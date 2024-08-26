@@ -28,18 +28,19 @@ end
 
 function common.load_json(__input_path__)
     if __input_path__ == nil then
-        error ("Missing Rocprof JSON input file")
+        error ("Missing JSON input file")
         return nil
     end
     local infile = io.open (__input_path__, "r")
     if infile == nil then
-        error ("Rocprof JSON input file "..__input_path__.." can't be opened")
+        error ("JSON input file "..__input_path__.." can't be opened")
         return nil
     end
     local data = infile:read ("*a")
     infile:close ()
     return JSON:decode(data)
 end
+
 
 function common.check_arg(arg)
     if #arg < 2 then

@@ -3,7 +3,6 @@
 
 #include <stdbool.h>
 #include <stddef.h>
-#include "hsa.h"
 #include "ratelprof.h"
 #include "ratelprof_ext.h"
 

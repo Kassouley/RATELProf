@@ -18,23 +18,19 @@ hsa_status_t hsa_amd_memory_async_copy_on_engine(void* dst, hsa_agent_t dst_agen
     return hsa_api_table.ptr_hsa_amd_memory_async_copy_on_engine(dst, dst_agent, src, src_agent, size, num_dep_signals, dep_signals, completion_signal, engine_id, force_copy_on_sdma); 
 }
 
-hsa_status_t hsa_amd_memory_copy_engine_status(hsa_agent_t dst_agent, hsa_agent_t src_agent, uint32_t *engine_ids_mask) { 
-    return hsa_api_table.ptr_hsa_amd_memory_copy_engine_status(dst_agent, src_agent, engine_ids_mask); 
-}
-
 void hsa_signal_store_relaxed(hsa_signal_t signal, hsa_signal_value_t value) { 
-    hsa_api_table.ptr_hsa_signal_store_relaxed(signal, value); 
     DISPATCH_INTERCEPT();
+    hsa_api_table.ptr_hsa_signal_store_relaxed(signal, value); 
 }
 
 void hsa_signal_store_screlease(hsa_signal_t signal, hsa_signal_value_t value) { 
-    hsa_api_table.ptr_hsa_signal_store_screlease(signal, value); 
     DISPATCH_INTERCEPT();
+    hsa_api_table.ptr_hsa_signal_store_screlease(signal, value); 
 }
 
 void hsa_signal_store_release(hsa_signal_t signal, hsa_signal_value_t value) { 
-    hsa_api_table.ptr_hsa_signal_store_release(signal, value); 
     DISPATCH_INTERCEPT();
+    hsa_api_table.ptr_hsa_signal_store_release(signal, value); 
 }
 
 void hsa_signal_silent_store_relaxed(hsa_signal_t signal, hsa_signal_value_t value) { 
