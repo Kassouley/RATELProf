@@ -1,94 +1,68 @@
--- Function to add indentation
-local function add_indent(level)
-    return string.rep("    ", level)
+-- prettify_json.lua
+
+local function get_traces(__input_path__)
+    local file, err = io.open(__input_path__, "r")
+    if not file then
+        error("Could not open file: " .. err)
+    end
+
+    local traces = {
+        hsaTraces = {},
+        hipTraces = {},
+        gpuTraces = {}
+    }
+
+    for line in file:lines() do
+        local key, modifiedLine
+        if line:find('"d":0,') then
+            key, modifiedLine = "hsaTraces", "\t\t\t" .. line:gsub('"d":0,', '')
+        elseif line:find('"d":1,') then
+            key, modifiedLine = "hipTraces", "\t\t\t" .. line:gsub('"d":1,', '')
+        elseif line:find('"d":4096,') then
+            key, modifiedLine = "gpuTraces", "\t\t\t" .. line:gsub('"d":4096,', '')
+        end
+
+        if key then
+            table.insert(traces[key], modifiedLine)
+        end
+    end
+    file:close()
+
+    for k, v in pairs(traces) do
+        traces[k] = table.concat(v, ",\n")
+    end
+
+    return traces
 end
 
--- Function to prettify a JSON array of arrays
-local function prettify_json(input_json)
-    local result = ""
-    local level = 0
-    local in_quotes = false
-    local escape_char = false
+-- Main script logic
+local function main()
+    local __input_path__ = arg[1]
+    if not __input_path__ then
+        error("Input file path not specified. Usage: lua " .. arg[0] .. " <input_file_path>")
+    end
 
-    for i = 1, #input_json do
-        local char = input_json:sub(i, i)
+    local traces = get_traces(__input_path__)
+    local traceEvents = {}
 
-        if char == '"' and not escape_char then
-            in_quotes = not in_quotes
-            result = result .. char
-        elseif char == "\\" and in_quotes then
-            escape_char = not escape_char
-            result = result .. char
-        elseif char == "{" or char == "[" then
-            if not in_quotes then
-                level = level + 1
-                result = result .. char .. "\n" .. add_indent(level)
-            else
-                result = result .. char
-            end
-        elseif char == "}" or char == "]" then
-            if not in_quotes then
-                level = level - 1
-                result = result .. "\n" .. add_indent(level) .. char
-            else
-                result = result .. char
-            end
-        elseif char == "," then
-            if not in_quotes then
-                result = result .. char .. "\n" .. add_indent(level)
-            else
-                result = result .. char
-            end
-        elseif char == ":" then
-            if not in_quotes then
-                result = result .. char .. " "
-            else
-                result = result .. char
-            end
+    for k, v in pairs(traces) do
+        if v == "" then
+            table.insert(traceEvents, '\t\t"' .. k .. '": []')
         else
-            result = result .. char
-            escape_char = false
+            table.insert(traceEvents, '\t\t"' .. k .. '": [\n' .. v .. '\n\t\t]')
         end
     end
 
-    return result
-end
-
--- Function to read the JSON string from a file
-local function read_file(file_path)
-    local file = io.open(file_path, "r") -- Open the file in read mode
-    if not file then
-        print("Could not open file: " .. file_path)
-        return nil
+    local json = "{\n\t\"traceEvents\": {\n" .. table.concat(traceEvents, ",\n") .. "\n\t}\n}"
+    
+    local output_path = "output.json" 
+    local outputFile, err = io.open(output_path, "w")
+    if not outputFile then
+        error("Could not open output file: " .. err)
     end
-    local content = file:read("*a") -- Read the entire file content
-    file:close() -- Close the file
-    return content
+    outputFile:write(json)
+    outputFile:close()
 end
 
--- Function to write the prettified JSON back to the file
-local function write_file(file_path, content)
-    local file = io.open(file_path, "w") -- Open the file in write mode
-    if not file then
-        print("Could not write to file: " .. file_path)
-        return false
-    end
-    file:write(content) -- Write the prettified content back to the file
-    file:close() -- Close the file
-    return true
-end
-
--- Main logic to read the JSON from a file, prettify it, and replace the original file
-local file_path = arg[1] -- Get the file path passed as an argument
-
-if not file_path then
-    print("Please provide a file path as an argument.")
-else
-    local input_json = read_file(file_path)
-    if input_json then
-        local prettified_json = prettify_json(input_json)
-        if write_file(file_path, prettified_json) then
-            print("File has been prettified and saved: " .. file_path)
-        end
-    end
-end
+-- Run the main function
+main()

@@ -1,0 +1,20 @@
+{
+  "_VERSION": "1.0",
+  "_DEFAULT_REPORT": [
+    "gpukernsum",
+    "gpusum",
+    "hipapisum",
+    "hsaapisum"
+  ],
+  "_ALL_REPORT": {
+    "hipapitrace": "./reports/hipapitrace.lua",
+    "hipapisum": "./reports/hipapisum.lua",
+    "hsaapitrace": "./reports/hsaapitrace.lua",
+    "hsaapisum": "./reports/hsaapisum.lua",
+    "gpukernsum": "./reports/gpukernsum.lua",
+    "gpumemtimesum": "./reports/gpumemtimesum.lua",
+    "gputrace": "./reports/gputrace.lua",
+    "gpumemsizesum": "./reports/gpumemsizesum.lua",
+    "gpusum": "./reports/gpusum.lua"
+  }
+}
