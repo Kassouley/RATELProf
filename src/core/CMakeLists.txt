@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 3.10)
 # Project name and type (shared library)
 project(${CORE_PROJECT_NAME} VERSION 1.0.0 LANGUAGES C CXX)
 
+# set(CMAKE_C_COMPILER  "/opt/rocm/llvm/bin/clang")
+# set(CMAKE_CXX_COMPILER  "/opt/rocm/llvm/bin/clang")
 set(CMAKE_C_COMPILER  "hipcc")
 set(CMAKE_CXX_COMPILER  "hipcc")
 
@@ -51,6 +53,7 @@ add_custom_target(debug
 target_include_directories(${LIBRARY_NAME}
     PUBLIC
         ${ROCM_PATH}/include
+        ${ROCM_PATH}/llvm/include
         ${ROCM_PATH}/include/hip
         ${ROCM_PATH}/include/hsa
         ${HEADER_DIRS}

@@ -29,7 +29,7 @@ ratelprof_status_t
 ratelprof_activity_pool_fini()
 {
     CHECK_RATELPROF_CALL(
-        ratelprof_hashtable_free(&activity_pool->agent_queueId_map)); // TODO DEBUG FREE
+        ratelprof_hashtable_free(&activity_pool->agent_queueId_map));
     CHECK_RATELPROF_CALL(
         ratelprof_hashtable_free(&activity_pool->queue_doorbell_map));
     CHECK_RATELPROF_CALL(
@@ -117,6 +117,7 @@ ratelprof_activity_pool_flush_activities()
             ratelprof_queue_pop(&activity_pool->activities, (void*)&activity));
         ratelprof_domain_t* domain_ptr = (ratelprof_domain_t*)activity;
         activity_pool->prop.activity_callback(*domain_ptr, activity, activity_pool->prop.activity_callback_user_args);
+        free(activity);
     }
     return RATELPROF_STATUS_SUCCESS;
 }

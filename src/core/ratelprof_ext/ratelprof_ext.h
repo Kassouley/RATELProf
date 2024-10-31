@@ -4,8 +4,15 @@
 #include <stdint.h>
 #include "ratelprof.h"
 #include "ratelprof_buffer_manager.h"
+#include "profiling_trace.h"
+#include "main_trace.h"
 
-#define RATELPROF_DOMAIN_GPU 0x100
+#define RATELPROF_COPY_DOMAIN 0x10
+#define RATELPROF_KERNEL_DOMAIN 0x11
+#define RATELPROF_BARRIEROR_DOMAIN 0x12
+#define RATELPROF_BARRIERAND_DOMAIN 0x13
+#define RATELPROF_DOMAIN_PROFILING 0x14
+#define RATELPROF_DOMAIN_MAIN 0x15
 
 #define RATELPROF_STATUS_KEY_NOT_FOUND 0x80
 #define RATELPROF_STATUS_QUEUE_EMPTY 0x81
@@ -19,31 +26,31 @@
 
 #define get_error_string get_combined_error_string
 
-typedef enum {
-    RATELPROF_DISPATCH_OPERATION,
-    RATELPROF_COPY_OPERATION,
-    RATELPROF_KERNEL_OPERATION,
-    RATELPROF_BARRIEROR_OPERATION,
-    RATELPROF_BARRIERAND_OPERATION,
-    RATELPROF_CPU_OPERATION
-} ratelprof_op_t;
+typedef bool (*gpu_callback_t)(hsa_signal_value_t, void*);
 
 typedef union gpu_args_s {
     struct {
         ratelprof_timespec_t dispatch_time;
         hsa_agent_t agent;
         uint64_t queue_id;
-        uint16_t workgroup_size_x;
-        uint16_t workgroup_size_y;
-        uint16_t workgroup_size_z;
-        uint32_t grid_size_x;
-        uint32_t grid_size_y;
-        uint32_t grid_size_z;
-        uint32_t private_segment_size;
-        uint32_t group_segment_size;
-        uint64_t kernel_object;
-        void* kernarg_address;
-    } kernel_launch;
+        union {
+            struct {
+                uint16_t workgroup_size_x;
+                uint16_t workgroup_size_y;
+                uint16_t workgroup_size_z;
+                uint32_t grid_size_x;
+                uint32_t grid_size_y;
+                uint32_t grid_size_z;
+                uint32_t private_segment_size;
+                uint32_t group_segment_size;
+                uint64_t kernel_object;
+                void* kernarg_address;
+            } kernel;
+            struct {
+                hsa_signal_t dep_signal[5];
+            } barrier;
+        };
+    } dispatch;
     struct {
         hsa_agent_t src_agent;
         hsa_agent_t dst_agent;
@@ -55,11 +62,11 @@ typedef union gpu_args_s {
 
 typedef struct ratelprof_gpu_activity_s {
     ratelprof_domain_t domain;
-    ratelprof_op_t op;
     uint64_t corr_id;
     uint64_t start_time;
     uint64_t stop_time;
     hsa_signal_t completion_signal;
+    hsa_signal_t proxy_signal;
     gpu_args_t args;
     
 } ratelprof_gpu_activity_t;

@@ -1,15 +1,19 @@
 local Report = require("Report")
 local conversion = require("conversion")
 local statistics = require("statistics")
+local common = require("common")
 
 local function get_metric(trace)
-    local b = conversion.num(trace[report_common.key.copy_size], "hex", "dec")
+    local b = conversion.num(trace.args.copy_size, "hex", "dec")
     return conversion.bytes(b, "bytes", "mb")
 end
 
+local function get_entry_key_tab(trace)
+    return { common.get_copy_name(trace) }
+end
 
 function Report:get_report_name()
-    return "GPU MemOps Summary (by Time)"
+    return "GPU MemOps Summary (by Size)"
 end
 
 function Report:get_headers()
@@ -28,10 +32,9 @@ end
 
 function Report:get_data()
     local gpu_traces = self:get_gpu_mem_traces()
-
-    local key_tab = {report_common.key.name}
-
-    local data = statistics.get_output_summary(gpu_traces, key_tab, get_metric)
+    
+    local entries, total_metrics = statistics.get_entries(gpu_traces, get_entry_key_tab, get_metric)
+    local data = statistics.get_output_summary(entries, total_metrics)
     
     table.sort(data, function(a, b)
         return tonumber(a[2]) > tonumber(b[2])

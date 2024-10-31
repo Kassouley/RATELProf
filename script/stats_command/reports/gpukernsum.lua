@@ -2,6 +2,18 @@ local Report = require("Report")
 local report_common = require("report_common")
 local statistics = require("statistics")
 
+local function get_entry_key_tab(trace)
+    return { 
+        trace.args.grd[1],
+        trace.args.grd[2],
+        trace.args.grd[3],
+        trace.args.wrg[1],
+        trace.args.wrg[2],
+        trace.args.wrg[3],
+        trace.args.kernel_name
+     }
+end
+
 function Report:get_report_name()
     return "GPU Kernel Summary"
 end
@@ -28,18 +40,9 @@ end
 
 function Report:get_data()
     local gpu_traces = self:get_gpu_kern_traces()
-
-    local key_tab = {
-        report_common.key.gpu_grd1,
-        report_common.key.gpu_grd2,
-        report_common.key.gpu_grd3,
-        report_common.key.gpu_blk1,
-        report_common.key.gpu_blk2,
-        report_common.key.gpu_blk3,
-        report_common.key.name
-    }
-
-    local data = statistics.get_output_summary(gpu_traces, key_tab, report_common.get_duration, self.timeunit)
+    
+    local entries, total_metrics = statistics.get_entries(gpu_traces, get_entry_key_tab, report_common.get_duration, self.timeunit)
+    local data = statistics.get_output_summary(entries, total_metrics)
     
     table.sort(data, function(a, b)
         return tonumber(a[2]) > tonumber(b[2])

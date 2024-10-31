@@ -9,6 +9,7 @@
 #include "hsa/hsa.h"
 #include "hsa/hsa_ext_amd.h" 
 #include <string.h>
+#include <stdbool.h>
 
 #define HSA_STRING_SIZE_MAX 128
 
@@ -1252,14 +1253,14 @@ static inline void* get_hsa_funaddr_by_id(hsa_api_id_t id)
 // )
 struct args_hsa_queue_load_read_index_scacquire_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
 };
 
 #define GET_ARGS_VALUE_hsa_queue_load_read_index_scacquire(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_load_read_index_scacquire.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_load_read_index_scacquire.queue = (hsa_queue_t *)queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_load_read_index_scacquire(args) { \
@@ -1280,8 +1281,8 @@ struct args_hsa_ext_image_clear_t {
 	hsa_status_t retval;
 	hsa_agent_t agent;
 	hsa_ext_image_t image;
-	const void * data;
-	const hsa_ext_image_region_t * image_region;
+	void * data;
+	hsa_ext_image_region_t * image_region;
 	struct { // const hsa_ext_image_region_t *
 		 hsa_ext_image_region_t val;
 	} image_region__ref;
@@ -1290,8 +1291,8 @@ struct args_hsa_ext_image_clear_t {
 #define GET_ARGS_VALUE_hsa_ext_image_clear(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_ext_image_clear.agent = (hsa_agent_t)agent; \
 	__hsa_activity->hsa_args.hsa_ext_image_clear.image = (hsa_ext_image_t)image; \
-	__hsa_activity->hsa_args.hsa_ext_image_clear.data = (const void *)data; \
-	__hsa_activity->hsa_args.hsa_ext_image_clear.image_region = (const hsa_ext_image_region_t *)image_region; \
+	__hsa_activity->hsa_args.hsa_ext_image_clear.data = (void *)data; \
+	__hsa_activity->hsa_args.hsa_ext_image_clear.image_region = (hsa_ext_image_region_t *)image_region; \
 };
 
 #define GET_PTRS_VALUE_hsa_ext_image_clear(args) { \
@@ -1309,7 +1310,7 @@ struct args_hsa_ext_image_clear_t {
 // )
 struct args_hsa_queue_cas_write_index_acquire_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -1318,7 +1319,7 @@ struct args_hsa_queue_cas_write_index_acquire_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_cas_write_index_acquire(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_cas_write_index_acquire.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_cas_write_index_acquire.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_cas_write_index_acquire.expected = (uint64_t)expected; \
 	__hsa_activity->hsa_args.hsa_queue_cas_write_index_acquire.value = (uint64_t)value; \
 };
@@ -1342,11 +1343,11 @@ struct args_hsa_queue_cas_write_index_acquire_t {
 struct args_hsa_executable_get_symbol_t {
 	hsa_status_t retval;
 	hsa_executable_t executable;
-	const char * module_name;
+	char * module_name;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} module_name__ref;
-	const char * symbol_name;
+	char * symbol_name;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} symbol_name__ref;
@@ -1360,8 +1361,8 @@ struct args_hsa_executable_get_symbol_t {
 
 #define GET_ARGS_VALUE_hsa_executable_get_symbol(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_executable_get_symbol.executable = (hsa_executable_t)executable; \
-	__hsa_activity->hsa_args.hsa_executable_get_symbol.module_name = (const char *)module_name; \
-	__hsa_activity->hsa_args.hsa_executable_get_symbol.symbol_name = (const char *)symbol_name; \
+	__hsa_activity->hsa_args.hsa_executable_get_symbol.module_name = (char *)module_name; \
+	__hsa_activity->hsa_args.hsa_executable_get_symbol.symbol_name = (char *)symbol_name; \
 	__hsa_activity->hsa_args.hsa_executable_get_symbol.agent = (hsa_agent_t)agent; \
 	__hsa_activity->hsa_args.hsa_executable_get_symbol.call_convention = (int32_t)call_convention; \
 	__hsa_activity->hsa_args.hsa_executable_get_symbol.symbol = (hsa_executable_symbol_t *)symbol; \
@@ -1408,7 +1409,7 @@ struct args_hsa_executable_agent_global_variable_define_t {
 	hsa_status_t retval;
 	hsa_executable_t executable;
 	hsa_agent_t agent;
-	const char * variable_name;
+	char * variable_name;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} variable_name__ref;
@@ -1418,7 +1419,7 @@ struct args_hsa_executable_agent_global_variable_define_t {
 #define GET_ARGS_VALUE_hsa_executable_agent_global_variable_define(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_executable_agent_global_variable_define.executable = (hsa_executable_t)executable; \
 	__hsa_activity->hsa_args.hsa_executable_agent_global_variable_define.agent = (hsa_agent_t)agent; \
-	__hsa_activity->hsa_args.hsa_executable_agent_global_variable_define.variable_name = (const char *)variable_name; \
+	__hsa_activity->hsa_args.hsa_executable_agent_global_variable_define.variable_name = (char *)variable_name; \
 	__hsa_activity->hsa_args.hsa_executable_agent_global_variable_define.address = (void *)address; \
 };
 
@@ -1438,7 +1439,7 @@ struct args_hsa_executable_agent_global_variable_define_t {
 struct args_hsa_code_object_get_symbol_t {
 	hsa_status_t retval;
 	hsa_code_object_t code_object;
-	const char * symbol_name;
+	char * symbol_name;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} symbol_name__ref;
@@ -1450,7 +1451,7 @@ struct args_hsa_code_object_get_symbol_t {
 
 #define GET_ARGS_VALUE_hsa_code_object_get_symbol(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_code_object_get_symbol.code_object = (hsa_code_object_t)code_object; \
-	__hsa_activity->hsa_args.hsa_code_object_get_symbol.symbol_name = (const char *)symbol_name; \
+	__hsa_activity->hsa_args.hsa_code_object_get_symbol.symbol_name = (char *)symbol_name; \
 	__hsa_activity->hsa_args.hsa_code_object_get_symbol.symbol = (hsa_code_symbol_t *)symbol; \
 };
 
@@ -1813,7 +1814,7 @@ struct args_hsa_signal_or_relaxed_t {
 // )
 struct args_hsa_queue_cas_write_index_scacquire_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -1822,7 +1823,7 @@ struct args_hsa_queue_cas_write_index_scacquire_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_cas_write_index_scacquire(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_cas_write_index_scacquire.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_cas_write_index_scacquire.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_cas_write_index_scacquire.expected = (uint64_t)expected; \
 	__hsa_activity->hsa_args.hsa_queue_cas_write_index_scacquire.value = (uint64_t)value; \
 };
@@ -1882,7 +1883,7 @@ struct args_hsa_signal_and_screlease_t {
 // )
 struct args_hsa_amd_pointer_info_t {
 	hsa_status_t retval;
-	const void * ptr;
+	void * ptr;
 	hsa_amd_pointer_info_t * info;
 	struct { // hsa_amd_pointer_info_t *
 		hsa_amd_pointer_info_t val;
@@ -1900,7 +1901,7 @@ struct args_hsa_amd_pointer_info_t {
 };
 
 #define GET_ARGS_VALUE_hsa_amd_pointer_info(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_amd_pointer_info.ptr = (const void *)ptr; \
+	__hsa_activity->hsa_args.hsa_amd_pointer_info.ptr = (void *)ptr; \
 	__hsa_activity->hsa_args.hsa_amd_pointer_info.info = (hsa_amd_pointer_info_t *)info; \
 	__hsa_activity->hsa_args.hsa_amd_pointer_info.alloc = (void *(*)(size_t))alloc; \
 	__hsa_activity->hsa_args.hsa_amd_pointer_info.num_agents_accessible = (uint32_t *)num_agents_accessible; \
@@ -1987,12 +1988,12 @@ struct args_hsa_amd_svm_attributes_get_t {
 struct args_hsa_signal_group_create_t {
 	hsa_status_t retval;
 	uint32_t num_signals;
-	const hsa_signal_t * signals;
+	hsa_signal_t * signals;
 	struct { // const hsa_signal_t *
 		 hsa_signal_t val;
 	} signals__ref;
 	uint32_t num_consumers;
-	const hsa_agent_t * consumers;
+	hsa_agent_t * consumers;
 	struct { // const hsa_agent_t *
 		 hsa_agent_t val;
 	} consumers__ref;
@@ -2004,9 +2005,9 @@ struct args_hsa_signal_group_create_t {
 
 #define GET_ARGS_VALUE_hsa_signal_group_create(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_signal_group_create.num_signals = (uint32_t)num_signals; \
-	__hsa_activity->hsa_args.hsa_signal_group_create.signals = (const hsa_signal_t *)signals; \
+	__hsa_activity->hsa_args.hsa_signal_group_create.signals = (hsa_signal_t *)signals; \
 	__hsa_activity->hsa_args.hsa_signal_group_create.num_consumers = (uint32_t)num_consumers; \
-	__hsa_activity->hsa_args.hsa_signal_group_create.consumers = (const hsa_agent_t *)consumers; \
+	__hsa_activity->hsa_args.hsa_signal_group_create.consumers = (hsa_agent_t *)consumers; \
 	__hsa_activity->hsa_args.hsa_signal_group_create.signal_group = (hsa_signal_group_t *)signal_group; \
 };
 
@@ -2051,13 +2052,13 @@ struct args_hsa_memory_deregister_t {
 // )
 struct args_hsa_amd_ipc_memory_attach_t {
 	hsa_status_t retval;
-	const hsa_amd_ipc_memory_t * handle;
+	hsa_amd_ipc_memory_t * handle;
 	struct { // const hsa_amd_ipc_memory_t *
 		 hsa_amd_ipc_memory_t val;
 	} handle__ref;
 	size_t len;
 	uint32_t num_agents;
-	const hsa_agent_t * mapping_agents;
+	hsa_agent_t * mapping_agents;
 	struct { // const hsa_agent_t *
 		 hsa_agent_t val;
 	} mapping_agents__ref;
@@ -2068,10 +2069,10 @@ struct args_hsa_amd_ipc_memory_attach_t {
 };
 
 #define GET_ARGS_VALUE_hsa_amd_ipc_memory_attach(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_amd_ipc_memory_attach.handle = (const hsa_amd_ipc_memory_t *)handle; \
+	__hsa_activity->hsa_args.hsa_amd_ipc_memory_attach.handle = (hsa_amd_ipc_memory_t *)handle; \
 	__hsa_activity->hsa_args.hsa_amd_ipc_memory_attach.len = (size_t)len; \
 	__hsa_activity->hsa_args.hsa_amd_ipc_memory_attach.num_agents = (uint32_t)num_agents; \
-	__hsa_activity->hsa_args.hsa_amd_ipc_memory_attach.mapping_agents = (const hsa_agent_t *)mapping_agents; \
+	__hsa_activity->hsa_args.hsa_amd_ipc_memory_attach.mapping_agents = (hsa_agent_t *)mapping_agents; \
 	__hsa_activity->hsa_args.hsa_amd_ipc_memory_attach.mapped_ptr = (void **)mapped_ptr; \
 };
 
@@ -2096,7 +2097,7 @@ struct args_hsa_amd_ipc_memory_attach_t {
 // )
 struct args_hsa_amd_queue_cu_get_mask_t {
 	hsa_status_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -2108,7 +2109,7 @@ struct args_hsa_amd_queue_cu_get_mask_t {
 };
 
 #define GET_ARGS_VALUE_hsa_amd_queue_cu_get_mask(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_amd_queue_cu_get_mask.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_amd_queue_cu_get_mask.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_amd_queue_cu_get_mask.num_cu_mask_count = (uint32_t)num_cu_mask_count; \
 	__hsa_activity->hsa_args.hsa_amd_queue_cu_get_mask.cu_mask = (uint32_t *)cu_mask; \
 };
@@ -2130,7 +2131,7 @@ struct args_hsa_amd_queue_cu_get_mask_t {
 // )
 struct args_hsa_queue_add_write_index_scacq_screl_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -2138,7 +2139,7 @@ struct args_hsa_queue_add_write_index_scacq_screl_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_add_write_index_scacq_screl(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_add_write_index_scacq_screl.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_add_write_index_scacq_screl.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_add_write_index_scacq_screl.value = (uint64_t)value; \
 };
 
@@ -2348,7 +2349,7 @@ struct args_hsa_signal_or_release_t {
 // )
 struct args_hsa_queue_cas_write_index_acq_rel_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -2357,7 +2358,7 @@ struct args_hsa_queue_cas_write_index_acq_rel_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_cas_write_index_acq_rel(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_cas_write_index_acq_rel.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_cas_write_index_acq_rel.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_cas_write_index_acq_rel.expected = (uint64_t)expected; \
 	__hsa_activity->hsa_args.hsa_queue_cas_write_index_acq_rel.value = (uint64_t)value; \
 };
@@ -2383,7 +2384,7 @@ struct args_hsa_code_object_serialize_t {
 	hsa_code_object_t code_object;
 	hsa_status_t (*alloc_callback)(size_t, hsa_callback_data_t, void **);
 	hsa_callback_data_t callback_data;
-	const char * options;
+	char * options;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} options__ref;
@@ -2401,7 +2402,7 @@ struct args_hsa_code_object_serialize_t {
 	__hsa_activity->hsa_args.hsa_code_object_serialize.code_object = (hsa_code_object_t)code_object; \
 	__hsa_activity->hsa_args.hsa_code_object_serialize.alloc_callback = (hsa_status_t (*)(size_t, hsa_callback_data_t, void **))alloc_callback; \
 	__hsa_activity->hsa_args.hsa_code_object_serialize.callback_data = (hsa_callback_data_t)callback_data; \
-	__hsa_activity->hsa_args.hsa_code_object_serialize.options = (const char *)options; \
+	__hsa_activity->hsa_args.hsa_code_object_serialize.options = (char *)options; \
 	__hsa_activity->hsa_args.hsa_code_object_serialize.serialized_code_object = (void **)serialized_code_object; \
 	__hsa_activity->hsa_args.hsa_code_object_serialize.serialized_code_object_size = (size_t *)serialized_code_object_size; \
 };
@@ -2523,7 +2524,7 @@ struct args_hsa_executable_create_alt_t {
 	hsa_status_t retval;
 	hsa_profile_t profile;
 	hsa_default_float_rounding_mode_t default_float_rounding_mode;
-	const char * options;
+	char * options;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} options__ref;
@@ -2536,7 +2537,7 @@ struct args_hsa_executable_create_alt_t {
 #define GET_ARGS_VALUE_hsa_executable_create_alt(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_executable_create_alt.profile = (hsa_profile_t)profile; \
 	__hsa_activity->hsa_args.hsa_executable_create_alt.default_float_rounding_mode = (hsa_default_float_rounding_mode_t)default_float_rounding_mode; \
-	__hsa_activity->hsa_args.hsa_executable_create_alt.options = (const char *)options; \
+	__hsa_activity->hsa_args.hsa_executable_create_alt.options = (char *)options; \
 	__hsa_activity->hsa_args.hsa_executable_create_alt.executable = (hsa_executable_t *)executable; \
 };
 
@@ -2565,30 +2566,30 @@ struct args_hsa_executable_create_alt_t {
 // )
 struct args_hsa_amd_memory_async_copy_rect_t {
 	hsa_status_t retval;
-	const hsa_pitched_ptr_t * dst;
+	hsa_pitched_ptr_t * dst;
 	struct { // const hsa_pitched_ptr_t *
 		 hsa_pitched_ptr_t val;
 	} dst__ref;
-	const hsa_dim3_t * dst_offset;
+	hsa_dim3_t * dst_offset;
 	struct { // const hsa_dim3_t *
 		 hsa_dim3_t val;
 	} dst_offset__ref;
-	const hsa_pitched_ptr_t * src;
+	hsa_pitched_ptr_t * src;
 	struct { // const hsa_pitched_ptr_t *
 		 hsa_pitched_ptr_t val;
 	} src__ref;
-	const hsa_dim3_t * src_offset;
+	hsa_dim3_t * src_offset;
 	struct { // const hsa_dim3_t *
 		 hsa_dim3_t val;
 	} src_offset__ref;
-	const hsa_dim3_t * range;
+	hsa_dim3_t * range;
 	struct { // const hsa_dim3_t *
 		 hsa_dim3_t val;
 	} range__ref;
 	hsa_agent_t copy_agent;
 	hsa_amd_copy_direction_t dir;
 	uint32_t num_dep_signals;
-	const hsa_signal_t * dep_signals;
+	hsa_signal_t * dep_signals;
 	struct { // const hsa_signal_t *
 		 hsa_signal_t val;
 	} dep_signals__ref;
@@ -2596,15 +2597,15 @@ struct args_hsa_amd_memory_async_copy_rect_t {
 };
 
 #define GET_ARGS_VALUE_hsa_amd_memory_async_copy_rect(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.dst = (const hsa_pitched_ptr_t *)dst; \
-	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.dst_offset = (const hsa_dim3_t *)dst_offset; \
-	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.src = (const hsa_pitched_ptr_t *)src; \
-	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.src_offset = (const hsa_dim3_t *)src_offset; \
-	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.range = (const hsa_dim3_t *)range; \
+	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.dst = (hsa_pitched_ptr_t *)dst; \
+	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.dst_offset = (hsa_dim3_t *)dst_offset; \
+	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.src = (hsa_pitched_ptr_t *)src; \
+	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.src_offset = (hsa_dim3_t *)src_offset; \
+	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.range = (hsa_dim3_t *)range; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.copy_agent = (hsa_agent_t)copy_agent; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.dir = (hsa_amd_copy_direction_t)dir; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.num_dep_signals = (uint32_t)num_dep_signals; \
-	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.dep_signals = (const hsa_signal_t *)dep_signals; \
+	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.dep_signals = (hsa_signal_t *)dep_signals; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_rect.completion_signal = (hsa_signal_t)completion_signal; \
 };
 
@@ -2693,14 +2694,14 @@ struct args_hsa_signal_cas_acq_rel_t {
 // )
 struct args_hsa_queue_load_read_index_relaxed_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
 };
 
 #define GET_ARGS_VALUE_hsa_queue_load_read_index_relaxed(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_load_read_index_relaxed.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_load_read_index_relaxed.queue = (hsa_queue_t *)queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_load_read_index_relaxed(args) { \
@@ -2771,14 +2772,14 @@ struct args_hsa_signal_subtract_acq_rel_t {
 // )
 struct args_hsa_queue_load_read_index_acquire_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
 };
 
 #define GET_ARGS_VALUE_hsa_queue_load_read_index_acquire(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_load_read_index_acquire.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_load_read_index_acquire.queue = (hsa_queue_t *)queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_load_read_index_acquire(args) { \
@@ -2833,7 +2834,7 @@ struct args_hsa_signal_and_scacquire_t {
 // )
 struct args_hsa_queue_add_write_index_release_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -2841,7 +2842,7 @@ struct args_hsa_queue_add_write_index_release_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_add_write_index_release(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_add_write_index_release.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_add_write_index_release.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_add_write_index_release.value = (uint64_t)value; \
 };
 
@@ -3023,14 +3024,14 @@ struct args_hsa_signal_store_release_t {
 // )
 struct args_hsa_queue_load_write_index_scacquire_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
 };
 
 #define GET_ARGS_VALUE_hsa_queue_load_write_index_scacquire(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_load_write_index_scacquire.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_load_write_index_scacquire.queue = (hsa_queue_t *)queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_load_write_index_scacquire(args) { \
@@ -3152,12 +3153,12 @@ struct args_hsa_amd_memory_pool_get_info_t {
 // )
 struct args_hsa_amd_pointer_info_set_userdata_t {
 	hsa_status_t retval;
-	const void * ptr;
+	void * ptr;
 	void * userdata;
 };
 
 #define GET_ARGS_VALUE_hsa_amd_pointer_info_set_userdata(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_amd_pointer_info_set_userdata.ptr = (const void *)ptr; \
+	__hsa_activity->hsa_args.hsa_amd_pointer_info_set_userdata.ptr = (void *)ptr; \
 	__hsa_activity->hsa_args.hsa_amd_pointer_info_set_userdata.userdata = (void *)userdata; \
 };
 
@@ -3216,7 +3217,7 @@ struct args_hsa_iterate_agents_t {
 // 		uint64_t value (unsigned long)
 // )
 struct args_hsa_queue_store_write_index_screlease_t {
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -3224,7 +3225,7 @@ struct args_hsa_queue_store_write_index_screlease_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_store_write_index_screlease(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_store_write_index_screlease.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_store_write_index_screlease.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_store_write_index_screlease.value = (uint64_t)value; \
 };
 
@@ -3267,7 +3268,7 @@ struct args_hsa_executable_readonly_variable_define_t {
 	hsa_status_t retval;
 	hsa_executable_t executable;
 	hsa_agent_t agent;
-	const char * variable_name;
+	char * variable_name;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} variable_name__ref;
@@ -3277,7 +3278,7 @@ struct args_hsa_executable_readonly_variable_define_t {
 #define GET_ARGS_VALUE_hsa_executable_readonly_variable_define(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_executable_readonly_variable_define.executable = (hsa_executable_t)executable; \
 	__hsa_activity->hsa_args.hsa_executable_readonly_variable_define.agent = (hsa_agent_t)agent; \
-	__hsa_activity->hsa_args.hsa_executable_readonly_variable_define.variable_name = (const char *)variable_name; \
+	__hsa_activity->hsa_args.hsa_executable_readonly_variable_define.variable_name = (char *)variable_name; \
 	__hsa_activity->hsa_args.hsa_executable_readonly_variable_define.address = (void *)address; \
 };
 
@@ -3359,7 +3360,7 @@ struct args_hsa_amd_memory_pool_can_migrate_t {
 // 		uint64_t value (unsigned long)
 // )
 struct args_hsa_queue_store_write_index_relaxed_t {
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -3367,7 +3368,7 @@ struct args_hsa_queue_store_write_index_relaxed_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_store_write_index_relaxed(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_store_write_index_relaxed.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_store_write_index_relaxed.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_store_write_index_relaxed.value = (uint64_t)value; \
 };
 
@@ -3485,7 +3486,7 @@ struct args_hsa_signal_wait_relaxed_t {
 // )
 struct args_hsa_amd_portable_export_dmabuf_t {
 	hsa_status_t retval;
-	const void * ptr;
+	void * ptr;
 	size_t size;
 	int * dmabuf;
 	struct { // int *
@@ -3498,7 +3499,7 @@ struct args_hsa_amd_portable_export_dmabuf_t {
 };
 
 #define GET_ARGS_VALUE_hsa_amd_portable_export_dmabuf(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_amd_portable_export_dmabuf.ptr = (const void *)ptr; \
+	__hsa_activity->hsa_args.hsa_amd_portable_export_dmabuf.ptr = (void *)ptr; \
 	__hsa_activity->hsa_args.hsa_amd_portable_export_dmabuf.size = (size_t)size; \
 	__hsa_activity->hsa_args.hsa_amd_portable_export_dmabuf.dmabuf = (int *)dmabuf; \
 	__hsa_activity->hsa_args.hsa_amd_portable_export_dmabuf.offset = (uint64_t *)offset; \
@@ -3715,7 +3716,7 @@ struct args_hsa_code_object_iterate_symbols_t {
 struct args_hsa_extension_get_name_t {
 	hsa_status_t retval;
 	uint16_t extension;
-	const char ** name;
+	char ** name;
 	struct { // const char **
 		 char* ptr1;
 		char val[HSA_STRING_SIZE_MAX];
@@ -3724,7 +3725,7 @@ struct args_hsa_extension_get_name_t {
 
 #define GET_ARGS_VALUE_hsa_extension_get_name(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_extension_get_name.extension = (uint16_t)extension; \
-	__hsa_activity->hsa_args.hsa_extension_get_name.name = (const char **)name; \
+	__hsa_activity->hsa_args.hsa_extension_get_name.name = (char **)name; \
 };
 
 #define GET_PTRS_VALUE_hsa_extension_get_name(args) { \
@@ -3765,11 +3766,11 @@ struct args_hsa_signal_exchange_relaxed_t {
 struct args_hsa_executable_get_symbol_by_name_t {
 	hsa_status_t retval;
 	hsa_executable_t executable;
-	const char * symbol_name;
+	char * symbol_name;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} symbol_name__ref;
-	const hsa_agent_t * agent;
+	hsa_agent_t * agent;
 	struct { // const hsa_agent_t *
 		 hsa_agent_t val;
 	} agent__ref;
@@ -3781,8 +3782,8 @@ struct args_hsa_executable_get_symbol_by_name_t {
 
 #define GET_ARGS_VALUE_hsa_executable_get_symbol_by_name(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_executable_get_symbol_by_name.executable = (hsa_executable_t)executable; \
-	__hsa_activity->hsa_args.hsa_executable_get_symbol_by_name.symbol_name = (const char *)symbol_name; \
-	__hsa_activity->hsa_args.hsa_executable_get_symbol_by_name.agent = (const hsa_agent_t *)agent; \
+	__hsa_activity->hsa_args.hsa_executable_get_symbol_by_name.symbol_name = (char *)symbol_name; \
+	__hsa_activity->hsa_args.hsa_executable_get_symbol_by_name.agent = (hsa_agent_t *)agent; \
 	__hsa_activity->hsa_args.hsa_executable_get_symbol_by_name.symbol = (hsa_executable_symbol_t *)symbol; \
 };
 
@@ -3813,11 +3814,11 @@ struct args_hsa_executable_get_symbol_by_name_t {
 struct args_hsa_ext_image_create_with_layout_t {
 	hsa_status_t retval;
 	hsa_agent_t agent;
-	const hsa_ext_image_descriptor_t * image_descriptor;
+	hsa_ext_image_descriptor_t * image_descriptor;
 	struct { // const hsa_ext_image_descriptor_t *
 		 hsa_ext_image_descriptor_t val;
 	} image_descriptor__ref;
-	const void * image_data;
+	void * image_data;
 	hsa_access_permission_t access_permission;
 	hsa_ext_image_data_layout_t image_data_layout;
 	size_t image_data_row_pitch;
@@ -3830,8 +3831,8 @@ struct args_hsa_ext_image_create_with_layout_t {
 
 #define GET_ARGS_VALUE_hsa_ext_image_create_with_layout(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_ext_image_create_with_layout.agent = (hsa_agent_t)agent; \
-	__hsa_activity->hsa_args.hsa_ext_image_create_with_layout.image_descriptor = (const hsa_ext_image_descriptor_t *)image_descriptor; \
-	__hsa_activity->hsa_args.hsa_ext_image_create_with_layout.image_data = (const void *)image_data; \
+	__hsa_activity->hsa_args.hsa_ext_image_create_with_layout.image_descriptor = (hsa_ext_image_descriptor_t *)image_descriptor; \
+	__hsa_activity->hsa_args.hsa_ext_image_create_with_layout.image_data = (void *)image_data; \
 	__hsa_activity->hsa_args.hsa_ext_image_create_with_layout.access_permission = (hsa_access_permission_t)access_permission; \
 	__hsa_activity->hsa_args.hsa_ext_image_create_with_layout.image_data_layout = (hsa_ext_image_data_layout_t)image_data_layout; \
 	__hsa_activity->hsa_args.hsa_ext_image_create_with_layout.image_data_row_pitch = (size_t)image_data_row_pitch; \
@@ -3855,14 +3856,14 @@ struct args_hsa_ext_image_create_with_layout_t {
 // )
 struct args_hsa_queue_load_write_index_relaxed_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
 };
 
 #define GET_ARGS_VALUE_hsa_queue_load_write_index_relaxed(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_load_write_index_relaxed.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_load_write_index_relaxed.queue = (hsa_queue_t *)queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_load_write_index_relaxed(args) { \
@@ -3885,16 +3886,16 @@ struct args_hsa_ext_image_copy_t {
 	hsa_status_t retval;
 	hsa_agent_t agent;
 	hsa_ext_image_t src_image;
-	const hsa_dim3_t * src_offset;
+	hsa_dim3_t * src_offset;
 	struct { // const hsa_dim3_t *
 		 hsa_dim3_t val;
 	} src_offset__ref;
 	hsa_ext_image_t dst_image;
-	const hsa_dim3_t * dst_offset;
+	hsa_dim3_t * dst_offset;
 	struct { // const hsa_dim3_t *
 		 hsa_dim3_t val;
 	} dst_offset__ref;
-	const hsa_dim3_t * range;
+	hsa_dim3_t * range;
 	struct { // const hsa_dim3_t *
 		 hsa_dim3_t val;
 	} range__ref;
@@ -3903,10 +3904,10 @@ struct args_hsa_ext_image_copy_t {
 #define GET_ARGS_VALUE_hsa_ext_image_copy(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_ext_image_copy.agent = (hsa_agent_t)agent; \
 	__hsa_activity->hsa_args.hsa_ext_image_copy.src_image = (hsa_ext_image_t)src_image; \
-	__hsa_activity->hsa_args.hsa_ext_image_copy.src_offset = (const hsa_dim3_t *)src_offset; \
+	__hsa_activity->hsa_args.hsa_ext_image_copy.src_offset = (hsa_dim3_t *)src_offset; \
 	__hsa_activity->hsa_args.hsa_ext_image_copy.dst_image = (hsa_ext_image_t)dst_image; \
-	__hsa_activity->hsa_args.hsa_ext_image_copy.dst_offset = (const hsa_dim3_t *)dst_offset; \
-	__hsa_activity->hsa_args.hsa_ext_image_copy.range = (const hsa_dim3_t *)range; \
+	__hsa_activity->hsa_args.hsa_ext_image_copy.dst_offset = (hsa_dim3_t *)dst_offset; \
+	__hsa_activity->hsa_args.hsa_ext_image_copy.range = (hsa_dim3_t *)range; \
 };
 
 #define GET_PTRS_VALUE_hsa_ext_image_copy(args) { \
@@ -3930,7 +3931,7 @@ struct args_hsa_ext_image_copy_t {
 // )
 struct args_hsa_code_object_reader_create_from_memory_t {
 	hsa_status_t retval;
-	const void * code_object;
+	void * code_object;
 	size_t size;
 	hsa_code_object_reader_t * code_object_reader;
 	struct { // hsa_code_object_reader_t *
@@ -3939,7 +3940,7 @@ struct args_hsa_code_object_reader_create_from_memory_t {
 };
 
 #define GET_ARGS_VALUE_hsa_code_object_reader_create_from_memory(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_code_object_reader_create_from_memory.code_object = (const void *)code_object; \
+	__hsa_activity->hsa_args.hsa_code_object_reader_create_from_memory.code_object = (void *)code_object; \
 	__hsa_activity->hsa_args.hsa_code_object_reader_create_from_memory.size = (size_t)size; \
 	__hsa_activity->hsa_args.hsa_code_object_reader_create_from_memory.code_object_reader = (hsa_code_object_reader_t *)code_object_reader; \
 };
@@ -4040,7 +4041,7 @@ struct args_hsa_amd_vmem_export_shareable_handle_t {
 // )
 struct args_hsa_queue_add_write_index_acq_rel_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -4048,7 +4049,7 @@ struct args_hsa_queue_add_write_index_acq_rel_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_add_write_index_acq_rel(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_add_write_index_acq_rel.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_add_write_index_acq_rel.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_add_write_index_acq_rel.value = (uint64_t)value; \
 };
 
@@ -4121,15 +4122,15 @@ struct args_hsa_agent_extension_supported_t {
 struct args_hsa_amd_image_create_t {
 	hsa_status_t retval;
 	hsa_agent_t agent;
-	const hsa_ext_image_descriptor_t * image_descriptor;
+	hsa_ext_image_descriptor_t * image_descriptor;
 	struct { // const hsa_ext_image_descriptor_t *
 		 hsa_ext_image_descriptor_t val;
 	} image_descriptor__ref;
-	const hsa_amd_image_descriptor_t * image_layout;
+	hsa_amd_image_descriptor_t * image_layout;
 	struct { // const hsa_amd_image_descriptor_t *
 		 hsa_amd_image_descriptor_t val;
 	} image_layout__ref;
-	const void * image_data;
+	void * image_data;
 	hsa_access_permission_t access_permission;
 	hsa_ext_image_t * image;
 	struct { // hsa_ext_image_t *
@@ -4139,9 +4140,9 @@ struct args_hsa_amd_image_create_t {
 
 #define GET_ARGS_VALUE_hsa_amd_image_create(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_amd_image_create.agent = (hsa_agent_t)agent; \
-	__hsa_activity->hsa_args.hsa_amd_image_create.image_descriptor = (const hsa_ext_image_descriptor_t *)image_descriptor; \
-	__hsa_activity->hsa_args.hsa_amd_image_create.image_layout = (const hsa_amd_image_descriptor_t *)image_layout; \
-	__hsa_activity->hsa_args.hsa_amd_image_create.image_data = (const void *)image_data; \
+	__hsa_activity->hsa_args.hsa_amd_image_create.image_descriptor = (hsa_ext_image_descriptor_t *)image_descriptor; \
+	__hsa_activity->hsa_args.hsa_amd_image_create.image_layout = (hsa_amd_image_descriptor_t *)image_layout; \
+	__hsa_activity->hsa_args.hsa_amd_image_create.image_data = (void *)image_data; \
 	__hsa_activity->hsa_args.hsa_amd_image_create.access_permission = (hsa_access_permission_t)access_permission; \
 	__hsa_activity->hsa_args.hsa_amd_image_create.image = (hsa_ext_image_t *)image; \
 };
@@ -4254,7 +4255,7 @@ struct args_hsa_code_object_reader_destroy_t {
 // )
 struct args_hsa_queue_cas_write_index_release_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -4263,7 +4264,7 @@ struct args_hsa_queue_cas_write_index_release_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_cas_write_index_release(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_cas_write_index_release.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_cas_write_index_release.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_cas_write_index_release.expected = (uint64_t)expected; \
 	__hsa_activity->hsa_args.hsa_queue_cas_write_index_release.value = (uint64_t)value; \
 };
@@ -4287,7 +4288,7 @@ struct args_hsa_executable_load_code_object_t {
 	hsa_executable_t executable;
 	hsa_agent_t agent;
 	hsa_code_object_t code_object;
-	const char * options;
+	char * options;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} options__ref;
@@ -4297,7 +4298,7 @@ struct args_hsa_executable_load_code_object_t {
 	__hsa_activity->hsa_args.hsa_executable_load_code_object.executable = (hsa_executable_t)executable; \
 	__hsa_activity->hsa_args.hsa_executable_load_code_object.agent = (hsa_agent_t)agent; \
 	__hsa_activity->hsa_args.hsa_executable_load_code_object.code_object = (hsa_code_object_t)code_object; \
-	__hsa_activity->hsa_args.hsa_executable_load_code_object.options = (const char *)options; \
+	__hsa_activity->hsa_args.hsa_executable_load_code_object.options = (char *)options; \
 };
 
 #define GET_PTRS_VALUE_hsa_executable_load_code_object(args) { \
@@ -4322,11 +4323,11 @@ struct args_hsa_amd_memory_async_copy_t {
 	hsa_status_t retval;
 	void * dst;
 	hsa_agent_t dst_agent;
-	const void * src;
+	void * src;
 	hsa_agent_t src_agent;
 	size_t size;
 	uint32_t num_dep_signals;
-	const hsa_signal_t * dep_signals;
+	hsa_signal_t * dep_signals;
 	struct { // const hsa_signal_t *
 		 hsa_signal_t val;
 	} dep_signals__ref;
@@ -4336,11 +4337,11 @@ struct args_hsa_amd_memory_async_copy_t {
 #define GET_ARGS_VALUE_hsa_amd_memory_async_copy(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy.dst = (void *)dst; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy.dst_agent = (hsa_agent_t)dst_agent; \
-	__hsa_activity->hsa_args.hsa_amd_memory_async_copy.src = (const void *)src; \
+	__hsa_activity->hsa_args.hsa_amd_memory_async_copy.src = (void *)src; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy.src_agent = (hsa_agent_t)src_agent; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy.size = (size_t)size; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy.num_dep_signals = (uint32_t)num_dep_signals; \
-	__hsa_activity->hsa_args.hsa_amd_memory_async_copy.dep_signals = (const hsa_signal_t *)dep_signals; \
+	__hsa_activity->hsa_args.hsa_amd_memory_async_copy.dep_signals = (hsa_signal_t *)dep_signals; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy.completion_signal = (hsa_signal_t)completion_signal; \
 };
 
@@ -4601,7 +4602,7 @@ struct args_hsa_amd_ipc_memory_create_t {
 // 		uint64_t value (unsigned long)
 // )
 struct args_hsa_queue_store_write_index_release_t {
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -4609,7 +4610,7 @@ struct args_hsa_queue_store_write_index_release_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_store_write_index_release(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_store_write_index_release.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_store_write_index_release.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_store_write_index_release.value = (uint64_t)value; \
 };
 
@@ -4687,7 +4688,7 @@ struct args_hsa_signal_cas_scacq_screl_t {
 // )
 struct args_hsa_queue_cas_write_index_scacq_screl_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -4696,7 +4697,7 @@ struct args_hsa_queue_cas_write_index_scacq_screl_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_cas_write_index_scacq_screl(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_cas_write_index_scacq_screl.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_cas_write_index_scacq_screl.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_cas_write_index_scacq_screl.expected = (uint64_t)expected; \
 	__hsa_activity->hsa_args.hsa_queue_cas_write_index_scacq_screl.value = (uint64_t)value; \
 };
@@ -4826,7 +4827,7 @@ struct args_hsa_ext_image_get_capability_with_layout_t {
 	hsa_status_t retval;
 	hsa_agent_t agent;
 	hsa_ext_image_geometry_t geometry;
-	const hsa_ext_image_format_t * image_format;
+	hsa_ext_image_format_t * image_format;
 	struct { // const hsa_ext_image_format_t *
 		 hsa_ext_image_format_t val;
 	} image_format__ref;
@@ -4840,7 +4841,7 @@ struct args_hsa_ext_image_get_capability_with_layout_t {
 #define GET_ARGS_VALUE_hsa_ext_image_get_capability_with_layout(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_ext_image_get_capability_with_layout.agent = (hsa_agent_t)agent; \
 	__hsa_activity->hsa_args.hsa_ext_image_get_capability_with_layout.geometry = (hsa_ext_image_geometry_t)geometry; \
-	__hsa_activity->hsa_args.hsa_ext_image_get_capability_with_layout.image_format = (const hsa_ext_image_format_t *)image_format; \
+	__hsa_activity->hsa_args.hsa_ext_image_get_capability_with_layout.image_format = (hsa_ext_image_format_t *)image_format; \
 	__hsa_activity->hsa_args.hsa_ext_image_get_capability_with_layout.image_data_layout = (hsa_ext_image_data_layout_t)image_data_layout; \
 	__hsa_activity->hsa_args.hsa_ext_image_get_capability_with_layout.capability_mask = (uint32_t *)capability_mask; \
 };
@@ -4917,11 +4918,11 @@ struct args_hsa_amd_svm_attributes_set_t {
 struct args_hsa_ext_image_import_t {
 	hsa_status_t retval;
 	hsa_agent_t agent;
-	const void * src_memory;
+	void * src_memory;
 	size_t src_row_pitch;
 	size_t src_slice_pitch;
 	hsa_ext_image_t dst_image;
-	const hsa_ext_image_region_t * image_region;
+	hsa_ext_image_region_t * image_region;
 	struct { // const hsa_ext_image_region_t *
 		 hsa_ext_image_region_t val;
 	} image_region__ref;
@@ -4929,11 +4930,11 @@ struct args_hsa_ext_image_import_t {
 
 #define GET_ARGS_VALUE_hsa_ext_image_import(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_ext_image_import.agent = (hsa_agent_t)agent; \
-	__hsa_activity->hsa_args.hsa_ext_image_import.src_memory = (const void *)src_memory; \
+	__hsa_activity->hsa_args.hsa_ext_image_import.src_memory = (void *)src_memory; \
 	__hsa_activity->hsa_args.hsa_ext_image_import.src_row_pitch = (size_t)src_row_pitch; \
 	__hsa_activity->hsa_args.hsa_ext_image_import.src_slice_pitch = (size_t)src_slice_pitch; \
 	__hsa_activity->hsa_args.hsa_ext_image_import.dst_image = (hsa_ext_image_t)dst_image; \
-	__hsa_activity->hsa_args.hsa_ext_image_import.image_region = (const hsa_ext_image_region_t *)image_region; \
+	__hsa_activity->hsa_args.hsa_ext_image_import.image_region = (hsa_ext_image_region_t *)image_region; \
 };
 
 #define GET_PTRS_VALUE_hsa_ext_image_import(args) { \
@@ -4975,7 +4976,7 @@ struct args_hsa_amd_svm_prefetch_async_t {
 	size_t size;
 	hsa_agent_t agent;
 	uint32_t num_dep_signals;
-	const hsa_signal_t * dep_signals;
+	hsa_signal_t * dep_signals;
 	struct { // const hsa_signal_t *
 		 hsa_signal_t val;
 	} dep_signals__ref;
@@ -4987,7 +4988,7 @@ struct args_hsa_amd_svm_prefetch_async_t {
 	__hsa_activity->hsa_args.hsa_amd_svm_prefetch_async.size = (size_t)size; \
 	__hsa_activity->hsa_args.hsa_amd_svm_prefetch_async.agent = (hsa_agent_t)agent; \
 	__hsa_activity->hsa_args.hsa_amd_svm_prefetch_async.num_dep_signals = (uint32_t)num_dep_signals; \
-	__hsa_activity->hsa_args.hsa_amd_svm_prefetch_async.dep_signals = (const hsa_signal_t *)dep_signals; \
+	__hsa_activity->hsa_args.hsa_amd_svm_prefetch_async.dep_signals = (hsa_signal_t *)dep_signals; \
 	__hsa_activity->hsa_args.hsa_amd_svm_prefetch_async.completion_signal = (hsa_signal_t)completion_signal; \
 };
 
@@ -5038,7 +5039,7 @@ struct args_hsa_signal_silent_store_relaxed_t {
 // 		uint64_t value (unsigned long)
 // )
 struct args_hsa_queue_store_read_index_relaxed_t {
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -5046,7 +5047,7 @@ struct args_hsa_queue_store_read_index_relaxed_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_store_read_index_relaxed(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_store_read_index_relaxed.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_store_read_index_relaxed.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_store_read_index_relaxed.value = (uint64_t)value; \
 };
 
@@ -5162,7 +5163,7 @@ struct args_hsa_signal_and_acquire_t {
 // )
 struct args_hsa_queue_add_write_index_relaxed_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -5170,7 +5171,7 @@ struct args_hsa_queue_add_write_index_relaxed_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_add_write_index_relaxed(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_add_write_index_relaxed.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_add_write_index_relaxed.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_add_write_index_relaxed.value = (uint64_t)value; \
 };
 
@@ -5257,7 +5258,7 @@ struct args_hsa_signal_exchange_acq_rel_t {
 // )
 struct args_hsa_queue_cas_write_index_screlease_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -5266,7 +5267,7 @@ struct args_hsa_queue_cas_write_index_screlease_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_cas_write_index_screlease(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_cas_write_index_screlease.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_cas_write_index_screlease.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_cas_write_index_screlease.expected = (uint64_t)expected; \
 	__hsa_activity->hsa_args.hsa_queue_cas_write_index_screlease.value = (uint64_t)value; \
 };
@@ -5302,7 +5303,7 @@ struct args_hsa_amd_async_function_t {
 // 		uint64_t value (unsigned long)
 // )
 struct args_hsa_queue_store_read_index_screlease_t {
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -5310,7 +5311,7 @@ struct args_hsa_queue_store_read_index_screlease_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_store_read_index_screlease(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_store_read_index_screlease.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_store_read_index_screlease.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_store_read_index_screlease.value = (uint64_t)value; \
 };
 
@@ -5476,7 +5477,7 @@ struct args_hsa_amd_vmem_set_access_t {
 	hsa_status_t retval;
 	void * va;
 	size_t size;
-	const hsa_amd_memory_access_desc_t * desc;
+	hsa_amd_memory_access_desc_t * desc;
 	struct { // const hsa_amd_memory_access_desc_t *
 		 hsa_amd_memory_access_desc_t val;
 	} desc__ref;
@@ -5486,7 +5487,7 @@ struct args_hsa_amd_vmem_set_access_t {
 #define GET_ARGS_VALUE_hsa_amd_vmem_set_access(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_amd_vmem_set_access.va = (void *)va; \
 	__hsa_activity->hsa_args.hsa_amd_vmem_set_access.size = (size_t)size; \
-	__hsa_activity->hsa_args.hsa_amd_vmem_set_access.desc = (const hsa_amd_memory_access_desc_t *)desc; \
+	__hsa_activity->hsa_args.hsa_amd_vmem_set_access.desc = (hsa_amd_memory_access_desc_t *)desc; \
 	__hsa_activity->hsa_args.hsa_amd_vmem_set_access.desc_cnt = (size_t)desc_cnt; \
 };
 
@@ -5567,11 +5568,11 @@ struct args_hsa_amd_memory_async_copy_on_engine_t {
 	hsa_status_t retval;
 	void * dst;
 	hsa_agent_t dst_agent;
-	const void * src;
+	void * src;
 	hsa_agent_t src_agent;
 	size_t size;
 	uint32_t num_dep_signals;
-	const hsa_signal_t * dep_signals;
+	hsa_signal_t * dep_signals;
 	struct { // const hsa_signal_t *
 		 hsa_signal_t val;
 	} dep_signals__ref;
@@ -5583,11 +5584,11 @@ struct args_hsa_amd_memory_async_copy_on_engine_t {
 #define GET_ARGS_VALUE_hsa_amd_memory_async_copy_on_engine(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_on_engine.dst = (void *)dst; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_on_engine.dst_agent = (hsa_agent_t)dst_agent; \
-	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_on_engine.src = (const void *)src; \
+	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_on_engine.src = (void *)src; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_on_engine.src_agent = (hsa_agent_t)src_agent; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_on_engine.size = (size_t)size; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_on_engine.num_dep_signals = (uint32_t)num_dep_signals; \
-	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_on_engine.dep_signals = (const hsa_signal_t *)dep_signals; \
+	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_on_engine.dep_signals = (hsa_signal_t *)dep_signals; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_on_engine.completion_signal = (hsa_signal_t)completion_signal; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_on_engine.engine_id = (hsa_amd_sdma_engine_id_t)engine_id; \
 	__hsa_activity->hsa_args.hsa_amd_memory_async_copy_on_engine.force_copy_on_sdma = (_Bool)force_copy_on_sdma; \
@@ -5712,7 +5713,7 @@ struct args_hsa_signal_cas_relaxed_t {
 // )
 struct args_hsa_queue_add_write_index_scacquire_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -5720,7 +5721,7 @@ struct args_hsa_queue_add_write_index_scacquire_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_add_write_index_scacquire(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_add_write_index_scacquire.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_add_write_index_scacquire.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_add_write_index_scacquire.value = (uint64_t)value; \
 };
 
@@ -5883,11 +5884,11 @@ struct args_hsa_system_extension_supported_t {
 struct args_hsa_signal_group_wait_any_relaxed_t {
 	hsa_status_t retval;
 	hsa_signal_group_t signal_group;
-	const hsa_signal_condition_t * conditions;
+	hsa_signal_condition_t * conditions;
 	struct { // const hsa_signal_condition_t *
 		 hsa_signal_condition_t val;
 	} conditions__ref;
-	const hsa_signal_value_t * compare_values;
+	hsa_signal_value_t * compare_values;
 	struct { // const hsa_signal_value_t *
 		 hsa_signal_value_t val;
 	} compare_values__ref;
@@ -5904,8 +5905,8 @@ struct args_hsa_signal_group_wait_any_relaxed_t {
 
 #define GET_ARGS_VALUE_hsa_signal_group_wait_any_relaxed(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_signal_group_wait_any_relaxed.signal_group = (hsa_signal_group_t)signal_group; \
-	__hsa_activity->hsa_args.hsa_signal_group_wait_any_relaxed.conditions = (const hsa_signal_condition_t *)conditions; \
-	__hsa_activity->hsa_args.hsa_signal_group_wait_any_relaxed.compare_values = (const hsa_signal_value_t *)compare_values; \
+	__hsa_activity->hsa_args.hsa_signal_group_wait_any_relaxed.conditions = (hsa_signal_condition_t *)conditions; \
+	__hsa_activity->hsa_args.hsa_signal_group_wait_any_relaxed.compare_values = (hsa_signal_value_t *)compare_values; \
 	__hsa_activity->hsa_args.hsa_signal_group_wait_any_relaxed.wait_state_hint = (hsa_wait_state_t)wait_state_hint; \
 	__hsa_activity->hsa_args.hsa_signal_group_wait_any_relaxed.signal = (hsa_signal_t *)signal; \
 	__hsa_activity->hsa_args.hsa_signal_group_wait_any_relaxed.value = (hsa_signal_value_t *)value; \
@@ -5997,7 +5998,7 @@ struct args_hsa_signal_create_t {
 	hsa_status_t retval;
 	hsa_signal_value_t initial_value;
 	uint32_t num_consumers;
-	const hsa_agent_t * consumers;
+	hsa_agent_t * consumers;
 	struct { // const hsa_agent_t *
 		 hsa_agent_t val;
 	} consumers__ref;
@@ -6010,7 +6011,7 @@ struct args_hsa_signal_create_t {
 #define GET_ARGS_VALUE_hsa_signal_create(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_signal_create.initial_value = (hsa_signal_value_t)initial_value; \
 	__hsa_activity->hsa_args.hsa_signal_create.num_consumers = (uint32_t)num_consumers; \
-	__hsa_activity->hsa_args.hsa_signal_create.consumers = (const hsa_agent_t *)consumers; \
+	__hsa_activity->hsa_args.hsa_signal_create.consumers = (hsa_agent_t *)consumers; \
 	__hsa_activity->hsa_args.hsa_signal_create.signal = (hsa_signal_t *)signal; \
 };
 
@@ -6064,7 +6065,7 @@ struct args_hsa_ext_image_get_capability_t {
 	hsa_status_t retval;
 	hsa_agent_t agent;
 	hsa_ext_image_geometry_t geometry;
-	const hsa_ext_image_format_t * image_format;
+	hsa_ext_image_format_t * image_format;
 	struct { // const hsa_ext_image_format_t *
 		 hsa_ext_image_format_t val;
 	} image_format__ref;
@@ -6077,7 +6078,7 @@ struct args_hsa_ext_image_get_capability_t {
 #define GET_ARGS_VALUE_hsa_ext_image_get_capability(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_ext_image_get_capability.agent = (hsa_agent_t)agent; \
 	__hsa_activity->hsa_args.hsa_ext_image_get_capability.geometry = (hsa_ext_image_geometry_t)geometry; \
-	__hsa_activity->hsa_args.hsa_ext_image_get_capability.image_format = (const hsa_ext_image_format_t *)image_format; \
+	__hsa_activity->hsa_args.hsa_ext_image_get_capability.image_format = (hsa_ext_image_format_t *)image_format; \
 	__hsa_activity->hsa_args.hsa_ext_image_get_capability.capability_mask = (uint32_t *)capability_mask; \
 };
 
@@ -6115,7 +6116,7 @@ struct args_hsa_ext_image_destroy_t {
 // 		uint64_t value (unsigned long)
 // )
 struct args_hsa_queue_store_read_index_release_t {
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -6123,7 +6124,7 @@ struct args_hsa_queue_store_read_index_release_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_store_read_index_release(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_store_read_index_release.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_store_read_index_release.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_store_read_index_release.value = (uint64_t)value; \
 };
 
@@ -6208,7 +6209,7 @@ struct args_hsa_signal_silent_store_screlease_t {
 struct args_hsa_executable_validate_alt_t {
 	hsa_status_t retval;
 	hsa_executable_t executable;
-	const char * options;
+	char * options;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} options__ref;
@@ -6220,7 +6221,7 @@ struct args_hsa_executable_validate_alt_t {
 
 #define GET_ARGS_VALUE_hsa_executable_validate_alt(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_executable_validate_alt.executable = (hsa_executable_t)executable; \
-	__hsa_activity->hsa_args.hsa_executable_validate_alt.options = (const char *)options; \
+	__hsa_activity->hsa_args.hsa_executable_validate_alt.options = (char *)options; \
 	__hsa_activity->hsa_args.hsa_executable_validate_alt.result = (uint32_t *)result; \
 };
 
@@ -6245,7 +6246,7 @@ struct args_hsa_executable_create_t {
 	hsa_status_t retval;
 	hsa_profile_t profile;
 	hsa_executable_state_t executable_state;
-	const char * options;
+	char * options;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} options__ref;
@@ -6258,7 +6259,7 @@ struct args_hsa_executable_create_t {
 #define GET_ARGS_VALUE_hsa_executable_create(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_executable_create.profile = (hsa_profile_t)profile; \
 	__hsa_activity->hsa_args.hsa_executable_create.executable_state = (hsa_executable_state_t)executable_state; \
-	__hsa_activity->hsa_args.hsa_executable_create.options = (const char *)options; \
+	__hsa_activity->hsa_args.hsa_executable_create.options = (char *)options; \
 	__hsa_activity->hsa_args.hsa_executable_create.executable = (hsa_executable_t *)executable; \
 };
 
@@ -6331,13 +6332,13 @@ struct args_hsa_amd_memory_pool_free_t {
 // )
 struct args_hsa_amd_memory_migrate_t {
 	hsa_status_t retval;
-	const void * ptr;
+	void * ptr;
 	hsa_amd_memory_pool_t memory_pool;
 	uint32_t flags;
 };
 
 #define GET_ARGS_VALUE_hsa_amd_memory_migrate(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_amd_memory_migrate.ptr = (const void *)ptr; \
+	__hsa_activity->hsa_args.hsa_amd_memory_migrate.ptr = (void *)ptr; \
 	__hsa_activity->hsa_args.hsa_amd_memory_migrate.memory_pool = (hsa_amd_memory_pool_t)memory_pool; \
 	__hsa_activity->hsa_args.hsa_amd_memory_migrate.flags = (uint32_t)flags; \
 };
@@ -6371,7 +6372,7 @@ struct args_hsa_amd_signal_create_t {
 	hsa_status_t retval;
 	hsa_signal_value_t initial_value;
 	uint32_t num_consumers;
-	const hsa_agent_t * consumers;
+	hsa_agent_t * consumers;
 	struct { // const hsa_agent_t *
 		 hsa_agent_t val;
 	} consumers__ref;
@@ -6385,7 +6386,7 @@ struct args_hsa_amd_signal_create_t {
 #define GET_ARGS_VALUE_hsa_amd_signal_create(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_amd_signal_create.initial_value = (hsa_signal_value_t)initial_value; \
 	__hsa_activity->hsa_args.hsa_amd_signal_create.num_consumers = (uint32_t)num_consumers; \
-	__hsa_activity->hsa_args.hsa_amd_signal_create.consumers = (const hsa_agent_t *)consumers; \
+	__hsa_activity->hsa_args.hsa_amd_signal_create.consumers = (hsa_agent_t *)consumers; \
 	__hsa_activity->hsa_args.hsa_amd_signal_create.attributes = (uint64_t)attributes; \
 	__hsa_activity->hsa_args.hsa_amd_signal_create.signal = (hsa_signal_t *)signal; \
 };
@@ -6411,7 +6412,7 @@ struct args_hsa_executable_load_program_code_object_t {
 	hsa_status_t retval;
 	hsa_executable_t executable;
 	hsa_code_object_reader_t code_object_reader;
-	const char * options;
+	char * options;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} options__ref;
@@ -6424,7 +6425,7 @@ struct args_hsa_executable_load_program_code_object_t {
 #define GET_ARGS_VALUE_hsa_executable_load_program_code_object(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_executable_load_program_code_object.executable = (hsa_executable_t)executable; \
 	__hsa_activity->hsa_args.hsa_executable_load_program_code_object.code_object_reader = (hsa_code_object_reader_t)code_object_reader; \
-	__hsa_activity->hsa_args.hsa_executable_load_program_code_object.options = (const char *)options; \
+	__hsa_activity->hsa_args.hsa_executable_load_program_code_object.options = (char *)options; \
 	__hsa_activity->hsa_args.hsa_executable_load_program_code_object.loaded_code_object = (hsa_loaded_code_object_t *)loaded_code_object; \
 };
 
@@ -6465,11 +6466,11 @@ struct args_hsa_signal_load_relaxed_t {
 struct args_hsa_signal_group_wait_any_scacquire_t {
 	hsa_status_t retval;
 	hsa_signal_group_t signal_group;
-	const hsa_signal_condition_t * conditions;
+	hsa_signal_condition_t * conditions;
 	struct { // const hsa_signal_condition_t *
 		 hsa_signal_condition_t val;
 	} conditions__ref;
-	const hsa_signal_value_t * compare_values;
+	hsa_signal_value_t * compare_values;
 	struct { // const hsa_signal_value_t *
 		 hsa_signal_value_t val;
 	} compare_values__ref;
@@ -6486,8 +6487,8 @@ struct args_hsa_signal_group_wait_any_scacquire_t {
 
 #define GET_ARGS_VALUE_hsa_signal_group_wait_any_scacquire(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_signal_group_wait_any_scacquire.signal_group = (hsa_signal_group_t)signal_group; \
-	__hsa_activity->hsa_args.hsa_signal_group_wait_any_scacquire.conditions = (const hsa_signal_condition_t *)conditions; \
-	__hsa_activity->hsa_args.hsa_signal_group_wait_any_scacquire.compare_values = (const hsa_signal_value_t *)compare_values; \
+	__hsa_activity->hsa_args.hsa_signal_group_wait_any_scacquire.conditions = (hsa_signal_condition_t *)conditions; \
+	__hsa_activity->hsa_args.hsa_signal_group_wait_any_scacquire.compare_values = (hsa_signal_value_t *)compare_values; \
 	__hsa_activity->hsa_args.hsa_signal_group_wait_any_scacquire.wait_state_hint = (hsa_wait_state_t)wait_state_hint; \
 	__hsa_activity->hsa_args.hsa_signal_group_wait_any_scacquire.signal = (hsa_signal_t *)signal; \
 	__hsa_activity->hsa_args.hsa_signal_group_wait_any_scacquire.value = (hsa_signal_value_t *)value; \
@@ -6517,7 +6518,7 @@ struct args_hsa_signal_group_wait_any_scacquire_t {
 // )
 struct args_hsa_queue_cas_write_index_relaxed_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -6526,7 +6527,7 @@ struct args_hsa_queue_cas_write_index_relaxed_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_cas_write_index_relaxed(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_cas_write_index_relaxed.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_cas_write_index_relaxed.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_cas_write_index_relaxed.expected = (uint64_t)expected; \
 	__hsa_activity->hsa_args.hsa_queue_cas_write_index_relaxed.value = (uint64_t)value; \
 };
@@ -6563,7 +6564,7 @@ struct args_hsa_signal_subtract_relaxed_t {
 struct args_hsa_executable_freeze_t {
 	hsa_status_t retval;
 	hsa_executable_t executable;
-	const char * options;
+	char * options;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} options__ref;
@@ -6571,7 +6572,7 @@ struct args_hsa_executable_freeze_t {
 
 #define GET_ARGS_VALUE_hsa_executable_freeze(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_executable_freeze.executable = (hsa_executable_t)executable; \
-	__hsa_activity->hsa_args.hsa_executable_freeze.options = (const char *)options; \
+	__hsa_activity->hsa_args.hsa_executable_freeze.options = (char *)options; \
 };
 
 #define GET_PTRS_VALUE_hsa_executable_freeze(args) { \
@@ -6587,14 +6588,14 @@ struct args_hsa_executable_freeze_t {
 // )
 struct args_hsa_queue_load_write_index_acquire_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
 };
 
 #define GET_ARGS_VALUE_hsa_queue_load_write_index_acquire(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_load_write_index_acquire.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_load_write_index_acquire.queue = (hsa_queue_t *)queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_load_write_index_acquire(args) { \
@@ -6638,7 +6639,7 @@ struct args_hsa_amd_vmem_map_t {
 // )
 struct args_hsa_amd_ipc_signal_attach_t {
 	hsa_status_t retval;
-	const hsa_amd_ipc_signal_t * handle;
+	hsa_amd_ipc_signal_t * handle;
 	struct { // const hsa_amd_ipc_signal_t *
 		 hsa_amd_ipc_signal_t val;
 	} handle__ref;
@@ -6649,7 +6650,7 @@ struct args_hsa_amd_ipc_signal_attach_t {
 };
 
 #define GET_ARGS_VALUE_hsa_amd_ipc_signal_attach(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_amd_ipc_signal_attach.handle = (const hsa_amd_ipc_signal_t *)handle; \
+	__hsa_activity->hsa_args.hsa_amd_ipc_signal_attach.handle = (hsa_amd_ipc_signal_t *)handle; \
 	__hsa_activity->hsa_args.hsa_amd_ipc_signal_attach.signal = (hsa_signal_t *)signal; \
 };
 
@@ -6689,21 +6690,21 @@ struct args_hsa_amd_register_system_event_handler_t {
 // )
 struct args_hsa_amd_queue_cu_set_mask_t {
 	hsa_status_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
 	uint32_t num_cu_mask_count;
-	const uint32_t * cu_mask;
+	uint32_t * cu_mask;
 	struct { // const uint32_t *
 		 uint32_t val;
 	} cu_mask__ref;
 };
 
 #define GET_ARGS_VALUE_hsa_amd_queue_cu_set_mask(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_amd_queue_cu_set_mask.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_amd_queue_cu_set_mask.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_amd_queue_cu_set_mask.num_cu_mask_count = (uint32_t)num_cu_mask_count; \
-	__hsa_activity->hsa_args.hsa_amd_queue_cu_set_mask.cu_mask = (const uint32_t *)cu_mask; \
+	__hsa_activity->hsa_args.hsa_amd_queue_cu_set_mask.cu_mask = (uint32_t *)cu_mask; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_queue_cu_set_mask(args) { \
@@ -6732,7 +6733,7 @@ struct args_hsa_ext_image_export_t {
 	void * dst_memory;
 	size_t dst_row_pitch;
 	size_t dst_slice_pitch;
-	const hsa_ext_image_region_t * image_region;
+	hsa_ext_image_region_t * image_region;
 	struct { // const hsa_ext_image_region_t *
 		 hsa_ext_image_region_t val;
 	} image_region__ref;
@@ -6744,7 +6745,7 @@ struct args_hsa_ext_image_export_t {
 	__hsa_activity->hsa_args.hsa_ext_image_export.dst_memory = (void *)dst_memory; \
 	__hsa_activity->hsa_args.hsa_ext_image_export.dst_row_pitch = (size_t)dst_row_pitch; \
 	__hsa_activity->hsa_args.hsa_ext_image_export.dst_slice_pitch = (size_t)dst_slice_pitch; \
-	__hsa_activity->hsa_args.hsa_ext_image_export.image_region = (const hsa_ext_image_region_t *)image_region; \
+	__hsa_activity->hsa_args.hsa_ext_image_export.image_region = (hsa_ext_image_region_t *)image_region; \
 };
 
 #define GET_PTRS_VALUE_hsa_ext_image_export(args) { \
@@ -6762,7 +6763,7 @@ struct args_hsa_ext_image_export_t {
 struct args_hsa_status_string_t {
 	hsa_status_t retval;
 	hsa_status_t status;
-	const char ** status_string;
+	char ** status_string;
 	struct { // const char **
 		 char* ptr1;
 		char val[HSA_STRING_SIZE_MAX];
@@ -6771,7 +6772,7 @@ struct args_hsa_status_string_t {
 
 #define GET_ARGS_VALUE_hsa_status_string(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_status_string.status = (hsa_status_t)status; \
-	__hsa_activity->hsa_args.hsa_status_string.status_string = (const char **)status_string; \
+	__hsa_activity->hsa_args.hsa_status_string.status_string = (char **)status_string; \
 };
 
 #define GET_PTRS_VALUE_hsa_status_string(args) { \
@@ -6808,7 +6809,7 @@ struct args_hsa_signal_xor_screlease_t {
 // )
 struct args_hsa_queue_add_write_index_acquire_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -6816,7 +6817,7 @@ struct args_hsa_queue_add_write_index_acquire_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_add_write_index_acquire(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_add_write_index_acquire.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_add_write_index_acquire.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_add_write_index_acquire.value = (uint64_t)value; \
 };
 
@@ -6834,7 +6835,7 @@ struct args_hsa_queue_add_write_index_acquire_t {
 // )
 struct args_hsa_queue_add_write_index_screlease_t {
 	uint64_t retval;
-	const hsa_queue_t * queue;
+	hsa_queue_t * queue;
 	struct { // const hsa_queue_t *
 		 hsa_queue_t val;
 	} queue__ref;
@@ -6842,7 +6843,7 @@ struct args_hsa_queue_add_write_index_screlease_t {
 };
 
 #define GET_ARGS_VALUE_hsa_queue_add_write_index_screlease(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_queue_add_write_index_screlease.queue = (const hsa_queue_t *)queue; \
+	__hsa_activity->hsa_args.hsa_queue_add_write_index_screlease.queue = (hsa_queue_t *)queue; \
 	__hsa_activity->hsa_args.hsa_queue_add_write_index_screlease.value = (uint64_t)value; \
 };
 
@@ -6863,11 +6864,11 @@ struct args_hsa_queue_add_write_index_screlease_t {
 struct args_hsa_code_object_get_symbol_from_name_t {
 	hsa_status_t retval;
 	hsa_code_object_t code_object;
-	const char * module_name;
+	char * module_name;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} module_name__ref;
-	const char * symbol_name;
+	char * symbol_name;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} symbol_name__ref;
@@ -6879,8 +6880,8 @@ struct args_hsa_code_object_get_symbol_from_name_t {
 
 #define GET_ARGS_VALUE_hsa_code_object_get_symbol_from_name(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_code_object_get_symbol_from_name.code_object = (hsa_code_object_t)code_object; \
-	__hsa_activity->hsa_args.hsa_code_object_get_symbol_from_name.module_name = (const char *)module_name; \
-	__hsa_activity->hsa_args.hsa_code_object_get_symbol_from_name.symbol_name = (const char *)symbol_name; \
+	__hsa_activity->hsa_args.hsa_code_object_get_symbol_from_name.module_name = (char *)module_name; \
+	__hsa_activity->hsa_args.hsa_code_object_get_symbol_from_name.symbol_name = (char *)symbol_name; \
 	__hsa_activity->hsa_args.hsa_code_object_get_symbol_from_name.symbol = (hsa_code_symbol_t *)symbol; \
 };
 
@@ -6904,7 +6905,7 @@ struct args_hsa_code_object_get_symbol_from_name_t {
 // )
 struct args_hsa_isa_from_name_t {
 	hsa_status_t retval;
-	const char * name;
+	char * name;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} name__ref;
@@ -6915,7 +6916,7 @@ struct args_hsa_isa_from_name_t {
 };
 
 #define GET_ARGS_VALUE_hsa_isa_from_name(__hsa_activity) { \
-	__hsa_activity->hsa_args.hsa_isa_from_name.name = (const char *)name; \
+	__hsa_activity->hsa_args.hsa_isa_from_name.name = (char *)name; \
 	__hsa_activity->hsa_args.hsa_isa_from_name.isa = (hsa_isa_t *)isa; \
 };
 
@@ -6979,11 +6980,11 @@ struct args_hsa_amd_agent_set_async_scratch_limit_t {
 struct args_hsa_ext_image_create_t {
 	hsa_status_t retval;
 	hsa_agent_t agent;
-	const hsa_ext_image_descriptor_t * image_descriptor;
+	hsa_ext_image_descriptor_t * image_descriptor;
 	struct { // const hsa_ext_image_descriptor_t *
 		 hsa_ext_image_descriptor_t val;
 	} image_descriptor__ref;
-	const void * image_data;
+	void * image_data;
 	hsa_access_permission_t access_permission;
 	hsa_ext_image_t * image;
 	struct { // hsa_ext_image_t *
@@ -6993,8 +6994,8 @@ struct args_hsa_ext_image_create_t {
 
 #define GET_ARGS_VALUE_hsa_ext_image_create(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_ext_image_create.agent = (hsa_agent_t)agent; \
-	__hsa_activity->hsa_args.hsa_ext_image_create.image_descriptor = (const hsa_ext_image_descriptor_t *)image_descriptor; \
-	__hsa_activity->hsa_args.hsa_ext_image_create.image_data = (const void *)image_data; \
+	__hsa_activity->hsa_args.hsa_ext_image_create.image_descriptor = (hsa_ext_image_descriptor_t *)image_descriptor; \
+	__hsa_activity->hsa_args.hsa_ext_image_create.image_data = (void *)image_data; \
 	__hsa_activity->hsa_args.hsa_ext_image_create.access_permission = (hsa_access_permission_t)access_permission; \
 	__hsa_activity->hsa_args.hsa_ext_image_create.image = (hsa_ext_image_t *)image; \
 };
@@ -7051,7 +7052,7 @@ struct args_hsa_executable_load_agent_code_object_t {
 	hsa_executable_t executable;
 	hsa_agent_t agent;
 	hsa_code_object_reader_t code_object_reader;
-	const char * options;
+	char * options;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} options__ref;
@@ -7065,7 +7066,7 @@ struct args_hsa_executable_load_agent_code_object_t {
 	__hsa_activity->hsa_args.hsa_executable_load_agent_code_object.executable = (hsa_executable_t)executable; \
 	__hsa_activity->hsa_args.hsa_executable_load_agent_code_object.agent = (hsa_agent_t)agent; \
 	__hsa_activity->hsa_args.hsa_executable_load_agent_code_object.code_object_reader = (hsa_code_object_reader_t)code_object_reader; \
-	__hsa_activity->hsa_args.hsa_executable_load_agent_code_object.options = (const char *)options; \
+	__hsa_activity->hsa_args.hsa_executable_load_agent_code_object.options = (char *)options; \
 	__hsa_activity->hsa_args.hsa_executable_load_agent_code_object.loaded_code_object = (hsa_loaded_code_object_t *)loaded_code_object; \
 };
 
@@ -7153,13 +7154,13 @@ struct args_hsa_amd_portable_close_dmabuf_t {
 struct args_hsa_memory_copy_t {
 	hsa_status_t retval;
 	void * dst;
-	const void * src;
+	void * src;
 	size_t size;
 };
 
 #define GET_ARGS_VALUE_hsa_memory_copy(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_memory_copy.dst = (void *)dst; \
-	__hsa_activity->hsa_args.hsa_memory_copy.src = (const void *)src; \
+	__hsa_activity->hsa_args.hsa_memory_copy.src = (void *)src; \
 	__hsa_activity->hsa_args.hsa_memory_copy.size = (size_t)size; \
 };
 
@@ -7196,7 +7197,7 @@ struct args_hsa_signal_exchange_scacquire_t {
 struct args_hsa_ext_image_data_get_info_with_layout_t {
 	hsa_status_t retval;
 	hsa_agent_t agent;
-	const hsa_ext_image_descriptor_t * image_descriptor;
+	hsa_ext_image_descriptor_t * image_descriptor;
 	struct { // const hsa_ext_image_descriptor_t *
 		 hsa_ext_image_descriptor_t val;
 	} image_descriptor__ref;
@@ -7212,7 +7213,7 @@ struct args_hsa_ext_image_data_get_info_with_layout_t {
 
 #define GET_ARGS_VALUE_hsa_ext_image_data_get_info_with_layout(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_ext_image_data_get_info_with_layout.agent = (hsa_agent_t)agent; \
-	__hsa_activity->hsa_args.hsa_ext_image_data_get_info_with_layout.image_descriptor = (const hsa_ext_image_descriptor_t *)image_descriptor; \
+	__hsa_activity->hsa_args.hsa_ext_image_data_get_info_with_layout.image_descriptor = (hsa_ext_image_descriptor_t *)image_descriptor; \
 	__hsa_activity->hsa_args.hsa_ext_image_data_get_info_with_layout.access_permission = (hsa_access_permission_t)access_permission; \
 	__hsa_activity->hsa_args.hsa_ext_image_data_get_info_with_layout.image_data_layout = (hsa_ext_image_data_layout_t)image_data_layout; \
 	__hsa_activity->hsa_args.hsa_ext_image_data_get_info_with_layout.image_data_row_pitch = (size_t)image_data_row_pitch; \
@@ -7239,7 +7240,7 @@ struct args_hsa_ext_image_data_get_info_with_layout_t {
 struct args_hsa_executable_global_variable_define_t {
 	hsa_status_t retval;
 	hsa_executable_t executable;
-	const char * variable_name;
+	char * variable_name;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} variable_name__ref;
@@ -7248,7 +7249,7 @@ struct args_hsa_executable_global_variable_define_t {
 
 #define GET_ARGS_VALUE_hsa_executable_global_variable_define(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_executable_global_variable_define.executable = (hsa_executable_t)executable; \
-	__hsa_activity->hsa_args.hsa_executable_global_variable_define.variable_name = (const char *)variable_name; \
+	__hsa_activity->hsa_args.hsa_executable_global_variable_define.variable_name = (char *)variable_name; \
 	__hsa_activity->hsa_args.hsa_executable_global_variable_define.address = (void *)address; \
 };
 
@@ -7286,7 +7287,7 @@ struct args_hsa_signal_add_acquire_t {
 struct args_hsa_ext_image_data_get_info_t {
 	hsa_status_t retval;
 	hsa_agent_t agent;
-	const hsa_ext_image_descriptor_t * image_descriptor;
+	hsa_ext_image_descriptor_t * image_descriptor;
 	struct { // const hsa_ext_image_descriptor_t *
 		 hsa_ext_image_descriptor_t val;
 	} image_descriptor__ref;
@@ -7299,7 +7300,7 @@ struct args_hsa_ext_image_data_get_info_t {
 
 #define GET_ARGS_VALUE_hsa_ext_image_data_get_info(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_ext_image_data_get_info.agent = (hsa_agent_t)agent; \
-	__hsa_activity->hsa_args.hsa_ext_image_data_get_info.image_descriptor = (const hsa_ext_image_descriptor_t *)image_descriptor; \
+	__hsa_activity->hsa_args.hsa_ext_image_data_get_info.image_descriptor = (hsa_ext_image_descriptor_t *)image_descriptor; \
 	__hsa_activity->hsa_args.hsa_ext_image_data_get_info.access_permission = (hsa_access_permission_t)access_permission; \
 	__hsa_activity->hsa_args.hsa_ext_image_data_get_info.image_data_info = (hsa_ext_image_data_info_t *)image_data_info; \
 };
@@ -7367,7 +7368,7 @@ struct args_hsa_amd_interop_map_buffer_t {
 	struct { // size_t *
 		size_t val;
 	} metadata_size__ref;
-	const void ** metadata;
+	void ** metadata;
 	struct { // const void **
 		 void* ptr1;
 	} metadata__ref;
@@ -7381,7 +7382,7 @@ struct args_hsa_amd_interop_map_buffer_t {
 	__hsa_activity->hsa_args.hsa_amd_interop_map_buffer.size = (size_t *)size; \
 	__hsa_activity->hsa_args.hsa_amd_interop_map_buffer.ptr = (void **)ptr; \
 	__hsa_activity->hsa_args.hsa_amd_interop_map_buffer.metadata_size = (size_t *)metadata_size; \
-	__hsa_activity->hsa_args.hsa_amd_interop_map_buffer.metadata = (const void **)metadata; \
+	__hsa_activity->hsa_args.hsa_amd_interop_map_buffer.metadata = (void **)metadata; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_interop_map_buffer(args) { \
@@ -7412,7 +7413,7 @@ struct args_hsa_amd_interop_map_buffer_t {
 struct args_hsa_ext_sampler_create_t {
 	hsa_status_t retval;
 	hsa_agent_t agent;
-	const hsa_ext_sampler_descriptor_t * sampler_descriptor;
+	hsa_ext_sampler_descriptor_t * sampler_descriptor;
 	struct { // const hsa_ext_sampler_descriptor_t *
 		 hsa_ext_sampler_descriptor_t val;
 	} sampler_descriptor__ref;
@@ -7424,7 +7425,7 @@ struct args_hsa_ext_sampler_create_t {
 
 #define GET_ARGS_VALUE_hsa_ext_sampler_create(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_ext_sampler_create.agent = (hsa_agent_t)agent; \
-	__hsa_activity->hsa_args.hsa_ext_sampler_create.sampler_descriptor = (const hsa_ext_sampler_descriptor_t *)sampler_descriptor; \
+	__hsa_activity->hsa_args.hsa_ext_sampler_create.sampler_descriptor = (hsa_ext_sampler_descriptor_t *)sampler_descriptor; \
 	__hsa_activity->hsa_args.hsa_ext_sampler_create.sampler = (hsa_ext_sampler_t *)sampler; \
 };
 
@@ -7449,7 +7450,7 @@ struct args_hsa_code_object_deserialize_t {
 	hsa_status_t retval;
 	void * serialized_code_object;
 	size_t serialized_code_object_size;
-	const char * options;
+	char * options;
 	struct { // const char *
 		char val[HSA_STRING_SIZE_MAX];
 	} options__ref;
@@ -7462,7 +7463,7 @@ struct args_hsa_code_object_deserialize_t {
 #define GET_ARGS_VALUE_hsa_code_object_deserialize(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_code_object_deserialize.serialized_code_object = (void *)serialized_code_object; \
 	__hsa_activity->hsa_args.hsa_code_object_deserialize.serialized_code_object_size = (size_t)serialized_code_object_size; \
-	__hsa_activity->hsa_args.hsa_code_object_deserialize.options = (const char *)options; \
+	__hsa_activity->hsa_args.hsa_code_object_deserialize.options = (char *)options; \
 	__hsa_activity->hsa_args.hsa_code_object_deserialize.code_object = (hsa_code_object_t *)code_object; \
 };
 
@@ -7486,22 +7487,22 @@ struct args_hsa_code_object_deserialize_t {
 struct args_hsa_amd_agents_allow_access_t {
 	hsa_status_t retval;
 	uint32_t num_agents;
-	const hsa_agent_t * agents;
+	hsa_agent_t * agents;
 	struct { // const hsa_agent_t *
 		 hsa_agent_t val;
 	} agents__ref;
-	const uint32_t * flags;
+	uint32_t * flags;
 	struct { // const uint32_t *
 		 uint32_t val;
 	} flags__ref;
-	const void * ptr;
+	void * ptr;
 };
 
 #define GET_ARGS_VALUE_hsa_amd_agents_allow_access(__hsa_activity) { \
 	__hsa_activity->hsa_args.hsa_amd_agents_allow_access.num_agents = (uint32_t)num_agents; \
-	__hsa_activity->hsa_args.hsa_amd_agents_allow_access.agents = (const hsa_agent_t *)agents; \
-	__hsa_activity->hsa_args.hsa_amd_agents_allow_access.flags = (const uint32_t *)flags; \
-	__hsa_activity->hsa_args.hsa_amd_agents_allow_access.ptr = (const void *)ptr; \
+	__hsa_activity->hsa_args.hsa_amd_agents_allow_access.agents = (hsa_agent_t *)agents; \
+	__hsa_activity->hsa_args.hsa_amd_agents_allow_access.flags = (uint32_t *)flags; \
+	__hsa_activity->hsa_args.hsa_amd_agents_allow_access.ptr = (void *)ptr; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_agents_allow_access(args) { \

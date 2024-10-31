@@ -1,6 +1,15 @@
 local Report = require("Report")
 local report_common = require("report_common")
+local common = require("common")
 local statistics = require("statistics")
+
+local function get_entry_key_tab1(trace)
+    return { "MemoryOperation", common.get_copy_name(trace) }
+end
+
+local function get_entry_key_tab2(trace)
+    return { "KernelDispatch", trace.args.kernel_name }
+end
 
 function Report:get_report_name()
     return "GPU Summary"
@@ -22,14 +31,16 @@ function Report:get_headers()
 end
 
 function Report:get_data()
-    local gpu_traces = self:get_gpu_traces()
+    local kern_traces = self:get_gpu_kern_traces()
+    local mem_traces = self:get_gpu_mem_traces()
 
-    local key_tab = {
-        report_common.key.gpu_op,
-        report_common.key.name
-    }
+    local kern_entries, kern_total_metric = statistics.get_entries(kern_traces, get_entry_key_tab2, report_common.get_duration, self.timeunit)
+    local mem_entries, mem_total_metric = statistics.get_entries(mem_traces, get_entry_key_tab1, report_common.get_duration, self.timeunit)
+    local gpu_entries = common.merge_tab(kern_entries, mem_entries)
+    local gpu_total_metric = kern_total_metric + mem_total_metric
 
-    local data = statistics.get_output_summary(gpu_traces, key_tab, report_common.get_duration, self.timeunit)
+    local data = statistics.get_output_summary(gpu_entries, gpu_total_metric)
+    print(#data)
     
     table.sort(data, function(a, b)
         return tonumber(a[2]) > tonumber(b[2])

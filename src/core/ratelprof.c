@@ -8,14 +8,16 @@
 #include "api_table_manager.h"
 #include "logger.h"
 
-api_table_t hip_api_table;
-api_table_t hsa_api_table; 
+api_table_t hsa_api_table;
+api_table_t omp_tgt_rtl_api_table;
+api_table_t hip_api_table; 
 
 const char* get_domain_name(ratelprof_domain_t domain) 
 {
 	switch(domain) {
-		case RATELPROF_DOMAIN_HIP: return "RATELPROF_DOMAIN_HIP";
-		case RATELPROF_DOMAIN_HSA: return "RATELPROF_DOMAIN_HSA"; 
+		case RATELPROF_DOMAIN_HSA: return "RATELPROF_DOMAIN_HSA";
+		case RATELPROF_DOMAIN_OMP_TGT_RTL: return "RATELPROF_DOMAIN_OMP_TGT_RTL";
+		case RATELPROF_DOMAIN_HIP: return "RATELPROF_DOMAIN_HIP"; 
 		default : return "Unknown domain";
 	}
 	return "Unknown domain";
@@ -24,10 +26,12 @@ const char* get_domain_name(ratelprof_domain_t domain)
 const char* get_funame_by_id(ratelprof_domain_t domain, ratelprof_api_id_t funid) 
 {
     switch (domain) {
-		case RATELPROF_DOMAIN_HIP:
-			return get_hip_funame_by_id(funid);
 		case RATELPROF_DOMAIN_HSA:
-			return get_hsa_funame_by_id(funid); 
+			return get_hsa_funame_by_id(funid);
+		case RATELPROF_DOMAIN_OMP_TGT_RTL:
+			return get_omp_tgt_rtl_funame_by_id(funid);
+		case RATELPROF_DOMAIN_HIP:
+			return get_hip_funame_by_id(funid); 
         default: break;
     }
 }
@@ -35,10 +39,12 @@ const char* get_funame_by_id(ratelprof_domain_t domain, ratelprof_api_id_t funid
 ratelprof_api_id_t get_funid_by_name(ratelprof_domain_t domain, const char* funame) 
 {
     switch (domain) {
-		case RATELPROF_DOMAIN_HIP:
-			return get_hip_funid_by_name(funame);
 		case RATELPROF_DOMAIN_HSA:
-			return get_hsa_funid_by_name(funame); 
+			return get_hsa_funid_by_name(funame);
+		case RATELPROF_DOMAIN_OMP_TGT_RTL:
+			return get_omp_tgt_rtl_funid_by_name(funame);
+		case RATELPROF_DOMAIN_HIP:
+			return get_hip_funid_by_name(funame); 
         default: break;
     }
 }
@@ -46,10 +52,12 @@ ratelprof_api_id_t get_funid_by_name(ratelprof_domain_t domain, const char* funa
 void* get_funaddr_by_id(ratelprof_domain_t domain, ratelprof_api_id_t funid) 
 {
     switch (domain) {
-		case RATELPROF_DOMAIN_HIP:
-			return get_hip_funaddr_by_id(funid);
 		case RATELPROF_DOMAIN_HSA:
-			return get_hsa_funaddr_by_id(funid); 
+			return get_hsa_funaddr_by_id(funid);
+		case RATELPROF_DOMAIN_OMP_TGT_RTL:
+			return get_omp_tgt_rtl_funaddr_by_id(funid);
+		case RATELPROF_DOMAIN_HIP:
+			return get_hip_funaddr_by_id(funid); 
         default: break;
     }
 }
@@ -57,10 +65,12 @@ void* get_funaddr_by_id(ratelprof_domain_t domain, ratelprof_api_id_t funid)
 ratelprof_status_t ratelprof_enable_domain(ratelprof_domain_t domain) 
 {
     switch (domain) {
-		case RATELPROF_DOMAIN_HIP:
-			return ratelprof_enable_api_table(&hip_api_table, "RATELPROF_DOMAIN_HIP_FUNCTIONS");
 		case RATELPROF_DOMAIN_HSA:
-			return ratelprof_enable_api_table(&hsa_api_table, "RATELPROF_DOMAIN_HSA_FUNCTIONS"); 
+			return ratelprof_enable_api_table(&hsa_api_table, "RATELPROF_DOMAIN_HSA_FUNCTIONS");
+		case RATELPROF_DOMAIN_OMP_TGT_RTL:
+			return ratelprof_enable_api_table(&omp_tgt_rtl_api_table, "RATELPROF_DOMAIN_OMP_TGT_RTL_FUNCTIONS");
+		case RATELPROF_DOMAIN_HIP:
+			return ratelprof_enable_api_table(&hip_api_table, "RATELPROF_DOMAIN_HIP_FUNCTIONS"); 
         default: return RATELPROF_STATUS_UNKNOWN_DOMAIN;
     }
     return RATELPROF_STATUS_SUCCESS;
@@ -69,10 +79,12 @@ ratelprof_status_t ratelprof_enable_domain(ratelprof_domain_t domain)
 ratelprof_status_t ratelprof_disable_domain(ratelprof_domain_t domain) 
 {
     switch (domain) {
-		case RATELPROF_DOMAIN_HIP:
-			return ratelprof_disable_api_table(&hip_api_table);
 		case RATELPROF_DOMAIN_HSA:
-			return ratelprof_disable_api_table(&hsa_api_table); 
+			return ratelprof_disable_api_table(&hsa_api_table);
+		case RATELPROF_DOMAIN_OMP_TGT_RTL:
+			return ratelprof_disable_api_table(&omp_tgt_rtl_api_table);
+		case RATELPROF_DOMAIN_HIP:
+			return ratelprof_disable_api_table(&hip_api_table); 
         default: return RATELPROF_STATUS_UNKNOWN_DOMAIN;
     }
     return RATELPROF_STATUS_SUCCESS;
@@ -81,10 +93,12 @@ ratelprof_status_t ratelprof_disable_domain(ratelprof_domain_t domain)
 ratelprof_status_t ratelprof_set_api_callback(ratelprof_domain_t domain, api_callback_handler_t callback_handler) 
 {
     switch (domain) {
-		case RATELPROF_DOMAIN_HIP:
-			return set_hip_api_callback(callback_handler);
 		case RATELPROF_DOMAIN_HSA:
-			return set_hsa_api_callback(callback_handler); 
+			return set_hsa_api_callback(callback_handler);
+		case RATELPROF_DOMAIN_OMP_TGT_RTL:
+			return set_omp_tgt_rtl_api_callback(callback_handler);
+		case RATELPROF_DOMAIN_HIP:
+			return set_hip_api_callback(callback_handler); 
         default: return RATELPROF_STATUS_UNKNOWN_DOMAIN;
     }
     return RATELPROF_STATUS_SUCCESS;
@@ -95,9 +109,17 @@ ratelprof_status_t ratelprof_init()
     INIT_LOGGER();
     init_id_system();
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
+	status = ratelprof_init_api_table(RATELPROF_DOMAIN_HSA, &hsa_api_table, HSA_API_ID_NB_FUNCTION);
+	if (status != RATELPROF_STATUS_SUCCESS) return status;
+	status = ratelprof_populate_api_table(&hsa_api_table, "/opt/rocm/lib/libhsa-runtime64.so");
+	if (status != RATELPROF_STATUS_SUCCESS) return status;
+	status = ratelprof_init_api_table(RATELPROF_DOMAIN_OMP_TGT_RTL, &omp_tgt_rtl_api_table, OMP_TGT_RTL_API_ID_NB_FUNCTION);
+	if (status != RATELPROF_STATUS_SUCCESS) return status;
+	status = ratelprof_populate_api_table(&omp_tgt_rtl_api_table, "/opt/rocm/llvm/lib/libomptarget.rtl.amdgpu.so");
+	if (status != RATELPROF_STATUS_SUCCESS) return status;
 	status = ratelprof_init_api_table(RATELPROF_DOMAIN_HIP, &hip_api_table, HIP_API_ID_NB_FUNCTION);
 	if (status != RATELPROF_STATUS_SUCCESS) return status;
-	status = ratelprof_init_api_table(RATELPROF_DOMAIN_HSA, &hsa_api_table, HSA_API_ID_NB_FUNCTION);
+	status = ratelprof_populate_api_table(&hip_api_table, "/opt/rocm/lib/libamdhip64.so");
 	if (status != RATELPROF_STATUS_SUCCESS) return status; 
     printf("Profiler initialized.\n");
     return status;
@@ -108,9 +130,11 @@ ratelprof_status_t ratelprof_fini()
     CLOSE_LOGGER();
     cleanup_id_system();
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
-	status = ratelprof_cleanup_api_table(&hip_api_table);
-	if (status != RATELPROF_STATUS_SUCCESS) return status;
 	status = ratelprof_cleanup_api_table(&hsa_api_table);
+	if (status != RATELPROF_STATUS_SUCCESS) return status;
+	status = ratelprof_cleanup_api_table(&omp_tgt_rtl_api_table);
+	if (status != RATELPROF_STATUS_SUCCESS) return status;
+	status = ratelprof_cleanup_api_table(&hip_api_table);
 	if (status != RATELPROF_STATUS_SUCCESS) return status; 
     printf("Profiler finalized.\n");
     return status;

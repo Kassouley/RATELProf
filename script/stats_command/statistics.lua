@@ -2,34 +2,6 @@ require("string_ext")
 
 local statistics = {}
 
-local function get_nested_value(tbl, path)
-    local keys = path:split(".")
-    local value = tbl
-    for _, key in ipairs(keys) do
-        local index = tonumber(key)
-        if index then
-            value = value[index]
-        else
-            value = value[key]
-        end
-        if value == nil then
-            break
-        end
-    end
-    return value
-end
-
-local function get_key_fom_cols(trace, key_cols)
-    local key_str = ""
-    local key_tab = {}
-    for _, col in ipairs(key_cols) do
-        key_value = get_nested_value(trace, col)
-        key_str = key_str.."_"..tostring(key_value)
-        table.insert(key_tab, key_value)
-    end
-    return key_tab, key_str
-end
-
 local function compute_stats(entry, total_metric)
     local values = entry.values
     local count = entry.count
@@ -69,20 +41,20 @@ local function compute_stats(entry, total_metric)
 
     -- Round average to the nearest integer
     avg = math.floor(avg + 0.5)
-    return {percent=percent, total=total, count=count, avg=avg, med=med, min=min, max=max, stdDev=stdDev}
+    return {string.format("%.2f", percent), total, count, avg, med, min, max, string.format("%.2f", stdDev)}
 end
 
-function statistics.get_output_summary(data, key_cols, get_stat_metric, timeunit)
-    local output_data = {}
+
+function statistics.get_entries(data, get_entry_key_tab, get_stat_metric, timeunit)
     local total_metric = 0
     local entries = {}
-
     for _, trace in ipairs(data) do
-        local key, key_str = get_key_fom_cols(trace, key_cols)
+        local key_tab = get_entry_key_tab(trace)
+        local key_str = table.concat(key_tab, "#__#")
         local metric = get_stat_metric(trace, timeunit)
 
         if not entries[key_str] then
-            entries[key_str] = {key = key, count = 0, total = 0, values = {}}
+            entries[key_str] = {key_tab = key_tab, count = 0, total = 0, values = {}}
         end
 
         local entry = entries[key_str]
@@ -91,21 +63,15 @@ function statistics.get_output_summary(data, key_cols, get_stat_metric, timeunit
         table.insert(entry.values, metric)
         total_metric = total_metric + metric
     end
+    return entries, total_metric
+end
+
+function statistics.get_output_summary(entries, total_metric)
+    local output_data = {}
 
     for _, entry in pairs(entries) do
-        local stats = compute_stats(entry, total_metric)
-        local statistic_table = {
-            string.format("%.2f", stats.percent),
-            stats.total,
-            stats.count,
-            stats.avg,
-            stats.med,
-            stats.min,
-            stats.max,
-            string.format("%.2f", stats.stdDev)
-        }
-        
-        table.move(entry.key, 1, #entry.key, #statistic_table + 1, statistic_table)
+        local statistic_table = compute_stats(entry, total_metric)
+        table.move(entry.key_tab, 1, #entry.key_tab, #statistic_table + 1, statistic_table)
         table.insert(output_data, statistic_table)
     end
 

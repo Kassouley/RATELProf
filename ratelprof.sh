@@ -27,8 +27,9 @@ Options:
   -h, --help                       Display this help message
   -f, --filter FILE                Specify the input file with functions to intercept
   --plugin PATH                    Specify the plugin path for RATELProf (options: stdout, json, or custom path)
-  --hsa-prof                       Enable profiling of HSA library functions
-  --hip-prof                       Enable profiling of HIP library functions
+  --hsa-trace                       Enable profiling of HSA library functions
+  --hip-trace                       Enable profiling of HIP library functions
+  --omp-tgt-rtl-trace               Enable profiling of OMP_TGT_RTL library functions
 EOF
     exit 0
 }
@@ -70,11 +71,17 @@ function parse_arguments() {
                 shift
                 filter_file="$1"
                 ;;
-            --hsa-prof)
+            --hsa-trace)
                 hsa_prof_enabled=1
                 ;;
-            --hip-prof)
+            --hip-trace)
                 hip_prof_enabled=1
+                ;;
+            --omp-tgt-rtl-trace)
+                omp_tgt_rtl_prof_enabled=1
+                ;;
+            --prof-trace)
+                domain_prof_enabled=1
                 ;;
             --)
                 shift
@@ -108,6 +115,8 @@ get_number_of_kernel() {
 filter_file=""
 hsa_prof_enabled=0
 hip_prof_enabled=0
+omp_tgt_rtl_prof_enabled=0
+domain_prof_enabled=0
 plugin_path="/home/lneto/RATELProf/ratelprof/build/lib/libplugin_json.so"
 app_args=()
 preload_lib="/home/lneto/RATELProf/ratelprof/build/lib/libratelprof_core.so"
@@ -132,6 +141,9 @@ fi
 # Handle library interception
 [[ $hsa_prof_enabled -eq 1 ]] && export RATELPROF_DOMAIN_HSA=1
 [[ $hip_prof_enabled -eq 1 ]] && export RATELPROF_DOMAIN_HIP=1
+[[ $omp_tgt_rtl_prof_enabled -eq 1 ]] && export RATELPROF_DOMAIN_OMP_TGT_RTL=1
+[[ $domain_prof_enabled -eq 1 ]] && export RATELPROF_DOMAIN_PROFILING=1
+
 export RATELPROF_PLUGIN_PATH="$plugin_path"
 export RATELPROF_NB_KERNEL_AVAILABLE=$(get_number_of_kernel)
 

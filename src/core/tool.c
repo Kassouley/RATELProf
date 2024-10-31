@@ -21,10 +21,10 @@ ratelprof_plugin_t* plugin = NULL;
 
 static void* load_symbol(void *handle, const char *symbol) {
     void *sym = dlsym(handle, symbol);
-    if (!sym) {
+    if (sym == NULL) {
         fprintf(stderr, "Error loading symbol %s: %s\n", symbol, dlerror());
         if (handle) dlclose(handle);
-        exit(EXIT_FAILURE);
+        abort();
     }
     return sym;
 }
@@ -46,34 +46,28 @@ static void close_plugin_manager(plugin_manager_t* pm) {
     }
 }
 
-
-void firstFunction() {
-    printf( "firstFunction\n" );
-}
-
 void onLoad()
 {
     ratelprof_init();
     
     open_plugin_manager(&plugin_manager);
     plugin_manager.plugin_initialize(&plugin);
+
+    // API Table Init
     api_callback_handler_t callback_handler;
+    for (ratelprof_domain_t domain = 0; domain < RATELPROF_NB_DOMAIN; domain++)
+    {
+        if (is_profiled_domain(get_domain_name(domain))) {
+            plugin_manager.get_api_callback(plugin, domain, &callback_handler);
+            ratelprof_set_api_callback(domain, callback_handler);
+            ratelprof_enable_domain(domain);
+        }
+    }
 
-    if (is_profiled_domain("RATELPROF_DOMAIN_HIP")) {
-		plugin_manager.get_api_callback(plugin, RATELPROF_DOMAIN_HIP, &callback_handler);
-		ratelprof_set_api_callback(RATELPROF_DOMAIN_HIP, callback_handler);
-		ratelprof_enable_domain(RATELPROF_DOMAIN_HIP);
-	}
-	if (is_profiled_domain("RATELPROF_DOMAIN_HSA")) {
-		plugin_manager.get_api_callback(plugin, RATELPROF_DOMAIN_HSA, &callback_handler);
-		ratelprof_set_api_callback(RATELPROF_DOMAIN_HSA, callback_handler);
-		ratelprof_enable_domain(RATELPROF_DOMAIN_HSA);
-	}
-
+    // Activity System Init
     activity_callback_t activity_callback;
     void* activity_callback_user_args;
     plugin_manager.get_activity_callback(plugin, &activity_callback, &activity_callback_user_args);
-
     ratelprof_pool_properties_t props = {
         .activity_callback = activity_callback,
         .activity_callback_user_args = activity_callback_user_args,
@@ -81,17 +75,27 @@ void onLoad()
     };
     ratelprof_activity_pool_init(&props);
 
+    // Profiling Table Init
+    ratelprof_init_profiling_table();
+	if (is_profiled_domain("RATELPROF_DOMAIN_PROFILING")) {
+		ratelprof_enable_profiling_table();
+	}
 }
 
 void onExit()
 {
     ratelprof_activity_pool_flush_activities();
-    // printf("%d\n",ratelprof_activity_pool_fini());
-     if (is_profiled_domain("RATELPROF_DOMAIN_HIP")) {
-		ratelprof_disable_domain(RATELPROF_DOMAIN_HIP);
-	}
-	if (is_profiled_domain("RATELPROF_DOMAIN_HSA")) {
-		ratelprof_disable_domain(RATELPROF_DOMAIN_HSA);
+    ratelprof_activity_pool_fini();
+
+    for (ratelprof_domain_t domain = 0; domain < RATELPROF_NB_DOMAIN; domain++)
+    {
+        if (is_profiled_domain(get_domain_name(domain))) {
+		    ratelprof_disable_domain(domain);
+        }
+    }
+    
+	if (is_profiled_domain("RATELPROF_DOMAIN_PROFILING")) {
+		ratelprof_disable_profiling_table();
 	}
     plugin_manager.plugin_finalize(&plugin);
     close_plugin_manager(&plugin_manager);
@@ -100,7 +104,11 @@ void onExit()
 
 __attribute__((constructor(101))) void init(void) 
 {
+    onLoad();
+}
+
+__attribute__((destructor(101))) void fini(void) 
+{
     int cr = atexit( onExit );
     assert( cr == 0 );
-    onLoad();
 }

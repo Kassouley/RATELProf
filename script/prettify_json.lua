@@ -9,7 +9,8 @@ local function get_traces(__input_path__)
     local traces = {
         hsaTraces = {},
         hipTraces = {},
-        gpuTraces = {}
+        memoryTraces = {},
+        kernelTraces = {}
     }
 
     for line in file:lines() do
@@ -18,8 +19,10 @@ local function get_traces(__input_path__)
             key, modifiedLine = "hsaTraces", "\t\t\t" .. line:gsub('"d":0,', '')
         elseif line:find('"d":1,') then
             key, modifiedLine = "hipTraces", "\t\t\t" .. line:gsub('"d":1,', '')
-        elseif line:find('"d":4096,') then
-            key, modifiedLine = "gpuTraces", "\t\t\t" .. line:gsub('"d":4096,', '')
+        elseif line:find('"d":16,') then
+            key, modifiedLine = "memoryTraces", "\t\t\t" .. line:gsub('"d":16,', '')
+        elseif line:find('"d":17,') then
+            key, modifiedLine = "kernelTraces", "\t\t\t" .. line:gsub('"d":17,', '')
         end
 
         if key then

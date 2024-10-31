@@ -1,53 +1,52 @@
 local Report = require("Report")
 
-local memCpyKindNames = {
-    [1] = { src = "Host", dst = "Device" },
-    [2] = { src = "Device", dst = "Host" }
-}
-
-local function get_copy_name_from_kind(memCpyKind, direction)
-    return memCpyKindNames[memCpyKind] and memCpyKindNames[memCpyKind][direction] or "Unknown"
-end
-
-local function get_output_data(traces, timeunit)
+local function get_output_data(kern_traces, mem_traces, timeunit)
     local data = {}
 
-    for _, trace in ipairs(traces) do
+    for _, trace in ipairs(kern_traces) do
+        local dur = report_common.get_duration(trace, timeunit)
+        local size = trace.args.size
         local entry = {
-            trace[report_common.key.start],
-            report_common.get_duration(trace, timeunit),
-            trace[report_common.key.corrId],
+            trace.start,
+            dur,
+            trace.corr_id,
             "---",
             "---",
             "---",
             "---",
+            size,
+            size / conversion.time(dur, timeunit, "sec"),
+            common.get_copy_name_from_kind(trace.args.src_type),
+            common.get_copy_name_from_kind(trace.args.dst_type),
             "---",
             "---",
-            "---",
-            "---",
-            "---",
-            "---",
-            "---",
-            trace[report_common.key.gpu_id],
-            trace[report_common.key.queue_id],
+            common.get_copy_name(trace),
             trace[report_common.key.name]
         }
+        table.insert(data, entry)
+    end
 
-        if trace[report_common.key.gpu_op] == 2 then
-            entry[4] = trace[report_common.key.gpu_grd1]
-            entry[5] = trace[report_common.key.gpu_grd2]
-            entry[6] = trace[report_common.key.gpu_grd3]
-            entry[7] = trace[report_common.key.gpu_blk1]
-            entry[8] = trace[report_common.key.gpu_blk2]
-            entry[9] = trace[report_common.key.gpu_blk3]
-            entry[10] = trace[report_common.key.gpu_shrdmem]
-        elseif trace[report_common.key.gpu_op] == 1 then
-            entry[11] = trace[report_common.key.copy_size]
-            entry[12] = entry[11] / conversion.time(entry[2], timeunit, "sec")
-            entry[13] = get_copy_src_from_kind(report_common.key.copy_memCpyKind, "src")
-            entry[14] = get_copy_dst_from_kind(report_common.key.copy_memCpyKind, "dst")
-        end
-
+    for _, trace in ipairs(mem_traces) do
+        local entry = {
+            trace.start,
+            report_common.get_duration(trace, timeunit),
+            trace.corr_id,
+            trace.args.grd[1],
+            trace.args.grd[2],
+            trace.args.grd[3],
+            trace.args.wrg[1],
+            trace.args.wrg[2],
+            trace.args.wrg[3],
+            trace.args.group_segment_size,
+            trace.args.private_segment_size,
+            "---",
+            "---",
+            "---",
+            "---",
+            trace.args.gpu_id,
+            trace.args.queue_id,
+            trace.args.kernel_name,
+        }
         table.insert(data, entry)
     end
     return data
@@ -70,25 +69,27 @@ function Report:get_headers()
         "BlkX", -- 7
         "BlkY", -- 8
         "BlkZ", -- 9
-        "SharedMem (MB)", -- 10
-        "Bytes (MB)", -- 11
-        "Throughput (MBps)", -- 12
-        "SrcMemKd", -- 13
-        "DstMemKd", -- 14
-        "Device", -- 15
-        "Queue", -- 16
+        "GroupMem (MB)", -- 10
+        "PrivateMem (MB)", -- 11
+        "Bytes (MB)", -- 12
+        "Throughput (MBps)", -- 13
+        "SrcMemKd", -- 14
+        "DstMemKd", -- 15
+        "Device", -- 16
+        "Queue", -- 17
         "Name" -- 18
     }
 end
 
 
 function Report:get_data()
-    local gpu_traces = self:get_gpu_traces()
+    local kern_traces = self:get_gpu_kern_traces()
+    local mem_traces = self:get_gpu_mem_traces()
 
-    local data = get_output_data(gpu_traces, self.timeunit)
+    local data = get_output_data(kern_traces, mem_traces, self.timeunit)
 
     table.sort(data, function(a, b)
-        return tonumber(a[3]) < tonumber(b[3])
+        return tonumber(a[1]) < tonumber(b[1])
     end)
 
     return data

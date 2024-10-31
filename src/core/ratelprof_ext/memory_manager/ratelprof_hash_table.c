@@ -111,7 +111,6 @@ ratelprof_status_t ratelprof_hashtable_free(ratelprof_hash_table_t *table)
             free(temp);
         }
     }
-    printf("non moi j'suis coach\n");
     free(table->buckets);
     table->buckets = NULL;
     return RATELPROF_STATUS_SUCCESS;
