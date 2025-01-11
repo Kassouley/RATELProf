@@ -71,7 +71,10 @@ function statistics.get_output_summary(entries, total_metric)
 
     for _, entry in pairs(entries) do
         local statistic_table = compute_stats(entry, total_metric)
-        table.move(entry.key_tab, 1, #entry.key_tab, #statistic_table + 1, statistic_table)
+        for i = 1, #entry.key_tab do
+            table.insert(statistic_table, entry.key_tab[i])
+        end
+        -- table.move(entry.key_tab, 1, #entry.key_tab, #statistic_table + 1, statistic_table)
         table.insert(output_data, statistic_table)
     end
 

@@ -137,6 +137,13 @@ function path.scanfile(p)
     return files
 end
 
+function path.get_script_dir(level)
+    level = (level or 0) + 1  -- Default to 1 level up, adding 1 for this function itself
+    local info = debug.getinfo(level, "S")
+    local path = info and info.source:match("@(.*)$")  -- Extract file path if info exists
+    return path and path:match("(.*/)") or "./"       -- Extract directory from path or return "./" as default
+end
+
 
 -- Example usage
 -- local p = path.concat("folder", "subfolder", "file.txt")

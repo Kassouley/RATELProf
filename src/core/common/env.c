@@ -10,7 +10,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <dlfcn.h>
-#include "ratelprof.h"
+#include <stdint.h>
 #include "env.h"
 
 const char* get_function_filter(const char* env_function_filter) 
@@ -30,10 +30,10 @@ const char* get_function_filter(const char* env_function_filter)
 
 void* get_plugin_lib()
 {
-    const char *plugin_path = getenv("RATELPROF_PLUGIN_PATH");
+    const char *plugin_path = getenv(ENV_PLUGIN_PATH);
     static void* plugin_handle = NULL;
     if (plugin_path == NULL) {
-        fprintf(stderr, "Environment variable RATELPROF_PLUGIN_PATH is not set.\n");
+        fprintf(stderr, "Environment variable %s is not set.\n", ENV_PLUGIN_PATH);
         exit(EXIT_FAILURE);
     }
     plugin_handle = dlopen(plugin_path, RTLD_LAZY);
@@ -46,15 +46,15 @@ void* get_plugin_lib()
 
 const char* get_output_file()
 {
-    const char* out = getenv("RATELPROF_OUTPUT_FILE");
-    if (!out) return "report.json";
+    const char* out = getenv(ENV_OUTPUT_FILE);
+    if (!out) return DEFAULT_OUTPUT_FILE;
     return out;
 }
 
 size_t get_buffer_size() 
 {
-    const char* buf_size = getenv("RATELPROF_BUFFER_SIZE");
-    if (!buf_size) return 0x200000;
+    const char* buf_size = getenv(ENV_BUFFER_SIZE);
+    if (!buf_size) return DEFAULT_BUFFER_SIZE;
     return atoll(buf_size);
 }
 
@@ -72,7 +72,7 @@ uint32_t get_nb_kernel_available()
     return atoll(nb_kernel_av);
 }
 
-bool is_profiled_domain(const char *domain) 
+bool is_set_domain(const char *domain) 
 {
     const char *env_var = getenv(domain);
     if (env_var != NULL && *env_var != '\0') {

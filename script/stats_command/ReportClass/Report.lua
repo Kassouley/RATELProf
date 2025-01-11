@@ -17,16 +17,15 @@ function Report:new(attribute)
     if attribute == nil then return error("Report Constructor need attributes") end
     if attribute.trace_data == nil then return error("Report Constructor need an input_data") end
     if attribute.report == nil then return error("Report Constructor need a report") end
-    require("json_parser")
-    path.require_from_path(attribute.report_path)
+    path.require_from_path(path.get_script_dir(1).."../"..attribute.report_path)
     local instance = setmetatable({}, self)
     instance.trace_file = attribute.trace_file
     instance.trace_data = attribute.trace_data
     instance.report = attribute.report
     instance.report_path = attribute.report_path
+    instance.is_only_main = attribute.is_only_main or false
     instance.timeunit = attribute.timeunit
     instance.data = instance:get_data()
-
     return instance
 end
 
@@ -41,8 +40,8 @@ function Report:generate(args)
     ) .. (output ~= "-" and " to '" .. (filename or "") .. "'" or "") .. "...\n")
 
     if #self.data == 0 then
-        print(string.format(
-            "SKIPPED: %s does not contain %s data.\n",
+        print(string.format( -- TODO (11-11-2024) : Fix, file is created even if report is skipped
+            "\nSKIPPED: '%s' does not contain %s data.\n",
             self.trace_file, self:get_report_name()
         ))
     else

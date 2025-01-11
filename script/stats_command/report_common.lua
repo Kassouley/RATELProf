@@ -1,13 +1,24 @@
+local const = require("const")
 local conversion = require("conversion")
-local report_common = {}
+local json_parser = require("json_parser")
+
+local report_common = json_parser
+
+function report_common.get_copy_name_from_kind(kind)
+    return const._MEM_KIND[kind+1]
+end
+
+function report_common.get_copy_name(trace)
+    return "Copy"..report_common.get_copy_name_from_kind(trace.args.src_type)..
+            "To"..report_common.get_copy_name_from_kind(trace.args.dst_type)
+end
 
 function report_common.get_duration(trace, timeunit)
-    local stop = trace["end"]
-    local start = trace.start
+    local dur = trace.dur
     if timeunit ~= "ns" then
-        return conversion.time(stop, "ns", timeunit) - conversion.time(start, "ns", timeunit)
+        return conversion.time(dur, "ns", timeunit)
     end
-    return  stop - start
+    return  dur
 end
 
 function report_common.get_sort_api_sum(data)
@@ -43,9 +54,10 @@ function report_common.get_header_api_trace(timeunit)
         "Start ("..timeunit..")", -- 1
         "Duration ("..timeunit..")", -- 2
         "Name", -- 3
-        "CorrId", -- 4
-        "Pid", -- 5
-        "Tid" -- 6
+        "Id", -- 4
+        "CorrId", -- 5
+        "Pid", -- 6
+        "Tid" -- 7
     }
 end
 
@@ -57,6 +69,7 @@ function report_common.api_get_output_data(traces, timeunit)
             trace.start,
             report_common.get_duration(trace, timeunit),
             trace.name,
+            trace.id,
             trace.corr_id,
             trace.pid,
             trace.tid

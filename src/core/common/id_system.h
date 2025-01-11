@@ -12,7 +12,6 @@ typedef struct Stack {
 
 // Function prototypes for stack operations
 
-
 // Function to initialize the stack with an initial capacity
 void stack_init(Stack* s, int capacity);
 

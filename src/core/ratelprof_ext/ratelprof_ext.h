@@ -5,14 +5,12 @@
 #include "ratelprof.h"
 #include "ratelprof_buffer_manager.h"
 #include "profiling_trace.h"
-#include "main_trace.h"
 
-#define RATELPROF_COPY_DOMAIN 0x10
-#define RATELPROF_KERNEL_DOMAIN 0x11
-#define RATELPROF_BARRIEROR_DOMAIN 0x12
-#define RATELPROF_BARRIERAND_DOMAIN 0x13
+#define RATELPROF_DOMAIN_COPY 0x10
+#define RATELPROF_DOMAIN_KERNEL 0x11
+#define RATELPROF_DOMAIN_BARRIEROR 0x12
+#define RATELPROF_DOMAIN_BARRIERAND 0x13
 #define RATELPROF_DOMAIN_PROFILING 0x14
-#define RATELPROF_DOMAIN_MAIN 0x15
 
 #define RATELPROF_STATUS_KEY_NOT_FOUND 0x80
 #define RATELPROF_STATUS_QUEUE_EMPTY 0x81
@@ -62,6 +60,8 @@ typedef union gpu_args_s {
 
 typedef struct ratelprof_gpu_activity_s {
     ratelprof_domain_t domain;
+    ratelprof_phase_t phase;
+    uint64_t id;
     uint64_t corr_id;
     uint64_t start_time;
     uint64_t stop_time;
@@ -98,13 +98,10 @@ static inline const char* get_combined_error_string(ratelprof_status_t err) {
 }
 
 #include "ratelprof_activity_pool.h"
+#include "ratelprof_object_tracking.h"
 
-static inline const char* get_kernel_name(uint64_t kernel_object)
-{
-    char* kernel_name = NULL;
-    CHECK_RATELPROF_CALL(
-        ratelprof_activity_pool_get_kernelName_from_kernelObj(kernel_object, (void*)&kernel_name));
-    return kernel_name;
-}
+const char* get_kernel_name(uint64_t kernel_object);
+ratelprof_status_t ratelprof_ext_init();
+ratelprof_status_t ratelprof_ext_fini();
 
 #endif // RATELPROF_EXT_H

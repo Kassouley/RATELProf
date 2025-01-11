@@ -8,6 +8,11 @@ file(GLOB ALL_ENTRIES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURC
 # Initialize an empty list to hold subdirectories
 set(SUBDIRS)
 
+# set(CMAKE_C_COMPILER  "/opt/rocm/llvm/bin/clang")
+# set(CMAKE_CXX_COMPILER  "/opt/rocm/llvm/bin/clang")
+set(CMAKE_C_COMPILER  "hipcc")
+set(CMAKE_CXX_COMPILER  "hipcc")
+
 # Loop through all entries and add only directories to SUBDIRS
 foreach(ENTRY ${ALL_ENTRIES})
     if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${ENTRY}")
@@ -15,10 +20,10 @@ foreach(ENTRY ${ALL_ENTRIES})
     endif()
 endforeach()
 
-set(SOURCES2
-    "${CMAKE_CURRENT_SOURCE_DIR}/activity_plugin.c"
-    "${CMAKE_CURRENT_SOURCE_DIR}/plugin.c"
-)
+file(GLOB SOURCES2 
+        "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp" 
+        "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
+    )
 
 # Now you have only directories in SUBDIRS
 foreach(SUBDIR ${SUBDIRS})
@@ -28,7 +33,7 @@ foreach(SUBDIR ${SUBDIRS})
     )
 
     if (SOURCES)
-        set(LIB_NAME "${SUBDIR}")
+        set(LIB_NAME "plugin_${SUBDIR}")
 
         add_library(${LIB_NAME} SHARED ${SOURCES} ${SOURCES2})
 

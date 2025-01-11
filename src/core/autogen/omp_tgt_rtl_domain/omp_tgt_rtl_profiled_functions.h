@@ -10,7 +10,20 @@
 #include <string.h>
 #include <stdbool.h>
 
+
 #define OMP_TGT_RTL_STRING_SIZE_MAX 128
+
+#define OMP_TGT_RTL_FUNCTION_CALL(func, ...) { \
+	clock_gettime(CLOCK_MONOTONIC, &__omp_tgt_rtl_activity->start_time); \
+	((__##func##_t)omp_tgt_rtl_api_table.api_fn[OMP_TGT_RTL_API_ID_##func])(__VA_ARGS__); \
+	clock_gettime(CLOCK_MONOTONIC, &__omp_tgt_rtl_activity->stop_time); \
+};
+
+#define OMP_TGT_RTL_FUNCTION_CALL_RET(ret_type, func, ...) \
+	clock_gettime(CLOCK_MONOTONIC, &__omp_tgt_rtl_activity->start_time); \
+	ret_type __omp_tgt_rtl_ret = ((__##func##_t)omp_tgt_rtl_api_table.api_fn[OMP_TGT_RTL_API_ID_##func])(__VA_ARGS__); \
+	clock_gettime(CLOCK_MONOTONIC, &__omp_tgt_rtl_activity->stop_time); \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.func.retval = (ret_type)__omp_tgt_rtl_ret; \
 
      
 // OMP_TGT_RTL API Function Prototype
@@ -277,17 +290,17 @@ static inline void* get_omp_tgt_rtl_funaddr_by_id(omp_tgt_rtl_api_id_t id)
 // 		__tgt_async_info * AsyncInfoPtr (struct)
 // )
 struct args___tgt_rtl_query_async_t {
-	int32_t retval;
 	int32_t device_id;
-	__tgt_async_info * AsyncInfoPtr;
+	__tgt_async_info* AsyncInfoPtr;
 	struct { // __tgt_async_info *
 		__tgt_async_info val;
 	} AsyncInfoPtr__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_query_async(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_query_async.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_query_async.AsyncInfoPtr = (__tgt_async_info *)AsyncInfoPtr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_query_async.AsyncInfoPtr = (__tgt_async_info*)AsyncInfoPtr; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_query_async(args) { \
@@ -295,6 +308,8 @@ struct args___tgt_rtl_query_async_t {
 		args->__tgt_rtl_query_async.AsyncInfoPtr__ref.val = *args->__tgt_rtl_query_async.AsyncInfoPtr; \
 	} \
 };
+
+
 
 
 // int32_t
@@ -305,32 +320,35 @@ struct args___tgt_rtl_query_async_t {
 // 		int64_t size (long)
 // )
 struct args___tgt_rtl_data_submit_t {
-	int32_t retval;
 	int32_t device_id;
-	void * target_ptr;
-	void * host_ptr;
+	void* target_ptr;
+	void* host_ptr;
 	int64_t size;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_data_submit(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_submit.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_submit.target_ptr = (void *)target_ptr; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_submit.host_ptr = (void *)host_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_submit.target_ptr = (void*)target_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_submit.host_ptr = (void*)host_ptr; \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_submit.size = (int64_t)size; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_data_submit(args)
+
+
+
 
 // int
 // __tgt_rtl_are_allocations_for_maps_on_apus_disabled (
 // )
 struct args___tgt_rtl_are_allocations_for_maps_on_apus_disabled_t {
 	int retval;
-
 };
 
-#define GET_ARGS_VALUE___tgt_rtl_are_allocations_for_maps_on_apus_disabled(__omp_tgt_rtl_activity)
-#define GET_PTRS_VALUE___tgt_rtl_are_allocations_for_maps_on_apus_disabled(args)
+
+
+
+
 
 // int32_t
 // __tgt_rtl_data_notify_mapped (
@@ -339,19 +357,21 @@ struct args___tgt_rtl_are_allocations_for_maps_on_apus_disabled_t {
 // 		int64_t size (long)
 // )
 struct args___tgt_rtl_data_notify_mapped_t {
-	int32_t retval;
 	int32_t device_id;
-	void * host_ptr;
+	void* host_ptr;
 	int64_t size;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_data_notify_mapped(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_notify_mapped.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_notify_mapped.host_ptr = (void *)host_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_notify_mapped.host_ptr = (void*)host_ptr; \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_notify_mapped.size = (int64_t)size; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_data_notify_mapped(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_data_submit_async (
@@ -362,23 +382,23 @@ struct args___tgt_rtl_data_notify_mapped_t {
 // 		__tgt_async_info * AsyncInfo (struct)
 // )
 struct args___tgt_rtl_data_submit_async_t {
-	int32_t retval;
 	int32_t device_id;
-	void * target_ptr;
-	void * host_ptr;
+	void* target_ptr;
+	void* host_ptr;
 	int64_t size;
-	__tgt_async_info * AsyncInfo;
+	__tgt_async_info* AsyncInfo;
 	struct { // __tgt_async_info *
 		__tgt_async_info val;
 	} AsyncInfo__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_data_submit_async(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_submit_async.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_submit_async.target_ptr = (void *)target_ptr; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_submit_async.host_ptr = (void *)host_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_submit_async.target_ptr = (void*)target_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_submit_async.host_ptr = (void*)host_ptr; \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_submit_async.size = (int64_t)size; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_submit_async.AsyncInfo = (__tgt_async_info *)AsyncInfo; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_submit_async.AsyncInfo = (__tgt_async_info*)AsyncInfo; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_data_submit_async(args) { \
@@ -388,24 +408,26 @@ struct args___tgt_rtl_data_submit_async_t {
 };
 
 
+
+
 // int32_t
 // __tgt_rtl_init_async_info (
 // 		int32_t device_id (int)
 // 		__tgt_async_info ** async_info_ptr (struct)
 // )
 struct args___tgt_rtl_init_async_info_t {
-	int32_t retval;
 	int32_t device_id;
-	__tgt_async_info ** async_info_ptr;
+	__tgt_async_info** async_info_ptr;
 	struct { // __tgt_async_info **
 		__tgt_async_info* ptr1;
 		__tgt_async_info val;
 	} async_info_ptr__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_init_async_info(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_init_async_info.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_init_async_info.async_info_ptr = (__tgt_async_info **)async_info_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_init_async_info.async_info_ptr = (__tgt_async_info**)async_info_ptr; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_init_async_info(args) { \
@@ -418,15 +440,17 @@ struct args___tgt_rtl_init_async_info_t {
 };
 
 
+
+
 // int32_t
 // __tgt_rtl_is_data_exchangable (
 // 		int32_t src_dev_id (int)
 // 		int32_t dst_dev_id (int)
 // )
 struct args___tgt_rtl_is_data_exchangable_t {
-	int32_t retval;
 	int32_t src_dev_id;
 	int32_t dst_dev_id;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_is_data_exchangable(__omp_tgt_rtl_activity) { \
@@ -434,7 +458,9 @@ struct args___tgt_rtl_is_data_exchangable_t {
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_is_data_exchangable.dst_dev_id = (int32_t)dst_dev_id; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_is_data_exchangable(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_data_retrieve_async (
@@ -445,23 +471,23 @@ struct args___tgt_rtl_is_data_exchangable_t {
 // 		__tgt_async_info * AsyncInfo (struct)
 // )
 struct args___tgt_rtl_data_retrieve_async_t {
-	int32_t retval;
 	int32_t device_id;
-	void * host_ptr;
-	void * target_ptr;
+	void* host_ptr;
+	void* target_ptr;
 	int64_t size;
-	__tgt_async_info * AsyncInfo;
+	__tgt_async_info* AsyncInfo;
 	struct { // __tgt_async_info *
 		__tgt_async_info val;
 	} AsyncInfo__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_data_retrieve_async(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_retrieve_async.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_retrieve_async.host_ptr = (void *)host_ptr; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_retrieve_async.target_ptr = (void *)target_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_retrieve_async.host_ptr = (void*)host_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_retrieve_async.target_ptr = (void*)target_ptr; \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_retrieve_async.size = (int64_t)size; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_retrieve_async.AsyncInfo = (__tgt_async_info *)AsyncInfo; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_retrieve_async.AsyncInfo = (__tgt_async_info*)AsyncInfo; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_data_retrieve_async(args) { \
@@ -471,6 +497,8 @@ struct args___tgt_rtl_data_retrieve_async_t {
 };
 
 
+
+
 // int32_t
 // __tgt_rtl_data_delete (
 // 		int32_t device_id (int)
@@ -478,19 +506,21 @@ struct args___tgt_rtl_data_retrieve_async_t {
 // 		int32_t kind (int)
 // )
 struct args___tgt_rtl_data_delete_t {
-	int32_t retval;
 	int32_t device_id;
-	void * target_ptr;
+	void* target_ptr;
 	int32_t kind;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_data_delete(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_delete.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_delete.target_ptr = (void *)target_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_delete.target_ptr = (void*)target_ptr; \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_delete.kind = (int32_t)kind; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_data_delete(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_data_exchange_async (
@@ -502,25 +532,25 @@ struct args___tgt_rtl_data_delete_t {
 // 		__tgt_async_info * AsyncInfo (struct)
 // )
 struct args___tgt_rtl_data_exchange_async_t {
-	int32_t retval;
 	int32_t src_dev_id;
-	void * src_ptr;
+	void* src_ptr;
 	int32_t dst_dev_id;
-	void * dst_ptr;
+	void* dst_ptr;
 	int64_t size;
-	__tgt_async_info * AsyncInfo;
+	__tgt_async_info* AsyncInfo;
 	struct { // __tgt_async_info *
 		__tgt_async_info val;
 	} AsyncInfo__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_data_exchange_async(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange_async.src_dev_id = (int32_t)src_dev_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange_async.src_ptr = (void *)src_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange_async.src_ptr = (void*)src_ptr; \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange_async.dst_dev_id = (int32_t)dst_dev_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange_async.dst_ptr = (void *)dst_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange_async.dst_ptr = (void*)dst_ptr; \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange_async.size = (int64_t)size; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange_async.AsyncInfo = (__tgt_async_info *)AsyncInfo; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange_async.AsyncInfo = (__tgt_async_info*)AsyncInfo; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_data_exchange_async(args) { \
@@ -530,6 +560,8 @@ struct args___tgt_rtl_data_exchange_async_t {
 };
 
 
+
+
 // int32_t
 // __tgt_rtl_prepopulate_page_table (
 // 		int32_t device_id (int)
@@ -537,19 +569,21 @@ struct args___tgt_rtl_data_exchange_async_t {
 // 		int64_t size (long)
 // )
 struct args___tgt_rtl_prepopulate_page_table_t {
-	int32_t retval;
 	int32_t device_id;
-	void * ptr;
+	void* ptr;
 	int64_t size;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_prepopulate_page_table(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_prepopulate_page_table.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_prepopulate_page_table.ptr = (void *)ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_prepopulate_page_table.ptr = (void*)ptr; \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_prepopulate_page_table.size = (int64_t)size; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_prepopulate_page_table(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_data_exchange (
@@ -560,23 +594,25 @@ struct args___tgt_rtl_prepopulate_page_table_t {
 // 		int64_t size (long)
 // )
 struct args___tgt_rtl_data_exchange_t {
-	int32_t retval;
 	int32_t src_dev_id;
-	void * src_ptr;
+	void* src_ptr;
 	int32_t dst_dev_id;
-	void * dst_ptr;
+	void* dst_ptr;
 	int64_t size;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_data_exchange(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange.src_dev_id = (int32_t)src_dev_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange.src_ptr = (void *)src_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange.src_ptr = (void*)src_ptr; \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange.dst_dev_id = (int32_t)dst_dev_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange.dst_ptr = (void *)dst_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange.dst_ptr = (void*)dst_ptr; \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_exchange.size = (int64_t)size; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_data_exchange(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_launch_kernel (
@@ -588,34 +624,34 @@ struct args___tgt_rtl_data_exchange_t {
 // 		__tgt_async_info * AsyncInfo (struct)
 // )
 struct args___tgt_rtl_launch_kernel_t {
-	int32_t retval;
 	int32_t device_id;
-	void * tgt_entry_ptr;
-	void ** tgt_args;
+	void* tgt_entry_ptr;
+	void** tgt_args;
 	struct { // void **
 		void* ptr1;
 	} tgt_args__ref;
-	ptrdiff_t * tgt_offsets;
+	ptrdiff_t* tgt_offsets;
 	struct { // ptrdiff_t *
 		ptrdiff_t val;
 	} tgt_offsets__ref;
-	KernelArgsTy * KernelArgs;
+	KernelArgsTy* KernelArgs;
 	struct { // KernelArgsTy *
 		KernelArgsTy val;
 	} KernelArgs__ref;
-	__tgt_async_info * AsyncInfo;
+	__tgt_async_info* AsyncInfo;
 	struct { // __tgt_async_info *
 		__tgt_async_info val;
 	} AsyncInfo__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_launch_kernel(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel.tgt_entry_ptr = (void *)tgt_entry_ptr; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel.tgt_args = (void **)tgt_args; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel.tgt_offsets = (ptrdiff_t *)tgt_offsets; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel.KernelArgs = (KernelArgsTy *)KernelArgs; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel.AsyncInfo = (__tgt_async_info *)AsyncInfo; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel.tgt_entry_ptr = (void*)tgt_entry_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel.tgt_args = (void**)tgt_args; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel.tgt_offsets = (ptrdiff_t*)tgt_offsets; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel.KernelArgs = (KernelArgsTy*)KernelArgs; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel.AsyncInfo = (__tgt_async_info*)AsyncInfo; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_launch_kernel(args) { \
@@ -634,20 +670,22 @@ struct args___tgt_rtl_launch_kernel_t {
 };
 
 
+
+
 // int32_t
 // __tgt_rtl_is_valid_binary (
 // 		__tgt_device_image * image (struct)
 // )
 struct args___tgt_rtl_is_valid_binary_t {
-	int32_t retval;
-	__tgt_device_image * image;
+	__tgt_device_image* image;
 	struct { // __tgt_device_image *
 		__tgt_device_image val;
 	} image__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_is_valid_binary(__omp_tgt_rtl_activity) { \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_is_valid_binary.image = (__tgt_device_image *)image; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_is_valid_binary.image = (__tgt_device_image*)image; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_is_valid_binary(args) { \
@@ -655,6 +693,8 @@ struct args___tgt_rtl_is_valid_binary_t {
 		args->__tgt_rtl_is_valid_binary.image__ref.val = *args->__tgt_rtl_is_valid_binary.image; \
 	} \
 };
+
+
 
 
 // int32_t
@@ -665,21 +705,23 @@ struct args___tgt_rtl_is_valid_binary_t {
 // 		int64_t size (long)
 // )
 struct args___tgt_rtl_data_retrieve_t {
-	int32_t retval;
 	int32_t device_id;
-	void * host_ptr;
-	void * target_ptr;
+	void* host_ptr;
+	void* target_ptr;
 	int64_t size;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_data_retrieve(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_retrieve.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_retrieve.host_ptr = (void *)host_ptr; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_retrieve.target_ptr = (void *)target_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_retrieve.host_ptr = (void*)host_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_retrieve.target_ptr = (void*)target_ptr; \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_retrieve.size = (int64_t)size; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_data_retrieve(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_data_lock (
@@ -689,21 +731,21 @@ struct args___tgt_rtl_data_retrieve_t {
 // 		void ** LockedHostPtr (void)
 // )
 struct args___tgt_rtl_data_lock_t {
-	int32_t retval;
 	int32_t device_id;
-	void * host_ptr;
+	void* host_ptr;
 	int64_t size;
-	void ** LockedHostPtr;
+	void** LockedHostPtr;
 	struct { // void **
 		void* ptr1;
 	} LockedHostPtr__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_data_lock(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_lock.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_lock.host_ptr = (void *)host_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_lock.host_ptr = (void*)host_ptr; \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_lock.size = (int64_t)size; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_lock.LockedHostPtr = (void **)LockedHostPtr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_lock.LockedHostPtr = (void**)LockedHostPtr; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_data_lock(args) { \
@@ -713,16 +755,19 @@ struct args___tgt_rtl_data_lock_t {
 };
 
 
+
+
 // int32_t
 // __tgt_rtl_supports_empty_images (
 // )
 struct args___tgt_rtl_supports_empty_images_t {
 	int32_t retval;
-
 };
 
-#define GET_ARGS_VALUE___tgt_rtl_supports_empty_images(__omp_tgt_rtl_activity)
-#define GET_PTRS_VALUE___tgt_rtl_supports_empty_images(args)
+
+
+
+
 
 // int32_t
 // __tgt_rtl_destroy_event (
@@ -730,43 +775,48 @@ struct args___tgt_rtl_supports_empty_images_t {
 // 		void * event (void)
 // )
 struct args___tgt_rtl_destroy_event_t {
-	int32_t retval;
 	int32_t device_id;
-	void * event;
+	void* event;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_destroy_event(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_destroy_event.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_destroy_event.event = (void *)event; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_destroy_event.event = (void*)event; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_destroy_event(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_number_of_devices (
 // )
 struct args___tgt_rtl_number_of_devices_t {
 	int32_t retval;
-
 };
 
-#define GET_ARGS_VALUE___tgt_rtl_number_of_devices(__omp_tgt_rtl_activity)
-#define GET_PTRS_VALUE___tgt_rtl_number_of_devices(args)
+
+
+
+
 
 // int64_t
 // __tgt_rtl_init_requires (
 // 		int64_t RequiresFlags (long)
 // )
 struct args___tgt_rtl_init_requires_t {
-	int64_t retval;
 	int64_t RequiresFlags;
+	int64_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_init_requires(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_init_requires.RequiresFlags = (int64_t)RequiresFlags; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_init_requires(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_data_notify_unmapped (
@@ -774,17 +824,19 @@ struct args___tgt_rtl_init_requires_t {
 // 		void * host_ptr (void)
 // )
 struct args___tgt_rtl_data_notify_unmapped_t {
-	int32_t retval;
 	int32_t device_id;
-	void * host_ptr;
+	void* host_ptr;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_data_notify_unmapped(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_notify_unmapped.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_notify_unmapped.host_ptr = (void *)host_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_notify_unmapped.host_ptr = (void*)host_ptr; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_data_notify_unmapped(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_init_device_info (
@@ -793,23 +845,23 @@ struct args___tgt_rtl_data_notify_unmapped_t {
 // 		const char ** err_str (string)
 // )
 struct args___tgt_rtl_init_device_info_t {
-	int32_t retval;
 	int32_t device_id;
-	__tgt_device_info * device_info_ptr;
+	__tgt_device_info* device_info_ptr;
 	struct { // __tgt_device_info *
 		__tgt_device_info val;
 	} device_info_ptr__ref;
-	char ** err_str;
+	const char** err_str;
 	struct { // const char **
-		 char* ptr1;
+		const char* ptr1;
 		char val[OMP_TGT_RTL_STRING_SIZE_MAX];
 	} err_str__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_init_device_info(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_init_device_info.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_init_device_info.device_info_ptr = (__tgt_device_info *)device_info_ptr; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_init_device_info.err_str = (char **)err_str; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_init_device_info.device_info_ptr = (__tgt_device_info*)device_info_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_init_device_info.err_str = (const char**)err_str; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_init_device_info(args) { \
@@ -825,23 +877,27 @@ struct args___tgt_rtl_init_device_info_t {
 };
 
 
+
+
 // int32_t
 // __tgt_rtl_sync_event (
 // 		int32_t device_id (int)
 // 		void * event (void)
 // )
 struct args___tgt_rtl_sync_event_t {
-	int32_t retval;
 	int32_t device_id;
-	void * event;
+	void* event;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_sync_event(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_sync_event.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_sync_event.event = (void *)event; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_sync_event.event = (void*)event; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_sync_event(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_synchronize (
@@ -849,17 +905,17 @@ struct args___tgt_rtl_sync_event_t {
 // 		__tgt_async_info * AsyncInfo (struct)
 // )
 struct args___tgt_rtl_synchronize_t {
-	int32_t retval;
 	int32_t device_id;
-	__tgt_async_info * AsyncInfo;
+	__tgt_async_info* AsyncInfo;
 	struct { // __tgt_async_info *
 		__tgt_async_info val;
 	} AsyncInfo__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_synchronize(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_synchronize.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_synchronize.AsyncInfo = (__tgt_async_info *)AsyncInfo; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_synchronize.AsyncInfo = (__tgt_async_info*)AsyncInfo; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_synchronize(args) { \
@@ -869,6 +925,8 @@ struct args___tgt_rtl_synchronize_t {
 };
 
 
+
+
 // void
 // __tgt_rtl_set_up_env (
 // )
@@ -876,8 +934,10 @@ struct args___tgt_rtl_set_up_env_t {
 
 };
 
-#define GET_ARGS_VALUE___tgt_rtl_set_up_env(__omp_tgt_rtl_activity)
-#define GET_PTRS_VALUE___tgt_rtl_set_up_env(args)
+
+
+
+
 
 // int32_t
 // __tgt_rtl_data_unlock (
@@ -885,65 +945,72 @@ struct args___tgt_rtl_set_up_env_t {
 // 		void * host_ptr (void)
 // )
 struct args___tgt_rtl_data_unlock_t {
-	int32_t retval;
 	int device_id;
-	void * host_ptr;
+	void* host_ptr;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_data_unlock(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_unlock.device_id = (int)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_unlock.host_ptr = (void *)host_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_unlock.host_ptr = (void*)host_ptr; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_data_unlock(args)
+
+
+
 
 // int
 // __tgt_rtl_is_fine_grained_memory_enabled (
 // )
 struct args___tgt_rtl_is_fine_grained_memory_enabled_t {
 	int retval;
-
 };
 
-#define GET_ARGS_VALUE___tgt_rtl_is_fine_grained_memory_enabled(__omp_tgt_rtl_activity)
-#define GET_PTRS_VALUE___tgt_rtl_is_fine_grained_memory_enabled(args)
+
+
+
+
 
 // int
 // __tgt_rtl_has_USM_capable_dGPU (
 // )
 struct args___tgt_rtl_has_USM_capable_dGPU_t {
 	int retval;
-
 };
 
-#define GET_ARGS_VALUE___tgt_rtl_has_USM_capable_dGPU(__omp_tgt_rtl_activity)
-#define GET_PTRS_VALUE___tgt_rtl_has_USM_capable_dGPU(args)
+
+
+
+
 
 // int
 // __tgt_rtl_has_apu_device (
 // )
 struct args___tgt_rtl_has_apu_device_t {
 	int retval;
-
 };
 
-#define GET_ARGS_VALUE___tgt_rtl_has_apu_device(__omp_tgt_rtl_activity)
-#define GET_PTRS_VALUE___tgt_rtl_has_apu_device(args)
+
+
+
+
 
 // int32_t
 // __tgt_rtl_set_device_offset (
 // 		int32_t DeviceIdOffset (int)
 // )
 struct args___tgt_rtl_set_device_offset_t {
-	int32_t retval;
 	int32_t DeviceIdOffset;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_set_device_offset(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_set_device_offset.DeviceIdOffset = (int32_t)DeviceIdOffset; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_set_device_offset(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_launch_kernel_sync (
@@ -954,29 +1021,29 @@ struct args___tgt_rtl_set_device_offset_t {
 // 		KernelArgsTy * KernelArgs (struct)
 // )
 struct args___tgt_rtl_launch_kernel_sync_t {
-	int32_t retval;
 	int32_t device_id;
-	void * tgt_entry_ptr;
-	void ** tgt_args;
+	void* tgt_entry_ptr;
+	void** tgt_args;
 	struct { // void **
 		void* ptr1;
 	} tgt_args__ref;
-	ptrdiff_t * tgt_offsets;
+	ptrdiff_t* tgt_offsets;
 	struct { // ptrdiff_t *
 		ptrdiff_t val;
 	} tgt_offsets__ref;
-	KernelArgsTy * KernelArgs;
+	KernelArgsTy* KernelArgs;
 	struct { // KernelArgsTy *
 		KernelArgsTy val;
 	} KernelArgs__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_launch_kernel_sync(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel_sync.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel_sync.tgt_entry_ptr = (void *)tgt_entry_ptr; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel_sync.tgt_args = (void **)tgt_args; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel_sync.tgt_offsets = (ptrdiff_t *)tgt_offsets; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel_sync.KernelArgs = (KernelArgsTy *)KernelArgs; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel_sync.tgt_entry_ptr = (void*)tgt_entry_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel_sync.tgt_args = (void**)tgt_args; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel_sync.tgt_offsets = (ptrdiff_t*)tgt_offsets; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_launch_kernel_sync.KernelArgs = (KernelArgsTy*)KernelArgs; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_launch_kernel_sync(args) { \
@@ -992,6 +1059,8 @@ struct args___tgt_rtl_launch_kernel_sync_t {
 };
 
 
+
+
 // int32_t
 // __tgt_rtl_record_event (
 // 		int32_t device_id (int)
@@ -999,19 +1068,19 @@ struct args___tgt_rtl_launch_kernel_sync_t {
 // 		__tgt_async_info * AsyncInfo (struct)
 // )
 struct args___tgt_rtl_record_event_t {
-	int32_t retval;
 	int32_t device_id;
-	void * event;
-	__tgt_async_info * AsyncInfo;
+	void* event;
+	__tgt_async_info* AsyncInfo;
 	struct { // __tgt_async_info *
 		__tgt_async_info val;
 	} AsyncInfo__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_record_event(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_record_event.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_record_event.event = (void *)event; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_record_event.AsyncInfo = (__tgt_async_info *)AsyncInfo; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_record_event.event = (void*)event; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_record_event.AsyncInfo = (__tgt_async_info*)AsyncInfo; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_record_event(args) { \
@@ -1019,6 +1088,8 @@ struct args___tgt_rtl_record_event_t {
 		args->__tgt_rtl_record_event.AsyncInfo__ref.val = *args->__tgt_rtl_record_event.AsyncInfo; \
 	} \
 };
+
+
 
 
 // void
@@ -1033,7 +1104,9 @@ struct args___tgt_rtl_set_info_flag_t {
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_set_info_flag.NewInfoLevel = (uint32_t)NewInfoLevel; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_set_info_flag(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_create_event (
@@ -1041,17 +1114,17 @@ struct args___tgt_rtl_set_info_flag_t {
 // 		void ** event (void)
 // )
 struct args___tgt_rtl_create_event_t {
-	int32_t retval;
 	int32_t device_id;
-	void ** event;
+	void** event;
 	struct { // void **
 		void* ptr1;
 	} event__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_create_event(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_create_event.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_create_event.event = (void **)event; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_create_event.event = (void**)event; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_create_event(args) { \
@@ -1059,6 +1132,8 @@ struct args___tgt_rtl_create_event_t {
 		args->__tgt_rtl_create_event.event__ref.ptr1 = (void*)*args->__tgt_rtl_create_event.event; \
 	} \
 };
+
+
 
 
 // void
@@ -1073,7 +1148,9 @@ struct args___tgt_rtl_print_device_info_t {
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_print_device_info.device_id = (int32_t)device_id; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_print_device_info(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_get_function (
@@ -1082,22 +1159,22 @@ struct args___tgt_rtl_print_device_info_t {
 // 		void ** kernel_ptr (void)
 // )
 struct args___tgt_rtl_get_function_t {
-	int32_t retval;
 	__tgt_device_binary binary;
-	char * name;
+	const char* name;
 	struct { // const char *
 		char val[OMP_TGT_RTL_STRING_SIZE_MAX];
 	} name__ref;
-	void ** kernel_ptr;
+	void** kernel_ptr;
 	struct { // void **
 		void* ptr1;
 	} kernel_ptr__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_get_function(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_get_function.binary = (__tgt_device_binary)binary; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_get_function.name = (char *)name; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_get_function.kernel_ptr = (void **)kernel_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_get_function.name = (const char*)name; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_get_function.kernel_ptr = (void**)kernel_ptr; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_get_function(args) { \
@@ -1110,31 +1187,36 @@ struct args___tgt_rtl_get_function_t {
 };
 
 
+
+
 // int32_t
 // __tgt_rtl_init_plugin (
 // )
 struct args___tgt_rtl_init_plugin_t {
 	int32_t retval;
-
 };
 
-#define GET_ARGS_VALUE___tgt_rtl_init_plugin(__omp_tgt_rtl_activity)
-#define GET_PTRS_VALUE___tgt_rtl_init_plugin(args)
+
+
+
+
 
 // int32_t
 // __tgt_rtl_number_of_team_procs (
 // 		int device_id (int)
 // )
 struct args___tgt_rtl_number_of_team_procs_t {
-	int32_t retval;
 	int device_id;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_number_of_team_procs(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_number_of_team_procs.device_id = (int)device_id; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_number_of_team_procs(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_wait_event (
@@ -1143,19 +1225,19 @@ struct args___tgt_rtl_number_of_team_procs_t {
 // 		__tgt_async_info * AsyncInfo (struct)
 // )
 struct args___tgt_rtl_wait_event_t {
-	int32_t retval;
 	int32_t device_id;
-	void * event;
-	__tgt_async_info * AsyncInfo;
+	void* event;
+	__tgt_async_info* AsyncInfo;
 	struct { // __tgt_async_info *
 		__tgt_async_info val;
 	} AsyncInfo__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_wait_event(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_wait_event.device_id = (int32_t)device_id; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_wait_event.event = (void *)event; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_wait_event.AsyncInfo = (__tgt_async_info *)AsyncInfo; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_wait_event.event = (void*)event; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_wait_event.AsyncInfo = (__tgt_async_info*)AsyncInfo; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_wait_event(args) { \
@@ -1163,6 +1245,8 @@ struct args___tgt_rtl_wait_event_t {
 		args->__tgt_rtl_wait_event.AsyncInfo__ref.val = *args->__tgt_rtl_wait_event.AsyncInfo; \
 	} \
 };
+
+
 
 
 // void *
@@ -1173,36 +1257,40 @@ struct args___tgt_rtl_wait_event_t {
 // 		int32_t kind (int)
 // )
 struct args___tgt_rtl_data_alloc_t {
-	void * retval;
 	int32_t device_id;
 	int64_t size;
-	void * host_ptr;
+	void* host_ptr;
 	int32_t kind;
+	void* retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_data_alloc(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_alloc.device_id = (int32_t)device_id; \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_alloc.size = (int64_t)size; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_alloc.host_ptr = (void *)host_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_alloc.host_ptr = (void*)host_ptr; \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_data_alloc.kind = (int32_t)kind; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_data_alloc(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_init_device (
 // 		int32_t device_id (int)
 // )
 struct args___tgt_rtl_init_device_t {
-	int32_t retval;
 	int32_t device_id;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_init_device(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_init_device.device_id = (int32_t)device_id; \
 };
 
-#define GET_PTRS_VALUE___tgt_rtl_init_device(args)
+
+
+
 
 // int32_t
 // __tgt_rtl_get_global (
@@ -1212,24 +1300,24 @@ struct args___tgt_rtl_init_device_t {
 // 		void ** device_ptr (void)
 // )
 struct args___tgt_rtl_get_global_t {
-	int32_t retval;
 	__tgt_device_binary binary;
 	uint64_t size;
-	char * name;
+	const char* name;
 	struct { // const char *
 		char val[OMP_TGT_RTL_STRING_SIZE_MAX];
 	} name__ref;
-	void ** device_ptr;
+	void** device_ptr;
 	struct { // void **
 		void* ptr1;
 	} device_ptr__ref;
+	int32_t retval;
 };
 
 #define GET_ARGS_VALUE___tgt_rtl_get_global(__omp_tgt_rtl_activity) { \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_get_global.binary = (__tgt_device_binary)binary; \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_get_global.size = (uint64_t)size; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_get_global.name = (char *)name; \
-	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_get_global.device_ptr = (void **)device_ptr; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_get_global.name = (const char*)name; \
+	__omp_tgt_rtl_activity->omp_tgt_rtl_args.__tgt_rtl_get_global.device_ptr = (void**)device_ptr; \
 };
 
 #define GET_PTRS_VALUE___tgt_rtl_get_global(args) { \
@@ -1242,16 +1330,19 @@ struct args___tgt_rtl_get_global_t {
 };
 
 
+
+
 // int
 // __tgt_rtl_requested_prepopulate_gpu_page_table (
 // )
 struct args___tgt_rtl_requested_prepopulate_gpu_page_table_t {
 	int retval;
-
 };
 
-#define GET_ARGS_VALUE___tgt_rtl_requested_prepopulate_gpu_page_table(__omp_tgt_rtl_activity)
-#define GET_PTRS_VALUE___tgt_rtl_requested_prepopulate_gpu_page_table(args)
+
+
+
+
  
 
      
@@ -1309,49 +1400,54 @@ static inline void get_omp_tgt_rtl_pointed_args_for(omp_tgt_rtl_api_id_t id, omp
 {
     if (!is_enter) {
         switch(id) {
-			case OMP_TGT_RTL_API_ID___tgt_rtl_query_async : GET_PTRS_VALUE___tgt_rtl_query_async(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_data_submit : GET_PTRS_VALUE___tgt_rtl_data_submit(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_are_allocations_for_maps_on_apus_disabled : GET_PTRS_VALUE___tgt_rtl_are_allocations_for_maps_on_apus_disabled(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_data_notify_mapped : GET_PTRS_VALUE___tgt_rtl_data_notify_mapped(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_data_submit_async : GET_PTRS_VALUE___tgt_rtl_data_submit_async(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_init_async_info : GET_PTRS_VALUE___tgt_rtl_init_async_info(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_is_data_exchangable : GET_PTRS_VALUE___tgt_rtl_is_data_exchangable(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_data_retrieve_async : GET_PTRS_VALUE___tgt_rtl_data_retrieve_async(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_data_delete : GET_PTRS_VALUE___tgt_rtl_data_delete(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_data_exchange_async : GET_PTRS_VALUE___tgt_rtl_data_exchange_async(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_prepopulate_page_table : GET_PTRS_VALUE___tgt_rtl_prepopulate_page_table(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_data_exchange : GET_PTRS_VALUE___tgt_rtl_data_exchange(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel : GET_PTRS_VALUE___tgt_rtl_launch_kernel(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_is_valid_binary : GET_PTRS_VALUE___tgt_rtl_is_valid_binary(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_data_retrieve : GET_PTRS_VALUE___tgt_rtl_data_retrieve(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_data_lock : GET_PTRS_VALUE___tgt_rtl_data_lock(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_supports_empty_images : GET_PTRS_VALUE___tgt_rtl_supports_empty_images(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_destroy_event : GET_PTRS_VALUE___tgt_rtl_destroy_event(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_number_of_devices : GET_PTRS_VALUE___tgt_rtl_number_of_devices(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_init_requires : GET_PTRS_VALUE___tgt_rtl_init_requires(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_data_notify_unmapped : GET_PTRS_VALUE___tgt_rtl_data_notify_unmapped(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_init_device_info : GET_PTRS_VALUE___tgt_rtl_init_device_info(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_sync_event : GET_PTRS_VALUE___tgt_rtl_sync_event(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_synchronize : GET_PTRS_VALUE___tgt_rtl_synchronize(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_set_up_env : GET_PTRS_VALUE___tgt_rtl_set_up_env(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_data_unlock : GET_PTRS_VALUE___tgt_rtl_data_unlock(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_is_fine_grained_memory_enabled : GET_PTRS_VALUE___tgt_rtl_is_fine_grained_memory_enabled(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_has_USM_capable_dGPU : GET_PTRS_VALUE___tgt_rtl_has_USM_capable_dGPU(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_has_apu_device : GET_PTRS_VALUE___tgt_rtl_has_apu_device(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_set_device_offset : GET_PTRS_VALUE___tgt_rtl_set_device_offset(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel_sync : GET_PTRS_VALUE___tgt_rtl_launch_kernel_sync(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_record_event : GET_PTRS_VALUE___tgt_rtl_record_event(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_set_info_flag : GET_PTRS_VALUE___tgt_rtl_set_info_flag(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_create_event : GET_PTRS_VALUE___tgt_rtl_create_event(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_print_device_info : GET_PTRS_VALUE___tgt_rtl_print_device_info(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_get_function : GET_PTRS_VALUE___tgt_rtl_get_function(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_init_plugin : GET_PTRS_VALUE___tgt_rtl_init_plugin(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_number_of_team_procs : GET_PTRS_VALUE___tgt_rtl_number_of_team_procs(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_wait_event : GET_PTRS_VALUE___tgt_rtl_wait_event(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_data_alloc : GET_PTRS_VALUE___tgt_rtl_data_alloc(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_init_device : GET_PTRS_VALUE___tgt_rtl_init_device(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_get_global : GET_PTRS_VALUE___tgt_rtl_get_global(args); return;
-			case OMP_TGT_RTL_API_ID___tgt_rtl_requested_prepopulate_gpu_page_table : GET_PTRS_VALUE___tgt_rtl_requested_prepopulate_gpu_page_table(args); return; 
+			case OMP_TGT_RTL_API_ID___tgt_rtl_query_async : 
+				GET_PTRS_VALUE___tgt_rtl_query_async(args);
+				return;
+			case OMP_TGT_RTL_API_ID___tgt_rtl_data_submit_async : 
+				GET_PTRS_VALUE___tgt_rtl_data_submit_async(args);
+				return;
+			case OMP_TGT_RTL_API_ID___tgt_rtl_init_async_info : 
+				GET_PTRS_VALUE___tgt_rtl_init_async_info(args);
+				return;
+			case OMP_TGT_RTL_API_ID___tgt_rtl_data_retrieve_async : 
+				GET_PTRS_VALUE___tgt_rtl_data_retrieve_async(args);
+				return;
+			case OMP_TGT_RTL_API_ID___tgt_rtl_data_exchange_async : 
+				GET_PTRS_VALUE___tgt_rtl_data_exchange_async(args);
+				return;
+			case OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel : 
+				GET_PTRS_VALUE___tgt_rtl_launch_kernel(args);
+				return;
+			case OMP_TGT_RTL_API_ID___tgt_rtl_is_valid_binary : 
+				GET_PTRS_VALUE___tgt_rtl_is_valid_binary(args);
+				return;
+			case OMP_TGT_RTL_API_ID___tgt_rtl_data_lock : 
+				GET_PTRS_VALUE___tgt_rtl_data_lock(args);
+				return;
+			case OMP_TGT_RTL_API_ID___tgt_rtl_init_device_info : 
+				GET_PTRS_VALUE___tgt_rtl_init_device_info(args);
+				return;
+			case OMP_TGT_RTL_API_ID___tgt_rtl_synchronize : 
+				GET_PTRS_VALUE___tgt_rtl_synchronize(args);
+				return;
+			case OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel_sync : 
+				GET_PTRS_VALUE___tgt_rtl_launch_kernel_sync(args);
+				return;
+			case OMP_TGT_RTL_API_ID___tgt_rtl_record_event : 
+				GET_PTRS_VALUE___tgt_rtl_record_event(args);
+				return;
+			case OMP_TGT_RTL_API_ID___tgt_rtl_create_event : 
+				GET_PTRS_VALUE___tgt_rtl_create_event(args);
+				return;
+			case OMP_TGT_RTL_API_ID___tgt_rtl_get_function : 
+				GET_PTRS_VALUE___tgt_rtl_get_function(args);
+				return;
+			case OMP_TGT_RTL_API_ID___tgt_rtl_wait_event : 
+				GET_PTRS_VALUE___tgt_rtl_wait_event(args);
+				return;
+			case OMP_TGT_RTL_API_ID___tgt_rtl_get_global : 
+				GET_PTRS_VALUE___tgt_rtl_get_global(args);
+				return; 
             default : break;
         }
     } else {

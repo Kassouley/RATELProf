@@ -14,8 +14,8 @@ set(LIBRARY_NAME ${CORE_PROJECT_NAME})
 
 # Find all source files in the current directory (both .c and .cpp)
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
 )
 
 # Find all header files in the current directory
@@ -37,23 +37,17 @@ list(REMOVE_DUPLICATES HEADER_DIRS)
 # Add the shared library (create the target first)
 add_library(${LIBRARY_NAME} SHARED ${SOURCES} ${HEADERS})
 
+
 # Use an environment variable for ROCm path, falling back to /opt/rocm if not set
 set(ROCM_PATH $ENV{ROCM_PATH} CACHE PATH "Path to ROCm toolkit")
 if (NOT ROCM_PATH)
     set(ROCM_PATH "/opt/rocm")
 endif()
 
-# Create a custom target 'debug'
-add_custom_target(debug
-    COMMAND ${CMAKE_COMMAND} -E env CXXFLAGS=-DRATELPROF_DEBUG ${CMAKE_MAKE_PROGRAM} ${LIBRARY_NAME}
-    COMMENT "Building in debug mode with -DRATELPROF_DEBUG"
-)
-
 # Add include directories for ROCm and project headers
 target_include_directories(${LIBRARY_NAME}
     PUBLIC
         ${ROCM_PATH}/include
-        ${ROCM_PATH}/llvm/include
         ${ROCM_PATH}/include/hip
         ${ROCM_PATH}/include/hsa
         ${HEADER_DIRS}
