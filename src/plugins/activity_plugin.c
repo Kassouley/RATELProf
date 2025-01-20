@@ -4,6 +4,7 @@
 #include "hip_domain/hip_plugin.h"
 #include "hsa_domain/hsa_plugin.h"
 #include "omp_tgt_rtl_domain/omp_tgt_rtl_plugin.h"
+#include "omp_tgt_domain/omp_tgt_plugin.h"
 
 // Helper function to add common activity data to the buffer
 void add_activity_data_to_buffer(ratelprof_buffer_t* json_buffer, 
@@ -41,6 +42,10 @@ void activity_callback(ratelprof_domain_t domain, const void* activity, const vo
             hsa_activity_callback(activity, json_buffer);
             break;
             
+        case RATELPROF_DOMAIN_OMP_TGT:
+            omp_tgt_activity_callback(activity, json_buffer);
+            break;
+
         case RATELPROF_DOMAIN_OMP_TGT_RTL:
             omp_tgt_rtl_activity_callback(activity, json_buffer);
             break;
@@ -72,6 +77,12 @@ void profiling_activity_callback(const ratelprof_profiling_activity_t* activity,
         activity->domain, activity->phase, get_prof_funame_by_id(activity->funid), activity->id, activity->corr_id, start, stop, stop-start, activity->pid, activity->tid);
 }
     
+void omp_tgt_activity_callback(const ratelprof_api_activity_t* activity, ratelprof_buffer_t* json_buffer)
+{
+    add_activity_data_to_buffer(json_buffer, activity, get_omp_tgt_funame_by_id(activity->funid));
+    process_omp_tgt_args_for(activity->funid, &activity->omp_tgt_args, json_buffer);
+    ratelprof_add_to_buffer(json_buffer, "}");
+}
 
 void omp_tgt_rtl_activity_callback(const ratelprof_api_activity_t* activity, ratelprof_buffer_t* json_buffer)
 {

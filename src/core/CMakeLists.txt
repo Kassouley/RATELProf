@@ -56,6 +56,7 @@ target_include_directories(${LIBRARY_NAME}
 # Add compilation options to a specific target (library or executable)
 target_compile_options(${LIBRARY_NAME} 
     PUBLIC
+    	-D_GNU_SOURCE
         -D__HIP_PLATFORM_AMD__
 )
 

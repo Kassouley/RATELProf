@@ -24,7 +24,7 @@ typedef enum {
 	RATELPROF_DOMAIN_HSA,
 	RATELPROF_DOMAIN_OMP_TGT_RTL,
 	RATELPROF_DOMAIN_HIP, 
-    RATELPROF_NB_DOMAIN
+	RATELPROF_NB_DOMAIN
 } ratelprof_domain_t;
 
 typedef enum {

@@ -90,7 +90,7 @@ local function process_profiling(positional_args, options_values)
         return result
     end
 
-    local preload_lib = settings._INSTALL_DIR.."/lib/libratelprof_core.so"
+    local preload_lib = settings._INSTALL_DIR.."/lib/libratelprof.so"
     if not path.file_exists(preload_lib) then
         print("Error: Preload library '"..preload_lib.."' not found.")
         os.exit(1)

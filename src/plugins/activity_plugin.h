@@ -11,6 +11,7 @@ void hsa_activity_callback(const ratelprof_api_activity_t* activity, ratelprof_b
 void hip_activity_callback(const ratelprof_api_activity_t* activity, ratelprof_buffer_t* json_buffer);
 void gpu_activity_callback(const ratelprof_gpu_activity_t* activity, ratelprof_buffer_t* json_buffer);
 void omp_tgt_rtl_activity_callback(const ratelprof_api_activity_t* activity, ratelprof_buffer_t* json_buffer);
+void omp_tgt_activity_callback(const ratelprof_api_activity_t* activity, ratelprof_buffer_t* json_buffer);
 void profiling_activity_callback(const ratelprof_profiling_activity_t* activity, ratelprof_buffer_t* json_buffer);
 
 #endif // ACTIVITY_PLUGIN_H
