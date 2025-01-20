@@ -23,8 +23,9 @@ typedef struct ratelprof_plugin_s {
 
 void init_json_content(ratelprof_buffer_t* json_buffer)
 {
+    int i = 0;
     ratelprof_add_to_buffer(json_buffer, "{\n\t\"domain_id\": {\n");
-    for (int i = 0; i < RATELPROF_NB_DOMAIN; i++)
+    for (i = 0; i < RATELPROF_NB_DOMAIN; i++)
     {
         ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": {\"name\":\"%s\", \"desc\":\"%s\"},\n", i, ratelprof_get_domain_name(i), ratelprof_get_domain_desc(i));
     }
@@ -34,10 +35,13 @@ void init_json_content(ratelprof_buffer_t* json_buffer)
         RATELPROF_DOMAIN_BARRIEROR, RATELPROF_DOMAIN_BARRIERAND,
         RATELPROF_DOMAIN_PROFILING
     };
-    for (int i = 0; i < 5; i++)
+    for (i = 0; i < 4; i++)
     {
-        ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": {\"name\":\"%s\", \"desc\":\"%s\"},\n", i, ratelprof_ext_get_domain_name(i), ratelprof_ext_get_domain_desc(i));
+        int d = domains[i]
+        ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": {\"name\":\"%s\", \"desc\":\"%s\"},\n", d, ratelprof_ext_get_domain_name(d), ratelprof_ext_get_domain_desc(d));
     }
+    ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": {\"name\":\"%s\", \"desc\":\"%s\"}\n", domains[4], ratelprof_ext_get_domain_name(domains[4]), ratelprof_ext_get_domain_desc(domains[4]));
+
 
     ratelprof_add_to_buffer(json_buffer, "\t\"phase_id\": {\n");
     ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": \"TOOL_INIT_PHASE\",\n", RATELPROF_IN_TOOL_INIT_PHASE);
