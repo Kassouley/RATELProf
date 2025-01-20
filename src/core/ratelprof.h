@@ -17,6 +17,16 @@
 #include "omp_tgt_rtl_profiled_functions.h"
 #include "hip_profiled_functions.h" 
 
+#define RATELPROF_DOMAIN_OMP_TGT_NAME "RATELPROF_DOMAIN_OMP_TGT"
+#define RATELPROF_DOMAIN_HSA_NAME "RATELPROF_DOMAIN_HSA"
+#define RATELPROF_DOMAIN_OMP_TGT_RTL_NAME "RATELPROF_DOMAIN_OMP_TGT_RTL"
+#define RATELPROF_DOMAIN_HIP_NAME "RATELPROF_DOMAIN_HIP" 
+
+#define RATELPROF_DOMAIN_OMP_TGT_DESC "OpenMP Target Is a component of the OpenMP framework that facilitates the execution of offloaded code on target devices, such as GPUs."
+#define RATELPROF_DOMAIN_HSA_DESC "HSA is an open industry standard and architecture developed to seamlessly integrate CPUs, GPUs, and other accelerators into a unified computing environment."
+#define RATELPROF_DOMAIN_OMP_TGT_RTL_DESC "Refers to the target runtime library in the OpenMP programming model, responsible for handling the execution of code offloaded to target devices, such as GPUs or other accelerators."
+#define RATELPROF_DOMAIN_HIP_DESC "HIP is a C++ runtime API and programming model developed by AMD that enables developers to write portable and high-performance GPU applications." 
+
 typedef unsigned int ratelprof_api_id_t;
 
 typedef enum {
@@ -24,7 +34,7 @@ typedef enum {
 	RATELPROF_DOMAIN_HSA,
 	RATELPROF_DOMAIN_OMP_TGT_RTL,
 	RATELPROF_DOMAIN_HIP, 
-	RATELPROF_NB_DOMAIN
+    RATELPROF_NB_DOMAIN
 } ratelprof_domain_t;
 
 typedef enum {
@@ -62,7 +72,8 @@ extern api_table_t hsa_api_table;
 extern api_table_t omp_tgt_rtl_api_table;
 extern api_table_t hip_api_table; 
 
-const char* get_domain_name(ratelprof_domain_t domain);
+const char* ratelprof_get_domain_name(ratelprof_domain_t domain);
+const char* ratelprof_get_domain_desc(ratelprof_domain_t domain);
 const char* get_funame_by_id(ratelprof_domain_t domain, ratelprof_api_id_t funid);
 ratelprof_api_id_t get_funid_by_name(ratelprof_domain_t domain, const char* funame);
 void* get_funaddr_by_id(ratelprof_domain_t domain, ratelprof_api_id_t funid);

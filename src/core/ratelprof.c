@@ -11,13 +11,25 @@ api_table_t hsa_api_table;
 api_table_t omp_tgt_rtl_api_table;
 api_table_t hip_api_table; 
 
-const char* get_domain_name(ratelprof_domain_t domain) 
+const char* ratelprof_get_domain_name(ratelprof_domain_t domain) 
 {
 	switch(domain) {
-		case RATELPROF_DOMAIN_OMP_TGT: return "RATELPROF_DOMAIN_OMP_TGT";
-		case RATELPROF_DOMAIN_HSA: return "RATELPROF_DOMAIN_HSA";
-		case RATELPROF_DOMAIN_OMP_TGT_RTL: return "RATELPROF_DOMAIN_OMP_TGT_RTL";
-		case RATELPROF_DOMAIN_HIP: return "RATELPROF_DOMAIN_HIP"; 
+		case RATELPROF_DOMAIN_OMP_TGT: return RATELPROF_DOMAIN_OMP_TGT_NAME;
+		case RATELPROF_DOMAIN_HSA: return RATELPROF_DOMAIN_HSA_NAME;
+		case RATELPROF_DOMAIN_OMP_TGT_RTL: return RATELPROF_DOMAIN_OMP_TGT_RTL_NAME;
+		case RATELPROF_DOMAIN_HIP: return RATELPROF_DOMAIN_HIP_NAME; 
+		default : return "Unknown domain";
+	}
+	return "Unknown domain";
+}
+
+const char* ratelprof_get_domain_desc(ratelprof_domain_t domain) 
+{
+	switch(domain) {
+		case RATELPROF_DOMAIN_OMP_TGT: return RATELPROF_DOMAIN_OMP_TGT_DESC;
+		case RATELPROF_DOMAIN_HSA: return RATELPROF_DOMAIN_HSA_DESC;
+		case RATELPROF_DOMAIN_OMP_TGT_RTL: return RATELPROF_DOMAIN_OMP_TGT_RTL_DESC;
+		case RATELPROF_DOMAIN_HIP: return RATELPROF_DOMAIN_HIP_DESC; 
 		default : return "Unknown domain";
 	}
 	return "Unknown domain";

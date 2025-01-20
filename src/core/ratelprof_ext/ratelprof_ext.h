@@ -12,6 +12,18 @@
 #define RATELPROF_DOMAIN_BARRIERAND 0x13
 #define RATELPROF_DOMAIN_PROFILING 0x14
 
+#define RATELPROF_DOMAIN_COPY_NAME "MEMORY_COPY"
+#define RATELPROF_DOMAIN_KERNEL_NAME "KERNEL_DISPATCH"
+#define RATELPROF_DOMAIN_BARRIEROR_NAME "BARRIER_OR_DISPATCH"
+#define RATELPROF_DOMAIN_BARRIERAND_NAME "BARRIER_AND_DISPATCH"
+#define RATELPROF_DOMAIN_PROFILING_NAME "PROFILING_DOMAIN"
+
+#define RATELPROF_DOMAIN_COPY_DESC "The copy operation in GPU programming is responsible for transferring data between memory locations, such as between host and device memory or between different regions of GPU memory."
+#define RATELPROF_DOMAIN_KERNEL_DESC "The kernel dispatch operation is the process of launching a computational kernel on the GPU."
+#define RATELPROF_DOMAIN_BARRIEROR_DESC "The Barrier OR is a less restrictive synchronization mechanism that allows subsequent operations to proceed as soon as any one of the specified preceding operations has completed."
+#define RATELPROF_DOMAIN_BARRIERAND_DESC "The Barrier AND is a synchronization primitive that ensures all preceding operations in the command queue have completed before subsequent operations can begin."
+#define RATELPROF_DOMAIN_PROFILING_DESC "The profiling domain correspond to all HSA function used by RATELProf for GPU Profiling"
+
 #define RATELPROF_STATUS_KEY_NOT_FOUND 0x80
 #define RATELPROF_STATUS_QUEUE_EMPTY 0x81
 #define RATELPROF_STATUS_BUFFER_IS_NULL 0x82
@@ -101,6 +113,8 @@ static inline const char* get_combined_error_string(ratelprof_status_t err) {
 #include "ratelprof_object_tracking.h"
 
 const char* get_kernel_name(uint64_t kernel_object);
+const char* ratelprof_ext_get_domain_name(ratelprof_domain_t domain);
+const char* ratelprof_ext_get_domain_desc(ratelprof_domain_t domain);
 ratelprof_status_t ratelprof_ext_init();
 ratelprof_status_t ratelprof_ext_fini();
 

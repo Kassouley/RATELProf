@@ -26,13 +26,19 @@ void init_json_content(ratelprof_buffer_t* json_buffer)
     ratelprof_add_to_buffer(json_buffer, "{\n\t\"domain_id\": {\n");
     for (int i = 0; i < RATELPROF_NB_DOMAIN; i++)
     {
-        ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": \"%s\",\n", i, get_domain_name(i));
+        ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": {\"name\":\"%s\", \"desc\":\"%s\"},\n", i, ratelprof_get_domain_name(i), ratelprof_get_domain_desc(i));
     }
-    ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": \"MEMORY_COPY\",\n", RATELPROF_DOMAIN_COPY);
-    ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": \"KERNEL_DISPATCH\",\n", RATELPROF_DOMAIN_KERNEL);
-    ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": \"BARRIER_OR_DISPATCH\",\n", RATELPROF_DOMAIN_BARRIEROR);
-    ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": \"BARRIER_AND_DISPATCH\",\n", RATELPROF_DOMAIN_BARRIERAND);
-    ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": \"PROFILING_DOMAIN\"\n\t},\n", RATELPROF_DOMAIN_PROFILING);
+
+    int domains[5] = {
+        RATELPROF_DOMAIN_COPY, RATELPROF_DOMAIN_KERNEL,
+        RATELPROF_DOMAIN_BARRIEROR, RATELPROF_DOMAIN_BARRIERAND,
+        RATELPROF_DOMAIN_PROFILING
+    };
+    for (int i = 0; i < 5; i++)
+    {
+        ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": {\"name\":\"%s\", \"desc\":\"%s\"},\n", i, ratelprof_ext_get_domain_name(i), ratelprof_ext_get_domain_desc(i));
+    }
+
     ratelprof_add_to_buffer(json_buffer, "\t\"phase_id\": {\n");
     ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": \"TOOL_INIT_PHASE\",\n", RATELPROF_IN_TOOL_INIT_PHASE);
     ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": \"CONSTRUCTOR_PHASE\",\n", RATELPROF_IN_CONSTRUCTOR_PHASE);

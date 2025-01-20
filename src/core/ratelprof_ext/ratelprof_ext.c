@@ -9,6 +9,33 @@ const char* get_kernel_name(uint64_t kernel_object)
     return kernel_name;
 }
 
+const char* ratelprof_ext_get_domain_name(ratelprof_domain_t domain) 
+{
+	switch((int)domain) {
+		case RATELPROF_DOMAIN_COPY:         return RATELPROF_DOMAIN_COPY_NAME;
+		case RATELPROF_DOMAIN_KERNEL:       return RATELPROF_DOMAIN_KERNEL_NAME;
+		case RATELPROF_DOMAIN_BARRIEROR:    return RATELPROF_DOMAIN_BARRIEROR_NAME;
+		case RATELPROF_DOMAIN_BARRIERAND:   return RATELPROF_DOMAIN_BARRIERAND_NAME;
+		case RATELPROF_DOMAIN_PROFILING:    return RATELPROF_DOMAIN_PROFILING_NAME;
+		default : return ratelprof_get_domain_name(domain) ;
+	}
+	return "Unknown domain";
+}
+
+
+const char* ratelprof_ext_get_domain_desc(ratelprof_domain_t domain) 
+{
+	switch((int)domain) {
+		case RATELPROF_DOMAIN_COPY:         return RATELPROF_DOMAIN_COPY_DESC;
+		case RATELPROF_DOMAIN_KERNEL:       return RATELPROF_DOMAIN_KERNEL_DESC;
+		case RATELPROF_DOMAIN_BARRIEROR:    return RATELPROF_DOMAIN_BARRIEROR_DESC;
+		case RATELPROF_DOMAIN_BARRIERAND:   return RATELPROF_DOMAIN_BARRIERAND_DESC; 
+		case RATELPROF_DOMAIN_PROFILING:    return RATELPROF_DOMAIN_PROFILING_DESC; 
+		default : return ratelprof_get_domain_desc(domain) ;
+	}
+	return "Unknown domain";
+}
+
 
 ratelprof_status_t ratelprof_ext_init()
 {

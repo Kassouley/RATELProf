@@ -58,7 +58,7 @@ void onLoad()
     api_callback_handler_t callback_handler;
     for (ratelprof_domain_t domain = 0; domain < RATELPROF_NB_DOMAIN; domain++)
     {
-        if (is_set_domain(get_domain_name(domain))) {
+        if (is_set_domain(ratelprof_get_domain_name(domain))) {
             plugin_manager.get_api_callback(plugin, domain, &callback_handler);
             ratelprof_set_api_callback(domain, callback_handler);
             ratelprof_enable_domain(domain);
@@ -93,7 +93,7 @@ void onExit()
 
     for (ratelprof_domain_t domain = 0; domain < RATELPROF_NB_DOMAIN; domain++)
     {
-        if (is_set_domain(get_domain_name(domain))) {
+        if (is_set_domain(ratelprof_get_domain_name(domain))) {
 		    ratelprof_disable_domain(domain);
         }
     }
