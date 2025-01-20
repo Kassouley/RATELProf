@@ -37,10 +37,10 @@ void init_json_content(ratelprof_buffer_t* json_buffer)
     };
     for (i = 0; i < 4; i++)
     {
-        int d = domains[i]
+        int d = domains[i];
         ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": {\"name\":\"%s\", \"desc\":\"%s\"},\n", d, ratelprof_ext_get_domain_name(d), ratelprof_ext_get_domain_desc(d));
     }
-    ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": {\"name\":\"%s\", \"desc\":\"%s\"}\n", domains[4], ratelprof_ext_get_domain_name(domains[4]), ratelprof_ext_get_domain_desc(domains[4]));
+    ratelprof_add_to_buffer(json_buffer, "\t\t\"%d\": {\"name\":\"%s\", \"desc\":\"%s\"}\n\t},", domains[4], ratelprof_ext_get_domain_name(domains[4]), ratelprof_ext_get_domain_desc(domains[4]));
 
 
     ratelprof_add_to_buffer(json_buffer, "\t\"phase_id\": {\n");
