@@ -21,6 +21,15 @@ function report_common.get_duration(trace, timeunit)
     return  dur
 end
 
+
+function report_common.get_queue_time(trace, timeunit)
+    local dur = trace.start - trace.args.dispatch_time
+    if timeunit ~= "ns" then
+        return conversion.time(dur, "ns", timeunit)
+    end
+    return  dur
+end
+
 function report_common.get_sort_api_sum(data)
     table.sort(data, function(a, b)
         return tonumber(a[2]) > tonumber(b[2])

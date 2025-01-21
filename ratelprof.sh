@@ -16,7 +16,7 @@ EOF
 }
 
 #!/bin/bash
-INSTALL_DIR="/home/lneto/RATELProf/build"
+INSTALL_DIR="/home/lneto/RATELProf/RATELProf/build"
 
 # Check if no argument is provided
 if [ -z "$1" ]; then

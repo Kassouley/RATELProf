@@ -75,7 +75,7 @@ local function process_profiling(positional_args, options_values)
     end
     local function get_number_of_kernel(app_arg)
         -- Run the shell command and capture its output
-        local handle = io.popen("nm -C -U " .. app_arg .. " | grep __device_stub__ | wc -l")
+        local handle = io.popen("nm --demangle --defined-only " .. app_arg .. " | grep -iE \"__device_stub__|__omp_offloading\" | wc -l")
         local num = tonumber(handle:read("*a"):match("%d+"))
         handle:close()
     

@@ -15,7 +15,7 @@ local function fetch_traces(report, domain_string)
     -- If not cached, fetch and store in cache
     local ret = {}
     for _, trace in ipairs(report.trace_data.trace_events) do
-        if report.trace_data.domain_id[tostring(trace.d)] == domain_string
+        if report.trace_data.domain_id[tostring(trace.d)].name == domain_string
                 and (not report.is_only_main or report.trace_data.phase_id[tostring(trace.p)] == "MAIN_PHASE") then
             table.insert(ret, trace)
         end
@@ -35,7 +35,7 @@ function parser.get_hip_traces(report)
 end
 
 function parser.get_omp_traces(report)
-    return fetch_traces(report, "RATELPROF_DOMAIN_OMP")
+    return fetch_traces(report, "RATELPROF_DOMAIN_OMP_TGT")
 end
 
 function parser.get_omp_target_traces(report)

@@ -2,7 +2,7 @@ require("string_ext")
 
 local statistics = {}
 
-local function compute_stats(entry, total_metric)
+function statistics.compute_stats(entry, total_metric)
     local values = entry.values
     local count = entry.count
     local total = entry.total
@@ -70,11 +70,10 @@ function statistics.get_output_summary(entries, total_metric)
     local output_data = {}
 
     for _, entry in pairs(entries) do
-        local statistic_table = compute_stats(entry, total_metric)
+        local statistic_table = statistics.compute_stats(entry, total_metric)
         for i = 1, #entry.key_tab do
             table.insert(statistic_table, entry.key_tab[i])
         end
-        -- table.move(entry.key_tab, 1, #entry.key_tab, #statistic_table + 1, statistic_table)
         table.insert(output_data, statistic_table)
     end
 

@@ -1,5 +1,6 @@
 local Report = require("Report")
 local report_common = require("report_common")
+local conversion = require("conversion")
 
 local function get_output_data(kern_traces, mem_traces, barrand_traces, barror_traces, timeunit)
     local data = {}
@@ -9,25 +10,28 @@ local function get_output_data(kern_traces, mem_traces, barrand_traces, barror_t
         local dur = report_common.get_duration(trace, timeunit)
 
         if entry_type == "mem" then
-            local size = trace.args.size
+            local size = conversion.bytes(trace.args.size, "bytes", "mb")
             return {
-                trace.start,
+                string.format("%.0f", trace.start),
                 dur,
+                "---",
                 trace.id,
                 trace.corr_id,
-                "---", "---", "---", "---",
+                "---", "---", "---", "---", "---", "---", "---", "---",
                 size,
-                size / conversion.time(dur, timeunit, "sec"),
+                string.format("%.2f", size / conversion.time(dur, timeunit, "sec")),
                 report_common.get_copy_name_from_kind(trace.args.src_type),
                 report_common.get_copy_name_from_kind(trace.args.dst_type),
                 "---", "---",
-                report_common.get_copy_name(trace),
-                trace[report_common.key.name]
+                report_common.get_copy_name(trace)
             }
         elseif entry_type == "barrand" or entry_type == "barror" then
+            local queue_dur = trace.start - trace.args.dispatch_time
+            if timeunit ~= "ns" then queue_dur = conversion.time(queue_dur, "ns", timeunit) end
             return {
-                trace.start,
+                string.format("%.0f", trace.start),
                 dur,
+                queue_dur,
                 trace.id,
                 trace.corr_id,
                 "---", "---", "---", "---", "---", "---", "---", "---",
@@ -37,9 +41,12 @@ local function get_output_data(kern_traces, mem_traces, barrand_traces, barror_t
                 entry_type == "barrand" and "Barrier And" or "Barrier Or"
             }
         elseif entry_type == "kern" then
+            local queue_dur = trace.start - trace.args.dispatch_time
+            if timeunit ~= "ns" then queue_dur = conversion.time(queue_dur, "ns", timeunit) end
             return {
-                trace.start,
+                string.format("%.0f", trace.start),
                 dur,
+                queue_dur,
                 trace.id,
                 trace.corr_id,
                 trace.args.grd[1], trace.args.grd[2], trace.args.grd[3],
@@ -83,25 +90,26 @@ end
 
 function Report:get_headers()
     return {
-        "Start ("..self.timeunit..")", -- 1
-        "Duration ("..self.timeunit..")", -- 2
-        "Id", -- 3
-        "CorrId", -- 4
-        "GrdX", -- 5
-        "GrdY", -- 6
-        "GrdZ", -- 7
-        "BlkX", -- 8
-        "BlkY", -- 9
-        "BlkZ", -- 10
-        "GroupMem (MB)", -- 11
-        "PrivateMem (MB)", -- 12
-        "Bytes (MB)", -- 13
-        "Throughput (MBps)", -- 14
-        "SrcMemKd", -- 15
-        "DstMemKd", -- 16
-        "Device", -- 17
-        "Queue", -- 18
-        "Name" -- 19
+        "Start ("..self.timeunit..")", 
+        "Duration ("..self.timeunit..")", 
+        "Queue Time ("..self.timeunit..")", 
+        "Id", 
+        "CorrId", 
+        "GrdX", 
+        "GrdY", 
+        "GrdZ", 
+        "BlkX", 
+        "BlkY", 
+        "BlkZ",
+        "GroupMem (MB)",
+        "PrivateMem (MB)",
+        "Bytes (MB)",
+        "Throughput (MBps)",
+        "SrcMemKd",
+        "DstMemKd",
+        "Device",
+        "Queue",
+        "Name"
     }
 end
 
