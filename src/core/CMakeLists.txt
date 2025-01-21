@@ -61,3 +61,7 @@ target_compile_options(${LIBRARY_NAME}
 )
 
 target_include_directories(${LIBRARY_NAME} PUBLIC .)
+
+
+# Install the library
+install(TARGETS ${LIBRARY_NAME} DESTINATION ${CORE_PROJECT_NAME}/lib)

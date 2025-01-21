@@ -48,26 +48,33 @@ static void close_plugin_manager(plugin_manager_t* pm) {
 
 void onLoad()
 {
+    printf("RPROF: Initializing RATELProf . . .");
     ratelprof_init();
     ratelprof_ext_init();
     
     open_plugin_manager(&plugin_manager);
     plugin_manager.plugin_initialize(&plugin);
+    printf("\rRPROF: Initializing RATELProf . . . SUCCESS\n");
 
     // API Table Init
     api_callback_handler_t callback_handler;
     for (ratelprof_domain_t domain = 0; domain < RATELPROF_NB_DOMAIN; domain++)
     {
-        if (is_set_domain(ratelprof_get_domain_name(domain))) {
+        const char* domain_name = ratelprof_get_domain_name(domain);
+        if (is_set_domain(domain_name)) {
+            printf("RPROF: Configuring domain '%s' . . .", domain_name);
             plugin_manager.get_api_callback(plugin, domain, &callback_handler);
             ratelprof_set_api_callback(domain, callback_handler);
             ratelprof_enable_domain(domain);
+            printf("\rRPROF: Domain '%s' enabled.          \n", domain_name);
         }
     }
 
     // Profiling Table Init
 	if (is_set_domain("RATELPROF_DOMAIN_PROFILING")) {
+        printf("RPROF: Enabling profiling traced functions . . .\n");
 		ratelprof_enable_profiling_table();
+        printf("\rRPROF: Profiling traced functions enabled.          \n");
 	}
 
     // Activity System Init
@@ -81,15 +88,34 @@ void onLoad()
         .buffer_size = get_buffer_size()
     };
     ratelprof_activity_pool_init(&props);
+
+    printf("RPROF: Starting profiling . . .\n");
     ratelprof_start();
+
+    printf("RPROF: Application output :\n\n");
+
 }
 
 void onExit()
 {
     ratelprof_stop();
+    printf("\nRPROF: Profiling finished.\n");
+
+    ratelprof_lifecycle_t* lc = ratelprof_get_lifecycle();
+ 
+    ratelprof_time_t main_start = ratelprof_get_timestamp_ms(lc->main_start);
+    ratelprof_time_t main_stop = ratelprof_get_timestamp_ms(lc->main_stop);
+    ratelprof_time_t constructor_start = ratelprof_get_timestamp_ms(lc->constructor_start);
+    ratelprof_time_t destructor_stop = ratelprof_get_timestamp_ms(lc->destructor_stop);
+    printf("RPROF: Application duration : %10lu ms\n", main_stop - main_start);
+    printf("RPROF: Constructor duration : %10lu ms\n", main_start - constructor_start);
+    printf("RPROF: Destructor duration :  %10lu ms\n", destructor_stop - main_stop);
+    printf("RPROF: Total duration :       %10lu ms\n", destructor_stop - main_start);
     
+    printf("RPROF: Flushing activities . . .");
     ratelprof_activity_pool_flush_activities();
     ratelprof_activity_pool_fini();
+    printf("\rRPROF: Flushing activities . . . Done\n");
 
     for (ratelprof_domain_t domain = 0; domain < RATELPROF_NB_DOMAIN; domain++)
     {
@@ -101,7 +127,8 @@ void onExit()
 	if (is_set_domain("RATELPROF_DOMAIN_PROFILING")) {
 		ratelprof_disable_profiling_table();
 	}
-    
+
+    printf("RPROF: Exiting . . .\n");
     ratelprof_fini();
     ratelprof_ext_fini();
 

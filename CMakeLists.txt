@@ -17,3 +17,11 @@ set(CORE_PROJECT_NAME "ratelprof" CACHE STRING "RATELProf for the core part")
 # Add subdirectory for the shared library
 add_subdirectory(src/core)
 add_subdirectory(src/plugins)
+
+# Install scripts
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/scripts/ DESTINATION ${CMAKE_INSTALL_PREFIX}/${CORE_PROJECT_NAME}/share/scripts)
+install(FILES ${CMAKE_SOURCE_DIR}/ratelprof.sh 
+        RENAME ratelprof
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/${CORE_PROJECT_NAME}/bin/
+        PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
+

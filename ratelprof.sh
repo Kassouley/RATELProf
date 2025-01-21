@@ -16,7 +16,7 @@ EOF
 }
 
 #!/bin/bash
-INSTALL_DIR="/home/lneto/RATELProf/RATELProf/build"
+INSTALL_DIR=$RATELPROF_INSTALL_DIR/share/scripts
 
 # Check if no argument is provided
 if [ -z "$1" ]; then
@@ -28,12 +28,12 @@ fi
 case "$1" in
     profile)
         shift
-        eval "lua $INSTALL_DIR/../script/profile_command/profile.lua $@"
+        eval "lua $INSTALL_DIR/profile_command/profile.lua $@"
         ;;
 
     stats)
         shift
-        eval "lua $INSTALL_DIR/../script/stats_command/stats.lua $@"
+        eval "lua $INSTALL_DIR/stats_command/stats.lua $@"
         ;;
 
     visualize)

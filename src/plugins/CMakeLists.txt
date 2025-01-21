@@ -48,5 +48,8 @@ foreach(SUBDIR ${SUBDIRS})
         target_link_libraries(${LIB_NAME} ${CORE_PROJECT_NAME})
 
         message(STATUS "Created shared library: ${LIB_NAME}")
+        
+        # Install the library
+        install(TARGETS ${LIB_NAME} DESTINATION ${CORE_PROJECT_NAME}/lib)
     endif()
 endforeach()
