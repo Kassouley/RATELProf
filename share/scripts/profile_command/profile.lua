@@ -164,7 +164,7 @@ local function main(arg)
     local script = Script:new(attribute)
 
     -- script:set_usage("ratelprof profile [<options>] -- [application] [<application args>]")
-    script:set_desc("\n\tProfile")
+    script:set_desc("\n\tProfile an AMD GPU application and trace AMD Library functions")
 
     script:set_execute_function(process_profiling)
 

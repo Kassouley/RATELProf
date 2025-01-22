@@ -98,7 +98,7 @@ local function main(arg)
     }
     local script = Script:new(attribute)
 
-    script:set_desc("\n\tGenerate report on trace file")
+    script:set_desc("\n\tGenerate differents types of report based on trace file")
 
     script:set_execute_function(process_stats)
 

@@ -67,7 +67,7 @@ local function main(arg)
     }
     local script = Script:new(attribute)
 
-    script:set_desc("\n\tVisualize")
+    script:set_desc("\n\tGenerate a HTML report view to see traces as a timeline.")
 
     script:set_execute_function(process_visualizing)
 
