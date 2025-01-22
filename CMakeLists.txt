@@ -19,7 +19,7 @@ add_subdirectory(src/core)
 add_subdirectory(src/plugins)
 
 # Install scripts
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/scripts/ DESTINATION ${CMAKE_INSTALL_PREFIX}/${CORE_PROJECT_NAME}/share/scripts)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/share/ DESTINATION ${CMAKE_INSTALL_PREFIX}/${CORE_PROJECT_NAME}/share/)
 install(FILES ${CMAKE_SOURCE_DIR}/ratelprof.sh 
         RENAME ratelprof
         DESTINATION ${CMAKE_INSTALL_PREFIX}/${CORE_PROJECT_NAME}/bin/

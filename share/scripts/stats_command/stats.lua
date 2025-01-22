@@ -16,11 +16,11 @@ end
 
 require("string_ext")
 local common = require("common")
-local path = require("path")
+local lfs = require("lfs")
 local conversion = require("conversion")
 local Script = require("Script")
 local Report = require("Report")
-local settings = common.load_json(path.get_script_dir(1).."stats_settings.json")
+local settings = common.load_json(lfs.get_script_path(1).."stats_settings.json")
 
 local function report_option(script, value)
     if value then script.options_values.reports = value:split(",")
@@ -90,7 +90,7 @@ local function main(arg)
 
     local attribute = {
         name = "ratelprof stats",
-        settings = settings,
+        version = settings._VERSION,
         default_options_values = { 
             reports = settings._DEFAULT_REPORT, outputs = {"-"}, 
             formats = {}, timeunit = "ns"

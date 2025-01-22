@@ -1,4 +1,4 @@
-local path = require("path")
+local lfs = require("lfs")
 
 -- Report.lua
 local Report = {}
@@ -17,7 +17,7 @@ function Report:new(attribute)
     if attribute == nil then return error("Report Constructor need attributes") end
     if attribute.trace_data == nil then return error("Report Constructor need an input_data") end
     if attribute.report == nil then return error("Report Constructor need a report") end
-    path.require_from_path(path.get_script_dir(1).."../"..attribute.report_path)
+    lfs.require_from_path(lfs.get_script_path(1).."../"..attribute.report_path)
     local instance = setmetatable({}, self)
     instance.trace_file = attribute.trace_file
     instance.trace_data = attribute.trace_data
@@ -69,7 +69,7 @@ function Report:get_output_stream(output, format)
         out = io.popen(command, "w")
         if not out then error("Failed to execute command: " .. command) end
     else
-        local default_basename = path.remove_extension(self.trace_file)
+        local default_basename = lfs.remove_extension(self.trace_file)
         local file_extension = format_extensions[format] or "txt"
         local basename = output == "." and default_basename or output
         filename = string.format("%s_%s.%s", basename, self.report, file_extension)

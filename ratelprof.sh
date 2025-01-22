@@ -15,6 +15,11 @@ EOF
     exit 0
 }
 
+if [[ -z $RATELPROF_INSTALL_DIR ]]; then
+    echo "Error: RATELPROF_INSTALL_DIR env var not defined"
+    exit
+fi
+
 #!/bin/bash
 INSTALL_DIR=$RATELPROF_INSTALL_DIR/share/scripts
 
@@ -38,7 +43,7 @@ case "$1" in
 
     visualize)
         shift
-        echo "Work in progress"
+        eval "lua $INSTALL_DIR/visualize_command/visualize.lua $@"
         ;;
 
     --help|-h)

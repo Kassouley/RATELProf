@@ -15,9 +15,9 @@ end
 
 require("string_ext")
 local common = require("common")
-local path = require("path")
+local lfs = require("lfs")
 local Script = require("Script")
-local settings = common.load_json(path.get_script_dir(1).."profile_settings.json")
+local settings = common.load_json(lfs.get_script_path(1).."profile_settings.json")
 local INSTALL_DIR = os.getenv("RATELPROF_INSTALL_DIR")
 
 -- Function to set environment variable
@@ -27,7 +27,7 @@ end
 
 local function process_profiling(positional_args, options_values)
     local application_command = positional_args
-    if not path.file_exists(application_command[1]) then
+    if not lfs.file_exists(application_command[1]) then
         print("No application to profile.")
         os.exit(1)
     end
@@ -91,7 +91,7 @@ local function process_profiling(positional_args, options_values)
     end
 
     local preload_lib = INSTALL_DIR.."/lib/libratelprof.so"
-    if not path.file_exists(preload_lib) then
+    if not lfs.file_exists(preload_lib) then
         print("Error: Preload library '"..preload_lib.."' not found.")
         os.exit(1)
     end
@@ -154,7 +154,7 @@ local function main(arg)
         
     local attribute = {
         name = "ratelprof profile",
-        settings = settings,
+        version = settings._VERSION,
         default_options_values = { 
             plugin = INSTALL_DIR.."/lib/libplugin_json.so", 
             filter = nil, output = "report_"..os.date("%Y-%m-%d_%H-%M-%S")..".json",
