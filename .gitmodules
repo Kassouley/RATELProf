@@ -1,0 +1,3 @@
+[submodule "share/visualize"]
+	path = share/visualize
+	url = git@github.com:Kassouley/RATELProf-Visualize.git

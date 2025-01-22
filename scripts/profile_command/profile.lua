@@ -114,7 +114,7 @@ local function process_profiling(positional_args, options_values)
     print("RPROF: Profiling of '"..application_command[1].."'")
     print("RPROF: Application Command : '"..table.concat(application_command, " ").."'")
     print("RPROF: Plugin used : '"..options_values.plugin.."'")
-    print("RPROF: Profiling output : '"..options_values.output.."'")
+    print("RPROF: Profiling output file : '"..options_values.output.."'")
 
     local ret_code = os.execute(env.." "..table.concat(application_command, " "))
     if ret_code ~= 0 then
