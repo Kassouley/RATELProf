@@ -2,7 +2,6 @@
  * # DO NOT MODIFY UNLESS YOU KNOW WHAT YOU ARE DOING.
  * # ANY CHANGES MAY BE OVERWRITTEN BY SUBSEQUENT RUNS OF GILDA.
  */ 
-#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <dlfcn.h>
