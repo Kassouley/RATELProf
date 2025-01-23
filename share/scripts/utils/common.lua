@@ -27,4 +27,11 @@ function common.merge_tab(t1, ...)
     return t1
 end
 
+function common.execute_command(cmd)
+    local handle = io.popen(cmd)
+    local result = handle:read("*a")
+    handle:close()
+    return result
+end
+
 return common

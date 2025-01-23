@@ -17,7 +17,7 @@ function Report:new(attribute)
     if attribute == nil then return error("Report Constructor need attributes") end
     if attribute.trace_data == nil then return error("Report Constructor need an input_data") end
     if attribute.report == nil then return error("Report Constructor need a report") end
-    lfs.require_from_path(lfs.get_script_path(1).."../"..attribute.report_path)
+    lfs.require_from_path(attribute.report_path)
     local instance = setmetatable({}, self)
     instance.trace_file = attribute.trace_file
     instance.trace_data = attribute.trace_data

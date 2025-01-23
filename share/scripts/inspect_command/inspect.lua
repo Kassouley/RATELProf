@@ -22,15 +22,6 @@ local msgpack = require("msgpack")
 
 local INSTALL_DIR = os.getenv("RATELPROF_INSTALL_DIR")
 
-
-local function execute_command(cmd)
-    local handle = io.popen(cmd)
-    local result = handle:read("*a")
-    handle:close()
-    return result
-end
-
-
 local function extract_gpu_elf(binary_app)
     local llvm_check = "readelf -S " .. binary_app .. " | grep -q .llvm.offloading"
     local hip_check = "readelf -S " .. binary_app .. " | grep -q .hip_fatbin"
@@ -44,12 +35,12 @@ local function extract_gpu_elf(binary_app)
         print("No GPU ELF has been found in your application.")
         os.exit(1)
     end
-    return execute_command(extract_command)
+    return common.execute_command(extract_command)
 end
 
 local function get_kernel_metadata(gpu_elf)
-    execute_command("echo -n "..gpu_elf.." | xxd -r -p > /tmp/rprof_inspect_gpu_elf")
-    local res = execute_command("readelf --notes /tmp/rprof_inspect_gpu_elf")
+    common.execute_command("echo -n "..gpu_elf.." | xxd -r -p > /tmp/rprof_inspect_gpu_elf")
+    local res = common.execute_command("readelf --notes /tmp/rprof_inspect_gpu_elf")
     local encoded_metadata = res:match("description data:%s*([%x%s]+)")
     
     if not encoded_metadata then

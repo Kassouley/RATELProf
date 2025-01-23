@@ -21,6 +21,7 @@ local conversion = require("conversion")
 local Script = require("Script")
 local Report = require("Report")
 local settings = common.load_json(lfs.get_script_path(1).."stats_settings.json")
+local INSTALL_DIR = os.getenv("RATELPROF_INSTALL_DIR")
 
 local function report_option(script, value)
     if value then script.options_values.reports = value:split(",")
@@ -73,7 +74,7 @@ local function process_stats(positional_args, options_values)
                 trace_file = input_file, 
                 trace_data = input_data, 
                 report = report, 
-                report_path = settings._ALL_REPORT[report], 
+                report_path = INSTALL_DIR..settings._ALL_REPORT[report], 
                 timeunit = timeunit,
                 is_only_main = is_only_main
             })

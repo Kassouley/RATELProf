@@ -9,18 +9,18 @@
     "omp_target_api_sum"
   ],
   "_ALL_REPORT": {
-    "omp_api_trace": "./reports/omp_api_trace.lua",
-    "omp_api_sum": "./reports/omp_api_sum.lua",
-    "omp_target_api_trace": "./reports/omp_target_api_trace.lua",
-    "omp_target_api_sum": "./reports/omp_target_api_sum.lua",
-    "hip_api_trace": "./reports/hip_api_trace.lua",
-    "hip_api_sum": "./reports/hip_api_sum.lua",
-    "hsa_api_trace": "./reports/hsa_api_trace.lua",
-    "hsa_api_sum": "./reports/hsa_api_sum.lua",
-    "gpu_kern_sum": "./reports/gpu_kern_sum.lua",
-    "gpu_mem_time_sum": "./reports/gpu_mem_time_sum.lua",
-    "gpu_trace": "./reports/gpu_trace.lua",
-    "gpu_mem_size_sum": "./reports/gpu_mem_size_sum.lua",
-    "gpu_sum": "./reports/gpu_sum.lua"
+    "omp_api_trace":        "/share/scripts/stats_command/reports/omp_api_trace.lua",
+    "omp_api_sum":          "/share/scripts/stats_command/reports/omp_api_sum.lua",
+    "omp_target_api_trace": "/share/scripts/stats_command/reports/omp_target_api_trace.lua",
+    "omp_target_api_sum":   "/share/scripts/stats_command/reports/omp_target_api_sum.lua",
+    "hip_api_trace":        "/share/scripts/stats_command/reports/hip_api_trace.lua",
+    "hip_api_sum":          "/share/scripts/stats_command/reports/hip_api_sum.lua",
+    "hsa_api_trace":        "/share/scripts/stats_command/reports/hsa_api_trace.lua",
+    "hsa_api_sum":          "/share/scripts/stats_command/reports/hsa_api_sum.lua",
+    "gpu_kern_sum":         "/share/scripts/stats_command/reports/gpu_kern_sum.lua",
+    "gpu_mem_time_sum":     "/share/scripts/stats_command/reports/gpu_mem_time_sum.lua",
+    "gpu_trace":            "/share/scripts/stats_command/reports/gpu_trace.lua",
+    "gpu_mem_size_sum":     "/share/scripts/stats_command/reports/gpu_mem_size_sum.lua",
+    "gpu_sum":              "/share/scripts/stats_command/reports/gpu_sum.lua"
   }
 }

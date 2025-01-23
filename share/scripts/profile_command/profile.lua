@@ -121,6 +121,9 @@ local function process_profiling(positional_args, options_values)
         print("Error: Application execution failed code("..ret_code..").")
         os.exit(ret_code)
     end
+    local bytes_written = string.gsub(common.execute_command("cat "..options_values.output.." | wc -c"), "\n", "")
+    print("RPROF: Bytes written in '"..options_values.output.."' : "..bytes_written)
+    print("RPROF: Exiting tool . . .")
 end
 
 local function output_option(script, value) script.options_values.output = value end

@@ -128,12 +128,13 @@ void onExit()
 		ratelprof_disable_profiling_table();
 	}
 
-    printf("RPROF: Exiting . . .\n");
+    printf("RPROF: Finalizing RATELProf . . .");
     ratelprof_fini();
     ratelprof_ext_fini();
 
     plugin_manager.plugin_finalize(&plugin);
     close_plugin_manager(&plugin_manager);
+    printf("\rRPROF: Finalizing RATELProf . . . SUCCESS\n");
 }
 
 __attribute__((constructor(101))) void init(void) 
