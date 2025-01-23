@@ -8,7 +8,8 @@ Usage: $0 [--help] <command> [options] [command args]
 Commands:
   profile       Run an application and capture its profile into a json report file.
   stats         Generate statistics from an existing json report file.
-  visualize     Generate a HTML Report Viewer to see the traces into a timeline
+  visualize     Generate a HTML Report Viewer to see the traces into a timeline.
+  inspect       Inspect an application and output data about kernels from the application.
 
 Use '$0 <command> --help' for more information about a specific command.
 EOF
@@ -44,6 +45,11 @@ case "$1" in
     visualize)
         shift
         eval "lua $INSTALL_DIR/visualize_command/visualize.lua $@"
+        ;;
+
+    inspect)
+        shift
+        eval "lua $INSTALL_DIR/inspect_command/inspect.lua $@"
         ;;
 
     --help|-h)

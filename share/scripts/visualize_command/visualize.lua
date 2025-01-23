@@ -1,4 +1,4 @@
--- stats.lua
+-- visualize.lua
 -- Set up the script directory and package paths
 local script_dir = debug.getinfo(1, "S").source:match("@(.*[\\/]?.*)") or ""
 script_dir = script_dir:gsub('\\', '/'):match("(.*[\\/])") or ""
