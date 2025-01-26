@@ -11,7 +11,7 @@ Commands:
   visualize     Generate a HTML Report Viewer to see the traces into a timeline.
   inspect       Inspect an application and output data about kernels from the application.
 
-Use '$0 <command> --help' for more information about a specific command.
+Use '$(basename $0) <command> --help' for more information about a specific command.
 EOF
     exit 0
 }
@@ -22,7 +22,7 @@ if [[ -z $RATELPROF_INSTALL_DIR ]]; then
 fi
 
 #!/bin/bash
-INSTALL_DIR=$RATELPROF_INSTALL_DIR/share/scripts
+SCRIPT_DIR=$(dirname $0)/../share/scripts
 
 # Check if no argument is provided
 if [ -z "$1" ]; then
@@ -34,22 +34,22 @@ fi
 case "$1" in
     profile)
         shift
-        eval "lua $INSTALL_DIR/profile_command/profile.lua $@"
+        eval "lua $SCRIPT_DIR/profile_command/profile.lua $@"
         ;;
 
     stats)
         shift
-        eval "lua $INSTALL_DIR/stats_command/stats.lua $@"
+        eval "lua $SCRIPT_DIR/stats_command/stats.lua $@"
         ;;
 
     visualize)
         shift
-        eval "lua $INSTALL_DIR/visualize_command/visualize.lua $@"
+        eval "lua $SCRIPT_DIR/visualize_command/visualize.lua $@"
         ;;
 
     inspect)
         shift
-        eval "lua $INSTALL_DIR/inspect_command/inspect.lua $@"
+        eval "lua $SCRIPT_DIR/inspect_command/inspect.lua $@"
         ;;
 
     --help|-h)

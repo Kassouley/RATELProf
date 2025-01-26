@@ -1,8 +1,9 @@
 local Report = require("Report")
 local report_common = require("report_common")
 local conversion = require("conversion")
+local common = require("common")
 
-local function get_output_data(kern_traces, mem_traces, barrand_traces, barror_traces, timeunit)
+local function get_output_data(kern_traces, mem_traces, barrand_traces, barror_traces, timeunit, is_mangled, is_trunc)
     local data = {}
 
     -- Helper function to construct entries
@@ -42,6 +43,7 @@ local function get_output_data(kern_traces, mem_traces, barrand_traces, barror_t
             }
         elseif entry_type == "kern" then
             local queue_dur = trace.start - trace.args.dispatch_time
+            local kernel_name = trace.args.kernel_name
             if timeunit ~= "ns" then queue_dur = conversion.time(queue_dur, "ns", timeunit) end
             return {
                 string.format("%.0f", trace.start),
@@ -56,7 +58,7 @@ local function get_output_data(kern_traces, mem_traces, barrand_traces, barror_t
                 "---", "---", "---", "---",
                 trace.args.gpu_id,
                 trace.args.queue_id,
-                trace.args.kernel_name
+                kernel_name
             }
         end
     end
@@ -120,7 +122,7 @@ function Report:get_data()
     local barrand_traces = report_common.get_gpu_barrierand_traces(self)
     local barror_traces = report_common.get_gpu_barrieror_traces(self)
 
-    local data = get_output_data(kern_traces, mem_traces, barrand_traces, barror_traces, self.timeunit)
+    local data = get_output_data(kern_traces, mem_traces, barrand_traces, barror_traces, self.timeunit, self.is_mangled, self.is_trunc)
 
     table.sort(data, function(a, b)
         return tonumber(a[1]) < tonumber(b[1])

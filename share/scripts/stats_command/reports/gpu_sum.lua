@@ -49,8 +49,12 @@ function Report:get_data()
     local barrand_entries, barrand_total_metric = statistics.get_entries(barrand_traces, get_entry_key_tab3, report_common.get_duration, self.timeunit)
     local barror_entries, barror_total_metric = statistics.get_entries(barror_traces, get_entry_key_tab4, report_common.get_duration, self.timeunit)
 
-
-    local gpu_entries = common.merge_tab(kern_entries, mem_entries, barrand_entries, barror_entries)
+    local gpu_entries = {}
+    for i, t in ipairs({kern_entries, mem_entries, barrand_entries, barror_entries}) do
+        for j, value in pairs(t) do
+            table.insert(gpu_entries, value)
+        end
+    end
     local gpu_total_metric = kern_total_metric + mem_total_metric + barrand_total_metric + barror_total_metric
 
     local data = statistics.get_output_summary(gpu_entries, gpu_total_metric)

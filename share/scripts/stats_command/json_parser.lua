@@ -1,4 +1,5 @@
 local Report = require("Report")
+local common = require("common")
 
 local parser = {}
 
@@ -17,6 +18,14 @@ local function fetch_traces(report, domain_string)
     for _, trace in ipairs(report.trace_data.trace_events) do
         if report.trace_data.domain_id[tostring(trace.d)].name == domain_string
                 and (not report.is_only_main or report.trace_data.phase_id[tostring(trace.p)] == "MAIN_PHASE") then
+            
+            if domain_string == "KERNEL_DISPATCH" then
+                if report.is_trunc then
+                    trace.args.kernel_name = common.execute_command("c++filt --no-params ".. trace.args.kernel_name)
+                elseif not report.is_mangled then
+                    trace.args.kernel_name = common.execute_command("c++filt ".. trace.args.kernel_name)
+                end
+            end
             table.insert(ret, trace)
         end
     end

@@ -24,6 +24,8 @@ function Report:new(attribute)
     instance.report = attribute.report
     instance.report_path = attribute.report_path
     instance.is_only_main = attribute.is_only_main or false
+    instance.is_trunc = attribute.is_trunc or false
+    instance.is_mangled = attribute.is_mangled or false
     instance.timeunit = attribute.timeunit
     instance.data = instance:get_data()
     return instance

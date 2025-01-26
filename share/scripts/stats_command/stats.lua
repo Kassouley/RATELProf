@@ -21,7 +21,7 @@ local conversion = require("conversion")
 local Script = require("Script")
 local Report = require("Report")
 local settings = common.load_json(lfs.get_script_path(1).."stats_settings.json")
-local INSTALL_DIR = os.getenv("RATELPROF_INSTALL_DIR")
+local INSTALL_DIR = common.execute_command('realpath "' .. script_dir.."../../.." .. '" 2>/dev/null')
 
 local function report_option(script, value)
     if value then script.options_values.reports = value:split(",")
@@ -50,6 +50,14 @@ local function only_main_option(script, value)
     script.options_values.is_only_main = true
 end
 
+local function mangled_option(script, _)
+    script.options_values.is_mangled = true
+end
+
+local function trunc_option(script, _)
+    script.options_values.is_trunc = true
+end
+
 
 -- Default formats for each output type
 local function get_default_formats(output)
@@ -59,11 +67,13 @@ end
 -- Function to process the input file
 local function process_stats(positional_args, options_values)
     local input_file = positional_args[1]
+    if not lfs.file_exists(input_file) or not lfs.has_extension(input_file, "json") then
+        print("Error : Incorrect report file in input.")
+        os.exit(1)
+    end
     local reports = options_values.reports
     local outputs = options_values.outputs
     local formats = options_values.formats
-    local timeunit = options_values.timeunit
-    local is_only_main = options_values.is_only_main
     local input_data = common.load_json(input_file)
 
     for i, report in ipairs(reports) do
@@ -75,8 +85,10 @@ local function process_stats(positional_args, options_values)
                 trace_data = input_data, 
                 report = report, 
                 report_path = INSTALL_DIR..settings._ALL_REPORT[report], 
-                timeunit = timeunit,
-                is_only_main = is_only_main
+                timeunit = options_values.timeunit,
+                is_only_main = options_values.is_only_main,
+                is_trunc = options_values.is_trunc,
+                is_mangled = options_values.is_mangled,
             })
             r:generate({format=output_format, output=output})
         else
@@ -175,9 +187,21 @@ local function main(arg)
 
                             
     script:add_option("only-main", nil, nil, 
-    [[                  
-                            Will compute only statistic for traces from main phase]], 
+[[                  
+                            Will compute only statistic for traces from main phase.]], 
                             false, only_main_option)
+
+                            
+    script:add_option("mangled", "m", nil, 
+[[                  
+                            Do not demangled kernel name.]], 
+                            false, mangled_option)
+    
+    
+    script:add_option("trunc", "t", nil, 
+[[                  
+                            Truncate function arguments from demangled kernel names.]], 
+                            false, trunc_option)
                        
     script:execute(arg)
 end

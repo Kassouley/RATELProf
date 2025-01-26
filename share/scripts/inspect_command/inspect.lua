@@ -20,7 +20,7 @@ local Script = require("Script")
 local settings = common.load_json(lfs.get_script_path(1).."inspect_settings.json")
 local msgpack = require("msgpack")
 
-local INSTALL_DIR = os.getenv("RATELPROF_INSTALL_DIR")
+local INSTALL_DIR = common.execute_command('realpath "' .. script_dir.."../../.." .. '" 2>/dev/null')
 
 local function extract_gpu_elf(binary_app)
     local llvm_check = "readelf -S " .. binary_app .. " | grep -q .llvm.offloading"
@@ -131,8 +131,15 @@ local function process_inspecting(positional_args, options_values)
     local csv_entries = {"Name, Wavefront Size, Private Segment Size, Group Segment Size, SGPR count, SGPR spill count, VGPR count, VGPR spill count, Language"}
 
     for _, kernel in pairs(kernels_metadata) do
+        local kernel_name = kernel[".name"]
+        if options_values.is_trunc then
+            kernel_name = common.execute_command("c++filt --no-params "..kernel_name)
+        elseif not options_values.is_mangled then
+            kernel_name = '"'..common.execute_command("c++filt "..kernel_name)..'"'
+        end
+
         local kernel_entry = {
-            kernel[".name"],
+            kernel_name,
             kernel[".wavefront_size"],
             kernel[".private_segment_fixed_size"],
             kernel[".group_segment_fixed_size"],
@@ -165,11 +172,17 @@ local function json_option(script, _)
     script.options_values.save_json = true
 end
 
-
 local function output_option(script, value)
     script.options_values.output_file = value
 end
 
+local function mangled_option(script, _)
+    script.options_values.is_mangled = true
+end
+
+local function trunc_option(script, _)
+    script.options_values.is_trunc = true
+end
 
 -- Main script logic
 local function main(arg)
@@ -196,6 +209,16 @@ local function main(arg)
     script:add_option("output", "o", "<output_file>", 
                     "\tChange the CSV output file.", 
                     true, output_option)
+
+                    
+    script:add_option("mangled", "m", nil, 
+                    "\tDo not demangled kernel name.", 
+                    false, mangled_option)
+                    
+                    
+    script:add_option("trunc", "t", nil, 
+                    "\tTruncate function arguments from demangled kernel names.", 
+                    false, trunc_option)
 
     script:execute(arg)
 end

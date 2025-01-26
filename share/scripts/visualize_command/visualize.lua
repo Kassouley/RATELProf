@@ -23,7 +23,7 @@ local merge_json = require("merge_json")
 local merge_js = require("merge_js")
 local merge_css = require("merge_css")
 
-local INSTALL_DIR = os.getenv("RATELPROF_INSTALL_DIR")
+local INSTALL_DIR = common.execute_command('realpath "' .. script_dir.."../../.." .. '" 2>/dev/null')
 
 
 local function process_visualizing(positional_args, options_values)
@@ -55,6 +55,8 @@ local function process_visualizing(positional_args, options_values)
     local output_file = io.open(output_file, "w")
     output_file:write(html_content)
     output_file:close()
+    print("RPROF: HTML report written to " .. output_file)
+
 end
 
 -- Main script logic

@@ -18,7 +18,7 @@ local common = require("common")
 local lfs = require("lfs")
 local Script = require("Script")
 local settings = common.load_json(lfs.get_script_path(1).."profile_settings.json")
-local INSTALL_DIR = os.getenv("RATELPROF_INSTALL_DIR")
+local INSTALL_DIR = common.execute_command('realpath "' .. script_dir.."../../.." .. '" 2>/dev/null')
 
 -- Function to set environment variable
 local function set_env(env, var, value)
@@ -121,7 +121,7 @@ local function process_profiling(positional_args, options_values)
         print("Error: Application execution failed code("..ret_code..").")
         os.exit(ret_code)
     end
-    local bytes_written = string.gsub(common.execute_command("cat "..options_values.output.." | wc -c"), "\n", "")
+    local bytes_written = common.execute_command("cat "..options_values.output.." | wc -c")
     print("RPROF: Bytes written in '"..options_values.output.."' : "..bytes_written)
     print("RPROF: Exiting tool . . .")
 end

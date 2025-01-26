@@ -1,6 +1,7 @@
 local Report = require("Report")
 local report_common = require("report_common")
 local statistics = require("statistics")
+local common = require("common")
 
 local function get_entry_key_tab(trace)
     return { 
@@ -74,8 +75,8 @@ function Report:get_data()
             statistic_table_for_queue_time[8],
         }
 
-        for i = 1, #entry_dur_time.key_tab do
-            table.insert(statistic_table, entry_dur_time.key_tab[i])
+        for i, v in ipairs(entry_dur_time.key_tab) do
+            table.insert(statistic_table, v)
         end
         table.insert(data, statistic_table)
     end
