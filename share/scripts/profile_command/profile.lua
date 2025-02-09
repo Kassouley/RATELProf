@@ -31,7 +31,9 @@ local function process_profiling(positional_args, options_values)
         print("No application to profile.")
         os.exit(1)
     end
-    local function export_filter_var(filename)
+
+    
+    local function export_filter_var(filename, filter_type)
         local file = io.open(filename, "r")
         if not file then
             print("Error: Could not open file " .. filename)
@@ -68,21 +70,17 @@ local function process_profiling(positional_args, options_values)
     
         local env = ""
         for category, names in pairs(categories) do
-            local var_name = "RATELPROF_DOMAIN_"..string.upper(category).."_FUNCTIONS"
-            env = set_env(env, var_name, table.concat(names,","))
+            local upper_category = string.upper(category)
+            env = set_env(env, string.format(settings._ENV.FUNCTION_FILTERED, upper_category), table.concat(names,","))
+            env = set_env(env, string.format(settings._ENV.FILTER_TYPE, upper_category), filter_type)
         end
         return env
     end
     local function get_number_of_kernel(app_arg)
-        -- Run the shell command and capture its output
-        local handle = io.popen("nm --demangle --defined-only " .. app_arg .. " | grep -iE \"__device_stub__|__omp_offloading\" | wc -l")
-        local num = tonumber(handle:read("*a"):match("%d+"))
-        handle:close()
-    
-        -- Initialize result
+        local num = tonumber(common.execute_command(
+            "nm --demangle --defined-only " .. app_arg .. " | grep -iE \"__device_stub__|__omp_offloading\" | wc -l"
+        ):match("%d+")) or 1
         local result = 32
-    
-        -- Double result until it is greater than or equal to num
         while result < num do
             result = result * 2
         end
@@ -90,17 +88,31 @@ local function process_profiling(positional_args, options_values)
         return result
     end
 
-    local preload_lib = INSTALL_DIR.."/lib/libratelprof.so"
-    if not lfs.file_exists(preload_lib) then
-        print("Error: Preload library '"..preload_lib.."' not found.")
+    local function get_number_of_queue()
+        local output = common.execute_command(INSTALL_DIR.."/bin/ratelinfo --max-queue")
+        return tonumber(output) + 1
+    end
+
+    local preload_tool    = INSTALL_DIR.."/lib/libratelprof.so"
+    local preload_wrapper = INSTALL_DIR.."/lib/libratelprof_wrapper.so"
+    local preload_lib     = preload_wrapper..":"..preload_tool
+    if not lfs.file_exists(preload_tool) then
+        print("Error: Preload library '"..preload_tool.."' not found.")
+        os.exit(1)
+    end
+    if not lfs.file_exists(preload_wrapper) then
+        print("Error: Preload library '"..preload_wrapper.."' not found.")
         os.exit(1)
     end
     local nb_kernel_available = get_number_of_kernel(application_command[1])
+    local nb_queue_available = get_number_of_queue()
     local env = options_values.env
-    if options_values.filter then env = export_filter_var(options_values.filter) end
-    if options_values.output then env = set_env(env, "RATELPROF_OUTPUT_FILE", options_values.output) end
-    env = set_env(env, "RATELPROF_PLUGIN_PATH", "\""..options_values.plugin.."\"")
-    env = set_env(env, "RATELPROF_NB_KERNEL_AVAILABLE", nb_kernel_available)
+    if options_values.blacklist then env = export_filter_var(options_values.blacklist, 1) end
+    if options_values.whitelist then env = export_filter_var(options_values.whitelist, 2) end
+    if options_values.output then env = set_env(env, settings._ENV.OUTPUT_FILE, options_values.output) end
+    env = set_env(env, settings._ENV.PLUGIN_PATH, "\""..options_values.plugin.."\"")
+    env = set_env(env, settings._ENV.NB_KERNEL_AV, nb_kernel_available)
+    env = set_env(env, settings._ENV.NB_QUEUE_AV, nb_queue_available)
     env = set_env(env, "LD_PRELOAD", preload_lib)
 
     print([[
@@ -111,14 +123,15 @@ local function process_profiling(positional_args, options_values)
     |_| \_\/_/   \_\_| |_____|_____|_|   |_|  \___/|_|  
 ]])
 
-    print("RPROF: Profiling of '"..application_command[1].."'")
-    print("RPROF: Application Command : '"..table.concat(application_command, " ").."'")
-    print("RPROF: Plugin used : '"..options_values.plugin.."'")
-    print("RPROF: Profiling output file : '"..options_values.output.."'")
-
+    print("RPROF: Application profiled :    '"..application_command[1].."'")
+    print("RPROF: Application Command :     '"..table.concat(application_command, " ").."'")
+    print("RPROF: Preloaded tool :          '"..preload_tool.."'")
+    print("RPROF: Preloaded wrapper :       '"..preload_wrapper.."'")
+    print("RPROF: Plugin used :             '"..options_values.plugin.."'")
+    print("RPROF: Profiling output file :   '"..options_values.output.."'")
     local ret_code = os.execute(env.." "..table.concat(application_command, " "))
     if ret_code ~= 0 then
-        print("Error: Application execution failed code("..ret_code..").")
+        print("Error: Application execution failed - code("..ret_code..").")
         os.exit(ret_code)
     end
     local bytes_written = common.execute_command("cat "..options_values.output.." | wc -c")
@@ -127,12 +140,13 @@ local function process_profiling(positional_args, options_values)
 end
 
 local function output_option(script, value) script.options_values.output = value end
-local function enable_filter(script, value) script.options_values.filter = value end
+local function enable_whitelist(script, value) script.options_values.whitelist = value end
+local function enable_blacklist(script, value) script.options_values.blacklist = value end
 local function enable_domain(script, value, domain_env) 
     script.options_values.env = set_env(script.options_values.env, domain_env, "1")
 end
 local function enable_prof_domain(script, value) 
-    script.options_values.env = set_env(script.options_values.env, "RATELPROF_DOMAIN_PROFILING", "1")
+    script.options_values.env = set_env(script.options_values.env, settings._ENV.DOMAIN_PROFILING, "1")
 end
 local function enable_all_domain(script, value, domains) 
     for _, domain in ipairs(domains) do
@@ -166,7 +180,6 @@ local function main(arg)
     }
     local script = Script:new(attribute)
 
-    -- script:set_usage("ratelprof profile [<options>] -- [application] [<application args>]")
     script:set_desc("\n\tProfile an AMD GPU application and trace AMD Library functions")
 
     script:set_execute_function(process_profiling)
@@ -176,7 +189,8 @@ local function main(arg)
 
     script:add_option("output", "o", "<FILE>", "Output report filename.", true, output_option)
 
-    script:add_option("filter", "f", "<FILE>", "Specify the input file with functions to intercept", true, enable_filter)
+    script:add_option("--whitelist", "w", "<FILE>", "Specify an input file with functions to intercept", true, enable_whitelist)
+    script:add_option("--blacklist", "b", "<FILE>", "Specify an input file with functions to not intercept", true, enable_blacklist)
                             
     script:add_option("plugin", nil, "<PLUGIN>", "Specify the plugin path for RATELProf (options: stdout, json, or custom path)", true, plugin_option)
     
