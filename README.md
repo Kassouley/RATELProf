@@ -4,25 +4,11 @@ RATELProf is a powerful and lightweight profiler designed specifically for AMD G
 
 ##  Table of Contents
 
-- [Overview](#-overview)
 - [Features](#-features)
-- [Project Structure](#-project-structure)
-  - [Project Index](#-project-index)
 - [Getting Started](#-getting-started)
   - [Prerequisites](#-prerequisites)
   - [Installation](#-installation)
-  - [Usage](#-usage)
-  - [Testing](#-testing)
-- [Project Roadmap](#-project-roadmap)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Acknowledgments](#-acknowledgments)
-
----
-
-##  Overview
-
-<code> REPLACE-ME</code>
+- [Project Structure](#-project-structure)
 
 ---
 
@@ -30,13 +16,13 @@ RATELProf is a powerful and lightweight profiler designed specifically for AMD G
 
 RATELProf provides a comprehensive suite of tools to profile, analyze, and optimize AMD GPU applications. Key features include:
 
-### **GPU Activity Profiling**
+#### **GPU Activity Profiling**
 - Monitor kernel dispatches, barriers and memory transfers to identify bottlenecks and optimize GPU performance.
 
-### **Runtime API Tracing**
+#### **Runtime API Tracing**
 - Trace calls from HSA, HIP, and OpenMP runtimes, offering deep insights into application behavior.
 
-### **Commands**
+#### **Commands**
 RATELProf includes four core commands to streamline your profiling workflow:
 
 1. **`profile`**  
@@ -48,7 +34,7 @@ RATELProf includes four core commands to streamline your profiling workflow:
    - Output includes detailed metrics similar to the `stat` command from NVIDIA's Nsight Systems.
 
 3. **`visualize`**  
-   - Generates an interactive HTML timeline report for the JSON profile data.  
+   - Generates an interactive HTML timeline report for the JSON profile report created by the profile command.  
    - Perfect for visualizing application details.
 
 4. **`inspect`**  
@@ -59,14 +45,13 @@ RATELProf includes four core commands to streamline your profiling workflow:
 
 ## **Getting Started**
 
-Installing RATELProf is simple and requires running the provided `install.sh` script. Follow these steps:
+Installing RATELProf is simple and requires running the provided `install.sh` script.
 
 ### Prerequisites
 
 Ensure you have the following installed on your system before proceeding:
 - **CMake** (version 3.10 or later)
 - **AMD ROCm Toolkit** (download from [ROCm's official site](https://github.com/ROCm/ROCm))
-- **Linux Environment**
 
 ### Installation
 
@@ -98,9 +83,13 @@ By default, the tool will be installed to $HOME/.local. If you want to install i
     ├── bin
     │   ├── ratelprof.sh
     ├── share
+    │   ├── ratelinfo
     │   ├── scripts
     │   ├── visualize
     └── src
+        ├── tools
         ├── core
+        ├── ext
+        ├── wrappers
         └── plugins
 ```
