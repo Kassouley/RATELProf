@@ -1,3 +1,5 @@
+module ("Script", package.seeall)
+
 -- Define the Script class
 Script = {}
 Script.__index = Script
@@ -15,16 +17,14 @@ function Script:new(attribute)
             short_name = "h",
             arg = nil,
             description = "Show this help message and exit",
-            default = nil,
-            callback = instance.show_help
+            default = nil
         },
         {
             long_name = "version",
             short_name = nil,
             arg = nil,
             description = "Show the version of this command",
-            default = nil,
-            callback = instance.show_version
+            default = nil
         }
     }
     instance.options_values = attribute.default_options_values or {}
@@ -41,7 +41,7 @@ end
 function Script:execute(args)
     self:check_args(args)
     if not self.execute_function then error("No execute function set") end
-    return self.execute_function(self.arguments_values, self.options_values)
+    return self:execute_function(self.arguments_values, self.options_values)
 end
 
 function Script:set_execute_function(execute_function)
@@ -84,15 +84,14 @@ function Script:add_argument(name, is_optional, is_list, description)
 end
 
 -- Method to add an option
-function Script:add_option(long_name, short_name, arg, description, need_arg, callback, cb_args)
+function Script:add_option(long_name, short_name, arg, description, need_arg, default_val)
     table.insert(self.options, {
         long_name = long_name,
         short_name = short_name,
         arg = arg,
         description = description or "No description",
         need_arg = need_arg,
-        callback = callback,
-        cb_args = cb_args
+        default_val = default_val
     })
 end
 
@@ -161,51 +160,47 @@ function Script:check_args(args)
     local i = 1
     while i <= #args do
         local arg = args[i]
-        local matched = false
-        local value = nil
-
-        for _, option in ipairs(self.options) do
-            matched = false
-            if (option.short_name and arg == "-" .. option.short_name) 
-                or (option.long_name and arg:match("^%-%-" .. option.long_name:gsub("-", "%%-") .. "=?")) then
-                matched = true
-                if option.arg and option.need_arg then
-                    if option.long_name and arg:match("=(.+)") then
-                        value = arg:match("^%-%-" .. option.long_name .. "=(.+)")
-                    else
-                        i = i + 1
-                        value = args[i]
-                        if not value or value:sub(1, 1) == "-" then
-                            print("Error: " .. arg .. " need an argument.\n")
-                            self:show_help()
-                        end
-                    end
-                elseif option.arg and not option.need_arg then
-                    if option.long_name and arg:match("=(.+)") then
-                        value = arg:match("^%-%-" .. option.long_name .. "=(.*)")
-                    else
-                        i = i + 1
-                        value = args[i]
-                        if not value or value:sub(1, 1) == "-" then
-                            value = ""
-                            i = i - 1
-                        end
-                    end
-                end
-            end
-            if matched then 
-                if option.callback then
-                    option.callback(self, value, option.cb_args)
-                end
-                break
-            end
-        end
+        local value = true
+        local matched_option = false
         
-        if not matched then
-            if arg:sub(1, 1) == "-" then
+        if arg:sub(1, 1) == "-" then
+            for _, option in ipairs(self.options) do
+                if (option.short_name and arg == "-" .. option.short_name) 
+                    or (option.long_name and arg:match("^%-%-" .. option.long_name:gsub("-", "%%-") .. "=?")) then
+                    matched_option = true
+                    option.has_been_processed = true
+                    if option.arg and option.need_arg then
+                        if option.long_name and arg:match("=(.+)") then
+                            value = arg:match("^%-%-" .. option.long_name .. "=(.+)")
+                        else
+                            i = i + 1
+                            value = args[i]
+                            if not value or value:sub(1, 1) == "-" then
+                                print("Error: " .. arg .. " need an argument.\n")
+                                self:show_help()
+                            end
+                        end
+                    elseif option.arg and not option.need_arg then
+                        if option.long_name and arg:match("=(.+)") then
+                            value = arg:match("^%-%-" .. option.long_name .. "=(.*)")
+                        else
+                            i = i + 1
+                            value = args[i]
+                            if not value or value:sub(1, 1) == "-" then
+                                value = ""
+                                i = i - 1
+                            end
+                        end
+                    end
+                    self.options_values[option.long_name] = value 
+                    break
+                end
+            end
+            if not matched_option then
                 print("Unknown option: " .. arg)
                 self:show_help()
             end
+        else
             if self.nb_commands > 0 then
                 local command_name = arg
                 local new_args = {}
@@ -226,6 +221,20 @@ function Script:check_args(args)
 
         i = i + 1
     end
+
+    if self.options_values["help"] then
+        self:show_help()
+    elseif self.options_values["version"] then
+        self:show_version()
+    end
+
+    
+    for _, option in ipairs(self.options) do
+        if not option.has_been_processed and option.default_val then
+            self.options_values[option.long_name] = option.default_val 
+        end
+    end
+
     if self.nb_commands > 0 then
         print("Error: Need a command\n")
         self:show_help()
@@ -245,5 +254,3 @@ function Script:check_args(args)
         self:show_help()
     end
 end
-
-return Script

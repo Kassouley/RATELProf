@@ -1,7 +1,7 @@
-local lfs = require("lfs")
+module ("Report", package.seeall)
 
 -- Report.lua
-local Report = {}
+Report = {}
 Report.__index = Report
 
 -- Available formats and their extensions
@@ -15,55 +15,73 @@ local format_extensions = {
 -- Constructor: Initialize a new Report object
 function Report:new(attribute)
     if attribute == nil then return error("Report Constructor need attributes") end
-    if attribute.trace_data == nil then return error("Report Constructor need an input_data") end
-    if attribute.report == nil then return error("Report Constructor need a report") end
-    lfs.require_from_path(attribute.report_path)
+    if attribute.report_id == nil then return error("Report Constructor need a report_id") end
+
     local instance = setmetatable({}, self)
-    instance.trace_file = attribute.trace_file
-    instance.trace_data = attribute.trace_data
-    instance.report = attribute.report
+
+    instance.trace_path = attribute.trace_path
+    instance.report_id = attribute.report_id
+    instance.report_name = attribute.report_name
     instance.report_path = attribute.report_path
-    instance.is_only_main = attribute.is_only_main or false
-    instance.is_trunc = attribute.is_trunc or false
-    instance.is_mangled = attribute.is_mangled or false
-    instance.timeunit = attribute.timeunit
-    instance.data = instance:get_data()
+    
+    instance.data = attribute.data or {}
+    instance.data_size = attribute.data_size or 0
+
     return instance
 end
 
-function Report:generate(args)
-    local output = args.output
-    local format = args.format
-    local stream, filename = self:get_output_stream(output, format)
+function Report:generate(opt)
+    local output = opt.output
+    local format = opt.format
+    local timeunit = opt.timeunit
+    local is_only_main = opt["only-main"]
+    local is_trunc = opt.trunc
+    local is_mangled = opt.mangled
+
+    local filename = self:get_output_filename(output, format, self.trace_path)
 
     print(string.format(
-        "\nProcessing '%s' with '%s'", 
-        self.trace_file, self.report_path
-    ) .. (output ~= "-" and " to '" .. (filename or "") .. "'" or "") .. "...\n")
+        "\nProcessing '%s' with '%s'%s...\n",
+        self.trace_path, self.report_path,
+        (filename and (" to '" .. filename .. "'") or "")
+    ))
 
-    if #self.data == 0 then
-        print(string.format( -- TODO (11-11-2024) : Fix, file is created even if report is skipped
+    if self.data_size == 0 then
+        print(string.format(
             "\nSKIPPED: '%s' does not contain %s data.\n",
-            self.trace_file, self:get_report_name()
+            self.trace_path, self.report_name
         ))
-    else
-        if output == "-" then
-            print(string.format(
-                "** %s (%s):\n",
-                self:get_report_name(), self.report
-            ))
-        end
-        table.insert(self.data, 1, self:get_headers())
-        stream:write(self:get_formatted_data(format))
+        return
     end
+
+    local stream = self:get_output_stream(output, filename)
+    if output == "-" then
+        print(string.format(
+            "** %s (%s):\n",
+            self.report_name, self.report_id
+        ))
+    end
+    stream:write(self:get_formatted_data(format))
     if stream ~= io.stdout then
         stream:close()
     end
+
 end
 
-function Report:get_output_stream(output, format)
+function Report:get_output_filename(output, format, input)
+    if output == "-" or output:sub(1, 1) == "@" then
+        return nil
+    end
+
+    local default_basename = lfs.remove_extension(input)
+    local file_extension = format_extensions[format] or "txt"
+    local basename = output == "." and default_basename or output
+
+    return string.format("%s_%s.%s", basename, self.report_id, file_extension)
+end
+
+function Report:get_output_stream(output, filename)
     local out = nil
-    local filename = nil
     if output == "-" then
         out = io.stdout
     elseif output:sub(1, 1) == "@" then
@@ -71,14 +89,10 @@ function Report:get_output_stream(output, format)
         out = io.popen(command, "w")
         if not out then error("Failed to execute command: " .. command) end
     else
-        local default_basename = lfs.remove_extension(self.trace_file)
-        local file_extension = format_extensions[format] or "txt"
-        local basename = output == "." and default_basename or output
-        filename = string.format("%s_%s.%s", basename, self.report, file_extension)
         out = io.open(filename, "w")
         if not out then error("Failed to open file: " .. filename) end
     end
-    return out, filename
+    return out
 end
 
 function Report:get_formatted_data(format)
@@ -181,4 +195,3 @@ function Report:toColumn()
     return table.concat(result, "\n") .. "\n"
 end
 
-return Report

@@ -1,14 +1,9 @@
-local Report = require("Report")
-local report_common = require("report_common")
-local conversion = require("conversion")
-local common = require("common")
-
-local function get_output_data(kern_traces, mem_traces, barrand_traces, barror_traces, timeunit, is_mangled, is_trunc)
+local function get_output_data(kern_traces, mem_traces, barrand_traces, barror_traces, timeunit)
     local data = {}
 
     -- Helper function to construct entries
     local function add_entry(trace, entry_type)
-        local dur = report_common.get_duration(trace, timeunit)
+        local dur = stats:get_duration(trace, timeunit)
 
         if entry_type == "mem" then
             local size = conversion.bytes(trace.args.size, "bytes", "mb")
@@ -21,10 +16,10 @@ local function get_output_data(kern_traces, mem_traces, barrand_traces, barror_t
                 "---", "---", "---", "---", "---", "---", "---", "---",
                 size,
                 string.format("%.2f", size / conversion.time(dur, timeunit, "sec")),
-                report_common.get_copy_name_from_kind(trace.args.src_type),
-                report_common.get_copy_name_from_kind(trace.args.dst_type),
+                stats:get_copy_name_from_kind(trace.args.src_type),
+                stats:get_copy_name_from_kind(trace.args.dst_type),
                 "---", "---",
-                report_common.get_copy_name(trace)
+                stats:get_copy_name(trace)
             }
         elseif entry_type == "barrand" or entry_type == "barror" then
             local queue_dur = trace.start - trace.args.dispatch_time
@@ -83,18 +78,11 @@ local function get_output_data(kern_traces, mem_traces, barrand_traces, barror_t
     return data
 end
 
-
-
-function Report:get_report_name()
-    return "GPU Traces"
-end
-
-
-function Report:get_headers()
-    return {
-        "Start ("..self.timeunit..")", 
-        "Duration ("..self.timeunit..")", 
-        "Queue Time ("..self.timeunit..")", 
+return function(all_traces, attribute, opt)
+    local headers = {
+        "Start ("..opt.timeunit..")", 
+        "Duration ("..opt.timeunit..")", 
+        "Queue Time ("..opt.timeunit..")", 
         "Id", 
         "CorrId", 
         "GrdX", 
@@ -113,20 +101,22 @@ function Report:get_headers()
         "Queue",
         "Name"
     }
-end
 
+    local kern_traces    = stats:fetch_traces(all_traces, "KERNEL_DISPATCH", opt) or {}
+    local mem_traces     = stats:fetch_traces(all_traces, "MEMORY_COPY", opt) or {}
+    local barrand_traces = stats:fetch_traces(all_traces, "BARRIER_AND_DISPATCH", opt) or {}
+    local barror_traces  = stats:fetch_traces(all_traces, "BARRIER_OR_DISPATCH", opt) or {}
 
-function Report:get_data()
-    local kern_traces = report_common.get_gpu_kern_traces(self)
-    local mem_traces = report_common.get_gpu_mem_traces(self)
-    local barrand_traces = report_common.get_gpu_barrierand_traces(self)
-    local barror_traces = report_common.get_gpu_barrieror_traces(self)
+    attribute.report_name = "GPU Traces"
+    attribute.data = get_output_data(kern_traces, mem_traces, barrand_traces, barror_traces, opt.timeunit)
+    attribute.data_size = #attribute.data
 
-    local data = get_output_data(kern_traces, mem_traces, barrand_traces, barror_traces, self.timeunit, self.is_mangled, self.is_trunc)
-
-    table.sort(data, function(a, b)
+    
+    table.sort(attribute.data, function(a, b)
         return tonumber(a[1]) < tonumber(b[1])
     end)
 
-    return data
+    table.insert(attribute.data, 1, headers)
+
+    Report.Report:new(attribute):generate(opt)
 end

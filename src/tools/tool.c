@@ -6,7 +6,8 @@
 #include <dlfcn.h>
 #include <ratelprof.h>
 #include <ratelprof_ext.h>
-#include "plugin.h"
+
+typedef struct ratelprof_plugin_s ratelprof_plugin_t;
 
 typedef struct plugin_manager_s {
     void* plugin_handle;
@@ -31,11 +32,16 @@ static void* load_symbol(void *handle, const char *symbol) {
 
 static void open_plugin_manager(plugin_manager_t* pm) {
     if (!pm->plugin_handle) {
-        pm->plugin_handle = get_plugin_lib();
-        pm->plugin_initialize = load_symbol(pm->plugin_handle, "ratelprof_plugin_initialize");
-        pm->plugin_finalize = load_symbol(pm->plugin_handle, "ratelprof_plugin_finalize");
-        pm->get_api_callback = load_symbol(pm->plugin_handle, "ratelprof_get_api_callback");
-        pm->get_activity_callback = load_symbol(pm->plugin_handle, "ratelprof_get_activity_callback");
+        void* handle = get_plugin_lib();
+        if (!handle) {
+            fprintf(stderr, "RPROF: Environment variable %s is not set.\n", ENV_PLUGIN_PATH);
+            exit(1);
+        }
+        pm->plugin_handle = handle;
+        pm->plugin_initialize       = load_symbol(handle, "ratelprof_plugin_initialize");
+        pm->plugin_finalize         = load_symbol(handle, "ratelprof_plugin_finalize");
+        pm->get_api_callback        = load_symbol(handle, "ratelprof_get_api_callback");
+        pm->get_activity_callback   = load_symbol(handle, "ratelprof_get_activity_callback");
     }
 }
 
@@ -111,6 +117,7 @@ void onExit()
     ratelprof_time_t main_stop = ratelprof_get_timestamp_ms(lc->main_stop);
     ratelprof_time_t constructor_start = ratelprof_get_timestamp_ms(lc->constructor_start);
     ratelprof_time_t destructor_stop = ratelprof_get_timestamp_ms(lc->destructor_stop);
+
     printf("RPROF: Application duration : %10lu ms\n", main_stop - main_start);
     printf("RPROF: Constructor duration : %10lu ms\n", main_start - constructor_start);
     printf("RPROF: Destructor duration :  %10lu ms\n", destructor_stop - main_stop);
@@ -139,4 +146,5 @@ __attribute__((destructor(101))) void fini(void)
 {
     int cr = atexit( onExit );
     assert( cr == 0 );
+    (void)cr;
 }

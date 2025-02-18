@@ -1,8 +1,3 @@
-local Report = require("Report")
-local report_common = require("report_common")
-local statistics = require("statistics")
-local common = require("common")
-
 local function get_entry_key_tab(trace)
     return { 
         trace.args.grd[1],
@@ -15,27 +10,25 @@ local function get_entry_key_tab(trace)
      }
 end
 
-function Report:get_report_name()
-    return "GPU Kernel Summary"
-end
 
-function Report:get_headers()
-    return {
+return function(all_traces, attribute, opt)
+    local timeunit = opt.timeunit
+    local headers = {
         "Time (%)", 
-        "Total Time ("..self.timeunit..")", 
+        "Total Time ("..timeunit..")", 
         "Instances", 
-        "Avg ("..self.timeunit..")", 
-        "Med ("..self.timeunit..")", 
-        "Min ("..self.timeunit..")", 
-        "Max ("..self.timeunit..")", 
-        "StdDev ("..self.timeunit..")",
+        "Avg ("..timeunit..")", 
+        "Med ("..timeunit..")", 
+        "Min ("..timeunit..")", 
+        "Max ("..timeunit..")", 
+        "StdDev ("..timeunit..")",
         "Queue Time (%)", 
-        "Total QTime ("..self.timeunit..")", 
-        "QAvg ("..self.timeunit..")", 
-        "QMed ("..self.timeunit..")", 
-        "QMin ("..self.timeunit..")", 
-        "QMax ("..self.timeunit..")", 
-        "QStdDev ("..self.timeunit..")",
+        "Total QTime ("..timeunit..")", 
+        "QAvg ("..timeunit..")", 
+        "QMed ("..timeunit..")", 
+        "QMin ("..timeunit..")", 
+        "QMax ("..timeunit..")", 
+        "QStdDev ("..timeunit..")",
         "GridX", 
         "GridY", 
         "GridZ", 
@@ -44,18 +37,18 @@ function Report:get_headers()
         "BlockZ", 
         "Name" 
     }
-end
 
-function Report:get_data()
-    local gpu_traces = report_common.get_gpu_kern_traces(self)
-    local entries_dur_time, total_metrics_dur_time = statistics.get_entries(gpu_traces, get_entry_key_tab, report_common.get_duration, self.timeunit)
-    local entries_queue_time, total_metrics_queue_time = statistics.get_entries(gpu_traces, get_entry_key_tab, report_common.get_queue_time, self.timeunit)
+    local gpu_traces = stats:fetch_traces(all_traces, "KERNEL_DISPATCH", opt) or {}
+    
+
+    local entries_dur_time, total_metrics_dur_time = stats:get_entries(gpu_traces, get_entry_key_tab, stats.get_duration, timeunit)
+    local entries_queue_time, total_metrics_queue_time = stats:get_entries(gpu_traces, get_entry_key_tab, stats.get_queue_time, timeunit)
+    
     local data = {}
-
     for key_str, entry_dur_time in pairs(entries_dur_time) do
         local entry_queue_time = entries_queue_time[key_str]
-        local statistic_table_for_duration_time = statistics.compute_stats(entry_dur_time, total_metrics_dur_time)
-        local statistic_table_for_queue_time = statistics.compute_stats(entry_queue_time, total_metrics_queue_time)
+        local statistic_table_for_duration_time = stats:compute_stats(entry_dur_time, total_metrics_dur_time)
+        local statistic_table_for_queue_time = stats:compute_stats(entry_queue_time, total_metrics_queue_time)
         
         local statistic_table = {
             statistic_table_for_duration_time[1], 
@@ -84,5 +77,12 @@ function Report:get_data()
     table.sort(data, function(a, b)
         return tonumber(a[2]) > tonumber(b[2])
     end)
-    return data
+
+    table.insert(data, 1, headers)
+
+    attribute.report_name = "GPU Kernel Summary"
+    attribute.data = data
+    attribute.data_size = #data - 1
+    
+    Report.Report:new(attribute):generate(opt)
 end

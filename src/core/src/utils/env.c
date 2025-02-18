@@ -42,11 +42,8 @@ void* get_plugin_lib()
 {
     const char *plugin_path = getenv(ENV_PLUGIN_PATH);
     static void* plugin_handle = NULL;
-    if (plugin_path == NULL) {
-        fprintf(stderr, "Environment variable %s is not set.\n", ENV_PLUGIN_PATH);
-        exit(EXIT_FAILURE);
-    }
-    plugin_handle = dlopen(plugin_path, RTLD_LAZY);
+    if (plugin_path == NULL) return NULL;
+    plugin_handle = dlopen(plugin_path, RTLD_LAZY | RTLD_DEEPBIND);
     if (!plugin_handle) {
         fprintf(stderr, "%s\n", dlerror());
         exit(EXIT_FAILURE);

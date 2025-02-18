@@ -90,8 +90,8 @@ ratelprof_status_t ratelprof_delete_hash(ratelprof_hash_table_t *table,
         prev->next = entry->next;
     }
     free(entry->value);
-    free(entry);
     entry->value = NULL;
+    free(entry);
     entry = NULL;
     return RATELPROF_STATUS_SUCCESS;
 }

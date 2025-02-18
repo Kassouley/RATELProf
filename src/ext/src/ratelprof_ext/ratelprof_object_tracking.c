@@ -28,7 +28,7 @@ ratelprof_object_tracking_pool_fini()
     RATELPROF_TRY(ratelprof_hashtable_free(&object_tracking_pool->queue_doorbell_map));
     RATELPROF_TRY(ratelprof_hashtable_free(&object_tracking_pool->kernelName_kernelObj_map));
     if (object_tracking_pool->agents_list) free(object_tracking_pool->agents_list);
-    return RATELPROF_STATUS_SUCCESS;
+    return status;
 }
 
 

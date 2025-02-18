@@ -1,20 +1,17 @@
-# Minimum CMake version
-cmake_minimum_required(VERSION 3.10)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
-# Project name and type (shared library)
-project(${TOOL_PROJECT_NAME} VERSION 1.0.0 LANGUAGES C CXX)
+PROJECT(${TOOL_PROJECT_NAME} VERSION 1.0.0 LANGUAGES C CXX)
 
-# Set the output library name
-set(LIBRARY_NAME ${TOOL_PROJECT_NAME})
-
-# Find all source files in the current directory (both .c and .cpp)
-file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
+FILE(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
 )
 
-# Add the shared library (create the target first)
-add_library(${LIBRARY_NAME} SHARED ${SOURCES})
+ADD_LIBRARY(${PROJECT_NAME}-lib-dyn     SHARED ${SOURCES})
+ADD_LIBRARY(${PROJECT_NAME}-lib-static  STATIC ${SOURCES})
 
-target_link_libraries(${LIBRARY_NAME} ${CORE_PROJECT_NAME})
-target_link_libraries(${LIBRARY_NAME} ${EXT_PROJECT_NAME})
+TARGET_LINK_LIBRARIES(${PROJECT_NAME}-lib-dyn       ${CORE_PROJECT_NAME}-lib-dyn        ${EXT_PROJECT_NAME}-lib-dyn )
+TARGET_LINK_LIBRARIES(${PROJECT_NAME}-lib-static    ${CORE_PROJECT_NAME}-lib-static     ${EXT_PROJECT_NAME}-lib-static)
+
+SET_TARGET_PROPERTIES(${PROJECT_NAME}-lib-dyn       PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
+SET_TARGET_PROPERTIES(${PROJECT_NAME}-lib-static    PROPERTIES OUTPUT_NAME ${PROJECT_NAME})

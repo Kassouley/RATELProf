@@ -1,59 +1,8 @@
-local msgpack = {}
+module("msgpack", package.seeall)
 
-local function ordered_table()
-    local ordered_table = {
-        keys = {}, -- To keep track of the order of keys
-        data = {}, -- To store the key-value pairs
-    }
-
-    setmetatable(ordered_table, {
-        __index = function(t, k)
-            return t.data[k] -- Redirect indexing to the data table
-        end,
-        __newindex = function(t, k, v)
-            if v == nil then
-                t.data[k] = nil
-                for i, key in ipairs(t.keys) do
-                    if k == key then
-                        table.remove(t.keys, i)
-                        break
-                    end
-                end
-            else
-                if t.data[k] == nil then
-                    table.insert(t.keys, k) -- Add key to the order list if it's new
-                end
-                t.data[k] = v -- Store the value in the data table
-            end
-        end,
-        __pairs = function(t)
-            local i = 0
-            return function()
-                i = i + 1
-                local k = t.keys[i]
-                if k then
-                    return k, t.data[k]
-                end
-            end
-        end,
-    })
-    return ordered_table
-end
-
--- Override pairs for Lua 5.1 / LuaJIT
-local old_pairs = pairs
-function pairs(tbl)
-    local mt = getmetatable(tbl)
-    if mt and mt.__pairs then
-        return mt.__pairs(tbl)
-    end
-    return old_pairs(tbl)
-end
-
-
-function msgpack.decode(hex_string)
+function decode(hex_string)
     local index = 1
-    local data = ordered_table()
+    local data = {}
     
     -- Convert the hex string into a table of bytes
     local bytes = {}
@@ -78,7 +27,7 @@ function msgpack.decode(hex_string)
         elseif byte >= 0x80 and byte <= 0x8f then
             -- fixmap (0x80 - 0x8f)
             local map_len = byte - 0x80
-            local map = ordered_table()
+            local map = {}
             for i = 1, map_len do
                 local key = decode()
                 local value = decode()
@@ -199,7 +148,7 @@ function msgpack.decode(hex_string)
         elseif byte == 0xde then
             -- map16
             local len = (next_byte() * 256) + next_byte()
-            local map = ordered_table()
+            local map = {}
             for i = 1, len do
                 local key = decode()
                 local value = decode()
@@ -209,7 +158,7 @@ function msgpack.decode(hex_string)
         elseif byte == 0xdf then
             -- map32
             local len = (next_byte() * 16777216) + (next_byte() * 65536) + (next_byte() * 256) + next_byte()
-            local map = ordered_table()
+            local map = {}
             for i = 1, len do
                 local key = decode()
                 local value = decode()
@@ -224,5 +173,3 @@ function msgpack.decode(hex_string)
 
     return decode()
 end
-
-return msgpack

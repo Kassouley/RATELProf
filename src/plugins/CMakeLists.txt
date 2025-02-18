@@ -2,6 +2,18 @@ cmake_minimum_required(VERSION 3.10)
 
 project(plugin_lib)
 
+
+MACRO(SUBDIRLIST result curdir)
+    file(GLOB_RECURSE ALL_ITEMS LIST_DIRECTORIES true ${curdir} ${curdir}/*)
+    set(SUBDIRS [])
+    foreach(ITEM ${ALL_ITEMS})
+        if(IS_DIRECTORY ${ITEM})
+            list(APPEND SUBDIRS ${ITEM})
+        endif()
+    endforeach()
+    set(${result} ${SUBDIRS})
+ENDMACRO()
+
 SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/*)
 file(GLOB SOURCES2 
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp" 
@@ -24,10 +36,18 @@ foreach(SUBDIR ${SUBDIRS})
         target_include_directories(${LIBRARY_NAME}
             PRIVATE
                 ${CMAKE_CURRENT_SOURCE_DIR}/include
+                ${CMAKE_SOURCE_DIR}/src/core/include
+                ${CMAKE_SOURCE_DIR}/src/ext/include
+        )
+        
+        target_compile_options(${LIBRARY_NAME} 
+            PUBLIC
+                -O3
+                -D__HIP_PLATFORM_AMD__
         )
 
-        target_link_libraries(${LIBRARY_NAME} ${CORE_PROJECT_NAME})
-        target_link_libraries(${LIBRARY_NAME} ${EXT_PROJECT_NAME})
+        # target_link_libraries(${LIBRARY_NAME} ${CORE_PROJECT_NAME})
+        # target_link_libraries(${LIBRARY_NAME} ${EXT_PROJECT_NAME})
 
         message(STATUS "Created shared library: ${LIBRARY_NAME}")
     endif()

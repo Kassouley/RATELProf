@@ -14,8 +14,6 @@
 #include "ratelprof/ratelprof_lifecycle.h"
 #include "utils/utils.h"
 
-static int (*main_fn)(int, char **, char **);
-
 ratelprof_lifecycle_t lifecycle;
 
 ratelprof_status_t ratelprof_init_lifecycle() 

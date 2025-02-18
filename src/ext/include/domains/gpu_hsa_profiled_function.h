@@ -187,7 +187,7 @@ static inline void ratelprof_set_signal_handler(hsa_signal_t signal, hsa_amd_sig
     if (s == RATELPROF_STATUS_SUCCESS) { \
         hsa_kernel_dispatch_packet_t* packets = (hsa_kernel_dispatch_packet_t*) queue->base_address; \
         hsa_kernel_dispatch_packet_t* packet = (hsa_kernel_dispatch_packet_t*)(packets + value % queue->size); \
-        int packet_type = (packet->header & (1 << HSA_PACKET_HEADER_WIDTH_TYPE) - 1); \
+        int packet_type = (packet->header & ((1 << HSA_PACKET_HEADER_WIDTH_TYPE) - 1)); \
         ratelprof_gpu_activity_t* activity = malloc(sizeof(ratelprof_gpu_activity_t)); \
         \
         ratelprof_create_proxy_signal(&activity->proxy_signal); \

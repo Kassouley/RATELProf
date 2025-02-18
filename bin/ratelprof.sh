@@ -23,6 +23,7 @@ fi
 
 #!/bin/bash
 SCRIPT_DIR=$(dirname $0)/../share/scripts
+export LUA_PATH="$SCRIPT_DIR/?.lua;;"
 
 # Check if no argument is provided
 if [ -z "$1" ]; then
@@ -34,22 +35,22 @@ fi
 case "$1" in
     profile)
         shift
-        eval "lua $SCRIPT_DIR/profile_command/profile.lua $@"
+        eval "lua $SCRIPT_DIR/profile.lua $@"
         ;;
 
     stats)
         shift
-        eval "lua $SCRIPT_DIR/stats_command/stats.lua $@"
+        eval "lua $SCRIPT_DIR/stats.lua $@"
         ;;
 
     visualize)
         shift
-        eval "lua $SCRIPT_DIR/visualize_command/visualize.lua $@"
+        eval "lua $SCRIPT_DIR/visualize.lua $@"
         ;;
 
     inspect)
         shift
-        eval "lua $SCRIPT_DIR/inspect_command/inspect.lua $@"
+        eval "lua $SCRIPT_DIR/inspect.lua $@"
         ;;
 
     --help|-h)

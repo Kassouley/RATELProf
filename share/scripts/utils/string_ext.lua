@@ -1,5 +1,7 @@
 -- string.lua
 
+module ("string_ext", package.seeall)
+
 -- Trim whitespace from both ends of a string
 function string:trim()
     return self:match("^%s*(.-)%s*$")

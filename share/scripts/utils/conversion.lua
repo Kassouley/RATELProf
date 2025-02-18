@@ -1,23 +1,23 @@
 -- conversion.lua
-local conversion = {}
+module ("conversion", package.seeall)
 
 -- Time Conversion Functions
-conversion.time_units = { sec = 1, ms = 1e3, us = 1e6, ns = 1e9 }
-function conversion.time(value, from_unit, to_unit)
+time_units = { sec = 1, ms = 1e3, us = 1e6, ns = 1e9 }
+function time(value, from_unit, to_unit)
     local units = conversion.time_units
     return value * (units[to_unit] / units[from_unit])
 end
 
 
 -- Data Size Conversion Functions
-conversion.bytes_units = { bytes = 1, kb = 1000, mb = 1000^2, gb = 1000^3 }
-function conversion.bytes(value, from_unit, to_unit)
+bytes_units = { bytes = 1, kb = 1000, mb = 1000^2, gb = 1000^3 }
+function bytes(value, from_unit, to_unit)
     local units = conversion.bytes_units 
     return value * (units[from_unit] / units[to_unit])
 end
 
 -- Number Conversion Functions
-function conversion.num(value, from_format, to_format)
+function num(value, from_format, to_format)
     if from_format == "dec" then
         if to_format == "hex" then
             return string.format("%X", value)
@@ -36,5 +36,3 @@ function conversion.num(value, from_format, to_format)
         end
     end
 end
-
-return conversion
