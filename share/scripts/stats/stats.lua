@@ -1,15 +1,15 @@
 -- stats.lua
-module ("stats.process", package.seeall)
-
 require ("utils.string_ext")
-require ("utils.common")
-require ("utils.lfs")
-require ("utils.conversion")
+local utils   = require ("utils.utils")
+local lfs     = require ("utils.lfs")
+local convert = require ("utils.convert")
 
-require ("stats.Classes.Report")
-require ("stats.report_common")
-require ("stats.statistics")
+Report           = require ("stats.Classes.Report")
+report_common    = require ("stats.report_common")
 
+local settings = require ("settings")
+
+local stats = {}
 
 local function handle_option(options)
     local value = nil
@@ -31,7 +31,7 @@ local function handle_option(options)
 
     value = options["timeunit"]
     if value then 
-        if not conversion.time_units[value] then 
+        if not convert.time_units[value] then 
             print("Time unit '"..value.."' not available.") 
             os.exit(1)
         end 
@@ -45,33 +45,17 @@ local function get_default_formats(output)
     return output == "-" and "column" or "csv"
 end
 
--- Function to process the input file
-function stats:process_stats(positional_args, options_values)
-    handle_option(options_values)
-    local input_file = positional_args[1]
-    if not lfs.file_exists(input_file) or not lfs.has_extension(input_file, "json") then
-        print("Error : Incorrect report file in input.")
-        os.exit(1)
-    end
-    
-    local default_reports = {}
-    for _, report in ipairs(settings.settings._ALL_REPORT) do
-        if report.default == true then
-            table.insert(default_reports, report.name)
-        end
-    end
-    local reports = options_values.report or default_reports
-    local outputs = options_values.output or {"-"}
-    local formats = options_values.format or {}
+
+function stats.execute_report(reports, outputs, formats, input_file, options_values)
+    local data = utils.load_json(input_file)
 
     for i, report_id in ipairs(reports) do
-        if settings.settings._REPORT_PATH[report_id] then
+        if settings._REPORT_PATH[report_id] then
             local output = outputs[i] or outputs[#outputs]
             local output_format = formats[i] or formats[#formats] or get_default_formats(output)
 
-            local all_traces = common.load_json(input_file)
-            local report_path = lfs.get_script_path(1)..settings.settings._REPORT_PATH[report_id]
-            report_path = common.execute_command("realpath "..report_path)
+            local report_path = lfs.get_script_path(1)..settings._REPORT_PATH[report_id]
+            report_path = utils.execute_command("realpath "..report_path)
 
             local attribute = {
                 trace_path = input_file,
@@ -89,7 +73,7 @@ function stats:process_stats(positional_args, options_values)
             }
             local chunk, err = loadfile(report_path)
             if chunk then
-                chunk()(all_traces, attribute, opt)
+                chunk()(data, attribute, opt)
             else
                 print("Error loading file: " .. err)
             end
@@ -98,3 +82,27 @@ function stats:process_stats(positional_args, options_values)
         end
     end
 end
+
+-- Function to process the input file
+function stats.process_stats(positional_args, options_values)
+    handle_option(options_values)
+    local input_file = positional_args[1]
+    if not lfs.file_exists(input_file) or not lfs.has_extension(input_file, "json") then
+        print("Error : Incorrect report file in input.")
+        os.exit(1)
+    end
+    
+    local default_reports = {}
+    for _, report in ipairs(settings._ALL_REPORT) do
+        if report.default == true then
+            table.insert(default_reports, report.name)
+        end
+    end
+    local reports = options_values.report or default_reports
+    local outputs = options_values.output or {"-"}
+    local formats = options_values.format or {}
+
+    stats.execute_report(reports, outputs, formats, input_file, options_values)
+end
+
+return stats

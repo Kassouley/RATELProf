@@ -1,6 +1,6 @@
-module("msgpack", package.seeall)
+local msgpack = {}
 
-function decode(hex_string)
+function msgpack.decode(hex_string)
     local index = 1
     local data = {}
     
@@ -173,3 +173,5 @@ function decode(hex_string)
 
     return decode()
 end
+
+return msgpack

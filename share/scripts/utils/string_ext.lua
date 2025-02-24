@@ -1,6 +1,4 @@
--- string.lua
-
-module ("string_ext", package.seeall)
+-- string_ext.lua
 
 -- Trim whitespace from both ends of a string
 function string:trim()

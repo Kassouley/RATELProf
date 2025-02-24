@@ -1,8 +1,9 @@
-local lfs = require("lfs")
+local lfs = require("utils.lfs")
+
 local merge_json = {}
 
 local function minify(json_content)
-    return json_content:gsub("%s*", "")
+    return json_content:gsub("%s+", " ")
 end
 
 function merge_json.get_json_data(json_path)

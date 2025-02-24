@@ -1,7 +1,7 @@
-module ("Report", package.seeall)
-
 -- Report.lua
-Report = {}
+local lfs = require ("utils.lfs")
+
+local Report = {}
 Report.__index = Report
 
 -- Available formats and their extensions
@@ -195,3 +195,4 @@ function Report:toColumn()
     return table.concat(result, "\n") .. "\n"
 end
 
+return Report

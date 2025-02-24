@@ -1,29 +1,25 @@
 -- stats.lua
-module ("stats", package.seeall)
-
-require ("settings")
-
-require ("stats.process")
-
-require ("utils.Script")
+local settings = require ("settings")
+local stats    = require ("stats.stats")
+local Script   = require ("utils.Script")
 
 -- Main script logic
-local function stats(arg)
+local function main(arg)
 
     local attribute = {
         name = "ratelprof stats",
         version = settings._VERSION,
     }
-    local script = Script.Script:new(attribute)
+    local script = Script:new(attribute)
 
     script:set_desc("\n\tGenerate differents types of report based on report file")
 
-    script:set_execute_function(process_stats)
+    script:set_execute_function(stats.process_stats)
 
     script:add_argument("report-file", false, false, "Path to the report file.")
 
     local default_reports = {}
-    for _, report in ipairs(settings.settings._ALL_REPORT) do
+    for _, report in ipairs(settings._ALL_REPORT) do
         if report.default == true then
             table.insert(default_reports, report.name)
         end
@@ -119,4 +115,4 @@ local function stats(arg)
 end
 
 -- Run the main function
-stats(arg)
+main(arg)

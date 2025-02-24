@@ -1,8 +1,8 @@
-module ("common", package.seeall)
-
 require("utils.json.json")
 
-function load_json(__input_path__)
+local utils = {}
+
+function utils.load_json(__input_path__)
     if __input_path__ == nil then
         error ("Missing JSON input file")
         return nil
@@ -18,7 +18,7 @@ function load_json(__input_path__)
 end
 
 
-function merge_tab(t1, ...)
+function utils.merge_tab(t1, ...)
     for _, t in ipairs({...}) do
         for _, value in pairs(t) do
             table.insert(t1, value)
@@ -27,7 +27,7 @@ function merge_tab(t1, ...)
     return t1
 end
 
-function execute_command(cmd)
+function utils.execute_command(cmd)
     local handle = io.popen(cmd)
     local result = handle:read("*a")
     handle:close()
@@ -35,7 +35,7 @@ function execute_command(cmd)
 end
 
 
-function generate_json(value, indent)
+function utils.generate_json(value, indent)
     indent = indent or 0
     local indentation = string.rep(" ", indent)
     local json_parts = {}
@@ -92,3 +92,4 @@ function generate_json(value, indent)
     return table.concat(json_parts)
 end
 
+return utils

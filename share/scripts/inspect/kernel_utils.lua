@@ -1,13 +1,12 @@
-module("inspect.kernel_utils", package.seeall)
+local utils   = require ("utils.utils")
+local lfs     = require ("utils.lfs")
+local msgpack = require ("inspect.msgpack")
 
-require ("utils.lfs")
-require ("utils.common")
-
-require ("inspect.msgpack")
+local kernel_utils = {}
 
 local function extract_gpu_elf(binary_app)
     local llvm_check = "readelf -S " .. binary_app .. " | grep -q .llvm.offloading"
-    local hip_check = "readelf -S " .. binary_app .. " | grep -q .hip_fatbin"
+    local hip_check  = "readelf -S " .. binary_app .. " | grep -q .hip_fatbin"
 
     local extract_command = ""
     if os.execute(llvm_check) == 0 then
@@ -18,12 +17,12 @@ local function extract_gpu_elf(binary_app)
         print("No GPU ELF has been found in your application.")
         os.exit(1)
     end
-    return common.execute_command(extract_command)
+    return utils.execute_command(extract_command)
 end
 
 local function get_kernel_metadata(gpu_elf)
-    common.execute_command("echo -n "..gpu_elf.." | xxd -r -p > /tmp/rprof_inspect_gpu_elf")
-    local res = common.execute_command("readelf --notes /tmp/rprof_inspect_gpu_elf")
+    utils.execute_command("echo -n "..gpu_elf.." | xxd -r -p > /tmp/rprof_inspect_gpu_elf")
+    local res = utils.execute_command("readelf --notes /tmp/rprof_inspect_gpu_elf")
     local encoded_metadata = res:match("description data:%s*([%x%s]+)")
     
     if not encoded_metadata then
@@ -34,7 +33,7 @@ local function get_kernel_metadata(gpu_elf)
     return msgpack.decode(encoded_metadata)
 end
 
-function inspect:inspect_kernels(application, options_values)
+function kernel_utils.inspect_kernels(application, options_values)
     if not lfs.file_exists(application) then
         print("No application to inspect.")
         os.exit(1)
@@ -56,9 +55,9 @@ function inspect:inspect_kernels(application, options_values)
     for _, kernel in pairs(kernels_metadata) do
         local kernel_name = kernel[".name"]
         if options_values.trunc then
-            kernel_name = common.execute_command("c++filt --no-params "..kernel_name)
+            kernel_name = utils.execute_command("c++filt --no-params "..kernel_name)
         elseif not options_values.mangled then
-            kernel_name = '"'..common.execute_command("c++filt "..kernel_name)..'"'
+            kernel_name = '"'..utils.execute_command("c++filt "..kernel_name)..'"'
         end
 
         local kernel_entry = {
@@ -81,7 +80,7 @@ function inspect:inspect_kernels(application, options_values)
     print("RPROF: CSV output written to " .. output_file)
 
     if options_values["save-json"] then
-        local json_output = common.generate_json(application_metadata)
+        local json_output = utils.generate_json(application_metadata)
         output_file = lfs.remove_extension(output_file, ".csv")..".json"
         local file = lfs.open_file(output_file, "w")
         file:write(json_output)
@@ -90,3 +89,4 @@ function inspect:inspect_kernels(application, options_values)
     end
 end
 
+return kernel_utils

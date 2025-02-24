@@ -1,22 +1,23 @@
-module("profile.env", package.seeall)
-
-require ("utils.common")
 require ("utils.string_ext")
-require ("utils.lfs")
+local utils    = require ("utils.utils")
+local lfs      = require ("utils.lfs")
+local settings = require ("settings")
 
 local env = {}
 
+env.env_value = {}
+
 -- Function to set environment variable
-function profile:set_env(var, value)
-    table.insert(env, var.."="..value)
+function env.set_env(var, value)
+    table.insert(env.env_value, var.."="..value)
 end
 
-function profile:get_env()
-    return table.concat(env, " ")
+function env.get_env()
+    return table.concat(env.env_value, " ")
 end
 
 
-function profile:set_filter_env_var(filename, filter_type, settings)
+function env.set_filter_env_var(filename, filter_type)
     local file = lfs.open_file(filename, "r")
     local categories = {}
     local current_category = nil
@@ -47,13 +48,13 @@ function profile:set_filter_env_var(filename, filter_type, settings)
     
     for category, names in pairs(categories) do
         local upper_category = string.upper(category)
-        profile:set_env(string.format(settings.settings._ENV.FUNCTION_FILTERED, upper_category), table.concat(names,","))
-        profile:set_env(string.format(settings.settings._ENV.FILTER_TYPE, upper_category), filter_type)
+        env.set_env(string.format(settings._ENV.FUNCTION_FILTERED, upper_category), table.concat(names,","))
+        env.set_env(string.format(settings._ENV.FILTER_TYPE, upper_category), filter_type)
     end
 end
 
-function profile:set_number_of_kernel_env_var(application)
-    local num = tonumber(common.execute_command(
+function env.set_number_of_kernel_env_var(application)
+    local num = tonumber(utils.execute_command(
         "nm --demangle --defined-only " .. application .. " | grep -iE \"__device_stub__|__omp_offloading\" | wc -l"
     ):match("%d+")) or 1
     local result = 32
@@ -61,11 +62,13 @@ function profile:set_number_of_kernel_env_var(application)
         result = result * 2
     end
 
-    profile:set_env(settings.settings._ENV.NB_KERNEL_AV, result)
+    env.set_env(settings._ENV.NB_KERNEL_AV, result)
 end
 
 
-function profile:set_number_of_queue_env_var()
-    local output = common.execute_command(settings.settings._INSTALL_DIR.."/bin/ratelinfo --max-queue")
-    profile:set_env(settings.settings._ENV.NB_QUEUE_AV, tonumber(output) + 1)
+function env.set_number_of_queue_env_var()
+    local output = utils.execute_command(settings._INSTALL_DIR.."/bin/ratelinfo --max-queue")
+    env.set_env(settings._ENV.NB_QUEUE_AV, tonumber(output) + 1)
 end
+
+return env

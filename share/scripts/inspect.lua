@@ -1,11 +1,7 @@
 -- inspect.lua
-module ("inspect", package.seeall)
-
-require ("settings")
-
-require ("utils.Script")
-
-require ("inspect.process")
+local settings = require ("settings")
+local Script   = require ("utils.Script")
+local inspect  = require ("inspect.inspect")
 
 -- Main script logic
 function main(arg)
@@ -14,11 +10,10 @@ function main(arg)
         name = "ratelprof inspect",
         version = settings._VERSION,
     }
-    local script = Script.Script:new(attribute)
+    local script = Script:new(attribute)
 
     script:set_desc("\n\tInspect an application and output data about kernels from the application.")
-    
-    script:set_execute_function(process_inspecting)
+    script:set_execute_function(inspect.process_inspecting)
 
     script:add_argument("application", false, false, "\tThe application to inspect.")
 

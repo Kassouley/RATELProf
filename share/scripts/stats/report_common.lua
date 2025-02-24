@@ -1,11 +1,18 @@
-module ("stats.report_common", package.seeall)
+local utils    = require ("utils.utils")
+local convert  = require ("utils.convert")
+local settings = require ("settings")
+
+local report_common = {}
+
+report_common = require ("stats.statistics")
 
 -- Cache table to store previously fetched traces
-local trace_cache = {}
+report_common.trace_cache = {}
 
 -- Optimized fetch_traces function
-function stats:fetch_traces(data, domain_string, opt)
+function report_common.fetch_traces(data, domain_string, opt)
     -- Check if traces for this domain_string are already cached
+    local trace_cache = report_common.trace_cache
     if trace_cache[domain_string] then
         return trace_cache[domain_string]
     end
@@ -18,9 +25,9 @@ function stats:fetch_traces(data, domain_string, opt)
             
             if domain_string == "KERNEL_DISPATCH" and not opt.is_mangled then
                 if opt.is_trunc then
-                    trace.args.kernel_name = common.execute_command("c++filt --no-params ".. trace.args.kernel_name)
+                    trace.args.kernel_name = utils.execute_command("c++filt --no-params ".. trace.args.kernel_name)
                 elseif not opt.is_trunc then
-                    trace.args.kernel_name = common.execute_command("c++filt ".. trace.args.kernel_name)
+                    trace.args.kernel_name = utils.execute_command("c++filt ".. trace.args.kernel_name)
                 end
             end
             table.insert(ret, trace)
@@ -32,13 +39,13 @@ function stats:fetch_traces(data, domain_string, opt)
     return ret
 end
 
-function stats:process_api_raw_data_for_sum_report(raw_data, timeunit)
+function report_common.process_api_raw_data_for_sum_report(raw_data, timeunit)
     local function get_entry_key_tab(trace)
         return { trace.name }
     end
 
-    local entries, total_metrics = stats:get_entries(raw_data, get_entry_key_tab, stats.get_duration, timeunit)
-    local data = stats:get_output_summary(entries, total_metrics)
+    local entries, total_metrics = report_common.get_entries(raw_data, get_entry_key_tab, report_common.get_duration, timeunit)
+    local data = report_common.get_output_summary(entries, total_metrics)
 
     local headers = {
         "Time (%)", -- 1
@@ -61,12 +68,12 @@ function stats:process_api_raw_data_for_sum_report(raw_data, timeunit)
 end
 
 
-function stats:process_api_raw_data_for_trace_report(raw_data, timeunit)
+function report_common.process_api_raw_data_for_trace_report(raw_data, timeunit)
     local data = {}
     for _, trace in ipairs(raw_data) do
         local entry = {
             string.format("%.0f", trace.start),
-            stats:get_duration(trace, timeunit),
+            report_common.get_duration(trace, timeunit),
             trace.name,
             trace.id,
             trace.corr_id,
@@ -95,32 +102,34 @@ function stats:process_api_raw_data_for_trace_report(raw_data, timeunit)
     return data
 end
 
-function stats:get_copy_name_from_kind(kind)
-    return settings.settings._MEM_KIND[kind+1]
+function report_common.get_copy_name_from_kind(kind)
+    return settings._MEM_KIND[kind+1]
 end
 
-function stats:get_copy_name(trace)
-    return "Copy"..stats:get_copy_name_from_kind(trace.args.src_type)..
-            "To"..stats:get_copy_name_from_kind(trace.args.dst_type)
+function report_common.get_copy_name(trace)
+    return "Copy"..report_common.get_copy_name_from_kind(trace.args.src_type)..
+            "To"..report_common.get_copy_name_from_kind(trace.args.dst_type)
 end
 
-function stats:get_duration(trace, timeunit)
+function report_common.get_duration(trace, timeunit)
     local dur = trace.dur
     if timeunit ~= "ns" then
-        return conversion.time(dur, "ns", timeunit)
+        return convert.time(dur, "ns", timeunit)
     end
     return  dur
 end
 
-function stats:get_size(trace)
-    return conversion.bytes(trace.args.size, "bytes", "mb")
+function report_common.get_size(trace)
+    return convert.bytes(trace.args.size, "bytes", "mb")
 end
 
 
-function stats:get_queue_time(trace, timeunit)
+function report_common.get_queue_time(trace, timeunit)
     local dur = trace.start - trace.args.dispatch_time
     if timeunit ~= "ns" then
-        return conversion.time(dur, "ns", timeunit)
+        return convert.time(dur, "ns", timeunit)
     end
     return  dur
 end
+
+return report_common

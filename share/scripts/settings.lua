@@ -1,17 +1,17 @@
-module ("settings", package.seeall)
+local settings = {}
 
-_INSTALL_DIR = "/home/lneto/.local/ratelprof"
+-- settings._INSTALL_DIR = "/home/lneto/.local/ratelprof"
 
-_VERSION = "1.0"
+settings._VERSION = "1.0"
 
-_TRACES = {
+settings._TRACES = {
       {var="RATELPROF_DOMAIN_HSA",            name="HSA",                 option="hsa-trace"},
       {var="RATELPROF_DOMAIN_HIP",            name="HIP",                 option="hip-trace"},
       {var="RATELPROF_DOMAIN_OMP_TGT",        name="OpenMP Target",       option="omp-tgt-trace"},
       {var="RATELPROF_DOMAIN_OMP_TGT_RTL",    name="OpenMP Target RTL",   option="omp-tgt-rtl-trace"}
     }
 
-_ENV = {
+settings._ENV = {
       FUNCTION_FILTERED =   "RATELPROF_DOMAIN_%s_FUNCTIONS_FILTERED",
       FILTER_TYPE =         "RATELPROF_DOMAIN_%s_FILTER_TYPE",
       PLUGIN_PATH =         "RATELPROF_PLUGIN_PATH",
@@ -21,7 +21,7 @@ _ENV = {
       DOMAIN_PROFILING =    "RATELPROF_DOMAIN_PROFILING"
     }
 
-_REPORT_PATH = {
+settings._REPORT_PATH = {
   omp_api_trace         = "reports/omp_api_trace.lua",
   omp_api_sum           = "reports/omp_api_sum.lua",
   omp_target_api_trace  = "reports/omp_target_api_trace.lua",
@@ -35,10 +35,9 @@ _REPORT_PATH = {
   gpu_kern_sum          = "reports/gpu_kern_sum.lua",
   gpu_mem_time_sum      = "reports/gpu_mem_time_sum.lua",
   gpu_mem_size_sum      = "reports/gpu_mem_size_sum.lua"
-
 }
 
-_ALL_REPORT = {
+settings._ALL_REPORT = {
       {
         name    = "omp_api_trace",
         desc    = "Show all trace about OpenMP Target API",
@@ -106,5 +105,6 @@ _ALL_REPORT = {
       }
     }
 
-_MEM_KIND = {"Host", "Device"}
-  
+settings._MEM_KIND = {"Host", "Device"}
+
+return settings

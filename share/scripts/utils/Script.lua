@@ -1,7 +1,5 @@
-module ("Script", package.seeall)
-
 -- Define the Script class
-Script = {}
+local Script = {}
 Script.__index = Script
 
 -- Constructor
@@ -41,7 +39,7 @@ end
 function Script:execute(args)
     self:check_args(args)
     if not self.execute_function then error("No execute function set") end
-    return self:execute_function(self.arguments_values, self.options_values)
+    return self.execute_function(self.arguments_values, self.options_values)
 end
 
 function Script:set_execute_function(execute_function)
@@ -175,6 +173,17 @@ function Script:check_args(args)
                         else
                             i = i + 1
                             value = args[i]
+
+                            if value and (value:sub(1, 1) == '"' or value:sub(1, 1) == "'") then
+                                local quote_char = value:sub(1, 1)
+                                local quoted_value = value
+                                while i + 1 <= #args and not value:match(quote_char .. "$") do
+                                    i = i + 1
+                                    quoted_value = quoted_value .. " " .. args[i]
+                                end
+                                value = quoted_value:match("^" .. quote_char .. "(.-)" .. quote_char .. "$") or quoted_value
+                            end
+
                             if not value or value:sub(1, 1) == "-" then
                                 print("Error: " .. arg .. " need an argument.\n")
                                 self:show_help()
@@ -254,3 +263,5 @@ function Script:check_args(args)
         self:show_help()
     end
 end
+
+return Script

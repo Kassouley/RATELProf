@@ -1,6 +1,6 @@
-module ("stats.statistics", package.seeall)
+local statistics = {}
 
-function stats:compute_stats(entry, total_metric)
+function statistics.compute_stats(entry, total_metric)
     local values = entry.values
     local count = entry.count
     local total = entry.total
@@ -43,14 +43,14 @@ function stats:compute_stats(entry, total_metric)
 end
 
 
-function stats:get_entries(data, get_entry_key_tab, get_stat_metric, timeunit)
+function statistics.get_entries(data, get_entry_key_tab, get_stat_metric, timeunit)
     local total_metric = 0
     local entries = {}
 
     for _, trace in ipairs(data) do
         local key_tab = get_entry_key_tab(trace)
         local key_str = table.concat(key_tab, "#__#")
-        local metric = get_stat_metric(_, trace, timeunit)
+        local metric = get_stat_metric(trace, timeunit)
 
         if not entries[key_str] then
             entries[key_str] = {key_tab = key_tab, count = 0, total = 0, values = {}}
@@ -65,11 +65,11 @@ function stats:get_entries(data, get_entry_key_tab, get_stat_metric, timeunit)
     return entries, total_metric
 end
 
-function stats:get_output_summary(entries, total_metric)
+function statistics.get_output_summary(entries, total_metric)
     local output_data = {}
 
     for _, entry in pairs(entries) do
-        local statistic_table = stats:compute_stats(entry, total_metric)
+        local statistic_table = statistics.compute_stats(entry, total_metric)
         for i = 1, #entry.key_tab do
             table.insert(statistic_table, entry.key_tab[i])
         end
@@ -78,3 +78,5 @@ function stats:get_output_summary(entries, total_metric)
 
     return output_data
 end
+
+return statistics

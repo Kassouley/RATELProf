@@ -38,17 +38,17 @@ return function(all_traces, attribute, opt)
         "Name" 
     }
 
-    local gpu_traces = stats:fetch_traces(all_traces, "KERNEL_DISPATCH", opt) or {}
+    local gpu_traces = report_common.fetch_traces(all_traces, "KERNEL_DISPATCH", opt) or {}
     
 
-    local entries_dur_time, total_metrics_dur_time = stats:get_entries(gpu_traces, get_entry_key_tab, stats.get_duration, timeunit)
-    local entries_queue_time, total_metrics_queue_time = stats:get_entries(gpu_traces, get_entry_key_tab, stats.get_queue_time, timeunit)
+    local entries_dur_time, total_metrics_dur_time = report_common.get_entries(gpu_traces, get_entry_key_tab, report_common.get_duration, timeunit)
+    local entries_queue_time, total_metrics_queue_time = report_common.get_entries(gpu_traces, get_entry_key_tab, report_common.get_queue_time, timeunit)
     
     local data = {}
     for key_str, entry_dur_time in pairs(entries_dur_time) do
         local entry_queue_time = entries_queue_time[key_str]
-        local statistic_table_for_duration_time = stats:compute_stats(entry_dur_time, total_metrics_dur_time)
-        local statistic_table_for_queue_time = stats:compute_stats(entry_queue_time, total_metrics_queue_time)
+        local statistic_table_for_duration_time = report_common.compute_stats(entry_dur_time, total_metrics_dur_time)
+        local statistic_table_for_queue_time = report_common.compute_stats(entry_queue_time, total_metrics_queue_time)
         
         local statistic_table = {
             statistic_table_for_duration_time[1], 
@@ -84,5 +84,5 @@ return function(all_traces, attribute, opt)
     attribute.data = data
     attribute.data_size = #data - 1
     
-    Report.Report:new(attribute):generate(opt)
+    Report:new(attribute):generate(opt)
 end

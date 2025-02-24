@@ -1,5 +1,5 @@
 local function get_entry_key_tab1(trace)
-    return { "MemoryOperation", stats:get_copy_name(trace) }
+    return { "MemoryOperation", report_common.get_copy_name(trace) }
 end
 
 local function get_entry_key_tab2(trace)
@@ -30,15 +30,15 @@ return function(all_traces, attribute, opt)
         "Operation" 
     }
 
-    local kern_traces    = stats:fetch_traces(all_traces, "KERNEL_DISPATCH",      opt) or {}
-    local mem_traces     = stats:fetch_traces(all_traces, "MEMORY_COPY",          opt) or {}
-    local barrand_traces = stats:fetch_traces(all_traces, "BARRIER_AND_DISPATCH", opt) or {}
-    local barror_traces  = stats:fetch_traces(all_traces, "BARRIER_OR_DISPATCH",  opt) or {}
+    local kern_traces    = report_common.fetch_traces(all_traces, "KERNEL_DISPATCH",      opt) or {}
+    local mem_traces     = report_common.fetch_traces(all_traces, "MEMORY_COPY",          opt) or {}
+    local barrand_traces = report_common.fetch_traces(all_traces, "BARRIER_AND_DISPATCH", opt) or {}
+    local barror_traces  = report_common.fetch_traces(all_traces, "BARRIER_OR_DISPATCH",  opt) or {}
 
-    local mem_entries, mem_total_metric         = stats:get_entries(mem_traces, get_entry_key_tab1, stats.get_duration, timeunit)
-    local kern_entries, kern_total_metric       = stats:get_entries(kern_traces, get_entry_key_tab2, stats.get_duration, timeunit)
-    local barrand_entries, barrand_total_metric = stats:get_entries(barrand_traces, get_entry_key_tab3, stats.get_duration, timeunit)
-    local barror_entries, barror_total_metric   = stats:get_entries(barror_traces, get_entry_key_tab4, stats.get_duration, timeunit)
+    local mem_entries, mem_total_metric         = report_common.get_entries(mem_traces, get_entry_key_tab1, report_common.get_duration, timeunit)
+    local kern_entries, kern_total_metric       = report_common.get_entries(kern_traces, get_entry_key_tab2, report_common.get_duration, timeunit)
+    local barrand_entries, barrand_total_metric = report_common.get_entries(barrand_traces, get_entry_key_tab3, report_common.get_duration, timeunit)
+    local barror_entries, barror_total_metric   = report_common.get_entries(barror_traces, get_entry_key_tab4, report_common.get_duration, timeunit)
 
     local gpu_entries = {}
     for i, t in ipairs({kern_entries, mem_entries, barrand_entries, barror_entries}) do
@@ -48,7 +48,7 @@ return function(all_traces, attribute, opt)
     end
     local gpu_total_metric = kern_total_metric + mem_total_metric + barrand_total_metric + barror_total_metric
     
-    local data = stats:get_output_summary(gpu_entries, gpu_total_metric)
+    local data = report_common.get_output_summary(gpu_entries, gpu_total_metric)
 
     table.sort(data, function(a, b)
         return tonumber(a[2]) > tonumber(b[2])
@@ -60,5 +60,5 @@ return function(all_traces, attribute, opt)
     attribute.data = data
     attribute.data_size = #data - 1
     
-    Report.Report:new(attribute):generate(opt)
+    Report:new(attribute):generate(opt)
 end

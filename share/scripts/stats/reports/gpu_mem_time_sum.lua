@@ -1,5 +1,5 @@
 local function get_entry_key_tab(trace)
-    return { stats:get_copy_name(trace) }
+    return { report_common.get_copy_name(trace) }
 end
 
 return function(all_traces, attribute, opt)
@@ -16,10 +16,10 @@ return function(all_traces, attribute, opt)
         "Operation" 
     }
 
-    local gpu_traces = stats:fetch_traces(all_traces, "MEMORY_COPY", opt) or {}
+    local gpu_traces = report_common.fetch_traces(all_traces, "MEMORY_COPY", opt) or {}
     
-    local entries, total_metrics = stats:get_entries(gpu_traces, get_entry_key_tab, stats.get_duration, timeunit)
-    local data = stats:get_output_summary(entries, total_metrics)
+    local entries, total_metrics = report_common.get_entries(gpu_traces, get_entry_key_tab, report_common.get_duration, timeunit)
+    local data = report_common.get_output_summary(entries, total_metrics)
 
     table.sort(data, function(a, b)
         return tonumber(a[2]) > tonumber(b[2])
@@ -31,5 +31,5 @@ return function(all_traces, attribute, opt)
     attribute.data = data
     attribute.data_size = #data - 1
     
-    Report.Report:new(attribute):generate(opt)
+    Report:new(attribute):generate(opt)
 end

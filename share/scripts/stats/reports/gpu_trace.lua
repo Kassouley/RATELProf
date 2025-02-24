@@ -1,12 +1,14 @@
+local convert = require ("utils.convert")
+
 local function get_output_data(kern_traces, mem_traces, barrand_traces, barror_traces, timeunit)
     local data = {}
 
     -- Helper function to construct entries
     local function add_entry(trace, entry_type)
-        local dur = stats:get_duration(trace, timeunit)
+        local dur = report_common.get_duration(trace, timeunit)
 
         if entry_type == "mem" then
-            local size = conversion.bytes(trace.args.size, "bytes", "mb")
+            local size = convert.bytes(trace.args.size, "bytes", "mb")
             return {
                 string.format("%.0f", trace.start),
                 dur,
@@ -15,15 +17,15 @@ local function get_output_data(kern_traces, mem_traces, barrand_traces, barror_t
                 trace.corr_id,
                 "---", "---", "---", "---", "---", "---", "---", "---",
                 size,
-                string.format("%.2f", size / conversion.time(dur, timeunit, "sec")),
-                stats:get_copy_name_from_kind(trace.args.src_type),
-                stats:get_copy_name_from_kind(trace.args.dst_type),
+                string.format("%.2f", size / convert.time(dur, timeunit, "sec")),
+                report_common.get_copy_name_from_kind(trace.args.src_type),
+                report_common.get_copy_name_from_kind(trace.args.dst_type),
                 "---", "---",
-                stats:get_copy_name(trace)
+                report_common.get_copy_name(trace)
             }
         elseif entry_type == "barrand" or entry_type == "barror" then
             local queue_dur = trace.start - trace.args.dispatch_time
-            if timeunit ~= "ns" then queue_dur = conversion.time(queue_dur, "ns", timeunit) end
+            if timeunit ~= "ns" then queue_dur = convert.time(queue_dur, "ns", timeunit) end
             return {
                 string.format("%.0f", trace.start),
                 dur,
@@ -39,7 +41,7 @@ local function get_output_data(kern_traces, mem_traces, barrand_traces, barror_t
         elseif entry_type == "kern" then
             local queue_dur = trace.start - trace.args.dispatch_time
             local kernel_name = trace.args.kernel_name
-            if timeunit ~= "ns" then queue_dur = conversion.time(queue_dur, "ns", timeunit) end
+            if timeunit ~= "ns" then queue_dur = convert.time(queue_dur, "ns", timeunit) end
             return {
                 string.format("%.0f", trace.start),
                 dur,
@@ -102,10 +104,10 @@ return function(all_traces, attribute, opt)
         "Name"
     }
 
-    local kern_traces    = stats:fetch_traces(all_traces, "KERNEL_DISPATCH", opt) or {}
-    local mem_traces     = stats:fetch_traces(all_traces, "MEMORY_COPY", opt) or {}
-    local barrand_traces = stats:fetch_traces(all_traces, "BARRIER_AND_DISPATCH", opt) or {}
-    local barror_traces  = stats:fetch_traces(all_traces, "BARRIER_OR_DISPATCH", opt) or {}
+    local kern_traces    = report_common.fetch_traces(all_traces, "KERNEL_DISPATCH", opt) or {}
+    local mem_traces     = report_common.fetch_traces(all_traces, "MEMORY_COPY", opt) or {}
+    local barrand_traces = report_common.fetch_traces(all_traces, "BARRIER_AND_DISPATCH", opt) or {}
+    local barror_traces  = report_common.fetch_traces(all_traces, "BARRIER_OR_DISPATCH", opt) or {}
 
     attribute.report_name = "GPU Traces"
     attribute.data = get_output_data(kern_traces, mem_traces, barrand_traces, barror_traces, opt.timeunit)
@@ -118,5 +120,5 @@ return function(all_traces, attribute, opt)
 
     table.insert(attribute.data, 1, headers)
 
-    Report.Report:new(attribute):generate(opt)
+    Report:new(attribute):generate(opt)
 end
