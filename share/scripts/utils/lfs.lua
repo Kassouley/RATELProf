@@ -24,6 +24,10 @@ end
 -- @param p The file path as a string.
 -- @return The processed and normalized file path.
 local function get_path(p)
+    if p == nil then
+        error ("No path provided")
+        return nil
+    end
     p = sub_env_var(p)
     p = normalize_path_separator(p)
     return p
@@ -41,16 +45,21 @@ end
 -- This function ensures the provided file path is cleaned before attempting to open the file.
 -- @param filename The name of the file to open as a string.
 -- @param mode The mode in which to open the file (e.g., "r" for read, "w" for write).
+-- @param ext Optional, check if the filename has the correct extension.
 -- @return A file handle if the file is opened successfully, otherwise raises an error.
-function lfs.open_file(filename, mode)
+function lfs.open_file(filename, mode, ext)
     if filename == nil then
-        error("Missing input file")
+        error ("Error: Missing input file")
         return nil
     end
     filename = get_path(filename)
+    if ext and not lfs.has_extension (filename, ext) then
+        error ("Error: The input file is not a '"..ext.."' file")
+        return nil
+    end
     local file = io.open(filename, mode)
     if not file then
-        error("Error: Unable to open file " .. filename)
+        error ("Error: Unable to open file " .. filename)
         return nil
     end
     return file

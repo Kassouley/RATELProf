@@ -1,17 +1,10 @@
 require("utils.json.json")
+local lfs = require("utils.lfs")
 
 local utils = {}
 
-function utils.load_json(__input_path__)
-    if __input_path__ == nil then
-        error ("Missing JSON input file")
-        return nil
-    end
-    local infile = io.open (__input_path__, "r")
-    if infile == nil then
-        error ("JSON input file "..__input_path__.." can't be opened")
-        return nil
-    end
+function utils.load_json (__input_path__)
+    local infile = lfs.open_file (__input_path__, "r", "json")
     local data = infile:read ("*a")
     infile:close ()
     return JSON:decode(data)

@@ -28,7 +28,7 @@ typedef enum {
 
 static inline void ratelprof_get_agent_type(hsa_agent_t agent, uint32_t* type)  __attribute__((always_inline));
 static inline uint64_t ratelprof_get_kernel_obj_from_symbol(hsa_executable_symbol_t symbol)  __attribute__((always_inline)) ; 
-static inline void ratelprof_init_agent_list() __attribute__((always_inline)) ;
+static inline void ratelprof_init_agent_list() __attribute__((always_inline));
 static inline void ratelprof_enable_profiling(hsa_queue_t* queue) __attribute__((always_inline));
 static inline void ratelprof_create_proxy_signal(hsa_signal_t* signal) __attribute__((always_inline));
 static inline void ratelprof_destroy_proxy_signal(hsa_signal_t signal) __attribute__((always_inline));

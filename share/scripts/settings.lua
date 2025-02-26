@@ -1,6 +1,9 @@
+local lfs   = require ("utils.lfs")
+local utils = require ("utils.utils")
+
 local settings = {}
 
--- settings._INSTALL_DIR = "/home/lneto/.local/ratelprof"
+settings._INSTALL_DIR = utils.execute_command("realpath "..lfs.get_script_path(1).."../../")
 
 settings._VERSION = "1.0"
 

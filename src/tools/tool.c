@@ -130,10 +130,11 @@ void onExit()
 
     printf("RPROF: Finalizing RATELProf . . .");
     ratelprof_fini();
-    ratelprof_ext_fini();
 
     plugin_manager.plugin_finalize(&plugin);
     close_plugin_manager(&plugin_manager);
+
+    ratelprof_ext_fini();
     printf("\rRPROF: Finalizing RATELProf :    SUCCESS\n");
 }
 

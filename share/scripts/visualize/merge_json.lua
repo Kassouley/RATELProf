@@ -8,7 +8,7 @@ end
 
 function merge_json.get_json_data(json_path)
     local content = nil
-    local file = lfs.open_file(json_path, "r")
+    local file = lfs.open_file(json_path, "r", "json")
     content = file:read("*all")
     file:close()
     return minify(content)
