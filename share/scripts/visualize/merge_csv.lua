@@ -19,7 +19,7 @@ function merge_csv.get_csv_data(report_json, tmp_dir_path)
     }
 
     local output = lfs.concat_path(tmp_dir_path, prefix)
-    stats.execute_report(reports, {output}, {"csv"}, report_json, {trunc = true, timeunit = "ns"})
+    stats.execute_report(reports, {output}, {"csv"}, report_json, {mangled = true, timeunit = "ns"})
 
     local content_table = {}
     for _, report_name in ipairs(reports) do

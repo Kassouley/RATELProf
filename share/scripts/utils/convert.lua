@@ -10,7 +10,7 @@ end
 
 
 -- Data Size Conversion Functions
-convert.bytes_units = { bytes = 1, kb = 1000, mb = 1000^2, gb = 1000^3 }
+convert.bytes_units = { bytes = 1, kb = 1024, mb = 1024^2, gb = 1024^3 }
 function convert.bytes(value, from_unit, to_unit)
     local units = convert.bytes_units 
     return value * (units[from_unit] / units[to_unit])
