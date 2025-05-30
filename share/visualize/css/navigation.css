@@ -1,0 +1,35 @@
+
+#navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border: none;
+    margin: 10px auto;
+}
+
+.menu {
+    margin: 0 auto;
+    gap: 10px;
+}
+
+.menu button {
+    padding: 8px 16px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.trace-select {
+    position: absolute;
+    left: 20px;
+    gap: 5px;
+    align-items: center;
+}
+
+.trace-select input[type="text"] {
+    padding: 6px;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    width: 200px;
+}

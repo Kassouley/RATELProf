@@ -1,0 +1,24 @@
+.lvl-1-group-class {
+    border: 0px;
+    background-color: var(--lvl-1-group-color);
+}
+
+.lvl-2-group-class {
+    border: 0px;
+    background-color: var(--lvl-2-group-color);
+}
+
+.lvl-3-group-class {
+    border: 0px;
+    background-color: var(--lvl-3-group-color);
+}
+
+.non-highlighted {
+    border: 0px;
+    outline: 0px solid;
+}
+
+.highlighted {
+    border: 0px;
+    outline: 3px solid var(--highlight-color);
+}

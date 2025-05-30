@@ -1,0 +1,33 @@
+.vis-timeline {
+    font-size: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.vis-item.vis-background.mainBackground {
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.vis-item.vis-selected {
+    box-sizing: border-box;
+    border: 0px;
+    outline: 3px solid var(--selected-color);
+}
+  
+.vis-item.vis-point.vis-selected {
+    background-color: rgba(0, 0, 0, 0);
+    border: 0px;
+    outline: 0px;
+}
+
+.vis-item.vis-dot{
+    border-width:3px;
+}
+
+.vis-tooltip {
+    position: absolute !important; 
+    background-color: var(--primary-bg) !important;
+    color: var(--text-color) !important;
+    padding: 5px !important;
+    border-radius: 3px !important;
+    font-size: 10px !important;
+}

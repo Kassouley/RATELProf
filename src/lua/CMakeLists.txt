@@ -1,0 +1,24 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
+
+PROJECT(LuaModule)
+
+FIND_PACKAGE(PkgConfig REQUIRED)
+pkg_search_module(LUA REQUIRED lua5.1)
+
+INCLUDE_DIRECTORIES(${LUA_INCLUDE_DIRS})
+
+MACRO(ADD_LUA_LIBRARY NAME)
+    ADD_LIBRARY(${NAME} SHARED ${NAME}.c)
+    SET_TARGET_PROPERTIES(${NAME} PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/lua
+        PREFIX "")
+endmacro()
+
+ADD_LUA_LIBRARY(msgpack_decoder)
+
+
+ADD_LIBRARY(msgpack_encoder SHARED msgpack_encoder.c ${CMAKE_CURRENT_SOURCE_DIR}/../plugins/memory_structure/msgpack.c)
+    TARGET_INCLUDE_DIRECTORIES(msgpack_encoder PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../plugins/memory_structure/)
+    SET_TARGET_PROPERTIES(msgpack_encoder PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/lua
+        PREFIX "")
