@@ -4,11 +4,14 @@ RATELProf is a powerful and lightweight profiler designed specifically for AMD G
 
 ##  Table of Contents
 
-- [Features](#-features)
-- [Getting Started](#-getting-started)
-  - [Prerequisites](#-prerequisites)
-  - [Installation](#-installation)
-- [Project Structure](#-project-structure)
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Comparison with ROCprof v3](#comparison-with-rocprof-v3)
+- [Future Work and Improvement](#future-work-and-improvement)
+- [Project Structure](#project-structure)
+- [Contribution](#contribution)
 
 ---
 
