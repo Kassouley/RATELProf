@@ -3,11 +3,16 @@ local Report = {}
 Report.__index = Report
 Report.utils = {}
 
-function Report.utils.execute_report(data, input_file, options_values, report_list)
+function Report.utils.execute_report(data, input_file, options_values, report_list, progress_enabled, progress_msg)
     local reports = options_values.reports or {}
     local outputs = options_values.outputs or {}
     local formats = options_values.formats or {}
+    local nreports = #reports
     for i, report_id in ipairs(reports) do
+        if progress_enabled then
+            ratelprof.utils.print_progress(progress_msg, i-1, nreports)
+        end
+
         local report_path = report_list.__default_report_path..report_id..".lua"
         if ratelprof.fs.exists(report_path) then
             local output = outputs[i] or outputs[#outputs]
@@ -21,14 +26,15 @@ function Report.utils.execute_report(data, input_file, options_values, report_li
                 report_id     = report_id,
                 report_path   = report_path,
                 max_col_width = options_values.max_col_width,
-                notation      = options_values.notation
+                notation      = options_values.notation,
+                progress_enabled = progress_enabled
             }
 
             local opt = {
                 timeunit     = options_values.timeunit,
                 is_only_main = options_values.only_main,
                 is_trunc     = options_values.trunc,
-                is_mangled   = options_values.mangled
+                is_mangled   = options_values.mangled,
             }
 
             local report_obj = Report:new(attribute)
@@ -48,13 +54,12 @@ function Report.utils.execute_report(data, input_file, options_values, report_li
             end
 
             local chunk, err = loadfile(report_path)
-            local ret = 0
             if chunk then
-                ret = chunk()(data, report_obj, opt)
+                chunk()(data, report_obj, opt)
             else
                 error("Error loading file: " .. err)
             end
-            if not ret then
+            if not report_obj.is_skipped then
                 report_obj:generate()
             end
 
@@ -62,6 +67,9 @@ function Report.utils.execute_report(data, input_file, options_values, report_li
             print("\n")
             Message:error(string.format("Report '%s' encountered an internal error: No valid report file or class found", report_id))
         end
+    end
+    if progress_enabled then
+        ratelprof.utils.print_progress(progress_msg, nreports, nreports)
     end
 end
 
@@ -73,6 +81,11 @@ local format_extensions = {
     tsv = "tsv"
 }
 
+local function print_if_not (cond, format, ...)
+    if not cond then
+        Message:print (format, ...)
+    end
+end
 
 -- Constructor: Initialize a new Report object
 function Report:new(attribute)
@@ -97,9 +110,13 @@ function Report:new(attribute)
     instance.headers = nil
     instance.msg = nil
 
+    instance.is_skipped = false
+
+    instance.progress_enabled = attribute.progress_enabled
+
     local filename = instance:get_output_filename()
     instance.filename = filename
-    Message:print(string.format(
+    print_if_not(instance.progress_enabled, string.format(
         "\nProcessing '%s' with '%s'%s...\n",
         instance.trace_path, instance.report_path,
         (filename and (" to '" .. filename .. "'") or "")
@@ -143,6 +160,11 @@ function Report:set_data(data)
     self.data = data
 end
 
+function Report:skip(format, ...)
+    print_if_not(self.progress_enabled, "SKIPPED: "..string.format(format, ...))
+    self.is_skipped = true
+end
+
 function Report:generate()
     if not self.data then
         error("Report doesn't have any data to process")
@@ -151,30 +173,27 @@ function Report:generate()
     local has_msg = self.msg
 
     if #self.data == 0 then
-        if has_msg then 
+        if has_msg then
             if self.output ~= "-" and self.output:sub(1, 1) ~= "@" and self.format == "csv" or self.format == "tsv" then
                 local msg_filename = ratelprof.fs.remove_extension(self.filename).."_msg.txt"
                 local msg_file = ratelprof.fs.open_file(msg_filename, "w")
                 msg_file:write(self.msg)
                 msg_file:close()
             else
-                Message:print(self.msg) 
+                print_if_not(self.progress_enabled, self.msg) 
             end
         end
-        Message:print(string.format(
-            "SKIPPED: '%s' does not contain %s data.",
-            self.trace_path, self.report_name
-        ))
+        self:skip("'%s' does not contain %s data.", self.trace_path, self.report_name)
         return
     end
-    
+
     if self.headers then 
         table.insert(self.data, 1, self.headers)
     end
 
     local stream = self:get_output_stream()
     if self.output == "-" then
-        Message:print(string.format(
+        print_if_not(self.progress_enabled, string.format(
             "** %s %s (%s):\n",
             self.report_name, self.report_type, self.report_id
         ))

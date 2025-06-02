@@ -78,10 +78,9 @@ function merge_csv.get_csv_data(input_file, tmp_dir_path, data, opt)
     }
 
     options.reports = stats_reports
-    Report.utils.execute_report(data, input_file, options, ratelprof.consts._ALL_STATS_REPORT)
-
+    Report.utils.execute_report(data, input_file, options, ratelprof.consts._ALL_STATS_REPORT, true, "Report statistics")
     options.reports = analyze_reports
-    Report.utils.execute_report(data, input_file, options, ratelprof.consts._ALL_RULES_REPORT)
+    Report.utils.execute_report(data, input_file, options, ratelprof.consts._ALL_RULES_REPORT, true, "Report analysis")
 
     local stats_content = process_reports(stats_reports, false)
     local analyze_content = process_reports(analyze_reports, true)

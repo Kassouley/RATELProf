@@ -75,8 +75,8 @@ return function(traces_data, report_obj, opt)
     local kernel_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL)
 
     if next(kernel_data) == nil then
-        print ("SKIPPED: The report could not be analyzed because it does not contain the required GPU data.")
-        return 1
+        report_obj:skip("The report could not be analyzed because it does not contain the required GPU data.")
+        return
     end
 
     report_obj:set_headers({

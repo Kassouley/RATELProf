@@ -2,6 +2,16 @@ require("utils.json.json")
 
 local utils = {}
 
+
+function utils.print_progress(prefix, current, total)
+    local bar_length = 30
+    local progress = math.floor((current / total) * bar_length)
+    local bar = string.rep("=", progress) .. string.rep(" ", bar_length - progress)
+    io.write(string.format("\r%-20s [%s] %d/%d", prefix, bar, current, total))
+    if current == total then io.write("\n") end
+    io.flush()
+end
+
 function utils.load_json (__input_path__)
     local infile = ratelprof.fs.open_file (__input_path__, "r", "json")
     local data = infile:read ("*a")

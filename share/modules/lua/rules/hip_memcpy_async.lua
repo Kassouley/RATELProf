@@ -12,13 +12,13 @@ return function(traces_data, report_obj, opt)
     local hip_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_HIP)
 
     if next(cpy_data) == nil then
-        print ("SKIPPED: The report could not be analyzed because it does not contain the required GPU data.")
-        return 1
+        report_obj:skip("The report could not be analyzed because it does not contain the required GPU data.")
+        return
     end
     
     if next(hip_data) == nil then
-        print ("SKIPPED: The report could not be analyzed because it does not contain the required HIP API data.")
-        return 1
+        report_obj:skip("The report could not be analyzed because it does not contain the required HIP API data.")
+        return
     end
     
     report_obj:set_headers({

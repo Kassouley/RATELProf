@@ -223,13 +223,6 @@ function preprocess.init(data)
     __is_init = true
 end
 
-local function print_progress(prefix, current, total)
-    local bar_length = 30
-    local progress = math.floor((current / total) * bar_length)
-    local bar = string.rep("=", progress) .. string.rep(" ", bar_length - progress)
-    io.write(string.format("\r%-20s [%s] %d/%d", prefix, bar, current, total))
-    io.flush()
-end
 
 function preprocess.run(opt)
     is_init()
@@ -243,7 +236,7 @@ function preprocess.run(opt)
     main_buffer:encode_array(ndomains)
 
     for domain_id, events in pairs(event_domains) do
-        print_progress("Domain processed", domain_i, ndomains)
+        ratelprof.utils.print_progress("Domain processed", domain_i, ndomains)
         domain_i = domain_i + 1
         
         local nitems = 0
@@ -273,7 +266,7 @@ function preprocess.run(opt)
         buf:free()
         tmp:free()
     end
-    print_progress("Preprocessing", ndomains, ndomains)
+    ratelprof.utils.print_progress("Preprocessing", ndomains, ndomains)
 end
 
 function preprocess.get_data()
