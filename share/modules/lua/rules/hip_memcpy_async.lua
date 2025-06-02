@@ -10,6 +10,12 @@ return function(traces_data, report_obj, opt)
 
     local cpy_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY)
     local hip_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_HIP)
+    local hsa_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_HSA)
+
+    if next(hsa_data) ~= nil then
+        report_obj:skip("The report could not be analyzed because it contains HSA data. This version doesn't support this analysis while HSA traces are present.")
+        return
+    end
 
     if next(cpy_data) == nil then
         report_obj:skip("The report could not be analyzed because it does not contain the required GPU data.")
@@ -36,7 +42,7 @@ return function(traces_data, report_obj, opt)
     local nb_api_cpy = 0
     local grouped_copies = {}
 
-    for id, gpuCpy in ipairs(cpy_data) do
+    for _, gpuCpy in pairs(cpy_data) do
         if not grouped_copies[gpuCpy.corr_id] then
             grouped_copies[gpuCpy.corr_id] = {}
         end
