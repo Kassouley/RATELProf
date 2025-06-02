@@ -21,7 +21,6 @@
 .info-table tr:last-child {
     border-bottom: none;
 }
-
   
 .two-column-flex {
     display: flex;

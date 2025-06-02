@@ -60,6 +60,8 @@ function decodeB64(b64) {
                 item.limitSize  = true;
                 item.end        = item.start + Math.ceil(item.dur/1000);
                 item.group      = get_group_id(item, domain_id);
+                
+                if (item.start < 1000000) item.is_visible = true;
 
                 items.push(item);
             }

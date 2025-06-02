@@ -99,16 +99,16 @@ function getTimelineOptions() {
 
           return container;
         },
-        loadingScreenTemplate: () => "<h1> Loading... </h1>",
-        onTimeout: {
-            timeoutMs: 100,
-            callback: callback => {
-                const didUserCancel = confirm(
-                    "Too many items loaded! Would you like to continue rendering (this might take a while)?"
-                );
-                callback(didUserCancel);
-            }
-        },
+        // loadingScreenTemplate: () => `<div style="display:flex;justify-content:center;align-items:center;height:100%;font-family:Arial,sans-serif;font-size:1.2rem;color:#333;background:#f0f0f0;text-align:center;padding:2rem;border-radius:8px;">Loading ...</div>`,
+        // onTimeout: {
+        //     timeoutMs: 100,
+        //     callback: callback => {
+        //         const didUserCancel = confirm(
+        //             "Too many items loaded! Would you like to continue rendering (this might take a while)?"
+        //         );
+        //         callback(didUserCancel);
+        //     }
+        // },
         stack: false,
         min: minStart,
         max: maxEnd,
@@ -119,47 +119,77 @@ function getTimelineOptions() {
     };
 }
 
-function createTimeline(items, groups) {
-    const container      = document.getElementById("timeline");
-    const options        = getTimelineOptions();
-    console.log("items contruction . . .");
-    const itemsDataSet   = new vis.DataSet(items);
-    console.log("groups contruction . . .");
+
+function createTimeline(items, groups, container) {
+    const options = getTimelineOptions();
+    const sortedItems    = items.sort((a, b) => a.start - b.start);
+    const itemsDataSet   = new vis.DataSet(sortedItems);
     const groupsDataSet  = new vis.DataSet(groups);
-    console.log("timeline contruction . . .");
 
 
-    // const offset = 100;
-    // const MAX_ITEMS = 1000;
-    // const tmp = {start: options.start, end: options.end};
+    const offset = 1000;
+    let lastRange = {
+        start: options.start,
+        end:   options.end
+    };
 
-    // let count = 0; 
+    const visibleItems = new vis.DataView(itemsDataSet, {
+        filter: function (item) {
+            return item.is_visible;
+        }
+    });
+    
+    container.innerHTML = "";
+    const timeline = new vis.Timeline(container, visibleItems, groupsDataSet, options);
 
-    // const visibleItems = new vis.DataView(itemsDataSet, {
-    //     filter: function (item) {
-    //         if (count >= MAX_ITEMS) return false;
+    function binarySearch(items, end) {
+        let low = 0, high = items.length;
+        while (low < high) {
+            const mid = Math.floor((low + high) / 2);
+            if (items[mid].start < end) low = mid + 1;
+            else high = mid;
+        }
+        return low - 1;
+    }
 
-    //         const itemStart = new Date(item.start).getTime();
-    //         const itemEnd = new Date(item.end || item.start).getTime();
-    //         const rangeStart = tmp.start - offset;
-    //         const rangeEnd = tmp.end + offset;
+    timeline.on('rangechanged', function (props) {
+        const newStart = props.start.getTime();
+        const newEnd = props.end.getTime();
 
-    //         const isInRange = itemEnd >= rangeStart && itemStart <= rangeEnd;
-    //         if (isInRange) count++;
-    //         return isInRange && count <= MAX_ITEMS;
-    //     }
-    // });
+        if (Math.abs(newStart - lastRange.start) < 1000 && Math.abs(newEnd - lastRange.end) < 1000) return;
 
-    const timeline = new vis.Timeline(container, itemsDataSet, groupsDataSet, options);
+        lastRange.start = newStart;
+        lastRange.end   = newEnd;
 
-    // timeline.on('rangechanged', function (props) {
-    //     tmp.start = props.start.getTime();
-    //     tmp.end = props.end.getTime();
-    //     count = 0;
-    //     visibleItems.refresh();
-    // console.log(visibleItems.length);
-    // });
-    // console.log("construcion finished");
+        const rangeStart = newStart - offset;
+        const rangeEnd   = newEnd   + offset;
+
+        const lastIndex = binarySearch(sortedItems, rangeEnd);
+
+        // In this version, items are rendered only if they are visible in the current range and stay
+        // rendered even if they go out of the range.
+        const updates = [];
+
+        for (let i = lastIndex; i >= 0; i--) {
+            const item = sortedItems[i];
+            const itemEnd = item.end ? item.end : item.start;
+            if (itemEnd < rangeStart) break;
+
+            const shouldBeVisible = itemEnd >= rangeStart && item.start <= rangeEnd;
+
+            if (item.is_visible !== shouldBeVisible) {
+                item.is_visible = shouldBeVisible;
+                updates.push({ id: item.id, is_visible: item.is_visible });
+            }
+        }
+
+        if (updates.length > 0) {
+            itemsDataSet.update(updates);
+        }
+    });
+
+    
+    console.log("construcion finished");
 
 
     const showTraceDetails = trace => {
@@ -283,6 +313,7 @@ function createTimeline(items, groups) {
     document.getElementById("goto").onclick = () => {
         const id = parseInt(document.getElementById("id_input").value.trim(), 10);
         if (!isNaN(id)) {
+            itemsDataSet.updateOnly({id:id, is_visible: true});
             timeline.setSelection(id, { focus: true });
             onSelectTraceAux(id, false);
         } else {
@@ -301,6 +332,7 @@ function createTimeline(items, groups) {
         if (isItemExist) {
             itemsDataSet.update({ 
                 id: timeMarkerId, 
+                is_visible: true,
                 content: convertTime(end - start), 
                 start, 
                 end 
