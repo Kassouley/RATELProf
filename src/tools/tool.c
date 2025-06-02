@@ -52,20 +52,17 @@ static void close_plugin_manager(plugin_manager_t* pm) {
 ratelprof_status_t onLoad()
 {
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
-    LOG(LOG_LEVEL_INFO, "Initializing RATELProf . . .\r");
+
+    // CORE INITIALIZATION
+    LOG(LOG_LEVEL_DEBUG, "Initializing RATELProf Core . . .\r");
     RATELPROF_TRY(
         ratelprof_init(RATELPROF_NB_DOMAIN_EXT),
         LOG(LOG_LEVEL_FATAL, "Failed to init RATELProf core part.\n")
     );
-
-    RATELPROF_TRY(
-        ratelprof_ext_init(),
-        LOG(LOG_LEVEL_FATAL, "Failed to init RATELProf extension part.\n")
-    );
     
     open_plugin_manager(&plugin_manager);
     plugin_manager.plugin_initialize(&plugin);
-    LOG(LOG_LEVEL_INFO, "Initializing RATELProf : SUCCESS\n");
+    LOG(LOG_LEVEL_DEBUG, "Initializing RATELProf Core : SUCCESS\n");
 
     // API Table Init
     api_callback_handler_t callback_handler;
@@ -73,7 +70,7 @@ ratelprof_status_t onLoad()
     {
         const char* domain_name = ratelprof_get_domain_name(domain);
         if (is_set_domain(domain_name)) {
-            LOG(LOG_LEVEL_INFO, "Configuring domain '%s' . . . \r", domain_name);
+            LOG(LOG_LEVEL_INFO, "Enabling domain '%s' tracing . . . \r", domain_name);
             plugin_manager.get_api_callback(plugin, domain, &callback_handler);
 
             RATELPROF_TRY(
@@ -88,7 +85,16 @@ ratelprof_status_t onLoad()
         }
     }
 
+    // EXT INITIALIZATION
+    LOG(LOG_LEVEL_DEBUG, "Initializing RATELProf Ext . . .\r");
+    RATELPROF_TRY(
+        ratelprof_ext_init(),
+        LOG(LOG_LEVEL_FATAL, "Failed to init RATELProf extension part.\n")
+    );
+    LOG(LOG_LEVEL_DEBUG, "Initializing RATELProf Ext : SUCCESS\n");
+
 	if (is_set_domain(RATELPROF_DOMAIN_OMP_REGION_NAME)) {
+        LOG(LOG_LEVEL_INFO, "Configuring domain '%s' . . . \r", RATELPROF_DOMAIN_OMP_REGION_NAME);
         plugin_manager.get_api_callback(plugin, RATELPROF_DOMAIN_OMP_REGION, &callback_handler);
         RATELPROF_TRY(
             ratelprof_set_api_callback(RATELPROF_DOMAIN_OMP_REGION, callback_handler),
@@ -96,14 +102,13 @@ ratelprof_status_t onLoad()
         );
     }
 
-    // Profiling Table Init
 	if (is_set_domain(RATELPROF_DOMAIN_PROFILING_NAME)) {
         LOG(LOG_LEVEL_INFO, "Enabling profiling traced functions . . . \r");
         RATELPROF_TRY(
             ratelprof_enable_profiling_table(),
             LOG(LOG_LEVEL_FATAL, "Cannot enable profiling function tracing.\n")
         );
-        LOG(LOG_LEVEL_INFO, "Profiling traced functions enabled.       \n");
+        LOG(LOG_LEVEL_INFO, "HSA functions tracing used in RATELProf enabled. \n");
 	}
 
 	if (is_set_domain(RATELPROF_DOMAIN_COPY_NAME)) {
@@ -133,6 +138,7 @@ ratelprof_status_t onLoad()
         LOG(LOG_LEVEL_INFO, "Barrier dispatch profiling enabled.      \n");
 	}
 
+
     // Activity System Init
     activity_callback_t activity_callback = NULL;
     void* user_args = NULL;
@@ -145,16 +151,6 @@ ratelprof_status_t onLoad()
         .buffer_size = envtoll("RATELPROF_BUFFER_SIZE", 0x200000)
     };
     ratelprof_activity_pool_init(&props);
-
-    /*
-     * TODO 29/03/2025 : Find a better way to do this.
-     * The problem is if enable the hsa_shut_down function after calling this line
-     * it will overwrite this affectation but we want i_gpu_hsa_shut_down to be used
-     * whenever HSA API table is enable or not. So to avoid this overwrite we put
-     * it after the enabling of HSA API table, but what will happened if we add
-     * a feature that let user enable HSA API table during runtime and not at init
-     */ 
-    hsa_api_table.api_ptr[HSA_API_ID_hsa_shut_down] = i_gpu_hsa_shut_down;
 
     LOG(LOG_LEVEL_INFO, "Starting profiling . . .\n");
     ratelprof_start();

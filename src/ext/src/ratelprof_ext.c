@@ -77,7 +77,7 @@ ratelprof_status_t ratelprof_enable_memcpy_profiling() {
     hsa_api_table.api_ptr[HSA_API_ID_hsa_init]                            = i_gpu_hsa_init;
     hsa_api_table.api_ptr[HSA_API_ID_hsa_amd_memory_async_copy]           = i_gpu_hsa_amd_memory_async_copy;
     hsa_api_table.api_ptr[HSA_API_ID_hsa_amd_memory_async_copy_on_engine] = i_gpu_hsa_amd_memory_async_copy_on_engine;
-    
+
     return RATELPROF_STATUS_SUCCESS;
 }
 
@@ -161,6 +161,8 @@ ratelprof_status_t ratelprof_ext_init()
     
     RATELPROF_TRY(ratelprof_init_api_table(RATELPROF_DOMAIN_PROFILING, &profiling_table, PROFILING_ID_NB_FUNCTION));
     RATELPROF_TRY(ratelprof_populate_profiling_table());
+    
+    hsa_api_table.api_ptr[HSA_API_ID_hsa_shut_down] = i_gpu_hsa_shut_down;
 
 	RATELPROF_TRY(ratelprof_object_tracking_pool_init());
     
