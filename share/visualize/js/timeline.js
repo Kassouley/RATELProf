@@ -188,9 +188,6 @@ function createTimeline(items, groups, container) {
         }
     });
 
-    
-    console.log("construcion finished");
-
 
     const showTraceDetails = trace => {
         const traceInfo = document.getElementById('trace-info');
@@ -248,10 +245,10 @@ function createTimeline(items, groups, container) {
 
         if (domainHandlers[trace._event_kind]) domainHandlers[trace._event_kind]();
 
-        traceInfo.innerHTML = '<div class="two-column-flex">' +
-                                `<div class="column"><table class="info-table">${lcol.join("\n")}</table></div>` +
-                                `<div class="column"><table class="info-table">${rcol.join("\n")}</table></div>` +
-                              '</div>';
+        traceInfo.innerHTML = '<table class="two-column"><tr><td>' +
+                                `<div class="scrollable-column"><table class="column">${lcol.join("\n")}</table></div>` +
+                                `</td><td><div class="scrollable-column"><table class="column">${rcol.join("\n")}</table></div>` +
+                              '</td></tr></table>';
     };
 
 

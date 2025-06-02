@@ -1,35 +1,47 @@
-.info-table {
+table.column {
     width: 100%;
     border-collapse: collapse;
+    white-space: nowrap;
 }
 
-.info-table th, 
-.info-table td {
+table.column th,
+table.column td {
     padding: 8px 12px;
     text-align: left;
+    border: none;
 }
 
-.info-table th {
+table.column th {
     width: 20%;
     font-weight: bold;
 }
 
-.info-table tr {
-    border-bottom: 1px solid var(--border-color);;  
+table.column tr {
+    border-bottom: 1px solid var(--border-color);
 }
 
-.info-table tr:last-child {
+table.column tr:last-child {
     border-bottom: none;
 }
-  
-.two-column-flex {
-    display: flex;
-    gap: 10px;
+
+table.two-column {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
 }
 
-.column {
-    flex: 1;
+table.two-column td {
+    width: 50%;
+    padding: 10px;
+    vertical-align: top;
+    box-sizing: border-box;
 }
+
+.scrollable-column {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
 
 .indent {
     margin-left: 20px;
