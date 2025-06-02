@@ -456,6 +456,24 @@ consts_helper.visualize = {
             arg             = "<output_file>",
             arg_required    = true,
             default         = nil
+        },
+        start = {
+            desc            = [[ 
+                Visualize only trace after 'start' argument (in ns). 
+                Default 'start' is 0 (Application start).]],
+            sname           = nil,
+            arg             = "<value>",
+            arg_required    = true,
+            default         = nil
+        },
+        stop = {
+            desc            = [[ 
+                Visualize only trace before 'stop' argument (in ns). 
+                Default 'stop' is until application end.]],
+            sname           = nil,
+            arg             = "<value>",
+            arg_required    = true,
+            default         = nil
         }
     }
 }

@@ -227,6 +227,9 @@ end
 function preprocess.run(opt)
     is_init()
 
+    local _start = ratelprof.get_opt_val(opt, "start")
+    local _stop  = ratelprof.get_opt_val(opt, "stop")
+
     local ndomains = 0
     local domain_i = 0
     for _, _ in pairs(event_domains) do
@@ -243,10 +246,10 @@ function preprocess.run(opt)
         local buf = msgpack_encoder.new(1024, msgpack_encoder.OVERFLOW_REALLOC)
         for event_id, event in pairs(events) do
             local event_start = normalize_time(event.start)
-            local event_end   = normalize_time(event.start + event.dur)
+            local event_stop  = normalize_time(event.start + event.dur)
 
-            local within_start = not opt.start_time or event_start >= opt.start_time
-            local within_end   = not opt.end_time   or event_end   <= opt.end_time
+            local within_start = not _start or event_start >= _start
+            local within_end   = not _stop  or event_stop  <= _stop
 
             if within_start and within_end then
                 nitems = nitems + 1

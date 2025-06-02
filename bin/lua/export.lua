@@ -25,5 +25,6 @@ local function main(arg)
     script:set_execute_function(export.process_export)
     script:execute(arg)
 end
+
 -- Run the main function
 main(arg)
