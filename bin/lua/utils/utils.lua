@@ -52,6 +52,9 @@ end
 
 function utils.execute_command(cmd)
     local handle = io.popen(cmd)
+    if not handle then
+        error ("cannot execute command, handle is nil")
+    end
     local result = handle:read("*a")
     handle:close()
     return string.gsub(result, "\n$", "")
