@@ -459,7 +459,7 @@ consts_helper.visualize = {
         },
         start = {
             desc            = [[ 
-                Visualize only trace after 'start' argument (in ns). 
+                Visualize only trace after 'start' argument (in microseconds). 
                 Default 'start' is 0 (Application start).]],
             sname           = nil,
             arg             = "<value>",
@@ -468,7 +468,7 @@ consts_helper.visualize = {
         },
         stop = {
             desc            = [[ 
-                Visualize only trace before 'stop' argument (in ns). 
+                Visualize only trace before 'stop' argument (in microseconds). 
                 Default 'stop' is until application end.]],
             sname           = nil,
             arg             = "<value>",

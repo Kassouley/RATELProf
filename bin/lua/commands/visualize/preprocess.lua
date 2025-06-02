@@ -228,7 +228,9 @@ function preprocess.run(opt)
     is_init()
 
     local _start = ratelprof.get_opt_val(opt, "start")
+    if _start then _start = tonumber(_start) end
     local _stop  = ratelprof.get_opt_val(opt, "stop")
+    if _stop then _stop = tonumber(_stop) end
 
     local ndomains = 0
     local domain_i = 0
@@ -249,9 +251,9 @@ function preprocess.run(opt)
             local event_stop  = normalize_time(event.start + event.dur)
 
             local within_start = not _start or event_start >= _start
-            local within_end   = not _stop  or event_stop  <= _stop
+            local within_stop  = not _stop  or event_stop  <= _stop
 
-            if within_start and within_end then
+            if within_start and within_stop then
                 nitems = nitems + 1
                 local data = get_event_data(event, domain_id, opt)
                 data.start = event_start
