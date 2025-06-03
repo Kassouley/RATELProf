@@ -1,4 +1,4 @@
-function prettyPrint(obj, indentLevel = 0) {
+function printArgs(obj, indentLevel = 0) {
   let html = '';
   const indentClass = 'indent'.repeat(indentLevel);
 
@@ -13,20 +13,20 @@ function prettyPrint(obj, indentLevel = 0) {
             if (index < keys.length - 1) {
               html += `<span class="value">${field.value[subfield]}</span> -> `;
             } else {
-              html += prettyPrint(field.value[subfield], indentLevel + 1);
+              html += printArgs(field.value[subfield], indentLevel + 1);
             }
           });
           html += `</div>`;
         } else if (typeof field.value === 'object') {
           html += `{<div class="indent">`;
-          html += prettyPrint(field.value, indentLevel + 1); 
+          html += printArgs(field.value, indentLevel + 1); 
           html += `</div>}</div>`;
         } else {
           html += `<span class="value">${field.value}</span></div>`;
         }
       } else {
         html += `<div class="${indentClass}"><span class="key">${key}</span> = {<div class="indent">`;
-        html += prettyPrint(field, indentLevel + 1); 
+        html += printArgs(field, indentLevel + 1); 
         html += `</div>}</div>`;
       }
     }
@@ -40,11 +40,11 @@ function prettyPrint(obj, indentLevel = 0) {
  * See "https://visjs.github.io/vis-timeline/docs/timeline/" for more details.
  */
 function getTimelineOptions() {
-    const minStart = lifecycle_table.init_start; 
-    const maxEnd   = lifecycle_table.fini_stop;
     return {
-        start: minStart,
-        end: minStart + 100000,
+        start: 0,
+        end:   100000,
+        min:   lifecycle_table.init_start,
+        max:   lifecycle_table.fini_stop,
         format: {
             minorLabels: function(date, scale, step) {
 				return convertTime(date.toDate().getTime())
@@ -83,35 +83,7 @@ function getTimelineOptions() {
                 b.value = v;
             }
         },
-        groupTemplate: function (group) {
-          if (!group) return;
-          var container = document.createElement("div");
-          if (group.treeLevel == 1) {
-              var infoIcon      = document.createElement("img");
-              infoIcon.src      = "assets/icons/information.png";
-              infoIcon.style.paddingRight = "5px";
-              container.appendChild(infoIcon);
-          }
-          
-          var label = document.createElement("span");
-          label.innerHTML = group.content;
-          container.appendChild(label);  
-
-          return container;
-        },
-        // loadingScreenTemplate: () => `<div style="display:flex;justify-content:center;align-items:center;height:100%;font-family:Arial,sans-serif;font-size:1.2rem;color:#333;background:#f0f0f0;text-align:center;padding:2rem;border-radius:8px;">Loading ...</div>`,
-        // onTimeout: {
-        //     timeoutMs: 100,
-        //     callback: callback => {
-        //         const didUserCancel = confirm(
-        //             "Too many items loaded! Would you like to continue rendering (this might take a while)?"
-        //         );
-        //         callback(didUserCancel);
-        //     }
-        // },
         stack: false,
-        min: minStart,
-        max: maxEnd,
         groupHeightMode: 'fixed',
         orientation: "both",
         margin: { item: 10, axis: 5 },
@@ -121,28 +93,31 @@ function getTimelineOptions() {
 
 
 function createTimeline(items, groups, container) {
-    const options = getTimelineOptions();
+    const options        = getTimelineOptions();
     const sortedItems    = items.sort((a, b) => a.start - b.start);
     const itemsDataSet   = new vis.DataSet(sortedItems);
     const groupsDataSet  = new vis.DataSet(groups);
 
+    let dispatches_are_shown = false;
 
+    const visibleItems = new vis.DataView(itemsDataSet, {
+        filter: function (item) {
+            if (item._event_kind == "DISPATCH" && !dispatches_are_shown) return false;
+            return item.is_visible;
+        }
+    });
+
+    container.innerHTML = "";
+    const timeline = new vis.Timeline(container, visibleItems, groupsDataSet, options);
+
+    // Helper function for adding visible item in timeline
     const offset = 1000;
     let lastRange = {
         start: options.start,
         end:   options.end
     };
 
-    const visibleItems = new vis.DataView(itemsDataSet, {
-        filter: function (item) {
-            return item.is_visible;
-        }
-    });
-    
-    container.innerHTML = "";
-    const timeline = new vis.Timeline(container, visibleItems, groupsDataSet, options);
-
-    function binarySearch(items, end) {
+    const binarySearch = (items, end) => {
         let low = 0, high = items.length;
         while (low < high) {
             const mid = Math.floor((low + high) / 2);
@@ -150,8 +125,10 @@ function createTimeline(items, groups, container) {
             else high = mid;
         }
         return low - 1;
-    }
+    };
 
+    // Fire when range changed more than 1000 unit of time
+    // Update visible item in timeline
     timeline.on('rangechanged', function (props) {
         const newStart = props.start.getTime();
         const newEnd = props.end.getTime();
@@ -167,7 +144,7 @@ function createTimeline(items, groups, container) {
         const lastIndex = binarySearch(sortedItems, rangeEnd);
 
         // In this version, items are rendered only if they are visible in the current range and stay
-        // rendered even if they go out of the range.
+        // rendered even if they went out of the range.
         const updates = [];
 
         for (let i = lastIndex; i >= 0; i--) {
@@ -213,7 +190,7 @@ function createTimeline(items, groups, container) {
             CPU: () => {
                 append(lcol, "Process ID",         args.pid);
                 append(lcol, "Thread ID",          args.tid);
-                append(rcol, "Function Arguments", prettyPrint(args.args));
+                append(rcol, "Function Arguments", printArgs(args.args));
             },
             KERNEL: () => {
                 append(lcol, "Dispatch Time",          convertTime(args.dispatch_time));
@@ -280,14 +257,6 @@ function createTimeline(items, groups, container) {
         itemsDataSet.update(highlightedItems);
     };
 
-    const move = percentage => {
-        const range = timeline.getWindow();
-        const interval = range.end - range.start;
-        timeline.setWindow({
-            start: range.start.valueOf() - interval * percentage,
-            end: range.end.valueOf() - interval * percentage
-        });
-    };
 
 
     const onSelectTraceAux = (id, isCtrlKeyPushed) => {
@@ -300,13 +269,48 @@ function createTimeline(items, groups, container) {
     };
 
 
-    // Attach navigation and event handlers
-    document.getElementById("zoomIn").onclick = () => timeline.zoomIn(0.3);
-    document.getElementById("zoomOut").onclick = () => timeline.zoomOut(0.3);
+    // Fire when the 'Show Dispatches' checkbox change
+    // Show dispatches point of kernel and barrier dispatches
+    document.getElementById("show-dispatch").addEventListener("change", (e) => {
+        dispatches_are_shown = e.target.checked;
+        visibleItems.refresh();
+    });
 
+    // Fire when the zoom slider change
+    // Zoom in the timeline according to the slider value
+    const sliderMax = 200;
+    const maxUnzoom = 1000000;
+    document.getElementById('zoom-slider').addEventListener('input', (e) => {
+        const zoomValue = parseInt(e.target.value, 10);
+        const visibleRange = maxUnzoom - ((zoomValue / sliderMax) * maxUnzoom);
+        const win = timeline.getWindow();
+        const center = (win.start.valueOf() + win.end.valueOf()) / 2;
+        const newStart = new Date(center - visibleRange / 2);
+        const newEnd = new Date(center + visibleRange / 2);
+        timeline.setWindow(newStart, newEnd)
+    });
+
+
+    // Helper function to move in the timeline
+    const move = pct => {
+        const win = timeline.getWindow();
+        const interval = win.end - win.start;
+        timeline.setWindow({
+            start: win.start.valueOf() - interval * pct,
+            end: win.end.valueOf() - interval * pct
+        })
+    };
+
+    // Fire when the '<<' button is clicked
+    // Move the timeline to the left
     document.getElementById("moveLeft").onclick = () => move(0.3);
+
+    // Fire when the '>>' button is clicked
+    // Move the timeline to the right
     document.getElementById("moveRight").onclick = () => move(-0.3);
 
+    // Fire when the 'Go to' button is clicked
+    // Read the input field next to it and focus the timeline to the corresponding trace id
     document.getElementById("goto").onclick = () => {
         const id = parseInt(document.getElementById("id_input").value.trim(), 10);
         if (!isNaN(id)) {
@@ -318,6 +322,8 @@ function createTimeline(items, groups, container) {
         }
     };
 
+
+    // Helper function and variable for time marker management
     let isRightMouseDown = false;
     let firstTime = null;
     let timeMarkerId = "time_marker_id";
@@ -343,10 +349,16 @@ function createTimeline(items, groups, container) {
         }
     };
 
+    // Fire when right click on timeline
+    // Prevent default context menu to appear
     timeline.on('contextmenu', function (properties) {
         properties.event.preventDefault();
     });
 
+
+    // Fire when user click on timeline and when it's a right click
+    // Create the time marker but doesn't add it yet in the timeline
+    // The time marker will be add only if user move the mouse
     timeline.on('mouseDown', function (properties) {
         if (properties.event.button === 2) {
             itemsDataSet.remove(timeMarkerId);
@@ -361,12 +373,16 @@ function createTimeline(items, groups, container) {
         }
     });
 
+    // Fire when mouse move in the timeline and when the right click is pressed
+    // Update the time marker and add it if not present
     timeline.on('mouseMove', function (properties) {
         if (isRightMouseDown && properties.time) {
             updateTimeMarker(properties.time);
         }
     });
 
+    // Fire when user release click on timeline and when it was a right click
+    // Update the time marker for the last time and leave it until new right click
     timeline.on('mouseUp', function (properties) {
         if (isRightMouseDown && properties.time) {
             updateTimeMarker(properties.time);
@@ -374,7 +390,9 @@ function createTimeline(items, groups, container) {
         isRightMouseDown = false;
     });
 
-
+    // Fire when a user click on an item
+    // If ctrl key is pressed     : highlight correlated parent trace
+    // If ctrl key is not pressed : highlight correlated child traces
     timeline.on('select', function (properties) {
         if (properties.items.length > 0) {
             if (properties.event.srcEvent.ctrlKey) {
@@ -388,6 +406,8 @@ function createTimeline(items, groups, container) {
         }
     });
 
+    // Fire when double click on an item
+    // Focus on it
     timeline.on('doubleClick', function (properties) {
         if (properties.what === 'item') {
             const selectedItem = itemsDataSet.get(properties.item);
@@ -396,5 +416,6 @@ function createTimeline(items, groups, container) {
             }
         }
     });
+
     return timeline;
 }

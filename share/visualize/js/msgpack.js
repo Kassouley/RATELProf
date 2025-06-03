@@ -2,19 +2,19 @@ function decodeB64(b64) {
     const bin = atob(b64);
     let off = 0;
     
-    const float32Buffer = new DataView(new ArrayBuffer(4));
-    const float64Buffer = new DataView(new ArrayBuffer(8));
+    const f32buf = new DataView(new ArrayBuffer(4));
+    const f64buf = new DataView(new ArrayBuffer(8));
     
-    function readByte32() {
-       return ((readByte8() << 24) | (readByte8() << 16) | (readByte8() << 8) | readByte8());
+    function readB32() {
+       return ((readB8() << 24) | (readB8() << 16) | (readB8() << 8) | readB8())
     }
 
-    function readByte16() { 
-        return (readByte8() << 8) | readByte8();
+    function readB16() { 
+        return (readB8() << 8) | readB8()
     }
 
-    function readByte8() {
-        return bin.charCodeAt(off++);
+    function readB8() {
+        return bin.charCodeAt(off++)
     }
 
     /*
@@ -43,7 +43,7 @@ function decodeB64(b64) {
 
     // Ext formats
     function readExt(len) {
-        const type = readByte8();
+        const type = readB8();
         if (type == 1) {
             const string_id = decode();
             return extension_string_array[string_id];
@@ -71,7 +71,7 @@ function decodeB64(b64) {
     }
 
     function decode() {
-        const byte = readByte8();
+        const byte = readB8();
 
         // positive fixint (0x00 - 0x7f)
         if (byte <= 0x7f) return byte;
@@ -91,26 +91,26 @@ function decodeB64(b64) {
         switch (byte) {
 
             // map 16 (0xde)
-            case (0xde): return readMap(readByte16());
+            case (0xde): return readMap(readB16());
 
             // map 32 (0xdf)
-            case(0xdf): return readMap(readByte32());
+            case(0xdf): return readMap(readB32());
 
             // array 16 (0xdc)
-            case(0xdc): return readArray(readByte16());
+            case(0xdc): return readArray(readB16());
 
             // array 32 (0xdd)
-            case(0xdd): return readArray(readByte32());
+            case(0xdd): return readArray(readB32());
 
             /*
             // str 8 (0xd9)
-            case(0xd9): return readString(readByte8());
+            case(0xd9): return readString(readB8());
 
             // str 16 (0xda)
-            case(0xda): return readString(readByte16());
+            case(0xda): return readString(readB16());
 
             // str 32 (0xdb)
-            case(0xdb): return readString(readByte32());
+            case(0xdb): return readString(readB32());
             */
 
             // nil (0xc0)
@@ -123,18 +123,18 @@ function decodeB64(b64) {
             case(0xc3): return true;
 
             // uint 8 (0xcc)
-            case(0xcc): return readByte8()  & 0xFF;
+            case(0xcc): return readB8() & 0xFF;
 
             // uint 16 (0xcd)
-            case(0xcd): return readByte16() & 0xFFFF;
+            case(0xcd): return readB16() & 0xFFFF;
 
             // uint 32 (0xce)
-            case(0xce): return readByte32() >>> 0;
+            case(0xce): return readB32() >>> 0;
 
             // uint 64 (0xcf)
             case 0xcf: {
-                const hi = readByte32() >>> 0;
-                const lo = readByte32() >>> 0;
+                const hi = readB32() >>> 0;
+                const lo = readB32() >>> 0;
                 const val = hi * 4294967296 + lo;
 
                 if (val > Number.MAX_SAFE_INTEGER) {
@@ -146,23 +146,23 @@ function decodeB64(b64) {
 
             // int 8 (0xd0)
             case(0xd0): {
-                const val = readByte8();
+                const val = readB8();
                 return (val & 0x80) ? val - 0x100 : val;
             }
             // int 16 (0xd1)
             case(0xd1): {
-                const val = readByte16();
+                const val = readB16();
                 return (val & 0x8000) ? val - 0x10000 : val;
             }
             // int 32 (0xd2)
             case(0xd2): {
-                const val = readByte32();
+                const val = readB32();
                 return (val & 0x80000000) ? val - 0x100000000 : val;
             }
             // int 64 (0xd3)
             case(0xd3): {
-                const hi = readByte32();
-                const lo = readByte32();
+                const hi = readB32();
+                const lo = readB32();
                 const val = (hi << 32n) | lo;
                 return (high & 0x80000000) ? val - (1n << 64n) : val;
             }
@@ -182,23 +182,23 @@ function decodeB64(b64) {
             case(0xd8): return readExt(16);
 
             // ext 8 (0xc7)
-            case(0xc7): return readExt(readByte8());
+            case(0xc7): return readExt(readB8());
 
             // ext 16 (0xc8)
-            case(0xc8): return readExt(readByte16());
+            case(0xc8): return readExt(readB16());
 
             // ext 32 (0xc9)
-            case(0xc9): return readExt(readByte32());
+            case(0xc9): return readExt(readB32());
        
             // float 32 (0xca)
             case 0xca:
-                float32Buffer.setUint32(0, readByte32());
-                return float32Buffer.getFloat32(0);
+                f32buf.setUint32(0, readB32());
+                return f32buf.getFloat32(0);
             // float 64 (0xcb)
             case 0xcb:
-                float64Buffer.setUint32(0, readByte32());
-                float64Buffer.setUint32(4, readByte32());
-                return float64Buffer.getFloat64(0);
+                f64buf.setUint32(0, readB32());
+                f64buf.setUint32(4, readB32());
+                return f64buf.getFloat64(0);
         }
 
         throw new Error(`Unsupported byte: 0x${byte.toString(16)}`);

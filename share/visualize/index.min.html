@@ -56,17 +56,30 @@
 
     <!-- Navigation Section -->
     <section id="navigation">
-      <div class="trace-select">
-        <input type="text" id="id_input" placeholder="Enter Trace ID" aria-label="Trace ID">
-        <button id="goto" aria-label="Go to Trace ID">Go to</button>
-      </div>
-      <div class="menu">
-        <button id="moveLeft" aria-label="Move timeline left">&laquo;</button>
-        <button id="zoomIn" aria-label="Zoom in">+</button>
-        <button id="zoomOut" aria-label="Zoom out">-</button>
-        <button id="moveRight" aria-label="Move timeline right">&raquo;</button>
-      </div>
+      <table>
+        <tr>
+          <td class="left">
+            <div class="trace-select">
+              <input type="text" id="id_input" placeholder="Enter Trace ID" aria-label="Trace ID">
+              <button id="goto" aria-label="Go to Trace ID">Go to</button>
+            </div>
+          </td>
+          <td class="center">
+            <div class="menu">
+              <button id="moveLeft" aria-label="Move timeline left">&laquo;</button>
+              <span>-</span>
+              <input id="zoom-slider" type="range" min="0" max="200" value="100">
+              <span>+</span>
+              <button id="moveRight" aria-label="Move timeline right">&raquo;</button>
+            </div>
+          </td>
+          <td class="right">
+            <input id="show-dispatch" type="checkbox"><label for="show-dispatch"> Show dispatches</label>
+          </td>
+        </tr>
+      </table>
     </section>
+
 
     <!-- Trace Details Section -->
     <section id="details">
@@ -116,28 +129,13 @@
       <script src="js/utils.js"></script>
       <script src="js/main.min.js"></script>
       <script src="js/csv.js"></script>
-      <script>
-        function openTab(event, tabId) {
-            var contents = document.getElementsByClassName("tab-content");
-            for (var i = 0; i < contents.length; i++) {
-                contents[i].classList.remove("active");
-            }
-
-            var buttons = document.getElementsByClassName("tab-button");
-            for (var i = 0; i < buttons.length; i++) {
-                buttons[i].classList.remove("active");
-            }
-
-            document.getElementById(tabId).classList.add("active");
-            event.currentTarget.classList.add("active");
-        }
-      </script>
+      <script src="js/tab.js"></script>
   
     </section>
   </main>
 
   <footer>
-    <p>2024 RATELProf.</p>
+    <p>2025 RATELProf 1.0.0</p>
   </footer>
 </body>
 </html>
