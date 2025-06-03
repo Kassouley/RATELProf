@@ -351,20 +351,20 @@ function createTimeline(items, groups, container) {
 
     // Fire when right click on timeline
     // Prevent default context menu to appear
-    timeline.on('contextmenu', function (properties) {
-        properties.event.preventDefault();
+    timeline.on('contextmenu', function (props) {
+        props.event.preventDefault();
     });
 
 
     // Fire when user click on timeline and when it's a right click
     // Create the time marker but doesn't add it yet in the timeline
     // The time marker will be add only if user move the mouse
-    timeline.on('mouseDown', function (properties) {
-        if (properties.event.button === 2) {
+    timeline.on('mouseDown', function (props) {
+        if (props.event.button === 2) {
             itemsDataSet.remove(timeMarkerId);
-            if (properties.what == 'background' && properties.time) {
+            if (props.what == 'background' && props.time) {
                 isRightMouseDown = true;
-                firstTime = properties.time;
+                firstTime = props.time;
                 tempItem = {
                     id: timeMarkerId,
                     type: "background"
@@ -375,17 +375,17 @@ function createTimeline(items, groups, container) {
 
     // Fire when mouse move in the timeline and when the right click is pressed
     // Update the time marker and add it if not present
-    timeline.on('mouseMove', function (properties) {
-        if (isRightMouseDown && properties.time) {
-            updateTimeMarker(properties.time);
+    timeline.on('mouseMove', function (props) {
+        if (isRightMouseDown && props.time) {
+            updateTimeMarker(props.time);
         }
     });
 
     // Fire when user release click on timeline and when it was a right click
     // Update the time marker for the last time and leave it until new right click
-    timeline.on('mouseUp', function (properties) {
-        if (isRightMouseDown && properties.time) {
-            updateTimeMarker(properties.time);
+    timeline.on('mouseUp', function (props) {
+        if (isRightMouseDown && props.time) {
+            updateTimeMarker(props.time);
         }
         isRightMouseDown = false;
     });
@@ -393,12 +393,12 @@ function createTimeline(items, groups, container) {
     // Fire when a user click on an item
     // If ctrl key is pressed     : highlight correlated parent trace
     // If ctrl key is not pressed : highlight correlated child traces
-    timeline.on('select', function (properties) {
-        if (properties.items.length > 0) {
-            if (properties.event.srcEvent.ctrlKey) {
-                onSelectTraceAux(properties.items[0], false);
+    timeline.on('select', function (props) {
+        if (props.items.length > 0) {
+            if (props.event.srcEvent.ctrlKey) {
+                onSelectTraceAux(props.items[0], false);
             } else {
-                onSelectTraceAux(properties.items[0], true);
+                onSelectTraceAux(props.items[0], true);
             }
         } else {
             clearTraceDetails();
@@ -408,9 +408,9 @@ function createTimeline(items, groups, container) {
 
     // Fire when double click on an item
     // Focus on it
-    timeline.on('doubleClick', function (properties) {
-        if (properties.what === 'item') {
-            const selectedItem = itemsDataSet.get(properties.item);
+    timeline.on('doubleClick', function (props) {
+        if (props.what === 'item') {
+            const selectedItem = itemsDataSet.get(props.item);
             if (selectedItem) {
                 timeline.focus(selectedItem.id);
             }
