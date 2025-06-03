@@ -32,7 +32,7 @@ return function(traces_data, report_obj, opt)
         "API Name",
         "PID",
         "TID",
-        "Kind",
+        "Operation",
         "Size (MB)",
         "CPU Duration (ns)",
         "GPU Duration (ns)"

@@ -94,6 +94,17 @@ function utils.get_copy_name(src, dst)
     return ("Copy%sTo%s"):format(get_name(src), get_name(dst))
 end
 
+function utils.get_gpu_id(trace, gpu_node_id_map)
+    local gpu_agent = trace.args.gpu_id
+    if not gpu_agent then
+        if trace.dst_type == 1 then gpu_agent = trace.dst_agent
+        elseif trace.src_type == 1 then gpu_agent = trace.src_agent
+        else error ("shouldn't reach, a copy need to have a gpu agent")
+        end
+    end
+    return gpu_node_id_map[tostring(gpu_agent)] or gpu_agent
+end
+
 local function generate_json(value, indent)
     indent = indent or 0
     local indentation = string.rep(" ", indent)
