@@ -118,6 +118,10 @@ consts._ALL_RULES_REPORT = {
       desc    = "Compute GPU time where no kernel is running",
       default = true
     },
+    hidden_transfers = {
+      desc    = "TODO",
+      default = true
+    },
 }
 
 

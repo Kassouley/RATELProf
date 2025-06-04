@@ -62,7 +62,11 @@ end
 
 local omp_pattern = "^__omp_offloading_[%da-f]+_[%da-f]+_(.-)_l(%d+).*"
 
+local name_cache = {}
 function utils.get_kernel_name(name, is_trunc, is_mangled)
+    local cached_name = name_cache[name]
+    if cached_name then return cached_name end
+
     local mangled_name, line = name:match(omp_pattern)
     local ret = name
     if not is_mangled then
@@ -78,7 +82,9 @@ function utils.get_kernel_name(name, is_trunc, is_mangled)
             ret = ret .. " (l." .. line .. ")"
         end
     end
-    return '"'..ret..'"'
+    cached_name = '"'..ret..'"'
+    name_cache[name] = cached_name
+    return cached_name
 end
 
 
@@ -97,12 +103,12 @@ end
 function utils.get_gpu_id(trace, gpu_node_id_map)
     local gpu_agent = trace.args.gpu_id
     if not gpu_agent then
-        if trace.dst_type == 1 then gpu_agent = trace.dst_agent
-        elseif trace.src_type == 1 then gpu_agent = trace.src_agent
-        else error ("shouldn't reach, a copy need to have a gpu agent")
+        if trace.args.dst_type == 1 then gpu_agent = trace.args.dst_agent
+        elseif trace.args.src_type == 1 then gpu_agent = trace.args.src_agent
+        else error ("shouldn't reach, a gpu trace need to have a gpu agent")
         end
     end
-    return gpu_node_id_map[tostring(gpu_agent)] or gpu_agent
+    return gpu_node_id_map[gpu_agent] or gpu_agent
 end
 
 local function generate_json(value, indent)

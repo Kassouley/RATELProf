@@ -105,6 +105,10 @@ Addressing these gaps might improve application performance.
 
     local no_advice_msg = "There were no problems detected with GPU utilization. GPU was not found to be idle for more than "..GAP_MS.." ms.\n"
 
+    table.sort(data, function(a, b)
+        return a[5] < b[5]
+    end)
+
     if #data == 0 then 
         msg = msg .. no_advice_msg
     else

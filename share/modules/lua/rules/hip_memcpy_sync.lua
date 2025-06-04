@@ -9,7 +9,7 @@ return function(traces_data, report_obj, opt)
         "API Name",
         "PID",
         "TID",
-        "Kind",
+        "Operation",
         "Size (MB)",
         "CPU Duration (ns)",
         "GPU Duration (ns)"
@@ -43,7 +43,7 @@ return function(traces_data, report_obj, opt)
                     hip_cpy,
                     corr_hip_trace.pid,
                     corr_hip_trace.tid,
-                    report_helper.get_copy_name(gpuCpy.args.src_type, gpuCpy.args.dst_type),
+                    ratelprof.utils.get_copy_name(gpuCpy.args.src_type, gpuCpy.args.dst_type),
                     report_helper.get_size(gpuCpy.args.size),
                     report_helper.get_duration(corr_hip_trace.dur, opt.timeunit),
                     report_helper.get_duration(gpuCpy.dur, opt.timeunit)
@@ -61,6 +61,10 @@ This correspond to ]]..string.format("%.2f", (((#data)/nb_api_cpy)*100))..[[% of
 Suggestion: Use hipMemcpy*Async() APIs instead.
 ]]
     local no_advice_msg = "There were no problems detected related to synchronous memcpy operations.\n"
+
+    table.sort(data, function(a, b)
+        return a[8] < b[8]
+    end)
 
     if #data == 0 then 
         msg = msg .. no_advice_msg

@@ -77,7 +77,7 @@ return function(traces_data, report_obj, opt)
                         hip_cpy,
                         corr_hip_trace.pid,
                         corr_hip_trace.tid,
-                        report_helper.get_copy_name(gpuCpy.src_type, gpuCpy.dst_type),
+                        ratelprof.utils.get_copy_name(gpuCpy.src_type, gpuCpy.dst_type),
                         report_helper.get_size(gpuCpy.size),
                         report_helper.get_duration(corr_hip_trace.dur, opt.timeunit),
                         report_helper.get_duration(last_stop - first_start, opt.timeunit)
@@ -100,6 +100,10 @@ This correspond to ]]..string.format("%.2f", (((#data)/nb_api_cpy)*100))..[[% of
 Suggestion: If applicable, use PINNED memory instead by using hipHostMalloc to allocate your host side memory.
 ]]
     local no_advice_msg = "There were no problems detected related to asynchronous memcpy operations.\n"
+
+    table.sort(data, function(a, b)
+        return a[7] < b[7]
+    end)
 
     if #data == 0 then 
         msg = msg .. no_advice_msg

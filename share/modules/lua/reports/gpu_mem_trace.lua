@@ -10,9 +10,9 @@ local function get_output_data(mem_traces, timeunit)
     for id, trace in pairs(mem_traces) do
         local dur = report_helper.get_duration(trace.dur, timeunit)
         local size = tonumber(convert.bytes(trace.args.size, "bytes", "mb"))
-        local src_name = report_helper.get_copy_name_from_kind(trace.args.src_type)
-        local dst_name = report_helper.get_copy_name_from_kind(trace.args.dst_type)
-        local cpy_name = report_helper.get_copy_name(trace.args.src_type, trace.args.dst_type)
+        local src_name = ratelprof.utils.get_copy_name_from_kind(trace.args.src_type)
+        local dst_name = ratelprof.utils.get_copy_name_from_kind(trace.args.dst_type)
+        local cpy_name = ratelprof.utils.get_copy_name(trace.args.src_type, trace.args.dst_type)
         data[#data + 1] = {
             string.format("%.0f", trace.start),
             dur,

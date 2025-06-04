@@ -1,6 +1,5 @@
 local convert       = require ("utils.convert")
 local report_helper = require ("utils.report_helper")
-local stats_helper  = require ("utils.stats_helper")
 
 local function get_output_data(traces_data, opt)
     local data = {}
@@ -26,10 +25,10 @@ local function get_output_data(traces_data, opt)
                 "---", "---", "---", "---", "---", "---", "---", "---",
                 size,
                 tonumber(size / convert.time(dur, timeunit, "sec")),
-                report_helper.get_copy_name_from_kind(trace.args.src_type),
-                report_helper.get_copy_name_from_kind(trace.args.dst_type),
+                ratelprof.utils.get_copy_name_from_kind(trace.args.src_type),
+                ratelprof.utils.get_copy_name_from_kind(trace.args.dst_type),
                 "---", "---",
-                report_helper.get_copy_name(trace.args.src_type, trace.args.dst_type)
+                ratelprof.utils.get_copy_name(trace.args.src_type, trace.args.dst_type)
             }
         elseif entry_type == 1 or entry_type == 2 then
             local queue_dur = trace.start - trace.args.dispatch_time

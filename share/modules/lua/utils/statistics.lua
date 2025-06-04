@@ -33,13 +33,13 @@ function statistics.compute_stats(entry, total_metric)
     -- Round average to the nearest integer
     avg = math.floor(avg + 0.5)
     return {
-        string.format("%.2f", percent), 
-        total, 
-        count, 
-        avg, 
-        med, 
-        min, 
-        max, 
+        string.format("%.2f", percent),
+        total,
+        count,
+        avg,
+        med,
+        min,
+        max,
         stdDev
     }
 end

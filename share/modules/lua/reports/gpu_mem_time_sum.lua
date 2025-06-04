@@ -2,7 +2,7 @@ local report_helper = require ("utils.report_helper")
 local stats_helper  = require ("utils.stats_helper")
 
 local function get_entry_key_tab(trace)
-    return { report_helper.get_copy_name(trace.args.src_type, trace.args.dst_type) }
+    return { ratelprof.utils.get_copy_name(trace.args.src_type, trace.args.dst_type) }
 end
 
 local function get_metric(trace, opt)
