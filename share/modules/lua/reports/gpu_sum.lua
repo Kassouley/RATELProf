@@ -51,7 +51,7 @@ return function(traces_data, report_obj, opt)
     local barror_entries,  barror_total_metric  = stats_helper.get_entries(barror_traces,  get_entry_key_tab4, get_metric, opt)
 
     for _, entry in pairs(mem_entries) do
-        entry.key_tab[2] = report_helper.get_copy_name(entry.key_tab[2], entry.key_tab[3])
+        entry.key_tab[2] = ratelprof.utils.get_copy_name(entry.key_tab[2], entry.key_tab[3])
         entry.key_tab[3] = nil
     end
     for _, entry in pairs(kern_entries) do
