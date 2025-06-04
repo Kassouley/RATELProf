@@ -26,6 +26,7 @@ function Report.utils.execute_report(data, input_file, options_values, report_li
                 report_id     = report_id,
                 report_path   = report_path,
                 max_col_width = options_values.max_col_width,
+                max_lines     = options_values.max_lines,
                 notation      = options_values.notation,
                 progress_enabled = progress_enabled
             }
@@ -50,7 +51,7 @@ function Report.utils.execute_report(data, input_file, options_values, report_li
             end
 
             data.get_gpu_id = function(self, handle)
-                return self.node_id[handle] or 'Unknown'
+                return self.node_id[handle] or string.format('Unknown(%lu)', handle)
             end
 
             local chunk, err = loadfile(report_path)
@@ -101,6 +102,11 @@ function Report:new(attribute)
     instance.format = attribute.format
 
     instance.max_col_width = tonumber(attribute.max_col_width) or 32
+    if attribute.max_lines == "all" then
+        instance.max_lines = attribute.max_lines
+    else
+        instance.max_lines = tonumber(attribute.max_lines) or 50
+    end
     instance.notation = attribute.notation
 
     instance.report_name = "'No name set'"
@@ -221,6 +227,7 @@ function Report:get_output_filename()
     if self.output == "-" or self.output:sub(1, 1) == "@" then
         return nil
     end
+    self.max_lines = "all"
 
     local report_wo_ext = ratelprof.fs.remove_extension(self.trace_path)
     local file_extension = format_extensions[self.format] or "txt"
@@ -356,8 +363,12 @@ function Report:__format_data(separator, bsep, msep, asep, columnWidths)
     local result = {}
     local widths = columnWidths or {}
     local data = self.data
+    local max_lines = self.max_lines
+    local data_size = #data
+    local is_all_data_shown = max_lines == "all" or data_size < max_lines
+    local ndata = is_all_data_shown and data_size or max_lines + 1
 
-    for i = 1, #data do
+    for i = 1, ndata do
         local line = {}
         line[#line + 1] = bsep 
         local ncol = #data[i]
@@ -372,7 +383,11 @@ function Report:__format_data(separator, bsep, msep, asep, columnWidths)
         end
     end
 
-    return table.concat(result, "\n") .. "\n"
+    if not is_all_data_shown then
+        result[#result + 1] = ". . . (output has been trunc for visibility, please use option --max-lines or export to a file)"
+    end
+
+    return table.concat(result, "\n") .. "\n", is_all_data_shown
 end
 
 function Report:toTable()
@@ -388,8 +403,10 @@ function Report:toTable()
         return table.concat(separator)
     end
     local separator = get_separator()
-    local content =  self:__format_data(separator, "| ", " | ", " |", columnWidths)
-    return separator .. "\n" .. content .. separator .. "\n"
+    local content, is_all_data_shown = self:__format_data(separator, "| ", " | ", " |", columnWidths)
+    if is_all_data_shown then content = separator .. "\n" .. content .. separator .. "\n"
+    else content = separator .. "\n" .. content end
+    return content
 end
 
 function Report:toColumn()
@@ -403,12 +420,14 @@ function Report:toColumn()
         return table.concat(separator_line, " ")
     end
     local separator = get_separator()
-    return  self:__format_data(separator, nil, " ", nil, columnWidths)
+    local content, _ = self:__format_data(separator, nil, " ", nil, columnWidths)
+    return content
 end
 
 function Report:toCSV(sep)
     sep = sep or ","
-    return self:__format_data(nil, nil, sep, nil, nil)
+    local content, _ = self:__format_data(nil, nil, sep, nil, nil)
+    return content
 end
 
 function Report:toTSV()

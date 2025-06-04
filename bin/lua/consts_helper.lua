@@ -20,6 +20,19 @@ for report_id, report in pairs(ratelprof.consts._ALL_RULES_REPORT) do
     end
 end
 
+local function deep_copy(original)
+    if type(original) ~= "table" then
+        return original
+    end
+
+    local copy = {}
+    for k, v in pairs(original) do
+        copy[k] = deep_copy(v)
+    end
+    return copy
+end
+
+
 consts_helper.profile = {
     desc = "\n\tProfile an AMD GPU application and trace AMD Library functions",
     opt = {
@@ -231,6 +244,16 @@ consts_helper.stats = {
             sname           = nil,
             arg             = "<width>",
             arg_required    = true,
+            default         = 32
+        },
+        ['max-lines'] = {
+            desc            = [[ 
+                Define the maximum lines to show inside the report.
+                Note : Default for file output is 'all'.
+                ]],
+            sname           = nil,
+            arg             = "<number|all>",
+            arg_required    = true,
             default         = 50
         },
         ['notation'] = {
@@ -247,6 +270,7 @@ consts_helper.stats = {
     }
 }
 
+
 consts_helper.analyze = {
     cmd = "analyze",
     args = {
@@ -257,8 +281,9 @@ consts_helper.analyze = {
         },
     },
     desc = "\n\tAnalyze a report file and give advice about possible optimizations.",
-    opt = {
-        report = {
+    opt = deep_copy(consts_helper.stats.opt)
+}
+consts_helper.analyze.opt.report = {
             desc            = [[ 
                 Specify the rule(s) to generate.
                 This option may be used multiple times. If no rules are given, 
@@ -272,117 +297,8 @@ consts_helper.analyze = {
             arg             = "<name[,name...]>",
             arg_required    = true,
             default         = default_rules
-        },
-        output = {
-            desc            = [[ 
-                Specify the output mechanism. There are three output mechanisms:
-                print to console, output to file, or output to command. If no
-                outputs are designated, the default is to print reports to the
-                console.
-                This option may be used multiple times. Multiple outputs may also
-                be specified using a comma-separated list.
-     
-                If the given output name is "-", the output will be displayed
-                on the console. 
-                If the output name starts with "@", the output designates a 
-                command to run. The command will be executed and the analysis 
-                output will be piped into the command. Any other output
-                is assumed to be the base path and name for a file.
-     
-                If a file basename is given, the filename used will be:
-                   <basename>_<report>.<output_format>
-                The output "." can be used to indicate the analysis should be output
-                to a file, and the default basename should be used.]],
-            sname           = "o",
-            arg             = "<output[,output...]>",
-            arg_required    = true,
-            default         = "-"
-        },
-        format = {
-            desc            = [[ 
-                Specify the output format. The special name "." indicates the
-                default format for the given output.
-
-                The default format for console is:    column
-                The default format for files is:      csv
-                The default format for processes is:  csv
-
-                Available formats (and file extensions):
-
-                    column     Human readable columns (.txt)
-                    table      Human readable table (.txt)
-                    csv        Comma Separated Values (.csv)
-                    tsv        Tab Separated Values (.tsv)
-
-                This option may be used multiple times. Multiple formats may also
-                be specified using a comma-separated list.]],
-            sname           = "f",
-            arg             = "<format[,format...]>",
-            arg_required    = true,
-            default         = nil
-        },
-        ['help-report'] = {
-            desc            = [[ 
-                Display help information about the available reports.]],
-            sname           = nil,
-            arg             = nil,
-            arg_required    = false,
-            default         = nil
-        },
-        timeunit = {
-            desc            = [[ 
-                Set basic unit of time. The default is nanoseconds.
-                Possible values are: ns, us, ms, sec.]],
-            sname           = nil,
-            arg             = "<time unit>",
-            arg_required    = true,
-            default         = "ns"
-        },
-        ['only-main'] = {
-            desc            = [[ 
-                Compute only statistic for traces from main phase.]],
-            sname           = nil,
-            arg             = nil,
-            arg_required    = false,
-            default         = nil
-        },
-        mangled = {
-            desc            = [[ 
-                Use the mangled name of the function in the report.]],
-            sname           = "m",
-            arg             = nil,
-            arg_required    = false,
-            default         = nil
-        },
-        trunc = {
-            desc            = [[ 
-                Truncate function arguments from demangled kernel names.]],
-            sname           = "t",
-            arg             = nil,
-            arg_required    = false,
-            default         = nil
-        },
-        ['max-col-width'] = {
-            desc            = [[ 
-                Define the columns max width for table and column format.]],
-            sname           = nil,
-            arg             = "<width>",
-            arg_required    = true,
-            default         = 50
-        },
-        ['notation'] = {
-            desc            = [[ 
-                Change number notation of output reports.
-                Possible values : 'raw', 'scientific', 'thousands-separator'
-                Default is 'scientific' for csv/tsv format, and 'thousands-separator' for other.
-                If value is invalid, option is skipped and default is used.]],
-            sname           = nil,
-            arg             = "<notation>",
-            arg_required    = true,
-            default         = nil
         }
-    }
-}
+
 
 consts_helper.inspect = {
     cmd = "inspect",
