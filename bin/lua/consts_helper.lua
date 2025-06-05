@@ -147,7 +147,7 @@ consts_helper.stats = {
             sname           = "r",
             arg             = "<name[,name...]>",
             arg_required    = true,
-            default         = default_reports
+            default         = table.concat(default_reports, ",")
         },
         output = {
             desc            = [[ 
@@ -296,7 +296,7 @@ consts_helper.analyze.opt.report = {
             sname           = "r",
             arg             = "<name[,name...]>",
             arg_required    = true,
-            default         = default_rules
+            default         = table.concat(default_rules, ",")
         }
 
 

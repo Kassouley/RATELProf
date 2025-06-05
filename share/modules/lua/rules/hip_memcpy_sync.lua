@@ -52,7 +52,7 @@ return function(traces_data, report_obj, opt)
         end
     end
 
-    local msg   = "This rule identifies memory transfers that are synchronous. It includes all hipMemcpy*() functions.\n"
+    local msg = ratelprof.consts._ALL_RULES_REPORT.hip_memcpy_sync.desc
     local advice_msg = [[
 
 The following are synchronous memory transfers that block the host.

@@ -86,8 +86,10 @@ end
 
 return function(traces_data, report_obj, opt)
 
-    local TIME_THRESHOLD = 100000
-    local HIDDEN_THRESHOLD_PCT = 50
+
+    local HIDDEN_THRESHOLD_PCT = tonumber(opt.report_opt.th_hidden) or ratelprof.consts._ALL_RULES_REPORT.hidden_transfers.opt.th_hidden.default
+    local TIME_THRESHOLD = tonumber(opt.report_opt.th_dur) or ratelprof.consts._ALL_RULES_REPORT.hidden_transfers.opt.th_dur.default
+
 
     report_obj:set_name("Hidden transfers latency")
     report_obj:set_type("Analyze")
@@ -119,12 +121,7 @@ return function(traces_data, report_obj, opt)
 
     local data, percentage_per_gpu = find_hidden_latency(copy_data, kernel_data, traces_data.node_id, TIME_THRESHOLD, HIDDEN_THRESHOLD_PCT)
 
-    local msg = [[
-This rule identifies memory transfers (>]]..TIME_THRESHOLD..[[ ns) whose latency is not fully hidden by concurrent kernel execution.
-For each memory transfer, the rule calculates how much of its duration does not overlap with any kernel activity for each GPU.
-Transfers that are not sufficiently overlapped may contribute to performance bottlenecks, as their latency is visible to the application.
- 
-]]
+    local msg = ratelprof.consts._ALL_RULES_REPORT.hidden_transfers.desc
 
     local advice_msg = [[
 The following memory transfers have less than ]]..HIDDEN_THRESHOLD_PCT..[[% of their latency hidden by concurrent kernel execution.

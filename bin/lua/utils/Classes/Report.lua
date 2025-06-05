@@ -3,12 +3,36 @@ local Report = {}
 Report.__index = Report
 Report.utils = {}
 
+function parse_report_option(input)
+    local result = {}
+
+        local name, args = input:match('^([^:]+):?(.*)$')
+        local options = {}
+
+        if args and args ~= "" then
+            for arg in string.gmatch(args, '([^:]+)') do
+                local key, val = arg:match('([^=]+)=?(.*)')
+                if val == "" then
+                    val = true  -- If there's no value, set to true
+                end
+                options[key] = val
+            end
+        end
+
+        result[name] = options
+
+    return result
+end
+
 function Report.utils.execute_report(data, input_file, options_values, report_list, progress_enabled, progress_msg)
     local reports = options_values.reports or {}
     local outputs = options_values.outputs or {}
     local formats = options_values.formats or {}
+    
     local nreports = #reports
-    for i, report_id in ipairs(reports) do
+    for i, report_data in ipairs(reports) do
+        local report_id = report_data.id
+
         if progress_enabled then
             ratelprof.utils.print_progress(progress_msg, i-1, nreports)
         end
@@ -36,6 +60,7 @@ function Report.utils.execute_report(data, input_file, options_values, report_li
                 is_only_main = options_values.only_main,
                 is_trunc     = options_values.trunc,
                 is_mangled   = options_values.mangled,
+                report_opt   = report_data.opt
             }
 
             local report_obj = Report:new(attribute)
@@ -65,7 +90,7 @@ function Report.utils.execute_report(data, input_file, options_values, report_li
             end
 
         else
-            print("\n")
+            print('\n')
             Message:error(string.format("Report '%s' encountered an internal error: No valid report file or class found", report_id))
         end
     end
@@ -366,11 +391,11 @@ function Report:__format_data(separator, bsep, msep, asep, columnWidths)
     local max_lines = self.max_lines
     local data_size = #data
     local is_all_data_shown = max_lines == "all" or data_size < max_lines
-    local ndata = is_all_data_shown and data_size or max_lines + 1
+    local ndata = is_all_data_shown and data_size or max_lines
 
     for i = 1, ndata do
         local line = {}
-        line[#line + 1] = bsep 
+        line[#line + 1] = bsep
         local ncol = #data[i]
         for j = 1, ncol do
             line[#line + 1] = self:__get_formatted_item(data[i][j], widths[j] or 1) .. (ncol == j and "" or msep)
@@ -384,7 +409,7 @@ function Report:__format_data(separator, bsep, msep, asep, columnWidths)
     end
 
     if not is_all_data_shown then
-        result[#result + 1] = ". . . (output has been trunc for visibility, please use option --max-lines or export to a file)"
+        result[#result + 1] = ". . . ("..data_size-ndata.." lines has been trunc for visibility, please use option --max-lines or export to a file)"
     end
 
     return table.concat(result, "\n") .. "\n", is_all_data_shown

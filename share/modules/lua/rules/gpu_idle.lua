@@ -5,8 +5,7 @@ function find_gaps(kernel_traces, gap_th, gpu_node_id_map)
     -- Step 1: Group traces by gpu_id
     local gpu_traces = {}
     for _, trace in pairs(kernel_traces) do
-        local gpu_agent = trace.args.gpu_id
-        local gpu_id = gpu_node_id_map[tostring(gpu_agent)] or gpu_agent
+        local gpu_id = ratelprof.utils.get_gpu_id(trace, gpu_node_id_map)
         if not gpu_traces[gpu_id] then
             gpu_traces[gpu_id] = {}
         end
@@ -70,7 +69,7 @@ return function(traces_data, report_obj, opt)
     report_obj:set_name("GPU Idle")
     report_obj:set_type("Analyze")
 
-    local GAP_MS = 500 --TMP VALUE, NEED TO BE A USER INPUT
+    local GAP_MS = tonumber(opt.report_opt.th_gap) or ratelprof.consts._ALL_RULES_REPORT.gpu_idle.opt.th_gap.default
     
     local kernel_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL)
 
@@ -89,15 +88,12 @@ return function(traces_data, report_obj, opt)
 
     local data, percentage_per_gpu = find_gaps(kernel_data, GAP_MS * 1e6, traces_data.node_id)
 
-    local msg = [[
-This rule identifies time regions where a GPU is idle for longer than a set threshold. 
-For each GPU, gaps are found within the time range that starts with the beginning of the first GPU
-operation on that device and ends with the end of the last GPU operation on that device.
+    local msg = ratelprof.consts._ALL_RULES_REPORT.gpu_idle.desc
 
-]]
     local advice_msg = [[
 The following are ranges where a GPU is idle for more than ]]..GAP_MS..[[ ms. 
 Addressing these gaps might improve application performance.
+
 ]]
     for gpu_id, percent in pairs(percentage_per_gpu) do
         advice_msg = advice_msg .. "On GPU ID " .. gpu_id .. ", gaps account for " .. percent .. "% of the total GPU time.\n"
@@ -106,7 +102,7 @@ Addressing these gaps might improve application performance.
     local no_advice_msg = "There were no problems detected with GPU utilization. GPU was not found to be idle for more than "..GAP_MS.." ms.\n"
 
     table.sort(data, function(a, b)
-        return a[5] < b[5]
+        return a[2] < b[2]
     end)
 
     if #data == 0 then 
@@ -115,6 +111,6 @@ Addressing these gaps might improve application performance.
         msg = msg .. advice_msg
     end
     
-    report_obj:set_custom_message(msg)
+    report_obj:set_custom_message(msg..'\n')
     report_obj:set_data(data)
 end

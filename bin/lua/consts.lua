@@ -107,19 +107,52 @@ consts._ALL_RULES_REPORT = {
     __default_report_path = consts._MODULES_DIR.."lua/rules/",
 
     hip_memcpy_async = {
-      desc    = "Show HIP API synchronous memory copy that should be async",
+      desc   = [[
+This rule identifies asynchronous memory transfers that end up becoming synchronous if the memory is pageable or if the transfers is too short.
+
+]],
       default = true
     },
     hip_memcpy_sync = {
-      desc    = "Show HIP API synchronous memory copy that block the CPU",
+      desc   = [[
+This rule identifies memory transfers that are synchronous and block the host during GPU memory transfers. 
+It includes all hipMemcpy*() API functions.
+
+]],
       default = true
     },
     gpu_idle = {
-      desc    = "Compute GPU time where no kernel is running",
+      desc    = [[
+This rule identifies time regions where a GPU is idle for longer than a set threshold. 
+For each GPU, gaps are found within the time range that starts with the beginning of the first GPU
+operation on that device and ends with the end of the last GPU operation on that device.
+
+]],
+      opt = {
+        th_gap = {
+          default = 500,
+          desc    = "Minimum gap duration (in ms) that will be reported."
+        }
+      },
       default = true
     },
     hidden_transfers = {
-      desc    = "TODO",
+      desc    = [[
+This rule identifies memory transfers (>threshold value in ns) whose latency is not fully hidden by concurrent kernel execution.
+For each memory transfer, the rule calculates how much of its duration does not overlap with any kernel activity for each GPU.
+Transfers that are not sufficiently overlapped may contribute to performance bottlenecks, as their latency is visible to the application.
+ 
+]],
+      opt = {
+        th_dur = {
+          default = 100000,
+          desc    = "Minimum duration (in ns) a memory transfer must have to be analyzed for hidden latency."
+        },
+        th_hidden = {
+          default = 50,
+          desc    = "Maximum percentage of hidden time a memory transfer can have to be reported."
+        }
+      },
       default = true
     },
 }

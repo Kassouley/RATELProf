@@ -88,8 +88,8 @@ return function(traces_data, report_obj, opt)
         end
     end
 
-    
-    local msg   = "This rule identifies asynchronous memory transfers that end up becoming synchronous if the memory is pageable or if the transfers is too short.\n"
+
+    local msg = ratelprof.consts._ALL_RULES_REPORT.hip_memcpy_async.desc
     local advice_msg = [[
 
 The following memory transfers are synchronized with their corresponding HIP asynchronous memory copy trace.

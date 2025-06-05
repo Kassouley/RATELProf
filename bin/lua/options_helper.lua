@@ -3,10 +3,37 @@
 
 local options_helper = {}
 
+local function parse_report_option(input)
+    local result = {}
+
+    for entry in string.gmatch(input, '([^,]+)') do
+        local id, args = entry:match('^([^:]+):?(.*)$')
+        local options = {}
+
+        if args and args ~= "" then
+            for arg in string.gmatch(args, '([^:]+)') do
+                local key, val = arg:match('([^=]+)=?(.*)')
+                if val == "" then
+                    val = true
+                end
+                options[key] = val
+            end
+        end
+
+        table.insert(result, {
+            id = id,
+            opt = options
+        })
+    end
+
+    return result
+end
+
+
 -- Function to handle the options for the analyze and stats command
 function options_helper.handle_stats_analyze_option(options)
     local reports = ratelprof.get_opt_val(options, "report")
-    if reports and type(reports) == "string" then reports = reports:split(",") end
+    if reports then reports = parse_report_option(reports) end
 
     local outputs = ratelprof.get_opt_val(options, "output")
     if outputs then outputs = outputs:split(",") end

@@ -2,7 +2,6 @@ local report_helper = require ("utils.report_helper")
 local stats_helper  = require ("utils.stats_helper")
 
 local function get_entry_key_tab1(trace)
-
     return { "MemoryOperation", trace.args.src_type or "Unknown", trace.args.dst_type or "Unknown"}
 end
 
