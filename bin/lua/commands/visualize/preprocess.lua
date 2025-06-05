@@ -160,7 +160,7 @@ local function get_event_data(event, domain_id, opt)
         local dst_agent = event.args.dst_agent
         args.src = ratelprof.utils.get_copy_name_from_kind(event.args.src_type) ..
             " Node ID. "..get_id_from_agent(src_agent).." ("..src_agent..")"
-        args.dst = ratelprof.utils.get_copy_name_from_kind(event.args.src_type) ..
+        args.dst = ratelprof.utils.get_copy_name_from_kind(event.args.dst_type) ..
             " Node ID. "..get_id_from_agent(dst_agent).." ("..dst_agent..")"
         args.size       = event.args.size
         args.engine_id  = event.args.engine_id

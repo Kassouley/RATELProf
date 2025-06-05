@@ -174,7 +174,7 @@ With 3-way concurency :                        |
     else
         msg = msg .. advice_msg
     end
-    
+
     report_obj:set_custom_message(msg)
     report_obj:set_data(data)
 end
