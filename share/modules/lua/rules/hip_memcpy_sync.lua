@@ -53,14 +53,13 @@ return function(traces_data, report_obj, opt)
     end
 
     local msg = ratelprof.consts._ALL_RULES_REPORT.hip_memcpy_sync.desc
-    local advice_msg = [[
-
+    local advice_msg = [[ 
 The following are synchronous memory transfers that block the host.
 This correspond to ]]..string.format("%.2f", (((#data)/nb_api_cpy)*100))..[[% of your hipMemcpy*() operations.
 
 Suggestion: Use hipMemcpy*Async() APIs instead.
 ]]
-    local no_advice_msg = "There were no problems detected related to synchronous memcpy operations.\n"
+    local no_advice_msg = "\nThere were no problems detected related to synchronous memcpy operations.\n"
 
     table.sort(data, function(a, b)
         return a[8] < b[8]

@@ -90,8 +90,7 @@ return function(traces_data, report_obj, opt)
 
 
     local msg = ratelprof.consts._ALL_RULES_REPORT.hip_memcpy_async.desc
-    local advice_msg = [[
-
+    local advice_msg = [[ 
 The following memory transfers are synchronized with their corresponding HIP asynchronous memory copy trace.
 It appears that the transferred memory is either using PAGEABLE memory or is not large enough to be processed asynchronously.
 
@@ -99,7 +98,7 @@ This correspond to ]]..string.format("%.2f", (((#data)/nb_api_cpy)*100))..[[% of
 
 Suggestion: If applicable, use PINNED memory instead by using hipHostMalloc to allocate your host side memory.
 ]]
-    local no_advice_msg = "There were no problems detected related to asynchronous memcpy operations.\n"
+    local no_advice_msg = "\nThere were no problems detected related to asynchronous memcpy operations.\n"
 
     table.sort(data, function(a, b)
         return a[7] < b[7]

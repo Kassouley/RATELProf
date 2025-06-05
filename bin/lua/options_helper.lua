@@ -30,8 +30,49 @@ local function parse_report_option(input)
 end
 
 
+local function print_help_report(reports, title)
+    print("Available "..title..":\n")
+
+    for name, data in pairs(reports) do
+        if name ~= "__default_report_path" then
+            print(string.format("== %s ==", name))
+
+            -- Print description
+            if data.desc then
+                print(data.desc)
+            end
+
+            -- Print options if available
+            if data.opt then
+                print("  Options :")
+                for opt_name, opt_data in pairs(data.opt) do
+                    local desc = opt_data.desc or "No description."
+                    local default = opt_data.default ~= nil and tostring(opt_data.default) or "None"
+                    print(string.format("    %s=<value> (default: %s)\n      %s", opt_name, default, desc))
+                end
+                print("")
+            end
+
+            -- Print if is enabled by default
+            if data.default ~= nil then
+                print(string.format("  Enabled by default : %s", tostring(data.default)))
+            end
+
+            print("")
+        end
+    end
+    os.exit(0)
+end
+
+
 -- Function to handle the options for the analyze and stats command
 function options_helper.handle_stats_analyze_option(options)
+    local help_reports = ratelprof.get_opt_val(options, "help-reports")
+    if help_reports then print_help_report(ratelprof.consts._ALL_STATS_REPORT, "Reports") end
+
+    local help_rules = ratelprof.get_opt_val(options, "help-rules")
+    if help_rules then print_help_report(ratelprof.consts._ALL_RULES_REPORT, "Rules") end
+
     local reports = ratelprof.get_opt_val(options, "report")
     if reports then reports = parse_report_option(reports) end
 

@@ -145,7 +145,7 @@ consts_helper.stats = {
                 See --help-reports for a list of built-in reports, along with more
                 information on each report.]],
             sname           = "r",
-            arg             = "<name[,name...]>",
+            arg             = "<name[:args...][,name[:args...]...]>",
             arg_required    = true,
             default         = table.concat(default_reports, ",")
         },
@@ -197,7 +197,7 @@ consts_helper.stats = {
             arg_required    = true,
             default         = nil
         },
-        ['help-report'] = {
+        ['help-reports'] = {
             desc            = [[ 
                 Display help information about the available reports.]],
             sname           = nil,
@@ -294,9 +294,19 @@ consts_helper.analyze.opt.report = {
                 See --help-reports for a list of built-in rules, along with more
                 information on each rule.]],
             sname           = "r",
-            arg             = "<name[,name...]>",
+            arg             = "<name[:args...][,name[:args...]...]>",
             arg_required    = true,
             default         = table.concat(default_rules, ",")
+        }
+
+consts_helper.analyze.opt['help-reports'] = nil
+consts_helper.analyze.opt['help-rules'] = {
+            desc            = [[ 
+                Display help information about the available rules.]],
+            sname           = nil,
+            arg             = nil,
+            arg_required    = false,
+            default         = nil
         }
 
 

@@ -123,7 +123,7 @@ return function(traces_data, report_obj, opt)
 
     local msg = ratelprof.consts._ALL_RULES_REPORT.hidden_transfers.desc
 
-    local advice_msg = [[
+    local advice_msg = [[ 
 The following memory transfers have less than ]]..HIDDEN_THRESHOLD_PCT..[[% of their latency hidden by concurrent kernel execution.
 Improving concurrency between memory transfers and kernels can help reduce total runtime and increase GPU utilization.
 Note : 
@@ -136,33 +136,33 @@ W/O concurency :
   +-------------+----------------+-------------+
 -------------------------------------------------> Time
 
-With 2-way concurency :
-  +-------------+----+----+
-  | Memcpy(H2D) | K1 |DH1 |
-  +-------------+----+----+----+
-                     | K2 |DH2 |
-                     +----+----+----+  Speed up
-                          | K3 |DH3 | <--------> 
+With 2-way concurency :                        |
+  +-------------+----+----+                    |
+  | Memcpy(H2D) | K1 |DH1 |                    |
+  +-------------+----+----+----+               |
+                     | K2 |DH2 |               |
+                     +----+----+----+ Speed up |
+                          | K3 |DH3 | <------> |
                           +----+----+
 -------------------------------------------------> Time
 
-With 3-way concurency :
-  +----+----+----+
-  |HD1 | K1 |DH1 |
-  +----+----+----+----+
-       |HD2 | K2 |DH2 |
-       +----+----+----+----+      Speed up
-            |HD3 | K3 |DH3 | <----------------> 
+With 3-way concurency :                        |
+  +----+----+----+                             |
+  |HD1 | K1 |DH1 |                             |
+  +----+----+----+----+                        |
+       |HD2 | K2 |DH2 |                        |
+       +----+----+----+----+     Speed up      |
+            |HD3 | K3 |DH3 | <---------------> | 
             +----+----+----+
 -------------------------------------------------> Time
-
+ 
 ]]
 
     for gpu_id, percent in pairs(percentage_per_gpu) do
         advice_msg = advice_msg .. "On GPU ID " .. gpu_id .. ", an average of " .. percent .. "% of memory transfer time is not hidden by kernel execution.\n\n"
     end
 
-    local no_advice_msg = "All memory transfers were sufficiently overlapped by kernel execution. No visible latency (>"..HIDDEN_THRESHOLD_PCT.."%) due to memory transfers was detected.\n\n"
+    local no_advice_msg = "\nAll memory transfers were sufficiently overlapped by kernel execution. No visible latency (>"..HIDDEN_THRESHOLD_PCT.."%) due to memory transfers was detected.\n\n"
 
 
     table.sort(data, function(a, b)

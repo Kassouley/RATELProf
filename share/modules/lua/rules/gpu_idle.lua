@@ -90,16 +90,15 @@ return function(traces_data, report_obj, opt)
 
     local msg = ratelprof.consts._ALL_RULES_REPORT.gpu_idle.desc
 
-    local advice_msg = [[
+    local advice_msg = [[ 
 The following are ranges where a GPU is idle for more than ]]..GAP_MS..[[ ms. 
 Addressing these gaps might improve application performance.
-
 ]]
     for gpu_id, percent in pairs(percentage_per_gpu) do
         advice_msg = advice_msg .. "On GPU ID " .. gpu_id .. ", gaps account for " .. percent .. "% of the total GPU time.\n"
     end
 
-    local no_advice_msg = "There were no problems detected with GPU utilization. GPU was not found to be idle for more than "..GAP_MS.." ms.\n"
+    local no_advice_msg = "\nThere were no problems detected with GPU utilization. GPU was not found to be idle for more than "..GAP_MS.." ms.\n"
 
     table.sort(data, function(a, b)
         return a[2] < b[2]
@@ -111,6 +110,6 @@ Addressing these gaps might improve application performance.
         msg = msg .. advice_msg
     end
     
-    report_obj:set_custom_message(msg..'\n')
+    report_obj:set_custom_message(msg)
     report_obj:set_data(data)
 end
