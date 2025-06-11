@@ -16,7 +16,8 @@ return function(traces_data, report_obj, opt)
     local sizeunit = "B"
 
     report_obj:set_headers({
-        "Total (%)", 
+        "App Time (%)",
+        "API Time (%)",
         "Total ("..sizeunit..")", 
         "Count", 
         "Avg ("..sizeunit..")", 
@@ -30,7 +31,7 @@ return function(traces_data, report_obj, opt)
     local gpu_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY)
     
     local entries, total_metrics = stats_helper.get_entries(gpu_traces, get_entry_key_tab, get_metric, opt)
-    local data = stats_helper.get_output_summary(entries, total_metrics)
+    local data = stats_helper.get_output_summary(entries, total_metrics, traces_data:get_app_dur())
 
     table.sort(data, function(a, b)
         return tonumber(a[2]) > tonumber(b[2])

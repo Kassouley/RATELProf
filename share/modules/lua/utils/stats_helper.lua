@@ -10,10 +10,11 @@ local function get_entry_key_tab(trace)
     return { trace.name }
 end
 
-function stats_helper.process_api_raw_data_for_sum_report(report_obj, raw_data, opt)
+function stats_helper.process_api_raw_data_for_sum_report(report_obj, data, domain, opt)
     local timeunit = opt.timeunit
+    local raw_data = data:get(domain)
     local entries, total_metrics = stats_helper.get_entries(raw_data, get_entry_key_tab, get_metric, opt)
-    local data = stats_helper.get_output_summary(entries, total_metrics)
+    local data = stats_helper.get_output_summary(entries, total_metrics, data:get_app_dur())
 
     table.sort(data, function(a, b)
         return tonumber(a[2]) > tonumber(b[2])
@@ -22,7 +23,8 @@ function stats_helper.process_api_raw_data_for_sum_report(report_obj, raw_data, 
     report_obj:set_data(data)
 
     report_obj:set_headers({
-        "Time (%)", -- 1
+        "App Time (%)", -- 1
+        "API Time (%)", -- 1
         "Total Time ("..timeunit..")", -- 2 
         "Num Calls", -- 3
         "Avg ("..timeunit..")", -- 4

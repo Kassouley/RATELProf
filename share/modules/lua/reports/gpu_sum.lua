@@ -27,13 +27,14 @@ return function(traces_data, report_obj, opt)
 
     local timeunit = opt.timeunit
     report_obj:set_headers({
-        "Time (%)", 
-        "Total Time ("..timeunit..")", 
-        "Instances", 
-        "Avg ("..timeunit..")", 
-        "Med ("..timeunit..")", 
-        "Min ("..timeunit..")", 
-        "Max ("..timeunit..")", 
+        "App Time (%)",
+        "API Time (%)",
+        "Total Time ("..timeunit..")",
+        "Instances",
+        "Avg ("..timeunit..")",
+        "Med ("..timeunit..")",
+        "Min ("..timeunit..")",
+        "Max ("..timeunit..")",
         "StdDev ("..timeunit..")",
         "Category",
         "Operation" 
@@ -65,7 +66,7 @@ return function(traces_data, report_obj, opt)
     end
     local gpu_total_metric = kern_total_metric + mem_total_metric + barrand_total_metric + barror_total_metric
     
-    local data = stats_helper.get_output_summary(gpu_entries, gpu_total_metric)
+    local data = stats_helper.get_output_summary(gpu_entries, gpu_total_metric, traces_data:get_app_dur())
 
     table.sort(data, function(a, b)
         return tonumber(a[2]) > tonumber(b[2])

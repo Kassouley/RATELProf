@@ -3,7 +3,7 @@ local stats_helper  = require ("utils.stats_helper")
 local statistics  = require ("utils.statistics")
 
 local function get_entry_key_tab(trace, opt)
-    return { 
+    return {
         trace.args.grd[1],
         trace.args.grd[2],
         trace.args.grd[3],
@@ -28,7 +28,8 @@ return function(traces_data, report_obj, opt)
     report_obj:set_type("Summary")
 
     report_obj:set_headers({
-        "Time (%)", 
+        "App Time (%)",
+        "API Time (%)",
         "Total Time ("..timeunit..")", 
         "Instances", 
         "Avg ("..timeunit..")", 
@@ -36,7 +37,6 @@ return function(traces_data, report_obj, opt)
         "Min ("..timeunit..")", 
         "Max ("..timeunit..")", 
         "StdDev ("..timeunit..")",
-        "Queue Time (%)", 
         "Total QTime ("..timeunit..")", 
         "QAvg ("..timeunit..")", 
         "QMed ("..timeunit..")", 
@@ -69,8 +69,8 @@ return function(traces_data, report_obj, opt)
     local data = {}
     for key_str, entry_dur_time in pairs(entries_dur_time) do
         local entry_queue_time = entries_queue_time[key_str]
-        local statistic_table_for_duration_time = stats_helper.compute_stats(entry_dur_time, total_metrics_dur_time)
-        local statistic_table_for_queue_time = stats_helper.compute_stats(entry_queue_time, total_metrics_queue_time)
+        local statistic_table_for_duration_time = stats_helper.compute_stats(entry_dur_time, total_metrics_dur_time, traces_data:get_app_dur())
+        local statistic_table_for_queue_time = stats_helper.compute_stats(entry_queue_time, total_metrics_queue_time, traces_data:get_app_dur())
         
         local statistic_table = {
             statistic_table_for_duration_time[1], 
@@ -81,9 +81,8 @@ return function(traces_data, report_obj, opt)
             statistic_table_for_duration_time[6], 
             statistic_table_for_duration_time[7],
             statistic_table_for_duration_time[8],
-            statistic_table_for_queue_time[1], 
-            statistic_table_for_queue_time[2],
-            statistic_table_for_queue_time[4], 
+            statistic_table_for_duration_time[9],
+            statistic_table_for_queue_time[3],
             statistic_table_for_queue_time[5],
             statistic_table_for_queue_time[6], 
             statistic_table_for_queue_time[7],

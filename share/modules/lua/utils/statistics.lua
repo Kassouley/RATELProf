@@ -1,7 +1,7 @@
 local statistics = {}
 
 
-function statistics.compute_stats(entry, total_metric)
+function statistics.compute_stats(entry, total_metric, app_total_dur)
     local values = entry.values
     local count = entry.count
     local total = entry.total
@@ -28,12 +28,14 @@ function statistics.compute_stats(entry, total_metric)
     local stdDev = math.sqrt(math.max(variance, 0))
 
     -- Compute percentage
-    local percent = (total / total_metric) * 100
+    local local_percent  = (total / total_metric)  * 100
+    local global_percent = (total / app_total_dur) * 100
 
     -- Round average to the nearest integer
     avg = math.floor(avg + 0.5)
     return {
-        string.format("%.2f", percent),
+        string.format("%.2f", global_percent),
+        string.format("%.2f", local_percent),
         total,
         count,
         avg,
@@ -86,11 +88,11 @@ function statistics.get_entries(data, get_entry_key_tab, get_metric, opt)
     return entries, total_metric
 end
 
-function statistics.get_output_summary(entries, total_metric)
+function statistics.get_output_summary(entries, total_metric, app_total_dur)
     local output_data = {}
 
     for _, entry in pairs(entries) do
-        local statistic_table = statistics.compute_stats(entry, total_metric)
+        local statistic_table = statistics.compute_stats(entry, total_metric, app_total_dur)
         for i = 1, #entry.key_tab do
             table.insert(statistic_table, entry.key_tab[i])
         end
