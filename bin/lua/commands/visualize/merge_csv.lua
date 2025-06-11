@@ -22,11 +22,12 @@ function merge_csv.get_csv_data(input_file, tmp_dir_path, data, opt)
     local function process_reports(reports_list, has_advice) 
         local content_table = {}
         
-        for _, report_name in ipairs(reports_list) do
+        for _, report in ipairs(reports_list) do
+            local report_name = report.id
             local filename = output.."_"..report_name
             local content = get_report_content(filename..".csv")
             local format = '{name:"%s",data:[%s]%s}'
-            local msg_format = ',msg:"%s"'
+            local msg_format = ',msg:"<pre>%s</pre>"'
             local msg = ""
             if has_advice then
                 local filename_advice = filename.."_msg.txt"
@@ -52,21 +53,23 @@ function merge_csv.get_csv_data(input_file, tmp_dir_path, data, opt)
     end
 
     local stats_reports = {
-        "omp_region_api_sum",
-        "omp_api_sum",
-        "omp_target_api_sum",
-        "hip_api_sum",
-        "hsa_api_sum",
-        "gpu_sum",
-        "gpu_kern_sum",
-        "gpu_mem_time_sum",
-        "gpu_mem_size_sum"
+        {id = "omp_region_api_sum"},
+        {id = "omp_api_sum"},
+        {id = "omp_target_api_sum"},
+        {id = "hip_api_sum"},
+        {id = "hsa_api_sum"},
+        {id = "gpu_sum"},
+        {id = "gpu_kern_sum"},
+        {id = "gpu_mem_time_sum"},
+        {id = "gpu_mem_size_sum"}
     }
 
     local analyze_reports = {
-        "gpu_idle",
-        "hip_memcpy_sync",
-        "hip_memcpy_async"
+        {id = "coalescable_kernels"},
+        {id = "hidden_transfers"},
+        {id = "gpu_idle"},
+        {id = "hip_memcpy_sync"},
+        {id = "hip_memcpy_async"}
     }
 
     local options = {
@@ -79,6 +82,7 @@ function merge_csv.get_csv_data(input_file, tmp_dir_path, data, opt)
 
     options.reports = stats_reports
     Report.utils.execute_report(data, input_file, options, ratelprof.consts._ALL_STATS_REPORT, true, "Report statistics")
+
     options.reports = analyze_reports
     Report.utils.execute_report(data, input_file, options, ratelprof.consts._ALL_RULES_REPORT, true, "Report analysis")
 
