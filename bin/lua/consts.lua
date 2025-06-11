@@ -5,7 +5,13 @@ consts._INSTALL_DIR  = os.getenv("INSTALL_DIR") or "."
 consts._LIBS_DIR     = consts._INSTALL_DIR.."/lib/"
 consts._MODULES_DIR  = consts._INSTALL_DIR.."/share/modules/"
 
-consts._VERSION = "1.0"
+
+local major, minor, patch = 1, 0, 0
+consts._VERSION_MAJOR = major
+consts._VERSION_MINOR = minor
+consts._VERSION_PATCH = patch
+consts._VERSION = string.format("%d.%d.%d", major, minor, patch)
+
 
 package.cpath = consts._LIBS_DIR.."lua/?.so;" .. package.cpath
 package.path  = consts._MODULES_DIR.."lua/?.lua;" .. package.path
@@ -147,6 +153,28 @@ Transfers that are not sufficiently overlapped may contribute to performance bot
         th_hidden = {
           default = 50,
           desc    = "Maximum percentage of hidden time a memory transfer can have to be reported."
+        }
+      },
+      default = true
+    },
+    coalescable_kernels = {
+      desc    = [[
+This rule detects multiple small, back-to-back launches of the same kernel that may be combined into a single, larger launch.
+Frequent small kernel invocations can cause excessive launch overhead and underutilization of GPU resources.
+Combining them may reduce launch latency and improve overall throughput.
+]],
+      opt = {
+        th_dur = {
+          default = 50000,
+          desc    = "Minimum duration (in ns) a kernel must have to be analyzed for coalescable optimization."
+        },
+        th_gap = {
+          default = 50000,
+          desc    = "Maximum gaps duration (in ns) between two kernel calls."
+        },
+        min_seq = {
+          default = 3,
+          desc    = "Length of the minimal sequence."
         }
       },
       default = true
