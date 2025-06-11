@@ -60,7 +60,7 @@ function Report.utils.execute_report(data, input_file, options_values, report_li
                 is_only_main = options_values.only_main,
                 is_trunc     = options_values.trunc,
                 is_mangled   = options_values.mangled,
-                report_opt   = report_data.opt
+                report_opt   = report_data.opt or {}
             }
 
             local report_obj = Report:new(attribute)
