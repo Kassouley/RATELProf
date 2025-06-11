@@ -75,6 +75,10 @@ function Report.utils.execute_report(data, input_file, options_values, report_li
                 end
             end
 
+            data.get_app_dur = function(self)
+                return self.lifecycle.destructor_stop - self.lifecycle.constructor_start
+            end
+
             data.get_gpu_id = function(self, handle)
                 return self.node_id[handle] or string.format('Unknown(%lu)', handle)
             end
@@ -293,14 +297,32 @@ end
 
 local MAX_WIDTH = 32 
 
+local function get_engineering_notation(n)
+    local function log10(x)
+        return math.log(x) / math.log(10)
+    end
+    if n == 0 then
+        return "0"
+    end
+
+    local exponent = math.floor(log10(math.abs(n)) / 3) * 3
+    local scaled = n / (10 ^ exponent)
+
+    local formatted_scaled = string.format("%.3f", scaled)
+
+    formatted_scaled = formatted_scaled:gsub("(%..-)[0]+$", "%1")
+    formatted_scaled = formatted_scaled:gsub("%.$", "")
+
+    return formatted_scaled .. "e" .. tostring(exponent)
+end
+
+
 local function get_raw_number(n)
     return tonumber(n)
 end
 
 local function get_scientific_number(n)
-    if n > 1000 then return string.format("%.3e", n):gsub("e", "E")
-    elseif ratelprof.utils.is_integer(n) then return string.format("%d", n) end
-    return string.format("%.3f", n)
+    return string.format("%.3e", n)
 end
 
 local function get_separator_number(n)
@@ -333,6 +355,7 @@ end
 local get_notation_number = {
     ["raw"] = get_raw_number, 
     ["scientific"] = get_scientific_number,
+    ["engineering"] = get_engineering_notation,
     ["thousands-separator"] = get_separator_number
 }
 

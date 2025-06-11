@@ -66,9 +66,8 @@ consts_helper.profile = {
             desc            = string.format([[ 
 
                 Possible values are %s or 'none'.
-                Select the API(s) to trace. Multiple APIs can be selected, separated by commas only
-                (no spaces).
-                If 'none' is selected, no APIs are traced.
+                Select the API(s) to trace. Multiple APIs can be selected, separated by commas only (no spaces).
+                If 'none' is selected, no API is traced.
                 'gpu' is equivalent to 'kernel,memory,barrier'.
                 'cpu' is equivalent to all other APIs.
                 'omp' is equivalent to 'omp-routine,omp-region,omp-tgt-rtl'.
@@ -259,7 +258,7 @@ consts_helper.stats = {
         ['notation'] = {
             desc            = [[ 
                 Change number notation of output reports.
-                Possible values : 'raw', 'scientific', 'thousands-separator'
+                Possible values : 'raw', 'scientific', 'engineering' or 'thousands-separator'
                 Default is 'scientific' for csv/tsv format, and 'thousands-separator' for other.
                 If value is invalid, option is skipped and default is used.]],
             sname           = nil,
