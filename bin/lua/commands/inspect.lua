@@ -1,4 +1,5 @@
 local kernel_helper = require ("commands.inspect.kernel_helper")
+local agent_helper  = require ("commands.inspect.agent_helper")
 
 local inspect = {}
 
@@ -13,7 +14,7 @@ local function inspect_kernels(application, opt)
     local trunc = ratelprof.get_opt_val(opt, "trunc")
     local save_json = ratelprof.get_opt_val(opt, "save-json")
 
-    local output_file = output or "inspect_"..ratelprof.fs.basename(application)..".csv"
+    local output_file = output or ("inspect_"..ratelprof.fs.basename(application)..".csv")
     if not ratelprof.fs.has_extension(output_file, ".csv") then
         Message:error("Output file need to be a CSV")
         os.exit(1)
@@ -58,8 +59,20 @@ local function inspect_kernels(application, opt)
     end
 end
 
+local function inspect_agents()
+    agent_helper.print_gpu_data()
+end
+
 function inspect.process_inspecting(positional_args, opt)
-    inspect_kernels(positional_args[1], opt)
+
+    if ratelprof.get_opt_val(opt, "info") == "agents" then
+        inspect_agents()
+    elseif ratelprof.get_opt_val(opt, "info") == "kernels" then
+        inspect_kernels(positional_args[1], opt)
+    else
+        Message:print ("Invalid inspect option. Use 'agents' or 'kernels'.")
+        os.exit(1)
+    end
 end
 
 return inspect

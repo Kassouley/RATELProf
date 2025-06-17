@@ -13,7 +13,7 @@ function main(arg)
     local script = Script:new(attribute)
 
     script:set_desc(ratelprof.consts_helper.inspect.desc)
-    script:set_execute_function(inspect.processinspecting)
+    script:set_execute_function(inspect.process_inspecting)
 
     local args = ratelprof.consts_helper.inspect.args["application"]
     script:add_argument("application", args.is_optional, args.is_list, args.desc)
