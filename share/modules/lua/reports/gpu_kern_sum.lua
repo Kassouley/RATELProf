@@ -28,21 +28,21 @@ return function(traces_data, report_obj, opt)
     report_obj:set_type("Summary")
 
     report_obj:set_headers({
-        "App Time (%)",
-        "API Time (%)",
-        "Total Time ("..timeunit..")", 
-        "Instances", 
-        "Avg ("..timeunit..")", 
-        "Med ("..timeunit..")", 
-        "Min ("..timeunit..")", 
-        "Max ("..timeunit..")", 
-        "StdDev ("..timeunit..")",
-        "Total QTime ("..timeunit..")", 
-        "QAvg ("..timeunit..")", 
-        "QMed ("..timeunit..")", 
-        "QMin ("..timeunit..")", 
-        "QMax ("..timeunit..")", 
-        "QStdDev ("..timeunit..")",
+        "App Time (%)", -- 1
+        "API Time (%)", -- 2
+        "Total Time ("..timeunit..")", -- 3
+        "Instances",  -- 4
+        "Avg ("..timeunit..")", -- 5
+        "Med ("..timeunit..")", -- 6
+        "Min ("..timeunit..")", -- 7
+        "Max ("..timeunit..")",  --8
+        "StdDev ("..timeunit..")", -- 9
+        "Total QTime ("..timeunit..")", -- 3
+        "QAvg ("..timeunit..")", -- 5
+        "QMed ("..timeunit..")", -- 6
+        "QMin ("..timeunit..")", -- 7
+        "QMax ("..timeunit..")", -- 8
+        "QStdDev ("..timeunit..")", -- 9
         "GridX", 
         "GridY", 
         "GridZ", 
@@ -87,6 +87,7 @@ return function(traces_data, report_obj, opt)
             statistic_table_for_queue_time[6], 
             statistic_table_for_queue_time[7],
             statistic_table_for_queue_time[8],
+            statistic_table_for_queue_time[9],
             entry_dur_time.key_tab[1],
             entry_dur_time.key_tab[2],
             entry_dur_time.key_tab[3],

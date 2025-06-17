@@ -64,8 +64,8 @@ local function find_hidden_latency(copy_data, kernel_data, gpu_node_id_map, TIME
                 total_time_per_gpu[copy_gpu_id] = total_time_per_gpu[copy_gpu_id] + dur_copy
 
                 items[#items+1] = {
-                    copy_gpu_id,
-                    id,
+                    tostring(copy_gpu_id),
+                    tostring(id),
                     ratelprof.utils.get_copy_name(copy.args.src_type, copy.args.dst_type),
                     copy.args.size,
                     string.format("%.2f", hidden_percentage),
@@ -110,7 +110,7 @@ return function(traces_data, report_obj, opt)
     end
 
     report_obj:set_headers({
-        "GPU Node ID",
+        "GPU ID",
         "Copy ID",
         "Operation",
         "Size (B)",

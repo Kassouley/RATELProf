@@ -73,10 +73,10 @@ return function(traces_data, report_obj, opt)
                 }
                 if is_synchronized(gpuCpy, corr_hip_trace) then
                     table.insert(data, {
-                        corr_id,
+                        tostring(corr_id),
                         hip_cpy,
-                        corr_hip_trace.pid,
-                        corr_hip_trace.tid,
+                        tostring(corr_hip_trace.pid),
+                        tostring(corr_hip_trace.tid),
                         ratelprof.utils.get_copy_name(gpuCpy.src_type, gpuCpy.dst_type),
                         report_helper.get_size(gpuCpy.size),
                         report_helper.get_duration(corr_hip_trace.dur, opt.timeunit),

@@ -43,8 +43,8 @@ function find_gaps(kernel_traces, gap_th, gpu_node_id_map)
             local gap_dur = SRj_plus_1["start"] - ERj["stop"]
             if gap_dur > gap_th then
                 table.insert(gaps, {
-                    gpu_id,
-                    #gaps + 1,
+                    tostring(gpu_id),
+                    tostring(#gaps + 1),
                     string.format("%.0f", ERj["stop"]), 
                     string.format("%.0f", SRj_plus_1["start"]),
                     gap_dur
@@ -79,7 +79,7 @@ return function(traces_data, report_obj, opt)
     end
 
     report_obj:set_headers({
-        "GPU Node ID",
+        "GPU ID",
         "Range ID",
         "Start",
         "End",

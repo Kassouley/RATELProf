@@ -12,7 +12,7 @@ return function(traces_data, report_obj, opt)
         "Operation",
         "Size (MB)",
         "CPU Duration (ns)",
-        "GPU Duration (ns)"
+        "GPU Duration (ns)",
     })
 
     local cpy_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY)
@@ -38,11 +38,11 @@ return function(traces_data, report_obj, opt)
             nb_api_cpy = nb_api_cpy + 1
             if hip_cpy:match("^hipMemcpy") and not hip_cpy:match("Async$") then
                 table.insert(data, {
-                    id,
-                    gpuCpy.corr_id,
+                    tostring(id),
+                    tostring(gpuCpy.corr_id),
                     hip_cpy,
-                    corr_hip_trace.pid,
-                    corr_hip_trace.tid,
+                    tostring(corr_hip_trace.pid),
+                    tostring(corr_hip_trace.tid),
                     ratelprof.utils.get_copy_name(gpuCpy.args.src_type, gpuCpy.args.dst_type),
                     report_helper.get_size(gpuCpy.args.size),
                     report_helper.get_duration(corr_hip_trace.dur, opt.timeunit),

@@ -24,8 +24,8 @@ local function find_coalescable_kernels(kernel_data, gpu_node_id_map, DURATION_T
             ideal_app_duration = ideal_app_duration - sequence_dur + ideal_duration
 
             table.insert(items, {
-                gpu_node_id,
-                queue_id,
+                tostring(gpu_node_id),
+                tostring(queue_id),
                 #sequence,
                 sequence_start,
                 sequence_stop,
@@ -106,7 +106,7 @@ return function(traces_data, report_obj, opt)
     end
 
     report_obj:set_headers({
-        "GPU Node ID",
+        "GPU ID",
         "Queue ID",
         "Seq Length",
         "Seq Start",
