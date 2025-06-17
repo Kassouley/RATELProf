@@ -1,3 +1,11 @@
+#trace-info {
+    font-size: 1rem;
+    padding: 10px;
+    background-color: var(--secondary-bg);
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
 table.column {
     width: 100%;
     border-collapse: collapse;

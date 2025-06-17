@@ -19,15 +19,16 @@
   <link rel="stylesheet" href="css/vis-custom.css">
   <link rel="stylesheet" href="css/timeline-section.css">
   <link rel="stylesheet" href="css/details-section.css">
+
+
+  <script src="js/tab.js"></script>
 </head>
 
 <body>
   <!-- Page Header -->
-  <div class="header">
-    <div class="title">
-      <img src="assets/images/ratel_logo.png" alt="Logo" class="ratel-logo">
-      <h1>RATELProf Timeline Visualization</h1> 
-    </div>
+  <div class="title">
+    <img src="assets/images/ratel_logo.png" alt="Logo" class="ratel-logo">
+    <h1>RATELProf Timeline Visualization</h1> 
   </div>
     
   <div class="info-container">
@@ -49,89 +50,72 @@
   </div>
 
   <main>
-    <!-- Timeline Container -->
-    <section id="timeline-container">
-      <div id="timeline" role="region" aria-label="Trace timeline"></div>
-    </section>
+    <div class="tabs">
+      <button id= "btn-tab-tl" class="active" onclick="openTab(event, 'tab1')">Timeline</button>
+      <button onclick="openTab(event, 'tab2')">Statistics</button>
+      <button onclick="openTab(event, 'tab3')">Analyze</button>
+    </div>
 
-    <!-- Navigation Section -->
-    <section id="navigation">
-      <table>
-        <tr>
-          <td class="left">
-            <div class="trace-select">
-              <input type="text" id="id_input" placeholder="Enter Trace ID" aria-label="Trace ID">
-              <button id="goto" aria-label="Go to Trace ID">Go to</button>
-            </div>
-          </td>
-          <td class="center">
-            <div class="menu">
-              <button id="moveLeft" aria-label="Move timeline left">&laquo;</button>
-              <span>-</span>
-              <input id="zoom-slider" type="range" min="0" max="200" value="100">
-              <span>+</span>
-              <button id="moveRight" aria-label="Move timeline right">&raquo;</button>
-            </div>
-          </td>
-          <td class="right">
-            <input id="show-dispatch" type="checkbox"><label for="show-dispatch"> Show dispatches</label>
-          </td>
-        </tr>
-      </table>
-    </section>
+      <!-- Contenu des onglets -->
+    <div id="tab1" class="tab-content active">
+      <!-- Timeline Container -->
+      <section id="timeline-container">
+        <div id="timeline" role="region" aria-label="Trace timeline"></div>
+      </section>
 
-
-    <!-- Trace Details Section -->
-    <section id="details">
-      <div class="tabs">
-        <button class="tab-button active" onclick="openTab(event, 'tab1')">Trace Details</button>
-        <button class="tab-button"        onclick="openTab(event, 'tab2')">Statistics</button>
-        <button class="tab-button"        onclick="openTab(event, 'tab3')">Analyze</button>
+      <!-- Navigation Section -->
+      <section id="nav">
+        <table>
+          <tr>
+            <td class="left">
+              <div class="trace-select">
+                <input type="text" id="id_input" placeholder="Enter Trace ID" aria-label="Trace ID">
+                <button id="goto" aria-label="Go to Trace ID">Go to</button>
+              </div>
+            </td>
+            <td class="center">
+                <button id="moveLeft" aria-label="Move timeline left">&laquo;</button>
+                <span>-</span>
+                <input id="zoom-slider" type="range" min="0" max="200" value="100">
+                <span>+</span>
+                <button id="moveRight" aria-label="Move timeline right">&raquo;</button>
+            </td>
+            <td class="right">
+              <input id="show-dispatch" type="checkbox"><label for="show-dispatch"> Show dispatches</label>
+            </td>
+          </tr>
+        </table>
+      </section>
+      <div id="trace-info" aria-live="polite">
+        Click on a trace to view details here.
       </div>
+    </div>
 
-        <!-- Contenu des onglets -->
-      <div id="tab1" class="tab-content active">
-        <div id="trace-info" aria-live="polite">
-          Click on a trace to view details here.
+    <div id="tab2" class="tab-content">
+      <div id="csv-container-stats" class="csv-container">
+        <div class="csv-list">
+          <ul id="csvList-stats"></ul>
+        </div>
+        <div id="tableContainer-stats" class="table-container">Select a CSV file to view its data.</div>
+      </div>
+    </div>
+
+    <div id="tab3" class="tab-content">
+      <div id="csv-container-analyze" class="csv-container">
+        <div class="csv-list">
+          <ul id="csvList-analyze"></ul>
+        </div>
+        <div id="tableContainer-analyze" class="table-container">
+            Select a CSV file to view its data.
         </div>
       </div>
+    </div>
 
-      <div id="tab2" class="tab-content">
-        <div id="csv-container">
-          <!-- Left Column: CSV Names -->
-          <div class="csv-list">
-              <ul id="statsList"></ul>
-          </div>
-
-          <!-- Right Column: CSV Content -->
-          <div class="csv-content" id="statsContent">
-              Select a CSV file to view its data
-          </div>
-        </div>
-      </div>
-
-      <div id="tab3" class="tab-content">
-        <div id="csv-container">
-          <!-- Left Column: CSV Names -->
-          <div class="csv-list">
-              <ul id="analyzeList"></ul>
-          </div>
-
-          <!-- Right Column: CSV Content -->
-          <div class="csv-content" id="analyzeContent">
-              Select a CSV file to view its data
-          </div>
-        </div>
-      </div>
-
-      <script src="js/msgpack.js"></script>
-      <script src="js/timeline.js"></script>
-      <script src="js/utils.js"></script>
-      <script src="js/main.min.js"></script>
-      <script src="js/csv.js"></script>
-      <script src="js/tab.js"></script>
-  
-    </section>
+    <script src="js/msgpack.js"></script>
+    <script src="js/timeline.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/main.min.js"></script>
+    <script src="js/csv.js"></script>
   </main>
 
   <footer>

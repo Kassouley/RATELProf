@@ -7,17 +7,3 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: var(--secondary-bg);
 }
-
-#details {
-    background-color: var(--secondary-bg);
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#trace-info {
-    font-size: 1rem;
-    background-color: var(--secondary-bg);
-    border-radius: 4px;
-    border: none;
-}

@@ -5,8 +5,8 @@
 }
 
 /* Boutons des onglets */
-.tab-button {
-    background-color: #f1f1f1;
+.tabs button {
+    background-color: var(--secondary-bg);
     color: var(--text-color);
     border: none;
     padding: 12px 20px;
@@ -16,7 +16,7 @@
 }
 
 /* Effet au survol et activation */
-.tab-button:hover, .tab-button.active {
+.tabs button:hover, .tabs button.active {
     background-color: #ddd;
 }
 
@@ -26,6 +26,8 @@
     padding: 20px;
     border: 1px solid #ddd;
     border-top: none;
+    background-color: var(--secondary-bg);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Affichage de l'onglet actif */

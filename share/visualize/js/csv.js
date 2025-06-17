@@ -1,116 +1,154 @@
-const sortState = {}; // Store sort states per table type
 
-function escapeHTML(str) {
-    return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
+function setupCSVViewer(tabId) {
+    const csvData = csvDataPerTab[tabId];
+    const listEl = document.getElementById(`csvList-${tabId}`);
+    const tableContainer = document.getElementById(`tableContainer-${tabId}`);
+
+    for (const fileName in csvData) {
+        const file = csvData[fileName];
+        const li = document.createElement('li');
+        li.textContent = fileName;
+        li.onclick = () => displayData(file, tableContainer);
+        listEl.appendChild(li);
+    }
 }
 
-function displayCSV(data, type) {
-    const tableId = `${type}Table`;
-    let html = `<table class='csvTable' id='${tableId}'><thead><tr>`;
+function displayData(file, tableContainer) {
+    tableContainer.innerHTML = '';
+    if (file.msg) displayMSG(file, tableContainer);
+    if (file.content.length > 0) displayCSV(file, tableContainer);
+}
 
-    const headers = data[0].split(",");
+function displayMSG(file, tableContainer) {
+  const box = document.createElement('div');
+  box.className = 'box';
 
-    // Table headers with sorting event
-    headers.forEach((col, index) => {
-        html += `<th data-index="${index}" data-type="${type}" class="sortable">${col}<span class="sort-arrow" id="arrow-${type}-${index}"> ⭥</span></th>`;
+  const toggleBtn = document.createElement('div');
+  toggleBtn.className = 'toggle-btn';
+  toggleBtn.textContent = '+';
+  toggleBtn.onclick = function () {
+    toggleContent(this);
+  };
+
+  const labelText = document.createTextNode(' Advices');
+
+  const contentBox = document.createElement('div');
+  contentBox.className = 'content-box';
+
+  const paragraph = document.createElement('div');
+  paragraph.innerHTML = file.msg || '<i>No content provided.</i>';
+
+  contentBox.appendChild(paragraph);
+  box.appendChild(toggleBtn);
+  box.appendChild(labelText);
+  box.appendChild(contentBox);
+  tableContainer.appendChild(box);
+}
+
+function toggleContent(btn) {
+  const content = btn.nextElementSibling;
+  const isShown = content.classList.toggle('show');
+  btn.textContent = isShown ? '−' : '+';
+}
+
+
+function displayCSV(file, tableContainer) {
+    if (!file.hiddenCols) file.hiddenCols = new Set();
+    const { content, sortState, hiddenCols } = file;
+    const rows = content.map(row => row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g));
+
+    const table = document.createElement('table');
+    table.className = 'csvTable';
+
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+
+    rows[0].forEach((header, index) => {
+    if (hiddenCols.has(index)) return;
+    const th = document.createElement('th');
+    th.textContent = header;
+    th.classList.add('sortable');
+    th.onclick = () => {
+        const isSameCol = sortState?.col === index;
+        const direction = isSameCol && sortState.direction === 'asc' ? 'desc' : 'asc';
+        file.sortState = { col: index, direction };
+        tableContainer.innerHTML = '';
+        displayData(file, tableContainer);
+    };
+    if (sortState && sortState.col === index) {
+        th.classList.add(sortState.direction);
+    }
+    headerRow.appendChild(th);
     });
 
-    html += "</tr></thead><tbody>";
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
 
-    // Table rows
-    html += data.slice(1).map(row => {
-        const cells = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)
-            .map(cell => escapeHTML(cell));
-        return `<tr><td>${cells.join("</td><td>")}</td></tr>`;
-    }).join("");
+    const tbody = document.createElement('tbody');
+    let dataRows = rows.slice(1);
 
+    if (sortState) {
+    const { col, direction } = sortState;
+    dataRows.sort((a, b) => {
+        const aText = a[col]?.trim() ?? "";
+        const bText = b[col]?.trim() ?? "";
+        const aNum = parseFloat(aText);
+        const bNum = parseFloat(bText);
+        let cmp;
+        if (!isNaN(aNum) && !isNaN(bNum)) {
+        cmp = aNum - bNum;
+        } else {
+        cmp = aText.localeCompare(bText);
+        }
+        return direction === 'asc' ? cmp : -cmp;
+    });
+    }
 
-    html += "</tbody></table>";
-    return html;
-}
-
-function sortTable(col, type) {
-    const table = document.getElementById(`${type}Table`);
-    const tbody = table.querySelector("tbody");
-    const rows = Array.from(tbody.rows);
-
-    // Initialize sorting state if not present
-    if (!sortState[type]) sortState[type] = { col: null, ascending: true };
-
-    const state = sortState[type];
-    const is_ascending = state.ascending;
-
-    // Toggle sorting order if sorting same column, otherwise reset to ascending
-    state.ascending = state.col === col ? !state.ascending : true;
-    state.col = col;
-
-    rows.sort((rowA, rowB) => {
-        const cellA = rowA.cells[col].textContent.trim();
-        const cellB = rowB.cells[col].textContent.trim();
-
-        const numA = parseFloat(cellA);
-        const numB = parseFloat(cellB);
-
-        return !isNaN(numA) && !isNaN(numB)
-            ? (is_ascending ? numA - numB : numB - numA)
-            : (is_ascending? cellA.localeCompare(cellB) : cellB.localeCompare(cellA));
+    dataRows.forEach(row => {
+    const tr = document.createElement('tr');
+        row.forEach((cell, index) => {
+            if (hiddenCols.has(index)) return;
+            const td = document.createElement('td');
+            td.textContent = cell;
+            tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
     });
 
-    // Apply sorted rows using DocumentFragment for better performance
-    const fragment = document.createDocumentFragment();
-    rows.forEach(row => fragment.appendChild(row));
-    tbody.innerHTML = "";
-    tbody.appendChild(fragment);
+    table.appendChild(tbody);
 
-    // Update sort arrows
-    document.querySelectorAll(`#${type}Table .sort-arrow`).forEach(arrow => arrow.textContent = " ⭥");
-    document.getElementById(`arrow-${type}-${col}`).textContent = is_ascending ? " ⭡" : " ⭣";
+    // Column toggle buttons
+    rows[0].forEach((header, index) => {
+    const btn = document.createElement('button');
+    btn.textContent = `${hiddenCols.has(index) ? '[+]' : '[-]'} ${header}`;
+    btn.className = hiddenCols.has(index) ? ' hidden' : '';
+    btn.onclick = () => {
+        if (hiddenCols.has(index)) hiddenCols.delete(index);
+        else hiddenCols.add(index);
+        displayData(file, tableContainer);
+    };
+    tableContainer.appendChild(btn);
+    });
+
+    tableContainer.appendChild(table);
 }
 
-function showCSVContent(csv, type) {
-    sortState[type] = { col: null, ascending: true }; // Reset sorting
-    const contentEl = document.getElementById(`${type}Content`);
-    let data = "";
-    if (csv.msg) data += `<p>${csv.msg}</p>`;
-    if (csv.data.length !== 0 != 0) data += displayCSV(csv.data, type);
-    if (data == "") data = "No data available this report.";
-    contentEl.innerHTML = data;
-}
+// Setup CSV Viewers for each tab
+setupCSVViewer("stats");
+setupCSVViewer("analyze");
 
-function createCSVList(csv_data, type) {
-    const listContainer = document.getElementById(`${type}List`);
-    listContainer.innerHTML = csv_data.map(csv => 
-        `<li data-type="${type}" data-name="${csv.name}">${csv.name}</li>`).join("");
-}
-
-// Event Delegation for sorting
 document.addEventListener("click", event => {
-    if (event.target.matches(".sortable")) {
-        const col = event.target.dataset.index;
-        const type = event.target.dataset.type;
-        sortTable(Number(col), type);
+    const statsTableContainer = document.getElementById('tableContainer-stats');
+    const clickedRow = event.target.closest("tr");
+    
+    // Check if the click is within the stats tab table and on a row
+    if (statsTableContainer?.contains(event.target) && clickedRow) {
+        // Open tab1
+        openTabAux(document.querySelector('#btn-tab-tl'), "tab1");
 
-    } else if (event.target.closest("li")) {
-        // Handling CSV list click
-        const listItem = event.target.closest("li");
-        const type = listItem.dataset.type;
-        const name = listItem.dataset.name;
-        const csv = (type === "stats" ? csv_stats : csv_analyze).find(c => c.name === name);
-        if (csv) showCSVContent(csv, type);
-
-    } else if (event.target.closest("tr")) {
         const itemsDataSet = timelineObject.itemsData;
-        const itemName = event.target.closest("tr").lastElementChild.textContent.trim();
+        const itemName = clickedRow.lastElementChild.textContent.trim();
         const ids = itemsDataSet.get().filter(item => item.content === itemName).map(item => item.id);
         timelineObject.setSelection(ids, { focus: true });
     }
 });
-
-// Initialize lists
-createCSVList(csv_stats, "stats");
-createCSVList(csv_analyze, "analyze");

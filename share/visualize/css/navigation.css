@@ -1,26 +1,38 @@
-#navigation table {
+#nav table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
 }
 
-#navigation td {
+#nav td {
   vertical-align: middle;
 }
 
-#navigation td.left {
+#nav td.left {
   text-align: left;
 }
 
-#navigation td.center {
-  text-align: center;
+.trace-select {
+  display: flex;
+  gap: 5px;
+  align-items: center;
 }
 
-#navigation td.right {
+.trace-select input[type="text"] {
+  padding: 6px;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  width: 200px;
+}
+
+
+#nav td.right {
   text-align: right;
 }
 
-.menu {
+#nav td.center {
+  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,7 +41,7 @@
   margin: 10px;
 }
 
-.menu button {
+#nav td.center button {
   padding: 8px 16px;
   margin-left: 2px;
   margin-right: 2px;
@@ -40,7 +52,7 @@
   width: 200px;
   height: 7px;
   border-radius: 5px;  
-  background: var(--secondary-bg);
+  background: var(--primary-bg);
   outline: none;
   opacity: 0.7;
   -webkit-transition: .2s;
@@ -63,18 +75,4 @@
   border-radius: 50%;
   background: #3c6e71;
   cursor: pointer;
-}
-
-.trace-select {
-  display: flex;
-  gap: 5px;
-  align-items: center;
-}
-
-.trace-select input[type="text"] {
-  padding: 6px;
-  font-size: 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  width: 200px;
 }
