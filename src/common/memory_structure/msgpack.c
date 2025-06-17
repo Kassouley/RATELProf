@@ -11,7 +11,8 @@ static int msgpack_reserve(msgpack_buffer_t *buf, size_t additional_size) {
         return 0; // No need to grow or flush
     }
 
-    if (buf->overflow_mode == MSGPACK_OVERFLOW_WRITE_TO_FILE) {
+    if (buf->overflow_mode == MSGPACK_OVERFLOW_WRITE_TO_FILE
+        || buf->overflow_mode == MSGPACK_OVERFLOW_APPEND_TO_FILE) {
         if (additional_size <= buf->capacity) {
             msgpack_write(buf);
             return 0;
@@ -61,16 +62,17 @@ int msgpack_init(msgpack_buffer_t *buf, size_t capacity, msgpack_overflow_mode_t
         return -1;
     }
 
-    if (mode == MSGPACK_OVERFLOW_WRITE_TO_FILE) {
-        if (filename) {
-            buf->file = fopen(filename, "wb");
-            if (!buf->file) {
-                fprintf(stderr, "msgpack_init: failed to open file '%s'\n", filename);
-                free(buf->data);
-                return -1;
-            }
-        } else {
+    if (mode == MSGPACK_OVERFLOW_APPEND_TO_FILE || mode == MSGPACK_OVERFLOW_WRITE_TO_FILE) {
+        if (!filename) {
             fprintf(stderr, "msgpack_init: filename required for WRITE_TO_FILE mode\n");
+            free(buf->data);
+            return -1;
+        }
+
+        const char *mode_str = (mode == MSGPACK_OVERFLOW_APPEND_TO_FILE) ? "ab" : "wb";
+        buf->file = fopen(filename, mode_str);
+        if (!buf->file) {
+            fprintf(stderr, "msgpack_init: failed to open file '%s'\n", filename);
             free(buf->data);
             return -1;
         }
@@ -81,7 +83,8 @@ int msgpack_init(msgpack_buffer_t *buf, size_t capacity, msgpack_overflow_mode_t
 }
 
 int msgpack_free(msgpack_buffer_t *buf) {
-    if (buf->overflow_mode == MSGPACK_OVERFLOW_WRITE_TO_FILE && buf->file) {
+    if ((buf->overflow_mode == MSGPACK_OVERFLOW_WRITE_TO_FILE 
+        || buf->overflow_mode == MSGPACK_OVERFLOW_APPEND_TO_FILE) && buf->file) {
         msgpack_write(buf);
         fclose(buf->file);
         buf->file = NULL;
@@ -265,8 +268,9 @@ int msgpack_encode_ext(msgpack_buffer_t *buf, int8_t type, const uint8_t *data, 
     }
 
     buf->data[buf->size++] = (uint8_t)type;
-    memcpy(buf->data + buf->size, data, len);
-    buf->size += len;
-
+    if (data && len) {
+        memcpy(buf->data + buf->size, data, len);
+        buf->size += len;
+    }
     return 0;
 }

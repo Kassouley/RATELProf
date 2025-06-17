@@ -8,7 +8,8 @@
 /* Buffer overflow handling modes */
 typedef enum {
     MSGPACK_OVERFLOW_REALLOC,
-    MSGPACK_OVERFLOW_WRITE_TO_FILE
+    MSGPACK_OVERFLOW_WRITE_TO_FILE,
+    MSGPACK_OVERFLOW_APPEND_TO_FILE
 } msgpack_overflow_mode_t;
 
 /* MessagePack buffer structure */
