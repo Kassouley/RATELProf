@@ -110,56 +110,52 @@ function utils.get_gpu_id(trace, gpu_node_id_map)
     end
     return gpu_node_id_map[gpu_agent] or gpu_agent
 end
-
 local function generate_json(value, indent)
     indent = indent or 0
     local indentation = string.rep(" ", indent)
     local json_parts = {}
 
-    if type(value) ~= "table" then
-        if type(value) == "string" then
-            return string.format("%q", value) -- Escape strings for JSON
-        else
-            return string.format("%.0f", value)
-        end
+    local function escape_string(str)
+        return string.format("%q", str):gsub("\\\n", "\\n") -- Clean up newline
     end
 
-    -- Check if the table is an array (has sequential numeric indices)
+    if type(value) == "string" then
+        return escape_string(value)
+    elseif type(value) == "number" then
+        return tostring(value)
+    elseif type(value) == "boolean" then
+        return tostring(value)
+    elseif type(value) == "nil" then
+        return "null"
+    elseif type(value) ~= "table" then
+        error("Unsupported type: " .. type(value))
+    end
+
+    -- Detect if it's an array (sequential integer keys)
     local is_array = true
-    local count = 0
+    local i = 0
     for k, _ in pairs(value) do
-        count = count + 1
-        if type(k) ~= "number" or k ~= count then
+        i = i + 1
+        if type(k) ~= "number" or k ~= i then
             is_array = false
             break
         end
     end
 
     if is_array then
-        -- Handle JSON list (array)
         table.insert(json_parts, "[\n")
         for i, v in ipairs(value) do
-            if i > 1 then
-                table.insert(json_parts, ",\n")
-            end
+            if i > 1 then table.insert(json_parts, ",\n") end
             table.insert(json_parts, indentation .. "  " .. generate_json(v, indent + 2))
         end
         table.insert(json_parts, "\n" .. indentation .. "]")
     else
-        -- Handle JSON object
         table.insert(json_parts, "{\n")
         local first = true
         for k, v in pairs(value) do
-            if not first then
-                table.insert(json_parts, ",\n")
-            end
+            if not first then table.insert(json_parts, ",\n") end
             first = false
-
-            local key = tostring(k)
-            if type(k) == "string" then
-                key = string.format("%q", k) -- Escape string keys
-            end
-
+            local key = escape_string(tostring(k))
             table.insert(json_parts, indentation .. "  " .. key .. ": " .. generate_json(v, indent + 2))
         end
         table.insert(json_parts, "\n" .. indentation .. "}")
@@ -167,6 +163,7 @@ local function generate_json(value, indent)
 
     return table.concat(json_parts)
 end
+
 
 utils.generate_json = generate_json
 

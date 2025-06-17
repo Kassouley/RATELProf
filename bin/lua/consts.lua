@@ -12,10 +12,6 @@ consts._VERSION_MINOR = minor
 consts._VERSION_PATCH = patch
 consts._VERSION = string.format("%d.%d.%d", major, minor, patch)
 
-
-package.cpath = consts._LIBS_DIR.."lua/?.so;" .. package.cpath
-package.path  = consts._MODULES_DIR.."lua/?.lua;" .. package.path
-
 consts._REPORT_EXT = "rprof-rep"
 
 consts._LIBS_NAME = {
@@ -250,5 +246,15 @@ consts._ALL_STATS_REPORT = {
         default = false
       }
     }
+
+consts._IDX_TOOL_INIT_STOP = 1
+consts._IDX_CONSTRUCTOR_START = 1
+consts._IDX_CONSTRUCTOR_STOP = 2
+consts._IDX_MAIN_START = 2
+consts._IDX_MAIN_STOP = 3
+consts._IDX_DESTRUCTOR_START = 3
+consts._IDX_DESTRUCTOR_STOP = 4
+consts._IDX_TOOL_FINI_START = 4
+consts._IDX_TOOL_FINI_STOP = 5
 
 return consts

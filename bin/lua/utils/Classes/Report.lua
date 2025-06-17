@@ -66,17 +66,21 @@ function Report.utils.execute_report(data, input_file, options_values, report_li
             local report_obj = Report:new(attribute)
 
             
+            local cached_trace = {}
             data.get = function(self, domain_name)
-                local domain_id = self.domain_id[domain_name].id
-                if domain_id then
-                    return self.trace_events[domain_id] or {}
-                else
-                    error("Domain name unkown")
+                if cached_trace[domain_name] then return cached_trace[domain_name] end
+                local ret = {}
+                for id, trace in pairs(self.trace_events[domain_name] or {}) do
+                    if not opt.is_only_main or trace.phase == "MAIN_PHASE" then
+                        ret[id] = trace
+                    end
                 end
+                cached_trace[domain_name] = ret
+                return ret
             end
-
+        
             data.get_app_dur = function(self)
-                return self.lifecycle.destructor_stop - self.lifecycle.constructor_start
+                return self.lifecycle[ratelprof.consts._IDX_DESTRUCTOR_STOP] - self.lifecycle[ratelprof.consts._IDX_CONSTRUCTOR_START]
             end
 
             data.get_gpu_id = function(self, handle)
@@ -134,8 +138,9 @@ function Report:new(attribute)
     if attribute.max_lines == "all" then
         instance.max_lines = attribute.max_lines
     else
-        instance.max_lines = tonumber(attribute.max_lines) or 50
+        instance.max_lines = tonumber(attribute.max_lines) or nil
     end
+    
     instance.notation = attribute.notation
 
     instance.report_name = "'No name set'"
@@ -254,9 +259,10 @@ end
 
 function Report:get_output_filename()
     if self.output == "-" or self.output:sub(1, 1) == "@" then
+        self.max_lines = self.max_lines or 50
         return nil
     end
-    self.max_lines = "all"
+    self.max_lines = self.max_lines or "all"
 
     local report_wo_ext = ratelprof.fs.remove_extension(self.trace_path)
     local file_extension = format_extensions[self.format] or "txt"
@@ -431,7 +437,7 @@ function Report:__format_data(separator, bsep, msep, asep, columnWidths)
         end
     end
 
-    if not is_all_data_shown then
+    if not is_all_data_shown and (format_extensions[self.format] == "txt" or self.output == "-") then
         result[#result + 1] = ". . . ("..data_size-ndata.." lines has been trunc for visibility, please use option --max-lines or export to a file)"
     end
 
