@@ -1,4 +1,5 @@
-local env = require ("commands.profile.env")
+local env           = require ("commands.profile.env")
+local agent_helper  = require ("commands.inspect.agent_helper")
 
 local profile = {}
 
@@ -28,9 +29,11 @@ local function handle_profile_option(options)
                 env.set_env(trace.var, "1")
             end
         else
-            Message:error("Trace '"..trace_name.."' is not supported. Skipping it.")
+            if trace_name ~= 'none' then
+                Message:warn("Trace '"..trace_name.."' is not supported. Skipping it.")
+            end
         end
-    end 
+    end
 
     local plugin_path = ratelprof.get_opt_val(options, "plugin")
     if plugin_path then
@@ -152,6 +155,8 @@ function profile.process_profiling(positional_args, options_values)
     else
         normal_execution (run_command)
     end
+
+    agent_helper.set_gpu_props_to_msgpack(output_file)
 
     local bytes_written = ratelprof.fs.get_size(output_file)
     Message:print ("RPROF: Bytes written in '"..output_file.."' : "..bytes_written)

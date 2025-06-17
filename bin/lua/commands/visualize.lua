@@ -1,7 +1,6 @@
 -- visualize.lua
 local preprocess = require ("commands.visualize.preprocess")
 local merge_csv  = require("commands.visualize.merge_csv")
-local msgpack    = require ("msgpack_decoder")
 
 local visualize = {}
 
@@ -17,7 +16,7 @@ function visualize.process_visualizing(positional_args, options_values)
     local html_content = html_file:read("*all")
     html_file:close()
 
-    local data = msgpack.decode_msgpack_binary(report_file)
+    local data = ratelprof.msgpack.decode(report_file)
 
     preprocess.init(data)
     preprocess.run(options_values)

@@ -1,7 +1,6 @@
 -- stats.lua
 local options_helper = require ("options_helper")
 local Report         = require ("utils.Classes.Report")
-local msgpack        = require ("msgpack_decoder")
 
 local stats = {}
 
@@ -12,7 +11,7 @@ function stats.process_stats (positional_args, options_values)
     
     local opt = options_helper.handle_stats_analyze_option(options_values)
     
-    local data = msgpack.decode_msgpack_binary(report_file)
+    local data = ratelprof.msgpack.decode(report_file)
     Report.utils.execute_report(data, report_file, opt, ratelprof.consts._ALL_STATS_REPORT)
 end
 

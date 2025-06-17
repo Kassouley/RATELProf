@@ -1,7 +1,3 @@
-local msgpack = require ("msgpack_decoder")
-
-local preprocess = require ("commands.visualize.preprocess")
-
 local export = {}
 
 local function write_to_output_file(report_file, data, ext)
@@ -14,7 +10,7 @@ local function write_to_output_file(report_file, data, ext)
 end
 
 local function export_json(report_file)
-    local data = msgpack.decode_msgpack_binary(report_file)
+    local data = ratelprof.msgpack.decode(report_file)
     local json_data = ratelprof.utils.generate_json(data)
 
     write_to_output_file(report_file, json_data, ".json")
@@ -60,21 +56,16 @@ end
 
 
 local function export_arg_info(report_file)
-    local data = msgpack.decode_msgpack_binary(report_file)
-    local domain_map_name_id = data.domain_id
-    local domain_map_id_name = {}
-    for domain_name, domain in pairs(domain_map_name_id) do
-        domain_map_id_name[domain.id] = domain_name
-    end
+    local data = ratelprof.msgpack.decode(report_file)
     local arg_info_data = {}
     local trace_events = data.trace_events
-    for domain_id, domain in pairs(trace_events) do
+    for domain_name, domain in pairs(trace_events) do
         for event_id, event in pairs(domain) do
             if event.name then
                 local name = event.name
                 local args = event.args
                 local arg_info = format_call(name, args)
-                local entry = string.format("%-32s | %8s | %s", domain_map_id_name[domain_id], event_id, arg_info)
+                local entry = string.format("%-32s | %8s | %s", domain_name, event_id, arg_info)
                 arg_info_data[#arg_info_data + 1] = entry
             end
         end
