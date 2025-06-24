@@ -1,0 +1,31 @@
+
+.csv ul {
+  border-right: 1px solid var(--border-color);
+  width: 15%;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  padding-right: 10px;
+}
+
+.csv li {
+  cursor: pointer;
+  background-color: var(--primary-bg);
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.csv li:hover {
+  background-color: var(--hover-color);
+}
+
+.csv li.active {
+  background-color: var(--primary-color);
+  color: var(--text-color-light);
+}
+
+.csv li.active:hover {
+  background-color: var(--secondary-color);
+  color: var(--text-color-light);
+}

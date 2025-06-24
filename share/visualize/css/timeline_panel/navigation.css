@@ -1,0 +1,86 @@
+#nav table,
+#nav th,
+#nav tr,
+#nav td {
+  all: revert;
+}
+
+
+#nav table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+#nav td {
+  vertical-align: middle;
+}
+
+#nav td.left {
+  text-align: left;
+}
+
+.trace-select {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.trace-select input[type="text"] {
+  padding: 6px;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  width: 200px;
+}
+
+
+#nav td.right {
+  text-align: right;
+}
+
+#nav td.center {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 18px;
+  margin: 10px;
+}
+
+#nav td.center button {
+  padding: 8px 16px;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+#zoom-slider {
+  -webkit-appearance: none;
+  width: 200px;
+  height: 7px;
+  border-radius: 5px;  
+  background: var(--primary-bg);
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+#zoom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%; 
+  background: #3c6e71;
+  cursor: pointer;
+}
+
+#zoom-slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #3c6e71;
+  cursor: pointer;
+}

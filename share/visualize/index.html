@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RATELProf - "@@HTML_TITLE@@"</title>
+
+    <link rel="stylesheet" href="vis/vis-timeline-graph2d.min.css">
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/table.css">
+    <link rel="stylesheet" href="css/button.css">
+    <link rel="stylesheet" href="css/panel.css">
+    <link rel="stylesheet" href="css/misc.css">
+    <link rel="stylesheet" href="css/main_panel/grid.css">
+
+    <link rel="stylesheet" href="css/timeline_panel/timeline.css">
+    <link rel="stylesheet" href="css/timeline_panel/navigation.css">
+    <link rel="stylesheet" href="css/timeline_panel/details-section.css">
+    <link rel="stylesheet" href="css/timeline_panel/vis-custom.css">
+    <link rel="stylesheet" href="css/timeline_panel/tooltip.css">
+
+    <link rel="stylesheet" href="css/csv_panel/panel.css">
+    <link rel="stylesheet" href="css/csv_panel/csv.css">
+    <link rel="stylesheet" href="css/csv_panel/csv-list.css">
+  
+    <script src="vis/vis-timeline-graph2d.min.js"></script>
+
+    <script src="js/data.js"></script>
+    <script src="js/panel.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/csv.js"></script>
+
+    <script src="js/main_panel/gpu_table.js"></script>
+    <script src="js/main_panel/common_table.js"></script>
+
+    <script src="js/timeline_panel/options.js"></script>
+    <script src="js/timeline_panel/groups.js"></script>
+    <script src="js/timeline_panel/msgpack.js"></script>
+    <script src="js/timeline_panel/timeline.js"></script>
+    <script src="js/timeline_panel/panel.js"></script>
+
+    <script src="js/event.js"></script>
+
+    <script src="data-test.js"></script>
+</head>
+<body>
+    <div class="header">
+        <h1>RATELProf Visualization</h1>
+        <button onclick="showPanel('mainPanel')"><strong>Summary</strong></button>
+        <button onclick="showPanel('timelinePanel')"><strong>Timeline</strong></button>
+        <button onclick="showPanel('statsPanel')"><strong>Statistics</strong></button>
+        <button onclick="showPanel('analyzePanel')"><strong>Analyze</strong></button>
+        <button onclick="showPanel('kernelPanel')"><strong>Kernels</strong></button>
+    </div>
+
+    <div id="mainPanel" class="tab-panel active">
+        <div id="grid-container"></div>
+    </div>
+
+    <div id="timelinePanel" class="tab-panel">
+        <section id="timeline-container">
+            <div id="timeline" role="region" aria-label="Trace timeline"></div>
+        </section>
+        <!-- Navigation Section -->
+        <section id="nav">
+            <table>
+                <tr>
+                    <td class="left">
+                        <div class="trace-select">
+                            <input type="text" id="id_input" placeholder="Enter Trace ID" aria-label="Trace ID">
+                            <button id="goto" aria-label="Go to Trace ID">Go to</button>
+                        </div>
+                    </td>
+                    <td class="center">
+                        <button id="moveLeft" aria-label="Move timeline left">&laquo;</button>
+                        <span>-</span>
+                        <input id="zoom-slider" type="range" min="0" max="200" value="100">
+                        <span>+</span>
+                        <button id="moveRight" aria-label="Move timeline right">&raquo;</button>
+                    </td>
+                    <td class="right">
+                        <input id="show-dispatch" type="checkbox"><label for="show-dispatch"> Show dispatches</label>
+                    </td>
+                </tr>
+            </table>
+        </section>
+        <div id="trace-info">
+            Click on a trace to view details here.
+        </div>
+        <div id="info-container">
+            <div id="info-icon">i</div>
+            <div class="tooltip">
+                <strong>How to use the timeline:</strong>
+                <ul>
+                    <li>Ctrl + Wheel up to zoom</li>
+                    <li>Ctrl + Wheel down to unzoom</li>
+                    <li>Left-click and move to navigate</li>
+                    <li>Right-click and move to select an area and see its duration</li>
+                    <li>Click a trace to highlight it and highlight in red traces called by this trace</li>
+                    <li>Ctrl + Click a trace to highlight it and highlight in red who call this trace</li>
+                    <li>Double-click on a trace to focus on it</li>
+                    <li>Drag-n-Drop domain group to change their order</li>
+                    <li>On "Statistics" tab, click a row to highlight and focus on related visible traces</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="statsPanel" class="tab-panel">
+        <div id="stats" class="csv"></div>
+    </div>
+
+    <div id="analyzePanel" class="tab-panel">
+        <div id="analyze" class="csv"></div>
+    </div>
+
+    <div id="kernelPanel" class="tab-panel">
+        <h3>Kernel Panel</h3>
+        <p>Work in progress.</p>
+    </div>
+
+</body>
+</html>

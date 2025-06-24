@@ -1,0 +1,83 @@
+.csv {
+  width: 100%;
+  height: 100%;
+  display:flex;
+}
+
+.csv button {
+  font-size: 10px;
+  font-family: monospace;
+  margin: 2px;
+  padding: 4px;
+}
+
+.csv-container {
+  overflow: auto;
+  white-space: nowrap;
+  width: 100%;
+  padding-left: 10px;
+}
+
+.csv-container table {
+    table-layout: auto;
+}
+.csv-container th.sortable::after {
+  padding-right:10px;
+  content: "\00a0\00a0"; /* Reserve space for arrow */
+  display: inline-block;
+  width: 1em;
+  text-align: center;
+}
+
+.csv-container th.asc::after {
+  content: "\00a0▲";
+}
+
+.csv-container th.desc::after {
+  content: "\00a0▼";
+}
+
+
+.table-container  {
+  white-space: nowrap;
+  width: 85%;
+  height: 70vh;
+  padding-left: 10px;
+  overflow: auto;
+}
+
+.box {
+  width: 100%;
+  box-shadow: inset 0 0 0 1px var(--border-color);
+  font-family: Arial, sans-serif;
+  background-color: #fafafa;
+  border-radius: 4px;
+}
+
+.toggle-btn {
+  display: inline-block;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 1px 4px;
+  background-color: var(--secondary-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  color: #555;
+  user-select: none;
+  font-weight: bold;
+  margin: 3px;
+}
+
+.content-box {
+  display: none;
+  padding: 10px;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  border-radius: 0 0 4px 4px;
+  color: #333;
+  font-size: 14px;
+}
+
+.content-box.show {
+  display: block;
+}
