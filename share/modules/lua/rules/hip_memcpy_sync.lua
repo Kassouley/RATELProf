@@ -1,5 +1,30 @@
 local report_helper = require ("utils.report_helper")
 
+
+local function compute_sync_copy_speedup(data, app_dur)
+    local total_useless_sync_time_per_tid = {}
+
+    for _, e in ipairs(data) do
+        local tid = e[5]
+        local cpu_dur = e[8]
+        local gpu_dur = e[9]
+
+        if not total_useless_sync_time_per_tid[tid] then
+            total_useless_sync_time_per_tid[tid] = 0
+        end
+        total_useless_sync_time_per_tid[tid] = total_useless_sync_time_per_tid[tid] + (cpu_dur - gpu_dur)
+    end
+
+    local max, _ = table.max(total_useless_sync_time_per_tid)
+
+    if max == nil or max == 0 then
+        error("Invalid max ideal duration")
+    end
+
+    return app_dur / (app_dur - max)
+end
+
+
 return function(traces_data, report_obj, opt)
     report_obj:set_name("Host/Device Sync Memcpy")
     report_obj:set_type("Analyze")
@@ -15,8 +40,8 @@ return function(traces_data, report_obj, opt)
         "GPU Duration (ns)",
     })
 
-    local cpy_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY)
-    local hip_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_HIP)
+    local cpy_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
+    local hip_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_HIP, opt)
 
     if next(cpy_data) == nil then
         report_obj:skip("The report could not be analyzed because it does not contain the required GPU data.")
@@ -53,24 +78,34 @@ return function(traces_data, report_obj, opt)
     end
 
     local msg = ratelprof.consts._ALL_RULES_REPORT.hip_memcpy_sync.desc
-    local advice_msg = [[ 
+    local speedup_factor = 1
+
+    if #data == 0 then 
+    local no_advice_msg = "\nThere were no problems detected related to synchronous memcpy operations.\n"
+        msg = msg .. no_advice_msg
+    else
+
+        local app_duration = traces_data:get_app_dur()
+
+        speedup_factor = compute_sync_copy_speedup(data, app_duration)
+
+
+        local advice_msg = [[ 
 The following are synchronous memory transfers that block the host.
 This correspond to ]]..string.format("%.2f", (((#data)/nb_api_cpy)*100))..[[% of your hipMemcpy*() operations.
 
 Suggestion: Use hipMemcpy*Async() APIs instead.
-]]
-    local no_advice_msg = "\nThere were no problems detected related to synchronous memcpy operations.\n"
+Your application might speed up by ]] .. string.format("x%.3f.\n\n", speedup_factor).."\n"
 
-    table.sort(data, function(a, b)
-        return a[8] < b[8]
-    end)
+        table.sort(data, function(a, b)
+            return a[8] < b[8]
+        end)
 
-    if #data == 0 then 
-        msg = msg .. no_advice_msg
-    else
         msg = msg .. advice_msg
     end
     
     report_obj:set_custom_message(msg)
     report_obj:set_data(data)
+    
+    return {speedup = speedup_factor, advice = msg}
 end

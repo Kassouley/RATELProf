@@ -11,7 +11,7 @@ end
 
 local function export_json(report_file)
     local data = ratelprof.msgpack.decode(report_file)
-    local json_data = ratelprof.utils.generate_json(data)
+    local json_data = ratelprof.utils.generate_json(data.raw)
 
     write_to_output_file(report_file, json_data, ".json")
 end
@@ -58,7 +58,7 @@ end
 local function export_arg_info(report_file)
     local data = ratelprof.msgpack.decode(report_file)
     local arg_info_data = {}
-    local trace_events = data.trace_events
+    local trace_events = data.raw.trace_events
     for domain_name, domain in pairs(trace_events) do
         for event_id, event in pairs(domain) do
             if event.name then
