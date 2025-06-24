@@ -1,6 +1,8 @@
 -- visualize.lua
-local preprocess = require ("commands.visualize.preprocess")
-local merge_csv  = require("commands.visualize.merge_csv")
+local preprocess    = require ("commands.visualize.preprocess")
+local reports       = require ("commands.visualize.reports")
+local main_panel    = require ("commands.visualize.main_panel")
+local common_data   = require ("commands.visualize.common_data")
 
 local visualize = {}
 
@@ -18,19 +20,30 @@ function visualize.process_visualizing(positional_args, options_values)
 
     local data = ratelprof.msgpack.decode(report_file)
 
-    preprocess.init(data)
-    preprocess.run(options_values)
 
-    local stats_csv_content, analyze_csv_content = merge_csv.get_csv_data(report_file, tmp_dir, data, options_values)
+    local csv_content = reports.get_csv_data(report_file, tmp_dir, data, options_values)
 
-    html_content = html_content:gsub('"@@CSV_STATS_DATA_HANDLER@@"', stats_csv_content)
-    html_content = html_content:gsub('"@@CSV_ANALYZE_DATA_HANDLER@@"', analyze_csv_content)
 
-    html_content = html_content:gsub('@@B64_DATA_HANDLER@@', preprocess.get_data())
-    html_content = html_content:gsub('"@@LIFECYLE_TABLE_HANDLER@@"', preprocess.get_lifecycle_data())
-    html_content = html_content:gsub('"@@STRING_EXT_TABLE_HANDLER@@"', preprocess.get_string_map())
-    html_content = html_content:gsub('"@@DATA_DOMAIN_TABLE_HANDLER@@"', preprocess.get_domain_data())
+    local b64_data, string_ext_array = preprocess.get_b64_buffer(data, options_values)
+    local gpu_labels, gpu_props = main_panel.get_gpu_data_as_js_string()
 
+    local handlers = {
+        {HANDLE = "HTML_TITLE",             sub = report_file},
+        {HANDLE = "CSV_DATA_PER_TAB",       sub = csv_content},
+        {HANDLE = "LIFECYCLE_TABLE",        sub = common_data.get_lifecycle_table_as_js_string(data)},
+        {HANDLE = "EXTENSION_STRING_ARRAY", sub = string_ext_array},
+        {HANDLE = "DOMAIN_TABLE",           sub = common_data.get_domain_table_as_js_string(data)},
+        {HANDLE = "GPU_LABELS",             sub = gpu_labels},
+        {HANDLE = "GPU_DATA",               sub = gpu_props},
+        {HANDLE = "SUMMARY_DATA",           sub = main_panel.get_summary_data_as_js_string()},
+        {HANDLE = "B64_DATA",               sub = b64_data},
+    }
+
+    for _, h in ipairs(handlers) do
+        html_content = html_content:gsub('"@@'..h.HANDLE..'@@"', h.sub)
+        
+    end
+    
     local output_file = ratelprof.get_opt_val(options_values, "output")
                             or ratelprof.fs.remove_extension(report_file)..'.html'
     
