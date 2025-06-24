@@ -5,12 +5,17 @@
  
 #include <ratelprof.h>
 #include <ratelprof_ext.h>
+#include "version.h"
+
 #include "msgpack.h"
+#include "msgpack_ext.h"
+
 #include "activity_plugin.h" 
 #include "omp_routine_plugin.h"
 #include "hsa_plugin.h"
 #include "omp_tgt_rtl_plugin.h"
 #include "hip_plugin.h" 
+
 
 typedef struct {
     msgpack_buffer_t buffer;
@@ -25,97 +30,103 @@ typedef struct ratelprof_plugin_s {
 	api_callback_handler_t ompt_callback_handler;
 
     activity_callback_t activity_callback;
+
     plugin_traces_t* traces;
 } ratelprof_plugin_t;
 
-static inline void write_report(plugin_traces_t* traces)
-{
-    size_t i = 0;
-    msgpack_buffer_t buf;
-    msgpack_init(&buf, 0xff, MSGPACK_OVERFLOW_WRITE_TO_FILE, get_output_file());
 
-    // Encode a map of size 5 : ["domain_id", "phase_id", "lifecycle", "node_id", "trace_events"]
-    msgpack_encode_map(&buf, 5);
-
-    msgpack_encode_string(&buf, "domain_id");
-    msgpack_encode_map(&buf, RATELPROF_NB_DOMAIN_EXT);
-    for (i = 0; i < RATELPROF_NB_DOMAIN_EXT; i++)
-    {
-        msgpack_encode_string(&buf, ratelprof_ext_get_domain_name(i));
-        msgpack_encode_map(&buf, 2);
-        msgpack_encode_string(&buf, "id");
-        msgpack_encode_uint(&buf, i);
-        msgpack_encode_string(&buf, "desc");
-        msgpack_encode_string(&buf, ratelprof_ext_get_domain_desc(i));
-    }
+/** RATELProf Ext encoding 
+ *      Encoding as follow : 
+ *          - extension bytes (magic bytes)
+ *          - tool version as 3 uint
+ *          - experiment start epoch time as uint
+ *          - lifecycle stop time as array
+ *          - main data
+ *          - map node id to agent object
+ *          - string extension mapping
+ *          - trace data
+ */
+static inline void encode_ratelprof_ext(ratelprof_plugin_t* p) {
+    plugin_traces_t* traces = p->traces;
     
-    const char* phases_name[RATELPROF_NB_PHASE] = {
-        "TOOL_INIT_PHASE",
-        "CONSTRUCTOR_PHASE",
-        "MAIN_PHASE",
-        "DESTRUCTOR_PHASE",
-        "TOOL_FINI_PHASE"
-    };
+    ratelprof_lifecycle_t* lc = ratelprof_get_lifecycle();
+    size_t i = 0;
+    msgpack_buffer_t main_buffer;
+    msgpack_init(&main_buffer, 0xff, MSGPACK_OVERFLOW_WRITE_TO_FILE, get_output_file());
 
-    msgpack_encode_string(&buf, "phase_id");
-    msgpack_encode_map(&buf, RATELPROF_NB_PHASE);
+    msgpack_encode_ext(&main_buffer,  MSGPACK_EXT_RATELPROF, NULL, 0);
+
+    // Encode tool version
+    msgpack_encode_array(&main_buffer, 3);
+    msgpack_encode_uint(&main_buffer, RATELPROF_MAJOR);
+    msgpack_encode_uint(&main_buffer, RATELPROF_MINOR);
+    msgpack_encode_uint(&main_buffer, RATELPROF_PATCH);
+
+
+    // Encode experiment start
+    msgpack_encode_uint(&main_buffer, ratelprof_get_timestamp_ns(lc->experiment_start_epoch));
+
+    // Encode lifecycle stop time (first start is 0 and other start are prev stop)
+    msgpack_encode_array(&main_buffer, RATELPROF_NB_PHASE);
     for (i = 0; i < RATELPROF_NB_PHASE; i++)
     {
-        msgpack_encode_uint(&buf, i);
-        msgpack_encode_string(&buf, phases_name[i]);
+        ratelprof_time_t t = ratelprof_get_timestamp_ns(lc->phase_stop_ts[i]);
+        msgpack_encode_uint(&main_buffer, ratelprof_get_normalized_time(t));
     }
 
-    ratelprof_lifecycle_t* lc = ratelprof_get_lifecycle();
+    // Encode main data
+    msgpack_encode_array(&main_buffer, lc->main_data.argc + 1);
+    msgpack_encode_int(&main_buffer, lc->main_data.retval);
+    for (i = 0; i < lc->main_data.argc; i++)
+    {
+        msgpack_encode_string(&main_buffer, lc->main_data.argv[i]);
+    }
     
-    msgpack_encode_string(&buf, "lifecycle");
-    msgpack_encode_map(&buf, 6);
-    msgpack_encode_string(&buf, "tool_init_start");
-    msgpack_encode_uint(&buf, ratelprof_get_timestamp_ns(lc->tool_init_start));
-    msgpack_encode_string(&buf, "constructor_start");
-    msgpack_encode_uint(&buf, ratelprof_get_timestamp_ns(lc->constructor_start));
-    msgpack_encode_string(&buf, "main_start");
-    msgpack_encode_uint(&buf, ratelprof_get_timestamp_ns(lc->main_start));
-    msgpack_encode_string(&buf, "main_stop");
-    msgpack_encode_uint(&buf, ratelprof_get_timestamp_ns(lc->main_stop));
-    msgpack_encode_string(&buf, "destructor_stop");
-    msgpack_encode_uint(&buf, ratelprof_get_timestamp_ns(lc->destructor_stop));
-    msgpack_encode_string(&buf, "tool_init_stop");
-    msgpack_encode_uint(&buf, ratelprof_get_timestamp_ns(lc->tool_fini_stop));
 
-    
+    // Encode map Node ID to Agent Object
     ratelprof_object_tracking_pool_t* pool = ratelprof_object_tracking_pool_get_pool();
     ratelprof_agent_object_t*  agents_list = pool->agents_list;
     size_t                     agents_count = pool->agents_count;
 
-    msgpack_encode_string(&buf, "node_id");
     if (agents_list && agents_count > 0) {
-        msgpack_encode_map(&buf, agents_count);
+        msgpack_encode_map(&main_buffer, agents_count);
         for (i = 0; i < agents_count; i++) {
-            msgpack_encode_uint(&buf, agents_list[i].handle);
-            msgpack_encode_uint(&buf, i);
+            msgpack_encode_uint(&main_buffer, agents_list[i].handle);
+            msgpack_encode_uint(&main_buffer, i);
         }
     } else {
-        msgpack_encode_map(&buf, 0);
+        msgpack_encode_map(&main_buffer, 0);
     }
 
+    msgpack_buffer_t trace_events;
+    msgpack_init(&trace_events, 0xffffff, MSGPACK_OVERFLOW_REALLOC, NULL);
+
+    // Preprocess trace event data
     size_t nb_domain_util = 0;
     for (i = 0; i < RATELPROF_NB_DOMAIN_EXT; i++) {
         if (traces[i].size != 0)
             nb_domain_util++;
     }
-    msgpack_encode_string(&buf, "trace_events");
-    msgpack_encode_map(&buf, nb_domain_util);
+    
+    msgpack_encode_map(&trace_events, nb_domain_util);
     for (i = 0; i < RATELPROF_NB_DOMAIN_EXT; i++) {
         if (traces[i].size != 0) {
-            msgpack_encode_uint(&buf, i);
-            msgpack_encode_map(&buf, traces[i].size);
-            msgpack_concat(&buf, &traces[i].buffer);
+            msgpack_encode_string_ext(&trace_events, ratelprof_ext_get_domain_name(i));
+            msgpack_encode_map(&trace_events, traces[i].size);
+            msgpack_concat(&trace_events, &traces[i].buffer);
             msgpack_free(&traces[i].buffer);
         }
     }
-    msgpack_free(&buf);
-}
 
+    // Encode string extension mapping
+    msgpack_encode_string_table_ext(&main_buffer);
+
+    // Encode trace event data
+    msgpack_concat(&main_buffer, &trace_events);
+
+    msgpack_free(&main_buffer); // Write data and free
+    msgpack_free(&trace_events); // Write data and free
+}
 
 
 ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin) 
@@ -140,7 +151,8 @@ ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin)
 	p->ompt_callback_handler.on_enter = on_enter_ompt_callback;
 	p->ompt_callback_handler.on_exit = on_exit_ompt_callback; 
 
-     p->activity_callback = activity_callback; 
+    p->activity_callback = activity_callback; 
+
     p->traces = (plugin_traces_t*)malloc(RATELPROF_NB_DOMAIN_EXT * sizeof(plugin_traces_t));
     for (int i = 0; i < RATELPROF_NB_DOMAIN_EXT; i++) {
         p->traces[i].size = 0;
@@ -149,6 +161,8 @@ ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin)
             msgpack_init(&p->traces[i].buffer, 0xffffff, MSGPACK_OVERFLOW_REALLOC, NULL);
         }
     }
+
+    msgpack_ext_string_init();
 
     *plugin = p;
     return status;
@@ -163,9 +177,10 @@ ratelprof_status_t ratelprof_plugin_finalize(ratelprof_plugin_t** plugin)
     p = *plugin;
     if (p == NULL) return RATELPROF_STATUS_PLUGIN_IS_NULL;
     
-    write_report(p->traces);
+    encode_ratelprof_ext(p);
 
     free(p->traces);
+    msgpack_ext_string_free();
 
     free(*plugin);
     *plugin = NULL;

@@ -5,6 +5,7 @@
 #include <ratelprof.h>
 #include <ratelprof_ext.h>
 #include "msgpack.h"
+#include "msgpack_ext.h"
 #include "activity_plugin.h"
 
 typedef struct {
@@ -18,71 +19,67 @@ void add_activity_data_to_buffer(msgpack_buffer_t* buf,
                                   const char* name)
 {
     ratelprof_time_t start = ratelprof_get_timestamp_ns(activity->start_time);
-    ratelprof_time_t stop = ratelprof_get_timestamp_ns(activity->stop_time);
+    ratelprof_time_t stop  = ratelprof_get_timestamp_ns(activity->stop_time);
+    ratelprof_time_t dur   = stop - start;
 
     msgpack_encode_uint(buf, activity->id);
-    msgpack_encode_map(buf, 9);
+    msgpack_encode_map(buf, 8);
 
-    msgpack_encode_string(buf, "p");
-    msgpack_encode_uint(buf, activity->phase);
+    msgpack_encode_string_ext(buf, "phase");
+    msgpack_encode_string_ext(buf, ratelprof_get_phase_name(activity->phase));
     
-    msgpack_encode_string(buf, "name");
-    msgpack_encode_string(buf, name);
+    msgpack_encode_string_ext(buf, "name");
+    msgpack_encode_string_ext(buf, name);
     
-    msgpack_encode_string(buf, "corr_id");
+    msgpack_encode_string_ext(buf, "corr_id");
     msgpack_encode_uint(buf, activity->corr_id);
     
-    msgpack_encode_string(buf, "start");
-    msgpack_encode_uint(buf, start);
+    msgpack_encode_string_ext(buf, "start");
+    msgpack_encode_uint(buf, ratelprof_get_normalized_time(start));
     
-    msgpack_encode_string(buf, "stop");
-    msgpack_encode_uint(buf, stop);
+    msgpack_encode_string_ext(buf, "dur");
+    msgpack_encode_uint(buf, dur);
     
-    msgpack_encode_string(buf, "dur");
-    msgpack_encode_uint(buf, stop-start);
-    
-    msgpack_encode_string(buf, "pid");
+    msgpack_encode_string_ext(buf, "pid");
     msgpack_encode_uint(buf, activity->pid);
     
-    msgpack_encode_string(buf, "tid");
+    msgpack_encode_string_ext(buf, "tid");
     msgpack_encode_uint(buf, activity->tid);
     
-    msgpack_encode_string(buf, "args");
+    msgpack_encode_string_ext(buf, "args");
 }
 
 void ompt_activity_callback(const ratelprof_ompt_api_activity_t* activity, msgpack_buffer_t* buf)
 {
     ratelprof_time_t start = ratelprof_get_timestamp_ns(activity->start_time);
-    ratelprof_time_t stop = ratelprof_get_timestamp_ns(activity->stop_time);
+    ratelprof_time_t stop  = ratelprof_get_timestamp_ns(activity->stop_time);
+    ratelprof_time_t dur   = stop - start;
 
     msgpack_encode_uint(buf, activity->id);
-    msgpack_encode_map(buf, 9);
+    msgpack_encode_map(buf, 8);
 
-    msgpack_encode_string(buf, "p");
-    msgpack_encode_uint(buf, activity->phase);
+    msgpack_encode_string_ext(buf, "phase");
+    msgpack_encode_string_ext(buf, ratelprof_get_phase_name(activity->phase));
     
-    msgpack_encode_string(buf, "name");
-    msgpack_encode_string(buf, get_ompt_funame_by_id(activity->funid));
+    msgpack_encode_string_ext(buf, "name");
+    msgpack_encode_string_ext(buf, get_ompt_funame_by_id(activity->funid));
     
-    msgpack_encode_string(buf, "corr_id");
+    msgpack_encode_string_ext(buf, "corr_id");
     msgpack_encode_uint(buf, activity->corr_id);
     
-    msgpack_encode_string(buf, "start");
-    msgpack_encode_uint(buf, start);
+    msgpack_encode_string_ext(buf, "start");
+    msgpack_encode_uint(buf, ratelprof_get_normalized_time(start));
     
-    msgpack_encode_string(buf, "stop");
-    msgpack_encode_uint(buf, stop);
+    msgpack_encode_string_ext(buf, "dur");
+    msgpack_encode_uint(buf, dur);
     
-    msgpack_encode_string(buf, "dur");
-    msgpack_encode_uint(buf, stop-start);
-    
-    msgpack_encode_string(buf, "pid");
+    msgpack_encode_string_ext(buf, "pid");
     msgpack_encode_uint(buf, activity->pid);
     
-    msgpack_encode_string(buf, "tid");
+    msgpack_encode_string_ext(buf, "tid");
     msgpack_encode_uint(buf, activity->tid);
     
-    msgpack_encode_string(buf, "args");
+    msgpack_encode_string_ext(buf, "args");
     process_ompt_args_for(activity->funid, &activity->args, buf);
 }
 
@@ -115,44 +112,42 @@ void gpu_activity_callback(const ratelprof_gpu_activity_t* activity, msgpack_buf
 {
     int i = 0;
     msgpack_encode_uint(buf, activity->id);
-    msgpack_encode_map(buf, 7);
+    msgpack_encode_map(buf, 6);
 
-    msgpack_encode_string(buf, "p");
-    msgpack_encode_uint(buf, activity->phase);
+    msgpack_encode_string_ext(buf, "phase");
+    msgpack_encode_string_ext(buf, ratelprof_get_phase_name(activity->phase));
     
-    msgpack_encode_string(buf, "corr_id");
+    msgpack_encode_string_ext(buf, "corr_id");
     msgpack_encode_uint(buf, activity->corr_id);
+
+    msgpack_encode_string_ext(buf, "start");
+    msgpack_encode_uint(buf, ratelprof_get_normalized_time(activity->start_time));
     
-    msgpack_encode_string(buf, "start");
-    msgpack_encode_uint(buf, activity->start_time);
+    msgpack_encode_string_ext(buf, "dur");
+    msgpack_encode_uint(buf, activity->stop_time - activity->start_time);
     
-    msgpack_encode_string(buf, "stop");
-    msgpack_encode_uint(buf, activity->stop_time);
-    
-    msgpack_encode_string(buf, "dur");
-    msgpack_encode_uint(buf, activity->stop_time-activity->start_time);
-    
-    msgpack_encode_string(buf, "sig");
+    msgpack_encode_string_ext(buf, "sig");
     msgpack_encode_uint(buf, activity->completion_signal.handle);
 
-    msgpack_encode_string(buf, "args");
+    msgpack_encode_string_ext(buf, "args");
 
     switch ((int)activity->domain)
     {
         case RATELPROF_DOMAIN_BARRIEROR:
         case RATELPROF_DOMAIN_BARRIERAND: {
+            ratelprof_time_t t = ratelprof_get_timestamp_ns(activity->args.dispatch.dispatch_time);
             msgpack_encode_map(buf, 4);
 
-            msgpack_encode_string(buf, "dispatch_time");
-            msgpack_encode_uint(buf, ratelprof_get_timestamp_ns(activity->args.dispatch.dispatch_time));
+            msgpack_encode_string_ext(buf, "dispatch_time");
+            msgpack_encode_uint(buf, ratelprof_get_normalized_time(t));
 
-            msgpack_encode_string(buf, "gpu_id");
+            msgpack_encode_string_ext(buf, "gpu_id");
             msgpack_encode_uint(buf, activity->args.dispatch.agent.handle);
 
-            msgpack_encode_string(buf, "queue_id");
+            msgpack_encode_string_ext(buf, "queue_id");
             msgpack_encode_uint(buf, activity->args.dispatch.queue_id);
 
-            msgpack_encode_string(buf, "dep_signal");
+            msgpack_encode_string_ext(buf, "dep_signal");
             msgpack_encode_array(buf, 5);
             for (i = 0; i < 5; i++)
             {
@@ -161,66 +156,67 @@ void gpu_activity_callback(const ratelprof_gpu_activity_t* activity, msgpack_buf
             
             break;
         }
-        case RATELPROF_DOMAIN_KERNEL:
-            
+        case RATELPROF_DOMAIN_KERNEL: {
+            ratelprof_time_t t = ratelprof_get_timestamp_ns(activity->args.dispatch.dispatch_time);
             msgpack_encode_map(buf, 10);
 
-            msgpack_encode_string(buf, "kernel_name");
-            msgpack_encode_string(buf, get_kernel_name(activity->args.dispatch.kernel.kernel_object));
+            msgpack_encode_string_ext(buf, "kernel_name");
+            msgpack_encode_string_ext(buf, get_kernel_name(activity->args.dispatch.kernel.kernel_object));
 
-            msgpack_encode_string(buf, "dispatch_time");
-            msgpack_encode_uint(buf, ratelprof_get_timestamp_ns(activity->args.dispatch.dispatch_time));
+            msgpack_encode_string_ext(buf, "dispatch_time");
+            msgpack_encode_uint(buf, ratelprof_get_normalized_time(t));
             
-            msgpack_encode_string(buf, "gpu_id");
+            msgpack_encode_string_ext(buf, "gpu_id");
             msgpack_encode_uint(buf, activity->args.dispatch.agent.handle);
 
-            msgpack_encode_string(buf, "queue_id");
+            msgpack_encode_string_ext(buf, "queue_id");
             msgpack_encode_uint(buf, activity->args.dispatch.queue_id);
 
-            msgpack_encode_string(buf, "wrg");
+            msgpack_encode_string_ext(buf, "wrg");
             msgpack_encode_array(buf, 3);
             msgpack_encode_uint(buf, activity->args.dispatch.kernel.workgroup_size_x);
             msgpack_encode_uint(buf, activity->args.dispatch.kernel.workgroup_size_y);
             msgpack_encode_uint(buf, activity->args.dispatch.kernel.workgroup_size_z);
             
-            msgpack_encode_string(buf, "grd");
+            msgpack_encode_string_ext(buf, "grd");
             msgpack_encode_array(buf, 3);
             msgpack_encode_uint(buf, activity->args.dispatch.kernel.grid_size_x);
             msgpack_encode_uint(buf, activity->args.dispatch.kernel.grid_size_y);
             msgpack_encode_uint(buf, activity->args.dispatch.kernel.grid_size_z);
 
-            msgpack_encode_string(buf, "private_segment_size");
+            msgpack_encode_string_ext(buf, "private_segment_size");
             msgpack_encode_uint(buf, activity->args.dispatch.kernel.private_segment_size);
 
-            msgpack_encode_string(buf, "group_segment_size");
+            msgpack_encode_string_ext(buf, "group_segment_size");
             msgpack_encode_uint(buf, activity->args.dispatch.kernel.group_segment_size);
 
-            msgpack_encode_string(buf, "kernel_object");
+            msgpack_encode_string_ext(buf, "kernel_object");
             msgpack_encode_uint(buf, activity->args.dispatch.kernel.kernel_object);
 
-            msgpack_encode_string(buf, "kernarg_address");
+            msgpack_encode_string_ext(buf, "kernarg_address");
             msgpack_encode_uint(buf, (uintptr_t)activity->args.dispatch.kernel.kernarg_address);
             break;
+        }
 
         case RATELPROF_DOMAIN_COPY:
             msgpack_encode_map(buf, 6);
 
-            msgpack_encode_string(buf, "src_agent");
+            msgpack_encode_string_ext(buf, "src_agent");
             msgpack_encode_uint(buf, activity->args.mem_copy.src_agent.handle);
 
-            msgpack_encode_string(buf, "dst_agent");
+            msgpack_encode_string_ext(buf, "dst_agent");
             msgpack_encode_uint(buf, activity->args.mem_copy.dst_agent.handle);
 
-            msgpack_encode_string(buf, "src_type");
+            msgpack_encode_string_ext(buf, "src_type");
             msgpack_encode_uint(buf, activity->args.mem_copy.src_type);
 
-            msgpack_encode_string(buf, "dst_type");
+            msgpack_encode_string_ext(buf, "dst_type");
             msgpack_encode_uint(buf, activity->args.mem_copy.dst_type);
 
-            msgpack_encode_string(buf, "size");
+            msgpack_encode_string_ext(buf, "size");
             msgpack_encode_uint(buf, activity->args.mem_copy.size);
 
-            msgpack_encode_string(buf, "engine_id");
+            msgpack_encode_string_ext(buf, "engine_id");
             msgpack_encode_int(buf, activity->args.mem_copy.engine_id);
             break;
 

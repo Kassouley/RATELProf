@@ -16,7 +16,7 @@ ENDMACRO()
 
 SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/*)
 
-file(GLOB SOURCES2 "${CMAKE_CURRENT_SOURCE_DIR}/memory_structure/*.c")
+file(GLOB SOURCES2 "${CMAKE_SOURCE_DIR}/src/common/memory_structure/*.c")
 
 # Now you have only directories in SUBDIRS
 foreach(SUBDIR ${SUBDIRS})
@@ -33,10 +33,10 @@ foreach(SUBDIR ${SUBDIRS})
 
         target_include_directories(${LIBRARY_NAME}
             PRIVATE
-                ${CMAKE_CURRENT_SOURCE_DIR}/memory_structure
                 ${CMAKE_CURRENT_SOURCE_DIR}/include
                 ${CMAKE_SOURCE_DIR}/src/core/include
                 ${CMAKE_SOURCE_DIR}/src/ext/include
+                ${CMAKE_SOURCE_DIR}/src/common/memory_structure
         )
         
         target_compile_options(${LIBRARY_NAME} 
@@ -44,9 +44,6 @@ foreach(SUBDIR ${SUBDIRS})
                 -O3
                 -D__HIP_PLATFORM_AMD__
         )
-
-        # target_link_libraries(${LIBRARY_NAME} ${CORE_PROJECT_NAME})
-        # target_link_libraries(${LIBRARY_NAME} ${EXT_PROJECT_NAME})
 
         message(STATUS "Created shared library: ${LIBRARY_NAME}")
     endif()

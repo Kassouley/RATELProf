@@ -46,19 +46,11 @@ static inline void init_json_content(json_buffer_t* json_buffer)
 static inline void fini_json_content(json_buffer_t* json_buffer)
 {
     size_t i = 0;
-    ratelprof_lifecycle_t*             lc = ratelprof_get_lifecycle();
     ratelprof_object_tracking_pool_t* pool = ratelprof_object_tracking_pool_get_pool();
     ratelprof_agent_object_t*  agents_list = pool->agents_list;
     size_t                    agents_count = pool->agents_count;
 
     add_to_json_buffer(json_buffer, "\t],");
-    add_to_json_buffer(json_buffer, "\n\t\"lifecycle\": {\n");
-    add_to_json_buffer(json_buffer, "\t\t\"tool_init_start\": %lu,\n", ratelprof_get_timestamp_ns(lc->tool_init_start));
-    add_to_json_buffer(json_buffer, "\t\t\"constructor_start\": %lu,\n", ratelprof_get_timestamp_ns(lc->constructor_start));
-    add_to_json_buffer(json_buffer, "\t\t\"main_start\": %lu,\n", ratelprof_get_timestamp_ns(lc->main_start));
-    add_to_json_buffer(json_buffer, "\t\t\"main_stop\": %lu,\n", ratelprof_get_timestamp_ns(lc->main_stop));
-    add_to_json_buffer(json_buffer, "\t\t\"destructor_stop\": %lu,\n", ratelprof_get_timestamp_ns(lc->destructor_stop));
-    add_to_json_buffer(json_buffer, "\t\t\"tool_init_stop\": %lu\n\t},", ratelprof_get_timestamp_ns(lc->tool_fini_stop));
     add_to_json_buffer(json_buffer, "\n\t\"node_id\": {\n");
     if (agents_list && agents_count > 0) {
         for (i = 0; i < agents_count-1; i++)

@@ -110,19 +110,15 @@ ratelprof_status_t ratelprof_disable_domain(ratelprof_domain_t domain)
 
 
 ratelprof_status_t ratelprof_start() 
-{
-	ratelprof_lifecycle_t * lc = ratelprof_get_lifecycle();
-    lc->current_phase = RATELPROF_IN_CONSTRUCTOR_PHASE;
-    lc->constructor_start = ratelprof_get_curr_timespec();
+{    
+	ratelprof_next_phase();
     return RATELPROF_STATUS_SUCCESS;
 }
 
 
 ratelprof_status_t ratelprof_stop() 
 {
-	ratelprof_lifecycle_t * lc = ratelprof_get_lifecycle();
-    lc->current_phase = RATELPROF_IN_TOOL_FINI_PHASE;
-    lc->destructor_stop = ratelprof_get_curr_timespec();
+	ratelprof_next_phase();
     return RATELPROF_STATUS_SUCCESS;
 }
 

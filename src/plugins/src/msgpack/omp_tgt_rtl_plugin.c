@@ -7,6 +7,7 @@
 #include <ratelprof_ext.h>
 #include "omp_tgt_rtl_plugin.h"
 #include "msgpack.h"
+#include "msgpack_ext.h"
 
 void on_enter_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity){
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
@@ -36,25 +37,25 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	__tgt_async_info * AsyncInfoPtr (struct);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_query_async.device_id);
 
-			msgpack_encode_string(buf, "AsyncInfoPtr");
+			msgpack_encode_string_ext(buf, "AsyncInfoPtr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "__tgt_async_info *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "__tgt_async_info *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_query_async.AsyncInfoPtr);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_query_async.retval);
 
 			break;
@@ -66,39 +67,39 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	int64_t size (long);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 5);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_submit.device_id);
 
-			msgpack_encode_string(buf, "target_ptr");
+			msgpack_encode_string_ext(buf, "target_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_submit.target_ptr);
 
-			msgpack_encode_string(buf, "host_ptr");
+			msgpack_encode_string_ext(buf, "host_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_submit.host_ptr);
 
-			msgpack_encode_string(buf, "size");
+			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int64_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int64_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_submit.size);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_submit.retval);
 
 			break;
@@ -106,11 +107,11 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 		case OMP_TGT_RTL_API_ID___tgt_rtl_are_allocations_for_maps_on_apus_disabled :
 			//	int retval (int);
 			msgpack_encode_map(buf, 1);
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_are_allocations_for_maps_on_apus_disabled.retval);
 
 			break;
@@ -121,32 +122,32 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	int64_t size (long);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 4);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_notify_mapped.device_id);
 
-			msgpack_encode_string(buf, "host_ptr");
+			msgpack_encode_string_ext(buf, "host_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_notify_mapped.host_ptr);
 
-			msgpack_encode_string(buf, "size");
+			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int64_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int64_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_notify_mapped.size);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_notify_mapped.retval);
 
 			break;
@@ -159,46 +160,46 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	__tgt_async_info * AsyncInfo (struct);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 6);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_submit_async.device_id);
 
-			msgpack_encode_string(buf, "target_ptr");
+			msgpack_encode_string_ext(buf, "target_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_submit_async.target_ptr);
 
-			msgpack_encode_string(buf, "host_ptr");
+			msgpack_encode_string_ext(buf, "host_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_submit_async.host_ptr);
 
-			msgpack_encode_string(buf, "size");
+			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int64_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int64_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_submit_async.size);
 
-			msgpack_encode_string(buf, "AsyncInfo");
+			msgpack_encode_string_ext(buf, "AsyncInfo");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "__tgt_async_info *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "__tgt_async_info *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_submit_async.AsyncInfo);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_submit_async.retval);
 
 			break;
@@ -208,25 +209,25 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	__tgt_async_info ** async_info_ptr (struct);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_init_async_info.device_id);
 
-			msgpack_encode_string(buf, "async_info_ptr");
+			msgpack_encode_string_ext(buf, "async_info_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "__tgt_async_info **");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "__tgt_async_info **");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_init_async_info.async_info_ptr);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_init_async_info.retval);
 
 			break;
@@ -236,25 +237,25 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	int32_t dst_dev_id (int);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
-			msgpack_encode_string(buf, "src_dev_id");
+			msgpack_encode_string_ext(buf, "src_dev_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_is_data_exchangable.src_dev_id);
 
-			msgpack_encode_string(buf, "dst_dev_id");
+			msgpack_encode_string_ext(buf, "dst_dev_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_is_data_exchangable.dst_dev_id);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_is_data_exchangable.retval);
 
 			break;
@@ -267,46 +268,46 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	__tgt_async_info * AsyncInfo (struct);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 6);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_retrieve_async.device_id);
 
-			msgpack_encode_string(buf, "host_ptr");
+			msgpack_encode_string_ext(buf, "host_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_retrieve_async.host_ptr);
 
-			msgpack_encode_string(buf, "target_ptr");
+			msgpack_encode_string_ext(buf, "target_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_retrieve_async.target_ptr);
 
-			msgpack_encode_string(buf, "size");
+			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int64_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int64_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_retrieve_async.size);
 
-			msgpack_encode_string(buf, "AsyncInfo");
+			msgpack_encode_string_ext(buf, "AsyncInfo");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "__tgt_async_info *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "__tgt_async_info *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_retrieve_async.AsyncInfo);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_retrieve_async.retval);
 
 			break;
@@ -317,32 +318,32 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	int32_t kind (int);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 4);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_delete.device_id);
 
-			msgpack_encode_string(buf, "target_ptr");
+			msgpack_encode_string_ext(buf, "target_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_delete.target_ptr);
 
-			msgpack_encode_string(buf, "kind");
+			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_delete.kind);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_delete.retval);
 
 			break;
@@ -356,53 +357,53 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	__tgt_async_info * AsyncInfo (struct);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 7);
-			msgpack_encode_string(buf, "src_dev_id");
+			msgpack_encode_string_ext(buf, "src_dev_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_exchange_async.src_dev_id);
 
-			msgpack_encode_string(buf, "src_ptr");
+			msgpack_encode_string_ext(buf, "src_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_exchange_async.src_ptr);
 
-			msgpack_encode_string(buf, "dst_dev_id");
+			msgpack_encode_string_ext(buf, "dst_dev_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_exchange_async.dst_dev_id);
 
-			msgpack_encode_string(buf, "dst_ptr");
+			msgpack_encode_string_ext(buf, "dst_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_exchange_async.dst_ptr);
 
-			msgpack_encode_string(buf, "size");
+			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int64_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int64_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_exchange_async.size);
 
-			msgpack_encode_string(buf, "AsyncInfo");
+			msgpack_encode_string_ext(buf, "AsyncInfo");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "__tgt_async_info *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "__tgt_async_info *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_exchange_async.AsyncInfo);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_exchange_async.retval);
 
 			break;
@@ -413,32 +414,32 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	int64_t size (long);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 4);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_prepopulate_page_table.device_id);
 
-			msgpack_encode_string(buf, "ptr");
+			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_prepopulate_page_table.ptr);
 
-			msgpack_encode_string(buf, "size");
+			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int64_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int64_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_prepopulate_page_table.size);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_prepopulate_page_table.retval);
 
 			break;
@@ -451,46 +452,46 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	int64_t size (long);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 6);
-			msgpack_encode_string(buf, "src_dev_id");
+			msgpack_encode_string_ext(buf, "src_dev_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_exchange.src_dev_id);
 
-			msgpack_encode_string(buf, "src_ptr");
+			msgpack_encode_string_ext(buf, "src_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_exchange.src_ptr);
 
-			msgpack_encode_string(buf, "dst_dev_id");
+			msgpack_encode_string_ext(buf, "dst_dev_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_exchange.dst_dev_id);
 
-			msgpack_encode_string(buf, "dst_ptr");
+			msgpack_encode_string_ext(buf, "dst_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_exchange.dst_ptr);
 
-			msgpack_encode_string(buf, "size");
+			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int64_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int64_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_exchange.size);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_exchange.retval);
 
 			break;
@@ -504,53 +505,53 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	__tgt_async_info * AsyncInfo (struct);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 7);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_launch_kernel.device_id);
 
-			msgpack_encode_string(buf, "tgt_entry_ptr");
+			msgpack_encode_string_ext(buf, "tgt_entry_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_launch_kernel.tgt_entry_ptr);
 
-			msgpack_encode_string(buf, "tgt_args");
+			msgpack_encode_string_ext(buf, "tgt_args");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void **");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void **");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_launch_kernel.tgt_args);
 
-			msgpack_encode_string(buf, "tgt_offsets");
+			msgpack_encode_string_ext(buf, "tgt_offsets");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "ptrdiff_t *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "ptrdiff_t *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_launch_kernel.tgt_offsets);
 
-			msgpack_encode_string(buf, "KernelArgs");
+			msgpack_encode_string_ext(buf, "KernelArgs");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "KernelArgsTy *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "KernelArgsTy *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_launch_kernel.KernelArgs);
 
-			msgpack_encode_string(buf, "AsyncInfo");
+			msgpack_encode_string_ext(buf, "AsyncInfo");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "__tgt_async_info *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "__tgt_async_info *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_launch_kernel.AsyncInfo);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_launch_kernel.retval);
 
 			break;
@@ -559,18 +560,18 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	__tgt_device_image * image (struct);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "image");
+			msgpack_encode_string_ext(buf, "image");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "__tgt_device_image *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "__tgt_device_image *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_is_valid_binary.image);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_is_valid_binary.retval);
 
 			break;
@@ -582,39 +583,39 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	int64_t size (long);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 5);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_retrieve.device_id);
 
-			msgpack_encode_string(buf, "host_ptr");
+			msgpack_encode_string_ext(buf, "host_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_retrieve.host_ptr);
 
-			msgpack_encode_string(buf, "target_ptr");
+			msgpack_encode_string_ext(buf, "target_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_retrieve.target_ptr);
 
-			msgpack_encode_string(buf, "size");
+			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int64_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int64_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_retrieve.size);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_retrieve.retval);
 
 			break;
@@ -626,39 +627,39 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	void ** LockedHostPtr (void);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 5);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_lock.device_id);
 
-			msgpack_encode_string(buf, "host_ptr");
+			msgpack_encode_string_ext(buf, "host_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_lock.host_ptr);
 
-			msgpack_encode_string(buf, "size");
+			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int64_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int64_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_lock.size);
 
-			msgpack_encode_string(buf, "LockedHostPtr");
+			msgpack_encode_string_ext(buf, "LockedHostPtr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void **");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void **");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_lock.LockedHostPtr);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_lock.retval);
 
 			break;
@@ -666,11 +667,11 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 		case OMP_TGT_RTL_API_ID___tgt_rtl_supports_empty_images :
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 1);
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_supports_empty_images.retval);
 
 			break;
@@ -680,25 +681,25 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	void * event (void);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_destroy_event.device_id);
 
-			msgpack_encode_string(buf, "event");
+			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_destroy_event.event);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_destroy_event.retval);
 
 			break;
@@ -706,11 +707,11 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 		case OMP_TGT_RTL_API_ID___tgt_rtl_number_of_devices :
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 1);
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_number_of_devices.retval);
 
 			break;
@@ -719,18 +720,18 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	int64_t RequiresFlags (long);
 			//	int64_t retval (long);
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "RequiresFlags");
+			msgpack_encode_string_ext(buf, "RequiresFlags");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int64_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int64_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_init_requires.RequiresFlags);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int64_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int64_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_init_requires.retval);
 
 			break;
@@ -740,25 +741,25 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	void * host_ptr (void);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_notify_unmapped.device_id);
 
-			msgpack_encode_string(buf, "host_ptr");
+			msgpack_encode_string_ext(buf, "host_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_notify_unmapped.host_ptr);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_notify_unmapped.retval);
 
 			break;
@@ -769,32 +770,32 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	const char ** err_str (string);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 4);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_init_device_info.device_id);
 
-			msgpack_encode_string(buf, "device_info_ptr");
+			msgpack_encode_string_ext(buf, "device_info_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "__tgt_device_info *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "__tgt_device_info *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_init_device_info.device_info_ptr);
 
-			msgpack_encode_string(buf, "err_str");
+			msgpack_encode_string_ext(buf, "err_str");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "const char **");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "const char **");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_init_device_info.err_str);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_init_device_info.retval);
 
 			break;
@@ -804,25 +805,25 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	void * event (void);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_sync_event.device_id);
 
-			msgpack_encode_string(buf, "event");
+			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_sync_event.event);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_sync_event.retval);
 
 			break;
@@ -832,25 +833,25 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	__tgt_async_info * AsyncInfo (struct);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_synchronize.device_id);
 
-			msgpack_encode_string(buf, "AsyncInfo");
+			msgpack_encode_string_ext(buf, "AsyncInfo");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "__tgt_async_info *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "__tgt_async_info *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_synchronize.AsyncInfo);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_synchronize.retval);
 
 			break;
@@ -866,25 +867,25 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	void * host_ptr (void);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_unlock.device_id);
 
-			msgpack_encode_string(buf, "host_ptr");
+			msgpack_encode_string_ext(buf, "host_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_unlock.host_ptr);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_unlock.retval);
 
 			break;
@@ -892,11 +893,11 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 		case OMP_TGT_RTL_API_ID___tgt_rtl_is_fine_grained_memory_enabled :
 			//	int retval (int);
 			msgpack_encode_map(buf, 1);
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_is_fine_grained_memory_enabled.retval);
 
 			break;
@@ -904,11 +905,11 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 		case OMP_TGT_RTL_API_ID___tgt_rtl_has_USM_capable_dGPU :
 			//	int retval (int);
 			msgpack_encode_map(buf, 1);
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_has_USM_capable_dGPU.retval);
 
 			break;
@@ -916,11 +917,11 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 		case OMP_TGT_RTL_API_ID___tgt_rtl_has_apu_device :
 			//	int retval (int);
 			msgpack_encode_map(buf, 1);
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_has_apu_device.retval);
 
 			break;
@@ -929,18 +930,18 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	int32_t DeviceIdOffset (int);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "DeviceIdOffset");
+			msgpack_encode_string_ext(buf, "DeviceIdOffset");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_set_device_offset.DeviceIdOffset);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_set_device_offset.retval);
 
 			break;
@@ -953,46 +954,46 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	KernelArgsTy * KernelArgs (struct);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 6);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_launch_kernel_sync.device_id);
 
-			msgpack_encode_string(buf, "tgt_entry_ptr");
+			msgpack_encode_string_ext(buf, "tgt_entry_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_launch_kernel_sync.tgt_entry_ptr);
 
-			msgpack_encode_string(buf, "tgt_args");
+			msgpack_encode_string_ext(buf, "tgt_args");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void **");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void **");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_launch_kernel_sync.tgt_args);
 
-			msgpack_encode_string(buf, "tgt_offsets");
+			msgpack_encode_string_ext(buf, "tgt_offsets");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "ptrdiff_t *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "ptrdiff_t *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_launch_kernel_sync.tgt_offsets);
 
-			msgpack_encode_string(buf, "KernelArgs");
+			msgpack_encode_string_ext(buf, "KernelArgs");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "KernelArgsTy *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "KernelArgsTy *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_launch_kernel_sync.KernelArgs);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_launch_kernel_sync.retval);
 
 			break;
@@ -1003,32 +1004,32 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	__tgt_async_info * AsyncInfo (struct);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 4);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_record_event.device_id);
 
-			msgpack_encode_string(buf, "event");
+			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_record_event.event);
 
-			msgpack_encode_string(buf, "AsyncInfo");
+			msgpack_encode_string_ext(buf, "AsyncInfo");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "__tgt_async_info *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "__tgt_async_info *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_record_event.AsyncInfo);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_record_event.retval);
 
 			break;
@@ -1036,11 +1037,11 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 		case OMP_TGT_RTL_API_ID___tgt_rtl_set_info_flag :
 			//	uint32_t NewInfoLevel (unsigned int);
 			msgpack_encode_map(buf, 1);
-			msgpack_encode_string(buf, "NewInfoLevel");
+			msgpack_encode_string_ext(buf, "NewInfoLevel");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "uint32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "uint32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_set_info_flag.NewInfoLevel);
 
 			break;
@@ -1050,25 +1051,25 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	void ** event (void);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_create_event.device_id);
 
-			msgpack_encode_string(buf, "event");
+			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void **");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void **");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_create_event.event);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_create_event.retval);
 
 			break;
@@ -1076,11 +1077,11 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 		case OMP_TGT_RTL_API_ID___tgt_rtl_print_device_info :
 			//	int32_t device_id (int);
 			msgpack_encode_map(buf, 1);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_print_device_info.device_id);
 
 			break;
@@ -1093,39 +1094,39 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	void ** kernel_ptr (void);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 4);
-			msgpack_encode_string(buf, "binary");
+			msgpack_encode_string_ext(buf, "binary");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "struct __tgt_device_binary");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "struct __tgt_device_binary");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 1);
 
-			msgpack_encode_string(buf, "handle");
+			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "uintptr_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "uintptr_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_get_function.binary.handle);
 
-			msgpack_encode_string(buf, "name");
+			msgpack_encode_string_ext(buf, "name");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "const char *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "const char *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_get_function.name);
 
-			msgpack_encode_string(buf, "kernel_ptr");
+			msgpack_encode_string_ext(buf, "kernel_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void **");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void **");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_get_function.kernel_ptr);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_get_function.retval);
 
 			break;
@@ -1133,11 +1134,11 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 		case OMP_TGT_RTL_API_ID___tgt_rtl_init_plugin :
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 1);
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_init_plugin.retval);
 
 			break;
@@ -1146,18 +1147,18 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	int device_id (int);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_number_of_team_procs.device_id);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_number_of_team_procs.retval);
 
 			break;
@@ -1168,32 +1169,32 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	__tgt_async_info * AsyncInfo (struct);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 4);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_wait_event.device_id);
 
-			msgpack_encode_string(buf, "event");
+			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_wait_event.event);
 
-			msgpack_encode_string(buf, "AsyncInfo");
+			msgpack_encode_string_ext(buf, "AsyncInfo");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "__tgt_async_info *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "__tgt_async_info *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_wait_event.AsyncInfo);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_wait_event.retval);
 
 			break;
@@ -1205,39 +1206,39 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	int32_t kind (int);
 			//	void * retval (void);
 			msgpack_encode_map(buf, 5);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_alloc.device_id);
 
-			msgpack_encode_string(buf, "size");
+			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int64_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int64_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_alloc.size);
 
-			msgpack_encode_string(buf, "host_ptr");
+			msgpack_encode_string_ext(buf, "host_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_alloc.host_ptr);
 
-			msgpack_encode_string(buf, "kind");
+			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_data_alloc.kind);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_data_alloc.retval);
 
 			break;
@@ -1246,18 +1247,18 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	int32_t device_id (int);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "device_id");
+			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_init_device.device_id);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_init_device.retval);
 
 			break;
@@ -1271,46 +1272,46 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	void ** device_ptr (void);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 5);
-			msgpack_encode_string(buf, "binary");
+			msgpack_encode_string_ext(buf, "binary");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "struct __tgt_device_binary");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "struct __tgt_device_binary");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 1);
 
-			msgpack_encode_string(buf, "handle");
+			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "uintptr_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "uintptr_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_get_global.binary.handle);
 
-			msgpack_encode_string(buf, "size");
+			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "uint64_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "uint64_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_get_global.size);
 
-			msgpack_encode_string(buf, "name");
+			msgpack_encode_string_ext(buf, "name");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "const char *");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "const char *");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_get_global.name);
 
-			msgpack_encode_string(buf, "device_ptr");
+			msgpack_encode_string_ext(buf, "device_ptr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void **");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void **");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->__tgt_rtl_get_global.device_ptr);
 
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int32_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int32_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_get_global.retval);
 
 			break;
@@ -1318,11 +1319,11 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 		case OMP_TGT_RTL_API_ID___tgt_rtl_requested_prepopulate_gpu_page_table :
 			//	int retval (int);
 			msgpack_encode_map(buf, 1);
-			msgpack_encode_string(buf, "retval");
+			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->__tgt_rtl_requested_prepopulate_gpu_page_table.retval);
 
 			break;

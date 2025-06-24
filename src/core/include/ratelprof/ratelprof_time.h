@@ -66,6 +66,16 @@ ratelprof_timespec_t ratelprof_get_curr_timespec();
 
 
 /**
+ * @brief Retrieves the current epoch timestamp.
+ *
+ * This function obtains the current time using `clock_gettime` with the 
+ * `CLOCK_REALTIME` clock source and returns it as a `ratelprof_timespec_t`.
+ *
+ * @return The current time as a `ratelprof_timespec_t` structure.
+ */
+ratelprof_timespec_t ratelprof_get_curr_epoch();
+
+/**
  * @brief Converts a `ratelprof_timespec_t` timestamp to nanoseconds.
  *
  * This function takes a `ratelprof_timespec_t` (which is an alias for `struct timespec`) 

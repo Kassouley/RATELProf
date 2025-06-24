@@ -19,17 +19,45 @@
 
 ratelprof_lifecycle_t lifecycle;
 
+
+const char* ratelprof_get_phase_name(ratelprof_phase_t phase) {
+    switch (phase)
+    {
+        case RATELPROF_IN_TOOL_INIT_PHASE:      return "TOOL_INIT_PHASE"; break;
+        case RATELPROF_IN_CONSTRUCTOR_PHASE:    return "CONSTRUCTOR_PHASE"; break;
+        case RATELPROF_IN_MAIN_PHASE:           return "MAIN_PHASE"; break;
+        case RATELPROF_IN_DESTRUCTOR_PHASE:     return "DESTRUCTOR_PHASE"; break;
+        case RATELPROF_IN_TOOL_FINI_PHASE:      return "TOOL_FINI_PHASE"; break;
+        
+        default: return "Unknown phase"; break;
+    }
+    return "Unknown phase";
+}
+
+
+ratelprof_time_t ratelprof_get_normalized_time(ratelprof_time_t time) {
+    return time - lifecycle.normalizer;
+}
+
+
 void ratelprof_init_lifecycle() 
 {
     lifecycle.current_phase = RATELPROF_IN_TOOL_INIT_PHASE;
-    lifecycle.tool_init_start = ratelprof_get_curr_timespec();
+    lifecycle.experiment_start_epoch = ratelprof_get_curr_epoch();
+
+    ratelprof_timespec_t ts = ratelprof_get_curr_timespec();
+    lifecycle.normalizer = ratelprof_get_timestamp_ns(ts);
 }
 
 
 void ratelprof_fini_lifecycle() 
 {
-    if (lifecycle.main_data.argv) free(lifecycle.main_data.argv);
-    lifecycle.tool_fini_stop = ratelprof_get_curr_timespec();
+    ratelprof_next_phase();
+}
+
+void ratelprof_next_phase() {
+    lifecycle.phase_stop_ts[lifecycle.current_phase] = ratelprof_get_curr_timespec();
+    lifecycle.current_phase++;
 }
 
 
@@ -47,20 +75,23 @@ ratelprof_lifecycle_t* ratelprof_get_lifecycle()
 
 int i_main(int argc, char **argv, char **envp)
 {
-    lifecycle.current_phase = RATELPROF_IN_MAIN_PHASE;
+    lifecycle.main_data.pid  = get_pid();
+    lifecycle.main_data.tid  = get_tid();
     lifecycle.main_data.argc = argc;
-    lifecycle.main_data.argv = (char**)malloc(argc * sizeof(char*));
+    lifecycle.main_data.argv = (char**)malloc(argc * sizeof(char*) + 1);
+
     if (!lifecycle.main_data.argv) {
         LOG(LOG_LEVEL_FATAL, "Cannot allocate main data argument. Out of memory ?\n");
     }
     for (int i = 0; i < argc; ++i) {
         lifecycle.main_data.argv[i] = strdup(argv[i]);
     }
-    lifecycle.main_start = ratelprof_get_curr_timespec();
+
+    ratelprof_next_phase();
+
     lifecycle.main_data.retval = lifecycle.main_data.main_fn(argc, argv, envp);
-    lifecycle.main_stop = ratelprof_get_curr_timespec();
-    lifecycle.main_data.pid = get_pid();
-    lifecycle.main_data.tid = get_tid();
-    lifecycle.current_phase = RATELPROF_IN_DESTRUCTOR_PHASE;
+
+    ratelprof_next_phase();
+
     return lifecycle.main_data.retval;
 }

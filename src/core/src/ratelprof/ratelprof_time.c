@@ -13,6 +13,13 @@ ratelprof_timespec_t ratelprof_get_curr_timespec()
     return ts;
 }
 
+ratelprof_timespec_t ratelprof_get_curr_epoch()
+{
+    ratelprof_timespec_t ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+    return ts;
+}
+
 ratelprof_time_t ratelprof_get_timestamp_ns(ratelprof_timespec_t ts)
 {
     return (ratelprof_time_t)ts.tv_sec * 1000000000ULL + (ratelprof_time_t)ts.tv_nsec;

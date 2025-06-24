@@ -6,6 +6,7 @@
 #include <dlfcn.h>
 #include <ratelprof.h>
 #include <ratelprof_ext.h>
+#include "version.h"
 
 typedef struct ratelprof_plugin_s ratelprof_plugin_t;
 
@@ -32,7 +33,7 @@ static void open_plugin_manager(plugin_manager_t* pm) {
     if (!pm->plugin_handle) {
         void* handle = get_plugin_lib();
         if (!handle) {
-            LOG(LOG_LEVEL_FATAL, "RPROF: Environment variable %s is not set.\n", ENV_PLUGIN_PATH);
+            LOG(LOG_LEVEL_FATAL, "Environment variable %s is not set.\n", ENV_PLUGIN_PATH);
         }
         pm->plugin_handle = handle;
         pm->plugin_initialize       = load_symbol(handle, "ratelprof_plugin_initialize");
@@ -167,11 +168,12 @@ void onExit()
     LOG(LOG_LEVEL_INFO, "Profiling finished.\n");
 
     ratelprof_lifecycle_t* lc = ratelprof_get_lifecycle();
+
  
-    ratelprof_time_t main_start        = ratelprof_get_timestamp_ms(lc->main_start);
-    ratelprof_time_t main_stop         = ratelprof_get_timestamp_ms(lc->main_stop);
-    ratelprof_time_t constructor_start = ratelprof_get_timestamp_ms(lc->constructor_start);
-    ratelprof_time_t destructor_stop   = ratelprof_get_timestamp_ms(lc->destructor_stop);
+    ratelprof_time_t constructor_start = ratelprof_get_timestamp_ms(lc->phase_stop_ts[RATELPROF_IN_TOOL_INIT_PHASE]);
+    ratelprof_time_t main_start        = ratelprof_get_timestamp_ms(lc->phase_stop_ts[RATELPROF_IN_CONSTRUCTOR_PHASE]);
+    ratelprof_time_t main_stop         = ratelprof_get_timestamp_ms(lc->phase_stop_ts[RATELPROF_IN_MAIN_PHASE]);
+    ratelprof_time_t destructor_stop   = ratelprof_get_timestamp_ms(lc->phase_stop_ts[RATELPROF_IN_DESTRUCTOR_PHASE]);
 
     LOG(LOG_LEVEL_INFO, "Application duration : %10lu ms\n", main_stop - main_start);
     LOG(LOG_LEVEL_INFO, "Constructor duration : %10lu ms\n", main_start - constructor_start);

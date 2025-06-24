@@ -66,12 +66,11 @@ typedef struct {
  */
 typedef struct {
     ratelprof_phase_t current_phase;           /**< The current phase of the program lifecycle. */
-    ratelprof_timespec_t tool_init_start;        /**< Timestamp for the start of the tool initialization phase. */
-    ratelprof_timespec_t constructor_start;      /**< Timestamp for the start of the constructor phase. */
-    ratelprof_timespec_t main_start;             /**< Timestamp for the start of the main execution phase. */
-    ratelprof_timespec_t main_stop;              /**< Timestamp for the end of the main execution phase. */
-    ratelprof_timespec_t destructor_stop;        /**< Timestamp for the end of the destructor phase. */
-    ratelprof_timespec_t tool_fini_stop;         /**< Timestamp for the end of the tool finalization phase. */
+
+    ratelprof_timespec_t experiment_start_epoch;
+    ratelprof_timespec_t phase_stop_ts[RATELPROF_NB_PHASE];
+    ratelprof_time_t normalizer;     
+
     ratelprof_main_data_t main_data;   /**< Data related to the program's main execution. */
 } ratelprof_lifecycle_t;
 
@@ -133,6 +132,37 @@ ratelprof_phase_t ratelprof_get_current_phase();
  * ```
  */
 ratelprof_lifecycle_t* ratelprof_get_lifecycle();
+
+
+/**
+ * @brief Change to next phase.
+ *
+ * Record current phase stop time and move to next phase
+ */
+void ratelprof_next_phase();
+
+
+/**
+ * @brief Return the phase name according to the given phase id.
+ * 
+ * @param phase The phase id.
+ *
+ * @return The phase name
+ */
+const char* ratelprof_get_phase_name(ratelprof_phase_t phase);
+
+
+/**
+ * @brief Normalized and return the time given.
+ * 
+ * This function need to be call after lifecycle initialization.
+ * The function will substract the application start time to the time given in argument.
+ * 
+ * @param time time to normalized.
+ *
+ * @return Normalized time
+ */
+ratelprof_time_t ratelprof_get_normalized_time(ratelprof_time_t time);
 
 
 /**

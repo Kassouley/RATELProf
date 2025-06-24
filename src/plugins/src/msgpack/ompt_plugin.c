@@ -7,6 +7,7 @@
 #include <ratelprof_ext.h>
 #include "ompt_plugin.h"
 #include "msgpack.h"
+#include "msgpack_ext.h"
 
 void on_enter_ompt_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* a){
 	ratelprof_ompt_api_activity_t* activity = (ratelprof_ompt_api_activity_t*) a;
@@ -52,53 +53,53 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
 			//	size_t bytes (unsigned long);
 			//	const void* codeptr_ra (void);
 			msgpack_encode_map(buf, 7);
-			msgpack_encode_string(buf, "host_op_id");
+			msgpack_encode_string_ext(buf, "host_op_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "ompt_id_t*");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "ompt_id_t*");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->target_data_op.host_op_id);
 
-			msgpack_encode_string(buf, "src_addr");
+			msgpack_encode_string_ext(buf, "src_addr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void*");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void*");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->target_data_op.src_addr);
 
-			msgpack_encode_string(buf, "src_device_num");
+			msgpack_encode_string_ext(buf, "src_device_num");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->target_data_op.src_device_num);
 
-			msgpack_encode_string(buf, "dest_addr");
+			msgpack_encode_string_ext(buf, "dest_addr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void*");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void*");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->target_data_op.dest_addr);
 
-			msgpack_encode_string(buf, "dest_device_num");
+			msgpack_encode_string_ext(buf, "dest_device_num");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->target_data_op.dest_device_num);
 
-			msgpack_encode_string(buf, "bytes");
+			msgpack_encode_string_ext(buf, "bytes");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "size_t");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "size_t");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->target_data_op.bytes);
 
-			msgpack_encode_string(buf, "codeptr_ra");
+			msgpack_encode_string_ext(buf, "codeptr_ra");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "const void*");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "const void*");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->target_data_op.codeptr_ra);
 
 			break;
@@ -111,62 +112,62 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
 			//	unsigned int* mapping_flags (unsigned int);
 			//	const void* codeptr_ra (void);
 			msgpack_encode_map(buf, 6);
-			msgpack_encode_string(buf, "nitems");
+			msgpack_encode_string_ext(buf, "nitems");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "unsigned int");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "unsigned int");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->target_map_emi.nitems);
 
-			msgpack_encode_string(buf, "host_addr");
+			msgpack_encode_string_ext(buf, "host_addr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void**");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void**");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_array(buf, args->target_map_emi.nitems);
 			for (int i = 0; i < args->target_map_emi.nitems; i++)
 			{
 				msgpack_encode_uint(buf, (uintptr_t)args->target_map_emi.map[i].host_addr);
 			}
 
-			msgpack_encode_string(buf, "device_addr");
+			msgpack_encode_string_ext(buf, "device_addr");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "void**");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "void**");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_array(buf, args->target_map_emi.nitems);
 			for (int i = 0; i < args->target_map_emi.nitems; i++)
 			{
 				msgpack_encode_uint(buf, (uintptr_t)args->target_map_emi.map[i].device_addr);
 			}
 
-			msgpack_encode_string(buf, "bytes");
+			msgpack_encode_string_ext(buf, "bytes");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "size_t*");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "size_t*");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_array(buf, args->target_map_emi.nitems);
 			for (int i = 0; i < args->target_map_emi.nitems; i++)
 			{
 				msgpack_encode_uint(buf, args->target_map_emi.map[i].bytes);
 			}
 
-			msgpack_encode_string(buf, "mapping_flags");
+			msgpack_encode_string_ext(buf, "mapping_flags");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "ompt_target_map_flag_t*");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "ompt_target_map_flag_t*");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_array(buf, args->target_map_emi.nitems);
 			for (int i = 0; i < args->target_map_emi.nitems; i++)
 			{
-				msgpack_encode_string(buf, get_map_flag_name(args->target_map_emi.map[i].mapping_flags));
+				msgpack_encode_string_ext(buf, get_map_flag_name(args->target_map_emi.map[i].mapping_flags));
 			}
 
-			msgpack_encode_string(buf, "codeptr_ra");
+			msgpack_encode_string_ext(buf, "codeptr_ra");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "const void*");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "const void*");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->target_map_emi.codeptr_ra);
 
 			break;
@@ -175,18 +176,18 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
 			//	ompt_id_t* host_op_id (unsigned long);
 			//	unsigned int requested_num_teams (unsigned int);
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "host_op_id");
+			msgpack_encode_string_ext(buf, "host_op_id");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "ompt_id_t*");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "ompt_id_t*");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->target_submit_emi.host_op_id);
 
-			msgpack_encode_string(buf, "requested_num_teams");
+			msgpack_encode_string_ext(buf, "requested_num_teams");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "unsigned int");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "unsigned int");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->target_submit_emi.requested_num_teams);
 
 			break;
@@ -201,18 +202,18 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
 			//	int device_num (int);
 			//	const void* codeptr_ra (void);
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "device_num");
+			msgpack_encode_string_ext(buf, "device_num");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "int");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "int");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->target_emi.device_num);
 
-			msgpack_encode_string(buf, "codeptr_ra");
+			msgpack_encode_string_ext(buf, "codeptr_ra");
 			msgpack_encode_map(buf, 2);
-			msgpack_encode_string(buf, "type");
-			msgpack_encode_string(buf, "const void*");
-			msgpack_encode_string(buf, "value");
+			msgpack_encode_string_ext(buf, "type");
+			msgpack_encode_string_ext(buf, "const void*");
+			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_uint(buf, (uintptr_t)args->target_emi.codeptr_ra);
 
 			break;
