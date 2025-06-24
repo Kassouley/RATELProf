@@ -3,28 +3,9 @@ local Report = {}
 Report.__index = Report
 Report.utils = {}
 
-function parse_report_option(input)
-    local result = {}
-
-        local name, args = input:match('^([^:]+):?(.*)$')
-        local options = {}
-
-        if args and args ~= "" then
-            for arg in string.gmatch(args, '([^:]+)') do
-                local key, val = arg:match('([^=]+)=?(.*)')
-                if val == "" then
-                    val = true  -- If there's no value, set to true
-                end
-                options[key] = val
-            end
-        end
-
-        result[name] = options
-
-    return result
-end
-
 function Report.utils.execute_report(data, input_file, options_values, report_list, progress_enabled, progress_msg)
+    local report_ret_vals = {}
+
     local reports = options_values.reports or {}
     local outputs = options_values.outputs or {}
     local formats = options_values.formats or {}
@@ -65,31 +46,9 @@ function Report.utils.execute_report(data, input_file, options_values, report_li
 
             local report_obj = Report:new(attribute)
 
-            
-            local cached_trace = {}
-            data.get = function(self, domain_name)
-                if cached_trace[domain_name] then return cached_trace[domain_name] end
-                local ret = {}
-                for id, trace in pairs(self.trace_events[domain_name] or {}) do
-                    if not opt.is_only_main or trace.phase == "MAIN_PHASE" then
-                        ret[id] = trace
-                    end
-                end
-                cached_trace[domain_name] = ret
-                return ret
-            end
-        
-            data.get_app_dur = function(self)
-                return self.lifecycle[ratelprof.consts._IDX_DESTRUCTOR_STOP] - self.lifecycle[ratelprof.consts._IDX_CONSTRUCTOR_START]
-            end
-
-            data.get_gpu_id = function(self, handle)
-                return self.node_id[handle] or string.format('Unknown(%lu)', handle)
-            end
-
             local chunk, err = loadfile(report_path)
             if chunk then
-                chunk()(data, report_obj, opt)
+                report_ret_vals[report_id] = chunk()(data, report_obj, opt)
             else
                 error("Error loading file: " .. err)
             end
@@ -105,6 +64,8 @@ function Report.utils.execute_report(data, input_file, options_values, report_li
     if progress_enabled then
         ratelprof.utils.print_progress(progress_msg, nreports, nreports)
     end
+
+    return report_ret_vals
 end
 
 -- Available formats and their extensions
