@@ -2,6 +2,51 @@ require("utils.json.json")
 
 local utils = {}
 
+function utils.compute_total_covered_duration(...)
+    local intervals = {}
+    local count = 0
+    
+    -- Step 1: Flatten all traces from each argument into intervals array
+    local args = {...}
+    for _, traces in ipairs(args) do
+        for _, t in pairs(traces) do
+            count = count + 1
+            intervals[count] = {start = t.start, stop = t.start + t.dur}
+        end
+    end
+
+    if count == 0 then return 0 end
+
+    -- Step 2: Sort by start time
+    table.sort(intervals, function(a, b)
+        return a.start < b.start
+    end)
+
+    -- Step 3: Merge intervals and compute total
+    local total = 0
+    local cur_start = intervals[1].start
+    local cur_stop = intervals[1].stop
+
+    for i = 2, count do
+        local s = intervals[i].start
+        local e = intervals[i].stop
+
+        if s <= cur_stop then
+            if e > cur_stop then
+                cur_stop = e
+            end
+        else
+            total = total + (cur_stop - cur_start)
+            cur_start = s
+            cur_stop = e
+        end
+    end
+
+    total = total + (cur_stop - cur_start)
+    return total
+end
+
+
 
 function utils.print_progress(prefix, current, total)
     local bar_length = 30
@@ -100,7 +145,8 @@ function utils.get_copy_name(src, dst)
     return ("Copy%sTo%s"):format(get_name(src), get_name(dst))
 end
 
-function utils.get_gpu_id(trace, gpu_node_id_map)
+
+function utils.get_gpu_id(trace, traces_data)
     local gpu_agent = trace.args.gpu_id
     if not gpu_agent then
         if trace.args.dst_type == 1 then gpu_agent = trace.args.dst_agent
@@ -108,8 +154,10 @@ function utils.get_gpu_id(trace, gpu_node_id_map)
         else error ("shouldn't reach, a gpu trace need to have a gpu agent")
         end
     end
-    return gpu_node_id_map[gpu_agent] or gpu_agent
+    return traces_data:get_gpu_id(gpu_agent)
 end
+
+
 local function generate_json(value, indent)
     indent = indent or 0
     local indentation = string.rep(" ", indent)
