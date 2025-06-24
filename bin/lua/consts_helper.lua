@@ -323,7 +323,7 @@ consts_helper.inspect = {
         info = {
             desc            = [[
                 Specify the information to inspect.
-                Possible values are: 'agents', 'kernels'.
+                Possible values are: 'gpu', 'kernels'.
                 Default is 'kernels'.]],
             sname           = "i",
             arg             = "<info>",
