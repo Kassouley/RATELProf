@@ -27,7 +27,7 @@ return function(traces_data, report_obj, opt)
         "Operation" 
     })
 
-    local gpu_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY)
+    local gpu_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
     
     local entries, total_metrics = stats_helper.get_entries(gpu_traces, get_entry_key_tab, get_metric, opt)
     local data = stats_helper.get_output_summary(entries, total_metrics, traces_data:get_app_dur())
@@ -37,4 +37,12 @@ return function(traces_data, report_obj, opt)
     end)
 
     report_obj:set_data(data)
+
+    local copy_time = ratelprof.utils.compute_total_covered_duration(gpu_traces)
+
+    return {
+        total_time = total_metrics,
+        copy_time = copy_time
+    }
+
 end

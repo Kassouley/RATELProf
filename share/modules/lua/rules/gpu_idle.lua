@@ -1,11 +1,11 @@
-function find_gaps(kernel_traces, gap_th, gpu_node_id_map)
+local function find_gaps(traces_data, kernel_traces, gap_th)
     local gaps = {}
     local percentage_per_gpu = {}
 
     -- Step 1: Group traces by gpu_id
     local gpu_traces = {}
     for _, trace in pairs(kernel_traces) do
-        local gpu_id = ratelprof.utils.get_gpu_id(trace, gpu_node_id_map)
+        local gpu_id = traces_data:get_gpu_id(trace.args.gpu_id)
         if not gpu_traces[gpu_id] then
             gpu_traces[gpu_id] = {}
         end
@@ -20,18 +20,19 @@ function find_gaps(kernel_traces, gap_th, gpu_node_id_map)
 
         -- Copy traces into sorting tables
         for _, t in ipairs(traces) do
+            t.stop = t.start + t.dur
             table.insert(starts_sorted, t)
             table.insert(ends_sorted, t)
         end
 
         -- Sort by start times
-        table.sort(starts_sorted, function(a, b) 
-            return a["start"] < b["start"] 
+        table.sort(starts_sorted, function(a, b)
+            return a["start"] < b["start"]
         end)
 
         -- Sort by end times
-        table.sort(ends_sorted, function(a, b) 
-            return a["stop"] < b["stop"] 
+        table.sort(ends_sorted, function(a, b)
+            return a["stop"] < b["stop"]
         end)
 
         -- Step 3: Reconstruct intervals [ERj, SRj+1]
@@ -71,7 +72,7 @@ return function(traces_data, report_obj, opt)
 
     local GAP_MS = tonumber(opt.report_opt.th_gap) or ratelprof.consts._ALL_RULES_REPORT.gpu_idle.opt.th_gap.default
     
-    local kernel_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL)
+    local kernel_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL, opt)
 
     if next(kernel_data) == nil then
         report_obj:skip("The report could not be analyzed because it does not contain the required GPU data.")
@@ -86,7 +87,7 @@ return function(traces_data, report_obj, opt)
         "Duration (ns)"
     })
 
-    local data, percentage_per_gpu = find_gaps(kernel_data, GAP_MS * 1e6, traces_data.node_id)
+    local data, percentage_per_gpu = find_gaps(traces_data, kernel_data, GAP_MS * 1e6)
 
     local msg = ratelprof.consts._ALL_RULES_REPORT.gpu_idle.desc
 
@@ -112,4 +113,6 @@ Addressing these gaps might improve application performance.
     
     report_obj:set_custom_message(msg)
     report_obj:set_data(data)
+
+    return {advice = msg}
 end

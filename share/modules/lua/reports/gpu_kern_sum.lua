@@ -52,7 +52,7 @@ return function(traces_data, report_obj, opt)
         "Name" 
     })
 
-    local gpu_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL)
+    local gpu_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL, opt)
 
 
     local total_metrics_dur_time = 0
@@ -105,4 +105,13 @@ return function(traces_data, report_obj, opt)
     end)
 
     report_obj:set_data(data)
+
+
+    local compute_time = ratelprof.utils.compute_total_covered_duration(gpu_traces)
+
+    return {
+        total_time = total_metrics_dur_time,
+        total_queue_time = total_metrics_queue_time,
+        compute_time = compute_time
+    }
 end

@@ -5,10 +5,10 @@ local function get_output_data(traces_data, opt)
     local data = {}
     local timeunit = opt.timeunit
     
-    local barror_traces  = traces_data:get(ratelprof.consts._ENV.DOMAIN_BARRIEROR)
-    local barrand_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_BARRIERAND)
-    local kern_traces    = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL)
-    local mem_traces     = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY)
+    local barror_traces  = traces_data:get(ratelprof.consts._ENV.DOMAIN_BARRIEROR, opt)
+    local barrand_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_BARRIERAND, opt)
+    local kern_traces    = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL, opt)
+    local mem_traces     = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
 
     -- Helper function to construct entries
     local function add_entry(trace, id, entry_type)

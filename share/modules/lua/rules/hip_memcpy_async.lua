@@ -1,16 +1,44 @@
 local report_helper = require ("utils.report_helper")
 
 local function is_synchronized(gpuCpy, hipMemcpy)
-    return gpuCpy["start"] > hipMemcpy["start"] and gpuCpy["stop"] < hipMemcpy["stop"]
+    local gpu_start = gpuCpy["start"]
+    local gpu_stop =  gpu_start + gpuCpy["dur"]
+    local api_start = hipMemcpy["start"]
+    local api_stop = api_start + hipMemcpy["dur"]
+    return gpu_start > api_start and gpu_stop < api_stop
 end
+
+local function compute_async_copy_speedup(data, app_dur)
+    local total_useless_sync_time_per_tid = {}
+
+    for _, e in ipairs(data) do
+        local tid = e[4]
+        local cpu_dur = e[7]
+        local gpu_dur = e[8]
+
+        if not total_useless_sync_time_per_tid[tid] then
+            total_useless_sync_time_per_tid[tid] = 0
+        end
+        total_useless_sync_time_per_tid[tid] = total_useless_sync_time_per_tid[tid] + (cpu_dur - gpu_dur)
+    end
+
+    local max, _ = table.max(total_useless_sync_time_per_tid)
+
+    if max == nil or max == 0 then
+        error("Invalid max ideal duration")
+    end
+
+    return app_dur / (app_dur - max)
+end
+
 
 return function(traces_data, report_obj, opt)
     report_obj:set_name("Host/Device Async Memcpy")
     report_obj:set_type("Analyze")
 
-    local cpy_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY)
-    local hip_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_HIP)
-    local hsa_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_HSA)
+    local cpy_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
+    local hip_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_HIP, opt)
+    local hsa_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_HSA, opt)
 
     if next(hsa_data) ~= nil then
         report_obj:skip("The report could not be analyzed because it contains HSA data. This version doesn't support this analysis while HSA traces are present.")
@@ -88,28 +116,37 @@ return function(traces_data, report_obj, opt)
         end
     end
 
-
     local msg = ratelprof.consts._ALL_RULES_REPORT.hip_memcpy_async.desc
-    local advice_msg = [[ 
+    local speedup_factor = 1
+
+    if #data == 0 then 
+        local no_advice_msg = "\nThere were no problems detected related to asynchronous memcpy operations.\n"
+        msg = msg .. no_advice_msg
+    else
+
+        local app_duration = traces_data:get_app_dur()
+
+        speedup_factor = compute_async_copy_speedup(data, app_duration)
+
+        local advice_msg = [[ 
 The following memory transfers are synchronized with their corresponding HIP asynchronous memory copy trace.
 It appears that the transferred memory is either using PAGEABLE memory or is not large enough to be processed asynchronously.
 
 This correspond to ]]..string.format("%.2f", (((#data)/nb_api_cpy)*100))..[[% of your hipMemcpy*Async operations.
 
 Suggestion: If applicable, use PINNED memory instead by using hipHostMalloc to allocate your host side memory.
-]]
-    local no_advice_msg = "\nThere were no problems detected related to asynchronous memcpy operations.\n"
+Your application might speed up by ]] .. string.format("x%.3f.\n\n", speedup_factor).."\n"
 
-    table.sort(data, function(a, b)
-        return a[7] < b[7]
-    end)
 
-    if #data == 0 then 
-        msg = msg .. no_advice_msg
-    else
+        table.sort(data, function(a, b)
+            return a[7] < b[7]
+        end)
+
         msg = msg .. advice_msg
     end
     
     report_obj:set_custom_message(msg)
     report_obj:set_data(data)
+
+    return {speedup = speedup_factor, advice = msg}
 end

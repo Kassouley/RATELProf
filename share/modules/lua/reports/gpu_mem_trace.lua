@@ -48,7 +48,7 @@ return function(traces_data, report_obj, opt)
     })
     
     
-    local mem_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY)
+    local mem_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
 
     local data = get_output_data(mem_traces, opt.timeunit)
     

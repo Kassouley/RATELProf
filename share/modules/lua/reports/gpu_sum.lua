@@ -40,10 +40,10 @@ return function(traces_data, report_obj, opt)
         "Operation" 
     })
 
-    local barror_traces  = traces_data:get(ratelprof.consts._ENV.DOMAIN_BARRIEROR)
-    local barrand_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_BARRIERAND)
-    local kern_traces    = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL)
-    local mem_traces     = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY)
+    local barror_traces  = traces_data:get(ratelprof.consts._ENV.DOMAIN_BARRIEROR, opt)
+    local barrand_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_BARRIERAND, opt)
+    local kern_traces    = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL, opt)
+    local mem_traces     = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
 
     local mem_entries,     mem_total_metric     = stats_helper.get_entries(mem_traces,     get_entry_key_tab1, get_metric, opt)
     local kern_entries,    kern_total_metric    = stats_helper.get_entries(kern_traces,    get_entry_key_tab2, get_metric, opt)
@@ -73,4 +73,8 @@ return function(traces_data, report_obj, opt)
     end)
 
     report_obj:set_data(data)
+
+    local active_time = ratelprof.utils.compute_total_covered_duration(mem_traces, kern_traces, barror_traces, barrand_traces)
+
+    return {active_time = active_time, longest_activity = data[1][11]}
 end

@@ -12,7 +12,7 @@ end
 
 function stats_helper.process_api_raw_data_for_sum_report(report_obj, data, domain, opt)
     local timeunit = opt.timeunit
-    local raw_data = data:get(domain)
+    local raw_data = data:get(domain, opt)
     local entries, total_metrics = stats_helper.get_entries(raw_data, get_entry_key_tab, get_metric, opt)
     local data = stats_helper.get_output_summary(entries, total_metrics, data:get_app_dur())
 
@@ -37,8 +37,9 @@ function stats_helper.process_api_raw_data_for_sum_report(report_obj, data, doma
 end
 
 
-function stats_helper.process_api_raw_data_for_trace_report(report_obj, raw_data, opt)
+function stats_helper.process_api_raw_data_for_trace_report(report_obj, data, domain, opt)
     local timeunit = opt.timeunit
+    local raw_data = data:get(domain, opt)
     local data = {}
     for id, trace in pairs(raw_data) do
         table.insert(data, {
