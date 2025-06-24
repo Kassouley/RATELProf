@@ -4,7 +4,7 @@ local agent_helper  = require ("commands.inspect.agent_helper")
 local inspect = {}
 
 local function inspect_kernels(application, opt)
-    if not ratelprof.fs.exists(application) then
+    if application == nil or not ratelprof.fs.exists(application) then
         Message:print("No application to inspect.")
         os.exit(1)
     end
@@ -65,12 +65,12 @@ end
 
 function inspect.process_inspecting(positional_args, opt)
 
-    if ratelprof.get_opt_val(opt, "info") == "agents" then
+    if ratelprof.get_opt_val(opt, "info") == "gpu" then
         inspect_agents()
     elseif ratelprof.get_opt_val(opt, "info") == "kernels" then
         inspect_kernels(positional_args[1], opt)
     else
-        Message:print ("Invalid inspect option. Use 'agents' or 'kernels'.")
+        Message:print ("Invalid inspect option. Use 'gpu' or 'kernels'.")
         os.exit(1)
     end
 end
