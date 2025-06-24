@@ -74,7 +74,28 @@ consts._DOMAIN_NAME = {
   [consts._ENV.DOMAIN_PROFILING]    = "HSA for RATELProf",
   [consts._ENV.DOMAIN_OMPT]         = "OpenMP Target Region"
 }
-    
+
+consts._GPU_DOMAIN = {
+  [consts._ENV.DOMAIN_BARRIEROR]    = true,
+  [consts._ENV.DOMAIN_BARRIERAND]   = true,
+  [consts._ENV.DOMAIN_KERNEL]       = true,
+  [consts._ENV.DOMAIN_COPY]         = true,
+}
+
+consts._DOMAIN_DESC = {
+  [consts._ENV.DOMAIN_HIP]          = "HIP is a programming framework used to launch GPU operations such as kernel dispatch or memory transfer. This domain is useful for anyone looking to understand and optimize the interactions between the CPU and GPU in programming.",
+  [consts._ENV.DOMAIN_HSA]          = "HSA is an AMD low-level library that operates behind the scenes of HIP and OpenMP, enabling communication between CPUs and GPUs for parallel processing. This domain will be only useful for expert or debugging.",
+  [consts._ENV.DOMAIN_OMP_TGT]      = "OpenMP Target is a runtime library that provides routines for managing data movement, memory mapping, etc.",
+  [consts._ENV.DOMAIN_OMP_TGT_RTL]  = "Refers to the target runtime library in the OpenMP programming model, working behind the scenes to execute '#pragma omp target' directives by managing data transfers and kernel execution on GPUs.",
+  [consts._ENV.DOMAIN_BARRIEROR]    = "The Barrier OR is a less restrictive synchronization mechanism that allows subsequent operations to proceed as soon as any one of the specified preceding operations has completed.",
+  [consts._ENV.DOMAIN_BARRIERAND]   = "The Barrier AND is a synchronization primitive that ensures all preceding operations in the command queue have completed before subsequent operations can begin.",
+  [consts._ENV.DOMAIN_KERNEL]       = "The kernel dispatch operation is the process of launching a computational kernel on the GPU.",
+  [consts._ENV.DOMAIN_COPY]         = "The copy operation in GPU programming is responsible for transferring data between memory locations (between host and device memory or between different regions of GPU memory).",
+  [consts._ENV.DOMAIN_PROFILING]    = "The profiling domain correspond to all HSA function used by RATELProf for GPU Profiling",
+  [consts._ENV.DOMAIN_OMPT]         = "OpenMP Target region traces given by the OMPT API"
+}
+
+
 consts._TRACES = {
   ['hip'] =           {var=consts._ENV.DOMAIN_HIP,          name="HIP API"}, 
   ['hsa'] =           {var=consts._ENV.DOMAIN_HSA,          name="HSA API"},
@@ -143,7 +164,7 @@ Transfers that are not sufficiently overlapped may contribute to performance bot
 ]],
       opt = {
         th_dur = {
-          default = 100000,
+          default = 1e6,
           desc    = "Minimum duration (in ns) a memory transfer must have to be analyzed for hidden latency."
         },
         th_hidden = {
