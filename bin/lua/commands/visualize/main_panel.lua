@@ -17,7 +17,7 @@ profiling_summary.rows = {
                                                                   "This is the time when GPU was not idle, not the sum of all GPU activity time."},
     {labels = "GPU Compute Time (%%)",   value = "N/A", tooltip = "Total time spent in all kernels"},
     {labels = "GPU Copy Time (%%)",      value = "N/A", tooltip = "Total time spent in all memory transfers"},
-    -- {labels = "Concurrency Score (%%)",  value = "N/A", tooltip = "Percentage of kernel computation that are in parallel. High concurrency can improve performance."},
+    {labels = "Concurrency Score (%%)",  value = "N/A", tooltip = "Percentage of kernel computation that are in parallel. High concurrency can improve performance."},
     {labels = "Hidden Copy Score (%%)",  value = "N/A", tooltip = "Percentage of copy time hidden by kernel computation. "..
                                                                   "Higher doesn't always mean better performance, "..
                                                                   "but hide memory copy latency can improve GPU utilization. "..
@@ -29,9 +29,9 @@ profiling_summary.rows = {
 
 potential_speedup.rows = {
     {labels = "Perfect HIP Async Copy",  value = "N/A", tooltip = "Speed up if all copies were 100% asynchronous"},
-    {labels = "Perfect Hidden Copy", value = "N/A", tooltip = "Speed up if all copies were hidden by kernels"},
-    -- {labels = "Copy Coalescing", value = "N/A", tooltip = "Speed up if all coalescable copies were coalesced"},
-    {labels = "Kernel Coalescing",   value = "N/A", tooltip = "Speed up if all coalescable kernels were coalesced"}
+    {labels = "Perfect Hidden Copy",     value = "N/A", tooltip = "Speed up if all copies were hidden by kernels"},
+    {labels = "Copy Coalescing",         value = "N/A", tooltip = "Speed up if all coalescable copies were coalesced"},
+    {labels = "Kernel Coalescing",       value = "N/A", tooltip = "Speed up if all coalescable kernels were coalesced"}
 }
 
 experiment_info.rows = {
@@ -84,29 +84,29 @@ function main_panel.set_profiling_summary(data, stats_ret_vals, analyze_ret_vals
     local bytes_transferred = get_ret_val(stats_ret_vals,   "gpu_mem_size_sum", "total_bytes")
     local app_time          = data:get_app_dur()
     local app_time_sec      = ratelprof.convert.time(app_time, "ns", "sec")
-    local gpu_time          = get_ret_val(stats_ret_vals, "gpu_sum", "active_time")
-    local gpu_compute_time  = get_ret_val(stats_ret_vals, "gpu_kern_sum", "compute_time")
-    local gpu_copy_time     = get_ret_val(stats_ret_vals, "gpu_mem_time_sum", "copy_time")
+    local gpu_time          = data:get_gpu_active_time()
+    local gpu_compute_time  = data:get_compute_time()
+    local gpu_copy_time     = data:get_copy_time()
     
 
     profiling_summary.rows[1].value = string.format("%.3f s", app_time_sec)
     profiling_summary.rows[2].value = format_gpu_time(gpu_time, app_time)
     profiling_summary.rows[3].value = format_gpu_time(gpu_compute_time, app_time)
     profiling_summary.rows[4].value = format_gpu_time(gpu_copy_time, app_time)
-    -- profiling_summary.rows[5].value = get_ret_val(analyze_ret_vals, "concurrency", "score")
-    profiling_summary.rows[5].value = get_ret_val(analyze_ret_vals, "hidden_transfers", "score")
-    profiling_summary.rows[6].value = get_ret_val(stats_ret_vals,   "gpu_sum",          "longest_activity")
-    profiling_summary.rows[7].value = bytes_transferred == "N/A" and "N/A" or format_bytes(bytes_transferred)
+    profiling_summary.rows[5].value = get_ret_val(analyze_ret_vals, "concurrency", "score")
+    profiling_summary.rows[6].value = get_ret_val(analyze_ret_vals, "hidden_transfers", "score")
+    profiling_summary.rows[7].value = get_ret_val(stats_ret_vals,   "gpu_sum",          "longest_activity")
+    profiling_summary.rows[8].value = bytes_transferred == "N/A" and "N/A" or format_bytes(bytes_transferred)
 end
 
 function main_panel.set_potential_speedup(data, stats_ret_vals, analyze_ret_vals)
     local async_speedup = get_ret_val(analyze_ret_vals, "hip_memcpy_async", "speedup", 1)
     local sync_speedup  = get_ret_val(analyze_ret_vals, "hip_memcpy_sync",  "speedup", 1)
-    
+
     potential_speedup.rows[1].value = format_speedup(async_speedup * sync_speedup)
     potential_speedup.rows[2].value = format_speedup(get_ret_val(analyze_ret_vals, "hidden_transfers",  "speedup"))
     potential_speedup.rows[3].value = format_speedup(get_ret_val(analyze_ret_vals, "coalescable_kernels" , "speedup"))
-    -- potential_speedup.rows[4].value = format_speedup(get_ret_val(analyze_ret_vals, "coalescable_transfers" , "speedup"))
+    potential_speedup.rows[4].value = format_speedup(get_ret_val(analyze_ret_vals, "coalescable_transfers" , "speedup"))
 end
 
 function main_panel.set_experiment_info(data, report_file)
