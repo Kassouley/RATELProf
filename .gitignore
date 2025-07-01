@@ -3,3 +3,5 @@ lib
 *.log
 *.rprof-rep
 tmp
+devtools
+.data-test*

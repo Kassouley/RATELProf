@@ -2,9 +2,9 @@ local report_helper = require ("utils.report_helper")
 
 local function is_synchronized(gpuCpy, hipMemcpy)
     local gpu_start = gpuCpy["start"]
-    local gpu_stop =  gpu_start + gpuCpy["dur"]
+    local gpu_stop  = gpuCpy["stop"]
     local api_start = hipMemcpy["start"]
-    local api_stop = api_start + hipMemcpy["dur"]
+    local api_stop  = api_start + hipMemcpy["dur"]
     return gpu_start > api_start and gpu_stop < api_stop
 end
 
@@ -32,40 +32,23 @@ local function compute_async_copy_speedup(data, app_dur)
 end
 
 
-return function(traces_data, report_obj, opt)
-    report_obj:set_name("Host/Device Async Memcpy")
-    report_obj:set_type("Analyze")
-
+return function(traces_data, report_id, opt)
     local cpy_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
     local hip_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_HIP, opt)
     local hsa_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_HSA, opt)
 
     if next(hsa_data) ~= nil then
-        report_obj:skip("The report could not be analyzed because it contains HSA data. This version doesn't support this analysis while HSA traces are present.")
-        return
+        return {skip = "The report could not be analyzed because it contains HSA data. This version doesn't support this analysis while HSA traces are present."}
     end
 
     if next(cpy_data) == nil then
-        report_obj:skip("The report could not be analyzed because it does not contain the required GPU data.")
-        return
+        return {skip = "The report could not be analyzed because it does not contain the required GPU data."}
     end
     
     if next(hip_data) == nil then
-        report_obj:skip("The report could not be analyzed because it does not contain the required HIP API data.")
-        return
+        return {skip = "The report could not be analyzed because it does not contain the required HIP API data."}
     end
     
-    report_obj:set_headers({
-        "API ID",
-        "API Name",
-        "PID",
-        "TID",
-        "Operation",
-        "Size (MB)",
-        "CPU Duration (ns)",
-        "GPU Duration (ns)"
-    })    
-
     local data = {}
     local nb_api_cpy = 0
     local grouped_copies = {}
@@ -82,19 +65,19 @@ return function(traces_data, report_obj, opt)
         if corr_hip_trace then
             local hip_cpy = corr_hip_trace.name
             if hip_cpy:match("^hipMemcpy") and hip_cpy:match("Async$") then
-                local first_start = group[1].start_time
-                local last_stop   = group[1].stop_time
+                local first_start = group[1].start
+                local last_stop   = first_start + group[1].dur
                 local size = 0
                 for _, gpuCpy in ipairs(group) do
-                    local gpu_start = gpuCpy.start_time
-                    local gpu_stop  = gpuCpy.stop_time
+                    local gpu_start = gpuCpy.start
+                    local gpu_stop  = gpu_start + gpuCpy.dur
                     if gpu_start < first_start then first_start = gpu_start end
                     if gpu_stop > last_stop    then last_stop   = gpu_stop end
                     size = size + gpuCpy.args.size
                 end
                 local gpuCpy = {
-                    start_time = first_start,
-                    stop_time  = last_stop,
+                    start = first_start,
+                    stop  = last_stop,
                     size = size,
                     src_type = group[1].args.src_type,
                     dst_type = group[1].args.dst_type
@@ -116,7 +99,7 @@ return function(traces_data, report_obj, opt)
         end
     end
 
-    local msg = ratelprof.consts._ALL_RULES_REPORT.hip_memcpy_async.desc
+    local msg = ratelprof.consts._ALL_RULES_REPORT[report_id].desc
     local speedup_factor = 1
 
     if #data == 0 then 
@@ -144,9 +127,23 @@ Your application might speed up by ]] .. string.format("x%.3f.\n\n", speedup_fac
 
         msg = msg .. advice_msg
     end
-    
-    report_obj:set_custom_message(msg)
-    report_obj:set_data(data)
 
-    return {speedup = speedup_factor, advice = msg}
+
+    return {
+        NAME = "Host/Device Async Memcpy",
+        TYPE = "Analyze",
+        HEADER = {
+            "API ID",
+            "API Name",
+            "PID",
+            "TID",
+            "Operation",
+            "Size (B)",
+            "CPU Duration (ns)",
+            "GPU Duration (ns)"
+        },
+        DATA = data,
+        MSG = msg,
+        speedup = speedup_factor
+    }
 end

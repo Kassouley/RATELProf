@@ -4,6 +4,9 @@
  * See "https://visjs.github.io/vis-timeline/docs/timeline/" for more details.
  */
 const options = {
+    onInitialDrawComplete: function () {
+        window.timeline.redraw();
+    },
     start: 0,
     end:   1e8,
     min:   lifecycle_table.init_start,

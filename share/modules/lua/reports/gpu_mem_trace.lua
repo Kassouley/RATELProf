@@ -1,8 +1,5 @@
 local convert       = require ("utils.convert")
 local report_helper = require ("utils.report_helper")
-local stats_helper  = require ("utils.stats_helper")
-
-local test = 0
 
 local function get_output_data(mem_traces, timeunit)
     local data = {}
@@ -29,32 +26,31 @@ local function get_output_data(mem_traces, timeunit)
     return data
 end
 
-return function(traces_data, report_obj, opt)
-    report_obj:set_name("GPU Memory")
-    report_obj:set_type("Traces")
-
-    report_obj:set_headers({
-        "Start ("..opt.timeunit..")", 
-        "Duration ("..opt.timeunit..")", 
-        "Id", 
-        "CorrId", 
-        "GroupMem (MB)",
-        "PrivateMem (MB)",
-        "Bytes (MB)",
-        "Throughput (MBps)",
-        "SrcMemKd",
-        "DstMemKd",
-        "Name"
-    })
-    
-    
+return function(traces_data, _, opt)
     local mem_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
 
     local data = get_output_data(mem_traces, opt.timeunit)
-    
+
     table.sort(data, function(a, b)
         return tonumber(a[1]) < tonumber(b[1])
     end)
 
-    report_obj:set_data(data)
+    return {
+        NAME = "GPU Memory",
+        TYPE = "Traces",
+        HEADER = {
+            "Start ("..opt.timeunit..")",
+            "Duration ("..opt.timeunit..")",
+            "Id",
+            "CorrId",
+            "GroupMem (MB)",
+            "PrivateMem (MB)",
+            "Bytes (MB)",
+            "Throughput (MBps)",
+            "SrcMemKd",
+            "DstMemKd",
+            "Name"
+        },
+        DATA = data
+    }
 end

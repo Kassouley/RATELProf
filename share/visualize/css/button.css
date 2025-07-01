@@ -13,12 +13,20 @@ button:hover {
 }
 
 
-button.hidden {
+button.light {
   border: 1px solid var(--border-color);
   color: var(--text-color);
   background: var(--secondary-bg);
 }
 
-button.hidden:hover {
+button.light:hover {
   background-color: var(--hover-color);
+}
+
+button.collapsed::before {
+  content: '[+] ';
+}
+
+button.expanded::before {
+  content: '[-] ';
 }

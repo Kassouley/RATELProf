@@ -21,24 +21,8 @@ local function get_metric(trace, opt)
     return report_helper.get_duration(trace.dur, opt.timeunit)
 end
 
-return function(traces_data, report_obj, opt)
-    report_obj:set_name("GPU")
-    report_obj:set_type("Summary")
-
+return function(traces_data, _, opt)
     local timeunit = opt.timeunit
-    report_obj:set_headers({
-        "App Time (%)",
-        "API Time (%)",
-        "Total Time ("..timeunit..")",
-        "Instances",
-        "Avg ("..timeunit..")",
-        "Med ("..timeunit..")",
-        "Min ("..timeunit..")",
-        "Max ("..timeunit..")",
-        "StdDev ("..timeunit..")",
-        "Category",
-        "Operation" 
-    })
 
     local barror_traces  = traces_data:get(ratelprof.consts._ENV.DOMAIN_BARRIEROR, opt)
     local barrand_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_BARRIERAND, opt)
@@ -55,7 +39,7 @@ return function(traces_data, report_obj, opt)
         entry.key_tab[3] = nil
     end
     for _, entry in pairs(kern_entries) do
-        entry.key_tab[2] = ratelprof.utils.get_kernel_name(entry.key_tab[2], opt.is_trunc, opt.is_mangled)
+        entry.key_tab[2] = ratelprof.utils.get_kernel_name(entry.key_tab[2], opt.trunc, opt.mangled)
     end
 
     local gpu_entries = {}
@@ -72,9 +56,26 @@ return function(traces_data, report_obj, opt)
         return tonumber(a[2]) > tonumber(b[2])
     end)
 
-    report_obj:set_data(data)
+    local longuest_activity = "N/A"
+    if data[1] and data[1][11] then longuest_activity = data[1][11] end
 
-    local active_time = ratelprof.utils.compute_total_covered_duration(mem_traces, kern_traces, barror_traces, barrand_traces)
-
-    return {active_time = active_time, longest_activity = data[1][11]}
+    return {
+        NAME = "GPU",
+        TYPE = "Summary",
+        DATA = data,
+        HEADER = {
+            "App Time (%)",
+            "API Time (%)",
+            "Total Time ("..timeunit..")",
+            "Instances",
+            "Avg ("..timeunit..")",
+            "Med ("..timeunit..")",
+            "Min ("..timeunit..")",
+            "Max ("..timeunit..")",
+            "StdDev ("..timeunit..")",
+            "Category",
+            "Operation" 
+        },
+        longest_activity = longuest_activity
+    }
 end

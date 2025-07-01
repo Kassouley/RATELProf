@@ -1,72 +1,14 @@
----@diagnostic disable: need-check-nil
 -- preprocess.lua
 -- Structure for data preprocessing
 
-local msgpack_encoder = ratelprof.msgpack.encoder
+local msgpack           = ratelprof.msgpack
+local msgpack_encoder   = msgpack.encoder
+local encode_ext_string = msgpack.encode.encode_ext_string
+local encode_table      = msgpack.encode.encode_table
 
 local preprocess = {}
 
 local depth_map = {}
-
-local str_map       = {}
-local reverse_map   = {}
-local counter       = 0
-
-local function get_key(s)
-    if reverse_map[s] then
-        return reverse_map[s]
-    end
-    counter = counter + 1
-    str_map[counter] = s
-    reverse_map[s] = counter - 1
-    return counter - 1
-end
-
-local function encode_ext_string(buf, str)
-    local key = get_key(str)
-    local type_code = 1
-    local data = msgpack_encoder.new(16, msgpack_encoder.OVERFLOW_REALLOC)
-    data:encode_uint(key)
-    buf:encode_ext(type_code, data)
-    data:free()
-end
-
-local function encode_table(buf, tbl)
-  local count = 0
-  for _ in pairs(tbl) do
-    count = count + 1
-  end
-
-  buf:encode_map(count)
-
-  for k, v in pairs(tbl) do
-    -- Encode key
-    if type(k) == "string" then
-      encode_ext_string(buf, k)
-    elseif ratelprof.utils.is_integer(k) then
-      buf:encode_int(k)
-    else
-      error("Unsupported key type: " .. type(k))
-    end
-
-    -- Encode value
-    if type(v) == "string" then
-      encode_ext_string(buf, v)
-    elseif type(v) == "boolean" then
-      buf:encode_bool(v)
-    elseif v == nil then
-      buf:encode_nil()
-    elseif type(v) == "table" then
-      encode_table(buf, v) -- recursive
-    elseif ratelprof.utils.is_integer(v) then
-      buf:encode_int(v)
-    elseif type(v) == "number" then
-      buf:encode_double(v)
-    else
-      error("Unsupported value type: " .. type(v))
-    end
-  end
-end
 
 local function compute_depth (group, event, event_id)
     if event == nil then
@@ -197,7 +139,7 @@ function preprocess.get_b64_buffer(data, opt)
     main_buffer:encode_array(ndomains)
 
     for domain_id, events in pairs(event_domains) do
-        ratelprof.utils.print_progress("Domain processed", domain_i, ndomains)
+        ratelprof.utils.print_progress(domain_i, ndomains, "Preprocessing", "("..domain_id..")")
         domain_i = domain_i + 1
         
         local nitems = 0
@@ -227,11 +169,11 @@ function preprocess.get_b64_buffer(data, opt)
         buf:free()
         tmp:free()
     end
-    ratelprof.utils.print_progress("Preprocessing", ndomains, ndomains)
+    ratelprof.utils.print_progress(ndomains, ndomains, "Preprocessing", "(Done)")
 
     local b64_buffer = main_buffer:to_b64()
     main_buffer:free()
-    return '"'..b64_buffer..'"', JSON:encode(str_map)
+    return '"'..b64_buffer..'"'
 end
 
 return preprocess

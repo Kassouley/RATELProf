@@ -1,3 +1,5 @@
+local report_helper = require("utils.report_helper")
+
 -- Overlap duration function
 local function overlap(s1, e1, s2, e2)
     local s = math.max(s1, s2)
@@ -30,6 +32,9 @@ local function find_hidden_latency(copy_data, kernel_data, traces_data, TIME_THR
     table.sort(kernel_table, function(a, b) return a.start < b.start end)
 
     local items = {}
+    local metrics = {}
+    local trace_ids = {}
+    
     local total_time_overlapped_per_gpu = {}
     local total_time_per_gpu = {}
 
@@ -74,7 +79,9 @@ local function find_hidden_latency(copy_data, kernel_data, traces_data, TIME_THR
                 total_time_overlapped_per_gpu[copy_gpu_id] = total_time_overlapped_per_gpu[copy_gpu_id] + time_overlapped
                 total_time_per_gpu[copy_gpu_id] = total_time_per_gpu[copy_gpu_id] + dur_copy
 
-                items[#items+1] = {
+                table.insert(trace_ids, id)
+                table.insert(metrics, time_overlapped)
+                table.insert(items, {
                     tostring(copy_gpu_id),
                     tostring(id),
                     ratelprof.utils.get_copy_name(copy.args.src_type, copy.args.dst_type),
@@ -82,7 +89,7 @@ local function find_hidden_latency(copy_data, kernel_data, traces_data, TIME_THR
                     string.format("%.2f", hidden_percentage),
                     dur_copy,
                     time_overlapped
-                }
+                })
             end
         end
     end
@@ -92,7 +99,7 @@ local function find_hidden_latency(copy_data, kernel_data, traces_data, TIME_THR
         total_percentage_per_gpu[gpu_id] = string.format("%.2f", 100 - (total_time_overlapped_per_gpu[gpu_id] / total) * 100)
     end
 
-    return items, total_percentage_per_gpu, not_hidden_copy_dur_per_sdma
+    return items, total_percentage_per_gpu, not_hidden_copy_dur_per_sdma, trace_ids, metrics
 end
 
 
@@ -105,46 +112,28 @@ local function compute_hidden_transfers_speedup(not_hidden_copy_dur_per_sdma, ap
     return app_dur / (app_dur - max_ideal_hidden_dur)
 end
 
-return function(traces_data, report_obj, opt)
+return function(traces_data, report_id, opt)
 
-    local HIDDEN_THRESHOLD_PCT = tonumber(opt.report_opt.th_hidden) or ratelprof.consts._ALL_RULES_REPORT.hidden_transfers.opt.th_hidden.default
-    local TIME_THRESHOLD       = tonumber(opt.report_opt.th_dur)    or ratelprof.consts._ALL_RULES_REPORT.hidden_transfers.opt.th_dur.default
+    local HIDDEN_THRESHOLD_PCT = report_helper.get_report_opt_value(report_id, "th_hidden", opt.report_opt)
+    local TIME_THRESHOLD       = report_helper.get_report_opt_value(report_id, "th_dur",    opt.report_opt)
 
-
-    report_obj:set_name("Hidden transfers latency")
-    report_obj:set_type("Analyze")
-
-    
     local kernel_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL, opt)
 
     if next(kernel_data) == nil then
-        report_obj:skip("The report could not be analyzed because it does not contain the required kernel data.")
-        return
+        return {skip = "The report could not be analyzed because it does not contain the required kernel data."}
     end
 
     local copy_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
 
     if next(copy_data) == nil then
-        report_obj:skip("The report could not be analyzed because it does not contain the required memory data.")
-        return
+        return {skip = "The report could not be analyzed because it does not contain the required copy data."}
     end
 
-    report_obj:set_headers({
-        "GPU ID",
-        "Copy ID",
-        "Operation",
-        "Size (B)",
-        "Hidden (%)",
-        "Duration (ns)",
-        "Hidden Duration (ns)"
-    })
-
-    local data, percentage_per_gpu, copy_dur_per_sdma = find_hidden_latency(copy_data, kernel_data, traces_data, TIME_THRESHOLD, HIDDEN_THRESHOLD_PCT)
+    local data, percentage_per_gpu, copy_dur_per_sdma, trace_ids, metrics = find_hidden_latency(copy_data, kernel_data, traces_data, TIME_THRESHOLD, HIDDEN_THRESHOLD_PCT)
 
     local app_dur = traces_data:get_app_dur()
     local speedup_factor = 1
-    local msg = ratelprof.consts._ALL_RULES_REPORT.hidden_transfers.desc
-
+    local msg = ratelprof.consts._ALL_RULES_REPORT[report_id].desc
 
     local total_percent = 0
     local npourcent = 0
@@ -207,11 +196,30 @@ Perfectly hide all memory transfers might speed up your application by ]] .. str
         table.sort(data, function(a, b)
             return a[7] < b[7]
         end)
-
     end
 
-    report_obj:set_custom_message(msg)
-    report_obj:set_data(data)
+    local header = {
+        "GPU ID",
+        "Copy ID",
+        "Operation",
+        "Size (B)",
+        "Hidden (%)",
+        "Duration (ns)",
+        "Hidden Duration (ns)"
+    }
 
-    return {speedup = speedup_factor, score = score, advice = msg}
+    local vis = #trace_ids > 0 and {header, trace_ids, metrics} or nil
+
+    return {
+        NAME = "Hidden transfers latency",
+        TYPE = "Analyze",
+        HEADER = header,
+        DATA = data,
+        MSG = msg,
+        score = score,
+        speedup = speedup_factor,
+
+        -- Return data for visualize command
+        vis = vis
+    }
 end

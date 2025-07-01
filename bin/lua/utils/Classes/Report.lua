@@ -1,7 +1,16 @@
 -- Report.lua
 local Report = {}
-Report.__index = Report
 Report.utils = {}
+
+local function print_if_not (cond, format, ...)
+    if not cond then
+        Message:print (format, ...)
+    end
+end
+
+local function print_skip(cond, format, ...)
+    print_if_not(cond, "SKIPPED: "..string.format(format, ...))
+end
 
 function Report.utils.execute_report(data, input_file, options_values, report_list, progress_enabled, progress_msg)
     local report_ret_vals = {}
@@ -15,54 +24,57 @@ function Report.utils.execute_report(data, input_file, options_values, report_li
         local report_id = report_data.id
 
         if progress_enabled then
-            ratelprof.utils.print_progress(progress_msg, i-1, nreports)
+            ratelprof.utils.print_progress(i-1, nreports, progress_msg, '('..report_id..')')
         end
 
         local report_path = report_list.__default_report_path..report_id..".lua"
         if ratelprof.fs.exists(report_path) then
-            local output = outputs[i] or outputs[#outputs]
-            local output_format = formats[i] or formats[#formats] 
+            local output = outputs[i] or outputs[#outputs] or '-'
+            local output_format = formats[i] or formats[#formats]
                                     or (output == "-" and "column" or "csv")
 
-            local attribute = {
-                format        = output_format,
-                output        = output,
-                trace_path    = input_file,
-                report_id     = report_id,
-                report_path   = report_path,
-                max_col_width = options_values.max_col_width,
-                max_lines     = options_values.max_lines,
-                notation      = options_values.notation,
-                progress_enabled = progress_enabled
-            }
+            local opt = options_values
+            opt.report_opt = report_data.opt or {}
 
-            local opt = {
-                timeunit     = options_values.timeunit,
-                is_only_main = options_values.only_main,
-                is_trunc     = options_values.trunc,
-                is_mangled   = options_values.mangled,
-                report_opt   = report_data.opt or {}
-            }
-
-            local report_obj = Report:new(attribute)
-
+            local ret = nil
             local chunk, err = loadfile(report_path)
             if chunk then
-                report_ret_vals[report_id] = chunk()(data, report_obj, opt)
+                ret = chunk()(data, report_id, opt)
             else
                 error("Error loading file: " .. err)
             end
-            if not report_obj.is_skipped then
+
+            local report_obj = Report:new({
+                    format          = output_format,
+                    output          = output,
+                    trace_path      = input_file,
+                    report_name     = ret.NAME,
+                    report_type     = ret.TYPE,
+                    report_id       = report_id,
+                    report_path     = report_path,
+                    max_col_width   = options_values.max_col_width,
+                    max_lines       = options_values.max_lines,
+                    notation        = options_values.notation,
+                    header          = ret.HEADER,
+                    msg             = ret.MSG,
+                    data            = ret.DATA,
+                    progress_enabled = progress_enabled,
+                })
+
+            if ret.skip then
+                print_skip(progress_enabled, ret.skip or "No skip message provided.")
+            else
                 report_obj:generate()
             end
 
+            report_ret_vals[report_id] = ret
         else
             print('\n')
             Message:error(string.format("Report '%s' encountered an internal error: No valid report file or class found", report_id))
         end
     end
     if progress_enabled then
-        ratelprof.utils.print_progress(progress_msg, nreports, nreports)
+        ratelprof.utils.print_progress(nreports, nreports, progress_msg, '(Done)')
     end
 
     return report_ret_vals
@@ -76,11 +88,24 @@ local format_extensions = {
     tsv = "tsv"
 }
 
-local function print_if_not (cond, format, ...)
-    if not cond then
-        Message:print (format, ...)
-    end
-end
+local report_attribute_type = {
+    format          = "string",
+    output          = "string",
+    trace_path      = "string",
+    report_name     = "string",
+    report_type     = "string",
+    report_id       = "string",
+    report_path     = "string",
+    max_col_width   = "number",
+    max_lines       = "string",
+    notation        = "string",
+    header          = "table",
+    msg             = "string",
+    data            = "table",
+    progress_enabled = "boolean",
+}
+
+Report.__index = Report
 
 -- Constructor: Initialize a new Report object
 function Report:new(attribute)
@@ -88,32 +113,18 @@ function Report:new(attribute)
 
     local instance = setmetatable({}, self)
 
-    instance.trace_path  = attribute.trace_path
-    instance.report_id   = attribute.report_id
-    instance.report_path = attribute.report_path
-
-    instance.output = attribute.output
-    instance.format = attribute.format
-
-    instance.max_col_width = tonumber(attribute.max_col_width) or 32
-    if attribute.max_lines == "all" then
-        instance.max_lines = attribute.max_lines
-    else
-        instance.max_lines = tonumber(attribute.max_lines) or nil
+    for name, value in pairs(attribute) do
+        local atype = report_attribute_type[name]
+        if not atype then
+            error(name.." is not a valid report attribute")
+        end
+        if value and type(value) ~= atype then
+            error(name.." argument must be a "..atype)
+        end
+        instance[name] = value
     end
-    
-    instance.notation = attribute.notation
 
-    instance.report_name = "'No name set'"
-    instance.report_type = "Report"
-
-    instance.data = nil
-    instance.headers = nil
-    instance.msg = nil
-
-    instance.is_skipped = false
-
-    instance.progress_enabled = attribute.progress_enabled
+    instance:set_default_value()
 
     local filename = instance:get_output_filename()
     instance.filename = filename
@@ -126,54 +137,16 @@ function Report:new(attribute)
     return instance
 end
 
-function Report:set_headers(headers)
-    if type(headers) ~= "table" then
-        error("Header argument must be a table")
-    end
-    self.headers = headers
-end
-
-function Report:set_custom_message(msg)
-    if type(msg) ~= "string" then
-        error("Custom message argument must be a string")
-    end
-    self.msg = msg
-end
-
-function Report:set_name(name)
-    if type(name) ~= "string" then
-        error("Name argument must be a string")
-    end
-    self.report_name = name
-end
-
-function Report:set_type(t)
-    if type(t) ~= "string" then
-        error("Type argument must be a string")
-    end
-    self.report_type = t
-end
-
-function Report:set_data(data)
-    if type(data) ~= "table" then
-        error("Data argument must be a table")
-    end
-    self.data = data
-end
-
-function Report:skip(format, ...)
-    print_if_not(self.progress_enabled, "SKIPPED: "..string.format(format, ...))
-    self.is_skipped = true
-end
 
 function Report:generate()
-    if not self.data then
+    local data = self.data
+    if not data then
         error("Report doesn't have any data to process")
     end
 
     local has_msg = self.msg
 
-    if #self.data == 0 then
+    if #data == 0 then
         if has_msg then
             if self.output ~= "-" and self.output:sub(1, 1) ~= "@" and self.format == "csv" or self.format == "tsv" then
                 local msg_filename = ratelprof.fs.remove_extension(self.filename).."_msg.txt"
@@ -184,12 +157,12 @@ function Report:generate()
                 print_if_not(self.progress_enabled, self.msg) 
             end
         end
-        self:skip("'%s' does not contain %s data.", self.trace_path, self.report_name)
+        print_skip(self.progress_enabled, "'%s' does not contain %s data.", self.trace_path, self.report_name)
         return
     end
 
-    if self.headers then 
-        table.insert(self.data, 1, self.headers)
+    if self.header then 
+        table.insert(data, 1, self.header)
     end
 
     local stream = self:get_output_stream()
@@ -218,12 +191,23 @@ function Report:generate()
 
 end
 
+function Report:set_default_value()
+    self.max_col_width = tonumber(self.max_col_width) or 32
+    
+    local max_lines = self.max_lines
+    if max_lines == "all" then return end
+    if self.output == "-" then
+        max_lines = tonumber(max_lines) or 50
+    else
+        max_lines = tonumber(max_lines) or "all"
+    end
+    self.max_lines = max_lines
+end
+
 function Report:get_output_filename()
     if self.output == "-" or self.output:sub(1, 1) == "@" then
-        self.max_lines = self.max_lines or 50
-        return nil
+        return
     end
-    self.max_lines = self.max_lines or "all"
 
     local report_wo_ext = ratelprof.fs.remove_extension(self.trace_path)
     local file_extension = format_extensions[self.format] or "txt"
@@ -261,8 +245,6 @@ function Report:get_formatted_data(format)
         return self:toColumn()
     end
 end
-
-local MAX_WIDTH = 32 
 
 local function get_engineering_notation(n)
     local function log10(x)
@@ -393,7 +375,7 @@ function Report:__format_data(separator, bsep, msep, asep, columnWidths)
         line[#line + 1] = asep
         result[#result + 1] = table.concat(line)
         
-        if i == 1 and self.headers then
+        if i == 1 and self.header then
             result[#result + 1] = separator
         end
     end

@@ -1,9 +1,13 @@
-local stats_helper  = require ("utils.stats_helper")
+local stats_helper = require ("utils.stats_helper")
 
-return function(traces_data, report_obj, opt)
-    report_obj:set_name("OpenMP Target Region API")
-    report_obj:set_type("Traces")
+return function(traces_data, _, opt)
+    local data, header = stats_helper.process_api_raw_data_for_trace_report(
+         traces_data, ratelprof.consts._ENV.DOMAIN_OMPT, opt)
 
-    stats_helper.process_api_raw_data_for_trace_report(
-        report_obj, traces_data, ratelprof.consts._ENV.DOMAIN_OMPT, opt)
+    return {
+        NAME = "OpenMP Target Region API",
+        TYPE = "Traces",
+        DATA = data,
+        HEADER = header
+    }
 end

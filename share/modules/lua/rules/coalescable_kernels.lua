@@ -1,5 +1,4 @@
-
-
+local report_helper = require("utils.report_helper")
 
 local function find_coalescable_kernels(kernel_data, trace_data, DURATION_THRESHOLD_NS, GAP_THRESHOLD_NS, MIN_SEQUENCE_LEN, opt)
 
@@ -26,11 +25,10 @@ local function find_coalescable_kernels(kernel_data, trace_data, DURATION_THRESH
                 tostring(queue_id),
                 #sequence,
                 sequence_start,
-                sequence_stop,
                 sequence_dur,
                 total_gap,
                 tonumber(string.format("%.2f", speedup_factor)),
-                ratelprof.utils.get_kernel_name(name, opt.is_trunc, opt.is_mangled),
+                ratelprof.utils.get_kernel_name(name, opt.trunc, opt.mangled),
             })
 
             if not sequences_per_gpu[gpu_node_id] then
@@ -44,17 +42,16 @@ local function find_coalescable_kernels(kernel_data, trace_data, DURATION_THRESH
     for _, kernel in pairs(kernel_data) do
         local gpu_node_id = trace_data:get_gpu_id(kernel.args.gpu_id)
         local queue_id    = kernel.args.queue_id
-
         if not kernel_table[gpu_node_id] then kernel_table[gpu_node_id] = {} end
         if not kernel_table[gpu_node_id][queue_id] then kernel_table[gpu_node_id][queue_id]  = {} end
         table.insert(kernel_table[gpu_node_id][queue_id], kernel)
     end
 
     local last = nil
-    local sequence = {}
 
     for gpu_node_id, kernels_per_gpu in pairs(kernel_table) do
         for queue_id, kernels_per_queue in pairs(kernels_per_gpu) do
+            local sequence = {}
             table.sort(kernels_per_queue, function(a, b) return a.start < b.start end)
 
             for _, k in ipairs(kernels_per_queue) do
@@ -89,7 +86,7 @@ local function compute_coalescable_kernels_speedup(data, app_dur)
 
     for _, e in ipairs(data) do
         local queue_id = e[2]
-        local gaps_duration = e[7]
+        local gaps_duration = e[6]
 
         if not total_gaps_per_queue[queue_id] then
             total_gaps_per_queue[queue_id] = 0
@@ -106,37 +103,21 @@ local function compute_coalescable_kernels_speedup(data, app_dur)
     return app_dur / (app_dur - max_gap_dur)
 end
 
-return function(traces_data, report_obj, opt)
+return function(traces_data, report_id, opt)
 
-
-    local DURATION_THRESHOLD_NS = tonumber(opt.report_opt.th_dur)  or ratelprof.consts._ALL_RULES_REPORT.coalescable_kernels.opt.th_dur.default
-    local GAP_THRESHOLD_NS      = tonumber(opt.report_opt.th_gap)  or ratelprof.consts._ALL_RULES_REPORT.coalescable_kernels.opt.th_gap.default
-    local MIN_SEQUENCE_LEN      = tonumber(opt.report_opt.min_seq) or ratelprof.consts._ALL_RULES_REPORT.coalescable_kernels.opt.min_seq.default
-
-    report_obj:set_name("Coalescable Kernel Launches")
-    report_obj:set_type("Analyze")
+    local DURATION_THRESHOLD_NS = report_helper.get_report_opt_value(report_id, "th_dur", opt.report_opt)
+    local GAP_THRESHOLD_NS      = report_helper.get_report_opt_value(report_id, "th_gap", opt.report_opt)
+    local MIN_SEQUENCE_LEN      = report_helper.get_report_opt_value(report_id, "min_seq", opt.report_opt)
 
     local kernel_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL, opt)
 
     if next(kernel_data) == nil then
-        report_obj:skip("The report could not be analyzed because it does not contain the required kernel data.")
-        return
+        return {skip = "The report could not be analyzed because it does not contain the required kernel data."}
     end
 
-    report_obj:set_headers({
-        "GPU ID",
-        "Queue ID",
-        "Seq Length",
-        "Seq Start",
-        "Seq Stop",
-        "Seq Duration (ns)",
-        "Seq Gap Duration (ns)",
-        "Seq Speed Up",
-        "Kernel Name",
-    })
     local speedup_factor = 1
 
-    local msg = ratelprof.consts._ALL_RULES_REPORT.coalescable_kernels.desc
+    local msg = ratelprof.consts._ALL_RULES_REPORT[report_id].desc
 
     local data, sequences_per_gpu = find_coalescable_kernels(kernel_data, traces_data, DURATION_THRESHOLD_NS, GAP_THRESHOLD_NS, MIN_SEQUENCE_LEN, opt)
 
@@ -171,8 +152,22 @@ Optimizing these kernel calls might speed up your application by ]] .. string.fo
         msg = msg .. no_advice_msg
     end
 
-    report_obj:set_custom_message(msg)
-    report_obj:set_data(data)
 
-    return {speedup = speedup_factor, advice = msg}
+    return {
+        NAME = "Coalescable Kernel Launches",
+        TYPE = "Analyze",
+        HEADER = {
+            "GPU ID",
+            "Queue ID",
+            "Seq Length",
+            "Seq Start (ns)",
+            "Seq Duration (ns)",
+            "Seq Gap Duration (ns)",
+            "Seq Speed Up",
+            "Kernel Name",
+        },
+        DATA = data,
+        MSG = msg,
+        speedup = speedup_factor
+    }
 end

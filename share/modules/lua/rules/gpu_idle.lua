@@ -1,3 +1,5 @@
+local report_helper = require("utils.report_helper")
+
 local function find_gaps(traces_data, kernel_traces, gap_th)
     local gaps = {}
     local percentage_per_gpu = {}
@@ -66,30 +68,18 @@ local function find_gaps(traces_data, kernel_traces, gap_th)
 end
 
 
-return function(traces_data, report_obj, opt)
-    report_obj:set_name("GPU Idle")
-    report_obj:set_type("Analyze")
-
-    local GAP_MS = tonumber(opt.report_opt.th_gap) or ratelprof.consts._ALL_RULES_REPORT.gpu_idle.opt.th_gap.default
+return function(traces_data, report_id, opt)
+    local GAP_MS = report_helper.get_report_opt_value(report_id, "th_gap", opt.report_opt)
     
     local kernel_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL, opt)
 
     if next(kernel_data) == nil then
-        report_obj:skip("The report could not be analyzed because it does not contain the required GPU data.")
-        return
+        return {skip = "The report could not be analyzed because it does not contain the required GPU data."}
     end
-
-    report_obj:set_headers({
-        "GPU ID",
-        "Range ID",
-        "Start",
-        "End",
-        "Duration (ns)"
-    })
 
     local data, percentage_per_gpu = find_gaps(traces_data, kernel_data, GAP_MS * 1e6)
 
-    local msg = ratelprof.consts._ALL_RULES_REPORT.gpu_idle.desc
+    local msg = ratelprof.consts._ALL_RULES_REPORT[report_id].desc
 
     local advice_msg = [[ 
 The following are ranges where a GPU is idle for more than ]]..GAP_MS..[[ ms. 
@@ -110,9 +100,18 @@ Addressing these gaps might improve application performance.
     else
         msg = msg .. advice_msg
     end
-    
-    report_obj:set_custom_message(msg)
-    report_obj:set_data(data)
 
-    return {advice = msg}
+    return {
+        NAME = "GPU Idle",
+        TYPE = "Analyze",
+        HEADER = {
+            "GPU ID",
+            "Range ID",
+            "Start",
+            "End",
+            "Duration (ns)"
+        },
+        DATA = data,
+        MSG = msg,
+    }
 end

@@ -1,6 +1,5 @@
 local report_helper = require ("utils.report_helper")
 
-
 local function compute_sync_copy_speedup(data, app_dur)
     local total_useless_sync_time_per_tid = {}
 
@@ -25,32 +24,16 @@ local function compute_sync_copy_speedup(data, app_dur)
 end
 
 
-return function(traces_data, report_obj, opt)
-    report_obj:set_name("Host/Device Sync Memcpy")
-    report_obj:set_type("Analyze")
-    report_obj:set_headers({
-        "Copy ID",
-        "API ID",
-        "API Name",
-        "PID",
-        "TID",
-        "Operation",
-        "Size (MB)",
-        "CPU Duration (ns)",
-        "GPU Duration (ns)",
-    })
-
+return function(traces_data, report_id, opt)
     local cpy_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
     local hip_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_HIP, opt)
 
     if next(cpy_data) == nil then
-        report_obj:skip("The report could not be analyzed because it does not contain the required GPU data.")
-        return
+        return {skip = "The report could not be analyzed because it does not contain the required GPU data."}
     end
     
     if next(hip_data) == nil then
-        report_obj:skip("The report could not be analyzed because it does not contain the required HIP API data.")
-        return
+        return {skip = "The report could not be analyzed because it does not contain the required HIP API data."}
     end
 
     local data = {}
@@ -77,7 +60,7 @@ return function(traces_data, report_obj, opt)
         end
     end
 
-    local msg = ratelprof.consts._ALL_RULES_REPORT.hip_memcpy_sync.desc
+    local msg = ratelprof.consts._ALL_RULES_REPORT[report_id].desc
     local speedup_factor = 1
 
     if #data == 0 then 
@@ -104,8 +87,22 @@ Your application might speed up by ]] .. string.format("x%.3f.\n\n", speedup_fac
         msg = msg .. advice_msg
     end
     
-    report_obj:set_custom_message(msg)
-    report_obj:set_data(data)
-    
-    return {speedup = speedup_factor, advice = msg}
+    return {
+        NAME = "Host/Device Sync Memcpy",
+        TYPE = "Analyze",
+        HEADER = {
+            "Copy ID",
+            "API ID",
+            "API Name",
+            "PID",
+            "TID",
+            "Operation",
+            "Size (B)",
+            "CPU Duration (ns)",
+            "GPU Duration (ns)",
+        },
+        DATA = data,
+        MSG = msg,
+        speedup = speedup_factor
+    }
 end

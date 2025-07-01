@@ -347,5 +347,5 @@ function createTimeline(items, groups, container) {
         }
     });
 
-    return timeline;
+    window.timeline = timeline;
 }

@@ -59,7 +59,7 @@ local function get_output_data(traces_data, opt)
                 "---", "---", "---", "---",
                 traces_data:get_gpu_id(trace.args.gpu_id),
                 tostring(trace.args.queue_id),
-                ratelprof.utils.get_kernel_name(trace.args.kernel_name, opt.is_trunc, opt.is_mangled)
+                ratelprof.utils.get_kernel_name(trace.args.kernel_name, opt.trunc, opt.mangled)
             }
         end
     end
@@ -84,34 +84,8 @@ local function get_output_data(traces_data, opt)
     return data
 end
 
-return function(traces_data, report_obj, opt)
-    report_obj:set_name("GPU")
-    report_obj:set_type("Traces")
-
-    report_obj:set_headers({
-        "Start ("..opt.timeunit..")", 
-        "Duration ("..opt.timeunit..")", 
-        "Queue Time ("..opt.timeunit..")", 
-        "Id", 
-        "CorrId", 
-        "GrdX", 
-        "GrdY", 
-        "GrdZ", 
-        "BlkX", 
-        "BlkY", 
-        "BlkZ",
-        "GroupMem (MB)",
-        "PrivateMem (MB)",
-        "Bytes (MB)",
-        "Throughput (MBps)",
-        "SrcMemKd",
-        "DstMemKd",
-        "Device",
-        "Queue",
-        "Name"
-    })
-    
-    
+return function(traces_data, _, opt)
+    local timeunit = opt.timeunit
 
     local data = get_output_data(traces_data, opt)
     
@@ -119,5 +93,31 @@ return function(traces_data, report_obj, opt)
         return tonumber(a[1]) < tonumber(b[1])
     end)
 
-    report_obj:set_data(data)
+    return {
+        NAME = "GPU",
+        TYPE = "Traces",
+        DATA = data,
+            HEADER = {
+            "Start ("..timeunit..")", 
+            "Duration ("..timeunit..")", 
+            "Queue Time ("..timeunit..")", 
+            "Id", 
+            "CorrId", 
+            "GrdX", 
+            "GrdY", 
+            "GrdZ", 
+            "BlkX", 
+            "BlkY", 
+            "BlkZ",
+            "GroupMem (MB)",
+            "PrivateMem (MB)",
+            "Bytes (MB)",
+            "Throughput (MBps)",
+            "SrcMemKd",
+            "DstMemKd",
+            "Device",
+            "Queue",
+            "Name"
+        }
+    }
 end

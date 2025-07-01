@@ -1,4 +1,5 @@
-const items = [];
+const traces_data = [];
+const traceMap = new Map();
 
 function decodeB64(b64) {
     const bin = atob(b64);
@@ -19,13 +20,11 @@ function decodeB64(b64) {
         return bin.charCodeAt(off++)
     }
 
-    /*
     function readString(len) {
         const str = bin.slice(off, off + len);
         off += len;
         return new TextDecoder().decode(Uint8Array.from(str, c => c.charCodeAt(0)));
     }
-    */
 
     function readArray(len) {
         const arr = [];
@@ -65,7 +64,8 @@ function decodeB64(b64) {
                 
                 if (item.start < 1000000) item.is_visible = true;
 
-                items.push(item);
+                traceMap.set(item.id, item);
+                traces_data.push(item);
             }
             return
         }
@@ -88,7 +88,7 @@ function decodeB64(b64) {
         if ((byte & 0xf0) === 0x90) return readArray(byte & 0x0f);
 
         // fixstr (0xa0 - 0xbf)
-        // if ((byte & 0xe0) === 0xa0) return readString(byte & 0x1f);
+        if ((byte & 0xe0) === 0xa0) return readString(byte & 0x1f);
 
         switch (byte) {
 
@@ -104,7 +104,6 @@ function decodeB64(b64) {
             // array 32 (0xdd)
             case(0xdd): return readArray(readB32());
 
-            /*
             // str 8 (0xd9)
             case(0xd9): return readString(readB8());
 
@@ -113,7 +112,6 @@ function decodeB64(b64) {
 
             // str 32 (0xdb)
             case(0xdb): return readString(readB32());
-            */
 
             // nil (0xc0)
             case(0xc0): return null;
@@ -163,10 +161,16 @@ function decodeB64(b64) {
             }
             // int 64 (0xd3)
             case(0xd3): {
-                const hi = readB32();
-                const lo = readB32();
-                const val = (hi << 32n) | lo;
-                return (high & 0x80000000) ? val - (1n << 64n) : val;
+                const hi = readB32() | 0;
+                const lo = readB32() >>> 0;
+
+                const val = hi * 4294967296 + lo;
+
+                if (val > Number.MAX_SAFE_INTEGER || val < Number.MIN_SAFE_INTEGER) {
+                    throw new Error(`int64 value (${val}) exceeds JavaScript safe integer range`);
+                }
+
+                return val;
             }
             // fixext 1 (0xd4)
             case(0xd4): return readExt(1);

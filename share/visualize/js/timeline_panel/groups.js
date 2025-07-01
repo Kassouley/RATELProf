@@ -38,7 +38,7 @@ function get_group_id(event, d) {
 
     createNestedGroup(nestedGroup, nestedGroupKey, nestedGroupName, q_id, 3);
 
-    items.push({
+    traces_data.push({
         className:  'non-highlighted',
         id:         `Dispatch_${event.id}`,
         start:      args.dispatch_time,
@@ -89,20 +89,19 @@ function concatGroups(groupsList) {
   return result;
 }
 
-function createMainGroup() {
-    let g = 1, c = 1000;
-    for (const [id, d] of Object.entries(domain_table))
-        groupsList[id] = {
-            group: {
-                className: "lvl-1-group-class",
-                style: "color:var(--text-color);background-color:var(--lvl-1-group-color);font-size:13px;text-align:left;",
-                treeLevel: 1,
-                id,
-                content: "ⓘ " + d.name,
-                title: d.desc,
-                showNested: d.isGPU,
-                value: d.isGPU ? g++ : c++
-            },
-            nested_groups: {}
-        };
+let g = 1, c = 1000;
+for (const [id, d] of Object.entries(domain_table)) {
+    groupsList[id] = {
+        group: {
+            className: "lvl-1-group-class",
+            style: "color:var(--text-color);background-color:var(--lvl-1-group-color);font-size:13px;text-align:left;",
+            treeLevel: 1,
+            id,
+            content: "ⓘ " + d.name,
+            title: d.desc,
+            showNested: d.isGPU,
+            value: d.isGPU ? g++ : c++
+        },
+        nested_groups: {}
+    }
 }

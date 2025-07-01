@@ -22,12 +22,10 @@ local function get_metric_qdur(trace, opt)
     return report_helper.get_duration(trace.start - trace.args.dispatch_time, opt.timeunit)
 end
 
-return function(traces_data, report_obj, opt)
+return function(traces_data, _, opt)
     local timeunit = opt.timeunit
-    report_obj:set_name("GPU Kernel")
-    report_obj:set_type("Summary")
 
-    report_obj:set_headers({
+    local HEADER = {
         "App Time (%)", -- 1
         "API Time (%)", -- 2
         "Total Time ("..timeunit..")", -- 3
@@ -50,7 +48,7 @@ return function(traces_data, report_obj, opt)
         "BlockY", 
         "BlockZ", 
         "Name" 
-    })
+    }
 
     local gpu_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL, opt)
 
@@ -94,7 +92,7 @@ return function(traces_data, report_obj, opt)
             entry_dur_time.key_tab[4],
             entry_dur_time.key_tab[5],
             entry_dur_time.key_tab[6],
-            ratelprof.utils.get_kernel_name(entry_dur_time.key_tab[7], opt.is_trunc, opt.is_mangled)
+            ratelprof.utils.get_kernel_name(entry_dur_time.key_tab[7], opt.trunc, opt.mangled)
         }
 
         table.insert(data, statistic_table)
@@ -104,14 +102,12 @@ return function(traces_data, report_obj, opt)
         return tonumber(a[2]) > tonumber(b[2])
     end)
 
-    report_obj:set_data(data)
-
-
-    local compute_time = ratelprof.utils.compute_total_covered_duration(gpu_traces)
-
     return {
+        NAME = "GPU Kernel",
+        TYPE = "Summary",
+        DATA = data,
+        HEADER = HEADER,
         total_time = total_metrics_dur_time,
         total_queue_time = total_metrics_queue_time,
-        compute_time = compute_time
     }
 end

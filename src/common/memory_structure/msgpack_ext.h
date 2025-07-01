@@ -26,7 +26,6 @@ void msgpack_ext_string_if_full();
 // Get or assign an ID for a string
 size_t msgpack_ext_get_string_id(const char *str);
 
-
 // Free memory used by the table
 void msgpack_ext_string_free();
 

@@ -1,27 +1,63 @@
-.csv {
-  width: 100%;
-  height: 100%;
-  display:flex;
-}
-
-.csv button {
-  font-size: 10px;
-  font-family: monospace;
-  margin: 2px;
-  padding: 4px;
-}
-
 .csv-container {
   overflow: auto;
   white-space: nowrap;
   width: 100%;
+  position: relative;
   padding-left: 10px;
+  padding-bottom: 20px;
 }
 
-.csv-container table {
+.csv {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.csv button {
+  font-size: 10px;
+  margin: 2px;
+  padding: 4px;
+}
+
+.csv .pagination {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-top: 2px;
+    margin-bottom: 1em;
+}
+
+.top-bar .config-toggle {
+    height: 2em;
+    width: 2em;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.top-bar input {
+  width: 100%;
+  height: 2.5em;
+  padding: 6px;
+  box-sizing: border-box;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.config-panel {
+  margin-bottom: 1em;
+  padding: 10px;
+}
+
+
+.csv-table table {
     table-layout: auto;
 }
-.csv-container th.sortable::after {
+.csv-table th.sortable::after {
   padding-right:10px;
   content: "\00a0\00a0"; /* Reserve space for arrow */
   display: inline-block;
@@ -29,55 +65,18 @@
   text-align: center;
 }
 
-.csv-container th.asc::after {
+.csv-table th.asc::after {
   content: "\00a0▲";
 }
 
-.csv-container th.desc::after {
+.csv-table th.desc::after {
   content: "\00a0▼";
 }
 
-
-.table-container  {
-  white-space: nowrap;
-  width: 85%;
-  height: 70vh;
-  padding-left: 10px;
-  overflow: auto;
-}
-
-.box {
+.message button {
+  margin: 0;
+  padding: 5px;
   width: 100%;
-  box-shadow: inset 0 0 0 1px var(--border-color);
-  font-family: Arial, sans-serif;
-  background-color: #fafafa;
-  border-radius: 4px;
-}
-
-.toggle-btn {
-  display: inline-block;
-  cursor: pointer;
+  text-align: left;
   font-size: 14px;
-  padding: 1px 4px;
-  background-color: var(--secondary-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 3px;
-  color: #555;
-  user-select: none;
-  font-weight: bold;
-  margin: 3px;
-}
-
-.content-box {
-  display: none;
-  padding: 10px;
-  background-color: #fff;
-  border-top: 1px solid #ddd;
-  border-radius: 0 0 4px 4px;
-  color: #333;
-  font-size: 14px;
-}
-
-.content-box.show {
-  display: block;
 }

@@ -48,11 +48,13 @@ end
 
 
 
-function utils.print_progress(prefix, current, total)
+function utils.print_progress(current, total, prefix, suffix)
+    prefix = prefix or ""
+    suffix = suffix or ""
     local bar_length = 30
     local progress = math.floor((current / total) * bar_length)
     local bar = string.rep("=", progress) .. string.rep(" ", bar_length - progress)
-    io.write(string.format("\r%-20s [%s] %d/%d", prefix, bar, current, total))
+    io.write(string.format("\r%-20s [%s] %d/%d %-30s", prefix, bar, current, total, suffix))
     if current == total then io.write("\n") end
     io.flush()
 end
@@ -81,8 +83,25 @@ end
 -- end
 
 function utils.is_integer(n)
-  return n == math.floor(n)
+    return n == math.floor(n)
 end
+
+function utils.is_array(tbl)
+    if type(tbl) ~= "table" then
+    return false
+    end
+
+    local i = 0
+    for k, _ in pairs(tbl) do
+        i = i + 1
+        if type(k) ~= "number" or k ~= i then
+            return false
+        end
+    end
+
+    return true
+end
+
 
 function utils.check_report_file(report_file)
     if not ratelprof.fs.exists(report_file) then
@@ -145,6 +164,10 @@ function utils.get_copy_name(src, dst)
     return ("Copy%sTo%s"):format(get_name(src), get_name(dst))
 end
 
+function utils.get_copy_name_from_trace(trace)
+    return utils.get_copy_name(trace.args.src_type, trace.args.dst_type)
+end
+
 
 function utils.get_gpu_id(trace, traces_data)
     local gpu_agent = trace.args.gpu_id
@@ -179,18 +202,7 @@ local function generate_json(value, indent)
         error("Unsupported type: " .. type(value))
     end
 
-    -- Detect if it's an array (sequential integer keys)
-    local is_array = true
-    local i = 0
-    for k, _ in pairs(value) do
-        i = i + 1
-        if type(k) ~= "number" or k ~= i then
-            is_array = false
-            break
-        end
-    end
-
-    if is_array then
+    if utils.is_array(value) then
         table.insert(json_parts, "[\n")
         for i, v in ipairs(value) do
             if i > 1 then table.insert(json_parts, ",\n") end

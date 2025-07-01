@@ -10,7 +10,7 @@ local function get_entry_key_tab(trace)
     return { trace.name }
 end
 
-function stats_helper.process_api_raw_data_for_sum_report(report_obj, data, domain, opt)
+function stats_helper.process_api_raw_data_for_sum_report(data, domain, opt)
     local timeunit = opt.timeunit
     local raw_data = data:get(domain, opt)
     local entries, total_metrics = stats_helper.get_entries(raw_data, get_entry_key_tab, get_metric, opt)
@@ -20,9 +20,7 @@ function stats_helper.process_api_raw_data_for_sum_report(report_obj, data, doma
         return tonumber(a[2]) > tonumber(b[2])
     end)
 
-    report_obj:set_data(data)
-
-    report_obj:set_headers({
+    return data, {
         "App Time (%)", -- 1
         "API Time (%)", -- 1
         "Total Time ("..timeunit..")", -- 2 
@@ -33,11 +31,11 @@ function stats_helper.process_api_raw_data_for_sum_report(report_obj, data, doma
         "Max ("..timeunit..")", -- 7
         "StdDev ("..timeunit..")", -- 8
         "Name" -- 9
-    })
+    }
 end
 
 
-function stats_helper.process_api_raw_data_for_trace_report(report_obj, data, domain, opt)
+function stats_helper.process_api_raw_data_for_trace_report(data, domain, opt)
     local timeunit = opt.timeunit
     local raw_data = data:get(domain, opt)
     local data = {}
@@ -57,9 +55,7 @@ function stats_helper.process_api_raw_data_for_trace_report(report_obj, data, do
         return tonumber(a[4]) < tonumber(b[4])
     end)
 
-    report_obj:set_data(data)
-
-    report_obj:set_headers({
+    return data, {
         "Start ("..timeunit..")", -- 1
         "Duration ("..timeunit..")", -- 2
         "Name", -- 3
@@ -67,7 +63,7 @@ function stats_helper.process_api_raw_data_for_trace_report(report_obj, data, do
         "CorrId", -- 5
         "Pid", -- 6
         "Tid" -- 7
-    })
+    }
 end
 
 return stats_helper

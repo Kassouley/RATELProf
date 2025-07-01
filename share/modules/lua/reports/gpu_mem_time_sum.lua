@@ -10,11 +10,9 @@ local function get_metric(trace, opt)
 end
 
 return function(traces_data, report_obj, opt)
-    report_obj:set_name("GPU MemOps")
-    report_obj:set_type("Summary (by Time)")
 
     local timeunit = opt.timeunit
-    report_obj:set_headers({
+    local HEADER = {
         "App Time (%)",
         "API Time (%)",
         "Total Time ("..timeunit..")",
@@ -25,7 +23,7 @@ return function(traces_data, report_obj, opt)
         "Max ("..timeunit..")",
         "StdDev ("..timeunit..")",
         "Operation" 
-    })
+    }
 
     local gpu_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
     
@@ -36,13 +34,13 @@ return function(traces_data, report_obj, opt)
         return tonumber(a[2]) > tonumber(b[2])
     end)
 
-    report_obj:set_data(data)
-
-    local copy_time = ratelprof.utils.compute_total_covered_duration(gpu_traces)
 
     return {
+        NAME = "GPU MemOps",
+        TYPE = "Summary (by Time)",
+        DATA = data,
+        HEADER = HEADER,
         total_time = total_metrics,
-        copy_time = copy_time
     }
 
 end
