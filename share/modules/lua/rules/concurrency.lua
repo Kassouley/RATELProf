@@ -12,7 +12,7 @@ local function compute_kernel_overlap_percentage(kernel_data, traces_data, CONCU
 
     table.sort(all_kernels, function(a, b) return a.start < b.start end)
 
-    local total_concurrent_time = 0
+    local total_concurrent_pct = 0
     local result_data = {}
     local trace_ids = {}
     local metrics = {}
@@ -69,10 +69,9 @@ local function compute_kernel_overlap_percentage(kernel_data, traces_data, CONCU
             overlap_duration = overlap_duration + (iv.stop - iv.start)
         end
 
-        total_concurrent_time = total_concurrent_time + overlap_duration
-
         local concurrency_pct = tonumber(string.format("%.2f", (overlap_duration / k.dur) * 100))
         if concurrency_pct >= CONCURRENCY_THRESHOLD_PCT then
+            total_concurrent_pct = total_concurrent_pct + concurrency_pct
             table.insert(metrics, tonumber(concurrency_pct))
             table.insert(trace_ids, k.id)
             table.insert(result_data, {
@@ -86,9 +85,7 @@ local function compute_kernel_overlap_percentage(kernel_data, traces_data, CONCU
         end
     end
 
-    local total_kernel_time = traces_data:get_compute_time()
-
-    local app_concurrency_pct = (total_concurrent_time / total_kernel_time) * 100
+    local app_concurrency_pct = total_concurrent_pct / #result_data
     return result_data, app_concurrency_pct, trace_ids, metrics
 end
 

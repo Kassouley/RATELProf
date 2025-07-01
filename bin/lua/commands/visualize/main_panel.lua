@@ -46,6 +46,9 @@ experiment_info.rows = {
 
 
 local function format_bytes(bytes)
+    if not bytes or bytes == "N/A" then
+        return 'N/A'
+    end
     local units = {"B", "KB", "MB", "GB", "TB"}
     local unit_index = 1
 
@@ -87,16 +90,16 @@ function main_panel.set_profiling_summary(data, stats_ret_vals, analyze_ret_vals
     local gpu_time          = data:get_gpu_active_time()
     local gpu_compute_time  = data:get_compute_time()
     local gpu_copy_time     = data:get_copy_time()
-    
+
 
     profiling_summary.rows[1].value = string.format("%.3f s", app_time_sec)
     profiling_summary.rows[2].value = format_gpu_time(gpu_time, app_time)
     profiling_summary.rows[3].value = format_gpu_time(gpu_compute_time, app_time)
     profiling_summary.rows[4].value = format_gpu_time(gpu_copy_time, app_time)
-    profiling_summary.rows[5].value = get_ret_val(analyze_ret_vals, "concurrency", "score")
-    profiling_summary.rows[6].value = get_ret_val(analyze_ret_vals, "hidden_transfers", "score")
+    profiling_summary.rows[5].value = string.format("%.2f", get_ret_val(analyze_ret_vals, "concurrency", "score"))
+    profiling_summary.rows[6].value = string.format("%.2f", get_ret_val(analyze_ret_vals, "hidden_transfers", "score"))
     profiling_summary.rows[7].value = get_ret_val(stats_ret_vals,   "gpu_sum",          "longest_activity")
-    profiling_summary.rows[8].value = bytes_transferred == "N/A" and "N/A" or format_bytes(bytes_transferred)
+    profiling_summary.rows[8].value = format_bytes(bytes_transferred)
 end
 
 function main_panel.set_potential_speedup(data, stats_ret_vals, analyze_ret_vals)
