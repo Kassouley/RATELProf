@@ -130,11 +130,15 @@ function agent_helper.set_gpu_props_to_msgpack(report_file)
 
     local buf = ratelprof.msgpack.encoder.new(1024, ratelprof.msgpack.encoder.OVERFLOW_APPEND_TO_FILE, report_file)
     buf:encode_map(size)
-    
+
     for node_id, agent in pairs(agents) do
         if agent.device_type_name == "GPU" then
             buf:encode_uint(node_id)
-            buf:encode_array(#useful_info)
+            local useful_info_count = 0
+            for _, info in ipairs(useful_info) do
+                if not info.i then useful_info_count = useful_info_count + 1 end
+            end
+            buf:encode_array(useful_info_count)
 
             for _, info in ipairs(useful_info) do
                 if not info.i then
