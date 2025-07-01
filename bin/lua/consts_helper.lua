@@ -253,7 +253,7 @@ consts_helper.stats = {
             sname           = nil,
             arg             = "<number|all>",
             arg_required    = true,
-            default         = 50
+            default         = nil
         },
         ['notation'] = {
             desc            = [[ 
@@ -265,7 +265,25 @@ consts_helper.stats = {
             arg             = "<notation>",
             arg_required    = true,
             default         = nil
-        }
+        },
+        start = {
+            desc            = [[ 
+                Process only trace after 'start' argument (in nanoseconds). 
+                Default 'start' is 0 (Application start).]],
+            sname           = nil,
+            arg             = "<value>",
+            arg_required    = true,
+            default         = nil
+        },
+        stop = {
+            desc            = [[ 
+                Process only trace before 'stop' argument (in nanoseconds). 
+                Default 'stop' is until application end.]],
+            sname           = nil,
+            arg             = "<value>",
+            arg_required    = true,
+            default         = nil
+        },
     }
 }
 
@@ -394,7 +412,7 @@ consts_helper.visualize = {
         },
         start = {
             desc            = [[ 
-                Visualize only trace after 'start' argument (in microseconds). 
+                Visualize only trace after 'start' argument (in nanoseconds). 
                 Default 'start' is 0 (Application start).]],
             sname           = nil,
             arg             = "<value>",
@@ -403,12 +421,21 @@ consts_helper.visualize = {
         },
         stop = {
             desc            = [[ 
-                Visualize only trace before 'stop' argument (in microseconds). 
+                Visualize only trace before 'stop' argument (in nanoseconds). 
                 Default 'stop' is until application end.]],
             sname           = nil,
             arg             = "<value>",
             arg_required    = true,
             default         = nil
+        },
+        ["only-data-test"] = {
+            desc            = [[ 
+                Generate only the data set used in the HTML report. This options is used for debbuging.]],
+            sname           = nil,
+            arg             = nil,
+            arg_required    = false,
+            default         = nil
+
         }
     }
 }

@@ -37,9 +37,10 @@ consts._PRELOADED_LIBS = {
   {name = consts._LIBS_NAME.WRAPPERS,  path = consts._LIBS.WRAPPERS}
 }
 
-consts._DEFAULT_PLUGIN = consts._LIBS.PLUGIN_MSGPACK    
+consts._DEFAULT_PLUGIN = consts._LIBS.PLUGIN_MSGPACK
 
-consts._HTML_REPORT_PATH = consts._MODULES_DIR.."/html/index.min.html"
+consts._HTML_REPORT_PATH   = consts._MODULES_DIR.."/html/index.min.html"
+consts._DATA_SET_TEST_PATH = consts._MODULES_DIR.."/html/data_handler.js"
 
 consts._ENV = {
       FUNCTION_FILTERED =   "RATELPROF_DOMAIN_%s_FUNCTIONS_FILTERED",
@@ -164,7 +165,7 @@ Transfers that are not sufficiently overlapped may contribute to performance bot
 ]],
       opt = {
         th_dur = {
-          default = 1e6,
+          default = 1e5,
           desc    = "Minimum duration (in ns) a memory transfer must have to be analyzed for hidden latency."
         },
         th_hidden = {
@@ -182,17 +183,54 @@ Combining them may reduce launch latency and improve overall throughput.
 ]],
       opt = {
         th_dur = {
-          default = 50000,
-          desc    = "Minimum duration (in ns) a kernel must have to be analyzed for coalescable optimization."
+          default = 1e6,
+          desc    = "Maximum duration (in ns) a kernel must have to be analyzed for coalescable optimization."
         },
         th_gap = {
-          default = 50000,
+          default = 1e6,
           desc    = "Maximum gaps duration (in ns) between two kernel calls."
         },
         min_seq = {
           default = 3,
           desc    = "Length of the minimal sequence."
         }
+      },
+      default = true
+    },
+    coalescable_transfers = {
+      desc    = [[
+This rule detects multiple small, back-to-back memory transfers that may be combined into a single, larger transfers.
+Frequent small transfers can cause excessive overhead and underutilization of GPU resources.
+Combining them may reduce latency and improve overall throughput.
+Note : These transfers are detected by SDMA engine and not by Stream ID. Some of the given advices might not be correct. 
+]],
+      opt = {
+        th_dur = {
+          default = 1e6,
+          desc    = "Maximum duration (in ns) a transfers must have to be analyzed for coalescable optimization."
+        },
+        th_gap = {
+          default = 1e6,
+          desc    = "Maximum gaps duration (in ns) between two transfers."
+        },
+        min_seq = {
+          default = 3,
+          desc    = "Length of the minimal sequence."
+        }
+      },
+      default = true
+    },
+    concurrency = {
+      desc    = [[
+This rule detects GPU kernels that execute concurrently with other kernels, based on time overlap.
+Each kernel's concurrency is measured as the percentage of its execution time that overlaps with other kernels.
+Kernels exceeding the configured concurrency threshold are highlighted in the report below.
+]],
+      opt = {
+        pct_th = {
+          default = 20,
+          desc    = "Minimum concurrency pourcentage that a kernel must have to be reported."
+        },
       },
       default = true
     },

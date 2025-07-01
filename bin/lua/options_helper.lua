@@ -91,12 +91,14 @@ function options_helper.handle_stats_analyze_option(options)
         end 
     end
 
-    local only_main = ratelprof.get_opt_val(options, "only-main")
-    local mangled = ratelprof.get_opt_val(options, "mangled")
-    local trunc = ratelprof.get_opt_val(options, "trunc")
+    local only_main     = ratelprof.get_opt_val(options, "only-main")
+    local mangled       = ratelprof.get_opt_val(options, "mangled")
+    local trunc         = ratelprof.get_opt_val(options, "trunc")
     local max_col_width = ratelprof.get_opt_val(options, "max-col-width")
-    local max_lines = ratelprof.get_opt_val(options, "max-lines")
-    local notation = ratelprof.get_opt_val(options, "notation")
+    local max_lines     = ratelprof.get_opt_val(options, "max-lines")
+    local notation      = ratelprof.get_opt_val(options, "notation")
+    local start         = tonumber(ratelprof.get_opt_val(options, "start"))
+    local stop          = tonumber(ratelprof.get_opt_val(options, "stop"))
 
     return {
         reports = reports,
@@ -108,7 +110,9 @@ function options_helper.handle_stats_analyze_option(options)
         trunc = trunc,
         max_col_width = max_col_width,
         max_lines = max_lines,
-        notation = notation
+        notation = notation,
+        start = start,
+        stop = stop,
     }
 end
 
