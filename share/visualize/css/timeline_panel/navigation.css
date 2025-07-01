@@ -21,19 +21,31 @@
 }
 
 .trace-select {
+  padding: 10px;
   display: flex;
-  gap: 5px;
-  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  width: 300px;
 }
 
-.trace-select input {
-  padding: 6px;
-  font-size: 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  width: 200px;
+.input-group {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 }
 
+.input-group input,
+.input-group button {
+  padding: 4px 8px;
+  font-size: 14px;
+  line-height: 1.2;
+  height: auto;
+  box-sizing: border-box;
+}
+
+.input-group input {
+  flex-grow: 1;
+}
 
 #nav td.right {
   text-align: right;
@@ -41,7 +53,6 @@
 
 #nav td.center {
   text-align: center;
-  display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;

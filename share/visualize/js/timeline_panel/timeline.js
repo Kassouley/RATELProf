@@ -241,7 +241,7 @@ function createTimeline(items, groups, container) {
 
     // Fire when the 'Go to' button is clicked
     // Read the input field next to it and focus the timeline to the corresponding trace id
-    document.getElementById("goto").onclick = () => {
+    document.getElementById("goto_id").onclick = () => {
         const id = parseInt(document.getElementById("id_input").value.trim(), 10);
         if (!isNaN(id)) {
             itemsDataSet.updateOnly({id:id, is_visible: true});
@@ -249,6 +249,17 @@ function createTimeline(items, groups, container) {
             onSelectTraceAux(id, false);
         } else {
             alert("Please enter a valid Trace ID.");
+        }
+    };
+
+
+    document.getElementById("goto_time").onclick = () => {
+        const time = convertToNs(document.getElementById("time_input").value.trim());
+        
+        if (time) {
+            const start = new Date(time);
+            const end   = new Date(time + 1e8);
+            timeline.setWindow(start, end);
         }
     };
 

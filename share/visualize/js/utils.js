@@ -112,4 +112,44 @@ function convertTime(time, isNanosecond = true) {
     return result.join(' ') 
 }
 
+function convertToNs(input) {
+      if (!input) {
+        alert('Please enter a value.');
+        return;
+      }
+
+      const tokens = input.split(/\s+/); // split by spaces
+      let totalNs = 0;
+      const regex = /^(\d+)(ns|us|ms|s)?$/i; // match exactly one token
+
+      for (const token of tokens) {
+        const match = token.match(regex);
+        if (!match) {
+          alert(`Invalid token: "${token}"`);
+          return;
+        }
+
+        const value = Number(match[1]);
+        const unit = (match[2] || 'ns').toLowerCase();
+
+        switch (unit) {
+          case 's':
+            totalNs += value * 1e9;
+            break;
+          case 'ms':
+            totalNs += value * 1e6;
+            break;
+          case 'us':
+            totalNs += value * 1e3;
+            break;
+          case 'ns':
+            totalNs += value;
+            break;
+          default:
+            alert(`Unknown unit: ${unit}`);
+            return;
+        }
+      }
+      return totalNs;
+    }
 
