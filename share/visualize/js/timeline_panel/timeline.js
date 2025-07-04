@@ -1,99 +1,82 @@
 
 function createTimeline(items, groups, container) {
-    items.push({
-      id: "init",
-      content: "init",
-      type: "background",
-      start: lifecycle_table.init_start,
-      end: lifecycle_table.main_start,
-      is_visible: true
-    },{
-      id: "main",
-      content: "main",
-      type: "background",
-      start: lifecycle_table.main_start,
-      end: lifecycle_table.main_stop,
-      className: "mainBackground",
-      is_visible: true
-    },{
-      id: "fini",
-      content: "fini",
-      type: "background",
-      start: lifecycle_table.main_stop,
-      end: lifecycle_table.fini_stop,
-      is_visible: true
-    });
-
-    const sortedItems    = items.sort((a, b) => a.start - b.start);
-    const itemsDataSet   = new vis.DataSet(sortedItems);
     const groupsDataSet  = new vis.DataSet(groups);
-
-    let dispatches_are_shown = false;
-
-    const visibleItems = new vis.DataView(itemsDataSet, {
-        filter: function (item) {
-            if (item._event_kind == "DISPATCH" && !dispatches_are_shown) return false;
-            return item.is_visible;
+    const visibleItems = new vis.DataSet([
+        {
+            id: "init",
+            content: "init",
+            type: "background",
+            start: lifecycle_table.init_start,
+            end: lifecycle_table.main_start,
+        },{
+            id: "main",
+            content: "main",
+            type: "background",
+            start: lifecycle_table.main_start,
+            end: lifecycle_table.main_stop,
+            className: "mainBackground",
+        },{
+            id: "fini",
+            content: "fini",
+            type: "background",
+            start: lifecycle_table.main_stop,
+            end: lifecycle_table.fini_stop,
         }
-    });
+    ]);
 
     container.innerHTML = "";
     const timeline = new vis.Timeline(container, visibleItems, groupsDataSet, options);
 
-    // Helper function for adding visible item in timeline
-    const offset = 1000;
-    let lastRange = {
-        start: options.start,
-        end:   options.end
+    // Worker code with diffing logic inside worker
+    const worker = new Worker("workers/timeline_worker.js");
+
+    worker.postMessage({ action: 'init', items: items });
+
+    worker.onmessage = (e) => {
+        if (e.data.status === 'itemsSet') {
+            onRangeChanged();
+        } 
+        if (e.data.toRemove && e.data.toAdd) {
+            visibleItems.remove(e.data.toRemove);
+            visibleItems.update(e.data.toAdd);
+        } 
+        if (e.data.toUpdate) {
+            visibleItems.update(e.data.toUpdate);
+        }
     };
 
-    const binarySearch = (items, end) => {
-        let low = 0, high = items.length;
-        while (low < high) {
-            const mid = Math.floor((low + high) / 2);
-            if (items[mid].start < end) low = mid + 1;
-            else high = mid;
+    // Throttle utility
+    function throttle(fn, wait) {
+        let lastTime = 0;
+        let timeout = null;
+        return function (...args) {
+        const now = Date.now();
+        if (now - lastTime >= wait) {
+            lastTime = now;
+            fn.apply(this, args);
+        } else if (!timeout) {
+            timeout = setTimeout(() => {
+                lastTime = Date.now();
+                timeout = null;
+                fn.apply(this, args);
+            }, wait - (now - lastTime));
         }
-        return low - 1;
-    };
+        };
+    }
 
-    // Fire when range changed more than 1000 unit of time
-    // Update visible item in timeline
-    timeline.on('rangechanged', function (props) {
-        const newStart = props.start.getTime();
-        const newEnd = props.end.getTime();
+    const onRangeChanged = throttle(() => {
+        const range = timeline.getWindow();
+        worker.postMessage({
+            action: 'updateVisibleItems',
+            range: {
+                start: range.start.getTime(),
+                end: range.end.getTime()
+            },
+        });
+    }, 100);
 
-        if (Math.abs(newStart - lastRange.start) < 1000 && Math.abs(newEnd - lastRange.end) < 1000) return;
+    timeline.on('rangechanged', onRangeChanged);
 
-        lastRange.start = newStart;
-        lastRange.end   = newEnd;
-
-        const rangeStart = newStart - offset;
-        const rangeEnd   = newEnd   + offset;
-
-        const lastIndex = binarySearch(sortedItems, rangeEnd);
-
-        // In this version, items are rendered only if they are visible in the current range and stay
-        // rendered even if they went out of the range.
-        const updates = [];
-
-        for (let i = lastIndex; i >= 0; i--) {
-            const item = sortedItems[i];
-            const itemEnd = item.end ? item.end : item.start;
-            if (itemEnd < rangeStart) break;
-
-            const shouldBeVisible = itemEnd >= rangeStart && item.start <= rangeEnd;
-
-            if (item.is_visible !== shouldBeVisible) {
-                item.is_visible = shouldBeVisible;
-                updates.push({ id: item.id, is_visible: item.is_visible });
-            }
-        }
-
-        if (updates.length > 0) {
-            itemsDataSet.update(updates);
-        }
-    });
 
 
     const showTraceDetails = trace => {
@@ -141,7 +124,7 @@ function createTimeline(items, groups, container) {
                 append(rcol, "Dependent Signals",  `[${Object.values(args.dep_signal).join(", ")}]`);
                 append(rcol, "Completion Signal",  args.sig);
             },
-            MEMORY: () => {
+            COPY: () => {
                 append(rcol, "Source",             args.src);
                 append(rcol, "Destination",        args.dst);
                 append(rcol, "Size transferred",   convertBytes(args.size));
@@ -163,37 +146,23 @@ function createTimeline(items, groups, container) {
         document.getElementById('trace-info').innerHTML = 'Click on a trace to view details here.';
     };
 
-    const highlightedOriginalItems = [];
+
+    const highlightTraces = (id, cid) => {
+        worker.postMessage({action: 'highlightItems', id, cid});
+    };
+
 
     const clearHighlightTraces = () => {
-        if (highlightedOriginalItems.length) {
-            itemsDataSet.update(highlightedOriginalItems);
-            highlightedOriginalItems.length = 0; // Reset array
-        }
+        worker.postMessage({action: 'clearHighlightItems'});
     };
-
-    const highlightTraces = (filterFun) => {
-        clearHighlightTraces();
-
-        const matchingItems = itemsDataSet.get().filter(filterFun);
-        if (matchingItems.length === 0) return;
-
-        highlightedOriginalItems.push(...matchingItems);
-        
-        const highlightedItems = matchingItems.map(item => ({
-            id: item.id,
-            className: 'highlighted'
-        }));
-        itemsDataSet.update(highlightedItems);
-    };
-
 
 
     const onSelectTraceAux = (id, isCtrlKeyPushed) => {
-        const selectedItem = itemsDataSet.get(id);
+        clearHighlightTraces();
+        const selectedItem  = items.get(id)
         if (selectedItem) {
-            if (isCtrlKeyPushed) highlightTraces(item => item.cid === selectedItem.id);
-            else highlightTraces(item => item.id === selectedItem.cid);
+            if (isCtrlKeyPushed) highlightTraces(selectedItem.id, null);
+            else highlightTraces(null, selectedItem.cid);
             showTraceDetails(selectedItem);
         }
     };
@@ -202,8 +171,8 @@ function createTimeline(items, groups, container) {
     // Fire when the 'Show Dispatches' checkbox change
     // Show dispatches point of kernel and barrier dispatches
     document.getElementById("show-dispatch").addEventListener("change", (e) => {
-        dispatches_are_shown = e.target.checked;
-        visibleItems.refresh();
+        worker.postMessage({action: 'showDispatch', toggle: e.target.checked});
+        onRangeChanged();
     });
 
     // Fire when the zoom slider change
@@ -244,9 +213,12 @@ function createTimeline(items, groups, container) {
     document.getElementById("goto_id").onclick = () => {
         const id = parseInt(document.getElementById("id_input").value.trim(), 10);
         if (!isNaN(id)) {
-            itemsDataSet.updateOnly({id:id, is_visible: true});
-            timeline.setSelection(id, { focus: true });
-            onSelectTraceAux(id, false);
+            const item  = items.get(id)
+            if (item) {
+                visibleItems.update(item);
+                timeline.setSelection(id, { focus: true });
+                onSelectTraceAux(id, false);
+            }
         } else {
             alert("Please enter a valid Trace ID.");
         }
@@ -272,9 +244,9 @@ function createTimeline(items, groups, container) {
 
     const updateTimeMarker = (currTime) => {
         let [start, end] = firstTime < currTime ? [firstTime, currTime] : [currTime, firstTime];
-        let isItemExist = itemsDataSet.get(tempItem.id);
+        let isItemExist = visibleItems.get(tempItem.id);
         if (isItemExist) {
-            itemsDataSet.update({ 
+            visibleItems.update({ 
                 id: timeMarkerId, 
                 is_visible: true,
                 content: convertTime(end - start), 
@@ -285,7 +257,7 @@ function createTimeline(items, groups, container) {
             if (start.getTime() !== end.getTime()) {
                 tempItem.start = start;
                 tempItem.end = end;
-                itemsDataSet.add(tempItem);
+                visibleItems.add(tempItem);
             }
         }
     };
@@ -302,7 +274,7 @@ function createTimeline(items, groups, container) {
     // The time marker will be add only if user move the mouse
     timeline.on('mouseDown', function (props) {
         if (props.event.button === 2) {
-            itemsDataSet.remove(timeMarkerId);
+            visibleItems.remove(timeMarkerId);
             if (props.what == 'background' && props.time) {
                 isRightMouseDown = true;
                 firstTime = props.time;
@@ -351,7 +323,7 @@ function createTimeline(items, groups, container) {
     // Focus on it
     timeline.on('doubleClick', function (props) {
         if (props.what === 'item') {
-            const selectedItem = itemsDataSet.get(props.item);
+            const selectedItem = items.get(props.item)
             if (selectedItem) {
                 timeline.focus(selectedItem.id);
             }

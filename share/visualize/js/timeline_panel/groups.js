@@ -37,16 +37,14 @@ function get_group_id(event, d) {
     nestedGroupName = `Queue ID. ${q_id}`;
 
     createNestedGroup(nestedGroup, nestedGroupKey, nestedGroupName, q_id, 3);
-
-    traces_data.push({
+    
+    traceMap.set(`Dispatch_${event.id}`, {
         className:  'non-highlighted',
-        id:         `Dispatch_${event.id}`,
         start:      args.dispatch_time,
         type:       "point",
         group:      nestedGroupKey,
         _event_kind: "DISPATCH",
         cid: event.id,
-        is_visible: args.dispatch_time < 1000000 ? true: false,
         args: {
           dispatched_event: event.content,
           dispatch_time: args.dispatch_time,

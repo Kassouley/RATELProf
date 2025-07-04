@@ -1,4 +1,3 @@
-const traces_data = [];
 const traceMap = new Map();
 
 function decodeB64(b64) {
@@ -62,10 +61,7 @@ function decodeB64(b64) {
                 item.end        = item.start + item.dur;
                 item.group      = get_group_id(item, domain_name);
                 
-                if (item.start < 1000000) item.is_visible = true;
-
                 traceMap.set(item.id, item);
-                traces_data.push(item);
             }
             return
         }
