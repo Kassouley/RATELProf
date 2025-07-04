@@ -32,6 +32,27 @@ def replace_head_section(html_content: str) -> str:
     return updated_html
 
 
+def inline_web_workers(script_content):
+    # Regex to match new Worker("path")
+    worker_regex = re.compile(r'new Worker\(["\'](.*?)["\']\)')
+
+
+    def replace_worker(match):
+        worker_code_path = match.group(1)
+
+        # Escape single quotes and backslashes in the worker code
+        subprocess.run([MINIFY_SCRIPT, "-o", f"{TMP_DIR}/workers.js", f"{HTML_DIR}/{worker_code_path}"], check=True)
+        worker_code_minified = read_file(f"{TMP_DIR}/workers.js").replace('\\', '\\\\').replace("'", "\\'")
+
+        replacement = f"new Worker(URL.createObjectURL(new Blob(['{worker_code_minified}'],{{type:'application/javascript'}})))"
+        return replacement
+
+    # Replace all occurrences
+    modified_js = worker_regex.sub(replace_worker, script_content)
+
+    return modified_js
+
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Step 0: Output file from argument or default
@@ -68,7 +89,7 @@ VIS_SCRIPT_TAG = '<script src=https://unpkg.com/vis-timeline@latest/standalone/u
 
 # Step 4: Define inline replacements
 inline_style = f"<style>{style_content}</style>"
-inline_script = f"<script>{script_content}</script>"
+inline_script = f"<script>{inline_web_workers(script_content)}</script>"
 vis_inline_style = f"<style>{vis_style_content}</style>"
 vis_inline_script = f"<script>{vis_script_content}</script>"
 
@@ -87,3 +108,7 @@ write_file(output_file, html_min_content)
 
 print(f"✅ Minification and inlining complete: {output_file}")
 
+
+
+WORKER_REGEX    = "new Worker(JS_PATH_REGEX)"
+WORKER_TEMPLATE = "new Worker(URL.createObjectURL(new Blob(['WORKER CODE FROM FILE'], {type:'application/javascript'})));"
