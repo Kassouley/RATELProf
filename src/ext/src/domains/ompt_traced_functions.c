@@ -3,7 +3,7 @@
 
 #include <ratelprof.h>
 
-#include "ratelprof_ext/ratelprof_ompt.h"
+#include "domains/ompt_api_helper.h"
 
 #define ratelprof_ompt_set_callback(name) \
     LOG(LOG_LEVEL_DEBUG, "[OMPT] ompt_set_callback on "#name" return %d\n", \
@@ -26,6 +26,7 @@ void on_ompt_callback_target_emi(
         ratelprof_ompt_api_activity_t *activity =
             (ratelprof_ompt_api_activity_t*)malloc(sizeof(ratelprof_ompt_api_activity_t));
 
+        activity->return_address = (void *)codeptr_ra;
         GET_ARGS_VALUE_target_emi(activity);
         target_task_data->ptr = (void*)activity;
 
@@ -57,6 +58,7 @@ void on_ompt_callback_target_data_op_emi(
         ratelprof_ompt_api_activity_t *activity =
             (ratelprof_ompt_api_activity_t*)malloc(sizeof(ratelprof_ompt_api_activity_t));
 
+        activity->return_address = (void *)codeptr_ra;
         GET_ARGS_VALUE_target_data_op(activity);
         target_data->ptr = (void*)activity;
 
@@ -81,6 +83,7 @@ void on_ompt_callback_target_submit_emi(
         ratelprof_ompt_api_activity_t *activity =
             (ratelprof_ompt_api_activity_t*)malloc(sizeof(ratelprof_ompt_api_activity_t));
 
+        activity->return_address = NULL;
         GET_ARGS_VALUE_target_submit_emi(activity);
         target_data->ptr = (void*)activity;
 
@@ -94,7 +97,7 @@ void on_ompt_callback_target_submit_emi(
 
 // --------------------- Data Mapping Callback ---------------------
 
-// TODO 15/05/2025 : Wrong callback signature
+// TODO 15/05/2025 : Wrong callback signature (Edit : 9/7, Idk what does it mean)
 void on_ompt_callback_target_map_emi(
     ompt_scope_endpoint_t endpoint,
     ompt_data_t *target_task_data,
@@ -110,6 +113,7 @@ void on_ompt_callback_target_map_emi(
         ratelprof_ompt_api_activity_t *activity =
             (ratelprof_ompt_api_activity_t*)malloc(sizeof(ratelprof_ompt_api_activity_t));
 
+        activity->return_address = (void *)codeptr_ra;
         GET_ARGS_VALUE_target_map_emi(activity);
         target_data->ptr = (void*)activity;
 

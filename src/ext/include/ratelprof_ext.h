@@ -10,6 +10,7 @@
 
 #include "domains/gpu_hsa_api_helper.h"
 #include "domains/profiling_hsa_api_helper.h"
+#include "domains/ompt_api_helper.h"
 
 #define RATELPROF_DOMAIN_COPY_NAME          "RATELPROF_DOMAIN_COPY"
 #define RATELPROF_DOMAIN_KERNEL_NAME        "RATELPROF_DOMAIN_KERNEL"
@@ -89,7 +90,6 @@ typedef struct ratelprof_gpu_activity_s {
 
 #include "domains/fun_proto/gpu_hsa_traced_functions.h"
 #include "domains/fun_proto/prof_hsa_traced_functions.h"
-#include "ratelprof_ext/ratelprof_ompt.h"
 
 const char* get_kernel_name(uint64_t kernel_object);
 const char* ratelprof_ext_get_domain_name(ratelprof_domain_t domain);

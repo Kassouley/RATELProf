@@ -75,6 +75,7 @@ ratelprof_timespec_t ratelprof_get_curr_timespec();
  */
 ratelprof_timespec_t ratelprof_get_curr_epoch();
 
+
 /**
  * @brief Converts a `ratelprof_timespec_t` timestamp to nanoseconds.
  *

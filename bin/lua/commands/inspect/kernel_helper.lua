@@ -47,7 +47,7 @@ function kernel_helper.get_kernel_metadata(binary_app)
         tmp_filename, tmp_filename
     ))
     
-    local data = msgpack.decode_msgpack_binary(tmp_filename..".mp")
+    local data = msgpack.decode_msgpack_binary(tmp_filename..".mp", true)
     
     if not data then
         Message:error("No metadata found in GPU ELF.")

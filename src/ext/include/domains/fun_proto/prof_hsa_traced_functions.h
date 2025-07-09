@@ -25,7 +25,7 @@ static inline void __on_exit_profiling_callback_function(ratelprof_api_activity_
 	ratelprof_api_activity_t* profiling_activity = (ratelprof_api_activity_t*)calloc(1, sizeof(ratelprof_api_activity_t)); \
 	__on_enter_profiling_callback_function(HSA_API_ID_##func, profiling_activity); \
     profiling_activity->start_time = ratelprof_get_curr_timespec(); \
-    ((__##func##_t)profiling_table.api_fn[PROFILING_ID_##func])(__VA_ARGS__); \
+    ((__##func##_t)profiling_table.api_fn[PROFILING_ID_##func])(__VA_ARGS__, NULL); \
     profiling_activity->stop_time = ratelprof_get_curr_timespec(); \
 	GET_ARGS_VALUE_##func(profiling_activity); \
 	__on_exit_profiling_callback_function(profiling_activity); \
@@ -37,7 +37,7 @@ static inline void __on_exit_profiling_callback_function(ratelprof_api_activity_
 	ratelprof_api_activity_t* profiling_activity = (ratelprof_api_activity_t*)calloc(1, sizeof(ratelprof_api_activity_t)); \
 	__on_enter_profiling_callback_function(HSA_API_ID_##func, profiling_activity); \
     profiling_activity->start_time = ratelprof_get_curr_timespec(); \
-    __ret = ((__##func##_t)profiling_table.api_fn[PROFILING_ID_##func])(__VA_ARGS__); \
+    __ret = ((__##func##_t)profiling_table.api_fn[PROFILING_ID_##func])(__VA_ARGS__, NULL); \
     profiling_activity->stop_time = ratelprof_get_curr_timespec(); \
 	GET_ARGS_VALUE_##func(profiling_activity); \
     profiling_activity->hsa_args.func.retval = (hsa_status_t)__ret; \

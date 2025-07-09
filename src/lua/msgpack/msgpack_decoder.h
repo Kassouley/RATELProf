@@ -15,6 +15,7 @@ typedef struct {
     size_t off;
     size_t size;
     lua_State *L;
+    int is_quiet;
 
     char** ext_string_array;
     size_t ext_string_array_size;
@@ -26,7 +27,8 @@ void decode_msgpack(msgpack_decode_ctx_t *ctx);
 
 
 // Function to print a progress bar of the decoding process
-static inline void print_progress_bar(const char* prefix, size_t current, size_t total) {
+static inline void print_progress_bar(const char* prefix, size_t current, size_t total, int is_quiet) {
+    if (is_quiet) return;
     const int bar_width = 30;
     static int last_shown = -1;
 

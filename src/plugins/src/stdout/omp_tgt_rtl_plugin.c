@@ -25,6 +25,7 @@ void on_exit_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t 
     activity->tid = get_tid();
     printf("-----------\n");
     printf("PHASE:%d : %s | ID: %lu | CID: %lu\n", activity->phase, get_omp_tgt_rtl_funame_by_id(activity->funid), activity->id, activity->corr_id);
+    ratelprof_get_and_print_location(activity->return_address);
     process_omp_tgt_rtl_args_for(activity->funid, &activity->omp_tgt_rtl_args, NULL);
     pop_id();
 }

@@ -21,7 +21,6 @@ void* dlsym(void *handle, const char *symbol) {
 		if (handle == omp_tgt_rtl_api_table.handler && omp_tgt_rtl_api_table.is_populate) {
         omp_tgt_rtl_api_id_t id = get_omp_tgt_rtl_funid_by_name(symbol);
         if (id != OMP_TGT_RTL_API_ID_UNKNOWN) {
-            LOG(LOG_LEVEL_DEBUG, "[OMP Target RTL] interception of %s\n", symbol);
             return omp_tgt_rtl_api_table.api_ptr[id];
         }
         } 

@@ -2,6 +2,8 @@ require("utils.json.json")
 
 local utils = {}
 
+utils.demangle = require ("demangle").demangle
+
 function utils.compute_total_covered_duration(...)
     local intervals = {}
     local count = 0
@@ -73,14 +75,6 @@ function utils.store_json (data, __input_path__)
     infile:close ()
 end
 
--- function utils.merge_tab(t1, ...)
---     for _, t in ipairs({...}) do
---         for _, value in pairs(t) do
---             table.insert(t1, value)
---         end
---     end
---     return t1
--- end
 
 function utils.is_integer(n)
     return n == math.floor(n)
@@ -138,9 +132,9 @@ function utils.get_kernel_name(name, is_trunc, is_mangled)
             name = mangled_name
         end
         if is_trunc then
-            ret = utils.execute_command("c++filt --no-params ".. name)
+            ret = utils.demangle(name, true)
         else
-            ret = utils.execute_command("c++filt ".. name)
+            ret = utils.demangle(name)
         end
         if line then
             ret = ret .. " (l." .. line .. ")"

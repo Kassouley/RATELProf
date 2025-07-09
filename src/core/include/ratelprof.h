@@ -27,9 +27,12 @@
 #include "utils/utils.h"
 #include "utils/env.h"
 #include "utils/logger.h"
+#include "utils/demangle.h"
+
 #include "ratelprof/ratelprof_id_system.h"
 #include "ratelprof/ratelprof_time.h"
 #include "ratelprof/ratelprof_lifecycle.h"
+#include "ratelprof/ratelprof_source_location.h"
 #include "ratelprof/ratelprof_status.h"
 
 #include "domains/omp_routine_api_helper.h"
@@ -159,6 +162,13 @@ typedef struct ratelprof_api_activity_s {
      * The timestamp when the API activity ended.
      */
     ratelprof_timespec_t stop_time;
+
+    /**
+     * @brief Return address of the API activity.
+     * 
+     * The return address of the intercepted function.
+     */
+    void* return_address;
 
     /**
      * @brief Union of domain-specific API arguments.

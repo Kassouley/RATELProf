@@ -17,7 +17,9 @@
  *          - lifecycle stop time as map of string to uint
  *          - map node id to agent object
  *          - string extension mapping
+ *          - location data
  *          - trace data
+ *          - gpu props
  */
 void decode_ratelprof_ext(msgpack_decode_ctx_t *ctx) {
     lua_newtable(ctx->L);
@@ -44,6 +46,10 @@ void decode_ratelprof_ext(msgpack_decode_ctx_t *ctx) {
 
     // String array decoding
     decode_msgpack(ctx);  // expects and decodes an array of strings
+
+    lua_pushstring(ctx->L, "location");
+    decode_msgpack(ctx);
+    lua_settable(ctx->L, -3);
 
     lua_pushstring(ctx->L, "trace_events");
     decode_msgpack(ctx);
@@ -129,7 +135,7 @@ void decode_map(msgpack_decode_ctx_t *ctx, size_t size) {
 }
 
 void decode_msgpack(msgpack_decode_ctx_t *ctx) {
-    print_progress_bar(PROGRESS_BAR_LABEL, ctx->off, ctx->size);
+    print_progress_bar(PROGRESS_BAR_LABEL, ctx->off, ctx->size, ctx->is_quiet);
     uint8_t b = read_byte(ctx);
 
     if (b <= 0x7f) {
@@ -196,6 +202,7 @@ void decode_msgpack(msgpack_decode_ctx_t *ctx) {
 
 int lua_decode_msgpack_file(lua_State *L) {
     const char *filename = luaL_checkstring(L, 1);
+    int is_quiet = lua_toboolean(L, 2);
 
     FILE *f = fopen(filename, "rb");
     if (!f) return luaL_error(L, "Cannot open file: %s", filename);
@@ -214,9 +221,9 @@ int lua_decode_msgpack_file(lua_State *L) {
     if (read != size) return luaL_error(L, "Bytes read: %ld | Size: %ld", read, size);
     fclose(f);
 
-    msgpack_decode_ctx_t ctx = { .buf = buf, .size = size, .off = 0, .L = L };
+    msgpack_decode_ctx_t ctx = { .buf = buf, .size = size, .off = 0, .L = L, .is_quiet = is_quiet };
     decode_msgpack(&ctx);
-    print_progress_bar(PROGRESS_BAR_LABEL, size, size);
+    print_progress_bar(PROGRESS_BAR_LABEL, size, size, is_quiet);
 
     if (ctx.ext_string_array) {
         for (size_t i = 0; i < ctx.ext_string_array_size; ++i) free(ctx.ext_string_array[i]);

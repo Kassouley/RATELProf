@@ -30,18 +30,22 @@
 typedef enum {
 	RATELPROF_ERROR = -1,            /**< A general error has occured */
 	RATELPROF_STATUS_SUCCESS,                     /**< Function return success */
-	RATELPROF_STATUS_CALLBACK_IS_NULL,            /**< Enter or exit callback has not been correctly set */
+	RATELPROF_STATUS_DLADDR_FAILED,               /**< Failed to translate address to symbolic information */
+	RATELPROF_STATUS_ALLOC_SIZE_0,                /**< An allocation function receive 0 bytes to allocate */
+	RATELPROF_STATUS_BFD_FAILED,                  /**< An error occured during BFD processing */
+	RATELPROF_STATUS_CALLBACK_SYSTEM_NOT_INIT,    /**< The callback system is not initialized */
+	RATELPROF_STATUS_API_TABLE_NOT_INIT,          /**< The API table is not initialized */
+	RATELPROF_STATUS_STACK_IS_EMPTY,              /**< The stack is empty */
+	RATELPROF_STATUS_UNKNOWN_DOMAIN,              /**< Domain in argument does not exist */
 	RATELPROF_STATUS_MALLOC_FAILED,               /**< Memory allocation failed */
 	RATELPROF_STATUS_STACK_IS_NULL,               /**< The stack is NULL or not initialized */
 	RATELPROF_STATUS_INVALID_PTR,                 /**< Invalid structure pointer (NULL) */
-	RATELPROF_STATUS_PLUGIN_ALREADY_INIT,         /**< The plugin is not null or has already been initialized */
 	RATELPROF_STATUS_PLUGIN_IS_NULL,              /**< The plugin is NULL or not initialized */
-	RATELPROF_STATUS_CALLBACK_SYSTEM_NOT_INIT,    /**< The callback system is not initialized */
-	RATELPROF_STATUS_API_TABLE_NOT_INIT,          /**< The API table is not initialized */
-	RATELPROF_STATUS_ALLOC_SIZE_0,                /**< An allocation function receive 0 bytes to allocate */
-	RATELPROF_STATUS_UNKNOWN_DOMAIN,              /**< Domain in argument does not exist */
+	RATELPROF_STATUS_BFD_NO_SECTION_FOUND,        /**< Cannot find section for this address */
+	RATELPROF_STATUS_CALLBACK_IS_NULL,            /**< Enter or exit callback has not been correctly set */
+	RATELPROF_STATUS_BFD_NO_SOURCE_FOUND,         /**< Cannot find source location for this address */
 	RATELPROF_STATUS_DLOPEN_FAILED,               /**< Failed to open library */
-	RATELPROF_STATUS_STACK_IS_EMPTY,              /**< The stack is empty */ 
+	RATELPROF_STATUS_PLUGIN_ALREADY_INIT,         /**< The plugin is not null or has already been initialized */ 
     RATELPROF_NB_STATUS
 } ratelprof_status_t;
 
@@ -64,18 +68,22 @@ static inline const char* get_error_string(ratelprof_status_t status) {
     {	
 		case RATELPROF_ERROR                       : return "A general error as occured.";
 		case RATELPROF_STATUS_SUCCESS                     : return "Function return success";
-		case RATELPROF_STATUS_CALLBACK_IS_NULL            : return "Enter or exit callback has not been correctly set";
+		case RATELPROF_STATUS_DLADDR_FAILED               : return "Failed to translate address to symbolic information";
+		case RATELPROF_STATUS_ALLOC_SIZE_0                : return "An allocation function receive 0 bytes to allocate";
+		case RATELPROF_STATUS_BFD_FAILED                  : return "An error occured during BFD processing";
+		case RATELPROF_STATUS_CALLBACK_SYSTEM_NOT_INIT    : return "The callback system is not initialized";
+		case RATELPROF_STATUS_API_TABLE_NOT_INIT          : return "The API table is not initialized";
+		case RATELPROF_STATUS_STACK_IS_EMPTY              : return "The stack is empty";
+		case RATELPROF_STATUS_UNKNOWN_DOMAIN              : return "Domain in argument does not exist";
 		case RATELPROF_STATUS_MALLOC_FAILED               : return "Memory allocation failed";
 		case RATELPROF_STATUS_STACK_IS_NULL               : return "The stack is NULL or not initialized";
 		case RATELPROF_STATUS_INVALID_PTR                 : return "Invalid structure pointer (NULL)";
-		case RATELPROF_STATUS_PLUGIN_ALREADY_INIT         : return "The plugin is not null or has already been initialized";
 		case RATELPROF_STATUS_PLUGIN_IS_NULL              : return "The plugin is NULL or not initialized";
-		case RATELPROF_STATUS_CALLBACK_SYSTEM_NOT_INIT    : return "The callback system is not initialized";
-		case RATELPROF_STATUS_API_TABLE_NOT_INIT          : return "The API table is not initialized";
-		case RATELPROF_STATUS_ALLOC_SIZE_0                : return "An allocation function receive 0 bytes to allocate";
-		case RATELPROF_STATUS_UNKNOWN_DOMAIN              : return "Domain in argument does not exist";
+		case RATELPROF_STATUS_BFD_NO_SECTION_FOUND        : return "Cannot find section for this address";
+		case RATELPROF_STATUS_CALLBACK_IS_NULL            : return "Enter or exit callback has not been correctly set";
+		case RATELPROF_STATUS_BFD_NO_SOURCE_FOUND         : return "Cannot find source location for this address";
 		case RATELPROF_STATUS_DLOPEN_FAILED               : return "Failed to open library";
-		case RATELPROF_STATUS_STACK_IS_EMPTY              : return "The stack is empty"; 
+		case RATELPROF_STATUS_PLUGIN_ALREADY_INIT         : return "The plugin is not null or has already been initialized"; 
         default: break;
     }
     return "Unknown error";

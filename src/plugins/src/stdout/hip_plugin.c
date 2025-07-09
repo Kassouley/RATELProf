@@ -25,6 +25,7 @@ void on_exit_hip_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void
     activity->tid = get_tid();
     printf("-----------\n");
     printf("PHASE:%d : %s | ID: %lu | CID: %lu\n", activity->phase, get_hip_funame_by_id(activity->funid), activity->id, activity->corr_id);
+    ratelprof_get_and_print_location(activity->return_address);
     process_hip_args_for(activity->funid, &activity->hip_args, NULL);
     pop_id();
 }

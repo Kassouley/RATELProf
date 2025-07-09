@@ -82,7 +82,7 @@ ratelprof_status_t onLoad()
                 ratelprof_enable_domain(domain),
                 LOG(LOG_LEVEL_ERROR, "Cannot enable domain '%s'\n", domain_name)
             );
-            LOG(LOG_LEVEL_INFO, "Domain '%s' enabled.          \n", domain_name);
+            LOG(LOG_LEVEL_INFO, "Domain '%s' enabled.                               \n", domain_name);
         }
     }
 
@@ -196,11 +196,11 @@ void onExit()
 
     LOG(LOG_LEVEL_INFO, "Finalizing RATELProf . . .\r");
     
-    if(ratelprof_fini())
-        LOG(LOG_LEVEL_FATAL, "Failed to finalize RATELProf core part.\n");
-
     plugin_manager.plugin_finalize(&plugin);
     close_plugin_manager(&plugin_manager);
+
+    if(ratelprof_fini())
+        LOG(LOG_LEVEL_FATAL, "Failed to finalize RATELProf core part.\n");
 
     if(ratelprof_ext_fini())
         LOG(LOG_LEVEL_FATAL, "Failed to finalize RATELProf extension part.\n");

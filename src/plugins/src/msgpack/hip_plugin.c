@@ -7,7 +7,6 @@
 #include <ratelprof_ext.h>
 #include "hip_plugin.h"
 #include "msgpack.h"
-#include "msgpack_ext.h"
 
 void on_enter_hip_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity){
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
@@ -16373,7 +16372,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char[64]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_string_ext(buf, args->hipIpcOpenMemHandle.handle.reserved);
+			msgpack_encode_string(buf, args->hipIpcOpenMemHandle.handle.reserved);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
@@ -16985,7 +16984,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char[64]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_string_ext(buf, args->hipIpcOpenEventHandle.handle.reserved);
+			msgpack_encode_string(buf, args->hipIpcOpenEventHandle.handle.reserved);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);

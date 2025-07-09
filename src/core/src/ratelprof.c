@@ -110,7 +110,7 @@ ratelprof_status_t ratelprof_disable_domain(ratelprof_domain_t domain)
 
 
 ratelprof_status_t ratelprof_start() 
-{    
+{
 	ratelprof_next_phase();
     return RATELPROF_STATUS_SUCCESS;
 }

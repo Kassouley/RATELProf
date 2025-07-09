@@ -49,13 +49,11 @@ struct map_t {
 struct args_target_map_emi_t {
     unsigned int nitems;
     struct map_t * map;
-    const void *codeptr_ra;
 };
 
 #define GET_ARGS_VALUE_target_map_emi(activity) { \
     activity->args.target_map_emi.nitems = nitems; \
     activity->args.target_map_emi.map = (struct map_t*) malloc(sizeof(struct map_t) * nitems); \
-    activity->args.target_map_emi.codeptr_ra = codeptr_ra;  \
     for (int i = 0; i < nitems; i++) { \
         activity->args.target_map_emi.map[i].host_addr = host_addr[i]; \
         activity->args.target_map_emi.map[i].device_addr = device_addr[i]; \
@@ -81,7 +79,6 @@ struct args_target_data_op_t {
     void *dest_addr;
     int dest_device_num;
     size_t bytes;
-    const void *codeptr_ra;
 };
 
 #define GET_ARGS_VALUE_target_data_op(activity) { \
@@ -91,17 +88,14 @@ struct args_target_data_op_t {
     activity->args.target_data_op.dest_addr = dest_addr; \
     activity->args.target_data_op.dest_device_num = dest_device_num; \
     activity->args.target_data_op.bytes = bytes; \
-    activity->args.target_data_op.codeptr_ra = codeptr_ra;  \
 };
 
 struct args_target_emi_t {
     int device_num;
-    const void *codeptr_ra;
 };
 
 #define GET_ARGS_VALUE_target_emi(activity) { \
     activity->args.target_emi.device_num = device_num; \
-    activity->args.target_emi.codeptr_ra = codeptr_ra;  \
 };
 
 typedef union ompt_api_args_u {
@@ -121,6 +115,7 @@ typedef struct ratelprof_ompt_api_activity_s {
 	uint64_t tid;
     ratelprof_timespec_t start_time;
     ratelprof_timespec_t stop_time;
+    void* return_address;
     ompt_api_args_t args;
 } ratelprof_ompt_api_activity_t;
 

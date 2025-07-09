@@ -23,7 +23,7 @@ void add_activity_data_to_buffer(msgpack_buffer_t* buf,
     ratelprof_time_t dur   = stop - start;
 
     msgpack_encode_uint(buf, activity->id);
-    msgpack_encode_map(buf, 8);
+    msgpack_encode_map(buf, 9);
 
     msgpack_encode_string_ext(buf, "phase");
     msgpack_encode_string_ext(buf, ratelprof_get_phase_name(activity->phase));
@@ -46,6 +46,12 @@ void add_activity_data_to_buffer(msgpack_buffer_t* buf,
     msgpack_encode_string_ext(buf, "tid");
     msgpack_encode_uint(buf, activity->tid);
     
+    msgpack_encode_string_ext(buf, "return_address");
+    msgpack_encode_uint(buf, (uintptr_t)activity->return_address);
+
+    // Put location in cache for later use
+    ratelprof_get_source_location(NULL, activity->return_address);
+
     msgpack_encode_string_ext(buf, "args");
 }
 
@@ -56,7 +62,7 @@ void ompt_activity_callback(const ratelprof_ompt_api_activity_t* activity, msgpa
     ratelprof_time_t dur   = stop - start;
 
     msgpack_encode_uint(buf, activity->id);
-    msgpack_encode_map(buf, 8);
+    msgpack_encode_map(buf, 9);
 
     msgpack_encode_string_ext(buf, "phase");
     msgpack_encode_string_ext(buf, ratelprof_get_phase_name(activity->phase));
@@ -78,6 +84,12 @@ void ompt_activity_callback(const ratelprof_ompt_api_activity_t* activity, msgpa
     
     msgpack_encode_string_ext(buf, "tid");
     msgpack_encode_uint(buf, activity->tid);
+
+    msgpack_encode_string_ext(buf, "return_address");
+    msgpack_encode_uint(buf, (uintptr_t)activity->return_address);
+
+    // Put location in cache for later use
+    ratelprof_get_source_location(NULL, activity->return_address);
     
     msgpack_encode_string_ext(buf, "args");
     process_ompt_args_for(activity->funid, &activity->args, buf);

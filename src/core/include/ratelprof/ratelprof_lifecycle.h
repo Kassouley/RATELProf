@@ -66,10 +66,10 @@ typedef struct {
  */
 typedef struct {
     ratelprof_phase_t current_phase;           /**< The current phase of the program lifecycle. */
-
-    ratelprof_timespec_t experiment_start_epoch;
-    ratelprof_timespec_t phase_stop_ts[RATELPROF_NB_PHASE];
-    ratelprof_time_t normalizer;     
+   
+    ratelprof_timespec_t experiment_start_epoch; /**< The start epoch of the current profiling experiment */
+    ratelprof_timespec_t phase_stop_ts[RATELPROF_NB_PHASE]; /**< Stop time for each phase (start is previous phase stop) */
+    ratelprof_time_t normalizer; /**< Normalizer time (in ns) used to normalize and reduce timing data */
 
     ratelprof_main_data_t main_data;   /**< Data related to the program's main execution. */
 } ratelprof_lifecycle_t;
@@ -165,6 +165,7 @@ const char* ratelprof_get_phase_name(ratelprof_phase_t phase);
 ratelprof_time_t ratelprof_get_normalized_time(ratelprof_time_t time);
 
 
+
 /**
  * @brief Wrapper function for the program's main function.
  *
@@ -178,7 +179,7 @@ ratelprof_time_t ratelprof_get_normalized_time(ratelprof_time_t time);
  *
  * @details
  * - The function updates the lifecycle's current phase to `RATELPROF_IN_MAIN_PHASE` and 
- *   records the start and stop times for the main phase using `clock_gettime`.
+ *   records the start and stop times for the main phase using `next phase` function.
  * - It duplicates the `argv` array to store it in the lifecycle's `main_data`.
  * - After executing the main function, it updates the `retval`, `pid`, and `tid` fields 
  *   of `main_data` and transitions the lifecycle phase to `RATELPROF_IN_DESTRUCTOR_PHASE`.

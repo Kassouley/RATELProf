@@ -25,6 +25,7 @@ void on_exit_ompt_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, voi
     activity->tid = get_tid();
     printf("-----------\n");
     printf("PHASE:%d : %s | ID: %lu | CID: %lu\n", activity->phase, get_ompt_funame_by_id(activity->funid), activity->id, activity->corr_id);
+    ratelprof_get_and_print_location(activity->return_address);
     process_ompt_args_for(activity->funid, &activity->args, NULL);
     pop_id();
 }
@@ -47,7 +48,6 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
 			//	void* dest_addr (void*);
 			//	int dest_device_num (int);
 			//	size_t bytes (unsigned long);
-			//	const void* codeptr_ra (void*);
 			printf("\tompt_id_t* host_op_id = %p", args->target_data_op.host_op_id);
 			printf("\n");
 			printf("\tvoid* src_addr = %p", args->target_data_op.src_addr);
@@ -57,7 +57,6 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
 			printf("\n");
 			printf("\tint dest_device_num = %d\n", args->target_data_op.dest_device_num);
 			printf("\tsize_t bytes = %lu\n", args->target_data_op.bytes);
-			printf("\tconst void* codeptr_ra = %p", args->target_data_op.codeptr_ra);
 			printf("\n");
 			break;
 
@@ -67,7 +66,6 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
 			//	void** device_addr (void**);
 			//	size_t* bytes (unsigned long*);
 			//	unsigned int* mapping_flags (unsigned int*);
-			//	const void* codeptr_ra (void*);
 			size_t i = 0;
 			size_t nitems = args->target_map_emi.nitems;
 			printf("\tunsigned int nitems = %lu\n", nitems);
@@ -100,7 +98,6 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
 			}
 			printf("%s]\n", get_map_flag_name(args->target_map_emi.map[i].mapping_flags));
 
-			printf("\tconst void* codeptr_ra = %p", args->target_map_emi.codeptr_ra);
 			printf("\n");
 			break;
 
@@ -121,9 +118,7 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
         case OMPT_API_ID_target_exit_data_nowait :
         case OMPT_API_ID_target_update_nowait :
 			//	int device_num (int);
-			//	const void* codeptr_ra (void*);
 			printf("\tint device_num = %d\n", args->target_emi.device_num);
-			printf("\tconst void* codeptr_ra = %p", args->target_emi.codeptr_ra);
 			printf("\n");
 			break;
  

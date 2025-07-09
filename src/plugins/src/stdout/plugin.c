@@ -8,14 +8,12 @@
 #include "hsa_plugin.h"
 #include "omp_tgt_rtl_plugin.h"
 #include "hip_plugin.h" 
-#include "ompt_plugin.h" 
 
 typedef struct ratelprof_plugin_s {
 	api_callback_handler_t omp_routine_callback_handler;
 	api_callback_handler_t hsa_callback_handler;
 	api_callback_handler_t omp_tgt_rtl_callback_handler;
 	api_callback_handler_t hip_callback_handler; 
-	api_callback_handler_t ompt_callback_handler;
 } ratelprof_plugin_t;
 
 ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin) 
@@ -36,8 +34,6 @@ ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin)
 	p->omp_tgt_rtl_callback_handler.on_exit = on_exit_omp_tgt_rtl_callback;
 	p->hip_callback_handler.on_enter = on_enter_hip_callback;
 	p->hip_callback_handler.on_exit = on_exit_hip_callback; 
-	p->ompt_callback_handler.on_enter = on_enter_ompt_callback;
-	p->ompt_callback_handler.on_exit = on_exit_ompt_callback; 
 
     *plugin = p;
     return status;
@@ -63,7 +59,6 @@ ratelprof_status_t ratelprof_get_api_callback(const ratelprof_plugin_t* plugin, 
 		case RATELPROF_DOMAIN_HSA: *callback_handler = plugin->hsa_callback_handler; break;
 		case RATELPROF_DOMAIN_OMP_TGT_RTL: *callback_handler = plugin->omp_tgt_rtl_callback_handler; break;
 		case RATELPROF_DOMAIN_HIP: *callback_handler = plugin->hip_callback_handler; break; 
-		case RATELPROF_DOMAIN_OMP_REGION: *callback_handler = plugin->ompt_callback_handler; break; 
         default: return RATELPROF_STATUS_UNKNOWN_DOMAIN;
     }
     return RATELPROF_STATUS_SUCCESS;

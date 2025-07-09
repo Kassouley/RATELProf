@@ -9,1810 +9,1810 @@
 #define CALL(func, ...) ((__##func##_t)hip_api_table.api_ptr[HIP_API_ID_##func])(__VA_ARGS__)
 
 hipError_t hipGraphMemsetNodeGetParams(hipGraphNode_t node, hipMemsetParams * pNodeParams) {
-	return CALL(hipGraphMemsetNodeGetParams, node, pNodeParams);
+	return CALL(hipGraphMemsetNodeGetParams, node, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipWaitExternalSemaphoresAsync(const hipExternalSemaphore_t * extSemArray, const hipExternalSemaphoreWaitParams * paramsArray, unsigned int numExtSems, hipStream_t stream) {
-	return CALL(hipWaitExternalSemaphoresAsync, extSemArray, paramsArray, numExtSems, stream);
+	return CALL(hipWaitExternalSemaphoresAsync, extSemArray, paramsArray, numExtSems, stream, __builtin_return_address(0));
 };
 
 hipError_t hipDrvPointerGetAttributes(unsigned int numAttributes, hipPointer_attribute * attributes, void ** data, hipDeviceptr_t ptr) {
-	return CALL(hipDrvPointerGetAttributes, numAttributes, attributes, data, ptr);
+	return CALL(hipDrvPointerGetAttributes, numAttributes, attributes, data, ptr, __builtin_return_address(0));
 };
 
 hipError_t hipExtStreamGetCUMask(hipStream_t stream, uint32_t cuMaskSize, uint32_t * cuMask) {
-	return CALL(hipExtStreamGetCUMask, stream, cuMaskSize, cuMask);
+	return CALL(hipExtStreamGetCUMask, stream, cuMaskSize, cuMask, __builtin_return_address(0));
 };
 
 hipError_t hipMemset_spt(void * dst, int value, size_t sizeBytes) {
-	return CALL(hipMemset_spt, dst, value, sizeBytes);
+	return CALL(hipMemset_spt, dst, value, sizeBytes, __builtin_return_address(0));
 };
 
 hipError_t hipCtxSynchronize() {
-	return CALL(hipCtxSynchronize, );
+	return CALL(hipCtxSynchronize, __builtin_return_address(0));
 };
 
 hipError_t hipMemGetAddressRange(hipDeviceptr_t * pbase, size_t * psize, hipDeviceptr_t dptr) {
-	return CALL(hipMemGetAddressRange, pbase, psize, dptr);
+	return CALL(hipMemGetAddressRange, pbase, psize, dptr, __builtin_return_address(0));
 };
 
 hipError_t hipMallocHost(void ** ptr, size_t size) {
-	return CALL(hipMallocHost, ptr, size);
+	return CALL(hipMallocHost, ptr, size, __builtin_return_address(0));
 };
 
 hipError_t hipMemAddressReserve(void ** ptr, size_t size, size_t alignment, void * addr, unsigned long long flags) {
-	return CALL(hipMemAddressReserve, ptr, size, alignment, addr, flags);
+	return CALL(hipMemAddressReserve, ptr, size, alignment, addr, flags, __builtin_return_address(0));
 };
 
 hipError_t hipStreamEndCapture(hipStream_t stream, hipGraph_t * pGraph) {
-	return CALL(hipStreamEndCapture, stream, pGraph);
+	return CALL(hipStreamEndCapture, stream, pGraph, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExecExternalSemaphoresWaitNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, const hipExternalSemaphoreWaitNodeParams * nodeParams) {
-	return CALL(hipGraphExecExternalSemaphoresWaitNodeSetParams, hGraphExec, hNode, nodeParams);
+	return CALL(hipGraphExecExternalSemaphoresWaitNodeSetParams, hGraphExec, hNode, nodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipStreamQuery_spt(hipStream_t stream) {
-	return CALL(hipStreamQuery_spt, stream);
+	return CALL(hipStreamQuery_spt, stream, __builtin_return_address(0));
 };
 
 hipError_t hipStreamCreateWithFlags(hipStream_t * stream, unsigned int flags) {
-	return CALL(hipStreamCreateWithFlags, stream, flags);
+	return CALL(hipStreamCreateWithFlags, stream, flags, __builtin_return_address(0));
 };
 
 hipError_t hipMemGetAllocationGranularity(size_t * granularity, const hipMemAllocationProp * prop, hipMemAllocationGranularity_flags option) {
-	return CALL(hipMemGetAllocationGranularity, granularity, prop, option);
+	return CALL(hipMemGetAllocationGranularity, granularity, prop, option, __builtin_return_address(0));
 };
 
 hipError_t hipProfilerStop() {
-	return CALL(hipProfilerStop, );
+	return CALL(hipProfilerStop, __builtin_return_address(0));
 };
 
 const char * hipGetErrorString(hipError_t hipError) {
-	return CALL(hipGetErrorString, hipError);
+	return CALL(hipGetErrorString, hipError, __builtin_return_address(0));
 };
 
 hipError_t hipGetDeviceFlags(unsigned int * flags) {
-	return CALL(hipGetDeviceFlags, flags);
+	return CALL(hipGetDeviceFlags, flags, __builtin_return_address(0));
 };
 
 hipError_t hipGetTextureObjectResourceDesc(hipResourceDesc * pResDesc, hipTextureObject_t textureObject) {
-	return CALL(hipGetTextureObjectResourceDesc, pResDesc, textureObject);
+	return CALL(hipGetTextureObjectResourceDesc, pResDesc, textureObject, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyPeerAsync(void * dst, int dstDeviceId, const void * src, int srcDevice, size_t sizeBytes, hipStream_t stream) {
-	return CALL(hipMemcpyPeerAsync, dst, dstDeviceId, src, srcDevice, sizeBytes, stream);
+	return CALL(hipMemcpyPeerAsync, dst, dstDeviceId, src, srcDevice, sizeBytes, stream, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefGetFormat(hipArray_Format * pFormat, int * pNumChannels, const textureReference * texRef) {
-	return CALL(hipTexRefGetFormat, pFormat, pNumChannels, texRef);
+	return CALL(hipTexRefGetFormat, pFormat, pNumChannels, texRef, __builtin_return_address(0));
 };
 
 hipError_t hipLaunchKernel(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream) {
-	return CALL(hipLaunchKernel, function_address, numBlocks, dimBlocks, args, sharedMemBytes, stream);
+	return CALL(hipLaunchKernel, function_address, numBlocks, dimBlocks, args, sharedMemBytes, stream, __builtin_return_address(0));
 };
 
 hipError_t hipGraphHostNodeGetParams(hipGraphNode_t node, hipHostNodeParams * pNodeParams) {
-	return CALL(hipGraphHostNodeGetParams, node, pNodeParams);
+	return CALL(hipGraphHostNodeGetParams, node, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipCtxGetSharedMemConfig(hipSharedMemConfig * pConfig) {
-	return CALL(hipCtxGetSharedMemConfig, pConfig);
+	return CALL(hipCtxGetSharedMemConfig, pConfig, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy2DToArray(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind) {
-	return CALL(hipMemcpy2DToArray, dst, wOffset, hOffset, src, spitch, width, height, kind);
+	return CALL(hipMemcpy2DToArray, dst, wOffset, hOffset, src, spitch, width, height, kind, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyFromSymbolAsync(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream) {
-	return CALL(hipMemcpyFromSymbolAsync, dst, symbol, sizeBytes, offset, kind, stream);
+	return CALL(hipMemcpyFromSymbolAsync, dst, symbol, sizeBytes, offset, kind, stream, __builtin_return_address(0));
 };
 
 hipError_t hipGraphKernelNodeSetAttribute(hipGraphNode_t hNode, hipLaunchAttributeID attr, const hipLaunchAttributeValue * value) {
-	return CALL(hipGraphKernelNodeSetAttribute, hNode, attr, value);
+	return CALL(hipGraphKernelNodeSetAttribute, hNode, attr, value, __builtin_return_address(0));
 };
 
 hipError_t hipMemPoolSetAttribute(hipMemPool_t mem_pool, hipMemPoolAttr attr, void * value) {
-	return CALL(hipMemPoolSetAttribute, mem_pool, attr, value);
+	return CALL(hipMemPoolSetAttribute, mem_pool, attr, value, __builtin_return_address(0));
 };
 
 hipError_t hipEventRecord_spt(hipEvent_t event, hipStream_t stream) {
-	return CALL(hipEventRecord_spt, event, stream);
+	return CALL(hipEventRecord_spt, event, stream, __builtin_return_address(0));
 };
 
 hipError_t hipExtLaunchKernel(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, hipEvent_t startEvent, hipEvent_t stopEvent, int flags) {
-	return CALL(hipExtLaunchKernel, function_address, numBlocks, dimBlocks, args, sharedMemBytes, stream, startEvent, stopEvent, flags);
+	return CALL(hipExtLaunchKernel, function_address, numBlocks, dimBlocks, args, sharedMemBytes, stream, startEvent, stopEvent, flags, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExecMemcpyNodeSetParamsToSymbol(hipGraphExec_t hGraphExec, hipGraphNode_t node, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind) {
-	return CALL(hipGraphExecMemcpyNodeSetParamsToSymbol, hGraphExec, node, symbol, src, count, offset, kind);
+	return CALL(hipGraphExecMemcpyNodeSetParamsToSymbol, hGraphExec, node, symbol, src, count, offset, kind, __builtin_return_address(0));
 };
 
 hipError_t hipDevicePrimaryCtxGetState(hipDevice_t dev, unsigned int * flags, int * active) {
-	return CALL(hipDevicePrimaryCtxGetState, dev, flags, active);
+	return CALL(hipDevicePrimaryCtxGetState, dev, flags, active, __builtin_return_address(0));
 };
 
 hipError_t hipGetSymbolSize(size_t * size, const void * symbol) {
-	return CALL(hipGetSymbolSize, size, symbol);
+	return CALL(hipGetSymbolSize, size, symbol, __builtin_return_address(0));
 };
 
 hipError_t hipDestroyExternalMemory(hipExternalMemory_t extMem) {
-	return CALL(hipDestroyExternalMemory, extMem);
+	return CALL(hipDestroyExternalMemory, extMem, __builtin_return_address(0));
 };
 
 hipError_t hipGetProcAddress(const char * symbol, void ** pfn, int hipVersion, uint64_t flags, hipDriverProcAddressQueryResult * symbolStatus) {
-	return CALL(hipGetProcAddress, symbol, pfn, hipVersion, flags, symbolStatus);
+	return CALL(hipGetProcAddress, symbol, pfn, hipVersion, flags, symbolStatus, __builtin_return_address(0));
 };
 
 hipError_t hipGraphNodeGetEnabled(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, unsigned int * isEnabled) {
-	return CALL(hipGraphNodeGetEnabled, hGraphExec, hNode, isEnabled);
+	return CALL(hipGraphNodeGetEnabled, hGraphExec, hNode, isEnabled, __builtin_return_address(0));
 };
 
 hipError_t hipEventDestroy(hipEvent_t event) {
-	return CALL(hipEventDestroy, event);
+	return CALL(hipEventDestroy, event, __builtin_return_address(0));
 };
 
 hipError_t hipGraphEventRecordNodeGetEvent(hipGraphNode_t node, hipEvent_t * event_out) {
-	return CALL(hipGraphEventRecordNodeGetEvent, node, event_out);
+	return CALL(hipGraphEventRecordNodeGetEvent, node, event_out, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefSetMipmapLevelBias(textureReference * texRef, float bias) {
-	return CALL(hipTexRefSetMipmapLevelBias, texRef, bias);
+	return CALL(hipTexRefSetMipmapLevelBias, texRef, bias, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy2DFromArray_spt(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind) {
-	return CALL(hipMemcpy2DFromArray_spt, dst, dpitch, src, wOffset, hOffset, width, height, kind);
+	return CALL(hipMemcpy2DFromArray_spt, dst, dpitch, src, wOffset, hOffset, width, height, kind, __builtin_return_address(0));
 };
 
 hipError_t hipMemGetAccess(unsigned long long * flags, const hipMemLocation * location, void * ptr) {
-	return CALL(hipMemGetAccess, flags, location, ptr);
+	return CALL(hipMemGetAccess, flags, location, ptr, __builtin_return_address(0));
 };
 
 hipError_t hipImportExternalSemaphore(hipExternalSemaphore_t * extSem_out, const hipExternalSemaphoreHandleDesc * semHandleDesc) {
-	return CALL(hipImportExternalSemaphore, extSem_out, semHandleDesc);
+	return CALL(hipImportExternalSemaphore, extSem_out, semHandleDesc, __builtin_return_address(0));
 };
 
 hipError_t hipLaunchHostFunc(hipStream_t stream, hipHostFn_t fn, void * userData) {
-	return CALL(hipLaunchHostFunc, stream, fn, userData);
+	return CALL(hipLaunchHostFunc, stream, fn, userData, __builtin_return_address(0));
 };
 
 hipError_t hipBindTexture2D(size_t * offset, const textureReference * tex, const void * devPtr, const hipChannelFormatDesc * desc, size_t width, size_t height, size_t pitch) {
-	return CALL(hipBindTexture2D, offset, tex, devPtr, desc, width, height, pitch);
+	return CALL(hipBindTexture2D, offset, tex, devPtr, desc, width, height, pitch, __builtin_return_address(0));
 };
 
 hipError_t hipGraphCreate(hipGraph_t * pGraph, unsigned int flags) {
-	return CALL(hipGraphCreate, pGraph, flags);
+	return CALL(hipGraphCreate, pGraph, flags, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefSetMipmappedArray(textureReference * texRef, struct hipMipmappedArray * mipmappedArray, unsigned int Flags) {
-	return CALL(hipTexRefSetMipmappedArray, texRef, mipmappedArray, Flags);
+	return CALL(hipTexRefSetMipmappedArray, texRef, mipmappedArray, Flags, __builtin_return_address(0));
 };
 
 hipError_t hipGraphRemoveDependencies(hipGraph_t graph, const hipGraphNode_t * from, const hipGraphNode_t * to, size_t numDependencies) {
-	return CALL(hipGraphRemoveDependencies, graph, from, to, numDependencies);
+	return CALL(hipGraphRemoveDependencies, graph, from, to, numDependencies, __builtin_return_address(0));
 };
 
 hipError_t hipMemset2D_spt(void * dst, size_t pitch, int value, size_t width, size_t height) {
-	return CALL(hipMemset2D_spt, dst, pitch, value, width, height);
+	return CALL(hipMemset2D_spt, dst, pitch, value, width, height, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind) {
-	return CALL(hipMemcpy, dst, src, sizeBytes, kind);
+	return CALL(hipMemcpy, dst, src, sizeBytes, kind, __builtin_return_address(0));
 };
 
 hipError_t hipMallocAsync(void ** dev_ptr, size_t size, hipStream_t stream) {
-	return CALL(hipMallocAsync, dev_ptr, size, stream);
+	return CALL(hipMallocAsync, dev_ptr, size, stream, __builtin_return_address(0));
 };
 
 hipError_t __hipPushCallConfiguration(dim3 gridDim, dim3 blockDim, size_t sharedMem, hipStream_t stream) {
-	return CALL(__hipPushCallConfiguration, gridDim, blockDim, sharedMem, stream);
+	return CALL(__hipPushCallConfiguration, gridDim, blockDim, sharedMem, stream, __builtin_return_address(0));
 };
 
 hipError_t hipStreamWaitEvent(hipStream_t stream, hipEvent_t event, unsigned int flags) {
-	return CALL(hipStreamWaitEvent, stream, event, flags);
+	return CALL(hipStreamWaitEvent, stream, event, flags, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefSetFlags(textureReference * texRef, unsigned int Flags) {
-	return CALL(hipTexRefSetFlags, texRef, Flags);
+	return CALL(hipTexRefSetFlags, texRef, Flags, __builtin_return_address(0));
 };
 
 hipError_t hipGraphMemFreeNodeGetParams(hipGraphNode_t node, void * dev_ptr) {
-	return CALL(hipGraphMemFreeNodeGetParams, node, dev_ptr);
+	return CALL(hipGraphMemFreeNodeGetParams, node, dev_ptr, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefGetAddress(hipDeviceptr_t * dev_ptr, const textureReference * texRef) {
-	return CALL(hipTexRefGetAddress, dev_ptr, texRef);
+	return CALL(hipTexRefGetAddress, dev_ptr, texRef, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyToArray(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t count, hipMemcpyKind kind) {
-	return CALL(hipMemcpyToArray, dst, wOffset, hOffset, src, count, kind);
+	return CALL(hipMemcpyToArray, dst, wOffset, hOffset, src, count, kind, __builtin_return_address(0));
 };
 
 hipError_t hipGraphEventWaitNodeGetEvent(hipGraphNode_t node, hipEvent_t * event_out) {
-	return CALL(hipGraphEventWaitNodeGetEvent, node, event_out);
+	return CALL(hipGraphEventWaitNodeGetEvent, node, event_out, __builtin_return_address(0));
 };
 
 hipError_t hipArrayDestroy(hipArray_t array) {
-	return CALL(hipArrayDestroy, array);
+	return CALL(hipArrayDestroy, array, __builtin_return_address(0));
 };
 
 hipError_t hipGraphKernelNodeCopyAttributes(hipGraphNode_t hSrc, hipGraphNode_t hDst) {
-	return CALL(hipGraphKernelNodeCopyAttributes, hSrc, hDst);
+	return CALL(hipGraphKernelNodeCopyAttributes, hSrc, hDst, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExecHostNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipHostNodeParams * pNodeParams) {
-	return CALL(hipGraphExecHostNodeSetParams, hGraphExec, node, pNodeParams);
+	return CALL(hipGraphExecHostNodeSetParams, hGraphExec, node, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipGraphNodeGetDependencies(hipGraphNode_t node, hipGraphNode_t * pDependencies, size_t * pNumDependencies) {
-	return CALL(hipGraphNodeGetDependencies, node, pDependencies, pNumDependencies);
+	return CALL(hipGraphNodeGetDependencies, node, pDependencies, pNumDependencies, __builtin_return_address(0));
 };
 
 hipError_t hipMemGetInfo(size_t * free, size_t * total) {
-	return CALL(hipMemGetInfo, free, total);
+	return CALL(hipMemGetInfo, free, total, __builtin_return_address(0));
 };
 
 hipError_t hipExtGetLastError() {
-	return CALL(hipExtGetLastError, );
+	return CALL(hipExtGetLastError, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy2DFromArrayAsync_spt(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream) {
-	return CALL(hipMemcpy2DFromArrayAsync_spt, dst, dpitch, src, wOffsetSrc, hOffsetSrc, width, height, kind, stream);
+	return CALL(hipMemcpy2DFromArrayAsync_spt, dst, dpitch, src, wOffsetSrc, hOffsetSrc, width, height, kind, stream, __builtin_return_address(0));
 };
 
 hipError_t hipMemPoolExportPointer(hipMemPoolPtrExportData * export_data, void * dev_ptr) {
-	return CALL(hipMemPoolExportPointer, export_data, dev_ptr);
+	return CALL(hipMemPoolExportPointer, export_data, dev_ptr, __builtin_return_address(0));
 };
 
 hipError_t hipUserObjectRetain(hipUserObject_t object, unsigned int count) {
-	return CALL(hipUserObjectRetain, object, count);
+	return CALL(hipUserObjectRetain, object, count, __builtin_return_address(0));
 };
 
 hipError_t hipMemAllocPitch(hipDeviceptr_t * dptr, size_t * pitch, size_t widthInBytes, size_t height, unsigned int elementSizeBytes) {
-	return CALL(hipMemAllocPitch, dptr, pitch, widthInBytes, height, elementSizeBytes);
+	return CALL(hipMemAllocPitch, dptr, pitch, widthInBytes, height, elementSizeBytes, __builtin_return_address(0));
 };
 
 hipError_t hipDevicePrimaryCtxSetFlags(hipDevice_t dev, unsigned int flags) {
-	return CALL(hipDevicePrimaryCtxSetFlags, dev, flags);
+	return CALL(hipDevicePrimaryCtxSetFlags, dev, flags, __builtin_return_address(0));
 };
 
 hipError_t hipGraphLaunch_spt(hipGraphExec_t graphExec, hipStream_t stream) {
-	return CALL(hipGraphLaunch_spt, graphExec, stream);
+	return CALL(hipGraphLaunch_spt, graphExec, stream, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyAtoA(hipArray_t dstArray, size_t dstOffset, hipArray_t srcArray, size_t srcOffset, size_t ByteCount) {
-	return CALL(hipMemcpyAtoA, dstArray, dstOffset, srcArray, srcOffset, ByteCount);
+	return CALL(hipMemcpyAtoA, dstArray, dstOffset, srcArray, srcOffset, ByteCount, __builtin_return_address(0));
 };
 
 hipError_t hipLaunchCooperativeKernel_spt(const void * f, dim3 gridDim, dim3 blockDim, void ** kernelParams, uint32_t sharedMemBytes, hipStream_t hStream) {
-	return CALL(hipLaunchCooperativeKernel_spt, f, gridDim, blockDim, kernelParams, sharedMemBytes, hStream);
+	return CALL(hipLaunchCooperativeKernel_spt, f, gridDim, blockDim, kernelParams, sharedMemBytes, hStream, __builtin_return_address(0));
 };
 
 hipError_t hipGraphDestroyNode(hipGraphNode_t node) {
-	return CALL(hipGraphDestroyNode, node);
+	return CALL(hipGraphDestroyNode, node, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceGetName(char * name, int len, hipDevice_t device) {
-	return CALL(hipDeviceGetName, name, len, device);
+	return CALL(hipDeviceGetName, name, len, device, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefGetFlags(unsigned int * pFlags, const textureReference * texRef) {
-	return CALL(hipTexRefGetFlags, pFlags, texRef);
+	return CALL(hipTexRefGetFlags, pFlags, texRef, __builtin_return_address(0));
 };
 
 hipError_t hipLaunchKernel_spt(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream) {
-	return CALL(hipLaunchKernel_spt, function_address, numBlocks, dimBlocks, args, sharedMemBytes, stream);
+	return CALL(hipLaunchKernel_spt, function_address, numBlocks, dimBlocks, args, sharedMemBytes, stream, __builtin_return_address(0));
 };
 
 hipError_t hipExtGetLinkTypeAndHopCount(int device1, int device2, uint32_t * linktype, uint32_t * hopcount) {
-	return CALL(hipExtGetLinkTypeAndHopCount, device1, device2, linktype, hopcount);
+	return CALL(hipExtGetLinkTypeAndHopCount, device1, device2, linktype, hopcount, __builtin_return_address(0));
 };
 
 const char * hipApiName(uint32_t id) {
-	return CALL(hipApiName, id);
+	return CALL(hipApiName, id, __builtin_return_address(0));
 };
 
 hipError_t hipGraphMemcpyNodeSetParams1D(hipGraphNode_t node, void * dst, const void * src, size_t count, hipMemcpyKind kind) {
-	return CALL(hipGraphMemcpyNodeSetParams1D, node, dst, src, count, kind);
+	return CALL(hipGraphMemcpyNodeSetParams1D, node, dst, src, count, kind, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceSetMemPool(int device, hipMemPool_t mem_pool) {
-	return CALL(hipDeviceSetMemPool, device, mem_pool);
+	return CALL(hipDeviceSetMemPool, device, mem_pool, __builtin_return_address(0));
 };
 
 hipError_t hipMallocMipmappedArray(hipMipmappedArray_t * mipmappedArray, const struct hipChannelFormatDesc * desc, struct hipExtent extent, unsigned int numLevels, unsigned int flags) {
-	return CALL(hipMallocMipmappedArray, mipmappedArray, desc, extent, numLevels, flags);
+	return CALL(hipMallocMipmappedArray, mipmappedArray, desc, extent, numLevels, flags, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy2DArrayToArray(hipArray_t dst, size_t wOffsetDst, size_t hOffsetDst, hipArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, hipMemcpyKind kind) {
-	return CALL(hipMemcpy2DArrayToArray, dst, wOffsetDst, hOffsetDst, src, wOffsetSrc, hOffsetSrc, width, height, kind);
+	return CALL(hipMemcpy2DArrayToArray, dst, wOffsetDst, hOffsetDst, src, wOffsetSrc, hOffsetSrc, width, height, kind, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceEnablePeerAccess(int peerDeviceId, unsigned int flags) {
-	return CALL(hipDeviceEnablePeerAccess, peerDeviceId, flags);
+	return CALL(hipDeviceEnablePeerAccess, peerDeviceId, flags, __builtin_return_address(0));
 };
 
 hipError_t hipHostMalloc(void ** ptr, size_t size, unsigned int flags) {
-	return CALL(hipHostMalloc, ptr, size, flags);
+	return CALL(hipHostMalloc, ptr, size, flags, __builtin_return_address(0));
 };
 
 hipError_t hipDestroySurfaceObject(hipSurfaceObject_t surfaceObject) {
-	return CALL(hipDestroySurfaceObject, surfaceObject);
+	return CALL(hipDestroySurfaceObject, surfaceObject, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceGetByPCIBusId(int * device, const char * pciBusId) {
-	return CALL(hipDeviceGetByPCIBusId, device, pciBusId);
+	return CALL(hipDeviceGetByPCIBusId, device, pciBusId, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceDisablePeerAccess(int peerDeviceId) {
-	return CALL(hipDeviceDisablePeerAccess, peerDeviceId);
+	return CALL(hipDeviceDisablePeerAccess, peerDeviceId, __builtin_return_address(0));
 };
 
 hipError_t hipStreamGetCaptureInfo_v2_spt(hipStream_t stream, hipStreamCaptureStatus * captureStatus_out, unsigned long long * id_out, hipGraph_t * graph_out, const hipGraphNode_t ** dependencies_out, size_t * numDependencies_out) {
-	return CALL(hipStreamGetCaptureInfo_v2_spt, stream, captureStatus_out, id_out, graph_out, dependencies_out, numDependencies_out);
+	return CALL(hipStreamGetCaptureInfo_v2_spt, stream, captureStatus_out, id_out, graph_out, dependencies_out, numDependencies_out, __builtin_return_address(0));
 };
 
 hipError_t hipStreamWriteValue32(hipStream_t stream, void * ptr, uint32_t value, unsigned int flags) {
-	return CALL(hipStreamWriteValue32, stream, ptr, value, flags);
+	return CALL(hipStreamWriteValue32, stream, ptr, value, flags, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefSetAddress(size_t * ByteOffset, textureReference * texRef, hipDeviceptr_t dptr, size_t bytes) {
-	return CALL(hipTexRefSetAddress, ByteOffset, texRef, dptr, bytes);
+	return CALL(hipTexRefSetAddress, ByteOffset, texRef, dptr, bytes, __builtin_return_address(0));
 };
 
 hipError_t hipArray3DCreate(hipArray_t * array, const HIP_ARRAY3D_DESCRIPTOR * pAllocateArray) {
-	return CALL(hipArray3DCreate, array, pAllocateArray);
+	return CALL(hipArray3DCreate, array, pAllocateArray, __builtin_return_address(0));
 };
 
 hipError_t hipCtxGetFlags(unsigned int * flags) {
-	return CALL(hipCtxGetFlags, flags);
+	return CALL(hipCtxGetFlags, flags, __builtin_return_address(0));
 };
 
 hipError_t hipFreeMipmappedArray(hipMipmappedArray_t mipmappedArray) {
-	return CALL(hipFreeMipmappedArray, mipmappedArray);
+	return CALL(hipFreeMipmappedArray, mipmappedArray, __builtin_return_address(0));
 };
 
 hipError_t hipUserObjectRelease(hipUserObject_t object, unsigned int count) {
-	return CALL(hipUserObjectRelease, object, count);
+	return CALL(hipUserObjectRelease, object, count, __builtin_return_address(0));
 };
 
 hipError_t hipFreeAsync(void * dev_ptr, hipStream_t stream) {
-	return CALL(hipFreeAsync, dev_ptr, stream);
+	return CALL(hipFreeAsync, dev_ptr, stream, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceSetSharedMemConfig(hipSharedMemConfig config) {
-	return CALL(hipDeviceSetSharedMemConfig, config);
+	return CALL(hipDeviceSetSharedMemConfig, config, __builtin_return_address(0));
 };
 
 hipError_t hipIpcCloseMemHandle(void * devPtr) {
-	return CALL(hipIpcCloseMemHandle, devPtr);
+	return CALL(hipIpcCloseMemHandle, devPtr, __builtin_return_address(0));
 };
 
 hipError_t hipOccupancyMaxActiveBlocksPerMultiprocessor(int * numBlocks, const void * f, int blockSize, size_t dynSharedMemPerBlk) {
-	return CALL(hipOccupancyMaxActiveBlocksPerMultiprocessor, numBlocks, f, blockSize, dynSharedMemPerBlk);
+	return CALL(hipOccupancyMaxActiveBlocksPerMultiprocessor, numBlocks, f, blockSize, dynSharedMemPerBlk, __builtin_return_address(0));
 };
 
 hipError_t hipInit(unsigned int flags) {
-	return CALL(hipInit, flags);
+	return CALL(hipInit, flags, __builtin_return_address(0));
 };
 
 hipError_t hipCtxDisablePeerAccess(hipCtx_t peerCtx) {
-	return CALL(hipCtxDisablePeerAccess, peerCtx);
+	return CALL(hipCtxDisablePeerAccess, peerCtx, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExternalSemaphoresWaitNodeSetParams(hipGraphNode_t hNode, const hipExternalSemaphoreWaitNodeParams * nodeParams) {
-	return CALL(hipGraphExternalSemaphoresWaitNodeSetParams, hNode, nodeParams);
+	return CALL(hipGraphExternalSemaphoresWaitNodeSetParams, hNode, nodeParams, __builtin_return_address(0));
 };
 
 size_t amd_dbgapi_get_build_id() {
-	return CALL(amd_dbgapi_get_build_id, );
+	return CALL(amd_dbgapi_get_build_id, __builtin_return_address(0));
 };
 
 hipError_t hipMemsetD32(hipDeviceptr_t dest, int value, size_t count) {
-	return CALL(hipMemsetD32, dest, value, count);
+	return CALL(hipMemsetD32, dest, value, count, __builtin_return_address(0));
 };
 
 hipError_t hipModuleGetTexRef(textureReference ** texRef, hipModule_t hmod, const char * name) {
-	return CALL(hipModuleGetTexRef, texRef, hmod, name);
+	return CALL(hipModuleGetTexRef, texRef, hmod, name, __builtin_return_address(0));
 };
 
 hipError_t hipLaunchCooperativeKernel(const void * f, dim3 gridDim, dim3 blockDimX, void ** kernelParams, unsigned int sharedMemBytes, hipStream_t stream) {
-	return CALL(hipLaunchCooperativeKernel, f, gridDim, blockDimX, kernelParams, sharedMemBytes, stream);
+	return CALL(hipLaunchCooperativeKernel, f, gridDim, blockDimX, kernelParams, sharedMemBytes, stream, __builtin_return_address(0));
 };
 
 const char * hipKernelNameRef(const hipFunction_t f) {
-	return CALL(hipKernelNameRef, f);
+	return CALL(hipKernelNameRef, f, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddKernelNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipKernelNodeParams * pNodeParams) {
-	return CALL(hipGraphAddKernelNode, pGraphNode, graph, pDependencies, numDependencies, pNodeParams);
+	return CALL(hipGraphAddKernelNode, pGraphNode, graph, pDependencies, numDependencies, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipUserObjectCreate(hipUserObject_t * object_out, void * ptr, hipHostFn_t destroy, unsigned int initialRefcount, unsigned int flags) {
-	return CALL(hipUserObjectCreate, object_out, ptr, destroy, initialRefcount, flags);
+	return CALL(hipUserObjectCreate, object_out, ptr, destroy, initialRefcount, flags, __builtin_return_address(0));
 };
 
 hipError_t hipFuncSetAttribute(const void * func, hipFuncAttribute attr, int value) {
-	return CALL(hipFuncSetAttribute, func, attr, value);
+	return CALL(hipFuncSetAttribute, func, attr, value, __builtin_return_address(0));
 };
 
 const char * amd_dbgapi_get_git_hash() {
-	return CALL(amd_dbgapi_get_git_hash, );
+	return CALL(amd_dbgapi_get_git_hash, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyHtoAAsync(hipArray_t dstArray, size_t dstOffset, const void * srcHost, size_t ByteCount, hipStream_t stream) {
-	return CALL(hipMemcpyHtoAAsync, dstArray, dstOffset, srcHost, ByteCount, stream);
+	return CALL(hipMemcpyHtoAAsync, dstArray, dstOffset, srcHost, ByteCount, stream, __builtin_return_address(0));
 };
 
 hipError_t hipStreamWaitEvent_spt(hipStream_t stream, hipEvent_t event, unsigned int flags) {
-	return CALL(hipStreamWaitEvent_spt, stream, event, flags);
+	return CALL(hipStreamWaitEvent_spt, stream, event, flags, __builtin_return_address(0));
 };
 
 hipError_t hipMipmappedArrayCreate(hipMipmappedArray_t * pHandle, HIP_ARRAY3D_DESCRIPTOR * pMipmappedArrayDesc, unsigned int numMipmapLevels) {
-	return CALL(hipMipmappedArrayCreate, pHandle, pMipmappedArrayDesc, numMipmapLevels);
+	return CALL(hipMipmappedArrayCreate, pHandle, pMipmappedArrayDesc, numMipmapLevels, __builtin_return_address(0));
 };
 
 hipError_t hipCtxPushCurrent(hipCtx_t ctx) {
-	return CALL(hipCtxPushCurrent, ctx);
+	return CALL(hipCtxPushCurrent, ctx, __builtin_return_address(0));
 };
 
 hipError_t hipMemPoolExportToShareableHandle(void * shared_handle, hipMemPool_t mem_pool, hipMemAllocationHandleType handle_type, unsigned int flags) {
-	return CALL(hipMemPoolExportToShareableHandle, shared_handle, mem_pool, handle_type, flags);
+	return CALL(hipMemPoolExportToShareableHandle, shared_handle, mem_pool, handle_type, flags, __builtin_return_address(0));
 };
 
 hipError_t hipStreamGetDevice(hipStream_t stream, hipDevice_t * device) {
-	return CALL(hipStreamGetDevice, stream, device);
+	return CALL(hipStreamGetDevice, stream, device, __builtin_return_address(0));
 };
 
 hipError_t hipMemImportFromShareableHandle(hipMemGenericAllocationHandle_t * handle, void * osHandle, hipMemAllocationHandleType shHandleType) {
-	return CALL(hipMemImportFromShareableHandle, handle, osHandle, shHandleType);
+	return CALL(hipMemImportFromShareableHandle, handle, osHandle, shHandleType, __builtin_return_address(0));
 };
 
 hipError_t hipDevicePrimaryCtxRetain(hipCtx_t * pctx, hipDevice_t dev) {
-	return CALL(hipDevicePrimaryCtxRetain, pctx, dev);
+	return CALL(hipDevicePrimaryCtxRetain, pctx, dev, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExecMemsetNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipMemsetParams * pNodeParams) {
-	return CALL(hipGraphExecMemsetNodeSetParams, hGraphExec, node, pNodeParams);
+	return CALL(hipGraphExecMemsetNodeSetParams, hGraphExec, node, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefGetMipmapLevelBias(float * pbias, const textureReference * texRef) {
-	return CALL(hipTexRefGetMipmapLevelBias, pbias, texRef);
+	return CALL(hipTexRefGetMipmapLevelBias, pbias, texRef, __builtin_return_address(0));
 };
 
 hipError_t hipConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, hipStream_t stream) {
-	return CALL(hipConfigureCall, gridDim, blockDim, sharedMem, stream);
+	return CALL(hipConfigureCall, gridDim, blockDim, sharedMem, stream, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceGetPCIBusId(char * pciBusId, int len, int device) {
-	return CALL(hipDeviceGetPCIBusId, pciBusId, len, device);
+	return CALL(hipDeviceGetPCIBusId, pciBusId, len, device, __builtin_return_address(0));
 };
 
 hipError_t hipMemset2DAsync_spt(void * dst, size_t pitch, int value, size_t width, size_t height, hipStream_t stream) {
-	return CALL(hipMemset2DAsync_spt, dst, pitch, value, width, height, stream);
+	return CALL(hipMemset2DAsync_spt, dst, pitch, value, width, height, stream, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefGetMipmapLevelClamp(float * pminMipmapLevelClamp, float * pmaxMipmapLevelClamp, const textureReference * texRef) {
-	return CALL(hipTexRefGetMipmapLevelClamp, pminMipmapLevelClamp, pmaxMipmapLevelClamp, texRef);
+	return CALL(hipTexRefGetMipmapLevelClamp, pminMipmapLevelClamp, pmaxMipmapLevelClamp, texRef, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy3DAsync(const struct hipMemcpy3DParms * p, hipStream_t stream) {
-	return CALL(hipMemcpy3DAsync, p, stream);
+	return CALL(hipMemcpy3DAsync, p, stream, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyPeer(void * dst, int dstDeviceId, const void * src, int srcDeviceId, size_t sizeBytes) {
-	return CALL(hipMemcpyPeer, dst, dstDeviceId, src, srcDeviceId, sizeBytes);
+	return CALL(hipMemcpyPeer, dst, dstDeviceId, src, srcDeviceId, sizeBytes, __builtin_return_address(0));
 };
 
 hipError_t hipHostFree(void * ptr) {
-	return CALL(hipHostFree, ptr);
+	return CALL(hipHostFree, ptr, __builtin_return_address(0));
 };
 
 hipError_t hipSetValidDevices(int * device_arr, int len) {
-	return CALL(hipSetValidDevices, device_arr, len);
+	return CALL(hipSetValidDevices, device_arr, len, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyAtoH(void * dst, hipArray_t srcArray, size_t srcOffset, size_t count) {
-	return CALL(hipMemcpyAtoH, dst, srcArray, srcOffset, count);
+	return CALL(hipMemcpyAtoH, dst, srcArray, srcOffset, count, __builtin_return_address(0));
 };
 
 hipError_t hipGetTextureReference(const textureReference ** texref, const void * symbol) {
-	return CALL(hipGetTextureReference, texref, symbol);
+	return CALL(hipGetTextureReference, texref, symbol, __builtin_return_address(0));
 };
 
 hipError_t hipDrvGetErrorName(hipError_t hipError, const char ** errorString) {
-	return CALL(hipDrvGetErrorName, hipError, errorString);
+	return CALL(hipDrvGetErrorName, hipError, errorString, __builtin_return_address(0));
 };
 
 hipError_t hipEventElapsedTime(float * ms, hipEvent_t start, hipEvent_t stop) {
-	return CALL(hipEventElapsedTime, ms, start, stop);
+	return CALL(hipEventElapsedTime, ms, start, stop, __builtin_return_address(0));
 };
 
 hipError_t hipStreamSynchronize_spt(hipStream_t stream) {
-	return CALL(hipStreamSynchronize_spt, stream);
+	return CALL(hipStreamSynchronize_spt, stream, __builtin_return_address(0));
 };
 
 hipError_t hipMipmappedArrayGetLevel(hipArray_t * pLevelArray, hipMipmappedArray_t hMipMappedArray, unsigned int level) {
-	return CALL(hipMipmappedArrayGetLevel, pLevelArray, hMipMappedArray, level);
+	return CALL(hipMipmappedArrayGetLevel, pLevelArray, hMipMappedArray, level, __builtin_return_address(0));
 };
 
 hipError_t hipModuleUnload(hipModule_t module) {
-	return CALL(hipModuleUnload, module);
+	return CALL(hipModuleUnload, module, __builtin_return_address(0));
 };
 
 hipError_t hipGraphDestroy(hipGraph_t graph) {
-	return CALL(hipGraphDestroy, graph);
+	return CALL(hipGraphDestroy, graph, __builtin_return_address(0));
 };
 
 hipError_t hipMallocArray(hipArray_t * array, const hipChannelFormatDesc * desc, size_t width, size_t height, unsigned int flags) {
-	return CALL(hipMallocArray, array, desc, width, height, flags);
+	return CALL(hipMallocArray, array, desc, width, height, flags, __builtin_return_address(0));
 };
 
 hipError_t hipMemPoolImportPointer(void ** dev_ptr, hipMemPool_t mem_pool, hipMemPoolPtrExportData * export_data) {
-	return CALL(hipMemPoolImportPointer, dev_ptr, mem_pool, export_data);
+	return CALL(hipMemPoolImportPointer, dev_ptr, mem_pool, export_data, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyDtoD(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes) {
-	return CALL(hipMemcpyDtoD, dst, src, sizeBytes);
+	return CALL(hipMemcpyDtoD, dst, src, sizeBytes, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddMemcpyNodeFromSymbol(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind) {
-	return CALL(hipGraphAddMemcpyNodeFromSymbol, pGraphNode, graph, pDependencies, numDependencies, dst, symbol, count, offset, kind);
+	return CALL(hipGraphAddMemcpyNodeFromSymbol, pGraphNode, graph, pDependencies, numDependencies, dst, symbol, count, offset, kind, __builtin_return_address(0));
 };
 
 hipError_t hipOccupancyMaxPotentialBlockSize(int * gridSize, int * blockSize, const void * f, size_t dynSharedMemPerBlk, int blockSizeLimit) {
-	return CALL(hipOccupancyMaxPotentialBlockSize, gridSize, blockSize, f, dynSharedMemPerBlk, blockSizeLimit);
+	return CALL(hipOccupancyMaxPotentialBlockSize, gridSize, blockSize, f, dynSharedMemPerBlk, blockSizeLimit, __builtin_return_address(0));
 };
 
 hipError_t hipMemsetD8(hipDeviceptr_t dest, unsigned char value, size_t count) {
-	return CALL(hipMemsetD8, dest, value, count);
+	return CALL(hipMemsetD8, dest, value, count, __builtin_return_address(0));
 };
 
 hipError_t hipCtxEnablePeerAccess(hipCtx_t peerCtx, unsigned int flags) {
-	return CALL(hipCtxEnablePeerAccess, peerCtx, flags);
+	return CALL(hipCtxEnablePeerAccess, peerCtx, flags, __builtin_return_address(0));
 };
 
 hipError_t hipGraphInstantiateWithFlags(hipGraphExec_t * pGraphExec, hipGraph_t graph, unsigned long long flags) {
-	return CALL(hipGraphInstantiateWithFlags, pGraphExec, graph, flags);
+	return CALL(hipGraphInstantiateWithFlags, pGraphExec, graph, flags, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddMemAllocNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipMemAllocNodeParams * pNodeParams) {
-	return CALL(hipGraphAddMemAllocNode, pGraphNode, graph, pDependencies, numDependencies, pNodeParams);
+	return CALL(hipGraphAddMemAllocNode, pGraphNode, graph, pDependencies, numDependencies, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyParam2D(const hip_Memcpy2D * pCopy) {
-	return CALL(hipMemcpyParam2D, pCopy);
+	return CALL(hipMemcpyParam2D, pCopy, __builtin_return_address(0));
 };
 
 hipError_t hipBindTextureToMipmappedArray(const textureReference * tex, hipMipmappedArray_const_t mipmappedArray, const hipChannelFormatDesc * desc) {
-	return CALL(hipBindTextureToMipmappedArray, tex, mipmappedArray, desc);
+	return CALL(hipBindTextureToMipmappedArray, tex, mipmappedArray, desc, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddEmptyNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies) {
-	return CALL(hipGraphAddEmptyNode, pGraphNode, graph, pDependencies, numDependencies);
+	return CALL(hipGraphAddEmptyNode, pGraphNode, graph, pDependencies, numDependencies, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy2DFromArrayAsync(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream) {
-	return CALL(hipMemcpy2DFromArrayAsync, dst, dpitch, src, wOffset, hOffset, width, height, kind, stream);
+	return CALL(hipMemcpy2DFromArrayAsync, dst, dpitch, src, wOffset, hOffset, width, height, kind, stream, __builtin_return_address(0));
 };
 
 hipError_t hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(int * numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags) {
-	return CALL(hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, numBlocks, f, blockSize, dynSharedMemPerBlk, flags);
+	return CALL(hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, numBlocks, f, blockSize, dynSharedMemPerBlk, flags, __builtin_return_address(0));
 };
 
 hipError_t hipCtxSetCurrent(hipCtx_t ctx) {
-	return CALL(hipCtxSetCurrent, ctx);
+	return CALL(hipCtxSetCurrent, ctx, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExecEventWaitNodeSetEvent(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, hipEvent_t event) {
-	return CALL(hipGraphExecEventWaitNodeSetEvent, hGraphExec, hNode, event);
+	return CALL(hipGraphExecEventWaitNodeSetEvent, hGraphExec, hNode, event, __builtin_return_address(0));
 };
 
 hipError_t hipMemPoolSetAccess(hipMemPool_t mem_pool, const hipMemAccessDesc * desc_list, size_t count) {
-	return CALL(hipMemPoolSetAccess, mem_pool, desc_list, count);
+	return CALL(hipMemPoolSetAccess, mem_pool, desc_list, count, __builtin_return_address(0));
 };
 
 hipError_t hipFuncGetAttribute(int * value, hipFunction_attribute attrib, hipFunction_t hfunc) {
-	return CALL(hipFuncGetAttribute, value, attrib, hfunc);
+	return CALL(hipFuncGetAttribute, value, attrib, hfunc, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefSetArray(textureReference * tex, hipArray_const_t array, unsigned int flags) {
-	return CALL(hipTexRefSetArray, tex, array, flags);
+	return CALL(hipTexRefSetArray, tex, array, flags, __builtin_return_address(0));
 };
 
 hipError_t hipMemRetainAllocationHandle(hipMemGenericAllocationHandle_t * handle, void * addr) {
-	return CALL(hipMemRetainAllocationHandle, handle, addr);
+	return CALL(hipMemRetainAllocationHandle, handle, addr, __builtin_return_address(0));
 };
 
 hipError_t hipRuntimeGetVersion(int * runtimeVersion) {
-	return CALL(hipRuntimeGetVersion, runtimeVersion);
+	return CALL(hipRuntimeGetVersion, runtimeVersion, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddEventWaitNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipEvent_t event) {
-	return CALL(hipGraphAddEventWaitNode, pGraphNode, graph, pDependencies, numDependencies, event);
+	return CALL(hipGraphAddEventWaitNode, pGraphNode, graph, pDependencies, numDependencies, event, __builtin_return_address(0));
 };
 
 hipError_t hipUnbindTexture(const textureReference * tex) {
-	return CALL(hipUnbindTexture, tex);
+	return CALL(hipUnbindTexture, tex, __builtin_return_address(0));
 };
 
 hipError_t hipPointerGetAttributes(hipPointerAttribute_t * attributes, const void * ptr) {
-	return CALL(hipPointerGetAttributes, attributes, ptr);
+	return CALL(hipPointerGetAttributes, attributes, ptr, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceGraphMemTrim(int device) {
-	return CALL(hipDeviceGraphMemTrim, device);
+	return CALL(hipDeviceGraphMemTrim, device, __builtin_return_address(0));
 };
 
 hipError_t hipGraphKernelNodeGetAttribute(hipGraphNode_t hNode, hipLaunchAttributeID attr, hipLaunchAttributeValue * value) {
-	return CALL(hipGraphKernelNodeGetAttribute, hNode, attr, value);
+	return CALL(hipGraphKernelNodeGetAttribute, hNode, attr, value, __builtin_return_address(0));
 };
 
 hipError_t hipFree(void * ptr) {
-	return CALL(hipFree, ptr);
+	return CALL(hipFree, ptr, __builtin_return_address(0));
 };
 
 hipError_t hipHostUnregister(void * hostPtr) {
-	return CALL(hipHostUnregister, hostPtr);
+	return CALL(hipHostUnregister, hostPtr, __builtin_return_address(0));
 };
 
 hipError_t hipHostGetDevicePointer(void ** devPtr, void * hstPtr, unsigned int flags) {
-	return CALL(hipHostGetDevicePointer, devPtr, hstPtr, flags);
+	return CALL(hipHostGetDevicePointer, devPtr, hstPtr, flags, __builtin_return_address(0));
 };
 
 hipError_t hipStreamGetPriority_spt(hipStream_t stream, int * priority) {
-	return CALL(hipStreamGetPriority_spt, stream, priority);
+	return CALL(hipStreamGetPriority_spt, stream, priority, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipGraphNodeParams * nodeParams) {
-	return CALL(hipGraphAddNode, pGraphNode, graph, pDependencies, numDependencies, nodeParams);
+	return CALL(hipGraphAddNode, pGraphNode, graph, pDependencies, numDependencies, nodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipGraphGetRootNodes(hipGraph_t graph, hipGraphNode_t * pRootNodes, size_t * pNumRootNodes) {
-	return CALL(hipGraphGetRootNodes, graph, pRootNodes, pNumRootNodes);
+	return CALL(hipGraphGetRootNodes, graph, pRootNodes, pNumRootNodes, __builtin_return_address(0));
 };
 
 hipError_t hipModuleGetGlobal(hipDeviceptr_t * dptr, size_t * bytes, hipModule_t hmod, const char * name) {
-	return CALL(hipModuleGetGlobal, dptr, bytes, hmod, name);
+	return CALL(hipModuleGetGlobal, dptr, bytes, hmod, name, __builtin_return_address(0));
 };
 
 hipError_t hipGraphicsUnmapResources(int count, hipGraphicsResource_t * resources, hipStream_t stream) {
-	return CALL(hipGraphicsUnmapResources, count, resources, stream);
+	return CALL(hipGraphicsUnmapResources, count, resources, stream, __builtin_return_address(0));
 };
 
 hipError_t hipMemsetAsync(void * dst, int value, size_t sizeBytes, hipStream_t stream) {
-	return CALL(hipMemsetAsync, dst, value, sizeBytes, stream);
+	return CALL(hipMemsetAsync, dst, value, sizeBytes, stream, __builtin_return_address(0));
 };
 
 hipError_t hipExtStreamCreateWithCUMask(hipStream_t * stream, uint32_t cuMaskSize, const uint32_t * cuMask) {
-	return CALL(hipExtStreamCreateWithCUMask, stream, cuMaskSize, cuMask);
+	return CALL(hipExtStreamCreateWithCUMask, stream, cuMaskSize, cuMask, __builtin_return_address(0));
 };
 
 hipError_t hipBindTexture(size_t * offset, const textureReference * tex, const void * devPtr, const hipChannelFormatDesc * desc, size_t size) {
-	return CALL(hipBindTexture, offset, tex, devPtr, desc, size);
+	return CALL(hipBindTexture, offset, tex, devPtr, desc, size, __builtin_return_address(0));
 };
 
 hipError_t hipSetupArgument(const void * arg, size_t size, size_t offset) {
-	return CALL(hipSetupArgument, arg, size, offset);
+	return CALL(hipSetupArgument, arg, size, offset, __builtin_return_address(0));
 };
 
 hipError_t hipFuncSetCacheConfig(const void * func, hipFuncCache_t config) {
-	return CALL(hipFuncSetCacheConfig, func, config);
+	return CALL(hipFuncSetCacheConfig, func, config, __builtin_return_address(0));
 };
 
 hipError_t hipDrvGetErrorString(hipError_t hipError, const char ** errorString) {
-	return CALL(hipDrvGetErrorString, hipError, errorString);
+	return CALL(hipDrvGetErrorString, hipError, errorString, __builtin_return_address(0));
 };
 
 hipError_t hipCtxSetCacheConfig(hipFuncCache_t cacheConfig) {
-	return CALL(hipCtxSetCacheConfig, cacheConfig);
+	return CALL(hipCtxSetCacheConfig, cacheConfig, __builtin_return_address(0));
 };
 
 hipError_t hipMemset3D_spt(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent) {
-	return CALL(hipMemset3D_spt, pitchedDevPtr, value, extent);
+	return CALL(hipMemset3D_spt, pitchedDevPtr, value, extent, __builtin_return_address(0));
 };
 
 hipError_t hipStreamGetCaptureInfo(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, unsigned long long * pId) {
-	return CALL(hipStreamGetCaptureInfo, stream, pCaptureStatus, pId);
+	return CALL(hipStreamGetCaptureInfo, stream, pCaptureStatus, pId, __builtin_return_address(0));
 };
 
 hipError_t hipMemsetD16Async(hipDeviceptr_t dest, unsigned short value, size_t count, hipStream_t stream) {
-	return CALL(hipMemsetD16Async, dest, value, count, stream);
+	return CALL(hipMemsetD16Async, dest, value, count, stream, __builtin_return_address(0));
 };
 
 hipError_t hipGraphInstantiateWithParams(hipGraphExec_t * pGraphExec, hipGraph_t graph, hipGraphInstantiateParams * instantiateParams) {
-	return CALL(hipGraphInstantiateWithParams, pGraphExec, graph, instantiateParams);
+	return CALL(hipGraphInstantiateWithParams, pGraphExec, graph, instantiateParams, __builtin_return_address(0));
 };
 
 hipError_t hipIpcGetMemHandle(hipIpcMemHandle_t * handle, void * devPtr) {
-	return CALL(hipIpcGetMemHandle, handle, devPtr);
+	return CALL(hipIpcGetMemHandle, handle, devPtr, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddMemsetNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipMemsetParams * pMemsetParams) {
-	return CALL(hipGraphAddMemsetNode, pGraphNode, graph, pDependencies, numDependencies, pMemsetParams);
+	return CALL(hipGraphAddMemsetNode, pGraphNode, graph, pDependencies, numDependencies, pMemsetParams, __builtin_return_address(0));
 };
 
 hipError_t hipEventCreateWithFlags(hipEvent_t * event, unsigned int flags) {
-	return CALL(hipEventCreateWithFlags, event, flags);
+	return CALL(hipEventCreateWithFlags, event, flags, __builtin_return_address(0));
 };
 
 hipError_t hipChooseDeviceR0600(int * device, const hipDeviceProp_tR0600 * prop) {
-	return CALL(hipChooseDeviceR0600, device, prop);
+	return CALL(hipChooseDeviceR0600, device, prop, __builtin_return_address(0));
 };
 
 hipError_t hipStreamQuery(hipStream_t stream) {
-	return CALL(hipStreamQuery, stream);
+	return CALL(hipStreamQuery, stream, __builtin_return_address(0));
 };
 
 hipError_t hipMemRangeGetAttribute(void * data, size_t data_size, hipMemRangeAttribute attribute, const void * dev_ptr, size_t count) {
-	return CALL(hipMemRangeGetAttribute, data, data_size, attribute, dev_ptr, count);
+	return CALL(hipMemRangeGetAttribute, data, data_size, attribute, dev_ptr, count, __builtin_return_address(0));
 };
 
 hipError_t hipCreateSurfaceObject(hipSurfaceObject_t * pSurfObject, const hipResourceDesc * pResDesc) {
-	return CALL(hipCreateSurfaceObject, pSurfObject, pResDesc);
+	return CALL(hipCreateSurfaceObject, pSurfObject, pResDesc, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefSetMaxAnisotropy(textureReference * texRef, unsigned int maxAniso) {
-	return CALL(hipTexRefSetMaxAnisotropy, texRef, maxAniso);
+	return CALL(hipTexRefSetMaxAnisotropy, texRef, maxAniso, __builtin_return_address(0));
 };
 
 hipError_t hipGraphEventWaitNodeSetEvent(hipGraphNode_t node, hipEvent_t event) {
-	return CALL(hipGraphEventWaitNodeSetEvent, node, event);
+	return CALL(hipGraphEventWaitNodeSetEvent, node, event, __builtin_return_address(0));
 };
 
 hipError_t hipArrayCreate(hipArray_t * pHandle, const HIP_ARRAY_DESCRIPTOR * pAllocateArray) {
-	return CALL(hipArrayCreate, pHandle, pAllocateArray);
+	return CALL(hipArrayCreate, pHandle, pAllocateArray, __builtin_return_address(0));
 };
 
 hipError_t hipGraphKernelNodeGetParams(hipGraphNode_t node, hipKernelNodeParams * pNodeParams) {
-	return CALL(hipGraphKernelNodeGetParams, node, pNodeParams);
+	return CALL(hipGraphKernelNodeGetParams, node, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipMemUnmap(void * ptr, size_t size) {
-	return CALL(hipMemUnmap, ptr, size);
+	return CALL(hipMemUnmap, ptr, size, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyAsync_spt(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream) {
-	return CALL(hipMemcpyAsync_spt, dst, src, sizeBytes, kind, stream);
+	return CALL(hipMemcpyAsync_spt, dst, src, sizeBytes, kind, stream, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceGetLimit(size_t * pValue, enum hipLimit_t limit) {
-	return CALL(hipDeviceGetLimit, pValue, limit);
+	return CALL(hipDeviceGetLimit, pValue, limit, __builtin_return_address(0));
 };
 
 hipError_t hipStreamAddCallback_spt(hipStream_t stream, hipStreamCallback_t callback, void * userData, unsigned int flags) {
-	return CALL(hipStreamAddCallback_spt, stream, callback, userData, flags);
+	return CALL(hipStreamAddCallback_spt, stream, callback, userData, flags, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefGetMipmapFilterMode(enum hipTextureFilterMode * pfm, const textureReference * texRef) {
-	return CALL(hipTexRefGetMipmapFilterMode, pfm, texRef);
+	return CALL(hipTexRefGetMipmapFilterMode, pfm, texRef, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefSetMipmapLevelClamp(textureReference * texRef, float minMipMapLevelClamp, float maxMipMapLevelClamp) {
-	return CALL(hipTexRefSetMipmapLevelClamp, texRef, minMipMapLevelClamp, maxMipMapLevelClamp);
+	return CALL(hipTexRefSetMipmapLevelClamp, texRef, minMipMapLevelClamp, maxMipMapLevelClamp, __builtin_return_address(0));
 };
 
 hipError_t hipStreamGetFlags(hipStream_t stream, unsigned int * flags) {
-	return CALL(hipStreamGetFlags, stream, flags);
+	return CALL(hipStreamGetFlags, stream, flags, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyAtoHAsync(void * dstHost, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, hipStream_t stream) {
-	return CALL(hipMemcpyAtoHAsync, dstHost, srcArray, srcOffset, ByteCount, stream);
+	return CALL(hipMemcpyAtoHAsync, dstHost, srcArray, srcOffset, ByteCount, stream, __builtin_return_address(0));
 };
 
 hipError_t hipMemsetD32Async(hipDeviceptr_t dst, int value, size_t count, hipStream_t stream) {
-	return CALL(hipMemsetD32Async, dst, value, count, stream);
+	return CALL(hipMemsetD32Async, dst, value, count, stream, __builtin_return_address(0));
 };
 
 hipError_t hipGraphNodeFindInClone(hipGraphNode_t * pNode, hipGraphNode_t originalNode, hipGraph_t clonedGraph) {
-	return CALL(hipGraphNodeFindInClone, pNode, originalNode, clonedGraph);
+	return CALL(hipGraphNodeFindInClone, pNode, originalNode, clonedGraph, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddDependencies(hipGraph_t graph, const hipGraphNode_t * from, const hipGraphNode_t * to, size_t numDependencies) {
-	return CALL(hipGraphAddDependencies, graph, from, to, numDependencies);
+	return CALL(hipGraphAddDependencies, graph, from, to, numDependencies, __builtin_return_address(0));
 };
 
 hipError_t hipGraphGetNodes(hipGraph_t graph, hipGraphNode_t * nodes, size_t * numNodes) {
-	return CALL(hipGraphGetNodes, graph, nodes, numNodes);
+	return CALL(hipGraphGetNodes, graph, nodes, numNodes, __builtin_return_address(0));
 };
 
 hipError_t hipGraphLaunch(hipGraphExec_t graphExec, hipStream_t stream) {
-	return CALL(hipGraphLaunch, graphExec, stream);
+	return CALL(hipGraphLaunch, graphExec, stream, __builtin_return_address(0));
 };
 
 hipError_t hipMemMap(void * ptr, size_t size, size_t offset, hipMemGenericAllocationHandle_t handle, unsigned long long flags) {
-	return CALL(hipMemMap, ptr, size, offset, handle, flags);
+	return CALL(hipMemMap, ptr, size, offset, handle, flags, __builtin_return_address(0));
 };
 
 hipError_t hipGraphMemcpyNodeSetParamsToSymbol(hipGraphNode_t node, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind) {
-	return CALL(hipGraphMemcpyNodeSetParamsToSymbol, node, symbol, src, count, offset, kind);
+	return CALL(hipGraphMemcpyNodeSetParamsToSymbol, node, symbol, src, count, offset, kind, __builtin_return_address(0));
 };
 
 hipError_t hipStreamAttachMemAsync(hipStream_t stream, void * dev_ptr, size_t length, unsigned int flags) {
-	return CALL(hipStreamAttachMemAsync, stream, dev_ptr, length, flags);
+	return CALL(hipStreamAttachMemAsync, stream, dev_ptr, length, flags, __builtin_return_address(0));
 };
 
 hipError_t hipPointerGetAttribute(void * data, hipPointer_attribute attribute, hipDeviceptr_t ptr) {
-	return CALL(hipPointerGetAttribute, data, attribute, ptr);
+	return CALL(hipPointerGetAttribute, data, attribute, ptr, __builtin_return_address(0));
 };
 
 hipError_t hipMemPrefetchAsync(const void * dev_ptr, size_t count, int device, hipStream_t stream) {
-	return CALL(hipMemPrefetchAsync, dev_ptr, count, device, stream);
+	return CALL(hipMemPrefetchAsync, dev_ptr, count, device, stream, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyDtoA(hipArray_t dstArray, size_t dstOffset, hipDeviceptr_t srcDevice, size_t ByteCount) {
-	return CALL(hipMemcpyDtoA, dstArray, dstOffset, srcDevice, ByteCount);
+	return CALL(hipMemcpyDtoA, dstArray, dstOffset, srcDevice, ByteCount, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy_spt(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind) {
-	return CALL(hipMemcpy_spt, dst, src, sizeBytes, kind);
+	return CALL(hipMemcpy_spt, dst, src, sizeBytes, kind, __builtin_return_address(0));
 };
 
 hipError_t hipCtxPopCurrent(hipCtx_t * ctx) {
-	return CALL(hipCtxPopCurrent, ctx);
+	return CALL(hipCtxPopCurrent, ctx, __builtin_return_address(0));
 };
 
 hipError_t hipPointerSetAttribute(const void * value, hipPointer_attribute attribute, hipDeviceptr_t ptr) {
-	return CALL(hipPointerSetAttribute, value, attribute, ptr);
+	return CALL(hipPointerSetAttribute, value, attribute, ptr, __builtin_return_address(0));
 };
 
 hipError_t hipLaunchByPtr(const void * func) {
-	return CALL(hipLaunchByPtr, func);
+	return CALL(hipLaunchByPtr, func, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceSynchronize() {
-	return CALL(hipDeviceSynchronize, );
+	return CALL(hipDeviceSynchronize, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceGetCacheConfig(hipFuncCache_t * cacheConfig) {
-	return CALL(hipDeviceGetCacheConfig, cacheConfig);
+	return CALL(hipDeviceGetCacheConfig, cacheConfig, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy2DAsync_spt(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream) {
-	return CALL(hipMemcpy2DAsync_spt, dst, dpitch, src, spitch, width, height, kind, stream);
+	return CALL(hipMemcpy2DAsync_spt, dst, dpitch, src, spitch, width, height, kind, stream, __builtin_return_address(0));
 };
 
 hipError_t hipDevicePrimaryCtxRelease(hipDevice_t dev) {
-	return CALL(hipDevicePrimaryCtxRelease, dev);
+	return CALL(hipDevicePrimaryCtxRelease, dev, __builtin_return_address(0));
 };
 
 hipError_t hipMemset3DAsync_spt(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, hipStream_t stream) {
-	return CALL(hipMemset3DAsync_spt, pitchedDevPtr, value, extent, stream);
+	return CALL(hipMemset3DAsync_spt, pitchedDevPtr, value, extent, stream, __builtin_return_address(0));
 };
 
 hipError_t hipMemsetD16(hipDeviceptr_t dest, unsigned short value, size_t count) {
-	return CALL(hipMemsetD16, dest, value, count);
+	return CALL(hipMemsetD16, dest, value, count, __builtin_return_address(0));
 };
 
 const char * hipGetErrorName(hipError_t hip_error) {
-	return CALL(hipGetErrorName, hip_error);
+	return CALL(hipGetErrorName, hip_error, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyFromSymbol_spt(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind) {
-	return CALL(hipMemcpyFromSymbol_spt, dst, symbol, sizeBytes, offset, kind);
+	return CALL(hipMemcpyFromSymbol_spt, dst, symbol, sizeBytes, offset, kind, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceGetP2PAttribute(int * value, hipDeviceP2PAttr attr, int srcDevice, int dstDevice) {
-	return CALL(hipDeviceGetP2PAttribute, value, attr, srcDevice, dstDevice);
+	return CALL(hipDeviceGetP2PAttribute, value, attr, srcDevice, dstDevice, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyToSymbolAsync_spt(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream) {
-	return CALL(hipMemcpyToSymbolAsync_spt, symbol, src, sizeBytes, offset, kind, stream);
+	return CALL(hipMemcpyToSymbolAsync_spt, symbol, src, sizeBytes, offset, kind, stream, __builtin_return_address(0));
 };
 
 hipError_t hipModuleGetFunction(hipFunction_t * function, hipModule_t module, const char * kname) {
-	return CALL(hipModuleGetFunction, function, module, kname);
+	return CALL(hipModuleGetFunction, function, module, kname, __builtin_return_address(0));
 };
 
 hipError_t hipMemsetAsync_spt(void * dst, int value, size_t sizeBytes, hipStream_t stream) {
-	return CALL(hipMemsetAsync_spt, dst, value, sizeBytes, stream);
+	return CALL(hipMemsetAsync_spt, dst, value, sizeBytes, stream, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceSetLimit(enum hipLimit_t limit, size_t value) {
-	return CALL(hipDeviceSetLimit, limit, value);
+	return CALL(hipDeviceSetLimit, limit, value, __builtin_return_address(0));
 };
 
 hipError_t hipMallocManaged(void ** dev_ptr, size_t size, unsigned int flags) {
-	return CALL(hipMallocManaged, dev_ptr, size, flags);
+	return CALL(hipMallocManaged, dev_ptr, size, flags, __builtin_return_address(0));
 };
 
 hipError_t hipEventQuery(hipEvent_t event) {
-	return CALL(hipEventQuery, event);
+	return CALL(hipEventQuery, event, __builtin_return_address(0));
 };
 
 hipError_t hipStreamDestroy(hipStream_t stream) {
-	return CALL(hipStreamDestroy, stream);
+	return CALL(hipStreamDestroy, stream, __builtin_return_address(0));
 };
 
 hipError_t hipStreamGetPriority(hipStream_t stream, int * priority) {
-	return CALL(hipStreamGetPriority, stream, priority);
+	return CALL(hipStreamGetPriority, stream, priority, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefSetMipmapFilterMode(textureReference * texRef, enum hipTextureFilterMode fm) {
-	return CALL(hipTexRefSetMipmapFilterMode, texRef, fm);
+	return CALL(hipTexRefSetMipmapFilterMode, texRef, fm, __builtin_return_address(0));
 };
 
 hipError_t hipEventSynchronize(hipEvent_t event) {
-	return CALL(hipEventSynchronize, event);
+	return CALL(hipEventSynchronize, event, __builtin_return_address(0));
 };
 
 hipError_t hipGraphNodeSetEnabled(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, unsigned int isEnabled) {
-	return CALL(hipGraphNodeSetEnabled, hGraphExec, hNode, isEnabled);
+	return CALL(hipGraphNodeSetEnabled, hGraphExec, hNode, isEnabled, __builtin_return_address(0));
 };
 
 hipError_t hipModuleOccupancyMaxPotentialBlockSize(int * gridSize, int * blockSize, hipFunction_t f, size_t dynSharedMemPerBlk, int blockSizeLimit) {
-	return CALL(hipModuleOccupancyMaxPotentialBlockSize, gridSize, blockSize, f, dynSharedMemPerBlk, blockSizeLimit);
+	return CALL(hipModuleOccupancyMaxPotentialBlockSize, gridSize, blockSize, f, dynSharedMemPerBlk, blockSizeLimit, __builtin_return_address(0));
 };
 
 hipError_t hipGetMipmappedArrayLevel(hipArray_t * levelArray, hipMipmappedArray_const_t mipmappedArray, unsigned int level) {
-	return CALL(hipGetMipmappedArrayLevel, levelArray, mipmappedArray, level);
+	return CALL(hipGetMipmappedArrayLevel, levelArray, mipmappedArray, level, __builtin_return_address(0));
 };
 
 hipError_t hipMemMapArrayAsync(hipArrayMapInfo * mapInfoList, unsigned int count, hipStream_t stream) {
-	return CALL(hipMemMapArrayAsync, mapInfoList, count, stream);
+	return CALL(hipMemMapArrayAsync, mapInfoList, count, stream, __builtin_return_address(0));
 };
 
 hipError_t hipDestroyTextureObject(hipTextureObject_t textureObject) {
-	return CALL(hipDestroyTextureObject, textureObject);
+	return CALL(hipDestroyTextureObject, textureObject, __builtin_return_address(0));
 };
 
 hipError_t hipGraphicsMapResources(int count, hipGraphicsResource_t * resources, hipStream_t stream) {
-	return CALL(hipGraphicsMapResources, count, resources, stream);
+	return CALL(hipGraphicsMapResources, count, resources, stream, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddChildGraphNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipGraph_t childGraph) {
-	return CALL(hipGraphAddChildGraphNode, pGraphNode, graph, pDependencies, numDependencies, childGraph);
+	return CALL(hipGraphAddChildGraphNode, pGraphNode, graph, pDependencies, numDependencies, childGraph, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyToSymbolAsync(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream) {
-	return CALL(hipMemcpyToSymbolAsync, symbol, src, sizeBytes, offset, kind, stream);
+	return CALL(hipMemcpyToSymbolAsync, symbol, src, sizeBytes, offset, kind, stream, __builtin_return_address(0));
 };
 
 hipError_t hipGraphEventRecordNodeSetEvent(hipGraphNode_t node, hipEvent_t event) {
-	return CALL(hipGraphEventRecordNodeSetEvent, node, event);
+	return CALL(hipGraphEventRecordNodeSetEvent, node, event, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy3DAsync_spt(const hipMemcpy3DParms * p, hipStream_t stream) {
-	return CALL(hipMemcpy3DAsync_spt, p, stream);
+	return CALL(hipMemcpy3DAsync_spt, p, stream, __builtin_return_address(0));
 };
 
 hipError_t hipGraphDebugDotPrint(hipGraph_t graph, const char * path, unsigned int flags) {
-	return CALL(hipGraphDebugDotPrint, graph, path, flags);
+	return CALL(hipGraphDebugDotPrint, graph, path, flags, __builtin_return_address(0));
 };
 
 hipError_t hipGraphReleaseUserObject(hipGraph_t graph, hipUserObject_t object, unsigned int count) {
-	return CALL(hipGraphReleaseUserObject, graph, object, count);
+	return CALL(hipGraphReleaseUserObject, graph, object, count, __builtin_return_address(0));
 };
 
 hipError_t hipGraphNodeGetDependentNodes(hipGraphNode_t node, hipGraphNode_t * pDependentNodes, size_t * pNumDependentNodes) {
-	return CALL(hipGraphNodeGetDependentNodes, node, pDependentNodes, pNumDependentNodes);
+	return CALL(hipGraphNodeGetDependentNodes, node, pDependentNodes, pNumDependentNodes, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceGet(hipDevice_t * device, int ordinal) {
-	return CALL(hipDeviceGet, device, ordinal);
+	return CALL(hipDeviceGet, device, ordinal, __builtin_return_address(0));
 };
 
 hipError_t hipGetTextureAlignmentOffset(size_t * offset, const textureReference * texref) {
-	return CALL(hipGetTextureAlignmentOffset, offset, texref);
+	return CALL(hipGetTextureAlignmentOffset, offset, texref, __builtin_return_address(0));
 };
 
 hipError_t hipMemRelease(hipMemGenericAllocationHandle_t handle) {
-	return CALL(hipMemRelease, handle);
+	return CALL(hipMemRelease, handle, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy2D_spt(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind) {
-	return CALL(hipMemcpy2D_spt, dst, dpitch, src, spitch, width, height, kind);
+	return CALL(hipMemcpy2D_spt, dst, dpitch, src, spitch, width, height, kind, __builtin_return_address(0));
 };
 
 hipError_t hipFreeArray(hipArray_t array) {
-	return CALL(hipFreeArray, array);
+	return CALL(hipFreeArray, array, __builtin_return_address(0));
 };
 
 hipError_t hipDrvMemcpy2DUnaligned(const hip_Memcpy2D * pCopy) {
-	return CALL(hipDrvMemcpy2DUnaligned, pCopy);
+	return CALL(hipDrvMemcpy2DUnaligned, pCopy, __builtin_return_address(0));
 };
 
 hipError_t hipGetTextureObjectResourceViewDesc(struct hipResourceViewDesc * pResViewDesc, hipTextureObject_t textureObject) {
-	return CALL(hipGetTextureObjectResourceViewDesc, pResViewDesc, textureObject);
+	return CALL(hipGetTextureObjectResourceViewDesc, pResViewDesc, textureObject, __builtin_return_address(0));
 };
 
 hipError_t hipMemExportToShareableHandle(void * shareableHandle, hipMemGenericAllocationHandle_t handle, hipMemAllocationHandleType handleType, unsigned long long flags) {
-	return CALL(hipMemExportToShareableHandle, shareableHandle, handle, handleType, flags);
+	return CALL(hipMemExportToShareableHandle, shareableHandle, handle, handleType, flags, __builtin_return_address(0));
 };
 
 hipError_t hipTexObjectDestroy(hipTextureObject_t texObject) {
-	return CALL(hipTexObjectDestroy, texObject);
+	return CALL(hipTexObjectDestroy, texObject, __builtin_return_address(0));
 };
 
 hipError_t hipMemset(void * dst, int value, size_t sizeBytes) {
-	return CALL(hipMemset, dst, value, sizeBytes);
+	return CALL(hipMemset, dst, value, sizeBytes, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceGetMemPool(hipMemPool_t * mem_pool, int device) {
-	return CALL(hipDeviceGetMemPool, mem_pool, device);
+	return CALL(hipDeviceGetMemPool, mem_pool, device, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExternalSemaphoresSignalNodeSetParams(hipGraphNode_t hNode, const hipExternalSemaphoreSignalNodeParams * nodeParams) {
-	return CALL(hipGraphExternalSemaphoresSignalNodeSetParams, hNode, nodeParams);
+	return CALL(hipGraphExternalSemaphoresSignalNodeSetParams, hNode, nodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipMemPoolCreate(hipMemPool_t * mem_pool, const hipMemPoolProps * pool_props) {
-	return CALL(hipMemPoolCreate, mem_pool, pool_props);
+	return CALL(hipMemPoolCreate, mem_pool, pool_props, __builtin_return_address(0));
 };
 
 hipError_t hipStreamAddCallback(hipStream_t stream, hipStreamCallback_t callback, void * userData, unsigned int flags) {
-	return CALL(hipStreamAddCallback, stream, callback, userData, flags);
+	return CALL(hipStreamAddCallback, stream, callback, userData, flags, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefGetBorderColor(float * pBorderColor, const textureReference * texRef) {
-	return CALL(hipTexRefGetBorderColor, pBorderColor, texRef);
+	return CALL(hipTexRefGetBorderColor, pBorderColor, texRef, __builtin_return_address(0));
 };
 
 hipError_t hipMemPoolGetAccess(hipMemAccessFlags * flags, hipMemPool_t mem_pool, hipMemLocation * location) {
-	return CALL(hipMemPoolGetAccess, flags, mem_pool, location);
+	return CALL(hipMemPoolGetAccess, flags, mem_pool, location, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefSetAddressMode(textureReference * texRef, int dim, enum hipTextureAddressMode am) {
-	return CALL(hipTexRefSetAddressMode, texRef, dim, am);
+	return CALL(hipTexRefSetAddressMode, texRef, dim, am, __builtin_return_address(0));
 };
 
 hipError_t hipProfilerStart() {
-	return CALL(hipProfilerStart, );
+	return CALL(hipProfilerStart, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExecMemcpyNodeSetParams1D(hipGraphExec_t hGraphExec, hipGraphNode_t node, void * dst, const void * src, size_t count, hipMemcpyKind kind) {
-	return CALL(hipGraphExecMemcpyNodeSetParams1D, hGraphExec, node, dst, src, count, kind);
+	return CALL(hipGraphExecMemcpyNodeSetParams1D, hGraphExec, node, dst, src, count, kind, __builtin_return_address(0));
 };
 
 hipError_t hipMalloc3D(hipPitchedPtr * pitchedDevPtr, hipExtent extent) {
-	return CALL(hipMalloc3D, pitchedDevPtr, extent);
+	return CALL(hipMalloc3D, pitchedDevPtr, extent, __builtin_return_address(0));
 };
 
 hipError_t hipStreamIsCapturing_spt(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus) {
-	return CALL(hipStreamIsCapturing_spt, stream, pCaptureStatus);
+	return CALL(hipStreamIsCapturing_spt, stream, pCaptureStatus, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyToSymbol(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind) {
-	return CALL(hipMemcpyToSymbol, symbol, src, sizeBytes, offset, kind);
+	return CALL(hipMemcpyToSymbol, symbol, src, sizeBytes, offset, kind, __builtin_return_address(0));
 };
 
 hipError_t hipPeekAtLastError() {
-	return CALL(hipPeekAtLastError, );
+	return CALL(hipPeekAtLastError, __builtin_return_address(0));
 };
 
 hipError_t hipGraphMemcpyNodeGetParams(hipGraphNode_t node, hipMemcpy3DParms * pNodeParams) {
-	return CALL(hipGraphMemcpyNodeGetParams, node, pNodeParams);
+	return CALL(hipGraphMemcpyNodeGetParams, node, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExecDestroy(hipGraphExec_t graphExec) {
-	return CALL(hipGraphExecDestroy, graphExec);
+	return CALL(hipGraphExecDestroy, graphExec, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceGetGraphMemAttribute(int device, hipGraphMemAttributeType attr, void * value) {
-	return CALL(hipDeviceGetGraphMemAttribute, device, attr, value);
+	return CALL(hipDeviceGetGraphMemAttribute, device, attr, value, __builtin_return_address(0));
 };
 
 hipError_t hipMemset2D(void * dst, size_t pitch, int value, size_t width, size_t height) {
-	return CALL(hipMemset2D, dst, pitch, value, width, height);
+	return CALL(hipMemset2D, dst, pitch, value, width, height, __builtin_return_address(0));
 };
 
 hipError_t hipSetDeviceFlags(unsigned int flags) {
-	return CALL(hipSetDeviceFlags, flags);
+	return CALL(hipSetDeviceFlags, flags, __builtin_return_address(0));
 };
 
 hipError_t hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(int * numBlocks, const void * f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags) {
-	return CALL(hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, numBlocks, f, blockSize, dynSharedMemPerBlk, flags);
+	return CALL(hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, numBlocks, f, blockSize, dynSharedMemPerBlk, flags, __builtin_return_address(0));
 };
 
 hipError_t hipGetChannelDesc(hipChannelFormatDesc * desc, hipArray_const_t array) {
-	return CALL(hipGetChannelDesc, desc, array);
+	return CALL(hipGetChannelDesc, desc, array, __builtin_return_address(0));
 };
 
 hipError_t hipLaunchHostFunc_spt(hipStream_t stream, hipHostFn_t fn, void * userData) {
-	return CALL(hipLaunchHostFunc_spt, stream, fn, userData);
+	return CALL(hipLaunchHostFunc_spt, stream, fn, userData, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy3D(const struct hipMemcpy3DParms * p) {
-	return CALL(hipMemcpy3D, p);
+	return CALL(hipMemcpy3D, p, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceComputeCapability(int * major, int * minor, hipDevice_t device) {
-	return CALL(hipDeviceComputeCapability, major, minor, device);
+	return CALL(hipDeviceComputeCapability, major, minor, device, __builtin_return_address(0));
 };
 
 hipError_t hipGraphicsSubResourceGetMappedArray(hipArray_t * array, hipGraphicsResource_t resource, unsigned int arrayIndex, unsigned int mipLevel) {
-	return CALL(hipGraphicsSubResourceGetMappedArray, array, resource, arrayIndex, mipLevel);
+	return CALL(hipGraphicsSubResourceGetMappedArray, array, resource, arrayIndex, mipLevel, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddMemcpyNodeToSymbol(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind) {
-	return CALL(hipGraphAddMemcpyNodeToSymbol, pGraphNode, graph, pDependencies, numDependencies, symbol, src, count, offset, kind);
+	return CALL(hipGraphAddMemcpyNodeToSymbol, pGraphNode, graph, pDependencies, numDependencies, symbol, src, count, offset, kind, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyDtoDAsync(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes, hipStream_t stream) {
-	return CALL(hipMemcpyDtoDAsync, dst, src, sizeBytes, stream);
+	return CALL(hipMemcpyDtoDAsync, dst, src, sizeBytes, stream, __builtin_return_address(0));
 };
 
 hipError_t hipStreamWaitValue32(hipStream_t stream, void * ptr, uint32_t value, unsigned int flags, uint32_t mask) {
-	return CALL(hipStreamWaitValue32, stream, ptr, value, flags, mask);
+	return CALL(hipStreamWaitValue32, stream, ptr, value, flags, mask, __builtin_return_address(0));
 };
 
 hipError_t hipGraphInstantiate(hipGraphExec_t * pGraphExec, hipGraph_t graph, hipGraphNode_t * pErrorNode, char * pLogBuffer, size_t bufferSize) {
-	return CALL(hipGraphInstantiate, pGraphExec, graph, pErrorNode, pLogBuffer, bufferSize);
+	return CALL(hipGraphInstantiate, pGraphExec, graph, pErrorNode, pLogBuffer, bufferSize, __builtin_return_address(0));
 };
 
 hipError_t hipMemPoolDestroy(hipMemPool_t mem_pool) {
-	return CALL(hipMemPoolDestroy, mem_pool);
+	return CALL(hipMemPoolDestroy, mem_pool, __builtin_return_address(0));
 };
 
 hipError_t hipGetDeviceCount(int * count) {
-	return CALL(hipGetDeviceCount, count);
+	return CALL(hipGetDeviceCount, count, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceGetSharedMemConfig(hipSharedMemConfig * pConfig) {
-	return CALL(hipDeviceGetSharedMemConfig, pConfig);
+	return CALL(hipDeviceGetSharedMemConfig, pConfig, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyDtoHAsync(void * dst, hipDeviceptr_t src, size_t sizeBytes, hipStream_t stream) {
-	return CALL(hipMemcpyDtoHAsync, dst, src, sizeBytes, stream);
+	return CALL(hipMemcpyDtoHAsync, dst, src, sizeBytes, stream, __builtin_return_address(0));
 };
 
 hipError_t hipTexObjectGetTextureDesc(HIP_TEXTURE_DESC * pTexDesc, hipTextureObject_t texObject) {
-	return CALL(hipTexObjectGetTextureDesc, pTexDesc, texObject);
+	return CALL(hipTexObjectGetTextureDesc, pTexDesc, texObject, __builtin_return_address(0));
 };
 
 hipError_t hipModuleOccupancyMaxPotentialBlockSizeWithFlags(int * gridSize, int * blockSize, hipFunction_t f, size_t dynSharedMemPerBlk, int blockSizeLimit, unsigned int flags) {
-	return CALL(hipModuleOccupancyMaxPotentialBlockSizeWithFlags, gridSize, blockSize, f, dynSharedMemPerBlk, blockSizeLimit, flags);
+	return CALL(hipModuleOccupancyMaxPotentialBlockSizeWithFlags, gridSize, blockSize, f, dynSharedMemPerBlk, blockSizeLimit, flags, __builtin_return_address(0));
 };
 
 hipError_t hipStreamIsCapturing(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus) {
-	return CALL(hipStreamIsCapturing, stream, pCaptureStatus);
+	return CALL(hipStreamIsCapturing, stream, pCaptureStatus, __builtin_return_address(0));
 };
 
 hipError_t hipGraphRetainUserObject(hipGraph_t graph, hipUserObject_t object, unsigned int count, unsigned int flags) {
-	return CALL(hipGraphRetainUserObject, graph, object, count, flags);
+	return CALL(hipGraphRetainUserObject, graph, object, count, flags, __builtin_return_address(0));
 };
 
 hipError_t hipMallocFromPoolAsync(void ** dev_ptr, size_t size, hipMemPool_t mem_pool, hipStream_t stream) {
-	return CALL(hipMallocFromPoolAsync, dev_ptr, size, mem_pool, stream);
+	return CALL(hipMallocFromPoolAsync, dev_ptr, size, mem_pool, stream, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy2DAsync(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream) {
-	return CALL(hipMemcpy2DAsync, dst, dpitch, src, spitch, width, height, kind, stream);
+	return CALL(hipMemcpy2DAsync, dst, dpitch, src, spitch, width, height, kind, stream, __builtin_return_address(0));
 };
 
 hipError_t hipStreamGetCaptureInfo_spt(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, unsigned long long * pId) {
-	return CALL(hipStreamGetCaptureInfo_spt, stream, pCaptureStatus, pId);
+	return CALL(hipStreamGetCaptureInfo_spt, stream, pCaptureStatus, pId, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyHtoA(hipArray_t dstArray, size_t dstOffset, const void * srcHost, size_t count) {
-	return CALL(hipMemcpyHtoA, dstArray, dstOffset, srcHost, count);
+	return CALL(hipMemcpyHtoA, dstArray, dstOffset, srcHost, count, __builtin_return_address(0));
 };
 
 hipError_t hipStreamBeginCapture_spt(hipStream_t stream, hipStreamCaptureMode mode) {
-	return CALL(hipStreamBeginCapture_spt, stream, mode);
+	return CALL(hipStreamBeginCapture_spt, stream, mode, __builtin_return_address(0));
 };
 
 hipError_t hipGetDevicePropertiesR0600(hipDeviceProp_tR0600 * prop, int deviceId) {
-	return CALL(hipGetDevicePropertiesR0600, prop, deviceId);
+	return CALL(hipGetDevicePropertiesR0600, prop, deviceId, __builtin_return_address(0));
 };
 
 hipError_t hipCtxGetCurrent(hipCtx_t * ctx) {
-	return CALL(hipCtxGetCurrent, ctx);
+	return CALL(hipCtxGetCurrent, ctx, __builtin_return_address(0));
 };
 
 hipError_t hipDrvGraphAddMemcpyNode(hipGraphNode_t * phGraphNode, hipGraph_t hGraph, const hipGraphNode_t * dependencies, size_t numDependencies, const HIP_MEMCPY3D * copyParams, hipCtx_t ctx) {
-	return CALL(hipDrvGraphAddMemcpyNode, phGraphNode, hGraph, dependencies, numDependencies, copyParams, ctx);
+	return CALL(hipDrvGraphAddMemcpyNode, phGraphNode, hGraph, dependencies, numDependencies, copyParams, ctx, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy2D(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind) {
-	return CALL(hipMemcpy2D, dst, dpitch, src, spitch, width, height, kind);
+	return CALL(hipMemcpy2D, dst, dpitch, src, spitch, width, height, kind, __builtin_return_address(0));
 };
 
 hipError_t hipMipmappedArrayDestroy(hipMipmappedArray_t hMipmappedArray) {
-	return CALL(hipMipmappedArrayDestroy, hMipmappedArray);
+	return CALL(hipMipmappedArrayDestroy, hMipmappedArray, __builtin_return_address(0));
 };
 
 hipError_t hipDrvMemcpy3DAsync(const HIP_MEMCPY3D * pCopy, hipStream_t stream) {
-	return CALL(hipDrvMemcpy3DAsync, pCopy, stream);
+	return CALL(hipDrvMemcpy3DAsync, pCopy, stream, __builtin_return_address(0));
 };
 
 hipError_t hipCtxGetDevice(hipDevice_t * device) {
-	return CALL(hipCtxGetDevice, device);
+	return CALL(hipCtxGetDevice, device, __builtin_return_address(0));
 };
 
 hipError_t hipThreadExchangeStreamCaptureMode(hipStreamCaptureMode * mode) {
-	return CALL(hipThreadExchangeStreamCaptureMode, mode);
+	return CALL(hipThreadExchangeStreamCaptureMode, mode, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyFromArray(void * dst, hipArray_const_t srcArray, size_t wOffset, size_t hOffset, size_t count, hipMemcpyKind kind) {
-	return CALL(hipMemcpyFromArray, dst, srcArray, wOffset, hOffset, count, kind);
+	return CALL(hipMemcpyFromArray, dst, srcArray, wOffset, hOffset, count, kind, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefSetAddress2D(textureReference * texRef, const HIP_ARRAY_DESCRIPTOR * desc, hipDeviceptr_t dptr, size_t Pitch) {
-	return CALL(hipTexRefSetAddress2D, texRef, desc, dptr, Pitch);
+	return CALL(hipTexRefSetAddress2D, texRef, desc, dptr, Pitch, __builtin_return_address(0));
 };
 
 hipError_t hipExternalMemoryGetMappedBuffer(void ** devPtr, hipExternalMemory_t extMem, const hipExternalMemoryBufferDesc * bufferDesc) {
-	return CALL(hipExternalMemoryGetMappedBuffer, devPtr, extMem, bufferDesc);
+	return CALL(hipExternalMemoryGetMappedBuffer, devPtr, extMem, bufferDesc, __builtin_return_address(0));
 };
 
 hipError_t hipGraphChildGraphNodeGetGraph(hipGraphNode_t node, hipGraph_t * pGraph) {
-	return CALL(hipGraphChildGraphNodeGetGraph, node, pGraph);
+	return CALL(hipGraphChildGraphNodeGetGraph, node, pGraph, __builtin_return_address(0));
 };
 
 hipError_t hipMemGetAllocationPropertiesFromHandle(hipMemAllocationProp * prop, hipMemGenericAllocationHandle_t handle) {
-	return CALL(hipMemGetAllocationPropertiesFromHandle, prop, handle);
+	return CALL(hipMemGetAllocationPropertiesFromHandle, prop, handle, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceSetCacheConfig(hipFuncCache_t cacheConfig) {
-	return CALL(hipDeviceSetCacheConfig, cacheConfig);
+	return CALL(hipDeviceSetCacheConfig, cacheConfig, __builtin_return_address(0));
 };
 
 hipError_t hipTexObjectCreate(hipTextureObject_t * pTexObject, const HIP_RESOURCE_DESC * pResDesc, const HIP_TEXTURE_DESC * pTexDesc, const HIP_RESOURCE_VIEW_DESC * pResViewDesc) {
-	return CALL(hipTexObjectCreate, pTexObject, pResDesc, pTexDesc, pResViewDesc);
+	return CALL(hipTexObjectCreate, pTexObject, pResDesc, pTexDesc, pResViewDesc, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyAtoD(hipDeviceptr_t dstDevice, hipArray_t srcArray, size_t srcOffset, size_t ByteCount) {
-	return CALL(hipMemcpyAtoD, dstDevice, srcArray, srcOffset, ByteCount);
+	return CALL(hipMemcpyAtoD, dstDevice, srcArray, srcOffset, ByteCount, __builtin_return_address(0));
 };
 
 hipError_t hipGraphClone(hipGraph_t * pGraphClone, hipGraph_t originalGraph) {
-	return CALL(hipGraphClone, pGraphClone, originalGraph);
+	return CALL(hipGraphClone, pGraphClone, originalGraph, __builtin_return_address(0));
 };
 
 hipError_t hipMemPtrGetInfo(void * ptr, size_t * size) {
-	return CALL(hipMemPtrGetInfo, ptr, size);
+	return CALL(hipMemPtrGetInfo, ptr, size, __builtin_return_address(0));
 };
 
 hipError_t hipDriverGetVersion(int * driverVersion) {
-	return CALL(hipDriverGetVersion, driverVersion);
+	return CALL(hipDriverGetVersion, driverVersion, __builtin_return_address(0));
 };
 
 hipError_t hipStreamCreate(hipStream_t * stream) {
-	return CALL(hipStreamCreate, stream);
+	return CALL(hipStreamCreate, stream, __builtin_return_address(0));
 };
 
 hipError_t hipDrvMemcpy3D(const HIP_MEMCPY3D * pCopy) {
-	return CALL(hipDrvMemcpy3D, pCopy);
+	return CALL(hipDrvMemcpy3D, pCopy, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyHtoD(hipDeviceptr_t dst, void * src, size_t sizeBytes) {
-	return CALL(hipMemcpyHtoD, dst, src, sizeBytes);
+	return CALL(hipMemcpyHtoD, dst, src, sizeBytes, __builtin_return_address(0));
 };
 
 hipError_t hipMemset3DAsync(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, hipStream_t stream) {
-	return CALL(hipMemset3DAsync, pitchedDevPtr, value, extent, stream);
+	return CALL(hipMemset3DAsync, pitchedDevPtr, value, extent, stream, __builtin_return_address(0));
 };
 
 hipError_t hipGraphKernelNodeSetParams(hipGraphNode_t node, const hipKernelNodeParams * pNodeParams) {
-	return CALL(hipGraphKernelNodeSetParams, node, pNodeParams);
+	return CALL(hipGraphKernelNodeSetParams, node, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipHostAlloc(void ** ptr, size_t size, unsigned int flags) {
-	return CALL(hipHostAlloc, ptr, size, flags);
+	return CALL(hipHostAlloc, ptr, size, flags, __builtin_return_address(0));
 };
 
 hipError_t hipHostRegister(void * hostPtr, size_t sizeBytes, unsigned int flags) {
-	return CALL(hipHostRegister, hostPtr, sizeBytes, flags);
+	return CALL(hipHostRegister, hostPtr, sizeBytes, flags, __builtin_return_address(0));
 };
 
 hipError_t hipGraphHostNodeSetParams(hipGraphNode_t node, const hipHostNodeParams * pNodeParams) {
-	return CALL(hipGraphHostNodeSetParams, node, pNodeParams);
+	return CALL(hipGraphHostNodeSetParams, node, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyParam2DAsync(const hip_Memcpy2D * pCopy, hipStream_t stream) {
-	return CALL(hipMemcpyParam2DAsync, pCopy, stream);
+	return CALL(hipMemcpyParam2DAsync, pCopy, stream, __builtin_return_address(0));
 };
 
 hipError_t hipExternalMemoryGetMappedMipmappedArray(hipMipmappedArray_t * mipmap, hipExternalMemory_t extMem, const hipExternalMemoryMipmappedArrayDesc * mipmapDesc) {
-	return CALL(hipExternalMemoryGetMappedMipmappedArray, mipmap, extMem, mipmapDesc);
+	return CALL(hipExternalMemoryGetMappedMipmappedArray, mipmap, extMem, mipmapDesc, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceGetAttribute(int * pi, hipDeviceAttribute_t attr, int deviceId) {
-	return CALL(hipDeviceGetAttribute, pi, attr, deviceId);
+	return CALL(hipDeviceGetAttribute, pi, attr, deviceId, __builtin_return_address(0));
 };
 
 hipError_t hipIpcGetEventHandle(hipIpcEventHandle_t * handle, hipEvent_t event) {
-	return CALL(hipIpcGetEventHandle, handle, event);
+	return CALL(hipIpcGetEventHandle, handle, event, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefGetArray(hipArray_t * pArray, const textureReference * texRef) {
-	return CALL(hipTexRefGetArray, pArray, texRef);
+	return CALL(hipTexRefGetArray, pArray, texRef, __builtin_return_address(0));
 };
 
 hipError_t hipModuleLaunchKernel(hipFunction_t f, unsigned int gridDimX, unsigned int gridDimY, unsigned int gridDimZ, unsigned int blockDimX, unsigned int blockDimY, unsigned int blockDimZ, unsigned int sharedMemBytes, hipStream_t stream, void ** kernelParams, void ** extra) {
-	return CALL(hipModuleLaunchKernel, f, gridDimX, gridDimY, gridDimZ, blockDimX, blockDimY, blockDimZ, sharedMemBytes, stream, kernelParams, extra);
+	return CALL(hipModuleLaunchKernel, f, gridDimX, gridDimY, gridDimZ, blockDimX, blockDimY, blockDimZ, sharedMemBytes, stream, kernelParams, extra, __builtin_return_address(0));
 };
 
 hipError_t hipGraphNodeGetType(hipGraphNode_t node, hipGraphNodeType * pType) {
-	return CALL(hipGraphNodeGetType, node, pType);
+	return CALL(hipGraphNodeGetType, node, pType, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExecEventRecordNodeSetEvent(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, hipEvent_t event) {
-	return CALL(hipGraphExecEventRecordNodeSetEvent, hGraphExec, hNode, event);
+	return CALL(hipGraphExecEventRecordNodeSetEvent, hGraphExec, hNode, event, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddExternalSemaphoresSignalNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipExternalSemaphoreSignalNodeParams * nodeParams) {
-	return CALL(hipGraphAddExternalSemaphoresSignalNode, pGraphNode, graph, pDependencies, numDependencies, nodeParams);
+	return CALL(hipGraphAddExternalSemaphoresSignalNode, pGraphNode, graph, pDependencies, numDependencies, nodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipMemset2DAsync(void * dst, size_t pitch, int value, size_t width, size_t height, hipStream_t stream) {
-	return CALL(hipMemset2DAsync, dst, pitch, value, width, height, stream);
+	return CALL(hipMemset2DAsync, dst, pitch, value, width, height, stream, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyWithStream(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream) {
-	return CALL(hipMemcpyWithStream, dst, src, sizeBytes, kind, stream);
+	return CALL(hipMemcpyWithStream, dst, src, sizeBytes, kind, stream, __builtin_return_address(0));
 };
 
 hipError_t hipBindTextureToArray(const textureReference * tex, hipArray_const_t array, const hipChannelFormatDesc * desc) {
-	return CALL(hipBindTextureToArray, tex, array, desc);
+	return CALL(hipBindTextureToArray, tex, array, desc, __builtin_return_address(0));
 };
 
 hipError_t hipStreamBeginCaptureToGraph(hipStream_t stream, hipGraph_t graph, const hipGraphNode_t * dependencies, const hipGraphEdgeData * dependencyData, size_t numDependencies, hipStreamCaptureMode mode) {
-	return CALL(hipStreamBeginCaptureToGraph, stream, graph, dependencies, dependencyData, numDependencies, mode);
+	return CALL(hipStreamBeginCaptureToGraph, stream, graph, dependencies, dependencyData, numDependencies, mode, __builtin_return_address(0));
 };
 
 hipError_t hipGraphGetEdges(hipGraph_t graph, hipGraphNode_t * from, hipGraphNode_t * to, size_t * numEdges) {
-	return CALL(hipGraphGetEdges, graph, from, to, numEdges);
+	return CALL(hipGraphGetEdges, graph, from, to, numEdges, __builtin_return_address(0));
 };
 
 hipError_t hipStreamWriteValue64(hipStream_t stream, void * ptr, uint64_t value, unsigned int flags) {
-	return CALL(hipStreamWriteValue64, stream, ptr, value, flags);
+	return CALL(hipStreamWriteValue64, stream, ptr, value, flags, __builtin_return_address(0));
 };
 
 hipError_t hipGraphicsResourceGetMappedPointer(void ** devPtr, size_t * size, hipGraphicsResource_t resource) {
-	return CALL(hipGraphicsResourceGetMappedPointer, devPtr, size, resource);
+	return CALL(hipGraphicsResourceGetMappedPointer, devPtr, size, resource, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceCanAccessPeer(int * canAccessPeer, int deviceId, int peerDeviceId) {
-	return CALL(hipDeviceCanAccessPeer, canAccessPeer, deviceId, peerDeviceId);
+	return CALL(hipDeviceCanAccessPeer, canAccessPeer, deviceId, peerDeviceId, __builtin_return_address(0));
 };
 
 hipError_t hipGraphMemcpyNodeSetParams(hipGraphNode_t node, const hipMemcpy3DParms * pNodeParams) {
-	return CALL(hipGraphMemcpyNodeSetParams, node, pNodeParams);
+	return CALL(hipGraphMemcpyNodeSetParams, node, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyHtoDAsync(hipDeviceptr_t dst, void * src, size_t sizeBytes, hipStream_t stream) {
-	return CALL(hipMemcpyHtoDAsync, dst, src, sizeBytes, stream);
+	return CALL(hipMemcpyHtoDAsync, dst, src, sizeBytes, stream, __builtin_return_address(0));
 };
 
 hipError_t hipGetLastError() {
-	return CALL(hipGetLastError, );
+	return CALL(hipGetLastError, __builtin_return_address(0));
 };
 
 hipError_t hipModuleOccupancyMaxActiveBlocksPerMultiprocessor(int * numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk) {
-	return CALL(hipModuleOccupancyMaxActiveBlocksPerMultiprocessor, numBlocks, f, blockSize, dynSharedMemPerBlk);
+	return CALL(hipModuleOccupancyMaxActiveBlocksPerMultiprocessor, numBlocks, f, blockSize, dynSharedMemPerBlk, __builtin_return_address(0));
 };
 
 hipError_t hipGraphicsUnregisterResource(hipGraphicsResource_t resource) {
-	return CALL(hipGraphicsUnregisterResource, resource);
+	return CALL(hipGraphicsUnregisterResource, resource, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddExternalSemaphoresWaitNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipExternalSemaphoreWaitNodeParams * nodeParams) {
-	return CALL(hipGraphAddExternalSemaphoresWaitNode, pGraphNode, graph, pDependencies, numDependencies, nodeParams);
+	return CALL(hipGraphAddExternalSemaphoresWaitNode, pGraphNode, graph, pDependencies, numDependencies, nodeParams, __builtin_return_address(0));
 };
 
 void __hipGetPCH(const char ** pch, unsigned int * size) {
-	CALL(__hipGetPCH, pch, size);
+	CALL(__hipGetPCH, pch, size, __builtin_return_address(0));
 };
 
 hipError_t hipEventCreate(hipEvent_t * event) {
-	return CALL(hipEventCreate, event);
+	return CALL(hipEventCreate, event, __builtin_return_address(0));
 };
 
 hipError_t hipStreamCreateWithPriority(hipStream_t * stream, unsigned int flags, int priority) {
-	return CALL(hipStreamCreateWithPriority, stream, flags, priority);
+	return CALL(hipStreamCreateWithPriority, stream, flags, priority, __builtin_return_address(0));
 };
 
 hipError_t hipModuleLaunchCooperativeKernel(hipFunction_t f, unsigned int gridDimX, unsigned int gridDimY, unsigned int gridDimZ, unsigned int blockDimX, unsigned int blockDimY, unsigned int blockDimZ, unsigned int sharedMemBytes, hipStream_t stream, void ** kernelParams) {
-	return CALL(hipModuleLaunchCooperativeKernel, f, gridDimX, gridDimY, gridDimZ, blockDimX, blockDimY, blockDimZ, sharedMemBytes, stream, kernelParams);
+	return CALL(hipModuleLaunchCooperativeKernel, f, gridDimX, gridDimY, gridDimZ, blockDimX, blockDimY, blockDimZ, sharedMemBytes, stream, kernelParams, __builtin_return_address(0));
 };
 
 hipError_t hipGraphMemAllocNodeGetParams(hipGraphNode_t node, hipMemAllocNodeParams * pNodeParams) {
-	return CALL(hipGraphMemAllocNodeGetParams, node, pNodeParams);
+	return CALL(hipGraphMemAllocNodeGetParams, node, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipMemAddressFree(void * devPtr, size_t size) {
-	return CALL(hipMemAddressFree, devPtr, size);
+	return CALL(hipMemAddressFree, devPtr, size, __builtin_return_address(0));
 };
 
 hipError_t hipCtxCreate(hipCtx_t * ctx, unsigned int flags, hipDevice_t device) {
-	return CALL(hipCtxCreate, ctx, flags, device);
+	return CALL(hipCtxCreate, ctx, flags, device, __builtin_return_address(0));
 };
 
 hipError_t hipCtxGetCacheConfig(hipFuncCache_t * cacheConfig) {
-	return CALL(hipCtxGetCacheConfig, cacheConfig);
+	return CALL(hipCtxGetCacheConfig, cacheConfig, __builtin_return_address(0));
 };
 
 hipError_t hipStreamSynchronize(hipStream_t stream) {
-	return CALL(hipStreamSynchronize, stream);
+	return CALL(hipStreamSynchronize, stream, __builtin_return_address(0));
 };
 
 const char * amd_dbgapi_get_build_name() {
-	return CALL(amd_dbgapi_get_build_name, );
+	return CALL(amd_dbgapi_get_build_name, __builtin_return_address(0));
 };
 
 hipError_t hipArray3DGetDescriptor(HIP_ARRAY3D_DESCRIPTOR * pArrayDescriptor, hipArray_t array) {
-	return CALL(hipArray3DGetDescriptor, pArrayDescriptor, array);
+	return CALL(hipArray3DGetDescriptor, pArrayDescriptor, array, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefGetFilterMode(enum hipTextureFilterMode * pfm, const textureReference * texRef) {
-	return CALL(hipTexRefGetFilterMode, pfm, texRef);
+	return CALL(hipTexRefGetFilterMode, pfm, texRef, __builtin_return_address(0));
 };
 
 hipError_t hipMalloc3DArray(hipArray_t * array, const struct hipChannelFormatDesc * desc, struct hipExtent extent, unsigned int flags) {
-	return CALL(hipMalloc3DArray, array, desc, extent, flags);
+	return CALL(hipMalloc3DArray, array, desc, extent, flags, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExecUpdate(hipGraphExec_t hGraphExec, hipGraph_t hGraph, hipGraphNode_t * hErrorNode_out, hipGraphExecUpdateResult * updateResult_out) {
-	return CALL(hipGraphExecUpdate, hGraphExec, hGraph, hErrorNode_out, updateResult_out);
+	return CALL(hipGraphExecUpdate, hGraphExec, hGraph, hErrorNode_out, updateResult_out, __builtin_return_address(0));
 };
 
 hipError_t hipEventRecord(hipEvent_t event, hipStream_t stream) {
-	return CALL(hipEventRecord, event, stream);
+	return CALL(hipEventRecord, event, stream, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy2DFromArray(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind) {
-	return CALL(hipMemcpy2DFromArray, dst, dpitch, src, wOffset, hOffset, width, height, kind);
+	return CALL(hipMemcpy2DFromArray, dst, dpitch, src, wOffset, hOffset, width, height, kind, __builtin_return_address(0));
 };
 
 hipError_t hipGraphUpload(hipGraphExec_t graphExec, hipStream_t stream) {
-	return CALL(hipGraphUpload, graphExec, stream);
+	return CALL(hipGraphUpload, graphExec, stream, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefSetFilterMode(textureReference * texRef, enum hipTextureFilterMode fm) {
-	return CALL(hipTexRefSetFilterMode, texRef, fm);
+	return CALL(hipTexRefSetFilterMode, texRef, fm, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefGetAddressMode(enum hipTextureAddressMode * pam, const textureReference * texRef, int dim) {
-	return CALL(hipTexRefGetAddressMode, pam, texRef, dim);
+	return CALL(hipTexRefGetAddressMode, pam, texRef, dim, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceGetStreamPriorityRange(int * leastPriority, int * greatestPriority) {
-	return CALL(hipDeviceGetStreamPriorityRange, leastPriority, greatestPriority);
+	return CALL(hipDeviceGetStreamPriorityRange, leastPriority, greatestPriority, __builtin_return_address(0));
 };
 
 hipError_t hipModuleLoadData(hipModule_t * module, const void * image) {
-	return CALL(hipModuleLoadData, module, image);
+	return CALL(hipModuleLoadData, module, image, __builtin_return_address(0));
 };
 
 hipError_t hipStreamWaitValue64(hipStream_t stream, void * ptr, uint64_t value, unsigned int flags, uint64_t mask) {
-	return CALL(hipStreamWaitValue64, stream, ptr, value, flags, mask);
+	return CALL(hipStreamWaitValue64, stream, ptr, value, flags, mask, __builtin_return_address(0));
 };
 
 hipError_t hipMallocPitch(void ** ptr, size_t * pitch, size_t width, size_t height) {
-	return CALL(hipMallocPitch, ptr, pitch, width, height);
+	return CALL(hipMallocPitch, ptr, pitch, width, height, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceTotalMem(size_t * bytes, hipDevice_t device) {
-	return CALL(hipDeviceTotalMem, bytes, device);
+	return CALL(hipDeviceTotalMem, bytes, device, __builtin_return_address(0));
 };
 
 hipError_t hipMemPoolTrimTo(hipMemPool_t mem_pool, size_t min_bytes_to_hold) {
-	return CALL(hipMemPoolTrimTo, mem_pool, min_bytes_to_hold);
+	return CALL(hipMemPoolTrimTo, mem_pool, min_bytes_to_hold, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceGetUuid(hipUUID * uuid, hipDevice_t device) {
-	return CALL(hipDeviceGetUuid, uuid, device);
+	return CALL(hipDeviceGetUuid, uuid, device, __builtin_return_address(0));
 };
 
 hipError_t hipDevicePrimaryCtxReset(hipDevice_t dev) {
-	return CALL(hipDevicePrimaryCtxReset, dev);
+	return CALL(hipDevicePrimaryCtxReset, dev, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExecExternalSemaphoresSignalNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, const hipExternalSemaphoreSignalNodeParams * nodeParams) {
-	return CALL(hipGraphExecExternalSemaphoresSignalNodeSetParams, hGraphExec, hNode, nodeParams);
+	return CALL(hipGraphExecExternalSemaphoresSignalNodeSetParams, hGraphExec, hNode, nodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipExtLaunchMultiKernelMultiDevice(hipLaunchParams * launchParamsList, int numDevices, unsigned int flags) {
-	return CALL(hipExtLaunchMultiKernelMultiDevice, launchParamsList, numDevices, flags);
+	return CALL(hipExtLaunchMultiKernelMultiDevice, launchParamsList, numDevices, flags, __builtin_return_address(0));
 };
 
 hipError_t hipMemsetD8Async(hipDeviceptr_t dest, unsigned char value, size_t count, hipStream_t stream) {
-	return CALL(hipMemsetD8Async, dest, value, count, stream);
+	return CALL(hipMemsetD8Async, dest, value, count, stream, __builtin_return_address(0));
 };
 
 hipError_t hipDrvGraphAddMemsetNode(hipGraphNode_t * phGraphNode, hipGraph_t hGraph, const hipGraphNode_t * dependencies, size_t numDependencies, const HIP_MEMSET_NODE_PARAMS * memsetParams, hipCtx_t ctx) {
-	return CALL(hipDrvGraphAddMemsetNode, phGraphNode, hGraph, dependencies, numDependencies, memsetParams, ctx);
+	return CALL(hipDrvGraphAddMemsetNode, phGraphNode, hGraph, dependencies, numDependencies, memsetParams, ctx, __builtin_return_address(0));
 };
 
 hipError_t hipGraphMemcpyNodeSetParamsFromSymbol(hipGraphNode_t node, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind) {
-	return CALL(hipGraphMemcpyNodeSetParamsFromSymbol, node, dst, symbol, count, offset, kind);
+	return CALL(hipGraphMemcpyNodeSetParamsFromSymbol, node, dst, symbol, count, offset, kind, __builtin_return_address(0));
 };
 
 hipError_t hipGetTextureObjectTextureDesc(hipTextureDesc * pTexDesc, hipTextureObject_t textureObject) {
-	return CALL(hipGetTextureObjectTextureDesc, pTexDesc, textureObject);
+	return CALL(hipGetTextureObjectTextureDesc, pTexDesc, textureObject, __builtin_return_address(0));
 };
 
 hipError_t hipMalloc(void ** ptr, size_t size) {
-	return CALL(hipMalloc, ptr, size);
+	return CALL(hipMalloc, ptr, size, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceSetGraphMemAttribute(int device, hipGraphMemAttributeType attr, void * value) {
-	return CALL(hipDeviceSetGraphMemAttribute, device, attr, value);
+	return CALL(hipDeviceSetGraphMemAttribute, device, attr, value, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExternalSemaphoresWaitNodeGetParams(hipGraphNode_t hNode, hipExternalSemaphoreWaitNodeParams * params_out) {
-	return CALL(hipGraphExternalSemaphoresWaitNodeGetParams, hNode, params_out);
+	return CALL(hipGraphExternalSemaphoresWaitNodeGetParams, hNode, params_out, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy2DToArray_spt(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind) {
-	return CALL(hipMemcpy2DToArray_spt, dst, wOffset, hOffset, src, spitch, width, height, kind);
+	return CALL(hipMemcpy2DToArray_spt, dst, wOffset, hOffset, src, spitch, width, height, kind, __builtin_return_address(0));
 };
 
 hipError_t hipArrayGetDescriptor(HIP_ARRAY_DESCRIPTOR * pArrayDescriptor, hipArray_t array) {
-	return CALL(hipArrayGetDescriptor, pArrayDescriptor, array);
+	return CALL(hipArrayGetDescriptor, pArrayDescriptor, array, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefGetMipMappedArray(hipMipmappedArray_t * pArray, const textureReference * texRef) {
-	return CALL(hipTexRefGetMipMappedArray, pArray, texRef);
+	return CALL(hipTexRefGetMipMappedArray, pArray, texRef, __builtin_return_address(0));
 };
 
 hipError_t hipMemRangeGetAttributes(void ** data, size_t * data_sizes, hipMemRangeAttribute * attributes, size_t num_attributes, const void * dev_ptr, size_t count) {
-	return CALL(hipMemRangeGetAttributes, data, data_sizes, attributes, num_attributes, dev_ptr, count);
+	return CALL(hipMemRangeGetAttributes, data, data_sizes, attributes, num_attributes, dev_ptr, count, __builtin_return_address(0));
 };
 
 hipError_t hipArrayGetInfo(hipChannelFormatDesc * desc, hipExtent * extent, unsigned int * flags, hipArray_t array) {
-	return CALL(hipArrayGetInfo, desc, extent, flags, array);
+	return CALL(hipArrayGetInfo, desc, extent, flags, array, __builtin_return_address(0));
 };
 
 hipError_t hipMemAdvise(const void * dev_ptr, size_t count, hipMemoryAdvise advice, int device) {
-	return CALL(hipMemAdvise, dev_ptr, count, advice, device);
+	return CALL(hipMemAdvise, dev_ptr, count, advice, device, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefSetBorderColor(textureReference * texRef, float * pBorderColor) {
-	return CALL(hipTexRefSetBorderColor, texRef, pBorderColor);
+	return CALL(hipTexRefSetBorderColor, texRef, pBorderColor, __builtin_return_address(0));
 };
 
 hipError_t hipExtMallocWithFlags(void ** ptr, size_t sizeBytes, unsigned int flags) {
-	return CALL(hipExtMallocWithFlags, ptr, sizeBytes, flags);
+	return CALL(hipExtMallocWithFlags, ptr, sizeBytes, flags, __builtin_return_address(0));
 };
 
 hipError_t hipMemAllocHost(void ** ptr, size_t size) {
-	return CALL(hipMemAllocHost, ptr, size);
+	return CALL(hipMemAllocHost, ptr, size, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddHostNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipHostNodeParams * pNodeParams) {
-	return CALL(hipGraphAddHostNode, pGraphNode, graph, pDependencies, numDependencies, pNodeParams);
+	return CALL(hipGraphAddHostNode, pGraphNode, graph, pDependencies, numDependencies, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExecMemcpyNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, hipMemcpy3DParms * pNodeParams) {
-	return CALL(hipGraphExecMemcpyNodeSetParams, hGraphExec, node, pNodeParams);
+	return CALL(hipGraphExecMemcpyNodeSetParams, hGraphExec, node, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipFuncGetAttributes(struct hipFuncAttributes * attr, const void * func) {
-	return CALL(hipFuncGetAttributes, attr, func);
+	return CALL(hipFuncGetAttributes, attr, func, __builtin_return_address(0));
 };
 
 hipError_t hipMemset3D(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent) {
-	return CALL(hipMemset3D, pitchedDevPtr, value, extent);
+	return CALL(hipMemset3D, pitchedDevPtr, value, extent, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefGetMaxAnisotropy(int * pmaxAnsio, const textureReference * texRef) {
-	return CALL(hipTexRefGetMaxAnisotropy, pmaxAnsio, texRef);
+	return CALL(hipTexRefGetMaxAnisotropy, pmaxAnsio, texRef, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddMemFreeNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dev_ptr) {
-	return CALL(hipGraphAddMemFreeNode, pGraphNode, graph, pDependencies, numDependencies, dev_ptr);
+	return CALL(hipGraphAddMemFreeNode, pGraphNode, graph, pDependencies, numDependencies, dev_ptr, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyFromArray_spt(void * dst, hipArray_const_t src, size_t wOffsetSrc, size_t hOffset, size_t count, hipMemcpyKind kind) {
-	return CALL(hipMemcpyFromArray_spt, dst, src, wOffsetSrc, hOffset, count, kind);
+	return CALL(hipMemcpyFromArray_spt, dst, src, wOffsetSrc, hOffset, count, kind, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy3D_spt(const struct hipMemcpy3DParms * p) {
-	return CALL(hipMemcpy3D_spt, p);
+	return CALL(hipMemcpy3D_spt, p, __builtin_return_address(0));
 };
 
 hipError_t hipStreamBeginCapture(hipStream_t stream, hipStreamCaptureMode mode) {
-	return CALL(hipStreamBeginCapture, stream, mode);
+	return CALL(hipStreamBeginCapture, stream, mode, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy2DToArrayAsync(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream) {
-	return CALL(hipMemcpy2DToArrayAsync, dst, wOffset, hOffset, src, spitch, width, height, kind, stream);
+	return CALL(hipMemcpy2DToArrayAsync, dst, wOffset, hOffset, src, spitch, width, height, kind, stream, __builtin_return_address(0));
 };
 
 hipError_t hipCtxSetSharedMemConfig(hipSharedMemConfig config) {
-	return CALL(hipCtxSetSharedMemConfig, config);
+	return CALL(hipCtxSetSharedMemConfig, config, __builtin_return_address(0));
 };
 
 hipError_t hipSetDevice(int deviceId) {
-	return CALL(hipSetDevice, deviceId);
+	return CALL(hipSetDevice, deviceId, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyDtoH(void * dst, hipDeviceptr_t src, size_t sizeBytes) {
-	return CALL(hipMemcpyDtoH, dst, src, sizeBytes);
+	return CALL(hipMemcpyDtoH, dst, src, sizeBytes, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyAsync(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream) {
-	return CALL(hipMemcpyAsync, dst, src, sizeBytes, kind, stream);
+	return CALL(hipMemcpyAsync, dst, src, sizeBytes, kind, stream, __builtin_return_address(0));
 };
 
 hipError_t hipMemCreate(hipMemGenericAllocationHandle_t * handle, size_t size, const hipMemAllocationProp * prop, unsigned long long flags) {
-	return CALL(hipMemCreate, handle, size, prop, flags);
+	return CALL(hipMemCreate, handle, size, prop, flags, __builtin_return_address(0));
 };
 
 hipError_t hipFuncSetSharedMemConfig(const void * func, hipSharedMemConfig config) {
-	return CALL(hipFuncSetSharedMemConfig, func, config);
+	return CALL(hipFuncSetSharedMemConfig, func, config, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExecChildGraphNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, hipGraph_t childGraph) {
-	return CALL(hipGraphExecChildGraphNodeSetParams, hGraphExec, node, childGraph);
+	return CALL(hipGraphExecChildGraphNodeSetParams, hGraphExec, node, childGraph, __builtin_return_address(0));
 };
 
 struct hipChannelFormatDesc hipCreateChannelDesc(int x, int y, int z, int w, enum hipChannelFormatKind f) {
-	return CALL(hipCreateChannelDesc, x, y, z, w, f);
+	return CALL(hipCreateChannelDesc, x, y, z, w, f, __builtin_return_address(0));
 };
 
 hipError_t hipFreeHost(void * ptr) {
-	return CALL(hipFreeHost, ptr);
+	return CALL(hipFreeHost, ptr, __builtin_return_address(0));
 };
 
 hipError_t hipTexObjectGetResourceDesc(HIP_RESOURCE_DESC * pResDesc, hipTextureObject_t texObject) {
-	return CALL(hipTexObjectGetResourceDesc, pResDesc, texObject);
+	return CALL(hipTexObjectGetResourceDesc, pResDesc, texObject, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpy2DToArrayAsync_spt(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream) {
-	return CALL(hipMemcpy2DToArrayAsync_spt, dst, wOffset, hOffset, src, spitch, width, height, kind, stream);
+	return CALL(hipMemcpy2DToArrayAsync_spt, dst, wOffset, hOffset, src, spitch, width, height, kind, stream, __builtin_return_address(0));
 };
 
 hipError_t hipLaunchCooperativeKernelMultiDevice(hipLaunchParams * launchParamsList, int numDevices, unsigned int flags) {
-	return CALL(hipLaunchCooperativeKernelMultiDevice, launchParamsList, numDevices, flags);
+	return CALL(hipLaunchCooperativeKernelMultiDevice, launchParamsList, numDevices, flags, __builtin_return_address(0));
 };
 
 hipError_t hipHostGetFlags(unsigned int * flagsPtr, void * hostPtr) {
-	return CALL(hipHostGetFlags, flagsPtr, hostPtr);
+	return CALL(hipHostGetFlags, flagsPtr, hostPtr, __builtin_return_address(0));
 };
 
 hipError_t hipMemSetAccess(void * ptr, size_t size, const hipMemAccessDesc * desc, size_t count) {
-	return CALL(hipMemSetAccess, ptr, size, desc, count);
+	return CALL(hipMemSetAccess, ptr, size, desc, count, __builtin_return_address(0));
 };
 
 hipError_t hipStreamUpdateCaptureDependencies(hipStream_t stream, hipGraphNode_t * dependencies, size_t numDependencies, unsigned int flags) {
-	return CALL(hipStreamUpdateCaptureDependencies, stream, dependencies, numDependencies, flags);
+	return CALL(hipStreamUpdateCaptureDependencies, stream, dependencies, numDependencies, flags, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExternalSemaphoresSignalNodeGetParams(hipGraphNode_t hNode, hipExternalSemaphoreSignalNodeParams * params_out) {
-	return CALL(hipGraphExternalSemaphoresSignalNodeGetParams, hNode, params_out);
+	return CALL(hipGraphExternalSemaphoresSignalNodeGetParams, hNode, params_out, __builtin_return_address(0));
 };
 
 hipError_t hipTexRefSetFormat(textureReference * texRef, hipArray_Format fmt, int NumPackedComponents) {
-	return CALL(hipTexRefSetFormat, texRef, fmt, NumPackedComponents);
+	return CALL(hipTexRefSetFormat, texRef, fmt, NumPackedComponents, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceReset() {
-	return CALL(hipDeviceReset, );
+	return CALL(hipDeviceReset, __builtin_return_address(0));
 };
 
 hipError_t hipMemPoolImportFromShareableHandle(hipMemPool_t * mem_pool, void * shared_handle, hipMemAllocationHandleType handle_type, unsigned int flags) {
-	return CALL(hipMemPoolImportFromShareableHandle, mem_pool, shared_handle, handle_type, flags);
+	return CALL(hipMemPoolImportFromShareableHandle, mem_pool, shared_handle, handle_type, flags, __builtin_return_address(0));
 };
 
 hipError_t hipCtxGetApiVersion(hipCtx_t ctx, int * apiVersion) {
-	return CALL(hipCtxGetApiVersion, ctx, apiVersion);
+	return CALL(hipCtxGetApiVersion, ctx, apiVersion, __builtin_return_address(0));
 };
 
 hipError_t hipDeviceGetDefaultMemPool(hipMemPool_t * mem_pool, int device) {
-	return CALL(hipDeviceGetDefaultMemPool, mem_pool, device);
+	return CALL(hipDeviceGetDefaultMemPool, mem_pool, device, __builtin_return_address(0));
 };
 
 hipError_t hipStreamGetFlags_spt(hipStream_t stream, unsigned int * flags) {
-	return CALL(hipStreamGetFlags_spt, stream, flags);
+	return CALL(hipStreamGetFlags_spt, stream, flags, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyFromSymbolAsync_spt(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream) {
-	return CALL(hipMemcpyFromSymbolAsync_spt, dst, symbol, sizeBytes, offset, kind, stream);
+	return CALL(hipMemcpyFromSymbolAsync_spt, dst, symbol, sizeBytes, offset, kind, stream, __builtin_return_address(0));
 };
 
 hipError_t hipTexObjectGetResourceViewDesc(HIP_RESOURCE_VIEW_DESC * pResViewDesc, hipTextureObject_t texObject) {
-	return CALL(hipTexObjectGetResourceViewDesc, pResViewDesc, texObject);
+	return CALL(hipTexObjectGetResourceViewDesc, pResViewDesc, texObject, __builtin_return_address(0));
 };
 
 hipError_t hipGetDevice(int * deviceId) {
-	return CALL(hipGetDevice, deviceId);
+	return CALL(hipGetDevice, deviceId, __builtin_return_address(0));
 };
 
 hipError_t hipGetSymbolAddress(void ** devPtr, const void * symbol) {
-	return CALL(hipGetSymbolAddress, devPtr, symbol);
+	return CALL(hipGetSymbolAddress, devPtr, symbol, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyToSymbol_spt(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind) {
-	return CALL(hipMemcpyToSymbol_spt, symbol, src, sizeBytes, offset, kind);
+	return CALL(hipMemcpyToSymbol_spt, symbol, src, sizeBytes, offset, kind, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddMemcpyNode1D(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dst, const void * src, size_t count, hipMemcpyKind kind) {
-	return CALL(hipGraphAddMemcpyNode1D, pGraphNode, graph, pDependencies, numDependencies, dst, src, count, kind);
+	return CALL(hipGraphAddMemcpyNode1D, pGraphNode, graph, pDependencies, numDependencies, dst, src, count, kind, __builtin_return_address(0));
 };
 
 hipError_t hipDestroyExternalSemaphore(hipExternalSemaphore_t extSem) {
-	return CALL(hipDestroyExternalSemaphore, extSem);
+	return CALL(hipDestroyExternalSemaphore, extSem, __builtin_return_address(0));
 };
 
 hipError_t hipIpcOpenMemHandle(void ** devPtr, hipIpcMemHandle_t handle, unsigned int flags) {
-	return CALL(hipIpcOpenMemHandle, devPtr, handle, flags);
+	return CALL(hipIpcOpenMemHandle, devPtr, handle, flags, __builtin_return_address(0));
 };
 
 hipError_t hipCtxDestroy(hipCtx_t ctx) {
-	return CALL(hipCtxDestroy, ctx);
+	return CALL(hipCtxDestroy, ctx, __builtin_return_address(0));
 };
 
 hipError_t hipStreamGetCaptureInfo_v2(hipStream_t stream, hipStreamCaptureStatus * captureStatus_out, unsigned long long * id_out, hipGraph_t * graph_out, const hipGraphNode_t ** dependencies_out, size_t * numDependencies_out) {
-	return CALL(hipStreamGetCaptureInfo_v2, stream, captureStatus_out, id_out, graph_out, dependencies_out, numDependencies_out);
+	return CALL(hipStreamGetCaptureInfo_v2, stream, captureStatus_out, id_out, graph_out, dependencies_out, numDependencies_out, __builtin_return_address(0));
 };
 
 int hipGetStreamDeviceId(hipStream_t stream) {
-	return CALL(hipGetStreamDeviceId, stream);
+	return CALL(hipGetStreamDeviceId, stream, __builtin_return_address(0));
 };
 
 hipError_t hipImportExternalMemory(hipExternalMemory_t * extMem_out, const hipExternalMemoryHandleDesc * memHandleDesc) {
-	return CALL(hipImportExternalMemory, extMem_out, memHandleDesc);
+	return CALL(hipImportExternalMemory, extMem_out, memHandleDesc, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExecKernelNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipKernelNodeParams * pNodeParams) {
-	return CALL(hipGraphExecKernelNodeSetParams, hGraphExec, node, pNodeParams);
+	return CALL(hipGraphExecKernelNodeSetParams, hGraphExec, node, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipStreamEndCapture_spt(hipStream_t stream, hipGraph_t * pGraph) {
-	return CALL(hipStreamEndCapture_spt, stream, pGraph);
+	return CALL(hipStreamEndCapture_spt, stream, pGraph, __builtin_return_address(0));
 };
 
 hipError_t hipGraphExecMemcpyNodeSetParamsFromSymbol(hipGraphExec_t hGraphExec, hipGraphNode_t node, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind) {
-	return CALL(hipGraphExecMemcpyNodeSetParamsFromSymbol, hGraphExec, node, dst, symbol, count, offset, kind);
+	return CALL(hipGraphExecMemcpyNodeSetParamsFromSymbol, hGraphExec, node, dst, symbol, count, offset, kind, __builtin_return_address(0));
 };
 
 hipError_t hipCreateTextureObject(hipTextureObject_t * pTexObject, const hipResourceDesc * pResDesc, const hipTextureDesc * pTexDesc, const struct hipResourceViewDesc * pResViewDesc) {
-	return CALL(hipCreateTextureObject, pTexObject, pResDesc, pTexDesc, pResViewDesc);
+	return CALL(hipCreateTextureObject, pTexObject, pResDesc, pTexDesc, pResViewDesc, __builtin_return_address(0));
 };
 
 hipError_t hipModuleLoadDataEx(hipModule_t * module, const void * image, unsigned int numOptions, hipJitOption * options, void ** optionValues) {
-	return CALL(hipModuleLoadDataEx, module, image, numOptions, options, optionValues);
+	return CALL(hipModuleLoadDataEx, module, image, numOptions, options, optionValues, __builtin_return_address(0));
 };
 
 hipError_t __hipPopCallConfiguration(dim3 * gridDim, dim3 * blockDim, size_t * sharedMem, hipStream_t * stream) {
-	return CALL(__hipPopCallConfiguration, gridDim, blockDim, sharedMem, stream);
+	return CALL(__hipPopCallConfiguration, gridDim, blockDim, sharedMem, stream, __builtin_return_address(0));
 };
 
 hipError_t hipMemcpyFromSymbol(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind) {
-	return CALL(hipMemcpyFromSymbol, dst, symbol, sizeBytes, offset, kind);
+	return CALL(hipMemcpyFromSymbol, dst, symbol, sizeBytes, offset, kind, __builtin_return_address(0));
 };
 
 hipError_t hipMemPoolGetAttribute(hipMemPool_t mem_pool, hipMemPoolAttr attr, void * value) {
-	return CALL(hipMemPoolGetAttribute, mem_pool, attr, value);
+	return CALL(hipMemPoolGetAttribute, mem_pool, attr, value, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddMemcpyNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipMemcpy3DParms * pCopyParams) {
-	return CALL(hipGraphAddMemcpyNode, pGraphNode, graph, pDependencies, numDependencies, pCopyParams);
+	return CALL(hipGraphAddMemcpyNode, pGraphNode, graph, pDependencies, numDependencies, pCopyParams, __builtin_return_address(0));
 };
 
 const char * hipKernelNameRefByPtr(const void * hostFunction, hipStream_t stream) {
-	return CALL(hipKernelNameRefByPtr, hostFunction, stream);
+	return CALL(hipKernelNameRefByPtr, hostFunction, stream, __builtin_return_address(0));
 };
 
 hipError_t hipIpcOpenEventHandle(hipEvent_t * event, hipIpcEventHandle_t handle) {
-	return CALL(hipIpcOpenEventHandle, event, handle);
+	return CALL(hipIpcOpenEventHandle, event, handle, __builtin_return_address(0));
 };
 
 hipError_t hipGetFuncBySymbol(hipFunction_t * functionPtr, const void * symbolPtr) {
-	return CALL(hipGetFuncBySymbol, functionPtr, symbolPtr);
+	return CALL(hipGetFuncBySymbol, functionPtr, symbolPtr, __builtin_return_address(0));
 };
 
 hipError_t hipGraphAddEventRecordNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipEvent_t event) {
-	return CALL(hipGraphAddEventRecordNode, pGraphNode, graph, pDependencies, numDependencies, event);
+	return CALL(hipGraphAddEventRecordNode, pGraphNode, graph, pDependencies, numDependencies, event, __builtin_return_address(0));
 };
 
 hipError_t hipModuleLaunchCooperativeKernelMultiDevice(hipFunctionLaunchParams * launchParamsList, unsigned int numDevices, unsigned int flags) {
-	return CALL(hipModuleLaunchCooperativeKernelMultiDevice, launchParamsList, numDevices, flags);
+	return CALL(hipModuleLaunchCooperativeKernelMultiDevice, launchParamsList, numDevices, flags, __builtin_return_address(0));
 };
 
 hipError_t hipGraphMemsetNodeSetParams(hipGraphNode_t node, const hipMemsetParams * pNodeParams) {
-	return CALL(hipGraphMemsetNodeSetParams, node, pNodeParams);
+	return CALL(hipGraphMemsetNodeSetParams, node, pNodeParams, __builtin_return_address(0));
 };
 
 hipError_t hipSignalExternalSemaphoresAsync(const hipExternalSemaphore_t * extSemArray, const hipExternalSemaphoreSignalParams * paramsArray, unsigned int numExtSems, hipStream_t stream) {
-	return CALL(hipSignalExternalSemaphoresAsync, extSemArray, paramsArray, numExtSems, stream);
+	return CALL(hipSignalExternalSemaphoresAsync, extSemArray, paramsArray, numExtSems, stream, __builtin_return_address(0));
 };
 
 hipError_t hipModuleLoad(hipModule_t * module, const char * fname) {
-	return CALL(hipModuleLoad, module, fname);
+	return CALL(hipModuleLoad, module, fname, __builtin_return_address(0));
 };
 

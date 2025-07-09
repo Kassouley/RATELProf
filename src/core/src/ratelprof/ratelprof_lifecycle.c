@@ -17,10 +17,12 @@
 #include "utils/logger.h"
 #include "utils/utils.h"
 
+
 ratelprof_lifecycle_t lifecycle;
 
 
-const char* ratelprof_get_phase_name(ratelprof_phase_t phase) {
+const char* ratelprof_get_phase_name(ratelprof_phase_t phase)
+{
     switch (phase)
     {
         case RATELPROF_IN_TOOL_INIT_PHASE:      return "TOOL_INIT_PHASE"; break;
@@ -35,8 +37,16 @@ const char* ratelprof_get_phase_name(ratelprof_phase_t phase) {
 }
 
 
-ratelprof_time_t ratelprof_get_normalized_time(ratelprof_time_t time) {
+ratelprof_time_t ratelprof_get_normalized_time(ratelprof_time_t time)
+{
     return time - lifecycle.normalizer;
+}
+
+
+void ratelprof_next_phase()
+{
+    lifecycle.phase_stop_ts[lifecycle.current_phase] = ratelprof_get_curr_timespec();
+    lifecycle.current_phase++;
 }
 
 
@@ -53,11 +63,6 @@ void ratelprof_init_lifecycle()
 void ratelprof_fini_lifecycle() 
 {
     ratelprof_next_phase();
-}
-
-void ratelprof_next_phase() {
-    lifecycle.phase_stop_ts[lifecycle.current_phase] = ratelprof_get_curr_timespec();
-    lifecycle.current_phase++;
 }
 
 

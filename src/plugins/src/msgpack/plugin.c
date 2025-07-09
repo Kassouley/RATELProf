@@ -6,16 +6,13 @@
 #include <ratelprof.h>
 #include <ratelprof_ext.h>
 #include "version.h"
-
 #include "msgpack.h"
-#include "msgpack_ext.h"
 
 #include "activity_plugin.h" 
 #include "omp_routine_plugin.h"
 #include "hsa_plugin.h"
 #include "omp_tgt_rtl_plugin.h"
 #include "hip_plugin.h" 
-
 
 typedef struct {
     msgpack_buffer_t buffer;
@@ -27,12 +24,37 @@ typedef struct ratelprof_plugin_s {
 	api_callback_handler_t hsa_callback_handler;
 	api_callback_handler_t omp_tgt_rtl_callback_handler;
 	api_callback_handler_t hip_callback_handler; 
-	api_callback_handler_t ompt_callback_handler;
+    api_callback_handler_t ompt_callback_handler;
 
     activity_callback_t activity_callback;
-
     plugin_traces_t* traces;
 } ratelprof_plugin_t;
+
+
+
+static bool count_location(ratelprof_source_data_t *loc, void *user_data) {
+    if (loc->addr) {
+        (*(size_t *)user_data)++;
+    }
+    return false;
+}
+
+static bool encode_location(ratelprof_source_data_t *loc, void *user_data) {
+    msgpack_buffer_t* buf = (msgpack_buffer_t*) user_data;
+    if (loc->addr) {
+        msgpack_encode_uint(buf, (uintptr_t)loc->addr);
+        msgpack_encode_map(buf, 4);
+        msgpack_encode_string_ext(buf, "ofile");
+        msgpack_encode_string_ext(buf, loc->object_file ? loc->object_file : "<unknown>");
+        msgpack_encode_string_ext(buf, "sfile");
+        msgpack_encode_string_ext(buf, loc->filename ? loc->filename : "<unknown>");
+        msgpack_encode_string_ext(buf, "sfun");
+        msgpack_encode_string_ext(buf, loc->func ? demangle(loc->func, 1) : "<unknown>");
+        msgpack_encode_string_ext(buf, "sline");
+        msgpack_encode_uint(buf, loc->line);
+    }
+    return false;
+}
 
 
 /** RATELProf Ext encoding 
@@ -84,8 +106,8 @@ static inline void encode_ratelprof_ext(ratelprof_plugin_t* p) {
     
 
     // Encode map Node ID to Agent Object
-    ratelprof_object_tracking_pool_t* pool = ratelprof_object_tracking_pool_get_pool();
-    ratelprof_agent_object_t*  agents_list = pool->agents_list;
+    ratelprof_object_tracking_pool_t* pool  = ratelprof_object_tracking_pool_get_pool();
+    ratelprof_agent_object_t*  agents_list  = pool->agents_list;
     size_t                     agents_count = pool->agents_count;
 
     if (agents_list && agents_count > 0) {
@@ -98,10 +120,22 @@ static inline void encode_ratelprof_ext(ratelprof_plugin_t* p) {
         msgpack_encode_map(&main_buffer, 0);
     }
 
+    // Preprocess location source data
+    msgpack_buffer_t location_data;
+    msgpack_init(&location_data, 0xfffff, MSGPACK_OVERFLOW_REALLOC, NULL);
+
+    size_t location_counter = 0;
+    ratelprof_iterate_location_cache(count_location, &location_counter);
+
+    msgpack_encode_map(&location_data, location_counter);
+
+    ratelprof_iterate_location_cache(encode_location, &location_data);
+
+
+    // Preprocess trace event data
     msgpack_buffer_t trace_events;
     msgpack_init(&trace_events, 0xffffff, MSGPACK_OVERFLOW_REALLOC, NULL);
 
-    // Preprocess trace event data
     size_t nb_domain_util = 0;
     for (i = 0; i < RATELPROF_NB_DOMAIN_EXT; i++) {
         if (traces[i].size != 0)
@@ -121,12 +155,17 @@ static inline void encode_ratelprof_ext(ratelprof_plugin_t* p) {
     // Encode string extension mapping
     msgpack_encode_string_table_ext(&main_buffer);
 
+    // Encode location data
+    msgpack_concat(&main_buffer, &location_data);
+    msgpack_free(&location_data);
+
     // Encode trace event data
     msgpack_concat(&main_buffer, &trace_events);
+    msgpack_free(&trace_events);
 
     msgpack_free(&main_buffer); // Write data and free
-    msgpack_free(&trace_events); // Write data and free
 }
+
 
 
 ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin) 
@@ -148,11 +187,11 @@ ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin)
 	p->omp_tgt_rtl_callback_handler.on_exit = on_exit_omp_tgt_rtl_callback;
 	p->hip_callback_handler.on_enter = on_enter_hip_callback;
 	p->hip_callback_handler.on_exit = on_exit_hip_callback; 
-	p->ompt_callback_handler.on_enter = on_enter_ompt_callback;
-	p->ompt_callback_handler.on_exit = on_exit_ompt_callback; 
+    p->ompt_callback_handler.on_enter = on_enter_ompt_callback;
+    p->ompt_callback_handler.on_exit = on_exit_ompt_callback; 
 
     p->activity_callback = activity_callback; 
-
+    
     p->traces = (plugin_traces_t*)malloc(RATELPROF_NB_DOMAIN_EXT * sizeof(plugin_traces_t));
     for (int i = 0; i < RATELPROF_NB_DOMAIN_EXT; i++) {
         p->traces[i].size = 0;
@@ -196,7 +235,7 @@ ratelprof_status_t ratelprof_get_api_callback(const ratelprof_plugin_t* plugin, 
 		case RATELPROF_DOMAIN_HSA: *callback_handler = plugin->hsa_callback_handler; break;
 		case RATELPROF_DOMAIN_OMP_TGT_RTL: *callback_handler = plugin->omp_tgt_rtl_callback_handler; break;
 		case RATELPROF_DOMAIN_HIP: *callback_handler = plugin->hip_callback_handler; break; 
-		case RATELPROF_DOMAIN_OMP_REGION: *callback_handler = plugin->ompt_callback_handler; break; 
+        case RATELPROF_DOMAIN_OMP_REGION: *callback_handler = plugin->ompt_callback_handler; break; 
         default: return RATELPROF_STATUS_UNKNOWN_DOMAIN;
     }
     return RATELPROF_STATUS_SUCCESS;

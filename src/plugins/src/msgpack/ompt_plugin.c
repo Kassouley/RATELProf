@@ -51,8 +51,7 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
 			//	void* dest_addr (void);
 			//	int dest_device_num (int);
 			//	size_t bytes (unsigned long);
-			//	const void* codeptr_ra (void);
-			msgpack_encode_map(buf, 7);
+			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "host_op_id");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
@@ -95,13 +94,6 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->target_data_op.bytes);
 
-			msgpack_encode_string_ext(buf, "codeptr_ra");
-			msgpack_encode_map(buf, 2);
-			msgpack_encode_string_ext(buf, "type");
-			msgpack_encode_string_ext(buf, "const void*");
-			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->target_data_op.codeptr_ra);
-
 			break;
 
 		case OMPT_API_ID_target_map :
@@ -110,8 +102,7 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
 			//	void** device_addr (void);
 			//	size_t* bytes (unsigned long);
 			//	unsigned int* mapping_flags (unsigned int);
-			//	const void* codeptr_ra (void);
-			msgpack_encode_map(buf, 6);
+			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "nitems");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
@@ -163,13 +154,6 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
 				msgpack_encode_string_ext(buf, get_map_flag_name(args->target_map_emi.map[i].mapping_flags));
 			}
 
-			msgpack_encode_string_ext(buf, "codeptr_ra");
-			msgpack_encode_map(buf, 2);
-			msgpack_encode_string_ext(buf, "type");
-			msgpack_encode_string_ext(buf, "const void*");
-			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->target_map_emi.codeptr_ra);
-
 			break;
 
 		case OMPT_API_ID_target_submit :
@@ -200,21 +184,13 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
         case OMPT_API_ID_target_exit_data_nowait :
         case OMPT_API_ID_target_update_nowait :
 			//	int device_num (int);
-			//	const void* codeptr_ra (void);
-			msgpack_encode_map(buf, 2);
+			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_int(buf, args->target_emi.device_num);
-
-			msgpack_encode_string_ext(buf, "codeptr_ra");
-			msgpack_encode_map(buf, 2);
-			msgpack_encode_string_ext(buf, "type");
-			msgpack_encode_string_ext(buf, "const void*");
-			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->target_emi.codeptr_ra);
 
 			break;
  

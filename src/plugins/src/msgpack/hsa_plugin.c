@@ -7,7 +7,6 @@
 #include <ratelprof_ext.h>
 #include "hsa_plugin.h"
 #include "msgpack.h"
-#include "msgpack_ext.h"
 
 void on_enter_hsa_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity){
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;

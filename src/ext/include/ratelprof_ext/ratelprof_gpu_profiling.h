@@ -12,7 +12,7 @@
 
 #include "domains/fun_proto/prof_hsa_traced_functions.h"
 
-#define CALL_PROF_FUNC(func, ...) ((__##func##_t)profiling_table.api_ptr[PROFILING_ID_##func])(__VA_ARGS__)
+#define CALL_PROF_FUNC(func, ...) ((__##func##_t)profiling_table.api_ptr[PROFILING_ID_##func])(__VA_ARGS__, NULL)
 
 static inline ratelprof_status_t ratelprof_intercept_copy(
     hsa_agent_t dst_agent, 

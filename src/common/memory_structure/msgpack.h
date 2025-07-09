@@ -37,4 +37,6 @@ int msgpack_encode_array(msgpack_buffer_t *buf, size_t count);
 int msgpack_encode_map(msgpack_buffer_t *buf, size_t count);
 int msgpack_encode_ext(msgpack_buffer_t *buf, int8_t type, const uint8_t *data, size_t len);
 
+#include "msgpack_ext.h"
+
 #endif // MSGPACK_H

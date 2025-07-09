@@ -22,187 +22,208 @@
 	__omp_routine_activity->omp_routine_args.func.retval = (ret_type)__omp_routine_ret; \
 
 
-void * i_omp_target_memset(void * ptr, int value, size_t size, int device_num) {
+void * i_omp_target_memset(void * ptr, int value, size_t size, int device_num, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_memset, __omp_routine_activity);
-	CALL_RET(void *, omp_target_memset, ptr, value, size, device_num);
+	CALL_RET(void *, omp_target_memset, ptr, value, size, device_num, NULL);
 	GET_ARGS_VALUE_omp_target_memset(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_memset, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-int i_omp_target_memcpy_async(void * dst, const void * src, size_t size, size_t dst_offset, size_t src_offset, int dst_device_num, int src_device_num, int async_depend_info, omp_depend_t * depend) {
+int i_omp_target_memcpy_async(void * dst, const void * src, size_t size, size_t dst_offset, size_t src_offset, int dst_device_num, int src_device_num, int async_depend_info, omp_depend_t * depend, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_memcpy_async, __omp_routine_activity);
-	CALL_RET(int, omp_target_memcpy_async, dst, src, size, dst_offset, src_offset, dst_device_num, src_device_num, async_depend_info, depend);
+	CALL_RET(int, omp_target_memcpy_async, dst, src, size, dst_offset, src_offset, dst_device_num, src_device_num, async_depend_info, depend, NULL);
 	GET_ARGS_VALUE_omp_target_memcpy_async(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_memcpy_async, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-int i_omp_target_memcpy_rect_async(void * dst, const void * src, size_t element_size, int num_dims, const size_t * volume, const size_t * dst_offsets, const size_t * src_offsets, const size_t * dst_dimensions, const size_t * src_dimensions, int dst_device_num, int src_device_num, int depobj_count, omp_depend_t * depobj_list) {
+int i_omp_target_memcpy_rect_async(void * dst, const void * src, size_t element_size, int num_dims, const size_t * volume, const size_t * dst_offsets, const size_t * src_offsets, const size_t * dst_dimensions, const size_t * src_dimensions, int dst_device_num, int src_device_num, int depobj_count, omp_depend_t * depobj_list, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_memcpy_rect_async, __omp_routine_activity);
-	CALL_RET(int, omp_target_memcpy_rect_async, dst, src, element_size, num_dims, volume, dst_offsets, src_offsets, dst_dimensions, src_dimensions, dst_device_num, src_device_num, depobj_count, depobj_list);
+	CALL_RET(int, omp_target_memcpy_rect_async, dst, src, element_size, num_dims, volume, dst_offsets, src_offsets, dst_dimensions, src_dimensions, dst_device_num, src_device_num, depobj_count, depobj_list, NULL);
 	GET_ARGS_VALUE_omp_target_memcpy_rect_async(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_memcpy_rect_async, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-void * i_omp_target_alloc(size_t size, int device_num) {
+void * i_omp_target_alloc(size_t size, int device_num, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_alloc, __omp_routine_activity);
-	CALL_RET(void *, omp_target_alloc, size, device_num);
+	CALL_RET(void *, omp_target_alloc, size, device_num, NULL);
 	GET_ARGS_VALUE_omp_target_alloc(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_alloc, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-void i_omp_target_free(void * device_ptr, int device_num) {
+void i_omp_target_free(void * device_ptr, int device_num, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_free, __omp_routine_activity);
-	CALL(omp_target_free, device_ptr, device_num)
+	CALL(omp_target_free, device_ptr, device_num, NULL)
 	GET_ARGS_VALUE_omp_target_free(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_free, __omp_routine_activity);
 	return;
 };
 
-int i_omp_target_memcpy_rect(void * dst, const void * src, size_t element_size, int num_dims, const size_t * volume, const size_t * dst_offsets, const size_t * src_offsets, const size_t * dst_dimensions, const size_t * src_dimensions, int dst_device_num, int src_device_num) {
+int i_omp_target_memcpy_rect(void * dst, const void * src, size_t element_size, int num_dims, const size_t * volume, const size_t * dst_offsets, const size_t * src_offsets, const size_t * dst_dimensions, const size_t * src_dimensions, int dst_device_num, int src_device_num, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_memcpy_rect, __omp_routine_activity);
-	CALL_RET(int, omp_target_memcpy_rect, dst, src, element_size, num_dims, volume, dst_offsets, src_offsets, dst_dimensions, src_dimensions, dst_device_num, src_device_num);
+	CALL_RET(int, omp_target_memcpy_rect, dst, src, element_size, num_dims, volume, dst_offsets, src_offsets, dst_dimensions, src_dimensions, dst_device_num, src_device_num, NULL);
 	GET_ARGS_VALUE_omp_target_memcpy_rect(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_memcpy_rect, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-int i_omp_target_disassociate_ptr(const void * host_ptr, int device_num) {
+int i_omp_target_disassociate_ptr(const void * host_ptr, int device_num, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_disassociate_ptr, __omp_routine_activity);
-	CALL_RET(int, omp_target_disassociate_ptr, host_ptr, device_num);
+	CALL_RET(int, omp_target_disassociate_ptr, host_ptr, device_num, NULL);
 	GET_ARGS_VALUE_omp_target_disassociate_ptr(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_disassociate_ptr, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-int i_omp_target_memcpy(void * dst, const void * src, size_t size, size_t dst_offset, size_t src_offset, int dst_device_num, int src_device_num) {
+int i_omp_target_memcpy(void * dst, const void * src, size_t size, size_t dst_offset, size_t src_offset, int dst_device_num, int src_device_num, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_memcpy, __omp_routine_activity);
-	CALL_RET(int, omp_target_memcpy, dst, src, size, dst_offset, src_offset, dst_device_num, src_device_num);
+	CALL_RET(int, omp_target_memcpy, dst, src, size, dst_offset, src_offset, dst_device_num, src_device_num, NULL);
 	GET_ARGS_VALUE_omp_target_memcpy(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_memcpy, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-void * i_omp_target_memset_async(void * ptr, int value, size_t size, int device_num, int async_depend_info, omp_depend_t * depend) {
+void * i_omp_target_memset_async(void * ptr, int value, size_t size, int device_num, int async_depend_info, omp_depend_t * depend, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_memset_async, __omp_routine_activity);
-	CALL_RET(void *, omp_target_memset_async, ptr, value, size, device_num, async_depend_info, depend);
+	CALL_RET(void *, omp_target_memset_async, ptr, value, size, device_num, async_depend_info, depend, NULL);
 	GET_ARGS_VALUE_omp_target_memset_async(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_memset_async, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-int i_omp_target_is_present(const void * host_ptr, int device_num) {
+int i_omp_target_is_present(const void * host_ptr, int device_num, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_is_present, __omp_routine_activity);
-	CALL_RET(int, omp_target_is_present, host_ptr, device_num);
+	CALL_RET(int, omp_target_is_present, host_ptr, device_num, NULL);
 	GET_ARGS_VALUE_omp_target_is_present(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_is_present, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-int i_omp_target_associate_ptr(const void * host_ptr, const void * device_ptr, size_t size, size_t alignment, int device_num) {
+int i_omp_target_associate_ptr(const void * host_ptr, const void * device_ptr, size_t size, size_t alignment, int device_num, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_associate_ptr, __omp_routine_activity);
-	CALL_RET(int, omp_target_associate_ptr, host_ptr, device_ptr, size, alignment, device_num);
+	CALL_RET(int, omp_target_associate_ptr, host_ptr, device_ptr, size, alignment, device_num, NULL);
 	GET_ARGS_VALUE_omp_target_associate_ptr(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_target_associate_ptr, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-int i_omp_get_initial_device() {
+int i_omp_get_initial_device(void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_initial_device, __omp_routine_activity);
-	CALL_RET(int, omp_get_initial_device);
+	CALL_RET(int, omp_get_initial_device, NULL);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_initial_device, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-void * i_llvm_omp_target_dynamic_shared_alloc() {
+void * i_llvm_omp_target_dynamic_shared_alloc(void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_llvm_omp_target_dynamic_shared_alloc, __omp_routine_activity);
-	CALL_RET(void *, llvm_omp_target_dynamic_shared_alloc);
+	CALL_RET(void *, llvm_omp_target_dynamic_shared_alloc, NULL);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_llvm_omp_target_dynamic_shared_alloc, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-omp_intptr_t i_omp_get_interop_int(const omp_interop_t interop, omp_interop_property_t prop, int * exists) {
+omp_intptr_t i_omp_get_interop_int(const omp_interop_t interop, omp_interop_property_t prop, int * exists, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_int, __omp_routine_activity);
-	CALL_RET(omp_intptr_t, omp_get_interop_int, interop, prop, exists);
+	CALL_RET(omp_intptr_t, omp_get_interop_int, interop, prop, exists, NULL);
 	GET_ARGS_VALUE_omp_get_interop_int(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_int, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-const char * i_omp_get_interop_name(const omp_interop_t interop, omp_interop_property_t prop) {
+const char * i_omp_get_interop_name(const omp_interop_t interop, omp_interop_property_t prop, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_name, __omp_routine_activity);
-	CALL_RET(const char *, omp_get_interop_name, interop, prop);
+	CALL_RET(const char *, omp_get_interop_name, interop, prop, NULL);
 	GET_ARGS_VALUE_omp_get_interop_name(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_name, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-void * i_omp_get_interop_ptr(const omp_interop_t interop, omp_interop_property_t prop, int * exists) {
+void * i_omp_get_interop_ptr(const omp_interop_t interop, omp_interop_property_t prop, int * exists, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_ptr, __omp_routine_activity);
-	CALL_RET(void *, omp_get_interop_ptr, interop, prop, exists);
+	CALL_RET(void *, omp_get_interop_ptr, interop, prop, exists, NULL);
 	GET_ARGS_VALUE_omp_get_interop_ptr(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_ptr, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-const char * i_omp_get_interop_str(const omp_interop_t interop, omp_interop_property_t prop, int * exists) {
+const char * i_omp_get_interop_str(const omp_interop_t interop, omp_interop_property_t prop, int * exists, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_str, __omp_routine_activity);
-	CALL_RET(const char *, omp_get_interop_str, interop, prop, exists);
+	CALL_RET(const char *, omp_get_interop_str, interop, prop, exists, NULL);
 	GET_ARGS_VALUE_omp_get_interop_str(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_str, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-const char * i_omp_get_interop_type_desc(const omp_interop_t interop, omp_interop_property_t prop) {
+const char * i_omp_get_interop_type_desc(const omp_interop_t interop, omp_interop_property_t prop, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_type_desc, __omp_routine_activity);
-	CALL_RET(const char *, omp_get_interop_type_desc, interop, prop);
+	CALL_RET(const char *, omp_get_interop_type_desc, interop, prop, NULL);
 	GET_ARGS_VALUE_omp_get_interop_type_desc(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_type_desc, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-void * i_omp_get_mapped_ptr(const void * ptr, int device_num) {
+void * i_omp_get_mapped_ptr(const void * ptr, int device_num, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_mapped_ptr, __omp_routine_activity);
-	CALL_RET(void *, omp_get_mapped_ptr, ptr, device_num);
+	CALL_RET(void *, omp_get_mapped_ptr, ptr, device_num, NULL);
 	GET_ARGS_VALUE_omp_get_mapped_ptr(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_mapped_ptr, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-int i_omp_get_num_devices() {
+int i_omp_get_num_devices(void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_num_devices, __omp_routine_activity);
-	CALL_RET(int, omp_get_num_devices);
+	CALL_RET(int, omp_get_num_devices, NULL);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_num_devices, __omp_routine_activity);
 	return __omp_routine_ret;
 };
 
-int i_omp_is_coarse_grain_mem_region(void * ptr, size_t size) {
+int i_omp_is_coarse_grain_mem_region(void * ptr, size_t size, void* return_address) {
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_is_coarse_grain_mem_region, __omp_routine_activity);
-	CALL_RET(int, omp_is_coarse_grain_mem_region, ptr, size);
+	CALL_RET(int, omp_is_coarse_grain_mem_region, ptr, size, NULL);
 	GET_ARGS_VALUE_omp_is_coarse_grain_mem_region(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_is_coarse_grain_mem_region, __omp_routine_activity);
 	return __omp_routine_ret;
