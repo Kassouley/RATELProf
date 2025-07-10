@@ -3,6 +3,7 @@
 #include <sys/syscall.h>
 #include <unistd.h>
 #include <time.h>
+#include <signal.h>
 #include <dlfcn.h>
 #include <ratelprof.h>
 #include <ratelprof_ext.h>
@@ -71,7 +72,7 @@ ratelprof_status_t onLoad()
     {
         const char* domain_name = ratelprof_get_domain_name(domain);
         if (is_set_domain(domain_name)) {
-            LOG(LOG_LEVEL_INFO, "Enabling domain '%s' tracing . . . \r", domain_name);
+            LOG(LOG_LEVEL_INFO, "Configuring domain '%s' tracing . . . \r", domain_name);
             plugin_manager.get_api_callback(plugin, domain, &callback_handler);
 
             RATELPROF_TRY(
@@ -95,12 +96,13 @@ ratelprof_status_t onLoad()
     LOG(LOG_LEVEL_DEBUG, "Initializing RATELProf Ext : SUCCESS\n");
 
 	if (is_set_domain(RATELPROF_DOMAIN_OMP_REGION_NAME)) {
-        LOG(LOG_LEVEL_INFO, "Configuring domain '%s' . . . \r", RATELPROF_DOMAIN_OMP_REGION_NAME);
+        LOG(LOG_LEVEL_INFO, "Configuring domain '%s' . . . tracing\r", RATELPROF_DOMAIN_OMP_REGION_NAME);
         plugin_manager.get_api_callback(plugin, RATELPROF_DOMAIN_OMP_REGION, &callback_handler);
         RATELPROF_TRY(
             ratelprof_set_api_callback(RATELPROF_DOMAIN_OMP_REGION, callback_handler),
             LOG(LOG_LEVEL_ERROR, "Cannot set domain 'OMPT' callback\n")
         );
+        LOG(LOG_LEVEL_INFO, "Domain '%s' enabled.                               \n", RATELPROF_DOMAIN_OMP_REGION_NAME);
     }
 
 	if (is_set_domain(RATELPROF_DOMAIN_PROFILING_NAME)) {
@@ -167,18 +169,6 @@ void onExit()
     printf("\n");
     LOG(LOG_LEVEL_INFO, "Profiling finished.\n");
 
-    ratelprof_lifecycle_t* lc = ratelprof_get_lifecycle();
-
- 
-    ratelprof_time_t constructor_start = ratelprof_get_timestamp_ms(lc->phase_stop_ts[RATELPROF_IN_TOOL_INIT_PHASE]);
-    ratelprof_time_t main_start        = ratelprof_get_timestamp_ms(lc->phase_stop_ts[RATELPROF_IN_CONSTRUCTOR_PHASE]);
-    ratelprof_time_t main_stop         = ratelprof_get_timestamp_ms(lc->phase_stop_ts[RATELPROF_IN_MAIN_PHASE]);
-    ratelprof_time_t destructor_stop   = ratelprof_get_timestamp_ms(lc->phase_stop_ts[RATELPROF_IN_DESTRUCTOR_PHASE]);
-
-    LOG(LOG_LEVEL_INFO, "Application duration : %10lu ms\n", main_stop - main_start);
-    LOG(LOG_LEVEL_INFO, "Constructor duration : %10lu ms\n", main_start - constructor_start);
-    LOG(LOG_LEVEL_INFO, "Destructor duration :  %10lu ms\n", destructor_stop - main_stop);
-    LOG(LOG_LEVEL_INFO, "Total duration :       %10lu ms\n", destructor_stop - main_start);
     
     LOG(LOG_LEVEL_INFO, "Flushing activities . . .\r");
     
@@ -192,12 +182,11 @@ void onExit()
     if (ratelprof_activity_pool_fini())
         LOG(LOG_LEVEL_FATAL, "Failed to finalize activity pool.\n");
 
-    LOG(LOG_LEVEL_INFO, "Flushing activities :     SUCCESS\n");
-
-    LOG(LOG_LEVEL_INFO, "Finalizing RATELProf . . .\r");
-    
     plugin_manager.plugin_finalize(&plugin);
     close_plugin_manager(&plugin_manager);
+
+    LOG(LOG_LEVEL_INFO, "Flushing activities :     SUCCESS\n");
+
 
     if(ratelprof_fini())
         LOG(LOG_LEVEL_FATAL, "Failed to finalize RATELProf core part.\n");
@@ -206,10 +195,33 @@ void onExit()
         LOG(LOG_LEVEL_FATAL, "Failed to finalize RATELProf extension part.\n");
 
     LOG(LOG_LEVEL_INFO, "Finalizing RATELProf :    SUCCESS\n");
+
+ 
+    ratelprof_time_t constructor_time  = ratelprof_get_constructor_time() / 1e6;
+    ratelprof_time_t main_time         = ratelprof_get_main_time() / 1e6;
+    ratelprof_time_t destructor_time   = ratelprof_get_destructor_time() / 1e6;
+
+    LOG(LOG_LEVEL_INFO, "Application duration : %10lu ms\n", main_time);
+    LOG(LOG_LEVEL_INFO, "Constructor duration : %10lu ms\n", constructor_time);
+    LOG(LOG_LEVEL_INFO, "Destructor duration :  %10lu ms\n", destructor_time);
+    LOG(LOG_LEVEL_INFO, "Total duration :       %10lu ms\n", constructor_time + main_time + destructor_time);
 }
+
+void handle_signal(int sig) {
+    printf("\n");
+    LOG(LOG_LEVEL_INFO, "The application terminated unexpectedly. RATELProf will now exit safely.\n");
+    onExit();
+    signal(sig, SIG_DFL);
+    raise(sig);
+}
+
 
 __attribute__((constructor(101))) void init(void) 
 {
+    signal(SIGSEGV, handle_signal); // segmentation fault
+    signal(SIGABRT, handle_signal); // abort()
+    signal(SIGINT,  handle_signal); // Ctrl+C
+    signal(SIGTERM, handle_signal); // kill
     onLoad();
 }
 

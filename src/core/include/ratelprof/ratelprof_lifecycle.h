@@ -33,12 +33,11 @@
  * a distinct stage in the program's execution, from initialization to finalization.
  */
 typedef enum {
-	RATELPROF_IN_TOOL_INIT_PHASE,    /**< Tool initialization phase: The tool is being initialized. */
 	RATELPROF_IN_CONSTRUCTOR_PHASE,  /**< Constructor phase: The constructor is being executed. */
 	RATELPROF_IN_MAIN_PHASE,         /**< Main phase: The main execution of the program is in progress. */
 	RATELPROF_IN_DESTRUCTOR_PHASE,   /**< Destructor phase: Destructor is being executed. */
-	RATELPROF_IN_TOOL_FINI_PHASE,    /**< Tool finalization phase: The tool is being finalized. */
-	RATELPROF_NB_PHASE               /**< Number phase */
+	RATELPROF_NB_PHASE,              /**< Number phase */
+	RATELPROF_IN_UNKNOWN_PHASE = -1  /**< Unknown phase. */
 } ratelprof_phase_t;
 
 
@@ -82,7 +81,7 @@ typedef struct {
  * `RATELPROF_IN_TOOL_INIT_PHASE` and recording the start time of the tool initialization phase 
  * using a monotonic clock.
  */
-void ratelprof_init_lifecycle();
+void ratelprof_start_lifecycle();
 
 
 /**
@@ -96,7 +95,7 @@ void ratelprof_init_lifecycle();
  *       proper cleanup of resources used during the lifecycle.
  *
  */
-void ratelprof_fini_lifecycle();
+void ratelprof_stop_lifecycle();
 
 
 /**
@@ -164,6 +163,10 @@ const char* ratelprof_get_phase_name(ratelprof_phase_t phase);
  */
 ratelprof_time_t ratelprof_get_normalized_time(ratelprof_time_t time);
 
+
+ratelprof_time_t ratelprof_get_constructor_time();
+ratelprof_time_t ratelprof_get_destructor_time();
+ratelprof_time_t ratelprof_get_main_time();
 
 
 /**

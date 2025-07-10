@@ -111,21 +111,20 @@ ratelprof_status_t ratelprof_disable_domain(ratelprof_domain_t domain)
 
 ratelprof_status_t ratelprof_start() 
 {
-	ratelprof_next_phase();
+	ratelprof_start_lifecycle();
     return RATELPROF_STATUS_SUCCESS;
 }
 
 
 ratelprof_status_t ratelprof_stop() 
 {
-	ratelprof_next_phase();
+	ratelprof_stop_lifecycle();
     return RATELPROF_STATUS_SUCCESS;
 }
 
 
 ratelprof_status_t ratelprof_init(unsigned int ndomains) 
 {
-    ratelprof_init_lifecycle();
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
     RATELPROF_TRY(init_id_system());
 
@@ -162,7 +161,6 @@ ratelprof_status_t ratelprof_fini()
 		);
 	}
     fini_callback_system();
-    ratelprof_fini_lifecycle();
     return status;
 }
 

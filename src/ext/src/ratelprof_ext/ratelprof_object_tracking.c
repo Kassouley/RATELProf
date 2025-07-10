@@ -2,7 +2,7 @@
 #include "ratelprof_ext/ratelprof_object_tracking.h"
 #include "ratelprof_ext/ratelprof_ext_status.h"
 
-ratelprof_object_tracking_pool_t* object_tracking_pool = NULL;
+static ratelprof_object_tracking_pool_t* object_tracking_pool = NULL;
 
 bool ratelprof_object_tracking_is_kernel_packet_tracked() {
     return object_tracking_pool && object_tracking_pool->is_kernel_packet_tracked;

@@ -49,7 +49,6 @@ static inline void print_progress_bar(const char* prefix, size_t current, size_t
     }
 
     if (current == total) {
-        putchar('\n');
         last_shown = -1;
     }
 }

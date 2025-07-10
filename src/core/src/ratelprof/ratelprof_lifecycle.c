@@ -18,18 +18,16 @@
 #include "utils/utils.h"
 
 
-ratelprof_lifecycle_t lifecycle;
+static ratelprof_lifecycle_t lifecycle = {.current_phase = RATELPROF_IN_UNKNOWN_PHASE};
 
 
 const char* ratelprof_get_phase_name(ratelprof_phase_t phase)
 {
     switch (phase)
     {
-        case RATELPROF_IN_TOOL_INIT_PHASE:      return "TOOL_INIT_PHASE"; break;
         case RATELPROF_IN_CONSTRUCTOR_PHASE:    return "CONSTRUCTOR_PHASE"; break;
         case RATELPROF_IN_MAIN_PHASE:           return "MAIN_PHASE"; break;
         case RATELPROF_IN_DESTRUCTOR_PHASE:     return "DESTRUCTOR_PHASE"; break;
-        case RATELPROF_IN_TOOL_FINI_PHASE:      return "TOOL_FINI_PHASE"; break;
         
         default: return "Unknown phase"; break;
     }
@@ -43,26 +41,60 @@ ratelprof_time_t ratelprof_get_normalized_time(ratelprof_time_t time)
 }
 
 
+ratelprof_time_t ratelprof_get_constructor_time()
+{
+    ratelprof_time_t constructor_stop = ratelprof_get_timestamp_ns(lifecycle.phase_stop_ts[RATELPROF_IN_CONSTRUCTOR_PHASE]);
+    return ratelprof_get_normalized_time(constructor_stop);
+}
+
+
+ratelprof_time_t ratelprof_get_main_time()
+{
+    ratelprof_time_t main_start = ratelprof_get_timestamp_ns(lifecycle.phase_stop_ts[RATELPROF_IN_CONSTRUCTOR_PHASE]);
+    ratelprof_time_t main_stop  = ratelprof_get_timestamp_ns(lifecycle.phase_stop_ts[RATELPROF_IN_MAIN_PHASE]);
+    return main_stop - main_start;
+}
+
+
+ratelprof_time_t ratelprof_get_destructor_time()
+{
+    ratelprof_time_t destructor_start = ratelprof_get_timestamp_ns(lifecycle.phase_stop_ts[RATELPROF_IN_MAIN_PHASE]);
+    ratelprof_time_t destructor_stop  = ratelprof_get_timestamp_ns(lifecycle.phase_stop_ts[RATELPROF_IN_DESTRUCTOR_PHASE]);
+    return destructor_stop - destructor_start;
+
+}
+
+
 void ratelprof_next_phase()
 {
-    lifecycle.phase_stop_ts[lifecycle.current_phase] = ratelprof_get_curr_timespec();
+    ratelprof_timespec_t ts = ratelprof_get_curr_timespec();
+
+    if (lifecycle.current_phase != RATELPROF_IN_UNKNOWN_PHASE 
+        && lifecycle.current_phase < RATELPROF_NB_PHASE)
+    {
+        lifecycle.phase_stop_ts[lifecycle.current_phase] = ts;
+    }
+    
     lifecycle.current_phase++;
 }
 
 
-void ratelprof_init_lifecycle() 
+void ratelprof_start_lifecycle() 
 {
-    lifecycle.current_phase = RATELPROF_IN_TOOL_INIT_PHASE;
-    lifecycle.experiment_start_epoch = ratelprof_get_curr_epoch();
-
     ratelprof_timespec_t ts = ratelprof_get_curr_timespec();
+    lifecycle.experiment_start_epoch = ratelprof_get_curr_epoch();
+    lifecycle.current_phase = RATELPROF_IN_CONSTRUCTOR_PHASE;
     lifecycle.normalizer = ratelprof_get_timestamp_ns(ts);
 }
 
 
-void ratelprof_fini_lifecycle() 
+void ratelprof_stop_lifecycle() 
 {
-    ratelprof_next_phase();
+    for (ratelprof_phase_t i = lifecycle.current_phase; i < RATELPROF_NB_PHASE; i++)
+    {
+        ratelprof_next_phase();
+    }
+    lifecycle.current_phase = RATELPROF_IN_UNKNOWN_PHASE;
 }
 
 

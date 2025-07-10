@@ -56,7 +56,7 @@ local function decode_rprof(rprof_rep)
     end
 
     data.get_constructor_start = function(self)
-        return self.raw.lifecycle[ratelprof.consts._IDX_CONSTRUCTOR_START]
+        return 0 -- App start at 0
     end
 
     data.get_destructor_stop = function(self)
