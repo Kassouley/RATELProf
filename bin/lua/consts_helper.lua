@@ -71,6 +71,7 @@ consts_helper.profile = {
                 'gpu' is equivalent to 'kernel,memory,barrier'.
                 'cpu' is equivalent to all other APIs.
                 'omp' is equivalent to 'omp-routine,omp-region,omp-tgt-rtl'.
+                'all' is equivalent to 'cpu,gpu'.
                 Default is 'kernel,memory,hip'.]], "'" .. table.concat(trace_list, "', '") .. "'"),
             sname           = "t",
             arg             = "<API>[,<API>]",

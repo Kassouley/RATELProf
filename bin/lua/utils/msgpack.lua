@@ -55,6 +55,38 @@ local function decode_rprof(rprof_rep)
         return ret
     end
 
+    data.get_location = function (self, trace)
+        return self.raw.location[trace.return_address] or {}
+    end
+
+    data.get_location_str = function (self, trace)
+        local loc = self:get_location(trace)
+        if not loc then return "Unknown Location" end
+        return string.format("%s in %s:%d", loc.sfun, loc.sfile, loc.sline)
+    end
+
+    data.find_parent_trace = function(self, trace)
+        local cid = trace.corr_id
+        local parent_trace = nil
+        for _, per_domain_traces in pairs(self.raw.trace_events) do
+            parent_trace = per_domain_traces[cid]
+            if parent_trace then break end
+        end
+        return parent_trace
+    end
+
+    data.find_entry_point = function(self, trace)
+        local entry_point = trace
+        local parent = self:find_parent_trace(entry_point)
+
+        while parent do
+            entry_point = parent
+            parent = self:find_parent_trace(entry_point)
+        end
+
+        return entry_point
+    end
+
     data.get_constructor_start = function(self)
         return 0 -- App start at 0
     end

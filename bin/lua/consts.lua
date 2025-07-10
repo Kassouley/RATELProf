@@ -6,7 +6,7 @@ consts._LIBS_DIR     = consts._INSTALL_DIR.."/lib/"
 consts._MODULES_DIR  = consts._INSTALL_DIR.."/share/modules/"
 
 
-local major, minor, patch = 1, 0, 0
+local major, minor, patch = 1, 1, 0
 consts._VERSION_MAJOR = major
 consts._VERSION_MINOR = minor
 consts._VERSION_PATCH = patch
@@ -124,6 +124,16 @@ consts._TRACES = {
                           consts._ENV.DOMAIN_OMP_TGT,
                           consts._ENV.DOMAIN_OMP_TGT_RTL,
                           consts._ENV.DOMAIN_OMPT},        name="OpenMP API"},
+  ['all'] =           {var={
+                          consts._ENV.DOMAIN_OMP_TGT,
+                          consts._ENV.DOMAIN_OMP_TGT_RTL,
+                          consts._ENV.DOMAIN_OMPT,
+                          consts._ENV.DOMAIN_HSA,
+                          consts._ENV.DOMAIN_HIP,
+                          consts._ENV.DOMAIN_KERNEL,
+                          consts._ENV.DOMAIN_COPY,
+                          consts._ENV.DOMAIN_BARRIEROR,
+                          consts._ENV.DOMAIN_BARRIERAND},  name="All Activity"},
 }
 
 

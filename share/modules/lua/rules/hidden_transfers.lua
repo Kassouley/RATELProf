@@ -79,6 +79,7 @@ local function find_hidden_latency(copy_data, kernel_data, traces_data, TIME_THR
                 total_time_overlapped_per_gpu[copy_gpu_id] = total_time_overlapped_per_gpu[copy_gpu_id] + time_overlapped
                 total_time_per_gpu[copy_gpu_id] = total_time_per_gpu[copy_gpu_id] + dur_copy
 
+                local entry_point = traces_data:find_entry_point(copy)
                 table.insert(trace_ids, id)
                 table.insert(metrics, time_overlapped)
                 table.insert(items, {
@@ -88,7 +89,8 @@ local function find_hidden_latency(copy_data, kernel_data, traces_data, TIME_THR
                     copy.args.size,
                     string.format("%.2f", hidden_percentage),
                     dur_copy,
-                    time_overlapped
+                    time_overlapped,
+                    traces_data:get_location_str(entry_point)
                 })
             end
         end
@@ -205,7 +207,8 @@ Perfectly hide all memory transfers might speed up your application by ]] .. str
         "Size (B)",
         "Hidden (%)",
         "Duration (ns)",
-        "Hidden Duration (ns)"
+        "Hidden Duration (ns)",
+        "Source",
     }
 
     local vis = #trace_ids > 0 and {header, trace_ids, metrics} or nil
