@@ -24,6 +24,7 @@
 #ifndef RATELPROF_H 
 #define RATELPROF_H 
 
+#include "utils/ratelprof_macro.h"
 #include "utils/utils.h"
 #include "utils/env.h"
 #include "utils/logger.h"
@@ -39,6 +40,10 @@
 #include "domains/hsa_api_helper.h"
 #include "domains/omp_tgt_rtl_api_helper.h"
 #include "domains/hip_api_helper.h" 
+
+#include "ratelprof/memory_structure/ratelprof_stack.h" 
+
+#define RATELPROF_PUBLIC_API __attribute__((weak))
 
 /**
  * @def RATELPROF_DOMAIN_*_NAME
@@ -273,7 +278,7 @@ const char* ratelprof_get_domain_desc(ratelprof_domain_t domain);
  * @return A pointer to a string containing the function name associated with the given 
  *         domain and function ID. If the domain is unknown, NULL is returned.
  */
-const char* get_funame_by_id(ratelprof_domain_t domain, ratelprof_api_id_t funid);
+const char* ratelprof_get_funame_by_id(ratelprof_domain_t domain, ratelprof_api_id_t funid);
 
 
 /**
@@ -289,7 +294,7 @@ const char* get_funame_by_id(ratelprof_domain_t domain, ratelprof_api_id_t funid
  * @return The function ID associated with the given domain and function name. If the domain 
  *         or function name is not recognized, -1 is returned to indicate an error.
  */
-ratelprof_api_id_t get_funid_by_name(ratelprof_domain_t domain, const char* funame);
+ratelprof_api_id_t ratelprof_get_funid_by_name(ratelprof_domain_t domain, const char* funame);
 
 
 /**
@@ -305,7 +310,7 @@ ratelprof_api_id_t get_funid_by_name(ratelprof_domain_t domain, const char* funa
  * @return The function address associated with the given domain and function ID. If the domain 
  *         or function ID is not recognized, NULL is returned to indicate an error.
  */
-void* get_funaddr_by_id(ratelprof_domain_t domain, ratelprof_api_id_t funid);
+void* ratelprof_get_funaddr_by_id(ratelprof_domain_t domain, ratelprof_api_id_t funid);
 
 
 /**
@@ -395,7 +400,7 @@ ratelprof_status_t ratelprof_stop();
  * @return RATELPROF_STATUS_INVALID_PTR The `api_table` address is NULL.
  * @return RATELPROF_STATUS_DLOPEN_FAILED Failed to open the shared library specified by `lib_path`.
  */
-ratelprof_status_t ratelprof_init(unsigned int ndomains);
+ratelprof_status_t ratelprof_init();
 
 
 /**

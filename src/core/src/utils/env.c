@@ -15,6 +15,7 @@
 
 const char* get_function_filter(const char* env_function_filter) 
 {
+    if (!env_function_filter) return NULL;
     const char* env_var = getenv(env_function_filter);
     if (env_var == NULL || *env_var == '\0') {
         return NULL;
@@ -32,6 +33,7 @@ const char* get_function_filter(const char* env_function_filter)
 
 filter_t get_filter_type(const char* env_filter_type)
 {
+    if (!env_filter_type) return NO_FILTER;
     const char* filter_env = getenv(env_filter_type);
     if (!filter_env) return NO_FILTER;
     filter_t filter = atoi(filter_env);

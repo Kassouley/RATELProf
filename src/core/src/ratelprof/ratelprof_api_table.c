@@ -39,7 +39,7 @@ ratelprof_status_t ratelprof_populate_api_table(ratelprof_api_table_t* api_table
     } 
     for (ratelprof_api_id_t id = 0; id < api_table->size; id++)
     {
-        const char* funame = get_funame_by_id(api_table->domain, id);
+        const char* funame = ratelprof_get_funame_by_id(api_table->domain, id);
         void* fn = (void*)(dlsym(handler, funame));
         if (!fn) {
             LOG(LOG_LEVEL_WARN, "Failed to load \"%s\". (%s) Skipping.\n", funame, dlerror());
@@ -77,7 +77,7 @@ ratelprof_status_t ratelprof_enable_api_table(ratelprof_api_table_t* api_table, 
     
     if (filter == NO_FILTER) {
         for (id = 0; id < api_table->size; id++) {
-            api_table->api_ptr[id] = get_funaddr_by_id(api_table->domain, id);
+            api_table->api_ptr[id] = ratelprof_get_funaddr_by_id(api_table->domain, id);
         }
     }
     else {
@@ -88,10 +88,10 @@ ratelprof_status_t ratelprof_enable_api_table(ratelprof_api_table_t* api_table, 
         token = strtok(functions_list, ",");
         while (token)
         {
-            id = get_funid_by_name(api_table->domain, token);
+            id = ratelprof_get_funid_by_name(api_table->domain, token);
             if (id >= 0 && id < api_table->size) {
                 if (filter == WHITELIST) {
-                    api_table->api_ptr[id] = get_funaddr_by_id(api_table->domain, id);
+                    api_table->api_ptr[id] = ratelprof_get_funaddr_by_id(api_table->domain, id);
                 } else if (filter == BLACKLIST) {
                     blacklist[id] = true;
                 }
@@ -103,7 +103,7 @@ ratelprof_status_t ratelprof_enable_api_table(ratelprof_api_table_t* api_table, 
         if (filter == BLACKLIST) {
             for (id = 0; id < api_table->size; id++) {
                 if (!blacklist[id]) 
-                    api_table->api_ptr[id] = get_funaddr_by_id(api_table->domain, id);
+                    api_table->api_ptr[id] = ratelprof_get_funaddr_by_id(api_table->domain, id);
             }
         }
     }
@@ -123,5 +123,5 @@ ratelprof_status_t ratelprof_disable_api_table(ratelprof_api_table_t* api_table)
 }
 
 void fallback(void) {
-    LOG(LOG_LEVEL_FATAL, "A function that hasn't been load by RATELProf has been called. See warning logs for more details.");
+    LOG(LOG_LEVEL_FATAL, "A function that hasn't been load by RATELProf has been called. See warning logs for more details.\n");
 }
