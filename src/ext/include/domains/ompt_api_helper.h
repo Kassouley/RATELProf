@@ -4,9 +4,6 @@
 #include <stdlib.h>
 #include <omp-tools.h>
 
-#include <ratelprof.h>
-#include "ratelprof_ext.h"
-
 typedef enum {
     OMPT_API_ID_TARGET_REGION               = 0,
     OMPT_API_ID_target                      = ompt_target,
@@ -98,27 +95,6 @@ struct args_target_emi_t {
     activity->args.target_emi.device_num = device_num; \
 };
 
-typedef union ompt_api_args_u {
-        struct args_target_map_emi_t target_map_emi;
-        struct args_target_submit_emi_t target_submit_emi;
-        struct args_target_data_op_t target_data_op;
-        struct args_target_emi_t target_emi;
-} ompt_api_args_t;
-
-typedef struct ratelprof_ompt_api_activity_s {
-	ratelprof_domain_t domain;
-    ratelprof_phase_t phase;
-	ratelprof_api_id_t funid;
-    uint64_t id;
-    uint64_t corr_id;
-	uint64_t pid;
-	uint64_t tid;
-    ratelprof_timespec_t start_time;
-    ratelprof_timespec_t stop_time;
-    void* return_address;
-    ompt_api_args_t args;
-} ratelprof_ompt_api_activity_t;
-
 
 static inline const char* get_map_flag_name(ompt_target_map_flag_t flag)
 {
@@ -161,6 +137,8 @@ static inline const char* get_ompt_funame_by_id(ompt_api_id_t id)
     }
     return NULL;
 }
+
+
 
 
 #endif // RATELPROF_OMPT_H

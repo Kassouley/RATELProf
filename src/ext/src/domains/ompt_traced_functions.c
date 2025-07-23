@@ -2,6 +2,7 @@
 #include <omp-tools.h>
 
 #include <ratelprof.h>
+#include "ratelprof_ext.h"
 
 #include "domains/ompt_api_helper.h"
 

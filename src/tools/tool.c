@@ -55,91 +55,56 @@ ratelprof_status_t onLoad()
 {
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
 
-    // CORE INITIALIZATION
-    LOG(LOG_LEVEL_DEBUG, "Initializing RATELProf Core . . .\r");
+    // INITIALIZATION
+    LOG(LOG_LEVEL_DEBUG, "Initializing RATELProf. . .\r");
     RATELPROF_TRY(
         ratelprof_init(RATELPROF_NB_DOMAIN_EXT),
-        LOG(LOG_LEVEL_FATAL, "Failed to init RATELProf core part.\n")
+        LOG(LOG_LEVEL_FATAL, "Failed to init RATELProf.\n")
     );
     
     open_plugin_manager(&plugin_manager);
     plugin_manager.plugin_initialize(&plugin);
-    LOG(LOG_LEVEL_DEBUG, "Initializing RATELProf Core : SUCCESS\n");
+    LOG(LOG_LEVEL_DEBUG, "Initializing RATELProf. . . Done\r");
 
-    // API Table Init
+    // Callback set
     api_callback_handler_t callback_handler;
     for (ratelprof_domain_t domain = 0; domain < RATELPROF_NB_DOMAIN; domain++)
     {
         const char* domain_name = ratelprof_get_domain_name(domain);
         if (is_set_domain(domain_name)) {
-            LOG(LOG_LEVEL_INFO, "Configuring domain '%s' tracing . . . \r", domain_name);
+            LOG(LOG_LEVEL_DEBUG, "Configuring callback for '%s' tracing . . .                  \r", domain_name);
             plugin_manager.get_api_callback(plugin, domain, &callback_handler);
 
             RATELPROF_TRY(
                 ratelprof_set_api_callback(domain, callback_handler),
                 LOG(LOG_LEVEL_ERROR, "Cannot set domain '%s' callback\n", domain_name)
             );
-            RATELPROF_TRY(
-                ratelprof_enable_domain(domain),
-                LOG(LOG_LEVEL_ERROR, "Cannot enable domain '%s'\n", domain_name)
-            );
-            LOG(LOG_LEVEL_INFO, "Domain '%s' enabled.                               \n", domain_name);
+            LOG(LOG_LEVEL_DEBUG, "Configuring callback for '%s' tracing . . . Done             \n", domain_name);
         }
     }
-
-    // EXT INITIALIZATION
-    LOG(LOG_LEVEL_DEBUG, "Initializing RATELProf Ext . . .\r");
-    RATELPROF_TRY(
-        ratelprof_ext_init(),
-        LOG(LOG_LEVEL_FATAL, "Failed to init RATELProf extension part.\n")
-    );
-    LOG(LOG_LEVEL_DEBUG, "Initializing RATELProf Ext : SUCCESS\n");
-
 	if (is_set_domain(RATELPROF_DOMAIN_OMP_REGION_NAME)) {
-        LOG(LOG_LEVEL_INFO, "Configuring domain '%s' . . . tracing\r", RATELPROF_DOMAIN_OMP_REGION_NAME);
+        LOG(LOG_LEVEL_DEBUG, "Configuring callback for '%s' tracing . . .                  \r", RATELPROF_DOMAIN_OMP_REGION_NAME);
         plugin_manager.get_api_callback(plugin, RATELPROF_DOMAIN_OMP_REGION, &callback_handler);
         RATELPROF_TRY(
             ratelprof_set_api_callback(RATELPROF_DOMAIN_OMP_REGION, callback_handler),
             LOG(LOG_LEVEL_ERROR, "Cannot set domain 'OMPT' callback\n")
         );
-        LOG(LOG_LEVEL_INFO, "Domain '%s' enabled.                               \n", RATELPROF_DOMAIN_OMP_REGION_NAME);
+        LOG(LOG_LEVEL_DEBUG, "Configuring callback for '%s' tracing . . . Done             \n", RATELPROF_DOMAIN_OMP_REGION_NAME);
     }
 
-	if (is_set_domain(RATELPROF_DOMAIN_PROFILING_NAME)) {
-        LOG(LOG_LEVEL_INFO, "Enabling profiling traced functions . . . \r");
-        RATELPROF_TRY(
-            ratelprof_enable_profiling_table(),
-            LOG(LOG_LEVEL_FATAL, "Cannot enable profiling function tracing.\n")
-        );
-        LOG(LOG_LEVEL_INFO, "HSA functions tracing used in RATELProf enabled. \n");
-	}
-
-	if (is_set_domain(RATELPROF_DOMAIN_COPY_NAME)) {
-        LOG(LOG_LEVEL_INFO, "Enabling memory transfers profiling . . .\r");
-        RATELPROF_TRY(
-            ratelprof_enable_memcpy_profiling(),
-            LOG(LOG_LEVEL_FATAL, "Cannot enable memory transfers profiling.\n")
-        );
-        LOG(LOG_LEVEL_INFO, "Memory transfers profiling enabled.      \n");
-	}
-
-	if (is_set_domain(RATELPROF_DOMAIN_KERNEL_NAME)) {
-        LOG(LOG_LEVEL_INFO, "Enabling kernel dispatch profiling . . .\r");
-        RATELPROF_TRY(
-            ratelprof_enable_kernel_dispatch_profiling(),
-            LOG(LOG_LEVEL_FATAL, "Cannot enable kernel dispatch profiling.\n")
-        );
-        LOG(LOG_LEVEL_INFO, "Kernel dispatch profiling enabled.      \n");
-	}
-
-	if (is_set_domain(RATELPROF_DOMAIN_BARRIERAND_NAME) && is_set_domain(RATELPROF_DOMAIN_BARRIEROR_NAME)) {
-        LOG(LOG_LEVEL_INFO, "Enabling barrier dispatch profiling . . .\r");
-        RATELPROF_TRY(
-            ratelprof_enable_barrier_dispatch_profiling(),
-            LOG(LOG_LEVEL_FATAL, "Cannot enable barrier dispatch profiling.\n")
-        );
-        LOG(LOG_LEVEL_INFO, "Barrier dispatch profiling enabled.      \n");
-	}
+    // Domain enabling
+    for (ratelprof_domain_ext_t domain = 0; domain < RATELPROF_NB_DOMAIN_EXT; domain++)
+    {
+        if (domain == RATELPROF_DOMAIN_BARRIEROR) continue; // Do not enable BARRIEROR because already enabled by BARRIERAND
+        const char* domain_name = ratelprof_get_domain_name(domain);
+        if (is_set_domain(domain_name)) {
+            RATELPROF_TRY(
+                ratelprof_enable_domain(domain),
+                LOG(LOG_LEVEL_ERROR, "Cannot enable domain '%s'\n", domain_name)
+            );
+            LOG(LOG_LEVEL_INFO, "Domain '%s' enabled.\n", domain_name);
+        }
+    }
 
 
     // Activity System Init
@@ -188,18 +153,13 @@ void onExit()
     LOG(LOG_LEVEL_INFO, "Flushing activities :     SUCCESS\n");
 
 
-    if(ratelprof_fini())
-        LOG(LOG_LEVEL_FATAL, "Failed to finalize RATELProf core part.\n");
-
-    if(ratelprof_ext_fini())
-        LOG(LOG_LEVEL_FATAL, "Failed to finalize RATELProf extension part.\n");
-
-    LOG(LOG_LEVEL_INFO, "Finalizing RATELProf :    SUCCESS\n");
-
- 
     ratelprof_time_t constructor_time  = ratelprof_get_constructor_time() / 1e6;
     ratelprof_time_t main_time         = ratelprof_get_main_time() / 1e6;
     ratelprof_time_t destructor_time   = ratelprof_get_destructor_time() / 1e6;
+
+    LOG(LOG_LEVEL_DEBUG, "Finalizing RATELProf . . . \r");
+    if (ratelprof_fini() != RATELPROF_STATUS_SUCCESS) LOG(LOG_LEVEL_FATAL, "Failed to finalize RATELProf.\n");
+    LOG(LOG_LEVEL_DEBUG, "Finalizing RATELProf . . . Done\n");
 
     LOG(LOG_LEVEL_INFO, "Application duration : %10lu ms\n", main_time);
     LOG(LOG_LEVEL_INFO, "Constructor duration : %10lu ms\n", constructor_time);
@@ -218,10 +178,10 @@ void handle_signal(int sig) {
 
 __attribute__((constructor(101))) void init(void) 
 {
-    signal(SIGSEGV, handle_signal); // segmentation fault
-    signal(SIGABRT, handle_signal); // abort()
-    signal(SIGINT,  handle_signal); // Ctrl+C
-    signal(SIGTERM, handle_signal); // kill
+    // signal(SIGSEGV, handle_signal); // segmentation fault
+    // signal(SIGABRT, handle_signal); // abort()
+    // signal(SIGINT,  handle_signal); // Ctrl+C
+    // signal(SIGTERM, handle_signal); // kill
     onLoad();
 }
 

@@ -8,7 +8,6 @@
 #include "ratelprof_ext.h"
 
 #include "ratelprof_ext/ratelprof_activity_pool.h"
-#include "ratelprof_ext/ratelprof_gpu_profiling.h"
 
 #include "domains/fun_proto/prof_hsa_traced_functions.h"
 

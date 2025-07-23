@@ -8,7 +8,7 @@
 
 static inline void __on_enter_profiling_callback_function(ratelprof_api_id_t id, ratelprof_api_activity_t* activity) {
     activity->phase = ratelprof_get_current_phase();
-    activity->domain = RATELPROF_DOMAIN_PROFILING;
+    activity->domain = (ratelprof_domain_t) RATELPROF_DOMAIN_PROFILING;
     activity->funid = id;
     get_correlation_id(&activity->corr_id);
     get_id(&activity->id);

@@ -33,8 +33,8 @@ consts._LIBS = {
 }
 
 consts._PRELOADED_LIBS = {
+  {name = consts._LIBS_NAME.WRAPPERS,  path = consts._LIBS.WRAPPERS},
   {name = consts._LIBS_NAME.RATELPROF, path = consts._LIBS.RATELPROF},
-  {name = consts._LIBS_NAME.WRAPPERS,  path = consts._LIBS.WRAPPERS}
 }
 
 consts._DEFAULT_PLUGIN = consts._LIBS.PLUGIN_MSGPACK
@@ -61,6 +61,7 @@ consts._ENV = {
       DOMAIN_COPY =         "RATELPROF_DOMAIN_COPY",
       DOMAIN_PROFILING =    "RATELPROF_DOMAIN_PROFILING",
       DOMAIN_OMPT =         "RATELPROF_DOMAIN_OMP_REGION",
+      DOMAIN_ROCTX =        "RATELPROF_DOMAIN_ROCTX",
     }
 
 consts._DOMAIN_NAME = {
@@ -73,7 +74,8 @@ consts._DOMAIN_NAME = {
   [consts._ENV.DOMAIN_KERNEL]       = "Kernel Dispatch",
   [consts._ENV.DOMAIN_COPY]         = "Memory Transfer",
   [consts._ENV.DOMAIN_PROFILING]    = "HSA for RATELProf",
-  [consts._ENV.DOMAIN_OMPT]         = "OpenMP Target Region"
+  [consts._ENV.DOMAIN_OMPT]         = "OpenMP Target Region",
+  [consts._ENV.DOMAIN_ROCTX]        = "ROCtx"
 }
 
 consts._GPU_DOMAIN = {
@@ -93,7 +95,8 @@ consts._DOMAIN_DESC = {
   [consts._ENV.DOMAIN_KERNEL]       = "The kernel dispatch operation is the process of launching a computational kernel on the GPU.",
   [consts._ENV.DOMAIN_COPY]         = "The copy operation in GPU programming is responsible for transferring data between memory locations (between host and device memory or between different regions of GPU memory).",
   [consts._ENV.DOMAIN_PROFILING]    = "The profiling domain correspond to all HSA function used by RATELProf for GPU Profiling",
-  [consts._ENV.DOMAIN_OMPT]         = "OpenMP Target region traces given by the OMPT API"
+  [consts._ENV.DOMAIN_OMPT]         = "OpenMP Target region traces given by the OMPT API",
+  [consts._ENV.DOMAIN_ROCTX]        = "ROCtx Support for RATELProf"
 }
 
 
@@ -106,6 +109,7 @@ consts._TRACES = {
   ['hsa-for-rprof'] = {var=consts._ENV.DOMAIN_PROFILING,    name="HSA for RATELProf"},
   ['kernel'] =        {var=consts._ENV.DOMAIN_KERNEL,       name="Kernel Dispatch"},
   ['memory'] =        {var=consts._ENV.DOMAIN_COPY,         name="Memory Transfer"},
+  ['roctx'] =         {var=consts._ENV.DOMAIN_ROCTX,        name="ROCtx"},
   ['barrier'] =       {var={
                           consts._ENV.DOMAIN_BARRIEROR,
                           consts._ENV.DOMAIN_BARRIERAND},  name="Barrier AND/OR Dispatch"},
@@ -125,6 +129,7 @@ consts._TRACES = {
                           consts._ENV.DOMAIN_OMP_TGT_RTL,
                           consts._ENV.DOMAIN_OMPT},        name="OpenMP API"},
   ['all'] =           {var={
+                          consts._ENV.DOMAIN_ROCTX,
                           consts._ENV.DOMAIN_OMP_TGT,
                           consts._ENV.DOMAIN_OMP_TGT_RTL,
                           consts._ENV.DOMAIN_OMPT,
