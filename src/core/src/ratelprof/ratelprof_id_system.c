@@ -78,6 +78,8 @@ ratelprof_status_t create_thread_stack(ratelprof_stack_t** s)
     if (*s == NULL) return RATELPROF_STATUS_MALLOC_FAILED;
     status = ratelprof_stack_init(*s, 2048);
     if (status != RATELPROF_STATUS_SUCCESS) return status;
+    status = ratelprof_stack_push(*s, 0);
+    if (status != RATELPROF_STATUS_SUCCESS) return status;
     pthread_setspecific(thread_stack_key, *s);  // Associate this stack with the current thread
     return status;
 }

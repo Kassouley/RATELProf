@@ -23,16 +23,16 @@ bool ratelprof_stack_is_empty(ratelprof_stack_t* s) {
 ratelprof_status_t ratelprof_stack_init(ratelprof_stack_t* s, size_t capacity) {
     if (capacity == 0) return RATELPROF_STATUS_ALLOC_SIZE_0;
     s->capacity = capacity;
-    s->top = 0;
+    s->top = -1;
     s->items = (uint64_t*)malloc(s->capacity * sizeof(uint64_t));  // Allocate memory for stack
     if (s->items == NULL) return RATELPROF_STATUS_MALLOC_FAILED;
-    s->items[s->top] = 0;
     return RATELPROF_STATUS_SUCCESS;
 }
 
 // Push operation to add an element to the stack
 ratelprof_status_t ratelprof_stack_push(ratelprof_stack_t* s, uint64_t el) {
-    if (!s) return RATELPROF_STATUS_STACK_IS_NULL;
+    if (!s) return RATELPROF_STATUS_INVALID_PTR;
+    if (s->capacity == 0) return RATELPROF_STATUS_STACK_NOT_INIT;
     if (ratelprof_stack_is_full(s)) {
         s->capacity *= 2;  // Double the capacity
         s->items = (uint64_t*)realloc(s->items, s->capacity * sizeof(uint64_t));  // Reallocate memory
@@ -44,7 +44,8 @@ ratelprof_status_t ratelprof_stack_push(ratelprof_stack_t* s, uint64_t el) {
 
 // Pop operation to remove the top element from the stack
 ratelprof_status_t ratelprof_stack_pop(ratelprof_stack_t* s, uint64_t* poped_el) {
-    if (!s) return RATELPROF_STATUS_STACK_IS_NULL;
+    if (!s) return RATELPROF_STATUS_INVALID_PTR;
+    if (s->capacity == 0) return RATELPROF_STATUS_STACK_NOT_INIT;
     if (ratelprof_stack_is_empty(s)) {
         return RATELPROF_STATUS_STACK_IS_EMPTY;
     }
@@ -54,7 +55,8 @@ ratelprof_status_t ratelprof_stack_pop(ratelprof_stack_t* s, uint64_t* poped_el)
 
 // Peek operation to get the top element without removing it
 ratelprof_status_t ratelprof_stack_peek(ratelprof_stack_t* s, uint64_t* peeked_el) {
-    if (!s) return RATELPROF_STATUS_STACK_IS_NULL;
+    if (!s) return RATELPROF_STATUS_INVALID_PTR;
+    if (s->capacity == 0) return RATELPROF_STATUS_STACK_NOT_INIT;
     if (ratelprof_stack_is_empty(s)) {
         return RATELPROF_STATUS_STACK_IS_EMPTY;
     }
@@ -64,7 +66,7 @@ ratelprof_status_t ratelprof_stack_peek(ratelprof_stack_t* s, uint64_t* peeked_e
 
 // Function to free the allocated memory when done
 ratelprof_status_t ratelprof_stack_free(ratelprof_stack_t* s) {
-    if (!s) return RATELPROF_STATUS_STACK_IS_NULL;
+    if (!s) return RATELPROF_STATUS_INVALID_PTR;
     free(s->items);
     s->items = NULL;
     s->top = -1;
