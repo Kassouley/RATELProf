@@ -1,6 +1,10 @@
+#include <pthread.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #include <ratelprof.h>
 #include "ratelprof_ext/memory_structure/ratelprof_hash_table.h"
 #include "ratelprof_ext/ratelprof_ext_status.h"
+
 
 // Create a new hash table
 ratelprof_status_t ratelprof_hashtable_init(ratelprof_hash_table_t *table, 
@@ -14,6 +18,7 @@ ratelprof_status_t ratelprof_hashtable_init(ratelprof_hash_table_t *table,
     for (size_t i = 0; i < size; i++) {
         table->buckets[i] = NULL;
     }
+    pthread_mutex_init(&table->mutex, NULL);
     return RATELPROF_STATUS_SUCCESS;
 }
 
@@ -28,12 +33,18 @@ ratelprof_status_t ratelprof_insert_hash(ratelprof_hash_table_t *table,
                                          uint64_t key, 
                                          void* value) 
 {
-    if (table->buckets == NULL)
-        return RATELPROF_STATUS_TABLE_IS_NULL;
+    if (!table) return RATELPROF_STATUS_INVALID_PTR;
+    if (!table->buckets) return RATELPROF_STATUS_TABLE_IS_NULL;
+
+    pthread_mutex_lock(&table->mutex);
+
     size_t index = ratelprof_hash(key, table->size);
     
     ratelprof_hash_entry_t *new_entry = (ratelprof_hash_entry_t *)malloc(sizeof(ratelprof_hash_entry_t));
-    if (new_entry == NULL) return RATELPROF_STATUS_MALLOC_FAILED;
+    if (new_entry == NULL) {
+        return RATELPROF_STATUS_MALLOC_FAILED;
+        pthread_mutex_unlock(&table->mutex);
+    }
 
     new_entry->key = key;
     new_entry->value = value;
@@ -45,6 +56,7 @@ ratelprof_status_t ratelprof_insert_hash(ratelprof_hash_table_t *table,
         new_entry->next = table->buckets[index];
         table->buckets[index] = new_entry;
     }
+    pthread_mutex_unlock(&table->mutex);
     return RATELPROF_STATUS_SUCCESS;
 }
 
@@ -53,17 +65,23 @@ ratelprof_status_t ratelprof_find_hash(ratelprof_hash_table_t *table,
                                        uint64_t key, 
                                        void** value) 
 {
-    if (table->buckets == NULL) return RATELPROF_STATUS_TABLE_IS_NULL;
+    if (!table) return RATELPROF_STATUS_INVALID_PTR;
+    if (!table->buckets) return RATELPROF_STATUS_TABLE_IS_NULL;
+
+    pthread_mutex_lock(&table->mutex);
 
     size_t index = ratelprof_hash(key, table->size);
+
     ratelprof_hash_entry_t *entry = table->buckets[index];
     while (entry != NULL) {
         if (entry->key == key) {
             *value = entry->value;
+            pthread_mutex_unlock(&table->mutex);
             return RATELPROF_STATUS_SUCCESS;
         }
         entry = entry->next;
     }
+    pthread_mutex_unlock(&table->mutex);
     return RATELPROF_STATUS_KEY_NOT_FOUND;
 }
 
@@ -71,10 +89,13 @@ ratelprof_status_t ratelprof_find_hash(ratelprof_hash_table_t *table,
 ratelprof_status_t ratelprof_delete_hash(ratelprof_hash_table_t *table, 
                                          uint64_t key) 
 {
-    if (table->buckets == NULL) {
-        return RATELPROF_STATUS_TABLE_IS_NULL;
-    }
+    if (!table) return RATELPROF_STATUS_INVALID_PTR;
+    if (!table->buckets) return RATELPROF_STATUS_TABLE_IS_NULL;
+
+    pthread_mutex_lock(&table->mutex);
+
     size_t index = ratelprof_hash(key, table->size);
+
     ratelprof_hash_entry_t *entry = table->buckets[index];
     ratelprof_hash_entry_t *prev = NULL;
     while (entry != NULL && entry->key != key) {
@@ -82,6 +103,7 @@ ratelprof_status_t ratelprof_delete_hash(ratelprof_hash_table_t *table,
         entry = entry->next;
     }
     if (entry == NULL) {
+        pthread_mutex_unlock(&table->mutex);
         return RATELPROF_STATUS_KEY_NOT_FOUND;
     }
     if (prev == NULL) {
@@ -93,6 +115,7 @@ ratelprof_status_t ratelprof_delete_hash(ratelprof_hash_table_t *table,
     entry->value = NULL;
     free(entry);
     entry = NULL;
+    pthread_mutex_unlock(&table->mutex);
     return RATELPROF_STATUS_SUCCESS;
 }
 
@@ -101,6 +124,9 @@ ratelprof_status_t ratelprof_hashtable_free(ratelprof_hash_table_t *table)
 {
     if (!table) return RATELPROF_STATUS_INVALID_PTR;
     if (!table->buckets) return RATELPROF_STATUS_TABLE_IS_NULL;
+
+    pthread_mutex_lock(&table->mutex);
+
     for (size_t i = 0; i < table->size; i++) {
         ratelprof_hash_entry_t *entry = table->buckets[i];
         while (entry != NULL) {
@@ -112,5 +138,9 @@ ratelprof_status_t ratelprof_hashtable_free(ratelprof_hash_table_t *table)
     }
     free(table->buckets);
     table->buckets = NULL;
+
+    pthread_mutex_unlock(&table->mutex);
+    pthread_mutex_destroy(&table->mutex);
+
     return RATELPROF_STATUS_SUCCESS;
 }

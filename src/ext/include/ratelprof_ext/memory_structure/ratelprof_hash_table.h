@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <ratelprof.h>
 
 /**
@@ -28,7 +29,10 @@ typedef struct ratelprof_hash_table_s {
     ratelprof_hash_entry_t **buckets; 
     /** The size of the hash table (number of buckets). */
     size_t size;
+    /** Mutex. */                
+    pthread_mutex_t mutex;
 } ratelprof_hash_table_t;
+
 
 /**
  * The function `ratelprof_hashtable_init` initializes a hash table with a specified size by allocating
