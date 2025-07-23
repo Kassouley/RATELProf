@@ -95,6 +95,37 @@ void ompt_activity_callback(const ratelprof_ompt_api_activity_t* activity, msgpa
     process_ompt_args_for(activity->funid, &activity->args, buf);
 }
 
+void roctx_activity_callback(const ratelprof_roctx_activity_t* activity, msgpack_buffer_t* buf)
+{
+    ratelprof_time_t start = ratelprof_get_timestamp_ns(activity->start_time);
+    ratelprof_time_t stop  = ratelprof_get_timestamp_ns(activity->stop_time);
+    ratelprof_time_t dur   = stop - start;
+
+    msgpack_encode_uint(buf, activity->id);
+    msgpack_encode_map(buf, 7);
+
+    msgpack_encode_string_ext(buf, "phase");
+    msgpack_encode_string_ext(buf, ratelprof_get_phase_name(activity->phase));
+    
+    msgpack_encode_string_ext(buf, "name");
+    msgpack_encode_string_ext(buf, activity->message);
+    
+    msgpack_encode_string_ext(buf, "corr_id");
+    msgpack_encode_uint(buf, activity->corr_id);
+    
+    msgpack_encode_string_ext(buf, "start");
+    msgpack_encode_uint(buf, ratelprof_get_normalized_time(start));
+    
+    msgpack_encode_string_ext(buf, "dur");
+    msgpack_encode_uint(buf, dur);
+    
+    msgpack_encode_string_ext(buf, "pid");
+    msgpack_encode_uint(buf, activity->pid);
+    
+    msgpack_encode_string_ext(buf, "tid");
+    msgpack_encode_uint(buf, activity->tid);
+}
+
 void omp_routine_activity_callback(const ratelprof_api_activity_t* activity, msgpack_buffer_t* buf)
 {
     add_activity_data_to_buffer(buf, activity, get_omp_routine_funame_by_id(activity->funid));
@@ -280,6 +311,10 @@ ratelprof_status_t activity_callback(ratelprof_domain_t domain, const void* acti
 
         case RATELPROF_DOMAIN_OMP_REGION:
             ompt_activity_callback(activity, buf);
+            break;
+
+        case RATELPROF_DOMAIN_ROCTX:
+            roctx_activity_callback(activity, buf);
             break;
 
         default:

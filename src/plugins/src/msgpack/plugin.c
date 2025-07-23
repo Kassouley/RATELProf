@@ -145,7 +145,7 @@ static inline void encode_ratelprof_ext(ratelprof_plugin_t* p) {
     msgpack_encode_map(&trace_events, nb_domain_util);
     for (i = 0; i < RATELPROF_NB_DOMAIN_EXT; i++) {
         if (traces[i].size != 0) {
-            msgpack_encode_string_ext(&trace_events, ratelprof_ext_get_domain_name(i));
+            msgpack_encode_string_ext(&trace_events, ratelprof_get_domain_name(i));
             msgpack_encode_map(&trace_events, traces[i].size);
             msgpack_concat(&trace_events, &traces[i].buffer);
             msgpack_free(&traces[i].buffer);
@@ -195,7 +195,7 @@ ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin)
     p->traces = (plugin_traces_t*)malloc(RATELPROF_NB_DOMAIN_EXT * sizeof(plugin_traces_t));
     for (int i = 0; i < RATELPROF_NB_DOMAIN_EXT; i++) {
         p->traces[i].size = 0;
-        const char* domain_name = ratelprof_ext_get_domain_name(i);
+        const char* domain_name = ratelprof_get_domain_name(i);
         if (is_set_domain(domain_name)) {
             msgpack_init(&p->traces[i].buffer, 0xffffff, MSGPACK_OVERFLOW_REALLOC, NULL);
         }
