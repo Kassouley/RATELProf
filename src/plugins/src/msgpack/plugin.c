@@ -4,13 +4,23 @@
  */
  
 #include <ratelprof.h>
+#include <ratelprof_ext.h>
+#include "version.h"
+#include "msgpack.h"
 
+#include "activity_plugin.h" 
 #include "hsa_plugin.h"
 #include "omp_tgt_rtl_plugin.h"
 #include "omp_routine_plugin.h"
 #include "hip_plugin.h"
 #include "mpi_plugin.h"
+#include "ompt_plugin.h"
 
+
+typedef struct {
+    msgpack_buffer_t buffer;
+    size_t size;
+} plugin_traces_t;
 
 typedef struct ratelprof_plugin_s {
 	api_callback_handler_t hsa_callback_handler;
@@ -18,7 +28,107 @@ typedef struct ratelprof_plugin_s {
 	api_callback_handler_t omp_routine_callback_handler;
 	api_callback_handler_t hip_callback_handler;
 	api_callback_handler_t mpi_callback_handler;
+    api_callback_handler_t ompt_callback_handler;
+
+    activity_callback_t activity_callback;
+    plugin_traces_t* traces;
 } ratelprof_plugin_t;
+
+
+
+/** RATELProf Ext encoding 
+ *      Encoding as follow : 
+ *          - extension bytes (magic bytes)
+ *          - tool version as 3 uint
+ *          - experiment start epoch time as uint
+ *          - lifecycle stop time as array
+ *          - main data
+ *          - map node id to agent object
+ *          - string extension mapping
+ *          - trace data
+ */
+static inline void encode_ratelprof_ext(ratelprof_plugin_t* p) {
+    plugin_traces_t* traces = p->traces;
+    
+    ratelprof_lifecycle_t* lc = ratelprof_get_lifecycle();
+    size_t i = 0;
+    msgpack_buffer_t main_buffer;
+    msgpack_init(&main_buffer, 0xff, MSGPACK_OVERFLOW_WRITE_TO_FILE, get_output_file());
+
+    msgpack_encode_ext(&main_buffer,  MSGPACK_EXT_RATELPROF, NULL, 0);
+
+    // Encode tool version
+    msgpack_encode_array(&main_buffer, 3);
+    msgpack_encode_uint(&main_buffer, RATELPROF_MAJOR);
+    msgpack_encode_uint(&main_buffer, RATELPROF_MINOR);
+    msgpack_encode_uint(&main_buffer, RATELPROF_PATCH);
+
+
+    // Encode experiment start
+    msgpack_encode_uint(&main_buffer, ratelprof_get_timestamp_ns(lc->experiment_start_epoch));
+
+    // Encode lifecycle stop time (first start is 0 and other start are prev stop)
+    msgpack_encode_array(&main_buffer, RATELPROF_NB_PHASE);
+    for (i = 0; i < RATELPROF_NB_PHASE; i++)
+    {
+        ratelprof_time_t t = ratelprof_get_timestamp_ns(lc->phase_stop_ts[i]);
+        msgpack_encode_uint(&main_buffer, ratelprof_get_normalized_time(t));
+    }
+
+    // Encode main data
+    msgpack_encode_array(&main_buffer, lc->main_data.argc + 1);
+    msgpack_encode_int(&main_buffer, lc->main_data.retval);
+    for (i = 0; i < lc->main_data.argc; i++)
+    {
+        msgpack_encode_string(&main_buffer, lc->main_data.argv[i]);
+    }
+    
+
+    // Encode map Node ID to Agent Object
+    ratelprof_object_tracking_pool_t* pool = ratelprof_object_tracking_pool_get_pool();
+    ratelprof_agent_object_t*  agents_list = pool->agents_list;
+    size_t                     agents_count = pool->agents_count;
+
+    if (agents_list && agents_count > 0) {
+        msgpack_encode_map(&main_buffer, agents_count);
+        for (i = 0; i < agents_count; i++) {
+            msgpack_encode_uint(&main_buffer, agents_list[i].handle);
+            msgpack_encode_uint(&main_buffer, i);
+        }
+    } else {
+        msgpack_encode_map(&main_buffer, 0);
+    }
+
+    msgpack_buffer_t trace_events;
+    msgpack_init(&trace_events, 0xffffff, MSGPACK_OVERFLOW_REALLOC, NULL);
+
+    // Preprocess trace event data
+    size_t nb_domain_util = 0;
+    for (i = 0; i < RATELPROF_NB_DOMAIN_EXT; i++) {
+        if (traces[i].size != 0)
+            nb_domain_util++;
+    }
+    
+    msgpack_encode_map(&trace_events, nb_domain_util);
+    for (i = 0; i < RATELPROF_NB_DOMAIN_EXT; i++) {
+        if (traces[i].size != 0) {
+            msgpack_encode_string_ext(&trace_events, ratelprof_get_domain_name(i));
+            msgpack_encode_map(&trace_events, traces[i].size);
+            msgpack_concat(&trace_events, &traces[i].buffer);
+            msgpack_free(&traces[i].buffer);
+        }
+    }
+
+    // Encode string extension mapping
+    msgpack_encode_string_table_ext(&main_buffer);
+
+    // Encode trace event data
+    msgpack_concat(&main_buffer, &trace_events);
+
+    msgpack_free(&main_buffer); // Write data and free
+    msgpack_free(&trace_events); // Write data and free
+}
+
 
 
 ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin) 
@@ -42,6 +152,21 @@ ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin)
     p->hip_callback_handler.on_exit = on_exit_hip_callback;
     p->mpi_callback_handler.on_enter = on_enter_mpi_callback;
     p->mpi_callback_handler.on_exit = on_exit_mpi_callback;
+    p->ompt_callback_handler.on_enter = on_enter_ompt_callback;
+    p->ompt_callback_handler.on_exit = on_exit_ompt_callback; 
+
+    p->activity_callback = activity_callback; 
+    
+    p->traces = (plugin_traces_t*)malloc(RATELPROF_NB_DOMAIN_EXT * sizeof(plugin_traces_t));
+    for (int i = 0; i < RATELPROF_NB_DOMAIN_EXT; i++) {
+        p->traces[i].size = 0;
+        const char* domain_name = ratelprof_get_domain_name(i);
+        if (is_set_domain(domain_name)) {
+            msgpack_init(&p->traces[i].buffer, 0xffffff, MSGPACK_OVERFLOW_REALLOC, NULL);
+        }
+    }
+
+    msgpack_ext_string_init();
 
     *plugin = p;
     return status;
@@ -49,9 +174,16 @@ ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin)
 
 ratelprof_status_t ratelprof_plugin_finalize(ratelprof_plugin_t** plugin) 
 {
+    ratelprof_plugin_t* p = NULL;
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
     if (plugin == NULL) return RATELPROF_STATUS_INVALID_PTR;
     if (*plugin == NULL) return RATELPROF_STATUS_PLUGIN_IS_NULL;
+    
+    p = *plugin;
+    encode_ratelprof_ext(p);
+
+    free(p->traces);
+    msgpack_ext_string_free();
 
     free(*plugin);
     *plugin = NULL;
@@ -68,7 +200,19 @@ ratelprof_status_t ratelprof_get_api_callback(const ratelprof_plugin_t* plugin, 
         case RATELPROF_DOMAIN_OMP_ROUTINE: *callback_handler = plugin->omp_routine_callback_handler; break;
         case RATELPROF_DOMAIN_HIP: *callback_handler = plugin->hip_callback_handler; break;
         case RATELPROF_DOMAIN_MPI: *callback_handler = plugin->mpi_callback_handler; break;
+        case RATELPROF_DOMAIN_OMP_REGION: *callback_handler = plugin->ompt_callback_handler; break; 
         default: return RATELPROF_STATUS_UNKNOWN_DOMAIN;
     }
+    return RATELPROF_STATUS_SUCCESS;
+}
+
+
+ratelprof_status_t ratelprof_get_activity_callback(const ratelprof_plugin_t* plugin, activity_callback_t* activity_callback, void** activity_callback_user_args) 
+{
+    if (plugin == NULL) return RATELPROF_STATUS_INVALID_PTR;
+    if (activity_callback == NULL) return RATELPROF_STATUS_INVALID_PTR;
+    if (activity_callback_user_args == NULL) return RATELPROF_STATUS_INVALID_PTR;
+    *activity_callback = plugin->activity_callback;
+    *activity_callback_user_args = plugin->traces;
     return RATELPROF_STATUS_SUCCESS;
 }

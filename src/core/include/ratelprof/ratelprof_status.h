@@ -29,8 +29,8 @@
  * and more.
  */
 typedef enum {
-	RATELPROF_ERROR = -1,            /**< A general error has occured */
-RATELPROF_STATUS_SUCCESS,                     /**< Function return success */
+	RATELPROF_STATUS_ERROR = -1,            	  /**< A general error has occured */
+    RATELPROF_STATUS_SUCCESS,                     /**< Function return success */
 	RATELPROF_STATUS_DLADDR_FAILED,               /**< Failed to translate address to symbolic information */
 	RATELPROF_STATUS_ALLOC_SIZE_0,                /**< An allocation function receive 0 bytes to allocate */
 	RATELPROF_STATUS_STACK_NOT_INIT,              /**< The stack is not initialized */
@@ -67,7 +67,7 @@ RATELPROF_STATUS_SUCCESS,                     /**< Function return success */
 static inline const char* get_error_string(ratelprof_status_t status) {
     switch (status)
     {	
-		case RATELPROF_ERROR                       : return "A general error as occured.";
+		case RATELPROF_STATUS_ERROR                       : return "A general error as occured.";
 		case RATELPROF_STATUS_SUCCESS                     : return "Function return success";
 		case RATELPROF_STATUS_DLADDR_FAILED               : return "Failed to translate address to symbolic information";
 		case RATELPROF_STATUS_ALLOC_SIZE_0                : return "An allocation function receive 0 bytes to allocate";

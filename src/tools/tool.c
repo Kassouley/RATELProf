@@ -106,7 +106,8 @@ ratelprof_status_t onLoad()
         }
     }
 
-
+    ratelprof_enable_node_id_tracking();
+    
     // Activity System Init
     activity_callback_t activity_callback = NULL;
     void* user_args = NULL;

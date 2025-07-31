@@ -100,7 +100,7 @@ static ratelprof_status_t ratelprof_populate_profiling_table() {
     };
 
     for (int i = 0; i < PROFILING_ID_NB_FUNCTION; i++) {
-        profiling_table.api_fn[i] = hsa_api_table.api_fn[hsa_api_ids[i]];
+        profiling_table.api_fn[i]  = hsa_api_table.api_fn[hsa_api_ids[i]];
         profiling_table.api_ptr[i] = hsa_api_table.api_fn[hsa_api_ids[i]];
     }
 
@@ -108,6 +108,14 @@ static ratelprof_status_t ratelprof_populate_profiling_table() {
 }
 
 
+ratelprof_status_t ratelprof_enable_node_id_tracking()
+{
+    ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
+
+    hsa_api_table.api_ptr[HSA_API_ID_hsa_shut_down] = i_gpu_hsa_shut_down;
+
+    return status;
+}
 
 ratelprof_status_t ratelprof_init()
 {
@@ -116,29 +124,20 @@ ratelprof_status_t ratelprof_init()
     RATELPROF_TRY(__ratelprof_init_impl(RATELPROF_NB_DOMAIN_EXT));
 
     RATELPROF_TRY(ratelprof_init_api_table(RATELPROF_DOMAIN_GPU, &gpu_api_table, GPU_API_ID_NB_FUNCTION),
-        LOG(LOG_LEVEL_ERROR, "Cannot init API table for domain %d. %s (code %d)\n", RATELPROF_DOMAIN_ROCTX, get_error_string_ext(status), status)
-    );
+        LOG(LOG_LEVEL_ERROR, "Cannot init API table for domain %d. %s (code %d)\n", RATELPROF_DOMAIN_GPU, get_error_string_ext(status), status));
     RATELPROF_TRY(ratelprof_populate_gpu_api_table(),
-        LOG(LOG_LEVEL_ERROR, "Cannot populate API table for domain %d. %s (code %d)\n", RATELPROF_DOMAIN_ROCTX, get_error_string_ext(status), status)
-    );
+        LOG(LOG_LEVEL_ERROR, "Cannot populate API table for domain %d. %s (code %d)\n", RATELPROF_DOMAIN_GPU, get_error_string_ext(status), status));
     
     RATELPROF_TRY(ratelprof_init_api_table(RATELPROF_DOMAIN_PROFILING, &profiling_table, PROFILING_ID_NB_FUNCTION),
-        LOG(LOG_LEVEL_ERROR, "Cannot init API table for domain %d. %s (code %d)\n", RATELPROF_DOMAIN_ROCTX, get_error_string_ext(status), status)
-    );
+        LOG(LOG_LEVEL_ERROR, "Cannot init API table for domain %d. %s (code %d)\n", RATELPROF_DOMAIN_PROFILING, get_error_string_ext(status), status));
     RATELPROF_TRY(ratelprof_populate_profiling_table(),
-        LOG(LOG_LEVEL_ERROR, "Cannot populate API table for domain %d. %s (code %d)\n", RATELPROF_DOMAIN_ROCTX, get_error_string_ext(status), status)
-    );
+        LOG(LOG_LEVEL_ERROR, "Cannot populate API table for domain %d. %s (code %d)\n", RATELPROF_DOMAIN_PROFILING, get_error_string_ext(status), status));
 
     RATELPROF_TRY(ratelprof_init_api_table(RATELPROF_DOMAIN_ROCTX, &roctx_api_table, ROCTX_API_ID_NB_FUNCTION),
-        LOG(LOG_LEVEL_ERROR, "Cannot init API table for domain %d. %s (code %d)\n", RATELPROF_DOMAIN_ROCTX, get_error_string_ext(status), status)
-    );
-    RATELPROF_TRY(
-        ratelprof_populate_api_table(&roctx_api_table, NULL),
-        LOG(LOG_LEVEL_ERROR, "Cannot populate API table for domain %d. %s (code %d)\n", RATELPROF_DOMAIN_ROCTX, get_error_string_ext(status), status)
-    );
+        LOG(LOG_LEVEL_ERROR, "Cannot init API table for domain %d. %s (code %d)\n", RATELPROF_DOMAIN_ROCTX, get_error_string_ext(status), status));
+    RATELPROF_TRY(ratelprof_populate_api_table(&roctx_api_table, NULL),
+        LOG(LOG_LEVEL_ERROR, "Cannot populate API table for domain %d. %s (code %d)\n", RATELPROF_DOMAIN_ROCTX, get_error_string_ext(status), status));
     
-    hsa_api_table.api_ptr[HSA_API_ID_hsa_shut_down] = i_gpu_hsa_shut_down;
-
 	RATELPROF_TRY(ratelprof_object_tracking_pool_init());
     
     return status;
@@ -200,6 +199,27 @@ ratelprof_status_t ratelprof_enable_domain(ratelprof_domain_t domain)
         case RATELPROF_DOMAIN_KERNEL        : status = ratelprof_enable_kernel_dispatch_profiling(); break;
         case RATELPROF_DOMAIN_BARRIERAND    : 
         case RATELPROF_DOMAIN_BARRIEROR     : status = ratelprof_enable_barrier_dispatch_profiling(); break;
+		case RATELPROF_DOMAIN_OMP_REGION    : break; // No need to enable
+        default: status = __ratelprof_enable_domain_impl(domain) ;
+    }
+    if (domain == RATELPROF_DOMAIN_HSA) {
+        RATELPROF_TRY(ratelprof_populate_gpu_api_table(),
+            LOG(LOG_LEVEL_ERROR, "Cannot populate API table for domain %d. %s (code %d)\n", RATELPROF_DOMAIN_GPU, get_error_string_ext(status), status));
+    }
+    return status;
+}
+
+// TODO 31/07/2025 : Implement it correctly
+ratelprof_status_t ratelprof_disable_domain(ratelprof_domain_t domain)
+{
+    ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
+    switch ((int)domain) {
+        case RATELPROF_DOMAIN_ROCTX         : status = RATELPROF_STATUS_ERROR; break;
+        case RATELPROF_DOMAIN_PROFILING     : status = RATELPROF_STATUS_ERROR; break;
+        case RATELPROF_DOMAIN_COPY          : status = RATELPROF_STATUS_ERROR; break;
+        case RATELPROF_DOMAIN_KERNEL        : status = RATELPROF_STATUS_ERROR; break;
+        case RATELPROF_DOMAIN_BARRIERAND    : 
+        case RATELPROF_DOMAIN_BARRIEROR     : status = RATELPROF_STATUS_ERROR; break;
 		case RATELPROF_DOMAIN_OMP_REGION    : break; // No need to enable
         default: status = __ratelprof_enable_domain_impl(domain) ;
     }

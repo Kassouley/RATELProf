@@ -132,5 +132,6 @@ typedef struct ratelprof_roctx_activity_s {
 #include "domains/fun_proto/roctx_traced_functions.h"
 
 const char* get_kernel_name(uint64_t kernel_object);
+ratelprof_status_t ratelprof_enable_node_id_tracking();
 
 #endif // RATELPROF_EXT_H
