@@ -10,7 +10,7 @@ local major, minor, patch = 1, 1, 0
 consts._VERSION_MAJOR = major
 consts._VERSION_MINOR = minor
 consts._VERSION_PATCH = patch
-consts._VERSION = string.format("%d.%d.%d", major, minor, patch)
+consts._VERSION       = string.format("%d.%d.%d", major, minor, patch)
 
 consts._REPORT_EXT = "rprof-rep"
 
@@ -62,6 +62,7 @@ consts._ENV = {
       DOMAIN_PROFILING =    "RATELPROF_DOMAIN_PROFILING",
       DOMAIN_OMPT =         "RATELPROF_DOMAIN_OMP_REGION",
       DOMAIN_ROCTX =        "RATELPROF_DOMAIN_ROCTX",
+      DOMAIN_MPI =          "RATELPROF_DOMAIN_MPI",
     }
 
 consts._DOMAIN_NAME = {
@@ -75,7 +76,8 @@ consts._DOMAIN_NAME = {
   [consts._ENV.DOMAIN_COPY]         = "Memory Transfer",
   [consts._ENV.DOMAIN_PROFILING]    = "HSA for RATELProf",
   [consts._ENV.DOMAIN_OMPT]         = "OpenMP Target Region",
-  [consts._ENV.DOMAIN_ROCTX]        = "ROCtx"
+  [consts._ENV.DOMAIN_ROCTX]        = "ROCtx",
+  [consts._ENV.DOMAIN_MPI]          = "MPI",
 }
 
 consts._GPU_DOMAIN = {
@@ -94,9 +96,10 @@ consts._DOMAIN_DESC = {
   [consts._ENV.DOMAIN_BARRIERAND]   = "The Barrier AND is a synchronization primitive that ensures all preceding operations in the command queue have completed before subsequent operations can begin.",
   [consts._ENV.DOMAIN_KERNEL]       = "The kernel dispatch operation is the process of launching a computational kernel on the GPU.",
   [consts._ENV.DOMAIN_COPY]         = "The copy operation in GPU programming is responsible for transferring data between memory locations (between host and device memory or between different regions of GPU memory).",
-  [consts._ENV.DOMAIN_PROFILING]    = "The profiling domain correspond to all HSA function used by RATELProf for GPU Profiling",
-  [consts._ENV.DOMAIN_OMPT]         = "OpenMP Target region traces given by the OMPT API",
-  [consts._ENV.DOMAIN_ROCTX]        = "ROCtx Support for RATELProf"
+  [consts._ENV.DOMAIN_PROFILING]    = "The profiling domain correspond to all HSA function used by RATELProf for GPU Profiling.",
+  [consts._ENV.DOMAIN_OMPT]         = "OpenMP Target region traces given by the OMPT API.",
+  [consts._ENV.DOMAIN_ROCTX]        = "ROCtx Support for RATELProf.",
+  [consts._ENV.DOMAIN_MPI]          = "MPI is a standardized library for parallel programming that enables processes to communicate by passing messages, supporting distributed-memory architectures.",
 }
 
 
@@ -110,10 +113,12 @@ consts._TRACES = {
   ['kernel'] =        {var=consts._ENV.DOMAIN_KERNEL,       name="Kernel Dispatch"},
   ['memory'] =        {var=consts._ENV.DOMAIN_COPY,         name="Memory Transfer"},
   ['roctx'] =         {var=consts._ENV.DOMAIN_ROCTX,        name="ROCtx"},
+  ['mpi'] =           {var=consts._ENV.DOMAIN_MPI,          name="MPI"},
   ['barrier'] =       {var={
                           consts._ENV.DOMAIN_BARRIEROR,
                           consts._ENV.DOMAIN_BARRIERAND},  name="Barrier AND/OR Dispatch"},
   ['cpu'] =           {var={
+                          consts._ENV.DOMAIN_MPI,
                           consts._ENV.DOMAIN_OMP_TGT,
                           consts._ENV.DOMAIN_OMP_TGT_RTL,
                           consts._ENV.DOMAIN_OMPT,
@@ -129,6 +134,7 @@ consts._TRACES = {
                           consts._ENV.DOMAIN_OMP_TGT_RTL,
                           consts._ENV.DOMAIN_OMPT},        name="OpenMP API"},
   ['all'] =           {var={
+                          consts._ENV.DOMAIN_MPI,
                           consts._ENV.DOMAIN_ROCTX,
                           consts._ENV.DOMAIN_OMP_TGT,
                           consts._ENV.DOMAIN_OMP_TGT_RTL,
