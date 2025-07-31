@@ -40,8 +40,6 @@
  *
  * @param[in] s Pointer to the thread-local stack to be cleaned up.
  *
- * @return None
- *
  * @note This function is registered as a destructor for the thread-local storage (TLS) key 
  *       created in `init_id_system`. It will be called automatically when the thread exits.
  *
@@ -126,7 +124,7 @@ ratelprof_status_t create_thread_stack(ratelprof_stack_t** s);
  *
  * @return RATELPROF_STATUS_SUCCESS The ID was successfully generated and pushed onto the stack.
  * @return RATELPROF_STATUS_MALLOC_FAILED Memory allocation failed for the stack (if stack initialization was required).
- * @return RATELPROF_STATUS_STACK_IS_NULL The stack is null.
+ * @return RATELPROF_STATUS_STACK_NOT_INIT The stack is not init or null.
  *
  * @note The function uses thread-local storage (TLS) to access the stack associated with the current thread.
  *       It is guaranteed to retrieve or create the stack using `get_thread_stack` before performing operations.
@@ -153,7 +151,7 @@ ratelprof_status_t get_id(uint64_t *id);
  * empty, an error status will be returned.
  *
  * @return RATELPROF_STATUS_SUCCESS The ID was successfully popped from the stack.
- * @return RATELPROF_STATUS_STACK_IS_NULL The stack is null.
+ * @return RATELPROF_STATUS_STACK_NOT_INIT The stack is not init or null.
  * @return RATELPROF_STATUS_STACK_IS_EMPTY The stack is empty, and no ID could be popped.
  *
  * @note The function relies on thread-local storage (TLS) to manage the stack. It ensures that each 
@@ -169,7 +167,7 @@ ratelprof_status_t get_id(uint64_t *id);
  * }
  * ```
  */
-ratelprof_status_t pop_id();
+ratelprof_status_t pop_id(void);
 
 
 /**
@@ -181,7 +179,7 @@ ratelprof_status_t pop_id();
  * @param[out] corr_id Pointer to a `uint64_t` variable where the correlation ID will be stored.
  *
  * @return RATELPROF_STATUS_SUCCESS The correlation ID was successfully retrieved.
- * @return RATELPROF_STATUS_STACK_IS_NULL The stack is null.
+ * @return RATELPROF_STATUS_STACK_NOT_INIT The stack is not init or null.
  * @return RATELPROF_STATUS_STACK_IS_EMPTY The stack is empty.
  *
  * @note The function relies on thread-local storage (TLS) to manage the stack. It ensures that each 
@@ -225,7 +223,7 @@ ratelprof_status_t get_correlation_id(uint64_t *corr_id);
  * }
  * ```
  */
-ratelprof_status_t init_id_system();
+ratelprof_status_t init_id_system(void);
 
 /**
  * @brief Cleans up and deletes the thread-local storage (TLS) key for the stack system.

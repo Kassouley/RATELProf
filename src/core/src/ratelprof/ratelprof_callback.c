@@ -4,6 +4,8 @@
  */
  
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "ratelprof.h"
 #include "ratelprof/ratelprof_callback.h"
 
@@ -19,11 +21,9 @@ void default_callback_function(ratelprof_domain_t domain, ratelprof_api_id_t id,
 
 ratelprof_status_t init_callback_system(unsigned int ndomains) {
     ratelprof_on_enter_callbacks = (api_callback_t*) malloc(ndomains * sizeof(api_callback_t));
+    if (!ratelprof_on_enter_callbacks) return RATELPROF_STATUS_MALLOC_FAILED;
     ratelprof_on_exit_callbacks = (api_callback_t*) malloc(ndomains * sizeof(api_callback_t));
-
-    if (!ratelprof_on_enter_callbacks || !ratelprof_on_exit_callbacks) {
-        return RATELPROF_STATUS_MALLOC_FAILED;
-    }
+    if (!ratelprof_on_exit_callbacks) return RATELPROF_STATUS_MALLOC_FAILED;
 
     _ndomains = ndomains;
 

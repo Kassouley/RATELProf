@@ -58,7 +58,7 @@ ratelprof_status_t onLoad()
     // INITIALIZATION
     LOG(LOG_LEVEL_DEBUG, "Initializing RATELProf. . .\r");
     RATELPROF_TRY(
-        ratelprof_init(RATELPROF_NB_DOMAIN_EXT),
+        ratelprof_init(),
         LOG(LOG_LEVEL_FATAL, "Failed to init RATELProf.\n")
     );
     

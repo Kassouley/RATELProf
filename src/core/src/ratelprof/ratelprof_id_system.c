@@ -28,7 +28,7 @@ static pthread_mutex_t id_mutex = PTHREAD_MUTEX_INITIALIZER;
  * This variable holds the next unique ID to be allocated. It is incremented each time 
  * a new ID is requested and is accessed in a thread-safe manner using the `id_mutex`.
  * 
- * @note This counter starts at 1 and increments with each call to `push_id()`.
+ * @note This counter starts at 1 and increments with each call to `get_id()`.
  */
 static size_t global_id_counter = 1;
 
@@ -108,7 +108,7 @@ ratelprof_status_t get_id(uint64_t *id)
 }
 
 // Pop an ID from the current thread's stack
-ratelprof_status_t pop_id()
+ratelprof_status_t pop_id(void)
 {
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
     ratelprof_stack_t* s;
@@ -145,7 +145,7 @@ ratelprof_status_t get_correlation_id(uint64_t *corr_id)
 }
 
 // Initialize the thread-local storage for the stack
-ratelprof_status_t init_id_system()
+ratelprof_status_t init_id_system(void)
 {
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
     // Create a TLS key with a destructor that will clean up the stack when the thread exits

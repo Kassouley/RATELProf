@@ -4,11 +4,11 @@
  */
  
 #include <stdio.h>
-#include <ratelprof_ext.h>
 #include <ratelprof.h>
 #include "omp_tgt_rtl_plugin.h"
 
-void on_enter_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity){
+void on_enter_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
+{
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
     get_omp_tgt_rtl_pointed_args_for(id, &activity->omp_tgt_rtl_args, 1);
     activity->phase = ratelprof_get_current_phase();
@@ -18,7 +18,8 @@ void on_enter_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t
     activity->funid = id;
 }
 
-void on_exit_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity){
+void on_exit_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
+{
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
     get_omp_tgt_rtl_pointed_args_for(id, &activity->omp_tgt_rtl_args, 0);
     activity->pid = get_pid();
@@ -30,11 +31,13 @@ void on_exit_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t 
     pop_id();
 }
 
-void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_api_args_t* args, void* user_args){
+void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_api_args_t* args, void* user_args)
+{
     switch(funid) {
 		case OMP_TGT_RTL_API_ID___tgt_rtl_query_async :
 			//	int32_t device_id (int);
 			//	__tgt_async_info * AsyncInfoPtr ({
+			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_query_async.device_id);
@@ -48,8 +51,8 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_submit :
 			//	int32_t device_id (int);
-			//	void * target_ptr (void*);
-			//	void * host_ptr (void*);
+			//	void * target_ptr (void *);
+			//	void * host_ptr (void *);
 			//	int64_t size (long);
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_submit.device_id);
@@ -68,7 +71,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_notify_mapped :
 			//	int32_t device_id (int);
-			//	void * host_ptr (void*);
+			//	void * host_ptr (void *);
 			//	int64_t size (long);
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_notify_mapped.device_id);
@@ -80,10 +83,11 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_submit_async :
 			//	int32_t device_id (int);
-			//	void * target_ptr (void*);
-			//	void * host_ptr (void*);
+			//	void * target_ptr (void *);
+			//	void * host_ptr (void *);
 			//	int64_t size (long);
 			//	__tgt_async_info * AsyncInfo ({
+			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_submit_async.device_id);
@@ -103,6 +107,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 		case OMP_TGT_RTL_API_ID___tgt_rtl_init_async_info :
 			//	int32_t device_id (int);
 			//	__tgt_async_info ** async_info_ptr ({
+			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_init_async_info.device_id);
@@ -128,10 +133,11 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_retrieve_async :
 			//	int32_t device_id (int);
-			//	void * host_ptr (void*);
-			//	void * target_ptr (void*);
+			//	void * host_ptr (void *);
+			//	void * target_ptr (void *);
 			//	int64_t size (long);
 			//	__tgt_async_info * AsyncInfo ({
+			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_retrieve_async.device_id);
@@ -150,7 +156,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_delete :
 			//	int32_t device_id (int);
-			//	void * target_ptr (void*);
+			//	void * target_ptr (void *);
 			//	int32_t kind (int);
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_delete.device_id);
@@ -162,11 +168,12 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_exchange_async :
 			//	int32_t src_dev_id (int);
-			//	void * src_ptr (void*);
+			//	void * src_ptr (void *);
 			//	int32_t dst_dev_id (int);
-			//	void * dst_ptr (void*);
+			//	void * dst_ptr (void *);
 			//	int64_t size (long);
 			//	__tgt_async_info * AsyncInfo ({
+			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
 			printf("\tint32_t src_dev_id = %d\n", args->__tgt_rtl_data_exchange_async.src_dev_id);
@@ -186,7 +193,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_prepopulate_page_table :
 			//	int32_t device_id (int);
-			//	void * ptr (void*);
+			//	void * ptr (void *);
 			//	int64_t size (long);
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_prepopulate_page_table.device_id);
@@ -198,9 +205,9 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_exchange :
 			//	int32_t src_dev_id (int);
-			//	void * src_ptr (void*);
+			//	void * src_ptr (void *);
 			//	int32_t dst_dev_id (int);
-			//	void * dst_ptr (void*);
+			//	void * dst_ptr (void *);
 			//	int64_t size (long);
 			//	int32_t retval (int);
 			printf("\tint32_t src_dev_id = %d\n", args->__tgt_rtl_data_exchange.src_dev_id);
@@ -215,22 +222,27 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel :
 			//	int32_t device_id (int);
-			//	void * tgt_entry_ptr (void*);
-			//	void ** tgt_args (void**);
+			//	void * tgt_entry_ptr (void *);
+			//	void ** tgt_args (void **);
 			//	ptrdiff_t * tgt_offsets (long*);
 			//	KernelArgsTy * KernelArgs ({
 			//		uint32_t Version (unsigned int);
 			//		uint32_t NumArgs (unsigned int);
+			//		void ** ArgBasePtrs (void **);
+			//		void ** ArgPtrs (void **);
+			//		void ** ArgNames (void **);
+			//		void ** ArgMappers (void **);
 			//		uint64_t Tripcount (unsigned long);
-			//		struct (unnamed struct at ../GILDA_Content/header/omp/omp_tgt_rtl.h:47:3) Flags ({
+			//		struct (unnamed at omp_tgt_rtl.h:47:3) Flags ({
 			//			uint64_t NoWait (unsigned long);
 			//			uint64_t Unused (unsigned long);
 			//		});
-			//		uint32_t[3] NumTeams (unsigned int);
-			//		uint32_t[3] ThreadLimit (unsigned int);
+			//		uint32_t[3] NumTeams (unsigned int[3]);
+			//		uint32_t[3] ThreadLimit (unsigned int[3]);
 			//		uint32_t DynCGroupMem (unsigned int);
 			//	});
 			//	__tgt_async_info * AsyncInfo ({
+			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_launch_kernel.device_id);
@@ -251,7 +263,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 				printf("\t\tuint32_t Version = %u\n", args->__tgt_rtl_launch_kernel.KernelArgs__ref.val.Version);
 				printf("\t\tuint32_t NumArgs = %u\n", args->__tgt_rtl_launch_kernel.KernelArgs__ref.val.NumArgs);
 				printf("\t\tuint64_t Tripcount = %lu\n", args->__tgt_rtl_launch_kernel.KernelArgs__ref.val.Tripcount);
-				printf("\t\tstruct (unnamed struct at ../GILDA_Content/header/omp/omp_tgt_rtl.h:47:3) Flags = {\n");
+				printf("\t\tstruct (unnamed at omp_tgt_rtl.h:47:3) Flags = {\n");
 				printf("\t\t\tuint64_t NoWait = %lu\n", args->__tgt_rtl_launch_kernel.KernelArgs__ref.val.Flags.NoWait);
 				printf("\t\t\tuint64_t Unused = %lu\n", args->__tgt_rtl_launch_kernel.KernelArgs__ref.val.Flags.Unused);
 				printf("\t\t}\n");
@@ -270,6 +282,8 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_is_valid_binary :
 			//	__tgt_device_image * image ({
+			//		void * ImageStart (void *);
+			//		void * ImageEnd (void *);
 			//	});
 			//	int32_t retval (int);
 			printf("\t__tgt_device_image * image = %p", args->__tgt_rtl_is_valid_binary.image);
@@ -282,8 +296,8 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_retrieve :
 			//	int32_t device_id (int);
-			//	void * host_ptr (void*);
-			//	void * target_ptr (void*);
+			//	void * host_ptr (void *);
+			//	void * target_ptr (void *);
 			//	int64_t size (long);
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_retrieve.device_id);
@@ -297,9 +311,9 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_lock :
 			//	int32_t device_id (int);
-			//	void * host_ptr (void*);
+			//	void * host_ptr (void *);
 			//	int64_t size (long);
-			//	void ** LockedHostPtr (void**);
+			//	void ** LockedHostPtr (void **);
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_lock.device_id);
 			printf("\tvoid * host_ptr = %p", args->__tgt_rtl_data_lock.host_ptr);
@@ -320,7 +334,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_destroy_event :
 			//	int32_t device_id (int);
-			//	void * event (void*);
+			//	void * event (void *);
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_destroy_event.device_id);
 			printf("\tvoid * event = %p", args->__tgt_rtl_destroy_event.event);
@@ -342,7 +356,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_notify_unmapped :
 			//	int32_t device_id (int);
-			//	void * host_ptr (void*);
+			//	void * host_ptr (void *);
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_notify_unmapped.device_id);
 			printf("\tvoid * host_ptr = %p", args->__tgt_rtl_data_notify_unmapped.host_ptr);
@@ -353,8 +367,10 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 		case OMP_TGT_RTL_API_ID___tgt_rtl_init_device_info :
 			//	int32_t device_id (int);
 			//	__tgt_device_info * device_info_ptr ({
+			//		void * Context (void *);
+			//		void * Device (void *);
 			//	});
-			//	const char ** err_str (string**);
+			//	const char ** err_str (const char **);
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_init_device_info.device_id);
 			printf("\t__tgt_device_info * device_info_ptr = %p", args->__tgt_rtl_init_device_info.device_info_ptr);
@@ -374,7 +390,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_sync_event :
 			//	int32_t device_id (int);
-			//	void * event (void*);
+			//	void * event (void *);
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_sync_event.device_id);
 			printf("\tvoid * event = %p", args->__tgt_rtl_sync_event.event);
@@ -385,6 +401,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 		case OMP_TGT_RTL_API_ID___tgt_rtl_synchronize :
 			//	int32_t device_id (int);
 			//	__tgt_async_info * AsyncInfo ({
+			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_synchronize.device_id);
@@ -403,7 +420,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_unlock :
 			//	int device_id (int);
-			//	void * host_ptr (void*);
+			//	void * host_ptr (void *);
 			//	int32_t retval (int);
 			printf("\tint device_id = %d\n", args->__tgt_rtl_data_unlock.device_id);
 			printf("\tvoid * host_ptr = %p", args->__tgt_rtl_data_unlock.host_ptr);
@@ -435,19 +452,23 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel_sync :
 			//	int32_t device_id (int);
-			//	void * tgt_entry_ptr (void*);
-			//	void ** tgt_args (void**);
+			//	void * tgt_entry_ptr (void *);
+			//	void ** tgt_args (void **);
 			//	ptrdiff_t * tgt_offsets (long*);
 			//	KernelArgsTy * KernelArgs ({
 			//		uint32_t Version (unsigned int);
 			//		uint32_t NumArgs (unsigned int);
+			//		void ** ArgBasePtrs (void **);
+			//		void ** ArgPtrs (void **);
+			//		void ** ArgNames (void **);
+			//		void ** ArgMappers (void **);
 			//		uint64_t Tripcount (unsigned long);
-			//		struct (unnamed struct at ../GILDA_Content/header/omp/omp_tgt_rtl.h:47:3) Flags ({
+			//		struct (unnamed at omp_tgt_rtl.h:47:3) Flags ({
 			//			uint64_t NoWait (unsigned long);
 			//			uint64_t Unused (unsigned long);
 			//		});
-			//		uint32_t[3] NumTeams (unsigned int);
-			//		uint32_t[3] ThreadLimit (unsigned int);
+			//		uint32_t[3] NumTeams (unsigned int[3]);
+			//		uint32_t[3] ThreadLimit (unsigned int[3]);
 			//		uint32_t DynCGroupMem (unsigned int);
 			//	});
 			//	int32_t retval (int);
@@ -469,7 +490,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 				printf("\t\tuint32_t Version = %u\n", args->__tgt_rtl_launch_kernel_sync.KernelArgs__ref.val.Version);
 				printf("\t\tuint32_t NumArgs = %u\n", args->__tgt_rtl_launch_kernel_sync.KernelArgs__ref.val.NumArgs);
 				printf("\t\tuint64_t Tripcount = %lu\n", args->__tgt_rtl_launch_kernel_sync.KernelArgs__ref.val.Tripcount);
-				printf("\t\tstruct (unnamed struct at ../GILDA_Content/header/omp/omp_tgt_rtl.h:47:3) Flags = {\n");
+				printf("\t\tstruct (unnamed at omp_tgt_rtl.h:47:3) Flags = {\n");
 				printf("\t\t\tuint64_t NoWait = %lu\n", args->__tgt_rtl_launch_kernel_sync.KernelArgs__ref.val.Flags.NoWait);
 				printf("\t\t\tuint64_t Unused = %lu\n", args->__tgt_rtl_launch_kernel_sync.KernelArgs__ref.val.Flags.Unused);
 				printf("\t\t}\n");
@@ -483,8 +504,9 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_record_event :
 			//	int32_t device_id (int);
-			//	void * event (void*);
+			//	void * event (void *);
 			//	__tgt_async_info * AsyncInfo ({
+			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_record_event.device_id);
@@ -505,7 +527,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_create_event :
 			//	int32_t device_id (int);
-			//	void ** event (void**);
+			//	void ** event (void **);
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_create_event.device_id);
 			printf("\tvoid ** event = %p", args->__tgt_rtl_create_event.event);
@@ -525,8 +547,8 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	__tgt_device_binary binary ({
 			//		uintptr_t handle (unsigned long);
 			//	});
-			//	const char * name (string*);
-			//	void ** kernel_ptr (void**);
+			//	const char * name (const char *);
+			//	void ** kernel_ptr (void **);
 			//	int32_t retval (int);
 			printf("\t__tgt_device_binary binary = {\n");
 			printf("\t\tuintptr_t handle = %lu\n", args->__tgt_rtl_get_function.binary.handle);
@@ -557,8 +579,9 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_wait_event :
 			//	int32_t device_id (int);
-			//	void * event (void*);
+			//	void * event (void *);
 			//	__tgt_async_info * AsyncInfo ({
+			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_wait_event.device_id);
@@ -575,9 +598,9 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_alloc :
 			//	int32_t device_id (int);
 			//	int64_t size (long);
-			//	void * host_ptr (void*);
+			//	void * host_ptr (void *);
 			//	int32_t kind (int);
-			//	void * retval (void*);
+			//	void * retval (void *);
 			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_alloc.device_id);
 			printf("\tint64_t size = %ld\n", args->__tgt_rtl_data_alloc.size);
 			printf("\tvoid * host_ptr = %p", args->__tgt_rtl_data_alloc.host_ptr);
@@ -599,8 +622,8 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//		uintptr_t handle (unsigned long);
 			//	});
 			//	uint64_t size (unsigned long);
-			//	const char * name (string*);
-			//	void ** device_ptr (void**);
+			//	const char * name (const char *);
+			//	void ** device_ptr (void **);
 			//	int32_t retval (int);
 			printf("\t__tgt_device_binary binary = {\n");
 			printf("\t\tuintptr_t handle = %lu\n", args->__tgt_rtl_get_global.binary.handle);
@@ -622,8 +645,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	int retval (int);
 			printf("\tint retval = %d\n", args->__tgt_rtl_requested_prepopulate_gpu_page_table.retval);
 			break;
- 
+
         default : break;
     }
 }
-

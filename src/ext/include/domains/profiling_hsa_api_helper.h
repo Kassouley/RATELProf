@@ -22,7 +22,7 @@
     
 
 typedef enum {
-    FOR_EACH_PROFILING_FUNC(RATELPROF_API_ID)
+    FOR_EACH_PROFILING_FUNC(GET_FUNC_API_ID)
     ADD_API_PREFIX(ID_NB_FUNCTION),
     ADD_API_PREFIX(ID_UNKNOWN)
 } profiling_id_t;
@@ -31,7 +31,7 @@ typedef enum {
 static inline const char* get_profiling_funame_by_id(profiling_id_t id) 
 {
     switch(id) {
-		FOR_EACH_PROFILING_FUNC(RATELPROF_GET_FUNAME_BY_ID_OF)
+		FOR_EACH_PROFILING_FUNC(GET_FUNAME_BY_ID_OF)
         default : return NULL;
     }
     return NULL;
@@ -41,7 +41,7 @@ static inline const char* get_profiling_funame_by_id(profiling_id_t id)
 static inline profiling_id_t get_profiling_funid_by_name(const char* name) 
 {
     if (name == NULL) return ADD_API_PREFIX(ID_UNKNOWN);
-    FOR_EACH_PROFILING_FUNC(RATELPROF_GET_FUNID_BY_NAME_OF)
+    FOR_EACH_PROFILING_FUNC(GET_FUNID_BY_NAME_OF)
     return ADD_API_PREFIX(ID_UNKNOWN);
 }
  
@@ -49,7 +49,7 @@ static inline profiling_id_t get_profiling_funid_by_name(const char* name)
 static inline void* get_profiling_funaddr_by_id(profiling_id_t id) 
 {
     switch(id) {
-		FOR_EACH_PROFILING_FUNC(RATELPROF_GET_FUNADDR_BY_ID_OF)
+		FOR_EACH_PROFILING_FUNC(GET_FUNADDR_BY_ID_OF)
         default : return NULL;
     }
     return NULL;

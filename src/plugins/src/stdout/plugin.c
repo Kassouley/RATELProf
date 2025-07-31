@@ -4,17 +4,22 @@
  */
  
 #include <ratelprof.h>
-#include "omp_routine_plugin.h"
+
 #include "hsa_plugin.h"
 #include "omp_tgt_rtl_plugin.h"
-#include "hip_plugin.h" 
+#include "omp_routine_plugin.h"
+#include "hip_plugin.h"
+#include "mpi_plugin.h"
+
 
 typedef struct ratelprof_plugin_s {
-	api_callback_handler_t omp_routine_callback_handler;
 	api_callback_handler_t hsa_callback_handler;
 	api_callback_handler_t omp_tgt_rtl_callback_handler;
-	api_callback_handler_t hip_callback_handler; 
+	api_callback_handler_t omp_routine_callback_handler;
+	api_callback_handler_t hip_callback_handler;
+	api_callback_handler_t mpi_callback_handler;
 } ratelprof_plugin_t;
+
 
 ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin) 
 {
@@ -26,14 +31,17 @@ ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin)
     
     p = (ratelprof_plugin_t*)malloc(sizeof(ratelprof_plugin_t));
     if (!p) return RATELPROF_STATUS_MALLOC_FAILED;
-	p->omp_routine_callback_handler.on_enter = on_enter_omp_routine_callback;
-	p->omp_routine_callback_handler.on_exit = on_exit_omp_routine_callback;
-	p->hsa_callback_handler.on_enter = on_enter_hsa_callback;
-	p->hsa_callback_handler.on_exit = on_exit_hsa_callback;
-	p->omp_tgt_rtl_callback_handler.on_enter = on_enter_omp_tgt_rtl_callback;
-	p->omp_tgt_rtl_callback_handler.on_exit = on_exit_omp_tgt_rtl_callback;
-	p->hip_callback_handler.on_enter = on_enter_hip_callback;
-	p->hip_callback_handler.on_exit = on_exit_hip_callback; 
+    
+    p->hsa_callback_handler.on_enter = on_enter_hsa_callback;
+    p->hsa_callback_handler.on_exit = on_exit_hsa_callback;
+    p->omp_tgt_rtl_callback_handler.on_enter = on_enter_omp_tgt_rtl_callback;
+    p->omp_tgt_rtl_callback_handler.on_exit = on_exit_omp_tgt_rtl_callback;
+    p->omp_routine_callback_handler.on_enter = on_enter_omp_routine_callback;
+    p->omp_routine_callback_handler.on_exit = on_exit_omp_routine_callback;
+    p->hip_callback_handler.on_enter = on_enter_hip_callback;
+    p->hip_callback_handler.on_exit = on_exit_hip_callback;
+    p->mpi_callback_handler.on_enter = on_enter_mpi_callback;
+    p->mpi_callback_handler.on_exit = on_exit_mpi_callback;
 
     *plugin = p;
     return status;
@@ -55,10 +63,11 @@ ratelprof_status_t ratelprof_get_api_callback(const ratelprof_plugin_t* plugin, 
     if (plugin == NULL) return RATELPROF_STATUS_INVALID_PTR;
     switch(domain)
     {
-		case RATELPROF_DOMAIN_OMP_ROUTINE: *callback_handler = plugin->omp_routine_callback_handler; break;
-		case RATELPROF_DOMAIN_HSA: *callback_handler = plugin->hsa_callback_handler; break;
-		case RATELPROF_DOMAIN_OMP_TGT_RTL: *callback_handler = plugin->omp_tgt_rtl_callback_handler; break;
-		case RATELPROF_DOMAIN_HIP: *callback_handler = plugin->hip_callback_handler; break; 
+        case RATELPROF_DOMAIN_HSA: *callback_handler = plugin->hsa_callback_handler; break;
+        case RATELPROF_DOMAIN_OMP_TGT_RTL: *callback_handler = plugin->omp_tgt_rtl_callback_handler; break;
+        case RATELPROF_DOMAIN_OMP_ROUTINE: *callback_handler = plugin->omp_routine_callback_handler; break;
+        case RATELPROF_DOMAIN_HIP: *callback_handler = plugin->hip_callback_handler; break;
+        case RATELPROF_DOMAIN_MPI: *callback_handler = plugin->mpi_callback_handler; break;
         default: return RATELPROF_STATUS_UNKNOWN_DOMAIN;
     }
     return RATELPROF_STATUS_SUCCESS;

@@ -28,10 +28,10 @@ typedef struct bfd_cache_entry_s {
     struct bfd_cache_entry_s *next;
 } bfd_cache_entry_t;
 
-typedef bool (*ratelprof_cache_iter_cb)(ratelprof_source_data_t *location, void *user_data);
+typedef bool (*ratelprof_cache_iter_cb_t)(ratelprof_source_data_t *location, void *user_data);
 
 
-bool ratelprof_iterate_location_cache(ratelprof_cache_iter_cb callback, void *user_data);
+bool ratelprof_iterate_location_cache(ratelprof_cache_iter_cb_t callback, void *user_data);
 ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, void *addr);
 const char * ratelprof_format_source_location_string(const ratelprof_source_data_t *loc);
 const char * ratelprof_format_binary_location_string(const ratelprof_source_data_t *loc);

@@ -11,14 +11,15 @@
  * 
  */
 
-#ifndef RATELPROF_CALLBACK_H 
-#define RATELPROF_CALLBACK_H  
+#ifndef RATELPROF_CALLBACK_H
+#define RATELPROF_CALLBACK_H 
 
 #include "utils/logger.h"
 #include "ratelprof.h"
 
 /**
- * @typedef api_callback_t * @brief Function pointer type for API callbacks.
+ * @typedef  void (*api_callback_t)(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity) 
+ * @brief Function pointer type for API callbacks.
  *
  * A function of this type is called when an API function is entered or exited.
  *

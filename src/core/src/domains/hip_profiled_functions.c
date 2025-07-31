@@ -4,6 +4,7 @@
  */
  
 #include <stdlib.h>
+
 #include "ratelprof.h"
 #include "domains/fun_proto/hip_profiled_functions.h"
 
@@ -17,2631 +18,18 @@
 
 #define CALL_RET(ret_type, func, ...) \
     __hip_activity->start_time = ratelprof_get_curr_timespec(); \
-	ret_type __hip_ret = ((__##func##_t)hip_api_table.api_fn[HIP_API_ID_##func])(__VA_ARGS__); \
+	ret_type __hip_ret = (ret_type)((__##func##_t)hip_api_table.api_fn[HIP_API_ID_##func])(__VA_ARGS__); \
     __hip_activity->stop_time = ratelprof_get_curr_timespec(); \
 	__hip_activity->hip_args.func.retval = (ret_type)__hip_ret; \
 
 
-hipError_t i_hipGraphMemsetNodeGetParams(hipGraphNode_t node, hipMemsetParams * pNodeParams, void* return_address) {
+hipError_t i_hipMemPtrGetInfo(void * ptr, size_t * size, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemsetNodeGetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphMemsetNodeGetParams, node, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphMemsetNodeGetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemsetNodeGetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipWaitExternalSemaphoresAsync(const hipExternalSemaphore_t * extSemArray, const hipExternalSemaphoreWaitParams * paramsArray, unsigned int numExtSems, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipWaitExternalSemaphoresAsync, __hip_activity);
-	CALL_RET(hipError_t, hipWaitExternalSemaphoresAsync, extSemArray, paramsArray, numExtSems, stream, NULL);
-	GET_ARGS_VALUE_hipWaitExternalSemaphoresAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipWaitExternalSemaphoresAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDrvPointerGetAttributes(unsigned int numAttributes, hipPointer_attribute * attributes, void ** data, hipDeviceptr_t ptr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvPointerGetAttributes, __hip_activity);
-	CALL_RET(hipError_t, hipDrvPointerGetAttributes, numAttributes, attributes, data, ptr, NULL);
-	GET_ARGS_VALUE_hipDrvPointerGetAttributes(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvPointerGetAttributes, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipExtStreamGetCUMask(hipStream_t stream, uint32_t cuMaskSize, uint32_t * cuMask, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtStreamGetCUMask, __hip_activity);
-	CALL_RET(hipError_t, hipExtStreamGetCUMask, stream, cuMaskSize, cuMask, NULL);
-	GET_ARGS_VALUE_hipExtStreamGetCUMask(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtStreamGetCUMask, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemset_spt(void * dst, int value, size_t sizeBytes, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemset_spt, dst, value, sizeBytes, NULL);
-	GET_ARGS_VALUE_hipMemset_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxSynchronize(void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSynchronize, __hip_activity);
-	CALL_RET(hipError_t, hipCtxSynchronize, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSynchronize, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemGetAddressRange(hipDeviceptr_t * pbase, size_t * psize, hipDeviceptr_t dptr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAddressRange, __hip_activity);
-	CALL_RET(hipError_t, hipMemGetAddressRange, pbase, psize, dptr, NULL);
-	GET_ARGS_VALUE_hipMemGetAddressRange(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAddressRange, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMallocHost(void ** ptr, size_t size, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocHost, __hip_activity);
-	CALL_RET(hipError_t, hipMallocHost, ptr, size, NULL);
-	GET_ARGS_VALUE_hipMallocHost(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocHost, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemAddressReserve(void ** ptr, size_t size, size_t alignment, void * addr, unsigned long long flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAddressReserve, __hip_activity);
-	CALL_RET(hipError_t, hipMemAddressReserve, ptr, size, alignment, addr, flags, NULL);
-	GET_ARGS_VALUE_hipMemAddressReserve(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAddressReserve, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamEndCapture(hipStream_t stream, hipGraph_t * pGraph, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamEndCapture, __hip_activity);
-	CALL_RET(hipError_t, hipStreamEndCapture, stream, pGraph, NULL);
-	GET_ARGS_VALUE_hipStreamEndCapture(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamEndCapture, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphExecExternalSemaphoresWaitNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecExternalSemaphoresWaitNodeSetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExecExternalSemaphoresWaitNodeSetParams, hGraphExec, hNode, nodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphExecExternalSemaphoresWaitNodeSetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecExternalSemaphoresWaitNodeSetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamQuery_spt(hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamQuery_spt, __hip_activity);
-	CALL_RET(hipError_t, hipStreamQuery_spt, stream, NULL);
-	GET_ARGS_VALUE_hipStreamQuery_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamQuery_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamCreateWithFlags(hipStream_t * stream, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamCreateWithFlags, __hip_activity);
-	CALL_RET(hipError_t, hipStreamCreateWithFlags, stream, flags, NULL);
-	GET_ARGS_VALUE_hipStreamCreateWithFlags(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamCreateWithFlags, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemGetAllocationGranularity(size_t * granularity, const hipMemAllocationProp * prop, hipMemAllocationGranularity_flags option, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAllocationGranularity, __hip_activity);
-	CALL_RET(hipError_t, hipMemGetAllocationGranularity, granularity, prop, option, NULL);
-	GET_ARGS_VALUE_hipMemGetAllocationGranularity(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAllocationGranularity, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipProfilerStop(void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipProfilerStop, __hip_activity);
-	CALL_RET(hipError_t, hipProfilerStop, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipProfilerStop, __hip_activity);
-	return __hip_ret;
-};
-
-const char * i_hipGetErrorString(hipError_t hipError, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetErrorString, __hip_activity);
-	CALL_RET(const char *, hipGetErrorString, hipError, NULL);
-	GET_ARGS_VALUE_hipGetErrorString(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetErrorString, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetDeviceFlags(unsigned int * flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDeviceFlags, __hip_activity);
-	CALL_RET(hipError_t, hipGetDeviceFlags, flags, NULL);
-	GET_ARGS_VALUE_hipGetDeviceFlags(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDeviceFlags, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetTextureObjectResourceDesc(hipResourceDesc * pResDesc, hipTextureObject_t textureObject, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureObjectResourceDesc, __hip_activity);
-	CALL_RET(hipError_t, hipGetTextureObjectResourceDesc, pResDesc, textureObject, NULL);
-	GET_ARGS_VALUE_hipGetTextureObjectResourceDesc(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureObjectResourceDesc, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyPeerAsync(void * dst, int dstDeviceId, const void * src, int srcDevice, size_t sizeBytes, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyPeerAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyPeerAsync, dst, dstDeviceId, src, srcDevice, sizeBytes, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpyPeerAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyPeerAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefGetFormat(hipArray_Format * pFormat, int * pNumChannels, const textureReference * texRef, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetFormat, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefGetFormat, pFormat, pNumChannels, texRef, NULL);
-	GET_ARGS_VALUE_hipTexRefGetFormat(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetFormat, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipLaunchKernel(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchKernel, __hip_activity);
-	CALL_RET(hipError_t, hipLaunchKernel, function_address, numBlocks, dimBlocks, args, sharedMemBytes, stream, NULL);
-	GET_ARGS_VALUE_hipLaunchKernel(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchKernel, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphHostNodeGetParams(hipGraphNode_t node, hipHostNodeParams * pNodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphHostNodeGetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphHostNodeGetParams, node, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphHostNodeGetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphHostNodeGetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxGetSharedMemConfig(hipSharedMemConfig * pConfig, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetSharedMemConfig, __hip_activity);
-	CALL_RET(hipError_t, hipCtxGetSharedMemConfig, pConfig, NULL);
-	GET_ARGS_VALUE_hipCtxGetSharedMemConfig(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetSharedMemConfig, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy2DToArray(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArray, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy2DToArray, dst, wOffset, hOffset, src, spitch, width, height, kind, NULL);
-	GET_ARGS_VALUE_hipMemcpy2DToArray(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyFromSymbolAsync(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromSymbolAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyFromSymbolAsync, dst, symbol, sizeBytes, offset, kind, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpyFromSymbolAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromSymbolAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphKernelNodeSetAttribute(hipGraphNode_t hNode, hipLaunchAttributeID attr, const hipLaunchAttributeValue * value, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeSetAttribute, __hip_activity);
-	CALL_RET(hipError_t, hipGraphKernelNodeSetAttribute, hNode, attr, value, NULL);
-	GET_ARGS_VALUE_hipGraphKernelNodeSetAttribute(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeSetAttribute, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemPoolSetAttribute(hipMemPool_t mem_pool, hipMemPoolAttr attr, void * value, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolSetAttribute, __hip_activity);
-	CALL_RET(hipError_t, hipMemPoolSetAttribute, mem_pool, attr, value, NULL);
-	GET_ARGS_VALUE_hipMemPoolSetAttribute(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolSetAttribute, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipEventRecord_spt(hipEvent_t event, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventRecord_spt, __hip_activity);
-	CALL_RET(hipError_t, hipEventRecord_spt, event, stream, NULL);
-	GET_ARGS_VALUE_hipEventRecord_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventRecord_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipExtLaunchKernel(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, hipEvent_t startEvent, hipEvent_t stopEvent, int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtLaunchKernel, __hip_activity);
-	CALL_RET(hipError_t, hipExtLaunchKernel, function_address, numBlocks, dimBlocks, args, sharedMemBytes, stream, startEvent, stopEvent, flags, NULL);
-	GET_ARGS_VALUE_hipExtLaunchKernel(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtLaunchKernel, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphExecMemcpyNodeSetParamsToSymbol(hipGraphExec_t hGraphExec, hipGraphNode_t node, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemcpyNodeSetParamsToSymbol, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExecMemcpyNodeSetParamsToSymbol, hGraphExec, node, symbol, src, count, offset, kind, NULL);
-	GET_ARGS_VALUE_hipGraphExecMemcpyNodeSetParamsToSymbol(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemcpyNodeSetParamsToSymbol, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDevicePrimaryCtxGetState(hipDevice_t dev, unsigned int * flags, int * active, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxGetState, __hip_activity);
-	CALL_RET(hipError_t, hipDevicePrimaryCtxGetState, dev, flags, active, NULL);
-	GET_ARGS_VALUE_hipDevicePrimaryCtxGetState(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxGetState, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetSymbolSize(size_t * size, const void * symbol, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetSymbolSize, __hip_activity);
-	CALL_RET(hipError_t, hipGetSymbolSize, size, symbol, NULL);
-	GET_ARGS_VALUE_hipGetSymbolSize(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetSymbolSize, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDestroyExternalMemory(hipExternalMemory_t extMem, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroyExternalMemory, __hip_activity);
-	CALL_RET(hipError_t, hipDestroyExternalMemory, extMem, NULL);
-	GET_ARGS_VALUE_hipDestroyExternalMemory(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroyExternalMemory, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetProcAddress(const char * symbol, void ** pfn, int hipVersion, uint64_t flags, hipDriverProcAddressQueryResult * symbolStatus, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetProcAddress, __hip_activity);
-	CALL_RET(hipError_t, hipGetProcAddress, symbol, pfn, hipVersion, flags, symbolStatus, NULL);
-	GET_ARGS_VALUE_hipGetProcAddress(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetProcAddress, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphNodeGetEnabled(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, unsigned int * isEnabled, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetEnabled, __hip_activity);
-	CALL_RET(hipError_t, hipGraphNodeGetEnabled, hGraphExec, hNode, isEnabled, NULL);
-	GET_ARGS_VALUE_hipGraphNodeGetEnabled(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetEnabled, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipEventDestroy(hipEvent_t event, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventDestroy, __hip_activity);
-	CALL_RET(hipError_t, hipEventDestroy, event, NULL);
-	GET_ARGS_VALUE_hipEventDestroy(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventDestroy, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphEventRecordNodeGetEvent(hipGraphNode_t node, hipEvent_t * event_out, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventRecordNodeGetEvent, __hip_activity);
-	CALL_RET(hipError_t, hipGraphEventRecordNodeGetEvent, node, event_out, NULL);
-	GET_ARGS_VALUE_hipGraphEventRecordNodeGetEvent(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventRecordNodeGetEvent, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefSetMipmapLevelBias(textureReference * texRef, float bias, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmapLevelBias, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefSetMipmapLevelBias, texRef, bias, NULL);
-	GET_ARGS_VALUE_hipTexRefSetMipmapLevelBias(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmapLevelBias, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy2DFromArray_spt(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArray_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy2DFromArray_spt, dst, dpitch, src, wOffset, hOffset, width, height, kind, NULL);
-	GET_ARGS_VALUE_hipMemcpy2DFromArray_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArray_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemGetAccess(unsigned long long * flags, const hipMemLocation * location, void * ptr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAccess, __hip_activity);
-	CALL_RET(hipError_t, hipMemGetAccess, flags, location, ptr, NULL);
-	GET_ARGS_VALUE_hipMemGetAccess(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAccess, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipImportExternalSemaphore(hipExternalSemaphore_t * extSem_out, const hipExternalSemaphoreHandleDesc * semHandleDesc, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipImportExternalSemaphore, __hip_activity);
-	CALL_RET(hipError_t, hipImportExternalSemaphore, extSem_out, semHandleDesc, NULL);
-	GET_ARGS_VALUE_hipImportExternalSemaphore(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipImportExternalSemaphore, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipLaunchHostFunc(hipStream_t stream, hipHostFn_t fn, void * userData, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchHostFunc, __hip_activity);
-	CALL_RET(hipError_t, hipLaunchHostFunc, stream, fn, userData, NULL);
-	GET_ARGS_VALUE_hipLaunchHostFunc(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchHostFunc, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipBindTexture2D(size_t * offset, const textureReference * tex, const void * devPtr, const hipChannelFormatDesc * desc, size_t width, size_t height, size_t pitch, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTexture2D, __hip_activity);
-	CALL_RET(hipError_t, hipBindTexture2D, offset, tex, devPtr, desc, width, height, pitch, NULL);
-	GET_ARGS_VALUE_hipBindTexture2D(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTexture2D, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphCreate(hipGraph_t * pGraph, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphCreate, __hip_activity);
-	CALL_RET(hipError_t, hipGraphCreate, pGraph, flags, NULL);
-	GET_ARGS_VALUE_hipGraphCreate(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphCreate, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefSetMipmappedArray(textureReference * texRef, struct hipMipmappedArray * mipmappedArray, unsigned int Flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmappedArray, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefSetMipmappedArray, texRef, mipmappedArray, Flags, NULL);
-	GET_ARGS_VALUE_hipTexRefSetMipmappedArray(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmappedArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphRemoveDependencies(hipGraph_t graph, const hipGraphNode_t * from, const hipGraphNode_t * to, size_t numDependencies, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphRemoveDependencies, __hip_activity);
-	CALL_RET(hipError_t, hipGraphRemoveDependencies, graph, from, to, numDependencies, NULL);
-	GET_ARGS_VALUE_hipGraphRemoveDependencies(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphRemoveDependencies, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemset2D_spt(void * dst, size_t pitch, int value, size_t width, size_t height, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2D_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemset2D_spt, dst, pitch, value, width, height, NULL);
-	GET_ARGS_VALUE_hipMemset2D_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2D_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy, dst, src, sizeBytes, kind, NULL);
-	GET_ARGS_VALUE_hipMemcpy(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMallocAsync(void ** dev_ptr, size_t size, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMallocAsync, dev_ptr, size, stream, NULL);
-	GET_ARGS_VALUE_hipMallocAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i___hipPushCallConfiguration(dim3 gridDim, dim3 blockDim, size_t sharedMem, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID___hipPushCallConfiguration, __hip_activity);
-	CALL_RET(hipError_t, __hipPushCallConfiguration, gridDim, blockDim, sharedMem, stream, NULL);
-	GET_ARGS_VALUE___hipPushCallConfiguration(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID___hipPushCallConfiguration, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamWaitEvent(hipStream_t stream, hipEvent_t event, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitEvent, __hip_activity);
-	CALL_RET(hipError_t, hipStreamWaitEvent, stream, event, flags, NULL);
-	GET_ARGS_VALUE_hipStreamWaitEvent(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitEvent, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefSetFlags(textureReference * texRef, unsigned int Flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetFlags, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefSetFlags, texRef, Flags, NULL);
-	GET_ARGS_VALUE_hipTexRefSetFlags(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetFlags, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphMemFreeNodeGetParams(hipGraphNode_t node, void * dev_ptr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	GET_ARGS_VALUE_hipGraphMemFreeNodeGetParams(__hip_activity);
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemFreeNodeGetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphMemFreeNodeGetParams, node, dev_ptr, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemFreeNodeGetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefGetAddress(hipDeviceptr_t * dev_ptr, const textureReference * texRef, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetAddress, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefGetAddress, dev_ptr, texRef, NULL);
-	GET_ARGS_VALUE_hipTexRefGetAddress(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetAddress, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyToArray(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t count, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToArray, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyToArray, dst, wOffset, hOffset, src, count, kind, NULL);
-	GET_ARGS_VALUE_hipMemcpyToArray(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphEventWaitNodeGetEvent(hipGraphNode_t node, hipEvent_t * event_out, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventWaitNodeGetEvent, __hip_activity);
-	CALL_RET(hipError_t, hipGraphEventWaitNodeGetEvent, node, event_out, NULL);
-	GET_ARGS_VALUE_hipGraphEventWaitNodeGetEvent(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventWaitNodeGetEvent, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipArrayDestroy(hipArray_t array, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayDestroy, __hip_activity);
-	CALL_RET(hipError_t, hipArrayDestroy, array, NULL);
-	GET_ARGS_VALUE_hipArrayDestroy(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayDestroy, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphKernelNodeCopyAttributes(hipGraphNode_t hSrc, hipGraphNode_t hDst, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeCopyAttributes, __hip_activity);
-	CALL_RET(hipError_t, hipGraphKernelNodeCopyAttributes, hSrc, hDst, NULL);
-	GET_ARGS_VALUE_hipGraphKernelNodeCopyAttributes(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeCopyAttributes, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphExecHostNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipHostNodeParams * pNodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecHostNodeSetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExecHostNodeSetParams, hGraphExec, node, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphExecHostNodeSetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecHostNodeSetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphNodeGetDependencies(hipGraphNode_t node, hipGraphNode_t * pDependencies, size_t * pNumDependencies, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetDependencies, __hip_activity);
-	CALL_RET(hipError_t, hipGraphNodeGetDependencies, node, pDependencies, pNumDependencies, NULL);
-	GET_ARGS_VALUE_hipGraphNodeGetDependencies(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetDependencies, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemGetInfo(size_t * free, size_t * total, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetInfo, __hip_activity);
-	CALL_RET(hipError_t, hipMemGetInfo, free, total, NULL);
-	GET_ARGS_VALUE_hipMemGetInfo(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetInfo, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipExtGetLastError(void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtGetLastError, __hip_activity);
-	CALL_RET(hipError_t, hipExtGetLastError, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtGetLastError, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy2DFromArrayAsync_spt(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArrayAsync_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy2DFromArrayAsync_spt, dst, dpitch, src, wOffsetSrc, hOffsetSrc, width, height, kind, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpy2DFromArrayAsync_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArrayAsync_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemPoolExportPointer(hipMemPoolPtrExportData * export_data, void * dev_ptr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolExportPointer, __hip_activity);
-	CALL_RET(hipError_t, hipMemPoolExportPointer, export_data, dev_ptr, NULL);
-	GET_ARGS_VALUE_hipMemPoolExportPointer(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolExportPointer, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipUserObjectRetain(hipUserObject_t object, unsigned int count, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUserObjectRetain, __hip_activity);
-	CALL_RET(hipError_t, hipUserObjectRetain, object, count, NULL);
-	GET_ARGS_VALUE_hipUserObjectRetain(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUserObjectRetain, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemAllocPitch(hipDeviceptr_t * dptr, size_t * pitch, size_t widthInBytes, size_t height, unsigned int elementSizeBytes, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAllocPitch, __hip_activity);
-	CALL_RET(hipError_t, hipMemAllocPitch, dptr, pitch, widthInBytes, height, elementSizeBytes, NULL);
-	GET_ARGS_VALUE_hipMemAllocPitch(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAllocPitch, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDevicePrimaryCtxSetFlags(hipDevice_t dev, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxSetFlags, __hip_activity);
-	CALL_RET(hipError_t, hipDevicePrimaryCtxSetFlags, dev, flags, NULL);
-	GET_ARGS_VALUE_hipDevicePrimaryCtxSetFlags(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxSetFlags, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphLaunch_spt(hipGraphExec_t graphExec, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphLaunch_spt, __hip_activity);
-	CALL_RET(hipError_t, hipGraphLaunch_spt, graphExec, stream, NULL);
-	GET_ARGS_VALUE_hipGraphLaunch_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphLaunch_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyAtoA(hipArray_t dstArray, size_t dstOffset, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoA, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyAtoA, dstArray, dstOffset, srcArray, srcOffset, ByteCount, NULL);
-	GET_ARGS_VALUE_hipMemcpyAtoA(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoA, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipLaunchCooperativeKernel_spt(const void * f, dim3 gridDim, dim3 blockDim, void ** kernelParams, uint32_t sharedMemBytes, hipStream_t hStream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchCooperativeKernel_spt, __hip_activity);
-	CALL_RET(hipError_t, hipLaunchCooperativeKernel_spt, f, gridDim, blockDim, kernelParams, sharedMemBytes, hStream, NULL);
-	GET_ARGS_VALUE_hipLaunchCooperativeKernel_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchCooperativeKernel_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphDestroyNode(hipGraphNode_t node, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphDestroyNode, __hip_activity);
-	CALL_RET(hipError_t, hipGraphDestroyNode, node, NULL);
-	GET_ARGS_VALUE_hipGraphDestroyNode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphDestroyNode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceGetName(char * name, int len, hipDevice_t device, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetName, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceGetName, name, len, device, NULL);
-	GET_ARGS_VALUE_hipDeviceGetName(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetName, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefGetFlags(unsigned int * pFlags, const textureReference * texRef, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetFlags, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefGetFlags, pFlags, texRef, NULL);
-	GET_ARGS_VALUE_hipTexRefGetFlags(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetFlags, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipLaunchKernel_spt(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchKernel_spt, __hip_activity);
-	CALL_RET(hipError_t, hipLaunchKernel_spt, function_address, numBlocks, dimBlocks, args, sharedMemBytes, stream, NULL);
-	GET_ARGS_VALUE_hipLaunchKernel_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchKernel_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipExtGetLinkTypeAndHopCount(int device1, int device2, uint32_t * linktype, uint32_t * hopcount, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtGetLinkTypeAndHopCount, __hip_activity);
-	CALL_RET(hipError_t, hipExtGetLinkTypeAndHopCount, device1, device2, linktype, hopcount, NULL);
-	GET_ARGS_VALUE_hipExtGetLinkTypeAndHopCount(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtGetLinkTypeAndHopCount, __hip_activity);
-	return __hip_ret;
-};
-
-const char * i_hipApiName(uint32_t id, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipApiName, __hip_activity);
-	CALL_RET(const char *, hipApiName, id, NULL);
-	GET_ARGS_VALUE_hipApiName(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipApiName, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphMemcpyNodeSetParams1D(hipGraphNode_t node, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParams1D, __hip_activity);
-	CALL_RET(hipError_t, hipGraphMemcpyNodeSetParams1D, node, dst, src, count, kind, NULL);
-	GET_ARGS_VALUE_hipGraphMemcpyNodeSetParams1D(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParams1D, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceSetMemPool(int device, hipMemPool_t mem_pool, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetMemPool, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceSetMemPool, device, mem_pool, NULL);
-	GET_ARGS_VALUE_hipDeviceSetMemPool(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetMemPool, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMallocMipmappedArray(hipMipmappedArray_t * mipmappedArray, const struct hipChannelFormatDesc * desc, struct hipExtent extent, unsigned int numLevels, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocMipmappedArray, __hip_activity);
-	CALL_RET(hipError_t, hipMallocMipmappedArray, mipmappedArray, desc, extent, numLevels, flags, NULL);
-	GET_ARGS_VALUE_hipMallocMipmappedArray(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocMipmappedArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy2DArrayToArray(hipArray_t dst, size_t wOffsetDst, size_t hOffsetDst, hipArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DArrayToArray, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy2DArrayToArray, dst, wOffsetDst, hOffsetDst, src, wOffsetSrc, hOffsetSrc, width, height, kind, NULL);
-	GET_ARGS_VALUE_hipMemcpy2DArrayToArray(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DArrayToArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceEnablePeerAccess(int peerDeviceId, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceEnablePeerAccess, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceEnablePeerAccess, peerDeviceId, flags, NULL);
-	GET_ARGS_VALUE_hipDeviceEnablePeerAccess(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceEnablePeerAccess, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipHostMalloc(void ** ptr, size_t size, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostMalloc, __hip_activity);
-	CALL_RET(hipError_t, hipHostMalloc, ptr, size, flags, NULL);
-	GET_ARGS_VALUE_hipHostMalloc(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostMalloc, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDestroySurfaceObject(hipSurfaceObject_t surfaceObject, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroySurfaceObject, __hip_activity);
-	CALL_RET(hipError_t, hipDestroySurfaceObject, surfaceObject, NULL);
-	GET_ARGS_VALUE_hipDestroySurfaceObject(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroySurfaceObject, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceGetByPCIBusId(int * device, const char * pciBusId, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetByPCIBusId, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceGetByPCIBusId, device, pciBusId, NULL);
-	GET_ARGS_VALUE_hipDeviceGetByPCIBusId(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetByPCIBusId, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceDisablePeerAccess(int peerDeviceId, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceDisablePeerAccess, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceDisablePeerAccess, peerDeviceId, NULL);
-	GET_ARGS_VALUE_hipDeviceDisablePeerAccess(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceDisablePeerAccess, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamGetCaptureInfo_v2_spt(hipStream_t stream, hipStreamCaptureStatus * captureStatus_out, unsigned long long * id_out, hipGraph_t * graph_out, const hipGraphNode_t ** dependencies_out, size_t * numDependencies_out, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo_v2_spt, __hip_activity);
-	CALL_RET(hipError_t, hipStreamGetCaptureInfo_v2_spt, stream, captureStatus_out, id_out, graph_out, dependencies_out, numDependencies_out, NULL);
-	GET_ARGS_VALUE_hipStreamGetCaptureInfo_v2_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo_v2_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamWriteValue32(hipStream_t stream, void * ptr, uint32_t value, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWriteValue32, __hip_activity);
-	CALL_RET(hipError_t, hipStreamWriteValue32, stream, ptr, value, flags, NULL);
-	GET_ARGS_VALUE_hipStreamWriteValue32(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWriteValue32, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefSetAddress(size_t * ByteOffset, textureReference * texRef, hipDeviceptr_t dptr, size_t bytes, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetAddress, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefSetAddress, ByteOffset, texRef, dptr, bytes, NULL);
-	GET_ARGS_VALUE_hipTexRefSetAddress(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetAddress, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipArray3DCreate(hipArray_t * array, const HIP_ARRAY3D_DESCRIPTOR * pAllocateArray, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArray3DCreate, __hip_activity);
-	CALL_RET(hipError_t, hipArray3DCreate, array, pAllocateArray, NULL);
-	GET_ARGS_VALUE_hipArray3DCreate(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArray3DCreate, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxGetFlags(unsigned int * flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetFlags, __hip_activity);
-	CALL_RET(hipError_t, hipCtxGetFlags, flags, NULL);
-	GET_ARGS_VALUE_hipCtxGetFlags(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetFlags, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipFreeMipmappedArray(hipMipmappedArray_t mipmappedArray, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	GET_ARGS_VALUE_hipFreeMipmappedArray(__hip_activity);
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeMipmappedArray, __hip_activity);
-	CALL_RET(hipError_t, hipFreeMipmappedArray, mipmappedArray, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeMipmappedArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipUserObjectRelease(hipUserObject_t object, unsigned int count, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUserObjectRelease, __hip_activity);
-	CALL_RET(hipError_t, hipUserObjectRelease, object, count, NULL);
-	GET_ARGS_VALUE_hipUserObjectRelease(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUserObjectRelease, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipFreeAsync(void * dev_ptr, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	GET_ARGS_VALUE_hipFreeAsync(__hip_activity);
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeAsync, __hip_activity);
-	CALL_RET(hipError_t, hipFreeAsync, dev_ptr, stream, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceSetSharedMemConfig(hipSharedMemConfig config, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetSharedMemConfig, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceSetSharedMemConfig, config, NULL);
-	GET_ARGS_VALUE_hipDeviceSetSharedMemConfig(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetSharedMemConfig, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipIpcCloseMemHandle(void * devPtr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcCloseMemHandle, __hip_activity);
-	CALL_RET(hipError_t, hipIpcCloseMemHandle, devPtr, NULL);
-	GET_ARGS_VALUE_hipIpcCloseMemHandle(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcCloseMemHandle, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipOccupancyMaxActiveBlocksPerMultiprocessor(int * numBlocks, const void * f, int blockSize, size_t dynSharedMemPerBlk, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessor, __hip_activity);
-	CALL_RET(hipError_t, hipOccupancyMaxActiveBlocksPerMultiprocessor, numBlocks, f, blockSize, dynSharedMemPerBlk, NULL);
-	GET_ARGS_VALUE_hipOccupancyMaxActiveBlocksPerMultiprocessor(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessor, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipInit(unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipInit, __hip_activity);
-	CALL_RET(hipError_t, hipInit, flags, NULL);
-	GET_ARGS_VALUE_hipInit(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipInit, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxDisablePeerAccess(hipCtx_t peerCtx, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxDisablePeerAccess, __hip_activity);
-	CALL_RET(hipError_t, hipCtxDisablePeerAccess, peerCtx, NULL);
-	GET_ARGS_VALUE_hipCtxDisablePeerAccess(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxDisablePeerAccess, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphExternalSemaphoresWaitNodeSetParams(hipGraphNode_t hNode, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresWaitNodeSetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExternalSemaphoresWaitNodeSetParams, hNode, nodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphExternalSemaphoresWaitNodeSetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresWaitNodeSetParams, __hip_activity);
-	return __hip_ret;
-};
-
-size_t i_amd_dbgapi_get_build_id(void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_amd_dbgapi_get_build_id, __hip_activity);
-	CALL_RET(size_t, amd_dbgapi_get_build_id, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_amd_dbgapi_get_build_id, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemsetD32(hipDeviceptr_t dest, int value, size_t count, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD32, __hip_activity);
-	CALL_RET(hipError_t, hipMemsetD32, dest, value, count, NULL);
-	GET_ARGS_VALUE_hipMemsetD32(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD32, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipModuleGetTexRef(textureReference ** texRef, hipModule_t hmod, const char * name, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleGetTexRef, __hip_activity);
-	CALL_RET(hipError_t, hipModuleGetTexRef, texRef, hmod, name, NULL);
-	GET_ARGS_VALUE_hipModuleGetTexRef(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleGetTexRef, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipLaunchCooperativeKernel(const void * f, dim3 gridDim, dim3 blockDimX, void ** kernelParams, unsigned int sharedMemBytes, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchCooperativeKernel, __hip_activity);
-	CALL_RET(hipError_t, hipLaunchCooperativeKernel, f, gridDim, blockDimX, kernelParams, sharedMemBytes, stream, NULL);
-	GET_ARGS_VALUE_hipLaunchCooperativeKernel(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchCooperativeKernel, __hip_activity);
-	return __hip_ret;
-};
-
-const char * i_hipKernelNameRef(const hipFunction_t f, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipKernelNameRef, __hip_activity);
-	CALL_RET(const char *, hipKernelNameRef, f, NULL);
-	GET_ARGS_VALUE_hipKernelNameRef(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipKernelNameRef, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphAddKernelNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipKernelNodeParams * pNodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddKernelNode, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddKernelNode, pGraphNode, graph, pDependencies, numDependencies, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphAddKernelNode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddKernelNode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipUserObjectCreate(hipUserObject_t * object_out, void * ptr, hipHostFn_t destroy, unsigned int initialRefcount, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUserObjectCreate, __hip_activity);
-	CALL_RET(hipError_t, hipUserObjectCreate, object_out, ptr, destroy, initialRefcount, flags, NULL);
-	GET_ARGS_VALUE_hipUserObjectCreate(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUserObjectCreate, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipFuncSetAttribute(const void * func, hipFuncAttribute attr, int value, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncSetAttribute, __hip_activity);
-	CALL_RET(hipError_t, hipFuncSetAttribute, func, attr, value, NULL);
-	GET_ARGS_VALUE_hipFuncSetAttribute(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncSetAttribute, __hip_activity);
-	return __hip_ret;
-};
-
-const char * i_amd_dbgapi_get_git_hash(void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_amd_dbgapi_get_git_hash, __hip_activity);
-	CALL_RET(const char *, amd_dbgapi_get_git_hash, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_amd_dbgapi_get_git_hash, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyHtoAAsync(hipArray_t dstArray, size_t dstOffset, const void * srcHost, size_t ByteCount, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoAAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyHtoAAsync, dstArray, dstOffset, srcHost, ByteCount, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpyHtoAAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoAAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamWaitEvent_spt(hipStream_t stream, hipEvent_t event, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitEvent_spt, __hip_activity);
-	CALL_RET(hipError_t, hipStreamWaitEvent_spt, stream, event, flags, NULL);
-	GET_ARGS_VALUE_hipStreamWaitEvent_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitEvent_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMipmappedArrayCreate(hipMipmappedArray_t * pHandle, HIP_ARRAY3D_DESCRIPTOR * pMipmappedArrayDesc, unsigned int numMipmapLevels, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMipmappedArrayCreate, __hip_activity);
-	CALL_RET(hipError_t, hipMipmappedArrayCreate, pHandle, pMipmappedArrayDesc, numMipmapLevels, NULL);
-	GET_ARGS_VALUE_hipMipmappedArrayCreate(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMipmappedArrayCreate, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxPushCurrent(hipCtx_t ctx, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxPushCurrent, __hip_activity);
-	CALL_RET(hipError_t, hipCtxPushCurrent, ctx, NULL);
-	GET_ARGS_VALUE_hipCtxPushCurrent(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxPushCurrent, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemPoolExportToShareableHandle(void * shared_handle, hipMemPool_t mem_pool, hipMemAllocationHandleType handle_type, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolExportToShareableHandle, __hip_activity);
-	CALL_RET(hipError_t, hipMemPoolExportToShareableHandle, shared_handle, mem_pool, handle_type, flags, NULL);
-	GET_ARGS_VALUE_hipMemPoolExportToShareableHandle(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolExportToShareableHandle, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamGetDevice(hipStream_t stream, hipDevice_t * device, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetDevice, __hip_activity);
-	CALL_RET(hipError_t, hipStreamGetDevice, stream, device, NULL);
-	GET_ARGS_VALUE_hipStreamGetDevice(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetDevice, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemImportFromShareableHandle(hipMemGenericAllocationHandle_t * handle, void * osHandle, hipMemAllocationHandleType shHandleType, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemImportFromShareableHandle, __hip_activity);
-	CALL_RET(hipError_t, hipMemImportFromShareableHandle, handle, osHandle, shHandleType, NULL);
-	GET_ARGS_VALUE_hipMemImportFromShareableHandle(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemImportFromShareableHandle, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDevicePrimaryCtxRetain(hipCtx_t * pctx, hipDevice_t dev, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxRetain, __hip_activity);
-	CALL_RET(hipError_t, hipDevicePrimaryCtxRetain, pctx, dev, NULL);
-	GET_ARGS_VALUE_hipDevicePrimaryCtxRetain(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxRetain, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphExecMemsetNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipMemsetParams * pNodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemsetNodeSetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExecMemsetNodeSetParams, hGraphExec, node, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphExecMemsetNodeSetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemsetNodeSetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefGetMipmapLevelBias(float * pbias, const textureReference * texRef, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMipmapLevelBias, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefGetMipmapLevelBias, pbias, texRef, NULL);
-	GET_ARGS_VALUE_hipTexRefGetMipmapLevelBias(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMipmapLevelBias, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipConfigureCall, __hip_activity);
-	CALL_RET(hipError_t, hipConfigureCall, gridDim, blockDim, sharedMem, stream, NULL);
-	GET_ARGS_VALUE_hipConfigureCall(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipConfigureCall, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceGetPCIBusId(char * pciBusId, int len, int device, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetPCIBusId, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceGetPCIBusId, pciBusId, len, device, NULL);
-	GET_ARGS_VALUE_hipDeviceGetPCIBusId(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetPCIBusId, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemset2DAsync_spt(void * dst, size_t pitch, int value, size_t width, size_t height, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2DAsync_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemset2DAsync_spt, dst, pitch, value, width, height, stream, NULL);
-	GET_ARGS_VALUE_hipMemset2DAsync_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2DAsync_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefGetMipmapLevelClamp(float * pminMipmapLevelClamp, float * pmaxMipmapLevelClamp, const textureReference * texRef, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMipmapLevelClamp, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefGetMipmapLevelClamp, pminMipmapLevelClamp, pmaxMipmapLevelClamp, texRef, NULL);
-	GET_ARGS_VALUE_hipTexRefGetMipmapLevelClamp(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMipmapLevelClamp, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy3DAsync(const struct hipMemcpy3DParms * p, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3DAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy3DAsync, p, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpy3DAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3DAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyPeer(void * dst, int dstDeviceId, const void * src, int srcDeviceId, size_t sizeBytes, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyPeer, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyPeer, dst, dstDeviceId, src, srcDeviceId, sizeBytes, NULL);
-	GET_ARGS_VALUE_hipMemcpyPeer(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyPeer, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipHostFree(void * ptr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	GET_ARGS_VALUE_hipHostFree(__hip_activity);
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostFree, __hip_activity);
-	CALL_RET(hipError_t, hipHostFree, ptr, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostFree, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipSetValidDevices(int * device_arr, int len, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipSetValidDevices, __hip_activity);
-	CALL_RET(hipError_t, hipSetValidDevices, device_arr, len, NULL);
-	GET_ARGS_VALUE_hipSetValidDevices(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipSetValidDevices, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyAtoH(void * dst, hipArray_t srcArray, size_t srcOffset, size_t count, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoH, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyAtoH, dst, srcArray, srcOffset, count, NULL);
-	GET_ARGS_VALUE_hipMemcpyAtoH(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoH, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetTextureReference(const textureReference ** texref, const void * symbol, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureReference, __hip_activity);
-	CALL_RET(hipError_t, hipGetTextureReference, texref, symbol, NULL);
-	GET_ARGS_VALUE_hipGetTextureReference(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureReference, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDrvGetErrorName(hipError_t hipError, const char ** errorString, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGetErrorName, __hip_activity);
-	CALL_RET(hipError_t, hipDrvGetErrorName, hipError, errorString, NULL);
-	GET_ARGS_VALUE_hipDrvGetErrorName(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGetErrorName, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipEventElapsedTime(float * ms, hipEvent_t start, hipEvent_t stop, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventElapsedTime, __hip_activity);
-	CALL_RET(hipError_t, hipEventElapsedTime, ms, start, stop, NULL);
-	GET_ARGS_VALUE_hipEventElapsedTime(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventElapsedTime, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamSynchronize_spt(hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamSynchronize_spt, __hip_activity);
-	CALL_RET(hipError_t, hipStreamSynchronize_spt, stream, NULL);
-	GET_ARGS_VALUE_hipStreamSynchronize_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamSynchronize_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMipmappedArrayGetLevel(hipArray_t * pLevelArray, hipMipmappedArray_t hMipMappedArray, unsigned int level, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMipmappedArrayGetLevel, __hip_activity);
-	CALL_RET(hipError_t, hipMipmappedArrayGetLevel, pLevelArray, hMipMappedArray, level, NULL);
-	GET_ARGS_VALUE_hipMipmappedArrayGetLevel(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMipmappedArrayGetLevel, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipModuleUnload(hipModule_t module, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleUnload, __hip_activity);
-	CALL_RET(hipError_t, hipModuleUnload, module, NULL);
-	GET_ARGS_VALUE_hipModuleUnload(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleUnload, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphDestroy(hipGraph_t graph, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphDestroy, __hip_activity);
-	CALL_RET(hipError_t, hipGraphDestroy, graph, NULL);
-	GET_ARGS_VALUE_hipGraphDestroy(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphDestroy, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMallocArray(hipArray_t * array, const hipChannelFormatDesc * desc, size_t width, size_t height, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocArray, __hip_activity);
-	CALL_RET(hipError_t, hipMallocArray, array, desc, width, height, flags, NULL);
-	GET_ARGS_VALUE_hipMallocArray(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemPoolImportPointer(void ** dev_ptr, hipMemPool_t mem_pool, hipMemPoolPtrExportData * export_data, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolImportPointer, __hip_activity);
-	CALL_RET(hipError_t, hipMemPoolImportPointer, dev_ptr, mem_pool, export_data, NULL);
-	GET_ARGS_VALUE_hipMemPoolImportPointer(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolImportPointer, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyDtoD(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoD, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyDtoD, dst, src, sizeBytes, NULL);
-	GET_ARGS_VALUE_hipMemcpyDtoD(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoD, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphAddMemcpyNodeFromSymbol(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNodeFromSymbol, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddMemcpyNodeFromSymbol, pGraphNode, graph, pDependencies, numDependencies, dst, symbol, count, offset, kind, NULL);
-	GET_ARGS_VALUE_hipGraphAddMemcpyNodeFromSymbol(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNodeFromSymbol, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipOccupancyMaxPotentialBlockSize(int * gridSize, int * blockSize, const void * f, size_t dynSharedMemPerBlk, int blockSizeLimit, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipOccupancyMaxPotentialBlockSize, __hip_activity);
-	CALL_RET(hipError_t, hipOccupancyMaxPotentialBlockSize, gridSize, blockSize, f, dynSharedMemPerBlk, blockSizeLimit, NULL);
-	GET_ARGS_VALUE_hipOccupancyMaxPotentialBlockSize(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipOccupancyMaxPotentialBlockSize, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemsetD8(hipDeviceptr_t dest, unsigned char value, size_t count, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD8, __hip_activity);
-	CALL_RET(hipError_t, hipMemsetD8, dest, value, count, NULL);
-	GET_ARGS_VALUE_hipMemsetD8(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD8, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxEnablePeerAccess(hipCtx_t peerCtx, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxEnablePeerAccess, __hip_activity);
-	CALL_RET(hipError_t, hipCtxEnablePeerAccess, peerCtx, flags, NULL);
-	GET_ARGS_VALUE_hipCtxEnablePeerAccess(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxEnablePeerAccess, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphInstantiateWithFlags(hipGraphExec_t * pGraphExec, hipGraph_t graph, unsigned long long flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphInstantiateWithFlags, __hip_activity);
-	CALL_RET(hipError_t, hipGraphInstantiateWithFlags, pGraphExec, graph, flags, NULL);
-	GET_ARGS_VALUE_hipGraphInstantiateWithFlags(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphInstantiateWithFlags, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphAddMemAllocNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipMemAllocNodeParams * pNodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemAllocNode, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddMemAllocNode, pGraphNode, graph, pDependencies, numDependencies, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphAddMemAllocNode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemAllocNode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyParam2D(const hip_Memcpy2D * pCopy, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyParam2D, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyParam2D, pCopy, NULL);
-	GET_ARGS_VALUE_hipMemcpyParam2D(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyParam2D, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipBindTextureToMipmappedArray(const textureReference * tex, hipMipmappedArray_const_t mipmappedArray, const hipChannelFormatDesc * desc, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTextureToMipmappedArray, __hip_activity);
-	CALL_RET(hipError_t, hipBindTextureToMipmappedArray, tex, mipmappedArray, desc, NULL);
-	GET_ARGS_VALUE_hipBindTextureToMipmappedArray(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTextureToMipmappedArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphAddEmptyNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddEmptyNode, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddEmptyNode, pGraphNode, graph, pDependencies, numDependencies, NULL);
-	GET_ARGS_VALUE_hipGraphAddEmptyNode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddEmptyNode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy2DFromArrayAsync(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArrayAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy2DFromArrayAsync, dst, dpitch, src, wOffset, hOffset, width, height, kind, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpy2DFromArrayAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArrayAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(int * numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, __hip_activity);
-	CALL_RET(hipError_t, hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, numBlocks, f, blockSize, dynSharedMemPerBlk, flags, NULL);
-	GET_ARGS_VALUE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxSetCurrent(hipCtx_t ctx, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSetCurrent, __hip_activity);
-	CALL_RET(hipError_t, hipCtxSetCurrent, ctx, NULL);
-	GET_ARGS_VALUE_hipCtxSetCurrent(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSetCurrent, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphExecEventWaitNodeSetEvent(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, hipEvent_t event, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecEventWaitNodeSetEvent, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExecEventWaitNodeSetEvent, hGraphExec, hNode, event, NULL);
-	GET_ARGS_VALUE_hipGraphExecEventWaitNodeSetEvent(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecEventWaitNodeSetEvent, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemPoolSetAccess(hipMemPool_t mem_pool, const hipMemAccessDesc * desc_list, size_t count, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolSetAccess, __hip_activity);
-	CALL_RET(hipError_t, hipMemPoolSetAccess, mem_pool, desc_list, count, NULL);
-	GET_ARGS_VALUE_hipMemPoolSetAccess(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolSetAccess, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipFuncGetAttribute(int * value, hipFunction_attribute attrib, hipFunction_t hfunc, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncGetAttribute, __hip_activity);
-	CALL_RET(hipError_t, hipFuncGetAttribute, value, attrib, hfunc, NULL);
-	GET_ARGS_VALUE_hipFuncGetAttribute(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncGetAttribute, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefSetArray(textureReference * tex, hipArray_const_t array, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetArray, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefSetArray, tex, array, flags, NULL);
-	GET_ARGS_VALUE_hipTexRefSetArray(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemRetainAllocationHandle(hipMemGenericAllocationHandle_t * handle, void * addr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRetainAllocationHandle, __hip_activity);
-	CALL_RET(hipError_t, hipMemRetainAllocationHandle, handle, addr, NULL);
-	GET_ARGS_VALUE_hipMemRetainAllocationHandle(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRetainAllocationHandle, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipRuntimeGetVersion(int * runtimeVersion, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipRuntimeGetVersion, __hip_activity);
-	CALL_RET(hipError_t, hipRuntimeGetVersion, runtimeVersion, NULL);
-	GET_ARGS_VALUE_hipRuntimeGetVersion(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipRuntimeGetVersion, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphAddEventWaitNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipEvent_t event, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddEventWaitNode, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddEventWaitNode, pGraphNode, graph, pDependencies, numDependencies, event, NULL);
-	GET_ARGS_VALUE_hipGraphAddEventWaitNode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddEventWaitNode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipUnbindTexture(const textureReference * tex, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUnbindTexture, __hip_activity);
-	CALL_RET(hipError_t, hipUnbindTexture, tex, NULL);
-	GET_ARGS_VALUE_hipUnbindTexture(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUnbindTexture, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipPointerGetAttributes(hipPointerAttribute_t * attributes, const void * ptr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPointerGetAttributes, __hip_activity);
-	CALL_RET(hipError_t, hipPointerGetAttributes, attributes, ptr, NULL);
-	GET_ARGS_VALUE_hipPointerGetAttributes(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPointerGetAttributes, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceGraphMemTrim(int device, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGraphMemTrim, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceGraphMemTrim, device, NULL);
-	GET_ARGS_VALUE_hipDeviceGraphMemTrim(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGraphMemTrim, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphKernelNodeGetAttribute(hipGraphNode_t hNode, hipLaunchAttributeID attr, hipLaunchAttributeValue * value, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeGetAttribute, __hip_activity);
-	CALL_RET(hipError_t, hipGraphKernelNodeGetAttribute, hNode, attr, value, NULL);
-	GET_ARGS_VALUE_hipGraphKernelNodeGetAttribute(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeGetAttribute, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipFree(void * ptr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	GET_ARGS_VALUE_hipFree(__hip_activity);
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFree, __hip_activity);
-	CALL_RET(hipError_t, hipFree, ptr, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFree, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipHostUnregister(void * hostPtr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostUnregister, __hip_activity);
-	CALL_RET(hipError_t, hipHostUnregister, hostPtr, NULL);
-	GET_ARGS_VALUE_hipHostUnregister(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostUnregister, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipHostGetDevicePointer(void ** devPtr, void * hstPtr, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostGetDevicePointer, __hip_activity);
-	CALL_RET(hipError_t, hipHostGetDevicePointer, devPtr, hstPtr, flags, NULL);
-	GET_ARGS_VALUE_hipHostGetDevicePointer(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostGetDevicePointer, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamGetPriority_spt(hipStream_t stream, int * priority, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetPriority_spt, __hip_activity);
-	CALL_RET(hipError_t, hipStreamGetPriority_spt, stream, priority, NULL);
-	GET_ARGS_VALUE_hipStreamGetPriority_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetPriority_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphAddNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipGraphNodeParams * nodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddNode, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddNode, pGraphNode, graph, pDependencies, numDependencies, nodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphAddNode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddNode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphGetRootNodes(hipGraph_t graph, hipGraphNode_t * pRootNodes, size_t * pNumRootNodes, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphGetRootNodes, __hip_activity);
-	CALL_RET(hipError_t, hipGraphGetRootNodes, graph, pRootNodes, pNumRootNodes, NULL);
-	GET_ARGS_VALUE_hipGraphGetRootNodes(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphGetRootNodes, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipModuleGetGlobal(hipDeviceptr_t * dptr, size_t * bytes, hipModule_t hmod, const char * name, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleGetGlobal, __hip_activity);
-	CALL_RET(hipError_t, hipModuleGetGlobal, dptr, bytes, hmod, name, NULL);
-	GET_ARGS_VALUE_hipModuleGetGlobal(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleGetGlobal, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphicsUnmapResources(int count, hipGraphicsResource_t * resources, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsUnmapResources, __hip_activity);
-	CALL_RET(hipError_t, hipGraphicsUnmapResources, count, resources, stream, NULL);
-	GET_ARGS_VALUE_hipGraphicsUnmapResources(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsUnmapResources, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemsetAsync(void * dst, int value, size_t sizeBytes, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemsetAsync, dst, value, sizeBytes, stream, NULL);
-	GET_ARGS_VALUE_hipMemsetAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipExtStreamCreateWithCUMask(hipStream_t * stream, uint32_t cuMaskSize, const uint32_t * cuMask, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtStreamCreateWithCUMask, __hip_activity);
-	CALL_RET(hipError_t, hipExtStreamCreateWithCUMask, stream, cuMaskSize, cuMask, NULL);
-	GET_ARGS_VALUE_hipExtStreamCreateWithCUMask(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtStreamCreateWithCUMask, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipBindTexture(size_t * offset, const textureReference * tex, const void * devPtr, const hipChannelFormatDesc * desc, size_t size, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTexture, __hip_activity);
-	CALL_RET(hipError_t, hipBindTexture, offset, tex, devPtr, desc, size, NULL);
-	GET_ARGS_VALUE_hipBindTexture(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTexture, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipSetupArgument(const void * arg, size_t size, size_t offset, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipSetupArgument, __hip_activity);
-	CALL_RET(hipError_t, hipSetupArgument, arg, size, offset, NULL);
-	GET_ARGS_VALUE_hipSetupArgument(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipSetupArgument, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipFuncSetCacheConfig(const void * func, hipFuncCache_t config, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncSetCacheConfig, __hip_activity);
-	CALL_RET(hipError_t, hipFuncSetCacheConfig, func, config, NULL);
-	GET_ARGS_VALUE_hipFuncSetCacheConfig(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncSetCacheConfig, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDrvGetErrorString(hipError_t hipError, const char ** errorString, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGetErrorString, __hip_activity);
-	CALL_RET(hipError_t, hipDrvGetErrorString, hipError, errorString, NULL);
-	GET_ARGS_VALUE_hipDrvGetErrorString(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGetErrorString, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxSetCacheConfig(hipFuncCache_t cacheConfig, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSetCacheConfig, __hip_activity);
-	CALL_RET(hipError_t, hipCtxSetCacheConfig, cacheConfig, NULL);
-	GET_ARGS_VALUE_hipCtxSetCacheConfig(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSetCacheConfig, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemset3D_spt(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3D_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemset3D_spt, pitchedDevPtr, value, extent, NULL);
-	GET_ARGS_VALUE_hipMemset3D_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3D_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamGetCaptureInfo(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, unsigned long long * pId, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo, __hip_activity);
-	CALL_RET(hipError_t, hipStreamGetCaptureInfo, stream, pCaptureStatus, pId, NULL);
-	GET_ARGS_VALUE_hipStreamGetCaptureInfo(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemsetD16Async(hipDeviceptr_t dest, unsigned short value, size_t count, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD16Async, __hip_activity);
-	CALL_RET(hipError_t, hipMemsetD16Async, dest, value, count, stream, NULL);
-	GET_ARGS_VALUE_hipMemsetD16Async(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD16Async, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphInstantiateWithParams(hipGraphExec_t * pGraphExec, hipGraph_t graph, hipGraphInstantiateParams * instantiateParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphInstantiateWithParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphInstantiateWithParams, pGraphExec, graph, instantiateParams, NULL);
-	GET_ARGS_VALUE_hipGraphInstantiateWithParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphInstantiateWithParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipIpcGetMemHandle(hipIpcMemHandle_t * handle, void * devPtr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcGetMemHandle, __hip_activity);
-	CALL_RET(hipError_t, hipIpcGetMemHandle, handle, devPtr, NULL);
-	GET_ARGS_VALUE_hipIpcGetMemHandle(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcGetMemHandle, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphAddMemsetNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipMemsetParams * pMemsetParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemsetNode, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddMemsetNode, pGraphNode, graph, pDependencies, numDependencies, pMemsetParams, NULL);
-	GET_ARGS_VALUE_hipGraphAddMemsetNode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemsetNode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipEventCreateWithFlags(hipEvent_t * event, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventCreateWithFlags, __hip_activity);
-	CALL_RET(hipError_t, hipEventCreateWithFlags, event, flags, NULL);
-	GET_ARGS_VALUE_hipEventCreateWithFlags(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventCreateWithFlags, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipChooseDeviceR0600(int * device, const hipDeviceProp_tR0600 * prop, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipChooseDeviceR0600, __hip_activity);
-	CALL_RET(hipError_t, hipChooseDeviceR0600, device, prop, NULL);
-	GET_ARGS_VALUE_hipChooseDeviceR0600(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipChooseDeviceR0600, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamQuery(hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamQuery, __hip_activity);
-	CALL_RET(hipError_t, hipStreamQuery, stream, NULL);
-	GET_ARGS_VALUE_hipStreamQuery(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamQuery, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemRangeGetAttribute(void * data, size_t data_size, hipMemRangeAttribute attribute, const void * dev_ptr, size_t count, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRangeGetAttribute, __hip_activity);
-	CALL_RET(hipError_t, hipMemRangeGetAttribute, data, data_size, attribute, dev_ptr, count, NULL);
-	GET_ARGS_VALUE_hipMemRangeGetAttribute(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRangeGetAttribute, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCreateSurfaceObject(hipSurfaceObject_t * pSurfObject, const hipResourceDesc * pResDesc, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCreateSurfaceObject, __hip_activity);
-	CALL_RET(hipError_t, hipCreateSurfaceObject, pSurfObject, pResDesc, NULL);
-	GET_ARGS_VALUE_hipCreateSurfaceObject(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCreateSurfaceObject, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefSetMaxAnisotropy(textureReference * texRef, unsigned int maxAniso, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMaxAnisotropy, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefSetMaxAnisotropy, texRef, maxAniso, NULL);
-	GET_ARGS_VALUE_hipTexRefSetMaxAnisotropy(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMaxAnisotropy, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphEventWaitNodeSetEvent(hipGraphNode_t node, hipEvent_t event, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventWaitNodeSetEvent, __hip_activity);
-	CALL_RET(hipError_t, hipGraphEventWaitNodeSetEvent, node, event, NULL);
-	GET_ARGS_VALUE_hipGraphEventWaitNodeSetEvent(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventWaitNodeSetEvent, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipArrayCreate(hipArray_t * pHandle, const HIP_ARRAY_DESCRIPTOR * pAllocateArray, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayCreate, __hip_activity);
-	CALL_RET(hipError_t, hipArrayCreate, pHandle, pAllocateArray, NULL);
-	GET_ARGS_VALUE_hipArrayCreate(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayCreate, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphKernelNodeGetParams(hipGraphNode_t node, hipKernelNodeParams * pNodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeGetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphKernelNodeGetParams, node, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphKernelNodeGetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeGetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemUnmap(void * ptr, size_t size, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemUnmap, __hip_activity);
-	CALL_RET(hipError_t, hipMemUnmap, ptr, size, NULL);
-	GET_ARGS_VALUE_hipMemUnmap(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemUnmap, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyAsync_spt(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAsync_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyAsync_spt, dst, src, sizeBytes, kind, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpyAsync_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAsync_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceGetLimit(size_t * pValue, enum hipLimit_t limit, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetLimit, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceGetLimit, pValue, limit, NULL);
-	GET_ARGS_VALUE_hipDeviceGetLimit(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetLimit, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamAddCallback_spt(hipStream_t stream, hipStreamCallback_t callback, void * userData, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamAddCallback_spt, __hip_activity);
-	CALL_RET(hipError_t, hipStreamAddCallback_spt, stream, callback, userData, flags, NULL);
-	GET_ARGS_VALUE_hipStreamAddCallback_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamAddCallback_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefGetMipmapFilterMode(enum hipTextureFilterMode * pfm, const textureReference * texRef, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMipmapFilterMode, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefGetMipmapFilterMode, pfm, texRef, NULL);
-	GET_ARGS_VALUE_hipTexRefGetMipmapFilterMode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMipmapFilterMode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefSetMipmapLevelClamp(textureReference * texRef, float minMipMapLevelClamp, float maxMipMapLevelClamp, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmapLevelClamp, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefSetMipmapLevelClamp, texRef, minMipMapLevelClamp, maxMipMapLevelClamp, NULL);
-	GET_ARGS_VALUE_hipTexRefSetMipmapLevelClamp(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmapLevelClamp, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamGetFlags(hipStream_t stream, unsigned int * flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetFlags, __hip_activity);
-	CALL_RET(hipError_t, hipStreamGetFlags, stream, flags, NULL);
-	GET_ARGS_VALUE_hipStreamGetFlags(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetFlags, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyAtoHAsync(void * dstHost, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoHAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyAtoHAsync, dstHost, srcArray, srcOffset, ByteCount, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpyAtoHAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoHAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemsetD32Async(hipDeviceptr_t dst, int value, size_t count, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD32Async, __hip_activity);
-	CALL_RET(hipError_t, hipMemsetD32Async, dst, value, count, stream, NULL);
-	GET_ARGS_VALUE_hipMemsetD32Async(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD32Async, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphNodeFindInClone(hipGraphNode_t * pNode, hipGraphNode_t originalNode, hipGraph_t clonedGraph, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeFindInClone, __hip_activity);
-	CALL_RET(hipError_t, hipGraphNodeFindInClone, pNode, originalNode, clonedGraph, NULL);
-	GET_ARGS_VALUE_hipGraphNodeFindInClone(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeFindInClone, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphAddDependencies(hipGraph_t graph, const hipGraphNode_t * from, const hipGraphNode_t * to, size_t numDependencies, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddDependencies, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddDependencies, graph, from, to, numDependencies, NULL);
-	GET_ARGS_VALUE_hipGraphAddDependencies(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddDependencies, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphGetNodes(hipGraph_t graph, hipGraphNode_t * nodes, size_t * numNodes, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphGetNodes, __hip_activity);
-	CALL_RET(hipError_t, hipGraphGetNodes, graph, nodes, numNodes, NULL);
-	GET_ARGS_VALUE_hipGraphGetNodes(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphGetNodes, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphLaunch(hipGraphExec_t graphExec, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphLaunch, __hip_activity);
-	CALL_RET(hipError_t, hipGraphLaunch, graphExec, stream, NULL);
-	GET_ARGS_VALUE_hipGraphLaunch(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphLaunch, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemMap(void * ptr, size_t size, size_t offset, hipMemGenericAllocationHandle_t handle, unsigned long long flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemMap, __hip_activity);
-	CALL_RET(hipError_t, hipMemMap, ptr, size, offset, handle, flags, NULL);
-	GET_ARGS_VALUE_hipMemMap(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemMap, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphMemcpyNodeSetParamsToSymbol(hipGraphNode_t node, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParamsToSymbol, __hip_activity);
-	CALL_RET(hipError_t, hipGraphMemcpyNodeSetParamsToSymbol, node, symbol, src, count, offset, kind, NULL);
-	GET_ARGS_VALUE_hipGraphMemcpyNodeSetParamsToSymbol(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParamsToSymbol, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamAttachMemAsync(hipStream_t stream, void * dev_ptr, size_t length, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamAttachMemAsync, __hip_activity);
-	CALL_RET(hipError_t, hipStreamAttachMemAsync, stream, dev_ptr, length, flags, NULL);
-	GET_ARGS_VALUE_hipStreamAttachMemAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamAttachMemAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipPointerGetAttribute(void * data, hipPointer_attribute attribute, hipDeviceptr_t ptr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPointerGetAttribute, __hip_activity);
-	CALL_RET(hipError_t, hipPointerGetAttribute, data, attribute, ptr, NULL);
-	GET_ARGS_VALUE_hipPointerGetAttribute(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPointerGetAttribute, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemPrefetchAsync(const void * dev_ptr, size_t count, int device, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPrefetchAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemPrefetchAsync, dev_ptr, count, device, stream, NULL);
-	GET_ARGS_VALUE_hipMemPrefetchAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPrefetchAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyDtoA(hipArray_t dstArray, size_t dstOffset, hipDeviceptr_t srcDevice, size_t ByteCount, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoA, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyDtoA, dstArray, dstOffset, srcDevice, ByteCount, NULL);
-	GET_ARGS_VALUE_hipMemcpyDtoA(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoA, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy_spt(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy_spt, dst, src, sizeBytes, kind, NULL);
-	GET_ARGS_VALUE_hipMemcpy_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxPopCurrent(hipCtx_t * ctx, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxPopCurrent, __hip_activity);
-	CALL_RET(hipError_t, hipCtxPopCurrent, ctx, NULL);
-	GET_ARGS_VALUE_hipCtxPopCurrent(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxPopCurrent, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipPointerSetAttribute(const void * value, hipPointer_attribute attribute, hipDeviceptr_t ptr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPointerSetAttribute, __hip_activity);
-	CALL_RET(hipError_t, hipPointerSetAttribute, value, attribute, ptr, NULL);
-	GET_ARGS_VALUE_hipPointerSetAttribute(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPointerSetAttribute, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipLaunchByPtr(const void * func, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchByPtr, __hip_activity);
-	CALL_RET(hipError_t, hipLaunchByPtr, func, NULL);
-	GET_ARGS_VALUE_hipLaunchByPtr(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchByPtr, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceSynchronize(void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSynchronize, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceSynchronize, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSynchronize, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceGetCacheConfig(hipFuncCache_t * cacheConfig, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetCacheConfig, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceGetCacheConfig, cacheConfig, NULL);
-	GET_ARGS_VALUE_hipDeviceGetCacheConfig(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetCacheConfig, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy2DAsync_spt(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DAsync_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy2DAsync_spt, dst, dpitch, src, spitch, width, height, kind, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpy2DAsync_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DAsync_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDevicePrimaryCtxRelease(hipDevice_t dev, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxRelease, __hip_activity);
-	CALL_RET(hipError_t, hipDevicePrimaryCtxRelease, dev, NULL);
-	GET_ARGS_VALUE_hipDevicePrimaryCtxRelease(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxRelease, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemset3DAsync_spt(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3DAsync_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemset3DAsync_spt, pitchedDevPtr, value, extent, stream, NULL);
-	GET_ARGS_VALUE_hipMemset3DAsync_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3DAsync_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemsetD16(hipDeviceptr_t dest, unsigned short value, size_t count, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD16, __hip_activity);
-	CALL_RET(hipError_t, hipMemsetD16, dest, value, count, NULL);
-	GET_ARGS_VALUE_hipMemsetD16(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD16, __hip_activity);
-	return __hip_ret;
-};
-
-const char * i_hipGetErrorName(hipError_t hip_error, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetErrorName, __hip_activity);
-	CALL_RET(const char *, hipGetErrorName, hip_error, NULL);
-	GET_ARGS_VALUE_hipGetErrorName(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetErrorName, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyFromSymbol_spt(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromSymbol_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyFromSymbol_spt, dst, symbol, sizeBytes, offset, kind, NULL);
-	GET_ARGS_VALUE_hipMemcpyFromSymbol_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromSymbol_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceGetP2PAttribute(int * value, hipDeviceP2PAttr attr, int srcDevice, int dstDevice, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetP2PAttribute, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceGetP2PAttribute, value, attr, srcDevice, dstDevice, NULL);
-	GET_ARGS_VALUE_hipDeviceGetP2PAttribute(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetP2PAttribute, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyToSymbolAsync_spt(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbolAsync_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyToSymbolAsync_spt, symbol, src, sizeBytes, offset, kind, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpyToSymbolAsync_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbolAsync_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipModuleGetFunction(hipFunction_t * function, hipModule_t module, const char * kname, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleGetFunction, __hip_activity);
-	CALL_RET(hipError_t, hipModuleGetFunction, function, module, kname, NULL);
-	GET_ARGS_VALUE_hipModuleGetFunction(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleGetFunction, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemsetAsync_spt(void * dst, int value, size_t sizeBytes, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetAsync_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemsetAsync_spt, dst, value, sizeBytes, stream, NULL);
-	GET_ARGS_VALUE_hipMemsetAsync_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetAsync_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceSetLimit(enum hipLimit_t limit, size_t value, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetLimit, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceSetLimit, limit, value, NULL);
-	GET_ARGS_VALUE_hipDeviceSetLimit(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetLimit, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMallocManaged(void ** dev_ptr, size_t size, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocManaged, __hip_activity);
-	CALL_RET(hipError_t, hipMallocManaged, dev_ptr, size, flags, NULL);
-	GET_ARGS_VALUE_hipMallocManaged(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocManaged, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipEventQuery(hipEvent_t event, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventQuery, __hip_activity);
-	CALL_RET(hipError_t, hipEventQuery, event, NULL);
-	GET_ARGS_VALUE_hipEventQuery(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventQuery, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamDestroy(hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamDestroy, __hip_activity);
-	CALL_RET(hipError_t, hipStreamDestroy, stream, NULL);
-	GET_ARGS_VALUE_hipStreamDestroy(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamDestroy, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamGetPriority(hipStream_t stream, int * priority, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetPriority, __hip_activity);
-	CALL_RET(hipError_t, hipStreamGetPriority, stream, priority, NULL);
-	GET_ARGS_VALUE_hipStreamGetPriority(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetPriority, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefSetMipmapFilterMode(textureReference * texRef, enum hipTextureFilterMode fm, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmapFilterMode, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefSetMipmapFilterMode, texRef, fm, NULL);
-	GET_ARGS_VALUE_hipTexRefSetMipmapFilterMode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmapFilterMode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipEventSynchronize(hipEvent_t event, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventSynchronize, __hip_activity);
-	CALL_RET(hipError_t, hipEventSynchronize, event, NULL);
-	GET_ARGS_VALUE_hipEventSynchronize(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventSynchronize, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphNodeSetEnabled(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, unsigned int isEnabled, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeSetEnabled, __hip_activity);
-	CALL_RET(hipError_t, hipGraphNodeSetEnabled, hGraphExec, hNode, isEnabled, NULL);
-	GET_ARGS_VALUE_hipGraphNodeSetEnabled(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeSetEnabled, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipModuleOccupancyMaxPotentialBlockSize(int * gridSize, int * blockSize, hipFunction_t f, size_t dynSharedMemPerBlk, int blockSizeLimit, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSize, __hip_activity);
-	CALL_RET(hipError_t, hipModuleOccupancyMaxPotentialBlockSize, gridSize, blockSize, f, dynSharedMemPerBlk, blockSizeLimit, NULL);
-	GET_ARGS_VALUE_hipModuleOccupancyMaxPotentialBlockSize(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSize, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetMipmappedArrayLevel(hipArray_t * levelArray, hipMipmappedArray_const_t mipmappedArray, unsigned int level, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetMipmappedArrayLevel, __hip_activity);
-	CALL_RET(hipError_t, hipGetMipmappedArrayLevel, levelArray, mipmappedArray, level, NULL);
-	GET_ARGS_VALUE_hipGetMipmappedArrayLevel(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetMipmappedArrayLevel, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemMapArrayAsync(hipArrayMapInfo * mapInfoList, unsigned int count, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemMapArrayAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemMapArrayAsync, mapInfoList, count, stream, NULL);
-	GET_ARGS_VALUE_hipMemMapArrayAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemMapArrayAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDestroyTextureObject(hipTextureObject_t textureObject, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroyTextureObject, __hip_activity);
-	CALL_RET(hipError_t, hipDestroyTextureObject, textureObject, NULL);
-	GET_ARGS_VALUE_hipDestroyTextureObject(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroyTextureObject, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphicsMapResources(int count, hipGraphicsResource_t * resources, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsMapResources, __hip_activity);
-	CALL_RET(hipError_t, hipGraphicsMapResources, count, resources, stream, NULL);
-	GET_ARGS_VALUE_hipGraphicsMapResources(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsMapResources, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphAddChildGraphNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipGraph_t childGraph, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddChildGraphNode, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddChildGraphNode, pGraphNode, graph, pDependencies, numDependencies, childGraph, NULL);
-	GET_ARGS_VALUE_hipGraphAddChildGraphNode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddChildGraphNode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyToSymbolAsync(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbolAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyToSymbolAsync, symbol, src, sizeBytes, offset, kind, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpyToSymbolAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbolAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphEventRecordNodeSetEvent(hipGraphNode_t node, hipEvent_t event, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventRecordNodeSetEvent, __hip_activity);
-	CALL_RET(hipError_t, hipGraphEventRecordNodeSetEvent, node, event, NULL);
-	GET_ARGS_VALUE_hipGraphEventRecordNodeSetEvent(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventRecordNodeSetEvent, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy3DAsync_spt(const hipMemcpy3DParms * p, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3DAsync_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy3DAsync_spt, p, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpy3DAsync_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3DAsync_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphDebugDotPrint(hipGraph_t graph, const char * path, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphDebugDotPrint, __hip_activity);
-	CALL_RET(hipError_t, hipGraphDebugDotPrint, graph, path, flags, NULL);
-	GET_ARGS_VALUE_hipGraphDebugDotPrint(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphDebugDotPrint, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphReleaseUserObject(hipGraph_t graph, hipUserObject_t object, unsigned int count, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphReleaseUserObject, __hip_activity);
-	CALL_RET(hipError_t, hipGraphReleaseUserObject, graph, object, count, NULL);
-	GET_ARGS_VALUE_hipGraphReleaseUserObject(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphReleaseUserObject, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphNodeGetDependentNodes(hipGraphNode_t node, hipGraphNode_t * pDependentNodes, size_t * pNumDependentNodes, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetDependentNodes, __hip_activity);
-	CALL_RET(hipError_t, hipGraphNodeGetDependentNodes, node, pDependentNodes, pNumDependentNodes, NULL);
-	GET_ARGS_VALUE_hipGraphNodeGetDependentNodes(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetDependentNodes, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceGet(hipDevice_t * device, int ordinal, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGet, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceGet, device, ordinal, NULL);
-	GET_ARGS_VALUE_hipDeviceGet(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGet, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetTextureAlignmentOffset(size_t * offset, const textureReference * texref, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureAlignmentOffset, __hip_activity);
-	CALL_RET(hipError_t, hipGetTextureAlignmentOffset, offset, texref, NULL);
-	GET_ARGS_VALUE_hipGetTextureAlignmentOffset(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureAlignmentOffset, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemRelease(hipMemGenericAllocationHandle_t handle, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRelease, __hip_activity);
-	CALL_RET(hipError_t, hipMemRelease, handle, NULL);
-	GET_ARGS_VALUE_hipMemRelease(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRelease, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy2D_spt(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2D_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy2D_spt, dst, dpitch, src, spitch, width, height, kind, NULL);
-	GET_ARGS_VALUE_hipMemcpy2D_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2D_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipFreeArray(hipArray_t array, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	GET_ARGS_VALUE_hipFreeArray(__hip_activity);
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeArray, __hip_activity);
-	CALL_RET(hipError_t, hipFreeArray, array, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDrvMemcpy2DUnaligned(const hip_Memcpy2D * pCopy, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvMemcpy2DUnaligned, __hip_activity);
-	CALL_RET(hipError_t, hipDrvMemcpy2DUnaligned, pCopy, NULL);
-	GET_ARGS_VALUE_hipDrvMemcpy2DUnaligned(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvMemcpy2DUnaligned, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetTextureObjectResourceViewDesc(struct hipResourceViewDesc * pResViewDesc, hipTextureObject_t textureObject, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureObjectResourceViewDesc, __hip_activity);
-	CALL_RET(hipError_t, hipGetTextureObjectResourceViewDesc, pResViewDesc, textureObject, NULL);
-	GET_ARGS_VALUE_hipGetTextureObjectResourceViewDesc(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureObjectResourceViewDesc, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemExportToShareableHandle(void * shareableHandle, hipMemGenericAllocationHandle_t handle, hipMemAllocationHandleType handleType, unsigned long long flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemExportToShareableHandle, __hip_activity);
-	CALL_RET(hipError_t, hipMemExportToShareableHandle, shareableHandle, handle, handleType, flags, NULL);
-	GET_ARGS_VALUE_hipMemExportToShareableHandle(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemExportToShareableHandle, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexObjectDestroy(hipTextureObject_t texObject, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectDestroy, __hip_activity);
-	CALL_RET(hipError_t, hipTexObjectDestroy, texObject, NULL);
-	GET_ARGS_VALUE_hipTexObjectDestroy(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectDestroy, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemset(void * dst, int value, size_t sizeBytes, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset, __hip_activity);
-	CALL_RET(hipError_t, hipMemset, dst, value, sizeBytes, NULL);
-	GET_ARGS_VALUE_hipMemset(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceGetMemPool(hipMemPool_t * mem_pool, int device, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetMemPool, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceGetMemPool, mem_pool, device, NULL);
-	GET_ARGS_VALUE_hipDeviceGetMemPool(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetMemPool, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphExternalSemaphoresSignalNodeSetParams(hipGraphNode_t hNode, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresSignalNodeSetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExternalSemaphoresSignalNodeSetParams, hNode, nodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphExternalSemaphoresSignalNodeSetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresSignalNodeSetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemPoolCreate(hipMemPool_t * mem_pool, const hipMemPoolProps * pool_props, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolCreate, __hip_activity);
-	CALL_RET(hipError_t, hipMemPoolCreate, mem_pool, pool_props, NULL);
-	GET_ARGS_VALUE_hipMemPoolCreate(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolCreate, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamAddCallback(hipStream_t stream, hipStreamCallback_t callback, void * userData, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamAddCallback, __hip_activity);
-	CALL_RET(hipError_t, hipStreamAddCallback, stream, callback, userData, flags, NULL);
-	GET_ARGS_VALUE_hipStreamAddCallback(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamAddCallback, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefGetBorderColor(float * pBorderColor, const textureReference * texRef, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetBorderColor, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefGetBorderColor, pBorderColor, texRef, NULL);
-	GET_ARGS_VALUE_hipTexRefGetBorderColor(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetBorderColor, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemPoolGetAccess(hipMemAccessFlags * flags, hipMemPool_t mem_pool, hipMemLocation * location, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolGetAccess, __hip_activity);
-	CALL_RET(hipError_t, hipMemPoolGetAccess, flags, mem_pool, location, NULL);
-	GET_ARGS_VALUE_hipMemPoolGetAccess(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolGetAccess, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefSetAddressMode(textureReference * texRef, int dim, enum hipTextureAddressMode am, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetAddressMode, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefSetAddressMode, texRef, dim, am, NULL);
-	GET_ARGS_VALUE_hipTexRefSetAddressMode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetAddressMode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipProfilerStart(void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipProfilerStart, __hip_activity);
-	CALL_RET(hipError_t, hipProfilerStart, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipProfilerStart, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPtrGetInfo, __hip_activity);
+	CALL_RET(hipError_t, hipMemPtrGetInfo, ptr, size, NULL);
+	GET_ARGS_VALUE_hipMemPtrGetInfo(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPtrGetInfo, __hip_activity);
 	return __hip_ret;
 };
 
@@ -2655,1200 +43,63 @@ hipError_t i_hipGraphExecMemcpyNodeSetParams1D(hipGraphExec_t hGraphExec, hipGra
 	return __hip_ret;
 };
 
-hipError_t i_hipMalloc3D(hipPitchedPtr * pitchedDevPtr, hipExtent extent, void* return_address) {
+hipError_t i_hipCtxEnablePeerAccess(hipCtx_t peerCtx, unsigned int flags, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMalloc3D, __hip_activity);
-	CALL_RET(hipError_t, hipMalloc3D, pitchedDevPtr, extent, NULL);
-	GET_ARGS_VALUE_hipMalloc3D(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMalloc3D, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxEnablePeerAccess, __hip_activity);
+	CALL_RET(hipError_t, hipCtxEnablePeerAccess, peerCtx, flags, NULL);
+	GET_ARGS_VALUE_hipCtxEnablePeerAccess(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxEnablePeerAccess, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipStreamIsCapturing_spt(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, void* return_address) {
+hipError_t i_hipHostUnregister(void * hostPtr, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamIsCapturing_spt, __hip_activity);
-	CALL_RET(hipError_t, hipStreamIsCapturing_spt, stream, pCaptureStatus, NULL);
-	GET_ARGS_VALUE_hipStreamIsCapturing_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamIsCapturing_spt, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostUnregister, __hip_activity);
+	CALL_RET(hipError_t, hipHostUnregister, hostPtr, NULL);
+	GET_ARGS_VALUE_hipHostUnregister(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostUnregister, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipMemcpyToSymbol(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address) {
+hipError_t i_hipDevicePrimaryCtxGetState(hipDevice_t dev, unsigned int * flags, int * active, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbol, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyToSymbol, symbol, src, sizeBytes, offset, kind, NULL);
-	GET_ARGS_VALUE_hipMemcpyToSymbol(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbol, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxGetState, __hip_activity);
+	CALL_RET(hipError_t, hipDevicePrimaryCtxGetState, dev, flags, active, NULL);
+	GET_ARGS_VALUE_hipDevicePrimaryCtxGetState(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxGetState, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipPeekAtLastError(void* return_address) {
+hipError_t i_hipPointerGetAttribute(void * data, hipPointer_attribute attribute, hipDeviceptr_t ptr, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPeekAtLastError, __hip_activity);
-	CALL_RET(hipError_t, hipPeekAtLastError, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPeekAtLastError, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPointerGetAttribute, __hip_activity);
+	CALL_RET(hipError_t, hipPointerGetAttribute, data, attribute, ptr, NULL);
+	GET_ARGS_VALUE_hipPointerGetAttribute(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPointerGetAttribute, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipGraphMemcpyNodeGetParams(hipGraphNode_t node, hipMemcpy3DParms * pNodeParams, void* return_address) {
+hipError_t i_hipMemPoolGetAccess(hipMemAccessFlags * flags, hipMemPool_t mem_pool, hipMemLocation * location, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeGetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphMemcpyNodeGetParams, node, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphMemcpyNodeGetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeGetParams, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolGetAccess, __hip_activity);
+	CALL_RET(hipError_t, hipMemPoolGetAccess, flags, mem_pool, location, NULL);
+	GET_ARGS_VALUE_hipMemPoolGetAccess(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolGetAccess, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipGraphExecDestroy(hipGraphExec_t graphExec, void* return_address) {
+hipError_t i_hipMemsetD32(hipDeviceptr_t dest, int value, size_t count, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecDestroy, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExecDestroy, graphExec, NULL);
-	GET_ARGS_VALUE_hipGraphExecDestroy(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecDestroy, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceGetGraphMemAttribute(int device, hipGraphMemAttributeType attr, void * value, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetGraphMemAttribute, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceGetGraphMemAttribute, device, attr, value, NULL);
-	GET_ARGS_VALUE_hipDeviceGetGraphMemAttribute(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetGraphMemAttribute, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemset2D(void * dst, size_t pitch, int value, size_t width, size_t height, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2D, __hip_activity);
-	CALL_RET(hipError_t, hipMemset2D, dst, pitch, value, width, height, NULL);
-	GET_ARGS_VALUE_hipMemset2D(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2D, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipSetDeviceFlags(unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipSetDeviceFlags, __hip_activity);
-	CALL_RET(hipError_t, hipSetDeviceFlags, flags, NULL);
-	GET_ARGS_VALUE_hipSetDeviceFlags(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipSetDeviceFlags, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(int * numBlocks, const void * f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, __hip_activity);
-	CALL_RET(hipError_t, hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, numBlocks, f, blockSize, dynSharedMemPerBlk, flags, NULL);
-	GET_ARGS_VALUE_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetChannelDesc(hipChannelFormatDesc * desc, hipArray_const_t array, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetChannelDesc, __hip_activity);
-	CALL_RET(hipError_t, hipGetChannelDesc, desc, array, NULL);
-	GET_ARGS_VALUE_hipGetChannelDesc(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetChannelDesc, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipLaunchHostFunc_spt(hipStream_t stream, hipHostFn_t fn, void * userData, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchHostFunc_spt, __hip_activity);
-	CALL_RET(hipError_t, hipLaunchHostFunc_spt, stream, fn, userData, NULL);
-	GET_ARGS_VALUE_hipLaunchHostFunc_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchHostFunc_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy3D(const struct hipMemcpy3DParms * p, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3D, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy3D, p, NULL);
-	GET_ARGS_VALUE_hipMemcpy3D(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3D, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceComputeCapability(int * major, int * minor, hipDevice_t device, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceComputeCapability, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceComputeCapability, major, minor, device, NULL);
-	GET_ARGS_VALUE_hipDeviceComputeCapability(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceComputeCapability, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphicsSubResourceGetMappedArray(hipArray_t * array, hipGraphicsResource_t resource, unsigned int arrayIndex, unsigned int mipLevel, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsSubResourceGetMappedArray, __hip_activity);
-	CALL_RET(hipError_t, hipGraphicsSubResourceGetMappedArray, array, resource, arrayIndex, mipLevel, NULL);
-	GET_ARGS_VALUE_hipGraphicsSubResourceGetMappedArray(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsSubResourceGetMappedArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphAddMemcpyNodeToSymbol(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNodeToSymbol, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddMemcpyNodeToSymbol, pGraphNode, graph, pDependencies, numDependencies, symbol, src, count, offset, kind, NULL);
-	GET_ARGS_VALUE_hipGraphAddMemcpyNodeToSymbol(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNodeToSymbol, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyDtoDAsync(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoDAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyDtoDAsync, dst, src, sizeBytes, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpyDtoDAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoDAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamWaitValue32(hipStream_t stream, void * ptr, uint32_t value, unsigned int flags, uint32_t mask, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitValue32, __hip_activity);
-	CALL_RET(hipError_t, hipStreamWaitValue32, stream, ptr, value, flags, mask, NULL);
-	GET_ARGS_VALUE_hipStreamWaitValue32(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitValue32, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphInstantiate(hipGraphExec_t * pGraphExec, hipGraph_t graph, hipGraphNode_t * pErrorNode, char * pLogBuffer, size_t bufferSize, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphInstantiate, __hip_activity);
-	CALL_RET(hipError_t, hipGraphInstantiate, pGraphExec, graph, pErrorNode, pLogBuffer, bufferSize, NULL);
-	GET_ARGS_VALUE_hipGraphInstantiate(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphInstantiate, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemPoolDestroy(hipMemPool_t mem_pool, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolDestroy, __hip_activity);
-	CALL_RET(hipError_t, hipMemPoolDestroy, mem_pool, NULL);
-	GET_ARGS_VALUE_hipMemPoolDestroy(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolDestroy, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetDeviceCount(int * count, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDeviceCount, __hip_activity);
-	CALL_RET(hipError_t, hipGetDeviceCount, count, NULL);
-	GET_ARGS_VALUE_hipGetDeviceCount(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDeviceCount, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceGetSharedMemConfig(hipSharedMemConfig * pConfig, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetSharedMemConfig, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceGetSharedMemConfig, pConfig, NULL);
-	GET_ARGS_VALUE_hipDeviceGetSharedMemConfig(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetSharedMemConfig, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyDtoHAsync(void * dst, hipDeviceptr_t src, size_t sizeBytes, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoHAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyDtoHAsync, dst, src, sizeBytes, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpyDtoHAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoHAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexObjectGetTextureDesc(HIP_TEXTURE_DESC * pTexDesc, hipTextureObject_t texObject, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectGetTextureDesc, __hip_activity);
-	CALL_RET(hipError_t, hipTexObjectGetTextureDesc, pTexDesc, texObject, NULL);
-	GET_ARGS_VALUE_hipTexObjectGetTextureDesc(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectGetTextureDesc, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipModuleOccupancyMaxPotentialBlockSizeWithFlags(int * gridSize, int * blockSize, hipFunction_t f, size_t dynSharedMemPerBlk, int blockSizeLimit, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSizeWithFlags, __hip_activity);
-	CALL_RET(hipError_t, hipModuleOccupancyMaxPotentialBlockSizeWithFlags, gridSize, blockSize, f, dynSharedMemPerBlk, blockSizeLimit, flags, NULL);
-	GET_ARGS_VALUE_hipModuleOccupancyMaxPotentialBlockSizeWithFlags(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSizeWithFlags, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamIsCapturing(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamIsCapturing, __hip_activity);
-	CALL_RET(hipError_t, hipStreamIsCapturing, stream, pCaptureStatus, NULL);
-	GET_ARGS_VALUE_hipStreamIsCapturing(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamIsCapturing, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphRetainUserObject(hipGraph_t graph, hipUserObject_t object, unsigned int count, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphRetainUserObject, __hip_activity);
-	CALL_RET(hipError_t, hipGraphRetainUserObject, graph, object, count, flags, NULL);
-	GET_ARGS_VALUE_hipGraphRetainUserObject(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphRetainUserObject, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMallocFromPoolAsync(void ** dev_ptr, size_t size, hipMemPool_t mem_pool, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocFromPoolAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMallocFromPoolAsync, dev_ptr, size, mem_pool, stream, NULL);
-	GET_ARGS_VALUE_hipMallocFromPoolAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocFromPoolAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy2DAsync(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy2DAsync, dst, dpitch, src, spitch, width, height, kind, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpy2DAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamGetCaptureInfo_spt(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, unsigned long long * pId, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo_spt, __hip_activity);
-	CALL_RET(hipError_t, hipStreamGetCaptureInfo_spt, stream, pCaptureStatus, pId, NULL);
-	GET_ARGS_VALUE_hipStreamGetCaptureInfo_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyHtoA(hipArray_t dstArray, size_t dstOffset, const void * srcHost, size_t count, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoA, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyHtoA, dstArray, dstOffset, srcHost, count, NULL);
-	GET_ARGS_VALUE_hipMemcpyHtoA(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoA, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamBeginCapture_spt(hipStream_t stream, hipStreamCaptureMode mode, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamBeginCapture_spt, __hip_activity);
-	CALL_RET(hipError_t, hipStreamBeginCapture_spt, stream, mode, NULL);
-	GET_ARGS_VALUE_hipStreamBeginCapture_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamBeginCapture_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetDevicePropertiesR0600(hipDeviceProp_tR0600 * prop, int deviceId, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDevicePropertiesR0600, __hip_activity);
-	CALL_RET(hipError_t, hipGetDevicePropertiesR0600, prop, deviceId, NULL);
-	GET_ARGS_VALUE_hipGetDevicePropertiesR0600(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDevicePropertiesR0600, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxGetCurrent(hipCtx_t * ctx, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetCurrent, __hip_activity);
-	CALL_RET(hipError_t, hipCtxGetCurrent, ctx, NULL);
-	GET_ARGS_VALUE_hipCtxGetCurrent(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetCurrent, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDrvGraphAddMemcpyNode(hipGraphNode_t * phGraphNode, hipGraph_t hGraph, const hipGraphNode_t * dependencies, size_t numDependencies, const HIP_MEMCPY3D * copyParams, hipCtx_t ctx, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGraphAddMemcpyNode, __hip_activity);
-	CALL_RET(hipError_t, hipDrvGraphAddMemcpyNode, phGraphNode, hGraph, dependencies, numDependencies, copyParams, ctx, NULL);
-	GET_ARGS_VALUE_hipDrvGraphAddMemcpyNode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGraphAddMemcpyNode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy2D(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2D, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy2D, dst, dpitch, src, spitch, width, height, kind, NULL);
-	GET_ARGS_VALUE_hipMemcpy2D(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2D, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMipmappedArrayDestroy(hipMipmappedArray_t hMipmappedArray, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMipmappedArrayDestroy, __hip_activity);
-	CALL_RET(hipError_t, hipMipmappedArrayDestroy, hMipmappedArray, NULL);
-	GET_ARGS_VALUE_hipMipmappedArrayDestroy(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMipmappedArrayDestroy, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDrvMemcpy3DAsync(const HIP_MEMCPY3D * pCopy, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvMemcpy3DAsync, __hip_activity);
-	CALL_RET(hipError_t, hipDrvMemcpy3DAsync, pCopy, stream, NULL);
-	GET_ARGS_VALUE_hipDrvMemcpy3DAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvMemcpy3DAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxGetDevice(hipDevice_t * device, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetDevice, __hip_activity);
-	CALL_RET(hipError_t, hipCtxGetDevice, device, NULL);
-	GET_ARGS_VALUE_hipCtxGetDevice(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetDevice, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipThreadExchangeStreamCaptureMode(hipStreamCaptureMode * mode, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipThreadExchangeStreamCaptureMode, __hip_activity);
-	CALL_RET(hipError_t, hipThreadExchangeStreamCaptureMode, mode, NULL);
-	GET_ARGS_VALUE_hipThreadExchangeStreamCaptureMode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipThreadExchangeStreamCaptureMode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyFromArray(void * dst, hipArray_const_t srcArray, size_t wOffset, size_t hOffset, size_t count, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromArray, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyFromArray, dst, srcArray, wOffset, hOffset, count, kind, NULL);
-	GET_ARGS_VALUE_hipMemcpyFromArray(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefSetAddress2D(textureReference * texRef, const HIP_ARRAY_DESCRIPTOR * desc, hipDeviceptr_t dptr, size_t Pitch, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetAddress2D, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefSetAddress2D, texRef, desc, dptr, Pitch, NULL);
-	GET_ARGS_VALUE_hipTexRefSetAddress2D(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetAddress2D, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipExternalMemoryGetMappedBuffer(void ** devPtr, hipExternalMemory_t extMem, const hipExternalMemoryBufferDesc * bufferDesc, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExternalMemoryGetMappedBuffer, __hip_activity);
-	CALL_RET(hipError_t, hipExternalMemoryGetMappedBuffer, devPtr, extMem, bufferDesc, NULL);
-	GET_ARGS_VALUE_hipExternalMemoryGetMappedBuffer(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExternalMemoryGetMappedBuffer, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphChildGraphNodeGetGraph(hipGraphNode_t node, hipGraph_t * pGraph, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphChildGraphNodeGetGraph, __hip_activity);
-	CALL_RET(hipError_t, hipGraphChildGraphNodeGetGraph, node, pGraph, NULL);
-	GET_ARGS_VALUE_hipGraphChildGraphNodeGetGraph(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphChildGraphNodeGetGraph, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemGetAllocationPropertiesFromHandle(hipMemAllocationProp * prop, hipMemGenericAllocationHandle_t handle, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAllocationPropertiesFromHandle, __hip_activity);
-	CALL_RET(hipError_t, hipMemGetAllocationPropertiesFromHandle, prop, handle, NULL);
-	GET_ARGS_VALUE_hipMemGetAllocationPropertiesFromHandle(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAllocationPropertiesFromHandle, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceSetCacheConfig(hipFuncCache_t cacheConfig, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetCacheConfig, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceSetCacheConfig, cacheConfig, NULL);
-	GET_ARGS_VALUE_hipDeviceSetCacheConfig(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetCacheConfig, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexObjectCreate(hipTextureObject_t * pTexObject, const HIP_RESOURCE_DESC * pResDesc, const HIP_TEXTURE_DESC * pTexDesc, const HIP_RESOURCE_VIEW_DESC * pResViewDesc, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectCreate, __hip_activity);
-	CALL_RET(hipError_t, hipTexObjectCreate, pTexObject, pResDesc, pTexDesc, pResViewDesc, NULL);
-	GET_ARGS_VALUE_hipTexObjectCreate(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectCreate, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyAtoD(hipDeviceptr_t dstDevice, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoD, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyAtoD, dstDevice, srcArray, srcOffset, ByteCount, NULL);
-	GET_ARGS_VALUE_hipMemcpyAtoD(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoD, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphClone(hipGraph_t * pGraphClone, hipGraph_t originalGraph, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphClone, __hip_activity);
-	CALL_RET(hipError_t, hipGraphClone, pGraphClone, originalGraph, NULL);
-	GET_ARGS_VALUE_hipGraphClone(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphClone, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemPtrGetInfo(void * ptr, size_t * size, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPtrGetInfo, __hip_activity);
-	CALL_RET(hipError_t, hipMemPtrGetInfo, ptr, size, NULL);
-	GET_ARGS_VALUE_hipMemPtrGetInfo(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPtrGetInfo, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDriverGetVersion(int * driverVersion, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDriverGetVersion, __hip_activity);
-	CALL_RET(hipError_t, hipDriverGetVersion, driverVersion, NULL);
-	GET_ARGS_VALUE_hipDriverGetVersion(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDriverGetVersion, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamCreate(hipStream_t * stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamCreate, __hip_activity);
-	CALL_RET(hipError_t, hipStreamCreate, stream, NULL);
-	GET_ARGS_VALUE_hipStreamCreate(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamCreate, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDrvMemcpy3D(const HIP_MEMCPY3D * pCopy, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvMemcpy3D, __hip_activity);
-	CALL_RET(hipError_t, hipDrvMemcpy3D, pCopy, NULL);
-	GET_ARGS_VALUE_hipDrvMemcpy3D(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvMemcpy3D, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyHtoD(hipDeviceptr_t dst, void * src, size_t sizeBytes, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoD, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyHtoD, dst, src, sizeBytes, NULL);
-	GET_ARGS_VALUE_hipMemcpyHtoD(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoD, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemset3DAsync(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3DAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemset3DAsync, pitchedDevPtr, value, extent, stream, NULL);
-	GET_ARGS_VALUE_hipMemset3DAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3DAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphKernelNodeSetParams(hipGraphNode_t node, const hipKernelNodeParams * pNodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeSetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphKernelNodeSetParams, node, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphKernelNodeSetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeSetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipHostAlloc(void ** ptr, size_t size, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostAlloc, __hip_activity);
-	CALL_RET(hipError_t, hipHostAlloc, ptr, size, flags, NULL);
-	GET_ARGS_VALUE_hipHostAlloc(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostAlloc, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipHostRegister(void * hostPtr, size_t sizeBytes, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostRegister, __hip_activity);
-	CALL_RET(hipError_t, hipHostRegister, hostPtr, sizeBytes, flags, NULL);
-	GET_ARGS_VALUE_hipHostRegister(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostRegister, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphHostNodeSetParams(hipGraphNode_t node, const hipHostNodeParams * pNodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphHostNodeSetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphHostNodeSetParams, node, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphHostNodeSetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphHostNodeSetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyParam2DAsync(const hip_Memcpy2D * pCopy, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyParam2DAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyParam2DAsync, pCopy, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpyParam2DAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyParam2DAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipExternalMemoryGetMappedMipmappedArray(hipMipmappedArray_t * mipmap, hipExternalMemory_t extMem, const hipExternalMemoryMipmappedArrayDesc * mipmapDesc, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExternalMemoryGetMappedMipmappedArray, __hip_activity);
-	CALL_RET(hipError_t, hipExternalMemoryGetMappedMipmappedArray, mipmap, extMem, mipmapDesc, NULL);
-	GET_ARGS_VALUE_hipExternalMemoryGetMappedMipmappedArray(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExternalMemoryGetMappedMipmappedArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceGetAttribute(int * pi, hipDeviceAttribute_t attr, int deviceId, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetAttribute, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceGetAttribute, pi, attr, deviceId, NULL);
-	GET_ARGS_VALUE_hipDeviceGetAttribute(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetAttribute, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipIpcGetEventHandle(hipIpcEventHandle_t * handle, hipEvent_t event, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcGetEventHandle, __hip_activity);
-	CALL_RET(hipError_t, hipIpcGetEventHandle, handle, event, NULL);
-	GET_ARGS_VALUE_hipIpcGetEventHandle(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcGetEventHandle, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefGetArray(hipArray_t * pArray, const textureReference * texRef, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetArray, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefGetArray, pArray, texRef, NULL);
-	GET_ARGS_VALUE_hipTexRefGetArray(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipModuleLaunchKernel(hipFunction_t f, unsigned int gridDimX, unsigned int gridDimY, unsigned int gridDimZ, unsigned int blockDimX, unsigned int blockDimY, unsigned int blockDimZ, unsigned int sharedMemBytes, hipStream_t stream, void ** kernelParams, void ** extra, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLaunchKernel, __hip_activity);
-	CALL_RET(hipError_t, hipModuleLaunchKernel, f, gridDimX, gridDimY, gridDimZ, blockDimX, blockDimY, blockDimZ, sharedMemBytes, stream, kernelParams, extra, NULL);
-	GET_ARGS_VALUE_hipModuleLaunchKernel(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLaunchKernel, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphNodeGetType(hipGraphNode_t node, hipGraphNodeType * pType, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetType, __hip_activity);
-	CALL_RET(hipError_t, hipGraphNodeGetType, node, pType, NULL);
-	GET_ARGS_VALUE_hipGraphNodeGetType(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetType, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphExecEventRecordNodeSetEvent(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, hipEvent_t event, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecEventRecordNodeSetEvent, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExecEventRecordNodeSetEvent, hGraphExec, hNode, event, NULL);
-	GET_ARGS_VALUE_hipGraphExecEventRecordNodeSetEvent(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecEventRecordNodeSetEvent, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphAddExternalSemaphoresSignalNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddExternalSemaphoresSignalNode, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddExternalSemaphoresSignalNode, pGraphNode, graph, pDependencies, numDependencies, nodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphAddExternalSemaphoresSignalNode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddExternalSemaphoresSignalNode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemset2DAsync(void * dst, size_t pitch, int value, size_t width, size_t height, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2DAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemset2DAsync, dst, pitch, value, width, height, stream, NULL);
-	GET_ARGS_VALUE_hipMemset2DAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2DAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyWithStream(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyWithStream, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyWithStream, dst, src, sizeBytes, kind, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpyWithStream(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyWithStream, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipBindTextureToArray(const textureReference * tex, hipArray_const_t array, const hipChannelFormatDesc * desc, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTextureToArray, __hip_activity);
-	CALL_RET(hipError_t, hipBindTextureToArray, tex, array, desc, NULL);
-	GET_ARGS_VALUE_hipBindTextureToArray(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTextureToArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamBeginCaptureToGraph(hipStream_t stream, hipGraph_t graph, const hipGraphNode_t * dependencies, const hipGraphEdgeData * dependencyData, size_t numDependencies, hipStreamCaptureMode mode, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamBeginCaptureToGraph, __hip_activity);
-	CALL_RET(hipError_t, hipStreamBeginCaptureToGraph, stream, graph, dependencies, dependencyData, numDependencies, mode, NULL);
-	GET_ARGS_VALUE_hipStreamBeginCaptureToGraph(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamBeginCaptureToGraph, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphGetEdges(hipGraph_t graph, hipGraphNode_t * from, hipGraphNode_t * to, size_t * numEdges, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphGetEdges, __hip_activity);
-	CALL_RET(hipError_t, hipGraphGetEdges, graph, from, to, numEdges, NULL);
-	GET_ARGS_VALUE_hipGraphGetEdges(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphGetEdges, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamWriteValue64(hipStream_t stream, void * ptr, uint64_t value, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWriteValue64, __hip_activity);
-	CALL_RET(hipError_t, hipStreamWriteValue64, stream, ptr, value, flags, NULL);
-	GET_ARGS_VALUE_hipStreamWriteValue64(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWriteValue64, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphicsResourceGetMappedPointer(void ** devPtr, size_t * size, hipGraphicsResource_t resource, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsResourceGetMappedPointer, __hip_activity);
-	CALL_RET(hipError_t, hipGraphicsResourceGetMappedPointer, devPtr, size, resource, NULL);
-	GET_ARGS_VALUE_hipGraphicsResourceGetMappedPointer(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsResourceGetMappedPointer, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceCanAccessPeer(int * canAccessPeer, int deviceId, int peerDeviceId, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceCanAccessPeer, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceCanAccessPeer, canAccessPeer, deviceId, peerDeviceId, NULL);
-	GET_ARGS_VALUE_hipDeviceCanAccessPeer(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceCanAccessPeer, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphMemcpyNodeSetParams(hipGraphNode_t node, const hipMemcpy3DParms * pNodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphMemcpyNodeSetParams, node, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphMemcpyNodeSetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyHtoDAsync(hipDeviceptr_t dst, void * src, size_t sizeBytes, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoDAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyHtoDAsync, dst, src, sizeBytes, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpyHtoDAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoDAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetLastError(void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetLastError, __hip_activity);
-	CALL_RET(hipError_t, hipGetLastError, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetLastError, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor(int * numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor, __hip_activity);
-	CALL_RET(hipError_t, hipModuleOccupancyMaxActiveBlocksPerMultiprocessor, numBlocks, f, blockSize, dynSharedMemPerBlk, NULL);
-	GET_ARGS_VALUE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphicsUnregisterResource(hipGraphicsResource_t resource, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsUnregisterResource, __hip_activity);
-	CALL_RET(hipError_t, hipGraphicsUnregisterResource, resource, NULL);
-	GET_ARGS_VALUE_hipGraphicsUnregisterResource(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsUnregisterResource, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphAddExternalSemaphoresWaitNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddExternalSemaphoresWaitNode, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddExternalSemaphoresWaitNode, pGraphNode, graph, pDependencies, numDependencies, nodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphAddExternalSemaphoresWaitNode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddExternalSemaphoresWaitNode, __hip_activity);
-	return __hip_ret;
-};
-
-void i___hipGetPCH(const char ** pch, unsigned int * size, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID___hipGetPCH, __hip_activity);
-	CALL(__hipGetPCH, pch, size, NULL)
-	GET_ARGS_VALUE___hipGetPCH(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID___hipGetPCH, __hip_activity);
-	return;
-};
-
-hipError_t i_hipEventCreate(hipEvent_t * event, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventCreate, __hip_activity);
-	CALL_RET(hipError_t, hipEventCreate, event, NULL);
-	GET_ARGS_VALUE_hipEventCreate(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventCreate, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamCreateWithPriority(hipStream_t * stream, unsigned int flags, int priority, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamCreateWithPriority, __hip_activity);
-	CALL_RET(hipError_t, hipStreamCreateWithPriority, stream, flags, priority, NULL);
-	GET_ARGS_VALUE_hipStreamCreateWithPriority(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamCreateWithPriority, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipModuleLaunchCooperativeKernel(hipFunction_t f, unsigned int gridDimX, unsigned int gridDimY, unsigned int gridDimZ, unsigned int blockDimX, unsigned int blockDimY, unsigned int blockDimZ, unsigned int sharedMemBytes, hipStream_t stream, void ** kernelParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLaunchCooperativeKernel, __hip_activity);
-	CALL_RET(hipError_t, hipModuleLaunchCooperativeKernel, f, gridDimX, gridDimY, gridDimZ, blockDimX, blockDimY, blockDimZ, sharedMemBytes, stream, kernelParams, NULL);
-	GET_ARGS_VALUE_hipModuleLaunchCooperativeKernel(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLaunchCooperativeKernel, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphMemAllocNodeGetParams(hipGraphNode_t node, hipMemAllocNodeParams * pNodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemAllocNodeGetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphMemAllocNodeGetParams, node, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphMemAllocNodeGetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemAllocNodeGetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemAddressFree(void * devPtr, size_t size, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	GET_ARGS_VALUE_hipMemAddressFree(__hip_activity);
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAddressFree, __hip_activity);
-	CALL_RET(hipError_t, hipMemAddressFree, devPtr, size, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAddressFree, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxCreate(hipCtx_t * ctx, unsigned int flags, hipDevice_t device, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxCreate, __hip_activity);
-	CALL_RET(hipError_t, hipCtxCreate, ctx, flags, device, NULL);
-	GET_ARGS_VALUE_hipCtxCreate(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxCreate, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxGetCacheConfig(hipFuncCache_t * cacheConfig, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetCacheConfig, __hip_activity);
-	CALL_RET(hipError_t, hipCtxGetCacheConfig, cacheConfig, NULL);
-	GET_ARGS_VALUE_hipCtxGetCacheConfig(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetCacheConfig, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamSynchronize(hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamSynchronize, __hip_activity);
-	CALL_RET(hipError_t, hipStreamSynchronize, stream, NULL);
-	GET_ARGS_VALUE_hipStreamSynchronize(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamSynchronize, __hip_activity);
-	return __hip_ret;
-};
-
-const char * i_amd_dbgapi_get_build_name(void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_amd_dbgapi_get_build_name, __hip_activity);
-	CALL_RET(const char *, amd_dbgapi_get_build_name, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_amd_dbgapi_get_build_name, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipArray3DGetDescriptor(HIP_ARRAY3D_DESCRIPTOR * pArrayDescriptor, hipArray_t array, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArray3DGetDescriptor, __hip_activity);
-	CALL_RET(hipError_t, hipArray3DGetDescriptor, pArrayDescriptor, array, NULL);
-	GET_ARGS_VALUE_hipArray3DGetDescriptor(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArray3DGetDescriptor, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefGetFilterMode(enum hipTextureFilterMode * pfm, const textureReference * texRef, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetFilterMode, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefGetFilterMode, pfm, texRef, NULL);
-	GET_ARGS_VALUE_hipTexRefGetFilterMode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetFilterMode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMalloc3DArray(hipArray_t * array, const struct hipChannelFormatDesc * desc, struct hipExtent extent, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMalloc3DArray, __hip_activity);
-	CALL_RET(hipError_t, hipMalloc3DArray, array, desc, extent, flags, NULL);
-	GET_ARGS_VALUE_hipMalloc3DArray(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMalloc3DArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphExecUpdate(hipGraphExec_t hGraphExec, hipGraph_t hGraph, hipGraphNode_t * hErrorNode_out, hipGraphExecUpdateResult * updateResult_out, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecUpdate, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExecUpdate, hGraphExec, hGraph, hErrorNode_out, updateResult_out, NULL);
-	GET_ARGS_VALUE_hipGraphExecUpdate(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecUpdate, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipEventRecord(hipEvent_t event, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventRecord, __hip_activity);
-	CALL_RET(hipError_t, hipEventRecord, event, stream, NULL);
-	GET_ARGS_VALUE_hipEventRecord(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventRecord, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy2DFromArray(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArray, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy2DFromArray, dst, dpitch, src, wOffset, hOffset, width, height, kind, NULL);
-	GET_ARGS_VALUE_hipMemcpy2DFromArray(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArray, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphUpload(hipGraphExec_t graphExec, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphUpload, __hip_activity);
-	CALL_RET(hipError_t, hipGraphUpload, graphExec, stream, NULL);
-	GET_ARGS_VALUE_hipGraphUpload(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphUpload, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefSetFilterMode(textureReference * texRef, enum hipTextureFilterMode fm, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetFilterMode, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefSetFilterMode, texRef, fm, NULL);
-	GET_ARGS_VALUE_hipTexRefSetFilterMode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetFilterMode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefGetAddressMode(enum hipTextureAddressMode * pam, const textureReference * texRef, int dim, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetAddressMode, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefGetAddressMode, pam, texRef, dim, NULL);
-	GET_ARGS_VALUE_hipTexRefGetAddressMode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetAddressMode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceGetStreamPriorityRange(int * leastPriority, int * greatestPriority, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetStreamPriorityRange, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceGetStreamPriorityRange, leastPriority, greatestPriority, NULL);
-	GET_ARGS_VALUE_hipDeviceGetStreamPriorityRange(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetStreamPriorityRange, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipModuleLoadData(hipModule_t * module, const void * image, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLoadData, __hip_activity);
-	CALL_RET(hipError_t, hipModuleLoadData, module, image, NULL);
-	GET_ARGS_VALUE_hipModuleLoadData(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLoadData, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamWaitValue64(hipStream_t stream, void * ptr, uint64_t value, unsigned int flags, uint64_t mask, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitValue64, __hip_activity);
-	CALL_RET(hipError_t, hipStreamWaitValue64, stream, ptr, value, flags, mask, NULL);
-	GET_ARGS_VALUE_hipStreamWaitValue64(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitValue64, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMallocPitch(void ** ptr, size_t * pitch, size_t width, size_t height, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocPitch, __hip_activity);
-	CALL_RET(hipError_t, hipMallocPitch, ptr, pitch, width, height, NULL);
-	GET_ARGS_VALUE_hipMallocPitch(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocPitch, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceTotalMem(size_t * bytes, hipDevice_t device, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceTotalMem, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceTotalMem, bytes, device, NULL);
-	GET_ARGS_VALUE_hipDeviceTotalMem(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceTotalMem, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemPoolTrimTo(hipMemPool_t mem_pool, size_t min_bytes_to_hold, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolTrimTo, __hip_activity);
-	CALL_RET(hipError_t, hipMemPoolTrimTo, mem_pool, min_bytes_to_hold, NULL);
-	GET_ARGS_VALUE_hipMemPoolTrimTo(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolTrimTo, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceGetUuid(hipUUID * uuid, hipDevice_t device, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetUuid, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceGetUuid, uuid, device, NULL);
-	GET_ARGS_VALUE_hipDeviceGetUuid(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetUuid, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDevicePrimaryCtxReset(hipDevice_t dev, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxReset, __hip_activity);
-	CALL_RET(hipError_t, hipDevicePrimaryCtxReset, dev, NULL);
-	GET_ARGS_VALUE_hipDevicePrimaryCtxReset(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxReset, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphExecExternalSemaphoresSignalNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecExternalSemaphoresSignalNodeSetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExecExternalSemaphoresSignalNodeSetParams, hGraphExec, hNode, nodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphExecExternalSemaphoresSignalNodeSetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecExternalSemaphoresSignalNodeSetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipExtLaunchMultiKernelMultiDevice(hipLaunchParams * launchParamsList, int numDevices, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtLaunchMultiKernelMultiDevice, __hip_activity);
-	CALL_RET(hipError_t, hipExtLaunchMultiKernelMultiDevice, launchParamsList, numDevices, flags, NULL);
-	GET_ARGS_VALUE_hipExtLaunchMultiKernelMultiDevice(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtLaunchMultiKernelMultiDevice, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemsetD8Async(hipDeviceptr_t dest, unsigned char value, size_t count, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD8Async, __hip_activity);
-	CALL_RET(hipError_t, hipMemsetD8Async, dest, value, count, stream, NULL);
-	GET_ARGS_VALUE_hipMemsetD8Async(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD8Async, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDrvGraphAddMemsetNode(hipGraphNode_t * phGraphNode, hipGraph_t hGraph, const hipGraphNode_t * dependencies, size_t numDependencies, const HIP_MEMSET_NODE_PARAMS * memsetParams, hipCtx_t ctx, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGraphAddMemsetNode, __hip_activity);
-	CALL_RET(hipError_t, hipDrvGraphAddMemsetNode, phGraphNode, hGraph, dependencies, numDependencies, memsetParams, ctx, NULL);
-	GET_ARGS_VALUE_hipDrvGraphAddMemsetNode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGraphAddMemsetNode, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphMemcpyNodeSetParamsFromSymbol(hipGraphNode_t node, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParamsFromSymbol, __hip_activity);
-	CALL_RET(hipError_t, hipGraphMemcpyNodeSetParamsFromSymbol, node, dst, symbol, count, offset, kind, NULL);
-	GET_ARGS_VALUE_hipGraphMemcpyNodeSetParamsFromSymbol(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParamsFromSymbol, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetTextureObjectTextureDesc(hipTextureDesc * pTexDesc, hipTextureObject_t textureObject, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureObjectTextureDesc, __hip_activity);
-	CALL_RET(hipError_t, hipGetTextureObjectTextureDesc, pTexDesc, textureObject, NULL);
-	GET_ARGS_VALUE_hipGetTextureObjectTextureDesc(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureObjectTextureDesc, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMalloc(void ** ptr, size_t size, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMalloc, __hip_activity);
-	CALL_RET(hipError_t, hipMalloc, ptr, size, NULL);
-	GET_ARGS_VALUE_hipMalloc(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMalloc, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceSetGraphMemAttribute(int device, hipGraphMemAttributeType attr, void * value, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetGraphMemAttribute, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceSetGraphMemAttribute, device, attr, value, NULL);
-	GET_ARGS_VALUE_hipDeviceSetGraphMemAttribute(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetGraphMemAttribute, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphExternalSemaphoresWaitNodeGetParams(hipGraphNode_t hNode, hipExternalSemaphoreWaitNodeParams * params_out, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresWaitNodeGetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExternalSemaphoresWaitNodeGetParams, hNode, params_out, NULL);
-	GET_ARGS_VALUE_hipGraphExternalSemaphoresWaitNodeGetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresWaitNodeGetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy2DToArray_spt(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArray_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy2DToArray_spt, dst, wOffset, hOffset, src, spitch, width, height, kind, NULL);
-	GET_ARGS_VALUE_hipMemcpy2DToArray_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArray_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipArrayGetDescriptor(HIP_ARRAY_DESCRIPTOR * pArrayDescriptor, hipArray_t array, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayGetDescriptor, __hip_activity);
-	CALL_RET(hipError_t, hipArrayGetDescriptor, pArrayDescriptor, array, NULL);
-	GET_ARGS_VALUE_hipArrayGetDescriptor(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayGetDescriptor, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD32, __hip_activity);
+	CALL_RET(hipError_t, hipMemsetD32, dest, value, count, NULL);
+	GET_ARGS_VALUE_hipMemsetD32(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD32, __hip_activity);
 	return __hip_ret;
 };
 
@@ -3862,173 +113,153 @@ hipError_t i_hipTexRefGetMipMappedArray(hipMipmappedArray_t * pArray, const text
 	return __hip_ret;
 };
 
-hipError_t i_hipMemRangeGetAttributes(void ** data, size_t * data_sizes, hipMemRangeAttribute * attributes, size_t num_attributes, const void * dev_ptr, size_t count, void* return_address) {
+hipError_t i_hipMalloc3D(hipPitchedPtr * pitchedDevPtr, hipExtent extent, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRangeGetAttributes, __hip_activity);
-	CALL_RET(hipError_t, hipMemRangeGetAttributes, data, data_sizes, attributes, num_attributes, dev_ptr, count, NULL);
-	GET_ARGS_VALUE_hipMemRangeGetAttributes(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRangeGetAttributes, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMalloc3D, __hip_activity);
+	CALL_RET(hipError_t, hipMalloc3D, pitchedDevPtr, extent, NULL);
+	GET_ARGS_VALUE_hipMalloc3D(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMalloc3D, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipArrayGetInfo(hipChannelFormatDesc * desc, hipExtent * extent, unsigned int * flags, hipArray_t array, void* return_address) {
+hipError_t i_hipMemsetD8(hipDeviceptr_t dest, unsigned char value, size_t count, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayGetInfo, __hip_activity);
-	CALL_RET(hipError_t, hipArrayGetInfo, desc, extent, flags, array, NULL);
-	GET_ARGS_VALUE_hipArrayGetInfo(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayGetInfo, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD8, __hip_activity);
+	CALL_RET(hipError_t, hipMemsetD8, dest, value, count, NULL);
+	GET_ARGS_VALUE_hipMemsetD8(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD8, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipMemAdvise(const void * dev_ptr, size_t count, hipMemoryAdvise advice, int device, void* return_address) {
+hipError_t i_hipMallocArray(hipArray_t * array, const hipChannelFormatDesc * desc, size_t width, size_t height, unsigned int flags, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAdvise, __hip_activity);
-	CALL_RET(hipError_t, hipMemAdvise, dev_ptr, count, advice, device, NULL);
-	GET_ARGS_VALUE_hipMemAdvise(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAdvise, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocArray, __hip_activity);
+	CALL_RET(hipError_t, hipMallocArray, array, desc, width, height, flags, NULL);
+	GET_ARGS_VALUE_hipMallocArray(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocArray, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipTexRefSetBorderColor(textureReference * texRef, float * pBorderColor, void* return_address) {
+hipError_t i_hipGraphEventWaitNodeGetEvent(hipGraphNode_t node, hipEvent_t * event_out, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetBorderColor, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefSetBorderColor, texRef, pBorderColor, NULL);
-	GET_ARGS_VALUE_hipTexRefSetBorderColor(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetBorderColor, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventWaitNodeGetEvent, __hip_activity);
+	CALL_RET(hipError_t, hipGraphEventWaitNodeGetEvent, node, event_out, NULL);
+	GET_ARGS_VALUE_hipGraphEventWaitNodeGetEvent(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventWaitNodeGetEvent, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipExtMallocWithFlags(void ** ptr, size_t sizeBytes, unsigned int flags, void* return_address) {
+hipError_t i_hipDrvMemcpy3D(const HIP_MEMCPY3D * pCopy, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtMallocWithFlags, __hip_activity);
-	CALL_RET(hipError_t, hipExtMallocWithFlags, ptr, sizeBytes, flags, NULL);
-	GET_ARGS_VALUE_hipExtMallocWithFlags(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtMallocWithFlags, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvMemcpy3D, __hip_activity);
+	CALL_RET(hipError_t, hipDrvMemcpy3D, pCopy, NULL);
+	GET_ARGS_VALUE_hipDrvMemcpy3D(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvMemcpy3D, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipMemAllocHost(void ** ptr, size_t size, void* return_address) {
+hipError_t i_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(int * numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAllocHost, __hip_activity);
-	CALL_RET(hipError_t, hipMemAllocHost, ptr, size, NULL);
-	GET_ARGS_VALUE_hipMemAllocHost(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAllocHost, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, __hip_activity);
+	CALL_RET(hipError_t, hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, numBlocks, f, blockSize, dynSharedMemPerBlk, flags, NULL);
+	GET_ARGS_VALUE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipGraphAddHostNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipHostNodeParams * pNodeParams, void* return_address) {
+hipError_t i_hipHostMalloc(void ** ptr, size_t size, unsigned int flags, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddHostNode, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddHostNode, pGraphNode, graph, pDependencies, numDependencies, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphAddHostNode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddHostNode, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostMalloc, __hip_activity);
+	CALL_RET(hipError_t, hipHostMalloc, ptr, size, flags, NULL);
+	GET_ARGS_VALUE_hipHostMalloc(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostMalloc, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipGraphExecMemcpyNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, hipMemcpy3DParms * pNodeParams, void* return_address) {
+hipError_t i_hipModuleGetTexRef(textureReference ** texRef, hipModule_t hmod, const char * name, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemcpyNodeSetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExecMemcpyNodeSetParams, hGraphExec, node, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphExecMemcpyNodeSetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemcpyNodeSetParams, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleGetTexRef, __hip_activity);
+	CALL_RET(hipError_t, hipModuleGetTexRef, texRef, hmod, name, NULL);
+	GET_ARGS_VALUE_hipModuleGetTexRef(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleGetTexRef, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipFuncGetAttributes(struct hipFuncAttributes * attr, const void * func, void* return_address) {
+hipError_t i_hipIpcGetMemHandle(hipIpcMemHandle_t * handle, void * devPtr, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncGetAttributes, __hip_activity);
-	CALL_RET(hipError_t, hipFuncGetAttributes, attr, func, NULL);
-	GET_ARGS_VALUE_hipFuncGetAttributes(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncGetAttributes, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcGetMemHandle, __hip_activity);
+	CALL_RET(hipError_t, hipIpcGetMemHandle, handle, devPtr, NULL);
+	GET_ARGS_VALUE_hipIpcGetMemHandle(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcGetMemHandle, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipMemset3D(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, void* return_address) {
+hipError_t i_hipMemcpyDtoHAsync(void * dst, hipDeviceptr_t src, size_t sizeBytes, hipStream_t stream, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3D, __hip_activity);
-	CALL_RET(hipError_t, hipMemset3D, pitchedDevPtr, value, extent, NULL);
-	GET_ARGS_VALUE_hipMemset3D(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3D, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoHAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyDtoHAsync, dst, src, sizeBytes, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpyDtoHAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoHAsync, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipTexRefGetMaxAnisotropy(int * pmaxAnsio, const textureReference * texRef, void* return_address) {
+hipError_t i_hipModuleLoad(hipModule_t * module, const char * fname, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMaxAnisotropy, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefGetMaxAnisotropy, pmaxAnsio, texRef, NULL);
-	GET_ARGS_VALUE_hipTexRefGetMaxAnisotropy(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMaxAnisotropy, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLoad, __hip_activity);
+	CALL_RET(hipError_t, hipModuleLoad, module, fname, NULL);
+	GET_ARGS_VALUE_hipModuleLoad(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLoad, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipGraphAddMemFreeNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dev_ptr, void* return_address) {
+hipError_t i_hipWaitExternalSemaphoresAsync(const hipExternalSemaphore_t * extSemArray, const hipExternalSemaphoreWaitParams * paramsArray, unsigned int numExtSems, hipStream_t stream, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	GET_ARGS_VALUE_hipGraphAddMemFreeNode(__hip_activity);
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemFreeNode, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddMemFreeNode, pGraphNode, graph, pDependencies, numDependencies, dev_ptr, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemFreeNode, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipWaitExternalSemaphoresAsync, __hip_activity);
+	CALL_RET(hipError_t, hipWaitExternalSemaphoresAsync, extSemArray, paramsArray, numExtSems, stream, NULL);
+	GET_ARGS_VALUE_hipWaitExternalSemaphoresAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipWaitExternalSemaphoresAsync, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipMemcpyFromArray_spt(void * dst, hipArray_const_t src, size_t wOffsetSrc, size_t hOffset, size_t count, hipMemcpyKind kind, void* return_address) {
+hipError_t i_hipGraphKernelNodeGetParams(hipGraphNode_t node, hipKernelNodeParams * pNodeParams, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromArray_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyFromArray_spt, dst, src, wOffsetSrc, hOffset, count, kind, NULL);
-	GET_ARGS_VALUE_hipMemcpyFromArray_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromArray_spt, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeGetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphKernelNodeGetParams, node, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphKernelNodeGetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeGetParams, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipMemcpy3D_spt(const struct hipMemcpy3DParms * p, void* return_address) {
+hipError_t i_hipGraphLaunch(hipGraphExec_t graphExec, hipStream_t stream, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3D_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy3D_spt, p, NULL);
-	GET_ARGS_VALUE_hipMemcpy3D_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3D_spt, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphLaunch, __hip_activity);
+	CALL_RET(hipError_t, hipGraphLaunch, graphExec, stream, NULL);
+	GET_ARGS_VALUE_hipGraphLaunch(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphLaunch, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipStreamBeginCapture(hipStream_t stream, hipStreamCaptureMode mode, void* return_address) {
+hipError_t i_hipHostAlloc(void ** ptr, size_t size, unsigned int flags, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamBeginCapture, __hip_activity);
-	CALL_RET(hipError_t, hipStreamBeginCapture, stream, mode, NULL);
-	GET_ARGS_VALUE_hipStreamBeginCapture(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamBeginCapture, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy2DToArrayAsync(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArrayAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy2DToArrayAsync, dst, wOffset, hOffset, src, spitch, width, height, kind, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpy2DToArrayAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArrayAsync, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxSetSharedMemConfig(hipSharedMemConfig config, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSetSharedMemConfig, __hip_activity);
-	CALL_RET(hipError_t, hipCtxSetSharedMemConfig, config, NULL);
-	GET_ARGS_VALUE_hipCtxSetSharedMemConfig(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSetSharedMemConfig, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostAlloc, __hip_activity);
+	CALL_RET(hipError_t, hipHostAlloc, ptr, size, flags, NULL);
+	GET_ARGS_VALUE_hipHostAlloc(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostAlloc, __hip_activity);
 	return __hip_ret;
 };
 
@@ -4042,362 +273,63 @@ hipError_t i_hipSetDevice(int deviceId, void* return_address) {
 	return __hip_ret;
 };
 
-hipError_t i_hipMemcpyDtoH(void * dst, hipDeviceptr_t src, size_t sizeBytes, void* return_address) {
+hipError_t i_hipModuleOccupancyMaxPotentialBlockSizeWithFlags(int * gridSize, int * blockSize, hipFunction_t f, size_t dynSharedMemPerBlk, int blockSizeLimit, unsigned int flags, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoH, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyDtoH, dst, src, sizeBytes, NULL);
-	GET_ARGS_VALUE_hipMemcpyDtoH(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoH, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSizeWithFlags, __hip_activity);
+	CALL_RET(hipError_t, hipModuleOccupancyMaxPotentialBlockSizeWithFlags, gridSize, blockSize, f, dynSharedMemPerBlk, blockSizeLimit, flags, NULL);
+	GET_ARGS_VALUE_hipModuleOccupancyMaxPotentialBlockSizeWithFlags(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSizeWithFlags, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipMemcpyAsync(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
+hipError_t i_hipGraphNodeGetDependentNodes(hipGraphNode_t node, hipGraphNode_t * pDependentNodes, size_t * pNumDependentNodes, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAsync, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyAsync, dst, src, sizeBytes, kind, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpyAsync(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAsync, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetDependentNodes, __hip_activity);
+	CALL_RET(hipError_t, hipGraphNodeGetDependentNodes, node, pDependentNodes, pNumDependentNodes, NULL);
+	GET_ARGS_VALUE_hipGraphNodeGetDependentNodes(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetDependentNodes, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipMemCreate(hipMemGenericAllocationHandle_t * handle, size_t size, const hipMemAllocationProp * prop, unsigned long long flags, void* return_address) {
+hipError_t i_hipExtStreamGetCUMask(hipStream_t stream, uint32_t cuMaskSize, uint32_t * cuMask, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemCreate, __hip_activity);
-	CALL_RET(hipError_t, hipMemCreate, handle, size, prop, flags, NULL);
-	GET_ARGS_VALUE_hipMemCreate(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemCreate, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtStreamGetCUMask, __hip_activity);
+	CALL_RET(hipError_t, hipExtStreamGetCUMask, stream, cuMaskSize, cuMask, NULL);
+	GET_ARGS_VALUE_hipExtStreamGetCUMask(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtStreamGetCUMask, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipFuncSetSharedMemConfig(const void * func, hipSharedMemConfig config, void* return_address) {
+hipError_t i_hipMemsetD16(hipDeviceptr_t dest, unsigned short value, size_t count, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncSetSharedMemConfig, __hip_activity);
-	CALL_RET(hipError_t, hipFuncSetSharedMemConfig, func, config, NULL);
-	GET_ARGS_VALUE_hipFuncSetSharedMemConfig(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncSetSharedMemConfig, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD16, __hip_activity);
+	CALL_RET(hipError_t, hipMemsetD16, dest, value, count, NULL);
+	GET_ARGS_VALUE_hipMemsetD16(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD16, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipGraphExecChildGraphNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, hipGraph_t childGraph, void* return_address) {
+hipError_t i_hipLaunchKernel(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecChildGraphNodeSetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExecChildGraphNodeSetParams, hGraphExec, node, childGraph, NULL);
-	GET_ARGS_VALUE_hipGraphExecChildGraphNodeSetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecChildGraphNodeSetParams, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchKernel, __hip_activity);
+	CALL_RET(hipError_t, hipLaunchKernel, function_address, numBlocks, dimBlocks, args, sharedMemBytes, stream, NULL);
+	GET_ARGS_VALUE_hipLaunchKernel(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchKernel, __hip_activity);
 	return __hip_ret;
 };
 
-struct hipChannelFormatDesc i_hipCreateChannelDesc(int x, int y, int z, int w, enum hipChannelFormatKind f, void* return_address) {
+const char * i_hipGetErrorString(hipError_t hipError, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCreateChannelDesc, __hip_activity);
-	CALL_RET(struct hipChannelFormatDesc, hipCreateChannelDesc, x, y, z, w, f, NULL);
-	GET_ARGS_VALUE_hipCreateChannelDesc(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCreateChannelDesc, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipFreeHost(void * ptr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	GET_ARGS_VALUE_hipFreeHost(__hip_activity);
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeHost, __hip_activity);
-	CALL_RET(hipError_t, hipFreeHost, ptr, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeHost, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexObjectGetResourceDesc(HIP_RESOURCE_DESC * pResDesc, hipTextureObject_t texObject, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectGetResourceDesc, __hip_activity);
-	CALL_RET(hipError_t, hipTexObjectGetResourceDesc, pResDesc, texObject, NULL);
-	GET_ARGS_VALUE_hipTexObjectGetResourceDesc(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectGetResourceDesc, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpy2DToArrayAsync_spt(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArrayAsync_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpy2DToArrayAsync_spt, dst, wOffset, hOffset, src, spitch, width, height, kind, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpy2DToArrayAsync_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArrayAsync_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipLaunchCooperativeKernelMultiDevice(hipLaunchParams * launchParamsList, int numDevices, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchCooperativeKernelMultiDevice, __hip_activity);
-	CALL_RET(hipError_t, hipLaunchCooperativeKernelMultiDevice, launchParamsList, numDevices, flags, NULL);
-	GET_ARGS_VALUE_hipLaunchCooperativeKernelMultiDevice(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchCooperativeKernelMultiDevice, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipHostGetFlags(unsigned int * flagsPtr, void * hostPtr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostGetFlags, __hip_activity);
-	CALL_RET(hipError_t, hipHostGetFlags, flagsPtr, hostPtr, NULL);
-	GET_ARGS_VALUE_hipHostGetFlags(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostGetFlags, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemSetAccess(void * ptr, size_t size, const hipMemAccessDesc * desc, size_t count, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemSetAccess, __hip_activity);
-	CALL_RET(hipError_t, hipMemSetAccess, ptr, size, desc, count, NULL);
-	GET_ARGS_VALUE_hipMemSetAccess(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemSetAccess, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamUpdateCaptureDependencies(hipStream_t stream, hipGraphNode_t * dependencies, size_t numDependencies, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamUpdateCaptureDependencies, __hip_activity);
-	CALL_RET(hipError_t, hipStreamUpdateCaptureDependencies, stream, dependencies, numDependencies, flags, NULL);
-	GET_ARGS_VALUE_hipStreamUpdateCaptureDependencies(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamUpdateCaptureDependencies, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphExternalSemaphoresSignalNodeGetParams(hipGraphNode_t hNode, hipExternalSemaphoreSignalNodeParams * params_out, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresSignalNodeGetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExternalSemaphoresSignalNodeGetParams, hNode, params_out, NULL);
-	GET_ARGS_VALUE_hipGraphExternalSemaphoresSignalNodeGetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresSignalNodeGetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexRefSetFormat(textureReference * texRef, hipArray_Format fmt, int NumPackedComponents, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetFormat, __hip_activity);
-	CALL_RET(hipError_t, hipTexRefSetFormat, texRef, fmt, NumPackedComponents, NULL);
-	GET_ARGS_VALUE_hipTexRefSetFormat(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetFormat, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceReset(void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceReset, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceReset, NULL);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceReset, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemPoolImportFromShareableHandle(hipMemPool_t * mem_pool, void * shared_handle, hipMemAllocationHandleType handle_type, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolImportFromShareableHandle, __hip_activity);
-	CALL_RET(hipError_t, hipMemPoolImportFromShareableHandle, mem_pool, shared_handle, handle_type, flags, NULL);
-	GET_ARGS_VALUE_hipMemPoolImportFromShareableHandle(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolImportFromShareableHandle, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxGetApiVersion(hipCtx_t ctx, int * apiVersion, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetApiVersion, __hip_activity);
-	CALL_RET(hipError_t, hipCtxGetApiVersion, ctx, apiVersion, NULL);
-	GET_ARGS_VALUE_hipCtxGetApiVersion(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetApiVersion, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDeviceGetDefaultMemPool(hipMemPool_t * mem_pool, int device, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetDefaultMemPool, __hip_activity);
-	CALL_RET(hipError_t, hipDeviceGetDefaultMemPool, mem_pool, device, NULL);
-	GET_ARGS_VALUE_hipDeviceGetDefaultMemPool(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetDefaultMemPool, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamGetFlags_spt(hipStream_t stream, unsigned int * flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetFlags_spt, __hip_activity);
-	CALL_RET(hipError_t, hipStreamGetFlags_spt, stream, flags, NULL);
-	GET_ARGS_VALUE_hipStreamGetFlags_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetFlags_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyFromSymbolAsync_spt(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromSymbolAsync_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyFromSymbolAsync_spt, dst, symbol, sizeBytes, offset, kind, stream, NULL);
-	GET_ARGS_VALUE_hipMemcpyFromSymbolAsync_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromSymbolAsync_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipTexObjectGetResourceViewDesc(HIP_RESOURCE_VIEW_DESC * pResViewDesc, hipTextureObject_t texObject, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectGetResourceViewDesc, __hip_activity);
-	CALL_RET(hipError_t, hipTexObjectGetResourceViewDesc, pResViewDesc, texObject, NULL);
-	GET_ARGS_VALUE_hipTexObjectGetResourceViewDesc(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectGetResourceViewDesc, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetDevice(int * deviceId, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDevice, __hip_activity);
-	CALL_RET(hipError_t, hipGetDevice, deviceId, NULL);
-	GET_ARGS_VALUE_hipGetDevice(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDevice, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetSymbolAddress(void ** devPtr, const void * symbol, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetSymbolAddress, __hip_activity);
-	CALL_RET(hipError_t, hipGetSymbolAddress, devPtr, symbol, NULL);
-	GET_ARGS_VALUE_hipGetSymbolAddress(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetSymbolAddress, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipMemcpyToSymbol_spt(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbol_spt, __hip_activity);
-	CALL_RET(hipError_t, hipMemcpyToSymbol_spt, symbol, src, sizeBytes, offset, kind, NULL);
-	GET_ARGS_VALUE_hipMemcpyToSymbol_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbol_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphAddMemcpyNode1D(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNode1D, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddMemcpyNode1D, pGraphNode, graph, pDependencies, numDependencies, dst, src, count, kind, NULL);
-	GET_ARGS_VALUE_hipGraphAddMemcpyNode1D(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNode1D, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipDestroyExternalSemaphore(hipExternalSemaphore_t extSem, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroyExternalSemaphore, __hip_activity);
-	CALL_RET(hipError_t, hipDestroyExternalSemaphore, extSem, NULL);
-	GET_ARGS_VALUE_hipDestroyExternalSemaphore(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroyExternalSemaphore, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipIpcOpenMemHandle(void ** devPtr, hipIpcMemHandle_t handle, unsigned int flags, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcOpenMemHandle, __hip_activity);
-	CALL_RET(hipError_t, hipIpcOpenMemHandle, devPtr, handle, flags, NULL);
-	GET_ARGS_VALUE_hipIpcOpenMemHandle(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcOpenMemHandle, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCtxDestroy(hipCtx_t ctx, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxDestroy, __hip_activity);
-	CALL_RET(hipError_t, hipCtxDestroy, ctx, NULL);
-	GET_ARGS_VALUE_hipCtxDestroy(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxDestroy, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamGetCaptureInfo_v2(hipStream_t stream, hipStreamCaptureStatus * captureStatus_out, unsigned long long * id_out, hipGraph_t * graph_out, const hipGraphNode_t ** dependencies_out, size_t * numDependencies_out, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo_v2, __hip_activity);
-	CALL_RET(hipError_t, hipStreamGetCaptureInfo_v2, stream, captureStatus_out, id_out, graph_out, dependencies_out, numDependencies_out, NULL);
-	GET_ARGS_VALUE_hipStreamGetCaptureInfo_v2(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo_v2, __hip_activity);
-	return __hip_ret;
-};
-
-int i_hipGetStreamDeviceId(hipStream_t stream, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetStreamDeviceId, __hip_activity);
-	CALL_RET(int, hipGetStreamDeviceId, stream, NULL);
-	GET_ARGS_VALUE_hipGetStreamDeviceId(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetStreamDeviceId, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipImportExternalMemory(hipExternalMemory_t * extMem_out, const hipExternalMemoryHandleDesc * memHandleDesc, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipImportExternalMemory, __hip_activity);
-	CALL_RET(hipError_t, hipImportExternalMemory, extMem_out, memHandleDesc, NULL);
-	GET_ARGS_VALUE_hipImportExternalMemory(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipImportExternalMemory, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphExecKernelNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipKernelNodeParams * pNodeParams, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecKernelNodeSetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExecKernelNodeSetParams, hGraphExec, node, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphExecKernelNodeSetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecKernelNodeSetParams, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipStreamEndCapture_spt(hipStream_t stream, hipGraph_t * pGraph, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamEndCapture_spt, __hip_activity);
-	CALL_RET(hipError_t, hipStreamEndCapture_spt, stream, pGraph, NULL);
-	GET_ARGS_VALUE_hipStreamEndCapture_spt(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamEndCapture_spt, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGraphExecMemcpyNodeSetParamsFromSymbol(hipGraphExec_t hGraphExec, hipGraphNode_t node, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemcpyNodeSetParamsFromSymbol, __hip_activity);
-	CALL_RET(hipError_t, hipGraphExecMemcpyNodeSetParamsFromSymbol, hGraphExec, node, dst, symbol, count, offset, kind, NULL);
-	GET_ARGS_VALUE_hipGraphExecMemcpyNodeSetParamsFromSymbol(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemcpyNodeSetParamsFromSymbol, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipCreateTextureObject(hipTextureObject_t * pTexObject, const hipResourceDesc * pResDesc, const hipTextureDesc * pTexDesc, const struct hipResourceViewDesc * pResViewDesc, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCreateTextureObject, __hip_activity);
-	CALL_RET(hipError_t, hipCreateTextureObject, pTexObject, pResDesc, pTexDesc, pResViewDesc, NULL);
-	GET_ARGS_VALUE_hipCreateTextureObject(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCreateTextureObject, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetErrorString, __hip_activity);
+	CALL_RET(char *, hipGetErrorString, hipError, NULL);
+	GET_ARGS_VALUE_hipGetErrorString(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetErrorString, __hip_activity);
 	return __hip_ret;
 };
 
@@ -4411,13 +343,712 @@ hipError_t i_hipModuleLoadDataEx(hipModule_t * module, const void * image, unsig
 	return __hip_ret;
 };
 
-hipError_t i___hipPopCallConfiguration(dim3 * gridDim, dim3 * blockDim, size_t * sharedMem, hipStream_t * stream, void* return_address) {
+hipError_t i_hipTexRefGetFilterMode(enum hipTextureFilterMode * pfm, const textureReference * texRef, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID___hipPopCallConfiguration, __hip_activity);
-	CALL_RET(hipError_t, __hipPopCallConfiguration, gridDim, blockDim, sharedMem, stream, NULL);
-	GET_ARGS_VALUE___hipPopCallConfiguration(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID___hipPopCallConfiguration, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetFilterMode, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefGetFilterMode, pfm, texRef, NULL);
+	GET_ARGS_VALUE_hipTexRefGetFilterMode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetFilterMode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphInstantiateWithParams(hipGraphExec_t * pGraphExec, hipGraph_t graph, hipGraphInstantiateParams * instantiateParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphInstantiateWithParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphInstantiateWithParams, pGraphExec, graph, instantiateParams, NULL);
+	GET_ARGS_VALUE_hipGraphInstantiateWithParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphInstantiateWithParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphMemcpyNodeSetParams1D(hipGraphNode_t node, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParams1D, __hip_activity);
+	CALL_RET(hipError_t, hipGraphMemcpyNodeSetParams1D, node, dst, src, count, kind, NULL);
+	GET_ARGS_VALUE_hipGraphMemcpyNodeSetParams1D(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParams1D, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamSynchronize(hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamSynchronize, __hip_activity);
+	CALL_RET(hipError_t, hipStreamSynchronize, stream, NULL);
+	GET_ARGS_VALUE_hipStreamSynchronize(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamSynchronize, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphicsUnmapResources(int count, hipGraphicsResource_t * resources, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsUnmapResources, __hip_activity);
+	CALL_RET(hipError_t, hipGraphicsUnmapResources, count, resources, stream, NULL);
+	GET_ARGS_VALUE_hipGraphicsUnmapResources(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsUnmapResources, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy2DFromArray_spt(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArray_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy2DFromArray_spt, dst, dpitch, src, wOffset, hOffset, width, height, kind, NULL);
+	GET_ARGS_VALUE_hipMemcpy2DFromArray_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArray_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExecMemcpyNodeSetParamsFromSymbol(hipGraphExec_t hGraphExec, hipGraphNode_t node, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemcpyNodeSetParamsFromSymbol, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExecMemcpyNodeSetParamsFromSymbol, hGraphExec, node, dst, symbol, count, offset, kind, NULL);
+	GET_ARGS_VALUE_hipGraphExecMemcpyNodeSetParamsFromSymbol(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemcpyNodeSetParamsFromSymbol, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefGetMipmapLevelBias(float * pbias, const textureReference * texRef, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMipmapLevelBias, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefGetMipmapLevelBias, pbias, texRef, NULL);
+	GET_ARGS_VALUE_hipTexRefGetMipmapLevelBias(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMipmapLevelBias, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddExternalSemaphoresSignalNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddExternalSemaphoresSignalNode, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddExternalSemaphoresSignalNode, pGraphNode, graph, pDependencies, numDependencies, nodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphAddExternalSemaphoresSignalNode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddExternalSemaphoresSignalNode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipExtGetLastError(void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtGetLastError, __hip_activity);
+	CALL_RET(hipError_t, hipExtGetLastError, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtGetLastError, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemMapArrayAsync(hipArrayMapInfo * mapInfoList, unsigned int count, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemMapArrayAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemMapArrayAsync, mapInfoList, count, stream, NULL);
+	GET_ARGS_VALUE_hipMemMapArrayAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemMapArrayAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyAsync(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyAsync, dst, src, sizeBytes, kind, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpyAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphKernelNodeSetAttribute(hipGraphNode_t hNode, hipLaunchAttributeID attr, const hipLaunchAttributeValue * value, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeSetAttribute, __hip_activity);
+	CALL_RET(hipError_t, hipGraphKernelNodeSetAttribute, hNode, attr, value, NULL);
+	GET_ARGS_VALUE_hipGraphKernelNodeSetAttribute(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeSetAttribute, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDrvMemcpy2DUnaligned(const hip_Memcpy2D * pCopy, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvMemcpy2DUnaligned, __hip_activity);
+	CALL_RET(hipError_t, hipDrvMemcpy2DUnaligned, pCopy, NULL);
+	GET_ARGS_VALUE_hipDrvMemcpy2DUnaligned(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvMemcpy2DUnaligned, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemPoolDestroy(hipMemPool_t mem_pool, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipMemPoolDestroy(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolDestroy, __hip_activity);
+	CALL_RET(hipError_t, hipMemPoolDestroy, mem_pool, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolDestroy, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphRemoveDependencies(hipGraph_t graph, const hipGraphNode_t * from, const hipGraphNode_t * to, size_t numDependencies, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphRemoveDependencies, __hip_activity);
+	CALL_RET(hipError_t, hipGraphRemoveDependencies, graph, from, to, numDependencies, NULL);
+	GET_ARGS_VALUE_hipGraphRemoveDependencies(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphRemoveDependencies, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphCreate(hipGraph_t * pGraph, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphCreate, __hip_activity);
+	CALL_RET(hipError_t, hipGraphCreate, pGraph, flags, NULL);
+	GET_ARGS_VALUE_hipGraphCreate(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphCreate, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipExtLaunchMultiKernelMultiDevice(hipLaunchParams * launchParamsList, int numDevices, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtLaunchMultiKernelMultiDevice, __hip_activity);
+	CALL_RET(hipError_t, hipExtLaunchMultiKernelMultiDevice, launchParamsList, numDevices, flags, NULL);
+	GET_ARGS_VALUE_hipExtLaunchMultiKernelMultiDevice(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtLaunchMultiKernelMultiDevice, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGetDeviceCount(int * count, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDeviceCount, __hip_activity);
+	CALL_RET(hipError_t, hipGetDeviceCount, count, NULL);
+	GET_ARGS_VALUE_hipGetDeviceCount(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDeviceCount, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemUnmap(void * ptr, size_t size, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemUnmap, __hip_activity);
+	CALL_RET(hipError_t, hipMemUnmap, ptr, size, NULL);
+	GET_ARGS_VALUE_hipMemUnmap(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemUnmap, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexObjectGetResourceDesc(HIP_RESOURCE_DESC * pResDesc, hipTextureObject_t texObject, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectGetResourceDesc, __hip_activity);
+	CALL_RET(hipError_t, hipTexObjectGetResourceDesc, pResDesc, texObject, NULL);
+	GET_ARGS_VALUE_hipTexObjectGetResourceDesc(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectGetResourceDesc, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExecEventRecordNodeSetEvent(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, hipEvent_t event, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecEventRecordNodeSetEvent, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExecEventRecordNodeSetEvent, hGraphExec, hNode, event, NULL);
+	GET_ARGS_VALUE_hipGraphExecEventRecordNodeSetEvent(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecEventRecordNodeSetEvent, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipInit(unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipInit, __hip_activity);
+	CALL_RET(hipError_t, hipInit, flags, NULL);
+	GET_ARGS_VALUE_hipInit(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipInit, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipThreadExchangeStreamCaptureMode(hipStreamCaptureMode * mode, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipThreadExchangeStreamCaptureMode, __hip_activity);
+	CALL_RET(hipError_t, hipThreadExchangeStreamCaptureMode, mode, NULL);
+	GET_ARGS_VALUE_hipThreadExchangeStreamCaptureMode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipThreadExchangeStreamCaptureMode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceGetP2PAttribute(int * value, hipDeviceP2PAttr attr, int srcDevice, int dstDevice, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetP2PAttribute, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceGetP2PAttribute, value, attr, srcDevice, dstDevice, NULL);
+	GET_ARGS_VALUE_hipDeviceGetP2PAttribute(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetP2PAttribute, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceGetByPCIBusId(int * device, const char * pciBusId, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetByPCIBusId, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceGetByPCIBusId, device, pciBusId, NULL);
+	GET_ARGS_VALUE_hipDeviceGetByPCIBusId(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetByPCIBusId, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipHostFree(void * ptr, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipHostFree(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostFree, __hip_activity);
+	CALL_RET(hipError_t, hipHostFree, ptr, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostFree, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipExtGetLinkTypeAndHopCount(int device1, int device2, uint32_t * linktype, uint32_t * hopcount, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtGetLinkTypeAndHopCount, __hip_activity);
+	CALL_RET(hipError_t, hipExtGetLinkTypeAndHopCount, device1, device2, linktype, hopcount, NULL);
+	GET_ARGS_VALUE_hipExtGetLinkTypeAndHopCount(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtGetLinkTypeAndHopCount, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyToSymbolAsync_spt(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbolAsync_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyToSymbolAsync_spt, symbol, src, sizeBytes, offset, kind, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpyToSymbolAsync_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbolAsync_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCtxDisablePeerAccess(hipCtx_t peerCtx, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxDisablePeerAccess, __hip_activity);
+	CALL_RET(hipError_t, hipCtxDisablePeerAccess, peerCtx, NULL);
+	GET_ARGS_VALUE_hipCtxDisablePeerAccess(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxDisablePeerAccess, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipSetupArgument(const void * arg, size_t size, size_t offset, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipSetupArgument, __hip_activity);
+	CALL_RET(hipError_t, hipSetupArgument, arg, size, offset, NULL);
+	GET_ARGS_VALUE_hipSetupArgument(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipSetupArgument, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyAtoHAsync(void * dstHost, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoHAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyAtoHAsync, dstHost, srcArray, srcOffset, ByteCount, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpyAtoHAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoHAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCtxSetCacheConfig(hipFuncCache_t cacheConfig, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSetCacheConfig, __hip_activity);
+	CALL_RET(hipError_t, hipCtxSetCacheConfig, cacheConfig, NULL);
+	GET_ARGS_VALUE_hipCtxSetCacheConfig(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSetCacheConfig, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemRelease(hipMemGenericAllocationHandle_t handle, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipMemRelease(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRelease, __hip_activity);
+	CALL_RET(hipError_t, hipMemRelease, handle, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRelease, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipUnbindTexture(const textureReference * tex, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUnbindTexture, __hip_activity);
+	CALL_RET(hipError_t, hipUnbindTexture, tex, NULL);
+	GET_ARGS_VALUE_hipUnbindTexture(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUnbindTexture, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDrvMemcpy3DAsync(const HIP_MEMCPY3D * pCopy, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvMemcpy3DAsync, __hip_activity);
+	CALL_RET(hipError_t, hipDrvMemcpy3DAsync, pCopy, stream, NULL);
+	GET_ARGS_VALUE_hipDrvMemcpy3DAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvMemcpy3DAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipIpcGetEventHandle(hipIpcEventHandle_t * handle, hipEvent_t event, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcGetEventHandle, __hip_activity);
+	CALL_RET(hipError_t, hipIpcGetEventHandle, handle, event, NULL);
+	GET_ARGS_VALUE_hipIpcGetEventHandle(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcGetEventHandle, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphReleaseUserObject(hipGraph_t graph, hipUserObject_t object, unsigned int count, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipGraphReleaseUserObject(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphReleaseUserObject, __hip_activity);
+	CALL_RET(hipError_t, hipGraphReleaseUserObject, graph, object, count, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphReleaseUserObject, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceGetMemPool(hipMemPool_t * mem_pool, int device, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetMemPool, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceGetMemPool, mem_pool, device, NULL);
+	GET_ARGS_VALUE_hipDeviceGetMemPool(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetMemPool, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphHostNodeSetParams(hipGraphNode_t node, const hipHostNodeParams * pNodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphHostNodeSetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphHostNodeSetParams, node, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphHostNodeSetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphHostNodeSetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddEventWaitNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipEvent_t event, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddEventWaitNode, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddEventWaitNode, pGraphNode, graph, pDependencies, numDependencies, event, NULL);
+	GET_ARGS_VALUE_hipGraphAddEventWaitNode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddEventWaitNode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy2DFromArrayAsync_spt(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArrayAsync_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy2DFromArrayAsync_spt, dst, dpitch, src, wOffsetSrc, hOffsetSrc, width, height, kind, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpy2DFromArrayAsync_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArrayAsync_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipLaunchHostFunc_spt(hipStream_t stream, hipHostFn_t fn, void * userData, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchHostFunc_spt, __hip_activity);
+	CALL_RET(hipError_t, hipLaunchHostFunc_spt, stream, fn, userData, NULL);
+	GET_ARGS_VALUE_hipLaunchHostFunc_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchHostFunc_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamWaitEvent_spt(hipStream_t stream, hipEvent_t event, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitEvent_spt, __hip_activity);
+	CALL_RET(hipError_t, hipStreamWaitEvent_spt, stream, event, flags, NULL);
+	GET_ARGS_VALUE_hipStreamWaitEvent_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitEvent_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipArrayGetDescriptor(HIP_ARRAY_DESCRIPTOR * pArrayDescriptor, hipArray_t array, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayGetDescriptor, __hip_activity);
+	CALL_RET(hipError_t, hipArrayGetDescriptor, pArrayDescriptor, array, NULL);
+	GET_ARGS_VALUE_hipArrayGetDescriptor(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayGetDescriptor, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExecUpdate(hipGraphExec_t hGraphExec, hipGraph_t hGraph, hipGraphNode_t * hErrorNode_out, hipGraphExecUpdateResult * updateResult_out, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecUpdate, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExecUpdate, hGraphExec, hGraph, hErrorNode_out, updateResult_out, NULL);
+	GET_ARGS_VALUE_hipGraphExecUpdate(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecUpdate, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemGetAllocationPropertiesFromHandle(hipMemAllocationProp * prop, hipMemGenericAllocationHandle_t handle, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAllocationPropertiesFromHandle, __hip_activity);
+	CALL_RET(hipError_t, hipMemGetAllocationPropertiesFromHandle, prop, handle, NULL);
+	GET_ARGS_VALUE_hipMemGetAllocationPropertiesFromHandle(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAllocationPropertiesFromHandle, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyWithStream(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyWithStream, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyWithStream, dst, src, sizeBytes, kind, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpyWithStream(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyWithStream, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddExternalSemaphoresWaitNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddExternalSemaphoresWaitNode, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddExternalSemaphoresWaitNode, pGraphNode, graph, pDependencies, numDependencies, nodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphAddExternalSemaphoresWaitNode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddExternalSemaphoresWaitNode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyAtoH(void * dst, hipArray_t srcArray, size_t srcOffset, size_t count, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoH, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyAtoH, dst, srcArray, srcOffset, count, NULL);
+	GET_ARGS_VALUE_hipMemcpyAtoH(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoH, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamQuery(hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamQuery, __hip_activity);
+	CALL_RET(hipError_t, hipStreamQuery, stream, NULL);
+	GET_ARGS_VALUE_hipStreamQuery(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamQuery, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipIpcCloseMemHandle(void * devPtr, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcCloseMemHandle, __hip_activity);
+	CALL_RET(hipError_t, hipIpcCloseMemHandle, devPtr, NULL);
+	GET_ARGS_VALUE_hipIpcCloseMemHandle(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcCloseMemHandle, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemsetAsync(void * dst, int value, size_t sizeBytes, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemsetAsync, dst, value, sizeBytes, stream, NULL);
+	GET_ARGS_VALUE_hipMemsetAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyDtoD(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoD, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyDtoD, dst, src, sizeBytes, NULL);
+	GET_ARGS_VALUE_hipMemcpyDtoD(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoD, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipModuleUnload(hipModule_t module, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipModuleUnload(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleUnload, __hip_activity);
+	CALL_RET(hipError_t, hipModuleUnload, module, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleUnload, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGetDevicePropertiesR0600(hipDeviceProp_tR0600 * prop, int deviceId, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDevicePropertiesR0600, __hip_activity);
+	CALL_RET(hipError_t, hipGetDevicePropertiesR0600, prop, deviceId, NULL);
+	GET_ARGS_VALUE_hipGetDevicePropertiesR0600(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDevicePropertiesR0600, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyFromArray(void * dst, hipArray_const_t srcArray, size_t wOffset, size_t hOffset, size_t count, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromArray, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyFromArray, dst, srcArray, wOffset, hOffset, count, kind, NULL);
+	GET_ARGS_VALUE_hipMemcpyFromArray(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromArray, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceCanAccessPeer(int * canAccessPeer, int deviceId, int peerDeviceId, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceCanAccessPeer, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceCanAccessPeer, canAccessPeer, deviceId, peerDeviceId, NULL);
+	GET_ARGS_VALUE_hipDeviceCanAccessPeer(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceCanAccessPeer, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemSetAccess(void * ptr, size_t size, const hipMemAccessDesc * desc, size_t count, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemSetAccess, __hip_activity);
+	CALL_RET(hipError_t, hipMemSetAccess, ptr, size, desc, count, NULL);
+	GET_ARGS_VALUE_hipMemSetAccess(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemSetAccess, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamWaitValue32(hipStream_t stream, void * ptr, uint32_t value, unsigned int flags, uint32_t mask, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitValue32, __hip_activity);
+	CALL_RET(hipError_t, hipStreamWaitValue32, stream, ptr, value, flags, mask, NULL);
+	GET_ARGS_VALUE_hipStreamWaitValue32(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitValue32, __hip_activity);
+	return __hip_ret;
+};
+
+const char * i_hipApiName(uint32_t id, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipApiName, __hip_activity);
+	CALL_RET(char *, hipApiName, id, NULL);
+	GET_ARGS_VALUE_hipApiName(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipApiName, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphicsSubResourceGetMappedArray(hipArray_t * array, hipGraphicsResource_t resource, unsigned int arrayIndex, unsigned int mipLevel, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsSubResourceGetMappedArray, __hip_activity);
+	CALL_RET(hipError_t, hipGraphicsSubResourceGetMappedArray, array, resource, arrayIndex, mipLevel, NULL);
+	GET_ARGS_VALUE_hipGraphicsSubResourceGetMappedArray(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsSubResourceGetMappedArray, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy2DToArrayAsync(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArrayAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy2DToArrayAsync, dst, wOffset, hOffset, src, spitch, width, height, kind, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpy2DToArrayAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArrayAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphDestroy(hipGraph_t graph, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipGraphDestroy(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphDestroy, __hip_activity);
+	CALL_RET(hipError_t, hipGraphDestroy, graph, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphDestroy, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefGetBorderColor(float * pBorderColor, const textureReference * texRef, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetBorderColor, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefGetBorderColor, pBorderColor, texRef, NULL);
+	GET_ARGS_VALUE_hipTexRefGetBorderColor(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetBorderColor, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddMemcpyNode1D(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNode1D, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddMemcpyNode1D, pGraphNode, graph, pDependencies, numDependencies, dst, src, count, kind, NULL);
+	GET_ARGS_VALUE_hipGraphAddMemcpyNode1D(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNode1D, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphGetNodes(hipGraph_t graph, hipGraphNode_t * nodes, size_t * numNodes, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphGetNodes, __hip_activity);
+	CALL_RET(hipError_t, hipGraphGetNodes, graph, nodes, numNodes, NULL);
+	GET_ARGS_VALUE_hipGraphGetNodes(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphGetNodes, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamGetFlags_spt(hipStream_t stream, unsigned int * flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetFlags_spt, __hip_activity);
+	CALL_RET(hipError_t, hipStreamGetFlags_spt, stream, flags, NULL);
+	GET_ARGS_VALUE_hipStreamGetFlags_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetFlags_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefSetAddress2D(textureReference * texRef, const HIP_ARRAY_DESCRIPTOR * desc, hipDeviceptr_t dptr, size_t Pitch, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetAddress2D, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefSetAddress2D, texRef, desc, dptr, Pitch, NULL);
+	GET_ARGS_VALUE_hipTexRefSetAddress2D(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetAddress2D, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamGetPriority(hipStream_t stream, int * priority, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetPriority, __hip_activity);
+	CALL_RET(hipError_t, hipStreamGetPriority, stream, priority, NULL);
+	GET_ARGS_VALUE_hipStreamGetPriority(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetPriority, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamCreate(hipStream_t * stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamCreate, __hip_activity);
+	CALL_RET(hipError_t, hipStreamCreate, stream, NULL);
+	GET_ARGS_VALUE_hipStreamCreate(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamCreate, __hip_activity);
 	return __hip_ret;
 };
 
@@ -4431,53 +1062,43 @@ hipError_t i_hipMemcpyFromSymbol(void * dst, const void * symbol, size_t sizeByt
 	return __hip_ret;
 };
 
-hipError_t i_hipMemPoolGetAttribute(hipMemPool_t mem_pool, hipMemPoolAttr attr, void * value, void* return_address) {
+hipError_t i_hipGraphNodeGetEnabled(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, unsigned int * isEnabled, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolGetAttribute, __hip_activity);
-	CALL_RET(hipError_t, hipMemPoolGetAttribute, mem_pool, attr, value, NULL);
-	GET_ARGS_VALUE_hipMemPoolGetAttribute(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolGetAttribute, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetEnabled, __hip_activity);
+	CALL_RET(hipError_t, hipGraphNodeGetEnabled, hGraphExec, hNode, isEnabled, NULL);
+	GET_ARGS_VALUE_hipGraphNodeGetEnabled(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetEnabled, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipGraphAddMemcpyNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipMemcpy3DParms * pCopyParams, void* return_address) {
+struct hipChannelFormatDesc i_hipCreateChannelDesc(int x, int y, int z, int w, enum hipChannelFormatKind f, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNode, __hip_activity);
-	CALL_RET(hipError_t, hipGraphAddMemcpyNode, pGraphNode, graph, pDependencies, numDependencies, pCopyParams, NULL);
-	GET_ARGS_VALUE_hipGraphAddMemcpyNode(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNode, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCreateChannelDesc, __hip_activity);
+	CALL_RET(struct hipChannelFormatDesc, hipCreateChannelDesc, x, y, z, w, f, NULL);
+	GET_ARGS_VALUE_hipCreateChannelDesc(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCreateChannelDesc, __hip_activity);
 	return __hip_ret;
 };
 
-const char * i_hipKernelNameRefByPtr(const void * hostFunction, hipStream_t stream, void* return_address) {
+hipError_t i_hipFreeMipmappedArray(hipMipmappedArray_t mipmappedArray, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipKernelNameRefByPtr, __hip_activity);
-	CALL_RET(const char *, hipKernelNameRefByPtr, hostFunction, stream, NULL);
-	GET_ARGS_VALUE_hipKernelNameRefByPtr(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipKernelNameRefByPtr, __hip_activity);
+	GET_ARGS_VALUE_hipFreeMipmappedArray(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeMipmappedArray, __hip_activity);
+	CALL_RET(hipError_t, hipFreeMipmappedArray, mipmappedArray, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeMipmappedArray, __hip_activity);
 	return __hip_ret;
 };
 
-hipError_t i_hipIpcOpenEventHandle(hipEvent_t * event, hipIpcEventHandle_t handle, void* return_address) {
+hipError_t i_hipGetTextureAlignmentOffset(size_t * offset, const textureReference * texref, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcOpenEventHandle, __hip_activity);
-	CALL_RET(hipError_t, hipIpcOpenEventHandle, event, handle, NULL);
-	GET_ARGS_VALUE_hipIpcOpenEventHandle(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcOpenEventHandle, __hip_activity);
-	return __hip_ret;
-};
-
-hipError_t i_hipGetFuncBySymbol(hipFunction_t * functionPtr, const void * symbolPtr, void* return_address) {
-	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetFuncBySymbol, __hip_activity);
-	CALL_RET(hipError_t, hipGetFuncBySymbol, functionPtr, symbolPtr, NULL);
-	GET_ARGS_VALUE_hipGetFuncBySymbol(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetFuncBySymbol, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureAlignmentOffset, __hip_activity);
+	CALL_RET(hipError_t, hipGetTextureAlignmentOffset, offset, texref, NULL);
+	GET_ARGS_VALUE_hipGetTextureAlignmentOffset(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureAlignmentOffset, __hip_activity);
 	return __hip_ret;
 };
 
@@ -4491,6 +1112,675 @@ hipError_t i_hipGraphAddEventRecordNode(hipGraphNode_t * pGraphNode, hipGraph_t 
 	return __hip_ret;
 };
 
+hipError_t i_hipGraphNodeFindInClone(hipGraphNode_t * pNode, hipGraphNode_t originalNode, hipGraph_t clonedGraph, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeFindInClone, __hip_activity);
+	CALL_RET(hipError_t, hipGraphNodeFindInClone, pNode, originalNode, clonedGraph, NULL);
+	GET_ARGS_VALUE_hipGraphNodeFindInClone(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeFindInClone, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyFromSymbol_spt(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromSymbol_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyFromSymbol_spt, dst, symbol, sizeBytes, offset, kind, NULL);
+	GET_ARGS_VALUE_hipMemcpyFromSymbol_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromSymbol_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemset3DAsync_spt(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3DAsync_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemset3DAsync_spt, pitchedDevPtr, value, extent, stream, NULL);
+	GET_ARGS_VALUE_hipMemset3DAsync_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3DAsync_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemsetD16Async(hipDeviceptr_t dest, unsigned short value, size_t count, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD16Async, __hip_activity);
+	CALL_RET(hipError_t, hipMemsetD16Async, dest, value, count, stream, NULL);
+	GET_ARGS_VALUE_hipMemsetD16Async(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD16Async, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceGetCacheConfig(hipFuncCache_t * cacheConfig, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetCacheConfig, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceGetCacheConfig, cacheConfig, NULL);
+	GET_ARGS_VALUE_hipDeviceGetCacheConfig(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetCacheConfig, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemCreate(hipMemGenericAllocationHandle_t * handle, size_t size, const hipMemAllocationProp * prop, unsigned long long flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemCreate, __hip_activity);
+	CALL_RET(hipError_t, hipMemCreate, handle, size, prop, flags, NULL);
+	GET_ARGS_VALUE_hipMemCreate(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemCreate, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExternalSemaphoresWaitNodeGetParams(hipGraphNode_t hNode, hipExternalSemaphoreWaitNodeParams * params_out, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresWaitNodeGetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExternalSemaphoresWaitNodeGetParams, hNode, params_out, NULL);
+	GET_ARGS_VALUE_hipGraphExternalSemaphoresWaitNodeGetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresWaitNodeGetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamEndCapture(hipStream_t stream, hipGraph_t * pGraph, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamEndCapture, __hip_activity);
+	CALL_RET(hipError_t, hipStreamEndCapture, stream, pGraph, NULL);
+	GET_ARGS_VALUE_hipStreamEndCapture(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamEndCapture, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyFromSymbolAsync_spt(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromSymbolAsync_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyFromSymbolAsync_spt, dst, symbol, sizeBytes, offset, kind, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpyFromSymbolAsync_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromSymbolAsync_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyHtoA(hipArray_t dstArray, size_t dstOffset, const void * srcHost, size_t count, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoA, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyHtoA, dstArray, dstOffset, srcHost, count, NULL);
+	GET_ARGS_VALUE_hipMemcpyHtoA(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoA, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExecHostNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipHostNodeParams * pNodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecHostNodeSetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExecHostNodeSetParams, hGraphExec, node, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphExecHostNodeSetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecHostNodeSetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMalloc(void ** ptr, size_t size, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMalloc, __hip_activity);
+	CALL_RET(hipError_t, hipMalloc, ptr, size, NULL);
+	GET_ARGS_VALUE_hipMalloc(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMalloc, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMalloc3DArray(hipArray_t * array, const struct hipChannelFormatDesc * desc, struct hipExtent extent, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMalloc3DArray, __hip_activity);
+	CALL_RET(hipError_t, hipMalloc3DArray, array, desc, extent, flags, NULL);
+	GET_ARGS_VALUE_hipMalloc3DArray(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMalloc3DArray, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExecKernelNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipKernelNodeParams * pNodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecKernelNodeSetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExecKernelNodeSetParams, hGraphExec, node, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphExecKernelNodeSetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecKernelNodeSetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGetTextureObjectResourceDesc(hipResourceDesc * pResDesc, hipTextureObject_t textureObject, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureObjectResourceDesc, __hip_activity);
+	CALL_RET(hipError_t, hipGetTextureObjectResourceDesc, pResDesc, textureObject, NULL);
+	GET_ARGS_VALUE_hipGetTextureObjectResourceDesc(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureObjectResourceDesc, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i___hipPushCallConfiguration(dim3 gridDim, dim3 blockDim, size_t sharedMem, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID___hipPushCallConfiguration, __hip_activity);
+	CALL_RET(hipError_t, __hipPushCallConfiguration, gridDim, blockDim, sharedMem, stream, NULL);
+	GET_ARGS_VALUE___hipPushCallConfiguration(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID___hipPushCallConfiguration, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy3DAsync_spt(const hipMemcpy3DParms * p, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3DAsync_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy3DAsync_spt, p, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpy3DAsync_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3DAsync_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemsetD8Async(hipDeviceptr_t dest, unsigned char value, size_t count, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD8Async, __hip_activity);
+	CALL_RET(hipError_t, hipMemsetD8Async, dest, value, count, stream, NULL);
+	GET_ARGS_VALUE_hipMemsetD8Async(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD8Async, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamAddCallback(hipStream_t stream, hipStreamCallback_t callback, void * userData, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamAddCallback, __hip_activity);
+	CALL_RET(hipError_t, hipStreamAddCallback, stream, callback, userData, flags, NULL);
+	GET_ARGS_VALUE_hipStreamAddCallback(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamAddCallback, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemPoolImportPointer(void ** dev_ptr, hipMemPool_t mem_pool, hipMemPoolPtrExportData * export_data, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolImportPointer, __hip_activity);
+	CALL_RET(hipError_t, hipMemPoolImportPointer, dev_ptr, mem_pool, export_data, NULL);
+	GET_ARGS_VALUE_hipMemPoolImportPointer(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolImportPointer, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipFuncGetAttributes(struct hipFuncAttributes * attr, const void * func, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncGetAttributes, __hip_activity);
+	CALL_RET(hipError_t, hipFuncGetAttributes, attr, func, NULL);
+	GET_ARGS_VALUE_hipFuncGetAttributes(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncGetAttributes, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCtxGetCurrent(hipCtx_t * ctx, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetCurrent, __hip_activity);
+	CALL_RET(hipError_t, hipCtxGetCurrent, ctx, NULL);
+	GET_ARGS_VALUE_hipCtxGetCurrent(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetCurrent, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddChildGraphNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipGraph_t childGraph, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddChildGraphNode, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddChildGraphNode, pGraphNode, graph, pDependencies, numDependencies, childGraph, NULL);
+	GET_ARGS_VALUE_hipGraphAddChildGraphNode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddChildGraphNode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipEventCreate(hipEvent_t * event, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventCreate, __hip_activity);
+	CALL_RET(hipError_t, hipEventCreate, event, NULL);
+	GET_ARGS_VALUE_hipEventCreate(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventCreate, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipHostGetDevicePointer(void ** devPtr, void * hstPtr, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostGetDevicePointer, __hip_activity);
+	CALL_RET(hipError_t, hipHostGetDevicePointer, devPtr, hstPtr, flags, NULL);
+	GET_ARGS_VALUE_hipHostGetDevicePointer(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostGetDevicePointer, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipEventQuery(hipEvent_t event, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventQuery, __hip_activity);
+	CALL_RET(hipError_t, hipEventQuery, event, NULL);
+	GET_ARGS_VALUE_hipEventQuery(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventQuery, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyPeerAsync(void * dst, int dstDeviceId, const void * src, int srcDevice, size_t sizeBytes, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyPeerAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyPeerAsync, dst, dstDeviceId, src, srcDevice, sizeBytes, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpyPeerAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyPeerAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemMap(void * ptr, size_t size, size_t offset, hipMemGenericAllocationHandle_t handle, unsigned long long flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemMap, __hip_activity);
+	CALL_RET(hipError_t, hipMemMap, ptr, size, offset, handle, flags, NULL);
+	GET_ARGS_VALUE_hipMemMap(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemMap, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipBindTextureToArray(const textureReference * tex, hipArray_const_t array, const hipChannelFormatDesc * desc, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTextureToArray, __hip_activity);
+	CALL_RET(hipError_t, hipBindTextureToArray, tex, array, desc, NULL);
+	GET_ARGS_VALUE_hipBindTextureToArray(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTextureToArray, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy2DAsync_spt(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DAsync_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy2DAsync_spt, dst, dpitch, src, spitch, width, height, kind, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpy2DAsync_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DAsync_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemPoolSetAttribute(hipMemPool_t mem_pool, hipMemPoolAttr attr, void * value, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolSetAttribute, __hip_activity);
+	CALL_RET(hipError_t, hipMemPoolSetAttribute, mem_pool, attr, value, NULL);
+	GET_ARGS_VALUE_hipMemPoolSetAttribute(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolSetAttribute, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGetLastError(void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetLastError, __hip_activity);
+	CALL_RET(hipError_t, hipGetLastError, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetLastError, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamEndCapture_spt(hipStream_t stream, hipGraph_t * pGraph, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamEndCapture_spt, __hip_activity);
+	CALL_RET(hipError_t, hipStreamEndCapture_spt, stream, pGraph, NULL);
+	GET_ARGS_VALUE_hipStreamEndCapture_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamEndCapture_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipModuleOccupancyMaxPotentialBlockSize(int * gridSize, int * blockSize, hipFunction_t f, size_t dynSharedMemPerBlk, int blockSizeLimit, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSize, __hip_activity);
+	CALL_RET(hipError_t, hipModuleOccupancyMaxPotentialBlockSize, gridSize, blockSize, f, dynSharedMemPerBlk, blockSizeLimit, NULL);
+	GET_ARGS_VALUE_hipModuleOccupancyMaxPotentialBlockSize(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSize, __hip_activity);
+	return __hip_ret;
+};
+
+const char * i_hipKernelNameRefByPtr(const void * hostFunction, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipKernelNameRefByPtr, __hip_activity);
+	CALL_RET(char *, hipKernelNameRefByPtr, hostFunction, stream, NULL);
+	GET_ARGS_VALUE_hipKernelNameRefByPtr(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipKernelNameRefByPtr, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGetDevice(int * deviceId, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDevice, __hip_activity);
+	CALL_RET(hipError_t, hipGetDevice, deviceId, NULL);
+	GET_ARGS_VALUE_hipGetDevice(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDevice, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy3D_spt(const struct hipMemcpy3DParms * p, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3D_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy3D_spt, p, NULL);
+	GET_ARGS_VALUE_hipMemcpy3D_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3D_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexObjectGetTextureDesc(HIP_TEXTURE_DESC * pTexDesc, hipTextureObject_t texObject, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectGetTextureDesc, __hip_activity);
+	CALL_RET(hipError_t, hipTexObjectGetTextureDesc, pTexDesc, texObject, NULL);
+	GET_ARGS_VALUE_hipTexObjectGetTextureDesc(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectGetTextureDesc, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceGet(hipDevice_t * device, int ordinal, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGet, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceGet, device, ordinal, NULL);
+	GET_ARGS_VALUE_hipDeviceGet(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGet, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExternalSemaphoresSignalNodeSetParams(hipGraphNode_t hNode, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresSignalNodeSetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExternalSemaphoresSignalNodeSetParams, hNode, nodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphExternalSemaphoresSignalNodeSetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresSignalNodeSetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDestroySurfaceObject(hipSurfaceObject_t surfaceObject, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipDestroySurfaceObject(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroySurfaceObject, __hip_activity);
+	CALL_RET(hipError_t, hipDestroySurfaceObject, surfaceObject, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroySurfaceObject, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamGetDevice(hipStream_t stream, hipDevice_t * device, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetDevice, __hip_activity);
+	CALL_RET(hipError_t, hipStreamGetDevice, stream, device, NULL);
+	GET_ARGS_VALUE_hipStreamGetDevice(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetDevice, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemAllocPitch(hipDeviceptr_t * dptr, size_t * pitch, size_t widthInBytes, size_t height, unsigned int elementSizeBytes, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAllocPitch, __hip_activity);
+	CALL_RET(hipError_t, hipMemAllocPitch, dptr, pitch, widthInBytes, height, elementSizeBytes, NULL);
+	GET_ARGS_VALUE_hipMemAllocPitch(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAllocPitch, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipGraphNodeParams * nodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddNode, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddNode, pGraphNode, graph, pDependencies, numDependencies, nodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphAddNode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddNode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceSetSharedMemConfig(hipSharedMemConfig config, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetSharedMemConfig, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceSetSharedMemConfig, config, NULL);
+	GET_ARGS_VALUE_hipDeviceSetSharedMemConfig(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetSharedMemConfig, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipRuntimeGetVersion(int * runtimeVersion, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipRuntimeGetVersion, __hip_activity);
+	CALL_RET(hipError_t, hipRuntimeGetVersion, runtimeVersion, NULL);
+	GET_ARGS_VALUE_hipRuntimeGetVersion(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipRuntimeGetVersion, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphChildGraphNodeGetGraph(hipGraphNode_t node, hipGraph_t * pGraph, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphChildGraphNodeGetGraph, __hip_activity);
+	CALL_RET(hipError_t, hipGraphChildGraphNodeGetGraph, node, pGraph, NULL);
+	GET_ARGS_VALUE_hipGraphChildGraphNodeGetGraph(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphChildGraphNodeGetGraph, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExecMemsetNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipMemsetParams * pNodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemsetNodeSetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExecMemsetNodeSetParams, hGraphExec, node, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphExecMemsetNodeSetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemsetNodeSetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphicsUnregisterResource(hipGraphicsResource_t resource, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsUnregisterResource, __hip_activity);
+	CALL_RET(hipError_t, hipGraphicsUnregisterResource, resource, NULL);
+	GET_ARGS_VALUE_hipGraphicsUnregisterResource(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsUnregisterResource, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipEventElapsedTime(float * ms, hipEvent_t start, hipEvent_t stop, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventElapsedTime, __hip_activity);
+	CALL_RET(hipError_t, hipEventElapsedTime, ms, start, stop, NULL);
+	GET_ARGS_VALUE_hipEventElapsedTime(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventElapsedTime, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipFreeAsync(void * dev_ptr, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipFreeAsync(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeAsync, __hip_activity);
+	CALL_RET(hipError_t, hipFreeAsync, dev_ptr, stream, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamCreateWithFlags(hipStream_t * stream, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamCreateWithFlags, __hip_activity);
+	CALL_RET(hipError_t, hipStreamCreateWithFlags, stream, flags, NULL);
+	GET_ARGS_VALUE_hipStreamCreateWithFlags(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamCreateWithFlags, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefSetAddress(size_t * ByteOffset, textureReference * texRef, hipDeviceptr_t dptr, size_t bytes, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetAddress, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefSetAddress, ByteOffset, texRef, dptr, bytes, NULL);
+	GET_ARGS_VALUE_hipTexRefSetAddress(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetAddress, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamAddCallback_spt(hipStream_t stream, hipStreamCallback_t callback, void * userData, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamAddCallback_spt, __hip_activity);
+	CALL_RET(hipError_t, hipStreamAddCallback_spt, stream, callback, userData, flags, NULL);
+	GET_ARGS_VALUE_hipStreamAddCallback_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamAddCallback_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddKernelNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipKernelNodeParams * pNodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddKernelNode, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddKernelNode, pGraphNode, graph, pDependencies, numDependencies, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphAddKernelNode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddKernelNode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyDtoH(void * dst, hipDeviceptr_t src, size_t sizeBytes, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoH, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyDtoH, dst, src, sizeBytes, NULL);
+	GET_ARGS_VALUE_hipMemcpyDtoH(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoH, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceTotalMem(size_t * bytes, hipDevice_t device, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceTotalMem, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceTotalMem, bytes, device, NULL);
+	GET_ARGS_VALUE_hipDeviceTotalMem(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceTotalMem, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemset2D(void * dst, size_t pitch, int value, size_t width, size_t height, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2D, __hip_activity);
+	CALL_RET(hipError_t, hipMemset2D, dst, pitch, value, width, height, NULL);
+	GET_ARGS_VALUE_hipMemset2D(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2D, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy2DToArray_spt(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArray_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy2DToArray_spt, dst, wOffset, hOffset, src, spitch, width, height, kind, NULL);
+	GET_ARGS_VALUE_hipMemcpy2DToArray_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArray_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemAllocHost(void ** ptr, size_t size, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAllocHost, __hip_activity);
+	CALL_RET(hipError_t, hipMemAllocHost, ptr, size, NULL);
+	GET_ARGS_VALUE_hipMemAllocHost(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAllocHost, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipPointerSetAttribute(const void * value, hipPointer_attribute attribute, hipDeviceptr_t ptr, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPointerSetAttribute, __hip_activity);
+	CALL_RET(hipError_t, hipPointerSetAttribute, value, attribute, ptr, NULL);
+	GET_ARGS_VALUE_hipPointerSetAttribute(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPointerSetAttribute, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphHostNodeGetParams(hipGraphNode_t node, hipHostNodeParams * pNodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphHostNodeGetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphHostNodeGetParams, node, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphHostNodeGetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphHostNodeGetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemset3D(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3D, __hip_activity);
+	CALL_RET(hipError_t, hipMemset3D, pitchedDevPtr, value, extent, NULL);
+	GET_ARGS_VALUE_hipMemset3D(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3D, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDestroyTextureObject(hipTextureObject_t textureObject, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipDestroyTextureObject(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroyTextureObject, __hip_activity);
+	CALL_RET(hipError_t, hipDestroyTextureObject, textureObject, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroyTextureObject, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemAdvise(const void * dev_ptr, size_t count, hipMemoryAdvise advice, int device, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAdvise, __hip_activity);
+	CALL_RET(hipError_t, hipMemAdvise, dev_ptr, count, advice, device, NULL);
+	GET_ARGS_VALUE_hipMemAdvise(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAdvise, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCtxGetCacheConfig(hipFuncCache_t * cacheConfig, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetCacheConfig, __hip_activity);
+	CALL_RET(hipError_t, hipCtxGetCacheConfig, cacheConfig, NULL);
+	GET_ARGS_VALUE_hipCtxGetCacheConfig(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetCacheConfig, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDrvPointerGetAttributes(unsigned int numAttributes, hipPointer_attribute * attributes, void ** data, hipDeviceptr_t ptr, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvPointerGetAttributes, __hip_activity);
+	CALL_RET(hipError_t, hipDrvPointerGetAttributes, numAttributes, attributes, data, ptr, NULL);
+	GET_ARGS_VALUE_hipDrvPointerGetAttributes(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvPointerGetAttributes, __hip_activity);
+	return __hip_ret;
+};
+
 hipError_t i_hipModuleLaunchCooperativeKernelMultiDevice(hipFunctionLaunchParams * launchParamsList, unsigned int numDevices, unsigned int flags, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
@@ -4501,13 +1791,143 @@ hipError_t i_hipModuleLaunchCooperativeKernelMultiDevice(hipFunctionLaunchParams
 	return __hip_ret;
 };
 
-hipError_t i_hipGraphMemsetNodeSetParams(hipGraphNode_t node, const hipMemsetParams * pNodeParams, void* return_address) {
+hipError_t i_hipModuleGetGlobal(hipDeviceptr_t * dptr, size_t * bytes, hipModule_t hmod, const char * name, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemsetNodeSetParams, __hip_activity);
-	CALL_RET(hipError_t, hipGraphMemsetNodeSetParams, node, pNodeParams, NULL);
-	GET_ARGS_VALUE_hipGraphMemsetNodeSetParams(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemsetNodeSetParams, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleGetGlobal, __hip_activity);
+	CALL_RET(hipError_t, hipModuleGetGlobal, dptr, bytes, hmod, name, NULL);
+	GET_ARGS_VALUE_hipModuleGetGlobal(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleGetGlobal, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphEventRecordNodeGetEvent(hipGraphNode_t node, hipEvent_t * event_out, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventRecordNodeGetEvent, __hip_activity);
+	CALL_RET(hipError_t, hipGraphEventRecordNodeGetEvent, node, event_out, NULL);
+	GET_ARGS_VALUE_hipGraphEventRecordNodeGetEvent(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventRecordNodeGetEvent, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphInstantiate(hipGraphExec_t * pGraphExec, hipGraph_t graph, hipGraphNode_t * pErrorNode, char * pLogBuffer, size_t bufferSize, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphInstantiate, __hip_activity);
+	CALL_RET(hipError_t, hipGraphInstantiate, pGraphExec, graph, pErrorNode, pLogBuffer, bufferSize, NULL);
+	GET_ARGS_VALUE_hipGraphInstantiate(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphInstantiate, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphRetainUserObject(hipGraph_t graph, hipUserObject_t object, unsigned int count, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphRetainUserObject, __hip_activity);
+	CALL_RET(hipError_t, hipGraphRetainUserObject, graph, object, count, flags, NULL);
+	GET_ARGS_VALUE_hipGraphRetainUserObject(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphRetainUserObject, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphMemAllocNodeGetParams(hipGraphNode_t node, hipMemAllocNodeParams * pNodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemAllocNodeGetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphMemAllocNodeGetParams, node, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphMemAllocNodeGetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemAllocNodeGetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamGetCaptureInfo(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, unsigned long long * pId, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo, __hip_activity);
+	CALL_RET(hipError_t, hipStreamGetCaptureInfo, stream, pCaptureStatus, pId, NULL);
+	GET_ARGS_VALUE_hipStreamGetCaptureInfo(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCtxPopCurrent(hipCtx_t * ctx, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxPopCurrent, __hip_activity);
+	CALL_RET(hipError_t, hipCtxPopCurrent, ctx, NULL);
+	GET_ARGS_VALUE_hipCtxPopCurrent(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxPopCurrent, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipPointerGetAttributes(hipPointerAttribute_t * attributes, const void * ptr, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPointerGetAttributes, __hip_activity);
+	CALL_RET(hipError_t, hipPointerGetAttributes, attributes, ptr, NULL);
+	GET_ARGS_VALUE_hipPointerGetAttributes(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPointerGetAttributes, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceDisablePeerAccess(int peerDeviceId, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceDisablePeerAccess, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceDisablePeerAccess, peerDeviceId, NULL);
+	GET_ARGS_VALUE_hipDeviceDisablePeerAccess(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceDisablePeerAccess, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMallocPitch(void ** ptr, size_t * pitch, size_t width, size_t height, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocPitch, __hip_activity);
+	CALL_RET(hipError_t, hipMallocPitch, ptr, pitch, width, height, NULL);
+	GET_ARGS_VALUE_hipMallocPitch(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocPitch, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy2DFromArrayAsync(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArrayAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy2DFromArrayAsync, dst, dpitch, src, wOffset, hOffset, width, height, kind, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpy2DFromArrayAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArrayAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceComputeCapability(int * major, int * minor, hipDevice_t device, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceComputeCapability, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceComputeCapability, major, minor, device, NULL);
+	GET_ARGS_VALUE_hipDeviceComputeCapability(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceComputeCapability, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyHtoD(hipDeviceptr_t dst, void * src, size_t sizeBytes, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoD, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyHtoD, dst, src, sizeBytes, NULL);
+	GET_ARGS_VALUE_hipMemcpyHtoD(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoD, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipOccupancyMaxActiveBlocksPerMultiprocessor(int * numBlocks, const void * f, int blockSize, size_t dynSharedMemPerBlk, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessor, __hip_activity);
+	CALL_RET(hipError_t, hipOccupancyMaxActiveBlocksPerMultiprocessor, numBlocks, f, blockSize, dynSharedMemPerBlk, NULL);
+	GET_ARGS_VALUE_hipOccupancyMaxActiveBlocksPerMultiprocessor(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessor, __hip_activity);
 	return __hip_ret;
 };
 
@@ -4521,14 +1941,2593 @@ hipError_t i_hipSignalExternalSemaphoresAsync(const hipExternalSemaphore_t * ext
 	return __hip_ret;
 };
 
-hipError_t i_hipModuleLoad(hipModule_t * module, const char * fname, void* return_address) {
+hipError_t i_hipArray3DGetDescriptor(HIP_ARRAY3D_DESCRIPTOR * pArrayDescriptor, hipArray_t array, void* return_address) {
 	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__hip_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLoad, __hip_activity);
-	CALL_RET(hipError_t, hipModuleLoad, module, fname, NULL);
-	GET_ARGS_VALUE_hipModuleLoad(__hip_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLoad, __hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArray3DGetDescriptor, __hip_activity);
+	CALL_RET(hipError_t, hipArray3DGetDescriptor, pArrayDescriptor, array, NULL);
+	GET_ARGS_VALUE_hipArray3DGetDescriptor(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArray3DGetDescriptor, __hip_activity);
 	return __hip_ret;
 };
- 
 
+hipError_t i___hipPopCallConfiguration(dim3 * gridDim, dim3 * blockDim, size_t * sharedMem, hipStream_t * stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID___hipPopCallConfiguration, __hip_activity);
+	CALL_RET(hipError_t, __hipPopCallConfiguration, gridDim, blockDim, sharedMem, stream, NULL);
+	GET_ARGS_VALUE___hipPopCallConfiguration(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID___hipPopCallConfiguration, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDevicePrimaryCtxRelease(hipDevice_t dev, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipDevicePrimaryCtxRelease(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxRelease, __hip_activity);
+	CALL_RET(hipError_t, hipDevicePrimaryCtxRelease, dev, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxRelease, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipLaunchCooperativeKernelMultiDevice(hipLaunchParams * launchParamsList, int numDevices, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchCooperativeKernelMultiDevice, __hip_activity);
+	CALL_RET(hipError_t, hipLaunchCooperativeKernelMultiDevice, launchParamsList, numDevices, flags, NULL);
+	GET_ARGS_VALUE_hipLaunchCooperativeKernelMultiDevice(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchCooperativeKernelMultiDevice, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipFreeArray(hipArray_t array, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipFreeArray(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeArray, __hip_activity);
+	CALL_RET(hipError_t, hipFreeArray, array, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeArray, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphMemsetNodeSetParams(hipGraphNode_t node, const hipMemsetParams * pNodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemsetNodeSetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphMemsetNodeSetParams, node, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphMemsetNodeSetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemsetNodeSetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemPoolSetAccess(hipMemPool_t mem_pool, const hipMemAccessDesc * desc_list, size_t count, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolSetAccess, __hip_activity);
+	CALL_RET(hipError_t, hipMemPoolSetAccess, mem_pool, desc_list, count, NULL);
+	GET_ARGS_VALUE_hipMemPoolSetAccess(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolSetAccess, __hip_activity);
+	return __hip_ret;
+};
+
+int i_hipGetStreamDeviceId(hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetStreamDeviceId, __hip_activity);
+	CALL_RET(int, hipGetStreamDeviceId, stream, NULL);
+	GET_ARGS_VALUE_hipGetStreamDeviceId(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetStreamDeviceId, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipExtStreamCreateWithCUMask(hipStream_t * stream, uint32_t cuMaskSize, const uint32_t * cuMask, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtStreamCreateWithCUMask, __hip_activity);
+	CALL_RET(hipError_t, hipExtStreamCreateWithCUMask, stream, cuMaskSize, cuMask, NULL);
+	GET_ARGS_VALUE_hipExtStreamCreateWithCUMask(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtStreamCreateWithCUMask, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGetTextureObjectTextureDesc(hipTextureDesc * pTexDesc, hipTextureObject_t textureObject, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureObjectTextureDesc, __hip_activity);
+	CALL_RET(hipError_t, hipGetTextureObjectTextureDesc, pTexDesc, textureObject, NULL);
+	GET_ARGS_VALUE_hipGetTextureObjectTextureDesc(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureObjectTextureDesc, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipEventRecord_spt(hipEvent_t event, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventRecord_spt, __hip_activity);
+	CALL_RET(hipError_t, hipEventRecord_spt, event, stream, NULL);
+	GET_ARGS_VALUE_hipEventRecord_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventRecord_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipConfigureCall, __hip_activity);
+	CALL_RET(hipError_t, hipConfigureCall, gridDim, blockDim, sharedMem, stream, NULL);
+	GET_ARGS_VALUE_hipConfigureCall(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipConfigureCall, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyFromArray_spt(void * dst, hipArray_const_t src, size_t wOffsetSrc, size_t hOffset, size_t count, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromArray_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyFromArray_spt, dst, src, wOffsetSrc, hOffset, count, kind, NULL);
+	GET_ARGS_VALUE_hipMemcpyFromArray_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromArray_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipModuleGetFunction(hipFunction_t * function, hipModule_t module, const char * kname, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleGetFunction, __hip_activity);
+	CALL_RET(hipError_t, hipModuleGetFunction, function, module, kname, NULL);
+	GET_ARGS_VALUE_hipModuleGetFunction(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleGetFunction, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipFuncSetCacheConfig(const void * func, hipFuncCache_t config, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncSetCacheConfig, __hip_activity);
+	CALL_RET(hipError_t, hipFuncSetCacheConfig, func, config, NULL);
+	GET_ARGS_VALUE_hipFuncSetCacheConfig(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncSetCacheConfig, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceGetLimit(size_t * pValue, enum hipLimit_t limit, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetLimit, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceGetLimit, pValue, limit, NULL);
+	GET_ARGS_VALUE_hipDeviceGetLimit(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetLimit, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefGetMaxAnisotropy(int * pmaxAnsio, const textureReference * texRef, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMaxAnisotropy, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefGetMaxAnisotropy, pmaxAnsio, texRef, NULL);
+	GET_ARGS_VALUE_hipTexRefGetMaxAnisotropy(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMaxAnisotropy, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipLaunchKernel_spt(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchKernel_spt, __hip_activity);
+	CALL_RET(hipError_t, hipLaunchKernel_spt, function_address, numBlocks, dimBlocks, args, sharedMemBytes, stream, NULL);
+	GET_ARGS_VALUE_hipLaunchKernel_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchKernel_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamBeginCaptureToGraph(hipStream_t stream, hipGraph_t graph, const hipGraphNode_t * dependencies, const hipGraphEdgeData * dependencyData, size_t numDependencies, hipStreamCaptureMode mode, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamBeginCaptureToGraph, __hip_activity);
+	CALL_RET(hipError_t, hipStreamBeginCaptureToGraph, stream, graph, dependencies, dependencyData, numDependencies, mode, NULL);
+	GET_ARGS_VALUE_hipStreamBeginCaptureToGraph(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamBeginCaptureToGraph, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefGetFormat(hipArray_Format * pFormat, int * pNumChannels, const textureReference * texRef, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetFormat, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefGetFormat, pFormat, pNumChannels, texRef, NULL);
+	GET_ARGS_VALUE_hipTexRefGetFormat(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetFormat, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamWaitValue64(hipStream_t stream, void * ptr, uint64_t value, unsigned int flags, uint64_t mask, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitValue64, __hip_activity);
+	CALL_RET(hipError_t, hipStreamWaitValue64, stream, ptr, value, flags, mask, NULL);
+	GET_ARGS_VALUE_hipStreamWaitValue64(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitValue64, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDevicePrimaryCtxRetain(hipCtx_t * pctx, hipDevice_t dev, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxRetain, __hip_activity);
+	CALL_RET(hipError_t, hipDevicePrimaryCtxRetain, pctx, dev, NULL);
+	GET_ARGS_VALUE_hipDevicePrimaryCtxRetain(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxRetain, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMallocManaged(void ** dev_ptr, size_t size, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocManaged, __hip_activity);
+	CALL_RET(hipError_t, hipMallocManaged, dev_ptr, size, flags, NULL);
+	GET_ARGS_VALUE_hipMallocManaged(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocManaged, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamCreateWithPriority(hipStream_t * stream, unsigned int flags, int priority, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamCreateWithPriority, __hip_activity);
+	CALL_RET(hipError_t, hipStreamCreateWithPriority, stream, flags, priority, NULL);
+	GET_ARGS_VALUE_hipStreamCreateWithPriority(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamCreateWithPriority, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamGetCaptureInfo_spt(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, unsigned long long * pId, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo_spt, __hip_activity);
+	CALL_RET(hipError_t, hipStreamGetCaptureInfo_spt, stream, pCaptureStatus, pId, NULL);
+	GET_ARGS_VALUE_hipStreamGetCaptureInfo_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddHostNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipHostNodeParams * pNodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddHostNode, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddHostNode, pGraphNode, graph, pDependencies, numDependencies, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphAddHostNode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddHostNode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipLaunchCooperativeKernel(const void * f, dim3 gridDim, dim3 blockDimX, void ** kernelParams, unsigned int sharedMemBytes, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchCooperativeKernel, __hip_activity);
+	CALL_RET(hipError_t, hipLaunchCooperativeKernel, f, gridDim, blockDimX, kernelParams, sharedMemBytes, stream, NULL);
+	GET_ARGS_VALUE_hipLaunchCooperativeKernel(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchCooperativeKernel, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipHostRegister(void * hostPtr, size_t sizeBytes, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostRegister, __hip_activity);
+	CALL_RET(hipError_t, hipHostRegister, hostPtr, sizeBytes, flags, NULL);
+	GET_ARGS_VALUE_hipHostRegister(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostRegister, __hip_activity);
+	return __hip_ret;
+};
+
+const char * i_hipGetErrorName(hipError_t hip_error, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetErrorName, __hip_activity);
+	CALL_RET(char *, hipGetErrorName, hip_error, NULL);
+	GET_ARGS_VALUE_hipGetErrorName(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetErrorName, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyToSymbol_spt(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbol_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyToSymbol_spt, symbol, src, sizeBytes, offset, kind, NULL);
+	GET_ARGS_VALUE_hipMemcpyToSymbol_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbol_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphMemsetNodeGetParams(hipGraphNode_t node, hipMemsetParams * pNodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemsetNodeGetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphMemsetNodeGetParams, node, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphMemsetNodeGetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemsetNodeGetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamWriteValue32(hipStream_t stream, void * ptr, uint32_t value, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWriteValue32, __hip_activity);
+	CALL_RET(hipError_t, hipStreamWriteValue32, stream, ptr, value, flags, NULL);
+	GET_ARGS_VALUE_hipStreamWriteValue32(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWriteValue32, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamSynchronize_spt(hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamSynchronize_spt, __hip_activity);
+	CALL_RET(hipError_t, hipStreamSynchronize_spt, stream, NULL);
+	GET_ARGS_VALUE_hipStreamSynchronize_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamSynchronize_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceGraphMemTrim(int device, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGraphMemTrim, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceGraphMemTrim, device, NULL);
+	GET_ARGS_VALUE_hipDeviceGraphMemTrim(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGraphMemTrim, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamDestroy(hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipStreamDestroy(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamDestroy, __hip_activity);
+	CALL_RET(hipError_t, hipStreamDestroy, stream, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamDestroy, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefSetArray(textureReference * tex, hipArray_const_t array, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetArray, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefSetArray, tex, array, flags, NULL);
+	GET_ARGS_VALUE_hipTexRefSetArray(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetArray, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyParam2DAsync(const hip_Memcpy2D * pCopy, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyParam2DAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyParam2DAsync, pCopy, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpyParam2DAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyParam2DAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemPoolExportPointer(hipMemPoolPtrExportData * export_data, void * dev_ptr, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolExportPointer, __hip_activity);
+	CALL_RET(hipError_t, hipMemPoolExportPointer, export_data, dev_ptr, NULL);
+	GET_ARGS_VALUE_hipMemPoolExportPointer(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolExportPointer, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphEventRecordNodeSetEvent(hipGraphNode_t node, hipEvent_t event, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventRecordNodeSetEvent, __hip_activity);
+	CALL_RET(hipError_t, hipGraphEventRecordNodeSetEvent, node, event, NULL);
+	GET_ARGS_VALUE_hipGraphEventRecordNodeSetEvent(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventRecordNodeSetEvent, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCtxDestroy(hipCtx_t ctx, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipCtxDestroy(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxDestroy, __hip_activity);
+	CALL_RET(hipError_t, hipCtxDestroy, ctx, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxDestroy, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipArrayDestroy(hipArray_t array, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipArrayDestroy(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayDestroy, __hip_activity);
+	CALL_RET(hipError_t, hipArrayDestroy, array, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayDestroy, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemGetAllocationGranularity(size_t * granularity, const hipMemAllocationProp * prop, hipMemAllocationGranularity_flags option, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAllocationGranularity, __hip_activity);
+	CALL_RET(hipError_t, hipMemGetAllocationGranularity, granularity, prop, option, NULL);
+	GET_ARGS_VALUE_hipMemGetAllocationGranularity(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAllocationGranularity, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphClone(hipGraph_t * pGraphClone, hipGraph_t originalGraph, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphClone, __hip_activity);
+	CALL_RET(hipError_t, hipGraphClone, pGraphClone, originalGraph, NULL);
+	GET_ARGS_VALUE_hipGraphClone(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphClone, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemset2DAsync_spt(void * dst, size_t pitch, int value, size_t width, size_t height, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2DAsync_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemset2DAsync_spt, dst, pitch, value, width, height, stream, NULL);
+	GET_ARGS_VALUE_hipMemset2DAsync_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2DAsync_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipBindTexture2D(size_t * offset, const textureReference * tex, const void * devPtr, const hipChannelFormatDesc * desc, size_t width, size_t height, size_t pitch, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTexture2D, __hip_activity);
+	CALL_RET(hipError_t, hipBindTexture2D, offset, tex, devPtr, desc, width, height, pitch, NULL);
+	GET_ARGS_VALUE_hipBindTexture2D(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTexture2D, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipArrayGetInfo(hipChannelFormatDesc * desc, hipExtent * extent, unsigned int * flags, hipArray_t array, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayGetInfo, __hip_activity);
+	CALL_RET(hipError_t, hipArrayGetInfo, desc, extent, flags, array, NULL);
+	GET_ARGS_VALUE_hipArrayGetInfo(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayGetInfo, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExternalSemaphoresSignalNodeGetParams(hipGraphNode_t hNode, hipExternalSemaphoreSignalNodeParams * params_out, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresSignalNodeGetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExternalSemaphoresSignalNodeGetParams, hNode, params_out, NULL);
+	GET_ARGS_VALUE_hipGraphExternalSemaphoresSignalNodeGetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresSignalNodeGetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceGetStreamPriorityRange(int * leastPriority, int * greatestPriority, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetStreamPriorityRange, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceGetStreamPriorityRange, leastPriority, greatestPriority, NULL);
+	GET_ARGS_VALUE_hipDeviceGetStreamPriorityRange(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetStreamPriorityRange, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExecChildGraphNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, hipGraph_t childGraph, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecChildGraphNodeSetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExecChildGraphNodeSetParams, hGraphExec, node, childGraph, NULL);
+	GET_ARGS_VALUE_hipGraphExecChildGraphNodeSetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecChildGraphNodeSetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemset2D_spt(void * dst, size_t pitch, int value, size_t width, size_t height, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2D_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemset2D_spt, dst, pitch, value, width, height, NULL);
+	GET_ARGS_VALUE_hipMemset2D_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2D_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceGetDefaultMemPool(hipMemPool_t * mem_pool, int device, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetDefaultMemPool, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceGetDefaultMemPool, mem_pool, device, NULL);
+	GET_ARGS_VALUE_hipDeviceGetDefaultMemPool(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetDefaultMemPool, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCtxCreate(hipCtx_t * ctx, unsigned int flags, hipDevice_t device, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxCreate, __hip_activity);
+	CALL_RET(hipError_t, hipCtxCreate, ctx, flags, device, NULL);
+	GET_ARGS_VALUE_hipCtxCreate(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxCreate, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamIsCapturing(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamIsCapturing, __hip_activity);
+	CALL_RET(hipError_t, hipStreamIsCapturing, stream, pCaptureStatus, NULL);
+	GET_ARGS_VALUE_hipStreamIsCapturing(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamIsCapturing, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamUpdateCaptureDependencies(hipStream_t stream, hipGraphNode_t * dependencies, size_t numDependencies, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamUpdateCaptureDependencies, __hip_activity);
+	CALL_RET(hipError_t, hipStreamUpdateCaptureDependencies, stream, dependencies, numDependencies, flags, NULL);
+	GET_ARGS_VALUE_hipStreamUpdateCaptureDependencies(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamUpdateCaptureDependencies, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceSynchronize(void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSynchronize, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceSynchronize, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSynchronize, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyFromSymbolAsync(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromSymbolAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyFromSymbolAsync, dst, symbol, sizeBytes, offset, kind, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpyFromSymbolAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyFromSymbolAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphDestroyNode(hipGraphNode_t node, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipGraphDestroyNode(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphDestroyNode, __hip_activity);
+	CALL_RET(hipError_t, hipGraphDestroyNode, node, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphDestroyNode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipUserObjectRetain(hipUserObject_t object, unsigned int count, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUserObjectRetain, __hip_activity);
+	CALL_RET(hipError_t, hipUserObjectRetain, object, count, NULL);
+	GET_ARGS_VALUE_hipUserObjectRetain(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUserObjectRetain, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExecEventWaitNodeSetEvent(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, hipEvent_t event, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecEventWaitNodeSetEvent, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExecEventWaitNodeSetEvent, hGraphExec, hNode, event, NULL);
+	GET_ARGS_VALUE_hipGraphExecEventWaitNodeSetEvent(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecEventWaitNodeSetEvent, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemAddressReserve(void ** ptr, size_t size, size_t alignment, void * addr, unsigned long long flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAddressReserve, __hip_activity);
+	CALL_RET(hipError_t, hipMemAddressReserve, ptr, size, alignment, addr, flags, NULL);
+	GET_ARGS_VALUE_hipMemAddressReserve(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAddressReserve, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddMemsetNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipMemsetParams * pMemsetParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemsetNode, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddMemsetNode, pGraphNode, graph, pDependencies, numDependencies, pMemsetParams, NULL);
+	GET_ARGS_VALUE_hipGraphAddMemsetNode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemsetNode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphicsResourceGetMappedPointer(void ** devPtr, size_t * size, hipGraphicsResource_t resource, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsResourceGetMappedPointer, __hip_activity);
+	CALL_RET(hipError_t, hipGraphicsResourceGetMappedPointer, devPtr, size, resource, NULL);
+	GET_ARGS_VALUE_hipGraphicsResourceGetMappedPointer(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsResourceGetMappedPointer, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamBeginCapture_spt(hipStream_t stream, hipStreamCaptureMode mode, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamBeginCapture_spt, __hip_activity);
+	CALL_RET(hipError_t, hipStreamBeginCapture_spt, stream, mode, NULL);
+	GET_ARGS_VALUE_hipStreamBeginCapture_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamBeginCapture_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceGetUuid(hipUUID * uuid, hipDevice_t device, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetUuid, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceGetUuid, uuid, device, NULL);
+	GET_ARGS_VALUE_hipDeviceGetUuid(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetUuid, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipModuleLaunchKernel(hipFunction_t f, unsigned int gridDimX, unsigned int gridDimY, unsigned int gridDimZ, unsigned int blockDimX, unsigned int blockDimY, unsigned int blockDimZ, unsigned int sharedMemBytes, hipStream_t stream, void ** kernelParams, void ** extra, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLaunchKernel, __hip_activity);
+	CALL_RET(hipError_t, hipModuleLaunchKernel, f, gridDimX, gridDimY, gridDimZ, blockDimX, blockDimY, blockDimZ, sharedMemBytes, stream, kernelParams, extra, NULL);
+	GET_ARGS_VALUE_hipModuleLaunchKernel(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLaunchKernel, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddEmptyNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddEmptyNode, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddEmptyNode, pGraphNode, graph, pDependencies, numDependencies, NULL);
+	GET_ARGS_VALUE_hipGraphAddEmptyNode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddEmptyNode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemRangeGetAttribute(void * data, size_t data_size, hipMemRangeAttribute attribute, const void * dev_ptr, size_t count, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRangeGetAttribute, __hip_activity);
+	CALL_RET(hipError_t, hipMemRangeGetAttribute, data, data_size, attribute, dev_ptr, count, NULL);
+	GET_ARGS_VALUE_hipMemRangeGetAttribute(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRangeGetAttribute, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphInstantiateWithFlags(hipGraphExec_t * pGraphExec, hipGraph_t graph, unsigned long long flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphInstantiateWithFlags, __hip_activity);
+	CALL_RET(hipError_t, hipGraphInstantiateWithFlags, pGraphExec, graph, flags, NULL);
+	GET_ARGS_VALUE_hipGraphInstantiateWithFlags(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphInstantiateWithFlags, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCtxPushCurrent(hipCtx_t ctx, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxPushCurrent, __hip_activity);
+	CALL_RET(hipError_t, hipCtxPushCurrent, ctx, NULL);
+	GET_ARGS_VALUE_hipCtxPushCurrent(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxPushCurrent, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCtxGetApiVersion(hipCtx_t ctx, int * apiVersion, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetApiVersion, __hip_activity);
+	CALL_RET(hipError_t, hipCtxGetApiVersion, ctx, apiVersion, NULL);
+	GET_ARGS_VALUE_hipCtxGetApiVersion(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetApiVersion, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipBindTexture(size_t * offset, const textureReference * tex, const void * devPtr, const hipChannelFormatDesc * desc, size_t size, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTexture, __hip_activity);
+	CALL_RET(hipError_t, hipBindTexture, offset, tex, devPtr, desc, size, NULL);
+	GET_ARGS_VALUE_hipBindTexture(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTexture, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamBeginCapture(hipStream_t stream, hipStreamCaptureMode mode, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamBeginCapture, __hip_activity);
+	CALL_RET(hipError_t, hipStreamBeginCapture, stream, mode, NULL);
+	GET_ARGS_VALUE_hipStreamBeginCapture(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamBeginCapture, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipProfilerStart(void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipProfilerStart, __hip_activity);
+	CALL_RET(hipError_t, hipProfilerStart, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipProfilerStart, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyHtoDAsync(hipDeviceptr_t dst, void * src, size_t sizeBytes, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoDAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyHtoDAsync, dst, src, sizeBytes, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpyHtoDAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoDAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGetDeviceFlags(unsigned int * flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDeviceFlags, __hip_activity);
+	CALL_RET(hipError_t, hipGetDeviceFlags, flags, NULL);
+	GET_ARGS_VALUE_hipGetDeviceFlags(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetDeviceFlags, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemRangeGetAttributes(void ** data, size_t * data_sizes, hipMemRangeAttribute * attributes, size_t num_attributes, const void * dev_ptr, size_t count, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRangeGetAttributes, __hip_activity);
+	CALL_RET(hipError_t, hipMemRangeGetAttributes, data, data_sizes, attributes, num_attributes, dev_ptr, count, NULL);
+	GET_ARGS_VALUE_hipMemRangeGetAttributes(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRangeGetAttributes, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDestroyExternalSemaphore(hipExternalSemaphore_t extSem, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipDestroyExternalSemaphore(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroyExternalSemaphore, __hip_activity);
+	CALL_RET(hipError_t, hipDestroyExternalSemaphore, extSem, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroyExternalSemaphore, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipIpcOpenEventHandle(hipEvent_t * event, hipIpcEventHandle_t handle, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcOpenEventHandle, __hip_activity);
+	CALL_RET(hipError_t, hipIpcOpenEventHandle, event, handle, NULL);
+	GET_ARGS_VALUE_hipIpcOpenEventHandle(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcOpenEventHandle, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphUpload(hipGraphExec_t graphExec, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphUpload, __hip_activity);
+	CALL_RET(hipError_t, hipGraphUpload, graphExec, stream, NULL);
+	GET_ARGS_VALUE_hipGraphUpload(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphUpload, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMallocAsync(void ** dev_ptr, size_t size, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMallocAsync, dev_ptr, size, stream, NULL);
+	GET_ARGS_VALUE_hipMallocAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipOccupancyMaxPotentialBlockSize(int * gridSize, int * blockSize, const void * f, size_t dynSharedMemPerBlk, int blockSizeLimit, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipOccupancyMaxPotentialBlockSize, __hip_activity);
+	CALL_RET(hipError_t, hipOccupancyMaxPotentialBlockSize, gridSize, blockSize, f, dynSharedMemPerBlk, blockSizeLimit, NULL);
+	GET_ARGS_VALUE_hipOccupancyMaxPotentialBlockSize(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipOccupancyMaxPotentialBlockSize, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDestroyExternalMemory(hipExternalMemory_t extMem, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipDestroyExternalMemory(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroyExternalMemory, __hip_activity);
+	CALL_RET(hipError_t, hipDestroyExternalMemory, extMem, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDestroyExternalMemory, __hip_activity);
+	return __hip_ret;
+};
+
+const char * i_amd_dbgapi_get_build_name(void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_amd_dbgapi_get_build_name, __hip_activity);
+	CALL_RET(char *, amd_dbgapi_get_build_name, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_amd_dbgapi_get_build_name, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddMemcpyNodeToSymbol(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNodeToSymbol, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddMemcpyNodeToSymbol, pGraphNode, graph, pDependencies, numDependencies, symbol, src, count, offset, kind, NULL);
+	GET_ARGS_VALUE_hipGraphAddMemcpyNodeToSymbol(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNodeToSymbol, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceGetPCIBusId(char * pciBusId, int len, int device, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetPCIBusId, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceGetPCIBusId, pciBusId, len, device, NULL);
+	GET_ARGS_VALUE_hipDeviceGetPCIBusId(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetPCIBusId, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGetChannelDesc(hipChannelFormatDesc * desc, hipArray_const_t array, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetChannelDesc, __hip_activity);
+	CALL_RET(hipError_t, hipGetChannelDesc, desc, array, NULL);
+	GET_ARGS_VALUE_hipGetChannelDesc(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetChannelDesc, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDevicePrimaryCtxReset(hipDevice_t dev, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxReset, __hip_activity);
+	CALL_RET(hipError_t, hipDevicePrimaryCtxReset, dev, NULL);
+	GET_ARGS_VALUE_hipDevicePrimaryCtxReset(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxReset, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipImportExternalMemory(hipExternalMemory_t * extMem_out, const hipExternalMemoryHandleDesc * memHandleDesc, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipImportExternalMemory, __hip_activity);
+	CALL_RET(hipError_t, hipImportExternalMemory, extMem_out, memHandleDesc, NULL);
+	GET_ARGS_VALUE_hipImportExternalMemory(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipImportExternalMemory, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipFuncSetSharedMemConfig(const void * func, hipSharedMemConfig config, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncSetSharedMemConfig, __hip_activity);
+	CALL_RET(hipError_t, hipFuncSetSharedMemConfig, func, config, NULL);
+	GET_ARGS_VALUE_hipFuncSetSharedMemConfig(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncSetSharedMemConfig, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamWaitEvent(hipStream_t stream, hipEvent_t event, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitEvent, __hip_activity);
+	CALL_RET(hipError_t, hipStreamWaitEvent, stream, event, flags, NULL);
+	GET_ARGS_VALUE_hipStreamWaitEvent(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWaitEvent, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefSetMipmapLevelBias(textureReference * texRef, float bias, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmapLevelBias, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefSetMipmapLevelBias, texRef, bias, NULL);
+	GET_ARGS_VALUE_hipTexRefSetMipmapLevelBias(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmapLevelBias, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemPoolImportFromShareableHandle(hipMemPool_t * mem_pool, void * shared_handle, hipMemAllocationHandleType handle_type, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolImportFromShareableHandle, __hip_activity);
+	CALL_RET(hipError_t, hipMemPoolImportFromShareableHandle, mem_pool, shared_handle, handle_type, flags, NULL);
+	GET_ARGS_VALUE_hipMemPoolImportFromShareableHandle(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolImportFromShareableHandle, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemPoolExportToShareableHandle(void * shared_handle, hipMemPool_t mem_pool, hipMemAllocationHandleType handle_type, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolExportToShareableHandle, __hip_activity);
+	CALL_RET(hipError_t, hipMemPoolExportToShareableHandle, shared_handle, mem_pool, handle_type, flags, NULL);
+	GET_ARGS_VALUE_hipMemPoolExportToShareableHandle(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolExportToShareableHandle, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExecMemcpyNodeSetParamsToSymbol(hipGraphExec_t hGraphExec, hipGraphNode_t node, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemcpyNodeSetParamsToSymbol, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExecMemcpyNodeSetParamsToSymbol, hGraphExec, node, symbol, src, count, offset, kind, NULL);
+	GET_ARGS_VALUE_hipGraphExecMemcpyNodeSetParamsToSymbol(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemcpyNodeSetParamsToSymbol, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefGetMipmapFilterMode(enum hipTextureFilterMode * pfm, const textureReference * texRef, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMipmapFilterMode, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefGetMipmapFilterMode, pfm, texRef, NULL);
+	GET_ARGS_VALUE_hipTexRefGetMipmapFilterMode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMipmapFilterMode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGetProcAddress(const char * symbol, void ** pfn, int hipVersion, uint64_t flags, hipDriverProcAddressQueryResult * symbolStatus, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetProcAddress, __hip_activity);
+	CALL_RET(hipError_t, hipGetProcAddress, symbol, pfn, hipVersion, flags, symbolStatus, NULL);
+	GET_ARGS_VALUE_hipGetProcAddress(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetProcAddress, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCreateTextureObject(hipTextureObject_t * pTexObject, const hipResourceDesc * pResDesc, const hipTextureDesc * pTexDesc, const struct hipResourceViewDesc * pResViewDesc, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCreateTextureObject, __hip_activity);
+	CALL_RET(hipError_t, hipCreateTextureObject, pTexObject, pResDesc, pTexDesc, pResViewDesc, NULL);
+	GET_ARGS_VALUE_hipCreateTextureObject(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCreateTextureObject, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphKernelNodeCopyAttributes(hipGraphNode_t hSrc, hipGraphNode_t hDst, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeCopyAttributes, __hip_activity);
+	CALL_RET(hipError_t, hipGraphKernelNodeCopyAttributes, hSrc, hDst, NULL);
+	GET_ARGS_VALUE_hipGraphKernelNodeCopyAttributes(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeCopyAttributes, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefGetFlags(unsigned int * pFlags, const textureReference * texRef, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetFlags, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefGetFlags, pFlags, texRef, NULL);
+	GET_ARGS_VALUE_hipTexRefGetFlags(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetFlags, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDrvGraphAddMemcpyNode(hipGraphNode_t * phGraphNode, hipGraph_t hGraph, const hipGraphNode_t * dependencies, size_t numDependencies, const HIP_MEMCPY3D * copyParams, hipCtx_t ctx, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGraphAddMemcpyNode, __hip_activity);
+	CALL_RET(hipError_t, hipDrvGraphAddMemcpyNode, phGraphNode, hGraph, dependencies, numDependencies, copyParams, ctx, NULL);
+	GET_ARGS_VALUE_hipDrvGraphAddMemcpyNode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGraphAddMemcpyNode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemExportToShareableHandle(void * shareableHandle, hipMemGenericAllocationHandle_t handle, hipMemAllocationHandleType handleType, unsigned long long flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemExportToShareableHandle, __hip_activity);
+	CALL_RET(hipError_t, hipMemExportToShareableHandle, shareableHandle, handle, handleType, flags, NULL);
+	GET_ARGS_VALUE_hipMemExportToShareableHandle(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemExportToShareableHandle, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphLaunch_spt(hipGraphExec_t graphExec, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphLaunch_spt, __hip_activity);
+	CALL_RET(hipError_t, hipGraphLaunch_spt, graphExec, stream, NULL);
+	GET_ARGS_VALUE_hipGraphLaunch_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphLaunch_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphMemcpyNodeSetParamsFromSymbol(hipGraphNode_t node, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParamsFromSymbol, __hip_activity);
+	CALL_RET(hipError_t, hipGraphMemcpyNodeSetParamsFromSymbol, node, dst, symbol, count, offset, kind, NULL);
+	GET_ARGS_VALUE_hipGraphMemcpyNodeSetParamsFromSymbol(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParamsFromSymbol, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphNodeGetDependencies(hipGraphNode_t node, hipGraphNode_t * pDependencies, size_t * pNumDependencies, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetDependencies, __hip_activity);
+	CALL_RET(hipError_t, hipGraphNodeGetDependencies, node, pDependencies, pNumDependencies, NULL);
+	GET_ARGS_VALUE_hipGraphNodeGetDependencies(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetDependencies, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy3D(const struct hipMemcpy3DParms * p, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3D, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy3D, p, NULL);
+	GET_ARGS_VALUE_hipMemcpy3D(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3D, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddMemcpyNodeFromSymbol(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNodeFromSymbol, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddMemcpyNodeFromSymbol, pGraphNode, graph, pDependencies, numDependencies, dst, symbol, count, offset, kind, NULL);
+	GET_ARGS_VALUE_hipGraphAddMemcpyNodeFromSymbol(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNodeFromSymbol, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamGetPriority_spt(hipStream_t stream, int * priority, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetPriority_spt, __hip_activity);
+	CALL_RET(hipError_t, hipStreamGetPriority_spt, stream, priority, NULL);
+	GET_ARGS_VALUE_hipStreamGetPriority_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetPriority_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipModuleLoadData(hipModule_t * module, const void * image, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLoadData, __hip_activity);
+	CALL_RET(hipError_t, hipModuleLoadData, module, image, NULL);
+	GET_ARGS_VALUE_hipModuleLoadData(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLoadData, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipSetDeviceFlags(unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipSetDeviceFlags, __hip_activity);
+	CALL_RET(hipError_t, hipSetDeviceFlags, flags, NULL);
+	GET_ARGS_VALUE_hipSetDeviceFlags(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipSetDeviceFlags, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipExternalMemoryGetMappedBuffer(void ** devPtr, hipExternalMemory_t extMem, const hipExternalMemoryBufferDesc * bufferDesc, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExternalMemoryGetMappedBuffer, __hip_activity);
+	CALL_RET(hipError_t, hipExternalMemoryGetMappedBuffer, devPtr, extMem, bufferDesc, NULL);
+	GET_ARGS_VALUE_hipExternalMemoryGetMappedBuffer(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExternalMemoryGetMappedBuffer, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipLaunchCooperativeKernel_spt(const void * f, dim3 gridDim, dim3 blockDim, void ** kernelParams, uint32_t sharedMemBytes, hipStream_t hStream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchCooperativeKernel_spt, __hip_activity);
+	CALL_RET(hipError_t, hipLaunchCooperativeKernel_spt, f, gridDim, blockDim, kernelParams, sharedMemBytes, hStream, NULL);
+	GET_ARGS_VALUE_hipLaunchCooperativeKernel_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchCooperativeKernel_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipLaunchHostFunc(hipStream_t stream, hipHostFn_t fn, void * userData, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchHostFunc, __hip_activity);
+	CALL_RET(hipError_t, hipLaunchHostFunc, stream, fn, userData, NULL);
+	GET_ARGS_VALUE_hipLaunchHostFunc(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchHostFunc, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyAsync_spt(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAsync_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyAsync_spt, dst, src, sizeBytes, kind, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpyAsync_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAsync_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyPeer(void * dst, int dstDeviceId, const void * src, int srcDeviceId, size_t sizeBytes, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyPeer, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyPeer, dst, dstDeviceId, src, srcDeviceId, sizeBytes, NULL);
+	GET_ARGS_VALUE_hipMemcpyPeer(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyPeer, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceReset(void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceReset, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceReset, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceReset, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemAddressFree(void * devPtr, size_t size, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipMemAddressFree(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAddressFree, __hip_activity);
+	CALL_RET(hipError_t, hipMemAddressFree, devPtr, size, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemAddressFree, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipProfilerStop(void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipProfilerStop, __hip_activity);
+	CALL_RET(hipError_t, hipProfilerStop, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipProfilerStop, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphEventWaitNodeSetEvent(hipGraphNode_t node, hipEvent_t event, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventWaitNodeSetEvent, __hip_activity);
+	CALL_RET(hipError_t, hipGraphEventWaitNodeSetEvent, node, event, NULL);
+	GET_ARGS_VALUE_hipGraphEventWaitNodeSetEvent(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphEventWaitNodeSetEvent, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipModuleLaunchCooperativeKernel(hipFunction_t f, unsigned int gridDimX, unsigned int gridDimY, unsigned int gridDimZ, unsigned int blockDimX, unsigned int blockDimY, unsigned int blockDimZ, unsigned int sharedMemBytes, hipStream_t stream, void ** kernelParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLaunchCooperativeKernel, __hip_activity);
+	CALL_RET(hipError_t, hipModuleLaunchCooperativeKernel, f, gridDimX, gridDimY, gridDimZ, blockDimX, blockDimY, blockDimZ, sharedMemBytes, stream, kernelParams, NULL);
+	GET_ARGS_VALUE_hipModuleLaunchCooperativeKernel(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleLaunchCooperativeKernel, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceGetName(char * name, int len, hipDevice_t device, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetName, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceGetName, name, len, device, NULL);
+	GET_ARGS_VALUE_hipDeviceGetName(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetName, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphNodeSetEnabled(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, unsigned int isEnabled, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeSetEnabled, __hip_activity);
+	CALL_RET(hipError_t, hipGraphNodeSetEnabled, hGraphExec, hNode, isEnabled, NULL);
+	GET_ARGS_VALUE_hipGraphNodeSetEnabled(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeSetEnabled, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefSetAddressMode(textureReference * texRef, int dim, enum hipTextureAddressMode am, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetAddressMode, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefSetAddressMode, texRef, dim, am, NULL);
+	GET_ARGS_VALUE_hipTexRefSetAddressMode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetAddressMode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipEventSynchronize(hipEvent_t event, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventSynchronize, __hip_activity);
+	CALL_RET(hipError_t, hipEventSynchronize, event, NULL);
+	GET_ARGS_VALUE_hipEventSynchronize(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventSynchronize, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphGetRootNodes(hipGraph_t graph, hipGraphNode_t * pRootNodes, size_t * pNumRootNodes, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphGetRootNodes, __hip_activity);
+	CALL_RET(hipError_t, hipGraphGetRootNodes, graph, pRootNodes, pNumRootNodes, NULL);
+	GET_ARGS_VALUE_hipGraphGetRootNodes(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphGetRootNodes, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy2DFromArray(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArray, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy2DFromArray, dst, dpitch, src, wOffset, hOffset, width, height, kind, NULL);
+	GET_ARGS_VALUE_hipMemcpy2DFromArray(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DFromArray, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExternalSemaphoresWaitNodeSetParams(hipGraphNode_t hNode, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresWaitNodeSetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExternalSemaphoresWaitNodeSetParams, hNode, nodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphExternalSemaphoresWaitNodeSetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExternalSemaphoresWaitNodeSetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyDtoA(hipArray_t dstArray, size_t dstOffset, hipDeviceptr_t srcDevice, size_t ByteCount, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoA, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyDtoA, dstArray, dstOffset, srcDevice, ByteCount, NULL);
+	GET_ARGS_VALUE_hipMemcpyDtoA(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoA, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphMemcpyNodeGetParams(hipGraphNode_t node, hipMemcpy3DParms * pNodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeGetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphMemcpyNodeGetParams, node, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphMemcpyNodeGetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeGetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy, dst, src, sizeBytes, kind, NULL);
+	GET_ARGS_VALUE_hipMemcpy(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipSetValidDevices(int * device_arr, int len, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipSetValidDevices, __hip_activity);
+	CALL_RET(hipError_t, hipSetValidDevices, device_arr, len, NULL);
+	GET_ARGS_VALUE_hipSetValidDevices(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipSetValidDevices, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy2DAsync(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy2DAsync, dst, dpitch, src, spitch, width, height, kind, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpy2DAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExecExternalSemaphoresWaitNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecExternalSemaphoresWaitNodeSetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExecExternalSemaphoresWaitNodeSetParams, hGraphExec, hNode, nodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphExecExternalSemaphoresWaitNodeSetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecExternalSemaphoresWaitNodeSetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamAttachMemAsync(hipStream_t stream, void * dev_ptr, size_t length, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamAttachMemAsync, __hip_activity);
+	CALL_RET(hipError_t, hipStreamAttachMemAsync, stream, dev_ptr, length, flags, NULL);
+	GET_ARGS_VALUE_hipStreamAttachMemAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamAttachMemAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemset2DAsync(void * dst, size_t pitch, int value, size_t width, size_t height, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2DAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemset2DAsync, dst, pitch, value, width, height, stream, NULL);
+	GET_ARGS_VALUE_hipMemset2DAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset2DAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexObjectGetResourceViewDesc(HIP_RESOURCE_VIEW_DESC * pResViewDesc, hipTextureObject_t texObject, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectGetResourceViewDesc, __hip_activity);
+	CALL_RET(hipError_t, hipTexObjectGetResourceViewDesc, pResViewDesc, texObject, NULL);
+	GET_ARGS_VALUE_hipTexObjectGetResourceViewDesc(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectGetResourceViewDesc, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipEventCreateWithFlags(hipEvent_t * event, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventCreateWithFlags, __hip_activity);
+	CALL_RET(hipError_t, hipEventCreateWithFlags, event, flags, NULL);
+	GET_ARGS_VALUE_hipEventCreateWithFlags(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventCreateWithFlags, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMipmappedArrayCreate(hipMipmappedArray_t * pHandle, HIP_ARRAY3D_DESCRIPTOR * pMipmappedArrayDesc, unsigned int numMipmapLevels, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMipmappedArrayCreate, __hip_activity);
+	CALL_RET(hipError_t, hipMipmappedArrayCreate, pHandle, pMipmappedArrayDesc, numMipmapLevels, NULL);
+	GET_ARGS_VALUE_hipMipmappedArrayCreate(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMipmappedArrayCreate, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy2D_spt(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2D_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy2D_spt, dst, dpitch, src, spitch, width, height, kind, NULL);
+	GET_ARGS_VALUE_hipMemcpy2D_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2D_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddMemcpyNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipMemcpy3DParms * pCopyParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNode, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddMemcpyNode, pGraphNode, graph, pDependencies, numDependencies, pCopyParams, NULL);
+	GET_ARGS_VALUE_hipGraphAddMemcpyNode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemcpyNode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyToSymbolAsync(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbolAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyToSymbolAsync, symbol, src, sizeBytes, offset, kind, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpyToSymbolAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbolAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMallocFromPoolAsync(void ** dev_ptr, size_t size, hipMemPool_t mem_pool, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocFromPoolAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMallocFromPoolAsync, dev_ptr, size, mem_pool, stream, NULL);
+	GET_ARGS_VALUE_hipMallocFromPoolAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocFromPoolAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(int * numBlocks, const void * f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, __hip_activity);
+	CALL_RET(hipError_t, hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, numBlocks, f, blockSize, dynSharedMemPerBlk, flags, NULL);
+	GET_ARGS_VALUE_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddMemFreeNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dev_ptr, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipGraphAddMemFreeNode(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemFreeNode, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddMemFreeNode, pGraphNode, graph, pDependencies, numDependencies, dev_ptr, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemFreeNode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor(int * numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor, __hip_activity);
+	CALL_RET(hipError_t, hipModuleOccupancyMaxActiveBlocksPerMultiprocessor, numBlocks, f, blockSize, dynSharedMemPerBlk, NULL);
+	GET_ARGS_VALUE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipEventDestroy(hipEvent_t event, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipEventDestroy(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventDestroy, __hip_activity);
+	CALL_RET(hipError_t, hipEventDestroy, event, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventDestroy, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceSetCacheConfig(hipFuncCache_t cacheConfig, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetCacheConfig, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceSetCacheConfig, cacheConfig, NULL);
+	GET_ARGS_VALUE_hipDeviceSetCacheConfig(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetCacheConfig, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipFree(void * ptr, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipFree(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFree, __hip_activity);
+	CALL_RET(hipError_t, hipFree, ptr, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFree, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy2DToArrayAsync_spt(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArrayAsync_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy2DToArrayAsync_spt, dst, wOffset, hOffset, src, spitch, width, height, kind, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpy2DToArrayAsync_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArrayAsync_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCtxGetFlags(unsigned int * flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetFlags, __hip_activity);
+	CALL_RET(hipError_t, hipCtxGetFlags, flags, NULL);
+	GET_ARGS_VALUE_hipCtxGetFlags(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetFlags, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGetSymbolAddress(void ** devPtr, const void * symbol, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetSymbolAddress, __hip_activity);
+	CALL_RET(hipError_t, hipGetSymbolAddress, devPtr, symbol, NULL);
+	GET_ARGS_VALUE_hipGetSymbolAddress(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetSymbolAddress, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefGetAddress(hipDeviceptr_t * dev_ptr, const textureReference * texRef, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetAddress, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefGetAddress, dev_ptr, texRef, NULL);
+	GET_ARGS_VALUE_hipTexRefGetAddress(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetAddress, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexObjectCreate(hipTextureObject_t * pTexObject, const HIP_RESOURCE_DESC * pResDesc, const HIP_TEXTURE_DESC * pTexDesc, const HIP_RESOURCE_VIEW_DESC * pResViewDesc, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectCreate, __hip_activity);
+	CALL_RET(hipError_t, hipTexObjectCreate, pTexObject, pResDesc, pTexDesc, pResViewDesc, NULL);
+	GET_ARGS_VALUE_hipTexObjectCreate(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectCreate, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceGetSharedMemConfig(hipSharedMemConfig * pConfig, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetSharedMemConfig, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceGetSharedMemConfig, pConfig, NULL);
+	GET_ARGS_VALUE_hipDeviceGetSharedMemConfig(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetSharedMemConfig, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyHtoAAsync(hipArray_t dstArray, size_t dstOffset, const void * srcHost, size_t ByteCount, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoAAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyHtoAAsync, dstArray, dstOffset, srcHost, ByteCount, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpyHtoAAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyHtoAAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemPoolGetAttribute(hipMemPool_t mem_pool, hipMemPoolAttr attr, void * value, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolGetAttribute, __hip_activity);
+	CALL_RET(hipError_t, hipMemPoolGetAttribute, mem_pool, attr, value, NULL);
+	GET_ARGS_VALUE_hipMemPoolGetAttribute(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolGetAttribute, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddMemAllocNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipMemAllocNodeParams * pNodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemAllocNode, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddMemAllocNode, pGraphNode, graph, pDependencies, numDependencies, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphAddMemAllocNode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddMemAllocNode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemRetainAllocationHandle(hipMemGenericAllocationHandle_t * handle, void * addr, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRetainAllocationHandle, __hip_activity);
+	CALL_RET(hipError_t, hipMemRetainAllocationHandle, handle, addr, NULL);
+	GET_ARGS_VALUE_hipMemRetainAllocationHandle(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemRetainAllocationHandle, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGetFuncBySymbol(hipFunction_t * functionPtr, const void * symbolPtr, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetFuncBySymbol, __hip_activity);
+	CALL_RET(hipError_t, hipGetFuncBySymbol, functionPtr, symbolPtr, NULL);
+	GET_ARGS_VALUE_hipGetFuncBySymbol(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetFuncBySymbol, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceSetMemPool(int device, hipMemPool_t mem_pool, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetMemPool, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceSetMemPool, device, mem_pool, NULL);
+	GET_ARGS_VALUE_hipDeviceSetMemPool(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetMemPool, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceSetLimit(enum hipLimit_t limit, size_t value, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetLimit, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceSetLimit, limit, value, NULL);
+	GET_ARGS_VALUE_hipDeviceSetLimit(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetLimit, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemGetInfo(size_t * free, size_t * total, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetInfo, __hip_activity);
+	CALL_RET(hipError_t, hipMemGetInfo, free, total, NULL);
+	GET_ARGS_VALUE_hipMemGetInfo(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetInfo, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyParam2D(const hip_Memcpy2D * pCopy, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyParam2D, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyParam2D, pCopy, NULL);
+	GET_ARGS_VALUE_hipMemcpyParam2D(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyParam2D, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphDebugDotPrint(hipGraph_t graph, const char * path, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphDebugDotPrint, __hip_activity);
+	CALL_RET(hipError_t, hipGraphDebugDotPrint, graph, path, flags, NULL);
+	GET_ARGS_VALUE_hipGraphDebugDotPrint(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphDebugDotPrint, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceSetGraphMemAttribute(int device, hipGraphMemAttributeType attr, void * value, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetGraphMemAttribute, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceSetGraphMemAttribute, device, attr, value, NULL);
+	GET_ARGS_VALUE_hipDeviceSetGraphMemAttribute(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceSetGraphMemAttribute, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDrvGetErrorString(hipError_t hipError, const char ** errorString, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGetErrorString, __hip_activity);
+	CALL_RET(hipError_t, hipDrvGetErrorString, hipError, errorString, NULL);
+	GET_ARGS_VALUE_hipDrvGetErrorString(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGetErrorString, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyDtoDAsync(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoDAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyDtoDAsync, dst, src, sizeBytes, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpyDtoDAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyDtoDAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCtxSynchronize(void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSynchronize, __hip_activity);
+	CALL_RET(hipError_t, hipCtxSynchronize, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSynchronize, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexObjectDestroy(hipTextureObject_t texObject, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipTexObjectDestroy(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectDestroy, __hip_activity);
+	CALL_RET(hipError_t, hipTexObjectDestroy, texObject, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexObjectDestroy, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefGetAddressMode(enum hipTextureAddressMode * pam, const textureReference * texRef, int dim, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetAddressMode, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefGetAddressMode, pam, texRef, dim, NULL);
+	GET_ARGS_VALUE_hipTexRefGetAddressMode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetAddressMode, __hip_activity);
+	return __hip_ret;
+};
+
+void i___hipGetPCH(const char ** pch, unsigned int * size, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID___hipGetPCH, __hip_activity);
+	CALL(__hipGetPCH, pch, size, NULL)
+	GET_ARGS_VALUE___hipGetPCH(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID___hipGetPCH, __hip_activity);
+	return;
+};
+
+hipError_t i_hipStreamGetFlags(hipStream_t stream, unsigned int * flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetFlags, __hip_activity);
+	CALL_RET(hipError_t, hipStreamGetFlags, stream, flags, NULL);
+	GET_ARGS_VALUE_hipStreamGetFlags(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetFlags, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemGetAccess(unsigned long long * flags, const hipMemLocation * location, void * ptr, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAccess, __hip_activity);
+	CALL_RET(hipError_t, hipMemGetAccess, flags, location, ptr, NULL);
+	GET_ARGS_VALUE_hipMemGetAccess(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAccess, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyAtoA(hipArray_t dstArray, size_t dstOffset, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoA, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyAtoA, dstArray, dstOffset, srcArray, srcOffset, ByteCount, NULL);
+	GET_ARGS_VALUE_hipMemcpyAtoA(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoA, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyToSymbol(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbol, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyToSymbol, symbol, src, sizeBytes, offset, kind, NULL);
+	GET_ARGS_VALUE_hipMemcpyToSymbol(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToSymbol, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCtxSetCurrent(hipCtx_t ctx, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSetCurrent, __hip_activity);
+	CALL_RET(hipError_t, hipCtxSetCurrent, ctx, NULL);
+	GET_ARGS_VALUE_hipCtxSetCurrent(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSetCurrent, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamQuery_spt(hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamQuery_spt, __hip_activity);
+	CALL_RET(hipError_t, hipStreamQuery_spt, stream, NULL);
+	GET_ARGS_VALUE_hipStreamQuery_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamQuery_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGetSymbolSize(size_t * size, const void * symbol, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetSymbolSize, __hip_activity);
+	CALL_RET(hipError_t, hipGetSymbolSize, size, symbol, NULL);
+	GET_ARGS_VALUE_hipGetSymbolSize(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetSymbolSize, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMipmappedArrayGetLevel(hipArray_t * pLevelArray, hipMipmappedArray_t hMipMappedArray, unsigned int level, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMipmappedArrayGetLevel, __hip_activity);
+	CALL_RET(hipError_t, hipMipmappedArrayGetLevel, pLevelArray, hMipMappedArray, level, NULL);
+	GET_ARGS_VALUE_hipMipmappedArrayGetLevel(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMipmappedArrayGetLevel, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipExternalMemoryGetMappedMipmappedArray(hipMipmappedArray_t * mipmap, hipExternalMemory_t extMem, const hipExternalMemoryMipmappedArrayDesc * mipmapDesc, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExternalMemoryGetMappedMipmappedArray, __hip_activity);
+	CALL_RET(hipError_t, hipExternalMemoryGetMappedMipmappedArray, mipmap, extMem, mipmapDesc, NULL);
+	GET_ARGS_VALUE_hipExternalMemoryGetMappedMipmappedArray(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExternalMemoryGetMappedMipmappedArray, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExecMemcpyNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, hipMemcpy3DParms * pNodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemcpyNodeSetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExecMemcpyNodeSetParams, hGraphExec, node, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphExecMemcpyNodeSetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecMemcpyNodeSetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipUserObjectCreate(hipUserObject_t * object_out, void * ptr, hipHostFn_t destroy, unsigned int initialRefcount, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUserObjectCreate, __hip_activity);
+	CALL_RET(hipError_t, hipUserObjectCreate, object_out, ptr, destroy, initialRefcount, flags, NULL);
+	GET_ARGS_VALUE_hipUserObjectCreate(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUserObjectCreate, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamGetCaptureInfo_v2(hipStream_t stream, hipStreamCaptureStatus * captureStatus_out, unsigned long long * id_out, hipGraph_t * graph_out, const hipGraphNode_t ** dependencies_out, size_t * numDependencies_out, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo_v2, __hip_activity);
+	CALL_RET(hipError_t, hipStreamGetCaptureInfo_v2, stream, captureStatus_out, id_out, graph_out, dependencies_out, numDependencies_out, NULL);
+	GET_ARGS_VALUE_hipStreamGetCaptureInfo_v2(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo_v2, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefGetArray(hipArray_t * pArray, const textureReference * texRef, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetArray, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefGetArray, pArray, texRef, NULL);
+	GET_ARGS_VALUE_hipTexRefGetArray(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetArray, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipImportExternalSemaphore(hipExternalSemaphore_t * extSem_out, const hipExternalSemaphoreHandleDesc * semHandleDesc, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipImportExternalSemaphore, __hip_activity);
+	CALL_RET(hipError_t, hipImportExternalSemaphore, extSem_out, semHandleDesc, NULL);
+	GET_ARGS_VALUE_hipImportExternalSemaphore(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipImportExternalSemaphore, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceGetAttribute(int * pi, hipDeviceAttribute_t attr, int deviceId, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetAttribute, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceGetAttribute, pi, attr, deviceId, NULL);
+	GET_ARGS_VALUE_hipDeviceGetAttribute(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetAttribute, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphMemFreeNodeGetParams(hipGraphNode_t node, void * dev_ptr, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipGraphMemFreeNodeGetParams(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemFreeNodeGetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphMemFreeNodeGetParams, node, dev_ptr, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemFreeNodeGetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCtxGetSharedMemConfig(hipSharedMemConfig * pConfig, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetSharedMemConfig, __hip_activity);
+	CALL_RET(hipError_t, hipCtxGetSharedMemConfig, pConfig, NULL);
+	GET_ARGS_VALUE_hipCtxGetSharedMemConfig(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetSharedMemConfig, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphMemcpyNodeSetParamsToSymbol(hipGraphNode_t node, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParamsToSymbol, __hip_activity);
+	CALL_RET(hipError_t, hipGraphMemcpyNodeSetParamsToSymbol, node, symbol, src, count, offset, kind, NULL);
+	GET_ARGS_VALUE_hipGraphMemcpyNodeSetParamsToSymbol(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParamsToSymbol, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy2DToArray(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArray, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy2DToArray, dst, wOffset, hOffset, src, spitch, width, height, kind, NULL);
+	GET_ARGS_VALUE_hipMemcpy2DToArray(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DToArray, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamIsCapturing_spt(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamIsCapturing_spt, __hip_activity);
+	CALL_RET(hipError_t, hipStreamIsCapturing_spt, stream, pCaptureStatus, NULL);
+	GET_ARGS_VALUE_hipStreamIsCapturing_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamIsCapturing_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipFreeHost(void * ptr, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipFreeHost(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeHost, __hip_activity);
+	CALL_RET(hipError_t, hipFreeHost, ptr, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFreeHost, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphKernelNodeSetParams(hipGraphNode_t node, const hipKernelNodeParams * pNodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeSetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphKernelNodeSetParams, node, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphKernelNodeSetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeSetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMallocHost(void ** ptr, size_t size, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocHost, __hip_activity);
+	CALL_RET(hipError_t, hipMallocHost, ptr, size, NULL);
+	GET_ARGS_VALUE_hipMallocHost(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocHost, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemset3D_spt(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3D_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemset3D_spt, pitchedDevPtr, value, extent, NULL);
+	GET_ARGS_VALUE_hipMemset3D_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3D_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamGetCaptureInfo_v2_spt(hipStream_t stream, hipStreamCaptureStatus * captureStatus_out, unsigned long long * id_out, hipGraph_t * graph_out, const hipGraphNode_t ** dependencies_out, size_t * numDependencies_out, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo_v2_spt, __hip_activity);
+	CALL_RET(hipError_t, hipStreamGetCaptureInfo_v2_spt, stream, captureStatus_out, id_out, graph_out, dependencies_out, numDependencies_out, NULL);
+	GET_ARGS_VALUE_hipStreamGetCaptureInfo_v2_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamGetCaptureInfo_v2_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGetTextureReference(const textureReference ** texref, const void * symbol, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureReference, __hip_activity);
+	CALL_RET(hipError_t, hipGetTextureReference, texref, symbol, NULL);
+	GET_ARGS_VALUE_hipGetTextureReference(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureReference, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExecExternalSemaphoresSignalNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecExternalSemaphoresSignalNodeSetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExecExternalSemaphoresSignalNodeSetParams, hGraphExec, hNode, nodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphExecExternalSemaphoresSignalNodeSetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecExternalSemaphoresSignalNodeSetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphAddDependencies(hipGraph_t graph, const hipGraphNode_t * from, const hipGraphNode_t * to, size_t numDependencies, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddDependencies, __hip_activity);
+	CALL_RET(hipError_t, hipGraphAddDependencies, graph, from, to, numDependencies, NULL);
+	GET_ARGS_VALUE_hipGraphAddDependencies(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphAddDependencies, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphNodeGetType(hipGraphNode_t node, hipGraphNodeType * pType, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetType, __hip_activity);
+	CALL_RET(hipError_t, hipGraphNodeGetType, node, pType, NULL);
+	GET_ARGS_VALUE_hipGraphNodeGetType(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphNodeGetType, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefSetBorderColor(textureReference * texRef, float * pBorderColor, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetBorderColor, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefSetBorderColor, texRef, pBorderColor, NULL);
+	GET_ARGS_VALUE_hipTexRefSetBorderColor(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetBorderColor, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemPrefetchAsync(const void * dev_ptr, size_t count, int device, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPrefetchAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemPrefetchAsync, dev_ptr, count, device, stream, NULL);
+	GET_ARGS_VALUE_hipMemPrefetchAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPrefetchAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCtxGetDevice(hipDevice_t * device, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetDevice, __hip_activity);
+	CALL_RET(hipError_t, hipCtxGetDevice, device, NULL);
+	GET_ARGS_VALUE_hipCtxGetDevice(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxGetDevice, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy2DArrayToArray(hipArray_t dst, size_t wOffsetDst, size_t hOffsetDst, hipArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DArrayToArray, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy2DArrayToArray, dst, wOffsetDst, hOffsetDst, src, wOffsetSrc, hOffsetSrc, width, height, kind, NULL);
+	GET_ARGS_VALUE_hipMemcpy2DArrayToArray(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2DArrayToArray, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipUserObjectRelease(hipUserObject_t object, unsigned int count, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipUserObjectRelease(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUserObjectRelease, __hip_activity);
+	CALL_RET(hipError_t, hipUserObjectRelease, object, count, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipUserObjectRelease, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipHostGetFlags(unsigned int * flagsPtr, void * hostPtr, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostGetFlags, __hip_activity);
+	CALL_RET(hipError_t, hipHostGetFlags, flagsPtr, hostPtr, NULL);
+	GET_ARGS_VALUE_hipHostGetFlags(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipHostGetFlags, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDrvGraphAddMemsetNode(hipGraphNode_t * phGraphNode, hipGraph_t hGraph, const hipGraphNode_t * dependencies, size_t numDependencies, const HIP_MEMSET_NODE_PARAMS * memsetParams, hipCtx_t ctx, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGraphAddMemsetNode, __hip_activity);
+	CALL_RET(hipError_t, hipDrvGraphAddMemsetNode, phGraphNode, hGraph, dependencies, numDependencies, memsetParams, ctx, NULL);
+	GET_ARGS_VALUE_hipDrvGraphAddMemsetNode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGraphAddMemsetNode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyAtoD(hipDeviceptr_t dstDevice, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoD, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyAtoD, dstDevice, srcArray, srcOffset, ByteCount, NULL);
+	GET_ARGS_VALUE_hipMemcpyAtoD(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyAtoD, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemPoolCreate(hipMemPool_t * mem_pool, const hipMemPoolProps * pool_props, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolCreate, __hip_activity);
+	CALL_RET(hipError_t, hipMemPoolCreate, mem_pool, pool_props, NULL);
+	GET_ARGS_VALUE_hipMemPoolCreate(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolCreate, __hip_activity);
+	return __hip_ret;
+};
+
+const char * i_hipKernelNameRef(const hipFunction_t f, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipKernelNameRef, __hip_activity);
+	CALL_RET(char *, hipKernelNameRef, f, NULL);
+	GET_ARGS_VALUE_hipKernelNameRef(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipKernelNameRef, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemset3DAsync(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3DAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemset3DAsync, pitchedDevPtr, value, extent, stream, NULL);
+	GET_ARGS_VALUE_hipMemset3DAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset3DAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipEventRecord(hipEvent_t event, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventRecord, __hip_activity);
+	CALL_RET(hipError_t, hipEventRecord, event, stream, NULL);
+	GET_ARGS_VALUE_hipEventRecord(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipEventRecord, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMipmappedArrayDestroy(hipMipmappedArray_t hMipmappedArray, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipMipmappedArrayDestroy(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMipmappedArrayDestroy, __hip_activity);
+	CALL_RET(hipError_t, hipMipmappedArrayDestroy, hMipmappedArray, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMipmappedArrayDestroy, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemsetAsync_spt(void * dst, int value, size_t sizeBytes, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetAsync_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemsetAsync_spt, dst, value, sizeBytes, stream, NULL);
+	GET_ARGS_VALUE_hipMemsetAsync_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetAsync_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDevicePrimaryCtxSetFlags(hipDevice_t dev, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxSetFlags, __hip_activity);
+	CALL_RET(hipError_t, hipDevicePrimaryCtxSetFlags, dev, flags, NULL);
+	GET_ARGS_VALUE_hipDevicePrimaryCtxSetFlags(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDevicePrimaryCtxSetFlags, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipPeekAtLastError(void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPeekAtLastError, __hip_activity);
+	CALL_RET(hipError_t, hipPeekAtLastError, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipPeekAtLastError, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceGetGraphMemAttribute(int device, hipGraphMemAttributeType attr, void * value, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetGraphMemAttribute, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceGetGraphMemAttribute, device, attr, value, NULL);
+	GET_ARGS_VALUE_hipDeviceGetGraphMemAttribute(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceGetGraphMemAttribute, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDrvGetErrorName(hipError_t hipError, const char ** errorString, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGetErrorName, __hip_activity);
+	CALL_RET(hipError_t, hipDrvGetErrorName, hipError, errorString, NULL);
+	GET_ARGS_VALUE_hipDrvGetErrorName(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDrvGetErrorName, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy_spt(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy_spt, dst, src, sizeBytes, kind, NULL);
+	GET_ARGS_VALUE_hipMemcpy_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCtxSetSharedMemConfig(hipSharedMemConfig config, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSetSharedMemConfig, __hip_activity);
+	CALL_RET(hipError_t, hipCtxSetSharedMemConfig, config, NULL);
+	GET_ARGS_VALUE_hipCtxSetSharedMemConfig(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCtxSetSharedMemConfig, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipCreateSurfaceObject(hipSurfaceObject_t * pSurfObject, const hipResourceDesc * pResDesc, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCreateSurfaceObject, __hip_activity);
+	CALL_RET(hipError_t, hipCreateSurfaceObject, pSurfObject, pResDesc, NULL);
+	GET_ARGS_VALUE_hipCreateSurfaceObject(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipCreateSurfaceObject, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGetMipmappedArrayLevel(hipArray_t * levelArray, hipMipmappedArray_const_t mipmappedArray, unsigned int level, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetMipmappedArrayLevel, __hip_activity);
+	CALL_RET(hipError_t, hipGetMipmappedArrayLevel, levelArray, mipmappedArray, level, NULL);
+	GET_ARGS_VALUE_hipGetMipmappedArrayLevel(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetMipmappedArrayLevel, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphExecDestroy(hipGraphExec_t graphExec, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	GET_ARGS_VALUE_hipGraphExecDestroy(__hip_activity);
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecDestroy, __hip_activity);
+	CALL_RET(hipError_t, hipGraphExecDestroy, graphExec, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphExecDestroy, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemsetD32Async(hipDeviceptr_t dst, int value, size_t count, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD32Async, __hip_activity);
+	CALL_RET(hipError_t, hipMemsetD32Async, dst, value, count, stream, NULL);
+	GET_ARGS_VALUE_hipMemsetD32Async(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemsetD32Async, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDeviceEnablePeerAccess(int peerDeviceId, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceEnablePeerAccess, __hip_activity);
+	CALL_RET(hipError_t, hipDeviceEnablePeerAccess, peerDeviceId, flags, NULL);
+	GET_ARGS_VALUE_hipDeviceEnablePeerAccess(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDeviceEnablePeerAccess, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipArray3DCreate(hipArray_t * array, const HIP_ARRAY3D_DESCRIPTOR * pAllocateArray, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArray3DCreate, __hip_activity);
+	CALL_RET(hipError_t, hipArray3DCreate, array, pAllocateArray, NULL);
+	GET_ARGS_VALUE_hipArray3DCreate(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArray3DCreate, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipIpcOpenMemHandle(void ** devPtr, hipIpcMemHandle_t handle, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcOpenMemHandle, __hip_activity);
+	CALL_RET(hipError_t, hipIpcOpenMemHandle, devPtr, handle, flags, NULL);
+	GET_ARGS_VALUE_hipIpcOpenMemHandle(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipIpcOpenMemHandle, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemPoolTrimTo(hipMemPool_t mem_pool, size_t min_bytes_to_hold, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolTrimTo, __hip_activity);
+	CALL_RET(hipError_t, hipMemPoolTrimTo, mem_pool, min_bytes_to_hold, NULL);
+	GET_ARGS_VALUE_hipMemPoolTrimTo(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemPoolTrimTo, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy2D(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2D, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy2D, dst, dpitch, src, spitch, width, height, kind, NULL);
+	GET_ARGS_VALUE_hipMemcpy2D(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy2D, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipFuncGetAttribute(int * value, hipFunction_attribute attrib, hipFunction_t hfunc, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncGetAttribute, __hip_activity);
+	CALL_RET(hipError_t, hipFuncGetAttribute, value, attrib, hfunc, NULL);
+	GET_ARGS_VALUE_hipFuncGetAttribute(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncGetAttribute, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipBindTextureToMipmappedArray(const textureReference * tex, hipMipmappedArray_const_t mipmappedArray, const hipChannelFormatDesc * desc, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTextureToMipmappedArray, __hip_activity);
+	CALL_RET(hipError_t, hipBindTextureToMipmappedArray, tex, mipmappedArray, desc, NULL);
+	GET_ARGS_VALUE_hipBindTextureToMipmappedArray(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipBindTextureToMipmappedArray, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphicsMapResources(int count, hipGraphicsResource_t * resources, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsMapResources, __hip_activity);
+	CALL_RET(hipError_t, hipGraphicsMapResources, count, resources, stream, NULL);
+	GET_ARGS_VALUE_hipGraphicsMapResources(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphicsMapResources, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipArrayCreate(hipArray_t * pHandle, const HIP_ARRAY_DESCRIPTOR * pAllocateArray, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayCreate, __hip_activity);
+	CALL_RET(hipError_t, hipArrayCreate, pHandle, pAllocateArray, NULL);
+	GET_ARGS_VALUE_hipArrayCreate(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipArrayCreate, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefSetMaxAnisotropy(textureReference * texRef, unsigned int maxAniso, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMaxAnisotropy, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefSetMaxAnisotropy, texRef, maxAniso, NULL);
+	GET_ARGS_VALUE_hipTexRefSetMaxAnisotropy(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMaxAnisotropy, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphKernelNodeGetAttribute(hipGraphNode_t hNode, hipLaunchAttributeID attr, hipLaunchAttributeValue * value, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeGetAttribute, __hip_activity);
+	CALL_RET(hipError_t, hipGraphKernelNodeGetAttribute, hNode, attr, value, NULL);
+	GET_ARGS_VALUE_hipGraphKernelNodeGetAttribute(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphKernelNodeGetAttribute, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipExtLaunchKernel(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, hipEvent_t startEvent, hipEvent_t stopEvent, int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtLaunchKernel, __hip_activity);
+	CALL_RET(hipError_t, hipExtLaunchKernel, function_address, numBlocks, dimBlocks, args, sharedMemBytes, stream, startEvent, stopEvent, flags, NULL);
+	GET_ARGS_VALUE_hipExtLaunchKernel(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtLaunchKernel, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefSetMipmapFilterMode(textureReference * texRef, enum hipTextureFilterMode fm, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmapFilterMode, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefSetMipmapFilterMode, texRef, fm, NULL);
+	GET_ARGS_VALUE_hipTexRefSetMipmapFilterMode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmapFilterMode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemImportFromShareableHandle(hipMemGenericAllocationHandle_t * handle, void * osHandle, hipMemAllocationHandleType shHandleType, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemImportFromShareableHandle, __hip_activity);
+	CALL_RET(hipError_t, hipMemImportFromShareableHandle, handle, osHandle, shHandleType, NULL);
+	GET_ARGS_VALUE_hipMemImportFromShareableHandle(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemImportFromShareableHandle, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefSetFormat(textureReference * texRef, hipArray_Format fmt, int NumPackedComponents, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetFormat, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefSetFormat, texRef, fmt, NumPackedComponents, NULL);
+	GET_ARGS_VALUE_hipTexRefSetFormat(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetFormat, __hip_activity);
+	return __hip_ret;
+};
+
+const char * i_amd_dbgapi_get_git_hash(void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_amd_dbgapi_get_git_hash, __hip_activity);
+	CALL_RET(char *, amd_dbgapi_get_git_hash, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_amd_dbgapi_get_git_hash, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipLaunchByPtr(const void * func, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchByPtr, __hip_activity);
+	CALL_RET(hipError_t, hipLaunchByPtr, func, NULL);
+	GET_ARGS_VALUE_hipLaunchByPtr(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipLaunchByPtr, __hip_activity);
+	return __hip_ret;
+};
+
+size_t i_amd_dbgapi_get_build_id(void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_amd_dbgapi_get_build_id, __hip_activity);
+	CALL_RET(size_t, amd_dbgapi_get_build_id, NULL);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_amd_dbgapi_get_build_id, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpy3DAsync(const struct hipMemcpy3DParms * p, hipStream_t stream, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3DAsync, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpy3DAsync, p, stream, NULL);
+	GET_ARGS_VALUE_hipMemcpy3DAsync(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpy3DAsync, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGetTextureObjectResourceViewDesc(struct hipResourceViewDesc * pResViewDesc, hipTextureObject_t textureObject, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureObjectResourceViewDesc, __hip_activity);
+	CALL_RET(hipError_t, hipGetTextureObjectResourceViewDesc, pResViewDesc, textureObject, NULL);
+	GET_ARGS_VALUE_hipGetTextureObjectResourceViewDesc(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGetTextureObjectResourceViewDesc, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefSetFilterMode(textureReference * texRef, enum hipTextureFilterMode fm, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetFilterMode, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefSetFilterMode, texRef, fm, NULL);
+	GET_ARGS_VALUE_hipTexRefSetFilterMode(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetFilterMode, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipDriverGetVersion(int * driverVersion, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDriverGetVersion, __hip_activity);
+	CALL_RET(hipError_t, hipDriverGetVersion, driverVersion, NULL);
+	GET_ARGS_VALUE_hipDriverGetVersion(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipDriverGetVersion, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipStreamWriteValue64(hipStream_t stream, void * ptr, uint64_t value, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWriteValue64, __hip_activity);
+	CALL_RET(hipError_t, hipStreamWriteValue64, stream, ptr, value, flags, NULL);
+	GET_ARGS_VALUE_hipStreamWriteValue64(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipStreamWriteValue64, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMallocMipmappedArray(hipMipmappedArray_t * mipmappedArray, const struct hipChannelFormatDesc * desc, struct hipExtent extent, unsigned int numLevels, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocMipmappedArray, __hip_activity);
+	CALL_RET(hipError_t, hipMallocMipmappedArray, mipmappedArray, desc, extent, numLevels, flags, NULL);
+	GET_ARGS_VALUE_hipMallocMipmappedArray(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMallocMipmappedArray, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemset_spt(void * dst, int value, size_t sizeBytes, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset_spt, __hip_activity);
+	CALL_RET(hipError_t, hipMemset_spt, dst, value, sizeBytes, NULL);
+	GET_ARGS_VALUE_hipMemset_spt(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset_spt, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefSetFlags(textureReference * texRef, unsigned int Flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetFlags, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefSetFlags, texRef, Flags, NULL);
+	GET_ARGS_VALUE_hipTexRefSetFlags(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetFlags, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemGetAddressRange(hipDeviceptr_t * pbase, size_t * psize, hipDeviceptr_t dptr, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAddressRange, __hip_activity);
+	CALL_RET(hipError_t, hipMemGetAddressRange, pbase, psize, dptr, NULL);
+	GET_ARGS_VALUE_hipMemGetAddressRange(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemGetAddressRange, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefSetMipmapLevelClamp(textureReference * texRef, float minMipMapLevelClamp, float maxMipMapLevelClamp, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmapLevelClamp, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefSetMipmapLevelClamp, texRef, minMipMapLevelClamp, maxMipMapLevelClamp, NULL);
+	GET_ARGS_VALUE_hipTexRefSetMipmapLevelClamp(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmapLevelClamp, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphMemcpyNodeSetParams(hipGraphNode_t node, const hipMemcpy3DParms * pNodeParams, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParams, __hip_activity);
+	CALL_RET(hipError_t, hipGraphMemcpyNodeSetParams, node, pNodeParams, NULL);
+	GET_ARGS_VALUE_hipGraphMemcpyNodeSetParams(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphMemcpyNodeSetParams, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipGraphGetEdges(hipGraph_t graph, hipGraphNode_t * from, hipGraphNode_t * to, size_t * numEdges, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphGetEdges, __hip_activity);
+	CALL_RET(hipError_t, hipGraphGetEdges, graph, from, to, numEdges, NULL);
+	GET_ARGS_VALUE_hipGraphGetEdges(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipGraphGetEdges, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemcpyToArray(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t count, hipMemcpyKind kind, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToArray, __hip_activity);
+	CALL_RET(hipError_t, hipMemcpyToArray, dst, wOffset, hOffset, src, count, kind, NULL);
+	GET_ARGS_VALUE_hipMemcpyToArray(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemcpyToArray, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipExtMallocWithFlags(void ** ptr, size_t sizeBytes, unsigned int flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtMallocWithFlags, __hip_activity);
+	CALL_RET(hipError_t, hipExtMallocWithFlags, ptr, sizeBytes, flags, NULL);
+	GET_ARGS_VALUE_hipExtMallocWithFlags(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipExtMallocWithFlags, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipFuncSetAttribute(const void * func, hipFuncAttribute attr, int value, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncSetAttribute, __hip_activity);
+	CALL_RET(hipError_t, hipFuncSetAttribute, func, attr, value, NULL);
+	GET_ARGS_VALUE_hipFuncSetAttribute(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipFuncSetAttribute, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipChooseDeviceR0600(int * device, const hipDeviceProp_tR0600 * prop, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipChooseDeviceR0600, __hip_activity);
+	CALL_RET(hipError_t, hipChooseDeviceR0600, device, prop, NULL);
+	GET_ARGS_VALUE_hipChooseDeviceR0600(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipChooseDeviceR0600, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefSetMipmappedArray(textureReference * texRef, struct hipMipmappedArray * mipmappedArray, unsigned int Flags, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmappedArray, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefSetMipmappedArray, texRef, mipmappedArray, Flags, NULL);
+	GET_ARGS_VALUE_hipTexRefSetMipmappedArray(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefSetMipmappedArray, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipMemset(void * dst, int value, size_t sizeBytes, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset, __hip_activity);
+	CALL_RET(hipError_t, hipMemset, dst, value, sizeBytes, NULL);
+	GET_ARGS_VALUE_hipMemset(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipMemset, __hip_activity);
+	return __hip_ret;
+};
+
+hipError_t i_hipTexRefGetMipmapLevelClamp(float * pminMipmapLevelClamp, float * pmaxMipmapLevelClamp, const textureReference * texRef, void* return_address) {
+	ratelprof_api_activity_t* __hip_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__hip_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMipmapLevelClamp, __hip_activity);
+	CALL_RET(hipError_t, hipTexRefGetMipmapLevelClamp, pminMipmapLevelClamp, pmaxMipmapLevelClamp, texRef, NULL);
+	GET_ARGS_VALUE_hipTexRefGetMipmapLevelClamp(__hip_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_HIP](RATELPROF_DOMAIN_HIP, HIP_API_ID_hipTexRefGetMipmapLevelClamp, __hip_activity);
+	return __hip_ret;
+};

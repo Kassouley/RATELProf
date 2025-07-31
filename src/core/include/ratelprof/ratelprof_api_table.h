@@ -36,7 +36,7 @@
  * APIs in a specific domain. It includes metadata about the domain, the handler 
  * for the shared library, arrays for function pointers, and the table size.
  *
- * @struct ratelprof_api_table_s
+ * @struct ratelprof_api_sable_s
  * @typedef ratelprof_api_table_t
  *
  * @var ratelprof_api_table_t::domain
@@ -66,7 +66,7 @@
  *       The memory allocated for `api_fn` and `api_ptr` should be freed during cleanup
  *       with `ratelprof_cleanup_api_table`.
  */
-typedef struct ratelprof_api_table_s {
+typedef struct ratelprof_api_sable_s {
     ratelprof_domain_t domain;      /**< The domain of the API table. */
     void* handler;                              /**< Handle to the shared library. */
     void** api_fn;                              /**< Array of original API function pointers. */
@@ -138,13 +138,13 @@ ratelprof_status_t ratelprof_init_api_table(ratelprof_domain_t domain, ratelprof
  * @example
  * ```c
  * ratelprof_api_table_t api_table;
- * ratelprof_status_t init_status = ratelprof_init_api_table(SOME_DOMAIN, &api_table, 10);
- * if (init_status != RATELPROF_STATUS_SUCCESS) {
+ * ratelprof_status_t status = ratelprof_init_api_table(SOME_DOMAIN, &api_table, 10);
+ * if (status != RATELPROF_STATUS_SUCCESS) {
  *     // Handle initialization error
  * }
  *
- * ratelprof_status_t populate_status = ratelprof_populate_api_table(&api_table, "libexample.so");
- * if (populate_status != RATELPROF_STATUS_SUCCESS) {
+ * status = ratelprof_populate_api_table(&api_table, "libexample.so");
+ * if (status != RATELPROF_STATUS_SUCCESS) {
  *     // Handle population error
  * }
  * ```
@@ -173,15 +173,15 @@ ratelprof_status_t ratelprof_populate_api_table(ratelprof_api_table_t* api_table
  * @example
  * ```c
  * ratelprof_api_table_t api_table;
- * ratelprof_status_t init_status = ratelprof_init_api_table(SOME_DOMAIN, &api_table, 10);
- * if (init_status != RATELPROF_STATUS_SUCCESS) {
+ * ratelprof_status_t status = ratelprof_init_api_table(SOME_DOMAIN, &api_table, 10);
+ * if (status != RATELPROF_STATUS_SUCCESS) {
  *     // Handle initialization error
  * }
  *
  * // Perform operations with the API table...
  *
- * ratelprof_status_t cleanup_status = ratelprof_cleanup_api_table(&api_table);
- * if (cleanup_status != RATELPROF_STATUS_SUCCESS) {
+ * status = ratelprof_cleanup_api_table(&api_table);
+ * if (status != RATELPROF_STATUS_SUCCESS) {
  *     // Handle cleanup error
  * }
  * ```
@@ -208,25 +208,25 @@ ratelprof_status_t ratelprof_cleanup_api_table(ratelprof_api_table_t* api_table)
  * @return RATELPROF_STATUS_API_TABLE_NOT_INIT The `api_table` has not been properly initialized.
  *
  * @note The environment variable `filter_var_name` should contain function names separated by commas (e.g., `"func1,func2,func3"`).
- * @note The function relies on helper functions like `get_filter_type`, `get_function_filter`, `get_funid_by_name`, 
- *       and `get_funaddr_by_id` to retrieve the necessary information for enabling functions.
+ * @note The function relies on helper functions like `get_filter_type`, `get_function_filter`, `ratelprof_get_funid_by_name`, 
+ *       and `ratelprof_get_funaddr_by_id` to retrieve the necessary information for enabling functions.
  *
  * @example
  * ```c
  * ratelprof_api_table_t api_table;
- * ratelprof_status_t init_status = ratelprof_init_api_table(SOME_DOMAIN, &api_table, 10);
- * if (init_status != RATELPROF_STATUS_SUCCESS) {
+ * ratelprof_status_t status = ratelprof_init_api_table(SOME_DOMAIN, &api_table, 10);
+ * if (status != RATELPROF_STATUS_SUCCESS) {
  *     // Handle initialization error
  * }
  *
- * ratelprof_status_t populate_status = ratelprof_populate_api_table(&api_table, "libexample.so");
- * if (populate_status != RATELPROF_STATUS_SUCCESS) {
+ * status = ratelprof_populate_api_table(&api_table, "libexample.so");
+ * if (status != RATELPROF_STATUS_SUCCESS) {
  *     // Handle population error
  * }
  *
  * // Enable specific functions based on the filter
- * ratelprof_status_t enable_status = ratelprof_enable_api_table(&api_table, "ENABLE_FUNCS", "FILTER_TYPE");
- * if (enable_status != RATELPROF_STATUS_SUCCESS) {
+ * status = ratelprof_enable_api_table(&api_table, "ENABLE_FUNCS", "FILTER_TYPE");
+ * if (status != RATELPROF_STATUS_SUCCESS) {
  *     // Handle enabling error
  * }
  * ```
@@ -252,13 +252,13 @@ ratelprof_status_t ratelprof_enable_api_table(ratelprof_api_table_t* api_table, 
  * @example
  * ```c
  * ratelprof_api_table_t api_table;
- * ratelprof_status_t init_status = ratelprof_init_api_table(SOME_DOMAIN, &api_table, 10);
- * if (init_status != RATELPROF_STATUS_SUCCESS) {
+ * ratelprof_status_t status = ratelprof_init_api_table(SOME_DOMAIN, &api_table, 10);
+ * if (status != RATELPROF_STATUS_SUCCESS) {
  *     // Handle initialization error
  * }
  *
- * ratelprof_status_t populate_status = ratelprof_populate_api_table(&api_table, "libexample.so");
- * if (populate_status != RATELPROF_STATUS_SUCCESS) {
+ * status = ratelprof_populate_api_table(&api_table, "libexample.so");
+ * if (status != RATELPROF_STATUS_SUCCESS) {
  *     // Handle population error
  * }
  *
@@ -266,8 +266,8 @@ ratelprof_status_t ratelprof_enable_api_table(ratelprof_api_table_t* api_table, 
  * ratelprof_enable_api_table(&api_table, "ENABLE_FUNCS");
  *
  * // Disable the API table, restoring original function pointers
- * ratelprof_status_t disable_status = ratelprof_disable_api_table(&api_table);
- * if (disable_status != RATELPROF_STATUS_SUCCESS) {
+ * status = ratelprof_disable_api_table(&api_table);
+ * if (status != RATELPROF_STATUS_SUCCESS) {
  *     // Handle disabling error
  * }
  * ```

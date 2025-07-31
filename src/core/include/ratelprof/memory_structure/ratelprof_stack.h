@@ -1,5 +1,5 @@
 /**
- * @file ratelprof_stack.h 
+ * @file ratelprof_stack.h
  * @brief Generic stack implementation for storing `uint64_t` elements.
  *
  * This header defines a stack data structure (`ratelprof_stack_t`) and provides a set 
@@ -18,7 +18,7 @@
  * 
  */
 
-#ifndef RATELPROF_STACK_H 
+#ifndef RATELPROF_STACK_H
 #define RATELPROF_STACK_H
 
 #include <stddef.h>
@@ -33,10 +33,10 @@
  * the current top index, and the maximum capacity of the stack. The stack grows 
  * dynamically as elements are pushed onto it and shrinks as elements are popped off.
  *
- * @struct ratelprof_stack_S
+ * @struct ratelprof_stack_s
  * @typedef ratelprof_stack_t
  */
-typedef struct ratelprof_stack_S {
+typedef struct ratelprof_stack_s {
     uint64_t* items;    /**< Pointer to the dynamically allocated array for storing stack elements. */
     int top;            /**< Index of the top element in the stack. */
     size_t capacity;    /**< Maximum size (capacity) of the stack. */
@@ -139,19 +139,16 @@ ratelprof_status_t ratelprof_stack_init(ratelprof_stack_t* s, size_t capacity);
  * @param[in] e The element of type `uint64_t` to be pushed onto the stack.
  *
  * @return RATELPROF_STATUS_SUCCESS The element was successfully pushed onto the stack.
- * @return RATELPROF_STATUS_STACK_IS_NULL The stack pointer is NULL.
+ * @return RATELPROF_STATUS_STACK_NOT_INIT The stack is not init or null.
  *
  * @example
  * ```c
  * ratelprof_stack_t stack;
  * ratelprof_stack_init(&stack, 10);
  *
- * // Push elements onto the stack
  * for (uint64_t i = 0; i < 20; i++) {
  *     ratelprof_stack_push(&stack, i);
  * }
- *
- * free(stack.items); // Free the allocated memory when done
  * ```
  */
 ratelprof_status_t ratelprof_stack_push(ratelprof_stack_t* s, uint64_t el);
@@ -168,7 +165,7 @@ ratelprof_status_t ratelprof_stack_push(ratelprof_stack_t* s, uint64_t el);
  *
  * @return RATELPROF_STATUS_SUCCESS The element was successfully popped from the stack.
  * @return RATELPROF_STATUS_STACK_IS_EMPTY The stack is empty, and no element could be popped.
- * @return RATELPROF_STATUS_STACK_IS_NULL The stack pointer is NULL.
+ * @return RATELPROF_STATUS_STACK_NOT_INIT The stack is not init or null.
  *
  * @warning If the `poped_el` pointer is NULL, the function may cause undefined behavior.
  *
@@ -202,7 +199,7 @@ ratelprof_status_t ratelprof_stack_pop(ratelprof_stack_t* s, uint64_t* poped_el)
  *
  * @return RATELPROF_STATUS_SUCCESS The top element was successfully retrieved.
  * @return RATELPROF_STATUS_STACK_IS_EMPTY The stack is empty, and no element could be retrieved.
- * @return RATELPROF_STATUS_STACK_IS_NULL The stack pointer is NULL.
+ * @return RATELPROF_STATUS_STACK_NOT_INIT The stack is not init or null.
  *
  * @warning If the `peeked_el` pointer is NULL, the function may cause undefined behavior.
  *
@@ -235,7 +232,7 @@ ratelprof_status_t ratelprof_stack_peek(ratelprof_stack_t* s, uint64_t* peeked_e
  * @param[in,out] s Pointer to the `ratelprof_stack_t` structure to be freed.
  *
  * @return RATELPROF_STATUS_SUCCESS The stack was successfully freed.
- * @return RATELPROF_STATUS_STACK_IS_NULL The stack pointer is NULL.
+ * @return RATELPROF_STATUS_STACK_NOT_INIT The stack is not init or null.
  *
  * @note After freeing the stack, its `items` pointer is set to `NULL`, and its 
  *       `top` and `capacity` fields are reset to `-1` and `0`, respectively.

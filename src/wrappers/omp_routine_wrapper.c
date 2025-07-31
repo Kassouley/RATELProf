@@ -4,9 +4,12 @@
  */
 
 #include "ratelprof.h"
+
 #include "omp.h"
 
+
 #define CALL(func, ...) ((__##func##_t)omp_routine_api_table.api_ptr[OMP_ROUTINE_API_ID_##func])(__VA_ARGS__)
+
 
 void * omp_target_memset(void * ptr, int value, size_t size, int device_num) {
 	return CALL(omp_target_memset, ptr, value, size, device_num, __builtin_return_address(0));
@@ -91,4 +94,3 @@ int omp_get_num_devices() {
 int omp_is_coarse_grain_mem_region(void * ptr, size_t size) {
 	return CALL(omp_is_coarse_grain_mem_region, ptr, size, __builtin_return_address(0));
 };
-

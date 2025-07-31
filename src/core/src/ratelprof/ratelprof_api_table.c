@@ -3,7 +3,9 @@
  * ANY CHANGES MAY BE OVERWRITTEN BY SUBSEQUENT RUNS OF GILDA. 
  */
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <dlfcn.h>
@@ -14,7 +16,7 @@
 
 #include "utils/logger.h"
 
-ratelprof_status_t ratelprof_init_api_table(ratelprof_domain_t domain, ratelprof_api_table_t* api_table, size_t size) 
+ratelprof_status_t ratelprof_init_api_table(ratelprof_domain_t domain, ratelprof_api_table_t* api_table, size_t size)
 {
     if (size == 0) return RATELPROF_STATUS_ALLOC_SIZE_0;
     if (!api_table) return RATELPROF_STATUS_INVALID_PTR;
@@ -30,7 +32,7 @@ ratelprof_status_t ratelprof_init_api_table(ratelprof_domain_t domain, ratelprof
     return RATELPROF_STATUS_SUCCESS;
 }
 
-ratelprof_status_t ratelprof_populate_api_table(ratelprof_api_table_t* api_table, const char* lib_path) 
+ratelprof_status_t ratelprof_populate_api_table(ratelprof_api_table_t* api_table, const char* lib_path)
 {
     void* handler = RTLD_NEXT;
     if (lib_path) {
@@ -53,7 +55,7 @@ ratelprof_status_t ratelprof_populate_api_table(ratelprof_api_table_t* api_table
     return RATELPROF_STATUS_SUCCESS;
 }
 
-ratelprof_status_t ratelprof_cleanup_api_table(ratelprof_api_table_t* api_table) 
+ratelprof_status_t ratelprof_cleanup_api_table(ratelprof_api_table_t* api_table)
 {
     if (!api_table) return RATELPROF_STATUS_INVALID_PTR;
     if (api_table->handler && api_table->handler != RTLD_NEXT) 
@@ -63,7 +65,7 @@ ratelprof_status_t ratelprof_cleanup_api_table(ratelprof_api_table_t* api_table)
     return RATELPROF_STATUS_SUCCESS;
 }
 
-ratelprof_status_t ratelprof_enable_api_table(ratelprof_api_table_t* api_table, const char* filter_var_name, const char* filter_type_name) 
+ratelprof_status_t ratelprof_enable_api_table(ratelprof_api_table_t* api_table, const char* filter_var_name, const char* filter_type_name)
 {
     if (!api_table) return RATELPROF_STATUS_INVALID_PTR;
     if (api_table->api_fn == NULL) return RATELPROF_STATUS_API_TABLE_NOT_INIT;
@@ -110,10 +112,10 @@ ratelprof_status_t ratelprof_enable_api_table(ratelprof_api_table_t* api_table, 
     return RATELPROF_STATUS_SUCCESS;
 }
 
-ratelprof_status_t ratelprof_disable_api_table(ratelprof_api_table_t* api_table) 
+ratelprof_status_t ratelprof_disable_api_table(ratelprof_api_table_t* api_table)
 {
     if (!api_table) return RATELPROF_STATUS_INVALID_PTR;
-    if (api_table->api_fn == NULL) return RATELPROF_STATUS_API_TABLE_NOT_INIT;
+    if (api_table->api_fn == NULL)  return RATELPROF_STATUS_API_TABLE_NOT_INIT;
     if (api_table->api_ptr == NULL) return RATELPROF_STATUS_API_TABLE_NOT_INIT;
     for (ratelprof_api_id_t id = 0; id < api_table->size; id++)
     {

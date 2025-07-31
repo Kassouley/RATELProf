@@ -4,6 +4,7 @@
  */
  
 #include <stdlib.h>
+
 #include "ratelprof.h"
 #include "domains/fun_proto/omp_tgt_rtl_profiled_functions.h"
 
@@ -17,7 +18,7 @@
 
 #define CALL_RET(ret_type, func, ...) \
     __omp_tgt_rtl_activity->start_time = ratelprof_get_curr_timespec(); \
-	ret_type __omp_tgt_rtl_ret = ((__##func##_t)omp_tgt_rtl_api_table.api_fn[OMP_TGT_RTL_API_ID_##func])(__VA_ARGS__); \
+	ret_type __omp_tgt_rtl_ret = (ret_type)((__##func##_t)omp_tgt_rtl_api_table.api_fn[OMP_TGT_RTL_API_ID_##func])(__VA_ARGS__); \
     __omp_tgt_rtl_activity->stop_time = ratelprof_get_curr_timespec(); \
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.func.retval = (ret_type)__omp_tgt_rtl_ret; \
 
@@ -442,5 +443,3 @@ int i___tgt_rtl_requested_prepopulate_gpu_page_table(void* return_address) {
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_requested_prepopulate_gpu_page_table, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
- 
-

@@ -3,12 +3,13 @@
  * ANY CHANGES MAY BE OVERWRITTEN BY SUBSEQUENT RUNS OF GILDA. 
  */
  
-#include <ratelprof.h>
 #include <ratelprof_ext.h>
+#include <ratelprof.h>
 #include "omp_routine_plugin.h"
 #include "msgpack.h"
 
-void on_enter_omp_routine_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity){
+void on_enter_omp_routine_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
+{
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
     ratelprof_activity_pool_push_activity(activity);
     get_correlation_id(&activity->corr_id);
@@ -20,23 +21,24 @@ void on_enter_omp_routine_callback(ratelprof_domain_t domain, ratelprof_api_id_t
     activity->tid = get_tid();
 }
 
-void on_exit_omp_routine_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity){
-	(void)user_activity;
+void on_exit_omp_routine_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
+{
 	(void)domain;
 	(void)id;
+	(void)user_activity;
     pop_id();
 }
 
-void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_api_args_t* args, void* user_args) 
+void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_api_args_t* args, void* user_args)
 {
     msgpack_buffer_t* buf = (msgpack_buffer_t*)user_args;
     switch(funid) {
 		case OMP_ROUTINE_API_ID_omp_target_memset :
-			//	void * ptr (void);
+			//	void * ptr (void *);
 			//	int value (int);
 			//	size_t size (unsigned long);
 			//	int device_num (int);
-			//	void * retval (void);
+			//	void * retval (void *);
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
@@ -76,15 +78,15 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_target_memcpy_async :
-			//	void * dst (void);
-			//	const void * src (void);
+			//	void * dst (void *);
+			//	const void * src (const void *);
 			//	size_t size (unsigned long);
 			//	size_t dst_offset (unsigned long);
 			//	size_t src_offset (unsigned long);
 			//	int dst_device_num (int);
 			//	int src_device_num (int);
 			//	int async_depend_info (int);
-			//	omp_depend_t * depend (void);
+			//	omp_depend_t * depend (void **);
 			//	int retval (int);
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "dst");
@@ -160,19 +162,19 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect_async :
-			//	void * dst (void);
-			//	const void * src (void);
+			//	void * dst (void *);
+			//	const void * src (const void *);
 			//	size_t element_size (unsigned long);
 			//	int num_dims (int);
-			//	const size_t * volume (unsigned long);
-			//	const size_t * dst_offsets (unsigned long);
-			//	const size_t * src_offsets (unsigned long);
-			//	const size_t * dst_dimensions (unsigned long);
-			//	const size_t * src_dimensions (unsigned long);
+			//	const size_t * volume (const unsigned long *);
+			//	const size_t * dst_offsets (const unsigned long *);
+			//	const size_t * src_offsets (const unsigned long *);
+			//	const size_t * dst_dimensions (const unsigned long *);
+			//	const size_t * src_dimensions (const unsigned long *);
 			//	int dst_device_num (int);
 			//	int src_device_num (int);
 			//	int depobj_count (int);
-			//	omp_depend_t * depobj_list (void);
+			//	omp_depend_t * depobj_list (void **);
 			//	int retval (int);
 			msgpack_encode_map(buf, 14);
 			msgpack_encode_string_ext(buf, "dst");
@@ -278,7 +280,7 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 		case OMP_ROUTINE_API_ID_omp_target_alloc :
 			//	size_t size (unsigned long);
 			//	int device_num (int);
-			//	void * retval (void);
+			//	void * retval (void *);
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
@@ -304,7 +306,7 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_target_free :
-			//	void * device_ptr (void);
+			//	void * device_ptr (void *);
 			//	int device_num (int);
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "device_ptr");
@@ -324,15 +326,15 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect :
-			//	void * dst (void);
-			//	const void * src (void);
+			//	void * dst (void *);
+			//	const void * src (const void *);
 			//	size_t element_size (unsigned long);
 			//	int num_dims (int);
-			//	const size_t * volume (unsigned long);
-			//	const size_t * dst_offsets (unsigned long);
-			//	const size_t * src_offsets (unsigned long);
-			//	const size_t * dst_dimensions (unsigned long);
-			//	const size_t * src_dimensions (unsigned long);
+			//	const size_t * volume (const unsigned long *);
+			//	const size_t * dst_offsets (const unsigned long *);
+			//	const size_t * src_offsets (const unsigned long *);
+			//	const size_t * dst_dimensions (const unsigned long *);
+			//	const size_t * src_dimensions (const unsigned long *);
 			//	int dst_device_num (int);
 			//	int src_device_num (int);
 			//	int retval (int);
@@ -424,7 +426,7 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_target_disassociate_ptr :
-			//	const void * host_ptr (void);
+			//	const void * host_ptr (const void *);
 			//	int device_num (int);
 			//	int retval (int);
 			msgpack_encode_map(buf, 3);
@@ -452,8 +454,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_target_memcpy :
-			//	void * dst (void);
-			//	const void * src (void);
+			//	void * dst (void *);
+			//	const void * src (const void *);
 			//	size_t size (unsigned long);
 			//	size_t dst_offset (unsigned long);
 			//	size_t src_offset (unsigned long);
@@ -520,13 +522,13 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_target_memset_async :
-			//	void * ptr (void);
+			//	void * ptr (void *);
 			//	int value (int);
 			//	size_t size (unsigned long);
 			//	int device_num (int);
 			//	int async_depend_info (int);
-			//	omp_depend_t * depend (void);
-			//	void * retval (void);
+			//	omp_depend_t * depend (void **);
+			//	void * retval (void *);
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
@@ -580,7 +582,7 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_target_is_present :
-			//	const void * host_ptr (void);
+			//	const void * host_ptr (const void *);
 			//	int device_num (int);
 			//	int retval (int);
 			msgpack_encode_map(buf, 3);
@@ -608,8 +610,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_target_associate_ptr :
-			//	const void * host_ptr (void);
-			//	const void * device_ptr (void);
+			//	const void * host_ptr (const void *);
+			//	const void * device_ptr (const void *);
 			//	size_t size (unsigned long);
 			//	size_t alignment (unsigned long);
 			//	int device_num (int);
@@ -672,7 +674,7 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_llvm_omp_target_dynamic_shared_alloc :
-			//	void * retval (void);
+			//	void * retval (void *);
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
@@ -684,9 +686,9 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_get_interop_int :
-			//	const omp_interop_t interop (void);
-			//	omp_interop_property_t prop (enum);
-			//	int * exists (int);
+			//	const omp_interop_t interop (const void *);
+			//	omp_interop_property_t prop (enum omp_interop_property);
+			//	int * exists (int *);
 			//	omp_intptr_t retval (long);
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "interop");
@@ -720,9 +722,9 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_get_interop_name :
-			//	const omp_interop_t interop (void);
-			//	omp_interop_property_t prop (enum);
-			//	const char * retval (string);
+			//	const omp_interop_t interop (const void *);
+			//	omp_interop_property_t prop (enum omp_interop_property);
+			//	const char * retval (const char *);
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "interop");
 			msgpack_encode_map(buf, 2);
@@ -748,10 +750,10 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_get_interop_ptr :
-			//	const omp_interop_t interop (void);
-			//	omp_interop_property_t prop (enum);
-			//	int * exists (int);
-			//	void * retval (void);
+			//	const omp_interop_t interop (const void *);
+			//	omp_interop_property_t prop (enum omp_interop_property);
+			//	int * exists (int *);
+			//	void * retval (void *);
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "interop");
 			msgpack_encode_map(buf, 2);
@@ -784,10 +786,10 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_get_interop_str :
-			//	const omp_interop_t interop (void);
-			//	omp_interop_property_t prop (enum);
-			//	int * exists (int);
-			//	const char * retval (string);
+			//	const omp_interop_t interop (const void *);
+			//	omp_interop_property_t prop (enum omp_interop_property);
+			//	int * exists (int *);
+			//	const char * retval (const char *);
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "interop");
 			msgpack_encode_map(buf, 2);
@@ -820,9 +822,9 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_get_interop_type_desc :
-			//	const omp_interop_t interop (void);
-			//	omp_interop_property_t prop (enum);
-			//	const char * retval (string);
+			//	const omp_interop_t interop (const void *);
+			//	omp_interop_property_t prop (enum omp_interop_property);
+			//	const char * retval (const char *);
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "interop");
 			msgpack_encode_map(buf, 2);
@@ -848,9 +850,9 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_get_mapped_ptr :
-			//	const void * ptr (void);
+			//	const void * ptr (const void *);
 			//	int device_num (int);
-			//	void * retval (void);
+			//	void * retval (void *);
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
@@ -888,7 +890,7 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			break;
 
 		case OMP_ROUTINE_API_ID_omp_is_coarse_grain_mem_region :
-			//	void * ptr (void);
+			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	int retval (int);
 			msgpack_encode_map(buf, 3);
@@ -914,8 +916,7 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			msgpack_encode_int(buf, args->omp_is_coarse_grain_mem_region.retval);
 
 			break;
- 
+
         default : break;
     }
 }
-

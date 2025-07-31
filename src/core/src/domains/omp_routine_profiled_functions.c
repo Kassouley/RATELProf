@@ -4,6 +4,7 @@
  */
  
 #include <stdlib.h>
+
 #include "ratelprof.h"
 #include "domains/fun_proto/omp_routine_profiled_functions.h"
 
@@ -17,7 +18,7 @@
 
 #define CALL_RET(ret_type, func, ...) \
     __omp_routine_activity->start_time = ratelprof_get_curr_timespec(); \
-	ret_type __omp_routine_ret = ((__##func##_t)omp_routine_api_table.api_fn[OMP_ROUTINE_API_ID_##func])(__VA_ARGS__); \
+	ret_type __omp_routine_ret = (ret_type)((__##func##_t)omp_routine_api_table.api_fn[OMP_ROUTINE_API_ID_##func])(__VA_ARGS__); \
     __omp_routine_activity->stop_time = ratelprof_get_curr_timespec(); \
 	__omp_routine_activity->omp_routine_args.func.retval = (ret_type)__omp_routine_ret; \
 
@@ -164,7 +165,7 @@ const char * i_omp_get_interop_name(const omp_interop_t interop, omp_interop_pro
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_name, __omp_routine_activity);
-	CALL_RET(const char *, omp_get_interop_name, interop, prop, NULL);
+	CALL_RET(char *, omp_get_interop_name, interop, prop, NULL);
 	GET_ARGS_VALUE_omp_get_interop_name(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_name, __omp_routine_activity);
 	return __omp_routine_ret;
@@ -184,7 +185,7 @@ const char * i_omp_get_interop_str(const omp_interop_t interop, omp_interop_prop
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_str, __omp_routine_activity);
-	CALL_RET(const char *, omp_get_interop_str, interop, prop, exists, NULL);
+	CALL_RET(char *, omp_get_interop_str, interop, prop, exists, NULL);
 	GET_ARGS_VALUE_omp_get_interop_str(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_str, __omp_routine_activity);
 	return __omp_routine_ret;
@@ -194,7 +195,7 @@ const char * i_omp_get_interop_type_desc(const omp_interop_t interop, omp_intero
 	ratelprof_api_activity_t* __omp_routine_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_routine_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_type_desc, __omp_routine_activity);
-	CALL_RET(const char *, omp_get_interop_type_desc, interop, prop, NULL);
+	CALL_RET(char *, omp_get_interop_type_desc, interop, prop, NULL);
 	GET_ARGS_VALUE_omp_get_interop_type_desc(__omp_routine_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_get_interop_type_desc, __omp_routine_activity);
 	return __omp_routine_ret;
@@ -228,5 +229,3 @@ int i_omp_is_coarse_grain_mem_region(void * ptr, size_t size, void* return_addre
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_ROUTINE](RATELPROF_DOMAIN_OMP_ROUTINE, OMP_ROUTINE_API_ID_omp_is_coarse_grain_mem_region, __omp_routine_activity);
 	return __omp_routine_ret;
 };
- 
-

@@ -168,7 +168,7 @@ ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, v
 }
 
 
-bool ratelprof_iterate_location_cache(ratelprof_cache_iter_cb callback, void *user_data) {
+bool ratelprof_iterate_location_cache(ratelprof_cache_iter_cb_t callback, void *user_data) {
     pthread_mutex_lock(&cache_mutex);
     for (cached_source_data_t *entry = location_cache; entry; entry = entry->next) {
         if (callback(&entry->location, user_data)) {
@@ -214,10 +214,7 @@ void ratelprof_print_location(ratelprof_source_data_t loc) {
 void ratelprof_get_and_print_location(void *addr) {
     ratelprof_source_data_t loc = {0};
     ratelprof_get_source_location(&loc, addr);
-
-    printf("%s [%s]\n", 
-        ratelprof_format_source_location_string(&loc), 
-        ratelprof_format_binary_location_string(&loc));
+    ratelprof_print_location(loc);
 }
 
 

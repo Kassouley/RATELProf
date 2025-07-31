@@ -1,5 +1,5 @@
 /**
- * @file ratelprof.h 
+ * @file ratelprof.h
  * @brief Header file for the RATELProf profiling tool.
  *
  * RATELProf is a profiling tool designed to track API calls within 
@@ -21,14 +21,14 @@
  * 
  */
 
-#ifndef RATELPROF_H 
-#define RATELPROF_H 
+#ifndef RATELPROF_H
+#define RATELPROF_H
 
-#include "utils/ratelprof_macro.h"
 #include "utils/utils.h"
 #include "utils/env.h"
 #include "utils/logger.h"
 #include "utils/demangle.h"
+#include "utils/macro.h"
 
 #include "ratelprof/ratelprof_id_system.h"
 #include "ratelprof/ratelprof_time.h"
@@ -36,14 +36,13 @@
 #include "ratelprof/ratelprof_source_location.h"
 #include "ratelprof/ratelprof_status.h"
 
-#include "domains/omp_routine_api_helper.h"
+#define RATELPROF_PUBLIC_API __attribute__((weak))
+
 #include "domains/hsa_api_helper.h"
 #include "domains/omp_tgt_rtl_api_helper.h"
-#include "domains/hip_api_helper.h" 
-
-#include "ratelprof/memory_structure/ratelprof_stack.h" 
-
-#define RATELPROF_PUBLIC_API __attribute__((weak))
+#include "domains/omp_routine_api_helper.h"
+#include "domains/hip_api_helper.h"
+#include "domains/mpi_api_helper.h"
 
 /**
  * @def RATELPROF_DOMAIN_*_NAME
@@ -51,10 +50,12 @@
  * 
  * Define the name domain.
  */
-#define RATELPROF_DOMAIN_OMP_ROUTINE_NAME "RATELPROF_DOMAIN_OMP_ROUTINE"
 #define RATELPROF_DOMAIN_HSA_NAME "RATELPROF_DOMAIN_HSA"
 #define RATELPROF_DOMAIN_OMP_TGT_RTL_NAME "RATELPROF_DOMAIN_OMP_TGT_RTL"
-#define RATELPROF_DOMAIN_HIP_NAME "RATELPROF_DOMAIN_HIP" 
+#define RATELPROF_DOMAIN_OMP_ROUTINE_NAME "RATELPROF_DOMAIN_OMP_ROUTINE"
+#define RATELPROF_DOMAIN_HIP_NAME "RATELPROF_DOMAIN_HIP"
+#define RATELPROF_DOMAIN_MPI_NAME "RATELPROF_DOMAIN_MPI"
+
 
 /**
  * @def RATELPROF_DOMAIN_*_DESC
@@ -62,14 +63,15 @@
  * 
  * Define a short description for a domain.
  */
-#define RATELPROF_DOMAIN_OMP_ROUTINE_DESC "OpenMP Target is a runtime library that provides routines for managing data movement, memory mapping, etc."
 #define RATELPROF_DOMAIN_HSA_DESC "HSA is an AMD low-level library that operates behind the scenes of HIP and OpenMP, enabling communication between CPUs and GPUs for parallel processing. This domain will be only useful for expert or debugging."
 #define RATELPROF_DOMAIN_OMP_TGT_RTL_DESC "Refers to the target runtime library in the OpenMP programming model, working behind the scenes to execute '#pragma omp target' directives by managing data transfers and kernel execution on GPUs."
-#define RATELPROF_DOMAIN_HIP_DESC "HIP is a programming framework used to launch GPU operations such as kernel dispatch or memory transfer. This domain is useful for anyone looking to understand and optimize the interactions between the CPU and GPU in programming." 
+#define RATELPROF_DOMAIN_OMP_ROUTINE_DESC "OpenMP Target is a runtime library that provides routines for managing data movement, memory mapping, etc."
+#define RATELPROF_DOMAIN_HIP_DESC "HIP is a programming framework used to launch GPU operations such as kernel dispatch or memory transfer. This domain is useful for anyone looking to understand and optimize the interactions between the CPU and GPU in programming."
+#define RATELPROF_DOMAIN_MPI_DESC "MPI is a standardized library for parallel programming that enables processes to communicate by passing messages, supporting distributed-memory architectures."
 
 
 /**
- * @typedef ratelprof_api_id_t 
+ * @typedef ratelprof_api_id_t
  * @brief Defines a type for API identifiers.
  * 
  * This type is used to represent the unique identifier for an API within a domain. 
@@ -80,17 +82,19 @@ typedef size_t ratelprof_api_id_t;
 
 
 /**
- * @enum ratelprof_domain_t 
+ * @enum ratelprof_domain_e
+ * @typedef ratelprof_domain_t
  * @brief Enum to represent different profiling domains.
  * 
  * This enum defines the different domains in the profiling system. Each domain 
  * represents a specific API or runtime environment that can be profiled.
  */
-typedef enum {
-	RATELPROF_DOMAIN_OMP_ROUTINE, /**< Domain RATELPROF_DOMAIN_OMP_ROUTINE. */
-	RATELPROF_DOMAIN_HSA, /**< Domain RATELPROF_DOMAIN_HSA. */
-	RATELPROF_DOMAIN_OMP_TGT_RTL, /**< Domain RATELPROF_DOMAIN_OMP_TGT_RTL. */
-	RATELPROF_DOMAIN_HIP, /**< Domain RATELPROF_DOMAIN_HIP. */ 
+typedef enum ratelprof_domain_e{
+	RATELPROF_DOMAIN_HSA, /**< Domain hsa. */
+	RATELPROF_DOMAIN_OMP_TGT_RTL, /**< Domain omp_tgt_rtl. */
+	RATELPROF_DOMAIN_OMP_ROUTINE, /**< Domain omp_routine. */
+	RATELPROF_DOMAIN_HIP, /**< Domain hip. */
+	RATELPROF_DOMAIN_MPI, /**< Domain mpi. */
     RATELPROF_NB_DOMAIN /**< Total number of domains (used for bounds checking). */
 } ratelprof_domain_t;
 
@@ -104,7 +108,7 @@ typedef enum {
  * such as the domain, phase, function ID, and timing details, along with
  * domain-specific arguments that vary based on the profiling domain.
  */
-typedef struct ratelprof_api_activity_s {
+typedef struct ratelprof_api_activity_s  {
     /**
      * @brief The profiling domain associated with the API activity.
      * 
@@ -182,10 +186,11 @@ typedef struct ratelprof_api_activity_s {
      * Each domain has its own argument structure.
      */
     union {
-		omp_routine_api_args_t omp_routine_args;  /**< Args for OMP_ROUTINE domain. */
 		hsa_api_args_t hsa_args;  /**< Args for HSA domain. */
 		omp_tgt_rtl_api_args_t omp_tgt_rtl_args;  /**< Args for OMP_TGT_RTL domain. */
-		hip_api_args_t hip_args;  /**< Args for HIP domain. */ 
+		omp_routine_api_args_t omp_routine_args;  /**< Args for OMP_ROUTINE domain. */
+		hip_api_args_t hip_args;  /**< Args for HIP domain. */
+		mpi_api_args_t mpi_args;  /**< Args for MPI domain. */
 	};
 } ratelprof_api_activity_t;
 
@@ -193,17 +198,6 @@ typedef struct ratelprof_api_activity_s {
 #include "ratelprof/ratelprof_api_table.h"
 #include "ratelprof/ratelprof_callback.h"
 
-
-
-/**
- * @extern omp_routine_api_table
- * @brief The API table for OMP_ROUTINE domain.
- * 
- * This external variable hold the API table that contains information
- * about OMP_ROUTINE functions.
- * It is used to manage and track the tracing of domain functions.
- */        
-extern ratelprof_api_table_t omp_routine_api_table;
 
 /**
  * @extern hsa_api_table
@@ -226,6 +220,16 @@ extern ratelprof_api_table_t hsa_api_table;
 extern ratelprof_api_table_t omp_tgt_rtl_api_table;
 
 /**
+ * @extern omp_routine_api_table
+ * @brief The API table for OMP_ROUTINE domain.
+ * 
+ * This external variable hold the API table that contains information
+ * about OMP_ROUTINE functions.
+ * It is used to manage and track the tracing of domain functions.
+ */        
+extern ratelprof_api_table_t omp_routine_api_table;
+
+/**
  * @extern hip_api_table
  * @brief The API table for HIP domain.
  * 
@@ -233,7 +237,18 @@ extern ratelprof_api_table_t omp_tgt_rtl_api_table;
  * about HIP functions.
  * It is used to manage and track the tracing of domain functions.
  */        
-extern ratelprof_api_table_t hip_api_table; 
+extern ratelprof_api_table_t hip_api_table;
+
+/**
+ * @extern mpi_api_table
+ * @brief The API table for MPI domain.
+ * 
+ * This external variable hold the API table that contains information
+ * about MPI functions.
+ * It is used to manage and track the tracing of domain functions.
+ */        
+extern ratelprof_api_table_t mpi_api_table;
+
 
 
 /**
@@ -361,7 +376,7 @@ ratelprof_status_t ratelprof_disable_domain(ratelprof_domain_t domain);
  *
  * @return RATELPROF_STATUS_SUCCESS if the function has been successfully executed.
  */
-ratelprof_status_t ratelprof_start();
+ratelprof_status_t ratelprof_start(void);
 
 
 /**
@@ -376,7 +391,7 @@ ratelprof_status_t ratelprof_start();
  *
  * @return RATELPROF_STATUS_SUCCESS if the function has been successfully executed.
  */
-ratelprof_status_t ratelprof_stop();
+ratelprof_status_t ratelprof_stop(void);
 
 
 /**
@@ -384,7 +399,7 @@ ratelprof_status_t ratelprof_stop();
  *
  * This function initializes the tool by performing the following steps:
  * - Initializes the logger using `INIT_LOGGER()`.
- * - Starts the tool's lifecycle by calling `ratelprof_init_lifecycle()`.
+ * - Starts the tool's lifecycle by calling `ratelprof_start_lifecycle()`.
  * - Initializes the ID system using `init_id_system()`.
  * - Iterates over each domain, initializing the corresponding API tables, 
  *   and populates them with necessary libraries for each domain.
@@ -400,7 +415,7 @@ ratelprof_status_t ratelprof_stop();
  * @return RATELPROF_STATUS_INVALID_PTR The `api_table` address is NULL.
  * @return RATELPROF_STATUS_DLOPEN_FAILED Failed to open the shared library specified by `lib_path`.
  */
-ratelprof_status_t ratelprof_init();
+ratelprof_status_t ratelprof_init(void);
 
 
 /**
@@ -410,7 +425,7 @@ ratelprof_status_t ratelprof_init();
  * - Closes the logger using `CLOSE_LOGGER()`.
  * - Cleans up the ID system by calling `cleanup_id_system()`.
  * - Iterates over each domain, cleaning up the corresponding API tables.
- * - Finalizes the lifecycle of the tool by calling `ratelprof_fini_lifecycle()`.
+ * - Finalizes the lifecycle of the tool by calling `ratelprof_stop_lifecycle()`.
  *
  * @note This function should be called when the tool is no longer needed, 
  *       to clean up allocated resources and finalize the tool.
@@ -418,6 +433,6 @@ ratelprof_status_t ratelprof_init();
  * @return RATELPROF_STATUS_SUCCESS if the finalization is successful.
  * @return RATELPROF_STATUS_INVALID_PTR The `api_table` pointer is NULL.
  */
-ratelprof_status_t ratelprof_fini();
+ratelprof_status_t ratelprof_fini(void);
 
 #endif // RATELPROF_H

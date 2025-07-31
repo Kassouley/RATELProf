@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+
 #include "ratelprof/memory_structure/ratelprof_stack.h"
 #include "ratelprof/ratelprof_status.h"
 

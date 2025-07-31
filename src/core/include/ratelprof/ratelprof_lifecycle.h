@@ -18,8 +18,8 @@
  * 
  */
 
-#ifndef RATELPROF_LIFECYCLE_H 
-#define RATELPROF_LIFECYCLE_H 
+#ifndef RATELPROF_LIFECYCLE_H
+#define RATELPROF_LIFECYCLE_H
 
 #include <stdlib.h>
 #include "ratelprof/ratelprof_status.h"
@@ -36,7 +36,7 @@ typedef enum {
 	RATELPROF_IN_CONSTRUCTOR_PHASE,  /**< Constructor phase: The constructor is being executed. */
 	RATELPROF_IN_MAIN_PHASE,         /**< Main phase: The main execution of the program is in progress. */
 	RATELPROF_IN_DESTRUCTOR_PHASE,   /**< Destructor phase: Destructor is being executed. */
-	RATELPROF_NB_PHASE,              /**< Number phase */
+	RATELPROF_NB_PHASE,              /**< Count of phase */
 	RATELPROF_IN_UNKNOWN_PHASE = -1  /**< Unknown phase. */
 } ratelprof_phase_t;
 
@@ -63,7 +63,7 @@ typedef struct {
  * This structure contains information about the lifecycle phases, including 
  * timing information for each phase and data related to the program's main execution.
  */
-typedef struct {
+typedef struct ratelprof_lifecycle_s {
     ratelprof_phase_t current_phase;           /**< The current phase of the program lifecycle. */
    
     ratelprof_timespec_t experiment_start_epoch; /**< The start epoch of the current profiling experiment */
@@ -75,27 +75,21 @@ typedef struct {
 
 
 /**
- * @brief Initializes the lifecycle system and sets the current phase to the tool initialization phase.
+ * @brief Start the lifecycle system and sets the current phase to the tool initialization phase.
  *
- * This function initializes the lifecycle management system by setting the `current_phase` to 
- * `RATELPROF_IN_TOOL_INIT_PHASE` and recording the start time of the tool initialization phase 
- * using a monotonic clock.
+ * This function start the lifecycle management system by getting epoch start time and initialize
+ * the current phase and the normalizer.
  */
-void ratelprof_start_lifecycle();
+void ratelprof_start_lifecycle(void);
 
 
 /**
- * @brief Finalizes the lifecycle and performs cleanup tasks.
+ * @brief Stop the lifecycle and performs cleanup tasks.
  *
- * This function finalizes the lifecycle by freeing allocated memory for 
- * the command-line arguments (`argv`) stored in the lifecycle's `main_data` structure 
- * and recording the timestamp for the end of the tool finalization phase.
- *
- * @note This function should be called at the end of the program's execution to ensure 
- *       proper cleanup of resources used during the lifecycle.
+ * This function stop the lifecycle by setting the next phase to the final phase.
  *
  */
-void ratelprof_stop_lifecycle();
+void ratelprof_stop_lifecycle(void);
 
 
 /**
@@ -112,7 +106,7 @@ void ratelprof_stop_lifecycle();
  * printf("Current lifecycle phase: %d\n", current_phase);
  * ```
  */
-ratelprof_phase_t ratelprof_get_current_phase();
+ratelprof_phase_t ratelprof_get_current_phase(void);
 
 
 /**
@@ -130,7 +124,7 @@ ratelprof_phase_t ratelprof_get_current_phase();
  * printf("Current phase: %d\n", lifecycle->current_phase);
  * ```
  */
-ratelprof_lifecycle_t* ratelprof_get_lifecycle();
+ratelprof_lifecycle_t* ratelprof_get_lifecycle(void);
 
 
 /**
@@ -138,7 +132,7 @@ ratelprof_lifecycle_t* ratelprof_get_lifecycle();
  *
  * Record current phase stop time and move to next phase
  */
-void ratelprof_next_phase();
+void ratelprof_next_phase(void);
 
 
 /**
@@ -164,9 +158,40 @@ const char* ratelprof_get_phase_name(ratelprof_phase_t phase);
 ratelprof_time_t ratelprof_get_normalized_time(ratelprof_time_t time);
 
 
-ratelprof_time_t ratelprof_get_constructor_time();
-ratelprof_time_t ratelprof_get_destructor_time();
-ratelprof_time_t ratelprof_get_main_time();
+/**
+ * @brief Retrieve the normalized constructor phase time.
+ * 
+ * This function returns the normalized timestamp marking the end of the constructor phase.
+ * The returned time is relative to the application start time, and requires that
+ * the lifecycle has been initialized beforehand.
+ *
+ * @return Normalized time duration for the constructor phase.
+ */
+ratelprof_time_t ratelprof_get_constructor_time(void);
+
+
+/**
+ * @brief Retrieve the normalized destructor phase time.
+ * 
+ * This function returns the normalized timestamp marking the end of the destructor phase.
+ * The returned time is relative to the application start time, and requires that
+ * the lifecycle has been initialized beforehand.
+ *
+ * @return Normalized time duration for the destructor phase.
+ */
+ratelprof_time_t ratelprof_get_destructor_time(void);
+
+
+/**
+ * @brief Retrieve the normalized main phase time.
+ * 
+ * This function returns the normalized timestamp marking the end of the main phase.
+ * The returned time is relative to the application start time, and requires that
+ * the lifecycle has been initialized beforehand.
+ *
+ * @return Normalized time duration for the main phase.
+ */
+ratelprof_time_t ratelprof_get_main_time(void);
 
 
 /**

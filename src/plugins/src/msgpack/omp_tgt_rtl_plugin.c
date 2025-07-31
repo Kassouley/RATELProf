@@ -3,12 +3,13 @@
  * ANY CHANGES MAY BE OVERWRITTEN BY SUBSEQUENT RUNS OF GILDA. 
  */
  
-#include <ratelprof.h>
 #include <ratelprof_ext.h>
+#include <ratelprof.h>
 #include "omp_tgt_rtl_plugin.h"
 #include "msgpack.h"
 
-void on_enter_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity){
+void on_enter_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
+{
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
     ratelprof_activity_pool_push_activity(activity);
     get_correlation_id(&activity->corr_id);
@@ -20,20 +21,21 @@ void on_enter_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t
     activity->tid = get_tid();
 }
 
-void on_exit_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity){
-	(void)user_activity;
+void on_exit_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
+{
 	(void)domain;
 	(void)id;
+	(void)user_activity;
     pop_id();
 }
 
-void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_api_args_t* args, void* user_args) 
+void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_api_args_t* args, void* user_args)
 {
     msgpack_buffer_t* buf = (msgpack_buffer_t*)user_args;
     switch(funid) {
 		case OMP_TGT_RTL_API_ID___tgt_rtl_query_async :
 			//	int32_t device_id (int);
-			//	__tgt_async_info * AsyncInfoPtr (struct);
+			//	__tgt_async_info * AsyncInfoPtr (struct __tgt_async_info*);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -61,8 +63,8 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_submit :
 			//	int32_t device_id (int);
-			//	void * target_ptr (void);
-			//	void * host_ptr (void);
+			//	void * target_ptr (void *);
+			//	void * host_ptr (void *);
 			//	int64_t size (long);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 5);
@@ -117,7 +119,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_notify_mapped :
 			//	int32_t device_id (int);
-			//	void * host_ptr (void);
+			//	void * host_ptr (void *);
 			//	int64_t size (long);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 4);
@@ -153,10 +155,10 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_submit_async :
 			//	int32_t device_id (int);
-			//	void * target_ptr (void);
-			//	void * host_ptr (void);
+			//	void * target_ptr (void *);
+			//	void * host_ptr (void *);
 			//	int64_t size (long);
-			//	__tgt_async_info * AsyncInfo (struct);
+			//	__tgt_async_info * AsyncInfo (struct __tgt_async_info*);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -205,7 +207,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_init_async_info :
 			//	int32_t device_id (int);
-			//	__tgt_async_info ** async_info_ptr (struct);
+			//	__tgt_async_info ** async_info_ptr (struct __tgt_async_info**);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -261,10 +263,10 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_retrieve_async :
 			//	int32_t device_id (int);
-			//	void * host_ptr (void);
-			//	void * target_ptr (void);
+			//	void * host_ptr (void *);
+			//	void * target_ptr (void *);
 			//	int64_t size (long);
-			//	__tgt_async_info * AsyncInfo (struct);
+			//	__tgt_async_info * AsyncInfo (struct __tgt_async_info*);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -313,7 +315,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_delete :
 			//	int32_t device_id (int);
-			//	void * target_ptr (void);
+			//	void * target_ptr (void *);
 			//	int32_t kind (int);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 4);
@@ -349,11 +351,11 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_exchange_async :
 			//	int32_t src_dev_id (int);
-			//	void * src_ptr (void);
+			//	void * src_ptr (void *);
 			//	int32_t dst_dev_id (int);
-			//	void * dst_ptr (void);
+			//	void * dst_ptr (void *);
 			//	int64_t size (long);
-			//	__tgt_async_info * AsyncInfo (struct);
+			//	__tgt_async_info * AsyncInfo (struct __tgt_async_info*);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "src_dev_id");
@@ -409,7 +411,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_prepopulate_page_table :
 			//	int32_t device_id (int);
-			//	void * ptr (void);
+			//	void * ptr (void *);
 			//	int64_t size (long);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 4);
@@ -445,9 +447,9 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_exchange :
 			//	int32_t src_dev_id (int);
-			//	void * src_ptr (void);
+			//	void * src_ptr (void *);
 			//	int32_t dst_dev_id (int);
-			//	void * dst_ptr (void);
+			//	void * dst_ptr (void *);
 			//	int64_t size (long);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 6);
@@ -497,11 +499,11 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel :
 			//	int32_t device_id (int);
-			//	void * tgt_entry_ptr (void);
-			//	void ** tgt_args (void);
-			//	ptrdiff_t * tgt_offsets (long);
-			//	KernelArgsTy * KernelArgs (struct);
-			//	__tgt_async_info * AsyncInfo (struct);
+			//	void * tgt_entry_ptr (void *);
+			//	void ** tgt_args (void **);
+			//	ptrdiff_t * tgt_offsets (long*);
+			//	KernelArgsTy * KernelArgs (struct KernelArgsTy*);
+			//	__tgt_async_info * AsyncInfo (struct __tgt_async_info*);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -556,7 +558,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			break;
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_is_valid_binary :
-			//	__tgt_device_image * image (struct);
+			//	__tgt_device_image * image (struct __tgt_device_image*);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "image");
@@ -577,8 +579,8 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_retrieve :
 			//	int32_t device_id (int);
-			//	void * host_ptr (void);
-			//	void * target_ptr (void);
+			//	void * host_ptr (void *);
+			//	void * target_ptr (void *);
 			//	int64_t size (long);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 5);
@@ -621,9 +623,9 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_lock :
 			//	int32_t device_id (int);
-			//	void * host_ptr (void);
+			//	void * host_ptr (void *);
 			//	int64_t size (long);
-			//	void ** LockedHostPtr (void);
+			//	void ** LockedHostPtr (void **);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -677,7 +679,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_destroy_event :
 			//	int32_t device_id (int);
-			//	void * event (void);
+			//	void * event (void *);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -737,7 +739,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_notify_unmapped :
 			//	int32_t device_id (int);
-			//	void * host_ptr (void);
+			//	void * host_ptr (void *);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -765,8 +767,8 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_init_device_info :
 			//	int32_t device_id (int);
-			//	__tgt_device_info * device_info_ptr (struct);
-			//	const char ** err_str (string);
+			//	__tgt_device_info * device_info_ptr (struct __tgt_device_info*);
+			//	const char ** err_str (const char **);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -801,7 +803,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_sync_event :
 			//	int32_t device_id (int);
-			//	void * event (void);
+			//	void * event (void *);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -829,7 +831,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_synchronize :
 			//	int32_t device_id (int);
-			//	__tgt_async_info * AsyncInfo (struct);
+			//	__tgt_async_info * AsyncInfo (struct __tgt_async_info*);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -863,7 +865,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_unlock :
 			//	int device_id (int);
-			//	void * host_ptr (void);
+			//	void * host_ptr (void *);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -947,10 +949,10 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel_sync :
 			//	int32_t device_id (int);
-			//	void * tgt_entry_ptr (void);
-			//	void ** tgt_args (void);
-			//	ptrdiff_t * tgt_offsets (long);
-			//	KernelArgsTy * KernelArgs (struct);
+			//	void * tgt_entry_ptr (void *);
+			//	void ** tgt_args (void **);
+			//	ptrdiff_t * tgt_offsets (long*);
+			//	KernelArgsTy * KernelArgs (struct KernelArgsTy*);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -999,8 +1001,8 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_record_event :
 			//	int32_t device_id (int);
-			//	void * event (void);
-			//	__tgt_async_info * AsyncInfo (struct);
+			//	void * event (void *);
+			//	__tgt_async_info * AsyncInfo (struct __tgt_async_info*);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -1047,7 +1049,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_create_event :
 			//	int32_t device_id (int);
-			//	void ** event (void);
+			//	void ** event (void **);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -1089,14 +1091,14 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	__tgt_device_binary binary ({
 			//		uintptr_t handle (unsigned long);
 			//	});
-			//	const char * name (string);
-			//	void ** kernel_ptr (void);
+			//	const char * name (const char *);
+			//	void ** kernel_ptr (void **);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "binary");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
-			msgpack_encode_string_ext(buf, "struct __tgt_device_binary");
+			msgpack_encode_string_ext(buf, "__tgt_device_binary");
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 1);
 
@@ -1164,8 +1166,8 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 
 		case OMP_TGT_RTL_API_ID___tgt_rtl_wait_event :
 			//	int32_t device_id (int);
-			//	void * event (void);
-			//	__tgt_async_info * AsyncInfo (struct);
+			//	void * event (void *);
+			//	__tgt_async_info * AsyncInfo (struct __tgt_async_info*);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "device_id");
@@ -1201,9 +1203,9 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 		case OMP_TGT_RTL_API_ID___tgt_rtl_data_alloc :
 			//	int32_t device_id (int);
 			//	int64_t size (long);
-			//	void * host_ptr (void);
+			//	void * host_ptr (void *);
 			//	int32_t kind (int);
-			//	void * retval (void);
+			//	void * retval (void *);
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "device_id");
 			msgpack_encode_map(buf, 2);
@@ -1267,14 +1269,14 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//		uintptr_t handle (unsigned long);
 			//	});
 			//	uint64_t size (unsigned long);
-			//	const char * name (string);
-			//	void ** device_ptr (void);
+			//	const char * name (const char *);
+			//	void ** device_ptr (void **);
 			//	int32_t retval (int);
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "binary");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
-			msgpack_encode_string_ext(buf, "struct __tgt_device_binary");
+			msgpack_encode_string_ext(buf, "__tgt_device_binary");
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 1);
 
@@ -1326,8 +1328,7 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			msgpack_encode_int(buf, args->__tgt_rtl_requested_prepopulate_gpu_page_table.retval);
 
 			break;
- 
+
         default : break;
     }
 }
-

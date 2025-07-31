@@ -1,5 +1,5 @@
 /**
- * @file omp_routine_api_helper.h 
+ * @file omp_routine_api_helper.h
  * @brief Helper functions for managing OMP_ROUTINE API calls in the profiling framework.
  *
  * This file contains various utility functions used to handle OMP_ROUTINE API calls 
@@ -12,18 +12,46 @@
  * 
  */
 
-#ifndef OMP_ROUTINE_API_HELPER_H 
-#define OMP_ROUTINE_API_HELPER_H 
+#ifndef OMP_ROUTINE_API_HELPER_H
+#define OMP_ROUTINE_API_HELPER_H
 
 #include <string.h>
 #include <stdbool.h>
-#include "omp.h" 
 #include "domains/fun_proto/omp_routine_profiled_functions.h"
-
+#include "omp.h" 
 
 #define OMP_ROUTINE_STRING_SIZE_MAX 128
 
-     
+#ifdef ADD_API_PREFIX
+#undef ADD_API_PREFIX
+#endif
+#define ADD_API_PREFIX(str) OMP_ROUTINE_API_##str
+
+
+#define FOR_EACH_OMP_ROUTINE_FUNC(macro) \
+macro(omp_target_memset)                 \
+macro(omp_target_memcpy_async)           \
+macro(omp_target_memcpy_rect_async)      \
+macro(omp_target_alloc)                  \
+macro(omp_target_free)                   \
+macro(omp_target_memcpy_rect)            \
+macro(omp_target_disassociate_ptr)       \
+macro(omp_target_memcpy)                 \
+macro(omp_target_memset_async)           \
+macro(omp_target_is_present)             \
+macro(omp_target_associate_ptr)          \
+macro(omp_get_initial_device)            \
+macro(llvm_omp_target_dynamic_shared_alloc) \
+macro(omp_get_interop_int)               \
+macro(omp_get_interop_name)              \
+macro(omp_get_interop_ptr)               \
+macro(omp_get_interop_str)               \
+macro(omp_get_interop_type_desc)         \
+macro(omp_get_mapped_ptr)                \
+macro(omp_get_num_devices)               \
+macro(omp_is_coarse_grain_mem_region)    \
+
+
 /**
  * @enum omp_routine_api_id_t 
  * @brief Enumeration of OMP_ROUTINE API function identifiers.
@@ -31,34 +59,13 @@
  * This enumeration defines unique identifiers for various OMP_ROUTINE API functions. 
  * These identifiers are used for profiling, tracking, and identifying specific OMP_ROUTINE function calls.
  */
-typedef enum {
-	OMP_ROUTINE_API_ID_omp_target_memset,
-	OMP_ROUTINE_API_ID_omp_target_memcpy_async,
-	OMP_ROUTINE_API_ID_omp_target_memcpy_rect_async,
-	OMP_ROUTINE_API_ID_omp_target_alloc,
-	OMP_ROUTINE_API_ID_omp_target_free,
-	OMP_ROUTINE_API_ID_omp_target_memcpy_rect,
-	OMP_ROUTINE_API_ID_omp_target_disassociate_ptr,
-	OMP_ROUTINE_API_ID_omp_target_memcpy,
-	OMP_ROUTINE_API_ID_omp_target_memset_async,
-	OMP_ROUTINE_API_ID_omp_target_is_present,
-	OMP_ROUTINE_API_ID_omp_target_associate_ptr,
-	OMP_ROUTINE_API_ID_omp_get_initial_device,
-	OMP_ROUTINE_API_ID_llvm_omp_target_dynamic_shared_alloc,
-	OMP_ROUTINE_API_ID_omp_get_interop_int,
-	OMP_ROUTINE_API_ID_omp_get_interop_name,
-	OMP_ROUTINE_API_ID_omp_get_interop_ptr,
-	OMP_ROUTINE_API_ID_omp_get_interop_str,
-	OMP_ROUTINE_API_ID_omp_get_interop_type_desc,
-	OMP_ROUTINE_API_ID_omp_get_mapped_ptr,
-	OMP_ROUTINE_API_ID_omp_get_num_devices,
-	OMP_ROUTINE_API_ID_omp_is_coarse_grain_mem_region, 
+typedef enum omp_routine_api_id_e {
+    FOR_EACH_OMP_ROUTINE_FUNC(GET_FUNC_API_ID)
     OMP_ROUTINE_API_ID_NB_FUNCTION,
     OMP_ROUTINE_API_ID_UNKNOWN,
 } omp_routine_api_id_t;
- 
 
-     
+
 /**
  * @brief Retrieves the function name corresponding to a given OMP_ROUTINE API function ID.
  *
@@ -71,72 +78,13 @@ typedef enum {
 static inline const char* get_omp_routine_funame_by_id(omp_routine_api_id_t id) 
 {
     switch(id) {
-		case OMP_ROUTINE_API_ID_omp_target_memset : return "omp_target_memset";
-		case OMP_ROUTINE_API_ID_omp_target_memcpy_async : return "omp_target_memcpy_async";
-		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect_async : return "omp_target_memcpy_rect_async";
-		case OMP_ROUTINE_API_ID_omp_target_alloc : return "omp_target_alloc";
-		case OMP_ROUTINE_API_ID_omp_target_free : return "omp_target_free";
-		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect : return "omp_target_memcpy_rect";
-		case OMP_ROUTINE_API_ID_omp_target_disassociate_ptr : return "omp_target_disassociate_ptr";
-		case OMP_ROUTINE_API_ID_omp_target_memcpy : return "omp_target_memcpy";
-		case OMP_ROUTINE_API_ID_omp_target_memset_async : return "omp_target_memset_async";
-		case OMP_ROUTINE_API_ID_omp_target_is_present : return "omp_target_is_present";
-		case OMP_ROUTINE_API_ID_omp_target_associate_ptr : return "omp_target_associate_ptr";
-		case OMP_ROUTINE_API_ID_omp_get_initial_device : return "omp_get_initial_device";
-		case OMP_ROUTINE_API_ID_llvm_omp_target_dynamic_shared_alloc : return "llvm_omp_target_dynamic_shared_alloc";
-		case OMP_ROUTINE_API_ID_omp_get_interop_int : return "omp_get_interop_int";
-		case OMP_ROUTINE_API_ID_omp_get_interop_name : return "omp_get_interop_name";
-		case OMP_ROUTINE_API_ID_omp_get_interop_ptr : return "omp_get_interop_ptr";
-		case OMP_ROUTINE_API_ID_omp_get_interop_str : return "omp_get_interop_str";
-		case OMP_ROUTINE_API_ID_omp_get_interop_type_desc : return "omp_get_interop_type_desc";
-		case OMP_ROUTINE_API_ID_omp_get_mapped_ptr : return "omp_get_mapped_ptr";
-		case OMP_ROUTINE_API_ID_omp_get_num_devices : return "omp_get_num_devices";
-		case OMP_ROUTINE_API_ID_omp_is_coarse_grain_mem_region : return "omp_is_coarse_grain_mem_region"; 
+        FOR_EACH_OMP_ROUTINE_FUNC(GET_FUNAME_BY_ID_OF)
         default : return NULL;
     }
     return NULL;
 }
- 
 
-     
-/**
- * @brief Retrieves the OMP_ROUTINE API function ID corresponding to a given function name.
- *
- * This function maps a OMP_ROUTINE API function name (string) to its corresponding function ID (`omp_routine_api_id_t`).
- * If the provided function name does not match any known functions, the function returns `OMP_ROUTINE_API_ID_UNKNOWN`.
- *
- * @param name The function name as a null-terminated string.
- * @return The corresponding OMP_ROUTINE API function ID of type `omp_routine_api_id_t`, or `OMP_ROUTINE_API_ID_UNKNOWN` if not found.
- */
-static inline omp_routine_api_id_t get_omp_routine_funid_by_name(const char* name) 
-{
-    if (name == NULL) return OMP_ROUTINE_API_ID_UNKNOWN;
-	else if (strcmp(name, "omp_target_memset") == 0) return OMP_ROUTINE_API_ID_omp_target_memset;
-	else if (strcmp(name, "omp_target_memcpy_async") == 0) return OMP_ROUTINE_API_ID_omp_target_memcpy_async;
-	else if (strcmp(name, "omp_target_memcpy_rect_async") == 0) return OMP_ROUTINE_API_ID_omp_target_memcpy_rect_async;
-	else if (strcmp(name, "omp_target_alloc") == 0) return OMP_ROUTINE_API_ID_omp_target_alloc;
-	else if (strcmp(name, "omp_target_free") == 0) return OMP_ROUTINE_API_ID_omp_target_free;
-	else if (strcmp(name, "omp_target_memcpy_rect") == 0) return OMP_ROUTINE_API_ID_omp_target_memcpy_rect;
-	else if (strcmp(name, "omp_target_disassociate_ptr") == 0) return OMP_ROUTINE_API_ID_omp_target_disassociate_ptr;
-	else if (strcmp(name, "omp_target_memcpy") == 0) return OMP_ROUTINE_API_ID_omp_target_memcpy;
-	else if (strcmp(name, "omp_target_memset_async") == 0) return OMP_ROUTINE_API_ID_omp_target_memset_async;
-	else if (strcmp(name, "omp_target_is_present") == 0) return OMP_ROUTINE_API_ID_omp_target_is_present;
-	else if (strcmp(name, "omp_target_associate_ptr") == 0) return OMP_ROUTINE_API_ID_omp_target_associate_ptr;
-	else if (strcmp(name, "omp_get_initial_device") == 0) return OMP_ROUTINE_API_ID_omp_get_initial_device;
-	else if (strcmp(name, "llvm_omp_target_dynamic_shared_alloc") == 0) return OMP_ROUTINE_API_ID_llvm_omp_target_dynamic_shared_alloc;
-	else if (strcmp(name, "omp_get_interop_int") == 0) return OMP_ROUTINE_API_ID_omp_get_interop_int;
-	else if (strcmp(name, "omp_get_interop_name") == 0) return OMP_ROUTINE_API_ID_omp_get_interop_name;
-	else if (strcmp(name, "omp_get_interop_ptr") == 0) return OMP_ROUTINE_API_ID_omp_get_interop_ptr;
-	else if (strcmp(name, "omp_get_interop_str") == 0) return OMP_ROUTINE_API_ID_omp_get_interop_str;
-	else if (strcmp(name, "omp_get_interop_type_desc") == 0) return OMP_ROUTINE_API_ID_omp_get_interop_type_desc;
-	else if (strcmp(name, "omp_get_mapped_ptr") == 0) return OMP_ROUTINE_API_ID_omp_get_mapped_ptr;
-	else if (strcmp(name, "omp_get_num_devices") == 0) return OMP_ROUTINE_API_ID_omp_get_num_devices;
-	else if (strcmp(name, "omp_is_coarse_grain_mem_region") == 0) return OMP_ROUTINE_API_ID_omp_is_coarse_grain_mem_region; 
-    return OMP_ROUTINE_API_ID_UNKNOWN;
-}
- 
 
-     
 /**
  * @brief Retrieves the function pointer corresponding to a given OMP_ROUTINE API function ID.
  *
@@ -149,34 +97,30 @@ static inline omp_routine_api_id_t get_omp_routine_funid_by_name(const char* nam
 static inline void* get_omp_routine_funaddr_by_id(omp_routine_api_id_t id) 
 {
     switch(id) {
-		case OMP_ROUTINE_API_ID_omp_target_memset : return i_omp_target_memset;
-		case OMP_ROUTINE_API_ID_omp_target_memcpy_async : return i_omp_target_memcpy_async;
-		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect_async : return i_omp_target_memcpy_rect_async;
-		case OMP_ROUTINE_API_ID_omp_target_alloc : return i_omp_target_alloc;
-		case OMP_ROUTINE_API_ID_omp_target_free : return i_omp_target_free;
-		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect : return i_omp_target_memcpy_rect;
-		case OMP_ROUTINE_API_ID_omp_target_disassociate_ptr : return i_omp_target_disassociate_ptr;
-		case OMP_ROUTINE_API_ID_omp_target_memcpy : return i_omp_target_memcpy;
-		case OMP_ROUTINE_API_ID_omp_target_memset_async : return i_omp_target_memset_async;
-		case OMP_ROUTINE_API_ID_omp_target_is_present : return i_omp_target_is_present;
-		case OMP_ROUTINE_API_ID_omp_target_associate_ptr : return i_omp_target_associate_ptr;
-		case OMP_ROUTINE_API_ID_omp_get_initial_device : return i_omp_get_initial_device;
-		case OMP_ROUTINE_API_ID_llvm_omp_target_dynamic_shared_alloc : return i_llvm_omp_target_dynamic_shared_alloc;
-		case OMP_ROUTINE_API_ID_omp_get_interop_int : return i_omp_get_interop_int;
-		case OMP_ROUTINE_API_ID_omp_get_interop_name : return i_omp_get_interop_name;
-		case OMP_ROUTINE_API_ID_omp_get_interop_ptr : return i_omp_get_interop_ptr;
-		case OMP_ROUTINE_API_ID_omp_get_interop_str : return i_omp_get_interop_str;
-		case OMP_ROUTINE_API_ID_omp_get_interop_type_desc : return i_omp_get_interop_type_desc;
-		case OMP_ROUTINE_API_ID_omp_get_mapped_ptr : return i_omp_get_mapped_ptr;
-		case OMP_ROUTINE_API_ID_omp_get_num_devices : return i_omp_get_num_devices;
-		case OMP_ROUTINE_API_ID_omp_is_coarse_grain_mem_region : return i_omp_is_coarse_grain_mem_region; 
+        FOR_EACH_OMP_ROUTINE_FUNC(GET_FUNADDR_BY_ID_OF)
         default : return NULL;
     }
     return NULL;
 }
- 
 
-     
+
+/**
+ * @brief Retrieves the OMP_ROUTINE API function ID corresponding to a given function name.
+ *
+ * This function maps a OMP_ROUTINE API function name (string) to its corresponding function ID (`omp_routine_api_id_t`).
+ * If the provided function name does not match any known functions, the function returns `OMP_ROUTINE_API_ID_UNKNOWN`.
+ *
+ * @param name The function name as a null-terminated string.
+ * @return The corresponding OMP_ROUTINE API function ID of type `omp_routine_api_id_t`, or `OMP_ROUTINE_API_ID_UNKNOWN` if not found.
+ */
+static inline omp_routine_api_id_t get_omp_routine_funid_by_name(const char* name) 
+{
+    if (name == NULL) return OMP_ROUTINE_API_ID_UNKNOWN;
+    FOR_EACH_OMP_ROUTINE_FUNC(GET_FUNID_BY_NAME_OF)
+    return OMP_ROUTINE_API_ID_UNKNOWN;
+}
+
+
 // OMP_ROUTINE API Args Data
 /**
  * @brief Structure to hold the arguments for the `omp_target_memset` function.
@@ -189,30 +133,26 @@ static inline void* get_omp_routine_funaddr_by_id(omp_routine_api_id_t id)
  * @note 
  *	void *
  *	omp_target_memset (
- *			void * ptr (void)
+ *			void * ptr (void *)
  *			int value (int)
  *			size_t size (unsigned long)
  *			int device_num (int)
  *	)
  */
 struct args_omp_target_memset_t {
-	void* ptr;
+	void * ptr;
 	int value;
 	size_t size;
 	int device_num;
-	void* retval;
+	void * retval;
 };
 
 #define GET_ARGS_VALUE_omp_target_memset(activity) { \
-	activity->omp_routine_args.omp_target_memset.ptr = (void*)ptr; \
-	activity->omp_routine_args.omp_target_memset.value = (int)value; \
-	activity->omp_routine_args.omp_target_memset.size = (size_t)size; \
-	activity->omp_routine_args.omp_target_memset.device_num = (int)device_num; \
+	activity->omp_routine_args.omp_target_memset.ptr = (void *) ptr; \
+	activity->omp_routine_args.omp_target_memset.value = (int) value; \
+	activity->omp_routine_args.omp_target_memset.size = (size_t) size; \
+	activity->omp_routine_args.omp_target_memset.device_num = (int) device_num; \
 };
-
-
-
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_memcpy_async` function.
@@ -225,53 +165,50 @@ struct args_omp_target_memset_t {
  * @note 
  *	int
  *	omp_target_memcpy_async (
- *			void * dst (void)
- *			const void * src (void)
+ *			void * dst (void *)
+ *			const void * src (const void *)
  *			size_t size (unsigned long)
  *			size_t dst_offset (unsigned long)
  *			size_t src_offset (unsigned long)
  *			int dst_device_num (int)
  *			int src_device_num (int)
  *			int async_depend_info (int)
- *			omp_depend_t * depend (void)
+ *			omp_depend_t * depend (void **)
  *	)
  */
 struct args_omp_target_memcpy_async_t {
-	void* dst;
-	const void* src;
+	void * dst;
+	void * src;
 	size_t size;
 	size_t dst_offset;
 	size_t src_offset;
 	int dst_device_num;
 	int src_device_num;
 	int async_depend_info;
-	omp_depend_t** depend;
-	struct { // omp_depend_t *
-		omp_depend_t* ptr1;
+	void ** depend;
+	struct {
+		void* ptr1;
 	} depend__ref;
 	int retval;
 };
 
 #define GET_ARGS_VALUE_omp_target_memcpy_async(activity) { \
-	activity->omp_routine_args.omp_target_memcpy_async.dst = (void*)dst; \
-	activity->omp_routine_args.omp_target_memcpy_async.src = (const void*)src; \
-	activity->omp_routine_args.omp_target_memcpy_async.size = (size_t)size; \
-	activity->omp_routine_args.omp_target_memcpy_async.dst_offset = (size_t)dst_offset; \
-	activity->omp_routine_args.omp_target_memcpy_async.src_offset = (size_t)src_offset; \
-	activity->omp_routine_args.omp_target_memcpy_async.dst_device_num = (int)dst_device_num; \
-	activity->omp_routine_args.omp_target_memcpy_async.src_device_num = (int)src_device_num; \
-	activity->omp_routine_args.omp_target_memcpy_async.async_depend_info = (int)async_depend_info; \
-	activity->omp_routine_args.omp_target_memcpy_async.depend = (omp_depend_t**)depend; \
+	activity->omp_routine_args.omp_target_memcpy_async.dst = (void *) dst; \
+	activity->omp_routine_args.omp_target_memcpy_async.src = (void *) src; \
+	activity->omp_routine_args.omp_target_memcpy_async.size = (size_t) size; \
+	activity->omp_routine_args.omp_target_memcpy_async.dst_offset = (size_t) dst_offset; \
+	activity->omp_routine_args.omp_target_memcpy_async.src_offset = (size_t) src_offset; \
+	activity->omp_routine_args.omp_target_memcpy_async.dst_device_num = (int) dst_device_num; \
+	activity->omp_routine_args.omp_target_memcpy_async.src_device_num = (int) src_device_num; \
+	activity->omp_routine_args.omp_target_memcpy_async.async_depend_info = (int) async_depend_info; \
+	activity->omp_routine_args.omp_target_memcpy_async.depend = (void **) depend; \
 };
 
 #define GET_PTRS_VALUE_omp_target_memcpy_async(args) { \
 	if (args->omp_target_memcpy_async.depend != NULL) { \
-		args->omp_target_memcpy_async.depend__ref.ptr1 = (void*)*args->omp_target_memcpy_async.depend; \
+		args->omp_target_memcpy_async.depend__ref.ptr1 = *args->omp_target_memcpy_async.depend; \
 	} \
 };
-
-
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_memcpy_rect_async` function.
@@ -284,70 +221,70 @@ struct args_omp_target_memcpy_async_t {
  * @note 
  *	int
  *	omp_target_memcpy_rect_async (
- *			void * dst (void)
- *			const void * src (void)
+ *			void * dst (void *)
+ *			const void * src (const void *)
  *			size_t element_size (unsigned long)
  *			int num_dims (int)
- *			const size_t * volume (unsigned long)
- *			const size_t * dst_offsets (unsigned long)
- *			const size_t * src_offsets (unsigned long)
- *			const size_t * dst_dimensions (unsigned long)
- *			const size_t * src_dimensions (unsigned long)
+ *			const size_t * volume (const unsigned long *)
+ *			const size_t * dst_offsets (const unsigned long *)
+ *			const size_t * src_offsets (const unsigned long *)
+ *			const size_t * dst_dimensions (const unsigned long *)
+ *			const size_t * src_dimensions (const unsigned long *)
  *			int dst_device_num (int)
  *			int src_device_num (int)
  *			int depobj_count (int)
- *			omp_depend_t * depobj_list (void)
+ *			omp_depend_t * depobj_list (void **)
  *	)
  */
 struct args_omp_target_memcpy_rect_async_t {
-	void* dst;
-	const void* src;
+	void * dst;
+	void * src;
 	size_t element_size;
 	int num_dims;
-	const size_t* volume;
-	struct { // const size_t *
+	size_t * volume;
+	struct {
 		size_t val;
 	} volume__ref;
-	const size_t* dst_offsets;
-	struct { // const size_t *
+	size_t * dst_offsets;
+	struct {
 		size_t val;
 	} dst_offsets__ref;
-	const size_t* src_offsets;
-	struct { // const size_t *
+	size_t * src_offsets;
+	struct {
 		size_t val;
 	} src_offsets__ref;
-	const size_t* dst_dimensions;
-	struct { // const size_t *
+	size_t * dst_dimensions;
+	struct {
 		size_t val;
 	} dst_dimensions__ref;
-	const size_t* src_dimensions;
-	struct { // const size_t *
+	size_t * src_dimensions;
+	struct {
 		size_t val;
 	} src_dimensions__ref;
 	int dst_device_num;
 	int src_device_num;
 	int depobj_count;
-	omp_depend_t** depobj_list;
-	struct { // omp_depend_t *
-		omp_depend_t* ptr1;
+	void ** depobj_list;
+	struct {
+		void* ptr1;
 	} depobj_list__ref;
 	int retval;
 };
 
 #define GET_ARGS_VALUE_omp_target_memcpy_rect_async(activity) { \
-	activity->omp_routine_args.omp_target_memcpy_rect_async.dst = (void*)dst; \
-	activity->omp_routine_args.omp_target_memcpy_rect_async.src = (const void*)src; \
-	activity->omp_routine_args.omp_target_memcpy_rect_async.element_size = (size_t)element_size; \
-	activity->omp_routine_args.omp_target_memcpy_rect_async.num_dims = (int)num_dims; \
-	activity->omp_routine_args.omp_target_memcpy_rect_async.volume = (const size_t*)volume; \
-	activity->omp_routine_args.omp_target_memcpy_rect_async.dst_offsets = (const size_t*)dst_offsets; \
-	activity->omp_routine_args.omp_target_memcpy_rect_async.src_offsets = (const size_t*)src_offsets; \
-	activity->omp_routine_args.omp_target_memcpy_rect_async.dst_dimensions = (const size_t*)dst_dimensions; \
-	activity->omp_routine_args.omp_target_memcpy_rect_async.src_dimensions = (const size_t*)src_dimensions; \
-	activity->omp_routine_args.omp_target_memcpy_rect_async.dst_device_num = (int)dst_device_num; \
-	activity->omp_routine_args.omp_target_memcpy_rect_async.src_device_num = (int)src_device_num; \
-	activity->omp_routine_args.omp_target_memcpy_rect_async.depobj_count = (int)depobj_count; \
-	activity->omp_routine_args.omp_target_memcpy_rect_async.depobj_list = (omp_depend_t**)depobj_list; \
+	activity->omp_routine_args.omp_target_memcpy_rect_async.dst = (void *) dst; \
+	activity->omp_routine_args.omp_target_memcpy_rect_async.src = (void *) src; \
+	activity->omp_routine_args.omp_target_memcpy_rect_async.element_size = (size_t) element_size; \
+	activity->omp_routine_args.omp_target_memcpy_rect_async.num_dims = (int) num_dims; \
+	activity->omp_routine_args.omp_target_memcpy_rect_async.volume = (size_t *) volume; \
+	activity->omp_routine_args.omp_target_memcpy_rect_async.dst_offsets = (size_t *) dst_offsets; \
+	activity->omp_routine_args.omp_target_memcpy_rect_async.src_offsets = (size_t *) src_offsets; \
+	activity->omp_routine_args.omp_target_memcpy_rect_async.dst_dimensions = (size_t *) dst_dimensions; \
+	activity->omp_routine_args.omp_target_memcpy_rect_async.src_dimensions = (size_t *) src_dimensions; \
+	activity->omp_routine_args.omp_target_memcpy_rect_async.dst_device_num = (int) dst_device_num; \
+	activity->omp_routine_args.omp_target_memcpy_rect_async.src_device_num = (int) src_device_num; \
+	activity->omp_routine_args.omp_target_memcpy_rect_async.depobj_count = (int) depobj_count; \
+	activity->omp_routine_args.omp_target_memcpy_rect_async.depobj_list = (void **) depobj_list; \
 };
 
 #define GET_PTRS_VALUE_omp_target_memcpy_rect_async(args) { \
@@ -367,12 +304,9 @@ struct args_omp_target_memcpy_rect_async_t {
 		args->omp_target_memcpy_rect_async.src_dimensions__ref.val = *args->omp_target_memcpy_rect_async.src_dimensions; \
 	} \
 	if (args->omp_target_memcpy_rect_async.depobj_list != NULL) { \
-		args->omp_target_memcpy_rect_async.depobj_list__ref.ptr1 = (void*)*args->omp_target_memcpy_rect_async.depobj_list; \
+		args->omp_target_memcpy_rect_async.depobj_list__ref.ptr1 = *args->omp_target_memcpy_rect_async.depobj_list; \
 	} \
 };
-
-
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_alloc` function.
@@ -392,17 +326,13 @@ struct args_omp_target_memcpy_rect_async_t {
 struct args_omp_target_alloc_t {
 	size_t size;
 	int device_num;
-	void* retval;
+	void * retval;
 };
 
 #define GET_ARGS_VALUE_omp_target_alloc(activity) { \
-	activity->omp_routine_args.omp_target_alloc.size = (size_t)size; \
-	activity->omp_routine_args.omp_target_alloc.device_num = (int)device_num; \
+	activity->omp_routine_args.omp_target_alloc.size = (size_t) size; \
+	activity->omp_routine_args.omp_target_alloc.device_num = (int) device_num; \
 };
-
-
-
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_free` function.
@@ -415,23 +345,19 @@ struct args_omp_target_alloc_t {
  * @note 
  *	void
  *	omp_target_free (
- *			void * device_ptr (void)
+ *			void * device_ptr (void *)
  *			int device_num (int)
  *	)
  */
 struct args_omp_target_free_t {
-	void* device_ptr;
+	void * device_ptr;
 	int device_num;
 };
 
 #define GET_ARGS_VALUE_omp_target_free(activity) { \
-	activity->omp_routine_args.omp_target_free.device_ptr = (void*)device_ptr; \
-	activity->omp_routine_args.omp_target_free.device_num = (int)device_num; \
+	activity->omp_routine_args.omp_target_free.device_ptr = (void *) device_ptr; \
+	activity->omp_routine_args.omp_target_free.device_num = (int) device_num; \
 };
-
-
-
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_memcpy_rect` function.
@@ -444,42 +370,42 @@ struct args_omp_target_free_t {
  * @note 
  *	int
  *	omp_target_memcpy_rect (
- *			void * dst (void)
- *			const void * src (void)
+ *			void * dst (void *)
+ *			const void * src (const void *)
  *			size_t element_size (unsigned long)
  *			int num_dims (int)
- *			const size_t * volume (unsigned long)
- *			const size_t * dst_offsets (unsigned long)
- *			const size_t * src_offsets (unsigned long)
- *			const size_t * dst_dimensions (unsigned long)
- *			const size_t * src_dimensions (unsigned long)
+ *			const size_t * volume (const unsigned long *)
+ *			const size_t * dst_offsets (const unsigned long *)
+ *			const size_t * src_offsets (const unsigned long *)
+ *			const size_t * dst_dimensions (const unsigned long *)
+ *			const size_t * src_dimensions (const unsigned long *)
  *			int dst_device_num (int)
  *			int src_device_num (int)
  *	)
  */
 struct args_omp_target_memcpy_rect_t {
-	void* dst;
-	const void* src;
+	void * dst;
+	void * src;
 	size_t element_size;
 	int num_dims;
-	const size_t* volume;
-	struct { // const size_t *
+	size_t * volume;
+	struct {
 		size_t val;
 	} volume__ref;
-	const size_t* dst_offsets;
-	struct { // const size_t *
+	size_t * dst_offsets;
+	struct {
 		size_t val;
 	} dst_offsets__ref;
-	const size_t* src_offsets;
-	struct { // const size_t *
+	size_t * src_offsets;
+	struct {
 		size_t val;
 	} src_offsets__ref;
-	const size_t* dst_dimensions;
-	struct { // const size_t *
+	size_t * dst_dimensions;
+	struct {
 		size_t val;
 	} dst_dimensions__ref;
-	const size_t* src_dimensions;
-	struct { // const size_t *
+	size_t * src_dimensions;
+	struct {
 		size_t val;
 	} src_dimensions__ref;
 	int dst_device_num;
@@ -488,17 +414,17 @@ struct args_omp_target_memcpy_rect_t {
 };
 
 #define GET_ARGS_VALUE_omp_target_memcpy_rect(activity) { \
-	activity->omp_routine_args.omp_target_memcpy_rect.dst = (void*)dst; \
-	activity->omp_routine_args.omp_target_memcpy_rect.src = (const void*)src; \
-	activity->omp_routine_args.omp_target_memcpy_rect.element_size = (size_t)element_size; \
-	activity->omp_routine_args.omp_target_memcpy_rect.num_dims = (int)num_dims; \
-	activity->omp_routine_args.omp_target_memcpy_rect.volume = (const size_t*)volume; \
-	activity->omp_routine_args.omp_target_memcpy_rect.dst_offsets = (const size_t*)dst_offsets; \
-	activity->omp_routine_args.omp_target_memcpy_rect.src_offsets = (const size_t*)src_offsets; \
-	activity->omp_routine_args.omp_target_memcpy_rect.dst_dimensions = (const size_t*)dst_dimensions; \
-	activity->omp_routine_args.omp_target_memcpy_rect.src_dimensions = (const size_t*)src_dimensions; \
-	activity->omp_routine_args.omp_target_memcpy_rect.dst_device_num = (int)dst_device_num; \
-	activity->omp_routine_args.omp_target_memcpy_rect.src_device_num = (int)src_device_num; \
+	activity->omp_routine_args.omp_target_memcpy_rect.dst = (void *) dst; \
+	activity->omp_routine_args.omp_target_memcpy_rect.src = (void *) src; \
+	activity->omp_routine_args.omp_target_memcpy_rect.element_size = (size_t) element_size; \
+	activity->omp_routine_args.omp_target_memcpy_rect.num_dims = (int) num_dims; \
+	activity->omp_routine_args.omp_target_memcpy_rect.volume = (size_t *) volume; \
+	activity->omp_routine_args.omp_target_memcpy_rect.dst_offsets = (size_t *) dst_offsets; \
+	activity->omp_routine_args.omp_target_memcpy_rect.src_offsets = (size_t *) src_offsets; \
+	activity->omp_routine_args.omp_target_memcpy_rect.dst_dimensions = (size_t *) dst_dimensions; \
+	activity->omp_routine_args.omp_target_memcpy_rect.src_dimensions = (size_t *) src_dimensions; \
+	activity->omp_routine_args.omp_target_memcpy_rect.dst_device_num = (int) dst_device_num; \
+	activity->omp_routine_args.omp_target_memcpy_rect.src_device_num = (int) src_device_num; \
 };
 
 #define GET_PTRS_VALUE_omp_target_memcpy_rect(args) { \
@@ -519,9 +445,6 @@ struct args_omp_target_memcpy_rect_t {
 	} \
 };
 
-
-
-
 /**
  * @brief Structure to hold the arguments for the `omp_target_disassociate_ptr` function.
  *
@@ -533,24 +456,20 @@ struct args_omp_target_memcpy_rect_t {
  * @note 
  *	int
  *	omp_target_disassociate_ptr (
- *			const void * host_ptr (void)
+ *			const void * host_ptr (const void *)
  *			int device_num (int)
  *	)
  */
 struct args_omp_target_disassociate_ptr_t {
-	const void* host_ptr;
+	void * host_ptr;
 	int device_num;
 	int retval;
 };
 
 #define GET_ARGS_VALUE_omp_target_disassociate_ptr(activity) { \
-	activity->omp_routine_args.omp_target_disassociate_ptr.host_ptr = (const void*)host_ptr; \
-	activity->omp_routine_args.omp_target_disassociate_ptr.device_num = (int)device_num; \
+	activity->omp_routine_args.omp_target_disassociate_ptr.host_ptr = (void *) host_ptr; \
+	activity->omp_routine_args.omp_target_disassociate_ptr.device_num = (int) device_num; \
 };
-
-
-
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_memcpy` function.
@@ -563,8 +482,8 @@ struct args_omp_target_disassociate_ptr_t {
  * @note 
  *	int
  *	omp_target_memcpy (
- *			void * dst (void)
- *			const void * src (void)
+ *			void * dst (void *)
+ *			const void * src (const void *)
  *			size_t size (unsigned long)
  *			size_t dst_offset (unsigned long)
  *			size_t src_offset (unsigned long)
@@ -573,8 +492,8 @@ struct args_omp_target_disassociate_ptr_t {
  *	)
  */
 struct args_omp_target_memcpy_t {
-	void* dst;
-	const void* src;
+	void * dst;
+	void * src;
 	size_t size;
 	size_t dst_offset;
 	size_t src_offset;
@@ -584,18 +503,14 @@ struct args_omp_target_memcpy_t {
 };
 
 #define GET_ARGS_VALUE_omp_target_memcpy(activity) { \
-	activity->omp_routine_args.omp_target_memcpy.dst = (void*)dst; \
-	activity->omp_routine_args.omp_target_memcpy.src = (const void*)src; \
-	activity->omp_routine_args.omp_target_memcpy.size = (size_t)size; \
-	activity->omp_routine_args.omp_target_memcpy.dst_offset = (size_t)dst_offset; \
-	activity->omp_routine_args.omp_target_memcpy.src_offset = (size_t)src_offset; \
-	activity->omp_routine_args.omp_target_memcpy.dst_device_num = (int)dst_device_num; \
-	activity->omp_routine_args.omp_target_memcpy.src_device_num = (int)src_device_num; \
+	activity->omp_routine_args.omp_target_memcpy.dst = (void *) dst; \
+	activity->omp_routine_args.omp_target_memcpy.src = (void *) src; \
+	activity->omp_routine_args.omp_target_memcpy.size = (size_t) size; \
+	activity->omp_routine_args.omp_target_memcpy.dst_offset = (size_t) dst_offset; \
+	activity->omp_routine_args.omp_target_memcpy.src_offset = (size_t) src_offset; \
+	activity->omp_routine_args.omp_target_memcpy.dst_device_num = (int) dst_device_num; \
+	activity->omp_routine_args.omp_target_memcpy.src_device_num = (int) src_device_num; \
 };
-
-
-
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_memset_async` function.
@@ -608,44 +523,41 @@ struct args_omp_target_memcpy_t {
  * @note 
  *	void *
  *	omp_target_memset_async (
- *			void * ptr (void)
+ *			void * ptr (void *)
  *			int value (int)
  *			size_t size (unsigned long)
  *			int device_num (int)
  *			int async_depend_info (int)
- *			omp_depend_t * depend (void)
+ *			omp_depend_t * depend (void **)
  *	)
  */
 struct args_omp_target_memset_async_t {
-	void* ptr;
+	void * ptr;
 	int value;
 	size_t size;
 	int device_num;
 	int async_depend_info;
-	omp_depend_t** depend;
-	struct { // omp_depend_t *
-		omp_depend_t* ptr1;
+	void ** depend;
+	struct {
+		void* ptr1;
 	} depend__ref;
-	void* retval;
+	void * retval;
 };
 
 #define GET_ARGS_VALUE_omp_target_memset_async(activity) { \
-	activity->omp_routine_args.omp_target_memset_async.ptr = (void*)ptr; \
-	activity->omp_routine_args.omp_target_memset_async.value = (int)value; \
-	activity->omp_routine_args.omp_target_memset_async.size = (size_t)size; \
-	activity->omp_routine_args.omp_target_memset_async.device_num = (int)device_num; \
-	activity->omp_routine_args.omp_target_memset_async.async_depend_info = (int)async_depend_info; \
-	activity->omp_routine_args.omp_target_memset_async.depend = (omp_depend_t**)depend; \
+	activity->omp_routine_args.omp_target_memset_async.ptr = (void *) ptr; \
+	activity->omp_routine_args.omp_target_memset_async.value = (int) value; \
+	activity->omp_routine_args.omp_target_memset_async.size = (size_t) size; \
+	activity->omp_routine_args.omp_target_memset_async.device_num = (int) device_num; \
+	activity->omp_routine_args.omp_target_memset_async.async_depend_info = (int) async_depend_info; \
+	activity->omp_routine_args.omp_target_memset_async.depend = (void **) depend; \
 };
 
 #define GET_PTRS_VALUE_omp_target_memset_async(args) { \
 	if (args->omp_target_memset_async.depend != NULL) { \
-		args->omp_target_memset_async.depend__ref.ptr1 = (void*)*args->omp_target_memset_async.depend; \
+		args->omp_target_memset_async.depend__ref.ptr1 = *args->omp_target_memset_async.depend; \
 	} \
 };
-
-
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_is_present` function.
@@ -658,24 +570,20 @@ struct args_omp_target_memset_async_t {
  * @note 
  *	int
  *	omp_target_is_present (
- *			const void * host_ptr (void)
+ *			const void * host_ptr (const void *)
  *			int device_num (int)
  *	)
  */
 struct args_omp_target_is_present_t {
-	const void* host_ptr;
+	void * host_ptr;
 	int device_num;
 	int retval;
 };
 
 #define GET_ARGS_VALUE_omp_target_is_present(activity) { \
-	activity->omp_routine_args.omp_target_is_present.host_ptr = (const void*)host_ptr; \
-	activity->omp_routine_args.omp_target_is_present.device_num = (int)device_num; \
+	activity->omp_routine_args.omp_target_is_present.host_ptr = (void *) host_ptr; \
+	activity->omp_routine_args.omp_target_is_present.device_num = (int) device_num; \
 };
-
-
-
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_associate_ptr` function.
@@ -688,16 +596,16 @@ struct args_omp_target_is_present_t {
  * @note 
  *	int
  *	omp_target_associate_ptr (
- *			const void * host_ptr (void)
- *			const void * device_ptr (void)
+ *			const void * host_ptr (const void *)
+ *			const void * device_ptr (const void *)
  *			size_t size (unsigned long)
  *			size_t alignment (unsigned long)
  *			int device_num (int)
  *	)
  */
 struct args_omp_target_associate_ptr_t {
-	const void* host_ptr;
-	const void* device_ptr;
+	void * host_ptr;
+	void * device_ptr;
 	size_t size;
 	size_t alignment;
 	int device_num;
@@ -705,16 +613,12 @@ struct args_omp_target_associate_ptr_t {
 };
 
 #define GET_ARGS_VALUE_omp_target_associate_ptr(activity) { \
-	activity->omp_routine_args.omp_target_associate_ptr.host_ptr = (const void*)host_ptr; \
-	activity->omp_routine_args.omp_target_associate_ptr.device_ptr = (const void*)device_ptr; \
-	activity->omp_routine_args.omp_target_associate_ptr.size = (size_t)size; \
-	activity->omp_routine_args.omp_target_associate_ptr.alignment = (size_t)alignment; \
-	activity->omp_routine_args.omp_target_associate_ptr.device_num = (int)device_num; \
+	activity->omp_routine_args.omp_target_associate_ptr.host_ptr = (void *) host_ptr; \
+	activity->omp_routine_args.omp_target_associate_ptr.device_ptr = (void *) device_ptr; \
+	activity->omp_routine_args.omp_target_associate_ptr.size = (size_t) size; \
+	activity->omp_routine_args.omp_target_associate_ptr.alignment = (size_t) alignment; \
+	activity->omp_routine_args.omp_target_associate_ptr.device_num = (int) device_num; \
 };
-
-
-
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_get_initial_device` function.
@@ -733,11 +637,6 @@ struct args_omp_get_initial_device_t {
 	int retval;
 };
 
-
-
-
-
-
 /**
  * @brief Structure to hold the arguments for the `llvm_omp_target_dynamic_shared_alloc` function.
  *
@@ -752,13 +651,8 @@ struct args_omp_get_initial_device_t {
  *	)
  */
 struct args_llvm_omp_target_dynamic_shared_alloc_t {
-	void* retval;
+	void * retval;
 };
-
-
-
-
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_get_interop_int` function.
@@ -771,25 +665,25 @@ struct args_llvm_omp_target_dynamic_shared_alloc_t {
  * @note 
  *	omp_intptr_t
  *	omp_get_interop_int (
- *			const omp_interop_t interop (void)
- *			omp_interop_property_t prop (enum)
- *			int * exists (int)
+ *			const omp_interop_t interop (const void *)
+ *			omp_interop_property_t prop (enum omp_interop_property)
+ *			int * exists (int *)
  *	)
  */
 struct args_omp_get_interop_int_t {
-	const omp_interop_t* interop;
+	void * interop;
 	omp_interop_property_t prop;
-	int* exists;
-	struct { // int *
+	int * exists;
+	struct {
 		int val;
 	} exists__ref;
 	omp_intptr_t retval;
 };
 
 #define GET_ARGS_VALUE_omp_get_interop_int(activity) { \
-	activity->omp_routine_args.omp_get_interop_int.interop = (const omp_interop_t*)interop; \
-	activity->omp_routine_args.omp_get_interop_int.prop = (omp_interop_property_t)prop; \
-	activity->omp_routine_args.omp_get_interop_int.exists = (int*)exists; \
+	activity->omp_routine_args.omp_get_interop_int.interop = (void *) interop; \
+	activity->omp_routine_args.omp_get_interop_int.prop = (omp_interop_property_t) prop; \
+	activity->omp_routine_args.omp_get_interop_int.exists = (int *) exists; \
 };
 
 #define GET_PTRS_VALUE_omp_get_interop_int(args) { \
@@ -797,9 +691,6 @@ struct args_omp_get_interop_int_t {
 		args->omp_get_interop_int.exists__ref.val = *args->omp_get_interop_int.exists; \
 	} \
 };
-
-
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_get_interop_name` function.
@@ -812,32 +703,29 @@ struct args_omp_get_interop_int_t {
  * @note 
  *	const char *
  *	omp_get_interop_name (
- *			const omp_interop_t interop (void)
- *			omp_interop_property_t prop (enum)
+ *			const omp_interop_t interop (const void *)
+ *			omp_interop_property_t prop (enum omp_interop_property)
  *	)
  */
 struct args_omp_get_interop_name_t {
-	const omp_interop_t* interop;
+	void * interop;
 	omp_interop_property_t prop;
-	const char* retval;
-	struct { // const char *
+	char * retval;
+	struct {
 		char val[OMP_ROUTINE_STRING_SIZE_MAX];
 	} retval__ref;
 };
 
 #define GET_ARGS_VALUE_omp_get_interop_name(activity) { \
-	activity->omp_routine_args.omp_get_interop_name.interop = (const omp_interop_t*)interop; \
-	activity->omp_routine_args.omp_get_interop_name.prop = (omp_interop_property_t)prop; \
+	activity->omp_routine_args.omp_get_interop_name.interop = (void *) interop; \
+	activity->omp_routine_args.omp_get_interop_name.prop = (omp_interop_property_t) prop; \
 };
-
-
 
 #define GET_PTRS_RET_VALUE_omp_get_interop_name(args) { \
 	if (args->omp_get_interop_name.retval != NULL) { \
 		strncpy(args->omp_get_interop_name.retval__ref.val, args->omp_get_interop_name.retval, OMP_ROUTINE_STRING_SIZE_MAX-1); \
 	} \
 };
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_get_interop_ptr` function.
@@ -850,25 +738,25 @@ struct args_omp_get_interop_name_t {
  * @note 
  *	void *
  *	omp_get_interop_ptr (
- *			const omp_interop_t interop (void)
- *			omp_interop_property_t prop (enum)
- *			int * exists (int)
+ *			const omp_interop_t interop (const void *)
+ *			omp_interop_property_t prop (enum omp_interop_property)
+ *			int * exists (int *)
  *	)
  */
 struct args_omp_get_interop_ptr_t {
-	const omp_interop_t* interop;
+	void * interop;
 	omp_interop_property_t prop;
-	int* exists;
-	struct { // int *
+	int * exists;
+	struct {
 		int val;
 	} exists__ref;
-	void* retval;
+	void * retval;
 };
 
 #define GET_ARGS_VALUE_omp_get_interop_ptr(activity) { \
-	activity->omp_routine_args.omp_get_interop_ptr.interop = (const omp_interop_t*)interop; \
-	activity->omp_routine_args.omp_get_interop_ptr.prop = (omp_interop_property_t)prop; \
-	activity->omp_routine_args.omp_get_interop_ptr.exists = (int*)exists; \
+	activity->omp_routine_args.omp_get_interop_ptr.interop = (void *) interop; \
+	activity->omp_routine_args.omp_get_interop_ptr.prop = (omp_interop_property_t) prop; \
+	activity->omp_routine_args.omp_get_interop_ptr.exists = (int *) exists; \
 };
 
 #define GET_PTRS_VALUE_omp_get_interop_ptr(args) { \
@@ -876,9 +764,6 @@ struct args_omp_get_interop_ptr_t {
 		args->omp_get_interop_ptr.exists__ref.val = *args->omp_get_interop_ptr.exists; \
 	} \
 };
-
-
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_get_interop_str` function.
@@ -891,28 +776,28 @@ struct args_omp_get_interop_ptr_t {
  * @note 
  *	const char *
  *	omp_get_interop_str (
- *			const omp_interop_t interop (void)
- *			omp_interop_property_t prop (enum)
- *			int * exists (int)
+ *			const omp_interop_t interop (const void *)
+ *			omp_interop_property_t prop (enum omp_interop_property)
+ *			int * exists (int *)
  *	)
  */
 struct args_omp_get_interop_str_t {
-	const omp_interop_t* interop;
+	void * interop;
 	omp_interop_property_t prop;
-	int* exists;
-	struct { // int *
+	int * exists;
+	struct {
 		int val;
 	} exists__ref;
-	const char* retval;
-	struct { // const char *
+	char * retval;
+	struct {
 		char val[OMP_ROUTINE_STRING_SIZE_MAX];
 	} retval__ref;
 };
 
 #define GET_ARGS_VALUE_omp_get_interop_str(activity) { \
-	activity->omp_routine_args.omp_get_interop_str.interop = (const omp_interop_t*)interop; \
-	activity->omp_routine_args.omp_get_interop_str.prop = (omp_interop_property_t)prop; \
-	activity->omp_routine_args.omp_get_interop_str.exists = (int*)exists; \
+	activity->omp_routine_args.omp_get_interop_str.interop = (void *) interop; \
+	activity->omp_routine_args.omp_get_interop_str.prop = (omp_interop_property_t) prop; \
+	activity->omp_routine_args.omp_get_interop_str.exists = (int *) exists; \
 };
 
 #define GET_PTRS_VALUE_omp_get_interop_str(args) { \
@@ -921,13 +806,11 @@ struct args_omp_get_interop_str_t {
 	} \
 };
 
-
 #define GET_PTRS_RET_VALUE_omp_get_interop_str(args) { \
 	if (args->omp_get_interop_str.retval != NULL) { \
 		strncpy(args->omp_get_interop_str.retval__ref.val, args->omp_get_interop_str.retval, OMP_ROUTINE_STRING_SIZE_MAX-1); \
 	} \
 };
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_get_interop_type_desc` function.
@@ -940,32 +823,29 @@ struct args_omp_get_interop_str_t {
  * @note 
  *	const char *
  *	omp_get_interop_type_desc (
- *			const omp_interop_t interop (void)
- *			omp_interop_property_t prop (enum)
+ *			const omp_interop_t interop (const void *)
+ *			omp_interop_property_t prop (enum omp_interop_property)
  *	)
  */
 struct args_omp_get_interop_type_desc_t {
-	const omp_interop_t* interop;
+	void * interop;
 	omp_interop_property_t prop;
-	const char* retval;
-	struct { // const char *
+	char * retval;
+	struct {
 		char val[OMP_ROUTINE_STRING_SIZE_MAX];
 	} retval__ref;
 };
 
 #define GET_ARGS_VALUE_omp_get_interop_type_desc(activity) { \
-	activity->omp_routine_args.omp_get_interop_type_desc.interop = (const omp_interop_t*)interop; \
-	activity->omp_routine_args.omp_get_interop_type_desc.prop = (omp_interop_property_t)prop; \
+	activity->omp_routine_args.omp_get_interop_type_desc.interop = (void *) interop; \
+	activity->omp_routine_args.omp_get_interop_type_desc.prop = (omp_interop_property_t) prop; \
 };
-
-
 
 #define GET_PTRS_RET_VALUE_omp_get_interop_type_desc(args) { \
 	if (args->omp_get_interop_type_desc.retval != NULL) { \
 		strncpy(args->omp_get_interop_type_desc.retval__ref.val, args->omp_get_interop_type_desc.retval, OMP_ROUTINE_STRING_SIZE_MAX-1); \
 	} \
 };
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_get_mapped_ptr` function.
@@ -978,24 +858,20 @@ struct args_omp_get_interop_type_desc_t {
  * @note 
  *	void *
  *	omp_get_mapped_ptr (
- *			const void * ptr (void)
+ *			const void * ptr (const void *)
  *			int device_num (int)
  *	)
  */
 struct args_omp_get_mapped_ptr_t {
-	const void* ptr;
+	void * ptr;
 	int device_num;
-	void* retval;
+	void * retval;
 };
 
 #define GET_ARGS_VALUE_omp_get_mapped_ptr(activity) { \
-	activity->omp_routine_args.omp_get_mapped_ptr.ptr = (const void*)ptr; \
-	activity->omp_routine_args.omp_get_mapped_ptr.device_num = (int)device_num; \
+	activity->omp_routine_args.omp_get_mapped_ptr.ptr = (void *) ptr; \
+	activity->omp_routine_args.omp_get_mapped_ptr.device_num = (int) device_num; \
 };
-
-
-
-
 
 /**
  * @brief Structure to hold the arguments for the `omp_get_num_devices` function.
@@ -1014,11 +890,6 @@ struct args_omp_get_num_devices_t {
 	int retval;
 };
 
-
-
-
-
-
 /**
  * @brief Structure to hold the arguments for the `omp_is_coarse_grain_mem_region` function.
  *
@@ -1030,27 +901,23 @@ struct args_omp_get_num_devices_t {
  * @note 
  *	int
  *	omp_is_coarse_grain_mem_region (
- *			void * ptr (void)
+ *			void * ptr (void *)
  *			size_t size (unsigned long)
  *	)
  */
 struct args_omp_is_coarse_grain_mem_region_t {
-	void* ptr;
+	void * ptr;
 	size_t size;
 	int retval;
 };
 
 #define GET_ARGS_VALUE_omp_is_coarse_grain_mem_region(activity) { \
-	activity->omp_routine_args.omp_is_coarse_grain_mem_region.ptr = (void*)ptr; \
-	activity->omp_routine_args.omp_is_coarse_grain_mem_region.size = (size_t)size; \
+	activity->omp_routine_args.omp_is_coarse_grain_mem_region.ptr = (void *) ptr; \
+	activity->omp_routine_args.omp_is_coarse_grain_mem_region.size = (size_t) size; \
 };
 
 
 
-
- 
-
-     
 /**
  * @brief Union representing argument structures for different OMP_ROUTINE API calls.
  *
@@ -1061,31 +928,10 @@ struct args_omp_is_coarse_grain_mem_region_t {
  * @typedef omp_routine_api_args_t 
  */
 typedef union omp_routine_api_args_u {
-	struct args_omp_target_memset_t omp_target_memset; /**< Arguments for omp_target_memset */
-	struct args_omp_target_memcpy_async_t omp_target_memcpy_async; /**< Arguments for omp_target_memcpy_async */
-	struct args_omp_target_memcpy_rect_async_t omp_target_memcpy_rect_async; /**< Arguments for omp_target_memcpy_rect_async */
-	struct args_omp_target_alloc_t omp_target_alloc; /**< Arguments for omp_target_alloc */
-	struct args_omp_target_free_t omp_target_free; /**< Arguments for omp_target_free */
-	struct args_omp_target_memcpy_rect_t omp_target_memcpy_rect; /**< Arguments for omp_target_memcpy_rect */
-	struct args_omp_target_disassociate_ptr_t omp_target_disassociate_ptr; /**< Arguments for omp_target_disassociate_ptr */
-	struct args_omp_target_memcpy_t omp_target_memcpy; /**< Arguments for omp_target_memcpy */
-	struct args_omp_target_memset_async_t omp_target_memset_async; /**< Arguments for omp_target_memset_async */
-	struct args_omp_target_is_present_t omp_target_is_present; /**< Arguments for omp_target_is_present */
-	struct args_omp_target_associate_ptr_t omp_target_associate_ptr; /**< Arguments for omp_target_associate_ptr */
-	struct args_omp_get_initial_device_t omp_get_initial_device; /**< Arguments for omp_get_initial_device */
-	struct args_llvm_omp_target_dynamic_shared_alloc_t llvm_omp_target_dynamic_shared_alloc; /**< Arguments for llvm_omp_target_dynamic_shared_alloc */
-	struct args_omp_get_interop_int_t omp_get_interop_int; /**< Arguments for omp_get_interop_int */
-	struct args_omp_get_interop_name_t omp_get_interop_name; /**< Arguments for omp_get_interop_name */
-	struct args_omp_get_interop_ptr_t omp_get_interop_ptr; /**< Arguments for omp_get_interop_ptr */
-	struct args_omp_get_interop_str_t omp_get_interop_str; /**< Arguments for omp_get_interop_str */
-	struct args_omp_get_interop_type_desc_t omp_get_interop_type_desc; /**< Arguments for omp_get_interop_type_desc */
-	struct args_omp_get_mapped_ptr_t omp_get_mapped_ptr; /**< Arguments for omp_get_mapped_ptr */
-	struct args_omp_get_num_devices_t omp_get_num_devices; /**< Arguments for omp_get_num_devices */
-	struct args_omp_is_coarse_grain_mem_region_t omp_is_coarse_grain_mem_region; /**< Arguments for omp_is_coarse_grain_mem_region */ 
+    FOR_EACH_OMP_ROUTINE_FUNC(GET_ARGS_STRUCT_OF)
 } omp_routine_api_args_t;
- 
 
-     
+
 /**
  * @brief Retrieves pointer-based argument values for OMP_ROUTINE API calls.
  *
@@ -1127,16 +973,14 @@ static inline void get_omp_routine_pointed_args_for(omp_routine_api_id_t id, omp
 				return;
 			case OMP_ROUTINE_API_ID_omp_get_interop_type_desc : 
 				GET_PTRS_RET_VALUE_omp_get_interop_type_desc(args);
-				return; 
+				return;
             default : break;
         }
     } else {
         switch(id) {
- 
+
             default : break;
         }
     }
 }
- 
-
 #endif // OMP_ROUTINE_API_HELPER_H
