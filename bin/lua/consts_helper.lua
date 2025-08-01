@@ -241,7 +241,7 @@ consts_helper.stats = {
         ['max-col-width'] = {
             desc            = [[ 
                 Define the columns max width for table and column format.]],
-            sname           = nil,
+            sname           = "C",
             arg             = "<width>",
             arg_required    = true,
             default         = 32
@@ -251,7 +251,7 @@ consts_helper.stats = {
                 Define the maximum lines to show inside the report.
                 Note : Default for file output is 'all'.
                 ]],
-            sname           = nil,
+            sname           = "L",
             arg             = "<number|all>",
             arg_required    = true,
             default         = nil
