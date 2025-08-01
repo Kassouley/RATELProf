@@ -12,6 +12,22 @@ function createTracesCSV(content, fileName) {
                 trace.content
             ];
         }).sort((a, b) => a[4] - b[4]);
+    } else if (fileName === 'hidden_transfers') {
+        const traceIds = content.shift();
+        content = traceIds.map((traceId, i) => {
+            const trace = traceMap.get(traceId);
+            const time_overlapped = content[0][i];
+            return [
+                trace.args.gpu_id,
+                trace.id,
+                trace.content,
+                trace.args.size,
+                content[0][i],
+                trace.dur,
+                (time_overlapped / trace.dur) * 100,
+                trace.loc
+            ];
+        }).sort((a, b) => a[4] - b[4]);
     }
     return content;
 }

@@ -95,6 +95,7 @@ function createTimeline(items, groups, container) {
                 append(lcol, "Name",       trace.content);
                 append(lcol, "ID",         trace.id);
                 append(lcol, "CID",        trace.cid);
+                append(lcol, "Source",     trace.loc);
                 append(lcol, "Duration",   convertTime(trace.dur, true));
                 append(lcol, "Start Time", convertTime(trace.start));
                 append(lcol, "End Time",   convertTime(trace.end));
