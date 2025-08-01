@@ -95,8 +95,8 @@ local function get_event_data(data, event, domain_id, opt)
 end
 
 
-local function encode_event_item(buf, event, data, events)
-    buf:encode_map(7)
+local function encode_event_item(buf, event, data, events, traces_data)
+    buf:encode_map(8)
 
     encode_ext_string(buf, "content")
     encode_ext_string(buf, data.event_content)
@@ -105,7 +105,7 @@ local function encode_event_item(buf, event, data, events)
     buf:encode_uint(data.id)
 
     encode_ext_string(buf, "start")
-    buf:encode_uint(data.start)
+    buf:encode_uint(event.start)
     
     encode_ext_string(buf, "subgroup")
     buf:encode_uint(compute_depth(events, event, data.id))
@@ -116,13 +116,17 @@ local function encode_event_item(buf, event, data, events)
     encode_ext_string(buf, "cid")
     buf:encode_uint(event.corr_id)
 
+    encode_ext_string(buf, "loc")
+    local entry_point = traces_data:find_entry_point(event)
+    encode_ext_string(buf, traces_data:get_location_str(entry_point))
+
     encode_ext_string(buf, "args")
     encode_table(buf, data.args)
 end
 
 
-function preprocess.get_b64_buffer(data, opt)
-    local event_domains = data.raw.trace_events
+function preprocess.get_b64_buffer(traces_data, opt)
+    local event_domains = traces_data.raw.trace_events
     local main_buffer =  msgpack_encoder.new(1024, msgpack_encoder.OVERFLOW_REALLOC)
 
     local _start = ratelprof.get_opt_val(opt, "start")
@@ -153,10 +157,9 @@ function preprocess.get_b64_buffer(data, opt)
 
             if within_start and within_stop then
                 nitems = nitems + 1
-                local data = get_event_data(data, event, domain_id, opt)
-                data.start = event_start
+                local data = get_event_data(traces_data, event, domain_id, opt)
                 data.id = event_id
-                encode_event_item(buf, event, data, events)
+                encode_event_item(buf, event, data, events, traces_data)
             end
         end
 

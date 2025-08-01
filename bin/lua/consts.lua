@@ -77,7 +77,7 @@ consts._DOMAIN_NAME = {
   [consts._ENV.DOMAIN_PROFILING]    = "HSA for RATELProf",
   [consts._ENV.DOMAIN_OMPT]         = "OpenMP Target Region",
   [consts._ENV.DOMAIN_ROCTX]        = "ROCtx",
-  [consts._ENV.DOMAIN_MPI]          = "MPI",
+  [consts._ENV.DOMAIN_MPI]          = "MPI API",
 }
 
 consts._GPU_DOMAIN = {
@@ -113,7 +113,7 @@ consts._TRACES = {
   ['kernel'] =        {var=consts._ENV.DOMAIN_KERNEL,       name="Kernel Dispatch"},
   ['memory'] =        {var=consts._ENV.DOMAIN_COPY,         name="Memory Transfer"},
   ['roctx'] =         {var=consts._ENV.DOMAIN_ROCTX,        name="ROCtx"},
-  ['mpi'] =           {var=consts._ENV.DOMAIN_MPI,          name="MPI"},
+  ['mpi'] =           {var=consts._ENV.DOMAIN_MPI,          name="MPI API"},
   ['barrier'] =       {var={
                           consts._ENV.DOMAIN_BARRIEROR,
                           consts._ENV.DOMAIN_BARRIERAND},  name="Barrier AND/OR Dispatch"},
