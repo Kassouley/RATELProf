@@ -35,6 +35,30 @@ typedef struct ratelprof_plugin_s {
 } ratelprof_plugin_t;
 
 
+static bool count_location(ratelprof_source_data_t *loc, void *user_data) {
+    if (loc->addr) {
+        (*(size_t *)user_data)++;
+    }
+    return false;
+}
+
+static bool encode_location(ratelprof_source_data_t *loc, void *user_data) {
+    msgpack_buffer_t* buf = (msgpack_buffer_t*) user_data;
+    if (loc->addr) {
+        msgpack_encode_uint(buf, (uintptr_t)loc->addr);
+        msgpack_encode_map(buf, 4);
+        msgpack_encode_string_ext(buf, "ofile");
+        msgpack_encode_string_ext(buf, loc->object_file ? loc->object_file : "<unknown>");
+        msgpack_encode_string_ext(buf, "sfile");
+        msgpack_encode_string_ext(buf, loc->filename ? loc->filename : "<unknown>");
+        msgpack_encode_string_ext(buf, "sfun");
+        msgpack_encode_string_ext(buf, loc->func ? demangle(loc->func, 1) : "<unknown>");
+        msgpack_encode_string_ext(buf, "sline");
+        msgpack_encode_uint(buf, loc->line);
+    }
+    return false;
+}
+
 
 /** RATELProf Ext encoding 
  *      Encoding as follow : 
@@ -99,10 +123,22 @@ static inline void encode_ratelprof_ext(ratelprof_plugin_t* p) {
         msgpack_encode_map(&main_buffer, 0);
     }
 
+    // Preprocess location source data
+    msgpack_buffer_t location_data;
+    msgpack_init(&location_data, 0xfffff, MSGPACK_OVERFLOW_REALLOC, NULL);
+
+    size_t location_counter = 0;
+    ratelprof_iterate_location_cache(count_location, &location_counter);
+
+    msgpack_encode_map(&location_data, location_counter);
+
+    ratelprof_iterate_location_cache(encode_location, &location_data);
+
+
+    // Preprocess trace event data
     msgpack_buffer_t trace_events;
     msgpack_init(&trace_events, 0xffffff, MSGPACK_OVERFLOW_REALLOC, NULL);
 
-    // Preprocess trace event data
     size_t nb_domain_util = 0;
     for (i = 0; i < RATELPROF_NB_DOMAIN_EXT; i++) {
         if (traces[i].size != 0)
@@ -122,11 +158,15 @@ static inline void encode_ratelprof_ext(ratelprof_plugin_t* p) {
     // Encode string extension mapping
     msgpack_encode_string_table_ext(&main_buffer);
 
+    // Encode location data
+    msgpack_concat(&main_buffer, &location_data);
+    msgpack_free(&location_data);
+
     // Encode trace event data
     msgpack_concat(&main_buffer, &trace_events);
+    msgpack_free(&trace_events);
 
     msgpack_free(&main_buffer); // Write data and free
-    msgpack_free(&trace_events); // Write data and free
 }
 
 
