@@ -32,36 +32,38 @@ if [ -z "$1" ]; then
     display_help
 fi
 
+cmd="$1"
+shift
+
+args=""
+for arg in "$@"; do
+    args="$args '$arg'"
+done
+
 # Use a case statement to check for specific strings
-case "$1" in
+case "$cmd" in
     profile)
-        shift
-        eval "luajit $SCRIPT_DIR/profile.lua $@"
+        eval "luajit $SCRIPT_DIR/profile.lua $args"
         ;;
 
     stats)
-        shift
-        eval "luajit $SCRIPT_DIR/stats.lua $@"
+        eval "luajit $SCRIPT_DIR/stats.lua $args"
         ;;
 
     analyze)
-        shift
-        eval "luajit $SCRIPT_DIR/analyze.lua $@"
+        eval "luajit $SCRIPT_DIR/analyze.lua $args"
         ;;
 
     visualize)
-        shift
-        eval "luajit $SCRIPT_DIR/visualize.lua $@"
+        eval "luajit $SCRIPT_DIR/visualize.lua $args"
         ;;
 
     inspect)
-        shift
-        eval "luajit $SCRIPT_DIR/inspect.lua $@"
+        eval "luajit $SCRIPT_DIR/inspect.lua $args"
         ;;
 
     export)
-        shift
-        eval "luajit $SCRIPT_DIR/export.lua $@"
+        eval "luajit $SCRIPT_DIR/export.lua $args"
         ;;
 
     --help|-h)

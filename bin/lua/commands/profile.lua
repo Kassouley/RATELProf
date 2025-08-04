@@ -91,7 +91,7 @@ function profile.process_profiling(positional_args, options_values)
     local opt = handle_profile_option(options_values)
     local launch_script     = opt.launch_script
     local launch_command    = opt.launch_command
-    local prefix            = opt.prefix
+    local prefix            = opt.prefix .. " "
     local output_file       = opt.output
     local plugin_path       = opt.plugin
 
@@ -133,7 +133,7 @@ function profile.process_profiling(positional_args, options_values)
 
     local env_var = env.get_env()
     local app_cmd = table.concat(application_command, " ")
-    local run_command = env_var.." "..prefix.." "..app_cmd
+    local run_command = env_var.." "..prefix..app_cmd
 
     Message:print ([[
      ____      _  _____ _____ _     ____             __ 
@@ -143,7 +143,7 @@ function profile.process_profiling(positional_args, options_values)
     |_| \_\/_/   \_\_| |_____|_____|_|   |_|  \___/|_|  
 ]])
     Message:print ("RPROF: Application profiled :    '"..application.."'")
-    Message:print ("RPROF: Application Command :     '"..app_cmd.."'")
+    Message:print ("RPROF: Application Command :     '"..prefix..app_cmd.."'")
     Message:print ("RPROF: Preloaded tool :          '"..ld_preload[1].."'")
     Message:print ("RPROF: Preloaded wrapper :       '"..ld_preload[2].."'")
     Message:print ("RPROF: Plugin used :             '"..plugin_path.."'")

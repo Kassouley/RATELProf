@@ -68,7 +68,7 @@ function Script:add_argument(name, is_optional, is_list, description)
         self.min_arguments = self.min_arguments + 1
         self.max_arguments = self.max_arguments + 1
     elseif is_optional then 
-        self.max_arguments = self.max_arguments + 1 
+        self.max_arguments = self.max_arguments + 1
     end
     if is_list then 
         self.max_arguments = nil 
@@ -171,7 +171,7 @@ function Script:check_args(args)
             end
             for _, option in ipairs(self.options) do
                 if (option.short_name and arg == "-" .. option.short_name) 
-                    or (option.long_name and arg:match("^%-%-" .. option.long_name:gsub("-", "%%-") .. "=?$")) then
+                    or (option.long_name and arg:match("^%-%-" .. option.long_name:gsub("-", "%%-") .. "=?")) then
                     matched_option = true
                     option.has_been_processed = true
                     if option.arg and option.need_arg then
