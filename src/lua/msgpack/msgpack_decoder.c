@@ -14,6 +14,7 @@
  *      Decoding as follow : 
  *          - tool version as 3 uint
  *          - experiment start epoch time as uint
+ *          - mpi rank as int -> -1 = no mpi
  *          - lifecycle stop time as map of string to uint
  *          - map node id to agent object
  *          - string extension mapping
@@ -32,6 +33,10 @@ void decode_ratelprof_ext(msgpack_decode_ctx_t *ctx) {
     decode_msgpack(ctx);
     lua_settable(ctx->L, -3);
 
+    lua_pushstring(ctx->L, "mpi_rank");
+    decode_msgpack(ctx);
+    lua_settable(ctx->L, -3);
+
     lua_pushstring(ctx->L, "lifecycle");
     decode_msgpack(ctx);
     lua_settable(ctx->L, -3);
@@ -47,7 +52,7 @@ void decode_ratelprof_ext(msgpack_decode_ctx_t *ctx) {
     // String array decoding
     decode_msgpack(ctx);  // expects and decodes an array of strings
 
-    lua_pushstring(ctx->L, "location");
+    lua_pushstring(ctx->L, "locations");
     decode_msgpack(ctx);
     lua_settable(ctx->L, -3);
 
@@ -60,7 +65,8 @@ void decode_ratelprof_ext(msgpack_decode_ctx_t *ctx) {
     lua_settable(ctx->L, -3);
 }
 
-void decode_string_array_ext(msgpack_decode_ctx_t *ctx, size_t size){
+void decode_string_array_ext(msgpack_decode_ctx_t *ctx, size_t size) {
+    if (ctx->ext_string_array) free(ctx->ext_string_array);
     ctx->ext_string_array = (char**)malloc(size * sizeof(char*));
     ctx->ext_string_array_size = size;
     for (size_t i = 0; i < size; i++) {

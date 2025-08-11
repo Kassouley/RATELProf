@@ -3,8 +3,10 @@
 
 #include <stdint.h>
 #include <ratelprof.h>
-#include "ratelprof_ext/ratelprof_ext_status.h"
 
+#include "utils/mpi_helper.h"
+
+#include "ratelprof_ext/ratelprof_ext_status.h"
 #include "ratelprof_ext/ratelprof_activity_pool.h"
 #include "ratelprof_ext/ratelprof_object_tracking.h"
 

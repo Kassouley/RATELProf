@@ -3,6 +3,9 @@
  * ANY CHANGES MAY BE OVERWRITTEN BY SUBSEQUENT RUNS OF GILDA. 
  */
  
+#include <string.h>
+#include <errno.h>
+#include <sys/file.h>
 #include <ratelprof.h>
 #include <ratelprof_ext.h>
 #include "version.h"
@@ -21,6 +24,7 @@ typedef struct {
     msgpack_buffer_t buffer;
     size_t size;
 } plugin_traces_t;
+
 
 typedef struct ratelprof_plugin_s {
 	api_callback_handler_t hsa_callback_handler;
@@ -60,6 +64,60 @@ static bool encode_location(ratelprof_source_data_t *loc, void *user_data) {
 }
 
 
+static inline char* get_report_filename() {
+    static char filename[512];
+    int rank = get_mpi_rank_from_env();  // returns -1 if not in MPI
+
+    const char* base_filename = get_output_file();
+    if (rank >= 0) {
+        snprintf(filename, sizeof(filename), "rank_%d_%s", rank, base_filename);
+    } else {
+        snprintf(filename, sizeof(filename), "%s", base_filename);
+    }
+    return filename;
+}
+
+static inline void memorize_filename(char filename[512])
+{
+    const char *filepath = "/tmp/rprof_output_filename.txt";
+
+    // Open file for appending, create if not exists
+    int fd = open(filepath, O_WRONLY | O_CREAT | O_APPEND, 0666);
+    if (fd == -1) {
+        LOG(LOG_LEVEL_ERROR, "Failed to open file %s for writing: %s\n", filepath, strerror(errno));
+        return;
+    }
+
+    // Lock the file exclusively
+    if (flock(fd, LOCK_EX) == -1) {
+        LOG(LOG_LEVEL_ERROR, "Failed to lock file %s: %s\n", filepath, strerror(errno));
+        close(fd);
+        return;
+    }
+
+    // Write the data safely
+    ssize_t written = write(fd, filename, strlen(filename));
+    if (written == -1) {
+        LOG(LOG_LEVEL_ERROR, "Failed to write to file %s: %s\n", filepath, strerror(errno));
+        flock(fd, LOCK_UN); // unlock before returning
+        close(fd);
+        return;
+    }
+
+    written = write(fd, "\n", 1);
+    if (written == -1) {
+        LOG(LOG_LEVEL_ERROR, "Failed to write to file %s: %s\n", filepath, strerror(errno));
+        flock(fd, LOCK_UN); // unlock before returning
+        close(fd);
+        return;
+    }
+
+    // Unlock and close
+    flock(fd, LOCK_UN);
+    close(fd);
+}
+
+
 /** RATELProf Ext encoding 
  *      Encoding as follow : 
  *          - extension bytes (magic bytes)
@@ -69,6 +127,7 @@ static bool encode_location(ratelprof_source_data_t *loc, void *user_data) {
  *          - main data
  *          - map node id to agent object
  *          - string extension mapping
+ *          - location data
  *          - trace data
  */
 static inline void encode_ratelprof_ext(ratelprof_plugin_t* p) {
@@ -77,7 +136,10 @@ static inline void encode_ratelprof_ext(ratelprof_plugin_t* p) {
     ratelprof_lifecycle_t* lc = ratelprof_get_lifecycle();
     size_t i = 0;
     msgpack_buffer_t main_buffer;
-    msgpack_init(&main_buffer, 0xff, MSGPACK_OVERFLOW_WRITE_TO_FILE, get_output_file());
+
+    char* filename = get_report_filename();
+    memorize_filename(filename);
+    msgpack_init(&main_buffer, 0xff, MSGPACK_OVERFLOW_WRITE_TO_FILE, filename);
 
     msgpack_encode_ext(&main_buffer,  MSGPACK_EXT_RATELPROF, NULL, 0);
 
@@ -90,6 +152,9 @@ static inline void encode_ratelprof_ext(ratelprof_plugin_t* p) {
 
     // Encode experiment start
     msgpack_encode_uint(&main_buffer, ratelprof_get_timestamp_ns(lc->experiment_start_epoch));
+
+    // Encode experiment rank
+    msgpack_encode_uint(&main_buffer, get_mpi_rank_from_env());
 
     // Encode lifecycle stop time (first start is 0 and other start are prev stop)
     msgpack_encode_array(&main_buffer, RATELPROF_NB_PHASE);
@@ -111,7 +176,7 @@ static inline void encode_ratelprof_ext(ratelprof_plugin_t* p) {
     // Encode map Node ID to Agent Object
     ratelprof_object_tracking_pool_t* pool = ratelprof_object_tracking_pool_get_pool();
     ratelprof_agent_object_t*  agents_list = pool->agents_list;
-    size_t                     agents_count = pool->agents_count;
+    size_t                    agents_count = pool->agents_count;
 
     if (agents_list && agents_count > 0) {
         msgpack_encode_map(&main_buffer, agents_count);
@@ -134,7 +199,7 @@ static inline void encode_ratelprof_ext(ratelprof_plugin_t* p) {
 
     ratelprof_iterate_location_cache(encode_location, &location_data);
 
-
+   
     // Preprocess trace event data
     msgpack_buffer_t trace_events;
     msgpack_init(&trace_events, 0xffffff, MSGPACK_OVERFLOW_REALLOC, NULL);

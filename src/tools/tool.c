@@ -51,6 +51,7 @@ static void close_plugin_manager(plugin_manager_t* pm) {
     }
 }
 
+
 ratelprof_status_t onLoad()
 {
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
@@ -102,7 +103,7 @@ ratelprof_status_t onLoad()
                 ratelprof_enable_domain(domain),
                 LOG(LOG_LEVEL_ERROR, "Cannot enable domain '%s'\n", domain_name)
             );
-            LOG(LOG_LEVEL_INFO, "Domain '%s' enabled.\n", domain_name);
+            LOG(LOG_LEVEL_DEBUG, "Domain '%s' enabled.\n", domain_name);
         }
     }
 
@@ -121,10 +122,10 @@ ratelprof_status_t onLoad()
     };
     ratelprof_activity_pool_init(&props);
 
-    LOG(LOG_LEVEL_INFO, "Starting profiling . . .\n");
+    LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Starting profiling . . .\n");
     ratelprof_start();
 
-    LOG(LOG_LEVEL_INFO, "Application output :\n\n");
+    LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Application output :\n\n");
 
     return status;
 }
@@ -132,11 +133,10 @@ ratelprof_status_t onLoad()
 void onExit()
 {
     ratelprof_stop();
-    printf("\n");
-    LOG(LOG_LEVEL_INFO, "Profiling finished.\n");
+    if (is_main_rank()) printf("\n");
+    LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Profiling finished.\n");
 
-    
-    LOG(LOG_LEVEL_INFO, "Flushing activities . . .\r");
+    LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Flushing activities . . .\r");
     
     ratelprof_status_t status = ratelprof_activity_pool_flush_activities();
     if (status == (ratelprof_status_t)RATELPROF_STATUS_NO_CALLBACK_SET) {
@@ -151,7 +151,7 @@ void onExit()
     plugin_manager.plugin_finalize(&plugin);
     close_plugin_manager(&plugin_manager);
 
-    LOG(LOG_LEVEL_INFO, "Flushing activities :     SUCCESS\n");
+    LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Flushing activities :     SUCCESS\n");
 
 
     ratelprof_time_t constructor_time  = ratelprof_get_constructor_time() / 1e6;
@@ -162,24 +162,25 @@ void onExit()
     if (ratelprof_fini() != RATELPROF_STATUS_SUCCESS) LOG(LOG_LEVEL_FATAL, "Failed to finalize RATELProf.\n");
     LOG(LOG_LEVEL_DEBUG, "Finalizing RATELProf . . . Done\n");
 
-    LOG(LOG_LEVEL_INFO, "Application duration : %10lu ms\n", main_time);
-    LOG(LOG_LEVEL_INFO, "Constructor duration : %10lu ms\n", constructor_time);
-    LOG(LOG_LEVEL_INFO, "Destructor duration :  %10lu ms\n", destructor_time);
-    LOG(LOG_LEVEL_INFO, "Total duration :       %10lu ms\n", constructor_time + main_time + destructor_time);
+    LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Application duration : %10lu ms\n", main_time);
+    LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Constructor duration : %10lu ms\n", constructor_time);
+    LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Destructor duration :  %10lu ms\n", destructor_time);
+    LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Total duration :       %10lu ms\n", constructor_time + main_time + destructor_time);
 }
+
+
 
 void handle_signal(int sig) {
     printf("\n");
-    LOG(LOG_LEVEL_INFO, "The application terminated unexpectedly. RATELProf will now exit safely.\n");
+    LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "The application terminated unexpectedly. RATELProf will now exit safely.\n");
     onExit();
     signal(sig, SIG_DFL);
     raise(sig);
 }
 
-
 __attribute__((constructor(101))) void init(void) 
 {
-    // signal(SIGSEGV, handle_signal); // segmentation fault
+    signal(SIGSEGV, handle_signal); // segmentation fault
     // signal(SIGABRT, handle_signal); // abort()
     // signal(SIGINT,  handle_signal); // Ctrl+C
     // signal(SIGTERM, handle_signal); // kill

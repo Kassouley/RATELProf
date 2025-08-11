@@ -2,64 +2,13 @@
 #include <lauxlib.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 #include <hsa/hsa.h>
 #include <hsa/hsa_ext_amd.h>
 
-#define QUERY(INFO, var) hsa_agent_get_info(agent, HSA_AGENT_INFO_##INFO, var)
-#define QUERY_AMD(INFO, var) hsa_agent_get_info(agent, (hsa_agent_info_t)HSA_AMD_AGENT_INFO_##INFO, var)
+#include "ratelprof_agent_query.h"
 
-#define MAX_STRING_LENGTH 64
-
-typedef enum {
-    RATELPROF_STATUS_SUCCESS,
-    RATELPROF_STATUS_HSA_INIT_FAILED,
-    RATELPROF_STATUS_MALLOC_FAILED,
-    RATELPROF_STATUS_HSA_ITERATE_AGENTS_FAILED,
-} ratelprof_status_t;
-
-typedef struct ratelprof_agent_data_s {
-    char name[MAX_STRING_LENGTH];
-    char product_name[MAX_STRING_LENGTH];
-    uint32_t device_type;
-    const char* device_type_name;
-    uint32_t node;
-    uint32_t driver_node_id;
-    const char* feature;
-    const char* machine_model;
-    uint32_t cache_size[4];
-    uint32_t cu_count;
-    uint32_t cacheline_size;
-    uint32_t max_clock_freq;
-    uint32_t max_mem_clock;
-    char uuid[21];
-    uint16_t version_major;
-    uint16_t version_minor;
-
-    char* isa_name;
-    uint32_t wavefront_size;
-    uint16_t workgroup_max_dim[3];
-    uint32_t workgroup_max_size;
-    uint32_t grid_max_dim[3];
-    uint32_t grid_max_size;
-    uint32_t fbarrier_max_size;
-    uint32_t queues_max;
-    uint32_t queue_min_size;
-    uint32_t queue_max_size;
-    const char* queue_type;
-    uint32_t max_wave_per_cu;
-    uint32_t num_simd_per_cu;
-    uint32_t num_se;
-    uint32_t num_sa_per_se;
-    uint32_t num_sdma_eng;
-    uint32_t num_sdma_xgmi_eng;
-    uint32_t num_xcc;
-    uint32_t chip_id;
-    uint32_t driver_uid;
-    hsa_agent_t nearest_cpu;
-    uint32_t nearest_cpu_node_id;
-} ratelprof_agent_data_t;
-
-hsa_status_t query_agent_data(hsa_agent_t agent, void* data) 
+static hsa_status_t query_agent_data(hsa_agent_t agent, void* data) 
 {
     ratelprof_agent_data_t *agents_list = (ratelprof_agent_data_t*)data;
 
@@ -70,18 +19,20 @@ hsa_status_t query_agent_data(hsa_agent_t agent, void* data)
     uint32_t feature;
     uint32_t machine_model;
 
-    ratelprof_agent_data_t agent_data = {};
+    ratelprof_agent_data_t agent_data = {0};
     // Query agent attributes
+    agent_data.agent = agent;
     QUERY(NAME, &agent_data.name);
     QUERY_AMD(PRODUCT_NAME, &agent_data.product_name);
     QUERY(DEVICE, &agent_data.device_type);
-    agent_data.device_type_name = (agent_data.device_type >= 0 && agent_data.device_type < 4) ? device_types[agent_data.device_type] : "-";
+
+    STRCOPY((agent_data.device_type >= 0 && agent_data.device_type < 4), agent_data.device_type_name, device_types[agent_data.device_type]);
     QUERY(NODE, &agent_data.node);
     QUERY_AMD(DRIVER_NODE_ID, &agent_data.driver_node_id);
     QUERY(FEATURE, &feature);
-    agent_data.feature = (feature > 0 && feature < 3) ? feature_types[feature-1] : "-";
+    STRCOPY((feature > 0 && feature < 3), agent_data.feature, feature_types[feature-1]);
     QUERY(MACHINE_MODEL, &machine_model);
-    agent_data.machine_model = (machine_model >= 0 && machine_model < 2) ? machine_model_types[machine_model] : "-";
+    STRCOPY((machine_model >= 0 && machine_model < 2), agent_data.machine_model, machine_model_types[machine_model]);
     QUERY(CACHE_SIZE, &agent_data.cache_size);
     QUERY_AMD(COMPUTE_UNIT_COUNT, &agent_data.cu_count);
     QUERY_AMD(CACHELINE_SIZE, &agent_data.cacheline_size);
@@ -98,14 +49,15 @@ hsa_status_t query_agent_data(hsa_agent_t agent, void* data)
         // Query GPU attributes
         QUERY(ISA , &isa);
         uint32_t isa_name_lenght = 0;
+        char* isa_name = NULL;
         hsa_isa_get_info_alt(isa, HSA_ISA_INFO_NAME_LENGTH, &isa_name_lenght);
         if (isa_name_lenght != 0) {
-            agent_data.isa_name = (char*) calloc(isa_name_lenght, sizeof(char));
-            hsa_isa_get_info_alt(isa, HSA_ISA_INFO_NAME, agent_data.isa_name);
-        } else {
-            agent_data.isa_name = (char*) calloc(2, sizeof(char));
-            agent_data.isa_name[0] = '-';
-        }
+            isa_name = (char*) calloc(isa_name_lenght, sizeof(char));
+            hsa_isa_get_info_alt(isa, HSA_ISA_INFO_NAME, isa_name);
+        } 
+        STRCOPY((isa_name_lenght != 0), agent_data.isa_name, isa_name);
+        if (isa_name) free(isa_name);
+
         QUERY(WAVEFRONT_SIZE, &agent_data.wavefront_size);
         QUERY(WORKGROUP_MAX_DIM, &agent_data.workgroup_max_dim);
         QUERY(WORKGROUP_MAX_SIZE, &agent_data.workgroup_max_size);
@@ -116,7 +68,7 @@ hsa_status_t query_agent_data(hsa_agent_t agent, void* data)
         QUERY(QUEUE_MIN_SIZE, &agent_data.queue_min_size);
         QUERY(QUEUE_MAX_SIZE, &agent_data.queue_max_size);
         QUERY(QUEUE_TYPE, &queue_type);
-        agent_data.queue_type = (queue_type >= 0 && queue_type < 3) ? queue_types[queue_type] : "-";
+        STRCOPY((queue_type >= 0 && queue_type < 3), agent_data.queue_type, queue_types[queue_type]);
         QUERY_AMD(CHIP_ID, &agent_data.chip_id);
         QUERY_AMD(MAX_WAVES_PER_CU, &agent_data.max_wave_per_cu);
         QUERY_AMD(NUM_SIMDS_PER_CU, &agent_data.num_simd_per_cu);
@@ -134,35 +86,53 @@ hsa_status_t query_agent_data(hsa_agent_t agent, void* data)
     return HSA_STATUS_SUCCESS;
 }
 
-hsa_status_t count_agents(hsa_agent_t agent, void* data) {
+static hsa_status_t count_agents(hsa_agent_t agent, void* data) {
     (void)agent;
     size_t* counter = (size_t*)data;
     (*counter)++;
     return HSA_STATUS_SUCCESS;
 }
 
-ratelprof_status_t ratelprof_query_agent_data(ratelprof_agent_data_t** agents_list, size_t* agents_count) 
+int ratelprof_query_agent_data_with_init(ratelprof_agent_data_t** agents_list, size_t* agents_count) 
 {
-    *agents_count = 0;
+    int status = 0;
+    
     // Initialize HSA runtime
-    hsa_status_t status = hsa_init();
-    if (status != HSA_STATUS_SUCCESS) return RATELPROF_STATUS_HSA_INIT_FAILED;
+    if (hsa_init() != HSA_STATUS_SUCCESS) return -1;
+
+    status = ratelprof_query_agent_data(agents_list, agents_count);
+    
+    // Shut down HSA runtime
+    if (hsa_shut_down() != HSA_STATUS_SUCCESS) return -1;
+
+    return status;
+}
+
+int ratelprof_query_agent_data(ratelprof_agent_data_t** agents_list, size_t* agents_count) 
+{
+    hsa_status_t status = HSA_STATUS_SUCCESS;
+    *agents_count = 0;
 
     // Iterate through all agents
     status = hsa_iterate_agents(count_agents, agents_count);
-    if (status != HSA_STATUS_SUCCESS) return RATELPROF_STATUS_HSA_ITERATE_AGENTS_FAILED;
+    if (status != HSA_STATUS_SUCCESS) {
+        return -1;
+    }
 
     *agents_list = (ratelprof_agent_data_t*) calloc(*agents_count, sizeof(ratelprof_agent_data_t));
-    if(!*agents_list) return RATELPROF_STATUS_MALLOC_FAILED;
+    if (!*agents_list) {
+        return -1;
+    }
 
     status = hsa_iterate_agents(query_agent_data, *agents_list);
-    if (status != HSA_STATUS_SUCCESS) return RATELPROF_STATUS_HSA_ITERATE_AGENTS_FAILED;
+    if (status != HSA_STATUS_SUCCESS) {
+        free(*agents_list);
+        return -1;
+    }
 
-    // Shut down HSA runtime
-    hsa_shut_down();
-
-    return RATELPROF_STATUS_SUCCESS;
+    return 0;
 }
+
 
 #define push_string(NAME)       lua_pushstring(L, data->NAME);  lua_setfield(L, -2, #NAME);
 #define push_int(NAME)          lua_pushinteger(L, data->NAME); lua_setfield(L, -2, #NAME);
@@ -227,8 +197,6 @@ static void push_agent_data(lua_State* L, const ratelprof_agent_data_t* data) {
     push_int(driver_uid);
 
     push_int(nearest_cpu_node_id);
-
-    free(data->isa_name);
 }
 
 // === Lua entry point: get_agents() ===
@@ -236,7 +204,7 @@ int lua_get_agents(lua_State* L) {
     ratelprof_agent_data_t* agents_list;
     size_t agents_count;
 
-    ratelprof_query_agent_data(&agents_list, &agents_count);
+    ratelprof_query_agent_data_with_init(&agents_list, &agents_count);
 
     lua_newtable(L);
     for (size_t i = 0; i < agents_count; i++) {

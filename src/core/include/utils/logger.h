@@ -24,4 +24,9 @@
 // Logger function with updatable messages
 void LOG(int level, const char *format, ...);
 
+// Logger function with a condition
+#define LOG_IF(condition, level, ...) \
+    do { if (condition) LOG(level, __VA_ARGS__); } while (0)
+
+
 #endif // LOGGER_H

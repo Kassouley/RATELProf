@@ -138,6 +138,12 @@ void omp_tgt_rtl_activity_callback(const ratelprof_api_activity_t* activity, msg
     process_omp_tgt_rtl_args_for(activity->funid, &activity->omp_tgt_rtl_args, buf);
 }
 
+void mpi_activity_callback(const ratelprof_api_activity_t* activity, msgpack_buffer_t* buf)
+{
+    add_activity_data_to_buffer(buf, activity, get_mpi_funame_by_id(activity->funid));
+    process_mpi_args_for(activity->funid, &activity->mpi_args, buf);
+}
+
 void hsa_activity_callback(const ratelprof_api_activity_t* activity, msgpack_buffer_t* buf)
 {
     add_activity_data_to_buffer(buf, activity, get_hsa_funame_by_id(activity->funid));
@@ -315,6 +321,10 @@ ratelprof_status_t activity_callback(ratelprof_domain_t domain, const void* acti
 
         case RATELPROF_DOMAIN_ROCTX:
             roctx_activity_callback(activity, buf);
+            break;
+            
+        case RATELPROF_DOMAIN_MPI:
+            mpi_activity_callback(activity, buf);
             break;
 
         default:
