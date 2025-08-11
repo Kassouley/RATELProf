@@ -91,6 +91,7 @@ function options_helper.handle_stats_analyze_option(options)
         end 
     end
 
+    local per_rank      = ratelprof.get_opt_val(options, "per-rank")
     local only_main     = ratelprof.get_opt_val(options, "only-main")
     local mangled       = ratelprof.get_opt_val(options, "mangled")
     local trunc         = ratelprof.get_opt_val(options, "trunc")
@@ -113,6 +114,7 @@ function options_helper.handle_stats_analyze_option(options)
         notation = notation,
         start = start,
         stop = stop,
+        per_rank = per_rank,
     }
 end
 

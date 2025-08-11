@@ -65,7 +65,7 @@ consts_helper.profile = {
         trace = {
             desc            = string.format([[ 
 
-                Possible values are %s or 'none'.
+                Possible values are %s.
                 Select the API(s) to trace. Multiple APIs can be selected, separated by commas only (no spaces).
                 If 'none' is selected, no API is traced.
                 'gpu' is equivalent to 'kernel,memory,barrier'.
@@ -127,9 +127,9 @@ consts_helper.stats = {
     cmd = "stats",
     args = {
         ["report-file"] = {
-            desc = "Path to the "..ratelprof.consts._REPORT_EXT.." report file.",
+            desc = "Path(s) to the "..ratelprof.consts._REPORT_EXT.." report file(s).",
             is_optional = false,
-            is_list = false
+            is_list = true
         },
     },
     desc = "\n\tGenerate differents types of statistical report based on report file",
@@ -285,6 +285,23 @@ consts_helper.stats = {
             arg_required    = true,
             default         = nil
         },
+        ['per-rank'] = {
+            desc            = [[ 
+                If multiple report files are specified, or if the report files contain profiling data for many ranks, 
+                the command will generate a separate analysis report for each rank instead of aggregating the data into a single report.]],
+            sname           = nil,
+            arg             = nil,
+            arg_required    = nil,
+            default         = false
+        },
+        ['progress-enabled'] = {
+            desc            = [[ 
+                Enable progress bar during report generation.]],
+            sname           = nil,
+            arg             = nil,
+            arg_required    = false,
+            default         = true
+        }
     }
 }
 
@@ -295,7 +312,7 @@ consts_helper.analyze = {
         ["report-file"] = {
             desc = "Path to the "..ratelprof.consts._REPORT_EXT.." report file.",
             is_optional = false,
-            is_list = false
+            is_list = true
         },
     },
     desc = "\n\tAnalyze a report file and give advice about possible optimizations.",
@@ -447,7 +464,7 @@ consts_helper.export = {
         ["report-file"] = {
             desc = "Path to the "..ratelprof.consts._REPORT_EXT.." report file.",
             is_optional = false,
-            is_list = false
+            is_list = true
         }
     },
     desc = "\n\tGenerate an export file from an existing "..ratelprof.consts._REPORT_EXT.." report.",

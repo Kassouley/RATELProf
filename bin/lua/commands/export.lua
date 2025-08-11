@@ -1,19 +1,25 @@
+local BinaryReport = require("utils.Classes.BinaryReport")
 local export = {}
 
-local function write_to_output_file(report_file, data, ext)
-    local output_file = ratelprof.fs.remove_extension(report_file, ratelprof.consts._REPORT_EXT)..ext
-    local f = io.open(output_file, "w")
+local function write_to_output_file(report_files, data, ext)
+    local report_wo_ext = "aggregated_report"
+    if #report_files == 1 then
+        report_wo_ext = ratelprof.fs.remove_extension(report_files[1], ratelprof.consts._REPORT_EXT)
+    end
+
+    local output_file = report_wo_ext..ext
+    local f = ratelprof.fs.open_file(output_file, "w")
     f:write(data)
     f:close()
     
     Message:print("RPROF: Export written to '" .. output_file.."'")
 end
 
-local function export_json(report_file)
-    local data = ratelprof.msgpack.decode(report_file)
-    local json_data = ratelprof.utils.generate_json(data.raw)
+local function export_json(report_files)
+    local data = BinaryReport:new(report_files)
+    local json_data = ratelprof.utils.generate_json(data:to_json())
 
-    write_to_output_file(report_file, json_data, ".json")
+    write_to_output_file(report_files, json_data, ".json")
 end
 
 local function format_number(val)
@@ -55,38 +61,36 @@ local function format_call(function_name, args)
 end
 
 
-local function export_arg_info(report_file)
-    local data = ratelprof.msgpack.decode(report_file)
+local function export_arg_info(report_files)
+    local data = BinaryReport:new(report_files)
     local arg_info_data = {}
-    local trace_events = data.raw.trace_events
-    for domain_name, domain in pairs(trace_events) do
-        for event_id, event in pairs(domain) do
-            if event.name then
-                local name = event.name
-                local args = event.args
-                local arg_info = format_call(name, args)
-                local entry = string.format("%-32s | %8s | %s", domain_name, event_id, arg_info)
-                arg_info_data[#arg_info_data + 1] = entry
-            end
-        end
-    end
 
-    write_to_output_file(report_file, table.concat(arg_info_data, "\n"), "_arg_info.txt")
+    data:for_each_traces(function(mpi_rank, domain_name, trace_id, trace)
+        if trace.name then
+            local name = trace.name
+            local args = trace.args
+            local arg_info = format_call(name, args)
+            local entry = string.format("%-32s |%s %8s | %s", 
+                    domain_name, mpi_rank == -1 and "" or " RANK "..mpi_rank.." |", trace_id, arg_info)
+            arg_info_data[#arg_info_data + 1] = entry
+        end
+    end)
+
+    write_to_output_file(report_files, table.concat(arg_info_data, "\n"), "_arg_info.txt")
 end
 
 function export.process_export(positional_args, opt)
-    local report_file = positional_args[1]
     local export_type = ratelprof.get_opt_val(opt, "type")
 
-    ratelprof.utils.check_report_file(report_file)
+    local report_files = ratelprof.utils.check_report_files(positional_args)
 
     if not export_type then
         Message:error("Export type is required.")
         os.exit(1)
     elseif export_type == "json" then
-        export_json(report_file)
+        export_json(report_files)
     elseif export_type == "arg-info" then
-        export_arg_info(report_file)
+        export_arg_info(report_files)
     else
         Message:error("Unknown export type: "..export_type)
         os.exit(1)

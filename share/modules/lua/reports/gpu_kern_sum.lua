@@ -14,19 +14,11 @@ local function get_entry_key_tab(trace, opt)
      }
 end
 
-local function get_metric_dur(trace, opt)
-    return report_helper.get_duration(trace.dur, opt.timeunit)
-end
-
-local function get_metric_qdur(trace, opt)
-    return report_helper.get_duration(trace.start - trace.args.dispatch_time, opt.timeunit)
-end
-
 return function(traces_data, _, opt)
     local timeunit = opt.timeunit
 
     local HEADER = {
-        "App Time (%)", -- 1
+        "Active Time (%)", -- 1
         "API Time (%)", -- 2
         "Total Time ("..timeunit..")", -- 3
         "Instances",  -- 4
@@ -35,6 +27,8 @@ return function(traces_data, _, opt)
         "Min ("..timeunit..")", -- 7
         "Max ("..timeunit..")",  --8
         "StdDev ("..timeunit..")", -- 9
+        "Active QTime (%)", -- 1
+        "API QTime (%)", -- 2
         "Total QTime ("..timeunit..")", -- 3
         "QAvg ("..timeunit..")", -- 5
         "QMed ("..timeunit..")", -- 6
@@ -50,7 +44,7 @@ return function(traces_data, _, opt)
         "Name" 
     }
 
-    local gpu_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL, opt)
+    local gpu_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL)
 
 
     local total_metrics_dur_time = 0
@@ -59,16 +53,17 @@ return function(traces_data, _, opt)
     local entries_queue_time = {}
     for _, trace in pairs(gpu_traces) do
         total_metrics_dur_time = statistics.get_entry(
-            entries_dur_time, trace, get_entry_key_tab, get_metric_dur, opt, total_metrics_dur_time)
+            entries_dur_time, trace, get_entry_key_tab, {"start", "stop"}, opt, total_metrics_dur_time)
         total_metrics_queue_time = statistics.get_entry(
-            entries_queue_time, trace, get_entry_key_tab, get_metric_qdur, opt, total_metrics_queue_time)
+            entries_queue_time, trace, get_entry_key_tab, {"args.dispatch_time", "start"}, opt, total_metrics_queue_time)
     end
     
+    local analyzed_interval_dur = traces_data:get_analyzed_interval_dur()
     local data = {}
     for key_str, entry_dur_time in pairs(entries_dur_time) do
         local entry_queue_time = entries_queue_time[key_str]
-        local statistic_table_for_duration_time = stats_helper.compute_stats(entry_dur_time, total_metrics_dur_time, traces_data:get_app_dur())
-        local statistic_table_for_queue_time = stats_helper.compute_stats(entry_queue_time, total_metrics_queue_time, traces_data:get_app_dur())
+        local statistic_table_for_duration_time = stats_helper.compute_stats(entry_dur_time, total_metrics_dur_time, analyzed_interval_dur)
+        local statistic_table_for_queue_time = stats_helper.compute_stats(entry_queue_time, total_metrics_queue_time, analyzed_interval_dur)
         
         local statistic_table = {
             statistic_table_for_duration_time[1], 
@@ -80,6 +75,8 @@ return function(traces_data, _, opt)
             statistic_table_for_duration_time[7],
             statistic_table_for_duration_time[8],
             statistic_table_for_duration_time[9],
+            statistic_table_for_queue_time[1], 
+            statistic_table_for_queue_time[2],
             statistic_table_for_queue_time[3],
             statistic_table_for_queue_time[5],
             statistic_table_for_queue_time[6], 

@@ -5,15 +5,11 @@ local function get_entry_key_tab(trace)
     return { ratelprof.utils.get_copy_name(trace.args.src_type, trace.args.dst_type) }
 end
 
-local function get_metric(trace, opt)
-    return report_helper.get_duration(trace.dur, opt.timeunit)
-end
-
-return function(traces_data, report_obj, opt)
+return function(traces_data, _, opt)
 
     local timeunit = opt.timeunit
     local HEADER = {
-        "App Time (%)",
+        "Active Time (%)",
         "API Time (%)",
         "Total Time ("..timeunit..")",
         "Count",
@@ -22,13 +18,13 @@ return function(traces_data, report_obj, opt)
         "Min ("..timeunit..")",
         "Max ("..timeunit..")",
         "StdDev ("..timeunit..")",
-        "Operation" 
+        "Operation"
     }
 
-    local gpu_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
+    local gpu_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY)
     
-    local entries, total_metrics = stats_helper.get_entries(gpu_traces, get_entry_key_tab, get_metric, opt)
-    local data = stats_helper.get_output_summary(entries, total_metrics, traces_data:get_app_dur())
+    local entries, total_metrics = stats_helper.get_entries(gpu_traces, get_entry_key_tab, {"start", "stop"}, opt)
+    local data = stats_helper.get_output_summary(entries, total_metrics, traces_data:get_analyzed_interval_dur())
 
     table.sort(data, function(a, b)
         return tonumber(a[2]) > tonumber(b[2])

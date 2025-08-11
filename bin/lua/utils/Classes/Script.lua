@@ -71,7 +71,7 @@ function Script:add_argument(name, is_optional, is_list, description)
         self.max_arguments = self.max_arguments + 1
     end
     if is_list then 
-        self.max_arguments = nil 
+        self.max_arguments = nil
     end
     table.insert(self.arguments, {
         name = name,
@@ -103,6 +103,8 @@ function Script:get_usage()
         for _, arg in ipairs(args) do
             if arg.is_optional then
                 str = str.." [<"..arg.name..">]"
+            elseif arg.is_list then
+                str = str.." <"..arg.name.."> [<"..arg.name..">...]"
             else
                 str = str.." <"..arg.name..">"
             end

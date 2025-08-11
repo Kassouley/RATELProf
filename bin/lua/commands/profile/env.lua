@@ -6,6 +6,7 @@ env.env_value = {}
 
 -- Function to set environment variable
 function env.set_env(var, value)
+    if not var then return end
     table.insert(env.env_value, var.."="..value)
 end
 

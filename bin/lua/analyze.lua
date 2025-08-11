@@ -17,7 +17,7 @@ local function main(arg)
 
     local args = ratelprof.consts_helper.analyze.args["report-file"]
 
-    script:add_argument("report-file", args.is_optional, args.is_list, args.desc) 
+    script:add_argument("report-file", args.is_optional, args.is_list, args.desc)
 
     for lname, opt in pairs(ratelprof.consts_helper.analyze.opt) do
         script:add_option(lname, opt.sname, opt.arg, opt.desc, opt.arg_required, opt.default)

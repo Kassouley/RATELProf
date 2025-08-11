@@ -1,11 +1,9 @@
-local report_helper = require("utils.report_helper")
-
-local function find_coalescable_transfers(copy_data, trace_data, DURATION_THRESHOLD_NS, GAP_THRESHOLD_NS, MIN_SEQUENCE_LEN, opt)
+local function find_coalescable_transfers(traces_data, DURATION_THRESHOLD_NS, GAP_THRESHOLD_NS, MIN_SEQUENCE_LEN, opt)
 
     local items = {}
-    local count = 0
+    local sequences_per_gpu = {}
 
-    local function on_sequence_end(sequence, sdma, name)
+    local function on_sequence_end(sequence, gpu_node_id, sdma, name)
         if #sequence >= MIN_SEQUENCE_LEN then
             local sequence_start = sequence[1].start
             local sequence_stop = sequence[#sequence].stop
@@ -21,6 +19,7 @@ local function find_coalescable_transfers(copy_data, trace_data, DURATION_THRESH
 
 
             table.insert(items, {
+                tostring(gpu_node_id),
                 tostring(sdma),
                 #sequence,
                 sequence_start,
@@ -30,46 +29,57 @@ local function find_coalescable_transfers(copy_data, trace_data, DURATION_THRESH
                 name,
             })
 
-            count = count + 1
+            if not sequences_per_gpu[gpu_node_id] then
+                sequences_per_gpu[gpu_node_id] = 0
+            end
+            sequences_per_gpu[gpu_node_id] = sequences_per_gpu[gpu_node_id] + 1
         end
     end
 
-    local copy_table = {}
-    for _, copy in pairs(copy_data) do
-        local sdma = copy.args.engine_id
+    traces_data:for_each_gpu(function (gpu_node_id, _)
+        local copy_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY)
 
-        if not copy_table[sdma] then copy_table[sdma] = {} end
-        table.insert(copy_table[sdma], copy)
-    end
+        if #copy_data == 0 then return end
 
-    local last = nil
+        local last_for_each_sdma = {}
+        local sequence_for_each_sdma = {}
+        for _, c in ipairs(copy_data) do
+            local sdma_id  = c.args.engine_id
+            local curr_last = last_for_each_sdma[sdma_id]
+            local sequence  = sequence_for_each_sdma[sdma_id] or {}
 
-    for sdma, copies in pairs(copy_table) do
-        local sequence = {}
-        table.sort(copies, function(a, b) return a.start < b.start end)
-
-        for _, c in ipairs(copies) do
-            c.stop = c.start + c.dur
             if c.dur > DURATION_THRESHOLD_NS then
                 -- Skip large kernels
-                last = nil
+                if curr_last then
+                    on_sequence_end(sequence, gpu_node_id, sdma_id, ratelprof.utils.get_copy_name_from_trace(curr_last))
+                end
                 sequence = {}
-            elseif not last or
-                (c.args.src_agent == last.args.src_agent and c.args.dst_agent == last.args.dst_agent and c.start - last.stop  <= GAP_THRESHOLD_NS) then
+                curr_last = nil
+            elseif not curr_last or (c.args.src_agent == curr_last.args.src_agent and c.args.dst_agent == curr_last.args.dst_agent 
+                    and c.start - curr_last.stop < GAP_THRESHOLD_NS) then
                 -- Add to sequence
                 table.insert(sequence, c)
+                curr_last = c
             else
                 -- Check and reset
-                on_sequence_end(sequence, sdma, ratelprof.utils.get_copy_name_from_trace(last))
-                sequence = { c }
+                on_sequence_end(sequence, gpu_node_id, sdma_id, ratelprof.utils.get_copy_name_from_trace(curr_last))
+                sequence = {c}
+                curr_last = c
             end
-            last = c
+            last_for_each_sdma[sdma_id] = curr_last
+            sequence_for_each_sdma[sdma_id] = sequence
         end
-        -- Final check for the last sequence of the queue
-        on_sequence_end(sequence, sdma, ratelprof.utils.get_copy_name_from_trace(last))
-    end
 
-    return items, count
+        -- Final check for each queue
+        for sdma_id, sequence in pairs(sequence_for_each_sdma) do
+            local last = last_for_each_sdma[sdma_id]
+            if last then
+                on_sequence_end(sequence, gpu_node_id, sdma_id, ratelprof.utils.get_copy_name_from_trace(last))
+            end
+        end
+    end)
+
+    return items, sequences_per_gpu
 end
 
 
@@ -77,8 +87,8 @@ local function compute_coalescable_transfers_speedup(data, app_dur)
     local total_gaps_per_sdma = {}
 
     for _, e in ipairs(data) do
-        local sdma = e[1]
-        local gaps_duration = e[5]
+        local sdma = e[2]
+        local gaps_duration = e[6]
 
         if not total_gaps_per_sdma[sdma] then
             total_gaps_per_sdma[sdma] = 0
@@ -95,31 +105,24 @@ local function compute_coalescable_transfers_speedup(data, app_dur)
     return app_dur / (app_dur - max_gap_dur)
 end
 
-return function(traces_data, report_id, opt)
+return function(traces_data, _, opt)
 
-    local DURATION_THRESHOLD_NS = report_helper.get_report_opt_value(report_id, "th_dur", opt.report_opt)
-    local GAP_THRESHOLD_NS      = report_helper.get_report_opt_value(report_id, "th_gap", opt.report_opt)
-    local MIN_SEQUENCE_LEN      = report_helper.get_report_opt_value(report_id, "min_seq", opt.report_opt)
-
-
-    local copy_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
-
-    if next(copy_data) == nil then
-        return {skip = "The report could not be analyzed because it does not contain the required copy data."}
-    end
+    local DURATION_THRESHOLD_NS = opt.th_dur
+    local GAP_THRESHOLD_NS      = opt.th_gap
+    local MIN_SEQUENCE_LEN      = opt.min_seq
 
     local speedup_factor = 1
 
-    local msg = ratelprof.consts._ALL_RULES_REPORT[report_id].desc
+    local data, sequences_per_gpu = find_coalescable_transfers(traces_data, DURATION_THRESHOLD_NS, GAP_THRESHOLD_NS, MIN_SEQUENCE_LEN, opt)
 
-    local data, count = find_coalescable_transfers(copy_data, traces_data, DURATION_THRESHOLD_NS, GAP_THRESHOLD_NS, MIN_SEQUENCE_LEN, opt)
+    local msg = ""
 
     if #data ~= 0 then
 
         local app_duration = traces_data:get_app_dur()
         speedup_factor = compute_coalescable_transfers_speedup(data, app_duration)
 
-        local advice_msg = [[
+        msg = [[
 The following memory transfers sequences may benefit from coalescing into fewer, larger transfers.
 These sequences were identified as:
   - Being the same transfers kind in the same SDMA,
@@ -128,19 +131,19 @@ These sequences were identified as:
   - Appearing at least ]] .. MIN_SEQUENCE_LEN .. [[ times in sequence.
 
 Optimizing these transfers might speed up your application by ]] .. string.format("x%.3f", speedup_factor) .. [[.
-]].. count .. [[ repeated memory transfers sequence(s) detected.
 
 ]]
+
+        for gpu_id, count in pairs(sequences_per_gpu) do
+            msg = msg .. "On GPU ID " .. gpu_id .. ", " .. count .. " repeated memory transfers sequence(s) detected.\n\n"
+        end
+
 
         table.sort(data, function(a, b)
             return a[7] > b[7]
         end)
-
-        msg = msg .. "\n" .. advice_msg
-
     else
-        local no_advice_msg = "\nNo redundant or coalescable memory transfers sequences were found.\n"
-        msg = msg .. no_advice_msg
+        msg = "No redundant or coalescable memory transfers sequences were found.\n"
     end
 
 
@@ -148,6 +151,7 @@ Optimizing these transfers might speed up your application by ]] .. string.forma
         NAME = "Coalescable Memory Transfers",
         TYPE = "Analyze",
         HEADER = {
+            "GPU ID",
             "SDMA",
             "Seq Length",
             "Seq Start (ns)",

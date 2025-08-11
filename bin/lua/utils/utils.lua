@@ -97,16 +97,58 @@ function utils.is_array(tbl)
 end
 
 
-function utils.check_report_file(report_file)
-    if not ratelprof.fs.exists(report_file) then
-        Message:error("Report '"..report_file.."' doesn't exists.")
-        os.exit(1)
+function utils.check_report_file(report_file, skip_on_check)
+    local function error_and_handle(msg)
+        if skip_on_check then
+            Message:error(msg .. " (Skipping.)")
+            return true
+        else
+            Message:error(msg)
+            os.exit(1)
+        end
     end
+
+    if not ratelprof.fs.exists(report_file) then
+        return error_and_handle("Report '" .. report_file .. "' doesn't exist.")
+    end
+
     if not ratelprof.fs.has_extension(report_file, ratelprof.consts._REPORT_EXT) then
-        Message:error("Report '"..report_file.."' is not a "..ratelprof.consts._REPORT_EXT.." file.")
-        os.exit(1)
+        return error_and_handle("Report '" .. report_file .. "' is not a ." .. ratelprof.consts._REPORT_EXT .. " file.")
     end
 end
+
+
+function utils.check_report_files(files, skip_on_check)
+    local valid_files = {}
+
+    local function error_and_handle(msg)
+        if skip_on_check then
+            Message:error(msg .. " (Skipping.)")
+        else
+            Message:error(msg)
+            os.exit(1)
+        end
+    end
+
+    for _, file in ipairs(files) do
+        if not ratelprof.fs.exists(file) then
+            error_and_handle("Report '" .. file .. "' doesn't exist.")
+        elseif not ratelprof.fs.has_extension(file, ratelprof.consts._REPORT_EXT) then
+            error_and_handle("Report '" .. file .. "' is not a ." .. ratelprof.consts._REPORT_EXT .. " file.")
+        else
+            table.insert(valid_files, file)
+        end
+    end
+
+    if #valid_files == 0 then
+        Message:error("No valid report files provided. Stopping...")
+        os.exit(1)
+    end
+
+    return valid_files
+end
+
+
 
 function utils.execute_command(cmd)
     local handle = io.popen(cmd)

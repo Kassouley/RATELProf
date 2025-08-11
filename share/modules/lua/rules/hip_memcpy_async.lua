@@ -1,117 +1,93 @@
 local report_helper = require ("utils.report_helper")
 
-local function is_synchronized(gpuCpy, hipMemcpy)
-    local gpu_start = gpuCpy["start"]
-    local gpu_stop  = gpuCpy["stop"]
-    local api_start = hipMemcpy["start"]
-    local api_stop  = api_start + hipMemcpy["dur"]
-    return gpu_start > api_start and gpu_stop < api_stop
+local function is_synchronized(gpu_trace, cpu_trace)
+    local cpu_start = cpu_trace.start
+    local cpu_stop  = cpu_start + cpu_trace.dur
+    return gpu_trace.start > cpu_start and gpu_trace.stop < cpu_stop
 end
-
-local function compute_async_copy_speedup(data, app_dur)
-    local total_useless_sync_time_per_tid = {}
-
-    for _, e in ipairs(data) do
-        local tid = e[4]
-        local cpu_dur = e[7]
-        local gpu_dur = e[8]
-
-        if not total_useless_sync_time_per_tid[tid] then
-            total_useless_sync_time_per_tid[tid] = 0
-        end
-        total_useless_sync_time_per_tid[tid] = total_useless_sync_time_per_tid[tid] + (cpu_dur - gpu_dur)
-    end
-
-    local max, _ = table.max(total_useless_sync_time_per_tid)
-
-    if max == nil or max == 0 then
-        error("Invalid max ideal duration")
-    end
-
-    return app_dur / (app_dur - max)
-end
-
 
 return function(traces_data, report_id, opt)
-    local cpy_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
-    local hip_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_HIP, opt)
-    local hsa_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_HSA, opt)
-
-    if next(hsa_data) ~= nil then
-        return {skip = "The report could not be analyzed because it contains HSA data. This version doesn't support this analysis while HSA traces are present."}
-    end
+    local cpy_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY)
 
     if next(cpy_data) == nil then
         return {skip = "The report could not be analyzed because it does not contain the required GPU data."}
     end
-    
-    if next(hip_data) == nil then
-        return {skip = "The report could not be analyzed because it does not contain the required HIP API data."}
-    end
-    
-    local data = {}
-    local nb_api_cpy = 0
-    local grouped_copies = {}
 
-    for _, gpuCpy in pairs(cpy_data) do
-        if not grouped_copies[gpuCpy.corr_id] then
-            grouped_copies[gpuCpy.corr_id] = {}
+    local grouped_copy_by_entry_point = {}
+    for _, gpu_trace in pairs(cpy_data) do
+        local entry_trace, domain = traces_data:find_entry_point(gpu_trace)
+
+        if entry_trace and domain == ratelprof.consts._ENV.DOMAIN_HIP then
+            local grouped_trace = grouped_copy_by_entry_point[entry_trace] or {
+                start = math.huge,
+                stop  = 0,
+                size  = 0,
+                corr_id  = gpu_trace.corr_id,
+                src_type = gpu_trace.args.src_type,
+                dst_type = gpu_trace.args.dst_type
+            }
+
+            grouped_trace.start = math.min(grouped_trace.start, gpu_trace.start)
+            grouped_trace.stop  = math.max(grouped_trace.stop,  gpu_trace.stop)
+            grouped_trace.size  = grouped_trace.size + gpu_trace.args.size
+
+            grouped_copy_by_entry_point[entry_trace] = grouped_trace
         end
-        table.insert(grouped_copies[gpuCpy.corr_id], gpuCpy)
     end
 
-    for corr_id, group in pairs(grouped_copies) do
-        local corr_hip_trace = hip_data[corr_id]
-        if corr_hip_trace then
-            local hip_cpy = corr_hip_trace.name
-            if hip_cpy:match("^hipMemcpy") and hip_cpy:match("Async$") then
-                local first_start = group[1].start
-                local last_stop   = first_start + group[1].dur
-                local size = 0
-                for _, gpuCpy in ipairs(group) do
-                    local gpu_start = gpuCpy.start
-                    local gpu_stop  = gpu_start + gpuCpy.dur
-                    if gpu_start < first_start then first_start = gpu_start end
-                    if gpu_stop > last_stop    then last_stop   = gpu_stop end
-                    size = size + gpuCpy.args.size
-                end
-                local gpuCpy = {
-                    start = first_start,
-                    stop  = last_stop,
-                    size = size,
-                    src_type = group[1].args.src_type,
-                    dst_type = group[1].args.dst_type
-                }
-                if is_synchronized(gpuCpy, corr_hip_trace) then
-                    table.insert(data, {
-                        tostring(corr_id),
-                        hip_cpy,
-                        tostring(corr_hip_trace.pid),
-                        tostring(corr_hip_trace.tid),
-                        ratelprof.utils.get_copy_name(gpuCpy.src_type, gpuCpy.dst_type),
-                        report_helper.get_size(gpuCpy.size),
-                        report_helper.get_duration(corr_hip_trace.dur, opt.timeunit),
-                        report_helper.get_duration(last_stop - first_start, opt.timeunit)
-                    })
-                end
-                nb_api_cpy = nb_api_cpy + 1
+    local data = {}
+
+    local total_useless_sync_time_table = {}
+
+    local nb_api_cpy = 0
+    for entry_trace, copy_trace in pairs(grouped_copy_by_entry_point) do
+        nb_api_cpy = nb_api_cpy + 1
+        local trace_name = entry_trace.name
+
+        if trace_name:match("^hipMemcpy[%w_]*Async$") then
+            if is_synchronized(copy_trace, entry_trace) then
+                local gpu_dur_ns = copy_trace.stop - copy_trace.start
+                local cpu_dur_ns = entry_trace.dur
+
+                local tid = tostring(entry_trace.tid)
+                local pid = tostring(entry_trace.pid)
+
+                local key = tid.."::"..pid
+                local total_useless_sync_time = total_useless_sync_time_table[key] or 0
+                total_useless_sync_time_table[key] = total_useless_sync_time + (cpu_dur_ns - gpu_dur_ns)
+
+                table.insert(data, {
+                    tostring(copy_trace.corr_id),
+                    trace_name,
+                    pid,
+                    tid,
+                    ratelprof.utils.get_copy_name(copy_trace.src_type, copy_trace.dst_type),
+                    report_helper.get_size(copy_trace.size),
+                    report_helper.get_duration(cpu_dur_ns, opt.timeunit),
+                    report_helper.get_duration(gpu_dur_ns, opt.timeunit)
+                })
             end
         end
     end
 
-    local msg = ratelprof.consts._ALL_RULES_REPORT[report_id].desc
+    local msg = ""
     local speedup_factor = 1
 
     if #data == 0 then 
-        local no_advice_msg = "\nThere were no problems detected related to asynchronous memcpy operations.\n"
-        msg = msg .. no_advice_msg
+        msg = "There were no problems detected related to asynchronous memcpy operations.\n"
     else
 
-        local app_duration = traces_data:get_app_dur()
+        local app_dur = traces_data:get_app_dur()
 
-        speedup_factor = compute_async_copy_speedup(data, app_duration)
+        local max_useless_time = table.max(total_useless_sync_time_table)
 
-        local advice_msg = [[ 
+        if max_useless_time == nil or max_useless_time == 0 then
+            error("Invalid max ideal duration")
+        end
+
+        speedup_factor = app_dur / (app_dur - max_useless_time)
+
+        msg = [[ 
 The following memory transfers are synchronized with their corresponding HIP asynchronous memory copy trace.
 It appears that the transferred memory is either using PAGEABLE memory or is not large enough to be processed asynchronously.
 
@@ -124,8 +100,6 @@ Your application might speed up by ]] .. string.format("x%.3f.\n\n", speedup_fac
         table.sort(data, function(a, b)
             return a[7] < b[7]
         end)
-
-        msg = msg .. advice_msg
     end
 
 

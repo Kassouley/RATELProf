@@ -123,7 +123,7 @@ consts._TRACES = {
                           consts._ENV.DOMAIN_OMP_TGT_RTL,
                           consts._ENV.DOMAIN_OMPT,
                           consts._ENV.DOMAIN_HSA,
-                          consts._ENV.DOMAIN_HIP},         name="CPU API"},
+                          consts._ENV.DOMAIN_HIP},         name="CPU Activity"},
   ['gpu'] =           {var={
                           consts._ENV.DOMAIN_KERNEL,
                           consts._ENV.DOMAIN_COPY,
@@ -145,6 +145,7 @@ consts._TRACES = {
                           consts._ENV.DOMAIN_COPY,
                           consts._ENV.DOMAIN_BARRIEROR,
                           consts._ENV.DOMAIN_BARRIERAND},  name="All Activity"},
+  ['none'] =          {var = nil,                          name="No Traces"},
 }
 
 
@@ -293,13 +294,21 @@ consts._ALL_STATS_REPORT = {
         desc    = "Compute statistics about HIP API traces",
         default = true
       },
+      mpi_api_trace = {
+        desc    = "Show all trace about MPI API",
+        default = false
+      },
+      mpi_api_sum = {
+        desc    = "Compute statistics about MPI API traces",
+        default = true
+      },
       hsa_api_trace = {
         desc    = "Show all trace about HSA API",
         default = false
       },
       hsa_api_sum = {
         desc    = "Compute statistics about HSA API traces",
-        default = true
+        default = false
       },
       gpu_trace = {
         desc    = "Show all trace about GPU activity",

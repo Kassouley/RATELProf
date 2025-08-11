@@ -12,7 +12,58 @@ local function print_skip(cond, format, ...)
     print_if_not(cond, "SKIPPED: "..string.format(format, ...))
 end
 
-function Report.utils.execute_report(data, input_file, options_values, report_list, progress_enabled, progress_msg)
+local function process_report_generation(report_ret_vals, chunk, rprof_rep_data, report_id, options_values, output_format, output, rprof_rep_files, report_path, progress_enabled, mpi_rank, opt)
+    report_ret_vals = report_ret_vals or {}
+    local ret = nil
+    ret = chunk()(rprof_rep_data, report_id, opt)
+
+    local report_obj = Report:new({
+        format           = output_format,
+        output           = output,
+        rprof_rep_files  = rprof_rep_files,
+        report_name      = ret.NAME,
+        report_type      = ret.TYPE,
+        report_id        = report_id,
+        report_path      = report_path,
+        max_col_width    = tonumber(options_values.max_col_width),
+        max_lines        = options_values.max_lines,
+        notation         = options_values.notation,
+        header           = ret.HEADER,
+        msg              = ret.MSG,
+        data             = ret.DATA,
+        progress_enabled = progress_enabled,
+        mpi_rank         = mpi_rank,
+    })
+
+    if ret.skip then
+        print_skip(progress_enabled, ret.skip or "No skip message provided.")
+    else
+        report_obj:generate()
+    end
+
+    if not report_ret_vals[mpi_rank] then
+        report_ret_vals[mpi_rank] = {}
+    end
+    report_ret_vals[mpi_rank][report_id] = ret
+end
+
+local function get_report_opt_value(ALL_REPORT, report_id, report_opt, opt)
+    if not ALL_REPORT[report_id].opt then return opt end
+    for name, option in pairs(ALL_REPORT[report_id].opt) do
+        local default = option.default
+        if not default then
+            error (string.format("No default report option value provided for %s in report %s", name, report_id))
+        end
+        if type(default) == "number" then
+            opt[name] = tonumber(report_opt[name]) or default
+        else
+            opt[name] = report_opt[name] or default
+        end
+    end
+    return opt
+end
+
+function Report.utils.execute_report(rprof_rep_data, options_values, report_list, progress_enabled, progress_msg)
     local report_ret_vals = {}
 
     local reports = options_values.reports or {}
@@ -33,41 +84,20 @@ function Report.utils.execute_report(data, input_file, options_values, report_li
             local output_format = formats[i] or formats[#formats]
                                     or (output == "-" and "column" or "csv")
 
-            local opt = options_values
-            opt.report_opt = report_data.opt or {}
-
-            local ret = nil
+            options_values = get_report_opt_value(report_list, report_id, report_data.opt, options_values)
+            
             local chunk, err = loadfile(report_path)
-            if chunk then
-                ret = chunk()(data, report_id, opt)
-            else
+            if not chunk then
                 error("Error loading file: " .. err)
             end
 
-            local report_obj = Report:new({
-                    format          = output_format,
-                    output          = output,
-                    trace_path      = input_file,
-                    report_name     = ret.NAME,
-                    report_type     = ret.TYPE,
-                    report_id       = report_id,
-                    report_path     = report_path,
-                    max_col_width   = tonumber(options_values.max_col_width),
-                    max_lines       = tonumber(options_values.max_lines),
-                    notation        = options_values.notation,
-                    header          = ret.HEADER,
-                    msg             = ret.MSG,
-                    data            = ret.DATA,
-                    progress_enabled = progress_enabled,
-                })
-
-            if ret.skip then
-                print_skip(progress_enabled, ret.skip or "No skip message provided.")
+            if options_values.per_rank == true then
+                rprof_rep_data:for_each_rank(function (mpi_rank, rprof_rep_file)
+                    process_report_generation(report_ret_vals, chunk, rprof_rep_data, report_id, options_values, output_format, output, {rprof_rep_file}, report_path, progress_enabled, mpi_rank, options_values)
+                end)
             else
-                report_obj:generate()
+                process_report_generation(report_ret_vals, chunk, rprof_rep_data, report_id, options_values, output_format, output, rprof_rep_data:get_rprof_rep_files(), report_path, progress_enabled, -1, options_values)
             end
-
-            report_ret_vals[report_id] = ret
         else
             print('\n')
             Message:error(string.format("Report '%s' encountered an internal error: No valid report file or class found", report_id))
@@ -82,27 +112,28 @@ end
 
 -- Available formats and their extensions
 local format_extensions = {
-    column = "txt",
-    table = "txt",
-    csv = "csv",
-    tsv = "tsv"
+    column  = "txt",
+    table   = "txt",
+    csv     = "csv",
+    tsv     = "tsv"
 }
 
 local report_attribute_type = {
-    format          = "string",
-    output          = "string",
-    trace_path      = "string",
-    report_name     = "string",
-    report_type     = "string",
-    report_id       = "string",
-    report_path     = "string",
-    max_col_width   = "number",
-    max_lines       = "string",
-    notation        = "string",
-    header          = "table",
-    msg             = "string",
-    data            = "table",
+    format           = "string",
+    output           = "string",
+    rprof_rep_files  = "table",
+    report_name      = "string",
+    report_type      = "string",
+    report_id        = "string",
+    report_path      = "string",
+    max_col_width    = "number",
+    max_lines        = "string",
+    notation         = "string",
+    header           = "table",
+    msg              = "string",
+    data             = "table",
     progress_enabled = "boolean",
+    mpi_rank         = "number",
 }
 
 Report.__index = Report
@@ -125,12 +156,13 @@ function Report:new(attribute)
     end
 
     instance:set_default_value()
-
     local filename = instance:get_output_filename()
     instance.filename = filename
     print_if_not(instance.progress_enabled, string.format(
-        "\nProcessing '%s' with '%s'%s...\n",
-        instance.trace_path, instance.report_path,
+        "\nProcessing '%s'%s with '%s'%s...\n",
+        table.concat(instance.rprof_rep_files, ", "),
+        (instance.mpi_rank > -1 and " (MPI RANK "..instance.mpi_rank..")" or ""),
+        instance.report_path,
         (filename and (" to '" .. filename .. "'") or "")
     ))
 
@@ -157,7 +189,7 @@ function Report:generate()
                 print_if_not(self.progress_enabled, self.msg) 
             end
         end
-        print_skip(self.progress_enabled, "'%s' does not contain %s data.", self.trace_path, self.report_name)
+        print_skip(self.progress_enabled, "'%s' does not contain %s data.", table.concat(self.rprof_rep_files, ", "), self.report_name)
         return
     end
 
@@ -209,7 +241,11 @@ function Report:get_output_filename()
         return
     end
 
-    local report_wo_ext = ratelprof.fs.remove_extension(self.trace_path)
+    local report_wo_ext = "aggregated_report"
+    if #self.rprof_rep_files == 1 then
+        report_wo_ext = ratelprof.fs.remove_extension(self.rprof_rep_files[1])
+    end
+
     local file_extension = format_extensions[self.format] or "txt"
     local basename = (self.output == "." and report_wo_ext or self.output)
 

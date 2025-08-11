@@ -17,6 +17,7 @@ local function handle_profile_option(options)
     local log_level = ratelprof.get_opt_val(options, "log-level")
     if log_level then env.set_env(ratelprof.consts._ENV.LOG_LEVEL, log_level) end
 
+    local enabled_domain = {}
     local traces_list = ratelprof.get_opt_val(options, "trace"):split(",")
     for _, trace_name in ipairs(traces_list) do
         local trace = ratelprof.consts._TRACES[trace_name]
@@ -28,10 +29,9 @@ local function handle_profile_option(options)
             else
                 env.set_env(trace.var, "1")
             end
+            table.insert(enabled_domain, trace.name)
         else
-            if trace_name ~= 'none' then
-                Message:warn("Trace '"..trace_name.."' is not supported. Skipping it.")
-            end
+            Message:warn("Trace '"..trace_name.."' is not supported. Skipping it.")
         end
     end
 
@@ -56,8 +56,8 @@ local function handle_profile_option(options)
         launch_script = launch_script,
         launch_command = launch_command,
         prefix = prefix,
-        output = output,
         plugin = plugin_path,
+        enabled_domain = enabled_domain,
     }
 end
 
@@ -92,7 +92,6 @@ function profile.process_profiling(positional_args, options_values)
     local launch_script     = opt.launch_script
     local launch_command    = opt.launch_command
     local prefix            = opt.prefix .. " "
-    local output_file       = opt.output
     local plugin_path       = opt.plugin
 
     if not ratelprof.fs.exists(application) then
@@ -133,7 +132,7 @@ function profile.process_profiling(positional_args, options_values)
 
     local env_var = env.get_env()
     local app_cmd = table.concat(application_command, " ")
-    local run_command = env_var.." "..prefix..app_cmd
+    local run_command = prefix.."env "..env_var.." "..app_cmd
 
     Message:print ([[
      ____      _  _____ _____ _     ____             __ 
@@ -147,7 +146,7 @@ function profile.process_profiling(positional_args, options_values)
     Message:print ("RPROF: Preloaded tool :          '"..ld_preload[1].."'")
     Message:print ("RPROF: Preloaded wrapper :       '"..ld_preload[2].."'")
     Message:print ("RPROF: Plugin used :             '"..plugin_path.."'")
-    Message:print ("RPROF: Profiling output file :   '"..output_file.."'")
+    Message:print ("RPROF: Profiling enabled for :   '"..table.concat(opt.enabled_domain, ", ").."'")
 
     if launch_command and launch_script and ratelprof.fs.exists(launch_script) then
         Message:print ("RPROF: Running :                 '"..launch_command.." "..launch_script.."'")
@@ -156,10 +155,15 @@ function profile.process_profiling(positional_args, options_values)
         normal_execution (run_command)
     end
 
-    agent_helper.set_gpu_props_to_msgpack(output_file)
+    local f = ratelprof.fs.open_file("/tmp/rprof_output_filename.txt", "r")
+    for output_file in f:lines() do
+        agent_helper.set_gpu_props_to_msgpack(output_file)
+        local bytes_written = ratelprof.fs.get_size(output_file)
+        Message:print ("RPROF: Bytes written in '"..output_file.."' : "..bytes_written)
+    end
+    f:close()
+    os.remove("/tmp/rprof_output_filename.txt")
 
-    local bytes_written = ratelprof.fs.get_size(output_file)
-    Message:print ("RPROF: Bytes written in '"..output_file.."' : "..bytes_written)
     Message:print ("RPROF: Exiting tool . . .")
 end
 

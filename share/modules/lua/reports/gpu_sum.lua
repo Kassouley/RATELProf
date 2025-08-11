@@ -17,22 +17,19 @@ local function get_entry_key_tab4(trace)
     return  { "BarrierDispatch", "BarrierOr" }
 end
 
-local function get_metric(trace, opt)
-    return report_helper.get_duration(trace.dur, opt.timeunit)
-end
 
 return function(traces_data, _, opt)
     local timeunit = opt.timeunit
 
-    local barror_traces  = traces_data:get(ratelprof.consts._ENV.DOMAIN_BARRIEROR, opt)
-    local barrand_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_BARRIERAND, opt)
-    local kern_traces    = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL, opt)
-    local mem_traces     = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
+    local barror_traces  = traces_data:get(ratelprof.consts._ENV.DOMAIN_BARRIEROR)
+    local barrand_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_BARRIERAND)
+    local kern_traces    = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL)
+    local mem_traces     = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY)
 
-    local mem_entries,     mem_total_metric     = stats_helper.get_entries(mem_traces,     get_entry_key_tab1, get_metric, opt)
-    local kern_entries,    kern_total_metric    = stats_helper.get_entries(kern_traces,    get_entry_key_tab2, get_metric, opt)
-    local barrand_entries, barrand_total_metric = stats_helper.get_entries(barrand_traces, get_entry_key_tab3, get_metric, opt)
-    local barror_entries,  barror_total_metric  = stats_helper.get_entries(barror_traces,  get_entry_key_tab4, get_metric, opt)
+    local mem_entries,     mem_total_metric     = stats_helper.get_entries(mem_traces,     get_entry_key_tab1, {"start", "stop"}, opt)
+    local kern_entries,    kern_total_metric    = stats_helper.get_entries(kern_traces,    get_entry_key_tab2, {"start", "stop"}, opt)
+    local barrand_entries, barrand_total_metric = stats_helper.get_entries(barrand_traces, get_entry_key_tab3, {"start", "stop"}, opt)
+    local barror_entries,  barror_total_metric  = stats_helper.get_entries(barror_traces,  get_entry_key_tab4, {"start", "stop"}, opt)
 
     for _, entry in pairs(mem_entries) do
         entry.key_tab[2] = ratelprof.utils.get_copy_name(entry.key_tab[2], entry.key_tab[3])
@@ -50,7 +47,7 @@ return function(traces_data, _, opt)
     end
     local gpu_total_metric = kern_total_metric + mem_total_metric + barrand_total_metric + barror_total_metric
     
-    local data = stats_helper.get_output_summary(gpu_entries, gpu_total_metric, traces_data:get_app_dur())
+    local data = stats_helper.get_output_summary(gpu_entries, gpu_total_metric, traces_data:get_analyzed_interval_dur())
 
     table.sort(data, function(a, b)
         return tonumber(a[2]) > tonumber(b[2])
@@ -64,7 +61,7 @@ return function(traces_data, _, opt)
         TYPE = "Summary",
         DATA = data,
         HEADER = {
-            "App Time (%)",
+            "Active Time (%)",
             "API Time (%)",
             "Total Time ("..timeunit..")",
             "Instances",
