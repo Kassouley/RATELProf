@@ -3,6 +3,27 @@
 local BinaryReport = {}
 BinaryReport.__index = BinaryReport
 
+local function check_report_file(report_file, skip_on_check)
+    local function error_and_handle(msg)
+        if skip_on_check then
+            Message:error(msg .. " (Skipping.)")
+            return true
+        else
+            Message:error(msg)
+            os.exit(1)
+        end
+    end
+
+    if not ratelprof.fs.exists(report_file) then
+        return error_and_handle("Report '" .. report_file .. "' doesn't exist.")
+    end
+
+    if not ratelprof.fs.has_extension(report_file, ratelprof.consts._REPORT_EXT) then
+        return error_and_handle("Report '" .. report_file .. "' is not a ." .. ratelprof.consts._REPORT_EXT .. " file.")
+    end
+end
+
+
 local function decode_rprof(rprof_rep)
 
     local data = ratelprof.msgpack.decode(rprof_rep)
@@ -63,12 +84,12 @@ function BinaryReport:new(rprof_rep_files, opt)
     self.rank_count = #rprof_rep_files
 
     for i, rprof_rep_file in ipairs(rprof_rep_files) do
-        ratelprof.utils.check_report_file(rprof_rep_file)
+        check_report_file(rprof_rep_file)
         local data = decode_rprof(rprof_rep_file)
 
         local mpi_rank = data.mpi_rank or -1
 
-        if i == 0 then
+        if i == 1 then
             self.version   = data.version
             self.main_data = data.main_data
             self.experiment_start_epoch = data.experiment_start_epoch
@@ -105,6 +126,14 @@ function BinaryReport:to_json()
     }
 end
 
+function BinaryReport:get_report_basename()
+    local report_wo_ext = "aggregated_report"
+    local files = self:get_rprof_rep_files()
+    if #files == 1 then
+        report_wo_ext = ratelprof.fs.remove_extension(files[1])
+    end
+    return report_wo_ext
+end
 
 function BinaryReport:get_rprof_rep_files()
     local files = {}
@@ -114,8 +143,6 @@ function BinaryReport:get_rprof_rep_files()
     return files
 end
 
-    -------- TODO TO AVOID APP TIME (%) > 100% , need to compute_total_covered_duration / non overlapping duration for each API
-    --- Then i will be able to create graph to show camembert of time spent in each API
 
 function BinaryReport:get_domain_traced()
     local domains = {}
@@ -127,6 +154,7 @@ function BinaryReport:get_domain_traced()
     end
     return domains
 end
+
 
 function BinaryReport:get_app_name()
     local main_data = self.main_data
@@ -158,6 +186,18 @@ function BinaryReport:for_each_traces(func)
     end
 end
 
+function BinaryReport:for_each_domain(func)
+    self:for_each_rank(function(mpi_rank, _)
+        for domain_id, domain_name in pairs(ratelprof.consts._DOMAIN_NAME) do
+            local events = self:get(domain_id)
+            if #events > 0 then
+                func(domain_name, domain_id, mpi_rank, events, ratelprof.consts._GPU_DOMAIN[domain_id] or false)
+            end
+        end
+    end)
+end
+
+
 function BinaryReport:for_each_rank(func)
     self.__in_for_each_rank = true
     for mpi_rank, _ in pairs(self.trace_events) do
@@ -168,23 +208,34 @@ function BinaryReport:for_each_rank(func)
     self.__in_for_each_rank = false
 end
 
+
 function BinaryReport:for_each_gpu(func)
     self.__in_for_each_gpu = true
     for _, gpu_props in ipairs(self.gpu_props) do
-        local gpu_node_id = gpu_props[3]
+        local gpu_node_id = gpu_props["node"]
         self.__current_gpu = gpu_node_id
-        func(gpu_node_id, gpu_props)
+        local stop = func(gpu_node_id, gpu_props)
+        if stop then break end
     end
     self.__current_gpu = nil
     self.__in_for_each_gpu = false
 end
 
+function BinaryReport:node_is_gpu(node_id)
+    local found = false
+    self:for_each_gpu(function(gpu_node_id, _)
+        if gpu_node_id == node_id then
+            found = true
+            return true
+        end
+    end)
+    return found
+end
+
 
 function BinaryReport:__get(ret, trace_events, mpi_rank, cond_func)
     if not cond_func then 
-        cond_func = function (self, trace)
-            return true
-        end
+        cond_func = function (_, _) return true end
     end
 
     local is_only_main =  self.only_main
@@ -238,6 +289,10 @@ function BinaryReport:__get_for_gpu(domain)
     return ret
 end
 
+function BinaryReport:get_raw(domain_name, mpi_rank)
+    local trace_events = self.trace_events[mpi_rank]
+    return trace_events[domain_name] or {}
+end
 
 function BinaryReport:get(domain_name)
     self.__cached_trace = self.__cached_trace or {}
@@ -274,8 +329,7 @@ end
 
 
 function BinaryReport:get_location(trace)
-    return self.locations[trace.return_address] 
-            or {sfun = "<unknown>", sfile = "<unknown>", sline = 0}
+    return self.locations[trace.return_address]
 end
 
 
@@ -358,17 +412,21 @@ function BinaryReport:get_analyzed_interval_dur()
     return stop - start
 end
 
-function BinaryReport:get_app_dur(rank)
-    rank = rank or self._current_rank
+function BinaryReport:get_max_stop_time()
     local time = 0
-    if not rank then
-        for mpi_rank, _ in pairs(self.trace_events) do
-            time = math.max(time, self:get_destructor_stop(mpi_rank))
-        end
-    else
-        time = self:get_destructor_stop(rank)
+    for mpi_rank, _ in pairs(self.trace_events) do
+        time = math.max(time, self:get_destructor_stop(mpi_rank))
     end
     return time
+end
+
+function BinaryReport:get_app_dur(rank)
+    rank = rank or self._current_rank
+    if not rank then
+        return self:get_max_stop_time()
+    else
+        return self:get_destructor_stop(rank)
+    end
 end
 
 function BinaryReport:get_active_compute_time()
@@ -396,7 +454,7 @@ function BinaryReport:get_not_hidden_active_copy_time()
     return active_gpu_time - active_compute_time
 end
 
-function BinaryReport:compute_total_covered_duration_of(...)
+function BinaryReport:compute_total_covered_duration(...)
     local intervals = {}
     local count = 0
 
@@ -414,6 +472,8 @@ function BinaryReport:compute_total_covered_duration_of(...)
         intervals = self:get(args[1])
         count = #intervals
     end
+
+    if count == 0 then return 0 end
 
     -- Merge intervals and compute total
     local total = 0
