@@ -83,14 +83,11 @@ function agent_helper.print_gpu_data()
     end
 end
 
-function agent_helper.get_gpu_props()
-    local agents, _ = agent_helper.get_agents()
-    local gpu_labels = {}
-    local gpu_props = {}
-
-    for _, info in ipairs(useful_info) do
-        table.insert(gpu_labels, info.title)
+function agent_helper.get_gpu_props(agents)
+    if not agents then
+        agents, _ = agent_helper.get_agents()
     end
+    local gpu_props = {}
 
     for node_id, agent in pairs(agents) do
         if agent.device_type_name == "GPU" then
@@ -98,7 +95,7 @@ function agent_helper.get_gpu_props()
             for _, info in ipairs(useful_info) do
                 local fmt = info.fmt
                 if fmt == "tbl" then
-                    table.insert(props, '""')
+                    table.insert(props, '')
                 else
                     local data = agent[info.key] or ""
                     if info.i then
@@ -107,14 +104,24 @@ function agent_helper.get_gpu_props()
                     if info.fn then
                         data = info.fn(data)
                     end
-                    table.insert(props, '"'..data..'"')
+                    table.insert(props, data)
                 end
-                gpu_props[node_id] = props
+                gpu_props[tostring(node_id)] = props
             end
         end
     end
 
-    return gpu_labels, gpu_props
+    return agent_helper.get_gpu_labels(), gpu_props
+end
+
+function agent_helper.get_gpu_labels()
+    local gpu_labels = {}
+
+    for _, info in ipairs(useful_info) do
+        table.insert(gpu_labels, info.title)
+    end
+
+    return gpu_labels
 end
 
 
@@ -128,20 +135,22 @@ function agent_helper.set_gpu_props_to_msgpack(report_file)
         end
     end
 
+    local useful_info_count = 0
+    for _, info in ipairs(useful_info) do
+        if not info.i then useful_info_count = useful_info_count + 1 end
+    end
+
     local buf = ratelprof.msgpack.encoder.new(1024, ratelprof.msgpack.encoder.OVERFLOW_APPEND_TO_FILE, report_file)
     buf:encode_map(size)
 
     for node_id, agent in pairs(agents) do
         if agent.device_type_name == "GPU" then
             buf:encode_uint(node_id)
-            local useful_info_count = 0
-            for _, info in ipairs(useful_info) do
-                if not info.i then useful_info_count = useful_info_count + 1 end
-            end
-            buf:encode_array(useful_info_count)
+            buf:encode_map(useful_info_count)
 
             for _, info in ipairs(useful_info) do
                 if not info.i then
+                    buf:encode_string(info.key)
                     local data = agent[info.key]
                     local fmt = info.fmt
                     if fmt == "tbl" then
