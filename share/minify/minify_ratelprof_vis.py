@@ -18,7 +18,6 @@ def replace_head_section(html_content: str) -> str:
     new_head = '''
 <head>
     <meta charset="UTF-8">
-    <title>RATELProf - "@@HTML_TITLE@@"</title>
 
     <link href="https://unpkg.com/vis-timeline@latest/styles/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css"/>
     <script src="https://unpkg.com/vis-timeline@latest/standalone/umd/vis-timeline-graph2d.min.js"></script>
@@ -34,23 +33,20 @@ def replace_head_section(html_content: str) -> str:
 
 def inline_web_workers(script_content):
     # Regex to match new Worker("path")
-    worker_regex = re.compile(r'new Worker\(["\'](.*?)["\']\)')
-
+    worker_regex = r'new\s+Worker\s*\(\s*["\']([^"\']+)["\']\)'
 
     def replace_worker(match):
         worker_code_path = match.group(1)
 
         # Escape single quotes and backslashes in the worker code
-        subprocess.run([MINIFY_SCRIPT, "-o", f"{TMP_DIR}/workers.js", f"{HTML_DIR}/{worker_code_path}"], check=True)
-        worker_code_minified = read_file(f"{TMP_DIR}/workers.js").replace('\\', '\\\\').replace("'", "\\'")
+        subprocess.run([MINIFY_SCRIPT, "-o", f"{TMP_DIR}/{worker_code_path}", f"{HTML_DIR}/{worker_code_path}"], check=True)
+        worker_code_minified = read_file(f"{TMP_DIR}/{worker_code_path}").replace('\\', '\\\\').replace("'", "\\'")
 
         replacement = f"new Worker(URL.createObjectURL(new Blob(['{worker_code_minified}'],{{type:'application/javascript'}})))"
         return replacement
 
     # Replace all occurrences
-    modified_js = worker_regex.sub(replace_worker, script_content)
-
-    return modified_js
+    return re.sub(worker_regex, replace_worker, script_content)
 
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -69,7 +65,7 @@ html_content = read_file(f"{HTML_DIR}/index.html")
 html_content = replace_head_section(html_content)
 write_file(f"{TMP_DIR}/index.min.html", html_content)
 
-subprocess.run([MINIFY_SCRIPT, "-r", "-b", "-o", f"{TMP_DIR}/script.js", f"{HTML_DIR}/js/"], check=True)
+subprocess.run([MINIFY_SCRIPT, "--exclude='.*'", "-r", "-b", "-o", f"{TMP_DIR}/script.js", f"{HTML_DIR}/js/"], check=True)
 subprocess.run([MINIFY_SCRIPT, "-r", "-b", "-o", f"{TMP_DIR}/style.css", f"{HTML_DIR}/css/"], check=True)
 subprocess.run([MINIFY_SCRIPT, "-o", f"{TMP_DIR}/index.min.html", f"{TMP_DIR}/index.min.html"], check=True)
 
@@ -107,8 +103,3 @@ write_file(output_file, html_min_content)
 # shutil.rmtree(TMP_DIR, ignore_errors=True)
 
 print(f"✅ Minification and inlining complete: {output_file}")
-
-
-
-WORKER_REGEX    = "new Worker(JS_PATH_REGEX)"
-WORKER_TEMPLATE = "new Worker(URL.createObjectURL(new Blob(['WORKER CODE FROM FILE'], {type:'application/javascript'})));"
