@@ -4,4 +4,4 @@ lib
 *.rprof-rep
 tmp
 devtools
-.data-test*
+.data*
