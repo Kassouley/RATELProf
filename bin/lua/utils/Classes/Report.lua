@@ -48,6 +48,7 @@ local function process_report_generation(report_ret_vals, chunk, rprof_rep_data,
 end
 
 local function get_report_opt_value(ALL_REPORT, report_id, report_opt, opt)
+    report_opt = report_opt or {}
     if not ALL_REPORT[report_id].opt then return opt end
     for name, option in pairs(ALL_REPORT[report_id].opt) do
         local default = option.default

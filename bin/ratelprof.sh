@@ -66,6 +66,10 @@ case "$cmd" in
         eval "luajit $SCRIPT_DIR/export.lua $args"
         ;;
 
+    summarize)
+        eval "luajit $SCRIPT_DIR/summarize.lua $args"
+        ;;
+
     --help|-h)
         display_help
         ;;

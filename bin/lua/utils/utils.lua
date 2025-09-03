@@ -97,27 +97,6 @@ function utils.is_array(tbl)
 end
 
 
-function utils.check_report_file(report_file, skip_on_check)
-    local function error_and_handle(msg)
-        if skip_on_check then
-            Message:error(msg .. " (Skipping.)")
-            return true
-        else
-            Message:error(msg)
-            os.exit(1)
-        end
-    end
-
-    if not ratelprof.fs.exists(report_file) then
-        return error_and_handle("Report '" .. report_file .. "' doesn't exist.")
-    end
-
-    if not ratelprof.fs.has_extension(report_file, ratelprof.consts._REPORT_EXT) then
-        return error_and_handle("Report '" .. report_file .. "' is not a ." .. ratelprof.consts._REPORT_EXT .. " file.")
-    end
-end
-
-
 function utils.check_report_files(files, skip_on_check)
     local valid_files = {}
 

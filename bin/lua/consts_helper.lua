@@ -481,4 +481,28 @@ consts_helper.export = {
     }
 }
 
+
+consts_helper.summarize = {
+    cmd = "summarize",
+    args = {
+        ["report-file"] = {
+            desc = "Path to the "..ratelprof.consts._REPORT_EXT.." report file.",
+            is_optional = false,
+            is_list = true
+        }
+    },
+    desc = "\n\tSummarize global metrics about a report file.",
+    opt = {
+        ["with-analysis"] = {
+            desc            = [[ 
+                Run statistical and analysis reports and show summary about these.]],
+            sname           = "a",
+            arg             = nil,
+            arg_required    = false,
+            default         = false
+        }
+    }
+}
+
+
 return consts_helper

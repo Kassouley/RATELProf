@@ -20,7 +20,7 @@ local function get_key(s)
         return reverse_map[s]
     end
     counter = counter + 1
-    str_map[counter] = string.gsub(s, "%%", "%%%%")
+    str_map[counter] = s
     reverse_map[s] = counter - 1
     return counter - 1
 end
