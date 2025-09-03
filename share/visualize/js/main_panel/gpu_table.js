@@ -1,41 +1,35 @@
-
 function createGpuTableWithDropdown() {
-    // Create the select dropdown
-    const select = document.createElement("select");
-    select.id = "gpu-select";
+    const tableDOM = document.createElement("div");
+    tableDOM.className = 'scrollable-table';
+    const table = new Table(tableDOM);
 
-    gpuDatasets.forEach((dataset, index) => {
-        const nodeName = Object.keys(dataset)[0];
+    const firstNode = Object.values(GPU_DATA)[0];
+    // Build the rows once here
+    GPU_LABELS.forEach((label, i) => {
+        table.addRow([label, firstNode[i]])
+    });
+
+    // Create the dropdown
+    const select = document.createElement("select");
+
+    Object.entries(GPU_DATA).forEach(([key]) => {
         const option = document.createElement("option");
-        option.value = index;
-        option.textContent = nodeName;
+        option.value = key;
+        option.textContent = "Node " + key;
         select.appendChild(option);
     });
 
-    const {table, _} = createTable("GPU Nodes", "gpuProps", select);
+    // Update table on dropdown change
+    select.addEventListener("change", (e) => {
+        updateGpuTable(GPU_DATA[e.target.value], table);
+    });
 
-    return createGridItem(table);
+    return createGridItem("GPU Nodes Attributes", select, tableDOM);
 }
 
-function updateGpuTable(index) {
-    const tbody = document.querySelector('#gpuProps tbody');
-    tbody.innerHTML = '';
-
-    const dataset = gpuDatasets[index];
-    const nodeName = Object.keys(dataset)[0];
-    const rowData = dataset[nodeName];
-
-    for (let i = 0; i < gpuLabels.length; i++) {
-        const tr = document.createElement('tr');
-
-        const tdStatic = document.createElement('td');
-        tdStatic.textContent = gpuLabels[i];
-        tr.appendChild(tdStatic);
-
-        const tdDynamic = document.createElement('td');
-        tdDynamic.textContent = rowData[i];
-        tr.appendChild(tdDynamic);
-
-        tbody.appendChild(tr);
-    }
+function updateGpuTable(data, table) {
+    if (!data) return;
+    data.forEach((item, i) => {
+        table.updateRow(i, [null, item]);
+    });
 }

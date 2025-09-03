@@ -1,30 +1,58 @@
-#timelinePanel {
-    background-color: var(--secondary-bg);
-    padding: 10px;
-    border-radius: 8px;
+#timelineStack { 
+    margin: 10px;
+    display: flex; 
+    flex-direction: column;
 }
 
-#timeline {
-    margin: 0 auto;
+.timeline-label {
+    font-family: monospace;
+    font-size: 13px;
+    display: flex;
+    white-space: pre;
     width: 100%;
-    height: 100%;
-    background-color: var(--secondary-bg);
 }
 
-.lvl-1-group-class {
-    border: 0px;
-    background-color: var(--lvl-1-group-color);
+.col-left {
+    display: flex; 
+    align-items: center; 
+    gap: 7px;
+    flex: 0 0 250px;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
 }
 
-.lvl-2-group-class {
-    border: 0px;
-    background-color: var(--lvl-2-group-color);
+.col-right {
+    flex: 1 1 auto;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
 }
 
-.lvl-3-group-class {
-    border: 0px;
-    background-color: var(--lvl-3-group-color);
+
+.preview-canvas{
+    width: 100%;
+    height: 40px;
 }
+
+
+.drag-handle {
+    cursor: grab;
+    user-select: none;
+}
+
+
+.collapse-arrow::before {
+    content: '▾';
+    display: inline-block;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+/* When collapsed, rotate the arrow */
+.collapsed .collapse-arrow::before {
+    content: '▸';
+}
+
 
 .non-highlighted {
     border: 0px;
@@ -35,3 +63,4 @@
     border: 0px;
     outline: 3px solid var(--highlight-color);
 }
+

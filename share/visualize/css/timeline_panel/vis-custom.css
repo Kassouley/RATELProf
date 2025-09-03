@@ -1,10 +1,7 @@
 .vis-timeline {
     font-size: 10px !important;
     border: 0px !important;
-}
-
-.vis-item.vis-background.mainBackground {
-    background-color: rgba(255, 255, 255, 0) !important;
+    overflow: visible !important;
 }
 
 .vis-item.vis-selected {
@@ -23,15 +20,32 @@
     border-width:3px !important;
 }
 
+.vis-timeline .vis-labelset .vis-label{
+  width: 250px !important;
+}
+
 .vis-tooltip {
-    position: absolute !important; 
-    background-color: var(--primary-bg) !important;
-    color: var(--text-color) !important;
-    padding: 5px !important;
-    border-radius: 3px !important;
-    font-size: 10px !important;
+    background: rgba(0, 0, 0, 0.8) !important;
+    color: white !important;
+    padding: 5px 8px !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+    pointer-events: none !important;
+    white-space: nowrap !important;
 }
 
 .vis-label .vis-inner {
-  min-height: 25px;
+    font-size: 12px !important;
+    min-height: 30px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.vis-timeline, .vis-timeline-frame {
+    border: 0px !important;
+}
+
+.vis-label {
+    width: 202px !important;
+    padding-left:100px;
 }

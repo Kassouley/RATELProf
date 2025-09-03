@@ -34,14 +34,19 @@ function printArgs(obj, indentLevel = 0) {
   return html;
 }
 
+function escapeHTML(input) {
+  if (typeof input !== "string") return input;
+  if (!input) return "";
+  return input
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
-const hashColorCache = new Map();
 
 function hashStringToLightColor(str) {
-    if (hashColorCache.has(str)) {
-        return hashColorCache.get(str);
-    }
-
     // Simple hash function to generate a color
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
@@ -55,8 +60,6 @@ function hashStringToLightColor(str) {
         const lightValue = Math.floor(value / 2 + 127); // Keep value in 127–255
         color += ("00" + lightValue.toString(16)).slice(-2);
     }
-
-    hashColorCache.set(str, color);
     return color;
 }
 
@@ -69,6 +72,26 @@ function convertBytes(bytes) {
     const formattedSize = bytes / Math.pow(1024, size);
   
     return `${formattedSize % 1 === 0 ? formattedSize.toFixed(0) : formattedSize.toFixed(2)} ${units[size]}`
+}
+
+
+// Throttle utility
+function throttle(fn, wait) {
+    let lastTime = 0;
+    let timeout = null;
+    return function (...args) {
+    const now = Date.now();
+    if (now - lastTime >= wait) {
+        lastTime = now;
+        fn.apply(this, args);
+    } else if (!timeout) {
+        timeout = setTimeout(() => {
+            lastTime = Date.now();
+            timeout = null;
+            fn.apply(this, args);
+        }, wait - (now - lastTime));
+    }
+  };
 }
 
 
@@ -91,11 +114,11 @@ function convertTime(time, isNanosecond = true) {
     let result = [];
     if (minutes > 0) {
         result.push(`${minutes} min`);
-        if (seconds > 0) result.push(`${seconds}s`) 
+        if (seconds > 0) result.push(`${seconds} s`) 
     } 
     else if (seconds > 0) {
         result.push(`${seconds} s`);
-        if (milliseconds > 0) result.push(`${milliseconds}ms`)
+        if (milliseconds > 0) result.push(`${milliseconds} ms`)
     }
     else if (milliseconds > 0) {
         result.push(`${milliseconds} ms`);
@@ -117,7 +140,6 @@ function convertToNs(input) {
         alert('Please enter a value.');
         return;
       }
-
       const tokens = input.split(/\s+/); // split by spaces
       let totalNs = 0;
       const regex = /^(\d+)(ns|us|ms|s)?$/i; // match exactly one token
@@ -153,3 +175,7 @@ function convertToNs(input) {
       return totalNs;
     }
 
+function truncate(str, maxLength = 30) {
+    if (!str) return "";
+    return str.length > maxLength ? str.substring(0, maxLength) + "..." : str;
+}

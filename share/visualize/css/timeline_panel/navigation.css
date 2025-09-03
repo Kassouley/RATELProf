@@ -5,6 +5,13 @@
   all: revert;
 }
 
+#nav {
+    margin: 10px;
+}
+
+#nav tr:hover {
+    background-color: var(--secondary-bg) !important;
+}
 
 #nav table {
   width: 100%;
@@ -21,7 +28,6 @@
 }
 
 .trace-select {
-  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;

@@ -1,0 +1,46 @@
+.chart-container {
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    outline: 1px solid var(--border-color);
+    position: relative;
+    width: 100%; 
+    height: 100%;
+}
+
+.chart-container canvas {
+    position: absolute;      /* Absolutely position inside parent */
+    top: 50%;                /* Center vertically */
+    left: 50%;               /* Center horizontally */
+    transform: translate(-50%, -50%);  /* Offset by half width/height to truly center */
+}
+
+.toooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    pointer-events: none;
+    visibility: hidden;
+    white-space: nowrap;
+}
+
+.legend {
+    flex-direction: column;
+    gap: 8px;
+    margin: 20px;
+    min-width: 100px;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+.legend-color {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+}

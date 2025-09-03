@@ -23,6 +23,14 @@ th:hover {
     background-color: var(--secondary-color);
 }
 
+tr:hover {
+    background-color: var(--hover-color) !important;
+}
+
+tr:nth-child(odd) {
+  background-color: var(--tbl-row-odd-color);
+}
+
 td {
     padding: 5px;
     border-bottom: 1px solid var(--border-color);
@@ -32,14 +40,9 @@ td {
     scrollbar-width: thin;
 }
 
-tr {
-    background-color: var(--tbl-row-even-color);
+tr.even {
+  background-color: var(--tbl-row-even-color);
 }
-
-tr:nth-child(even) {
-    background-color: var(--tbl-row-odd-color);
-}
-
-tr:hover {
-    background-color: var(--hover-color);
+tr.odd {
+  background-color: var(--tbl-row-odd-color);
 }

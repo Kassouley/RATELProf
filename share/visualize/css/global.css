@@ -25,12 +25,14 @@ html, body {
 }
 
 body {
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body {
     padding: 15px;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif  !important;
     background-color: var(--primary-bg);
     color: var(--text-color-dark);
 }

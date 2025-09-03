@@ -1,64 +1,21 @@
-function createTracesCSV(content, fileName) {
-    if (fileName === 'concurrency') {
-        const traceIds = content.shift();
-        content = traceIds.map((traceId, i) => {
-            const trace = traceMap.get(traceId);
-            return [
-                trace.args.gpu_id,
-                trace.args.queue_id,
-                trace.id,
-                trace.dur,
-                content[0][i],
-                trace.content
-            ];
-        }).sort((a, b) => a[4] - b[4]);
-    } else if (fileName === 'hidden_transfers') {
-        const traceIds = content.shift();
-        content = traceIds.map((traceId, i) => {
-            const trace = traceMap.get(traceId);
-            const time_overlapped = content[0][i];
-            return [
-                trace.args.gpu_id,
-                trace.id,
-                trace.content,
-                trace.args.size,
-                content[0][i],
-                trace.dur,
-                (time_overlapped / trace.dur) * 100,
-                trace.loc
-            ];
-        }).sort((a, b) => a[4] - b[4]);
-    }
-    return content;
-}
-
-
-function setupCSVViewer(tabId) {
-    const csvData = csvDataPerTab[tabId];
-
-    const container = document.getElementById(tabId);
-
-    const ul = document.createElement('ul');
-    ul.id = `csvList-${tabId}`;
-
-    const div = document.createElement('div');
-    div.className = 'csv-container';
-    div.textContent = 'Select a CSV file to view its data.';
-
-    container.appendChild(ul);
-    container.appendChild(div);
-
+async function processCsvData(csvData, ul, div, tabId) {
+    const decoder = new MsgpackDecoder(EXT_STRINGS);
     for (const fileName in csvData) {
         const file = csvData[fileName];
         if (file.content) {
-            const content = decodeB64(file.content);
-            file.headers = content.shift();
-            file.unitMode = file.headers.find(h => h.includes('(B)')) ? 'size' : 'time';
-            file.unitIndex = 0; // Default to the first unit scale
-            file.hiddenCols = new Set();
-            file.searchTerm = '';
-            file.content = createTracesCSV(content, fileName)
+            try {
+                const data = await decoder.decodeFromB64(file.content);
+                file.headers = data.shift();
+                file.unitMode = file.headers.find(h => h.includes('(B)')) ? 'size' : 'time';
+                file.unitIndex = 0;
+                file.hiddenCols = new Set();
+                file.searchTerm = '';
+                file.content = data;
+            } catch (err) {
+                console.error(err);
+            }
         }
+
         const li = document.createElement('li');
         li.textContent = file.name;
         li.title = fileName;
@@ -70,6 +27,29 @@ function setupCSVViewer(tabId) {
         };
         ul.appendChild(li);
     }
+}
+
+
+function createCSVTab(tabId) {
+    const csvData = CSV_DATA_PER_TAB[tabId];
+
+    const container = document.createElement("div");
+    container.className = "csv";
+
+    const ul = document.createElement('ul');
+    ul.id = `csvList-${tabId}`;
+
+    const div = document.createElement('div');
+    div.className = 'csv-container';
+    div.textContent = 'Select a CSV file to view its data.';
+
+    container.appendChild(ul);
+    container.appendChild(div);
+
+
+    processCsvData(csvData, ul, div, tabId);
+
+    return container
 }
 
 const unitScales = [1, 1e-3, 1e-6, 1e-9];
@@ -385,19 +365,3 @@ function displayCSV(file, csvContainer) {
 
     csvContainer.appendChild(pagination);
 }
-
-
-document.addEventListener("click", event => {
-    const statscsvContainer = document.getElementById('csvContainer-stats');
-    const clickedRow = event.target.closest("tr");
-    
-    // Check if the click is within the stats tab table and on a row
-    if (statscsvContainer?.contains(event.target) && clickedRow) {
-        showPanel("timelinePanel");
-
-        const itemsDataSet = window.timeline.itemsData;
-        const itemName = clickedRow.lastElementChild.textContent.trim();
-        const ids = itemsDataSet.get().filter(item => item.content === itemName).map(item => item.id);
-        window.timeline.setSelection(ids, { focus: true });
-    }
-});
