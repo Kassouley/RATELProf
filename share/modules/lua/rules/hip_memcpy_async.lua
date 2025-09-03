@@ -6,7 +6,7 @@ local function is_synchronized(gpu_trace, cpu_trace)
     return gpu_trace.start > cpu_start and gpu_trace.stop < cpu_stop
 end
 
-return function(traces_data, report_id, opt)
+return function(traces_data, _, opt)
     local cpy_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY)
 
     if next(cpy_data) == nil then

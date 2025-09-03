@@ -103,14 +103,18 @@ return function(traces_data, _, opt)
     local data, app_concurrency_pct, trace_ids, metrics = compute_kernel_overlap_percentage(traces_data, CONCURRENCY_THRESHOLD_PCT, opt)
 
     local msg = ""
+    local score = 0
+    local nscore = 0
 
     if #data == 0 then
-        msg = msg .. "\nNone of your kernels have a concurrency pourcentage superior to "..CONCURRENCY_THRESHOLD_PCT.."%\n"
+        msg = msg .. "None of your kernels have a concurrency pourcentage superior to "..CONCURRENCY_THRESHOLD_PCT.."%\n"
                   .. "Concurrency can improve performance if well done."
     else
 
         for gpu_id, percent in pairs(app_concurrency_pct) do
             msg = msg .. "On GPU ID " .. gpu_id .. ": " .. percent .. "% of total kernel time overlaps with other kernels.\n"
+            nscore = nscore + 1
+            score = score + (percent - score) / nscore
         end
         msg = msg .. "The following kernels are running concurrently with others.\n"
                   .. "A kernel is considered concurrent if the percentage of its execution time that overlaps with other kernels exceeds "
@@ -138,7 +142,7 @@ return function(traces_data, _, opt)
         HEADER = header,
         DATA = data,
         MSG = msg,
-        score = app_concurrency_pct,
+        score = score,
 
         -- Return data for visualize command
         vis = vis
