@@ -140,7 +140,7 @@ static int l_msgpack_tostring(lua_State *L) {
 /* Lua: buf:size() */
 static int l_msgpack_size(lua_State *L) {
     msgpack_buffer_t *buf = check_buffer(L, 1);
-    lua_pushinteger(L, (lua_Integer)buf->size);
+    lua_pushinteger(L, (lua_Integer)msgpack_size(buf));
     return 1;
 }
 
@@ -164,7 +164,7 @@ static int l_msgpack_new(lua_State *L) {
     size_t capacity = luaL_checkinteger(L, 1);
     int mode = luaL_checkinteger(L, 2);
     const char *filename = NULL;
-    if (mode == MSGPACK_OVERFLOW_WRITE_TO_FILE || mode == MSGPACK_OVERFLOW_APPEND_TO_FILE) {
+    if (MSGPACK_IS_FILE_MODE(mode)) {
         luaL_checktype(L, 3, LUA_TSTRING);
         filename = lua_tostring(L, 3);
     }
@@ -208,34 +208,6 @@ static int lmsgpack_to_hex(lua_State *L) {
     return 1;
 }
 
-static char *base64_encode(const uint8_t *data, size_t input_length, size_t *output_length) {
-    static const char encoding_table[] =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    char *encoded_data;
-    size_t output_len = 4 * ((input_length + 2) / 3);
-    encoded_data = (char *)malloc(output_len + 1);
-    if (encoded_data == NULL) return NULL;
-
-    for (size_t i = 0, j = 0; i < input_length;) {
-        uint32_t octet_a = i < input_length ? data[i++] : 0;
-        uint32_t octet_b = i < input_length ? data[i++] : 0;
-        uint32_t octet_c = i < input_length ? data[i++] : 0;
-
-        uint32_t triple = (octet_a << 16) | (octet_b << 8) | octet_c;
-
-        encoded_data[j++] = encoding_table[(triple >> 18) & 0x3F];
-        encoded_data[j++] = encoding_table[(triple >> 12) & 0x3F];
-        encoded_data[j++] = encoding_table[(triple >> 6) & 0x3F];
-        encoded_data[j++] = encoding_table[triple & 0x3F];
-    }
-
-    for (size_t i = 0; i < (3 - input_length % 3) % 3; i++)
-        encoded_data[output_len - 1 - i] = '=';
-
-    encoded_data[output_len] = '\0';
-    if (output_length) *output_length = output_len;
-    return encoded_data;
-}
 
 static int lmsgpack_to_b64(lua_State *L) {
     msgpack_buffer_t *buf = (msgpack_buffer_t *)luaL_checkudata(L, 1, LUA_MSGPACK_BUFFER);
@@ -246,12 +218,13 @@ static int lmsgpack_to_b64(lua_State *L) {
     }
 
     size_t b64_len;
-    char *b64_str = base64_encode(buf->data, buf->size, &b64_len);
+    char *b64_str = msgpack_to_b64(buf, &b64_len);
     if (!b64_str) {
         return luaL_error(L, "memory allocation failed in to_b64");
     }
 
     lua_pushlstring(L, b64_str, b64_len);
+
     free(b64_str);
     return 1;
 }
@@ -326,6 +299,10 @@ int luaopen_msgpack_encoder(lua_State *L) {
     lua_setfield(L, -2, "OVERFLOW_WRITE_TO_FILE");
     lua_pushinteger(L, MSGPACK_OVERFLOW_APPEND_TO_FILE);
     lua_setfield(L, -2, "OVERFLOW_APPEND_TO_FILE");
+    lua_pushinteger(L, MSGPACK_OVERFLOW_WRITE_B64_TO_FILE);
+    lua_setfield(L, -2, "OVERFLOW_WRITE_B64_TO_FILE");
+    lua_pushinteger(L, MSGPACK_OVERFLOW_APPEND_B64_TO_FILE);
+    lua_setfield(L, -2, "OVERFLOW_APPEND_B64_TO_FILE");
 
     return 1;
 }
