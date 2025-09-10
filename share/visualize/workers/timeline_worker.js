@@ -23,28 +23,26 @@ function hashStringToLightColor(str) {
     return color;
 }
 
-const allItems = [];
-const groupsIds = [];
 
-const DENSITY_GRANULARITY = 1000;
+let extension_string_array = []
 
-function decodeMsgpack(bytes, extension_string_array, density, preview_data) {
+function decodeItems(bin_str) {
     let off = 0;
 
     const f32buf      = new DataView(new ArrayBuffer(4));
     const f64buf      = new DataView(new ArrayBuffer(8));
     const textDecoder = new TextDecoder();
     
+    function readB8() {
+        return bin_str.charCodeAt(off++);
+    }
+
     function readB32() {
        return ((readB8() << 24) | (readB8() << 16) | (readB8() << 8) | readB8())
     }
 
     function readB16() { 
         return (readB8() << 8) | readB8()
-    }
-
-    function readB8() {
-        return bytes[off++];
     }
 
     function readString(len) {
@@ -75,40 +73,6 @@ function decodeMsgpack(bytes, extension_string_array, density, preview_data) {
         if (type == 1) {
             const string_id = decode();
             return extension_string_array[string_id];
-        }
-        else if (type == 2) {
-            const curr_off = off;
-            off += len; // skip len bytes
-            let group = decode();
-            let size = decode();
-            const new_off = off;
-            off = curr_off;
-
-            const min = preview_data.min;
-            const max = preview_data.max;
-
-            for (let i = 0; i < size; i++) {
-                const item = decode();
-                item.className  = 'non-highlighted';
-                item.style      = 'background-color:'+hashStringToLightColor(item.content);
-                item.limitSize  = true;
-                item.end        = item.start + item.dur;
-                item.group      = group;
-                item.subgroup   = item.subgroup || 0;
-
-                allItems.push(item);
-
-                const startX = Math.floor(((item.start - min) / (max - min)) * DENSITY_GRANULARITY);
-                const stopX = Math.floor(((item.end - min) / (max - min)) * DENSITY_GRANULARITY);
-                
-                for (let x = startX; x <= stopX; x++) {
-                    density[x] += item.score || 1;
-                }
-            }
-            groupsIds.push(group);
-
-            off = new_off;
-            return
         }
         throw new Error(`Unsupported ext: ${typeof(type)} ${type}`);
     }
@@ -251,9 +215,27 @@ function decodeMsgpack(bytes, extension_string_array, density, preview_data) {
         throw new Error(`Unsupported byte: 0x${byte.toString(16)}`);
     }
 
-    return decode();
+    const arr = [];
+    const ngroups = decode();
+    for (let j = 0; j < ngroups; j++) {
+        const group  = decode();
+        const nitems = decode();
+        for (let i = 0; i < nitems; i++) {
+            const item      = decode();
+            item.className  = 'non-highlighted';
+            item.style      = 'background-color:'+hashStringToLightColor(item.content);
+            item.limitSize  = true;
+            item.end        = item.start + item.dur;
+            item.group      = group;
+            item.subgroup   = item.subgroup || 0;
+            arr.push(item);
+        }
+    }
+    return arr;
 }
 
+
+const loadedRanges = new Map();
 
 let visibleItems = [];
 let visibleItemIds = new Set();
@@ -269,73 +251,82 @@ function isHighlight(item) {
 function filterRange(start, end) {
     const newVisibleItems = [];
     const newVisibleItemIds = new Set();
-    for (const item of allItems) {
-        if (
-            (item.start >= start && item.start <= end) ||
-            (item.end   >= start && item.end   <= end) ||
-            (item.start <  start && item.end   >  end)
-        ) {
-            if (dispatches_are_shown && item.args.dispatch_time) {
-                const dispatch_point = {
-                    id :        `Dispatch_${item.id}`,
-                    start:      item.args.dispatch_time,
-                    type:       "point",
-                    group:      item.group,
-                    cid:        item.id,
-                    dispatched_event: item.content,
+    for (const items of loadedRanges.values()) {
+        for (const item of items) {
+            if (
+                ((item.start >= start && item.start <= end) ||
+                 (item.end   >= start && item.end   <= end) ||
+                 (item.start <  start && item.end   >  end)) &&
+                (!newVisibleItemIds.has(item.id))
+            ) {
+                if (dispatches_are_shown && item.args.dispatch_time) {
+                    const dispatch_point = {
+                        id :        `Dispatch_${item.id}`,
+                        start:      item.args.dispatch_time,
+                        type:       "point",
+                        group:      item.group,
+                        cid:        item.id,
+                        dispatched_event: item.content,
+                    }
+                    dispatch_point.className = isHighlight(dispatch_point) ? 'highlighted' : 'non-highlighted';
+                    newVisibleItems.push(dispatch_point);
+                    newVisibleItemIds.add(dispatch_point.id);
                 }
-                dispatch_point.className = isHighlight(dispatch_point) ? 'highlighted' : 'non-highlighted';
-                newVisibleItems.push(dispatch_point);
-                newVisibleItemIds.add(dispatch_point.id);
+                item.className = isHighlight(item) ? 'highlighted' : 'non-highlighted';
+
+                newVisibleItems.push(item);
+                newVisibleItemIds.add(item.id);
             }
-            item.className = isHighlight(item) ? 'highlighted' : 'non-highlighted';
-            newVisibleItems.push(item);
-            newVisibleItemIds.add(item.id);
         }
     }
     return { newVisibleItems, newVisibleItemIds };
 }
 
+function updateVisibleItems(start, end) {
+    const { newVisibleItems, newVisibleItemIds } = filterRange(start, end);
+
+    const toRemove = [];
+    const toAdd = [];
+
+    for (let i = 0; i < visibleItems.length; i++) {
+        const item = visibleItems[i];
+        if (!newVisibleItemIds.has(item.id)) {
+            toRemove.push(item.id);
+        }
+    }
+
+    for (let i = 0; i < newVisibleItems.length; i++) {
+        const item = newVisibleItems[i];
+        if (!visibleItemIds.has(item.id)) {
+            toAdd.push(item);
+        }
+    }
+
+    visibleItems = newVisibleItems;
+    visibleItemIds = newVisibleItemIds
+
+    return { toRemove, toAdd }
+}
 
 onmessage = (e) => {
     const action = e.data.action;
 
     if (action === 'init') {
-        const density = new Array(DENSITY_GRANULARITY).fill(0.1);
-        const buffer = new Uint8Array(e.data.buffer)
-        e.data.buffer = null;
-        decodeMsgpack(
-            new Uint8Array(buffer), 
-            e.data.extension_string_array, 
-            density, 
-            e.data.preview_data);
-        postMessage({ groupsIds, density });
+        extension_string_array = e.data.extension_string_array
         
-    } else if (action === 'updateVisibleItems') {
-        const buf = 1e6;
-        const { newVisibleItems, newVisibleItemIds } = filterRange(e.data.range.start - buf, e.data.range.end + buf);
+    } else if (action === 'loadItems') {
+        const { loadId, data, start, end } = e.data;
+        const items = decodeItems(atob(data));
+        
+        loadedRanges.set(loadId, items);
+        postMessage(updateVisibleItems(start, end));
 
-        const toRemove = [];
-        const toAdd = [];
+    } else if (action === 'unloadItems') {
+        const { loadId } = e.data;
+        loadedRanges.delete(loadId);
 
-        for (let i = 0; i < visibleItems.length; i++) {
-            const item = visibleItems[i];
-            if (!newVisibleItemIds.has(item.id)) {
-                toRemove.push(item.id);
-            }
-        }
-
-        for (let i = 0; i < newVisibleItems.length; i++) {
-            const item = newVisibleItems[i];
-            if (!visibleItemIds.has(item.id)) {
-                toAdd.push(item);
-            }
-        }
-
-        visibleItems = newVisibleItems;
-        visibleItemIds = newVisibleItemIds
-
-        postMessage({ toRemove, toAdd });
+    } else if (action === 'updateVisibleItems' && loadedRanges.size !== 0) {
+        postMessage(updateVisibleItems(e.data.range.start, e.data.range.end));
 
     } else if (action === 'highlightItems') {
         selectedItemID = e.data.id;
@@ -365,14 +356,5 @@ onmessage = (e) => {
 
     } else if (action === 'showDispatch') {
         dispatches_are_shown = e.data.toggle;
-
-    } else if (action === 'select') {
-        const id = e.data.id;
-        const newItem = allItems.find(item => item.id === id);
-        if (newItem && !visibleItemIds.has(id)) {
-            visibleItems.push(newItem);
-            visibleItemIds.add(id);
-        }
-        postMessage({ toSelect: newItem });
-    }
+    } 
 };

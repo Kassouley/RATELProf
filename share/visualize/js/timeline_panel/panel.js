@@ -55,3 +55,15 @@ function createTimelineDOM () {
     `;
     return div;
 }
+
+function createTimelineStackFromData(data, min, max, main_lifecycle) {
+    const manager = new TimelineStackManager(min, max, "timelineStack", 'trace-info');
+
+    data.forEach((data) => {
+        const { timeline_id, rank, density, ...group_data } = data;
+
+        manager.addTimeline(timeline_id, rank, main_lifecycle[rank], group_data, density);
+    });
+
+    return manager;
+}

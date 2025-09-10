@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     try {
-        createTimelines(TIMELINE_DATA, 0, TIMELINE_MAX, TIMELINE_LIFECYCLE);
+        createTimelineStackFromData(TIMELINE_DATA, 0, TIMELINE_MAX, TIMELINE_LIFECYCLE);
     } catch (error) {
         alert('Error loading trace data: ' + error.message);
         console.error('Error loading trace data:', error)

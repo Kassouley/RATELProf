@@ -1,52 +1,39 @@
 class Timeline {
-    constructor(stackEl, stackTimelines, data, min, max, detailsContainerId, main_lifecycle, rank = -1) {
+    constructor(
+            id,
+            stackEl, 
+            data, 
+            min, max, 
+            detailsContainerId, 
+            main_lifecycle, 
+            density, 
+            rank = -1) {
+        this.id = id;
         this.rank = rank;
 
         this.min = min;
         this.max = max;
 
-        this.stackTimelines = stackTimelines;
-        
+        this.updateVisibleItems = throttle(this.updateVisibleItems.bind(this), 100);
+
         this.labels = Object.keys(data);
         this.values = Object.values(data);
-
-        this.last_label = this.labels.pop();
-        const b64_items = this.values.pop();
+        const groupLabel = this.labels.pop();
+        const groupsList = this.values.pop();
 
         this.worker = new Worker("workers/timeline_worker.js");
 
         this.__create_container(stackEl);
 
-        this.loadingGroupId = "tmp_loading";
+        this.__create_timeline(groupLabel, groupsList, density, main_lifecycle);
 
-        this.visibleItems = new vis.DataSet([
-            {
-                id: "init",
-                content: "Constructor",
-                type: "background",
-                start: min,
-                end: main_lifecycle[0],
-            }, {
-                id: "fini",
-                content: "Destructor",
-                type: "background",
-                start: main_lifecycle[1],
-                end: max,
-            }
-        ]);
-        this.groups = new vis.DataSet([{ id: this.loadingGroupId, content: "Loading..." }]);
-        this.__create_timeline();
+        this.__create_worker()
 
-        let buffer = Uint8Array.from(atob(b64_items), c => c.charCodeAt(0)).buffer;
-        this.__create_worker(buffer)
-        buffer = null;
-
-        this.timeMarkerId = "time_marker_id";
+        this.__timeMarkerId = "time_marker_id";
         this.__markerFirstTime = null;
 
         this.detailsContainerId = detailsContainerId;
 
-        this.updateVisibleItems = throttle(this.updateVisibleItems.bind(this), 100);
     }
 
     __get_path() {
@@ -60,67 +47,47 @@ class Timeline {
         });
     }
 
-    __create_worker(buffer) {
-        const w = this.canvas.width  = this.canvas.offsetWidth;
+    __create_worker() {
+        this.worker.postMessage({ action: 'init', extension_string_array: EXT_STRINGS });
 
-        this.worker.postMessage({ 
-            action: 'init', 
-            buffer: buffer,
-            extension_string_array: EXT_STRINGS,
-            preview_data: { 
-                min: this.min,
-                max: this.max
-            }
-        }, [buffer]);
-
-        this.worker.onmessage = (e) => {
-            if (e.data.groupsIds && e.data.density) {
-                const groupsIds = e.data.groupsIds;
-                if (groupsIds.length > 0) {
-                    this.__on_init_timeline(groupsIds, e.data.density);
-                }
-                
-            } else {
-                if (e.data.toAdd) {
-                    this.visibleItems.add(e.data.toAdd);
-                } 
-                if (e.data.toRemove) {
-                    this.visibleItems.remove(e.data.toRemove);
-                } 
-                if (e.data.toUpdate) {
-                    this.visibleItems.update(e.data.toUpdate);
-                }
-                if (e.data.toSelect) {
-                    const newItem = e.data.toSelect
-                    this.visibleItems.add(newItem);
-                    this.timeline.setSelection(newItem.id, { focus: true });
-                    this.onSelect(newItem.id, false);
-                }
+        this.worker.onmessage = (e) => {  
+            if (e.data.toAdd) {
+                this.visibleItems.add(e.data.toAdd);
+            } 
+            if (e.data.toRemove) {
+                this.visibleItems.remove(e.data.toRemove);
+            } 
+            if (e.data.toUpdate) {
+                this.visibleItems.update(e.data.toUpdate);
             }
         };
 
     }
 
-    __on_init_timeline(groupIds, density) {
-        this.groups.remove(this.loadingGroupId);
-        for (const groupId of groupIds) {
-            const prefix = (groupId === groupIds[groupIds.length - 1]) ? '└─ ' : '├─ ';
-            this.groups.add({ id: groupId, content: prefix + this.last_label + " " + groupId });
+    __create_timeline(groupLabel, groupsList, density, main_lifecycle) {
+        const groups = new vis.DataSet()
+        for (const groupId of groupsList) {
+            const prefix = (groupId === groupsList[groupsList.length - 1]) ? '└─ ' : '├─ ';
+            groups.add({ id: groupId, content: prefix + groupLabel + " " + groupId });
         }
+        
+        this.visibleItems = new vis.DataSet([
+            {
+                id: "init",
+                content: "Constructor",
+                type: "background",
+                start: this.min,
+                end: main_lifecycle[0],
+            }, {
+                id: "fini",
+                content: "Destructor",
+                type: "background",
+                start: main_lifecycle[1],
+                end: this.max,
+            }
+        ]);
 
-        this.preview = new Preview(
-            this.canvas, 
-            density, 
-            this.min, this.max,
-            this.timeline.getWindow()
-        );
-
-        this.timeline.on('rangechanged', this.updateVisibleItems);
-        this.updateVisibleItems();
-    }
-
-    __create_timeline() {
-        const timeline = new vis.Timeline(this.timelineDOM, this.visibleItems, this.groups, {
+        const timeline = new vis.Timeline(this.timelineDOM, this.visibleItems, groups, {
             min: this.min,
             max: this.max,
             start:0,
@@ -138,7 +105,7 @@ class Timeline {
             groupHeightMode: 'fixed',
             format: { minorLabels: function(date, scale, step) { return convertTime(date.toDate().getTime()) } },
             template: function (item) {
-                const str = item.content;
+                const str = item.content || "";
                 return str.length > 30 ? str.substring(0, 30) + "..." : str;
             },
             tooltip: {
@@ -161,20 +128,7 @@ class Timeline {
             },
         })
 
-        let isSyncing = false;
-        timeline.on('rangechange', (props) => {
-            if (this.preview) this.preview.renderPreviewHighlight(this.timeline.getWindow())
-            if (isSyncing) return;
-            isSyncing = true;
-            for (const tl of this.stackTimelines) {
-                tl.syncWindow(props.start, props.end);
-            }
-            isSyncing = false;
-        });
-
-        timeline.on('contextmenu', function (props) {
-            props.event.preventDefault();
-        });
+        this.timeline = timeline;
         
         // Fire when double click on an item
         // Focus on it
@@ -231,9 +185,9 @@ class Timeline {
                 const rect = this.canvas.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const clickedTime = this.min + (x / this.canvas.offsetWidth) * (this.max - this.min);
-                const window = timeline.getWindow();
-                const half = (window.end - window.start) / 2;
-                timeline.setWindow(clickedTime - half, clickedTime + half);
+                const { start, end } = this.getWindow();
+                const half = (end - start) / 2;
+                this.forceMoveWindow(clickedTime - half, clickedTime + half, true);
             }
         });
 
@@ -255,15 +209,17 @@ class Timeline {
             attributeFilter: ["style", "class"]
         });
 
-
-        this.timeline = timeline;
+        this.preview = new Preview(
+            this.canvas, 
+            density, 
+            this.min, this.max,
+            this.getWindow()
+        );
     }
 
 
     __create_container(stackEl) {
         const container = document.createElement('div');
-        container.className = 'timeline-container';
-        container.dataset.index = this.stackTimelines.length;
         stackEl.appendChild(container);
 
         const label = document.createElement('div');
@@ -291,18 +247,9 @@ class Timeline {
         collapseArrow.addEventListener('click', () => {
             this.toggleCollapse();
         });
+        this.container = container;
     }
 
-    updateVisibleItems() {
-        const range = this.timeline.getWindow();
-        this.worker.postMessage({
-            action: 'updateVisibleItems',
-            range: {
-                start: range.start.getTime(),
-                end: range.end.getTime()
-            }
-        });
-    }
 
     updateTimeMarker(currTime) {
         const firstTime = this.__markerFirstTime;
@@ -312,10 +259,10 @@ class Timeline {
         if (start.getTime() === end.getTime()) return;
 
         const items = this.timeline.itemsData;
-        const existing = items.get(this.timeMarkerId);
+        const existing = items.get(this.__timeMarkerId);
 
         const data = {
-            id: this.timeMarkerId,
+            id: this.__timeMarkerId,
             content: `${convertTime(end - start)}`,
             start,
             end,
@@ -369,7 +316,7 @@ class Timeline {
     }
 
     onRightClickDown(props) {
-        this.timeline.itemsData.remove(this.timeMarkerId);
+        this.timeline.itemsData.remove(this.__timeMarkerId);
         
         if (props && props.time) {
             this.__markerFirstTime = props.time;
@@ -392,58 +339,100 @@ class Timeline {
         this.updateVisibleItems();
     }
 
-    clearHighlights() {        
-        for (const tl of this.stackTimelines) {
-            tl.worker.postMessage({action: 'clearHighlightItems'});
+
+    updateVisibleItems(start, end) {
+        if (start === undefined || end === undefined) {
+            ({start, end} = this.getWindow());
         }
+        const margin = end - start;
+        start = start - margin;
+        end = end + margin;
+        this.worker.postMessage({ action: 'updateVisibleItems', range: {start, end} });
+    }
+
+    unsetHighlights() {
+        this.worker.postMessage({ action: "clearHighlightItems" });
+    }
+
+    setHighlights(id, cid) {
+        this.worker.postMessage({ action: "highlightItems", id, cid });
+    }
+
+    unselect() {
+        this.timeline.setSelection(null);
+    }
+
+
+    clearHighlights() {
+        const target = this.manager ? this.manager : [this];
+        target.forEach(tl => {
+            tl.unsetHighlights();
+        });
     }
 
     highlightItems(id, cid) {
-        for (const tl of this.stackTimelines) {
-            if (tl.rank == this.rank) {
-                tl.worker.postMessage({action: 'highlightItems', id, cid});
+        const target = this.manager ? this.manager : [this];
+        target.forEach((tl) => {
+            if (tl.rank === this.rank) {
+                tl.setHighlights( id, cid );
             }
+        });
+    }
+    
+    unselectExcept(timeline) {
+        const target = this.manager ? this.manager : [this];
+        target.forEach((tl) => {
+            if (timeline !== tl.timeline) {
+                tl.unselect()
+            }
+        });
+    }
+
+    forceMoveWindow(start, end, animation =  false) {
+        this.timeline.emit('rangechange', {
+            start: start, 
+            end: end, 
+            byUser: true,
+            animation: animation
+        });
+        this.timeline.emit('rangechanged', {
+            start: start, 
+            end: end, 
+            byUser: true
+        });
+    }
+
+    getWindow() {
+        const window = this.timeline.getWindow();
+        return {
+            start: window.start.getTime(),
+            end: window.end.getTime()
         }
     }
 
-    
     syncWindow(start, end, animation = false) {
         this.timeline.setWindow(start, end, { animation: animation });
+        if (this.preview) this.preview.renderPreviewHighlight({start, end});
     }
 
     moveWindow(pct) {
-        const win = this.timeline.getWindow();
-        const val = (win.end - win.start) * pct;
-        this.syncWindow(win.start.valueOf() - val, win.end.valueOf() - val, true)
+        const { start, end } = this.getWindow();
+        const val = (end - start) * pct;
+        this.syncWindow(start - val, end - val, true)
     }
 
     zoomWindow(value) {
         const sliderMax = 200;
-        const maxUnzoom = 1000000;
+        const maxUnzoom = this.max;
         const zoomValue = parseInt(value, 10);
         const visibleRange = maxUnzoom - ((zoomValue / sliderMax) * maxUnzoom);
-        const win = this.timeline.getWindow();
-        const center = (win.start.valueOf() + win.end.valueOf()) / 2;
-        const newStart = new Date(center - visibleRange / 2);
-        const newEnd = new Date(center + visibleRange / 2);
-        this.syncWindow(newStart, newEnd)
+        const { start, end } = this.getWindow();
+        const center = (start + end) / 2;
+        this.syncWindow(center - visibleRange / 2, center + visibleRange / 2)
     }
 
-    gotoWindow(time) {
-        const timeNs = convertToNs(time);
-        if (timeNs) {
-            this.syncWindow(new Date(timeNs), new Date(timeNs + 1e8), true);
-        }
-    }
-
-    gotoId(id) {
-        let selectedItem = this.visibleItems.get(id)
-        if (!selectedItem) {
-            this.worker.postMessage({ action: 'select', id });
-        } else {
-            this.onSelect(id, false);
-            this.timeline.setSelection(id, { focus: true });
-        }
+    gotoWindow(start) {
+        this.forceMoveWindow(start, start + 1e8, true)
     }
 
     onSelect(id, isCtrlKeyPushed) {
@@ -457,13 +446,6 @@ class Timeline {
         }
     };
 
-    unselectExcept(timeline) {
-        for (const tl of this.stackTimelines) {
-            if (timeline !== tl.timeline) {
-                tl.timeline.setSelection(null)
-            }
-        }
-    }
 
     clearTraceDetails() {
         document.getElementById(this.detailsContainerId).innerHTML = 'Click on a trace to view details here.';
@@ -494,6 +476,7 @@ class Timeline {
             append(lcol, "Duration",   convertTime(trace.dur, true));
             append(lcol, "Start Time", convertTime(trace.start));
             append(lcol, "End Time",   convertTime(trace.end));
+
             if (domain === "Kernel Dispatch") {
                 append(lcol, "Dispatch Time",          convertTime(args.dispatch_time));
                 append(rcol, "GPU ID",                 this.values[0]);
@@ -516,7 +499,7 @@ class Timeline {
 
             } else if (domain === "Barrier AND" || domain === "Barrier OR") {
                 append(lcol, "Dispatch Time",      convertTime(args.dispatch_time));
-                append(rcol, "GPU ID",             gpu_id);
+                append(rcol, "GPU ID",             this.values[0]);
                 append(rcol, "Queue ID",           trace.group);
                 append(rcol, "Dependent Signals",  `[${Object.values(args.dep_signal).join(", ")}]`);
                 append(rcol, "Completion Signal",  args.sig);
@@ -528,5 +511,29 @@ class Timeline {
             }
         }
         traceInfo.innerHTML = `<div class="two-column"><div class="scrollable-tab"><table>${lcol.join("\n")}</table></div><div class="scrollable-tab"><table>${rcol.join("\n")}</table></div></div>`;
+    }
+
+
+    setManager(manager) {
+        this.manager = manager;
+    }
+
+    setOnRangeChange(callback) {
+        this.timeline.on('rangechange', callback);
+    }
+
+
+    setOnRangeChanged(callback) {
+        this.timeline.on('rangechanged', callback);
+    }
+
+
+    loadData(data, loadId, start, end) {
+        if (!data) return;
+        this.worker.postMessage({ action: "loadItems", loadId, data, start, end});
+    }
+
+    unloadData(loadId) {
+        this.worker.postMessage({ action: "unloadItems", loadId });
     }
 }
