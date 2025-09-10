@@ -18,6 +18,7 @@ def replace_head_section(html_content: str) -> str:
     new_head = '''
 <head>
     <meta charset="UTF-8">
+    <script src=".data/.data.js"></script>
 
     <link href="https://unpkg.com/vis-timeline@latest/styles/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css"/>
     <script src="https://unpkg.com/vis-timeline@latest/standalone/umd/vis-timeline-graph2d.min.js"></script>
