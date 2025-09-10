@@ -115,14 +115,14 @@ end
 
 function BinaryReport:to_json()
     return {
-        version = self.version,
-        main_data = self.main_data,
+        version                = self.version,
+        main_data              = self.main_data,
         experiment_start_epoch = self.experiment_start_epoch,
-        trace_events = self.trace_events,
-        lifecycle = self.lifecycle,
-        locations = self.locations,
-        node_id = self.node_id,
-        gpu_props = self.gpu_props,
+        trace_events           = self.trace_events,
+        lifecycle              = self.lifecycle,
+        locations              = self.locations,
+        node_id                = self.node_id,
+        gpu_props              = self.gpu_props,
     }
 end
 
@@ -290,8 +290,8 @@ function BinaryReport:__get_for_gpu(domain)
 end
 
 function BinaryReport:get_raw(domain_name, mpi_rank)
-    local trace_events = self.trace_events[mpi_rank]
-    return trace_events[domain_name] or {}
+    if not self.trace_events[mpi_rank] then return {} end
+    return self.trace_events[mpi_rank][domain_name] or {}
 end
 
 function BinaryReport:get(domain_name)
@@ -338,6 +338,13 @@ function BinaryReport:get_location_str(trace)
     if not loc then return "Unknown Location" end
     return string.format("%s in %s:%d", loc.sfun, loc.sfile, loc.sline)
 end
+
+
+function BinaryReport:get_entry_point_location_str(trace)
+    local entry_point = self:find_entry_point(trace)
+    return self:get_location_str(entry_point)
+end
+
 
 function BinaryReport:find_parent_trace(trace, mpi_rank)
     mpi_rank = mpi_rank or trace.mpi_rank
