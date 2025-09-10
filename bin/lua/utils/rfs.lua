@@ -57,6 +57,12 @@ function rfs.open_file(filename, mode, ext)
         error ("Error: The input file is not a '"..ext.."' file")
         return nil
     end
+    
+    local dirname = rfs.dirname(filename)
+    if not rfs.exists(dirname) then
+        rfs.mkdir(dirname)
+    end
+
     local file = io.open(filename, mode)
     if not file then
         error ("Error: Unable to open file " .. filename)
@@ -65,7 +71,7 @@ function rfs.open_file(filename, mode, ext)
     return file
 end
 
--- Concatenates multiple path segments into a single path
+--- Concatenates multiple path segments into a single path
 -- @param ... Variable number of path segments
 -- @return The concatenated path
 function rfs.concat_path(...)
@@ -178,6 +184,7 @@ function rfs.is_absolute(p)
     return p:sub(1, 1) == "/" or p:match("^[A-Za-z]:\\")
 end
 
+
 --- Checks if a given path is a directory using system commands.
 -- @param p The path to check.
 -- @return True if the path is a directory, false otherwise.
@@ -196,6 +203,8 @@ function rfs.is_file(p)
     local command = 'test -f "' .. p .. '"'
     return os.execute(command)
 end
+
+
 --- Creates a directory, including any necessary parent directories.
 -- @param p The name of the directory to create.
 function rfs.mkdir(p)
@@ -257,6 +266,18 @@ function rfs.get_size(path)
     local size = file:seek("end")  -- move to end and get position
     file:close()
     return size
+end
+
+
+-- Remove a file
+-- @param p The path
+function rfs.rm(p)
+    p = get_path(p)
+    local success, err = os.remove(p)
+    if not success then
+        error("Failed to remove file '" .. p .. "': " .. (err or "unknown error"))
+    end
+    return true
 end
 
 return rfs

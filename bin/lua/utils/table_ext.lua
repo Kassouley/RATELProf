@@ -69,3 +69,12 @@ function table.copy(src)
     end
     return dest
 end
+
+function table.concat_keys(t, sep)
+    sep = sep or ""
+    local result, i = {}, 1
+    for k, _ in pairs(t) do
+        result[i], i = k, i + 1
+    end
+    return table.concat(result, sep)
+end

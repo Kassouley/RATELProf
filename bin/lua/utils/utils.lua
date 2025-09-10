@@ -49,6 +49,25 @@ function utils.compute_total_covered_duration(...)
 end
 
 
+-- Function to print memory usage in GB only if it changes (2 decimal digits)
+function utils.print_mem_usage(suffix, old_value)
+
+    -- Get memory in GB
+    local memory_gb = collectgarbage("count") / (1024 * 1024)
+
+    -- Round to 2 decimal places
+    local memory_rounded = math.floor(memory_gb * 100 + 0.5) / 100
+
+    -- Compare with old value
+    if memory_rounded ~= old_value then
+        io.write(string.format("\rMemory usage: %.2f GB%s", memory_rounded, suffix))
+        io.flush()  -- Ensure immediate print
+        return memory_rounded
+    else
+        return old_value
+    end
+end
+
 
 function utils.print_progress(current, total, prefix, suffix)
     prefix = prefix or ""
