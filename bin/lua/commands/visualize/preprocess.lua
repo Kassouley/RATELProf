@@ -46,13 +46,13 @@ end
 local function get_event_data(data, event, domain_id, opt)
     local event_content  = "N/A"
     local first_value    = nil
-    local key            = nil
+    local group          = nil
     local args           = {}
     if ratelprof.consts._ENV.DOMAIN_KERNEL == domain_id then
         event_content  = get_kernel_name(event.args.kernel_name, opt)
 
         first_value               = data:get_gpu_id(event.args.gpu_id)
-        key                       = event.args.queue_id
+        group                     = event.args.queue_id
         args.dispatch_time        = event.args.dispatch_time
         args.wrg                  = event.args.wrg
         args.grd                  = event.args.grd
@@ -66,7 +66,7 @@ local function get_event_data(data, event, domain_id, opt)
         event_content  = "Barrier OR"
 
         first_value         = data:get_gpu_id(event.args.gpu_id)
-        key                 = event.args.queue_id
+        group               = event.args.queue_id
         args.dispatch_time  = event.args.dispatch_time
         args.dep_signal     = event.args.dep_signal
         args.sig            = event.sig
@@ -75,7 +75,7 @@ local function get_event_data(data, event, domain_id, opt)
         event_content  = "Barrier AND"
 
         first_value         = data:get_gpu_id(event.args.gpu_id)
-        key                 = event.args.queue_id
+        group               = event.args.queue_id
         args.dispatch_time  = event.args.dispatch_time
         args.dep_signal     = event.args.dep_signal
         args.sig            = event.sig
@@ -88,7 +88,7 @@ local function get_event_data(data, event, domain_id, opt)
         local src_node  = data:get_gpu_id(src_agent)
         local dst_node  = data:get_gpu_id(dst_agent)
         first_value     = data:node_is_gpu(src_node) and src_node or dst_node
-        key = event.args.engine_id
+        group = event.args.engine_id
 
         args.src = ratelprof.utils.get_copy_name_from_kind(event.args.src_type) ..
             " Node ID. "..src_node.." ("..src_agent..")"
@@ -100,112 +100,226 @@ local function get_event_data(data, event, domain_id, opt)
     else
         event_content   = event.name
         first_value     = event.pid
-        key             = event.tid
+        group           = event.tid
         args.args       = event.args
     end
-    return { event_content = event_content, args = args, first_value = first_value, key = key }
+    return { event_content = event_content, args = args, first_value = first_value, group = group }
 end
 
 
-local function encode_event_item(buf, event_content, event, args, depth, traces_data)
+local DENSITY_GRANULARITY = 1000;
 
-    if depth > 0 then
+local function init_density(initial_value)
+    local density = {}
+    for i = 1, DENSITY_GRANULARITY do
+        density[i] = initial_value
+    end
+
+    return density
+end
+
+local function compute_density(density, item, min, max)
+    local startX = math.floor(((item.start - min) / (max - min)) * DENSITY_GRANULARITY)
+    local stopX  = math.floor(((item.stop  - min) / (max - min)) * DENSITY_GRANULARITY)
+
+    -- TODO (9/9/25) Implement a score system
+    local score  = item.score or 1
+
+    for x = startX, stopX do
+        density[x] = (density[x] or 0) + score
+    end
+end
+
+local function encode_event_item(buf, event_data)
+    if event_data.subgroup > 0 then
         buf:encode_map(8)
     else
         buf:encode_map(7)
     end
 
     encode_ext_string(buf, "content")
-    encode_ext_string(buf, event_content)
+    encode_ext_string(buf, event_data.content)
 
     encode_ext_string(buf, "id")
-    buf:encode_uint(event.id)
+    buf:encode_uint(event_data.id)
 
     encode_ext_string(buf, "start")
-    buf:encode_uint(event.start)
+    buf:encode_uint(event_data.start)
 
-    if depth > 0 then
+    if event_data.subgroup > 0 then
         encode_ext_string(buf, "subgroup")
-        buf:encode_uint(depth)
+        buf:encode_uint(event_data.subgroup)
     end
 
     encode_ext_string(buf, "dur")
-    buf:encode_uint(event.dur)
+    buf:encode_uint(event_data.dur)
 
     encode_ext_string(buf, "cid")
-    buf:encode_uint(event.corr_id)
+    buf:encode_uint(event_data.cid)
 
     encode_ext_string(buf, "loc")
-    local entry_point = traces_data:find_entry_point(event)
-    encode_ext_string(buf, traces_data:get_location_str(entry_point))
+    encode_ext_string(buf, event_data.loc)
 
     encode_ext_string(buf, "args")
-    encode_table(buf, args)
+    encode_table(buf, event_data.args)
 end
 
 
-function preprocess.start(traces_data, opt)
+function preprocess.start(traces_data, output, opt)
+    local BUCKET_DIR = ".data/buckets/"
+    local output_bucket = ratelprof.fs.concat_path(output, BUCKET_DIR)
+
     local results = {}
 
+    local BUCKET_SIZE = 1e9 -- 1 second
+
+    local files_per_bucket = {}
+
+    local timeline_id = 0
+    local nb_timeline = 0
+
     traces_data:for_each_domain(function(domain_name, domain_id, mpi_rank, events, is_gpu_domain)
-        local domain_buffers = {}
-        local nitems = {}
+        nb_timeline = nb_timeline + 1
+    end)
+
+    traces_data:for_each_domain(function(domain_name, domain_id, mpi_rank, events, is_gpu_domain)
+        local stack_per_group = {}
+
         local first_value   = nil
         local raw_data      = traces_data:get_raw(domain_id, mpi_rank)
 
+        local current_bucket = 0
+
+        local function flush_bucket()
+            local group_counts, ngroups = {}, 0
+
+            for group, stack in pairs(stack_per_group) do
+                local nitems = #stack
+                if nitems > 0 then
+                    ngroups = ngroups + 1
+                    group_counts[group] = nitems
+                end
+            end
+
+            if ngroups == 0 then return end
+
+            local filename = string.format(output_bucket.."/%d.js", current_bucket)
+            local file = files_per_bucket[current_bucket]
+            if not file then
+                if ratelprof.fs.exists(filename) then
+                    ratelprof.fs.rm(filename)
+                end
+                file = ratelprof.fs.open_file(filename, "a")
+                files_per_bucket[current_bucket] = file
+                file:write('window.b64_data={')
+            end
+            file:seek("end")
+            file:write(timeline_id..':"')
+            file:flush()
+
+            local buf = msgpack_encoder.new(65535, msgpack_encoder.OVERFLOW_APPEND_B64_TO_FILE, filename)
+            buf:encode_uint(ngroups)
+
+            for group, nitems in pairs(group_counts) do
+                local stack = stack_per_group[group]
+                buf:encode_int(group)
+                buf:encode_uint(nitems)
+                for i = 1, nitems do
+                    encode_event_item(buf, stack[i])
+                end
+            end
+            buf:write()
+            buf:free()
+
+            file:seek("end")
+            file:write('",')
+            file:flush()
+        end
+
+        local density = init_density(0)
+
+        local old_value = 0 
         for _, event in ipairs(events) do
+            
+            old_value = ratelprof.utils.print_mem_usage("", old_value)
+
             local data = get_event_data(traces_data, event, domain_id, opt)
 
-            first_value       = data.first_value
-            local key         = data.key
+            first_value = data.first_value
+            local group = data.group
 
-            domain_buffers[key] = domain_buffers[key] or msgpack_encoder.new(1024, msgpack_encoder.OVERFLOW_REALLOC)
-            nitems[key] = nitems[key] or 0
-            nitems[key] = nitems[key] + 1
+            -- advance bucket if event.start is outside current range
+            while event.start >= current_bucket + BUCKET_SIZE do
+                -- flush current bucket
+                flush_bucket()
 
-            local depth = compute_depth(raw_data, events, event, event.id)
-            encode_event_item(domain_buffers[key], data.event_content, event, data.args, depth, traces_data)
+                -- remove finished events from stack
+                for g, stack in pairs(stack_per_group) do
+                    local new_stack = {}
+                    for _, s in ipairs(stack) do
+                        if s.start + s.dur >= current_bucket + BUCKET_SIZE then
+                            new_stack[#new_stack+1] = s
+                        end
+                    end
+                    stack = nil
+                    stack_per_group[g] = new_stack
+                end
+
+                -- move to next bucket
+                current_bucket = current_bucket + BUCKET_SIZE
+            end
+
+            local stack = stack_per_group[group]
+            if not stack then
+                stack = {}
+                stack_per_group[group] = stack
+            end
+
+            table.insert(stack, {
+                content  = data.event_content,
+                group    = group,
+                subgroup = compute_depth(raw_data, events, event, event.id),
+                start    = event.start,
+                dur      = event.dur,
+                id       = event.id,
+                cid      = event.corr_id,
+                loc      = traces_data:get_entry_point_location_str(event),
+                args     = data.args,
+            })
+
+            compute_density(density, event, 0, traces_data:get_max_stop_time())
         end
 
-        local full_size = 1024
-        local nbuf = 0
-        for _, buf in pairs(domain_buffers) do
-            full_size = full_size + buf:size()
-            nbuf = nbuf + 1
-        end
-
-        local main_buffer = msgpack_encoder.new(full_size, msgpack_encoder.OVERFLOW_REALLOC)
-        main_buffer:encode_array(nbuf)
-        for key, buf in pairs(domain_buffers) do
-            main_buffer:encode_ext(2, buf)
-            main_buffer:encode_int(key)
-            main_buffer:encode_uint(nitems[key])
-            buf:free()
-        end
+        flush_bucket()
 
         local first_label = is_gpu_domain and "GPU" or "PID"
         local last_label  = get_last_label(domain_id)
         local json_string = "{" ..
+            'timeline_id:'..timeline_id..','..
+            'rank:'..mpi_rank..','..
             first_label..':'..first_value..','..
             'Domain:"'..domain_name..'",'..
-            last_label..':"'..main_buffer:to_b64()..'"'..
+            last_label..':['..table.concat_keys(stack_per_group, ",")..'],'..
+            'density'..':['..table.concat(density, ",")..'],'..
         "}"
-        main_buffer:free()
 
-        results[mpi_rank] = results[mpi_rank] or {}
         if is_gpu_domain then 
-            table.insert(results[mpi_rank], 1, json_string)
+            table.insert(results, 1, json_string)
         else
-            table.insert(results[mpi_rank], json_string)
+            table.insert(results, json_string)
         end
+
+        timeline_id = timeline_id + 1
     end)
 
-    local json = ""
-    for rank, entry in pairs(results) do
-        json = json..'"'..rank..'":['..table.concat(entry, ",")..']'
+    for _, f in pairs(files_per_bucket) do
+        f:write('}')
+        f:close()
     end
+    
+    Message:print("RPROF: Bucket generated to '" .. output_bucket.."'")
 
-    return '{'..json..'}'
+    return '['..table.concat(results, ",")..']'
 end
 
 return preprocess

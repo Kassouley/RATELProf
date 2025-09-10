@@ -13,14 +13,12 @@ local visualize = {}
 function visualize.process_visualizing(positional_args, options_values)
     local data = BinaryReport:new(positional_args)
 
-
-    local output_file    = ratelprof.get_opt_val(options_values, "output")
-    local only_data_test = ratelprof.get_opt_val(options_values, "only-data-test")
+    local output         = ratelprof.get_opt_val(options_values, "output") or data:get_report_basename()
     local tmp_dir        = ratelprof.get_opt_val(options_values, "tmp")
     ratelprof.fs.mkdir(tmp_dir)
+    ratelprof.fs.mkdir(output)
 
-
-    local timeline_data = preprocess.start(data, options_values)
+    local timeline_data = preprocess.start(data, output, options_values)
 
     options_values["with-analysis"] = true
 
@@ -59,25 +57,16 @@ function visualize.process_visualizing(positional_args, options_values)
         data_content = data_content .. h.HANDLE.. '=' .. h.data..(i ~= #handlers and ',' or '')
     end
 
-    local mode = "a"
-    if only_data_test then
-        output_file = output_file or data:get_report_basename()..'.js'
-        mode = "w"
-    else
-        output_file = output_file or data:get_report_basename()..'.html'
-        ratelprof.fs.copy_file(ratelprof.consts._HTML_REPORT_PATH, output_file)
-        data_content = "<script>" .. data_content .. "</script>"
-    end
+    local data_output = ratelprof.fs.concat_path(output, '.data/.data.js')
+    local html_output = ratelprof.fs.concat_path(output, ratelprof.fs.basename(output)..'.html')
 
-    local file = ratelprof.fs.open_file(output_file, mode)
+    ratelprof.fs.copy_file(ratelprof.consts._HTML_REPORT_PATH, html_output)
+
+    local file = ratelprof.fs.open_file(data_output, "w")
     file:write(data_content)
     file:close()
 
-    if only_data_test then
-        Message:print("RPROF: Dataset for testing written to '" .. output_file.."'")
-    else
-        Message:print("RPROF: HTML report written to '" .. output_file.."'")
-    end
+    Message:print("RPROF: HTML report written to '" .. html_output.."'")
 end
 
 return visualize

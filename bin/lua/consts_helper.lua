@@ -445,15 +445,6 @@ consts_helper.visualize = {
             arg             = "<value>",
             arg_required    = true,
             default         = nil
-        },
-        ["only-data-test"] = {
-            desc            = [[ 
-                Generate only the data set used in the HTML report. This options is used for debbuging.]],
-            sname           = nil,
-            arg             = nil,
-            arg_required    = false,
-            default         = nil
-
         }
     }
 }
