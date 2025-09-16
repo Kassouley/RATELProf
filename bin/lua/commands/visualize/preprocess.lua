@@ -178,7 +178,7 @@ function preprocess.start(traces_data, output, opt)
     local timeline_id = 0
     local nb_timeline = 0
 
-    traces_data:for_each_domain(function(domain_name, domain_id, mpi_rank, events, is_gpu_domain)
+    traces_data:for_each_domain(function(_, _, _, _, _)
         nb_timeline = nb_timeline + 1
     end)
 

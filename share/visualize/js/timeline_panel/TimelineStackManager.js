@@ -126,11 +126,11 @@ class TimelineStackManager {
       const fileEnd = base + this.rangeSize;
 
       if (fileEnd < start - margin || fileStart > end + margin) {
-        console.log(`Unload items from ${fileName}`)
         this.forEach(tl => {
           tl.unloadData(fileName)
         })
         this.loadedFiles.delete(fileName);
+        console.log(`Unload items from ${fileName}`);
       }
     }
   }

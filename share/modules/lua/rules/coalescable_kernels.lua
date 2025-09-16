@@ -54,7 +54,7 @@ local function find_coalescable_kernels(traces_data, DURATION_THRESHOLD_NS, GAP_
                 end
                 sequence = {}
                 curr_last = nil
-            elseif not curr_last or (k.args.kernel_name == curr_last.args.kernel_name 
+            elseif not curr_last or (k.args.kernel_name == curr_last.args.kernel_name
                     and k.start - curr_last.stop < GAP_THRESHOLD_NS) then
                 -- Add to sequence
                 table.insert(sequence, k)

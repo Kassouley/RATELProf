@@ -42,7 +42,7 @@ local function find_hidden_latency(traces_data, TIME_THRESHOLD, HIDDEN_THRESHOLD
             local stop_copy  = copy.stop
             local dur_copy   = copy.dur
             local sdma       = copy.args.engine_id
-            
+
             if not not_hidden_copy_dur_per_sdma[sdma] then
                 not_hidden_copy_dur_per_sdma[sdma] = 0
             end
