@@ -9,9 +9,15 @@ FILE(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
 
 FIND_LIBRARY(BFD_LIBRARY bfd)
 
-IF (NOT BFD_LIBRARY OR NOT BFD_INCLUDE_DIR)
-    MESSAGE(FATAL_ERROR "libbfd not found. Please install it.")
+IF (NOT BFD_LIBRARY)
+    MESSAGE(FATAL_ERROR "libbfd not found. Please install binutils-dev.")
 ENDIF()
+
+
+IF (NOT BFD_INCLUDE_DIR)
+    MESSAGE(FATAL_ERROR "BFD_INCLUDE_DIR not found. Please install binutils-dev or specify the path with ./install.sh -b path/to/bfd.h")
+ENDIF()
+
 
 ADD_LIBRARY(${PROJECT_NAME}-lib-dyn     SHARED ${SOURCES})
 ADD_LIBRARY(${PROJECT_NAME}-lib-static  STATIC ${SOURCES})

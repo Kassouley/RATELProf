@@ -1,13 +1,59 @@
 #!/bin/bash
-INSTALL_DIR=${1:-$HOME/.local}
-BUILD_DIR=build
-
 set -e
 
+usage() {
+    cat <<EOF
+Usage: $0 [options]
+
+Options:
+  -i, --INSTALL_DIR <dir>     Specify install prefix (default: \$HOME/.local)
+  -b, --BFD_INCLUDE_DIR <dir> Specify path to bfd.h include directory
+  -h, --help                  Show this help message and exit
+
+Examples:
+  $0
+  $0 -i /opt/myapp
+  $0 -b /opt/software/binutils/include
+  $0 -i /opt/myapp -b /opt/software/binutils/include
+EOF
+    exit 1
+}
+
+# Defaults
+INSTALL_DIR="$HOME/.local"
+BFD_INCLUDE_DIR=""
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -i|--INSTALL_DIR)
+            INSTALL_DIR="$2"
+            shift 2
+            ;;
+        -b|--BFD_INCLUDE_DIR)
+            BFD_INCLUDE_DIR="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            ;;
+        *)
+            echo "Unknown option: $1"
+            usage
+            ;;
+    esac
+done
+
+BUILD_DIR=build
+
 # Configure, build, and install
-cmake -B $BUILD_DIR -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR .
-cmake --build $BUILD_DIR 
-cmake --install $BUILD_DIR
+cmake -B "$BUILD_DIR" \
+    -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" \
+    ${BFD_INCLUDE_DIR:+-DBFD_INCLUDE_DIR="$BFD_INCLUDE_DIR"} \
+    .
+
+cmake --build "$BUILD_DIR"
+cmake --install "$BUILD_DIR"
 
 echo "Installed to $INSTALL_DIR"
 
@@ -27,7 +73,7 @@ if [[ ":$PATH:" != *":$INSTALL_DIR/bin:"* ]]; then
         fi
 
         if [[ -n $SHELL_CONFIG ]]; then
-            echo "export PATH=\"$INSTALL_DIR/bin:\$PATH\"" >> $SHELL_CONFIG
+            echo "export PATH=\"$INSTALL_DIR/bin:\$PATH\"" >> "$SHELL_CONFIG"
             echo "$INSTALL_DIR/bin has been added to your PATH permanently in $SHELL_CONFIG."
         else
             echo "Could not determine your shell configuration file. Please add $INSTALL_DIR/bin to your PATH manually."
