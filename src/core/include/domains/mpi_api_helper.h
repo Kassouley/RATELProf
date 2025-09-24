@@ -1013,7 +1013,7 @@ struct args_MPI_Isend_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -1030,7 +1030,7 @@ struct args_MPI_Isend_t {
 
 #define GET_PTRS_VALUE_MPI_Isend(args) { \
 	if (args->MPI_Isend.request != NULL) { \
-		args->MPI_Isend.request__ref.ptr1 = *args->MPI_Isend.request; \
+		args->MPI_Isend.request__ref.val = *args->MPI_Isend.request; \
 	} \
 };
 
@@ -1066,7 +1066,7 @@ struct args_MPI_Irecv_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -1083,7 +1083,7 @@ struct args_MPI_Irecv_t {
 
 #define GET_PTRS_VALUE_MPI_Irecv(args) { \
 	if (args->MPI_Irecv.request != NULL) { \
-		args->MPI_Irecv.request__ref.ptr1 = *args->MPI_Irecv.request; \
+		args->MPI_Irecv.request__ref.val = *args->MPI_Irecv.request; \
 	} \
 };
 
@@ -1108,7 +1108,7 @@ struct args_MPI_Irecv_t {
 struct args_MPI_Wait_t {
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	MPI_Status * status;
 	struct {
@@ -1124,7 +1124,7 @@ struct args_MPI_Wait_t {
 
 #define GET_PTRS_VALUE_MPI_Wait(args) { \
 	if (args->MPI_Wait.request != NULL) { \
-		args->MPI_Wait.request__ref.ptr1 = *args->MPI_Wait.request; \
+		args->MPI_Wait.request__ref.val = *args->MPI_Wait.request; \
 	} \
 	if (args->MPI_Wait.status != NULL) { \
 		args->MPI_Wait.status__ref.val = *args->MPI_Wait.status; \
@@ -1154,7 +1154,7 @@ struct args_MPI_Waitall_t {
 	int count;
 	MPI_Request(* array_of_requests);
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} array_of_requests__ref;
 	MPI_Status * array_of_statuses;
 	struct {
@@ -1171,7 +1171,7 @@ struct args_MPI_Waitall_t {
 
 #define GET_PTRS_VALUE_MPI_Waitall(args) { \
 	if (args->MPI_Waitall.array_of_requests != NULL) { \
-		args->MPI_Waitall.array_of_requests__ref.ptr1 = *args->MPI_Waitall.array_of_requests; \
+		args->MPI_Waitall.array_of_requests__ref.val = *args->MPI_Waitall.array_of_requests; \
 	} \
 	if (args->MPI_Waitall.array_of_statuses != NULL) { \
 		args->MPI_Waitall.array_of_statuses__ref.val = *args->MPI_Waitall.array_of_statuses; \
@@ -1202,7 +1202,7 @@ struct args_MPI_Waitany_t {
 	int count;
 	MPI_Request(* array_of_requests);
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} array_of_requests__ref;
 	int * index;
 	struct {
@@ -1224,7 +1224,7 @@ struct args_MPI_Waitany_t {
 
 #define GET_PTRS_VALUE_MPI_Waitany(args) { \
 	if (args->MPI_Waitany.array_of_requests != NULL) { \
-		args->MPI_Waitany.array_of_requests__ref.ptr1 = *args->MPI_Waitany.array_of_requests; \
+		args->MPI_Waitany.array_of_requests__ref.val = *args->MPI_Waitany.array_of_requests; \
 	} \
 	if (args->MPI_Waitany.index != NULL) { \
 		args->MPI_Waitany.index__ref.val = *args->MPI_Waitany.index; \
@@ -1259,7 +1259,7 @@ struct args_MPI_Waitsome_t {
 	int incount;
 	MPI_Request(* array_of_requests);
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} array_of_requests__ref;
 	int * outcount;
 	struct {
@@ -1286,7 +1286,7 @@ struct args_MPI_Waitsome_t {
 
 #define GET_PTRS_VALUE_MPI_Waitsome(args) { \
 	if (args->MPI_Waitsome.array_of_requests != NULL) { \
-		args->MPI_Waitsome.array_of_requests__ref.ptr1 = *args->MPI_Waitsome.array_of_requests; \
+		args->MPI_Waitsome.array_of_requests__ref.val = *args->MPI_Waitsome.array_of_requests; \
 	} \
 	if (args->MPI_Waitsome.outcount != NULL) { \
 		args->MPI_Waitsome.outcount__ref.val = *args->MPI_Waitsome.outcount; \
@@ -1321,7 +1321,7 @@ struct args_MPI_Waitsome_t {
 struct args_MPI_Test_t {
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int * flag;
 	struct {
@@ -1342,7 +1342,7 @@ struct args_MPI_Test_t {
 
 #define GET_PTRS_VALUE_MPI_Test(args) { \
 	if (args->MPI_Test.request != NULL) { \
-		args->MPI_Test.request__ref.ptr1 = *args->MPI_Test.request; \
+		args->MPI_Test.request__ref.val = *args->MPI_Test.request; \
 	} \
 	if (args->MPI_Test.flag != NULL) { \
 		args->MPI_Test.flag__ref.val = *args->MPI_Test.flag; \
@@ -1376,7 +1376,7 @@ struct args_MPI_Testall_t {
 	int count;
 	MPI_Request(* array_of_requests);
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} array_of_requests__ref;
 	int * flag;
 	struct {
@@ -1398,7 +1398,7 @@ struct args_MPI_Testall_t {
 
 #define GET_PTRS_VALUE_MPI_Testall(args) { \
 	if (args->MPI_Testall.array_of_requests != NULL) { \
-		args->MPI_Testall.array_of_requests__ref.ptr1 = *args->MPI_Testall.array_of_requests; \
+		args->MPI_Testall.array_of_requests__ref.val = *args->MPI_Testall.array_of_requests; \
 	} \
 	if (args->MPI_Testall.flag != NULL) { \
 		args->MPI_Testall.flag__ref.val = *args->MPI_Testall.flag; \
@@ -1433,7 +1433,7 @@ struct args_MPI_Testany_t {
 	int count;
 	MPI_Request(* array_of_requests);
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} array_of_requests__ref;
 	int * index;
 	struct {
@@ -1460,7 +1460,7 @@ struct args_MPI_Testany_t {
 
 #define GET_PTRS_VALUE_MPI_Testany(args) { \
 	if (args->MPI_Testany.array_of_requests != NULL) { \
-		args->MPI_Testany.array_of_requests__ref.ptr1 = *args->MPI_Testany.array_of_requests; \
+		args->MPI_Testany.array_of_requests__ref.val = *args->MPI_Testany.array_of_requests; \
 	} \
 	if (args->MPI_Testany.index != NULL) { \
 		args->MPI_Testany.index__ref.val = *args->MPI_Testany.index; \
@@ -1498,7 +1498,7 @@ struct args_MPI_Testsome_t {
 	int incount;
 	MPI_Request(* array_of_requests);
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} array_of_requests__ref;
 	int * outcount;
 	struct {
@@ -1525,7 +1525,7 @@ struct args_MPI_Testsome_t {
 
 #define GET_PTRS_VALUE_MPI_Testsome(args) { \
 	if (args->MPI_Testsome.array_of_requests != NULL) { \
-		args->MPI_Testsome.array_of_requests__ref.ptr1 = *args->MPI_Testsome.array_of_requests; \
+		args->MPI_Testsome.array_of_requests__ref.val = *args->MPI_Testsome.array_of_requests; \
 	} \
 	if (args->MPI_Testsome.outcount != NULL) { \
 		args->MPI_Testsome.outcount__ref.val = *args->MPI_Testsome.outcount; \
@@ -1558,7 +1558,7 @@ struct args_MPI_Testsome_t {
 struct args_MPI_Request_free_t {
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -1569,7 +1569,7 @@ struct args_MPI_Request_free_t {
 
 #define GET_PTRS_VALUE_MPI_Request_free(args) { \
 	if (args->MPI_Request_free.request != NULL) { \
-		args->MPI_Request_free.request__ref.ptr1 = *args->MPI_Request_free.request; \
+		args->MPI_Request_free.request__ref.val = *args->MPI_Request_free.request; \
 	} \
 };
 
@@ -1593,7 +1593,7 @@ struct args_MPI_Request_free_t {
 struct args_MPI_Cancel_t {
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -1604,7 +1604,7 @@ struct args_MPI_Cancel_t {
 
 #define GET_PTRS_VALUE_MPI_Cancel(args) { \
 	if (args->MPI_Cancel.request != NULL) { \
-		args->MPI_Cancel.request__ref.ptr1 = *args->MPI_Cancel.request; \
+		args->MPI_Cancel.request__ref.val = *args->MPI_Cancel.request; \
 	} \
 };
 
@@ -1632,7 +1632,7 @@ struct args_MPI_Type_contiguous_t {
 	MPI_Datatype oldtype;
 	MPI_Datatype * newtype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
 };
@@ -1645,7 +1645,7 @@ struct args_MPI_Type_contiguous_t {
 
 #define GET_PTRS_VALUE_MPI_Type_contiguous(args) { \
 	if (args->MPI_Type_contiguous.newtype != NULL) { \
-		args->MPI_Type_contiguous.newtype__ref.ptr1 = *args->MPI_Type_contiguous.newtype; \
+		args->MPI_Type_contiguous.newtype__ref.val = *args->MPI_Type_contiguous.newtype; \
 	} \
 };
 
@@ -1677,7 +1677,7 @@ struct args_MPI_Type_vector_t {
 	MPI_Datatype oldtype;
 	MPI_Datatype * newtype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
 };
@@ -1692,7 +1692,7 @@ struct args_MPI_Type_vector_t {
 
 #define GET_PTRS_VALUE_MPI_Type_vector(args) { \
 	if (args->MPI_Type_vector.newtype != NULL) { \
-		args->MPI_Type_vector.newtype__ref.ptr1 = *args->MPI_Type_vector.newtype; \
+		args->MPI_Type_vector.newtype__ref.val = *args->MPI_Type_vector.newtype; \
 	} \
 };
 
@@ -1730,7 +1730,7 @@ struct args_MPI_Type_indexed_t {
 	MPI_Datatype oldtype;
 	MPI_Datatype * newtype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
 };
@@ -1751,7 +1751,7 @@ struct args_MPI_Type_indexed_t {
 		args->MPI_Type_indexed.array_of_displacements__ref.val = *args->MPI_Type_indexed.array_of_displacements; \
 	} \
 	if (args->MPI_Type_indexed.newtype != NULL) { \
-		args->MPI_Type_indexed.newtype__ref.ptr1 = *args->MPI_Type_indexed.newtype; \
+		args->MPI_Type_indexed.newtype__ref.val = *args->MPI_Type_indexed.newtype; \
 	} \
 };
 
@@ -1786,7 +1786,7 @@ struct args_MPI_Type_create_indexed_block_t {
 	MPI_Datatype oldtype;
 	MPI_Datatype * newtype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
 };
@@ -1804,7 +1804,7 @@ struct args_MPI_Type_create_indexed_block_t {
 		args->MPI_Type_create_indexed_block.array_of_displacements__ref.val = *args->MPI_Type_create_indexed_block.array_of_displacements; \
 	} \
 	if (args->MPI_Type_create_indexed_block.newtype != NULL) { \
-		args->MPI_Type_create_indexed_block.newtype__ref.ptr1 = *args->MPI_Type_create_indexed_block.newtype; \
+		args->MPI_Type_create_indexed_block.newtype__ref.val = *args->MPI_Type_create_indexed_block.newtype; \
 	} \
 };
 
@@ -1841,11 +1841,11 @@ struct args_MPI_Type_create_struct_t {
 	} array_of_displacements__ref;
 	MPI_Datatype(* array_of_types);
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} array_of_types__ref;
 	MPI_Datatype * newtype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
 };
@@ -1866,10 +1866,10 @@ struct args_MPI_Type_create_struct_t {
 		args->MPI_Type_create_struct.array_of_displacements__ref.val = *args->MPI_Type_create_struct.array_of_displacements; \
 	} \
 	if (args->MPI_Type_create_struct.array_of_types != NULL) { \
-		args->MPI_Type_create_struct.array_of_types__ref.ptr1 = *args->MPI_Type_create_struct.array_of_types; \
+		args->MPI_Type_create_struct.array_of_types__ref.val = *args->MPI_Type_create_struct.array_of_types; \
 	} \
 	if (args->MPI_Type_create_struct.newtype != NULL) { \
-		args->MPI_Type_create_struct.newtype__ref.ptr1 = *args->MPI_Type_create_struct.newtype; \
+		args->MPI_Type_create_struct.newtype__ref.val = *args->MPI_Type_create_struct.newtype; \
 	} \
 };
 
@@ -1899,7 +1899,7 @@ struct args_MPI_Type_create_resized_t {
 	MPI_Aint extent;
 	MPI_Datatype * newtype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
 };
@@ -1913,7 +1913,7 @@ struct args_MPI_Type_create_resized_t {
 
 #define GET_PTRS_VALUE_MPI_Type_create_resized(args) { \
 	if (args->MPI_Type_create_resized.newtype != NULL) { \
-		args->MPI_Type_create_resized.newtype__ref.ptr1 = *args->MPI_Type_create_resized.newtype; \
+		args->MPI_Type_create_resized.newtype__ref.val = *args->MPI_Type_create_resized.newtype; \
 	} \
 };
 
@@ -1937,7 +1937,7 @@ struct args_MPI_Type_create_resized_t {
 struct args_MPI_Type_commit_t {
 	MPI_Datatype * type;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} type__ref;
 	int retval;
 };
@@ -1948,7 +1948,7 @@ struct args_MPI_Type_commit_t {
 
 #define GET_PTRS_VALUE_MPI_Type_commit(args) { \
 	if (args->MPI_Type_commit.type != NULL) { \
-		args->MPI_Type_commit.type__ref.ptr1 = *args->MPI_Type_commit.type; \
+		args->MPI_Type_commit.type__ref.val = *args->MPI_Type_commit.type; \
 	} \
 };
 
@@ -1972,7 +1972,7 @@ struct args_MPI_Type_commit_t {
 struct args_MPI_Type_free_t {
 	MPI_Datatype * type;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} type__ref;
 	int retval;
 };
@@ -1983,7 +1983,7 @@ struct args_MPI_Type_free_t {
 
 #define GET_PTRS_VALUE_MPI_Type_free(args) { \
 	if (args->MPI_Type_free.type != NULL) { \
-		args->MPI_Type_free.type__ref.ptr1 = *args->MPI_Type_free.type; \
+		args->MPI_Type_free.type__ref.val = *args->MPI_Type_free.type; \
 	} \
 };
 
@@ -3102,7 +3102,7 @@ struct args_MPI_Comm_group_t {
 	MPI_Comm comm;
 	MPI_Group * group;
 	struct {
-		void* ptr1;
+		MPI_Group val;
 	} group__ref;
 	int retval;
 };
@@ -3114,7 +3114,7 @@ struct args_MPI_Comm_group_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_group(args) { \
 	if (args->MPI_Comm_group.group != NULL) { \
-		args->MPI_Comm_group.group__ref.ptr1 = *args->MPI_Comm_group.group; \
+		args->MPI_Comm_group.group__ref.val = *args->MPI_Comm_group.group; \
 	} \
 };
 
@@ -3140,7 +3140,7 @@ struct args_MPI_Comm_dup_t {
 	MPI_Comm comm;
 	MPI_Comm * newcomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
 };
@@ -3152,7 +3152,7 @@ struct args_MPI_Comm_dup_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_dup(args) { \
 	if (args->MPI_Comm_dup.newcomm != NULL) { \
-		args->MPI_Comm_dup.newcomm__ref.ptr1 = *args->MPI_Comm_dup.newcomm; \
+		args->MPI_Comm_dup.newcomm__ref.val = *args->MPI_Comm_dup.newcomm; \
 	} \
 };
 
@@ -3180,7 +3180,7 @@ struct args_MPI_Comm_create_t {
 	MPI_Group group;
 	MPI_Comm * newcomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
 };
@@ -3193,7 +3193,7 @@ struct args_MPI_Comm_create_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_create(args) { \
 	if (args->MPI_Comm_create.newcomm != NULL) { \
-		args->MPI_Comm_create.newcomm__ref.ptr1 = *args->MPI_Comm_create.newcomm; \
+		args->MPI_Comm_create.newcomm__ref.val = *args->MPI_Comm_create.newcomm; \
 	} \
 };
 
@@ -3223,7 +3223,7 @@ struct args_MPI_Comm_split_t {
 	int key;
 	MPI_Comm * newcomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
 };
@@ -3237,7 +3237,7 @@ struct args_MPI_Comm_split_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_split(args) { \
 	if (args->MPI_Comm_split.newcomm != NULL) { \
-		args->MPI_Comm_split.newcomm__ref.ptr1 = *args->MPI_Comm_split.newcomm; \
+		args->MPI_Comm_split.newcomm__ref.val = *args->MPI_Comm_split.newcomm; \
 	} \
 };
 
@@ -3261,7 +3261,7 @@ struct args_MPI_Comm_split_t {
 struct args_MPI_Comm_free_t {
 	MPI_Comm * comm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} comm__ref;
 	int retval;
 };
@@ -3272,7 +3272,7 @@ struct args_MPI_Comm_free_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_free(args) { \
 	if (args->MPI_Comm_free.comm != NULL) { \
-		args->MPI_Comm_free.comm__ref.ptr1 = *args->MPI_Comm_free.comm; \
+		args->MPI_Comm_free.comm__ref.val = *args->MPI_Comm_free.comm; \
 	} \
 };
 
@@ -3374,7 +3374,7 @@ struct args_MPI_Comm_remote_group_t {
 	MPI_Comm comm;
 	MPI_Group * group;
 	struct {
-		void* ptr1;
+		MPI_Group val;
 	} group__ref;
 	int retval;
 };
@@ -3386,7 +3386,7 @@ struct args_MPI_Comm_remote_group_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_remote_group(args) { \
 	if (args->MPI_Comm_remote_group.group != NULL) { \
-		args->MPI_Comm_remote_group.group__ref.ptr1 = *args->MPI_Comm_remote_group.group; \
+		args->MPI_Comm_remote_group.group__ref.val = *args->MPI_Comm_remote_group.group; \
 	} \
 };
 
@@ -3859,7 +3859,7 @@ struct args_MPI_Group_union_t {
 	MPI_Group group2;
 	MPI_Group * newgroup;
 	struct {
-		void* ptr1;
+		MPI_Group val;
 	} newgroup__ref;
 	int retval;
 };
@@ -3872,7 +3872,7 @@ struct args_MPI_Group_union_t {
 
 #define GET_PTRS_VALUE_MPI_Group_union(args) { \
 	if (args->MPI_Group_union.newgroup != NULL) { \
-		args->MPI_Group_union.newgroup__ref.ptr1 = *args->MPI_Group_union.newgroup; \
+		args->MPI_Group_union.newgroup__ref.val = *args->MPI_Group_union.newgroup; \
 	} \
 };
 
@@ -3900,7 +3900,7 @@ struct args_MPI_Group_intersection_t {
 	MPI_Group group2;
 	MPI_Group * newgroup;
 	struct {
-		void* ptr1;
+		MPI_Group val;
 	} newgroup__ref;
 	int retval;
 };
@@ -3913,7 +3913,7 @@ struct args_MPI_Group_intersection_t {
 
 #define GET_PTRS_VALUE_MPI_Group_intersection(args) { \
 	if (args->MPI_Group_intersection.newgroup != NULL) { \
-		args->MPI_Group_intersection.newgroup__ref.ptr1 = *args->MPI_Group_intersection.newgroup; \
+		args->MPI_Group_intersection.newgroup__ref.val = *args->MPI_Group_intersection.newgroup; \
 	} \
 };
 
@@ -3941,7 +3941,7 @@ struct args_MPI_Group_difference_t {
 	MPI_Group group2;
 	MPI_Group * newgroup;
 	struct {
-		void* ptr1;
+		MPI_Group val;
 	} newgroup__ref;
 	int retval;
 };
@@ -3954,7 +3954,7 @@ struct args_MPI_Group_difference_t {
 
 #define GET_PTRS_VALUE_MPI_Group_difference(args) { \
 	if (args->MPI_Group_difference.newgroup != NULL) { \
-		args->MPI_Group_difference.newgroup__ref.ptr1 = *args->MPI_Group_difference.newgroup; \
+		args->MPI_Group_difference.newgroup__ref.val = *args->MPI_Group_difference.newgroup; \
 	} \
 };
 
@@ -3987,7 +3987,7 @@ struct args_MPI_Group_incl_t {
 	} ranks__ref;
 	MPI_Group * newgroup;
 	struct {
-		void* ptr1;
+		MPI_Group val;
 	} newgroup__ref;
 	int retval;
 };
@@ -4004,7 +4004,7 @@ struct args_MPI_Group_incl_t {
 		args->MPI_Group_incl.ranks__ref.val = *args->MPI_Group_incl.ranks; \
 	} \
 	if (args->MPI_Group_incl.newgroup != NULL) { \
-		args->MPI_Group_incl.newgroup__ref.ptr1 = *args->MPI_Group_incl.newgroup; \
+		args->MPI_Group_incl.newgroup__ref.val = *args->MPI_Group_incl.newgroup; \
 	} \
 };
 
@@ -4037,7 +4037,7 @@ struct args_MPI_Group_excl_t {
 	} ranks__ref;
 	MPI_Group * newgroup;
 	struct {
-		void* ptr1;
+		MPI_Group val;
 	} newgroup__ref;
 	int retval;
 };
@@ -4054,7 +4054,7 @@ struct args_MPI_Group_excl_t {
 		args->MPI_Group_excl.ranks__ref.val = *args->MPI_Group_excl.ranks; \
 	} \
 	if (args->MPI_Group_excl.newgroup != NULL) { \
-		args->MPI_Group_excl.newgroup__ref.ptr1 = *args->MPI_Group_excl.newgroup; \
+		args->MPI_Group_excl.newgroup__ref.val = *args->MPI_Group_excl.newgroup; \
 	} \
 };
 
@@ -4087,7 +4087,7 @@ struct args_MPI_Group_range_incl_t {
 	} ranges__ref;
 	MPI_Group * newgroup;
 	struct {
-		void* ptr1;
+		MPI_Group val;
 	} newgroup__ref;
 	int retval;
 };
@@ -4104,7 +4104,7 @@ struct args_MPI_Group_range_incl_t {
 		memcpy(args->MPI_Group_range_incl.ranges__ref.val, args->MPI_Group_range_incl.ranges, sizeof(args->MPI_Group_range_incl.ranges__ref.val)); \
 	} \
 	if (args->MPI_Group_range_incl.newgroup != NULL) { \
-		args->MPI_Group_range_incl.newgroup__ref.ptr1 = *args->MPI_Group_range_incl.newgroup; \
+		args->MPI_Group_range_incl.newgroup__ref.val = *args->MPI_Group_range_incl.newgroup; \
 	} \
 };
 
@@ -4137,7 +4137,7 @@ struct args_MPI_Group_range_excl_t {
 	} ranges__ref;
 	MPI_Group * newgroup;
 	struct {
-		void* ptr1;
+		MPI_Group val;
 	} newgroup__ref;
 	int retval;
 };
@@ -4154,7 +4154,7 @@ struct args_MPI_Group_range_excl_t {
 		memcpy(args->MPI_Group_range_excl.ranges__ref.val, args->MPI_Group_range_excl.ranges, sizeof(args->MPI_Group_range_excl.ranges__ref.val)); \
 	} \
 	if (args->MPI_Group_range_excl.newgroup != NULL) { \
-		args->MPI_Group_range_excl.newgroup__ref.ptr1 = *args->MPI_Group_range_excl.newgroup; \
+		args->MPI_Group_range_excl.newgroup__ref.val = *args->MPI_Group_range_excl.newgroup; \
 	} \
 };
 
@@ -4178,7 +4178,7 @@ struct args_MPI_Group_range_excl_t {
 struct args_MPI_Group_free_t {
 	MPI_Group * group;
 	struct {
-		void* ptr1;
+		MPI_Group val;
 	} group__ref;
 	int retval;
 };
@@ -4189,7 +4189,7 @@ struct args_MPI_Group_free_t {
 
 #define GET_PTRS_VALUE_MPI_Group_free(args) { \
 	if (args->MPI_Group_free.group != NULL) { \
-		args->MPI_Group_free.group__ref.ptr1 = *args->MPI_Group_free.group; \
+		args->MPI_Group_free.group__ref.val = *args->MPI_Group_free.group; \
 	} \
 };
 
@@ -4217,7 +4217,7 @@ struct args_MPI_Op_create_t {
 	int commute;
 	MPI_Op * op;
 	struct {
-		void* ptr1;
+		MPI_Op val;
 	} op__ref;
 	int retval;
 };
@@ -4230,7 +4230,7 @@ struct args_MPI_Op_create_t {
 
 #define GET_PTRS_VALUE_MPI_Op_create(args) { \
 	if (args->MPI_Op_create.op != NULL) { \
-		args->MPI_Op_create.op__ref.ptr1 = *args->MPI_Op_create.op; \
+		args->MPI_Op_create.op__ref.val = *args->MPI_Op_create.op; \
 	} \
 };
 
@@ -4254,7 +4254,7 @@ struct args_MPI_Op_create_t {
 struct args_MPI_Op_free_t {
 	MPI_Op * op;
 	struct {
-		void* ptr1;
+		MPI_Op val;
 	} op__ref;
 	int retval;
 };
@@ -4265,7 +4265,7 @@ struct args_MPI_Op_free_t {
 
 #define GET_PTRS_VALUE_MPI_Op_free(args) { \
 	if (args->MPI_Op_free.op != NULL) { \
-		args->MPI_Op_free.op__ref.ptr1 = *args->MPI_Op_free.op; \
+		args->MPI_Op_free.op__ref.val = *args->MPI_Op_free.op; \
 	} \
 };
 
@@ -4536,7 +4536,7 @@ struct args_MPI_Win_get_info_t {
 	MPI_Win win;
 	MPI_Info * info_used;
 	struct {
-		void* ptr1;
+		MPI_Info val;
 	} info_used__ref;
 	int retval;
 };
@@ -4548,7 +4548,7 @@ struct args_MPI_Win_get_info_t {
 
 #define GET_PTRS_VALUE_MPI_Win_get_info(args) { \
 	if (args->MPI_Win_get_info.info_used != NULL) { \
-		args->MPI_Win_get_info.info_used__ref.ptr1 = *args->MPI_Win_get_info.info_used; \
+		args->MPI_Win_get_info.info_used__ref.val = *args->MPI_Win_get_info.info_used; \
 	} \
 };
 
@@ -4588,7 +4588,7 @@ struct args_MPI_Rput_t {
 	MPI_Win win;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -4607,7 +4607,7 @@ struct args_MPI_Rput_t {
 
 #define GET_PTRS_VALUE_MPI_Rput(args) { \
 	if (args->MPI_Rput.request != NULL) { \
-		args->MPI_Rput.request__ref.ptr1 = *args->MPI_Rput.request; \
+		args->MPI_Rput.request__ref.val = *args->MPI_Rput.request; \
 	} \
 };
 
@@ -4701,7 +4701,7 @@ struct args_MPI_Ireduce_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -4719,7 +4719,7 @@ struct args_MPI_Ireduce_t {
 
 #define GET_PTRS_VALUE_MPI_Ireduce(args) { \
 	if (args->MPI_Ireduce.request != NULL) { \
-		args->MPI_Ireduce.request__ref.ptr1 = *args->MPI_Ireduce.request; \
+		args->MPI_Ireduce.request__ref.val = *args->MPI_Ireduce.request; \
 	} \
 };
 
@@ -4759,7 +4759,7 @@ struct args_MPI_Psend_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -4778,7 +4778,7 @@ struct args_MPI_Psend_init_t {
 
 #define GET_PTRS_VALUE_MPI_Psend_init(args) { \
 	if (args->MPI_Psend_init.request != NULL) { \
-		args->MPI_Psend_init.request__ref.ptr1 = *args->MPI_Psend_init.request; \
+		args->MPI_Psend_init.request__ref.val = *args->MPI_Psend_init.request; \
 	} \
 };
 
@@ -4818,7 +4818,7 @@ struct args_MPI_Reduce_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -4837,7 +4837,7 @@ struct args_MPI_Reduce_init_t {
 
 #define GET_PTRS_VALUE_MPI_Reduce_init(args) { \
 	if (args->MPI_Reduce_init.request != NULL) { \
-		args->MPI_Reduce_init.request__ref.ptr1 = *args->MPI_Reduce_init.request; \
+		args->MPI_Reduce_init.request__ref.val = *args->MPI_Reduce_init.request; \
 	} \
 };
 
@@ -4899,7 +4899,7 @@ struct args_MPI_Rsend_init_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -4916,7 +4916,7 @@ struct args_MPI_Rsend_init_t {
 
 #define GET_PTRS_VALUE_MPI_Rsend_init(args) { \
 	if (args->MPI_Rsend_init.request != NULL) { \
-		args->MPI_Rsend_init.request__ref.ptr1 = *args->MPI_Rsend_init.request; \
+		args->MPI_Rsend_init.request__ref.val = *args->MPI_Rsend_init.request; \
 	} \
 };
 
@@ -5031,7 +5031,7 @@ struct args_MPI_File_write_ordered_end_t {
 struct args_MPI_Errhandler_free_t {
 	MPI_Errhandler * errhandler;
 	struct {
-		void* ptr1;
+		MPI_Errhandler val;
 	} errhandler__ref;
 	int retval;
 };
@@ -5042,7 +5042,7 @@ struct args_MPI_Errhandler_free_t {
 
 #define GET_PTRS_VALUE_MPI_Errhandler_free(args) { \
 	if (args->MPI_Errhandler_free.errhandler != NULL) { \
-		args->MPI_Errhandler_free.errhandler__ref.ptr1 = *args->MPI_Errhandler_free.errhandler; \
+		args->MPI_Errhandler_free.errhandler__ref.val = *args->MPI_Errhandler_free.errhandler; \
 	} \
 };
 
@@ -5334,7 +5334,7 @@ struct args_MPI_Group_from_session_pset_t {
 	} pset_name__ref;
 	MPI_Group * newgroup;
 	struct {
-		void* ptr1;
+		MPI_Group val;
 	} newgroup__ref;
 	int retval;
 };
@@ -5350,7 +5350,7 @@ struct args_MPI_Group_from_session_pset_t {
 		strncpy(args->MPI_Group_from_session_pset.pset_name__ref.val, args->MPI_Group_from_session_pset.pset_name, MPI_STRING_SIZE_MAX-1); \
 	} \
 	if (args->MPI_Group_from_session_pset.newgroup != NULL) { \
-		args->MPI_Group_from_session_pset.newgroup__ref.ptr1 = *args->MPI_Group_from_session_pset.newgroup; \
+		args->MPI_Group_from_session_pset.newgroup__ref.val = *args->MPI_Group_from_session_pset.newgroup; \
 	} \
 };
 
@@ -5377,11 +5377,11 @@ struct args_MPI_Comm_idup_t {
 	MPI_Comm comm;
 	MPI_Comm * newcomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} newcomm__ref;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -5394,10 +5394,10 @@ struct args_MPI_Comm_idup_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_idup(args) { \
 	if (args->MPI_Comm_idup.newcomm != NULL) { \
-		args->MPI_Comm_idup.newcomm__ref.ptr1 = *args->MPI_Comm_idup.newcomm; \
+		args->MPI_Comm_idup.newcomm__ref.val = *args->MPI_Comm_idup.newcomm; \
 	} \
 	if (args->MPI_Comm_idup.request != NULL) { \
-		args->MPI_Comm_idup.request__ref.ptr1 = *args->MPI_Comm_idup.request; \
+		args->MPI_Comm_idup.request__ref.val = *args->MPI_Comm_idup.request; \
 	} \
 };
 
@@ -5492,7 +5492,7 @@ struct args_MPI_Allgatherv_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -5518,7 +5518,7 @@ struct args_MPI_Allgatherv_init_t {
 		args->MPI_Allgatherv_init.displs__ref.val = *args->MPI_Allgatherv_init.displs; \
 	} \
 	if (args->MPI_Allgatherv_init.request != NULL) { \
-		args->MPI_Allgatherv_init.request__ref.ptr1 = *args->MPI_Allgatherv_init.request; \
+		args->MPI_Allgatherv_init.request__ref.val = *args->MPI_Allgatherv_init.request; \
 	} \
 };
 
@@ -5546,7 +5546,7 @@ struct args_MPI_Comm_dup_with_info_t {
 	MPI_Info info;
 	MPI_Comm * newcomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
 };
@@ -5559,7 +5559,7 @@ struct args_MPI_Comm_dup_with_info_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_dup_with_info(args) { \
 	if (args->MPI_Comm_dup_with_info.newcomm != NULL) { \
-		args->MPI_Comm_dup_with_info.newcomm__ref.ptr1 = *args->MPI_Comm_dup_with_info.newcomm; \
+		args->MPI_Comm_dup_with_info.newcomm__ref.val = *args->MPI_Comm_dup_with_info.newcomm; \
 	} \
 };
 
@@ -5640,7 +5640,7 @@ struct args_MPI_Igather_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -5659,7 +5659,7 @@ struct args_MPI_Igather_t {
 
 #define GET_PTRS_VALUE_MPI_Igather(args) { \
 	if (args->MPI_Igather.request != NULL) { \
-		args->MPI_Igather.request__ref.ptr1 = *args->MPI_Igather.request; \
+		args->MPI_Igather.request__ref.val = *args->MPI_Igather.request; \
 	} \
 };
 
@@ -5741,7 +5741,7 @@ struct args_MPI_Type_create_hvector_t {
 	MPI_Datatype oldtype;
 	MPI_Datatype * newtype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
 };
@@ -5756,7 +5756,7 @@ struct args_MPI_Type_create_hvector_t {
 
 #define GET_PTRS_VALUE_MPI_Type_create_hvector(args) { \
 	if (args->MPI_Type_create_hvector.newtype != NULL) { \
-		args->MPI_Type_create_hvector.newtype__ref.ptr1 = *args->MPI_Type_create_hvector.newtype; \
+		args->MPI_Type_create_hvector.newtype__ref.val = *args->MPI_Type_create_hvector.newtype; \
 	} \
 };
 
@@ -5826,7 +5826,7 @@ struct args_MPI_Grequest_start_t {
 	void * extra_state;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -5841,7 +5841,7 @@ struct args_MPI_Grequest_start_t {
 
 #define GET_PTRS_VALUE_MPI_Grequest_start(args) { \
 	if (args->MPI_Grequest_start.request != NULL) { \
-		args->MPI_Grequest_start.request__ref.ptr1 = *args->MPI_Grequest_start.request; \
+		args->MPI_Grequest_start.request__ref.val = *args->MPI_Grequest_start.request; \
 	} \
 };
 
@@ -5877,7 +5877,7 @@ struct args_MPI_Bsend_init_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -5894,7 +5894,7 @@ struct args_MPI_Bsend_init_t {
 
 #define GET_PTRS_VALUE_MPI_Bsend_init(args) { \
 	if (args->MPI_Bsend_init.request != NULL) { \
-		args->MPI_Bsend_init.request__ref.ptr1 = *args->MPI_Bsend_init.request; \
+		args->MPI_Bsend_init.request__ref.val = *args->MPI_Bsend_init.request; \
 	} \
 };
 
@@ -6019,7 +6019,7 @@ struct args_MPI_Comm_split_type_t {
 	MPI_Info info;
 	MPI_Comm * newcomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
 };
@@ -6034,7 +6034,7 @@ struct args_MPI_Comm_split_type_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_split_type(args) { \
 	if (args->MPI_Comm_split_type.newcomm != NULL) { \
-		args->MPI_Comm_split_type.newcomm__ref.ptr1 = *args->MPI_Comm_split_type.newcomm; \
+		args->MPI_Comm_split_type.newcomm__ref.val = *args->MPI_Comm_split_type.newcomm; \
 	} \
 };
 
@@ -6158,7 +6158,7 @@ struct args_MPI_Improbe_t {
 	} flag__ref;
 	MPI_Message * message;
 	struct {
-		void* ptr1;
+		MPI_Message val;
 	} message__ref;
 	MPI_Status * status;
 	struct {
@@ -6181,7 +6181,7 @@ struct args_MPI_Improbe_t {
 		args->MPI_Improbe.flag__ref.val = *args->MPI_Improbe.flag; \
 	} \
 	if (args->MPI_Improbe.message != NULL) { \
-		args->MPI_Improbe.message__ref.ptr1 = *args->MPI_Improbe.message; \
+		args->MPI_Improbe.message__ref.val = *args->MPI_Improbe.message; \
 	} \
 	if (args->MPI_Improbe.status != NULL) { \
 		args->MPI_Improbe.status__ref.val = *args->MPI_Improbe.status; \
@@ -6210,7 +6210,7 @@ struct args_MPI_Comm_get_info_t {
 	MPI_Comm comm;
 	MPI_Info * info_used;
 	struct {
-		void* ptr1;
+		MPI_Info val;
 	} info_used__ref;
 	int retval;
 };
@@ -6222,7 +6222,7 @@ struct args_MPI_Comm_get_info_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_get_info(args) { \
 	if (args->MPI_Comm_get_info.info_used != NULL) { \
-		args->MPI_Comm_get_info.info_used__ref.ptr1 = *args->MPI_Comm_get_info.info_used; \
+		args->MPI_Comm_get_info.info_used__ref.val = *args->MPI_Comm_get_info.info_used; \
 	} \
 };
 
@@ -6341,7 +6341,7 @@ struct args_MPI_Type_create_f90_integer_t {
 	int r;
 	MPI_Datatype * newtype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
 };
@@ -6353,7 +6353,7 @@ struct args_MPI_Type_create_f90_integer_t {
 
 #define GET_PTRS_VALUE_MPI_Type_create_f90_integer(args) { \
 	if (args->MPI_Type_create_f90_integer.newtype != NULL) { \
-		args->MPI_Type_create_f90_integer.newtype__ref.ptr1 = *args->MPI_Type_create_f90_integer.newtype; \
+		args->MPI_Type_create_f90_integer.newtype__ref.val = *args->MPI_Type_create_f90_integer.newtype; \
 	} \
 };
 
@@ -6417,7 +6417,7 @@ struct args_MPI_Exscan_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -6435,7 +6435,7 @@ struct args_MPI_Exscan_init_t {
 
 #define GET_PTRS_VALUE_MPI_Exscan_init(args) { \
 	if (args->MPI_Exscan_init.request != NULL) { \
-		args->MPI_Exscan_init.request__ref.ptr1 = *args->MPI_Exscan_init.request; \
+		args->MPI_Exscan_init.request__ref.val = *args->MPI_Exscan_init.request; \
 	} \
 };
 
@@ -6471,7 +6471,7 @@ struct args_MPI_Ibsend_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -6488,7 +6488,7 @@ struct args_MPI_Ibsend_t {
 
 #define GET_PTRS_VALUE_MPI_Ibsend(args) { \
 	if (args->MPI_Ibsend.request != NULL) { \
-		args->MPI_Ibsend.request__ref.ptr1 = *args->MPI_Ibsend.request; \
+		args->MPI_Ibsend.request__ref.val = *args->MPI_Ibsend.request; \
 	} \
 };
 
@@ -6559,7 +6559,7 @@ struct args_MPI_Ialltoallw_t {
 	} sdispls__ref;
 	MPI_Datatype(* sendtypes);
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} sendtypes__ref;
 	void * recvbuf;
 	int(* recvcounts);
@@ -6572,12 +6572,12 @@ struct args_MPI_Ialltoallw_t {
 	} rdispls__ref;
 	MPI_Datatype(* recvtypes);
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} recvtypes__ref;
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -6603,7 +6603,7 @@ struct args_MPI_Ialltoallw_t {
 		args->MPI_Ialltoallw.sdispls__ref.val = *args->MPI_Ialltoallw.sdispls; \
 	} \
 	if (args->MPI_Ialltoallw.sendtypes != NULL) { \
-		args->MPI_Ialltoallw.sendtypes__ref.ptr1 = *args->MPI_Ialltoallw.sendtypes; \
+		args->MPI_Ialltoallw.sendtypes__ref.val = *args->MPI_Ialltoallw.sendtypes; \
 	} \
 	if (args->MPI_Ialltoallw.recvcounts != NULL) { \
 		args->MPI_Ialltoallw.recvcounts__ref.val = *args->MPI_Ialltoallw.recvcounts; \
@@ -6612,10 +6612,10 @@ struct args_MPI_Ialltoallw_t {
 		args->MPI_Ialltoallw.rdispls__ref.val = *args->MPI_Ialltoallw.rdispls; \
 	} \
 	if (args->MPI_Ialltoallw.recvtypes != NULL) { \
-		args->MPI_Ialltoallw.recvtypes__ref.ptr1 = *args->MPI_Ialltoallw.recvtypes; \
+		args->MPI_Ialltoallw.recvtypes__ref.val = *args->MPI_Ialltoallw.recvtypes; \
 	} \
 	if (args->MPI_Ialltoallw.request != NULL) { \
-		args->MPI_Ialltoallw.request__ref.ptr1 = *args->MPI_Ialltoallw.request; \
+		args->MPI_Ialltoallw.request__ref.val = *args->MPI_Ialltoallw.request; \
 	} \
 };
 
@@ -6650,7 +6650,7 @@ struct args_MPI_Comm_create_from_group_t {
 	MPI_Errhandler errhandler;
 	MPI_Comm * newcomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
 };
@@ -6668,7 +6668,7 @@ struct args_MPI_Comm_create_from_group_t {
 		strncpy(args->MPI_Comm_create_from_group.tag__ref.val, args->MPI_Comm_create_from_group.tag, MPI_STRING_SIZE_MAX-1); \
 	} \
 	if (args->MPI_Comm_create_from_group.newcomm != NULL) { \
-		args->MPI_Comm_create_from_group.newcomm__ref.ptr1 = *args->MPI_Comm_create_from_group.newcomm; \
+		args->MPI_Comm_create_from_group.newcomm__ref.val = *args->MPI_Comm_create_from_group.newcomm; \
 	} \
 };
 
@@ -6710,7 +6710,7 @@ struct args_MPI_Type_get_contents_t {
 	} array_of_addresses__ref;
 	MPI_Datatype(* array_of_datatypes);
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} array_of_datatypes__ref;
 	int retval;
 };
@@ -6733,7 +6733,7 @@ struct args_MPI_Type_get_contents_t {
 		args->MPI_Type_get_contents.array_of_addresses__ref.val = *args->MPI_Type_get_contents.array_of_addresses; \
 	} \
 	if (args->MPI_Type_get_contents.array_of_datatypes != NULL) { \
-		args->MPI_Type_get_contents.array_of_datatypes__ref.ptr1 = *args->MPI_Type_get_contents.array_of_datatypes; \
+		args->MPI_Type_get_contents.array_of_datatypes__ref.val = *args->MPI_Type_get_contents.array_of_datatypes; \
 	} \
 };
 
@@ -6767,7 +6767,7 @@ struct args_MPI_File_iwrite_at_t {
 	MPI_Datatype datatype;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -6783,7 +6783,7 @@ struct args_MPI_File_iwrite_at_t {
 
 #define GET_PTRS_VALUE_MPI_File_iwrite_at(args) { \
 	if (args->MPI_File_iwrite_at.request != NULL) { \
-		args->MPI_File_iwrite_at.request__ref.ptr1 = *args->MPI_File_iwrite_at.request; \
+		args->MPI_File_iwrite_at.request__ref.val = *args->MPI_File_iwrite_at.request; \
 	} \
 };
 
@@ -6944,7 +6944,7 @@ struct args_MPI_Allreduce_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -6962,7 +6962,7 @@ struct args_MPI_Allreduce_init_t {
 
 #define GET_PTRS_VALUE_MPI_Allreduce_init(args) { \
 	if (args->MPI_Allreduce_init.request != NULL) { \
-		args->MPI_Allreduce_init.request__ref.ptr1 = *args->MPI_Allreduce_init.request; \
+		args->MPI_Allreduce_init.request__ref.val = *args->MPI_Allreduce_init.request; \
 	} \
 };
 
@@ -7044,7 +7044,7 @@ struct args_MPI_Comm_create_errhandler_t {
 	MPI_Comm_errhandler_function * function;
 	MPI_Errhandler * errhandler;
 	struct {
-		void* ptr1;
+		MPI_Errhandler val;
 	} errhandler__ref;
 	int retval;
 };
@@ -7056,7 +7056,7 @@ struct args_MPI_Comm_create_errhandler_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_create_errhandler(args) { \
 	if (args->MPI_Comm_create_errhandler.errhandler != NULL) { \
-		args->MPI_Comm_create_errhandler.errhandler__ref.ptr1 = *args->MPI_Comm_create_errhandler.errhandler; \
+		args->MPI_Comm_create_errhandler.errhandler__ref.val = *args->MPI_Comm_create_errhandler.errhandler; \
 	} \
 };
 
@@ -7080,7 +7080,7 @@ struct args_MPI_Comm_create_errhandler_t {
 struct args_MPI_Info_free_t {
 	MPI_Info * info;
 	struct {
-		void* ptr1;
+		MPI_Info val;
 	} info__ref;
 	int retval;
 };
@@ -7091,7 +7091,7 @@ struct args_MPI_Info_free_t {
 
 #define GET_PTRS_VALUE_MPI_Info_free(args) { \
 	if (args->MPI_Info_free.info != NULL) { \
-		args->MPI_Info_free.info__ref.ptr1 = *args->MPI_Info_free.info; \
+		args->MPI_Info_free.info__ref.val = *args->MPI_Info_free.info; \
 	} \
 };
 
@@ -7168,7 +7168,7 @@ struct args_MPI_Ssend_init_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -7185,7 +7185,7 @@ struct args_MPI_Ssend_init_t {
 
 #define GET_PTRS_VALUE_MPI_Ssend_init(args) { \
 	if (args->MPI_Ssend_init.request != NULL) { \
-		args->MPI_Ssend_init.request__ref.ptr1 = *args->MPI_Ssend_init.request; \
+		args->MPI_Ssend_init.request__ref.val = *args->MPI_Ssend_init.request; \
 	} \
 };
 
@@ -7254,7 +7254,7 @@ struct args_MPI_Cart_create_t {
 	int reorder;
 	MPI_Comm * comm_cart;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} comm_cart__ref;
 	int retval;
 };
@@ -7276,7 +7276,7 @@ struct args_MPI_Cart_create_t {
 		args->MPI_Cart_create.periods__ref.val = *args->MPI_Cart_create.periods; \
 	} \
 	if (args->MPI_Cart_create.comm_cart != NULL) { \
-		args->MPI_Cart_create.comm_cart__ref.ptr1 = *args->MPI_Cart_create.comm_cart; \
+		args->MPI_Cart_create.comm_cart__ref.val = *args->MPI_Cart_create.comm_cart; \
 	} \
 };
 
@@ -7375,7 +7375,7 @@ struct args_MPI_Scan_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -7393,7 +7393,7 @@ struct args_MPI_Scan_init_t {
 
 #define GET_PTRS_VALUE_MPI_Scan_init(args) { \
 	if (args->MPI_Scan_init.request != NULL) { \
-		args->MPI_Scan_init.request__ref.ptr1 = *args->MPI_Scan_init.request; \
+		args->MPI_Scan_init.request__ref.val = *args->MPI_Scan_init.request; \
 	} \
 };
 
@@ -7429,7 +7429,7 @@ struct args_MPI_Irsend_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -7446,7 +7446,7 @@ struct args_MPI_Irsend_t {
 
 #define GET_PTRS_VALUE_MPI_Irsend(args) { \
 	if (args->MPI_Irsend.request != NULL) { \
-		args->MPI_Irsend.request__ref.ptr1 = *args->MPI_Irsend.request; \
+		args->MPI_Irsend.request__ref.val = *args->MPI_Irsend.request; \
 	} \
 };
 
@@ -7659,7 +7659,7 @@ struct args_MPI_Alltoallw_init_t {
 	} sdispls__ref;
 	MPI_Datatype(* sendtypes);
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} sendtypes__ref;
 	void * recvbuf;
 	int(* recvcounts);
@@ -7672,13 +7672,13 @@ struct args_MPI_Alltoallw_init_t {
 	} rdispls__ref;
 	MPI_Datatype(* recvtypes);
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} recvtypes__ref;
 	MPI_Comm comm;
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -7705,7 +7705,7 @@ struct args_MPI_Alltoallw_init_t {
 		args->MPI_Alltoallw_init.sdispls__ref.val = *args->MPI_Alltoallw_init.sdispls; \
 	} \
 	if (args->MPI_Alltoallw_init.sendtypes != NULL) { \
-		args->MPI_Alltoallw_init.sendtypes__ref.ptr1 = *args->MPI_Alltoallw_init.sendtypes; \
+		args->MPI_Alltoallw_init.sendtypes__ref.val = *args->MPI_Alltoallw_init.sendtypes; \
 	} \
 	if (args->MPI_Alltoallw_init.recvcounts != NULL) { \
 		args->MPI_Alltoallw_init.recvcounts__ref.val = *args->MPI_Alltoallw_init.recvcounts; \
@@ -7714,10 +7714,10 @@ struct args_MPI_Alltoallw_init_t {
 		args->MPI_Alltoallw_init.rdispls__ref.val = *args->MPI_Alltoallw_init.rdispls; \
 	} \
 	if (args->MPI_Alltoallw_init.recvtypes != NULL) { \
-		args->MPI_Alltoallw_init.recvtypes__ref.ptr1 = *args->MPI_Alltoallw_init.recvtypes; \
+		args->MPI_Alltoallw_init.recvtypes__ref.val = *args->MPI_Alltoallw_init.recvtypes; \
 	} \
 	if (args->MPI_Alltoallw_init.request != NULL) { \
-		args->MPI_Alltoallw_init.request__ref.ptr1 = *args->MPI_Alltoallw_init.request; \
+		args->MPI_Alltoallw_init.request__ref.val = *args->MPI_Alltoallw_init.request; \
 	} \
 };
 
@@ -7832,7 +7832,7 @@ struct args_MPI_Dist_graph_create_adjacent_t {
 	int reorder;
 	MPI_Comm * comm_dist_graph;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} comm_dist_graph__ref;
 	int retval;
 };
@@ -7864,7 +7864,7 @@ struct args_MPI_Dist_graph_create_adjacent_t {
 		args->MPI_Dist_graph_create_adjacent.destweights__ref.val = *args->MPI_Dist_graph_create_adjacent.destweights; \
 	} \
 	if (args->MPI_Dist_graph_create_adjacent.comm_dist_graph != NULL) { \
-		args->MPI_Dist_graph_create_adjacent.comm_dist_graph__ref.ptr1 = *args->MPI_Dist_graph_create_adjacent.comm_dist_graph; \
+		args->MPI_Dist_graph_create_adjacent.comm_dist_graph__ref.val = *args->MPI_Dist_graph_create_adjacent.comm_dist_graph; \
 	} \
 };
 
@@ -7905,7 +7905,7 @@ struct args_MPI_Reduce_scatter_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -7926,7 +7926,7 @@ struct args_MPI_Reduce_scatter_init_t {
 		args->MPI_Reduce_scatter_init.recvcounts__ref.val = *args->MPI_Reduce_scatter_init.recvcounts; \
 	} \
 	if (args->MPI_Reduce_scatter_init.request != NULL) { \
-		args->MPI_Reduce_scatter_init.request__ref.ptr1 = *args->MPI_Reduce_scatter_init.request; \
+		args->MPI_Reduce_scatter_init.request__ref.val = *args->MPI_Reduce_scatter_init.request; \
 	} \
 };
 
@@ -7950,7 +7950,7 @@ struct args_MPI_Reduce_scatter_init_t {
 struct args_MPI_Comm_get_parent_t {
 	MPI_Comm * parent;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} parent__ref;
 	int retval;
 };
@@ -7961,7 +7961,7 @@ struct args_MPI_Comm_get_parent_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_get_parent(args) { \
 	if (args->MPI_Comm_get_parent.parent != NULL) { \
-		args->MPI_Comm_get_parent.parent__ref.ptr1 = *args->MPI_Comm_get_parent.parent; \
+		args->MPI_Comm_get_parent.parent__ref.val = *args->MPI_Comm_get_parent.parent; \
 	} \
 };
 
@@ -8174,7 +8174,7 @@ struct args_MPI_Comm_connect_t {
 	MPI_Comm comm;
 	MPI_Comm * newcomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
 };
@@ -8192,7 +8192,7 @@ struct args_MPI_Comm_connect_t {
 		strncpy(args->MPI_Comm_connect.port_name__ref.val, args->MPI_Comm_connect.port_name, MPI_STRING_SIZE_MAX-1); \
 	} \
 	if (args->MPI_Comm_connect.newcomm != NULL) { \
-		args->MPI_Comm_connect.newcomm__ref.ptr1 = *args->MPI_Comm_connect.newcomm; \
+		args->MPI_Comm_connect.newcomm__ref.val = *args->MPI_Comm_connect.newcomm; \
 	} \
 };
 
@@ -8283,7 +8283,7 @@ struct args_MPI_Scatterv_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -8310,7 +8310,7 @@ struct args_MPI_Scatterv_init_t {
 		args->MPI_Scatterv_init.displs__ref.val = *args->MPI_Scatterv_init.displs; \
 	} \
 	if (args->MPI_Scatterv_init.request != NULL) { \
-		args->MPI_Scatterv_init.request__ref.ptr1 = *args->MPI_Scatterv_init.request; \
+		args->MPI_Scatterv_init.request__ref.val = *args->MPI_Scatterv_init.request; \
 	} \
 };
 
@@ -8544,7 +8544,7 @@ struct args_MPI_Startall_t {
 	int count;
 	MPI_Request(* array_of_requests);
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} array_of_requests__ref;
 	int retval;
 };
@@ -8556,7 +8556,7 @@ struct args_MPI_Startall_t {
 
 #define GET_PTRS_VALUE_MPI_Startall(args) { \
 	if (args->MPI_Startall.array_of_requests != NULL) { \
-		args->MPI_Startall.array_of_requests__ref.ptr1 = *args->MPI_Startall.array_of_requests; \
+		args->MPI_Startall.array_of_requests__ref.val = *args->MPI_Startall.array_of_requests; \
 	} \
 };
 
@@ -8798,7 +8798,7 @@ struct args_MPI_Session_get_pset_info_t {
 	} pset_name__ref;
 	MPI_Info * info_used;
 	struct {
-		void* ptr1;
+		MPI_Info val;
 	} info_used__ref;
 	int retval;
 };
@@ -8814,7 +8814,7 @@ struct args_MPI_Session_get_pset_info_t {
 		strncpy(args->MPI_Session_get_pset_info.pset_name__ref.val, args->MPI_Session_get_pset_info.pset_name, MPI_STRING_SIZE_MAX-1); \
 	} \
 	if (args->MPI_Session_get_pset_info.info_used != NULL) { \
-		args->MPI_Session_get_pset_info.info_used__ref.ptr1 = *args->MPI_Session_get_pset_info.info_used; \
+		args->MPI_Session_get_pset_info.info_used__ref.val = *args->MPI_Session_get_pset_info.info_used; \
 	} \
 };
 
@@ -8876,7 +8876,7 @@ struct args_MPI_Topo_test_t {
 struct args_MPI_Comm_disconnect_t {
 	MPI_Comm * comm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} comm__ref;
 	int retval;
 };
@@ -8887,7 +8887,7 @@ struct args_MPI_Comm_disconnect_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_disconnect(args) { \
 	if (args->MPI_Comm_disconnect.comm != NULL) { \
-		args->MPI_Comm_disconnect.comm__ref.ptr1 = *args->MPI_Comm_disconnect.comm; \
+		args->MPI_Comm_disconnect.comm__ref.val = *args->MPI_Comm_disconnect.comm; \
 	} \
 };
 
@@ -8961,7 +8961,7 @@ struct args_MPI_Ireduce_scatter_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -8981,7 +8981,7 @@ struct args_MPI_Ireduce_scatter_t {
 		args->MPI_Ireduce_scatter.recvcounts__ref.val = *args->MPI_Ireduce_scatter.recvcounts; \
 	} \
 	if (args->MPI_Ireduce_scatter.request != NULL) { \
-		args->MPI_Ireduce_scatter.request__ref.ptr1 = *args->MPI_Ireduce_scatter.request; \
+		args->MPI_Ireduce_scatter.request__ref.val = *args->MPI_Ireduce_scatter.request; \
 	} \
 };
 
@@ -9068,7 +9068,7 @@ struct args_MPI_Intercomm_merge_t {
 	int high;
 	MPI_Comm * newintracomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} newintracomm__ref;
 	int retval;
 };
@@ -9081,7 +9081,7 @@ struct args_MPI_Intercomm_merge_t {
 
 #define GET_PTRS_VALUE_MPI_Intercomm_merge(args) { \
 	if (args->MPI_Intercomm_merge.newintracomm != NULL) { \
-		args->MPI_Intercomm_merge.newintracomm__ref.ptr1 = *args->MPI_Intercomm_merge.newintracomm; \
+		args->MPI_Intercomm_merge.newintracomm__ref.val = *args->MPI_Intercomm_merge.newintracomm; \
 	} \
 };
 
@@ -9119,7 +9119,7 @@ struct args_MPI_Type_create_hindexed_t {
 	MPI_Datatype oldtype;
 	MPI_Datatype * newtype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
 };
@@ -9140,7 +9140,7 @@ struct args_MPI_Type_create_hindexed_t {
 		args->MPI_Type_create_hindexed.array_of_displacements__ref.val = *args->MPI_Type_create_hindexed.array_of_displacements; \
 	} \
 	if (args->MPI_Type_create_hindexed.newtype != NULL) { \
-		args->MPI_Type_create_hindexed.newtype__ref.ptr1 = *args->MPI_Type_create_hindexed.newtype; \
+		args->MPI_Type_create_hindexed.newtype__ref.val = *args->MPI_Type_create_hindexed.newtype; \
 	} \
 };
 
@@ -9271,7 +9271,7 @@ struct args_MPI_Ineighbor_allgatherv_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -9296,7 +9296,7 @@ struct args_MPI_Ineighbor_allgatherv_t {
 		args->MPI_Ineighbor_allgatherv.displs__ref.val = *args->MPI_Ineighbor_allgatherv.displs; \
 	} \
 	if (args->MPI_Ineighbor_allgatherv.request != NULL) { \
-		args->MPI_Ineighbor_allgatherv.request__ref.ptr1 = *args->MPI_Ineighbor_allgatherv.request; \
+		args->MPI_Ineighbor_allgatherv.request__ref.val = *args->MPI_Ineighbor_allgatherv.request; \
 	} \
 };
 
@@ -9476,7 +9476,7 @@ struct args_MPI_Type_create_f90_real_t {
 	int r;
 	MPI_Datatype * newtype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
 };
@@ -9489,7 +9489,7 @@ struct args_MPI_Type_create_f90_real_t {
 
 #define GET_PTRS_VALUE_MPI_Type_create_f90_real(args) { \
 	if (args->MPI_Type_create_f90_real.newtype != NULL) { \
-		args->MPI_Type_create_f90_real.newtype__ref.ptr1 = *args->MPI_Type_create_f90_real.newtype; \
+		args->MPI_Type_create_f90_real.newtype__ref.val = *args->MPI_Type_create_f90_real.newtype; \
 	} \
 };
 
@@ -9586,7 +9586,7 @@ struct args_MPI_Probe_t {
 struct args_MPI_File_close_t {
 	MPI_File * fh;
 	struct {
-		void* ptr1;
+		MPI_File val;
 	} fh__ref;
 	int retval;
 };
@@ -9597,7 +9597,7 @@ struct args_MPI_File_close_t {
 
 #define GET_PTRS_VALUE_MPI_File_close(args) { \
 	if (args->MPI_File_close.fh != NULL) { \
-		args->MPI_File_close.fh__ref.ptr1 = *args->MPI_File_close.fh; \
+		args->MPI_File_close.fh__ref.val = *args->MPI_File_close.fh; \
 	} \
 };
 
@@ -9721,7 +9721,7 @@ struct args_MPI_Rget_accumulate_t {
 	MPI_Win win;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -9744,7 +9744,7 @@ struct args_MPI_Rget_accumulate_t {
 
 #define GET_PTRS_VALUE_MPI_Rget_accumulate(args) { \
 	if (args->MPI_Rget_accumulate.request != NULL) { \
-		args->MPI_Rget_accumulate.request__ref.ptr1 = *args->MPI_Rget_accumulate.request; \
+		args->MPI_Rget_accumulate.request__ref.val = *args->MPI_Rget_accumulate.request; \
 	} \
 };
 
@@ -9776,7 +9776,7 @@ struct args_MPI_File_iread_all_t {
 	MPI_Datatype datatype;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -9791,7 +9791,7 @@ struct args_MPI_File_iread_all_t {
 
 #define GET_PTRS_VALUE_MPI_File_iread_all(args) { \
 	if (args->MPI_File_iread_all.request != NULL) { \
-		args->MPI_File_iread_all.request__ref.ptr1 = *args->MPI_File_iread_all.request; \
+		args->MPI_File_iread_all.request__ref.val = *args->MPI_File_iread_all.request; \
 	} \
 };
 
@@ -9837,7 +9837,7 @@ struct args_MPI_Isendrecv_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -9859,7 +9859,7 @@ struct args_MPI_Isendrecv_t {
 
 #define GET_PTRS_VALUE_MPI_Isendrecv(args) { \
 	if (args->MPI_Isendrecv.request != NULL) { \
-		args->MPI_Isendrecv.request__ref.ptr1 = *args->MPI_Isendrecv.request; \
+		args->MPI_Isendrecv.request__ref.val = *args->MPI_Isendrecv.request; \
 	} \
 };
 
@@ -10075,7 +10075,7 @@ struct args_MPI_Win_create_t {
 	MPI_Comm comm;
 	MPI_Win * win;
 	struct {
-		void* ptr1;
+		MPI_Win val;
 	} win__ref;
 	int retval;
 };
@@ -10091,7 +10091,7 @@ struct args_MPI_Win_create_t {
 
 #define GET_PTRS_VALUE_MPI_Win_create(args) { \
 	if (args->MPI_Win_create.win != NULL) { \
-		args->MPI_Win_create.win__ref.ptr1 = *args->MPI_Win_create.win; \
+		args->MPI_Win_create.win__ref.val = *args->MPI_Win_create.win; \
 	} \
 };
 
@@ -10131,7 +10131,7 @@ struct args_MPI_Isendrecv_replace_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -10150,7 +10150,7 @@ struct args_MPI_Isendrecv_replace_t {
 
 #define GET_PTRS_VALUE_MPI_Isendrecv_replace(args) { \
 	if (args->MPI_Isendrecv_replace.request != NULL) { \
-		args->MPI_Isendrecv_replace.request__ref.ptr1 = *args->MPI_Isendrecv_replace.request; \
+		args->MPI_Isendrecv_replace.request__ref.val = *args->MPI_Isendrecv_replace.request; \
 	} \
 };
 
@@ -10578,7 +10578,7 @@ struct args_MPI_Message_c2f_t {
 struct args_MPI_Win_free_t {
 	MPI_Win * win;
 	struct {
-		void* ptr1;
+		MPI_Win val;
 	} win__ref;
 	int retval;
 };
@@ -10589,7 +10589,7 @@ struct args_MPI_Win_free_t {
 
 #define GET_PTRS_VALUE_MPI_Win_free(args) { \
 	if (args->MPI_Win_free.win != NULL) { \
-		args->MPI_Win_free.win__ref.ptr1 = *args->MPI_Win_free.win; \
+		args->MPI_Win_free.win__ref.val = *args->MPI_Win_free.win; \
 	} \
 };
 
@@ -10617,7 +10617,7 @@ struct args_MPI_Type_create_f90_complex_t {
 	int r;
 	MPI_Datatype * newtype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
 };
@@ -10630,7 +10630,7 @@ struct args_MPI_Type_create_f90_complex_t {
 
 #define GET_PTRS_VALUE_MPI_Type_create_f90_complex(args) { \
 	if (args->MPI_Type_create_f90_complex.newtype != NULL) { \
-		args->MPI_Type_create_f90_complex.newtype__ref.ptr1 = *args->MPI_Type_create_f90_complex.newtype; \
+		args->MPI_Type_create_f90_complex.newtype__ref.val = *args->MPI_Type_create_f90_complex.newtype; \
 	} \
 };
 
@@ -10673,7 +10673,7 @@ struct args_MPI_Neighbor_alltoallw_init_t {
 	} sdispls__ref;
 	MPI_Datatype(* sendtypes);
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} sendtypes__ref;
 	void * recvbuf;
 	int(* recvcounts);
@@ -10686,13 +10686,13 @@ struct args_MPI_Neighbor_alltoallw_init_t {
 	} rdispls__ref;
 	MPI_Datatype(* recvtypes);
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} recvtypes__ref;
 	MPI_Comm comm;
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -10719,7 +10719,7 @@ struct args_MPI_Neighbor_alltoallw_init_t {
 		args->MPI_Neighbor_alltoallw_init.sdispls__ref.val = *args->MPI_Neighbor_alltoallw_init.sdispls; \
 	} \
 	if (args->MPI_Neighbor_alltoallw_init.sendtypes != NULL) { \
-		args->MPI_Neighbor_alltoallw_init.sendtypes__ref.ptr1 = *args->MPI_Neighbor_alltoallw_init.sendtypes; \
+		args->MPI_Neighbor_alltoallw_init.sendtypes__ref.val = *args->MPI_Neighbor_alltoallw_init.sendtypes; \
 	} \
 	if (args->MPI_Neighbor_alltoallw_init.recvcounts != NULL) { \
 		args->MPI_Neighbor_alltoallw_init.recvcounts__ref.val = *args->MPI_Neighbor_alltoallw_init.recvcounts; \
@@ -10728,10 +10728,10 @@ struct args_MPI_Neighbor_alltoallw_init_t {
 		args->MPI_Neighbor_alltoallw_init.rdispls__ref.val = *args->MPI_Neighbor_alltoallw_init.rdispls; \
 	} \
 	if (args->MPI_Neighbor_alltoallw_init.recvtypes != NULL) { \
-		args->MPI_Neighbor_alltoallw_init.recvtypes__ref.ptr1 = *args->MPI_Neighbor_alltoallw_init.recvtypes; \
+		args->MPI_Neighbor_alltoallw_init.recvtypes__ref.val = *args->MPI_Neighbor_alltoallw_init.recvtypes; \
 	} \
 	if (args->MPI_Neighbor_alltoallw_init.request != NULL) { \
-		args->MPI_Neighbor_alltoallw_init.request__ref.ptr1 = *args->MPI_Neighbor_alltoallw_init.request; \
+		args->MPI_Neighbor_alltoallw_init.request__ref.val = *args->MPI_Neighbor_alltoallw_init.request; \
 	} \
 };
 
@@ -10771,7 +10771,7 @@ struct args_MPI_Rget_t {
 	MPI_Win win;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -10790,7 +10790,7 @@ struct args_MPI_Rget_t {
 
 #define GET_PTRS_VALUE_MPI_Rget(args) { \
 	if (args->MPI_Rget.request != NULL) { \
-		args->MPI_Rget.request__ref.ptr1 = *args->MPI_Rget.request; \
+		args->MPI_Rget.request__ref.val = *args->MPI_Rget.request; \
 	} \
 };
 
@@ -10987,7 +10987,7 @@ struct args_MPI_Scatter_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -11007,7 +11007,7 @@ struct args_MPI_Scatter_init_t {
 
 #define GET_PTRS_VALUE_MPI_Scatter_init(args) { \
 	if (args->MPI_Scatter_init.request != NULL) { \
-		args->MPI_Scatter_init.request__ref.ptr1 = *args->MPI_Scatter_init.request; \
+		args->MPI_Scatter_init.request__ref.val = *args->MPI_Scatter_init.request; \
 	} \
 };
 
@@ -11103,7 +11103,7 @@ struct args_MPI_Mrecv_t {
 	MPI_Datatype type;
 	MPI_Message * message;
 	struct {
-		void* ptr1;
+		MPI_Message val;
 	} message__ref;
 	MPI_Status * status;
 	struct {
@@ -11122,7 +11122,7 @@ struct args_MPI_Mrecv_t {
 
 #define GET_PTRS_VALUE_MPI_Mrecv(args) { \
 	if (args->MPI_Mrecv.message != NULL) { \
-		args->MPI_Mrecv.message__ref.ptr1 = *args->MPI_Mrecv.message; \
+		args->MPI_Mrecv.message__ref.val = *args->MPI_Mrecv.message; \
 	} \
 	if (args->MPI_Mrecv.status != NULL) { \
 		args->MPI_Mrecv.status__ref.val = *args->MPI_Mrecv.status; \
@@ -11360,7 +11360,7 @@ struct args_MPI_Comm_spawn_t {
 	MPI_Comm comm;
 	MPI_Comm * intercomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} intercomm__ref;
 	int(* array_of_errcodes);
 	struct {
@@ -11391,7 +11391,7 @@ struct args_MPI_Comm_spawn_t {
 		} \
 	} \
 	if (args->MPI_Comm_spawn.intercomm != NULL) { \
-		args->MPI_Comm_spawn.intercomm__ref.ptr1 = *args->MPI_Comm_spawn.intercomm; \
+		args->MPI_Comm_spawn.intercomm__ref.val = *args->MPI_Comm_spawn.intercomm; \
 	} \
 	if (args->MPI_Comm_spawn.array_of_errcodes != NULL) { \
 		args->MPI_Comm_spawn.array_of_errcodes__ref.val = *args->MPI_Comm_spawn.array_of_errcodes; \
@@ -11493,7 +11493,7 @@ struct args_MPI_File_get_group_t {
 	MPI_File fh;
 	MPI_Group * group;
 	struct {
-		void* ptr1;
+		MPI_Group val;
 	} group__ref;
 	int retval;
 };
@@ -11505,7 +11505,7 @@ struct args_MPI_File_get_group_t {
 
 #define GET_PTRS_VALUE_MPI_File_get_group(args) { \
 	if (args->MPI_File_get_group.group != NULL) { \
-		args->MPI_File_get_group.group__ref.ptr1 = *args->MPI_File_get_group.group; \
+		args->MPI_File_get_group.group__ref.val = *args->MPI_File_get_group.group; \
 	} \
 };
 
@@ -11539,7 +11539,7 @@ struct args_MPI_File_iread_at_all_t {
 	MPI_Datatype datatype;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -11555,7 +11555,7 @@ struct args_MPI_File_iread_at_all_t {
 
 #define GET_PTRS_VALUE_MPI_File_iread_at_all(args) { \
 	if (args->MPI_File_iread_at_all.request != NULL) { \
-		args->MPI_File_iread_at_all.request__ref.ptr1 = *args->MPI_File_iread_at_all.request; \
+		args->MPI_File_iread_at_all.request__ref.val = *args->MPI_File_iread_at_all.request; \
 	} \
 };
 
@@ -11634,7 +11634,7 @@ struct args_MPI_File_iread_shared_t {
 	MPI_Datatype datatype;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -11649,7 +11649,7 @@ struct args_MPI_File_iread_shared_t {
 
 #define GET_PTRS_VALUE_MPI_File_iread_shared(args) { \
 	if (args->MPI_File_iread_shared.request != NULL) { \
-		args->MPI_File_iread_shared.request__ref.ptr1 = *args->MPI_File_iread_shared.request; \
+		args->MPI_File_iread_shared.request__ref.val = *args->MPI_File_iread_shared.request; \
 	} \
 };
 
@@ -11704,11 +11704,11 @@ struct args_MPI_Comm_idup_with_info_t {
 	MPI_Info info;
 	MPI_Comm * newcomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} newcomm__ref;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -11722,10 +11722,10 @@ struct args_MPI_Comm_idup_with_info_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_idup_with_info(args) { \
 	if (args->MPI_Comm_idup_with_info.newcomm != NULL) { \
-		args->MPI_Comm_idup_with_info.newcomm__ref.ptr1 = *args->MPI_Comm_idup_with_info.newcomm; \
+		args->MPI_Comm_idup_with_info.newcomm__ref.val = *args->MPI_Comm_idup_with_info.newcomm; \
 	} \
 	if (args->MPI_Comm_idup_with_info.request != NULL) { \
-		args->MPI_Comm_idup_with_info.request__ref.ptr1 = *args->MPI_Comm_idup_with_info.request; \
+		args->MPI_Comm_idup_with_info.request__ref.val = *args->MPI_Comm_idup_with_info.request; \
 	} \
 };
 
@@ -11865,7 +11865,7 @@ struct args_MPI_Intercomm_create_from_groups_t {
 	MPI_Errhandler errhandler;
 	MPI_Comm * newintercomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} newintercomm__ref;
 	int retval;
 };
@@ -11886,7 +11886,7 @@ struct args_MPI_Intercomm_create_from_groups_t {
 		strncpy(args->MPI_Intercomm_create_from_groups.tag__ref.val, args->MPI_Intercomm_create_from_groups.tag, MPI_STRING_SIZE_MAX-1); \
 	} \
 	if (args->MPI_Intercomm_create_from_groups.newintercomm != NULL) { \
-		args->MPI_Intercomm_create_from_groups.newintercomm__ref.ptr1 = *args->MPI_Intercomm_create_from_groups.newintercomm; \
+		args->MPI_Intercomm_create_from_groups.newintercomm__ref.val = *args->MPI_Intercomm_create_from_groups.newintercomm; \
 	} \
 };
 
@@ -11942,7 +11942,7 @@ struct args_MPI_Neighbor_alltoallv_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -11975,7 +11975,7 @@ struct args_MPI_Neighbor_alltoallv_init_t {
 		args->MPI_Neighbor_alltoallv_init.rdispls__ref.val = *args->MPI_Neighbor_alltoallv_init.rdispls; \
 	} \
 	if (args->MPI_Neighbor_alltoallv_init.request != NULL) { \
-		args->MPI_Neighbor_alltoallv_init.request__ref.ptr1 = *args->MPI_Neighbor_alltoallv_init.request; \
+		args->MPI_Neighbor_alltoallv_init.request__ref.val = *args->MPI_Neighbor_alltoallv_init.request; \
 	} \
 };
 
@@ -12029,7 +12029,7 @@ struct args_MPI_Type_create_darray_t {
 	MPI_Datatype oldtype;
 	MPI_Datatype * newtype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
 };
@@ -12061,7 +12061,7 @@ struct args_MPI_Type_create_darray_t {
 		args->MPI_Type_create_darray.psize_array__ref.val = *args->MPI_Type_create_darray.psize_array; \
 	} \
 	if (args->MPI_Type_create_darray.newtype != NULL) { \
-		args->MPI_Type_create_darray.newtype__ref.ptr1 = *args->MPI_Type_create_darray.newtype; \
+		args->MPI_Type_create_darray.newtype__ref.val = *args->MPI_Type_create_darray.newtype; \
 	} \
 };
 
@@ -12125,7 +12125,7 @@ struct args_MPI_Win_get_group_t {
 	MPI_Win win;
 	MPI_Group * group;
 	struct {
-		void* ptr1;
+		MPI_Group val;
 	} group__ref;
 	int retval;
 };
@@ -12137,7 +12137,7 @@ struct args_MPI_Win_get_group_t {
 
 #define GET_PTRS_VALUE_MPI_Win_get_group(args) { \
 	if (args->MPI_Win_get_group.group != NULL) { \
-		args->MPI_Win_get_group.group__ref.ptr1 = *args->MPI_Win_get_group.group; \
+		args->MPI_Win_get_group.group__ref.val = *args->MPI_Win_get_group.group; \
 	} \
 };
 
@@ -12319,7 +12319,7 @@ struct args_MPI_Ireduce_scatter_block_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -12336,7 +12336,7 @@ struct args_MPI_Ireduce_scatter_block_t {
 
 #define GET_PTRS_VALUE_MPI_Ireduce_scatter_block(args) { \
 	if (args->MPI_Ireduce_scatter_block.request != NULL) { \
-		args->MPI_Ireduce_scatter_block.request__ref.ptr1 = *args->MPI_Ireduce_scatter_block.request; \
+		args->MPI_Ireduce_scatter_block.request__ref.val = *args->MPI_Ireduce_scatter_block.request; \
 	} \
 };
 
@@ -12698,7 +12698,7 @@ struct args_MPI_Session_create_errhandler_t {
 	MPI_Session_errhandler_function * session_errhandler_fn;
 	MPI_Errhandler * errhandler;
 	struct {
-		void* ptr1;
+		MPI_Errhandler val;
 	} errhandler__ref;
 	int retval;
 };
@@ -12710,7 +12710,7 @@ struct args_MPI_Session_create_errhandler_t {
 
 #define GET_PTRS_VALUE_MPI_Session_create_errhandler(args) { \
 	if (args->MPI_Session_create_errhandler.errhandler != NULL) { \
-		args->MPI_Session_create_errhandler.errhandler__ref.ptr1 = *args->MPI_Session_create_errhandler.errhandler; \
+		args->MPI_Session_create_errhandler.errhandler__ref.val = *args->MPI_Session_create_errhandler.errhandler; \
 	} \
 };
 
@@ -12779,7 +12779,7 @@ struct args_MPI_Iscatter_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -12798,7 +12798,7 @@ struct args_MPI_Iscatter_t {
 
 #define GET_PTRS_VALUE_MPI_Iscatter(args) { \
 	if (args->MPI_Iscatter.request != NULL) { \
-		args->MPI_Iscatter.request__ref.ptr1 = *args->MPI_Iscatter.request; \
+		args->MPI_Iscatter.request__ref.val = *args->MPI_Iscatter.request; \
 	} \
 };
 
@@ -12932,7 +12932,7 @@ struct args_MPI_File_get_errhandler_t {
 	MPI_File file;
 	MPI_Errhandler * errhandler;
 	struct {
-		void* ptr1;
+		MPI_Errhandler val;
 	} errhandler__ref;
 	int retval;
 };
@@ -12944,7 +12944,7 @@ struct args_MPI_File_get_errhandler_t {
 
 #define GET_PTRS_VALUE_MPI_File_get_errhandler(args) { \
 	if (args->MPI_File_get_errhandler.errhandler != NULL) { \
-		args->MPI_File_get_errhandler.errhandler__ref.ptr1 = *args->MPI_File_get_errhandler.errhandler; \
+		args->MPI_File_get_errhandler.errhandler__ref.val = *args->MPI_File_get_errhandler.errhandler; \
 	} \
 };
 
@@ -12968,7 +12968,7 @@ struct args_MPI_File_get_errhandler_t {
 struct args_MPI_Session_finalize_t {
 	MPI_Session * session;
 	struct {
-		void* ptr1;
+		MPI_Session val;
 	} session__ref;
 	int retval;
 };
@@ -12979,7 +12979,7 @@ struct args_MPI_Session_finalize_t {
 
 #define GET_PTRS_VALUE_MPI_Session_finalize(args) { \
 	if (args->MPI_Session_finalize.session != NULL) { \
-		args->MPI_Session_finalize.session__ref.ptr1 = *args->MPI_Session_finalize.session; \
+		args->MPI_Session_finalize.session__ref.val = *args->MPI_Session_finalize.session; \
 	} \
 };
 
@@ -13046,7 +13046,7 @@ struct args_MPI_File_iwrite_all_t {
 	MPI_Datatype datatype;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -13061,7 +13061,7 @@ struct args_MPI_File_iwrite_all_t {
 
 #define GET_PTRS_VALUE_MPI_File_iwrite_all(args) { \
 	if (args->MPI_File_iwrite_all.request != NULL) { \
-		args->MPI_File_iwrite_all.request__ref.ptr1 = *args->MPI_File_iwrite_all.request; \
+		args->MPI_File_iwrite_all.request__ref.val = *args->MPI_File_iwrite_all.request; \
 	} \
 };
 
@@ -13172,7 +13172,7 @@ struct args_MPI_Alltoallv_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -13205,7 +13205,7 @@ struct args_MPI_Alltoallv_init_t {
 		args->MPI_Alltoallv_init.rdispls__ref.val = *args->MPI_Alltoallv_init.rdispls; \
 	} \
 	if (args->MPI_Alltoallv_init.request != NULL) { \
-		args->MPI_Alltoallv_init.request__ref.ptr1 = *args->MPI_Alltoallv_init.request; \
+		args->MPI_Alltoallv_init.request__ref.val = *args->MPI_Alltoallv_init.request; \
 	} \
 };
 
@@ -13426,7 +13426,7 @@ struct args_MPI_Win_create_dynamic_t {
 	MPI_Comm comm;
 	MPI_Win * win;
 	struct {
-		void* ptr1;
+		MPI_Win val;
 	} win__ref;
 	int retval;
 };
@@ -13439,7 +13439,7 @@ struct args_MPI_Win_create_dynamic_t {
 
 #define GET_PTRS_VALUE_MPI_Win_create_dynamic(args) { \
 	if (args->MPI_Win_create_dynamic.win != NULL) { \
-		args->MPI_Win_create_dynamic.win__ref.ptr1 = *args->MPI_Win_create_dynamic.win; \
+		args->MPI_Win_create_dynamic.win__ref.val = *args->MPI_Win_create_dynamic.win; \
 	} \
 };
 
@@ -13480,7 +13480,7 @@ struct args_MPI_Neighbor_alltoallw_t {
 	} sdispls__ref;
 	MPI_Datatype(* sendtypes);
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} sendtypes__ref;
 	void * recvbuf;
 	int(* recvcounts);
@@ -13493,7 +13493,7 @@ struct args_MPI_Neighbor_alltoallw_t {
 	} rdispls__ref;
 	MPI_Datatype(* recvtypes);
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} recvtypes__ref;
 	MPI_Comm comm;
 	int retval;
@@ -13519,7 +13519,7 @@ struct args_MPI_Neighbor_alltoallw_t {
 		args->MPI_Neighbor_alltoallw.sdispls__ref.val = *args->MPI_Neighbor_alltoallw.sdispls; \
 	} \
 	if (args->MPI_Neighbor_alltoallw.sendtypes != NULL) { \
-		args->MPI_Neighbor_alltoallw.sendtypes__ref.ptr1 = *args->MPI_Neighbor_alltoallw.sendtypes; \
+		args->MPI_Neighbor_alltoallw.sendtypes__ref.val = *args->MPI_Neighbor_alltoallw.sendtypes; \
 	} \
 	if (args->MPI_Neighbor_alltoallw.recvcounts != NULL) { \
 		args->MPI_Neighbor_alltoallw.recvcounts__ref.val = *args->MPI_Neighbor_alltoallw.recvcounts; \
@@ -13528,7 +13528,7 @@ struct args_MPI_Neighbor_alltoallw_t {
 		args->MPI_Neighbor_alltoallw.rdispls__ref.val = *args->MPI_Neighbor_alltoallw.rdispls; \
 	} \
 	if (args->MPI_Neighbor_alltoallw.recvtypes != NULL) { \
-		args->MPI_Neighbor_alltoallw.recvtypes__ref.ptr1 = *args->MPI_Neighbor_alltoallw.recvtypes; \
+		args->MPI_Neighbor_alltoallw.recvtypes__ref.val = *args->MPI_Neighbor_alltoallw.recvtypes; \
 	} \
 };
 
@@ -13564,7 +13564,7 @@ struct args_MPI_Iexscan_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -13581,7 +13581,7 @@ struct args_MPI_Iexscan_t {
 
 #define GET_PTRS_VALUE_MPI_Iexscan(args) { \
 	if (args->MPI_Iexscan.request != NULL) { \
-		args->MPI_Iexscan.request__ref.ptr1 = *args->MPI_Iexscan.request; \
+		args->MPI_Iexscan.request__ref.val = *args->MPI_Iexscan.request; \
 	} \
 };
 
@@ -13702,7 +13702,7 @@ struct args_MPI_Recv_init_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -13719,7 +13719,7 @@ struct args_MPI_Recv_init_t {
 
 #define GET_PTRS_VALUE_MPI_Recv_init(args) { \
 	if (args->MPI_Recv_init.request != NULL) { \
-		args->MPI_Recv_init.request__ref.ptr1 = *args->MPI_Recv_init.request; \
+		args->MPI_Recv_init.request__ref.val = *args->MPI_Recv_init.request; \
 	} \
 };
 
@@ -13764,7 +13764,7 @@ struct args_MPI_Type_create_subarray_t {
 	MPI_Datatype oldtype;
 	MPI_Datatype * newtype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
 };
@@ -13790,7 +13790,7 @@ struct args_MPI_Type_create_subarray_t {
 		args->MPI_Type_create_subarray.start_array__ref.val = *args->MPI_Type_create_subarray.start_array; \
 	} \
 	if (args->MPI_Type_create_subarray.newtype != NULL) { \
-		args->MPI_Type_create_subarray.newtype__ref.ptr1 = *args->MPI_Type_create_subarray.newtype; \
+		args->MPI_Type_create_subarray.newtype__ref.val = *args->MPI_Type_create_subarray.newtype; \
 	} \
 };
 
@@ -13820,7 +13820,7 @@ struct args_MPI_Comm_create_group_t {
 	int tag;
 	MPI_Comm * newcomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
 };
@@ -13834,7 +13834,7 @@ struct args_MPI_Comm_create_group_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_create_group(args) { \
 	if (args->MPI_Comm_create_group.newcomm != NULL) { \
-		args->MPI_Comm_create_group.newcomm__ref.ptr1 = *args->MPI_Comm_create_group.newcomm; \
+		args->MPI_Comm_create_group.newcomm__ref.val = *args->MPI_Comm_create_group.newcomm; \
 	} \
 };
 
@@ -13874,7 +13874,7 @@ struct args_MPI_Allgather_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -13893,7 +13893,7 @@ struct args_MPI_Allgather_init_t {
 
 #define GET_PTRS_VALUE_MPI_Allgather_init(args) { \
 	if (args->MPI_Allgather_init.request != NULL) { \
-		args->MPI_Allgather_init.request__ref.ptr1 = *args->MPI_Allgather_init.request; \
+		args->MPI_Allgather_init.request__ref.val = *args->MPI_Allgather_init.request; \
 	} \
 };
 
@@ -13931,7 +13931,7 @@ struct args_MPI_Reduce_scatter_block_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -13949,7 +13949,7 @@ struct args_MPI_Reduce_scatter_block_init_t {
 
 #define GET_PTRS_VALUE_MPI_Reduce_scatter_block_init(args) { \
 	if (args->MPI_Reduce_scatter_block_init.request != NULL) { \
-		args->MPI_Reduce_scatter_block_init.request__ref.ptr1 = *args->MPI_Reduce_scatter_block_init.request; \
+		args->MPI_Reduce_scatter_block_init.request__ref.val = *args->MPI_Reduce_scatter_block_init.request; \
 	} \
 };
 
@@ -13977,7 +13977,7 @@ struct args_MPI_Type_match_size_t {
 	int size;
 	MPI_Datatype * type;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} type__ref;
 	int retval;
 };
@@ -13990,7 +13990,7 @@ struct args_MPI_Type_match_size_t {
 
 #define GET_PTRS_VALUE_MPI_Type_match_size(args) { \
 	if (args->MPI_Type_match_size.type != NULL) { \
-		args->MPI_Type_match_size.type__ref.ptr1 = *args->MPI_Type_match_size.type; \
+		args->MPI_Type_match_size.type__ref.val = *args->MPI_Type_match_size.type; \
 	} \
 };
 
@@ -14077,7 +14077,7 @@ struct args_MPI_Alltoall_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -14096,7 +14096,7 @@ struct args_MPI_Alltoall_init_t {
 
 #define GET_PTRS_VALUE_MPI_Alltoall_init(args) { \
 	if (args->MPI_Alltoall_init.request != NULL) { \
-		args->MPI_Alltoall_init.request__ref.ptr1 = *args->MPI_Alltoall_init.request; \
+		args->MPI_Alltoall_init.request__ref.val = *args->MPI_Alltoall_init.request; \
 	} \
 };
 
@@ -14132,7 +14132,7 @@ struct args_MPI_Send_init_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -14149,7 +14149,7 @@ struct args_MPI_Send_init_t {
 
 #define GET_PTRS_VALUE_MPI_Send_init(args) { \
 	if (args->MPI_Send_init.request != NULL) { \
-		args->MPI_Send_init.request__ref.ptr1 = *args->MPI_Send_init.request; \
+		args->MPI_Send_init.request__ref.val = *args->MPI_Send_init.request; \
 	} \
 };
 
@@ -14215,7 +14215,7 @@ struct args_MPI_Neighbor_allgather_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -14234,7 +14234,7 @@ struct args_MPI_Neighbor_allgather_init_t {
 
 #define GET_PTRS_VALUE_MPI_Neighbor_allgather_init(args) { \
 	if (args->MPI_Neighbor_allgather_init.request != NULL) { \
-		args->MPI_Neighbor_allgather_init.request__ref.ptr1 = *args->MPI_Neighbor_allgather_init.request; \
+		args->MPI_Neighbor_allgather_init.request__ref.val = *args->MPI_Neighbor_allgather_init.request; \
 	} \
 };
 
@@ -14268,7 +14268,7 @@ struct args_MPI_Ibcast_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -14284,7 +14284,7 @@ struct args_MPI_Ibcast_t {
 
 #define GET_PTRS_VALUE_MPI_Ibcast(args) { \
 	if (args->MPI_Ibcast.request != NULL) { \
-		args->MPI_Ibcast.request__ref.ptr1 = *args->MPI_Ibcast.request; \
+		args->MPI_Ibcast.request__ref.val = *args->MPI_Ibcast.request; \
 	} \
 };
 
@@ -14316,7 +14316,7 @@ struct args_MPI_File_iread_t {
 	MPI_Datatype datatype;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -14331,7 +14331,7 @@ struct args_MPI_File_iread_t {
 
 #define GET_PTRS_VALUE_MPI_File_iread(args) { \
 	if (args->MPI_File_iread.request != NULL) { \
-		args->MPI_File_iread.request__ref.ptr1 = *args->MPI_File_iread.request; \
+		args->MPI_File_iread.request__ref.val = *args->MPI_File_iread.request; \
 	} \
 };
 
@@ -14371,7 +14371,7 @@ struct args_MPI_Neighbor_alltoall_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -14390,7 +14390,7 @@ struct args_MPI_Neighbor_alltoall_init_t {
 
 #define GET_PTRS_VALUE_MPI_Neighbor_alltoall_init(args) { \
 	if (args->MPI_Neighbor_alltoall_init.request != NULL) { \
-		args->MPI_Neighbor_alltoall_init.request__ref.ptr1 = *args->MPI_Neighbor_alltoall_init.request; \
+		args->MPI_Neighbor_alltoall_init.request__ref.val = *args->MPI_Neighbor_alltoall_init.request; \
 	} \
 };
 
@@ -14753,7 +14753,7 @@ struct args_MPI_Ineighbor_alltoall_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -14771,7 +14771,7 @@ struct args_MPI_Ineighbor_alltoall_t {
 
 #define GET_PTRS_VALUE_MPI_Ineighbor_alltoall(args) { \
 	if (args->MPI_Ineighbor_alltoall.request != NULL) { \
-		args->MPI_Ineighbor_alltoall.request__ref.ptr1 = *args->MPI_Ineighbor_alltoall.request; \
+		args->MPI_Ineighbor_alltoall.request__ref.val = *args->MPI_Ineighbor_alltoall.request; \
 	} \
 };
 
@@ -14846,7 +14846,7 @@ struct args_MPI_Iallgatherv_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -14871,7 +14871,7 @@ struct args_MPI_Iallgatherv_t {
 		args->MPI_Iallgatherv.displs__ref.val = *args->MPI_Iallgatherv.displs; \
 	} \
 	if (args->MPI_Iallgatherv.request != NULL) { \
-		args->MPI_Iallgatherv.request__ref.ptr1 = *args->MPI_Iallgatherv.request; \
+		args->MPI_Iallgatherv.request__ref.val = *args->MPI_Iallgatherv.request; \
 	} \
 };
 
@@ -14919,7 +14919,7 @@ struct args_MPI_Neighbor_allgatherv_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -14945,7 +14945,7 @@ struct args_MPI_Neighbor_allgatherv_init_t {
 		args->MPI_Neighbor_allgatherv_init.displs__ref.val = *args->MPI_Neighbor_allgatherv_init.displs; \
 	} \
 	if (args->MPI_Neighbor_allgatherv_init.request != NULL) { \
-		args->MPI_Neighbor_allgatherv_init.request__ref.ptr1 = *args->MPI_Neighbor_allgatherv_init.request; \
+		args->MPI_Neighbor_allgatherv_init.request__ref.val = *args->MPI_Neighbor_allgatherv_init.request; \
 	} \
 };
 
@@ -15216,7 +15216,7 @@ struct args_MPI_Mprobe_t {
 	MPI_Comm comm;
 	MPI_Message * message;
 	struct {
-		void* ptr1;
+		MPI_Message val;
 	} message__ref;
 	MPI_Status * status;
 	struct {
@@ -15235,7 +15235,7 @@ struct args_MPI_Mprobe_t {
 
 #define GET_PTRS_VALUE_MPI_Mprobe(args) { \
 	if (args->MPI_Mprobe.message != NULL) { \
-		args->MPI_Mprobe.message__ref.ptr1 = *args->MPI_Mprobe.message; \
+		args->MPI_Mprobe.message__ref.val = *args->MPI_Mprobe.message; \
 	} \
 	if (args->MPI_Mprobe.status != NULL) { \
 		args->MPI_Mprobe.status__ref.val = *args->MPI_Mprobe.status; \
@@ -15476,7 +15476,7 @@ struct args_MPI_Iscatterv_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -15502,7 +15502,7 @@ struct args_MPI_Iscatterv_t {
 		args->MPI_Iscatterv.displs__ref.val = *args->MPI_Iscatterv.displs; \
 	} \
 	if (args->MPI_Iscatterv.request != NULL) { \
-		args->MPI_Iscatterv.request__ref.ptr1 = *args->MPI_Iscatterv.request; \
+		args->MPI_Iscatterv.request__ref.val = *args->MPI_Iscatterv.request; \
 	} \
 };
 
@@ -15622,7 +15622,7 @@ struct args_MPI_Iallreduce_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -15639,7 +15639,7 @@ struct args_MPI_Iallreduce_t {
 
 #define GET_PTRS_VALUE_MPI_Iallreduce(args) { \
 	if (args->MPI_Iallreduce.request != NULL) { \
-		args->MPI_Iallreduce.request__ref.ptr1 = *args->MPI_Iallreduce.request; \
+		args->MPI_Iallreduce.request__ref.val = *args->MPI_Iallreduce.request; \
 	} \
 };
 
@@ -15707,7 +15707,7 @@ struct args_MPI_Get_processor_name_t {
 struct args_MPI_Start_t {
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -15718,7 +15718,7 @@ struct args_MPI_Start_t {
 
 #define GET_PTRS_VALUE_MPI_Start(args) { \
 	if (args->MPI_Start.request != NULL) { \
-		args->MPI_Start.request__ref.ptr1 = *args->MPI_Start.request; \
+		args->MPI_Start.request__ref.val = *args->MPI_Start.request; \
 	} \
 };
 
@@ -15885,7 +15885,7 @@ struct args_MPI_File_open_t {
 	MPI_Info info;
 	MPI_File * fh;
 	struct {
-		void* ptr1;
+		MPI_File val;
 	} fh__ref;
 	int retval;
 };
@@ -15903,7 +15903,7 @@ struct args_MPI_File_open_t {
 		strncpy(args->MPI_File_open.filename__ref.val, args->MPI_File_open.filename, MPI_STRING_SIZE_MAX-1); \
 	} \
 	if (args->MPI_File_open.fh != NULL) { \
-		args->MPI_File_open.fh__ref.ptr1 = *args->MPI_File_open.fh; \
+		args->MPI_File_open.fh__ref.val = *args->MPI_File_open.fh; \
 	} \
 };
 
@@ -15976,7 +15976,7 @@ struct args_MPI_Type_create_hindexed_block_t {
 	MPI_Datatype oldtype;
 	MPI_Datatype * newtype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
 };
@@ -15994,7 +15994,7 @@ struct args_MPI_Type_create_hindexed_block_t {
 		args->MPI_Type_create_hindexed_block.array_of_displacements__ref.val = *args->MPI_Type_create_hindexed_block.array_of_displacements; \
 	} \
 	if (args->MPI_Type_create_hindexed_block.newtype != NULL) { \
-		args->MPI_Type_create_hindexed_block.newtype__ref.ptr1 = *args->MPI_Type_create_hindexed_block.newtype; \
+		args->MPI_Type_create_hindexed_block.newtype__ref.val = *args->MPI_Type_create_hindexed_block.newtype; \
 	} \
 };
 
@@ -16074,7 +16074,7 @@ struct args_MPI_Issend_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -16091,7 +16091,7 @@ struct args_MPI_Issend_t {
 
 #define GET_PTRS_VALUE_MPI_Issend(args) { \
 	if (args->MPI_Issend.request != NULL) { \
-		args->MPI_Issend.request__ref.ptr1 = *args->MPI_Issend.request; \
+		args->MPI_Issend.request__ref.val = *args->MPI_Issend.request; \
 	} \
 };
 
@@ -16247,7 +16247,7 @@ struct args_MPI_Ineighbor_alltoallw_t {
 	} sdispls__ref;
 	MPI_Datatype(* sendtypes);
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} sendtypes__ref;
 	void * recvbuf;
 	int(* recvcounts);
@@ -16260,12 +16260,12 @@ struct args_MPI_Ineighbor_alltoallw_t {
 	} rdispls__ref;
 	MPI_Datatype(* recvtypes);
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} recvtypes__ref;
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -16291,7 +16291,7 @@ struct args_MPI_Ineighbor_alltoallw_t {
 		args->MPI_Ineighbor_alltoallw.sdispls__ref.val = *args->MPI_Ineighbor_alltoallw.sdispls; \
 	} \
 	if (args->MPI_Ineighbor_alltoallw.sendtypes != NULL) { \
-		args->MPI_Ineighbor_alltoallw.sendtypes__ref.ptr1 = *args->MPI_Ineighbor_alltoallw.sendtypes; \
+		args->MPI_Ineighbor_alltoallw.sendtypes__ref.val = *args->MPI_Ineighbor_alltoallw.sendtypes; \
 	} \
 	if (args->MPI_Ineighbor_alltoallw.recvcounts != NULL) { \
 		args->MPI_Ineighbor_alltoallw.recvcounts__ref.val = *args->MPI_Ineighbor_alltoallw.recvcounts; \
@@ -16300,10 +16300,10 @@ struct args_MPI_Ineighbor_alltoallw_t {
 		args->MPI_Ineighbor_alltoallw.rdispls__ref.val = *args->MPI_Ineighbor_alltoallw.rdispls; \
 	} \
 	if (args->MPI_Ineighbor_alltoallw.recvtypes != NULL) { \
-		args->MPI_Ineighbor_alltoallw.recvtypes__ref.ptr1 = *args->MPI_Ineighbor_alltoallw.recvtypes; \
+		args->MPI_Ineighbor_alltoallw.recvtypes__ref.val = *args->MPI_Ineighbor_alltoallw.recvtypes; \
 	} \
 	if (args->MPI_Ineighbor_alltoallw.request != NULL) { \
-		args->MPI_Ineighbor_alltoallw.request__ref.ptr1 = *args->MPI_Ineighbor_alltoallw.request; \
+		args->MPI_Ineighbor_alltoallw.request__ref.val = *args->MPI_Ineighbor_alltoallw.request; \
 	} \
 };
 
@@ -16366,7 +16366,7 @@ struct args_MPI_File_iread_at_t {
 	MPI_Datatype datatype;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -16382,7 +16382,7 @@ struct args_MPI_File_iread_at_t {
 
 #define GET_PTRS_VALUE_MPI_File_iread_at(args) { \
 	if (args->MPI_File_iread_at.request != NULL) { \
-		args->MPI_File_iread_at.request__ref.ptr1 = *args->MPI_File_iread_at.request; \
+		args->MPI_File_iread_at.request__ref.val = *args->MPI_File_iread_at.request; \
 	} \
 };
 
@@ -16437,7 +16437,7 @@ struct args_MPI_Session_get_info_t {
 	MPI_Session session;
 	MPI_Info * info_used;
 	struct {
-		void* ptr1;
+		MPI_Info val;
 	} info_used__ref;
 	int retval;
 };
@@ -16449,7 +16449,7 @@ struct args_MPI_Session_get_info_t {
 
 #define GET_PTRS_VALUE_MPI_Session_get_info(args) { \
 	if (args->MPI_Session_get_info.info_used != NULL) { \
-		args->MPI_Session_get_info.info_used__ref.ptr1 = *args->MPI_Session_get_info.info_used; \
+		args->MPI_Session_get_info.info_used__ref.val = *args->MPI_Session_get_info.info_used; \
 	} \
 };
 
@@ -16682,7 +16682,7 @@ struct args_MPI_Ineighbor_alltoallv_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -16714,7 +16714,7 @@ struct args_MPI_Ineighbor_alltoallv_t {
 		args->MPI_Ineighbor_alltoallv.rdispls__ref.val = *args->MPI_Ineighbor_alltoallv.rdispls; \
 	} \
 	if (args->MPI_Ineighbor_alltoallv.request != NULL) { \
-		args->MPI_Ineighbor_alltoallv.request__ref.ptr1 = *args->MPI_Ineighbor_alltoallv.request; \
+		args->MPI_Ineighbor_alltoallv.request__ref.val = *args->MPI_Ineighbor_alltoallv.request; \
 	} \
 };
 
@@ -16745,11 +16745,11 @@ struct args_MPI_Imrecv_t {
 	MPI_Datatype type;
 	MPI_Message * message;
 	struct {
-		void* ptr1;
+		MPI_Message val;
 	} message__ref;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -16764,10 +16764,10 @@ struct args_MPI_Imrecv_t {
 
 #define GET_PTRS_VALUE_MPI_Imrecv(args) { \
 	if (args->MPI_Imrecv.message != NULL) { \
-		args->MPI_Imrecv.message__ref.ptr1 = *args->MPI_Imrecv.message; \
+		args->MPI_Imrecv.message__ref.val = *args->MPI_Imrecv.message; \
 	} \
 	if (args->MPI_Imrecv.request != NULL) { \
-		args->MPI_Imrecv.request__ref.ptr1 = *args->MPI_Imrecv.request; \
+		args->MPI_Imrecv.request__ref.val = *args->MPI_Imrecv.request; \
 	} \
 };
 
@@ -16808,7 +16808,7 @@ struct args_MPI_Alltoallw_t {
 	} sdispls__ref;
 	MPI_Datatype(* sendtypes);
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} sendtypes__ref;
 	void * recvbuf;
 	int(* recvcounts);
@@ -16821,7 +16821,7 @@ struct args_MPI_Alltoallw_t {
 	} rdispls__ref;
 	MPI_Datatype(* recvtypes);
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} recvtypes__ref;
 	MPI_Comm comm;
 	int retval;
@@ -16847,7 +16847,7 @@ struct args_MPI_Alltoallw_t {
 		args->MPI_Alltoallw.sdispls__ref.val = *args->MPI_Alltoallw.sdispls; \
 	} \
 	if (args->MPI_Alltoallw.sendtypes != NULL) { \
-		args->MPI_Alltoallw.sendtypes__ref.ptr1 = *args->MPI_Alltoallw.sendtypes; \
+		args->MPI_Alltoallw.sendtypes__ref.val = *args->MPI_Alltoallw.sendtypes; \
 	} \
 	if (args->MPI_Alltoallw.recvcounts != NULL) { \
 		args->MPI_Alltoallw.recvcounts__ref.val = *args->MPI_Alltoallw.recvcounts; \
@@ -16856,7 +16856,7 @@ struct args_MPI_Alltoallw_t {
 		args->MPI_Alltoallw.rdispls__ref.val = *args->MPI_Alltoallw.rdispls; \
 	} \
 	if (args->MPI_Alltoallw.recvtypes != NULL) { \
-		args->MPI_Alltoallw.recvtypes__ref.ptr1 = *args->MPI_Alltoallw.recvtypes; \
+		args->MPI_Alltoallw.recvtypes__ref.val = *args->MPI_Alltoallw.recvtypes; \
 	} \
 };
 
@@ -16892,7 +16892,7 @@ struct args_MPI_Bcast_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -16909,7 +16909,7 @@ struct args_MPI_Bcast_init_t {
 
 #define GET_PTRS_VALUE_MPI_Bcast_init(args) { \
 	if (args->MPI_Bcast_init.request != NULL) { \
-		args->MPI_Bcast_init.request__ref.ptr1 = *args->MPI_Bcast_init.request; \
+		args->MPI_Bcast_init.request__ref.val = *args->MPI_Bcast_init.request; \
 	} \
 };
 
@@ -16935,7 +16935,7 @@ struct args_MPI_Ibarrier_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -16947,7 +16947,7 @@ struct args_MPI_Ibarrier_t {
 
 #define GET_PTRS_VALUE_MPI_Ibarrier(args) { \
 	if (args->MPI_Ibarrier.request != NULL) { \
-		args->MPI_Ibarrier.request__ref.ptr1 = *args->MPI_Ibarrier.request; \
+		args->MPI_Ibarrier.request__ref.val = *args->MPI_Ibarrier.request; \
 	} \
 };
 
@@ -16981,7 +16981,7 @@ struct args_MPI_File_iwrite_at_all_t {
 	MPI_Datatype datatype;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -16997,7 +16997,7 @@ struct args_MPI_File_iwrite_at_all_t {
 
 #define GET_PTRS_VALUE_MPI_File_iwrite_at_all(args) { \
 	if (args->MPI_File_iwrite_at_all.request != NULL) { \
-		args->MPI_File_iwrite_at_all.request__ref.ptr1 = *args->MPI_File_iwrite_at_all.request; \
+		args->MPI_File_iwrite_at_all.request__ref.val = *args->MPI_File_iwrite_at_all.request; \
 	} \
 };
 
@@ -17063,7 +17063,7 @@ struct args_MPI_Barrier_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -17076,7 +17076,7 @@ struct args_MPI_Barrier_init_t {
 
 #define GET_PTRS_VALUE_MPI_Barrier_init(args) { \
 	if (args->MPI_Barrier_init.request != NULL) { \
-		args->MPI_Barrier_init.request__ref.ptr1 = *args->MPI_Barrier_init.request; \
+		args->MPI_Barrier_init.request__ref.val = *args->MPI_Barrier_init.request; \
 	} \
 };
 
@@ -17109,11 +17109,11 @@ struct args_MPI_File_get_view_t {
 	} disp__ref;
 	MPI_Datatype * etype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} etype__ref;
 	MPI_Datatype * filetype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} filetype__ref;
 	char * datarep;
 	struct {
@@ -17135,10 +17135,10 @@ struct args_MPI_File_get_view_t {
 		args->MPI_File_get_view.disp__ref.val = *args->MPI_File_get_view.disp; \
 	} \
 	if (args->MPI_File_get_view.etype != NULL) { \
-		args->MPI_File_get_view.etype__ref.ptr1 = *args->MPI_File_get_view.etype; \
+		args->MPI_File_get_view.etype__ref.val = *args->MPI_File_get_view.etype; \
 	} \
 	if (args->MPI_File_get_view.filetype != NULL) { \
-		args->MPI_File_get_view.filetype__ref.ptr1 = *args->MPI_File_get_view.filetype; \
+		args->MPI_File_get_view.filetype__ref.val = *args->MPI_File_get_view.filetype; \
 	} \
 	if (args->MPI_File_get_view.datarep != NULL) { \
 		strncpy(args->MPI_File_get_view.datarep__ref.val, args->MPI_File_get_view.datarep, MPI_STRING_SIZE_MAX-1); \
@@ -17175,7 +17175,7 @@ struct args_MPI_Win_allocate_shared_t {
 	void * baseptr;
 	MPI_Win * win;
 	struct {
-		void* ptr1;
+		MPI_Win val;
 	} win__ref;
 	int retval;
 };
@@ -17191,7 +17191,7 @@ struct args_MPI_Win_allocate_shared_t {
 
 #define GET_PTRS_VALUE_MPI_Win_allocate_shared(args) { \
 	if (args->MPI_Win_allocate_shared.win != NULL) { \
-		args->MPI_Win_allocate_shared.win__ref.ptr1 = *args->MPI_Win_allocate_shared.win; \
+		args->MPI_Win_allocate_shared.win__ref.val = *args->MPI_Win_allocate_shared.win; \
 	} \
 };
 
@@ -17287,7 +17287,7 @@ struct args_MPI_Info_dup_t {
 	MPI_Info info;
 	MPI_Info * newinfo;
 	struct {
-		void* ptr1;
+		MPI_Info val;
 	} newinfo__ref;
 	int retval;
 };
@@ -17299,7 +17299,7 @@ struct args_MPI_Info_dup_t {
 
 #define GET_PTRS_VALUE_MPI_Info_dup(args) { \
 	if (args->MPI_Info_dup.newinfo != NULL) { \
-		args->MPI_Info_dup.newinfo__ref.ptr1 = *args->MPI_Info_dup.newinfo; \
+		args->MPI_Info_dup.newinfo__ref.val = *args->MPI_Info_dup.newinfo; \
 	} \
 };
 
@@ -17426,7 +17426,7 @@ struct args_MPI_Get_library_version_t {
 struct args_MPI_Info_create_t {
 	MPI_Info * info;
 	struct {
-		void* ptr1;
+		MPI_Info val;
 	} info__ref;
 	int retval;
 };
@@ -17437,7 +17437,7 @@ struct args_MPI_Info_create_t {
 
 #define GET_PTRS_VALUE_MPI_Info_create(args) { \
 	if (args->MPI_Info_create.info != NULL) { \
-		args->MPI_Info_create.info__ref.ptr1 = *args->MPI_Info_create.info; \
+		args->MPI_Info_create.info__ref.val = *args->MPI_Info_create.info; \
 	} \
 };
 
@@ -17504,7 +17504,7 @@ struct args_MPI_Iallgather_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -17522,7 +17522,7 @@ struct args_MPI_Iallgather_t {
 
 #define GET_PTRS_VALUE_MPI_Iallgather(args) { \
 	if (args->MPI_Iallgather.request != NULL) { \
-		args->MPI_Iallgather.request__ref.ptr1 = *args->MPI_Iallgather.request; \
+		args->MPI_Iallgather.request__ref.val = *args->MPI_Iallgather.request; \
 	} \
 };
 
@@ -17570,13 +17570,13 @@ struct args_MPI_Comm_spawn_multiple_t {
 	} array_of_maxprocs__ref;
 	MPI_Info(* array_of_info);
 	struct {
-		void* ptr1;
+		MPI_Info val;
 	} array_of_info__ref;
 	int root;
 	MPI_Comm comm;
 	MPI_Comm * intercomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} intercomm__ref;
 	int(* array_of_errcodes);
 	struct {
@@ -17617,10 +17617,10 @@ struct args_MPI_Comm_spawn_multiple_t {
 		args->MPI_Comm_spawn_multiple.array_of_maxprocs__ref.val = *args->MPI_Comm_spawn_multiple.array_of_maxprocs; \
 	} \
 	if (args->MPI_Comm_spawn_multiple.array_of_info != NULL) { \
-		args->MPI_Comm_spawn_multiple.array_of_info__ref.ptr1 = *args->MPI_Comm_spawn_multiple.array_of_info; \
+		args->MPI_Comm_spawn_multiple.array_of_info__ref.val = *args->MPI_Comm_spawn_multiple.array_of_info; \
 	} \
 	if (args->MPI_Comm_spawn_multiple.intercomm != NULL) { \
-		args->MPI_Comm_spawn_multiple.intercomm__ref.ptr1 = *args->MPI_Comm_spawn_multiple.intercomm; \
+		args->MPI_Comm_spawn_multiple.intercomm__ref.val = *args->MPI_Comm_spawn_multiple.intercomm; \
 	} \
 	if (args->MPI_Comm_spawn_multiple.array_of_errcodes != NULL) { \
 		args->MPI_Comm_spawn_multiple.array_of_errcodes__ref.val = *args->MPI_Comm_spawn_multiple.array_of_errcodes; \
@@ -17663,7 +17663,7 @@ struct args_MPI_Precv_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -17682,7 +17682,7 @@ struct args_MPI_Precv_init_t {
 
 #define GET_PTRS_VALUE_MPI_Precv_init(args) { \
 	if (args->MPI_Precv_init.request != NULL) { \
-		args->MPI_Precv_init.request__ref.ptr1 = *args->MPI_Precv_init.request; \
+		args->MPI_Precv_init.request__ref.val = *args->MPI_Precv_init.request; \
 	} \
 };
 
@@ -17957,7 +17957,7 @@ struct args_MPI_File_get_info_t {
 	MPI_File fh;
 	MPI_Info * info_used;
 	struct {
-		void* ptr1;
+		MPI_Info val;
 	} info_used__ref;
 	int retval;
 };
@@ -17969,7 +17969,7 @@ struct args_MPI_File_get_info_t {
 
 #define GET_PTRS_VALUE_MPI_File_get_info(args) { \
 	if (args->MPI_File_get_info.info_used != NULL) { \
-		args->MPI_File_get_info.info_used__ref.ptr1 = *args->MPI_File_get_info.info_used; \
+		args->MPI_File_get_info.info_used__ref.val = *args->MPI_File_get_info.info_used; \
 	} \
 };
 
@@ -18061,7 +18061,7 @@ struct args_MPI_Igatherv_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -18087,7 +18087,7 @@ struct args_MPI_Igatherv_t {
 		args->MPI_Igatherv.displs__ref.val = *args->MPI_Igatherv.displs; \
 	} \
 	if (args->MPI_Igatherv.request != NULL) { \
-		args->MPI_Igatherv.request__ref.ptr1 = *args->MPI_Igatherv.request; \
+		args->MPI_Igatherv.request__ref.val = *args->MPI_Igatherv.request; \
 	} \
 };
 
@@ -18183,7 +18183,7 @@ struct args_MPI_Comm_get_errhandler_t {
 	MPI_Comm comm;
 	MPI_Errhandler * erhandler;
 	struct {
-		void* ptr1;
+		MPI_Errhandler val;
 	} erhandler__ref;
 	int retval;
 };
@@ -18195,7 +18195,7 @@ struct args_MPI_Comm_get_errhandler_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_get_errhandler(args) { \
 	if (args->MPI_Comm_get_errhandler.erhandler != NULL) { \
-		args->MPI_Comm_get_errhandler.erhandler__ref.ptr1 = *args->MPI_Comm_get_errhandler.erhandler; \
+		args->MPI_Comm_get_errhandler.erhandler__ref.val = *args->MPI_Comm_get_errhandler.erhandler; \
 	} \
 };
 
@@ -18223,7 +18223,7 @@ struct args_MPI_Session_init_t {
 	MPI_Errhandler errhandler;
 	MPI_Session * session;
 	struct {
-		void* ptr1;
+		MPI_Session val;
 	} session__ref;
 	int retval;
 };
@@ -18236,7 +18236,7 @@ struct args_MPI_Session_init_t {
 
 #define GET_PTRS_VALUE_MPI_Session_init(args) { \
 	if (args->MPI_Session_init.session != NULL) { \
-		args->MPI_Session_init.session__ref.ptr1 = *args->MPI_Session_init.session; \
+		args->MPI_Session_init.session__ref.val = *args->MPI_Session_init.session; \
 	} \
 };
 
@@ -18302,7 +18302,7 @@ struct args_MPI_Intercomm_create_t {
 	int tag;
 	MPI_Comm * newintercomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} newintercomm__ref;
 	int retval;
 };
@@ -18318,7 +18318,7 @@ struct args_MPI_Intercomm_create_t {
 
 #define GET_PTRS_VALUE_MPI_Intercomm_create(args) { \
 	if (args->MPI_Intercomm_create.newintercomm != NULL) { \
-		args->MPI_Intercomm_create.newintercomm__ref.ptr1 = *args->MPI_Intercomm_create.newintercomm; \
+		args->MPI_Intercomm_create.newintercomm__ref.val = *args->MPI_Intercomm_create.newintercomm; \
 	} \
 };
 
@@ -18407,7 +18407,7 @@ struct args_MPI_Ialltoallv_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -18439,7 +18439,7 @@ struct args_MPI_Ialltoallv_t {
 		args->MPI_Ialltoallv.rdispls__ref.val = *args->MPI_Ialltoallv.rdispls; \
 	} \
 	if (args->MPI_Ialltoallv.request != NULL) { \
-		args->MPI_Ialltoallv.request__ref.ptr1 = *args->MPI_Ialltoallv.request; \
+		args->MPI_Ialltoallv.request__ref.val = *args->MPI_Ialltoallv.request; \
 	} \
 };
 
@@ -18549,7 +18549,7 @@ struct args_MPI_Cart_sub_t {
 	} remain_dims__ref;
 	MPI_Comm * new_comm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} new_comm__ref;
 	int retval;
 };
@@ -18565,7 +18565,7 @@ struct args_MPI_Cart_sub_t {
 		args->MPI_Cart_sub.remain_dims__ref.val = *args->MPI_Cart_sub.remain_dims; \
 	} \
 	if (args->MPI_Cart_sub.new_comm != NULL) { \
-		args->MPI_Cart_sub.new_comm__ref.ptr1 = *args->MPI_Cart_sub.new_comm; \
+		args->MPI_Cart_sub.new_comm__ref.val = *args->MPI_Cart_sub.new_comm; \
 	} \
 };
 
@@ -18599,7 +18599,7 @@ struct args_MPI_Win_allocate_t {
 	void * baseptr;
 	MPI_Win * win;
 	struct {
-		void* ptr1;
+		MPI_Win val;
 	} win__ref;
 	int retval;
 };
@@ -18615,7 +18615,7 @@ struct args_MPI_Win_allocate_t {
 
 #define GET_PTRS_VALUE_MPI_Win_allocate(args) { \
 	if (args->MPI_Win_allocate.win != NULL) { \
-		args->MPI_Win_allocate.win__ref.ptr1 = *args->MPI_Win_allocate.win; \
+		args->MPI_Win_allocate.win__ref.val = *args->MPI_Win_allocate.win; \
 	} \
 };
 
@@ -18641,7 +18641,7 @@ struct args_MPI_Session_get_errhandler_t {
 	MPI_Session session;
 	MPI_Errhandler * erhandler;
 	struct {
-		void* ptr1;
+		MPI_Errhandler val;
 	} erhandler__ref;
 	int retval;
 };
@@ -18653,7 +18653,7 @@ struct args_MPI_Session_get_errhandler_t {
 
 #define GET_PTRS_VALUE_MPI_Session_get_errhandler(args) { \
 	if (args->MPI_Session_get_errhandler.erhandler != NULL) { \
-		args->MPI_Session_get_errhandler.erhandler__ref.ptr1 = *args->MPI_Session_get_errhandler.erhandler; \
+		args->MPI_Session_get_errhandler.erhandler__ref.val = *args->MPI_Session_get_errhandler.erhandler; \
 	} \
 };
 
@@ -18726,7 +18726,7 @@ struct args_MPI_Info_create_env_t {
 	} argv__ref;
 	MPI_Info * info;
 	struct {
-		void* ptr1;
+		MPI_Info val;
 	} info__ref;
 	int retval;
 };
@@ -18745,7 +18745,7 @@ struct args_MPI_Info_create_env_t {
 		} \
 	} \
 	if (args->MPI_Info_create_env.info != NULL) { \
-		args->MPI_Info_create_env.info__ref.ptr1 = *args->MPI_Info_create_env.info; \
+		args->MPI_Info_create_env.info__ref.val = *args->MPI_Info_create_env.info; \
 	} \
 };
 
@@ -18771,7 +18771,7 @@ struct args_MPI_File_create_errhandler_t {
 	MPI_File_errhandler_function * function;
 	MPI_Errhandler * errhandler;
 	struct {
-		void* ptr1;
+		MPI_Errhandler val;
 	} errhandler__ref;
 	int retval;
 };
@@ -18783,7 +18783,7 @@ struct args_MPI_File_create_errhandler_t {
 
 #define GET_PTRS_VALUE_MPI_File_create_errhandler(args) { \
 	if (args->MPI_File_create_errhandler.errhandler != NULL) { \
-		args->MPI_File_create_errhandler.errhandler__ref.ptr1 = *args->MPI_File_create_errhandler.errhandler; \
+		args->MPI_File_create_errhandler.errhandler__ref.val = *args->MPI_File_create_errhandler.errhandler; \
 	} \
 };
 
@@ -18821,7 +18821,7 @@ struct args_MPI_Ialltoall_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -18839,7 +18839,7 @@ struct args_MPI_Ialltoall_t {
 
 #define GET_PTRS_VALUE_MPI_Ialltoall(args) { \
 	if (args->MPI_Ialltoall.request != NULL) { \
-		args->MPI_Ialltoall.request__ref.ptr1 = *args->MPI_Ialltoall.request; \
+		args->MPI_Ialltoall.request__ref.val = *args->MPI_Ialltoall.request; \
 	} \
 };
 
@@ -18881,7 +18881,7 @@ struct args_MPI_Raccumulate_t {
 	MPI_Win win;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -18901,7 +18901,7 @@ struct args_MPI_Raccumulate_t {
 
 #define GET_PTRS_VALUE_MPI_Raccumulate(args) { \
 	if (args->MPI_Raccumulate.request != NULL) { \
-		args->MPI_Raccumulate.request__ref.ptr1 = *args->MPI_Raccumulate.request; \
+		args->MPI_Raccumulate.request__ref.val = *args->MPI_Raccumulate.request; \
 	} \
 };
 
@@ -19076,7 +19076,7 @@ struct args_MPI_Dist_graph_create_t {
 	int reorder;
 	MPI_Comm * newcomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
 };
@@ -19107,7 +19107,7 @@ struct args_MPI_Dist_graph_create_t {
 		args->MPI_Dist_graph_create.weights__ref.val = *args->MPI_Dist_graph_create.weights; \
 	} \
 	if (args->MPI_Dist_graph_create.newcomm != NULL) { \
-		args->MPI_Dist_graph_create.newcomm__ref.ptr1 = *args->MPI_Dist_graph_create.newcomm; \
+		args->MPI_Dist_graph_create.newcomm__ref.val = *args->MPI_Dist_graph_create.newcomm; \
 	} \
 };
 
@@ -19133,7 +19133,7 @@ struct args_MPI_Comm_join_t {
 	int fd;
 	MPI_Comm * intercomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} intercomm__ref;
 	int retval;
 };
@@ -19145,7 +19145,7 @@ struct args_MPI_Comm_join_t {
 
 #define GET_PTRS_VALUE_MPI_Comm_join(args) { \
 	if (args->MPI_Comm_join.intercomm != NULL) { \
-		args->MPI_Comm_join.intercomm__ref.ptr1 = *args->MPI_Comm_join.intercomm; \
+		args->MPI_Comm_join.intercomm__ref.val = *args->MPI_Comm_join.intercomm; \
 	} \
 };
 
@@ -19195,7 +19195,7 @@ struct args_MPI_Gatherv_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -19222,7 +19222,7 @@ struct args_MPI_Gatherv_init_t {
 		args->MPI_Gatherv_init.displs__ref.val = *args->MPI_Gatherv_init.displs; \
 	} \
 	if (args->MPI_Gatherv_init.request != NULL) { \
-		args->MPI_Gatherv_init.request__ref.ptr1 = *args->MPI_Gatherv_init.request; \
+		args->MPI_Gatherv_init.request__ref.val = *args->MPI_Gatherv_init.request; \
 	} \
 };
 
@@ -19283,7 +19283,7 @@ struct args_MPI_Comm_accept_t {
 	MPI_Comm comm;
 	MPI_Comm * newcomm;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
 };
@@ -19301,7 +19301,7 @@ struct args_MPI_Comm_accept_t {
 		strncpy(args->MPI_Comm_accept.port_name__ref.val, args->MPI_Comm_accept.port_name, MPI_STRING_SIZE_MAX-1); \
 	} \
 	if (args->MPI_Comm_accept.newcomm != NULL) { \
-		args->MPI_Comm_accept.newcomm__ref.ptr1 = *args->MPI_Comm_accept.newcomm; \
+		args->MPI_Comm_accept.newcomm__ref.val = *args->MPI_Comm_accept.newcomm; \
 	} \
 };
 
@@ -19339,7 +19339,7 @@ struct args_MPI_Ineighbor_allgather_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -19357,7 +19357,7 @@ struct args_MPI_Ineighbor_allgather_t {
 
 #define GET_PTRS_VALUE_MPI_Ineighbor_allgather(args) { \
 	if (args->MPI_Ineighbor_allgather.request != NULL) { \
-		args->MPI_Ineighbor_allgather.request__ref.ptr1 = *args->MPI_Ineighbor_allgather.request; \
+		args->MPI_Ineighbor_allgather.request__ref.val = *args->MPI_Ineighbor_allgather.request; \
 	} \
 };
 
@@ -19383,7 +19383,7 @@ struct args_MPI_Type_dup_t {
 	MPI_Datatype type;
 	MPI_Datatype * newtype;
 	struct {
-		void* ptr1;
+		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
 };
@@ -19395,7 +19395,7 @@ struct args_MPI_Type_dup_t {
 
 #define GET_PTRS_VALUE_MPI_Type_dup(args) { \
 	if (args->MPI_Type_dup.newtype != NULL) { \
-		args->MPI_Type_dup.newtype__ref.ptr1 = *args->MPI_Type_dup.newtype; \
+		args->MPI_Type_dup.newtype__ref.val = *args->MPI_Type_dup.newtype; \
 	} \
 };
 
@@ -19427,7 +19427,7 @@ struct args_MPI_File_iwrite_shared_t {
 	MPI_Datatype datatype;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -19442,7 +19442,7 @@ struct args_MPI_File_iwrite_shared_t {
 
 #define GET_PTRS_VALUE_MPI_File_iwrite_shared(args) { \
 	if (args->MPI_File_iwrite_shared.request != NULL) { \
-		args->MPI_File_iwrite_shared.request__ref.ptr1 = *args->MPI_File_iwrite_shared.request; \
+		args->MPI_File_iwrite_shared.request__ref.val = *args->MPI_File_iwrite_shared.request; \
 	} \
 };
 
@@ -19468,7 +19468,7 @@ struct args_MPI_Win_get_errhandler_t {
 	MPI_Win win;
 	MPI_Errhandler * errhandler;
 	struct {
-		void* ptr1;
+		MPI_Errhandler val;
 	} errhandler__ref;
 	int retval;
 };
@@ -19480,7 +19480,7 @@ struct args_MPI_Win_get_errhandler_t {
 
 #define GET_PTRS_VALUE_MPI_Win_get_errhandler(args) { \
 	if (args->MPI_Win_get_errhandler.errhandler != NULL) { \
-		args->MPI_Win_get_errhandler.errhandler__ref.ptr1 = *args->MPI_Win_get_errhandler.errhandler; \
+		args->MPI_Win_get_errhandler.errhandler__ref.val = *args->MPI_Win_get_errhandler.errhandler; \
 	} \
 };
 
@@ -19516,7 +19516,7 @@ struct args_MPI_Iscan_t {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -19533,7 +19533,7 @@ struct args_MPI_Iscan_t {
 
 #define GET_PTRS_VALUE_MPI_Iscan(args) { \
 	if (args->MPI_Iscan.request != NULL) { \
-		args->MPI_Iscan.request__ref.ptr1 = *args->MPI_Iscan.request; \
+		args->MPI_Iscan.request__ref.val = *args->MPI_Iscan.request; \
 	} \
 };
 
@@ -19602,7 +19602,7 @@ struct args_MPI_Graph_create_t {
 	int reorder;
 	MPI_Comm * comm_graph;
 	struct {
-		void* ptr1;
+		MPI_Comm val;
 	} comm_graph__ref;
 	int retval;
 };
@@ -19624,7 +19624,7 @@ struct args_MPI_Graph_create_t {
 		args->MPI_Graph_create.edges__ref.val = *args->MPI_Graph_create.edges; \
 	} \
 	if (args->MPI_Graph_create.comm_graph != NULL) { \
-		args->MPI_Graph_create.comm_graph__ref.ptr1 = *args->MPI_Graph_create.comm_graph; \
+		args->MPI_Graph_create.comm_graph__ref.val = *args->MPI_Graph_create.comm_graph; \
 	} \
 };
 
@@ -19688,7 +19688,7 @@ struct args_MPI_Win_create_errhandler_t {
 	MPI_Win_errhandler_function * function;
 	MPI_Errhandler * errhandler;
 	struct {
-		void* ptr1;
+		MPI_Errhandler val;
 	} errhandler__ref;
 	int retval;
 };
@@ -19700,7 +19700,7 @@ struct args_MPI_Win_create_errhandler_t {
 
 #define GET_PTRS_VALUE_MPI_Win_create_errhandler(args) { \
 	if (args->MPI_Win_create_errhandler.errhandler != NULL) { \
-		args->MPI_Win_create_errhandler.errhandler__ref.ptr1 = *args->MPI_Win_create_errhandler.errhandler; \
+		args->MPI_Win_create_errhandler.errhandler__ref.val = *args->MPI_Win_create_errhandler.errhandler; \
 	} \
 };
 
@@ -19742,7 +19742,7 @@ struct args_MPI_Gather_init_t {
 	MPI_Info info;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -19762,7 +19762,7 @@ struct args_MPI_Gather_init_t {
 
 #define GET_PTRS_VALUE_MPI_Gather_init(args) { \
 	if (args->MPI_Gather_init.request != NULL) { \
-		args->MPI_Gather_init.request__ref.ptr1 = *args->MPI_Gather_init.request; \
+		args->MPI_Gather_init.request__ref.val = *args->MPI_Gather_init.request; \
 	} \
 };
 
@@ -19856,7 +19856,7 @@ struct args_MPI_File_iwrite_t {
 	MPI_Datatype datatype;
 	MPI_Request * request;
 	struct {
-		void* ptr1;
+		MPI_Request val;
 	} request__ref;
 	int retval;
 };
@@ -19871,7 +19871,7 @@ struct args_MPI_File_iwrite_t {
 
 #define GET_PTRS_VALUE_MPI_File_iwrite(args) { \
 	if (args->MPI_File_iwrite.request != NULL) { \
-		args->MPI_File_iwrite.request__ref.ptr1 = *args->MPI_File_iwrite.request; \
+		args->MPI_File_iwrite.request__ref.val = *args->MPI_File_iwrite.request; \
 	} \
 };
 

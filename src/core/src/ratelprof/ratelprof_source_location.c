@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <dlfcn.h>
 #include <string.h>
+#include <inttypes.h>
 #include <pthread.h>
 
 #include "ratelprof/ratelprof_source_location.h"
@@ -13,6 +14,7 @@
 // Save for each address the location data
 static cached_source_data_t *location_cache = NULL;
 static pthread_mutex_t cache_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 
 /*
  * addr2line:
@@ -68,7 +70,6 @@ static bool addr2line(const char *object_path, void *addr, void *dli_fbase,
 }
 
 
-
 static bool match_addr_callback(ratelprof_source_data_t *location, void *user_data) {
     ratelprof_source_data_t *args = (ratelprof_source_data_t*) user_data;
 
@@ -97,7 +98,7 @@ static ratelprof_status_t add_new_cache_entry(ratelprof_source_data_t data) {
 }
 
 
-ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, void *addr) {
+ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, void *addr) {    
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
 
     ratelprof_source_data_t tmp = {0};
@@ -130,7 +131,6 @@ ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, v
 
     return add_new_cache_entry(*data);
 }
-
 
 
 bool ratelprof_iterate_location_cache(ratelprof_cache_iter_cb_t callback, void *user_data) {

@@ -306,8 +306,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Isend.request);
 			if (args->MPI_Isend.request != NULL) {
-				printf("-> %p", args->MPI_Isend.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Isend.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Isend.retval);
 			break;
@@ -334,8 +333,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Irecv.request);
 			if (args->MPI_Irecv.request != NULL) {
-				printf("-> %p", args->MPI_Irecv.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Irecv.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Irecv.retval);
 			break;
@@ -354,8 +352,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Request * request = %p", args->MPI_Wait.request);
 			if (args->MPI_Wait.request != NULL) {
-				printf("-> %p", args->MPI_Wait.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Wait.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Status * status = %p", args->MPI_Wait.status);
 			if (args->MPI_Wait.status != NULL) {
@@ -386,8 +383,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint count = %d\n", args->MPI_Waitall.count);
 			printf("\tMPI_Request[] array_of_requests = %p", args->MPI_Waitall.array_of_requests);
 			if (args->MPI_Waitall.array_of_requests != NULL) {
-				printf("-> %p", args->MPI_Waitall.array_of_requests__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Waitall.array_of_requests__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Status * array_of_statuses = %p", args->MPI_Waitall.array_of_statuses);
 			if (args->MPI_Waitall.array_of_statuses != NULL) {
@@ -419,8 +415,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint count = %d\n", args->MPI_Waitany.count);
 			printf("\tMPI_Request[] array_of_requests = %p", args->MPI_Waitany.array_of_requests);
 			if (args->MPI_Waitany.array_of_requests != NULL) {
-				printf("-> %p", args->MPI_Waitany.array_of_requests__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Waitany.array_of_requests__ref.val);
 			} else { printf("\n"); };
 			printf("\tint * index = %p", args->MPI_Waitany.index);
 			if (args->MPI_Waitany.index != NULL) {
@@ -457,8 +452,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint incount = %d\n", args->MPI_Waitsome.incount);
 			printf("\tMPI_Request[] array_of_requests = %p", args->MPI_Waitsome.array_of_requests);
 			if (args->MPI_Waitsome.array_of_requests != NULL) {
-				printf("-> %p", args->MPI_Waitsome.array_of_requests__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Waitsome.array_of_requests__ref.val);
 			} else { printf("\n"); };
 			printf("\tint * outcount = %p", args->MPI_Waitsome.outcount);
 			if (args->MPI_Waitsome.outcount != NULL) {
@@ -496,8 +490,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Request * request = %p", args->MPI_Test.request);
 			if (args->MPI_Test.request != NULL) {
-				printf("-> %p", args->MPI_Test.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Test.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint * flag = %p", args->MPI_Test.flag);
 			if (args->MPI_Test.flag != NULL) {
@@ -533,8 +526,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint count = %d\n", args->MPI_Testall.count);
 			printf("\tMPI_Request[] array_of_requests = %p", args->MPI_Testall.array_of_requests);
 			if (args->MPI_Testall.array_of_requests != NULL) {
-				printf("-> %p", args->MPI_Testall.array_of_requests__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Testall.array_of_requests__ref.val);
 			} else { printf("\n"); };
 			printf("\tint * flag = %p", args->MPI_Testall.flag);
 			if (args->MPI_Testall.flag != NULL) {
@@ -571,8 +563,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint count = %d\n", args->MPI_Testany.count);
 			printf("\tMPI_Request[] array_of_requests = %p", args->MPI_Testany.array_of_requests);
 			if (args->MPI_Testany.array_of_requests != NULL) {
-				printf("-> %p", args->MPI_Testany.array_of_requests__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Testany.array_of_requests__ref.val);
 			} else { printf("\n"); };
 			printf("\tint * index = %p", args->MPI_Testany.index);
 			if (args->MPI_Testany.index != NULL) {
@@ -613,8 +604,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint incount = %d\n", args->MPI_Testsome.incount);
 			printf("\tMPI_Request[] array_of_requests = %p", args->MPI_Testsome.array_of_requests);
 			if (args->MPI_Testsome.array_of_requests != NULL) {
-				printf("-> %p", args->MPI_Testsome.array_of_requests__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Testsome.array_of_requests__ref.val);
 			} else { printf("\n"); };
 			printf("\tint * outcount = %p", args->MPI_Testsome.outcount);
 			if (args->MPI_Testsome.outcount != NULL) {
@@ -644,8 +634,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Request * request = %p", args->MPI_Request_free.request);
 			if (args->MPI_Request_free.request != NULL) {
-				printf("-> %p", args->MPI_Request_free.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Request_free.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Request_free.retval);
 			break;
@@ -657,8 +646,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Request * request = %p", args->MPI_Cancel.request);
 			if (args->MPI_Cancel.request != NULL) {
-				printf("-> %p", args->MPI_Cancel.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Cancel.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Cancel.retval);
 			break;
@@ -675,8 +663,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Datatype * newtype = %p", args->MPI_Type_contiguous.newtype);
 			if (args->MPI_Type_contiguous.newtype != NULL) {
-				printf("-> %p", args->MPI_Type_contiguous.newtype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_contiguous.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_contiguous.retval);
 			break;
@@ -697,8 +684,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Datatype * newtype = %p", args->MPI_Type_vector.newtype);
 			if (args->MPI_Type_vector.newtype != NULL) {
-				printf("-> %p", args->MPI_Type_vector.newtype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_vector.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_vector.retval);
 			break;
@@ -725,8 +711,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Datatype * newtype = %p", args->MPI_Type_indexed.newtype);
 			if (args->MPI_Type_indexed.newtype != NULL) {
-				printf("-> %p", args->MPI_Type_indexed.newtype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_indexed.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_indexed.retval);
 			break;
@@ -750,8 +735,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Datatype * newtype = %p", args->MPI_Type_create_indexed_block.newtype);
 			if (args->MPI_Type_create_indexed_block.newtype != NULL) {
-				printf("-> %p", args->MPI_Type_create_indexed_block.newtype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_create_indexed_block.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_create_indexed_block.retval);
 			break;
@@ -776,13 +760,11 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tconst MPI_Datatype[] array_of_types = %p", args->MPI_Type_create_struct.array_of_types);
 			if (args->MPI_Type_create_struct.array_of_types != NULL) {
-				printf("-> %p", args->MPI_Type_create_struct.array_of_types__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_create_struct.array_of_types__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Datatype * newtype = %p", args->MPI_Type_create_struct.newtype);
 			if (args->MPI_Type_create_struct.newtype != NULL) {
-				printf("-> %p", args->MPI_Type_create_struct.newtype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_create_struct.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_create_struct.retval);
 			break;
@@ -801,8 +783,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tMPI_Aint extent = %ld\n", args->MPI_Type_create_resized.extent);
 			printf("\tMPI_Datatype * newtype = %p", args->MPI_Type_create_resized.newtype);
 			if (args->MPI_Type_create_resized.newtype != NULL) {
-				printf("-> %p", args->MPI_Type_create_resized.newtype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_create_resized.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_create_resized.retval);
 			break;
@@ -814,8 +795,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Datatype * type = %p", args->MPI_Type_commit.type);
 			if (args->MPI_Type_commit.type != NULL) {
-				printf("-> %p", args->MPI_Type_commit.type__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_commit.type__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_commit.retval);
 			break;
@@ -827,8 +807,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Datatype * type = %p", args->MPI_Type_free.type);
 			if (args->MPI_Type_free.type != NULL) {
-				printf("-> %p", args->MPI_Type_free.type__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_free.type__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_free.retval);
 			break;
@@ -1448,8 +1427,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Group * group = %p", args->MPI_Comm_group.group);
 			if (args->MPI_Comm_group.group != NULL) {
-				printf("-> %p", args->MPI_Comm_group.group__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_group.group__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_group.retval);
 			break;
@@ -1464,8 +1442,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Comm * newcomm = %p", args->MPI_Comm_dup.newcomm);
 			if (args->MPI_Comm_dup.newcomm != NULL) {
-				printf("-> %p", args->MPI_Comm_dup.newcomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_dup.newcomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_dup.retval);
 			break;
@@ -1483,8 +1460,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Comm * newcomm = %p", args->MPI_Comm_create.newcomm);
 			if (args->MPI_Comm_create.newcomm != NULL) {
-				printf("-> %p", args->MPI_Comm_create.newcomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_create.newcomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_create.retval);
 			break;
@@ -1503,8 +1479,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint key = %d\n", args->MPI_Comm_split.key);
 			printf("\tMPI_Comm * newcomm = %p", args->MPI_Comm_split.newcomm);
 			if (args->MPI_Comm_split.newcomm != NULL) {
-				printf("-> %p", args->MPI_Comm_split.newcomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_split.newcomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_split.retval);
 			break;
@@ -1516,8 +1491,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Comm * comm = %p", args->MPI_Comm_free.comm);
 			if (args->MPI_Comm_free.comm != NULL) {
-				printf("-> %p", args->MPI_Comm_free.comm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_free.comm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_free.retval);
 			break;
@@ -1562,8 +1536,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Group * group = %p", args->MPI_Comm_remote_group.group);
 			if (args->MPI_Comm_remote_group.group != NULL) {
-				printf("-> %p", args->MPI_Comm_remote_group.group__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_remote_group.group__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_remote_group.retval);
 			break;
@@ -1773,8 +1746,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Group * newgroup = %p", args->MPI_Group_union.newgroup);
 			if (args->MPI_Group_union.newgroup != NULL) {
-				printf("-> %p", args->MPI_Group_union.newgroup__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Group_union.newgroup__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Group_union.retval);
 			break;
@@ -1792,8 +1764,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Group * newgroup = %p", args->MPI_Group_intersection.newgroup);
 			if (args->MPI_Group_intersection.newgroup != NULL) {
-				printf("-> %p", args->MPI_Group_intersection.newgroup__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Group_intersection.newgroup__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Group_intersection.retval);
 			break;
@@ -1811,8 +1782,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Group * newgroup = %p", args->MPI_Group_difference.newgroup);
 			if (args->MPI_Group_difference.newgroup != NULL) {
-				printf("-> %p", args->MPI_Group_difference.newgroup__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Group_difference.newgroup__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Group_difference.retval);
 			break;
@@ -1834,8 +1804,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Group * newgroup = %p", args->MPI_Group_incl.newgroup);
 			if (args->MPI_Group_incl.newgroup != NULL) {
-				printf("-> %p", args->MPI_Group_incl.newgroup__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Group_incl.newgroup__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Group_incl.retval);
 			break;
@@ -1857,8 +1826,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Group * newgroup = %p", args->MPI_Group_excl.newgroup);
 			if (args->MPI_Group_excl.newgroup != NULL) {
-				printf("-> %p", args->MPI_Group_excl.newgroup__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Group_excl.newgroup__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Group_excl.retval);
 			break;
@@ -1880,8 +1848,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Group * newgroup = %p", args->MPI_Group_range_incl.newgroup);
 			if (args->MPI_Group_range_incl.newgroup != NULL) {
-				printf("-> %p", args->MPI_Group_range_incl.newgroup__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Group_range_incl.newgroup__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Group_range_incl.retval);
 			break;
@@ -1903,8 +1870,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Group * newgroup = %p", args->MPI_Group_range_excl.newgroup);
 			if (args->MPI_Group_range_excl.newgroup != NULL) {
-				printf("-> %p", args->MPI_Group_range_excl.newgroup__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Group_range_excl.newgroup__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Group_range_excl.retval);
 			break;
@@ -1916,8 +1882,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Group * group = %p", args->MPI_Group_free.group);
 			if (args->MPI_Group_free.group != NULL) {
-				printf("-> %p", args->MPI_Group_free.group__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Group_free.group__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Group_free.retval);
 			break;
@@ -1933,8 +1898,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint commute = %d\n", args->MPI_Op_create.commute);
 			printf("\tMPI_Op * op = %p", args->MPI_Op_create.op);
 			if (args->MPI_Op_create.op != NULL) {
-				printf("-> %p", args->MPI_Op_create.op__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Op_create.op__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Op_create.retval);
 			break;
@@ -1946,8 +1910,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Op * op = %p", args->MPI_Op_free.op);
 			if (args->MPI_Op_free.op != NULL) {
-				printf("-> %p", args->MPI_Op_free.op__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Op_free.op__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Op_free.retval);
 			break;
@@ -2074,8 +2037,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Info * info_used = %p", args->MPI_Win_get_info.info_used);
 			if (args->MPI_Win_get_info.info_used != NULL) {
-				printf("-> %p", args->MPI_Win_get_info.info_used__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Win_get_info.info_used__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Win_get_info.retval);
 			break;
@@ -2107,8 +2069,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Rput.request);
 			if (args->MPI_Rput.request != NULL) {
-				printf("-> %p", args->MPI_Rput.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Rput.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Rput.retval);
 			break;
@@ -2164,8 +2125,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Ireduce.request);
 			if (args->MPI_Ireduce.request != NULL) {
-				printf("-> %p", args->MPI_Ireduce.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ireduce.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Ireduce.retval);
 			break;
@@ -2197,8 +2157,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Psend_init.request);
 			if (args->MPI_Psend_init.request != NULL) {
-				printf("-> %p", args->MPI_Psend_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Psend_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Psend_init.retval);
 			break;
@@ -2232,8 +2191,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Reduce_init.request);
 			if (args->MPI_Reduce_init.request != NULL) {
-				printf("-> %p", args->MPI_Reduce_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Reduce_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Reduce_init.retval);
 			break;
@@ -2270,8 +2228,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Rsend_init.request);
 			if (args->MPI_Rsend_init.request != NULL) {
-				printf("-> %p", args->MPI_Rsend_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Rsend_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Rsend_init.retval);
 			break;
@@ -2350,8 +2307,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Errhandler * errhandler = %p", args->MPI_Errhandler_free.errhandler);
 			if (args->MPI_Errhandler_free.errhandler != NULL) {
-				printf("-> %p", args->MPI_Errhandler_free.errhandler__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Errhandler_free.errhandler__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Errhandler_free.retval);
 			break;
@@ -2498,8 +2454,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Group * newgroup = %p", args->MPI_Group_from_session_pset.newgroup);
 			if (args->MPI_Group_from_session_pset.newgroup != NULL) {
-				printf("-> %p", args->MPI_Group_from_session_pset.newgroup__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Group_from_session_pset.newgroup__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Group_from_session_pset.retval);
 			break;
@@ -2515,13 +2470,11 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Comm * newcomm = %p", args->MPI_Comm_idup.newcomm);
 			if (args->MPI_Comm_idup.newcomm != NULL) {
-				printf("-> %p", args->MPI_Comm_idup.newcomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_idup.newcomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Request * request = %p", args->MPI_Comm_idup.request);
 			if (args->MPI_Comm_idup.request != NULL) {
-				printf("-> %p", args->MPI_Comm_idup.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_idup.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_idup.retval);
 			break;
@@ -2583,8 +2536,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Allgatherv_init.request);
 			if (args->MPI_Allgatherv_init.request != NULL) {
-				printf("-> %p", args->MPI_Allgatherv_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Allgatherv_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Allgatherv_init.retval);
 			break;
@@ -2602,8 +2554,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Comm * newcomm = %p", args->MPI_Comm_dup_with_info.newcomm);
 			if (args->MPI_Comm_dup_with_info.newcomm != NULL) {
-				printf("-> %p", args->MPI_Comm_dup_with_info.newcomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_dup_with_info.newcomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_dup_with_info.retval);
 			break;
@@ -2654,8 +2605,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Igather.request);
 			if (args->MPI_Igather.request != NULL) {
-				printf("-> %p", args->MPI_Igather.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Igather.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Igather.retval);
 			break;
@@ -2713,8 +2663,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Datatype * newtype = %p", args->MPI_Type_create_hvector.newtype);
 			if (args->MPI_Type_create_hvector.newtype != NULL) {
-				printf("-> %p", args->MPI_Type_create_hvector.newtype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_create_hvector.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_create_hvector.retval);
 			break;
@@ -2755,8 +2704,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Grequest_start.request);
 			if (args->MPI_Grequest_start.request != NULL) {
-				printf("-> %p", args->MPI_Grequest_start.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Grequest_start.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Grequest_start.retval);
 			break;
@@ -2783,8 +2731,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Bsend_init.request);
 			if (args->MPI_Bsend_init.request != NULL) {
-				printf("-> %p", args->MPI_Bsend_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Bsend_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Bsend_init.retval);
 			break;
@@ -2843,8 +2790,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Comm * newcomm = %p", args->MPI_Comm_split_type.newcomm);
 			if (args->MPI_Comm_split_type.newcomm != NULL) {
-				printf("-> %p", args->MPI_Comm_split_type.newcomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_split_type.newcomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_split_type.retval);
 			break;
@@ -2940,8 +2886,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Message * message = %p", args->MPI_Improbe.message);
 			if (args->MPI_Improbe.message != NULL) {
-				printf("-> %p", args->MPI_Improbe.message__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Improbe.message__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Status * status = %p", args->MPI_Improbe.status);
 			if (args->MPI_Improbe.status != NULL) {
@@ -2966,8 +2911,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Info * info_used = %p", args->MPI_Comm_get_info.info_used);
 			if (args->MPI_Comm_get_info.info_used != NULL) {
-				printf("-> %p", args->MPI_Comm_get_info.info_used__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_get_info.info_used__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_get_info.retval);
 			break;
@@ -3031,8 +2975,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint r = %d\n", args->MPI_Type_create_f90_integer.r);
 			printf("\tMPI_Datatype * newtype = %p", args->MPI_Type_create_f90_integer.newtype);
 			if (args->MPI_Type_create_f90_integer.newtype != NULL) {
-				printf("-> %p", args->MPI_Type_create_f90_integer.newtype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_create_f90_integer.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_create_f90_integer.retval);
 			break;
@@ -3074,8 +3017,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Exscan_init.request);
 			if (args->MPI_Exscan_init.request != NULL) {
-				printf("-> %p", args->MPI_Exscan_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Exscan_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Exscan_init.retval);
 			break;
@@ -3102,8 +3044,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Ibsend.request);
 			if (args->MPI_Ibsend.request != NULL) {
-				printf("-> %p", args->MPI_Ibsend.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ibsend.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Ibsend.retval);
 			break;
@@ -3146,8 +3087,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tconst MPI_Datatype[] sendtypes = %p", args->MPI_Ialltoallw.sendtypes);
 			if (args->MPI_Ialltoallw.sendtypes != NULL) {
-				printf("-> %p", args->MPI_Ialltoallw.sendtypes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ialltoallw.sendtypes__ref.val);
 			} else { printf("\n"); };
 			printf("\tvoid * recvbuf = %p", args->MPI_Ialltoallw.recvbuf);
 			printf("\n");
@@ -3161,15 +3101,13 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tconst MPI_Datatype[] recvtypes = %p", args->MPI_Ialltoallw.recvtypes);
 			if (args->MPI_Ialltoallw.recvtypes != NULL) {
-				printf("-> %p", args->MPI_Ialltoallw.recvtypes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ialltoallw.recvtypes__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Comm comm = %p", args->MPI_Ialltoallw.comm);
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Ialltoallw.request);
 			if (args->MPI_Ialltoallw.request != NULL) {
-				printf("-> %p", args->MPI_Ialltoallw.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ialltoallw.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Ialltoallw.retval);
 			break;
@@ -3195,8 +3133,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Comm * newcomm = %p", args->MPI_Comm_create_from_group.newcomm);
 			if (args->MPI_Comm_create_from_group.newcomm != NULL) {
-				printf("-> %p", args->MPI_Comm_create_from_group.newcomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_create_from_group.newcomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_create_from_group.retval);
 			break;
@@ -3227,8 +3164,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Datatype[] array_of_datatypes = %p", args->MPI_Type_get_contents.array_of_datatypes);
 			if (args->MPI_Type_get_contents.array_of_datatypes != NULL) {
-				printf("-> %p", args->MPI_Type_get_contents.array_of_datatypes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_get_contents.array_of_datatypes__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_get_contents.retval);
 			break;
@@ -3253,8 +3189,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_File_iwrite_at.request);
 			if (args->MPI_File_iwrite_at.request != NULL) {
-				printf("-> %p", args->MPI_File_iwrite_at.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_iwrite_at.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_iwrite_at.retval);
 			break;
@@ -3362,8 +3297,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Allreduce_init.request);
 			if (args->MPI_Allreduce_init.request != NULL) {
-				printf("-> %p", args->MPI_Allreduce_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Allreduce_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Allreduce_init.retval);
 			break;
@@ -3402,8 +3336,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tMPI_Comm_errhandler_function * function = %p\n", args->MPI_Comm_create_errhandler.function);
 			printf("\tMPI_Errhandler * errhandler = %p", args->MPI_Comm_create_errhandler.errhandler);
 			if (args->MPI_Comm_create_errhandler.errhandler != NULL) {
-				printf("-> %p", args->MPI_Comm_create_errhandler.errhandler__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_create_errhandler.errhandler__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_create_errhandler.retval);
 			break;
@@ -3415,8 +3348,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Info * info = %p", args->MPI_Info_free.info);
 			if (args->MPI_Info_free.info != NULL) {
-				printf("-> %p", args->MPI_Info_free.info__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Info_free.info__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Info_free.retval);
 			break;
@@ -3460,8 +3392,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Ssend_init.request);
 			if (args->MPI_Ssend_init.request != NULL) {
-				printf("-> %p", args->MPI_Ssend_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ssend_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Ssend_init.retval);
 			break;
@@ -3503,8 +3434,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint reorder = %d\n", args->MPI_Cart_create.reorder);
 			printf("\tMPI_Comm * comm_cart = %p", args->MPI_Cart_create.comm_cart);
 			if (args->MPI_Cart_create.comm_cart != NULL) {
-				printf("-> %p", args->MPI_Cart_create.comm_cart__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Cart_create.comm_cart__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Cart_create.retval);
 			break;
@@ -3564,8 +3494,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Scan_init.request);
 			if (args->MPI_Scan_init.request != NULL) {
-				printf("-> %p", args->MPI_Scan_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Scan_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Scan_init.retval);
 			break;
@@ -3592,8 +3521,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Irsend.request);
 			if (args->MPI_Irsend.request != NULL) {
-				printf("-> %p", args->MPI_Irsend.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Irsend.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Irsend.retval);
 			break;
@@ -3704,8 +3632,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tconst MPI_Datatype[] sendtypes = %p", args->MPI_Alltoallw_init.sendtypes);
 			if (args->MPI_Alltoallw_init.sendtypes != NULL) {
-				printf("-> %p", args->MPI_Alltoallw_init.sendtypes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Alltoallw_init.sendtypes__ref.val);
 			} else { printf("\n"); };
 			printf("\tvoid * recvbuf = %p", args->MPI_Alltoallw_init.recvbuf);
 			printf("\n");
@@ -3719,8 +3646,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tconst MPI_Datatype[] recvtypes = %p", args->MPI_Alltoallw_init.recvtypes);
 			if (args->MPI_Alltoallw_init.recvtypes != NULL) {
-				printf("-> %p", args->MPI_Alltoallw_init.recvtypes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Alltoallw_init.recvtypes__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Comm comm = %p", args->MPI_Alltoallw_init.comm);
 			printf("\n");
@@ -3728,8 +3654,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Alltoallw_init.request);
 			if (args->MPI_Alltoallw_init.request != NULL) {
-				printf("-> %p", args->MPI_Alltoallw_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Alltoallw_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Alltoallw_init.retval);
 			break;
@@ -3801,8 +3726,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint reorder = %d\n", args->MPI_Dist_graph_create_adjacent.reorder);
 			printf("\tMPI_Comm * comm_dist_graph = %p", args->MPI_Dist_graph_create_adjacent.comm_dist_graph);
 			if (args->MPI_Dist_graph_create_adjacent.comm_dist_graph != NULL) {
-				printf("-> %p", args->MPI_Dist_graph_create_adjacent.comm_dist_graph__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Dist_graph_create_adjacent.comm_dist_graph__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Dist_graph_create_adjacent.retval);
 			break;
@@ -3837,8 +3761,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Reduce_scatter_init.request);
 			if (args->MPI_Reduce_scatter_init.request != NULL) {
-				printf("-> %p", args->MPI_Reduce_scatter_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Reduce_scatter_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Reduce_scatter_init.retval);
 			break;
@@ -3850,8 +3773,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Comm * parent = %p", args->MPI_Comm_get_parent.parent);
 			if (args->MPI_Comm_get_parent.parent != NULL) {
-				printf("-> %p", args->MPI_Comm_get_parent.parent__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_get_parent.parent__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_get_parent.retval);
 			break;
@@ -3947,8 +3869,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Comm * newcomm = %p", args->MPI_Comm_connect.newcomm);
 			if (args->MPI_Comm_connect.newcomm != NULL) {
-				printf("-> %p", args->MPI_Comm_connect.newcomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_connect.newcomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_connect.retval);
 			break;
@@ -4014,8 +3935,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Scatterv_init.request);
 			if (args->MPI_Scatterv_init.request != NULL) {
-				printf("-> %p", args->MPI_Scatterv_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Scatterv_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Scatterv_init.retval);
 			break;
@@ -4170,8 +4090,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint count = %d\n", args->MPI_Startall.count);
 			printf("\tMPI_Request[] array_of_requests = %p", args->MPI_Startall.array_of_requests);
 			if (args->MPI_Startall.array_of_requests != NULL) {
-				printf("-> %p", args->MPI_Startall.array_of_requests__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Startall.array_of_requests__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Startall.retval);
 			break;
@@ -4323,8 +4242,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Info * info_used = %p", args->MPI_Session_get_pset_info.info_used);
 			if (args->MPI_Session_get_pset_info.info_used != NULL) {
-				printf("-> %p", args->MPI_Session_get_pset_info.info_used__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Session_get_pset_info.info_used__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Session_get_pset_info.retval);
 			break;
@@ -4351,8 +4269,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Comm * comm = %p", args->MPI_Comm_disconnect.comm);
 			if (args->MPI_Comm_disconnect.comm != NULL) {
-				printf("-> %p", args->MPI_Comm_disconnect.comm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_disconnect.comm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_disconnect.retval);
 			break;
@@ -4396,8 +4313,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Ireduce_scatter.request);
 			if (args->MPI_Ireduce_scatter.request != NULL) {
-				printf("-> %p", args->MPI_Ireduce_scatter.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ireduce_scatter.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Ireduce_scatter.retval);
 			break;
@@ -4441,8 +4357,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint high = %d\n", args->MPI_Intercomm_merge.high);
 			printf("\tMPI_Comm * newintracomm = %p", args->MPI_Intercomm_merge.newintracomm);
 			if (args->MPI_Intercomm_merge.newintracomm != NULL) {
-				printf("-> %p", args->MPI_Intercomm_merge.newintracomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Intercomm_merge.newintracomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Intercomm_merge.retval);
 			break;
@@ -4469,8 +4384,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Datatype * newtype = %p", args->MPI_Type_create_hindexed.newtype);
 			if (args->MPI_Type_create_hindexed.newtype != NULL) {
-				printf("-> %p", args->MPI_Type_create_hindexed.newtype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_create_hindexed.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_create_hindexed.retval);
 			break;
@@ -4559,8 +4473,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Ineighbor_allgatherv.request);
 			if (args->MPI_Ineighbor_allgatherv.request != NULL) {
-				printf("-> %p", args->MPI_Ineighbor_allgatherv.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ineighbor_allgatherv.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Ineighbor_allgatherv.retval);
 			break;
@@ -4664,8 +4577,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint r = %d\n", args->MPI_Type_create_f90_real.r);
 			printf("\tMPI_Datatype * newtype = %p", args->MPI_Type_create_f90_real.newtype);
 			if (args->MPI_Type_create_f90_real.newtype != NULL) {
-				printf("-> %p", args->MPI_Type_create_f90_real.newtype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_create_f90_real.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_create_f90_real.retval);
 			break;
@@ -4720,8 +4632,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_File * fh = %p", args->MPI_File_close.fh);
 			if (args->MPI_File_close.fh != NULL) {
-				printf("-> %p", args->MPI_File_close.fh__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_close.fh__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_close.retval);
 			break;
@@ -4808,8 +4719,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Rget_accumulate.request);
 			if (args->MPI_Rget_accumulate.request != NULL) {
-				printf("-> %p", args->MPI_Rget_accumulate.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Rget_accumulate.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Rget_accumulate.retval);
 			break;
@@ -4832,8 +4742,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_File_iread_all.request);
 			if (args->MPI_File_iread_all.request != NULL) {
-				printf("-> %p", args->MPI_File_iread_all.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_iread_all.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_iread_all.retval);
 			break;
@@ -4872,8 +4781,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Isendrecv.request);
 			if (args->MPI_Isendrecv.request != NULL) {
-				printf("-> %p", args->MPI_Isendrecv.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Isendrecv.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Isendrecv.retval);
 			break;
@@ -4982,8 +4890,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Win * win = %p", args->MPI_Win_create.win);
 			if (args->MPI_Win_create.win != NULL) {
-				printf("-> %p", args->MPI_Win_create.win__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Win_create.win__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Win_create.retval);
 			break;
@@ -5014,8 +4921,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Isendrecv_replace.request);
 			if (args->MPI_Isendrecv_replace.request != NULL) {
-				printf("-> %p", args->MPI_Isendrecv_replace.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Isendrecv_replace.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Isendrecv_replace.retval);
 			break;
@@ -5220,8 +5126,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Win * win = %p", args->MPI_Win_free.win);
 			if (args->MPI_Win_free.win != NULL) {
-				printf("-> %p", args->MPI_Win_free.win__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Win_free.win__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Win_free.retval);
 			break;
@@ -5237,8 +5142,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint r = %d\n", args->MPI_Type_create_f90_complex.r);
 			printf("\tMPI_Datatype * newtype = %p", args->MPI_Type_create_f90_complex.newtype);
 			if (args->MPI_Type_create_f90_complex.newtype != NULL) {
-				printf("-> %p", args->MPI_Type_create_f90_complex.newtype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_create_f90_complex.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_create_f90_complex.retval);
 			break;
@@ -5270,8 +5174,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tconst MPI_Datatype[] sendtypes = %p", args->MPI_Neighbor_alltoallw_init.sendtypes);
 			if (args->MPI_Neighbor_alltoallw_init.sendtypes != NULL) {
-				printf("-> %p", args->MPI_Neighbor_alltoallw_init.sendtypes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Neighbor_alltoallw_init.sendtypes__ref.val);
 			} else { printf("\n"); };
 			printf("\tvoid * recvbuf = %p", args->MPI_Neighbor_alltoallw_init.recvbuf);
 			printf("\n");
@@ -5285,8 +5188,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tconst MPI_Datatype[] recvtypes = %p", args->MPI_Neighbor_alltoallw_init.recvtypes);
 			if (args->MPI_Neighbor_alltoallw_init.recvtypes != NULL) {
-				printf("-> %p", args->MPI_Neighbor_alltoallw_init.recvtypes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Neighbor_alltoallw_init.recvtypes__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Comm comm = %p", args->MPI_Neighbor_alltoallw_init.comm);
 			printf("\n");
@@ -5294,8 +5196,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Neighbor_alltoallw_init.request);
 			if (args->MPI_Neighbor_alltoallw_init.request != NULL) {
-				printf("-> %p", args->MPI_Neighbor_alltoallw_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Neighbor_alltoallw_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Neighbor_alltoallw_init.retval);
 			break;
@@ -5327,8 +5228,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Rget.request);
 			if (args->MPI_Rget.request != NULL) {
-				printf("-> %p", args->MPI_Rget.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Rget.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Rget.retval);
 			break;
@@ -5436,8 +5336,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Scatter_init.request);
 			if (args->MPI_Scatter_init.request != NULL) {
-				printf("-> %p", args->MPI_Scatter_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Scatter_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Scatter_init.retval);
 			break;
@@ -5494,8 +5393,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Message * message = %p", args->MPI_Mrecv.message);
 			if (args->MPI_Mrecv.message != NULL) {
-				printf("-> %p", args->MPI_Mrecv.message__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Mrecv.message__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Status * status = %p", args->MPI_Mrecv.status);
 			if (args->MPI_Mrecv.status != NULL) {
@@ -5623,8 +5521,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Comm * intercomm = %p", args->MPI_Comm_spawn.intercomm);
 			if (args->MPI_Comm_spawn.intercomm != NULL) {
-				printf("-> %p", args->MPI_Comm_spawn.intercomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_spawn.intercomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint[] array_of_errcodes = %p", args->MPI_Comm_spawn.array_of_errcodes);
 			if (args->MPI_Comm_spawn.array_of_errcodes != NULL) {
@@ -5673,8 +5570,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Group * group = %p", args->MPI_File_get_group.group);
 			if (args->MPI_File_get_group.group != NULL) {
-				printf("-> %p", args->MPI_File_get_group.group__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_get_group.group__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_get_group.retval);
 			break;
@@ -5699,8 +5595,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_File_iread_at_all.request);
 			if (args->MPI_File_iread_at_all.request != NULL) {
-				printf("-> %p", args->MPI_File_iread_at_all.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_iread_at_all.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_iread_at_all.retval);
 			break;
@@ -5743,8 +5638,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_File_iread_shared.request);
 			if (args->MPI_File_iread_shared.request != NULL) {
-				printf("-> %p", args->MPI_File_iread_shared.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_iread_shared.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_iread_shared.retval);
 			break;
@@ -5773,13 +5667,11 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Comm * newcomm = %p", args->MPI_Comm_idup_with_info.newcomm);
 			if (args->MPI_Comm_idup_with_info.newcomm != NULL) {
-				printf("-> %p", args->MPI_Comm_idup_with_info.newcomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_idup_with_info.newcomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Request * request = %p", args->MPI_Comm_idup_with_info.request);
 			if (args->MPI_Comm_idup_with_info.request != NULL) {
-				printf("-> %p", args->MPI_Comm_idup_with_info.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_idup_with_info.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_idup_with_info.retval);
 			break;
@@ -5851,8 +5743,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Comm * newintercomm = %p", args->MPI_Intercomm_create_from_groups.newintercomm);
 			if (args->MPI_Intercomm_create_from_groups.newintercomm != NULL) {
-				printf("-> %p", args->MPI_Intercomm_create_from_groups.newintercomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Intercomm_create_from_groups.newintercomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Intercomm_create_from_groups.retval);
 			break;
@@ -5902,8 +5793,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Neighbor_alltoallv_init.request);
 			if (args->MPI_Neighbor_alltoallv_init.request != NULL) {
-				printf("-> %p", args->MPI_Neighbor_alltoallv_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Neighbor_alltoallv_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Neighbor_alltoallv_init.retval);
 			break;
@@ -5946,8 +5836,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Datatype * newtype = %p", args->MPI_Type_create_darray.newtype);
 			if (args->MPI_Type_create_darray.newtype != NULL) {
-				printf("-> %p", args->MPI_Type_create_darray.newtype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_create_darray.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_create_darray.retval);
 			break;
@@ -5977,8 +5866,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Group * group = %p", args->MPI_Win_get_group.group);
 			if (args->MPI_Win_get_group.group != NULL) {
-				printf("-> %p", args->MPI_Win_get_group.group__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Win_get_group.group__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Win_get_group.retval);
 			break;
@@ -6072,8 +5960,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Ireduce_scatter_block.request);
 			if (args->MPI_Ireduce_scatter_block.request != NULL) {
-				printf("-> %p", args->MPI_Ireduce_scatter_block.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ireduce_scatter_block.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Ireduce_scatter_block.retval);
 			break;
@@ -6256,8 +6143,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tMPI_Session_errhandler_function * session_errhandler_fn = %p\n", args->MPI_Session_create_errhandler.session_errhandler_fn);
 			printf("\tMPI_Errhandler * errhandler = %p", args->MPI_Session_create_errhandler.errhandler);
 			if (args->MPI_Session_create_errhandler.errhandler != NULL) {
-				printf("-> %p", args->MPI_Session_create_errhandler.errhandler__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Session_create_errhandler.errhandler__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Session_create_errhandler.retval);
 			break;
@@ -6302,8 +6188,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Iscatter.request);
 			if (args->MPI_Iscatter.request != NULL) {
-				printf("-> %p", args->MPI_Iscatter.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Iscatter.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Iscatter.retval);
 			break;
@@ -6381,8 +6266,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Errhandler * errhandler = %p", args->MPI_File_get_errhandler.errhandler);
 			if (args->MPI_File_get_errhandler.errhandler != NULL) {
-				printf("-> %p", args->MPI_File_get_errhandler.errhandler__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_get_errhandler.errhandler__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_get_errhandler.retval);
 			break;
@@ -6394,8 +6278,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Session * session = %p", args->MPI_Session_finalize.session);
 			if (args->MPI_Session_finalize.session != NULL) {
-				printf("-> %p", args->MPI_Session_finalize.session__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Session_finalize.session__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Session_finalize.retval);
 			break;
@@ -6430,8 +6313,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_File_iwrite_all.request);
 			if (args->MPI_File_iwrite_all.request != NULL) {
-				printf("-> %p", args->MPI_File_iwrite_all.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_iwrite_all.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_iwrite_all.retval);
 			break;
@@ -6504,8 +6386,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Alltoallv_init.request);
 			if (args->MPI_Alltoallv_init.request != NULL) {
-				printf("-> %p", args->MPI_Alltoallv_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Alltoallv_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Alltoallv_init.retval);
 			break;
@@ -6628,8 +6509,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Win * win = %p", args->MPI_Win_create_dynamic.win);
 			if (args->MPI_Win_create_dynamic.win != NULL) {
-				printf("-> %p", args->MPI_Win_create_dynamic.win__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Win_create_dynamic.win__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Win_create_dynamic.retval);
 			break;
@@ -6659,8 +6539,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tconst MPI_Datatype[] sendtypes = %p", args->MPI_Neighbor_alltoallw.sendtypes);
 			if (args->MPI_Neighbor_alltoallw.sendtypes != NULL) {
-				printf("-> %p", args->MPI_Neighbor_alltoallw.sendtypes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Neighbor_alltoallw.sendtypes__ref.val);
 			} else { printf("\n"); };
 			printf("\tvoid * recvbuf = %p", args->MPI_Neighbor_alltoallw.recvbuf);
 			printf("\n");
@@ -6674,8 +6553,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tconst MPI_Datatype[] recvtypes = %p", args->MPI_Neighbor_alltoallw.recvtypes);
 			if (args->MPI_Neighbor_alltoallw.recvtypes != NULL) {
-				printf("-> %p", args->MPI_Neighbor_alltoallw.recvtypes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Neighbor_alltoallw.recvtypes__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Comm comm = %p", args->MPI_Neighbor_alltoallw.comm);
 			printf("\n");
@@ -6706,8 +6584,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Iexscan.request);
 			if (args->MPI_Iexscan.request != NULL) {
-				printf("-> %p", args->MPI_Iexscan.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Iexscan.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Iexscan.retval);
 			break;
@@ -6771,8 +6648,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Recv_init.request);
 			if (args->MPI_Recv_init.request != NULL) {
-				printf("-> %p", args->MPI_Recv_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Recv_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Recv_init.retval);
 			break;
@@ -6806,8 +6682,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Datatype * newtype = %p", args->MPI_Type_create_subarray.newtype);
 			if (args->MPI_Type_create_subarray.newtype != NULL) {
-				printf("-> %p", args->MPI_Type_create_subarray.newtype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_create_subarray.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_create_subarray.retval);
 			break;
@@ -6827,8 +6702,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint tag = %d\n", args->MPI_Comm_create_group.tag);
 			printf("\tMPI_Comm * newcomm = %p", args->MPI_Comm_create_group.newcomm);
 			if (args->MPI_Comm_create_group.newcomm != NULL) {
-				printf("-> %p", args->MPI_Comm_create_group.newcomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_create_group.newcomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_create_group.retval);
 			break;
@@ -6862,8 +6736,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Allgather_init.request);
 			if (args->MPI_Allgather_init.request != NULL) {
-				printf("-> %p", args->MPI_Allgather_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Allgather_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Allgather_init.retval);
 			break;
@@ -6895,8 +6768,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Reduce_scatter_block_init.request);
 			if (args->MPI_Reduce_scatter_block_init.request != NULL) {
-				printf("-> %p", args->MPI_Reduce_scatter_block_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Reduce_scatter_block_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Reduce_scatter_block_init.retval);
 			break;
@@ -6912,8 +6784,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint size = %d\n", args->MPI_Type_match_size.size);
 			printf("\tMPI_Datatype * type = %p", args->MPI_Type_match_size.type);
 			if (args->MPI_Type_match_size.type != NULL) {
-				printf("-> %p", args->MPI_Type_match_size.type__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_match_size.type__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_match_size.retval);
 			break;
@@ -6967,8 +6838,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Alltoall_init.request);
 			if (args->MPI_Alltoall_init.request != NULL) {
-				printf("-> %p", args->MPI_Alltoall_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Alltoall_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Alltoall_init.retval);
 			break;
@@ -6995,8 +6865,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Send_init.request);
 			if (args->MPI_Send_init.request != NULL) {
-				printf("-> %p", args->MPI_Send_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Send_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Send_init.retval);
 			break;
@@ -7040,8 +6909,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Neighbor_allgather_init.request);
 			if (args->MPI_Neighbor_allgather_init.request != NULL) {
-				printf("-> %p", args->MPI_Neighbor_allgather_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Neighbor_allgather_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Neighbor_allgather_init.retval);
 			break;
@@ -7066,8 +6934,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Ibcast.request);
 			if (args->MPI_Ibcast.request != NULL) {
-				printf("-> %p", args->MPI_Ibcast.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ibcast.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Ibcast.retval);
 			break;
@@ -7090,8 +6957,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_File_iread.request);
 			if (args->MPI_File_iread.request != NULL) {
-				printf("-> %p", args->MPI_File_iread.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_iread.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_iread.retval);
 			break;
@@ -7125,8 +6991,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Neighbor_alltoall_init.request);
 			if (args->MPI_Neighbor_alltoall_init.request != NULL) {
-				printf("-> %p", args->MPI_Neighbor_alltoall_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Neighbor_alltoall_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Neighbor_alltoall_init.retval);
 			break;
@@ -7329,8 +7194,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Ineighbor_alltoall.request);
 			if (args->MPI_Ineighbor_alltoall.request != NULL) {
-				printf("-> %p", args->MPI_Ineighbor_alltoall.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ineighbor_alltoall.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Ineighbor_alltoall.retval);
 			break;
@@ -7381,8 +7245,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Iallgatherv.request);
 			if (args->MPI_Iallgatherv.request != NULL) {
-				printf("-> %p", args->MPI_Iallgatherv.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Iallgatherv.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Iallgatherv.retval);
 			break;
@@ -7424,8 +7287,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Neighbor_allgatherv_init.request);
 			if (args->MPI_Neighbor_allgatherv_init.request != NULL) {
-				printf("-> %p", args->MPI_Neighbor_allgatherv_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Neighbor_allgatherv_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Neighbor_allgatherv_init.retval);
 			break;
@@ -7569,8 +7431,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Message * message = %p", args->MPI_Mprobe.message);
 			if (args->MPI_Mprobe.message != NULL) {
-				printf("-> %p", args->MPI_Mprobe.message__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Mprobe.message__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Status * status = %p", args->MPI_Mprobe.status);
 			if (args->MPI_Mprobe.status != NULL) {
@@ -7723,8 +7584,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Iscatterv.request);
 			if (args->MPI_Iscatterv.request != NULL) {
-				printf("-> %p", args->MPI_Iscatterv.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Iscatterv.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Iscatterv.retval);
 			break;
@@ -7788,8 +7648,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Iallreduce.request);
 			if (args->MPI_Iallreduce.request != NULL) {
-				printf("-> %p", args->MPI_Iallreduce.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Iallreduce.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Iallreduce.retval);
 			break;
@@ -7818,8 +7677,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Request * request = %p", args->MPI_Start.request);
 			if (args->MPI_Start.request != NULL) {
-				printf("-> %p", args->MPI_Start.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Start.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Start.retval);
 			break;
@@ -7926,8 +7784,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_File * fh = %p", args->MPI_File_open.fh);
 			if (args->MPI_File_open.fh != NULL) {
-				printf("-> %p", args->MPI_File_open.fh__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_open.fh__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_open.retval);
 			break;
@@ -7966,8 +7823,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Datatype * newtype = %p", args->MPI_Type_create_hindexed_block.newtype);
 			if (args->MPI_Type_create_hindexed_block.newtype != NULL) {
-				printf("-> %p", args->MPI_Type_create_hindexed_block.newtype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_create_hindexed_block.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_create_hindexed_block.retval);
 			break;
@@ -8013,8 +7869,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Issend.request);
 			if (args->MPI_Issend.request != NULL) {
-				printf("-> %p", args->MPI_Issend.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Issend.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Issend.retval);
 			break;
@@ -8091,8 +7946,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tconst MPI_Datatype[] sendtypes = %p", args->MPI_Ineighbor_alltoallw.sendtypes);
 			if (args->MPI_Ineighbor_alltoallw.sendtypes != NULL) {
-				printf("-> %p", args->MPI_Ineighbor_alltoallw.sendtypes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ineighbor_alltoallw.sendtypes__ref.val);
 			} else { printf("\n"); };
 			printf("\tvoid * recvbuf = %p", args->MPI_Ineighbor_alltoallw.recvbuf);
 			printf("\n");
@@ -8106,15 +7960,13 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tconst MPI_Datatype[] recvtypes = %p", args->MPI_Ineighbor_alltoallw.recvtypes);
 			if (args->MPI_Ineighbor_alltoallw.recvtypes != NULL) {
-				printf("-> %p", args->MPI_Ineighbor_alltoallw.recvtypes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ineighbor_alltoallw.recvtypes__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Comm comm = %p", args->MPI_Ineighbor_alltoallw.comm);
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Ineighbor_alltoallw.request);
 			if (args->MPI_Ineighbor_alltoallw.request != NULL) {
-				printf("-> %p", args->MPI_Ineighbor_alltoallw.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ineighbor_alltoallw.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Ineighbor_alltoallw.retval);
 			break;
@@ -8152,8 +8004,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_File_iread_at.request);
 			if (args->MPI_File_iread_at.request != NULL) {
-				printf("-> %p", args->MPI_File_iread_at.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_iread_at.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_iread_at.retval);
 			break;
@@ -8180,8 +8031,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Info * info_used = %p", args->MPI_Session_get_info.info_used);
 			if (args->MPI_Session_get_info.info_used != NULL) {
-				printf("-> %p", args->MPI_Session_get_info.info_used__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Session_get_info.info_used__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Session_get_info.retval);
 			break;
@@ -8306,8 +8156,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Ineighbor_alltoallv.request);
 			if (args->MPI_Ineighbor_alltoallv.request != NULL) {
-				printf("-> %p", args->MPI_Ineighbor_alltoallv.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ineighbor_alltoallv.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Ineighbor_alltoallv.retval);
 			break;
@@ -8328,13 +8177,11 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Message * message = %p", args->MPI_Imrecv.message);
 			if (args->MPI_Imrecv.message != NULL) {
-				printf("-> %p", args->MPI_Imrecv.message__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Imrecv.message__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Request * request = %p", args->MPI_Imrecv.request);
 			if (args->MPI_Imrecv.request != NULL) {
-				printf("-> %p", args->MPI_Imrecv.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Imrecv.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Imrecv.retval);
 			break;
@@ -8364,8 +8211,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tconst MPI_Datatype[] sendtypes = %p", args->MPI_Alltoallw.sendtypes);
 			if (args->MPI_Alltoallw.sendtypes != NULL) {
-				printf("-> %p", args->MPI_Alltoallw.sendtypes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Alltoallw.sendtypes__ref.val);
 			} else { printf("\n"); };
 			printf("\tvoid * recvbuf = %p", args->MPI_Alltoallw.recvbuf);
 			printf("\n");
@@ -8379,8 +8225,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tconst MPI_Datatype[] recvtypes = %p", args->MPI_Alltoallw.recvtypes);
 			if (args->MPI_Alltoallw.recvtypes != NULL) {
-				printf("-> %p", args->MPI_Alltoallw.recvtypes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Alltoallw.recvtypes__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Comm comm = %p", args->MPI_Alltoallw.comm);
 			printf("\n");
@@ -8410,8 +8255,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Bcast_init.request);
 			if (args->MPI_Bcast_init.request != NULL) {
-				printf("-> %p", args->MPI_Bcast_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Bcast_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Bcast_init.retval);
 			break;
@@ -8426,8 +8270,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Ibarrier.request);
 			if (args->MPI_Ibarrier.request != NULL) {
-				printf("-> %p", args->MPI_Ibarrier.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ibarrier.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Ibarrier.retval);
 			break;
@@ -8452,8 +8295,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_File_iwrite_at_all.request);
 			if (args->MPI_File_iwrite_at_all.request != NULL) {
-				printf("-> %p", args->MPI_File_iwrite_at_all.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_iwrite_at_all.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_iwrite_at_all.retval);
 			break;
@@ -8486,8 +8328,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Barrier_init.request);
 			if (args->MPI_Barrier_init.request != NULL) {
-				printf("-> %p", args->MPI_Barrier_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Barrier_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Barrier_init.retval);
 			break;
@@ -8509,13 +8350,11 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Datatype * etype = %p", args->MPI_File_get_view.etype);
 			if (args->MPI_File_get_view.etype != NULL) {
-				printf("-> %p", args->MPI_File_get_view.etype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_get_view.etype__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Datatype * filetype = %p", args->MPI_File_get_view.filetype);
 			if (args->MPI_File_get_view.filetype != NULL) {
-				printf("-> %p", args->MPI_File_get_view.filetype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_get_view.filetype__ref.val);
 			} else { printf("\n"); };
 			printf("\tchar * datarep = %p", args->MPI_File_get_view.datarep);
 			if (args->MPI_File_get_view.datarep != NULL) {
@@ -8544,8 +8383,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Win * win = %p", args->MPI_Win_allocate_shared.win);
 			if (args->MPI_Win_allocate_shared.win != NULL) {
-				printf("-> %p", args->MPI_Win_allocate_shared.win__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Win_allocate_shared.win__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Win_allocate_shared.retval);
 			break;
@@ -8584,8 +8422,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Info * newinfo = %p", args->MPI_Info_dup.newinfo);
 			if (args->MPI_Info_dup.newinfo != NULL) {
-				printf("-> %p", args->MPI_Info_dup.newinfo__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Info_dup.newinfo__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Info_dup.retval);
 			break;
@@ -8641,8 +8478,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int retval (int);
 			printf("\tMPI_Info * info = %p", args->MPI_Info_create.info);
 			if (args->MPI_Info_create.info != NULL) {
-				printf("-> %p", args->MPI_Info_create.info__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Info_create.info__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Info_create.retval);
 			break;
@@ -8685,8 +8521,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Iallgather.request);
 			if (args->MPI_Iallgather.request != NULL) {
-				printf("-> %p", args->MPI_Iallgather.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Iallgather.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Iallgather.retval);
 			break;
@@ -8728,16 +8563,14 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tconst MPI_Info[] array_of_info = %p", args->MPI_Comm_spawn_multiple.array_of_info);
 			if (args->MPI_Comm_spawn_multiple.array_of_info != NULL) {
-				printf("-> %p", args->MPI_Comm_spawn_multiple.array_of_info__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_spawn_multiple.array_of_info__ref.val);
 			} else { printf("\n"); };
 			printf("\tint root = %d\n", args->MPI_Comm_spawn_multiple.root);
 			printf("\tMPI_Comm comm = %p", args->MPI_Comm_spawn_multiple.comm);
 			printf("\n");
 			printf("\tMPI_Comm * intercomm = %p", args->MPI_Comm_spawn_multiple.intercomm);
 			if (args->MPI_Comm_spawn_multiple.intercomm != NULL) {
-				printf("-> %p", args->MPI_Comm_spawn_multiple.intercomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_spawn_multiple.intercomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint[] array_of_errcodes = %p", args->MPI_Comm_spawn_multiple.array_of_errcodes);
 			if (args->MPI_Comm_spawn_multiple.array_of_errcodes != NULL) {
@@ -8773,8 +8606,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Precv_init.request);
 			if (args->MPI_Precv_init.request != NULL) {
-				printf("-> %p", args->MPI_Precv_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Precv_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Precv_init.retval);
 			break;
@@ -8920,8 +8752,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Info * info_used = %p", args->MPI_File_get_info.info_used);
 			if (args->MPI_File_get_info.info_used != NULL) {
-				printf("-> %p", args->MPI_File_get_info.info_used__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_get_info.info_used__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_get_info.retval);
 			break;
@@ -8981,8 +8812,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Igatherv.request);
 			if (args->MPI_Igatherv.request != NULL) {
-				printf("-> %p", args->MPI_Igatherv.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Igatherv.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Igatherv.retval);
 			break;
@@ -9027,8 +8857,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Errhandler * erhandler = %p", args->MPI_Comm_get_errhandler.erhandler);
 			if (args->MPI_Comm_get_errhandler.erhandler != NULL) {
-				printf("-> %p", args->MPI_Comm_get_errhandler.erhandler__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_get_errhandler.erhandler__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_get_errhandler.retval);
 			break;
@@ -9046,8 +8875,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Session * session = %p", args->MPI_Session_init.session);
 			if (args->MPI_Session_init.session != NULL) {
-				printf("-> %p", args->MPI_Session_init.session__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Session_init.session__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Session_init.retval);
 			break;
@@ -9086,8 +8914,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint tag = %d\n", args->MPI_Intercomm_create.tag);
 			printf("\tMPI_Comm * newintercomm = %p", args->MPI_Intercomm_create.newintercomm);
 			if (args->MPI_Intercomm_create.newintercomm != NULL) {
-				printf("-> %p", args->MPI_Intercomm_create.newintercomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Intercomm_create.newintercomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Intercomm_create.retval);
 			break;
@@ -9152,8 +8979,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Ialltoallv.request);
 			if (args->MPI_Ialltoallv.request != NULL) {
-				printf("-> %p", args->MPI_Ialltoallv.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ialltoallv.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Ialltoallv.retval);
 			break;
@@ -9204,8 +9030,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Comm * new_comm = %p", args->MPI_Cart_sub.new_comm);
 			if (args->MPI_Cart_sub.new_comm != NULL) {
-				printf("-> %p", args->MPI_Cart_sub.new_comm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Cart_sub.new_comm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Cart_sub.retval);
 			break;
@@ -9230,8 +9055,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Win * win = %p", args->MPI_Win_allocate.win);
 			if (args->MPI_Win_allocate.win != NULL) {
-				printf("-> %p", args->MPI_Win_allocate.win__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Win_allocate.win__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Win_allocate.retval);
 			break;
@@ -9246,8 +9070,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Errhandler * erhandler = %p", args->MPI_Session_get_errhandler.erhandler);
 			if (args->MPI_Session_get_errhandler.erhandler != NULL) {
-				printf("-> %p", args->MPI_Session_get_errhandler.erhandler__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Session_get_errhandler.erhandler__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Session_get_errhandler.retval);
 			break;
@@ -9286,8 +9109,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Info * info = %p", args->MPI_Info_create_env.info);
 			if (args->MPI_Info_create_env.info != NULL) {
-				printf("-> %p", args->MPI_Info_create_env.info__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Info_create_env.info__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Info_create_env.retval);
 			break;
@@ -9301,8 +9123,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tMPI_File_errhandler_function * function = %p\n", args->MPI_File_create_errhandler.function);
 			printf("\tMPI_Errhandler * errhandler = %p", args->MPI_File_create_errhandler.errhandler);
 			if (args->MPI_File_create_errhandler.errhandler != NULL) {
-				printf("-> %p", args->MPI_File_create_errhandler.errhandler__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_create_errhandler.errhandler__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_create_errhandler.retval);
 			break;
@@ -9333,8 +9154,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Ialltoall.request);
 			if (args->MPI_Ialltoall.request != NULL) {
-				printf("-> %p", args->MPI_Ialltoall.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ialltoall.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Ialltoall.retval);
 			break;
@@ -9369,8 +9189,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Raccumulate.request);
 			if (args->MPI_Raccumulate.request != NULL) {
-				printf("-> %p", args->MPI_Raccumulate.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Raccumulate.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Raccumulate.retval);
 			break;
@@ -9467,8 +9286,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint reorder = %d\n", args->MPI_Dist_graph_create.reorder);
 			printf("\tMPI_Comm * newcomm = %p", args->MPI_Dist_graph_create.newcomm);
 			if (args->MPI_Dist_graph_create.newcomm != NULL) {
-				printf("-> %p", args->MPI_Dist_graph_create.newcomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Dist_graph_create.newcomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Dist_graph_create.retval);
 			break;
@@ -9482,8 +9300,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint fd = %d\n", args->MPI_Comm_join.fd);
 			printf("\tMPI_Comm * intercomm = %p", args->MPI_Comm_join.intercomm);
 			if (args->MPI_Comm_join.intercomm != NULL) {
-				printf("-> %p", args->MPI_Comm_join.intercomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_join.intercomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_join.retval);
 			break;
@@ -9527,8 +9344,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Gatherv_init.request);
 			if (args->MPI_Gatherv_init.request != NULL) {
-				printf("-> %p", args->MPI_Gatherv_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Gatherv_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Gatherv_init.retval);
 			break;
@@ -9563,8 +9379,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Comm * newcomm = %p", args->MPI_Comm_accept.newcomm);
 			if (args->MPI_Comm_accept.newcomm != NULL) {
-				printf("-> %p", args->MPI_Comm_accept.newcomm__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Comm_accept.newcomm__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_accept.retval);
 			break;
@@ -9595,8 +9410,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Ineighbor_allgather.request);
 			if (args->MPI_Ineighbor_allgather.request != NULL) {
-				printf("-> %p", args->MPI_Ineighbor_allgather.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Ineighbor_allgather.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Ineighbor_allgather.retval);
 			break;
@@ -9611,8 +9425,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Datatype * newtype = %p", args->MPI_Type_dup.newtype);
 			if (args->MPI_Type_dup.newtype != NULL) {
-				printf("-> %p", args->MPI_Type_dup.newtype__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Type_dup.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_dup.retval);
 			break;
@@ -9635,8 +9448,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_File_iwrite_shared.request);
 			if (args->MPI_File_iwrite_shared.request != NULL) {
-				printf("-> %p", args->MPI_File_iwrite_shared.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_iwrite_shared.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_iwrite_shared.retval);
 			break;
@@ -9651,8 +9463,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Errhandler * errhandler = %p", args->MPI_Win_get_errhandler.errhandler);
 			if (args->MPI_Win_get_errhandler.errhandler != NULL) {
-				printf("-> %p", args->MPI_Win_get_errhandler.errhandler__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Win_get_errhandler.errhandler__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Win_get_errhandler.retval);
 			break;
@@ -9681,8 +9492,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Iscan.request);
 			if (args->MPI_Iscan.request != NULL) {
-				printf("-> %p", args->MPI_Iscan.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Iscan.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Iscan.retval);
 			break;
@@ -9723,8 +9533,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tint reorder = %d\n", args->MPI_Graph_create.reorder);
 			printf("\tMPI_Comm * comm_graph = %p", args->MPI_Graph_create.comm_graph);
 			if (args->MPI_Graph_create.comm_graph != NULL) {
-				printf("-> %p", args->MPI_Graph_create.comm_graph__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Graph_create.comm_graph__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Graph_create.retval);
 			break;
@@ -9753,8 +9562,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tMPI_Win_errhandler_function * function = %p\n", args->MPI_Win_create_errhandler.function);
 			printf("\tMPI_Errhandler * errhandler = %p", args->MPI_Win_create_errhandler.errhandler);
 			if (args->MPI_Win_create_errhandler.errhandler != NULL) {
-				printf("-> %p", args->MPI_Win_create_errhandler.errhandler__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Win_create_errhandler.errhandler__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Win_create_errhandler.retval);
 			break;
@@ -9790,8 +9598,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_Gather_init.request);
 			if (args->MPI_Gather_init.request != NULL) {
-				printf("-> %p", args->MPI_Gather_init.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_Gather_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Gather_init.retval);
 			break;
@@ -9848,8 +9655,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Request * request = %p", args->MPI_File_iwrite.request);
 			if (args->MPI_File_iwrite.request != NULL) {
-				printf("-> %p", args->MPI_File_iwrite.request__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->MPI_File_iwrite.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_iwrite.retval);
 			break;

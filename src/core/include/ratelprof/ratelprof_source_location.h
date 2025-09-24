@@ -2,7 +2,7 @@
 #define RATELPROF_SOURCE_LOCATION_H
 
 #include <stdint.h>
-#include <bfd.h>
+#include <stdbool.h>
 
 #include "ratelprof/ratelprof_status.h"
 
@@ -13,12 +13,10 @@ typedef struct ratelprof_source_data_s {
     const char *func;
 } ratelprof_source_data_t;
 
-
 typedef struct cached_source_data_s {
     ratelprof_source_data_t location;
     struct cached_source_data_s *next;
 } cached_source_data_t;
-
 
 typedef bool (*ratelprof_cache_iter_cb_t)(ratelprof_source_data_t *location, void *user_data);
 

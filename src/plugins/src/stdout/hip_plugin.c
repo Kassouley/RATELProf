@@ -325,8 +325,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipArray_t * array = %p", args->hipMallocArray.array);
 			if (args->hipMallocArray.array != NULL) {
-				printf("-> %p", args->hipMallocArray.array__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipMallocArray.array__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst hipChannelFormatDesc * desc = %p", args->hipMallocArray.desc);
 			if (args->hipMallocArray.desc != NULL) {
@@ -354,8 +353,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\n");
 			printf("\thipEvent_t * event_out = %p", args->hipGraphEventWaitNodeGetEvent.event_out);
 			if (args->hipGraphEventWaitNodeGetEvent.event_out != NULL) {
-				printf("-> %p", args->hipGraphEventWaitNodeGetEvent.event_out__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphEventWaitNodeGetEvent.event_out__ref.val);
 			} else { printf("\n"); };
 			printf("\thipError_t retval = %d\n", args->hipGraphEventWaitNodeGetEvent.retval);
 			break;
@@ -561,8 +559,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipModule_t * module = %p", args->hipModuleLoad.module);
 			if (args->hipModuleLoad.module != NULL) {
-				printf("-> %p", args->hipModuleLoad.module__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipModuleLoad.module__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst char * fname = %p", args->hipModuleLoad.fname);
 			if (args->hipModuleLoad.fname != NULL) {
@@ -722,8 +719,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\n");
 			printf("\thipGraphNode_t * pDependentNodes = %p", args->hipGraphNodeGetDependentNodes.pDependentNodes);
 			if (args->hipGraphNodeGetDependentNodes.pDependentNodes != NULL) {
-				printf("-> %p", args->hipGraphNodeGetDependentNodes.pDependentNodes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphNodeGetDependentNodes.pDependentNodes__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t * pNumDependentNodes = %p", args->hipGraphNodeGetDependentNodes.pNumDependentNodes);
 			if (args->hipGraphNodeGetDependentNodes.pNumDependentNodes != NULL) {
@@ -827,8 +823,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipModule_t * module = %p", args->hipModuleLoadDataEx.module);
 			if (args->hipModuleLoadDataEx.module != NULL) {
-				printf("-> %p", args->hipModuleLoadDataEx.module__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipModuleLoadDataEx.module__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst void * image = %p", args->hipModuleLoadDataEx.image);
 			printf("\n");
@@ -917,8 +912,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphExec_t * pGraphExec = %p", args->hipGraphInstantiateWithParams.pGraphExec);
 			if (args->hipGraphInstantiateWithParams.pGraphExec != NULL) {
-				printf("-> %p", args->hipGraphInstantiateWithParams.pGraphExec__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphInstantiateWithParams.pGraphExec__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphInstantiateWithParams.graph);
 			printf("\n");
@@ -972,8 +966,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\tint count = %d\n", args->hipGraphicsUnmapResources.count);
 			printf("\thipGraphicsResource_t * resources = %p", args->hipGraphicsUnmapResources.resources);
 			if (args->hipGraphicsUnmapResources.resources != NULL) {
-				printf("-> %p", args->hipGraphicsUnmapResources.resources__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphicsUnmapResources.resources__ref.val);
 			} else { printf("\n"); };
 			printf("\thipStream_t stream = %p", args->hipGraphicsUnmapResources.stream);
 			printf("\n");
@@ -1102,15 +1095,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddExternalSemaphoresSignalNode.pGraphNode);
 			if (args->hipGraphAddExternalSemaphoresSignalNode.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddExternalSemaphoresSignalNode.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddExternalSemaphoresSignalNode.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddExternalSemaphoresSignalNode.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddExternalSemaphoresSignalNode.pDependencies);
 			if (args->hipGraphAddExternalSemaphoresSignalNode.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddExternalSemaphoresSignalNode.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddExternalSemaphoresSignalNode.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddExternalSemaphoresSignalNode.numDependencies);
 			printf("\tconst hipExternalSemaphoreSignalNodeParams * nodeParams = %p", args->hipGraphAddExternalSemaphoresSignalNode.nodeParams);
@@ -1294,13 +1285,11 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\n");
 			printf("\tconst hipGraphNode_t * from = %p", args->hipGraphRemoveDependencies.from);
 			if (args->hipGraphRemoveDependencies.from != NULL) {
-				printf("-> %p", args->hipGraphRemoveDependencies.from__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphRemoveDependencies.from__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst hipGraphNode_t * to = %p", args->hipGraphRemoveDependencies.to);
 			if (args->hipGraphRemoveDependencies.to != NULL) {
-				printf("-> %p", args->hipGraphRemoveDependencies.to__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphRemoveDependencies.to__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphRemoveDependencies.numDependencies);
 			printf("\thipError_t retval = %d\n", args->hipGraphRemoveDependencies.retval);
@@ -1314,8 +1303,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraph_t * pGraph = %p", args->hipGraphCreate.pGraph);
 			if (args->hipGraphCreate.pGraph != NULL) {
-				printf("-> %p", args->hipGraphCreate.pGraph__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphCreate.pGraph__ref.val);
 			} else { printf("\n"); };
 			printf("\tunsigned int flags = %u\n", args->hipGraphCreate.flags);
 			printf("\thipError_t retval = %d\n", args->hipGraphCreate.retval);
@@ -1753,8 +1741,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipMemPool_t * mem_pool = %p", args->hipDeviceGetMemPool.mem_pool);
 			if (args->hipDeviceGetMemPool.mem_pool != NULL) {
-				printf("-> %p", args->hipDeviceGetMemPool.mem_pool__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipDeviceGetMemPool.mem_pool__ref.val);
 			} else { printf("\n"); };
 			printf("\tint device = %d\n", args->hipDeviceGetMemPool.device);
 			printf("\thipError_t retval = %d\n", args->hipDeviceGetMemPool.retval);
@@ -1791,15 +1778,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddEventWaitNode.pGraphNode);
 			if (args->hipGraphAddEventWaitNode.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddEventWaitNode.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddEventWaitNode.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddEventWaitNode.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddEventWaitNode.pDependencies);
 			if (args->hipGraphAddEventWaitNode.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddEventWaitNode.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddEventWaitNode.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddEventWaitNode.numDependencies);
 			printf("\thipEvent_t event = %p", args->hipGraphAddEventWaitNode.event);
@@ -1904,8 +1889,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\n");
 			printf("\thipGraphNode_t * hErrorNode_out = %p", args->hipGraphExecUpdate.hErrorNode_out);
 			if (args->hipGraphExecUpdate.hErrorNode_out != NULL) {
-				printf("-> %p", args->hipGraphExecUpdate.hErrorNode_out__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphExecUpdate.hErrorNode_out__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraphExecUpdateResult * updateResult_out = %p", args->hipGraphExecUpdate.updateResult_out);
 			if (args->hipGraphExecUpdate.updateResult_out != NULL) {
@@ -1982,15 +1966,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddExternalSemaphoresWaitNode.pGraphNode);
 			if (args->hipGraphAddExternalSemaphoresWaitNode.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddExternalSemaphoresWaitNode.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddExternalSemaphoresWaitNode.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddExternalSemaphoresWaitNode.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddExternalSemaphoresWaitNode.pDependencies);
 			if (args->hipGraphAddExternalSemaphoresWaitNode.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddExternalSemaphoresWaitNode.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddExternalSemaphoresWaitNode.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddExternalSemaphoresWaitNode.numDependencies);
 			printf("\tconst hipExternalSemaphoreWaitNodeParams * nodeParams = %p", args->hipGraphAddExternalSemaphoresWaitNode.nodeParams);
@@ -2456,8 +2438,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipArray_t * array = %p", args->hipGraphicsSubResourceGetMappedArray.array);
 			if (args->hipGraphicsSubResourceGetMappedArray.array != NULL) {
-				printf("-> %p", args->hipGraphicsSubResourceGetMappedArray.array__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphicsSubResourceGetMappedArray.array__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraphicsResource_t resource = %p", args->hipGraphicsSubResourceGetMappedArray.resource);
 			printf("\n");
@@ -2576,15 +2557,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddMemcpyNode1D.pGraphNode);
 			if (args->hipGraphAddMemcpyNode1D.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddMemcpyNode1D.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddMemcpyNode1D.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddMemcpyNode1D.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddMemcpyNode1D.pDependencies);
 			if (args->hipGraphAddMemcpyNode1D.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddMemcpyNode1D.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddMemcpyNode1D.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddMemcpyNode1D.numDependencies);
 			printf("\tvoid * dst = %p", args->hipGraphAddMemcpyNode1D.dst);
@@ -2607,8 +2586,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\n");
 			printf("\thipGraphNode_t * nodes = %p", args->hipGraphGetNodes.nodes);
 			if (args->hipGraphGetNodes.nodes != NULL) {
-				printf("-> %p", args->hipGraphGetNodes.nodes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphGetNodes.nodes__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t * numNodes = %p", args->hipGraphGetNodes.numNodes);
 			if (args->hipGraphGetNodes.numNodes != NULL) {
@@ -2727,8 +2705,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipStream_t * stream = %p", args->hipStreamCreate.stream);
 			if (args->hipStreamCreate.stream != NULL) {
-				printf("-> %p", args->hipStreamCreate.stream__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipStreamCreate.stream__ref.val);
 			} else { printf("\n"); };
 			printf("\thipError_t retval = %d\n", args->hipStreamCreate.retval);
 			break;
@@ -2915,15 +2892,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddEventRecordNode.pGraphNode);
 			if (args->hipGraphAddEventRecordNode.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddEventRecordNode.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddEventRecordNode.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddEventRecordNode.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddEventRecordNode.pDependencies);
 			if (args->hipGraphAddEventRecordNode.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddEventRecordNode.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddEventRecordNode.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddEventRecordNode.numDependencies);
 			printf("\thipEvent_t event = %p", args->hipGraphAddEventRecordNode.event);
@@ -2940,8 +2915,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pNode = %p", args->hipGraphNodeFindInClone.pNode);
 			if (args->hipGraphNodeFindInClone.pNode != NULL) {
-				printf("-> %p", args->hipGraphNodeFindInClone.pNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphNodeFindInClone.pNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraphNode_t originalNode = %p", args->hipGraphNodeFindInClone.originalNode);
 			printf("\n");
@@ -3051,8 +3025,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipMemGenericAllocationHandle_t * handle = %p", args->hipMemCreate.handle);
 			if (args->hipMemCreate.handle != NULL) {
-				printf("-> %p", args->hipMemCreate.handle__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipMemCreate.handle__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t size = %lu\n", args->hipMemCreate.size);
 			printf("\tconst hipMemAllocationProp * prop = %p", args->hipMemCreate.prop);
@@ -3102,8 +3075,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\n");
 			printf("\thipGraph_t * pGraph = %p", args->hipStreamEndCapture.pGraph);
 			if (args->hipStreamEndCapture.pGraph != NULL) {
-				printf("-> %p", args->hipStreamEndCapture.pGraph__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipStreamEndCapture.pGraph__ref.val);
 			} else { printf("\n"); };
 			printf("\thipError_t retval = %d\n", args->hipStreamEndCapture.retval);
 			break;
@@ -3205,8 +3177,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipArray_t * array = %p", args->hipMalloc3DArray.array);
 			if (args->hipMalloc3DArray.array != NULL) {
-				printf("-> %p", args->hipMalloc3DArray.array__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipMalloc3DArray.array__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst struct hipChannelFormatDesc * desc = %p", args->hipMalloc3DArray.desc);
 			if (args->hipMalloc3DArray.desc != NULL) {
@@ -3503,8 +3474,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipCtx_t * ctx = %p", args->hipCtxGetCurrent.ctx);
 			if (args->hipCtxGetCurrent.ctx != NULL) {
-				printf("-> %p", args->hipCtxGetCurrent.ctx__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipCtxGetCurrent.ctx__ref.val);
 			} else { printf("\n"); };
 			printf("\thipError_t retval = %d\n", args->hipCtxGetCurrent.retval);
 			break;
@@ -3520,15 +3490,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddChildGraphNode.pGraphNode);
 			if (args->hipGraphAddChildGraphNode.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddChildGraphNode.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddChildGraphNode.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddChildGraphNode.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddChildGraphNode.pDependencies);
 			if (args->hipGraphAddChildGraphNode.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddChildGraphNode.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddChildGraphNode.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddChildGraphNode.numDependencies);
 			printf("\thipGraph_t childGraph = %p", args->hipGraphAddChildGraphNode.childGraph);
@@ -3543,8 +3511,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipEvent_t * event = %p", args->hipEventCreate.event);
 			if (args->hipEventCreate.event != NULL) {
-				printf("-> %p", args->hipEventCreate.event__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipEventCreate.event__ref.val);
 			} else { printf("\n"); };
 			printf("\thipError_t retval = %d\n", args->hipEventCreate.retval);
 			break;
@@ -3749,8 +3716,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\n");
 			printf("\thipGraph_t * pGraph = %p", args->hipStreamEndCapture_spt.pGraph);
 			if (args->hipStreamEndCapture_spt.pGraph != NULL) {
-				printf("-> %p", args->hipStreamEndCapture_spt.pGraph__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipStreamEndCapture_spt.pGraph__ref.val);
 			} else { printf("\n"); };
 			printf("\thipError_t retval = %d\n", args->hipStreamEndCapture_spt.retval);
 			break;
@@ -4012,15 +3978,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddNode.pGraphNode);
 			if (args->hipGraphAddNode.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddNode.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddNode.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddNode.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddNode.pDependencies);
 			if (args->hipGraphAddNode.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddNode.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddNode.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddNode.numDependencies);
 			printf("\thipGraphNodeParams * nodeParams = %p", args->hipGraphAddNode.nodeParams);
@@ -4065,8 +4029,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\n");
 			printf("\thipGraph_t * pGraph = %p", args->hipGraphChildGraphNodeGetGraph.pGraph);
 			if (args->hipGraphChildGraphNodeGetGraph.pGraph != NULL) {
-				printf("-> %p", args->hipGraphChildGraphNodeGetGraph.pGraph__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphChildGraphNodeGetGraph.pGraph__ref.val);
 			} else { printf("\n"); };
 			printf("\thipError_t retval = %d\n", args->hipGraphChildGraphNodeGetGraph.retval);
 			break;
@@ -4151,8 +4114,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipStream_t * stream = %p", args->hipStreamCreateWithFlags.stream);
 			if (args->hipStreamCreateWithFlags.stream != NULL) {
-				printf("-> %p", args->hipStreamCreateWithFlags.stream__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipStreamCreateWithFlags.stream__ref.val);
 			} else { printf("\n"); };
 			printf("\tunsigned int flags = %u\n", args->hipStreamCreateWithFlags.flags);
 			printf("\thipError_t retval = %d\n", args->hipStreamCreateWithFlags.retval);
@@ -4264,15 +4226,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddKernelNode.pGraphNode);
 			if (args->hipGraphAddKernelNode.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddKernelNode.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddKernelNode.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddKernelNode.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddKernelNode.pDependencies);
 			if (args->hipGraphAddKernelNode.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddKernelNode.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddKernelNode.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddKernelNode.numDependencies);
 			printf("\tconst hipKernelNodeParams * pNodeParams = %p", args->hipGraphAddKernelNode.pNodeParams);
@@ -4578,8 +4538,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\n");
 			printf("\thipEvent_t * event_out = %p", args->hipGraphEventRecordNodeGetEvent.event_out);
 			if (args->hipGraphEventRecordNodeGetEvent.event_out != NULL) {
-				printf("-> %p", args->hipGraphEventRecordNodeGetEvent.event_out__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphEventRecordNodeGetEvent.event_out__ref.val);
 			} else { printf("\n"); };
 			printf("\thipError_t retval = %d\n", args->hipGraphEventRecordNodeGetEvent.retval);
 			break;
@@ -4595,15 +4554,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphExec_t * pGraphExec = %p", args->hipGraphInstantiate.pGraphExec);
 			if (args->hipGraphInstantiate.pGraphExec != NULL) {
-				printf("-> %p", args->hipGraphInstantiate.pGraphExec__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphInstantiate.pGraphExec__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphInstantiate.graph);
 			printf("\n");
 			printf("\thipGraphNode_t * pErrorNode = %p", args->hipGraphInstantiate.pErrorNode);
 			if (args->hipGraphInstantiate.pErrorNode != NULL) {
-				printf("-> %p", args->hipGraphInstantiate.pErrorNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphInstantiate.pErrorNode__ref.val);
 			} else { printf("\n"); };
 			printf("\tchar * pLogBuffer = %p", args->hipGraphInstantiate.pLogBuffer);
 			if (args->hipGraphInstantiate.pLogBuffer != NULL) {
@@ -4700,8 +4657,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipCtx_t * ctx = %p", args->hipCtxPopCurrent.ctx);
 			if (args->hipCtxPopCurrent.ctx != NULL) {
-				printf("-> %p", args->hipCtxPopCurrent.ctx__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipCtxPopCurrent.ctx__ref.val);
 			} else { printf("\n"); };
 			printf("\thipError_t retval = %d\n", args->hipCtxPopCurrent.retval);
 			break;
@@ -4945,8 +4901,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\thipStream_t * stream = %p", args->__hipPopCallConfiguration.stream);
 			if (args->__hipPopCallConfiguration.stream != NULL) {
-				printf("-> %p", args->__hipPopCallConfiguration.stream__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->__hipPopCallConfiguration.stream__ref.val);
 			} else { printf("\n"); };
 			printf("\thipError_t retval = %d\n", args->__hipPopCallConfiguration.retval);
 			break;
@@ -5089,8 +5044,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipStream_t * stream = %p", args->hipExtStreamCreateWithCUMask.stream);
 			if (args->hipExtStreamCreateWithCUMask.stream != NULL) {
-				printf("-> %p", args->hipExtStreamCreateWithCUMask.stream__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipExtStreamCreateWithCUMask.stream__ref.val);
 			} else { printf("\n"); };
 			printf("\tuint32_t cuMaskSize = %u\n", args->hipExtStreamCreateWithCUMask.cuMaskSize);
 			printf("\tconst uint32_t * cuMask = %p", args->hipExtStreamCreateWithCUMask.cuMask);
@@ -5214,8 +5168,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipFunction_t * function = %p", args->hipModuleGetFunction.function);
 			if (args->hipModuleGetFunction.function != NULL) {
-				printf("-> %p", args->hipModuleGetFunction.function__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipModuleGetFunction.function__ref.val);
 			} else { printf("\n"); };
 			printf("\thipModule_t module = %p", args->hipModuleGetFunction.module);
 			printf("\n");
@@ -5372,8 +5325,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\n");
 			printf("\tconst hipGraphNode_t * dependencies = %p", args->hipStreamBeginCaptureToGraph.dependencies);
 			if (args->hipStreamBeginCaptureToGraph.dependencies != NULL) {
-				printf("-> %p", args->hipStreamBeginCaptureToGraph.dependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipStreamBeginCaptureToGraph.dependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst hipGraphEdgeData * dependencyData = %p", args->hipStreamBeginCaptureToGraph.dependencyData);
 			if (args->hipStreamBeginCaptureToGraph.dependencyData != NULL) {
@@ -5479,8 +5431,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipCtx_t * pctx = %p", args->hipDevicePrimaryCtxRetain.pctx);
 			if (args->hipDevicePrimaryCtxRetain.pctx != NULL) {
-				printf("-> %p", args->hipDevicePrimaryCtxRetain.pctx__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipDevicePrimaryCtxRetain.pctx__ref.val);
 			} else { printf("\n"); };
 			printf("\thipDevice_t dev = %d\n", args->hipDevicePrimaryCtxRetain.dev);
 			printf("\thipError_t retval = %d\n", args->hipDevicePrimaryCtxRetain.retval);
@@ -5512,8 +5463,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipStream_t * stream = %p", args->hipStreamCreateWithPriority.stream);
 			if (args->hipStreamCreateWithPriority.stream != NULL) {
-				printf("-> %p", args->hipStreamCreateWithPriority.stream__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipStreamCreateWithPriority.stream__ref.val);
 			} else { printf("\n"); };
 			printf("\tunsigned int flags = %u\n", args->hipStreamCreateWithPriority.flags);
 			printf("\tint priority = %d\n", args->hipStreamCreateWithPriority.priority);
@@ -5554,15 +5504,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddHostNode.pGraphNode);
 			if (args->hipGraphAddHostNode.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddHostNode.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddHostNode.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddHostNode.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddHostNode.pDependencies);
 			if (args->hipGraphAddHostNode.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddHostNode.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddHostNode.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddHostNode.numDependencies);
 			printf("\tconst hipHostNodeParams * pNodeParams = %p", args->hipGraphAddHostNode.pNodeParams);
@@ -5933,8 +5881,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraph_t * pGraphClone = %p", args->hipGraphClone.pGraphClone);
 			if (args->hipGraphClone.pGraphClone != NULL) {
-				printf("-> %p", args->hipGraphClone.pGraphClone__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphClone.pGraphClone__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t originalGraph = %p", args->hipGraphClone.originalGraph);
 			printf("\n");
@@ -6170,8 +6117,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipMemPool_t * mem_pool = %p", args->hipDeviceGetDefaultMemPool.mem_pool);
 			if (args->hipDeviceGetDefaultMemPool.mem_pool != NULL) {
-				printf("-> %p", args->hipDeviceGetDefaultMemPool.mem_pool__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipDeviceGetDefaultMemPool.mem_pool__ref.val);
 			} else { printf("\n"); };
 			printf("\tint device = %d\n", args->hipDeviceGetDefaultMemPool.device);
 			printf("\thipError_t retval = %d\n", args->hipDeviceGetDefaultMemPool.retval);
@@ -6186,8 +6132,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipCtx_t * ctx = %p", args->hipCtxCreate.ctx);
 			if (args->hipCtxCreate.ctx != NULL) {
-				printf("-> %p", args->hipCtxCreate.ctx__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipCtxCreate.ctx__ref.val);
 			} else { printf("\n"); };
 			printf("\tunsigned int flags = %u\n", args->hipCtxCreate.flags);
 			printf("\thipDevice_t device = %d\n", args->hipCtxCreate.device);
@@ -6221,8 +6166,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\n");
 			printf("\thipGraphNode_t * dependencies = %p", args->hipStreamUpdateCaptureDependencies.dependencies);
 			if (args->hipStreamUpdateCaptureDependencies.dependencies != NULL) {
-				printf("-> %p", args->hipStreamUpdateCaptureDependencies.dependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipStreamUpdateCaptureDependencies.dependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipStreamUpdateCaptureDependencies.numDependencies);
 			printf("\tunsigned int flags = %u\n", args->hipStreamUpdateCaptureDependencies.flags);
@@ -6336,15 +6280,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddMemsetNode.pGraphNode);
 			if (args->hipGraphAddMemsetNode.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddMemsetNode.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddMemsetNode.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddMemsetNode.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddMemsetNode.pDependencies);
 			if (args->hipGraphAddMemsetNode.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddMemsetNode.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddMemsetNode.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddMemsetNode.numDependencies);
 			printf("\tconst hipMemsetParams * pMemsetParams = %p", args->hipGraphAddMemsetNode.pMemsetParams);
@@ -6460,15 +6402,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddEmptyNode.pGraphNode);
 			if (args->hipGraphAddEmptyNode.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddEmptyNode.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddEmptyNode.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddEmptyNode.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddEmptyNode.pDependencies);
 			if (args->hipGraphAddEmptyNode.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddEmptyNode.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddEmptyNode.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddEmptyNode.numDependencies);
 			printf("\thipError_t retval = %d\n", args->hipGraphAddEmptyNode.retval);
@@ -6502,8 +6442,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphExec_t * pGraphExec = %p", args->hipGraphInstantiateWithFlags.pGraphExec);
 			if (args->hipGraphInstantiateWithFlags.pGraphExec != NULL) {
-				printf("-> %p", args->hipGraphInstantiateWithFlags.pGraphExec__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphInstantiateWithFlags.pGraphExec__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphInstantiateWithFlags.graph);
 			printf("\n");
@@ -6715,8 +6654,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipEvent_t * event = %p", args->hipIpcOpenEventHandle.event);
 			if (args->hipIpcOpenEventHandle.event != NULL) {
-				printf("-> %p", args->hipIpcOpenEventHandle.event__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipIpcOpenEventHandle.event__ref.val);
 			} else { printf("\n"); };
 			printf("\thipIpcEventHandle_t handle = {\n");
 			printf("\t\tchar[64] reserved = %c\n", args->hipIpcOpenEventHandle.handle.reserved[0]);
@@ -6814,15 +6752,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddMemcpyNodeToSymbol.pGraphNode);
 			if (args->hipGraphAddMemcpyNodeToSymbol.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddMemcpyNodeToSymbol.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddMemcpyNodeToSymbol.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddMemcpyNodeToSymbol.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddMemcpyNodeToSymbol.pDependencies);
 			if (args->hipGraphAddMemcpyNodeToSymbol.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddMemcpyNodeToSymbol.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddMemcpyNodeToSymbol.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddMemcpyNodeToSymbol.numDependencies);
 			printf("\tconst void * symbol = %p", args->hipGraphAddMemcpyNodeToSymbol.symbol);
@@ -7011,8 +6947,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipMemPool_t * mem_pool = %p", args->hipMemPoolImportFromShareableHandle.mem_pool);
 			if (args->hipMemPoolImportFromShareableHandle.mem_pool != NULL) {
-				printf("-> %p", args->hipMemPoolImportFromShareableHandle.mem_pool__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipMemPoolImportFromShareableHandle.mem_pool__ref.val);
 			} else { printf("\n"); };
 			printf("\tvoid * shared_handle = %p", args->hipMemPoolImportFromShareableHandle.shared_handle);
 			printf("\n");
@@ -7183,8 +7118,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipTextureObject_t * pTexObject = %p", args->hipCreateTextureObject.pTexObject);
 			if (args->hipCreateTextureObject.pTexObject != NULL) {
-				printf("-> %p", args->hipCreateTextureObject.pTexObject__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipCreateTextureObject.pTexObject__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst hipResourceDesc * pResDesc = %p", args->hipCreateTextureObject.pResDesc);
 			if (args->hipCreateTextureObject.pResDesc != NULL) {
@@ -7333,15 +7267,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * phGraphNode = %p", args->hipDrvGraphAddMemcpyNode.phGraphNode);
 			if (args->hipDrvGraphAddMemcpyNode.phGraphNode != NULL) {
-				printf("-> %p", args->hipDrvGraphAddMemcpyNode.phGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipDrvGraphAddMemcpyNode.phGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t hGraph = %p", args->hipDrvGraphAddMemcpyNode.hGraph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * dependencies = %p", args->hipDrvGraphAddMemcpyNode.dependencies);
 			if (args->hipDrvGraphAddMemcpyNode.dependencies != NULL) {
-				printf("-> %p", args->hipDrvGraphAddMemcpyNode.dependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipDrvGraphAddMemcpyNode.dependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipDrvGraphAddMemcpyNode.numDependencies);
 			printf("\tconst HIP_MEMCPY3D * copyParams = %p", args->hipDrvGraphAddMemcpyNode.copyParams);
@@ -7434,8 +7366,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\n");
 			printf("\thipGraphNode_t * pDependencies = %p", args->hipGraphNodeGetDependencies.pDependencies);
 			if (args->hipGraphNodeGetDependencies.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphNodeGetDependencies.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphNodeGetDependencies.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t * pNumDependencies = %p", args->hipGraphNodeGetDependencies.pNumDependencies);
 			if (args->hipGraphNodeGetDependencies.pNumDependencies != NULL) {
@@ -7529,15 +7460,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddMemcpyNodeFromSymbol.pGraphNode);
 			if (args->hipGraphAddMemcpyNodeFromSymbol.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddMemcpyNodeFromSymbol.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddMemcpyNodeFromSymbol.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddMemcpyNodeFromSymbol.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddMemcpyNodeFromSymbol.pDependencies);
 			if (args->hipGraphAddMemcpyNodeFromSymbol.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddMemcpyNodeFromSymbol.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddMemcpyNodeFromSymbol.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddMemcpyNodeFromSymbol.numDependencies);
 			printf("\tvoid * dst = %p", args->hipGraphAddMemcpyNodeFromSymbol.dst);
@@ -7573,8 +7502,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipModule_t * module = %p", args->hipModuleLoadData.module);
 			if (args->hipModuleLoadData.module != NULL) {
-				printf("-> %p", args->hipModuleLoadData.module__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipModuleLoadData.module__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst void * image = %p", args->hipModuleLoadData.image);
 			printf("\n");
@@ -7897,8 +7825,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\n");
 			printf("\thipGraphNode_t * pRootNodes = %p", args->hipGraphGetRootNodes.pRootNodes);
 			if (args->hipGraphGetRootNodes.pRootNodes != NULL) {
-				printf("-> %p", args->hipGraphGetRootNodes.pRootNodes__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphGetRootNodes.pRootNodes__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t * pNumRootNodes = %p", args->hipGraphGetRootNodes.pNumRootNodes);
 			if (args->hipGraphGetRootNodes.pNumRootNodes != NULL) {
@@ -8203,8 +8130,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipEvent_t * event = %p", args->hipEventCreateWithFlags.event);
 			if (args->hipEventCreateWithFlags.event != NULL) {
-				printf("-> %p", args->hipEventCreateWithFlags.event__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipEventCreateWithFlags.event__ref.val);
 			} else { printf("\n"); };
 			printf("\tunsigned int flags = %u\n", args->hipEventCreateWithFlags.flags);
 			printf("\thipError_t retval = %d\n", args->hipEventCreateWithFlags.retval);
@@ -8346,15 +8272,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddMemcpyNode.pGraphNode);
 			if (args->hipGraphAddMemcpyNode.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddMemcpyNode.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddMemcpyNode.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddMemcpyNode.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddMemcpyNode.pDependencies);
 			if (args->hipGraphAddMemcpyNode.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddMemcpyNode.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddMemcpyNode.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddMemcpyNode.numDependencies);
 			printf("\tconst hipMemcpy3DParms * pCopyParams = %p", args->hipGraphAddMemcpyNode.pCopyParams);
@@ -8466,15 +8390,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddMemFreeNode.pGraphNode);
 			if (args->hipGraphAddMemFreeNode.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddMemFreeNode.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddMemFreeNode.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddMemFreeNode.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddMemFreeNode.pDependencies);
 			if (args->hipGraphAddMemFreeNode.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddMemFreeNode.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddMemFreeNode.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddMemFreeNode.numDependencies);
 			printf("\tvoid * dev_ptr = %p", args->hipGraphAddMemFreeNode.dev_ptr);
@@ -8681,8 +8603,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipTextureObject_t * pTexObject = %p", args->hipTexObjectCreate.pTexObject);
 			if (args->hipTexObjectCreate.pTexObject != NULL) {
-				printf("-> %p", args->hipTexObjectCreate.pTexObject__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipTexObjectCreate.pTexObject__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst HIP_RESOURCE_DESC * pResDesc = %p", args->hipTexObjectCreate.pResDesc);
 			if (args->hipTexObjectCreate.pResDesc != NULL) {
@@ -8798,15 +8719,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddMemAllocNode.pGraphNode);
 			if (args->hipGraphAddMemAllocNode.pGraphNode != NULL) {
-				printf("-> %p", args->hipGraphAddMemAllocNode.pGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddMemAllocNode.pGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t graph = %p", args->hipGraphAddMemAllocNode.graph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddMemAllocNode.pDependencies);
 			if (args->hipGraphAddMemAllocNode.pDependencies != NULL) {
-				printf("-> %p", args->hipGraphAddMemAllocNode.pDependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddMemAllocNode.pDependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddMemAllocNode.numDependencies);
 			printf("\thipMemAllocNodeParams * pNodeParams = %p", args->hipGraphAddMemAllocNode.pNodeParams);
@@ -8837,8 +8756,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipMemGenericAllocationHandle_t * handle = %p", args->hipMemRetainAllocationHandle.handle);
 			if (args->hipMemRetainAllocationHandle.handle != NULL) {
-				printf("-> %p", args->hipMemRetainAllocationHandle.handle__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipMemRetainAllocationHandle.handle__ref.val);
 			} else { printf("\n"); };
 			printf("\tvoid * addr = %p", args->hipMemRetainAllocationHandle.addr);
 			printf("\n");
@@ -8853,8 +8771,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipFunction_t * functionPtr = %p", args->hipGetFuncBySymbol.functionPtr);
 			if (args->hipGetFuncBySymbol.functionPtr != NULL) {
-				printf("-> %p", args->hipGetFuncBySymbol.functionPtr__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGetFuncBySymbol.functionPtr__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst void * symbolPtr = %p", args->hipGetFuncBySymbol.symbolPtr);
 			printf("\n");
@@ -9243,8 +9160,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipArray_t * pLevelArray = %p", args->hipMipmappedArrayGetLevel.pLevelArray);
 			if (args->hipMipmappedArrayGetLevel.pLevelArray != NULL) {
-				printf("-> %p", args->hipMipmappedArrayGetLevel.pLevelArray__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipMipmappedArrayGetLevel.pLevelArray__ref.val);
 			} else { printf("\n"); };
 			printf("\thipMipmappedArray_t hMipMappedArray = %p", args->hipMipmappedArrayGetLevel.hMipMappedArray);
 			if (args->hipMipmappedArrayGetLevel.hMipMappedArray != NULL) {
@@ -9448,8 +9364,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipUserObject_t * object_out = %p", args->hipUserObjectCreate.object_out);
 			if (args->hipUserObjectCreate.object_out != NULL) {
-				printf("-> %p", args->hipUserObjectCreate.object_out__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipUserObjectCreate.object_out__ref.val);
 			} else { printf("\n"); };
 			printf("\tvoid * ptr = %p", args->hipUserObjectCreate.ptr);
 			printf("\n");
@@ -9481,15 +9396,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\thipGraph_t * graph_out = %p", args->hipStreamGetCaptureInfo_v2.graph_out);
 			if (args->hipStreamGetCaptureInfo_v2.graph_out != NULL) {
-				printf("-> %p", args->hipStreamGetCaptureInfo_v2.graph_out__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipStreamGetCaptureInfo_v2.graph_out__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst hipGraphNode_t ** dependencies_out = %p", args->hipStreamGetCaptureInfo_v2.dependencies_out);
 			if (args->hipStreamGetCaptureInfo_v2.dependencies_out != NULL) {
 				printf("-> %p", args->hipStreamGetCaptureInfo_v2.dependencies_out__ref.ptr1);
 				if (args->hipStreamGetCaptureInfo_v2.dependencies_out__ref.ptr1 != NULL) {
-					printf("-> %p", args->hipStreamGetCaptureInfo_v2.dependencies_out__ref.ptr2);
-					printf("\n");
+					printf(" -> %p\n", args->hipStreamGetCaptureInfo_v2.dependencies_out__ref.val);
 				} else { printf("\n"); };
 			} else { printf("\n"); };
 			printf("\tsize_t * numDependencies_out = %p", args->hipStreamGetCaptureInfo_v2.numDependencies_out);
@@ -9528,8 +9441,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipArray_t * pArray = %p", args->hipTexRefGetArray.pArray);
 			if (args->hipTexRefGetArray.pArray != NULL) {
-				printf("-> %p", args->hipTexRefGetArray.pArray__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipTexRefGetArray.pArray__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst textureReference * texRef = %p", args->hipTexRefGetArray.texRef);
 			if (args->hipTexRefGetArray.texRef != NULL) {
@@ -9810,15 +9722,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\thipGraph_t * graph_out = %p", args->hipStreamGetCaptureInfo_v2_spt.graph_out);
 			if (args->hipStreamGetCaptureInfo_v2_spt.graph_out != NULL) {
-				printf("-> %p", args->hipStreamGetCaptureInfo_v2_spt.graph_out__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipStreamGetCaptureInfo_v2_spt.graph_out__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst hipGraphNode_t ** dependencies_out = %p", args->hipStreamGetCaptureInfo_v2_spt.dependencies_out);
 			if (args->hipStreamGetCaptureInfo_v2_spt.dependencies_out != NULL) {
 				printf("-> %p", args->hipStreamGetCaptureInfo_v2_spt.dependencies_out__ref.ptr1);
 				if (args->hipStreamGetCaptureInfo_v2_spt.dependencies_out__ref.ptr1 != NULL) {
-					printf("-> %p", args->hipStreamGetCaptureInfo_v2_spt.dependencies_out__ref.ptr2);
-					printf("\n");
+					printf(" -> %p\n", args->hipStreamGetCaptureInfo_v2_spt.dependencies_out__ref.val);
 				} else { printf("\n"); };
 			} else { printf("\n"); };
 			printf("\tsize_t * numDependencies_out = %p", args->hipStreamGetCaptureInfo_v2_spt.numDependencies_out);
@@ -9922,13 +9832,11 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\n");
 			printf("\tconst hipGraphNode_t * from = %p", args->hipGraphAddDependencies.from);
 			if (args->hipGraphAddDependencies.from != NULL) {
-				printf("-> %p", args->hipGraphAddDependencies.from__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddDependencies.from__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst hipGraphNode_t * to = %p", args->hipGraphAddDependencies.to);
 			if (args->hipGraphAddDependencies.to != NULL) {
-				printf("-> %p", args->hipGraphAddDependencies.to__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphAddDependencies.to__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddDependencies.numDependencies);
 			printf("\thipError_t retval = %d\n", args->hipGraphAddDependencies.retval);
@@ -10109,15 +10017,13 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipGraphNode_t * phGraphNode = %p", args->hipDrvGraphAddMemsetNode.phGraphNode);
 			if (args->hipDrvGraphAddMemsetNode.phGraphNode != NULL) {
-				printf("-> %p", args->hipDrvGraphAddMemsetNode.phGraphNode__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipDrvGraphAddMemsetNode.phGraphNode__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraph_t hGraph = %p", args->hipDrvGraphAddMemsetNode.hGraph);
 			printf("\n");
 			printf("\tconst hipGraphNode_t * dependencies = %p", args->hipDrvGraphAddMemsetNode.dependencies);
 			if (args->hipDrvGraphAddMemsetNode.dependencies != NULL) {
-				printf("-> %p", args->hipDrvGraphAddMemsetNode.dependencies__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipDrvGraphAddMemsetNode.dependencies__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t numDependencies = %lu\n", args->hipDrvGraphAddMemsetNode.numDependencies);
 			printf("\tconst HIP_MEMSET_NODE_PARAMS * memsetParams = %p", args->hipDrvGraphAddMemsetNode.memsetParams);
@@ -10170,8 +10076,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipMemPool_t * mem_pool = %p", args->hipMemPoolCreate.mem_pool);
 			if (args->hipMemPoolCreate.mem_pool != NULL) {
-				printf("-> %p", args->hipMemPoolCreate.mem_pool__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipMemPoolCreate.mem_pool__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst hipMemPoolProps * pool_props = %p", args->hipMemPoolCreate.pool_props);
 			if (args->hipMemPoolCreate.pool_props != NULL) {
@@ -10399,8 +10304,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipSurfaceObject_t * pSurfObject = %p", args->hipCreateSurfaceObject.pSurfObject);
 			if (args->hipCreateSurfaceObject.pSurfObject != NULL) {
-				printf("-> %p", args->hipCreateSurfaceObject.pSurfObject__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipCreateSurfaceObject.pSurfObject__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst hipResourceDesc * pResDesc = %p", args->hipCreateSurfaceObject.pResDesc);
 			if (args->hipCreateSurfaceObject.pResDesc != NULL) {
@@ -10440,8 +10344,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipArray_t * levelArray = %p", args->hipGetMipmappedArrayLevel.levelArray);
 			if (args->hipGetMipmappedArrayLevel.levelArray != NULL) {
-				printf("-> %p", args->hipGetMipmappedArrayLevel.levelArray__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGetMipmappedArrayLevel.levelArray__ref.val);
 			} else { printf("\n"); };
 			printf("\thipMipmappedArray_const_t mipmappedArray = %p", args->hipGetMipmappedArrayLevel.mipmappedArray);
 			if (args->hipGetMipmappedArrayLevel.mipmappedArray != NULL) {
@@ -10521,8 +10424,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipArray_t * array = %p", args->hipArray3DCreate.array);
 			if (args->hipArray3DCreate.array != NULL) {
-				printf("-> %p", args->hipArray3DCreate.array__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipArray3DCreate.array__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst HIP_ARRAY3D_DESCRIPTOR * pAllocateArray = %p", args->hipArray3DCreate.pAllocateArray);
 			if (args->hipArray3DCreate.pAllocateArray != NULL) {
@@ -10731,8 +10633,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\tint count = %d\n", args->hipGraphicsMapResources.count);
 			printf("\thipGraphicsResource_t * resources = %p", args->hipGraphicsMapResources.resources);
 			if (args->hipGraphicsMapResources.resources != NULL) {
-				printf("-> %p", args->hipGraphicsMapResources.resources__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphicsMapResources.resources__ref.val);
 			} else { printf("\n"); };
 			printf("\thipStream_t stream = %p", args->hipGraphicsMapResources.stream);
 			printf("\n");
@@ -10752,8 +10653,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipArray_t * pHandle = %p", args->hipArrayCreate.pHandle);
 			if (args->hipArrayCreate.pHandle != NULL) {
-				printf("-> %p", args->hipArrayCreate.pHandle__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipArrayCreate.pHandle__ref.val);
 			} else { printf("\n"); };
 			printf("\tconst HIP_ARRAY_DESCRIPTOR * pAllocateArray = %p", args->hipArrayCreate.pAllocateArray);
 			if (args->hipArrayCreate.pAllocateArray != NULL) {
@@ -10971,8 +10871,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipMemGenericAllocationHandle_t * handle = %p", args->hipMemImportFromShareableHandle.handle);
 			if (args->hipMemImportFromShareableHandle.handle != NULL) {
-				printf("-> %p", args->hipMemImportFromShareableHandle.handle__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipMemImportFromShareableHandle.handle__ref.val);
 			} else { printf("\n"); };
 			printf("\tvoid * osHandle = %p", args->hipMemImportFromShareableHandle.osHandle);
 			printf("\n");
@@ -11567,13 +11466,11 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\n");
 			printf("\thipGraphNode_t * from = %p", args->hipGraphGetEdges.from);
 			if (args->hipGraphGetEdges.from != NULL) {
-				printf("-> %p", args->hipGraphGetEdges.from__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphGetEdges.from__ref.val);
 			} else { printf("\n"); };
 			printf("\thipGraphNode_t * to = %p", args->hipGraphGetEdges.to);
 			if (args->hipGraphGetEdges.to != NULL) {
-				printf("-> %p", args->hipGraphGetEdges.to__ref.ptr1);
-				printf("\n");
+				printf(" -> %p\n", args->hipGraphGetEdges.to__ref.val);
 			} else { printf("\n"); };
 			printf("\tsize_t * numEdges = %p", args->hipGraphGetEdges.numEdges);
 			if (args->hipGraphGetEdges.numEdges != NULL) {

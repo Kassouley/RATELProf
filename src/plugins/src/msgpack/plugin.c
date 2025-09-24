@@ -2,7 +2,7 @@
  * DO NOT MODIFY UNLESS YOU KNOW WHAT YOU ARE DOING.
  * ANY CHANGES MAY BE OVERWRITTEN BY SUBSEQUENT RUNS OF GILDA. 
  */
- 
+
 #include <string.h>
 #include <errno.h>
 #include <sys/file.h>
@@ -25,7 +25,6 @@ typedef struct {
     size_t size;
 } plugin_traces_t;
 
-
 typedef struct ratelprof_plugin_s {
 	api_callback_handler_t hsa_callback_handler;
 	api_callback_handler_t omp_tgt_rtl_callback_handler;
@@ -37,6 +36,7 @@ typedef struct ratelprof_plugin_s {
     activity_callback_t activity_callback;
     plugin_traces_t* traces;
 } ratelprof_plugin_t;
+
 
 
 static bool count_location(ratelprof_source_data_t *loc, void *user_data) {
@@ -231,7 +231,6 @@ static inline void encode_ratelprof_ext(ratelprof_plugin_t* p) {
 
     msgpack_free(&main_buffer); // Write data and free
 }
-
 
 
 ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin) 

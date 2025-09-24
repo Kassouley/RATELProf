@@ -985,7 +985,7 @@ struct args_hipMemsetD8_t {
 struct args_hipMallocArray_t {
 	hipArray_t * array;
 	struct {
-		void* ptr1;
+		hipArray_t val;
 	} array__ref;
 	hipChannelFormatDesc * desc;
 	struct {
@@ -1007,7 +1007,7 @@ struct args_hipMallocArray_t {
 
 #define GET_PTRS_VALUE_hipMallocArray(args) { \
 	if (args->hipMallocArray.array != NULL) { \
-		args->hipMallocArray.array__ref.ptr1 = *args->hipMallocArray.array; \
+		args->hipMallocArray.array__ref.val = *args->hipMallocArray.array; \
 	} \
 	if (args->hipMallocArray.desc != NULL) { \
 		args->hipMallocArray.desc__ref.val = *args->hipMallocArray.desc; \
@@ -1036,7 +1036,7 @@ struct args_hipGraphEventWaitNodeGetEvent_t {
 	hipGraphNode_t node;
 	hipEvent_t * event_out;
 	struct {
-		void* ptr1;
+		hipEvent_t val;
 	} event_out__ref;
 	hipError_t retval;
 };
@@ -1048,7 +1048,7 @@ struct args_hipGraphEventWaitNodeGetEvent_t {
 
 #define GET_PTRS_VALUE_hipGraphEventWaitNodeGetEvent(args) { \
 	if (args->hipGraphEventWaitNodeGetEvent.event_out != NULL) { \
-		args->hipGraphEventWaitNodeGetEvent.event_out__ref.ptr1 = *args->hipGraphEventWaitNodeGetEvent.event_out; \
+		args->hipGraphEventWaitNodeGetEvent.event_out__ref.val = *args->hipGraphEventWaitNodeGetEvent.event_out; \
 	} \
 };
 
@@ -1320,7 +1320,7 @@ struct args_hipMemcpyDtoHAsync_t {
 struct args_hipModuleLoad_t {
 	hipModule_t * module;
 	struct {
-		void* ptr1;
+		hipModule_t val;
 	} module__ref;
 	char * fname;
 	struct {
@@ -1336,7 +1336,7 @@ struct args_hipModuleLoad_t {
 
 #define GET_PTRS_VALUE_hipModuleLoad(args) { \
 	if (args->hipModuleLoad.module != NULL) { \
-		args->hipModuleLoad.module__ref.ptr1 = *args->hipModuleLoad.module; \
+		args->hipModuleLoad.module__ref.val = *args->hipModuleLoad.module; \
 	} \
 	if (args->hipModuleLoad.fname != NULL) { \
 		strncpy(args->hipModuleLoad.fname__ref.val, args->hipModuleLoad.fname, HIP_STRING_SIZE_MAX-1); \
@@ -1606,7 +1606,7 @@ struct args_hipGraphNodeGetDependentNodes_t {
 	hipGraphNode_t node;
 	hipGraphNode_t * pDependentNodes;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependentNodes__ref;
 	size_t * pNumDependentNodes;
 	struct {
@@ -1623,7 +1623,7 @@ struct args_hipGraphNodeGetDependentNodes_t {
 
 #define GET_PTRS_VALUE_hipGraphNodeGetDependentNodes(args) { \
 	if (args->hipGraphNodeGetDependentNodes.pDependentNodes != NULL) { \
-		args->hipGraphNodeGetDependentNodes.pDependentNodes__ref.ptr1 = *args->hipGraphNodeGetDependentNodes.pDependentNodes; \
+		args->hipGraphNodeGetDependentNodes.pDependentNodes__ref.val = *args->hipGraphNodeGetDependentNodes.pDependentNodes; \
 	} \
 	if (args->hipGraphNodeGetDependentNodes.pNumDependentNodes != NULL) { \
 		args->hipGraphNodeGetDependentNodes.pNumDependentNodes__ref.val = *args->hipGraphNodeGetDependentNodes.pNumDependentNodes; \
@@ -1812,7 +1812,7 @@ struct args_hipGetErrorString_t {
 struct args_hipModuleLoadDataEx_t {
 	hipModule_t * module;
 	struct {
-		void* ptr1;
+		hipModule_t val;
 	} module__ref;
 	void * image;
 	unsigned int numOptions;
@@ -1837,7 +1837,7 @@ struct args_hipModuleLoadDataEx_t {
 
 #define GET_PTRS_VALUE_hipModuleLoadDataEx(args) { \
 	if (args->hipModuleLoadDataEx.module != NULL) { \
-		args->hipModuleLoadDataEx.module__ref.ptr1 = *args->hipModuleLoadDataEx.module; \
+		args->hipModuleLoadDataEx.module__ref.val = *args->hipModuleLoadDataEx.module; \
 	} \
 	if (args->hipModuleLoadDataEx.options != NULL) { \
 		args->hipModuleLoadDataEx.options__ref.val = *args->hipModuleLoadDataEx.options; \
@@ -1913,7 +1913,7 @@ struct args_hipTexRefGetFilterMode_t {
 struct args_hipGraphInstantiateWithParams_t {
 	hipGraphExec_t * pGraphExec;
 	struct {
-		void* ptr1;
+		hipGraphExec_t val;
 	} pGraphExec__ref;
 	hipGraph_t graph;
 	hipGraphInstantiateParams * instantiateParams;
@@ -1931,7 +1931,7 @@ struct args_hipGraphInstantiateWithParams_t {
 
 #define GET_PTRS_VALUE_hipGraphInstantiateWithParams(args) { \
 	if (args->hipGraphInstantiateWithParams.pGraphExec != NULL) { \
-		args->hipGraphInstantiateWithParams.pGraphExec__ref.ptr1 = *args->hipGraphInstantiateWithParams.pGraphExec; \
+		args->hipGraphInstantiateWithParams.pGraphExec__ref.val = *args->hipGraphInstantiateWithParams.pGraphExec; \
 	} \
 	if (args->hipGraphInstantiateWithParams.instantiateParams != NULL) { \
 		args->hipGraphInstantiateWithParams.instantiateParams__ref.val = *args->hipGraphInstantiateWithParams.instantiateParams; \
@@ -2025,7 +2025,7 @@ struct args_hipGraphicsUnmapResources_t {
 	int count;
 	hipGraphicsResource_t * resources;
 	struct {
-		void* ptr1;
+		hipGraphicsResource_t val;
 	} resources__ref;
 	hipStream_t stream;
 	hipError_t retval;
@@ -2039,7 +2039,7 @@ struct args_hipGraphicsUnmapResources_t {
 
 #define GET_PTRS_VALUE_hipGraphicsUnmapResources(args) { \
 	if (args->hipGraphicsUnmapResources.resources != NULL) { \
-		args->hipGraphicsUnmapResources.resources__ref.ptr1 = *args->hipGraphicsUnmapResources.resources; \
+		args->hipGraphicsUnmapResources.resources__ref.val = *args->hipGraphicsUnmapResources.resources; \
 	} \
 };
 
@@ -2202,12 +2202,12 @@ struct args_hipTexRefGetMipmapLevelBias_t {
 struct args_hipGraphAddExternalSemaphoresSignalNode_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	hipExternalSemaphoreSignalNodeParams * nodeParams;
@@ -2227,10 +2227,10 @@ struct args_hipGraphAddExternalSemaphoresSignalNode_t {
 
 #define GET_PTRS_VALUE_hipGraphAddExternalSemaphoresSignalNode(args) { \
 	if (args->hipGraphAddExternalSemaphoresSignalNode.pGraphNode != NULL) { \
-		args->hipGraphAddExternalSemaphoresSignalNode.pGraphNode__ref.ptr1 = *args->hipGraphAddExternalSemaphoresSignalNode.pGraphNode; \
+		args->hipGraphAddExternalSemaphoresSignalNode.pGraphNode__ref.val = *args->hipGraphAddExternalSemaphoresSignalNode.pGraphNode; \
 	} \
 	if (args->hipGraphAddExternalSemaphoresSignalNode.pDependencies != NULL) { \
-		args->hipGraphAddExternalSemaphoresSignalNode.pDependencies__ref.ptr1 = *args->hipGraphAddExternalSemaphoresSignalNode.pDependencies; \
+		args->hipGraphAddExternalSemaphoresSignalNode.pDependencies__ref.val = *args->hipGraphAddExternalSemaphoresSignalNode.pDependencies; \
 	} \
 	if (args->hipGraphAddExternalSemaphoresSignalNode.nodeParams != NULL) { \
 		args->hipGraphAddExternalSemaphoresSignalNode.nodeParams__ref.val = *args->hipGraphAddExternalSemaphoresSignalNode.nodeParams; \
@@ -2462,11 +2462,11 @@ struct args_hipGraphRemoveDependencies_t {
 	hipGraph_t graph;
 	hipGraphNode_t * from;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} from__ref;
 	hipGraphNode_t * to;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} to__ref;
 	size_t numDependencies;
 	hipError_t retval;
@@ -2481,10 +2481,10 @@ struct args_hipGraphRemoveDependencies_t {
 
 #define GET_PTRS_VALUE_hipGraphRemoveDependencies(args) { \
 	if (args->hipGraphRemoveDependencies.from != NULL) { \
-		args->hipGraphRemoveDependencies.from__ref.ptr1 = *args->hipGraphRemoveDependencies.from; \
+		args->hipGraphRemoveDependencies.from__ref.val = *args->hipGraphRemoveDependencies.from; \
 	} \
 	if (args->hipGraphRemoveDependencies.to != NULL) { \
-		args->hipGraphRemoveDependencies.to__ref.ptr1 = *args->hipGraphRemoveDependencies.to; \
+		args->hipGraphRemoveDependencies.to__ref.val = *args->hipGraphRemoveDependencies.to; \
 	} \
 };
 
@@ -2509,7 +2509,7 @@ struct args_hipGraphRemoveDependencies_t {
 struct args_hipGraphCreate_t {
 	hipGraph_t * pGraph;
 	struct {
-		void* ptr1;
+		hipGraph_t val;
 	} pGraph__ref;
 	unsigned int flags;
 	hipError_t retval;
@@ -2522,7 +2522,7 @@ struct args_hipGraphCreate_t {
 
 #define GET_PTRS_VALUE_hipGraphCreate(args) { \
 	if (args->hipGraphCreate.pGraph != NULL) { \
-		args->hipGraphCreate.pGraph__ref.ptr1 = *args->hipGraphCreate.pGraph; \
+		args->hipGraphCreate.pGraph__ref.val = *args->hipGraphCreate.pGraph; \
 	} \
 };
 
@@ -3279,7 +3279,7 @@ struct args_hipGraphReleaseUserObject_t {
 struct args_hipDeviceGetMemPool_t {
 	hipMemPool_t * mem_pool;
 	struct {
-		void* ptr1;
+		hipMemPool_t val;
 	} mem_pool__ref;
 	int device;
 	hipError_t retval;
@@ -3292,7 +3292,7 @@ struct args_hipDeviceGetMemPool_t {
 
 #define GET_PTRS_VALUE_hipDeviceGetMemPool(args) { \
 	if (args->hipDeviceGetMemPool.mem_pool != NULL) { \
-		args->hipDeviceGetMemPool.mem_pool__ref.ptr1 = *args->hipDeviceGetMemPool.mem_pool; \
+		args->hipDeviceGetMemPool.mem_pool__ref.val = *args->hipDeviceGetMemPool.mem_pool; \
 	} \
 };
 
@@ -3358,12 +3358,12 @@ struct args_hipGraphHostNodeSetParams_t {
 struct args_hipGraphAddEventWaitNode_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	hipEvent_t event;
@@ -3380,10 +3380,10 @@ struct args_hipGraphAddEventWaitNode_t {
 
 #define GET_PTRS_VALUE_hipGraphAddEventWaitNode(args) { \
 	if (args->hipGraphAddEventWaitNode.pGraphNode != NULL) { \
-		args->hipGraphAddEventWaitNode.pGraphNode__ref.ptr1 = *args->hipGraphAddEventWaitNode.pGraphNode; \
+		args->hipGraphAddEventWaitNode.pGraphNode__ref.val = *args->hipGraphAddEventWaitNode.pGraphNode; \
 	} \
 	if (args->hipGraphAddEventWaitNode.pDependencies != NULL) { \
-		args->hipGraphAddEventWaitNode.pDependencies__ref.ptr1 = *args->hipGraphAddEventWaitNode.pDependencies; \
+		args->hipGraphAddEventWaitNode.pDependencies__ref.val = *args->hipGraphAddEventWaitNode.pDependencies; \
 	} \
 };
 
@@ -3564,7 +3564,7 @@ struct args_hipGraphExecUpdate_t {
 	hipGraph_t hGraph;
 	hipGraphNode_t * hErrorNode_out;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} hErrorNode_out__ref;
 	hipGraphExecUpdateResult * updateResult_out;
 	struct {
@@ -3582,7 +3582,7 @@ struct args_hipGraphExecUpdate_t {
 
 #define GET_PTRS_VALUE_hipGraphExecUpdate(args) { \
 	if (args->hipGraphExecUpdate.hErrorNode_out != NULL) { \
-		args->hipGraphExecUpdate.hErrorNode_out__ref.ptr1 = *args->hipGraphExecUpdate.hErrorNode_out; \
+		args->hipGraphExecUpdate.hErrorNode_out__ref.val = *args->hipGraphExecUpdate.hErrorNode_out; \
 	} \
 	if (args->hipGraphExecUpdate.updateResult_out != NULL) { \
 		args->hipGraphExecUpdate.updateResult_out__ref.val = *args->hipGraphExecUpdate.updateResult_out; \
@@ -3689,12 +3689,12 @@ struct args_hipMemcpyWithStream_t {
 struct args_hipGraphAddExternalSemaphoresWaitNode_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	hipExternalSemaphoreWaitNodeParams * nodeParams;
@@ -3714,10 +3714,10 @@ struct args_hipGraphAddExternalSemaphoresWaitNode_t {
 
 #define GET_PTRS_VALUE_hipGraphAddExternalSemaphoresWaitNode(args) { \
 	if (args->hipGraphAddExternalSemaphoresWaitNode.pGraphNode != NULL) { \
-		args->hipGraphAddExternalSemaphoresWaitNode.pGraphNode__ref.ptr1 = *args->hipGraphAddExternalSemaphoresWaitNode.pGraphNode; \
+		args->hipGraphAddExternalSemaphoresWaitNode.pGraphNode__ref.val = *args->hipGraphAddExternalSemaphoresWaitNode.pGraphNode; \
 	} \
 	if (args->hipGraphAddExternalSemaphoresWaitNode.pDependencies != NULL) { \
-		args->hipGraphAddExternalSemaphoresWaitNode.pDependencies__ref.ptr1 = *args->hipGraphAddExternalSemaphoresWaitNode.pDependencies; \
+		args->hipGraphAddExternalSemaphoresWaitNode.pDependencies__ref.val = *args->hipGraphAddExternalSemaphoresWaitNode.pDependencies; \
 	} \
 	if (args->hipGraphAddExternalSemaphoresWaitNode.nodeParams != NULL) { \
 		args->hipGraphAddExternalSemaphoresWaitNode.nodeParams__ref.val = *args->hipGraphAddExternalSemaphoresWaitNode.nodeParams; \
@@ -4164,7 +4164,7 @@ struct args_hipApiName_t {
 struct args_hipGraphicsSubResourceGetMappedArray_t {
 	hipArray_t * array;
 	struct {
-		void* ptr1;
+		hipArray_t val;
 	} array__ref;
 	hipGraphicsResource_t resource;
 	unsigned int arrayIndex;
@@ -4181,7 +4181,7 @@ struct args_hipGraphicsSubResourceGetMappedArray_t {
 
 #define GET_PTRS_VALUE_hipGraphicsSubResourceGetMappedArray(args) { \
 	if (args->hipGraphicsSubResourceGetMappedArray.array != NULL) { \
-		args->hipGraphicsSubResourceGetMappedArray.array__ref.ptr1 = *args->hipGraphicsSubResourceGetMappedArray.array; \
+		args->hipGraphicsSubResourceGetMappedArray.array__ref.val = *args->hipGraphicsSubResourceGetMappedArray.array; \
 	} \
 };
 
@@ -4332,12 +4332,12 @@ struct args_hipTexRefGetBorderColor_t {
 struct args_hipGraphAddMemcpyNode1D_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	void * dst;
@@ -4360,10 +4360,10 @@ struct args_hipGraphAddMemcpyNode1D_t {
 
 #define GET_PTRS_VALUE_hipGraphAddMemcpyNode1D(args) { \
 	if (args->hipGraphAddMemcpyNode1D.pGraphNode != NULL) { \
-		args->hipGraphAddMemcpyNode1D.pGraphNode__ref.ptr1 = *args->hipGraphAddMemcpyNode1D.pGraphNode; \
+		args->hipGraphAddMemcpyNode1D.pGraphNode__ref.val = *args->hipGraphAddMemcpyNode1D.pGraphNode; \
 	} \
 	if (args->hipGraphAddMemcpyNode1D.pDependencies != NULL) { \
-		args->hipGraphAddMemcpyNode1D.pDependencies__ref.ptr1 = *args->hipGraphAddMemcpyNode1D.pDependencies; \
+		args->hipGraphAddMemcpyNode1D.pDependencies__ref.val = *args->hipGraphAddMemcpyNode1D.pDependencies; \
 	} \
 };
 
@@ -4390,7 +4390,7 @@ struct args_hipGraphGetNodes_t {
 	hipGraph_t graph;
 	hipGraphNode_t * nodes;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} nodes__ref;
 	size_t * numNodes;
 	struct {
@@ -4407,7 +4407,7 @@ struct args_hipGraphGetNodes_t {
 
 #define GET_PTRS_VALUE_hipGraphGetNodes(args) { \
 	if (args->hipGraphGetNodes.nodes != NULL) { \
-		args->hipGraphGetNodes.nodes__ref.ptr1 = *args->hipGraphGetNodes.nodes; \
+		args->hipGraphGetNodes.nodes__ref.val = *args->hipGraphGetNodes.nodes; \
 	} \
 	if (args->hipGraphGetNodes.numNodes != NULL) { \
 		args->hipGraphGetNodes.numNodes__ref.val = *args->hipGraphGetNodes.numNodes; \
@@ -4560,7 +4560,7 @@ struct args_hipStreamGetPriority_t {
 struct args_hipStreamCreate_t {
 	hipStream_t * stream;
 	struct {
-		void* ptr1;
+		hipStream_t val;
 	} stream__ref;
 	hipError_t retval;
 };
@@ -4571,7 +4571,7 @@ struct args_hipStreamCreate_t {
 
 #define GET_PTRS_VALUE_hipStreamCreate(args) { \
 	if (args->hipStreamCreate.stream != NULL) { \
-		args->hipStreamCreate.stream__ref.ptr1 = *args->hipStreamCreate.stream; \
+		args->hipStreamCreate.stream__ref.val = *args->hipStreamCreate.stream; \
 	} \
 };
 
@@ -4795,12 +4795,12 @@ struct args_hipGetTextureAlignmentOffset_t {
 struct args_hipGraphAddEventRecordNode_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	hipEvent_t event;
@@ -4817,10 +4817,10 @@ struct args_hipGraphAddEventRecordNode_t {
 
 #define GET_PTRS_VALUE_hipGraphAddEventRecordNode(args) { \
 	if (args->hipGraphAddEventRecordNode.pGraphNode != NULL) { \
-		args->hipGraphAddEventRecordNode.pGraphNode__ref.ptr1 = *args->hipGraphAddEventRecordNode.pGraphNode; \
+		args->hipGraphAddEventRecordNode.pGraphNode__ref.val = *args->hipGraphAddEventRecordNode.pGraphNode; \
 	} \
 	if (args->hipGraphAddEventRecordNode.pDependencies != NULL) { \
-		args->hipGraphAddEventRecordNode.pDependencies__ref.ptr1 = *args->hipGraphAddEventRecordNode.pDependencies; \
+		args->hipGraphAddEventRecordNode.pDependencies__ref.val = *args->hipGraphAddEventRecordNode.pDependencies; \
 	} \
 };
 
@@ -4846,7 +4846,7 @@ struct args_hipGraphAddEventRecordNode_t {
 struct args_hipGraphNodeFindInClone_t {
 	hipGraphNode_t * pNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pNode__ref;
 	hipGraphNode_t originalNode;
 	hipGraph_t clonedGraph;
@@ -4861,7 +4861,7 @@ struct args_hipGraphNodeFindInClone_t {
 
 #define GET_PTRS_VALUE_hipGraphNodeFindInClone(args) { \
 	if (args->hipGraphNodeFindInClone.pNode != NULL) { \
-		args->hipGraphNodeFindInClone.pNode__ref.ptr1 = *args->hipGraphNodeFindInClone.pNode; \
+		args->hipGraphNodeFindInClone.pNode__ref.val = *args->hipGraphNodeFindInClone.pNode; \
 	} \
 };
 
@@ -5031,7 +5031,7 @@ struct args_hipDeviceGetCacheConfig_t {
 struct args_hipMemCreate_t {
 	hipMemGenericAllocationHandle_t * handle;
 	struct {
-		void* ptr1;
+		hipMemGenericAllocationHandle_t val;
 	} handle__ref;
 	size_t size;
 	hipMemAllocationProp * prop;
@@ -5051,7 +5051,7 @@ struct args_hipMemCreate_t {
 
 #define GET_PTRS_VALUE_hipMemCreate(args) { \
 	if (args->hipMemCreate.handle != NULL) { \
-		args->hipMemCreate.handle__ref.ptr1 = *args->hipMemCreate.handle; \
+		args->hipMemCreate.handle__ref.val = *args->hipMemCreate.handle; \
 	} \
 	if (args->hipMemCreate.prop != NULL) { \
 		args->hipMemCreate.prop__ref.val = *args->hipMemCreate.prop; \
@@ -5118,7 +5118,7 @@ struct args_hipStreamEndCapture_t {
 	hipStream_t stream;
 	hipGraph_t * pGraph;
 	struct {
-		void* ptr1;
+		hipGraph_t val;
 	} pGraph__ref;
 	hipError_t retval;
 };
@@ -5130,7 +5130,7 @@ struct args_hipStreamEndCapture_t {
 
 #define GET_PTRS_VALUE_hipStreamEndCapture(args) { \
 	if (args->hipStreamEndCapture.pGraph != NULL) { \
-		args->hipStreamEndCapture.pGraph__ref.ptr1 = *args->hipStreamEndCapture.pGraph; \
+		args->hipStreamEndCapture.pGraph__ref.val = *args->hipStreamEndCapture.pGraph; \
 	} \
 };
 
@@ -5312,7 +5312,7 @@ struct args_hipMalloc_t {
 struct args_hipMalloc3DArray_t {
 	hipArray_t * array;
 	struct {
-		void* ptr1;
+		hipArray_t val;
 	} array__ref;
 	struct hipChannelFormatDesc * desc;
 	struct {
@@ -5332,7 +5332,7 @@ struct args_hipMalloc3DArray_t {
 
 #define GET_PTRS_VALUE_hipMalloc3DArray(args) { \
 	if (args->hipMalloc3DArray.array != NULL) { \
-		args->hipMalloc3DArray.array__ref.ptr1 = *args->hipMalloc3DArray.array; \
+		args->hipMalloc3DArray.array__ref.val = *args->hipMalloc3DArray.array; \
 	} \
 	if (args->hipMalloc3DArray.desc != NULL) { \
 		args->hipMalloc3DArray.desc__ref.val = *args->hipMalloc3DArray.desc; \
@@ -5666,7 +5666,7 @@ struct args_hipFuncGetAttributes_t {
 struct args_hipCtxGetCurrent_t {
 	hipCtx_t * ctx;
 	struct {
-		void* ptr1;
+		hipCtx_t val;
 	} ctx__ref;
 	hipError_t retval;
 };
@@ -5677,7 +5677,7 @@ struct args_hipCtxGetCurrent_t {
 
 #define GET_PTRS_VALUE_hipCtxGetCurrent(args) { \
 	if (args->hipCtxGetCurrent.ctx != NULL) { \
-		args->hipCtxGetCurrent.ctx__ref.ptr1 = *args->hipCtxGetCurrent.ctx; \
+		args->hipCtxGetCurrent.ctx__ref.val = *args->hipCtxGetCurrent.ctx; \
 	} \
 };
 
@@ -5705,12 +5705,12 @@ struct args_hipCtxGetCurrent_t {
 struct args_hipGraphAddChildGraphNode_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	hipGraph_t childGraph;
@@ -5727,10 +5727,10 @@ struct args_hipGraphAddChildGraphNode_t {
 
 #define GET_PTRS_VALUE_hipGraphAddChildGraphNode(args) { \
 	if (args->hipGraphAddChildGraphNode.pGraphNode != NULL) { \
-		args->hipGraphAddChildGraphNode.pGraphNode__ref.ptr1 = *args->hipGraphAddChildGraphNode.pGraphNode; \
+		args->hipGraphAddChildGraphNode.pGraphNode__ref.val = *args->hipGraphAddChildGraphNode.pGraphNode; \
 	} \
 	if (args->hipGraphAddChildGraphNode.pDependencies != NULL) { \
-		args->hipGraphAddChildGraphNode.pDependencies__ref.ptr1 = *args->hipGraphAddChildGraphNode.pDependencies; \
+		args->hipGraphAddChildGraphNode.pDependencies__ref.val = *args->hipGraphAddChildGraphNode.pDependencies; \
 	} \
 };
 
@@ -5754,7 +5754,7 @@ struct args_hipGraphAddChildGraphNode_t {
 struct args_hipEventCreate_t {
 	hipEvent_t * event;
 	struct {
-		void* ptr1;
+		hipEvent_t val;
 	} event__ref;
 	hipError_t retval;
 };
@@ -5765,7 +5765,7 @@ struct args_hipEventCreate_t {
 
 #define GET_PTRS_VALUE_hipEventCreate(args) { \
 	if (args->hipEventCreate.event != NULL) { \
-		args->hipEventCreate.event__ref.ptr1 = *args->hipEventCreate.event; \
+		args->hipEventCreate.event__ref.val = *args->hipEventCreate.event; \
 	} \
 };
 
@@ -6083,7 +6083,7 @@ struct args_hipStreamEndCapture_spt_t {
 	hipStream_t stream;
 	hipGraph_t * pGraph;
 	struct {
-		void* ptr1;
+		hipGraph_t val;
 	} pGraph__ref;
 	hipError_t retval;
 };
@@ -6095,7 +6095,7 @@ struct args_hipStreamEndCapture_spt_t {
 
 #define GET_PTRS_VALUE_hipStreamEndCapture_spt(args) { \
 	if (args->hipStreamEndCapture_spt.pGraph != NULL) { \
-		args->hipStreamEndCapture_spt.pGraph__ref.ptr1 = *args->hipStreamEndCapture_spt.pGraph; \
+		args->hipStreamEndCapture_spt.pGraph__ref.val = *args->hipStreamEndCapture_spt.pGraph; \
 	} \
 };
 
@@ -6515,12 +6515,12 @@ struct args_hipMemAllocPitch_t {
 struct args_hipGraphAddNode_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	hipGraphNodeParams * nodeParams;
@@ -6540,10 +6540,10 @@ struct args_hipGraphAddNode_t {
 
 #define GET_PTRS_VALUE_hipGraphAddNode(args) { \
 	if (args->hipGraphAddNode.pGraphNode != NULL) { \
-		args->hipGraphAddNode.pGraphNode__ref.ptr1 = *args->hipGraphAddNode.pGraphNode; \
+		args->hipGraphAddNode.pGraphNode__ref.val = *args->hipGraphAddNode.pGraphNode; \
 	} \
 	if (args->hipGraphAddNode.pDependencies != NULL) { \
-		args->hipGraphAddNode.pDependencies__ref.ptr1 = *args->hipGraphAddNode.pDependencies; \
+		args->hipGraphAddNode.pDependencies__ref.val = *args->hipGraphAddNode.pDependencies; \
 	} \
 	if (args->hipGraphAddNode.nodeParams != NULL) { \
 		args->hipGraphAddNode.nodeParams__ref.val = *args->hipGraphAddNode.nodeParams; \
@@ -6633,7 +6633,7 @@ struct args_hipGraphChildGraphNodeGetGraph_t {
 	hipGraphNode_t node;
 	hipGraph_t * pGraph;
 	struct {
-		void* ptr1;
+		hipGraph_t val;
 	} pGraph__ref;
 	hipError_t retval;
 };
@@ -6645,7 +6645,7 @@ struct args_hipGraphChildGraphNodeGetGraph_t {
 
 #define GET_PTRS_VALUE_hipGraphChildGraphNodeGetGraph(args) { \
 	if (args->hipGraphChildGraphNodeGetGraph.pGraph != NULL) { \
-		args->hipGraphChildGraphNodeGetGraph.pGraph__ref.ptr1 = *args->hipGraphChildGraphNodeGetGraph.pGraph; \
+		args->hipGraphChildGraphNodeGetGraph.pGraph__ref.val = *args->hipGraphChildGraphNodeGetGraph.pGraph; \
 	} \
 };
 
@@ -6807,7 +6807,7 @@ struct args_hipFreeAsync_t {
 struct args_hipStreamCreateWithFlags_t {
 	hipStream_t * stream;
 	struct {
-		void* ptr1;
+		hipStream_t val;
 	} stream__ref;
 	unsigned int flags;
 	hipError_t retval;
@@ -6820,7 +6820,7 @@ struct args_hipStreamCreateWithFlags_t {
 
 #define GET_PTRS_VALUE_hipStreamCreateWithFlags(args) { \
 	if (args->hipStreamCreateWithFlags.stream != NULL) { \
-		args->hipStreamCreateWithFlags.stream__ref.ptr1 = *args->hipStreamCreateWithFlags.stream; \
+		args->hipStreamCreateWithFlags.stream__ref.val = *args->hipStreamCreateWithFlags.stream; \
 	} \
 };
 
@@ -6933,12 +6933,12 @@ struct args_hipStreamAddCallback_spt_t {
 struct args_hipGraphAddKernelNode_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	hipKernelNodeParams * pNodeParams;
@@ -6958,10 +6958,10 @@ struct args_hipGraphAddKernelNode_t {
 
 #define GET_PTRS_VALUE_hipGraphAddKernelNode(args) { \
 	if (args->hipGraphAddKernelNode.pGraphNode != NULL) { \
-		args->hipGraphAddKernelNode.pGraphNode__ref.ptr1 = *args->hipGraphAddKernelNode.pGraphNode; \
+		args->hipGraphAddKernelNode.pGraphNode__ref.val = *args->hipGraphAddKernelNode.pGraphNode; \
 	} \
 	if (args->hipGraphAddKernelNode.pDependencies != NULL) { \
-		args->hipGraphAddKernelNode.pDependencies__ref.ptr1 = *args->hipGraphAddKernelNode.pDependencies; \
+		args->hipGraphAddKernelNode.pDependencies__ref.val = *args->hipGraphAddKernelNode.pDependencies; \
 	} \
 	if (args->hipGraphAddKernelNode.pNodeParams != NULL) { \
 		args->hipGraphAddKernelNode.pNodeParams__ref.val = *args->hipGraphAddKernelNode.pNodeParams; \
@@ -7528,7 +7528,7 @@ struct args_hipGraphEventRecordNodeGetEvent_t {
 	hipGraphNode_t node;
 	hipEvent_t * event_out;
 	struct {
-		void* ptr1;
+		hipEvent_t val;
 	} event_out__ref;
 	hipError_t retval;
 };
@@ -7540,7 +7540,7 @@ struct args_hipGraphEventRecordNodeGetEvent_t {
 
 #define GET_PTRS_VALUE_hipGraphEventRecordNodeGetEvent(args) { \
 	if (args->hipGraphEventRecordNodeGetEvent.event_out != NULL) { \
-		args->hipGraphEventRecordNodeGetEvent.event_out__ref.ptr1 = *args->hipGraphEventRecordNodeGetEvent.event_out; \
+		args->hipGraphEventRecordNodeGetEvent.event_out__ref.val = *args->hipGraphEventRecordNodeGetEvent.event_out; \
 	} \
 };
 
@@ -7568,12 +7568,12 @@ struct args_hipGraphEventRecordNodeGetEvent_t {
 struct args_hipGraphInstantiate_t {
 	hipGraphExec_t * pGraphExec;
 	struct {
-		void* ptr1;
+		hipGraphExec_t val;
 	} pGraphExec__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pErrorNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pErrorNode__ref;
 	char * pLogBuffer;
 	struct {
@@ -7593,10 +7593,10 @@ struct args_hipGraphInstantiate_t {
 
 #define GET_PTRS_VALUE_hipGraphInstantiate(args) { \
 	if (args->hipGraphInstantiate.pGraphExec != NULL) { \
-		args->hipGraphInstantiate.pGraphExec__ref.ptr1 = *args->hipGraphInstantiate.pGraphExec; \
+		args->hipGraphInstantiate.pGraphExec__ref.val = *args->hipGraphInstantiate.pGraphExec; \
 	} \
 	if (args->hipGraphInstantiate.pErrorNode != NULL) { \
-		args->hipGraphInstantiate.pErrorNode__ref.ptr1 = *args->hipGraphInstantiate.pErrorNode; \
+		args->hipGraphInstantiate.pErrorNode__ref.val = *args->hipGraphInstantiate.pErrorNode; \
 	} \
 	if (args->hipGraphInstantiate.pLogBuffer != NULL) { \
 		strncpy(args->hipGraphInstantiate.pLogBuffer__ref.val, args->hipGraphInstantiate.pLogBuffer, HIP_STRING_SIZE_MAX-1); \
@@ -7743,7 +7743,7 @@ struct args_hipStreamGetCaptureInfo_t {
 struct args_hipCtxPopCurrent_t {
 	hipCtx_t * ctx;
 	struct {
-		void* ptr1;
+		hipCtx_t val;
 	} ctx__ref;
 	hipError_t retval;
 };
@@ -7754,7 +7754,7 @@ struct args_hipCtxPopCurrent_t {
 
 #define GET_PTRS_VALUE_hipCtxPopCurrent(args) { \
 	if (args->hipCtxPopCurrent.ctx != NULL) { \
-		args->hipCtxPopCurrent.ctx__ref.ptr1 = *args->hipCtxPopCurrent.ctx; \
+		args->hipCtxPopCurrent.ctx__ref.val = *args->hipCtxPopCurrent.ctx; \
 	} \
 };
 
@@ -8168,7 +8168,7 @@ struct args___hipPopCallConfiguration_t {
 	} sharedMem__ref;
 	hipStream_t * stream;
 	struct {
-		void* ptr1;
+		hipStream_t val;
 	} stream__ref;
 	hipError_t retval;
 };
@@ -8191,7 +8191,7 @@ struct args___hipPopCallConfiguration_t {
 		args->__hipPopCallConfiguration.sharedMem__ref.val = *args->__hipPopCallConfiguration.sharedMem; \
 	} \
 	if (args->__hipPopCallConfiguration.stream != NULL) { \
-		args->__hipPopCallConfiguration.stream__ref.ptr1 = *args->__hipPopCallConfiguration.stream; \
+		args->__hipPopCallConfiguration.stream__ref.val = *args->__hipPopCallConfiguration.stream; \
 	} \
 };
 
@@ -8415,7 +8415,7 @@ struct args_hipGetStreamDeviceId_t {
 struct args_hipExtStreamCreateWithCUMask_t {
 	hipStream_t * stream;
 	struct {
-		void* ptr1;
+		hipStream_t val;
 	} stream__ref;
 	uint32_t cuMaskSize;
 	uint32_t * cuMask;
@@ -8433,7 +8433,7 @@ struct args_hipExtStreamCreateWithCUMask_t {
 
 #define GET_PTRS_VALUE_hipExtStreamCreateWithCUMask(args) { \
 	if (args->hipExtStreamCreateWithCUMask.stream != NULL) { \
-		args->hipExtStreamCreateWithCUMask.stream__ref.ptr1 = *args->hipExtStreamCreateWithCUMask.stream; \
+		args->hipExtStreamCreateWithCUMask.stream__ref.val = *args->hipExtStreamCreateWithCUMask.stream; \
 	} \
 	if (args->hipExtStreamCreateWithCUMask.cuMask != NULL) { \
 		args->hipExtStreamCreateWithCUMask.cuMask__ref.val = *args->hipExtStreamCreateWithCUMask.cuMask; \
@@ -8605,7 +8605,7 @@ struct args_hipMemcpyFromArray_spt_t {
 struct args_hipModuleGetFunction_t {
 	hipFunction_t * function;
 	struct {
-		void* ptr1;
+		hipFunction_t val;
 	} function__ref;
 	hipModule_t module;
 	char * kname;
@@ -8623,7 +8623,7 @@ struct args_hipModuleGetFunction_t {
 
 #define GET_PTRS_VALUE_hipModuleGetFunction(args) { \
 	if (args->hipModuleGetFunction.function != NULL) { \
-		args->hipModuleGetFunction.function__ref.ptr1 = *args->hipModuleGetFunction.function; \
+		args->hipModuleGetFunction.function__ref.val = *args->hipModuleGetFunction.function; \
 	} \
 	if (args->hipModuleGetFunction.kname != NULL) { \
 		strncpy(args->hipModuleGetFunction.kname__ref.val, args->hipModuleGetFunction.kname, HIP_STRING_SIZE_MAX-1); \
@@ -8818,7 +8818,7 @@ struct args_hipStreamBeginCaptureToGraph_t {
 	hipGraph_t graph;
 	hipGraphNode_t * dependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} dependencies__ref;
 	hipGraphEdgeData * dependencyData;
 	struct {
@@ -8840,7 +8840,7 @@ struct args_hipStreamBeginCaptureToGraph_t {
 
 #define GET_PTRS_VALUE_hipStreamBeginCaptureToGraph(args) { \
 	if (args->hipStreamBeginCaptureToGraph.dependencies != NULL) { \
-		args->hipStreamBeginCaptureToGraph.dependencies__ref.ptr1 = *args->hipStreamBeginCaptureToGraph.dependencies; \
+		args->hipStreamBeginCaptureToGraph.dependencies__ref.val = *args->hipStreamBeginCaptureToGraph.dependencies; \
 	} \
 	if (args->hipStreamBeginCaptureToGraph.dependencyData != NULL) { \
 		args->hipStreamBeginCaptureToGraph.dependencyData__ref.val = *args->hipStreamBeginCaptureToGraph.dependencyData; \
@@ -8959,7 +8959,7 @@ struct args_hipStreamWaitValue64_t {
 struct args_hipDevicePrimaryCtxRetain_t {
 	hipCtx_t * pctx;
 	struct {
-		void* ptr1;
+		hipCtx_t val;
 	} pctx__ref;
 	hipDevice_t dev;
 	hipError_t retval;
@@ -8972,7 +8972,7 @@ struct args_hipDevicePrimaryCtxRetain_t {
 
 #define GET_PTRS_VALUE_hipDevicePrimaryCtxRetain(args) { \
 	if (args->hipDevicePrimaryCtxRetain.pctx != NULL) { \
-		args->hipDevicePrimaryCtxRetain.pctx__ref.ptr1 = *args->hipDevicePrimaryCtxRetain.pctx; \
+		args->hipDevicePrimaryCtxRetain.pctx__ref.val = *args->hipDevicePrimaryCtxRetain.pctx; \
 	} \
 };
 
@@ -9039,7 +9039,7 @@ struct args_hipMallocManaged_t {
 struct args_hipStreamCreateWithPriority_t {
 	hipStream_t * stream;
 	struct {
-		void* ptr1;
+		hipStream_t val;
 	} stream__ref;
 	unsigned int flags;
 	int priority;
@@ -9054,7 +9054,7 @@ struct args_hipStreamCreateWithPriority_t {
 
 #define GET_PTRS_VALUE_hipStreamCreateWithPriority(args) { \
 	if (args->hipStreamCreateWithPriority.stream != NULL) { \
-		args->hipStreamCreateWithPriority.stream__ref.ptr1 = *args->hipStreamCreateWithPriority.stream; \
+		args->hipStreamCreateWithPriority.stream__ref.val = *args->hipStreamCreateWithPriority.stream; \
 	} \
 };
 
@@ -9129,12 +9129,12 @@ struct args_hipStreamGetCaptureInfo_spt_t {
 struct args_hipGraphAddHostNode_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	hipHostNodeParams * pNodeParams;
@@ -9154,10 +9154,10 @@ struct args_hipGraphAddHostNode_t {
 
 #define GET_PTRS_VALUE_hipGraphAddHostNode(args) { \
 	if (args->hipGraphAddHostNode.pGraphNode != NULL) { \
-		args->hipGraphAddHostNode.pGraphNode__ref.ptr1 = *args->hipGraphAddHostNode.pGraphNode; \
+		args->hipGraphAddHostNode.pGraphNode__ref.val = *args->hipGraphAddHostNode.pGraphNode; \
 	} \
 	if (args->hipGraphAddHostNode.pDependencies != NULL) { \
-		args->hipGraphAddHostNode.pDependencies__ref.ptr1 = *args->hipGraphAddHostNode.pDependencies; \
+		args->hipGraphAddHostNode.pDependencies__ref.val = *args->hipGraphAddHostNode.pDependencies; \
 	} \
 	if (args->hipGraphAddHostNode.pNodeParams != NULL) { \
 		args->hipGraphAddHostNode.pNodeParams__ref.val = *args->hipGraphAddHostNode.pNodeParams; \
@@ -9736,7 +9736,7 @@ struct args_hipMemGetAllocationGranularity_t {
 struct args_hipGraphClone_t {
 	hipGraph_t * pGraphClone;
 	struct {
-		void* ptr1;
+		hipGraph_t val;
 	} pGraphClone__ref;
 	hipGraph_t originalGraph;
 	hipError_t retval;
@@ -9749,7 +9749,7 @@ struct args_hipGraphClone_t {
 
 #define GET_PTRS_VALUE_hipGraphClone(args) { \
 	if (args->hipGraphClone.pGraphClone != NULL) { \
-		args->hipGraphClone.pGraphClone__ref.ptr1 = *args->hipGraphClone.pGraphClone; \
+		args->hipGraphClone.pGraphClone__ref.val = *args->hipGraphClone.pGraphClone; \
 	} \
 };
 
@@ -10088,7 +10088,7 @@ struct args_hipMemset2D_spt_t {
 struct args_hipDeviceGetDefaultMemPool_t {
 	hipMemPool_t * mem_pool;
 	struct {
-		void* ptr1;
+		hipMemPool_t val;
 	} mem_pool__ref;
 	int device;
 	hipError_t retval;
@@ -10101,7 +10101,7 @@ struct args_hipDeviceGetDefaultMemPool_t {
 
 #define GET_PTRS_VALUE_hipDeviceGetDefaultMemPool(args) { \
 	if (args->hipDeviceGetDefaultMemPool.mem_pool != NULL) { \
-		args->hipDeviceGetDefaultMemPool.mem_pool__ref.ptr1 = *args->hipDeviceGetDefaultMemPool.mem_pool; \
+		args->hipDeviceGetDefaultMemPool.mem_pool__ref.val = *args->hipDeviceGetDefaultMemPool.mem_pool; \
 	} \
 };
 
@@ -10127,7 +10127,7 @@ struct args_hipDeviceGetDefaultMemPool_t {
 struct args_hipCtxCreate_t {
 	hipCtx_t * ctx;
 	struct {
-		void* ptr1;
+		hipCtx_t val;
 	} ctx__ref;
 	unsigned int flags;
 	hipDevice_t device;
@@ -10142,7 +10142,7 @@ struct args_hipCtxCreate_t {
 
 #define GET_PTRS_VALUE_hipCtxCreate(args) { \
 	if (args->hipCtxCreate.ctx != NULL) { \
-		args->hipCtxCreate.ctx__ref.ptr1 = *args->hipCtxCreate.ctx; \
+		args->hipCtxCreate.ctx__ref.val = *args->hipCtxCreate.ctx; \
 	} \
 };
 
@@ -10208,7 +10208,7 @@ struct args_hipStreamUpdateCaptureDependencies_t {
 	hipStream_t stream;
 	hipGraphNode_t * dependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} dependencies__ref;
 	size_t numDependencies;
 	unsigned int flags;
@@ -10224,7 +10224,7 @@ struct args_hipStreamUpdateCaptureDependencies_t {
 
 #define GET_PTRS_VALUE_hipStreamUpdateCaptureDependencies(args) { \
 	if (args->hipStreamUpdateCaptureDependencies.dependencies != NULL) { \
-		args->hipStreamUpdateCaptureDependencies.dependencies__ref.ptr1 = *args->hipStreamUpdateCaptureDependencies.dependencies; \
+		args->hipStreamUpdateCaptureDependencies.dependencies__ref.val = *args->hipStreamUpdateCaptureDependencies.dependencies; \
 	} \
 };
 
@@ -10447,12 +10447,12 @@ struct args_hipMemAddressReserve_t {
 struct args_hipGraphAddMemsetNode_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	hipMemsetParams * pMemsetParams;
@@ -10472,10 +10472,10 @@ struct args_hipGraphAddMemsetNode_t {
 
 #define GET_PTRS_VALUE_hipGraphAddMemsetNode(args) { \
 	if (args->hipGraphAddMemsetNode.pGraphNode != NULL) { \
-		args->hipGraphAddMemsetNode.pGraphNode__ref.ptr1 = *args->hipGraphAddMemsetNode.pGraphNode; \
+		args->hipGraphAddMemsetNode.pGraphNode__ref.val = *args->hipGraphAddMemsetNode.pGraphNode; \
 	} \
 	if (args->hipGraphAddMemsetNode.pDependencies != NULL) { \
-		args->hipGraphAddMemsetNode.pDependencies__ref.ptr1 = *args->hipGraphAddMemsetNode.pDependencies; \
+		args->hipGraphAddMemsetNode.pDependencies__ref.val = *args->hipGraphAddMemsetNode.pDependencies; \
 	} \
 	if (args->hipGraphAddMemsetNode.pMemsetParams != NULL) { \
 		args->hipGraphAddMemsetNode.pMemsetParams__ref.val = *args->hipGraphAddMemsetNode.pMemsetParams; \
@@ -10690,12 +10690,12 @@ struct args_hipModuleLaunchKernel_t {
 struct args_hipGraphAddEmptyNode_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	hipError_t retval;
@@ -10710,10 +10710,10 @@ struct args_hipGraphAddEmptyNode_t {
 
 #define GET_PTRS_VALUE_hipGraphAddEmptyNode(args) { \
 	if (args->hipGraphAddEmptyNode.pGraphNode != NULL) { \
-		args->hipGraphAddEmptyNode.pGraphNode__ref.ptr1 = *args->hipGraphAddEmptyNode.pGraphNode; \
+		args->hipGraphAddEmptyNode.pGraphNode__ref.val = *args->hipGraphAddEmptyNode.pGraphNode; \
 	} \
 	if (args->hipGraphAddEmptyNode.pDependencies != NULL) { \
-		args->hipGraphAddEmptyNode.pDependencies__ref.ptr1 = *args->hipGraphAddEmptyNode.pDependencies; \
+		args->hipGraphAddEmptyNode.pDependencies__ref.val = *args->hipGraphAddEmptyNode.pDependencies; \
 	} \
 };
 
@@ -10777,7 +10777,7 @@ struct args_hipMemRangeGetAttribute_t {
 struct args_hipGraphInstantiateWithFlags_t {
 	hipGraphExec_t * pGraphExec;
 	struct {
-		void* ptr1;
+		hipGraphExec_t val;
 	} pGraphExec__ref;
 	hipGraph_t graph;
 	unsigned long long flags;
@@ -10792,7 +10792,7 @@ struct args_hipGraphInstantiateWithFlags_t {
 
 #define GET_PTRS_VALUE_hipGraphInstantiateWithFlags(args) { \
 	if (args->hipGraphInstantiateWithFlags.pGraphExec != NULL) { \
-		args->hipGraphInstantiateWithFlags.pGraphExec__ref.ptr1 = *args->hipGraphInstantiateWithFlags.pGraphExec; \
+		args->hipGraphInstantiateWithFlags.pGraphExec__ref.val = *args->hipGraphInstantiateWithFlags.pGraphExec; \
 	} \
 };
 
@@ -11147,7 +11147,7 @@ struct args_hipDestroyExternalSemaphore_t {
 struct args_hipIpcOpenEventHandle_t {
 	hipEvent_t * event;
 	struct {
-		void* ptr1;
+		hipEvent_t val;
 	} event__ref;
 	hipIpcEventHandle_t handle;
 	hipError_t retval;
@@ -11160,7 +11160,7 @@ struct args_hipIpcOpenEventHandle_t {
 
 #define GET_PTRS_VALUE_hipIpcOpenEventHandle(args) { \
 	if (args->hipIpcOpenEventHandle.event != NULL) { \
-		args->hipIpcOpenEventHandle.event__ref.ptr1 = *args->hipIpcOpenEventHandle.event; \
+		args->hipIpcOpenEventHandle.event__ref.val = *args->hipIpcOpenEventHandle.event; \
 	} \
 };
 
@@ -11370,12 +11370,12 @@ struct args_amd_dbgapi_get_build_name_t {
 struct args_hipGraphAddMemcpyNodeToSymbol_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	void * symbol;
@@ -11400,10 +11400,10 @@ struct args_hipGraphAddMemcpyNodeToSymbol_t {
 
 #define GET_PTRS_VALUE_hipGraphAddMemcpyNodeToSymbol(args) { \
 	if (args->hipGraphAddMemcpyNodeToSymbol.pGraphNode != NULL) { \
-		args->hipGraphAddMemcpyNodeToSymbol.pGraphNode__ref.ptr1 = *args->hipGraphAddMemcpyNodeToSymbol.pGraphNode; \
+		args->hipGraphAddMemcpyNodeToSymbol.pGraphNode__ref.val = *args->hipGraphAddMemcpyNodeToSymbol.pGraphNode; \
 	} \
 	if (args->hipGraphAddMemcpyNodeToSymbol.pDependencies != NULL) { \
-		args->hipGraphAddMemcpyNodeToSymbol.pDependencies__ref.ptr1 = *args->hipGraphAddMemcpyNodeToSymbol.pDependencies; \
+		args->hipGraphAddMemcpyNodeToSymbol.pDependencies__ref.val = *args->hipGraphAddMemcpyNodeToSymbol.pDependencies; \
 	} \
 };
 
@@ -11678,7 +11678,7 @@ struct args_hipTexRefSetMipmapLevelBias_t {
 struct args_hipMemPoolImportFromShareableHandle_t {
 	hipMemPool_t * mem_pool;
 	struct {
-		void* ptr1;
+		hipMemPool_t val;
 	} mem_pool__ref;
 	void * shared_handle;
 	hipMemAllocationHandleType handle_type;
@@ -11695,7 +11695,7 @@ struct args_hipMemPoolImportFromShareableHandle_t {
 
 #define GET_PTRS_VALUE_hipMemPoolImportFromShareableHandle(args) { \
 	if (args->hipMemPoolImportFromShareableHandle.mem_pool != NULL) { \
-		args->hipMemPoolImportFromShareableHandle.mem_pool__ref.ptr1 = *args->hipMemPoolImportFromShareableHandle.mem_pool; \
+		args->hipMemPoolImportFromShareableHandle.mem_pool__ref.val = *args->hipMemPoolImportFromShareableHandle.mem_pool; \
 	} \
 };
 
@@ -11904,7 +11904,7 @@ struct args_hipGetProcAddress_t {
 struct args_hipCreateTextureObject_t {
 	hipTextureObject_t * pTexObject;
 	struct {
-		void* ptr1;
+		hipTextureObject_t val;
 	} pTexObject__ref;
 	hipResourceDesc * pResDesc;
 	struct {
@@ -11930,7 +11930,7 @@ struct args_hipCreateTextureObject_t {
 
 #define GET_PTRS_VALUE_hipCreateTextureObject(args) { \
 	if (args->hipCreateTextureObject.pTexObject != NULL) { \
-		args->hipCreateTextureObject.pTexObject__ref.ptr1 = *args->hipCreateTextureObject.pTexObject; \
+		args->hipCreateTextureObject.pTexObject__ref.val = *args->hipCreateTextureObject.pTexObject; \
 	} \
 	if (args->hipCreateTextureObject.pResDesc != NULL) { \
 		args->hipCreateTextureObject.pResDesc__ref.val = *args->hipCreateTextureObject.pResDesc; \
@@ -12041,12 +12041,12 @@ struct args_hipTexRefGetFlags_t {
 struct args_hipDrvGraphAddMemcpyNode_t {
 	hipGraphNode_t * phGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} phGraphNode__ref;
 	hipGraph_t hGraph;
 	hipGraphNode_t * dependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} dependencies__ref;
 	size_t numDependencies;
 	HIP_MEMCPY3D * copyParams;
@@ -12068,10 +12068,10 @@ struct args_hipDrvGraphAddMemcpyNode_t {
 
 #define GET_PTRS_VALUE_hipDrvGraphAddMemcpyNode(args) { \
 	if (args->hipDrvGraphAddMemcpyNode.phGraphNode != NULL) { \
-		args->hipDrvGraphAddMemcpyNode.phGraphNode__ref.ptr1 = *args->hipDrvGraphAddMemcpyNode.phGraphNode; \
+		args->hipDrvGraphAddMemcpyNode.phGraphNode__ref.val = *args->hipDrvGraphAddMemcpyNode.phGraphNode; \
 	} \
 	if (args->hipDrvGraphAddMemcpyNode.dependencies != NULL) { \
-		args->hipDrvGraphAddMemcpyNode.dependencies__ref.ptr1 = *args->hipDrvGraphAddMemcpyNode.dependencies; \
+		args->hipDrvGraphAddMemcpyNode.dependencies__ref.val = *args->hipDrvGraphAddMemcpyNode.dependencies; \
 	} \
 	if (args->hipDrvGraphAddMemcpyNode.copyParams != NULL) { \
 		args->hipDrvGraphAddMemcpyNode.copyParams__ref.val = *args->hipDrvGraphAddMemcpyNode.copyParams; \
@@ -12206,7 +12206,7 @@ struct args_hipGraphNodeGetDependencies_t {
 	hipGraphNode_t node;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t * pNumDependencies;
 	struct {
@@ -12223,7 +12223,7 @@ struct args_hipGraphNodeGetDependencies_t {
 
 #define GET_PTRS_VALUE_hipGraphNodeGetDependencies(args) { \
 	if (args->hipGraphNodeGetDependencies.pDependencies != NULL) { \
-		args->hipGraphNodeGetDependencies.pDependencies__ref.ptr1 = *args->hipGraphNodeGetDependencies.pDependencies; \
+		args->hipGraphNodeGetDependencies.pDependencies__ref.val = *args->hipGraphNodeGetDependencies.pDependencies; \
 	} \
 	if (args->hipGraphNodeGetDependencies.pNumDependencies != NULL) { \
 		args->hipGraphNodeGetDependencies.pNumDependencies__ref.val = *args->hipGraphNodeGetDependencies.pNumDependencies; \
@@ -12293,12 +12293,12 @@ struct args_hipMemcpy3D_t {
 struct args_hipGraphAddMemcpyNodeFromSymbol_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	void * dst;
@@ -12323,10 +12323,10 @@ struct args_hipGraphAddMemcpyNodeFromSymbol_t {
 
 #define GET_PTRS_VALUE_hipGraphAddMemcpyNodeFromSymbol(args) { \
 	if (args->hipGraphAddMemcpyNodeFromSymbol.pGraphNode != NULL) { \
-		args->hipGraphAddMemcpyNodeFromSymbol.pGraphNode__ref.ptr1 = *args->hipGraphAddMemcpyNodeFromSymbol.pGraphNode; \
+		args->hipGraphAddMemcpyNodeFromSymbol.pGraphNode__ref.val = *args->hipGraphAddMemcpyNodeFromSymbol.pGraphNode; \
 	} \
 	if (args->hipGraphAddMemcpyNodeFromSymbol.pDependencies != NULL) { \
-		args->hipGraphAddMemcpyNodeFromSymbol.pDependencies__ref.ptr1 = *args->hipGraphAddMemcpyNodeFromSymbol.pDependencies; \
+		args->hipGraphAddMemcpyNodeFromSymbol.pDependencies__ref.val = *args->hipGraphAddMemcpyNodeFromSymbol.pDependencies; \
 	} \
 };
 
@@ -12389,7 +12389,7 @@ struct args_hipStreamGetPriority_spt_t {
 struct args_hipModuleLoadData_t {
 	hipModule_t * module;
 	struct {
-		void* ptr1;
+		hipModule_t val;
 	} module__ref;
 	void * image;
 	hipError_t retval;
@@ -12402,7 +12402,7 @@ struct args_hipModuleLoadData_t {
 
 #define GET_PTRS_VALUE_hipModuleLoadData(args) { \
 	if (args->hipModuleLoadData.module != NULL) { \
-		args->hipModuleLoadData.module__ref.ptr1 = *args->hipModuleLoadData.module; \
+		args->hipModuleLoadData.module__ref.val = *args->hipModuleLoadData.module; \
 	} \
 };
 
@@ -12960,7 +12960,7 @@ struct args_hipGraphGetRootNodes_t {
 	hipGraph_t graph;
 	hipGraphNode_t * pRootNodes;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pRootNodes__ref;
 	size_t * pNumRootNodes;
 	struct {
@@ -12977,7 +12977,7 @@ struct args_hipGraphGetRootNodes_t {
 
 #define GET_PTRS_VALUE_hipGraphGetRootNodes(args) { \
 	if (args->hipGraphGetRootNodes.pRootNodes != NULL) { \
-		args->hipGraphGetRootNodes.pRootNodes__ref.ptr1 = *args->hipGraphGetRootNodes.pRootNodes; \
+		args->hipGraphGetRootNodes.pRootNodes__ref.val = *args->hipGraphGetRootNodes.pRootNodes; \
 	} \
 	if (args->hipGraphGetRootNodes.pNumRootNodes != NULL) { \
 		args->hipGraphGetRootNodes.pNumRootNodes__ref.val = *args->hipGraphGetRootNodes.pNumRootNodes; \
@@ -13438,7 +13438,7 @@ struct args_hipTexObjectGetResourceViewDesc_t {
 struct args_hipEventCreateWithFlags_t {
 	hipEvent_t * event;
 	struct {
-		void* ptr1;
+		hipEvent_t val;
 	} event__ref;
 	unsigned int flags;
 	hipError_t retval;
@@ -13451,7 +13451,7 @@ struct args_hipEventCreateWithFlags_t {
 
 #define GET_PTRS_VALUE_hipEventCreateWithFlags(args) { \
 	if (args->hipEventCreateWithFlags.event != NULL) { \
-		args->hipEventCreateWithFlags.event__ref.ptr1 = *args->hipEventCreateWithFlags.event; \
+		args->hipEventCreateWithFlags.event__ref.val = *args->hipEventCreateWithFlags.event; \
 	} \
 };
 
@@ -13574,12 +13574,12 @@ struct args_hipMemcpy2D_spt_t {
 struct args_hipGraphAddMemcpyNode_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	hipMemcpy3DParms * pCopyParams;
@@ -13599,10 +13599,10 @@ struct args_hipGraphAddMemcpyNode_t {
 
 #define GET_PTRS_VALUE_hipGraphAddMemcpyNode(args) { \
 	if (args->hipGraphAddMemcpyNode.pGraphNode != NULL) { \
-		args->hipGraphAddMemcpyNode.pGraphNode__ref.ptr1 = *args->hipGraphAddMemcpyNode.pGraphNode; \
+		args->hipGraphAddMemcpyNode.pGraphNode__ref.val = *args->hipGraphAddMemcpyNode.pGraphNode; \
 	} \
 	if (args->hipGraphAddMemcpyNode.pDependencies != NULL) { \
-		args->hipGraphAddMemcpyNode.pDependencies__ref.ptr1 = *args->hipGraphAddMemcpyNode.pDependencies; \
+		args->hipGraphAddMemcpyNode.pDependencies__ref.val = *args->hipGraphAddMemcpyNode.pDependencies; \
 	} \
 	if (args->hipGraphAddMemcpyNode.pCopyParams != NULL) { \
 		args->hipGraphAddMemcpyNode.pCopyParams__ref.val = *args->hipGraphAddMemcpyNode.pCopyParams; \
@@ -13765,12 +13765,12 @@ struct args_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t {
 struct args_hipGraphAddMemFreeNode_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	void * dev_ptr;
@@ -13787,10 +13787,10 @@ struct args_hipGraphAddMemFreeNode_t {
 
 #define GET_PTRS_VALUE_hipGraphAddMemFreeNode(args) { \
 	if (args->hipGraphAddMemFreeNode.pGraphNode != NULL) { \
-		args->hipGraphAddMemFreeNode.pGraphNode__ref.ptr1 = *args->hipGraphAddMemFreeNode.pGraphNode; \
+		args->hipGraphAddMemFreeNode.pGraphNode__ref.val = *args->hipGraphAddMemFreeNode.pGraphNode; \
 	} \
 	if (args->hipGraphAddMemFreeNode.pDependencies != NULL) { \
-		args->hipGraphAddMemFreeNode.pDependencies__ref.ptr1 = *args->hipGraphAddMemFreeNode.pDependencies; \
+		args->hipGraphAddMemFreeNode.pDependencies__ref.val = *args->hipGraphAddMemFreeNode.pDependencies; \
 	} \
 };
 
@@ -14106,7 +14106,7 @@ struct args_hipTexRefGetAddress_t {
 struct args_hipTexObjectCreate_t {
 	hipTextureObject_t * pTexObject;
 	struct {
-		void* ptr1;
+		hipTextureObject_t val;
 	} pTexObject__ref;
 	HIP_RESOURCE_DESC * pResDesc;
 	struct {
@@ -14132,7 +14132,7 @@ struct args_hipTexObjectCreate_t {
 
 #define GET_PTRS_VALUE_hipTexObjectCreate(args) { \
 	if (args->hipTexObjectCreate.pTexObject != NULL) { \
-		args->hipTexObjectCreate.pTexObject__ref.ptr1 = *args->hipTexObjectCreate.pTexObject; \
+		args->hipTexObjectCreate.pTexObject__ref.val = *args->hipTexObjectCreate.pTexObject; \
 	} \
 	if (args->hipTexObjectCreate.pResDesc != NULL) { \
 		args->hipTexObjectCreate.pResDesc__ref.val = *args->hipTexObjectCreate.pResDesc; \
@@ -14274,12 +14274,12 @@ struct args_hipMemPoolGetAttribute_t {
 struct args_hipGraphAddMemAllocNode_t {
 	hipGraphNode_t * pGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pGraphNode__ref;
 	hipGraph_t graph;
 	hipGraphNode_t * pDependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} pDependencies__ref;
 	size_t numDependencies;
 	hipMemAllocNodeParams * pNodeParams;
@@ -14299,10 +14299,10 @@ struct args_hipGraphAddMemAllocNode_t {
 
 #define GET_PTRS_VALUE_hipGraphAddMemAllocNode(args) { \
 	if (args->hipGraphAddMemAllocNode.pGraphNode != NULL) { \
-		args->hipGraphAddMemAllocNode.pGraphNode__ref.ptr1 = *args->hipGraphAddMemAllocNode.pGraphNode; \
+		args->hipGraphAddMemAllocNode.pGraphNode__ref.val = *args->hipGraphAddMemAllocNode.pGraphNode; \
 	} \
 	if (args->hipGraphAddMemAllocNode.pDependencies != NULL) { \
-		args->hipGraphAddMemAllocNode.pDependencies__ref.ptr1 = *args->hipGraphAddMemAllocNode.pDependencies; \
+		args->hipGraphAddMemAllocNode.pDependencies__ref.val = *args->hipGraphAddMemAllocNode.pDependencies; \
 	} \
 	if (args->hipGraphAddMemAllocNode.pNodeParams != NULL) { \
 		args->hipGraphAddMemAllocNode.pNodeParams__ref.val = *args->hipGraphAddMemAllocNode.pNodeParams; \
@@ -14330,7 +14330,7 @@ struct args_hipGraphAddMemAllocNode_t {
 struct args_hipMemRetainAllocationHandle_t {
 	hipMemGenericAllocationHandle_t * handle;
 	struct {
-		void* ptr1;
+		hipMemGenericAllocationHandle_t val;
 	} handle__ref;
 	void * addr;
 	hipError_t retval;
@@ -14343,7 +14343,7 @@ struct args_hipMemRetainAllocationHandle_t {
 
 #define GET_PTRS_VALUE_hipMemRetainAllocationHandle(args) { \
 	if (args->hipMemRetainAllocationHandle.handle != NULL) { \
-		args->hipMemRetainAllocationHandle.handle__ref.ptr1 = *args->hipMemRetainAllocationHandle.handle; \
+		args->hipMemRetainAllocationHandle.handle__ref.val = *args->hipMemRetainAllocationHandle.handle; \
 	} \
 };
 
@@ -14368,7 +14368,7 @@ struct args_hipMemRetainAllocationHandle_t {
 struct args_hipGetFuncBySymbol_t {
 	hipFunction_t * functionPtr;
 	struct {
-		void* ptr1;
+		hipFunction_t val;
 	} functionPtr__ref;
 	void * symbolPtr;
 	hipError_t retval;
@@ -14381,7 +14381,7 @@ struct args_hipGetFuncBySymbol_t {
 
 #define GET_PTRS_VALUE_hipGetFuncBySymbol(args) { \
 	if (args->hipGetFuncBySymbol.functionPtr != NULL) { \
-		args->hipGetFuncBySymbol.functionPtr__ref.ptr1 = *args->hipGetFuncBySymbol.functionPtr; \
+		args->hipGetFuncBySymbol.functionPtr__ref.val = *args->hipGetFuncBySymbol.functionPtr; \
 	} \
 };
 
@@ -15085,7 +15085,7 @@ struct args_hipGetSymbolSize_t {
 struct args_hipMipmappedArrayGetLevel_t {
 	hipArray_t * pLevelArray;
 	struct {
-		void* ptr1;
+		hipArray_t val;
 	} pLevelArray__ref;
 	struct hipMipmappedArray * hMipMappedArray;
 	struct {
@@ -15103,7 +15103,7 @@ struct args_hipMipmappedArrayGetLevel_t {
 
 #define GET_PTRS_VALUE_hipMipmappedArrayGetLevel(args) { \
 	if (args->hipMipmappedArrayGetLevel.pLevelArray != NULL) { \
-		args->hipMipmappedArrayGetLevel.pLevelArray__ref.ptr1 = *args->hipMipmappedArrayGetLevel.pLevelArray; \
+		args->hipMipmappedArrayGetLevel.pLevelArray__ref.val = *args->hipMipmappedArrayGetLevel.pLevelArray; \
 	} \
 	if (args->hipMipmappedArrayGetLevel.hMipMappedArray != NULL) { \
 		args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val = *args->hipMipmappedArrayGetLevel.hMipMappedArray; \
@@ -15226,7 +15226,7 @@ struct args_hipGraphExecMemcpyNodeSetParams_t {
 struct args_hipUserObjectCreate_t {
 	hipUserObject_t * object_out;
 	struct {
-		void* ptr1;
+		hipUserObject_t val;
 	} object_out__ref;
 	void * ptr;
 	hipHostFn_t destroy;
@@ -15245,7 +15245,7 @@ struct args_hipUserObjectCreate_t {
 
 #define GET_PTRS_VALUE_hipUserObjectCreate(args) { \
 	if (args->hipUserObjectCreate.object_out != NULL) { \
-		args->hipUserObjectCreate.object_out__ref.ptr1 = *args->hipUserObjectCreate.object_out; \
+		args->hipUserObjectCreate.object_out__ref.val = *args->hipUserObjectCreate.object_out; \
 	} \
 };
 
@@ -15283,12 +15283,12 @@ struct args_hipStreamGetCaptureInfo_v2_t {
 	} id_out__ref;
 	hipGraph_t * graph_out;
 	struct {
-		void* ptr1;
+		hipGraph_t val;
 	} graph_out__ref;
 	hipGraphNode_t ** dependencies_out;
 	struct {
 		void* ptr1;
-		void* ptr2;
+		hipGraphNode_t val;
 	} dependencies_out__ref;
 	size_t * numDependencies_out;
 	struct {
@@ -15314,12 +15314,12 @@ struct args_hipStreamGetCaptureInfo_v2_t {
 		args->hipStreamGetCaptureInfo_v2.id_out__ref.val = *args->hipStreamGetCaptureInfo_v2.id_out; \
 	} \
 	if (args->hipStreamGetCaptureInfo_v2.graph_out != NULL) { \
-		args->hipStreamGetCaptureInfo_v2.graph_out__ref.ptr1 = *args->hipStreamGetCaptureInfo_v2.graph_out; \
+		args->hipStreamGetCaptureInfo_v2.graph_out__ref.val = *args->hipStreamGetCaptureInfo_v2.graph_out; \
 	} \
 	if (args->hipStreamGetCaptureInfo_v2.dependencies_out != NULL) { \
 		args->hipStreamGetCaptureInfo_v2.dependencies_out__ref.ptr1 = *args->hipStreamGetCaptureInfo_v2.dependencies_out; \
 		if (args->hipStreamGetCaptureInfo_v2.dependencies_out__ref.ptr1 != NULL) { \
-			args->hipStreamGetCaptureInfo_v2.dependencies_out__ref.ptr2 = **args->hipStreamGetCaptureInfo_v2.dependencies_out; \
+			args->hipStreamGetCaptureInfo_v2.dependencies_out__ref.val = **args->hipStreamGetCaptureInfo_v2.dependencies_out; \
 		} \
 	} \
 	if (args->hipStreamGetCaptureInfo_v2.numDependencies_out != NULL) { \
@@ -15348,7 +15348,7 @@ struct args_hipStreamGetCaptureInfo_v2_t {
 struct args_hipTexRefGetArray_t {
 	hipArray_t * pArray;
 	struct {
-		void* ptr1;
+		hipArray_t val;
 	} pArray__ref;
 	textureReference * texRef;
 	struct {
@@ -15364,7 +15364,7 @@ struct args_hipTexRefGetArray_t {
 
 #define GET_PTRS_VALUE_hipTexRefGetArray(args) { \
 	if (args->hipTexRefGetArray.pArray != NULL) { \
-		args->hipTexRefGetArray.pArray__ref.ptr1 = *args->hipTexRefGetArray.pArray; \
+		args->hipTexRefGetArray.pArray__ref.val = *args->hipTexRefGetArray.pArray; \
 	} \
 	if (args->hipTexRefGetArray.texRef != NULL) { \
 		args->hipTexRefGetArray.texRef__ref.val = *args->hipTexRefGetArray.texRef; \
@@ -15814,12 +15814,12 @@ struct args_hipStreamGetCaptureInfo_v2_spt_t {
 	} id_out__ref;
 	hipGraph_t * graph_out;
 	struct {
-		void* ptr1;
+		hipGraph_t val;
 	} graph_out__ref;
 	hipGraphNode_t ** dependencies_out;
 	struct {
 		void* ptr1;
-		void* ptr2;
+		hipGraphNode_t val;
 	} dependencies_out__ref;
 	size_t * numDependencies_out;
 	struct {
@@ -15845,12 +15845,12 @@ struct args_hipStreamGetCaptureInfo_v2_spt_t {
 		args->hipStreamGetCaptureInfo_v2_spt.id_out__ref.val = *args->hipStreamGetCaptureInfo_v2_spt.id_out; \
 	} \
 	if (args->hipStreamGetCaptureInfo_v2_spt.graph_out != NULL) { \
-		args->hipStreamGetCaptureInfo_v2_spt.graph_out__ref.ptr1 = *args->hipStreamGetCaptureInfo_v2_spt.graph_out; \
+		args->hipStreamGetCaptureInfo_v2_spt.graph_out__ref.val = *args->hipStreamGetCaptureInfo_v2_spt.graph_out; \
 	} \
 	if (args->hipStreamGetCaptureInfo_v2_spt.dependencies_out != NULL) { \
 		args->hipStreamGetCaptureInfo_v2_spt.dependencies_out__ref.ptr1 = *args->hipStreamGetCaptureInfo_v2_spt.dependencies_out; \
 		if (args->hipStreamGetCaptureInfo_v2_spt.dependencies_out__ref.ptr1 != NULL) { \
-			args->hipStreamGetCaptureInfo_v2_spt.dependencies_out__ref.ptr2 = **args->hipStreamGetCaptureInfo_v2_spt.dependencies_out; \
+			args->hipStreamGetCaptureInfo_v2_spt.dependencies_out__ref.val = **args->hipStreamGetCaptureInfo_v2_spt.dependencies_out; \
 		} \
 	} \
 	if (args->hipStreamGetCaptureInfo_v2_spt.numDependencies_out != NULL) { \
@@ -15965,11 +15965,11 @@ struct args_hipGraphAddDependencies_t {
 	hipGraph_t graph;
 	hipGraphNode_t * from;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} from__ref;
 	hipGraphNode_t * to;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} to__ref;
 	size_t numDependencies;
 	hipError_t retval;
@@ -15984,10 +15984,10 @@ struct args_hipGraphAddDependencies_t {
 
 #define GET_PTRS_VALUE_hipGraphAddDependencies(args) { \
 	if (args->hipGraphAddDependencies.from != NULL) { \
-		args->hipGraphAddDependencies.from__ref.ptr1 = *args->hipGraphAddDependencies.from; \
+		args->hipGraphAddDependencies.from__ref.val = *args->hipGraphAddDependencies.from; \
 	} \
 	if (args->hipGraphAddDependencies.to != NULL) { \
-		args->hipGraphAddDependencies.to__ref.ptr1 = *args->hipGraphAddDependencies.to; \
+		args->hipGraphAddDependencies.to__ref.val = *args->hipGraphAddDependencies.to; \
 	} \
 };
 
@@ -16285,12 +16285,12 @@ struct args_hipHostGetFlags_t {
 struct args_hipDrvGraphAddMemsetNode_t {
 	hipGraphNode_t * phGraphNode;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} phGraphNode__ref;
 	hipGraph_t hGraph;
 	hipGraphNode_t * dependencies;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} dependencies__ref;
 	size_t numDependencies;
 	HIP_MEMSET_NODE_PARAMS * memsetParams;
@@ -16312,10 +16312,10 @@ struct args_hipDrvGraphAddMemsetNode_t {
 
 #define GET_PTRS_VALUE_hipDrvGraphAddMemsetNode(args) { \
 	if (args->hipDrvGraphAddMemsetNode.phGraphNode != NULL) { \
-		args->hipDrvGraphAddMemsetNode.phGraphNode__ref.ptr1 = *args->hipDrvGraphAddMemsetNode.phGraphNode; \
+		args->hipDrvGraphAddMemsetNode.phGraphNode__ref.val = *args->hipDrvGraphAddMemsetNode.phGraphNode; \
 	} \
 	if (args->hipDrvGraphAddMemsetNode.dependencies != NULL) { \
-		args->hipDrvGraphAddMemsetNode.dependencies__ref.ptr1 = *args->hipDrvGraphAddMemsetNode.dependencies; \
+		args->hipDrvGraphAddMemsetNode.dependencies__ref.val = *args->hipDrvGraphAddMemsetNode.dependencies; \
 	} \
 	if (args->hipDrvGraphAddMemsetNode.memsetParams != NULL) { \
 		args->hipDrvGraphAddMemsetNode.memsetParams__ref.val = *args->hipDrvGraphAddMemsetNode.memsetParams; \
@@ -16378,7 +16378,7 @@ struct args_hipMemcpyAtoD_t {
 struct args_hipMemPoolCreate_t {
 	hipMemPool_t * mem_pool;
 	struct {
-		void* ptr1;
+		hipMemPool_t val;
 	} mem_pool__ref;
 	hipMemPoolProps * pool_props;
 	struct {
@@ -16394,7 +16394,7 @@ struct args_hipMemPoolCreate_t {
 
 #define GET_PTRS_VALUE_hipMemPoolCreate(args) { \
 	if (args->hipMemPoolCreate.mem_pool != NULL) { \
-		args->hipMemPoolCreate.mem_pool__ref.ptr1 = *args->hipMemPoolCreate.mem_pool; \
+		args->hipMemPoolCreate.mem_pool__ref.val = *args->hipMemPoolCreate.mem_pool; \
 	} \
 	if (args->hipMemPoolCreate.pool_props != NULL) { \
 		args->hipMemPoolCreate.pool_props__ref.val = *args->hipMemPoolCreate.pool_props; \
@@ -16775,7 +16775,7 @@ struct args_hipCtxSetSharedMemConfig_t {
 struct args_hipCreateSurfaceObject_t {
 	hipSurfaceObject_t * pSurfObject;
 	struct {
-		void* ptr1;
+		hipSurfaceObject_t val;
 	} pSurfObject__ref;
 	hipResourceDesc * pResDesc;
 	struct {
@@ -16791,7 +16791,7 @@ struct args_hipCreateSurfaceObject_t {
 
 #define GET_PTRS_VALUE_hipCreateSurfaceObject(args) { \
 	if (args->hipCreateSurfaceObject.pSurfObject != NULL) { \
-		args->hipCreateSurfaceObject.pSurfObject__ref.ptr1 = *args->hipCreateSurfaceObject.pSurfObject; \
+		args->hipCreateSurfaceObject.pSurfObject__ref.val = *args->hipCreateSurfaceObject.pSurfObject; \
 	} \
 	if (args->hipCreateSurfaceObject.pResDesc != NULL) { \
 		args->hipCreateSurfaceObject.pResDesc__ref.val = *args->hipCreateSurfaceObject.pResDesc; \
@@ -16820,7 +16820,7 @@ struct args_hipCreateSurfaceObject_t {
 struct args_hipGetMipmappedArrayLevel_t {
 	hipArray_t * levelArray;
 	struct {
-		void* ptr1;
+		hipArray_t val;
 	} levelArray__ref;
 	struct hipMipmappedArray * mipmappedArray;
 	struct {
@@ -16838,7 +16838,7 @@ struct args_hipGetMipmappedArrayLevel_t {
 
 #define GET_PTRS_VALUE_hipGetMipmappedArrayLevel(args) { \
 	if (args->hipGetMipmappedArrayLevel.levelArray != NULL) { \
-		args->hipGetMipmappedArrayLevel.levelArray__ref.ptr1 = *args->hipGetMipmappedArrayLevel.levelArray; \
+		args->hipGetMipmappedArrayLevel.levelArray__ref.val = *args->hipGetMipmappedArrayLevel.levelArray; \
 	} \
 	if (args->hipGetMipmappedArrayLevel.mipmappedArray != NULL) { \
 		args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val = *args->hipGetMipmappedArrayLevel.mipmappedArray; \
@@ -16956,7 +16956,7 @@ struct args_hipDeviceEnablePeerAccess_t {
 struct args_hipArray3DCreate_t {
 	hipArray_t * array;
 	struct {
-		void* ptr1;
+		hipArray_t val;
 	} array__ref;
 	HIP_ARRAY3D_DESCRIPTOR * pAllocateArray;
 	struct {
@@ -16972,7 +16972,7 @@ struct args_hipArray3DCreate_t {
 
 #define GET_PTRS_VALUE_hipArray3DCreate(args) { \
 	if (args->hipArray3DCreate.array != NULL) { \
-		args->hipArray3DCreate.array__ref.ptr1 = *args->hipArray3DCreate.array; \
+		args->hipArray3DCreate.array__ref.val = *args->hipArray3DCreate.array; \
 	} \
 	if (args->hipArray3DCreate.pAllocateArray != NULL) { \
 		args->hipArray3DCreate.pAllocateArray__ref.val = *args->hipArray3DCreate.pAllocateArray; \
@@ -17210,7 +17210,7 @@ struct args_hipGraphicsMapResources_t {
 	int count;
 	hipGraphicsResource_t * resources;
 	struct {
-		void* ptr1;
+		hipGraphicsResource_t val;
 	} resources__ref;
 	hipStream_t stream;
 	hipError_t retval;
@@ -17224,7 +17224,7 @@ struct args_hipGraphicsMapResources_t {
 
 #define GET_PTRS_VALUE_hipGraphicsMapResources(args) { \
 	if (args->hipGraphicsMapResources.resources != NULL) { \
-		args->hipGraphicsMapResources.resources__ref.ptr1 = *args->hipGraphicsMapResources.resources; \
+		args->hipGraphicsMapResources.resources__ref.val = *args->hipGraphicsMapResources.resources; \
 	} \
 };
 
@@ -17249,7 +17249,7 @@ struct args_hipGraphicsMapResources_t {
 struct args_hipArrayCreate_t {
 	hipArray_t * pHandle;
 	struct {
-		void* ptr1;
+		hipArray_t val;
 	} pHandle__ref;
 	HIP_ARRAY_DESCRIPTOR * pAllocateArray;
 	struct {
@@ -17265,7 +17265,7 @@ struct args_hipArrayCreate_t {
 
 #define GET_PTRS_VALUE_hipArrayCreate(args) { \
 	if (args->hipArrayCreate.pHandle != NULL) { \
-		args->hipArrayCreate.pHandle__ref.ptr1 = *args->hipArrayCreate.pHandle; \
+		args->hipArrayCreate.pHandle__ref.val = *args->hipArrayCreate.pHandle; \
 	} \
 	if (args->hipArrayCreate.pAllocateArray != NULL) { \
 		args->hipArrayCreate.pAllocateArray__ref.val = *args->hipArrayCreate.pAllocateArray; \
@@ -17470,7 +17470,7 @@ struct args_hipTexRefSetMipmapFilterMode_t {
 struct args_hipMemImportFromShareableHandle_t {
 	hipMemGenericAllocationHandle_t * handle;
 	struct {
-		void* ptr1;
+		hipMemGenericAllocationHandle_t val;
 	} handle__ref;
 	void * osHandle;
 	hipMemAllocationHandleType shHandleType;
@@ -17485,7 +17485,7 @@ struct args_hipMemImportFromShareableHandle_t {
 
 #define GET_PTRS_VALUE_hipMemImportFromShareableHandle(args) { \
 	if (args->hipMemImportFromShareableHandle.handle != NULL) { \
-		args->hipMemImportFromShareableHandle.handle__ref.ptr1 = *args->hipMemImportFromShareableHandle.handle; \
+		args->hipMemImportFromShareableHandle.handle__ref.val = *args->hipMemImportFromShareableHandle.handle; \
 	} \
 };
 
@@ -18066,11 +18066,11 @@ struct args_hipGraphGetEdges_t {
 	hipGraph_t graph;
 	hipGraphNode_t * from;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} from__ref;
 	hipGraphNode_t * to;
 	struct {
-		void* ptr1;
+		hipGraphNode_t val;
 	} to__ref;
 	size_t * numEdges;
 	struct {
@@ -18088,10 +18088,10 @@ struct args_hipGraphGetEdges_t {
 
 #define GET_PTRS_VALUE_hipGraphGetEdges(args) { \
 	if (args->hipGraphGetEdges.from != NULL) { \
-		args->hipGraphGetEdges.from__ref.ptr1 = *args->hipGraphGetEdges.from; \
+		args->hipGraphGetEdges.from__ref.val = *args->hipGraphGetEdges.from; \
 	} \
 	if (args->hipGraphGetEdges.to != NULL) { \
-		args->hipGraphGetEdges.to__ref.ptr1 = *args->hipGraphGetEdges.to; \
+		args->hipGraphGetEdges.to__ref.val = *args->hipGraphGetEdges.to; \
 	} \
 	if (args->hipGraphGetEdges.numEdges != NULL) { \
 		args->hipGraphGetEdges.numEdges__ref.val = *args->hipGraphGetEdges.numEdges; \
