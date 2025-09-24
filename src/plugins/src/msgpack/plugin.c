@@ -50,15 +50,13 @@ static bool encode_location(ratelprof_source_data_t *loc, void *user_data) {
     msgpack_buffer_t* buf = (msgpack_buffer_t*) user_data;
     if (loc->addr) {
         msgpack_encode_uint(buf, (uintptr_t)loc->addr);
-        msgpack_encode_map(buf, 4);
+        msgpack_encode_map(buf, 3);
         msgpack_encode_string_ext(buf, "ofile");
         msgpack_encode_string_ext(buf, loc->object_file ? loc->object_file : "<unknown>");
-        msgpack_encode_string_ext(buf, "sfile");
-        msgpack_encode_string_ext(buf, loc->filename ? loc->filename : "<unknown>");
+        msgpack_encode_string_ext(buf, "source");
+        msgpack_encode_string_ext(buf, loc->source ? loc->source : "<unknown>");
         msgpack_encode_string_ext(buf, "sfun");
         msgpack_encode_string_ext(buf, loc->func ? demangle(loc->func, 1) : "<unknown>");
-        msgpack_encode_string_ext(buf, "sline");
-        msgpack_encode_uint(buf, loc->line);
     }
     return false;
 }

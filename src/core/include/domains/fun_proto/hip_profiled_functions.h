@@ -8,912 +8,2266 @@
 
 #include "hip/hip_runtime.h" 
 
-// HIP API Function Prototype
-hipError_t i_hipMemPtrGetInfo(void * ptr, size_t * size, void* return_address);
-hipError_t i_hipGraphExecMemcpyNodeSetParams1D(hipGraphExec_t hGraphExec, hipGraphNode_t node, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipCtxEnablePeerAccess(hipCtx_t peerCtx, unsigned int flags, void* return_address);
-hipError_t i_hipHostUnregister(void * hostPtr, void* return_address);
-hipError_t i_hipDevicePrimaryCtxGetState(hipDevice_t dev, unsigned int * flags, int * active, void* return_address);
-hipError_t i_hipPointerGetAttribute(void * data, hipPointer_attribute attribute, hipDeviceptr_t ptr, void* return_address);
-hipError_t i_hipMemPoolGetAccess(hipMemAccessFlags * flags, hipMemPool_t mem_pool, hipMemLocation * location, void* return_address);
-hipError_t i_hipMemsetD32(hipDeviceptr_t dest, int value, size_t count, void* return_address);
-hipError_t i_hipTexRefGetMipMappedArray(hipMipmappedArray_t * pArray, const textureReference * texRef, void* return_address);
-hipError_t i_hipMalloc3D(hipPitchedPtr * pitchedDevPtr, hipExtent extent, void* return_address);
-hipError_t i_hipMemsetD8(hipDeviceptr_t dest, unsigned char value, size_t count, void* return_address);
-hipError_t i_hipMallocArray(hipArray_t * array, const hipChannelFormatDesc * desc, size_t width, size_t height, unsigned int flags, void* return_address);
-hipError_t i_hipGraphEventWaitNodeGetEvent(hipGraphNode_t node, hipEvent_t * event_out, void* return_address);
-hipError_t i_hipDrvMemcpy3D(const HIP_MEMCPY3D * pCopy, void* return_address);
-hipError_t i_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(int * numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags, void* return_address);
-hipError_t i_hipHostMalloc(void ** ptr, size_t size, unsigned int flags, void* return_address);
-hipError_t i_hipModuleGetTexRef(textureReference ** texRef, hipModule_t hmod, const char * name, void* return_address);
-hipError_t i_hipIpcGetMemHandle(hipIpcMemHandle_t * handle, void * devPtr, void* return_address);
-hipError_t i_hipMemcpyDtoHAsync(void * dst, hipDeviceptr_t src, size_t sizeBytes, hipStream_t stream, void* return_address);
-hipError_t i_hipModuleLoad(hipModule_t * module, const char * fname, void* return_address);
-hipError_t i_hipWaitExternalSemaphoresAsync(const hipExternalSemaphore_t * extSemArray, const hipExternalSemaphoreWaitParams * paramsArray, unsigned int numExtSems, hipStream_t stream, void* return_address);
-hipError_t i_hipGraphKernelNodeGetParams(hipGraphNode_t node, hipKernelNodeParams * pNodeParams, void* return_address);
-hipError_t i_hipGraphLaunch(hipGraphExec_t graphExec, hipStream_t stream, void* return_address);
-hipError_t i_hipHostAlloc(void ** ptr, size_t size, unsigned int flags, void* return_address);
-hipError_t i_hipSetDevice(int deviceId, void* return_address);
-hipError_t i_hipModuleOccupancyMaxPotentialBlockSizeWithFlags(int * gridSize, int * blockSize, hipFunction_t f, size_t dynSharedMemPerBlk, int blockSizeLimit, unsigned int flags, void* return_address);
-hipError_t i_hipGraphNodeGetDependentNodes(hipGraphNode_t node, hipGraphNode_t * pDependentNodes, size_t * pNumDependentNodes, void* return_address);
-hipError_t i_hipExtStreamGetCUMask(hipStream_t stream, uint32_t cuMaskSize, uint32_t * cuMask, void* return_address);
-hipError_t i_hipMemsetD16(hipDeviceptr_t dest, unsigned short value, size_t count, void* return_address);
-hipError_t i_hipLaunchKernel(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, void* return_address);
-const char * i_hipGetErrorString(hipError_t hipError, void* return_address);
-hipError_t i_hipModuleLoadDataEx(hipModule_t * module, const void * image, unsigned int numOptions, hipJitOption * options, void ** optionValues, void* return_address);
-hipError_t i_hipTexRefGetFilterMode(enum hipTextureFilterMode * pfm, const textureReference * texRef, void* return_address);
-hipError_t i_hipGraphInstantiateWithParams(hipGraphExec_t * pGraphExec, hipGraph_t graph, hipGraphInstantiateParams * instantiateParams, void* return_address);
-hipError_t i_hipGraphMemcpyNodeSetParams1D(hipGraphNode_t node, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipStreamSynchronize(hipStream_t stream, void* return_address);
-hipError_t i_hipGraphicsUnmapResources(int count, hipGraphicsResource_t * resources, hipStream_t stream, void* return_address);
-hipError_t i_hipMemcpy2DFromArray_spt(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipGraphExecMemcpyNodeSetParamsFromSymbol(hipGraphExec_t hGraphExec, hipGraphNode_t node, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipTexRefGetMipmapLevelBias(float * pbias, const textureReference * texRef, void* return_address);
-hipError_t i_hipGraphAddExternalSemaphoresSignalNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address);
-hipError_t i_hipExtGetLastError(void* return_address);
-hipError_t i_hipMemMapArrayAsync(hipArrayMapInfo * mapInfoList, unsigned int count, hipStream_t stream, void* return_address);
-hipError_t i_hipMemcpyAsync(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-hipError_t i_hipGraphKernelNodeSetAttribute(hipGraphNode_t hNode, hipLaunchAttributeID attr, const hipLaunchAttributeValue * value, void* return_address);
-hipError_t i_hipDrvMemcpy2DUnaligned(const hip_Memcpy2D * pCopy, void* return_address);
-hipError_t i_hipMemPoolDestroy(hipMemPool_t mem_pool, void* return_address);
-hipError_t i_hipGraphRemoveDependencies(hipGraph_t graph, const hipGraphNode_t * from, const hipGraphNode_t * to, size_t numDependencies, void* return_address);
-hipError_t i_hipGraphCreate(hipGraph_t * pGraph, unsigned int flags, void* return_address);
-hipError_t i_hipExtLaunchMultiKernelMultiDevice(hipLaunchParams * launchParamsList, int numDevices, unsigned int flags, void* return_address);
-hipError_t i_hipGetDeviceCount(int * count, void* return_address);
-hipError_t i_hipMemUnmap(void * ptr, size_t size, void* return_address);
-hipError_t i_hipTexObjectGetResourceDesc(HIP_RESOURCE_DESC * pResDesc, hipTextureObject_t texObject, void* return_address);
-hipError_t i_hipGraphExecEventRecordNodeSetEvent(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, hipEvent_t event, void* return_address);
-hipError_t i_hipInit(unsigned int flags, void* return_address);
-hipError_t i_hipThreadExchangeStreamCaptureMode(hipStreamCaptureMode * mode, void* return_address);
-hipError_t i_hipDeviceGetP2PAttribute(int * value, hipDeviceP2PAttr attr, int srcDevice, int dstDevice, void* return_address);
-hipError_t i_hipDeviceGetByPCIBusId(int * device, const char * pciBusId, void* return_address);
-hipError_t i_hipHostFree(void * ptr, void* return_address);
-hipError_t i_hipExtGetLinkTypeAndHopCount(int device1, int device2, uint32_t * linktype, uint32_t * hopcount, void* return_address);
-hipError_t i_hipMemcpyToSymbolAsync_spt(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-hipError_t i_hipCtxDisablePeerAccess(hipCtx_t peerCtx, void* return_address);
-hipError_t i_hipSetupArgument(const void * arg, size_t size, size_t offset, void* return_address);
-hipError_t i_hipMemcpyAtoHAsync(void * dstHost, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, hipStream_t stream, void* return_address);
-hipError_t i_hipCtxSetCacheConfig(hipFuncCache_t cacheConfig, void* return_address);
-hipError_t i_hipMemRelease(hipMemGenericAllocationHandle_t handle, void* return_address);
-hipError_t i_hipUnbindTexture(const textureReference * tex, void* return_address);
-hipError_t i_hipDrvMemcpy3DAsync(const HIP_MEMCPY3D * pCopy, hipStream_t stream, void* return_address);
-hipError_t i_hipIpcGetEventHandle(hipIpcEventHandle_t * handle, hipEvent_t event, void* return_address);
-hipError_t i_hipGraphReleaseUserObject(hipGraph_t graph, hipUserObject_t object, unsigned int count, void* return_address);
-hipError_t i_hipDeviceGetMemPool(hipMemPool_t * mem_pool, int device, void* return_address);
-hipError_t i_hipGraphHostNodeSetParams(hipGraphNode_t node, const hipHostNodeParams * pNodeParams, void* return_address);
-hipError_t i_hipGraphAddEventWaitNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipEvent_t event, void* return_address);
-hipError_t i_hipMemcpy2DFromArrayAsync_spt(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-hipError_t i_hipLaunchHostFunc_spt(hipStream_t stream, hipHostFn_t fn, void * userData, void* return_address);
-hipError_t i_hipStreamWaitEvent_spt(hipStream_t stream, hipEvent_t event, unsigned int flags, void* return_address);
-hipError_t i_hipArrayGetDescriptor(HIP_ARRAY_DESCRIPTOR * pArrayDescriptor, hipArray_t array, void* return_address);
-hipError_t i_hipGraphExecUpdate(hipGraphExec_t hGraphExec, hipGraph_t hGraph, hipGraphNode_t * hErrorNode_out, hipGraphExecUpdateResult * updateResult_out, void* return_address);
-hipError_t i_hipMemGetAllocationPropertiesFromHandle(hipMemAllocationProp * prop, hipMemGenericAllocationHandle_t handle, void* return_address);
-hipError_t i_hipMemcpyWithStream(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-hipError_t i_hipGraphAddExternalSemaphoresWaitNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address);
-hipError_t i_hipMemcpyAtoH(void * dst, hipArray_t srcArray, size_t srcOffset, size_t count, void* return_address);
-hipError_t i_hipStreamQuery(hipStream_t stream, void* return_address);
-hipError_t i_hipIpcCloseMemHandle(void * devPtr, void* return_address);
-hipError_t i_hipMemsetAsync(void * dst, int value, size_t sizeBytes, hipStream_t stream, void* return_address);
-hipError_t i_hipMemcpyDtoD(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes, void* return_address);
-hipError_t i_hipModuleUnload(hipModule_t module, void* return_address);
-hipError_t i_hipGetDevicePropertiesR0600(hipDeviceProp_tR0600 * prop, int deviceId, void* return_address);
-hipError_t i_hipMemcpyFromArray(void * dst, hipArray_const_t srcArray, size_t wOffset, size_t hOffset, size_t count, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipDeviceCanAccessPeer(int * canAccessPeer, int deviceId, int peerDeviceId, void* return_address);
-hipError_t i_hipMemSetAccess(void * ptr, size_t size, const hipMemAccessDesc * desc, size_t count, void* return_address);
-hipError_t i_hipStreamWaitValue32(hipStream_t stream, void * ptr, uint32_t value, unsigned int flags, uint32_t mask, void* return_address);
-const char * i_hipApiName(uint32_t id, void* return_address);
-hipError_t i_hipGraphicsSubResourceGetMappedArray(hipArray_t * array, hipGraphicsResource_t resource, unsigned int arrayIndex, unsigned int mipLevel, void* return_address);
-hipError_t i_hipMemcpy2DToArrayAsync(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-hipError_t i_hipGraphDestroy(hipGraph_t graph, void* return_address);
-hipError_t i_hipTexRefGetBorderColor(float * pBorderColor, const textureReference * texRef, void* return_address);
-hipError_t i_hipGraphAddMemcpyNode1D(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipGraphGetNodes(hipGraph_t graph, hipGraphNode_t * nodes, size_t * numNodes, void* return_address);
-hipError_t i_hipStreamGetFlags_spt(hipStream_t stream, unsigned int * flags, void* return_address);
-hipError_t i_hipTexRefSetAddress2D(textureReference * texRef, const HIP_ARRAY_DESCRIPTOR * desc, hipDeviceptr_t dptr, size_t Pitch, void* return_address);
-hipError_t i_hipStreamGetPriority(hipStream_t stream, int * priority, void* return_address);
-hipError_t i_hipStreamCreate(hipStream_t * stream, void* return_address);
-hipError_t i_hipMemcpyFromSymbol(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipGraphNodeGetEnabled(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, unsigned int * isEnabled, void* return_address);
-struct hipChannelFormatDesc i_hipCreateChannelDesc(int x, int y, int z, int w, enum hipChannelFormatKind f, void* return_address);
-hipError_t i_hipFreeMipmappedArray(hipMipmappedArray_t mipmappedArray, void* return_address);
-hipError_t i_hipGetTextureAlignmentOffset(size_t * offset, const textureReference * texref, void* return_address);
-hipError_t i_hipGraphAddEventRecordNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipEvent_t event, void* return_address);
-hipError_t i_hipGraphNodeFindInClone(hipGraphNode_t * pNode, hipGraphNode_t originalNode, hipGraph_t clonedGraph, void* return_address);
-hipError_t i_hipMemcpyFromSymbol_spt(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipMemset3DAsync_spt(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, hipStream_t stream, void* return_address);
-hipError_t i_hipMemsetD16Async(hipDeviceptr_t dest, unsigned short value, size_t count, hipStream_t stream, void* return_address);
-hipError_t i_hipDeviceGetCacheConfig(hipFuncCache_t * cacheConfig, void* return_address);
-hipError_t i_hipMemCreate(hipMemGenericAllocationHandle_t * handle, size_t size, const hipMemAllocationProp * prop, unsigned long long flags, void* return_address);
-hipError_t i_hipGraphExternalSemaphoresWaitNodeGetParams(hipGraphNode_t hNode, hipExternalSemaphoreWaitNodeParams * params_out, void* return_address);
-hipError_t i_hipStreamEndCapture(hipStream_t stream, hipGraph_t * pGraph, void* return_address);
-hipError_t i_hipMemcpyFromSymbolAsync_spt(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-hipError_t i_hipMemcpyHtoA(hipArray_t dstArray, size_t dstOffset, const void * srcHost, size_t count, void* return_address);
-hipError_t i_hipGraphExecHostNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipHostNodeParams * pNodeParams, void* return_address);
-hipError_t i_hipMalloc(void ** ptr, size_t size, void* return_address);
-hipError_t i_hipMalloc3DArray(hipArray_t * array, const struct hipChannelFormatDesc * desc, struct hipExtent extent, unsigned int flags, void* return_address);
-hipError_t i_hipGraphExecKernelNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipKernelNodeParams * pNodeParams, void* return_address);
-hipError_t i_hipGetTextureObjectResourceDesc(hipResourceDesc * pResDesc, hipTextureObject_t textureObject, void* return_address);
-hipError_t i___hipPushCallConfiguration(dim3 gridDim, dim3 blockDim, size_t sharedMem, hipStream_t stream, void* return_address);
-hipError_t i_hipMemcpy3DAsync_spt(const hipMemcpy3DParms * p, hipStream_t stream, void* return_address);
-hipError_t i_hipMemsetD8Async(hipDeviceptr_t dest, unsigned char value, size_t count, hipStream_t stream, void* return_address);
-hipError_t i_hipStreamAddCallback(hipStream_t stream, hipStreamCallback_t callback, void * userData, unsigned int flags, void* return_address);
-hipError_t i_hipMemPoolImportPointer(void ** dev_ptr, hipMemPool_t mem_pool, hipMemPoolPtrExportData * export_data, void* return_address);
-hipError_t i_hipFuncGetAttributes(struct hipFuncAttributes * attr, const void * func, void* return_address);
-hipError_t i_hipCtxGetCurrent(hipCtx_t * ctx, void* return_address);
-hipError_t i_hipGraphAddChildGraphNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipGraph_t childGraph, void* return_address);
-hipError_t i_hipEventCreate(hipEvent_t * event, void* return_address);
-hipError_t i_hipHostGetDevicePointer(void ** devPtr, void * hstPtr, unsigned int flags, void* return_address);
-hipError_t i_hipEventQuery(hipEvent_t event, void* return_address);
-hipError_t i_hipMemcpyPeerAsync(void * dst, int dstDeviceId, const void * src, int srcDevice, size_t sizeBytes, hipStream_t stream, void* return_address);
-hipError_t i_hipMemMap(void * ptr, size_t size, size_t offset, hipMemGenericAllocationHandle_t handle, unsigned long long flags, void* return_address);
-hipError_t i_hipBindTextureToArray(const textureReference * tex, hipArray_const_t array, const hipChannelFormatDesc * desc, void* return_address);
-hipError_t i_hipMemcpy2DAsync_spt(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-hipError_t i_hipMemPoolSetAttribute(hipMemPool_t mem_pool, hipMemPoolAttr attr, void * value, void* return_address);
-hipError_t i_hipGetLastError(void* return_address);
-hipError_t i_hipStreamEndCapture_spt(hipStream_t stream, hipGraph_t * pGraph, void* return_address);
-hipError_t i_hipModuleOccupancyMaxPotentialBlockSize(int * gridSize, int * blockSize, hipFunction_t f, size_t dynSharedMemPerBlk, int blockSizeLimit, void* return_address);
-const char * i_hipKernelNameRefByPtr(const void * hostFunction, hipStream_t stream, void* return_address);
-hipError_t i_hipGetDevice(int * deviceId, void* return_address);
-hipError_t i_hipMemcpy3D_spt(const struct hipMemcpy3DParms * p, void* return_address);
-hipError_t i_hipTexObjectGetTextureDesc(HIP_TEXTURE_DESC * pTexDesc, hipTextureObject_t texObject, void* return_address);
-hipError_t i_hipDeviceGet(hipDevice_t * device, int ordinal, void* return_address);
-hipError_t i_hipGraphExternalSemaphoresSignalNodeSetParams(hipGraphNode_t hNode, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address);
-hipError_t i_hipDestroySurfaceObject(hipSurfaceObject_t surfaceObject, void* return_address);
-hipError_t i_hipStreamGetDevice(hipStream_t stream, hipDevice_t * device, void* return_address);
-hipError_t i_hipMemAllocPitch(hipDeviceptr_t * dptr, size_t * pitch, size_t widthInBytes, size_t height, unsigned int elementSizeBytes, void* return_address);
-hipError_t i_hipGraphAddNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipGraphNodeParams * nodeParams, void* return_address);
-hipError_t i_hipDeviceSetSharedMemConfig(hipSharedMemConfig config, void* return_address);
-hipError_t i_hipRuntimeGetVersion(int * runtimeVersion, void* return_address);
-hipError_t i_hipGraphChildGraphNodeGetGraph(hipGraphNode_t node, hipGraph_t * pGraph, void* return_address);
-hipError_t i_hipGraphExecMemsetNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipMemsetParams * pNodeParams, void* return_address);
-hipError_t i_hipGraphicsUnregisterResource(hipGraphicsResource_t resource, void* return_address);
-hipError_t i_hipEventElapsedTime(float * ms, hipEvent_t start, hipEvent_t stop, void* return_address);
-hipError_t i_hipFreeAsync(void * dev_ptr, hipStream_t stream, void* return_address);
-hipError_t i_hipStreamCreateWithFlags(hipStream_t * stream, unsigned int flags, void* return_address);
-hipError_t i_hipTexRefSetAddress(size_t * ByteOffset, textureReference * texRef, hipDeviceptr_t dptr, size_t bytes, void* return_address);
-hipError_t i_hipStreamAddCallback_spt(hipStream_t stream, hipStreamCallback_t callback, void * userData, unsigned int flags, void* return_address);
-hipError_t i_hipGraphAddKernelNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipKernelNodeParams * pNodeParams, void* return_address);
-hipError_t i_hipMemcpyDtoH(void * dst, hipDeviceptr_t src, size_t sizeBytes, void* return_address);
-hipError_t i_hipDeviceTotalMem(size_t * bytes, hipDevice_t device, void* return_address);
-hipError_t i_hipMemset2D(void * dst, size_t pitch, int value, size_t width, size_t height, void* return_address);
-hipError_t i_hipMemcpy2DToArray_spt(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipMemAllocHost(void ** ptr, size_t size, void* return_address);
-hipError_t i_hipPointerSetAttribute(const void * value, hipPointer_attribute attribute, hipDeviceptr_t ptr, void* return_address);
-hipError_t i_hipGraphHostNodeGetParams(hipGraphNode_t node, hipHostNodeParams * pNodeParams, void* return_address);
-hipError_t i_hipMemset3D(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, void* return_address);
-hipError_t i_hipDestroyTextureObject(hipTextureObject_t textureObject, void* return_address);
-hipError_t i_hipMemAdvise(const void * dev_ptr, size_t count, hipMemoryAdvise advice, int device, void* return_address);
-hipError_t i_hipCtxGetCacheConfig(hipFuncCache_t * cacheConfig, void* return_address);
-hipError_t i_hipDrvPointerGetAttributes(unsigned int numAttributes, hipPointer_attribute * attributes, void ** data, hipDeviceptr_t ptr, void* return_address);
-hipError_t i_hipModuleLaunchCooperativeKernelMultiDevice(hipFunctionLaunchParams * launchParamsList, unsigned int numDevices, unsigned int flags, void* return_address);
-hipError_t i_hipModuleGetGlobal(hipDeviceptr_t * dptr, size_t * bytes, hipModule_t hmod, const char * name, void* return_address);
-hipError_t i_hipGraphEventRecordNodeGetEvent(hipGraphNode_t node, hipEvent_t * event_out, void* return_address);
-hipError_t i_hipGraphInstantiate(hipGraphExec_t * pGraphExec, hipGraph_t graph, hipGraphNode_t * pErrorNode, char * pLogBuffer, size_t bufferSize, void* return_address);
-hipError_t i_hipGraphRetainUserObject(hipGraph_t graph, hipUserObject_t object, unsigned int count, unsigned int flags, void* return_address);
-hipError_t i_hipGraphMemAllocNodeGetParams(hipGraphNode_t node, hipMemAllocNodeParams * pNodeParams, void* return_address);
-hipError_t i_hipStreamGetCaptureInfo(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, unsigned long long * pId, void* return_address);
-hipError_t i_hipCtxPopCurrent(hipCtx_t * ctx, void* return_address);
-hipError_t i_hipPointerGetAttributes(hipPointerAttribute_t * attributes, const void * ptr, void* return_address);
-hipError_t i_hipDeviceDisablePeerAccess(int peerDeviceId, void* return_address);
-hipError_t i_hipMallocPitch(void ** ptr, size_t * pitch, size_t width, size_t height, void* return_address);
-hipError_t i_hipMemcpy2DFromArrayAsync(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-hipError_t i_hipDeviceComputeCapability(int * major, int * minor, hipDevice_t device, void* return_address);
-hipError_t i_hipMemcpyHtoD(hipDeviceptr_t dst, void * src, size_t sizeBytes, void* return_address);
-hipError_t i_hipOccupancyMaxActiveBlocksPerMultiprocessor(int * numBlocks, const void * f, int blockSize, size_t dynSharedMemPerBlk, void* return_address);
-hipError_t i_hipSignalExternalSemaphoresAsync(const hipExternalSemaphore_t * extSemArray, const hipExternalSemaphoreSignalParams * paramsArray, unsigned int numExtSems, hipStream_t stream, void* return_address);
-hipError_t i_hipArray3DGetDescriptor(HIP_ARRAY3D_DESCRIPTOR * pArrayDescriptor, hipArray_t array, void* return_address);
-hipError_t i___hipPopCallConfiguration(dim3 * gridDim, dim3 * blockDim, size_t * sharedMem, hipStream_t * stream, void* return_address);
-hipError_t i_hipDevicePrimaryCtxRelease(hipDevice_t dev, void* return_address);
-hipError_t i_hipLaunchCooperativeKernelMultiDevice(hipLaunchParams * launchParamsList, int numDevices, unsigned int flags, void* return_address);
-hipError_t i_hipFreeArray(hipArray_t array, void* return_address);
-hipError_t i_hipGraphMemsetNodeSetParams(hipGraphNode_t node, const hipMemsetParams * pNodeParams, void* return_address);
-hipError_t i_hipMemPoolSetAccess(hipMemPool_t mem_pool, const hipMemAccessDesc * desc_list, size_t count, void* return_address);
-int i_hipGetStreamDeviceId(hipStream_t stream, void* return_address);
-hipError_t i_hipExtStreamCreateWithCUMask(hipStream_t * stream, uint32_t cuMaskSize, const uint32_t * cuMask, void* return_address);
-hipError_t i_hipGetTextureObjectTextureDesc(hipTextureDesc * pTexDesc, hipTextureObject_t textureObject, void* return_address);
-hipError_t i_hipEventRecord_spt(hipEvent_t event, hipStream_t stream, void* return_address);
-hipError_t i_hipConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, hipStream_t stream, void* return_address);
-hipError_t i_hipMemcpyFromArray_spt(void * dst, hipArray_const_t src, size_t wOffsetSrc, size_t hOffset, size_t count, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipModuleGetFunction(hipFunction_t * function, hipModule_t module, const char * kname, void* return_address);
-hipError_t i_hipFuncSetCacheConfig(const void * func, hipFuncCache_t config, void* return_address);
-hipError_t i_hipDeviceGetLimit(size_t * pValue, enum hipLimit_t limit, void* return_address);
-hipError_t i_hipTexRefGetMaxAnisotropy(int * pmaxAnsio, const textureReference * texRef, void* return_address);
-hipError_t i_hipLaunchKernel_spt(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, void* return_address);
-hipError_t i_hipStreamBeginCaptureToGraph(hipStream_t stream, hipGraph_t graph, const hipGraphNode_t * dependencies, const hipGraphEdgeData * dependencyData, size_t numDependencies, hipStreamCaptureMode mode, void* return_address);
-hipError_t i_hipTexRefGetFormat(hipArray_Format * pFormat, int * pNumChannels, const textureReference * texRef, void* return_address);
-hipError_t i_hipStreamWaitValue64(hipStream_t stream, void * ptr, uint64_t value, unsigned int flags, uint64_t mask, void* return_address);
-hipError_t i_hipDevicePrimaryCtxRetain(hipCtx_t * pctx, hipDevice_t dev, void* return_address);
-hipError_t i_hipMallocManaged(void ** dev_ptr, size_t size, unsigned int flags, void* return_address);
-hipError_t i_hipStreamCreateWithPriority(hipStream_t * stream, unsigned int flags, int priority, void* return_address);
-hipError_t i_hipStreamGetCaptureInfo_spt(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, unsigned long long * pId, void* return_address);
-hipError_t i_hipGraphAddHostNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipHostNodeParams * pNodeParams, void* return_address);
-hipError_t i_hipLaunchCooperativeKernel(const void * f, dim3 gridDim, dim3 blockDimX, void ** kernelParams, unsigned int sharedMemBytes, hipStream_t stream, void* return_address);
-hipError_t i_hipHostRegister(void * hostPtr, size_t sizeBytes, unsigned int flags, void* return_address);
-const char * i_hipGetErrorName(hipError_t hip_error, void* return_address);
-hipError_t i_hipMemcpyToSymbol_spt(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipGraphMemsetNodeGetParams(hipGraphNode_t node, hipMemsetParams * pNodeParams, void* return_address);
-hipError_t i_hipStreamWriteValue32(hipStream_t stream, void * ptr, uint32_t value, unsigned int flags, void* return_address);
-hipError_t i_hipStreamSynchronize_spt(hipStream_t stream, void* return_address);
-hipError_t i_hipDeviceGraphMemTrim(int device, void* return_address);
-hipError_t i_hipStreamDestroy(hipStream_t stream, void* return_address);
-hipError_t i_hipTexRefSetArray(textureReference * tex, hipArray_const_t array, unsigned int flags, void* return_address);
-hipError_t i_hipMemcpyParam2DAsync(const hip_Memcpy2D * pCopy, hipStream_t stream, void* return_address);
-hipError_t i_hipMemPoolExportPointer(hipMemPoolPtrExportData * export_data, void * dev_ptr, void* return_address);
-hipError_t i_hipGraphEventRecordNodeSetEvent(hipGraphNode_t node, hipEvent_t event, void* return_address);
-hipError_t i_hipCtxDestroy(hipCtx_t ctx, void* return_address);
-hipError_t i_hipArrayDestroy(hipArray_t array, void* return_address);
-hipError_t i_hipMemGetAllocationGranularity(size_t * granularity, const hipMemAllocationProp * prop, hipMemAllocationGranularity_flags option, void* return_address);
-hipError_t i_hipGraphClone(hipGraph_t * pGraphClone, hipGraph_t originalGraph, void* return_address);
-hipError_t i_hipMemset2DAsync_spt(void * dst, size_t pitch, int value, size_t width, size_t height, hipStream_t stream, void* return_address);
-hipError_t i_hipBindTexture2D(size_t * offset, const textureReference * tex, const void * devPtr, const hipChannelFormatDesc * desc, size_t width, size_t height, size_t pitch, void* return_address);
-hipError_t i_hipArrayGetInfo(hipChannelFormatDesc * desc, hipExtent * extent, unsigned int * flags, hipArray_t array, void* return_address);
-hipError_t i_hipGraphExternalSemaphoresSignalNodeGetParams(hipGraphNode_t hNode, hipExternalSemaphoreSignalNodeParams * params_out, void* return_address);
-hipError_t i_hipDeviceGetStreamPriorityRange(int * leastPriority, int * greatestPriority, void* return_address);
-hipError_t i_hipGraphExecChildGraphNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, hipGraph_t childGraph, void* return_address);
-hipError_t i_hipMemset2D_spt(void * dst, size_t pitch, int value, size_t width, size_t height, void* return_address);
-hipError_t i_hipDeviceGetDefaultMemPool(hipMemPool_t * mem_pool, int device, void* return_address);
-hipError_t i_hipCtxCreate(hipCtx_t * ctx, unsigned int flags, hipDevice_t device, void* return_address);
-hipError_t i_hipStreamIsCapturing(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, void* return_address);
-hipError_t i_hipStreamUpdateCaptureDependencies(hipStream_t stream, hipGraphNode_t * dependencies, size_t numDependencies, unsigned int flags, void* return_address);
-hipError_t i_hipDeviceSynchronize(void* return_address);
-hipError_t i_hipMemcpyFromSymbolAsync(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-hipError_t i_hipGraphDestroyNode(hipGraphNode_t node, void* return_address);
-hipError_t i_hipUserObjectRetain(hipUserObject_t object, unsigned int count, void* return_address);
-hipError_t i_hipGraphExecEventWaitNodeSetEvent(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, hipEvent_t event, void* return_address);
-hipError_t i_hipMemAddressReserve(void ** ptr, size_t size, size_t alignment, void * addr, unsigned long long flags, void* return_address);
-hipError_t i_hipGraphAddMemsetNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipMemsetParams * pMemsetParams, void* return_address);
-hipError_t i_hipGraphicsResourceGetMappedPointer(void ** devPtr, size_t * size, hipGraphicsResource_t resource, void* return_address);
-hipError_t i_hipStreamBeginCapture_spt(hipStream_t stream, hipStreamCaptureMode mode, void* return_address);
-hipError_t i_hipDeviceGetUuid(hipUUID * uuid, hipDevice_t device, void* return_address);
-hipError_t i_hipModuleLaunchKernel(hipFunction_t f, unsigned int gridDimX, unsigned int gridDimY, unsigned int gridDimZ, unsigned int blockDimX, unsigned int blockDimY, unsigned int blockDimZ, unsigned int sharedMemBytes, hipStream_t stream, void ** kernelParams, void ** extra, void* return_address);
-hipError_t i_hipGraphAddEmptyNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void* return_address);
-hipError_t i_hipMemRangeGetAttribute(void * data, size_t data_size, hipMemRangeAttribute attribute, const void * dev_ptr, size_t count, void* return_address);
-hipError_t i_hipGraphInstantiateWithFlags(hipGraphExec_t * pGraphExec, hipGraph_t graph, unsigned long long flags, void* return_address);
-hipError_t i_hipCtxPushCurrent(hipCtx_t ctx, void* return_address);
-hipError_t i_hipCtxGetApiVersion(hipCtx_t ctx, int * apiVersion, void* return_address);
-hipError_t i_hipBindTexture(size_t * offset, const textureReference * tex, const void * devPtr, const hipChannelFormatDesc * desc, size_t size, void* return_address);
-hipError_t i_hipStreamBeginCapture(hipStream_t stream, hipStreamCaptureMode mode, void* return_address);
-hipError_t i_hipProfilerStart(void* return_address);
-hipError_t i_hipMemcpyHtoDAsync(hipDeviceptr_t dst, void * src, size_t sizeBytes, hipStream_t stream, void* return_address);
-hipError_t i_hipGetDeviceFlags(unsigned int * flags, void* return_address);
-hipError_t i_hipMemRangeGetAttributes(void ** data, size_t * data_sizes, hipMemRangeAttribute * attributes, size_t num_attributes, const void * dev_ptr, size_t count, void* return_address);
-hipError_t i_hipDestroyExternalSemaphore(hipExternalSemaphore_t extSem, void* return_address);
-hipError_t i_hipIpcOpenEventHandle(hipEvent_t * event, hipIpcEventHandle_t handle, void* return_address);
-hipError_t i_hipGraphUpload(hipGraphExec_t graphExec, hipStream_t stream, void* return_address);
-hipError_t i_hipMallocAsync(void ** dev_ptr, size_t size, hipStream_t stream, void* return_address);
-hipError_t i_hipOccupancyMaxPotentialBlockSize(int * gridSize, int * blockSize, const void * f, size_t dynSharedMemPerBlk, int blockSizeLimit, void* return_address);
-hipError_t i_hipDestroyExternalMemory(hipExternalMemory_t extMem, void* return_address);
-const char * i_amd_dbgapi_get_build_name(void* return_address);
-hipError_t i_hipGraphAddMemcpyNodeToSymbol(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipDeviceGetPCIBusId(char * pciBusId, int len, int device, void* return_address);
-hipError_t i_hipGetChannelDesc(hipChannelFormatDesc * desc, hipArray_const_t array, void* return_address);
-hipError_t i_hipDevicePrimaryCtxReset(hipDevice_t dev, void* return_address);
-hipError_t i_hipImportExternalMemory(hipExternalMemory_t * extMem_out, const hipExternalMemoryHandleDesc * memHandleDesc, void* return_address);
-hipError_t i_hipFuncSetSharedMemConfig(const void * func, hipSharedMemConfig config, void* return_address);
-hipError_t i_hipStreamWaitEvent(hipStream_t stream, hipEvent_t event, unsigned int flags, void* return_address);
-hipError_t i_hipTexRefSetMipmapLevelBias(textureReference * texRef, float bias, void* return_address);
-hipError_t i_hipMemPoolImportFromShareableHandle(hipMemPool_t * mem_pool, void * shared_handle, hipMemAllocationHandleType handle_type, unsigned int flags, void* return_address);
-hipError_t i_hipMemPoolExportToShareableHandle(void * shared_handle, hipMemPool_t mem_pool, hipMemAllocationHandleType handle_type, unsigned int flags, void* return_address);
-hipError_t i_hipGraphExecMemcpyNodeSetParamsToSymbol(hipGraphExec_t hGraphExec, hipGraphNode_t node, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipTexRefGetMipmapFilterMode(enum hipTextureFilterMode * pfm, const textureReference * texRef, void* return_address);
-hipError_t i_hipGetProcAddress(const char * symbol, void ** pfn, int hipVersion, uint64_t flags, hipDriverProcAddressQueryResult * symbolStatus, void* return_address);
-hipError_t i_hipCreateTextureObject(hipTextureObject_t * pTexObject, const hipResourceDesc * pResDesc, const hipTextureDesc * pTexDesc, const struct hipResourceViewDesc * pResViewDesc, void* return_address);
-hipError_t i_hipGraphKernelNodeCopyAttributes(hipGraphNode_t hSrc, hipGraphNode_t hDst, void* return_address);
-hipError_t i_hipTexRefGetFlags(unsigned int * pFlags, const textureReference * texRef, void* return_address);
-hipError_t i_hipDrvGraphAddMemcpyNode(hipGraphNode_t * phGraphNode, hipGraph_t hGraph, const hipGraphNode_t * dependencies, size_t numDependencies, const HIP_MEMCPY3D * copyParams, hipCtx_t ctx, void* return_address);
-hipError_t i_hipMemExportToShareableHandle(void * shareableHandle, hipMemGenericAllocationHandle_t handle, hipMemAllocationHandleType handleType, unsigned long long flags, void* return_address);
-hipError_t i_hipGraphLaunch_spt(hipGraphExec_t graphExec, hipStream_t stream, void* return_address);
-hipError_t i_hipGraphMemcpyNodeSetParamsFromSymbol(hipGraphNode_t node, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipGraphNodeGetDependencies(hipGraphNode_t node, hipGraphNode_t * pDependencies, size_t * pNumDependencies, void* return_address);
-hipError_t i_hipMemcpy3D(const struct hipMemcpy3DParms * p, void* return_address);
-hipError_t i_hipGraphAddMemcpyNodeFromSymbol(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipStreamGetPriority_spt(hipStream_t stream, int * priority, void* return_address);
-hipError_t i_hipModuleLoadData(hipModule_t * module, const void * image, void* return_address);
-hipError_t i_hipSetDeviceFlags(unsigned int flags, void* return_address);
-hipError_t i_hipExternalMemoryGetMappedBuffer(void ** devPtr, hipExternalMemory_t extMem, const hipExternalMemoryBufferDesc * bufferDesc, void* return_address);
-hipError_t i_hipLaunchCooperativeKernel_spt(const void * f, dim3 gridDim, dim3 blockDim, void ** kernelParams, uint32_t sharedMemBytes, hipStream_t hStream, void* return_address);
-hipError_t i_hipLaunchHostFunc(hipStream_t stream, hipHostFn_t fn, void * userData, void* return_address);
-hipError_t i_hipMemcpyAsync_spt(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-hipError_t i_hipMemcpyPeer(void * dst, int dstDeviceId, const void * src, int srcDeviceId, size_t sizeBytes, void* return_address);
-hipError_t i_hipDeviceReset(void* return_address);
-hipError_t i_hipMemAddressFree(void * devPtr, size_t size, void* return_address);
-hipError_t i_hipProfilerStop(void* return_address);
-hipError_t i_hipGraphEventWaitNodeSetEvent(hipGraphNode_t node, hipEvent_t event, void* return_address);
-hipError_t i_hipModuleLaunchCooperativeKernel(hipFunction_t f, unsigned int gridDimX, unsigned int gridDimY, unsigned int gridDimZ, unsigned int blockDimX, unsigned int blockDimY, unsigned int blockDimZ, unsigned int sharedMemBytes, hipStream_t stream, void ** kernelParams, void* return_address);
-hipError_t i_hipDeviceGetName(char * name, int len, hipDevice_t device, void* return_address);
-hipError_t i_hipGraphNodeSetEnabled(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, unsigned int isEnabled, void* return_address);
-hipError_t i_hipTexRefSetAddressMode(textureReference * texRef, int dim, enum hipTextureAddressMode am, void* return_address);
-hipError_t i_hipEventSynchronize(hipEvent_t event, void* return_address);
-hipError_t i_hipGraphGetRootNodes(hipGraph_t graph, hipGraphNode_t * pRootNodes, size_t * pNumRootNodes, void* return_address);
-hipError_t i_hipMemcpy2DFromArray(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipGraphExternalSemaphoresWaitNodeSetParams(hipGraphNode_t hNode, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address);
-hipError_t i_hipMemcpyDtoA(hipArray_t dstArray, size_t dstOffset, hipDeviceptr_t srcDevice, size_t ByteCount, void* return_address);
-hipError_t i_hipGraphMemcpyNodeGetParams(hipGraphNode_t node, hipMemcpy3DParms * pNodeParams, void* return_address);
-hipError_t i_hipMemcpy(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipSetValidDevices(int * device_arr, int len, void* return_address);
-hipError_t i_hipMemcpy2DAsync(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-hipError_t i_hipGraphExecExternalSemaphoresWaitNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address);
-hipError_t i_hipStreamAttachMemAsync(hipStream_t stream, void * dev_ptr, size_t length, unsigned int flags, void* return_address);
-hipError_t i_hipMemset2DAsync(void * dst, size_t pitch, int value, size_t width, size_t height, hipStream_t stream, void* return_address);
-hipError_t i_hipTexObjectGetResourceViewDesc(HIP_RESOURCE_VIEW_DESC * pResViewDesc, hipTextureObject_t texObject, void* return_address);
-hipError_t i_hipEventCreateWithFlags(hipEvent_t * event, unsigned int flags, void* return_address);
-hipError_t i_hipMipmappedArrayCreate(hipMipmappedArray_t * pHandle, HIP_ARRAY3D_DESCRIPTOR * pMipmappedArrayDesc, unsigned int numMipmapLevels, void* return_address);
-hipError_t i_hipMemcpy2D_spt(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipGraphAddMemcpyNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipMemcpy3DParms * pCopyParams, void* return_address);
-hipError_t i_hipMemcpyToSymbolAsync(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-hipError_t i_hipMallocFromPoolAsync(void ** dev_ptr, size_t size, hipMemPool_t mem_pool, hipStream_t stream, void* return_address);
-hipError_t i_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(int * numBlocks, const void * f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags, void* return_address);
-hipError_t i_hipGraphAddMemFreeNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dev_ptr, void* return_address);
-hipError_t i_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor(int * numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk, void* return_address);
-hipError_t i_hipEventDestroy(hipEvent_t event, void* return_address);
-hipError_t i_hipDeviceSetCacheConfig(hipFuncCache_t cacheConfig, void* return_address);
-hipError_t i_hipFree(void * ptr, void* return_address);
-hipError_t i_hipMemcpy2DToArrayAsync_spt(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-hipError_t i_hipCtxGetFlags(unsigned int * flags, void* return_address);
-hipError_t i_hipGetSymbolAddress(void ** devPtr, const void * symbol, void* return_address);
-hipError_t i_hipTexRefGetAddress(hipDeviceptr_t * dev_ptr, const textureReference * texRef, void* return_address);
-hipError_t i_hipTexObjectCreate(hipTextureObject_t * pTexObject, const HIP_RESOURCE_DESC * pResDesc, const HIP_TEXTURE_DESC * pTexDesc, const HIP_RESOURCE_VIEW_DESC * pResViewDesc, void* return_address);
-hipError_t i_hipDeviceGetSharedMemConfig(hipSharedMemConfig * pConfig, void* return_address);
-hipError_t i_hipMemcpyHtoAAsync(hipArray_t dstArray, size_t dstOffset, const void * srcHost, size_t ByteCount, hipStream_t stream, void* return_address);
-hipError_t i_hipMemPoolGetAttribute(hipMemPool_t mem_pool, hipMemPoolAttr attr, void * value, void* return_address);
-hipError_t i_hipGraphAddMemAllocNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipMemAllocNodeParams * pNodeParams, void* return_address);
-hipError_t i_hipMemRetainAllocationHandle(hipMemGenericAllocationHandle_t * handle, void * addr, void* return_address);
-hipError_t i_hipGetFuncBySymbol(hipFunction_t * functionPtr, const void * symbolPtr, void* return_address);
-hipError_t i_hipDeviceSetMemPool(int device, hipMemPool_t mem_pool, void* return_address);
-hipError_t i_hipDeviceSetLimit(enum hipLimit_t limit, size_t value, void* return_address);
-hipError_t i_hipMemGetInfo(size_t * free, size_t * total, void* return_address);
-hipError_t i_hipMemcpyParam2D(const hip_Memcpy2D * pCopy, void* return_address);
-hipError_t i_hipGraphDebugDotPrint(hipGraph_t graph, const char * path, unsigned int flags, void* return_address);
-hipError_t i_hipDeviceSetGraphMemAttribute(int device, hipGraphMemAttributeType attr, void * value, void* return_address);
-hipError_t i_hipDrvGetErrorString(hipError_t hipError, const char ** errorString, void* return_address);
-hipError_t i_hipMemcpyDtoDAsync(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes, hipStream_t stream, void* return_address);
-hipError_t i_hipCtxSynchronize(void* return_address);
-hipError_t i_hipTexObjectDestroy(hipTextureObject_t texObject, void* return_address);
-hipError_t i_hipTexRefGetAddressMode(enum hipTextureAddressMode * pam, const textureReference * texRef, int dim, void* return_address);
-void i___hipGetPCH(const char ** pch, unsigned int * size, void* return_address);
-hipError_t i_hipStreamGetFlags(hipStream_t stream, unsigned int * flags, void* return_address);
-hipError_t i_hipMemGetAccess(unsigned long long * flags, const hipMemLocation * location, void * ptr, void* return_address);
-hipError_t i_hipMemcpyAtoA(hipArray_t dstArray, size_t dstOffset, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, void* return_address);
-hipError_t i_hipMemcpyToSymbol(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipCtxSetCurrent(hipCtx_t ctx, void* return_address);
-hipError_t i_hipStreamQuery_spt(hipStream_t stream, void* return_address);
-hipError_t i_hipGetSymbolSize(size_t * size, const void * symbol, void* return_address);
-hipError_t i_hipMipmappedArrayGetLevel(hipArray_t * pLevelArray, hipMipmappedArray_t hMipMappedArray, unsigned int level, void* return_address);
-hipError_t i_hipExternalMemoryGetMappedMipmappedArray(hipMipmappedArray_t * mipmap, hipExternalMemory_t extMem, const hipExternalMemoryMipmappedArrayDesc * mipmapDesc, void* return_address);
-hipError_t i_hipGraphExecMemcpyNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, hipMemcpy3DParms * pNodeParams, void* return_address);
-hipError_t i_hipUserObjectCreate(hipUserObject_t * object_out, void * ptr, hipHostFn_t destroy, unsigned int initialRefcount, unsigned int flags, void* return_address);
-hipError_t i_hipStreamGetCaptureInfo_v2(hipStream_t stream, hipStreamCaptureStatus * captureStatus_out, unsigned long long * id_out, hipGraph_t * graph_out, const hipGraphNode_t ** dependencies_out, size_t * numDependencies_out, void* return_address);
-hipError_t i_hipTexRefGetArray(hipArray_t * pArray, const textureReference * texRef, void* return_address);
-hipError_t i_hipImportExternalSemaphore(hipExternalSemaphore_t * extSem_out, const hipExternalSemaphoreHandleDesc * semHandleDesc, void* return_address);
-hipError_t i_hipDeviceGetAttribute(int * pi, hipDeviceAttribute_t attr, int deviceId, void* return_address);
-hipError_t i_hipGraphMemFreeNodeGetParams(hipGraphNode_t node, void * dev_ptr, void* return_address);
-hipError_t i_hipCtxGetSharedMemConfig(hipSharedMemConfig * pConfig, void* return_address);
-hipError_t i_hipGraphMemcpyNodeSetParamsToSymbol(hipGraphNode_t node, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipMemcpy2DToArray(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipStreamIsCapturing_spt(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, void* return_address);
-hipError_t i_hipFreeHost(void * ptr, void* return_address);
-hipError_t i_hipGraphKernelNodeSetParams(hipGraphNode_t node, const hipKernelNodeParams * pNodeParams, void* return_address);
-hipError_t i_hipMallocHost(void ** ptr, size_t size, void* return_address);
-hipError_t i_hipMemset3D_spt(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, void* return_address);
-hipError_t i_hipStreamGetCaptureInfo_v2_spt(hipStream_t stream, hipStreamCaptureStatus * captureStatus_out, unsigned long long * id_out, hipGraph_t * graph_out, const hipGraphNode_t ** dependencies_out, size_t * numDependencies_out, void* return_address);
-hipError_t i_hipGetTextureReference(const textureReference ** texref, const void * symbol, void* return_address);
-hipError_t i_hipGraphExecExternalSemaphoresSignalNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address);
-hipError_t i_hipGraphAddDependencies(hipGraph_t graph, const hipGraphNode_t * from, const hipGraphNode_t * to, size_t numDependencies, void* return_address);
-hipError_t i_hipGraphNodeGetType(hipGraphNode_t node, hipGraphNodeType * pType, void* return_address);
-hipError_t i_hipTexRefSetBorderColor(textureReference * texRef, float * pBorderColor, void* return_address);
-hipError_t i_hipMemPrefetchAsync(const void * dev_ptr, size_t count, int device, hipStream_t stream, void* return_address);
-hipError_t i_hipCtxGetDevice(hipDevice_t * device, void* return_address);
-hipError_t i_hipMemcpy2DArrayToArray(hipArray_t dst, size_t wOffsetDst, size_t hOffsetDst, hipArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipUserObjectRelease(hipUserObject_t object, unsigned int count, void* return_address);
-hipError_t i_hipHostGetFlags(unsigned int * flagsPtr, void * hostPtr, void* return_address);
-hipError_t i_hipDrvGraphAddMemsetNode(hipGraphNode_t * phGraphNode, hipGraph_t hGraph, const hipGraphNode_t * dependencies, size_t numDependencies, const HIP_MEMSET_NODE_PARAMS * memsetParams, hipCtx_t ctx, void* return_address);
-hipError_t i_hipMemcpyAtoD(hipDeviceptr_t dstDevice, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, void* return_address);
-hipError_t i_hipMemPoolCreate(hipMemPool_t * mem_pool, const hipMemPoolProps * pool_props, void* return_address);
-const char * i_hipKernelNameRef(const hipFunction_t f, void* return_address);
-hipError_t i_hipMemset3DAsync(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, hipStream_t stream, void* return_address);
-hipError_t i_hipEventRecord(hipEvent_t event, hipStream_t stream, void* return_address);
-hipError_t i_hipMipmappedArrayDestroy(hipMipmappedArray_t hMipmappedArray, void* return_address);
-hipError_t i_hipMemsetAsync_spt(void * dst, int value, size_t sizeBytes, hipStream_t stream, void* return_address);
-hipError_t i_hipDevicePrimaryCtxSetFlags(hipDevice_t dev, unsigned int flags, void* return_address);
-hipError_t i_hipPeekAtLastError(void* return_address);
-hipError_t i_hipDeviceGetGraphMemAttribute(int device, hipGraphMemAttributeType attr, void * value, void* return_address);
-hipError_t i_hipDrvGetErrorName(hipError_t hipError, const char ** errorString, void* return_address);
-hipError_t i_hipMemcpy_spt(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipCtxSetSharedMemConfig(hipSharedMemConfig config, void* return_address);
-hipError_t i_hipCreateSurfaceObject(hipSurfaceObject_t * pSurfObject, const hipResourceDesc * pResDesc, void* return_address);
-hipError_t i_hipGetMipmappedArrayLevel(hipArray_t * levelArray, hipMipmappedArray_const_t mipmappedArray, unsigned int level, void* return_address);
-hipError_t i_hipGraphExecDestroy(hipGraphExec_t graphExec, void* return_address);
-hipError_t i_hipMemsetD32Async(hipDeviceptr_t dst, int value, size_t count, hipStream_t stream, void* return_address);
-hipError_t i_hipDeviceEnablePeerAccess(int peerDeviceId, unsigned int flags, void* return_address);
-hipError_t i_hipArray3DCreate(hipArray_t * array, const HIP_ARRAY3D_DESCRIPTOR * pAllocateArray, void* return_address);
-hipError_t i_hipIpcOpenMemHandle(void ** devPtr, hipIpcMemHandle_t handle, unsigned int flags, void* return_address);
-hipError_t i_hipMemPoolTrimTo(hipMemPool_t mem_pool, size_t min_bytes_to_hold, void* return_address);
-hipError_t i_hipMemcpy2D(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipFuncGetAttribute(int * value, hipFunction_attribute attrib, hipFunction_t hfunc, void* return_address);
-hipError_t i_hipBindTextureToMipmappedArray(const textureReference * tex, hipMipmappedArray_const_t mipmappedArray, const hipChannelFormatDesc * desc, void* return_address);
-hipError_t i_hipGraphicsMapResources(int count, hipGraphicsResource_t * resources, hipStream_t stream, void* return_address);
-hipError_t i_hipArrayCreate(hipArray_t * pHandle, const HIP_ARRAY_DESCRIPTOR * pAllocateArray, void* return_address);
-hipError_t i_hipTexRefSetMaxAnisotropy(textureReference * texRef, unsigned int maxAniso, void* return_address);
-hipError_t i_hipGraphKernelNodeGetAttribute(hipGraphNode_t hNode, hipLaunchAttributeID attr, hipLaunchAttributeValue * value, void* return_address);
-hipError_t i_hipExtLaunchKernel(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, hipEvent_t startEvent, hipEvent_t stopEvent, int flags, void* return_address);
-hipError_t i_hipTexRefSetMipmapFilterMode(textureReference * texRef, enum hipTextureFilterMode fm, void* return_address);
-hipError_t i_hipMemImportFromShareableHandle(hipMemGenericAllocationHandle_t * handle, void * osHandle, hipMemAllocationHandleType shHandleType, void* return_address);
-hipError_t i_hipTexRefSetFormat(textureReference * texRef, hipArray_Format fmt, int NumPackedComponents, void* return_address);
-const char * i_amd_dbgapi_get_git_hash(void* return_address);
-hipError_t i_hipLaunchByPtr(const void * func, void* return_address);
-size_t i_amd_dbgapi_get_build_id(void* return_address);
-hipError_t i_hipMemcpy3DAsync(const struct hipMemcpy3DParms * p, hipStream_t stream, void* return_address);
-hipError_t i_hipGetTextureObjectResourceViewDesc(struct hipResourceViewDesc * pResViewDesc, hipTextureObject_t textureObject, void* return_address);
-hipError_t i_hipTexRefSetFilterMode(textureReference * texRef, enum hipTextureFilterMode fm, void* return_address);
-hipError_t i_hipDriverGetVersion(int * driverVersion, void* return_address);
-hipError_t i_hipStreamWriteValue64(hipStream_t stream, void * ptr, uint64_t value, unsigned int flags, void* return_address);
-hipError_t i_hipMallocMipmappedArray(hipMipmappedArray_t * mipmappedArray, const struct hipChannelFormatDesc * desc, struct hipExtent extent, unsigned int numLevels, unsigned int flags, void* return_address);
-hipError_t i_hipMemset_spt(void * dst, int value, size_t sizeBytes, void* return_address);
-hipError_t i_hipTexRefSetFlags(textureReference * texRef, unsigned int Flags, void* return_address);
-hipError_t i_hipMemGetAddressRange(hipDeviceptr_t * pbase, size_t * psize, hipDeviceptr_t dptr, void* return_address);
-hipError_t i_hipTexRefSetMipmapLevelClamp(textureReference * texRef, float minMipMapLevelClamp, float maxMipMapLevelClamp, void* return_address);
-hipError_t i_hipGraphMemcpyNodeSetParams(hipGraphNode_t node, const hipMemcpy3DParms * pNodeParams, void* return_address);
-hipError_t i_hipGraphGetEdges(hipGraph_t graph, hipGraphNode_t * from, hipGraphNode_t * to, size_t * numEdges, void* return_address);
-hipError_t i_hipMemcpyToArray(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
-hipError_t i_hipExtMallocWithFlags(void ** ptr, size_t sizeBytes, unsigned int flags, void* return_address);
-hipError_t i_hipFuncSetAttribute(const void * func, hipFuncAttribute attr, int value, void* return_address);
-hipError_t i_hipChooseDeviceR0600(int * device, const hipDeviceProp_tR0600 * prop, void* return_address);
-hipError_t i_hipTexRefSetMipmappedArray(textureReference * texRef, struct hipMipmappedArray * mipmappedArray, unsigned int Flags, void* return_address);
-hipError_t i_hipMemset(void * dst, int value, size_t sizeBytes, void* return_address);
-hipError_t i_hipTexRefGetMipmapLevelClamp(float * pminMipmapLevelClamp, float * pmaxMipmapLevelClamp, const textureReference * texRef, void* return_address);
+// HIP API Function Prototype & Functions Types
+#if HAVE_hipMemPtrGetInfo       
+    hipError_t i_hipMemPtrGetInfo(void * ptr, size_t * size, void* return_address);
+    typedef hipError_t (*__hipMemPtrGetInfo_t)(void * ptr, size_t * size, void* return_address);
+#endif
 
-// HIP Functions Types
-typedef hipError_t (*__hipMemPtrGetInfo_t)(void * ptr, size_t * size, void* return_address);
-typedef hipError_t (*__hipGraphExecMemcpyNodeSetParams1D_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipCtxEnablePeerAccess_t)(hipCtx_t peerCtx, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipHostUnregister_t)(void * hostPtr, void* return_address);
-typedef hipError_t (*__hipDevicePrimaryCtxGetState_t)(hipDevice_t dev, unsigned int * flags, int * active, void* return_address);
-typedef hipError_t (*__hipPointerGetAttribute_t)(void * data, hipPointer_attribute attribute, hipDeviceptr_t ptr, void* return_address);
-typedef hipError_t (*__hipMemPoolGetAccess_t)(hipMemAccessFlags * flags, hipMemPool_t mem_pool, hipMemLocation * location, void* return_address);
-typedef hipError_t (*__hipMemsetD32_t)(hipDeviceptr_t dest, int value, size_t count, void* return_address);
-typedef hipError_t (*__hipTexRefGetMipMappedArray_t)(hipMipmappedArray_t * pArray, const textureReference * texRef, void* return_address);
-typedef hipError_t (*__hipMalloc3D_t)(hipPitchedPtr * pitchedDevPtr, hipExtent extent, void* return_address);
-typedef hipError_t (*__hipMemsetD8_t)(hipDeviceptr_t dest, unsigned char value, size_t count, void* return_address);
-typedef hipError_t (*__hipMallocArray_t)(hipArray_t * array, const hipChannelFormatDesc * desc, size_t width, size_t height, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipGraphEventWaitNodeGetEvent_t)(hipGraphNode_t node, hipEvent_t * event_out, void* return_address);
-typedef hipError_t (*__hipDrvMemcpy3D_t)(const HIP_MEMCPY3D * pCopy, void* return_address);
-typedef hipError_t (*__hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t)(int * numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipHostMalloc_t)(void ** ptr, size_t size, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipModuleGetTexRef_t)(textureReference ** texRef, hipModule_t hmod, const char * name, void* return_address);
-typedef hipError_t (*__hipIpcGetMemHandle_t)(hipIpcMemHandle_t * handle, void * devPtr, void* return_address);
-typedef hipError_t (*__hipMemcpyDtoHAsync_t)(void * dst, hipDeviceptr_t src, size_t sizeBytes, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipModuleLoad_t)(hipModule_t * module, const char * fname, void* return_address);
-typedef hipError_t (*__hipWaitExternalSemaphoresAsync_t)(const hipExternalSemaphore_t * extSemArray, const hipExternalSemaphoreWaitParams * paramsArray, unsigned int numExtSems, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipGraphKernelNodeGetParams_t)(hipGraphNode_t node, hipKernelNodeParams * pNodeParams, void* return_address);
-typedef hipError_t (*__hipGraphLaunch_t)(hipGraphExec_t graphExec, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipHostAlloc_t)(void ** ptr, size_t size, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipSetDevice_t)(int deviceId, void* return_address);
-typedef hipError_t (*__hipModuleOccupancyMaxPotentialBlockSizeWithFlags_t)(int * gridSize, int * blockSize, hipFunction_t f, size_t dynSharedMemPerBlk, int blockSizeLimit, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipGraphNodeGetDependentNodes_t)(hipGraphNode_t node, hipGraphNode_t * pDependentNodes, size_t * pNumDependentNodes, void* return_address);
-typedef hipError_t (*__hipExtStreamGetCUMask_t)(hipStream_t stream, uint32_t cuMaskSize, uint32_t * cuMask, void* return_address);
-typedef hipError_t (*__hipMemsetD16_t)(hipDeviceptr_t dest, unsigned short value, size_t count, void* return_address);
-typedef hipError_t (*__hipLaunchKernel_t)(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, void* return_address);
-typedef const char * (*__hipGetErrorString_t)(hipError_t hipError, void* return_address);
-typedef hipError_t (*__hipModuleLoadDataEx_t)(hipModule_t * module, const void * image, unsigned int numOptions, hipJitOption * options, void ** optionValues, void* return_address);
-typedef hipError_t (*__hipTexRefGetFilterMode_t)(enum hipTextureFilterMode * pfm, const textureReference * texRef, void* return_address);
-typedef hipError_t (*__hipGraphInstantiateWithParams_t)(hipGraphExec_t * pGraphExec, hipGraph_t graph, hipGraphInstantiateParams * instantiateParams, void* return_address);
-typedef hipError_t (*__hipGraphMemcpyNodeSetParams1D_t)(hipGraphNode_t node, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipStreamSynchronize_t)(hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipGraphicsUnmapResources_t)(int count, hipGraphicsResource_t * resources, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMemcpy2DFromArray_spt_t)(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipGraphExecMemcpyNodeSetParamsFromSymbol_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipTexRefGetMipmapLevelBias_t)(float * pbias, const textureReference * texRef, void* return_address);
-typedef hipError_t (*__hipGraphAddExternalSemaphoresSignalNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address);
-typedef hipError_t (*__hipExtGetLastError_t)(void* return_address);
-typedef hipError_t (*__hipMemMapArrayAsync_t)(hipArrayMapInfo * mapInfoList, unsigned int count, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMemcpyAsync_t)(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipGraphKernelNodeSetAttribute_t)(hipGraphNode_t hNode, hipLaunchAttributeID attr, const hipLaunchAttributeValue * value, void* return_address);
-typedef hipError_t (*__hipDrvMemcpy2DUnaligned_t)(const hip_Memcpy2D * pCopy, void* return_address);
-typedef hipError_t (*__hipMemPoolDestroy_t)(hipMemPool_t mem_pool, void* return_address);
-typedef hipError_t (*__hipGraphRemoveDependencies_t)(hipGraph_t graph, const hipGraphNode_t * from, const hipGraphNode_t * to, size_t numDependencies, void* return_address);
-typedef hipError_t (*__hipGraphCreate_t)(hipGraph_t * pGraph, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipExtLaunchMultiKernelMultiDevice_t)(hipLaunchParams * launchParamsList, int numDevices, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipGetDeviceCount_t)(int * count, void* return_address);
-typedef hipError_t (*__hipMemUnmap_t)(void * ptr, size_t size, void* return_address);
-typedef hipError_t (*__hipTexObjectGetResourceDesc_t)(HIP_RESOURCE_DESC * pResDesc, hipTextureObject_t texObject, void* return_address);
-typedef hipError_t (*__hipGraphExecEventRecordNodeSetEvent_t)(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, hipEvent_t event, void* return_address);
-typedef hipError_t (*__hipInit_t)(unsigned int flags, void* return_address);
-typedef hipError_t (*__hipThreadExchangeStreamCaptureMode_t)(hipStreamCaptureMode * mode, void* return_address);
-typedef hipError_t (*__hipDeviceGetP2PAttribute_t)(int * value, hipDeviceP2PAttr attr, int srcDevice, int dstDevice, void* return_address);
-typedef hipError_t (*__hipDeviceGetByPCIBusId_t)(int * device, const char * pciBusId, void* return_address);
-typedef hipError_t (*__hipHostFree_t)(void * ptr, void* return_address);
-typedef hipError_t (*__hipExtGetLinkTypeAndHopCount_t)(int device1, int device2, uint32_t * linktype, uint32_t * hopcount, void* return_address);
-typedef hipError_t (*__hipMemcpyToSymbolAsync_spt_t)(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipCtxDisablePeerAccess_t)(hipCtx_t peerCtx, void* return_address);
-typedef hipError_t (*__hipSetupArgument_t)(const void * arg, size_t size, size_t offset, void* return_address);
-typedef hipError_t (*__hipMemcpyAtoHAsync_t)(void * dstHost, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipCtxSetCacheConfig_t)(hipFuncCache_t cacheConfig, void* return_address);
-typedef hipError_t (*__hipMemRelease_t)(hipMemGenericAllocationHandle_t handle, void* return_address);
-typedef hipError_t (*__hipUnbindTexture_t)(const textureReference * tex, void* return_address);
-typedef hipError_t (*__hipDrvMemcpy3DAsync_t)(const HIP_MEMCPY3D * pCopy, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipIpcGetEventHandle_t)(hipIpcEventHandle_t * handle, hipEvent_t event, void* return_address);
-typedef hipError_t (*__hipGraphReleaseUserObject_t)(hipGraph_t graph, hipUserObject_t object, unsigned int count, void* return_address);
-typedef hipError_t (*__hipDeviceGetMemPool_t)(hipMemPool_t * mem_pool, int device, void* return_address);
-typedef hipError_t (*__hipGraphHostNodeSetParams_t)(hipGraphNode_t node, const hipHostNodeParams * pNodeParams, void* return_address);
-typedef hipError_t (*__hipGraphAddEventWaitNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipEvent_t event, void* return_address);
-typedef hipError_t (*__hipMemcpy2DFromArrayAsync_spt_t)(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipLaunchHostFunc_spt_t)(hipStream_t stream, hipHostFn_t fn, void * userData, void* return_address);
-typedef hipError_t (*__hipStreamWaitEvent_spt_t)(hipStream_t stream, hipEvent_t event, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipArrayGetDescriptor_t)(HIP_ARRAY_DESCRIPTOR * pArrayDescriptor, hipArray_t array, void* return_address);
-typedef hipError_t (*__hipGraphExecUpdate_t)(hipGraphExec_t hGraphExec, hipGraph_t hGraph, hipGraphNode_t * hErrorNode_out, hipGraphExecUpdateResult * updateResult_out, void* return_address);
-typedef hipError_t (*__hipMemGetAllocationPropertiesFromHandle_t)(hipMemAllocationProp * prop, hipMemGenericAllocationHandle_t handle, void* return_address);
-typedef hipError_t (*__hipMemcpyWithStream_t)(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipGraphAddExternalSemaphoresWaitNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address);
-typedef hipError_t (*__hipMemcpyAtoH_t)(void * dst, hipArray_t srcArray, size_t srcOffset, size_t count, void* return_address);
-typedef hipError_t (*__hipStreamQuery_t)(hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipIpcCloseMemHandle_t)(void * devPtr, void* return_address);
-typedef hipError_t (*__hipMemsetAsync_t)(void * dst, int value, size_t sizeBytes, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMemcpyDtoD_t)(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes, void* return_address);
-typedef hipError_t (*__hipModuleUnload_t)(hipModule_t module, void* return_address);
-typedef hipError_t (*__hipGetDevicePropertiesR0600_t)(hipDeviceProp_tR0600 * prop, int deviceId, void* return_address);
-typedef hipError_t (*__hipMemcpyFromArray_t)(void * dst, hipArray_const_t srcArray, size_t wOffset, size_t hOffset, size_t count, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipDeviceCanAccessPeer_t)(int * canAccessPeer, int deviceId, int peerDeviceId, void* return_address);
-typedef hipError_t (*__hipMemSetAccess_t)(void * ptr, size_t size, const hipMemAccessDesc * desc, size_t count, void* return_address);
-typedef hipError_t (*__hipStreamWaitValue32_t)(hipStream_t stream, void * ptr, uint32_t value, unsigned int flags, uint32_t mask, void* return_address);
-typedef const char * (*__hipApiName_t)(uint32_t id, void* return_address);
-typedef hipError_t (*__hipGraphicsSubResourceGetMappedArray_t)(hipArray_t * array, hipGraphicsResource_t resource, unsigned int arrayIndex, unsigned int mipLevel, void* return_address);
-typedef hipError_t (*__hipMemcpy2DToArrayAsync_t)(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipGraphDestroy_t)(hipGraph_t graph, void* return_address);
-typedef hipError_t (*__hipTexRefGetBorderColor_t)(float * pBorderColor, const textureReference * texRef, void* return_address);
-typedef hipError_t (*__hipGraphAddMemcpyNode1D_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipGraphGetNodes_t)(hipGraph_t graph, hipGraphNode_t * nodes, size_t * numNodes, void* return_address);
-typedef hipError_t (*__hipStreamGetFlags_spt_t)(hipStream_t stream, unsigned int * flags, void* return_address);
-typedef hipError_t (*__hipTexRefSetAddress2D_t)(textureReference * texRef, const HIP_ARRAY_DESCRIPTOR * desc, hipDeviceptr_t dptr, size_t Pitch, void* return_address);
-typedef hipError_t (*__hipStreamGetPriority_t)(hipStream_t stream, int * priority, void* return_address);
-typedef hipError_t (*__hipStreamCreate_t)(hipStream_t * stream, void* return_address);
-typedef hipError_t (*__hipMemcpyFromSymbol_t)(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipGraphNodeGetEnabled_t)(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, unsigned int * isEnabled, void* return_address);
-typedef struct hipChannelFormatDesc (*__hipCreateChannelDesc_t)(int x, int y, int z, int w, enum hipChannelFormatKind f, void* return_address);
-typedef hipError_t (*__hipFreeMipmappedArray_t)(hipMipmappedArray_t mipmappedArray, void* return_address);
-typedef hipError_t (*__hipGetTextureAlignmentOffset_t)(size_t * offset, const textureReference * texref, void* return_address);
-typedef hipError_t (*__hipGraphAddEventRecordNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipEvent_t event, void* return_address);
-typedef hipError_t (*__hipGraphNodeFindInClone_t)(hipGraphNode_t * pNode, hipGraphNode_t originalNode, hipGraph_t clonedGraph, void* return_address);
-typedef hipError_t (*__hipMemcpyFromSymbol_spt_t)(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipMemset3DAsync_spt_t)(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMemsetD16Async_t)(hipDeviceptr_t dest, unsigned short value, size_t count, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipDeviceGetCacheConfig_t)(hipFuncCache_t * cacheConfig, void* return_address);
-typedef hipError_t (*__hipMemCreate_t)(hipMemGenericAllocationHandle_t * handle, size_t size, const hipMemAllocationProp * prop, unsigned long long flags, void* return_address);
-typedef hipError_t (*__hipGraphExternalSemaphoresWaitNodeGetParams_t)(hipGraphNode_t hNode, hipExternalSemaphoreWaitNodeParams * params_out, void* return_address);
-typedef hipError_t (*__hipStreamEndCapture_t)(hipStream_t stream, hipGraph_t * pGraph, void* return_address);
-typedef hipError_t (*__hipMemcpyFromSymbolAsync_spt_t)(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMemcpyHtoA_t)(hipArray_t dstArray, size_t dstOffset, const void * srcHost, size_t count, void* return_address);
-typedef hipError_t (*__hipGraphExecHostNodeSetParams_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipHostNodeParams * pNodeParams, void* return_address);
-typedef hipError_t (*__hipMalloc_t)(void ** ptr, size_t size, void* return_address);
-typedef hipError_t (*__hipMalloc3DArray_t)(hipArray_t * array, const struct hipChannelFormatDesc * desc, struct hipExtent extent, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipGraphExecKernelNodeSetParams_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipKernelNodeParams * pNodeParams, void* return_address);
-typedef hipError_t (*__hipGetTextureObjectResourceDesc_t)(hipResourceDesc * pResDesc, hipTextureObject_t textureObject, void* return_address);
-typedef hipError_t (*____hipPushCallConfiguration_t)(dim3 gridDim, dim3 blockDim, size_t sharedMem, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMemcpy3DAsync_spt_t)(const hipMemcpy3DParms * p, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMemsetD8Async_t)(hipDeviceptr_t dest, unsigned char value, size_t count, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipStreamAddCallback_t)(hipStream_t stream, hipStreamCallback_t callback, void * userData, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipMemPoolImportPointer_t)(void ** dev_ptr, hipMemPool_t mem_pool, hipMemPoolPtrExportData * export_data, void* return_address);
-typedef hipError_t (*__hipFuncGetAttributes_t)(struct hipFuncAttributes * attr, const void * func, void* return_address);
-typedef hipError_t (*__hipCtxGetCurrent_t)(hipCtx_t * ctx, void* return_address);
-typedef hipError_t (*__hipGraphAddChildGraphNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipGraph_t childGraph, void* return_address);
-typedef hipError_t (*__hipEventCreate_t)(hipEvent_t * event, void* return_address);
-typedef hipError_t (*__hipHostGetDevicePointer_t)(void ** devPtr, void * hstPtr, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipEventQuery_t)(hipEvent_t event, void* return_address);
-typedef hipError_t (*__hipMemcpyPeerAsync_t)(void * dst, int dstDeviceId, const void * src, int srcDevice, size_t sizeBytes, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMemMap_t)(void * ptr, size_t size, size_t offset, hipMemGenericAllocationHandle_t handle, unsigned long long flags, void* return_address);
-typedef hipError_t (*__hipBindTextureToArray_t)(const textureReference * tex, hipArray_const_t array, const hipChannelFormatDesc * desc, void* return_address);
-typedef hipError_t (*__hipMemcpy2DAsync_spt_t)(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMemPoolSetAttribute_t)(hipMemPool_t mem_pool, hipMemPoolAttr attr, void * value, void* return_address);
-typedef hipError_t (*__hipGetLastError_t)(void* return_address);
-typedef hipError_t (*__hipStreamEndCapture_spt_t)(hipStream_t stream, hipGraph_t * pGraph, void* return_address);
-typedef hipError_t (*__hipModuleOccupancyMaxPotentialBlockSize_t)(int * gridSize, int * blockSize, hipFunction_t f, size_t dynSharedMemPerBlk, int blockSizeLimit, void* return_address);
-typedef const char * (*__hipKernelNameRefByPtr_t)(const void * hostFunction, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipGetDevice_t)(int * deviceId, void* return_address);
-typedef hipError_t (*__hipMemcpy3D_spt_t)(const struct hipMemcpy3DParms * p, void* return_address);
-typedef hipError_t (*__hipTexObjectGetTextureDesc_t)(HIP_TEXTURE_DESC * pTexDesc, hipTextureObject_t texObject, void* return_address);
-typedef hipError_t (*__hipDeviceGet_t)(hipDevice_t * device, int ordinal, void* return_address);
-typedef hipError_t (*__hipGraphExternalSemaphoresSignalNodeSetParams_t)(hipGraphNode_t hNode, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address);
-typedef hipError_t (*__hipDestroySurfaceObject_t)(hipSurfaceObject_t surfaceObject, void* return_address);
-typedef hipError_t (*__hipStreamGetDevice_t)(hipStream_t stream, hipDevice_t * device, void* return_address);
-typedef hipError_t (*__hipMemAllocPitch_t)(hipDeviceptr_t * dptr, size_t * pitch, size_t widthInBytes, size_t height, unsigned int elementSizeBytes, void* return_address);
-typedef hipError_t (*__hipGraphAddNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipGraphNodeParams * nodeParams, void* return_address);
-typedef hipError_t (*__hipDeviceSetSharedMemConfig_t)(hipSharedMemConfig config, void* return_address);
-typedef hipError_t (*__hipRuntimeGetVersion_t)(int * runtimeVersion, void* return_address);
-typedef hipError_t (*__hipGraphChildGraphNodeGetGraph_t)(hipGraphNode_t node, hipGraph_t * pGraph, void* return_address);
-typedef hipError_t (*__hipGraphExecMemsetNodeSetParams_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipMemsetParams * pNodeParams, void* return_address);
-typedef hipError_t (*__hipGraphicsUnregisterResource_t)(hipGraphicsResource_t resource, void* return_address);
-typedef hipError_t (*__hipEventElapsedTime_t)(float * ms, hipEvent_t start, hipEvent_t stop, void* return_address);
-typedef hipError_t (*__hipFreeAsync_t)(void * dev_ptr, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipStreamCreateWithFlags_t)(hipStream_t * stream, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipTexRefSetAddress_t)(size_t * ByteOffset, textureReference * texRef, hipDeviceptr_t dptr, size_t bytes, void* return_address);
-typedef hipError_t (*__hipStreamAddCallback_spt_t)(hipStream_t stream, hipStreamCallback_t callback, void * userData, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipGraphAddKernelNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipKernelNodeParams * pNodeParams, void* return_address);
-typedef hipError_t (*__hipMemcpyDtoH_t)(void * dst, hipDeviceptr_t src, size_t sizeBytes, void* return_address);
-typedef hipError_t (*__hipDeviceTotalMem_t)(size_t * bytes, hipDevice_t device, void* return_address);
-typedef hipError_t (*__hipMemset2D_t)(void * dst, size_t pitch, int value, size_t width, size_t height, void* return_address);
-typedef hipError_t (*__hipMemcpy2DToArray_spt_t)(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipMemAllocHost_t)(void ** ptr, size_t size, void* return_address);
-typedef hipError_t (*__hipPointerSetAttribute_t)(const void * value, hipPointer_attribute attribute, hipDeviceptr_t ptr, void* return_address);
-typedef hipError_t (*__hipGraphHostNodeGetParams_t)(hipGraphNode_t node, hipHostNodeParams * pNodeParams, void* return_address);
-typedef hipError_t (*__hipMemset3D_t)(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, void* return_address);
-typedef hipError_t (*__hipDestroyTextureObject_t)(hipTextureObject_t textureObject, void* return_address);
-typedef hipError_t (*__hipMemAdvise_t)(const void * dev_ptr, size_t count, hipMemoryAdvise advice, int device, void* return_address);
-typedef hipError_t (*__hipCtxGetCacheConfig_t)(hipFuncCache_t * cacheConfig, void* return_address);
-typedef hipError_t (*__hipDrvPointerGetAttributes_t)(unsigned int numAttributes, hipPointer_attribute * attributes, void ** data, hipDeviceptr_t ptr, void* return_address);
-typedef hipError_t (*__hipModuleLaunchCooperativeKernelMultiDevice_t)(hipFunctionLaunchParams * launchParamsList, unsigned int numDevices, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipModuleGetGlobal_t)(hipDeviceptr_t * dptr, size_t * bytes, hipModule_t hmod, const char * name, void* return_address);
-typedef hipError_t (*__hipGraphEventRecordNodeGetEvent_t)(hipGraphNode_t node, hipEvent_t * event_out, void* return_address);
-typedef hipError_t (*__hipGraphInstantiate_t)(hipGraphExec_t * pGraphExec, hipGraph_t graph, hipGraphNode_t * pErrorNode, char * pLogBuffer, size_t bufferSize, void* return_address);
-typedef hipError_t (*__hipGraphRetainUserObject_t)(hipGraph_t graph, hipUserObject_t object, unsigned int count, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipGraphMemAllocNodeGetParams_t)(hipGraphNode_t node, hipMemAllocNodeParams * pNodeParams, void* return_address);
-typedef hipError_t (*__hipStreamGetCaptureInfo_t)(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, unsigned long long * pId, void* return_address);
-typedef hipError_t (*__hipCtxPopCurrent_t)(hipCtx_t * ctx, void* return_address);
-typedef hipError_t (*__hipPointerGetAttributes_t)(hipPointerAttribute_t * attributes, const void * ptr, void* return_address);
-typedef hipError_t (*__hipDeviceDisablePeerAccess_t)(int peerDeviceId, void* return_address);
-typedef hipError_t (*__hipMallocPitch_t)(void ** ptr, size_t * pitch, size_t width, size_t height, void* return_address);
-typedef hipError_t (*__hipMemcpy2DFromArrayAsync_t)(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipDeviceComputeCapability_t)(int * major, int * minor, hipDevice_t device, void* return_address);
-typedef hipError_t (*__hipMemcpyHtoD_t)(hipDeviceptr_t dst, void * src, size_t sizeBytes, void* return_address);
-typedef hipError_t (*__hipOccupancyMaxActiveBlocksPerMultiprocessor_t)(int * numBlocks, const void * f, int blockSize, size_t dynSharedMemPerBlk, void* return_address);
-typedef hipError_t (*__hipSignalExternalSemaphoresAsync_t)(const hipExternalSemaphore_t * extSemArray, const hipExternalSemaphoreSignalParams * paramsArray, unsigned int numExtSems, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipArray3DGetDescriptor_t)(HIP_ARRAY3D_DESCRIPTOR * pArrayDescriptor, hipArray_t array, void* return_address);
-typedef hipError_t (*____hipPopCallConfiguration_t)(dim3 * gridDim, dim3 * blockDim, size_t * sharedMem, hipStream_t * stream, void* return_address);
-typedef hipError_t (*__hipDevicePrimaryCtxRelease_t)(hipDevice_t dev, void* return_address);
-typedef hipError_t (*__hipLaunchCooperativeKernelMultiDevice_t)(hipLaunchParams * launchParamsList, int numDevices, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipFreeArray_t)(hipArray_t array, void* return_address);
-typedef hipError_t (*__hipGraphMemsetNodeSetParams_t)(hipGraphNode_t node, const hipMemsetParams * pNodeParams, void* return_address);
-typedef hipError_t (*__hipMemPoolSetAccess_t)(hipMemPool_t mem_pool, const hipMemAccessDesc * desc_list, size_t count, void* return_address);
-typedef int (*__hipGetStreamDeviceId_t)(hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipExtStreamCreateWithCUMask_t)(hipStream_t * stream, uint32_t cuMaskSize, const uint32_t * cuMask, void* return_address);
-typedef hipError_t (*__hipGetTextureObjectTextureDesc_t)(hipTextureDesc * pTexDesc, hipTextureObject_t textureObject, void* return_address);
-typedef hipError_t (*__hipEventRecord_spt_t)(hipEvent_t event, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipConfigureCall_t)(dim3 gridDim, dim3 blockDim, size_t sharedMem, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMemcpyFromArray_spt_t)(void * dst, hipArray_const_t src, size_t wOffsetSrc, size_t hOffset, size_t count, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipModuleGetFunction_t)(hipFunction_t * function, hipModule_t module, const char * kname, void* return_address);
-typedef hipError_t (*__hipFuncSetCacheConfig_t)(const void * func, hipFuncCache_t config, void* return_address);
-typedef hipError_t (*__hipDeviceGetLimit_t)(size_t * pValue, enum hipLimit_t limit, void* return_address);
-typedef hipError_t (*__hipTexRefGetMaxAnisotropy_t)(int * pmaxAnsio, const textureReference * texRef, void* return_address);
-typedef hipError_t (*__hipLaunchKernel_spt_t)(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipStreamBeginCaptureToGraph_t)(hipStream_t stream, hipGraph_t graph, const hipGraphNode_t * dependencies, const hipGraphEdgeData * dependencyData, size_t numDependencies, hipStreamCaptureMode mode, void* return_address);
-typedef hipError_t (*__hipTexRefGetFormat_t)(hipArray_Format * pFormat, int * pNumChannels, const textureReference * texRef, void* return_address);
-typedef hipError_t (*__hipStreamWaitValue64_t)(hipStream_t stream, void * ptr, uint64_t value, unsigned int flags, uint64_t mask, void* return_address);
-typedef hipError_t (*__hipDevicePrimaryCtxRetain_t)(hipCtx_t * pctx, hipDevice_t dev, void* return_address);
-typedef hipError_t (*__hipMallocManaged_t)(void ** dev_ptr, size_t size, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipStreamCreateWithPriority_t)(hipStream_t * stream, unsigned int flags, int priority, void* return_address);
-typedef hipError_t (*__hipStreamGetCaptureInfo_spt_t)(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, unsigned long long * pId, void* return_address);
-typedef hipError_t (*__hipGraphAddHostNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipHostNodeParams * pNodeParams, void* return_address);
-typedef hipError_t (*__hipLaunchCooperativeKernel_t)(const void * f, dim3 gridDim, dim3 blockDimX, void ** kernelParams, unsigned int sharedMemBytes, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipHostRegister_t)(void * hostPtr, size_t sizeBytes, unsigned int flags, void* return_address);
-typedef const char * (*__hipGetErrorName_t)(hipError_t hip_error, void* return_address);
-typedef hipError_t (*__hipMemcpyToSymbol_spt_t)(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipGraphMemsetNodeGetParams_t)(hipGraphNode_t node, hipMemsetParams * pNodeParams, void* return_address);
-typedef hipError_t (*__hipStreamWriteValue32_t)(hipStream_t stream, void * ptr, uint32_t value, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipStreamSynchronize_spt_t)(hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipDeviceGraphMemTrim_t)(int device, void* return_address);
-typedef hipError_t (*__hipStreamDestroy_t)(hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipTexRefSetArray_t)(textureReference * tex, hipArray_const_t array, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipMemcpyParam2DAsync_t)(const hip_Memcpy2D * pCopy, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMemPoolExportPointer_t)(hipMemPoolPtrExportData * export_data, void * dev_ptr, void* return_address);
-typedef hipError_t (*__hipGraphEventRecordNodeSetEvent_t)(hipGraphNode_t node, hipEvent_t event, void* return_address);
-typedef hipError_t (*__hipCtxDestroy_t)(hipCtx_t ctx, void* return_address);
-typedef hipError_t (*__hipArrayDestroy_t)(hipArray_t array, void* return_address);
-typedef hipError_t (*__hipMemGetAllocationGranularity_t)(size_t * granularity, const hipMemAllocationProp * prop, hipMemAllocationGranularity_flags option, void* return_address);
-typedef hipError_t (*__hipGraphClone_t)(hipGraph_t * pGraphClone, hipGraph_t originalGraph, void* return_address);
-typedef hipError_t (*__hipMemset2DAsync_spt_t)(void * dst, size_t pitch, int value, size_t width, size_t height, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipBindTexture2D_t)(size_t * offset, const textureReference * tex, const void * devPtr, const hipChannelFormatDesc * desc, size_t width, size_t height, size_t pitch, void* return_address);
-typedef hipError_t (*__hipArrayGetInfo_t)(hipChannelFormatDesc * desc, hipExtent * extent, unsigned int * flags, hipArray_t array, void* return_address);
-typedef hipError_t (*__hipGraphExternalSemaphoresSignalNodeGetParams_t)(hipGraphNode_t hNode, hipExternalSemaphoreSignalNodeParams * params_out, void* return_address);
-typedef hipError_t (*__hipDeviceGetStreamPriorityRange_t)(int * leastPriority, int * greatestPriority, void* return_address);
-typedef hipError_t (*__hipGraphExecChildGraphNodeSetParams_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, hipGraph_t childGraph, void* return_address);
-typedef hipError_t (*__hipMemset2D_spt_t)(void * dst, size_t pitch, int value, size_t width, size_t height, void* return_address);
-typedef hipError_t (*__hipDeviceGetDefaultMemPool_t)(hipMemPool_t * mem_pool, int device, void* return_address);
-typedef hipError_t (*__hipCtxCreate_t)(hipCtx_t * ctx, unsigned int flags, hipDevice_t device, void* return_address);
-typedef hipError_t (*__hipStreamIsCapturing_t)(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, void* return_address);
-typedef hipError_t (*__hipStreamUpdateCaptureDependencies_t)(hipStream_t stream, hipGraphNode_t * dependencies, size_t numDependencies, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipDeviceSynchronize_t)(void* return_address);
-typedef hipError_t (*__hipMemcpyFromSymbolAsync_t)(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipGraphDestroyNode_t)(hipGraphNode_t node, void* return_address);
-typedef hipError_t (*__hipUserObjectRetain_t)(hipUserObject_t object, unsigned int count, void* return_address);
-typedef hipError_t (*__hipGraphExecEventWaitNodeSetEvent_t)(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, hipEvent_t event, void* return_address);
-typedef hipError_t (*__hipMemAddressReserve_t)(void ** ptr, size_t size, size_t alignment, void * addr, unsigned long long flags, void* return_address);
-typedef hipError_t (*__hipGraphAddMemsetNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipMemsetParams * pMemsetParams, void* return_address);
-typedef hipError_t (*__hipGraphicsResourceGetMappedPointer_t)(void ** devPtr, size_t * size, hipGraphicsResource_t resource, void* return_address);
-typedef hipError_t (*__hipStreamBeginCapture_spt_t)(hipStream_t stream, hipStreamCaptureMode mode, void* return_address);
-typedef hipError_t (*__hipDeviceGetUuid_t)(hipUUID * uuid, hipDevice_t device, void* return_address);
-typedef hipError_t (*__hipModuleLaunchKernel_t)(hipFunction_t f, unsigned int gridDimX, unsigned int gridDimY, unsigned int gridDimZ, unsigned int blockDimX, unsigned int blockDimY, unsigned int blockDimZ, unsigned int sharedMemBytes, hipStream_t stream, void ** kernelParams, void ** extra, void* return_address);
-typedef hipError_t (*__hipGraphAddEmptyNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void* return_address);
-typedef hipError_t (*__hipMemRangeGetAttribute_t)(void * data, size_t data_size, hipMemRangeAttribute attribute, const void * dev_ptr, size_t count, void* return_address);
-typedef hipError_t (*__hipGraphInstantiateWithFlags_t)(hipGraphExec_t * pGraphExec, hipGraph_t graph, unsigned long long flags, void* return_address);
-typedef hipError_t (*__hipCtxPushCurrent_t)(hipCtx_t ctx, void* return_address);
-typedef hipError_t (*__hipCtxGetApiVersion_t)(hipCtx_t ctx, int * apiVersion, void* return_address);
-typedef hipError_t (*__hipBindTexture_t)(size_t * offset, const textureReference * tex, const void * devPtr, const hipChannelFormatDesc * desc, size_t size, void* return_address);
-typedef hipError_t (*__hipStreamBeginCapture_t)(hipStream_t stream, hipStreamCaptureMode mode, void* return_address);
-typedef hipError_t (*__hipProfilerStart_t)(void* return_address);
-typedef hipError_t (*__hipMemcpyHtoDAsync_t)(hipDeviceptr_t dst, void * src, size_t sizeBytes, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipGetDeviceFlags_t)(unsigned int * flags, void* return_address);
-typedef hipError_t (*__hipMemRangeGetAttributes_t)(void ** data, size_t * data_sizes, hipMemRangeAttribute * attributes, size_t num_attributes, const void * dev_ptr, size_t count, void* return_address);
-typedef hipError_t (*__hipDestroyExternalSemaphore_t)(hipExternalSemaphore_t extSem, void* return_address);
-typedef hipError_t (*__hipIpcOpenEventHandle_t)(hipEvent_t * event, hipIpcEventHandle_t handle, void* return_address);
-typedef hipError_t (*__hipGraphUpload_t)(hipGraphExec_t graphExec, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMallocAsync_t)(void ** dev_ptr, size_t size, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipOccupancyMaxPotentialBlockSize_t)(int * gridSize, int * blockSize, const void * f, size_t dynSharedMemPerBlk, int blockSizeLimit, void* return_address);
-typedef hipError_t (*__hipDestroyExternalMemory_t)(hipExternalMemory_t extMem, void* return_address);
-typedef const char * (*__amd_dbgapi_get_build_name_t)(void* return_address);
-typedef hipError_t (*__hipGraphAddMemcpyNodeToSymbol_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipDeviceGetPCIBusId_t)(char * pciBusId, int len, int device, void* return_address);
-typedef hipError_t (*__hipGetChannelDesc_t)(hipChannelFormatDesc * desc, hipArray_const_t array, void* return_address);
-typedef hipError_t (*__hipDevicePrimaryCtxReset_t)(hipDevice_t dev, void* return_address);
-typedef hipError_t (*__hipImportExternalMemory_t)(hipExternalMemory_t * extMem_out, const hipExternalMemoryHandleDesc * memHandleDesc, void* return_address);
-typedef hipError_t (*__hipFuncSetSharedMemConfig_t)(const void * func, hipSharedMemConfig config, void* return_address);
-typedef hipError_t (*__hipStreamWaitEvent_t)(hipStream_t stream, hipEvent_t event, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipTexRefSetMipmapLevelBias_t)(textureReference * texRef, float bias, void* return_address);
-typedef hipError_t (*__hipMemPoolImportFromShareableHandle_t)(hipMemPool_t * mem_pool, void * shared_handle, hipMemAllocationHandleType handle_type, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipMemPoolExportToShareableHandle_t)(void * shared_handle, hipMemPool_t mem_pool, hipMemAllocationHandleType handle_type, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipGraphExecMemcpyNodeSetParamsToSymbol_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipTexRefGetMipmapFilterMode_t)(enum hipTextureFilterMode * pfm, const textureReference * texRef, void* return_address);
-typedef hipError_t (*__hipGetProcAddress_t)(const char * symbol, void ** pfn, int hipVersion, uint64_t flags, hipDriverProcAddressQueryResult * symbolStatus, void* return_address);
-typedef hipError_t (*__hipCreateTextureObject_t)(hipTextureObject_t * pTexObject, const hipResourceDesc * pResDesc, const hipTextureDesc * pTexDesc, const struct hipResourceViewDesc * pResViewDesc, void* return_address);
-typedef hipError_t (*__hipGraphKernelNodeCopyAttributes_t)(hipGraphNode_t hSrc, hipGraphNode_t hDst, void* return_address);
-typedef hipError_t (*__hipTexRefGetFlags_t)(unsigned int * pFlags, const textureReference * texRef, void* return_address);
-typedef hipError_t (*__hipDrvGraphAddMemcpyNode_t)(hipGraphNode_t * phGraphNode, hipGraph_t hGraph, const hipGraphNode_t * dependencies, size_t numDependencies, const HIP_MEMCPY3D * copyParams, hipCtx_t ctx, void* return_address);
-typedef hipError_t (*__hipMemExportToShareableHandle_t)(void * shareableHandle, hipMemGenericAllocationHandle_t handle, hipMemAllocationHandleType handleType, unsigned long long flags, void* return_address);
-typedef hipError_t (*__hipGraphLaunch_spt_t)(hipGraphExec_t graphExec, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipGraphMemcpyNodeSetParamsFromSymbol_t)(hipGraphNode_t node, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipGraphNodeGetDependencies_t)(hipGraphNode_t node, hipGraphNode_t * pDependencies, size_t * pNumDependencies, void* return_address);
-typedef hipError_t (*__hipMemcpy3D_t)(const struct hipMemcpy3DParms * p, void* return_address);
-typedef hipError_t (*__hipGraphAddMemcpyNodeFromSymbol_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipStreamGetPriority_spt_t)(hipStream_t stream, int * priority, void* return_address);
-typedef hipError_t (*__hipModuleLoadData_t)(hipModule_t * module, const void * image, void* return_address);
-typedef hipError_t (*__hipSetDeviceFlags_t)(unsigned int flags, void* return_address);
-typedef hipError_t (*__hipExternalMemoryGetMappedBuffer_t)(void ** devPtr, hipExternalMemory_t extMem, const hipExternalMemoryBufferDesc * bufferDesc, void* return_address);
-typedef hipError_t (*__hipLaunchCooperativeKernel_spt_t)(const void * f, dim3 gridDim, dim3 blockDim, void ** kernelParams, uint32_t sharedMemBytes, hipStream_t hStream, void* return_address);
-typedef hipError_t (*__hipLaunchHostFunc_t)(hipStream_t stream, hipHostFn_t fn, void * userData, void* return_address);
-typedef hipError_t (*__hipMemcpyAsync_spt_t)(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMemcpyPeer_t)(void * dst, int dstDeviceId, const void * src, int srcDeviceId, size_t sizeBytes, void* return_address);
-typedef hipError_t (*__hipDeviceReset_t)(void* return_address);
-typedef hipError_t (*__hipMemAddressFree_t)(void * devPtr, size_t size, void* return_address);
-typedef hipError_t (*__hipProfilerStop_t)(void* return_address);
-typedef hipError_t (*__hipGraphEventWaitNodeSetEvent_t)(hipGraphNode_t node, hipEvent_t event, void* return_address);
-typedef hipError_t (*__hipModuleLaunchCooperativeKernel_t)(hipFunction_t f, unsigned int gridDimX, unsigned int gridDimY, unsigned int gridDimZ, unsigned int blockDimX, unsigned int blockDimY, unsigned int blockDimZ, unsigned int sharedMemBytes, hipStream_t stream, void ** kernelParams, void* return_address);
-typedef hipError_t (*__hipDeviceGetName_t)(char * name, int len, hipDevice_t device, void* return_address);
-typedef hipError_t (*__hipGraphNodeSetEnabled_t)(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, unsigned int isEnabled, void* return_address);
-typedef hipError_t (*__hipTexRefSetAddressMode_t)(textureReference * texRef, int dim, enum hipTextureAddressMode am, void* return_address);
-typedef hipError_t (*__hipEventSynchronize_t)(hipEvent_t event, void* return_address);
-typedef hipError_t (*__hipGraphGetRootNodes_t)(hipGraph_t graph, hipGraphNode_t * pRootNodes, size_t * pNumRootNodes, void* return_address);
-typedef hipError_t (*__hipMemcpy2DFromArray_t)(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipGraphExternalSemaphoresWaitNodeSetParams_t)(hipGraphNode_t hNode, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address);
-typedef hipError_t (*__hipMemcpyDtoA_t)(hipArray_t dstArray, size_t dstOffset, hipDeviceptr_t srcDevice, size_t ByteCount, void* return_address);
-typedef hipError_t (*__hipGraphMemcpyNodeGetParams_t)(hipGraphNode_t node, hipMemcpy3DParms * pNodeParams, void* return_address);
-typedef hipError_t (*__hipMemcpy_t)(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipSetValidDevices_t)(int * device_arr, int len, void* return_address);
-typedef hipError_t (*__hipMemcpy2DAsync_t)(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipGraphExecExternalSemaphoresWaitNodeSetParams_t)(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address);
-typedef hipError_t (*__hipStreamAttachMemAsync_t)(hipStream_t stream, void * dev_ptr, size_t length, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipMemset2DAsync_t)(void * dst, size_t pitch, int value, size_t width, size_t height, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipTexObjectGetResourceViewDesc_t)(HIP_RESOURCE_VIEW_DESC * pResViewDesc, hipTextureObject_t texObject, void* return_address);
-typedef hipError_t (*__hipEventCreateWithFlags_t)(hipEvent_t * event, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipMipmappedArrayCreate_t)(hipMipmappedArray_t * pHandle, HIP_ARRAY3D_DESCRIPTOR * pMipmappedArrayDesc, unsigned int numMipmapLevels, void* return_address);
-typedef hipError_t (*__hipMemcpy2D_spt_t)(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipGraphAddMemcpyNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipMemcpy3DParms * pCopyParams, void* return_address);
-typedef hipError_t (*__hipMemcpyToSymbolAsync_t)(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMallocFromPoolAsync_t)(void ** dev_ptr, size_t size, hipMemPool_t mem_pool, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t)(int * numBlocks, const void * f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipGraphAddMemFreeNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dev_ptr, void* return_address);
-typedef hipError_t (*__hipModuleOccupancyMaxActiveBlocksPerMultiprocessor_t)(int * numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk, void* return_address);
-typedef hipError_t (*__hipEventDestroy_t)(hipEvent_t event, void* return_address);
-typedef hipError_t (*__hipDeviceSetCacheConfig_t)(hipFuncCache_t cacheConfig, void* return_address);
-typedef hipError_t (*__hipFree_t)(void * ptr, void* return_address);
-typedef hipError_t (*__hipMemcpy2DToArrayAsync_spt_t)(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipCtxGetFlags_t)(unsigned int * flags, void* return_address);
-typedef hipError_t (*__hipGetSymbolAddress_t)(void ** devPtr, const void * symbol, void* return_address);
-typedef hipError_t (*__hipTexRefGetAddress_t)(hipDeviceptr_t * dev_ptr, const textureReference * texRef, void* return_address);
-typedef hipError_t (*__hipTexObjectCreate_t)(hipTextureObject_t * pTexObject, const HIP_RESOURCE_DESC * pResDesc, const HIP_TEXTURE_DESC * pTexDesc, const HIP_RESOURCE_VIEW_DESC * pResViewDesc, void* return_address);
-typedef hipError_t (*__hipDeviceGetSharedMemConfig_t)(hipSharedMemConfig * pConfig, void* return_address);
-typedef hipError_t (*__hipMemcpyHtoAAsync_t)(hipArray_t dstArray, size_t dstOffset, const void * srcHost, size_t ByteCount, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMemPoolGetAttribute_t)(hipMemPool_t mem_pool, hipMemPoolAttr attr, void * value, void* return_address);
-typedef hipError_t (*__hipGraphAddMemAllocNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipMemAllocNodeParams * pNodeParams, void* return_address);
-typedef hipError_t (*__hipMemRetainAllocationHandle_t)(hipMemGenericAllocationHandle_t * handle, void * addr, void* return_address);
-typedef hipError_t (*__hipGetFuncBySymbol_t)(hipFunction_t * functionPtr, const void * symbolPtr, void* return_address);
-typedef hipError_t (*__hipDeviceSetMemPool_t)(int device, hipMemPool_t mem_pool, void* return_address);
-typedef hipError_t (*__hipDeviceSetLimit_t)(enum hipLimit_t limit, size_t value, void* return_address);
-typedef hipError_t (*__hipMemGetInfo_t)(size_t * free, size_t * total, void* return_address);
-typedef hipError_t (*__hipMemcpyParam2D_t)(const hip_Memcpy2D * pCopy, void* return_address);
-typedef hipError_t (*__hipGraphDebugDotPrint_t)(hipGraph_t graph, const char * path, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipDeviceSetGraphMemAttribute_t)(int device, hipGraphMemAttributeType attr, void * value, void* return_address);
-typedef hipError_t (*__hipDrvGetErrorString_t)(hipError_t hipError, const char ** errorString, void* return_address);
-typedef hipError_t (*__hipMemcpyDtoDAsync_t)(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipCtxSynchronize_t)(void* return_address);
-typedef hipError_t (*__hipTexObjectDestroy_t)(hipTextureObject_t texObject, void* return_address);
-typedef hipError_t (*__hipTexRefGetAddressMode_t)(enum hipTextureAddressMode * pam, const textureReference * texRef, int dim, void* return_address);
-typedef void (*____hipGetPCH_t)(const char ** pch, unsigned int * size, void* return_address);
-typedef hipError_t (*__hipStreamGetFlags_t)(hipStream_t stream, unsigned int * flags, void* return_address);
-typedef hipError_t (*__hipMemGetAccess_t)(unsigned long long * flags, const hipMemLocation * location, void * ptr, void* return_address);
-typedef hipError_t (*__hipMemcpyAtoA_t)(hipArray_t dstArray, size_t dstOffset, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, void* return_address);
-typedef hipError_t (*__hipMemcpyToSymbol_t)(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipCtxSetCurrent_t)(hipCtx_t ctx, void* return_address);
-typedef hipError_t (*__hipStreamQuery_spt_t)(hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipGetSymbolSize_t)(size_t * size, const void * symbol, void* return_address);
-typedef hipError_t (*__hipMipmappedArrayGetLevel_t)(hipArray_t * pLevelArray, hipMipmappedArray_t hMipMappedArray, unsigned int level, void* return_address);
-typedef hipError_t (*__hipExternalMemoryGetMappedMipmappedArray_t)(hipMipmappedArray_t * mipmap, hipExternalMemory_t extMem, const hipExternalMemoryMipmappedArrayDesc * mipmapDesc, void* return_address);
-typedef hipError_t (*__hipGraphExecMemcpyNodeSetParams_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, hipMemcpy3DParms * pNodeParams, void* return_address);
-typedef hipError_t (*__hipUserObjectCreate_t)(hipUserObject_t * object_out, void * ptr, hipHostFn_t destroy, unsigned int initialRefcount, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipStreamGetCaptureInfo_v2_t)(hipStream_t stream, hipStreamCaptureStatus * captureStatus_out, unsigned long long * id_out, hipGraph_t * graph_out, const hipGraphNode_t ** dependencies_out, size_t * numDependencies_out, void* return_address);
-typedef hipError_t (*__hipTexRefGetArray_t)(hipArray_t * pArray, const textureReference * texRef, void* return_address);
-typedef hipError_t (*__hipImportExternalSemaphore_t)(hipExternalSemaphore_t * extSem_out, const hipExternalSemaphoreHandleDesc * semHandleDesc, void* return_address);
-typedef hipError_t (*__hipDeviceGetAttribute_t)(int * pi, hipDeviceAttribute_t attr, int deviceId, void* return_address);
-typedef hipError_t (*__hipGraphMemFreeNodeGetParams_t)(hipGraphNode_t node, void * dev_ptr, void* return_address);
-typedef hipError_t (*__hipCtxGetSharedMemConfig_t)(hipSharedMemConfig * pConfig, void* return_address);
-typedef hipError_t (*__hipGraphMemcpyNodeSetParamsToSymbol_t)(hipGraphNode_t node, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipMemcpy2DToArray_t)(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipStreamIsCapturing_spt_t)(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, void* return_address);
-typedef hipError_t (*__hipFreeHost_t)(void * ptr, void* return_address);
-typedef hipError_t (*__hipGraphKernelNodeSetParams_t)(hipGraphNode_t node, const hipKernelNodeParams * pNodeParams, void* return_address);
-typedef hipError_t (*__hipMallocHost_t)(void ** ptr, size_t size, void* return_address);
-typedef hipError_t (*__hipMemset3D_spt_t)(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, void* return_address);
-typedef hipError_t (*__hipStreamGetCaptureInfo_v2_spt_t)(hipStream_t stream, hipStreamCaptureStatus * captureStatus_out, unsigned long long * id_out, hipGraph_t * graph_out, const hipGraphNode_t ** dependencies_out, size_t * numDependencies_out, void* return_address);
-typedef hipError_t (*__hipGetTextureReference_t)(const textureReference ** texref, const void * symbol, void* return_address);
-typedef hipError_t (*__hipGraphExecExternalSemaphoresSignalNodeSetParams_t)(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address);
-typedef hipError_t (*__hipGraphAddDependencies_t)(hipGraph_t graph, const hipGraphNode_t * from, const hipGraphNode_t * to, size_t numDependencies, void* return_address);
-typedef hipError_t (*__hipGraphNodeGetType_t)(hipGraphNode_t node, hipGraphNodeType * pType, void* return_address);
-typedef hipError_t (*__hipTexRefSetBorderColor_t)(textureReference * texRef, float * pBorderColor, void* return_address);
-typedef hipError_t (*__hipMemPrefetchAsync_t)(const void * dev_ptr, size_t count, int device, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipCtxGetDevice_t)(hipDevice_t * device, void* return_address);
-typedef hipError_t (*__hipMemcpy2DArrayToArray_t)(hipArray_t dst, size_t wOffsetDst, size_t hOffsetDst, hipArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipUserObjectRelease_t)(hipUserObject_t object, unsigned int count, void* return_address);
-typedef hipError_t (*__hipHostGetFlags_t)(unsigned int * flagsPtr, void * hostPtr, void* return_address);
-typedef hipError_t (*__hipDrvGraphAddMemsetNode_t)(hipGraphNode_t * phGraphNode, hipGraph_t hGraph, const hipGraphNode_t * dependencies, size_t numDependencies, const HIP_MEMSET_NODE_PARAMS * memsetParams, hipCtx_t ctx, void* return_address);
-typedef hipError_t (*__hipMemcpyAtoD_t)(hipDeviceptr_t dstDevice, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, void* return_address);
-typedef hipError_t (*__hipMemPoolCreate_t)(hipMemPool_t * mem_pool, const hipMemPoolProps * pool_props, void* return_address);
-typedef const char * (*__hipKernelNameRef_t)(const hipFunction_t f, void* return_address);
-typedef hipError_t (*__hipMemset3DAsync_t)(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipEventRecord_t)(hipEvent_t event, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipMipmappedArrayDestroy_t)(hipMipmappedArray_t hMipmappedArray, void* return_address);
-typedef hipError_t (*__hipMemsetAsync_spt_t)(void * dst, int value, size_t sizeBytes, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipDevicePrimaryCtxSetFlags_t)(hipDevice_t dev, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipPeekAtLastError_t)(void* return_address);
-typedef hipError_t (*__hipDeviceGetGraphMemAttribute_t)(int device, hipGraphMemAttributeType attr, void * value, void* return_address);
-typedef hipError_t (*__hipDrvGetErrorName_t)(hipError_t hipError, const char ** errorString, void* return_address);
-typedef hipError_t (*__hipMemcpy_spt_t)(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipCtxSetSharedMemConfig_t)(hipSharedMemConfig config, void* return_address);
-typedef hipError_t (*__hipCreateSurfaceObject_t)(hipSurfaceObject_t * pSurfObject, const hipResourceDesc * pResDesc, void* return_address);
-typedef hipError_t (*__hipGetMipmappedArrayLevel_t)(hipArray_t * levelArray, hipMipmappedArray_const_t mipmappedArray, unsigned int level, void* return_address);
-typedef hipError_t (*__hipGraphExecDestroy_t)(hipGraphExec_t graphExec, void* return_address);
-typedef hipError_t (*__hipMemsetD32Async_t)(hipDeviceptr_t dst, int value, size_t count, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipDeviceEnablePeerAccess_t)(int peerDeviceId, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipArray3DCreate_t)(hipArray_t * array, const HIP_ARRAY3D_DESCRIPTOR * pAllocateArray, void* return_address);
-typedef hipError_t (*__hipIpcOpenMemHandle_t)(void ** devPtr, hipIpcMemHandle_t handle, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipMemPoolTrimTo_t)(hipMemPool_t mem_pool, size_t min_bytes_to_hold, void* return_address);
-typedef hipError_t (*__hipMemcpy2D_t)(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipFuncGetAttribute_t)(int * value, hipFunction_attribute attrib, hipFunction_t hfunc, void* return_address);
-typedef hipError_t (*__hipBindTextureToMipmappedArray_t)(const textureReference * tex, hipMipmappedArray_const_t mipmappedArray, const hipChannelFormatDesc * desc, void* return_address);
-typedef hipError_t (*__hipGraphicsMapResources_t)(int count, hipGraphicsResource_t * resources, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipArrayCreate_t)(hipArray_t * pHandle, const HIP_ARRAY_DESCRIPTOR * pAllocateArray, void* return_address);
-typedef hipError_t (*__hipTexRefSetMaxAnisotropy_t)(textureReference * texRef, unsigned int maxAniso, void* return_address);
-typedef hipError_t (*__hipGraphKernelNodeGetAttribute_t)(hipGraphNode_t hNode, hipLaunchAttributeID attr, hipLaunchAttributeValue * value, void* return_address);
-typedef hipError_t (*__hipExtLaunchKernel_t)(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, hipEvent_t startEvent, hipEvent_t stopEvent, int flags, void* return_address);
-typedef hipError_t (*__hipTexRefSetMipmapFilterMode_t)(textureReference * texRef, enum hipTextureFilterMode fm, void* return_address);
-typedef hipError_t (*__hipMemImportFromShareableHandle_t)(hipMemGenericAllocationHandle_t * handle, void * osHandle, hipMemAllocationHandleType shHandleType, void* return_address);
-typedef hipError_t (*__hipTexRefSetFormat_t)(textureReference * texRef, hipArray_Format fmt, int NumPackedComponents, void* return_address);
-typedef const char * (*__amd_dbgapi_get_git_hash_t)(void* return_address);
-typedef hipError_t (*__hipLaunchByPtr_t)(const void * func, void* return_address);
-typedef size_t (*__amd_dbgapi_get_build_id_t)(void* return_address);
-typedef hipError_t (*__hipMemcpy3DAsync_t)(const struct hipMemcpy3DParms * p, hipStream_t stream, void* return_address);
-typedef hipError_t (*__hipGetTextureObjectResourceViewDesc_t)(struct hipResourceViewDesc * pResViewDesc, hipTextureObject_t textureObject, void* return_address);
-typedef hipError_t (*__hipTexRefSetFilterMode_t)(textureReference * texRef, enum hipTextureFilterMode fm, void* return_address);
-typedef hipError_t (*__hipDriverGetVersion_t)(int * driverVersion, void* return_address);
-typedef hipError_t (*__hipStreamWriteValue64_t)(hipStream_t stream, void * ptr, uint64_t value, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipMallocMipmappedArray_t)(hipMipmappedArray_t * mipmappedArray, const struct hipChannelFormatDesc * desc, struct hipExtent extent, unsigned int numLevels, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipMemset_spt_t)(void * dst, int value, size_t sizeBytes, void* return_address);
-typedef hipError_t (*__hipTexRefSetFlags_t)(textureReference * texRef, unsigned int Flags, void* return_address);
-typedef hipError_t (*__hipMemGetAddressRange_t)(hipDeviceptr_t * pbase, size_t * psize, hipDeviceptr_t dptr, void* return_address);
-typedef hipError_t (*__hipTexRefSetMipmapLevelClamp_t)(textureReference * texRef, float minMipMapLevelClamp, float maxMipMapLevelClamp, void* return_address);
-typedef hipError_t (*__hipGraphMemcpyNodeSetParams_t)(hipGraphNode_t node, const hipMemcpy3DParms * pNodeParams, void* return_address);
-typedef hipError_t (*__hipGraphGetEdges_t)(hipGraph_t graph, hipGraphNode_t * from, hipGraphNode_t * to, size_t * numEdges, void* return_address);
-typedef hipError_t (*__hipMemcpyToArray_t)(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
-typedef hipError_t (*__hipExtMallocWithFlags_t)(void ** ptr, size_t sizeBytes, unsigned int flags, void* return_address);
-typedef hipError_t (*__hipFuncSetAttribute_t)(const void * func, hipFuncAttribute attr, int value, void* return_address);
-typedef hipError_t (*__hipChooseDeviceR0600_t)(int * device, const hipDeviceProp_tR0600 * prop, void* return_address);
-typedef hipError_t (*__hipTexRefSetMipmappedArray_t)(textureReference * texRef, struct hipMipmappedArray * mipmappedArray, unsigned int Flags, void* return_address);
-typedef hipError_t (*__hipMemset_t)(void * dst, int value, size_t sizeBytes, void* return_address);
-typedef hipError_t (*__hipTexRefGetMipmapLevelClamp_t)(float * pminMipmapLevelClamp, float * pmaxMipmapLevelClamp, const textureReference * texRef, void* return_address);
+#if HAVE_hipGraphExecMemcpyNodeSetParams1D       
+    hipError_t i_hipGraphExecMemcpyNodeSetParams1D(hipGraphExec_t hGraphExec, hipGraphNode_t node, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipGraphExecMemcpyNodeSetParams1D_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipCtxEnablePeerAccess       
+    hipError_t i_hipCtxEnablePeerAccess(hipCtx_t peerCtx, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipCtxEnablePeerAccess_t)(hipCtx_t peerCtx, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipHostUnregister       
+    hipError_t i_hipHostUnregister(void * hostPtr, void* return_address);
+    typedef hipError_t (*__hipHostUnregister_t)(void * hostPtr, void* return_address);
+#endif
+
+#if HAVE_hipDevicePrimaryCtxGetState       
+    hipError_t i_hipDevicePrimaryCtxGetState(hipDevice_t dev, unsigned int * flags, int * active, void* return_address);
+    typedef hipError_t (*__hipDevicePrimaryCtxGetState_t)(hipDevice_t dev, unsigned int * flags, int * active, void* return_address);
+#endif
+
+#if HAVE_hipPointerGetAttribute       
+    hipError_t i_hipPointerGetAttribute(void * data, hipPointer_attribute attribute, hipDeviceptr_t ptr, void* return_address);
+    typedef hipError_t (*__hipPointerGetAttribute_t)(void * data, hipPointer_attribute attribute, hipDeviceptr_t ptr, void* return_address);
+#endif
+
+#if HAVE_hipMemPoolGetAccess       
+    hipError_t i_hipMemPoolGetAccess(hipMemAccessFlags * flags, hipMemPool_t mem_pool, hipMemLocation * location, void* return_address);
+    typedef hipError_t (*__hipMemPoolGetAccess_t)(hipMemAccessFlags * flags, hipMemPool_t mem_pool, hipMemLocation * location, void* return_address);
+#endif
+
+#if HAVE_hipMemsetD32       
+    hipError_t i_hipMemsetD32(hipDeviceptr_t dest, int value, size_t count, void* return_address);
+    typedef hipError_t (*__hipMemsetD32_t)(hipDeviceptr_t dest, int value, size_t count, void* return_address);
+#endif
+
+#if HAVE_hipTexRefGetMipMappedArray       
+    hipError_t i_hipTexRefGetMipMappedArray(hipMipmappedArray_t * pArray, const textureReference * texRef, void* return_address);
+    typedef hipError_t (*__hipTexRefGetMipMappedArray_t)(hipMipmappedArray_t * pArray, const textureReference * texRef, void* return_address);
+#endif
+
+#if HAVE_hipMalloc3D       
+    hipError_t i_hipMalloc3D(hipPitchedPtr * pitchedDevPtr, hipExtent extent, void* return_address);
+    typedef hipError_t (*__hipMalloc3D_t)(hipPitchedPtr * pitchedDevPtr, hipExtent extent, void* return_address);
+#endif
+
+#if HAVE_hipMemsetD8       
+    hipError_t i_hipMemsetD8(hipDeviceptr_t dest, unsigned char value, size_t count, void* return_address);
+    typedef hipError_t (*__hipMemsetD8_t)(hipDeviceptr_t dest, unsigned char value, size_t count, void* return_address);
+#endif
+
+#if HAVE_hipMallocArray       
+    hipError_t i_hipMallocArray(hipArray_t * array, const hipChannelFormatDesc * desc, size_t width, size_t height, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipMallocArray_t)(hipArray_t * array, const hipChannelFormatDesc * desc, size_t width, size_t height, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipGraphEventWaitNodeGetEvent       
+    hipError_t i_hipGraphEventWaitNodeGetEvent(hipGraphNode_t node, hipEvent_t * event_out, void* return_address);
+    typedef hipError_t (*__hipGraphEventWaitNodeGetEvent_t)(hipGraphNode_t node, hipEvent_t * event_out, void* return_address);
+#endif
+
+#if HAVE_hipDrvMemcpy3D       
+    hipError_t i_hipDrvMemcpy3D(const HIP_MEMCPY3D * pCopy, void* return_address);
+    typedef hipError_t (*__hipDrvMemcpy3D_t)(const HIP_MEMCPY3D * pCopy, void* return_address);
+#endif
+
+#if HAVE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags       
+    hipError_t i_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(int * numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t)(int * numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipHostMalloc       
+    hipError_t i_hipHostMalloc(void ** ptr, size_t size, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipHostMalloc_t)(void ** ptr, size_t size, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipModuleGetTexRef       
+    hipError_t i_hipModuleGetTexRef(textureReference ** texRef, hipModule_t hmod, const char * name, void* return_address);
+    typedef hipError_t (*__hipModuleGetTexRef_t)(textureReference ** texRef, hipModule_t hmod, const char * name, void* return_address);
+#endif
+
+#if HAVE_hipIpcGetMemHandle       
+    hipError_t i_hipIpcGetMemHandle(hipIpcMemHandle_t * handle, void * devPtr, void* return_address);
+    typedef hipError_t (*__hipIpcGetMemHandle_t)(hipIpcMemHandle_t * handle, void * devPtr, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyDtoHAsync       
+    hipError_t i_hipMemcpyDtoHAsync(void * dst, hipDeviceptr_t src, size_t sizeBytes, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpyDtoHAsync_t)(void * dst, hipDeviceptr_t src, size_t sizeBytes, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipModuleLoad       
+    hipError_t i_hipModuleLoad(hipModule_t * module, const char * fname, void* return_address);
+    typedef hipError_t (*__hipModuleLoad_t)(hipModule_t * module, const char * fname, void* return_address);
+#endif
+
+#if HAVE_hipWaitExternalSemaphoresAsync       
+    hipError_t i_hipWaitExternalSemaphoresAsync(const hipExternalSemaphore_t * extSemArray, const hipExternalSemaphoreWaitParams * paramsArray, unsigned int numExtSems, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipWaitExternalSemaphoresAsync_t)(const hipExternalSemaphore_t * extSemArray, const hipExternalSemaphoreWaitParams * paramsArray, unsigned int numExtSems, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipGraphKernelNodeGetParams       
+    hipError_t i_hipGraphKernelNodeGetParams(hipGraphNode_t node, hipKernelNodeParams * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphKernelNodeGetParams_t)(hipGraphNode_t node, hipKernelNodeParams * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipGraphLaunch       
+    hipError_t i_hipGraphLaunch(hipGraphExec_t graphExec, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipGraphLaunch_t)(hipGraphExec_t graphExec, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipHostAlloc       
+    hipError_t i_hipHostAlloc(void ** ptr, size_t size, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipHostAlloc_t)(void ** ptr, size_t size, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipSetDevice       
+    hipError_t i_hipSetDevice(int deviceId, void* return_address);
+    typedef hipError_t (*__hipSetDevice_t)(int deviceId, void* return_address);
+#endif
+
+#if HAVE_hipModuleOccupancyMaxPotentialBlockSizeWithFlags       
+    hipError_t i_hipModuleOccupancyMaxPotentialBlockSizeWithFlags(int * gridSize, int * blockSize, hipFunction_t f, size_t dynSharedMemPerBlk, int blockSizeLimit, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipModuleOccupancyMaxPotentialBlockSizeWithFlags_t)(int * gridSize, int * blockSize, hipFunction_t f, size_t dynSharedMemPerBlk, int blockSizeLimit, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipGraphNodeGetDependentNodes       
+    hipError_t i_hipGraphNodeGetDependentNodes(hipGraphNode_t node, hipGraphNode_t * pDependentNodes, size_t * pNumDependentNodes, void* return_address);
+    typedef hipError_t (*__hipGraphNodeGetDependentNodes_t)(hipGraphNode_t node, hipGraphNode_t * pDependentNodes, size_t * pNumDependentNodes, void* return_address);
+#endif
+
+#if HAVE_hipExtStreamGetCUMask       
+    hipError_t i_hipExtStreamGetCUMask(hipStream_t stream, uint32_t cuMaskSize, uint32_t * cuMask, void* return_address);
+    typedef hipError_t (*__hipExtStreamGetCUMask_t)(hipStream_t stream, uint32_t cuMaskSize, uint32_t * cuMask, void* return_address);
+#endif
+
+#if HAVE_hipMemsetD16       
+    hipError_t i_hipMemsetD16(hipDeviceptr_t dest, unsigned short value, size_t count, void* return_address);
+    typedef hipError_t (*__hipMemsetD16_t)(hipDeviceptr_t dest, unsigned short value, size_t count, void* return_address);
+#endif
+
+#if HAVE_hipLaunchKernel       
+    hipError_t i_hipLaunchKernel(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipLaunchKernel_t)(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipGetErrorString       
+    const char * i_hipGetErrorString(hipError_t hipError, void* return_address);
+    typedef const char * (*__hipGetErrorString_t)(hipError_t hipError, void* return_address);
+#endif
+
+#if HAVE_hipModuleLoadDataEx       
+    hipError_t i_hipModuleLoadDataEx(hipModule_t * module, const void * image, unsigned int numOptions, hipJitOption * options, void ** optionValues, void* return_address);
+    typedef hipError_t (*__hipModuleLoadDataEx_t)(hipModule_t * module, const void * image, unsigned int numOptions, hipJitOption * options, void ** optionValues, void* return_address);
+#endif
+
+#if HAVE_hipTexRefGetFilterMode       
+    hipError_t i_hipTexRefGetFilterMode(enum hipTextureFilterMode * pfm, const textureReference * texRef, void* return_address);
+    typedef hipError_t (*__hipTexRefGetFilterMode_t)(enum hipTextureFilterMode * pfm, const textureReference * texRef, void* return_address);
+#endif
+
+#if HAVE_hipGraphInstantiateWithParams       
+    hipError_t i_hipGraphInstantiateWithParams(hipGraphExec_t * pGraphExec, hipGraph_t graph, hipGraphInstantiateParams * instantiateParams, void* return_address);
+    typedef hipError_t (*__hipGraphInstantiateWithParams_t)(hipGraphExec_t * pGraphExec, hipGraph_t graph, hipGraphInstantiateParams * instantiateParams, void* return_address);
+#endif
+
+#if HAVE_hipGraphMemcpyNodeSetParams1D       
+    hipError_t i_hipGraphMemcpyNodeSetParams1D(hipGraphNode_t node, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipGraphMemcpyNodeSetParams1D_t)(hipGraphNode_t node, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipStreamSynchronize       
+    hipError_t i_hipStreamSynchronize(hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipStreamSynchronize_t)(hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipGraphicsUnmapResources       
+    hipError_t i_hipGraphicsUnmapResources(int count, hipGraphicsResource_t * resources, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipGraphicsUnmapResources_t)(int count, hipGraphicsResource_t * resources, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy2DFromArray_spt       
+    hipError_t i_hipMemcpy2DFromArray_spt(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpy2DFromArray_spt_t)(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipGraphExecMemcpyNodeSetParamsFromSymbol       
+    hipError_t i_hipGraphExecMemcpyNodeSetParamsFromSymbol(hipGraphExec_t hGraphExec, hipGraphNode_t node, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipGraphExecMemcpyNodeSetParamsFromSymbol_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipTexRefGetMipmapLevelBias       
+    hipError_t i_hipTexRefGetMipmapLevelBias(float * pbias, const textureReference * texRef, void* return_address);
+    typedef hipError_t (*__hipTexRefGetMipmapLevelBias_t)(float * pbias, const textureReference * texRef, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddExternalSemaphoresSignalNode       
+    hipError_t i_hipGraphAddExternalSemaphoresSignalNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphAddExternalSemaphoresSignalNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address);
+#endif
+
+#if HAVE_hipExtGetLastError       
+    hipError_t i_hipExtGetLastError(void* return_address);
+    typedef hipError_t (*__hipExtGetLastError_t)(void* return_address);
+#endif
+
+#if HAVE_hipMemMapArrayAsync       
+    hipError_t i_hipMemMapArrayAsync(hipArrayMapInfo * mapInfoList, unsigned int count, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemMapArrayAsync_t)(hipArrayMapInfo * mapInfoList, unsigned int count, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyAsync       
+    hipError_t i_hipMemcpyAsync(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpyAsync_t)(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipGraphKernelNodeSetAttribute       
+    hipError_t i_hipGraphKernelNodeSetAttribute(hipGraphNode_t hNode, hipLaunchAttributeID attr, const hipLaunchAttributeValue * value, void* return_address);
+    typedef hipError_t (*__hipGraphKernelNodeSetAttribute_t)(hipGraphNode_t hNode, hipLaunchAttributeID attr, const hipLaunchAttributeValue * value, void* return_address);
+#endif
+
+#if HAVE_hipDrvMemcpy2DUnaligned       
+    hipError_t i_hipDrvMemcpy2DUnaligned(const hip_Memcpy2D * pCopy, void* return_address);
+    typedef hipError_t (*__hipDrvMemcpy2DUnaligned_t)(const hip_Memcpy2D * pCopy, void* return_address);
+#endif
+
+#if HAVE_hipMemPoolDestroy       
+    hipError_t i_hipMemPoolDestroy(hipMemPool_t mem_pool, void* return_address);
+    typedef hipError_t (*__hipMemPoolDestroy_t)(hipMemPool_t mem_pool, void* return_address);
+#endif
+
+#if HAVE_hipGraphRemoveDependencies       
+    hipError_t i_hipGraphRemoveDependencies(hipGraph_t graph, const hipGraphNode_t * from, const hipGraphNode_t * to, size_t numDependencies, void* return_address);
+    typedef hipError_t (*__hipGraphRemoveDependencies_t)(hipGraph_t graph, const hipGraphNode_t * from, const hipGraphNode_t * to, size_t numDependencies, void* return_address);
+#endif
+
+#if HAVE_hipGraphCreate       
+    hipError_t i_hipGraphCreate(hipGraph_t * pGraph, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipGraphCreate_t)(hipGraph_t * pGraph, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipExtLaunchMultiKernelMultiDevice       
+    hipError_t i_hipExtLaunchMultiKernelMultiDevice(hipLaunchParams * launchParamsList, int numDevices, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipExtLaunchMultiKernelMultiDevice_t)(hipLaunchParams * launchParamsList, int numDevices, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipGetDeviceCount       
+    hipError_t i_hipGetDeviceCount(int * count, void* return_address);
+    typedef hipError_t (*__hipGetDeviceCount_t)(int * count, void* return_address);
+#endif
+
+#if HAVE_hipMemUnmap       
+    hipError_t i_hipMemUnmap(void * ptr, size_t size, void* return_address);
+    typedef hipError_t (*__hipMemUnmap_t)(void * ptr, size_t size, void* return_address);
+#endif
+
+#if HAVE_hipTexObjectGetResourceDesc       
+    hipError_t i_hipTexObjectGetResourceDesc(HIP_RESOURCE_DESC * pResDesc, hipTextureObject_t texObject, void* return_address);
+    typedef hipError_t (*__hipTexObjectGetResourceDesc_t)(HIP_RESOURCE_DESC * pResDesc, hipTextureObject_t texObject, void* return_address);
+#endif
+
+#if HAVE_hipGraphExecEventRecordNodeSetEvent       
+    hipError_t i_hipGraphExecEventRecordNodeSetEvent(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, hipEvent_t event, void* return_address);
+    typedef hipError_t (*__hipGraphExecEventRecordNodeSetEvent_t)(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, hipEvent_t event, void* return_address);
+#endif
+
+#if HAVE_hipInit       
+    hipError_t i_hipInit(unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipInit_t)(unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipThreadExchangeStreamCaptureMode       
+    hipError_t i_hipThreadExchangeStreamCaptureMode(hipStreamCaptureMode * mode, void* return_address);
+    typedef hipError_t (*__hipThreadExchangeStreamCaptureMode_t)(hipStreamCaptureMode * mode, void* return_address);
+#endif
+
+#if HAVE_hipDeviceGetP2PAttribute       
+    hipError_t i_hipDeviceGetP2PAttribute(int * value, hipDeviceP2PAttr attr, int srcDevice, int dstDevice, void* return_address);
+    typedef hipError_t (*__hipDeviceGetP2PAttribute_t)(int * value, hipDeviceP2PAttr attr, int srcDevice, int dstDevice, void* return_address);
+#endif
+
+#if HAVE_hipDeviceGetByPCIBusId       
+    hipError_t i_hipDeviceGetByPCIBusId(int * device, const char * pciBusId, void* return_address);
+    typedef hipError_t (*__hipDeviceGetByPCIBusId_t)(int * device, const char * pciBusId, void* return_address);
+#endif
+
+#if HAVE_hipHostFree       
+    hipError_t i_hipHostFree(void * ptr, void* return_address);
+    typedef hipError_t (*__hipHostFree_t)(void * ptr, void* return_address);
+#endif
+
+#if HAVE_hipExtGetLinkTypeAndHopCount       
+    hipError_t i_hipExtGetLinkTypeAndHopCount(int device1, int device2, uint32_t * linktype, uint32_t * hopcount, void* return_address);
+    typedef hipError_t (*__hipExtGetLinkTypeAndHopCount_t)(int device1, int device2, uint32_t * linktype, uint32_t * hopcount, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyToSymbolAsync_spt       
+    hipError_t i_hipMemcpyToSymbolAsync_spt(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpyToSymbolAsync_spt_t)(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipCtxDisablePeerAccess       
+    hipError_t i_hipCtxDisablePeerAccess(hipCtx_t peerCtx, void* return_address);
+    typedef hipError_t (*__hipCtxDisablePeerAccess_t)(hipCtx_t peerCtx, void* return_address);
+#endif
+
+#if HAVE_hipSetupArgument       
+    hipError_t i_hipSetupArgument(const void * arg, size_t size, size_t offset, void* return_address);
+    typedef hipError_t (*__hipSetupArgument_t)(const void * arg, size_t size, size_t offset, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyAtoHAsync       
+    hipError_t i_hipMemcpyAtoHAsync(void * dstHost, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpyAtoHAsync_t)(void * dstHost, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipCtxSetCacheConfig       
+    hipError_t i_hipCtxSetCacheConfig(hipFuncCache_t cacheConfig, void* return_address);
+    typedef hipError_t (*__hipCtxSetCacheConfig_t)(hipFuncCache_t cacheConfig, void* return_address);
+#endif
+
+#if HAVE_hipMemRelease       
+    hipError_t i_hipMemRelease(hipMemGenericAllocationHandle_t handle, void* return_address);
+    typedef hipError_t (*__hipMemRelease_t)(hipMemGenericAllocationHandle_t handle, void* return_address);
+#endif
+
+#if HAVE_hipUnbindTexture       
+    hipError_t i_hipUnbindTexture(const textureReference * tex, void* return_address);
+    typedef hipError_t (*__hipUnbindTexture_t)(const textureReference * tex, void* return_address);
+#endif
+
+#if HAVE_hipDrvMemcpy3DAsync       
+    hipError_t i_hipDrvMemcpy3DAsync(const HIP_MEMCPY3D * pCopy, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipDrvMemcpy3DAsync_t)(const HIP_MEMCPY3D * pCopy, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipIpcGetEventHandle       
+    hipError_t i_hipIpcGetEventHandle(hipIpcEventHandle_t * handle, hipEvent_t event, void* return_address);
+    typedef hipError_t (*__hipIpcGetEventHandle_t)(hipIpcEventHandle_t * handle, hipEvent_t event, void* return_address);
+#endif
+
+#if HAVE_hipGraphReleaseUserObject       
+    hipError_t i_hipGraphReleaseUserObject(hipGraph_t graph, hipUserObject_t object, unsigned int count, void* return_address);
+    typedef hipError_t (*__hipGraphReleaseUserObject_t)(hipGraph_t graph, hipUserObject_t object, unsigned int count, void* return_address);
+#endif
+
+#if HAVE_hipDeviceGetMemPool       
+    hipError_t i_hipDeviceGetMemPool(hipMemPool_t * mem_pool, int device, void* return_address);
+    typedef hipError_t (*__hipDeviceGetMemPool_t)(hipMemPool_t * mem_pool, int device, void* return_address);
+#endif
+
+#if HAVE_hipGraphHostNodeSetParams       
+    hipError_t i_hipGraphHostNodeSetParams(hipGraphNode_t node, const hipHostNodeParams * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphHostNodeSetParams_t)(hipGraphNode_t node, const hipHostNodeParams * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddEventWaitNode       
+    hipError_t i_hipGraphAddEventWaitNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipEvent_t event, void* return_address);
+    typedef hipError_t (*__hipGraphAddEventWaitNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipEvent_t event, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy2DFromArrayAsync_spt       
+    hipError_t i_hipMemcpy2DFromArrayAsync_spt(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpy2DFromArrayAsync_spt_t)(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipLaunchHostFunc_spt       
+    hipError_t i_hipLaunchHostFunc_spt(hipStream_t stream, hipHostFn_t fn, void * userData, void* return_address);
+    typedef hipError_t (*__hipLaunchHostFunc_spt_t)(hipStream_t stream, hipHostFn_t fn, void * userData, void* return_address);
+#endif
+
+#if HAVE_hipStreamWaitEvent_spt       
+    hipError_t i_hipStreamWaitEvent_spt(hipStream_t stream, hipEvent_t event, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipStreamWaitEvent_spt_t)(hipStream_t stream, hipEvent_t event, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipArrayGetDescriptor       
+    hipError_t i_hipArrayGetDescriptor(HIP_ARRAY_DESCRIPTOR * pArrayDescriptor, hipArray_t array, void* return_address);
+    typedef hipError_t (*__hipArrayGetDescriptor_t)(HIP_ARRAY_DESCRIPTOR * pArrayDescriptor, hipArray_t array, void* return_address);
+#endif
+
+#if HAVE_hipGraphExecUpdate       
+    hipError_t i_hipGraphExecUpdate(hipGraphExec_t hGraphExec, hipGraph_t hGraph, hipGraphNode_t * hErrorNode_out, hipGraphExecUpdateResult * updateResult_out, void* return_address);
+    typedef hipError_t (*__hipGraphExecUpdate_t)(hipGraphExec_t hGraphExec, hipGraph_t hGraph, hipGraphNode_t * hErrorNode_out, hipGraphExecUpdateResult * updateResult_out, void* return_address);
+#endif
+
+#if HAVE_hipMemGetAllocationPropertiesFromHandle       
+    hipError_t i_hipMemGetAllocationPropertiesFromHandle(hipMemAllocationProp * prop, hipMemGenericAllocationHandle_t handle, void* return_address);
+    typedef hipError_t (*__hipMemGetAllocationPropertiesFromHandle_t)(hipMemAllocationProp * prop, hipMemGenericAllocationHandle_t handle, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyWithStream       
+    hipError_t i_hipMemcpyWithStream(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpyWithStream_t)(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddExternalSemaphoresWaitNode       
+    hipError_t i_hipGraphAddExternalSemaphoresWaitNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphAddExternalSemaphoresWaitNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyAtoH       
+    hipError_t i_hipMemcpyAtoH(void * dst, hipArray_t srcArray, size_t srcOffset, size_t count, void* return_address);
+    typedef hipError_t (*__hipMemcpyAtoH_t)(void * dst, hipArray_t srcArray, size_t srcOffset, size_t count, void* return_address);
+#endif
+
+#if HAVE_hipStreamQuery       
+    hipError_t i_hipStreamQuery(hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipStreamQuery_t)(hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipIpcCloseMemHandle       
+    hipError_t i_hipIpcCloseMemHandle(void * devPtr, void* return_address);
+    typedef hipError_t (*__hipIpcCloseMemHandle_t)(void * devPtr, void* return_address);
+#endif
+
+#if HAVE_hipMemsetAsync       
+    hipError_t i_hipMemsetAsync(void * dst, int value, size_t sizeBytes, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemsetAsync_t)(void * dst, int value, size_t sizeBytes, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyDtoD       
+    hipError_t i_hipMemcpyDtoD(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes, void* return_address);
+    typedef hipError_t (*__hipMemcpyDtoD_t)(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes, void* return_address);
+#endif
+
+#if HAVE_hipModuleUnload       
+    hipError_t i_hipModuleUnload(hipModule_t module, void* return_address);
+    typedef hipError_t (*__hipModuleUnload_t)(hipModule_t module, void* return_address);
+#endif
+
+#if HAVE_hipGetDevicePropertiesR0600       
+    hipError_t i_hipGetDevicePropertiesR0600(hipDeviceProp_tR0600 * prop, int deviceId, void* return_address);
+    typedef hipError_t (*__hipGetDevicePropertiesR0600_t)(hipDeviceProp_tR0600 * prop, int deviceId, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyFromArray       
+    hipError_t i_hipMemcpyFromArray(void * dst, hipArray_const_t srcArray, size_t wOffset, size_t hOffset, size_t count, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpyFromArray_t)(void * dst, hipArray_const_t srcArray, size_t wOffset, size_t hOffset, size_t count, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipDeviceCanAccessPeer       
+    hipError_t i_hipDeviceCanAccessPeer(int * canAccessPeer, int deviceId, int peerDeviceId, void* return_address);
+    typedef hipError_t (*__hipDeviceCanAccessPeer_t)(int * canAccessPeer, int deviceId, int peerDeviceId, void* return_address);
+#endif
+
+#if HAVE_hipMemSetAccess       
+    hipError_t i_hipMemSetAccess(void * ptr, size_t size, const hipMemAccessDesc * desc, size_t count, void* return_address);
+    typedef hipError_t (*__hipMemSetAccess_t)(void * ptr, size_t size, const hipMemAccessDesc * desc, size_t count, void* return_address);
+#endif
+
+#if HAVE_hipStreamWaitValue32       
+    hipError_t i_hipStreamWaitValue32(hipStream_t stream, void * ptr, uint32_t value, unsigned int flags, uint32_t mask, void* return_address);
+    typedef hipError_t (*__hipStreamWaitValue32_t)(hipStream_t stream, void * ptr, uint32_t value, unsigned int flags, uint32_t mask, void* return_address);
+#endif
+
+#if HAVE_hipApiName       
+    const char * i_hipApiName(uint32_t id, void* return_address);
+    typedef const char * (*__hipApiName_t)(uint32_t id, void* return_address);
+#endif
+
+#if HAVE_hipGraphicsSubResourceGetMappedArray       
+    hipError_t i_hipGraphicsSubResourceGetMappedArray(hipArray_t * array, hipGraphicsResource_t resource, unsigned int arrayIndex, unsigned int mipLevel, void* return_address);
+    typedef hipError_t (*__hipGraphicsSubResourceGetMappedArray_t)(hipArray_t * array, hipGraphicsResource_t resource, unsigned int arrayIndex, unsigned int mipLevel, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy2DToArrayAsync       
+    hipError_t i_hipMemcpy2DToArrayAsync(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpy2DToArrayAsync_t)(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipGraphDestroy       
+    hipError_t i_hipGraphDestroy(hipGraph_t graph, void* return_address);
+    typedef hipError_t (*__hipGraphDestroy_t)(hipGraph_t graph, void* return_address);
+#endif
+
+#if HAVE_hipTexRefGetBorderColor       
+    hipError_t i_hipTexRefGetBorderColor(float * pBorderColor, const textureReference * texRef, void* return_address);
+    typedef hipError_t (*__hipTexRefGetBorderColor_t)(float * pBorderColor, const textureReference * texRef, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddMemcpyNode1D       
+    hipError_t i_hipGraphAddMemcpyNode1D(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipGraphAddMemcpyNode1D_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dst, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipGraphGetNodes       
+    hipError_t i_hipGraphGetNodes(hipGraph_t graph, hipGraphNode_t * nodes, size_t * numNodes, void* return_address);
+    typedef hipError_t (*__hipGraphGetNodes_t)(hipGraph_t graph, hipGraphNode_t * nodes, size_t * numNodes, void* return_address);
+#endif
+
+#if HAVE_hipStreamGetFlags_spt       
+    hipError_t i_hipStreamGetFlags_spt(hipStream_t stream, unsigned int * flags, void* return_address);
+    typedef hipError_t (*__hipStreamGetFlags_spt_t)(hipStream_t stream, unsigned int * flags, void* return_address);
+#endif
+
+#if HAVE_hipTexRefSetAddress2D       
+    hipError_t i_hipTexRefSetAddress2D(textureReference * texRef, const HIP_ARRAY_DESCRIPTOR * desc, hipDeviceptr_t dptr, size_t Pitch, void* return_address);
+    typedef hipError_t (*__hipTexRefSetAddress2D_t)(textureReference * texRef, const HIP_ARRAY_DESCRIPTOR * desc, hipDeviceptr_t dptr, size_t Pitch, void* return_address);
+#endif
+
+#if HAVE_hipStreamGetPriority       
+    hipError_t i_hipStreamGetPriority(hipStream_t stream, int * priority, void* return_address);
+    typedef hipError_t (*__hipStreamGetPriority_t)(hipStream_t stream, int * priority, void* return_address);
+#endif
+
+#if HAVE_hipStreamCreate       
+    hipError_t i_hipStreamCreate(hipStream_t * stream, void* return_address);
+    typedef hipError_t (*__hipStreamCreate_t)(hipStream_t * stream, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyFromSymbol       
+    hipError_t i_hipMemcpyFromSymbol(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpyFromSymbol_t)(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipGraphNodeGetEnabled       
+    hipError_t i_hipGraphNodeGetEnabled(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, unsigned int * isEnabled, void* return_address);
+    typedef hipError_t (*__hipGraphNodeGetEnabled_t)(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, unsigned int * isEnabled, void* return_address);
+#endif
+
+#if HAVE_hipCreateChannelDesc       
+    struct hipChannelFormatDesc i_hipCreateChannelDesc(int x, int y, int z, int w, enum hipChannelFormatKind f, void* return_address);
+    typedef struct hipChannelFormatDesc (*__hipCreateChannelDesc_t)(int x, int y, int z, int w, enum hipChannelFormatKind f, void* return_address);
+#endif
+
+#if HAVE_hipFreeMipmappedArray       
+    hipError_t i_hipFreeMipmappedArray(hipMipmappedArray_t mipmappedArray, void* return_address);
+    typedef hipError_t (*__hipFreeMipmappedArray_t)(hipMipmappedArray_t mipmappedArray, void* return_address);
+#endif
+
+#if HAVE_hipGetTextureAlignmentOffset       
+    hipError_t i_hipGetTextureAlignmentOffset(size_t * offset, const textureReference * texref, void* return_address);
+    typedef hipError_t (*__hipGetTextureAlignmentOffset_t)(size_t * offset, const textureReference * texref, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddEventRecordNode       
+    hipError_t i_hipGraphAddEventRecordNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipEvent_t event, void* return_address);
+    typedef hipError_t (*__hipGraphAddEventRecordNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipEvent_t event, void* return_address);
+#endif
+
+#if HAVE_hipGraphNodeFindInClone       
+    hipError_t i_hipGraphNodeFindInClone(hipGraphNode_t * pNode, hipGraphNode_t originalNode, hipGraph_t clonedGraph, void* return_address);
+    typedef hipError_t (*__hipGraphNodeFindInClone_t)(hipGraphNode_t * pNode, hipGraphNode_t originalNode, hipGraph_t clonedGraph, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyFromSymbol_spt       
+    hipError_t i_hipMemcpyFromSymbol_spt(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpyFromSymbol_spt_t)(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipMemset3DAsync_spt       
+    hipError_t i_hipMemset3DAsync_spt(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemset3DAsync_spt_t)(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMemsetD16Async       
+    hipError_t i_hipMemsetD16Async(hipDeviceptr_t dest, unsigned short value, size_t count, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemsetD16Async_t)(hipDeviceptr_t dest, unsigned short value, size_t count, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipDeviceGetCacheConfig       
+    hipError_t i_hipDeviceGetCacheConfig(hipFuncCache_t * cacheConfig, void* return_address);
+    typedef hipError_t (*__hipDeviceGetCacheConfig_t)(hipFuncCache_t * cacheConfig, void* return_address);
+#endif
+
+#if HAVE_hipMemCreate       
+    hipError_t i_hipMemCreate(hipMemGenericAllocationHandle_t * handle, size_t size, const hipMemAllocationProp * prop, unsigned long long flags, void* return_address);
+    typedef hipError_t (*__hipMemCreate_t)(hipMemGenericAllocationHandle_t * handle, size_t size, const hipMemAllocationProp * prop, unsigned long long flags, void* return_address);
+#endif
+
+#if HAVE_hipGraphExternalSemaphoresWaitNodeGetParams       
+    hipError_t i_hipGraphExternalSemaphoresWaitNodeGetParams(hipGraphNode_t hNode, hipExternalSemaphoreWaitNodeParams * params_out, void* return_address);
+    typedef hipError_t (*__hipGraphExternalSemaphoresWaitNodeGetParams_t)(hipGraphNode_t hNode, hipExternalSemaphoreWaitNodeParams * params_out, void* return_address);
+#endif
+
+#if HAVE_hipStreamEndCapture       
+    hipError_t i_hipStreamEndCapture(hipStream_t stream, hipGraph_t * pGraph, void* return_address);
+    typedef hipError_t (*__hipStreamEndCapture_t)(hipStream_t stream, hipGraph_t * pGraph, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyFromSymbolAsync_spt       
+    hipError_t i_hipMemcpyFromSymbolAsync_spt(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpyFromSymbolAsync_spt_t)(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyHtoA       
+    hipError_t i_hipMemcpyHtoA(hipArray_t dstArray, size_t dstOffset, const void * srcHost, size_t count, void* return_address);
+    typedef hipError_t (*__hipMemcpyHtoA_t)(hipArray_t dstArray, size_t dstOffset, const void * srcHost, size_t count, void* return_address);
+#endif
+
+#if HAVE_hipGraphExecHostNodeSetParams       
+    hipError_t i_hipGraphExecHostNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipHostNodeParams * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphExecHostNodeSetParams_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipHostNodeParams * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipMalloc       
+    hipError_t i_hipMalloc(void ** ptr, size_t size, void* return_address);
+    typedef hipError_t (*__hipMalloc_t)(void ** ptr, size_t size, void* return_address);
+#endif
+
+#if HAVE_hipMalloc3DArray       
+    hipError_t i_hipMalloc3DArray(hipArray_t * array, const struct hipChannelFormatDesc * desc, struct hipExtent extent, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipMalloc3DArray_t)(hipArray_t * array, const struct hipChannelFormatDesc * desc, struct hipExtent extent, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipGraphExecKernelNodeSetParams       
+    hipError_t i_hipGraphExecKernelNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipKernelNodeParams * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphExecKernelNodeSetParams_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipKernelNodeParams * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipGetTextureObjectResourceDesc       
+    hipError_t i_hipGetTextureObjectResourceDesc(hipResourceDesc * pResDesc, hipTextureObject_t textureObject, void* return_address);
+    typedef hipError_t (*__hipGetTextureObjectResourceDesc_t)(hipResourceDesc * pResDesc, hipTextureObject_t textureObject, void* return_address);
+#endif
+
+#if HAVE___hipPushCallConfiguration       
+    hipError_t i___hipPushCallConfiguration(dim3 gridDim, dim3 blockDim, size_t sharedMem, hipStream_t stream, void* return_address);
+    typedef hipError_t (*____hipPushCallConfiguration_t)(dim3 gridDim, dim3 blockDim, size_t sharedMem, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy3DAsync_spt       
+    hipError_t i_hipMemcpy3DAsync_spt(const hipMemcpy3DParms * p, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpy3DAsync_spt_t)(const hipMemcpy3DParms * p, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMemsetD8Async       
+    hipError_t i_hipMemsetD8Async(hipDeviceptr_t dest, unsigned char value, size_t count, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemsetD8Async_t)(hipDeviceptr_t dest, unsigned char value, size_t count, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipStreamAddCallback       
+    hipError_t i_hipStreamAddCallback(hipStream_t stream, hipStreamCallback_t callback, void * userData, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipStreamAddCallback_t)(hipStream_t stream, hipStreamCallback_t callback, void * userData, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipMemPoolImportPointer       
+    hipError_t i_hipMemPoolImportPointer(void ** dev_ptr, hipMemPool_t mem_pool, hipMemPoolPtrExportData * export_data, void* return_address);
+    typedef hipError_t (*__hipMemPoolImportPointer_t)(void ** dev_ptr, hipMemPool_t mem_pool, hipMemPoolPtrExportData * export_data, void* return_address);
+#endif
+
+#if HAVE_hipFuncGetAttributes       
+    hipError_t i_hipFuncGetAttributes(struct hipFuncAttributes * attr, const void * func, void* return_address);
+    typedef hipError_t (*__hipFuncGetAttributes_t)(struct hipFuncAttributes * attr, const void * func, void* return_address);
+#endif
+
+#if HAVE_hipCtxGetCurrent       
+    hipError_t i_hipCtxGetCurrent(hipCtx_t * ctx, void* return_address);
+    typedef hipError_t (*__hipCtxGetCurrent_t)(hipCtx_t * ctx, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddChildGraphNode       
+    hipError_t i_hipGraphAddChildGraphNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipGraph_t childGraph, void* return_address);
+    typedef hipError_t (*__hipGraphAddChildGraphNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipGraph_t childGraph, void* return_address);
+#endif
+
+#if HAVE_hipEventCreate       
+    hipError_t i_hipEventCreate(hipEvent_t * event, void* return_address);
+    typedef hipError_t (*__hipEventCreate_t)(hipEvent_t * event, void* return_address);
+#endif
+
+#if HAVE_hipHostGetDevicePointer       
+    hipError_t i_hipHostGetDevicePointer(void ** devPtr, void * hstPtr, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipHostGetDevicePointer_t)(void ** devPtr, void * hstPtr, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipEventQuery       
+    hipError_t i_hipEventQuery(hipEvent_t event, void* return_address);
+    typedef hipError_t (*__hipEventQuery_t)(hipEvent_t event, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyPeerAsync       
+    hipError_t i_hipMemcpyPeerAsync(void * dst, int dstDeviceId, const void * src, int srcDevice, size_t sizeBytes, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpyPeerAsync_t)(void * dst, int dstDeviceId, const void * src, int srcDevice, size_t sizeBytes, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMemMap       
+    hipError_t i_hipMemMap(void * ptr, size_t size, size_t offset, hipMemGenericAllocationHandle_t handle, unsigned long long flags, void* return_address);
+    typedef hipError_t (*__hipMemMap_t)(void * ptr, size_t size, size_t offset, hipMemGenericAllocationHandle_t handle, unsigned long long flags, void* return_address);
+#endif
+
+#if HAVE_hipBindTextureToArray       
+    hipError_t i_hipBindTextureToArray(const textureReference * tex, hipArray_const_t array, const hipChannelFormatDesc * desc, void* return_address);
+    typedef hipError_t (*__hipBindTextureToArray_t)(const textureReference * tex, hipArray_const_t array, const hipChannelFormatDesc * desc, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy2DAsync_spt       
+    hipError_t i_hipMemcpy2DAsync_spt(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpy2DAsync_spt_t)(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMemPoolSetAttribute       
+    hipError_t i_hipMemPoolSetAttribute(hipMemPool_t mem_pool, hipMemPoolAttr attr, void * value, void* return_address);
+    typedef hipError_t (*__hipMemPoolSetAttribute_t)(hipMemPool_t mem_pool, hipMemPoolAttr attr, void * value, void* return_address);
+#endif
+
+#if HAVE_hipGetLastError       
+    hipError_t i_hipGetLastError(void* return_address);
+    typedef hipError_t (*__hipGetLastError_t)(void* return_address);
+#endif
+
+#if HAVE_hipStreamEndCapture_spt       
+    hipError_t i_hipStreamEndCapture_spt(hipStream_t stream, hipGraph_t * pGraph, void* return_address);
+    typedef hipError_t (*__hipStreamEndCapture_spt_t)(hipStream_t stream, hipGraph_t * pGraph, void* return_address);
+#endif
+
+#if HAVE_hipModuleOccupancyMaxPotentialBlockSize       
+    hipError_t i_hipModuleOccupancyMaxPotentialBlockSize(int * gridSize, int * blockSize, hipFunction_t f, size_t dynSharedMemPerBlk, int blockSizeLimit, void* return_address);
+    typedef hipError_t (*__hipModuleOccupancyMaxPotentialBlockSize_t)(int * gridSize, int * blockSize, hipFunction_t f, size_t dynSharedMemPerBlk, int blockSizeLimit, void* return_address);
+#endif
+
+#if HAVE_hipKernelNameRefByPtr       
+    const char * i_hipKernelNameRefByPtr(const void * hostFunction, hipStream_t stream, void* return_address);
+    typedef const char * (*__hipKernelNameRefByPtr_t)(const void * hostFunction, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipGetDevice       
+    hipError_t i_hipGetDevice(int * deviceId, void* return_address);
+    typedef hipError_t (*__hipGetDevice_t)(int * deviceId, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy3D_spt       
+    hipError_t i_hipMemcpy3D_spt(const struct hipMemcpy3DParms * p, void* return_address);
+    typedef hipError_t (*__hipMemcpy3D_spt_t)(const struct hipMemcpy3DParms * p, void* return_address);
+#endif
+
+#if HAVE_hipTexObjectGetTextureDesc       
+    hipError_t i_hipTexObjectGetTextureDesc(HIP_TEXTURE_DESC * pTexDesc, hipTextureObject_t texObject, void* return_address);
+    typedef hipError_t (*__hipTexObjectGetTextureDesc_t)(HIP_TEXTURE_DESC * pTexDesc, hipTextureObject_t texObject, void* return_address);
+#endif
+
+#if HAVE_hipDeviceGet       
+    hipError_t i_hipDeviceGet(hipDevice_t * device, int ordinal, void* return_address);
+    typedef hipError_t (*__hipDeviceGet_t)(hipDevice_t * device, int ordinal, void* return_address);
+#endif
+
+#if HAVE_hipGraphExternalSemaphoresSignalNodeSetParams       
+    hipError_t i_hipGraphExternalSemaphoresSignalNodeSetParams(hipGraphNode_t hNode, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphExternalSemaphoresSignalNodeSetParams_t)(hipGraphNode_t hNode, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address);
+#endif
+
+#if HAVE_hipDestroySurfaceObject       
+    hipError_t i_hipDestroySurfaceObject(hipSurfaceObject_t surfaceObject, void* return_address);
+    typedef hipError_t (*__hipDestroySurfaceObject_t)(hipSurfaceObject_t surfaceObject, void* return_address);
+#endif
+
+#if HAVE_hipStreamGetDevice       
+    hipError_t i_hipStreamGetDevice(hipStream_t stream, hipDevice_t * device, void* return_address);
+    typedef hipError_t (*__hipStreamGetDevice_t)(hipStream_t stream, hipDevice_t * device, void* return_address);
+#endif
+
+#if HAVE_hipMemAllocPitch       
+    hipError_t i_hipMemAllocPitch(hipDeviceptr_t * dptr, size_t * pitch, size_t widthInBytes, size_t height, unsigned int elementSizeBytes, void* return_address);
+    typedef hipError_t (*__hipMemAllocPitch_t)(hipDeviceptr_t * dptr, size_t * pitch, size_t widthInBytes, size_t height, unsigned int elementSizeBytes, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddNode       
+    hipError_t i_hipGraphAddNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipGraphNodeParams * nodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphAddNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipGraphNodeParams * nodeParams, void* return_address);
+#endif
+
+#if HAVE_hipDeviceSetSharedMemConfig       
+    hipError_t i_hipDeviceSetSharedMemConfig(hipSharedMemConfig config, void* return_address);
+    typedef hipError_t (*__hipDeviceSetSharedMemConfig_t)(hipSharedMemConfig config, void* return_address);
+#endif
+
+#if HAVE_hipRuntimeGetVersion       
+    hipError_t i_hipRuntimeGetVersion(int * runtimeVersion, void* return_address);
+    typedef hipError_t (*__hipRuntimeGetVersion_t)(int * runtimeVersion, void* return_address);
+#endif
+
+#if HAVE_hipGraphChildGraphNodeGetGraph       
+    hipError_t i_hipGraphChildGraphNodeGetGraph(hipGraphNode_t node, hipGraph_t * pGraph, void* return_address);
+    typedef hipError_t (*__hipGraphChildGraphNodeGetGraph_t)(hipGraphNode_t node, hipGraph_t * pGraph, void* return_address);
+#endif
+
+#if HAVE_hipGraphExecMemsetNodeSetParams       
+    hipError_t i_hipGraphExecMemsetNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipMemsetParams * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphExecMemsetNodeSetParams_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, const hipMemsetParams * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipGraphicsUnregisterResource       
+    hipError_t i_hipGraphicsUnregisterResource(hipGraphicsResource_t resource, void* return_address);
+    typedef hipError_t (*__hipGraphicsUnregisterResource_t)(hipGraphicsResource_t resource, void* return_address);
+#endif
+
+#if HAVE_hipEventElapsedTime       
+    hipError_t i_hipEventElapsedTime(float * ms, hipEvent_t start, hipEvent_t stop, void* return_address);
+    typedef hipError_t (*__hipEventElapsedTime_t)(float * ms, hipEvent_t start, hipEvent_t stop, void* return_address);
+#endif
+
+#if HAVE_hipFreeAsync       
+    hipError_t i_hipFreeAsync(void * dev_ptr, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipFreeAsync_t)(void * dev_ptr, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipStreamCreateWithFlags       
+    hipError_t i_hipStreamCreateWithFlags(hipStream_t * stream, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipStreamCreateWithFlags_t)(hipStream_t * stream, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipTexRefSetAddress       
+    hipError_t i_hipTexRefSetAddress(size_t * ByteOffset, textureReference * texRef, hipDeviceptr_t dptr, size_t bytes, void* return_address);
+    typedef hipError_t (*__hipTexRefSetAddress_t)(size_t * ByteOffset, textureReference * texRef, hipDeviceptr_t dptr, size_t bytes, void* return_address);
+#endif
+
+#if HAVE_hipStreamAddCallback_spt       
+    hipError_t i_hipStreamAddCallback_spt(hipStream_t stream, hipStreamCallback_t callback, void * userData, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipStreamAddCallback_spt_t)(hipStream_t stream, hipStreamCallback_t callback, void * userData, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddKernelNode       
+    hipError_t i_hipGraphAddKernelNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipKernelNodeParams * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphAddKernelNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipKernelNodeParams * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyDtoH       
+    hipError_t i_hipMemcpyDtoH(void * dst, hipDeviceptr_t src, size_t sizeBytes, void* return_address);
+    typedef hipError_t (*__hipMemcpyDtoH_t)(void * dst, hipDeviceptr_t src, size_t sizeBytes, void* return_address);
+#endif
+
+#if HAVE_hipDeviceTotalMem       
+    hipError_t i_hipDeviceTotalMem(size_t * bytes, hipDevice_t device, void* return_address);
+    typedef hipError_t (*__hipDeviceTotalMem_t)(size_t * bytes, hipDevice_t device, void* return_address);
+#endif
+
+#if HAVE_hipMemset2D       
+    hipError_t i_hipMemset2D(void * dst, size_t pitch, int value, size_t width, size_t height, void* return_address);
+    typedef hipError_t (*__hipMemset2D_t)(void * dst, size_t pitch, int value, size_t width, size_t height, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy2DToArray_spt       
+    hipError_t i_hipMemcpy2DToArray_spt(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpy2DToArray_spt_t)(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipMemAllocHost       
+    hipError_t i_hipMemAllocHost(void ** ptr, size_t size, void* return_address);
+    typedef hipError_t (*__hipMemAllocHost_t)(void ** ptr, size_t size, void* return_address);
+#endif
+
+#if HAVE_hipPointerSetAttribute       
+    hipError_t i_hipPointerSetAttribute(const void * value, hipPointer_attribute attribute, hipDeviceptr_t ptr, void* return_address);
+    typedef hipError_t (*__hipPointerSetAttribute_t)(const void * value, hipPointer_attribute attribute, hipDeviceptr_t ptr, void* return_address);
+#endif
+
+#if HAVE_hipGraphHostNodeGetParams       
+    hipError_t i_hipGraphHostNodeGetParams(hipGraphNode_t node, hipHostNodeParams * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphHostNodeGetParams_t)(hipGraphNode_t node, hipHostNodeParams * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipMemset3D       
+    hipError_t i_hipMemset3D(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, void* return_address);
+    typedef hipError_t (*__hipMemset3D_t)(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, void* return_address);
+#endif
+
+#if HAVE_hipDestroyTextureObject       
+    hipError_t i_hipDestroyTextureObject(hipTextureObject_t textureObject, void* return_address);
+    typedef hipError_t (*__hipDestroyTextureObject_t)(hipTextureObject_t textureObject, void* return_address);
+#endif
+
+#if HAVE_hipMemAdvise       
+    hipError_t i_hipMemAdvise(const void * dev_ptr, size_t count, hipMemoryAdvise advice, int device, void* return_address);
+    typedef hipError_t (*__hipMemAdvise_t)(const void * dev_ptr, size_t count, hipMemoryAdvise advice, int device, void* return_address);
+#endif
+
+#if HAVE_hipCtxGetCacheConfig       
+    hipError_t i_hipCtxGetCacheConfig(hipFuncCache_t * cacheConfig, void* return_address);
+    typedef hipError_t (*__hipCtxGetCacheConfig_t)(hipFuncCache_t * cacheConfig, void* return_address);
+#endif
+
+#if HAVE_hipDrvPointerGetAttributes       
+    hipError_t i_hipDrvPointerGetAttributes(unsigned int numAttributes, hipPointer_attribute * attributes, void ** data, hipDeviceptr_t ptr, void* return_address);
+    typedef hipError_t (*__hipDrvPointerGetAttributes_t)(unsigned int numAttributes, hipPointer_attribute * attributes, void ** data, hipDeviceptr_t ptr, void* return_address);
+#endif
+
+#if HAVE_hipModuleLaunchCooperativeKernelMultiDevice       
+    hipError_t i_hipModuleLaunchCooperativeKernelMultiDevice(hipFunctionLaunchParams * launchParamsList, unsigned int numDevices, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipModuleLaunchCooperativeKernelMultiDevice_t)(hipFunctionLaunchParams * launchParamsList, unsigned int numDevices, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipModuleGetGlobal       
+    hipError_t i_hipModuleGetGlobal(hipDeviceptr_t * dptr, size_t * bytes, hipModule_t hmod, const char * name, void* return_address);
+    typedef hipError_t (*__hipModuleGetGlobal_t)(hipDeviceptr_t * dptr, size_t * bytes, hipModule_t hmod, const char * name, void* return_address);
+#endif
+
+#if HAVE_hipGraphEventRecordNodeGetEvent       
+    hipError_t i_hipGraphEventRecordNodeGetEvent(hipGraphNode_t node, hipEvent_t * event_out, void* return_address);
+    typedef hipError_t (*__hipGraphEventRecordNodeGetEvent_t)(hipGraphNode_t node, hipEvent_t * event_out, void* return_address);
+#endif
+
+#if HAVE_hipGraphInstantiate       
+    hipError_t i_hipGraphInstantiate(hipGraphExec_t * pGraphExec, hipGraph_t graph, hipGraphNode_t * pErrorNode, char * pLogBuffer, size_t bufferSize, void* return_address);
+    typedef hipError_t (*__hipGraphInstantiate_t)(hipGraphExec_t * pGraphExec, hipGraph_t graph, hipGraphNode_t * pErrorNode, char * pLogBuffer, size_t bufferSize, void* return_address);
+#endif
+
+#if HAVE_hipGraphRetainUserObject       
+    hipError_t i_hipGraphRetainUserObject(hipGraph_t graph, hipUserObject_t object, unsigned int count, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipGraphRetainUserObject_t)(hipGraph_t graph, hipUserObject_t object, unsigned int count, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipGraphMemAllocNodeGetParams       
+    hipError_t i_hipGraphMemAllocNodeGetParams(hipGraphNode_t node, hipMemAllocNodeParams * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphMemAllocNodeGetParams_t)(hipGraphNode_t node, hipMemAllocNodeParams * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipStreamGetCaptureInfo       
+    hipError_t i_hipStreamGetCaptureInfo(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, unsigned long long * pId, void* return_address);
+    typedef hipError_t (*__hipStreamGetCaptureInfo_t)(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, unsigned long long * pId, void* return_address);
+#endif
+
+#if HAVE_hipCtxPopCurrent       
+    hipError_t i_hipCtxPopCurrent(hipCtx_t * ctx, void* return_address);
+    typedef hipError_t (*__hipCtxPopCurrent_t)(hipCtx_t * ctx, void* return_address);
+#endif
+
+#if HAVE_hipPointerGetAttributes       
+    hipError_t i_hipPointerGetAttributes(hipPointerAttribute_t * attributes, const void * ptr, void* return_address);
+    typedef hipError_t (*__hipPointerGetAttributes_t)(hipPointerAttribute_t * attributes, const void * ptr, void* return_address);
+#endif
+
+#if HAVE_hipDeviceDisablePeerAccess       
+    hipError_t i_hipDeviceDisablePeerAccess(int peerDeviceId, void* return_address);
+    typedef hipError_t (*__hipDeviceDisablePeerAccess_t)(int peerDeviceId, void* return_address);
+#endif
+
+#if HAVE_hipMallocPitch       
+    hipError_t i_hipMallocPitch(void ** ptr, size_t * pitch, size_t width, size_t height, void* return_address);
+    typedef hipError_t (*__hipMallocPitch_t)(void ** ptr, size_t * pitch, size_t width, size_t height, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy2DFromArrayAsync       
+    hipError_t i_hipMemcpy2DFromArrayAsync(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpy2DFromArrayAsync_t)(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipDeviceComputeCapability       
+    hipError_t i_hipDeviceComputeCapability(int * major, int * minor, hipDevice_t device, void* return_address);
+    typedef hipError_t (*__hipDeviceComputeCapability_t)(int * major, int * minor, hipDevice_t device, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyHtoD       
+    hipError_t i_hipMemcpyHtoD(hipDeviceptr_t dst, void * src, size_t sizeBytes, void* return_address);
+    typedef hipError_t (*__hipMemcpyHtoD_t)(hipDeviceptr_t dst, void * src, size_t sizeBytes, void* return_address);
+#endif
+
+#if HAVE_hipOccupancyMaxActiveBlocksPerMultiprocessor       
+    hipError_t i_hipOccupancyMaxActiveBlocksPerMultiprocessor(int * numBlocks, const void * f, int blockSize, size_t dynSharedMemPerBlk, void* return_address);
+    typedef hipError_t (*__hipOccupancyMaxActiveBlocksPerMultiprocessor_t)(int * numBlocks, const void * f, int blockSize, size_t dynSharedMemPerBlk, void* return_address);
+#endif
+
+#if HAVE_hipSignalExternalSemaphoresAsync       
+    hipError_t i_hipSignalExternalSemaphoresAsync(const hipExternalSemaphore_t * extSemArray, const hipExternalSemaphoreSignalParams * paramsArray, unsigned int numExtSems, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipSignalExternalSemaphoresAsync_t)(const hipExternalSemaphore_t * extSemArray, const hipExternalSemaphoreSignalParams * paramsArray, unsigned int numExtSems, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipArray3DGetDescriptor       
+    hipError_t i_hipArray3DGetDescriptor(HIP_ARRAY3D_DESCRIPTOR * pArrayDescriptor, hipArray_t array, void* return_address);
+    typedef hipError_t (*__hipArray3DGetDescriptor_t)(HIP_ARRAY3D_DESCRIPTOR * pArrayDescriptor, hipArray_t array, void* return_address);
+#endif
+
+#if HAVE___hipPopCallConfiguration       
+    hipError_t i___hipPopCallConfiguration(dim3 * gridDim, dim3 * blockDim, size_t * sharedMem, hipStream_t * stream, void* return_address);
+    typedef hipError_t (*____hipPopCallConfiguration_t)(dim3 * gridDim, dim3 * blockDim, size_t * sharedMem, hipStream_t * stream, void* return_address);
+#endif
+
+#if HAVE_hipDevicePrimaryCtxRelease       
+    hipError_t i_hipDevicePrimaryCtxRelease(hipDevice_t dev, void* return_address);
+    typedef hipError_t (*__hipDevicePrimaryCtxRelease_t)(hipDevice_t dev, void* return_address);
+#endif
+
+#if HAVE_hipLaunchCooperativeKernelMultiDevice       
+    hipError_t i_hipLaunchCooperativeKernelMultiDevice(hipLaunchParams * launchParamsList, int numDevices, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipLaunchCooperativeKernelMultiDevice_t)(hipLaunchParams * launchParamsList, int numDevices, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipFreeArray       
+    hipError_t i_hipFreeArray(hipArray_t array, void* return_address);
+    typedef hipError_t (*__hipFreeArray_t)(hipArray_t array, void* return_address);
+#endif
+
+#if HAVE_hipGraphMemsetNodeSetParams       
+    hipError_t i_hipGraphMemsetNodeSetParams(hipGraphNode_t node, const hipMemsetParams * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphMemsetNodeSetParams_t)(hipGraphNode_t node, const hipMemsetParams * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipMemPoolSetAccess       
+    hipError_t i_hipMemPoolSetAccess(hipMemPool_t mem_pool, const hipMemAccessDesc * desc_list, size_t count, void* return_address);
+    typedef hipError_t (*__hipMemPoolSetAccess_t)(hipMemPool_t mem_pool, const hipMemAccessDesc * desc_list, size_t count, void* return_address);
+#endif
+
+#if HAVE_hipGetStreamDeviceId       
+    int i_hipGetStreamDeviceId(hipStream_t stream, void* return_address);
+    typedef int (*__hipGetStreamDeviceId_t)(hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipExtStreamCreateWithCUMask       
+    hipError_t i_hipExtStreamCreateWithCUMask(hipStream_t * stream, uint32_t cuMaskSize, const uint32_t * cuMask, void* return_address);
+    typedef hipError_t (*__hipExtStreamCreateWithCUMask_t)(hipStream_t * stream, uint32_t cuMaskSize, const uint32_t * cuMask, void* return_address);
+#endif
+
+#if HAVE_hipGetTextureObjectTextureDesc       
+    hipError_t i_hipGetTextureObjectTextureDesc(hipTextureDesc * pTexDesc, hipTextureObject_t textureObject, void* return_address);
+    typedef hipError_t (*__hipGetTextureObjectTextureDesc_t)(hipTextureDesc * pTexDesc, hipTextureObject_t textureObject, void* return_address);
+#endif
+
+#if HAVE_hipEventRecord_spt       
+    hipError_t i_hipEventRecord_spt(hipEvent_t event, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipEventRecord_spt_t)(hipEvent_t event, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipConfigureCall       
+    hipError_t i_hipConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipConfigureCall_t)(dim3 gridDim, dim3 blockDim, size_t sharedMem, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyFromArray_spt       
+    hipError_t i_hipMemcpyFromArray_spt(void * dst, hipArray_const_t src, size_t wOffsetSrc, size_t hOffset, size_t count, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpyFromArray_spt_t)(void * dst, hipArray_const_t src, size_t wOffsetSrc, size_t hOffset, size_t count, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipModuleGetFunction       
+    hipError_t i_hipModuleGetFunction(hipFunction_t * function, hipModule_t module, const char * kname, void* return_address);
+    typedef hipError_t (*__hipModuleGetFunction_t)(hipFunction_t * function, hipModule_t module, const char * kname, void* return_address);
+#endif
+
+#if HAVE_hipFuncSetCacheConfig       
+    hipError_t i_hipFuncSetCacheConfig(const void * func, hipFuncCache_t config, void* return_address);
+    typedef hipError_t (*__hipFuncSetCacheConfig_t)(const void * func, hipFuncCache_t config, void* return_address);
+#endif
+
+#if HAVE_hipDeviceGetLimit       
+    hipError_t i_hipDeviceGetLimit(size_t * pValue, enum hipLimit_t limit, void* return_address);
+    typedef hipError_t (*__hipDeviceGetLimit_t)(size_t * pValue, enum hipLimit_t limit, void* return_address);
+#endif
+
+#if HAVE_hipTexRefGetMaxAnisotropy       
+    hipError_t i_hipTexRefGetMaxAnisotropy(int * pmaxAnsio, const textureReference * texRef, void* return_address);
+    typedef hipError_t (*__hipTexRefGetMaxAnisotropy_t)(int * pmaxAnsio, const textureReference * texRef, void* return_address);
+#endif
+
+#if HAVE_hipLaunchKernel_spt       
+    hipError_t i_hipLaunchKernel_spt(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipLaunchKernel_spt_t)(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipStreamBeginCaptureToGraph       
+    hipError_t i_hipStreamBeginCaptureToGraph(hipStream_t stream, hipGraph_t graph, const hipGraphNode_t * dependencies, const hipGraphEdgeData * dependencyData, size_t numDependencies, hipStreamCaptureMode mode, void* return_address);
+    typedef hipError_t (*__hipStreamBeginCaptureToGraph_t)(hipStream_t stream, hipGraph_t graph, const hipGraphNode_t * dependencies, const hipGraphEdgeData * dependencyData, size_t numDependencies, hipStreamCaptureMode mode, void* return_address);
+#endif
+
+#if HAVE_hipTexRefGetFormat       
+    hipError_t i_hipTexRefGetFormat(hipArray_Format * pFormat, int * pNumChannels, const textureReference * texRef, void* return_address);
+    typedef hipError_t (*__hipTexRefGetFormat_t)(hipArray_Format * pFormat, int * pNumChannels, const textureReference * texRef, void* return_address);
+#endif
+
+#if HAVE_hipStreamWaitValue64       
+    hipError_t i_hipStreamWaitValue64(hipStream_t stream, void * ptr, uint64_t value, unsigned int flags, uint64_t mask, void* return_address);
+    typedef hipError_t (*__hipStreamWaitValue64_t)(hipStream_t stream, void * ptr, uint64_t value, unsigned int flags, uint64_t mask, void* return_address);
+#endif
+
+#if HAVE_hipDevicePrimaryCtxRetain       
+    hipError_t i_hipDevicePrimaryCtxRetain(hipCtx_t * pctx, hipDevice_t dev, void* return_address);
+    typedef hipError_t (*__hipDevicePrimaryCtxRetain_t)(hipCtx_t * pctx, hipDevice_t dev, void* return_address);
+#endif
+
+#if HAVE_hipMallocManaged       
+    hipError_t i_hipMallocManaged(void ** dev_ptr, size_t size, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipMallocManaged_t)(void ** dev_ptr, size_t size, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipStreamCreateWithPriority       
+    hipError_t i_hipStreamCreateWithPriority(hipStream_t * stream, unsigned int flags, int priority, void* return_address);
+    typedef hipError_t (*__hipStreamCreateWithPriority_t)(hipStream_t * stream, unsigned int flags, int priority, void* return_address);
+#endif
+
+#if HAVE_hipStreamGetCaptureInfo_spt       
+    hipError_t i_hipStreamGetCaptureInfo_spt(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, unsigned long long * pId, void* return_address);
+    typedef hipError_t (*__hipStreamGetCaptureInfo_spt_t)(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, unsigned long long * pId, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddHostNode       
+    hipError_t i_hipGraphAddHostNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipHostNodeParams * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphAddHostNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipHostNodeParams * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipLaunchCooperativeKernel       
+    hipError_t i_hipLaunchCooperativeKernel(const void * f, dim3 gridDim, dim3 blockDimX, void ** kernelParams, unsigned int sharedMemBytes, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipLaunchCooperativeKernel_t)(const void * f, dim3 gridDim, dim3 blockDimX, void ** kernelParams, unsigned int sharedMemBytes, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipHostRegister       
+    hipError_t i_hipHostRegister(void * hostPtr, size_t sizeBytes, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipHostRegister_t)(void * hostPtr, size_t sizeBytes, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipGetErrorName       
+    const char * i_hipGetErrorName(hipError_t hip_error, void* return_address);
+    typedef const char * (*__hipGetErrorName_t)(hipError_t hip_error, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyToSymbol_spt       
+    hipError_t i_hipMemcpyToSymbol_spt(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpyToSymbol_spt_t)(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipGraphMemsetNodeGetParams       
+    hipError_t i_hipGraphMemsetNodeGetParams(hipGraphNode_t node, hipMemsetParams * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphMemsetNodeGetParams_t)(hipGraphNode_t node, hipMemsetParams * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipStreamWriteValue32       
+    hipError_t i_hipStreamWriteValue32(hipStream_t stream, void * ptr, uint32_t value, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipStreamWriteValue32_t)(hipStream_t stream, void * ptr, uint32_t value, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipStreamSynchronize_spt       
+    hipError_t i_hipStreamSynchronize_spt(hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipStreamSynchronize_spt_t)(hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipDeviceGraphMemTrim       
+    hipError_t i_hipDeviceGraphMemTrim(int device, void* return_address);
+    typedef hipError_t (*__hipDeviceGraphMemTrim_t)(int device, void* return_address);
+#endif
+
+#if HAVE_hipStreamDestroy       
+    hipError_t i_hipStreamDestroy(hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipStreamDestroy_t)(hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipTexRefSetArray       
+    hipError_t i_hipTexRefSetArray(textureReference * tex, hipArray_const_t array, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipTexRefSetArray_t)(textureReference * tex, hipArray_const_t array, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyParam2DAsync       
+    hipError_t i_hipMemcpyParam2DAsync(const hip_Memcpy2D * pCopy, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpyParam2DAsync_t)(const hip_Memcpy2D * pCopy, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMemPoolExportPointer       
+    hipError_t i_hipMemPoolExportPointer(hipMemPoolPtrExportData * export_data, void * dev_ptr, void* return_address);
+    typedef hipError_t (*__hipMemPoolExportPointer_t)(hipMemPoolPtrExportData * export_data, void * dev_ptr, void* return_address);
+#endif
+
+#if HAVE_hipGraphEventRecordNodeSetEvent       
+    hipError_t i_hipGraphEventRecordNodeSetEvent(hipGraphNode_t node, hipEvent_t event, void* return_address);
+    typedef hipError_t (*__hipGraphEventRecordNodeSetEvent_t)(hipGraphNode_t node, hipEvent_t event, void* return_address);
+#endif
+
+#if HAVE_hipCtxDestroy       
+    hipError_t i_hipCtxDestroy(hipCtx_t ctx, void* return_address);
+    typedef hipError_t (*__hipCtxDestroy_t)(hipCtx_t ctx, void* return_address);
+#endif
+
+#if HAVE_hipArrayDestroy       
+    hipError_t i_hipArrayDestroy(hipArray_t array, void* return_address);
+    typedef hipError_t (*__hipArrayDestroy_t)(hipArray_t array, void* return_address);
+#endif
+
+#if HAVE_hipMemGetAllocationGranularity       
+    hipError_t i_hipMemGetAllocationGranularity(size_t * granularity, const hipMemAllocationProp * prop, hipMemAllocationGranularity_flags option, void* return_address);
+    typedef hipError_t (*__hipMemGetAllocationGranularity_t)(size_t * granularity, const hipMemAllocationProp * prop, hipMemAllocationGranularity_flags option, void* return_address);
+#endif
+
+#if HAVE_hipGraphClone       
+    hipError_t i_hipGraphClone(hipGraph_t * pGraphClone, hipGraph_t originalGraph, void* return_address);
+    typedef hipError_t (*__hipGraphClone_t)(hipGraph_t * pGraphClone, hipGraph_t originalGraph, void* return_address);
+#endif
+
+#if HAVE_hipMemset2DAsync_spt       
+    hipError_t i_hipMemset2DAsync_spt(void * dst, size_t pitch, int value, size_t width, size_t height, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemset2DAsync_spt_t)(void * dst, size_t pitch, int value, size_t width, size_t height, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipBindTexture2D       
+    hipError_t i_hipBindTexture2D(size_t * offset, const textureReference * tex, const void * devPtr, const hipChannelFormatDesc * desc, size_t width, size_t height, size_t pitch, void* return_address);
+    typedef hipError_t (*__hipBindTexture2D_t)(size_t * offset, const textureReference * tex, const void * devPtr, const hipChannelFormatDesc * desc, size_t width, size_t height, size_t pitch, void* return_address);
+#endif
+
+#if HAVE_hipArrayGetInfo       
+    hipError_t i_hipArrayGetInfo(hipChannelFormatDesc * desc, hipExtent * extent, unsigned int * flags, hipArray_t array, void* return_address);
+    typedef hipError_t (*__hipArrayGetInfo_t)(hipChannelFormatDesc * desc, hipExtent * extent, unsigned int * flags, hipArray_t array, void* return_address);
+#endif
+
+#if HAVE_hipGraphExternalSemaphoresSignalNodeGetParams       
+    hipError_t i_hipGraphExternalSemaphoresSignalNodeGetParams(hipGraphNode_t hNode, hipExternalSemaphoreSignalNodeParams * params_out, void* return_address);
+    typedef hipError_t (*__hipGraphExternalSemaphoresSignalNodeGetParams_t)(hipGraphNode_t hNode, hipExternalSemaphoreSignalNodeParams * params_out, void* return_address);
+#endif
+
+#if HAVE_hipDeviceGetStreamPriorityRange       
+    hipError_t i_hipDeviceGetStreamPriorityRange(int * leastPriority, int * greatestPriority, void* return_address);
+    typedef hipError_t (*__hipDeviceGetStreamPriorityRange_t)(int * leastPriority, int * greatestPriority, void* return_address);
+#endif
+
+#if HAVE_hipGraphExecChildGraphNodeSetParams       
+    hipError_t i_hipGraphExecChildGraphNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, hipGraph_t childGraph, void* return_address);
+    typedef hipError_t (*__hipGraphExecChildGraphNodeSetParams_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, hipGraph_t childGraph, void* return_address);
+#endif
+
+#if HAVE_hipMemset2D_spt       
+    hipError_t i_hipMemset2D_spt(void * dst, size_t pitch, int value, size_t width, size_t height, void* return_address);
+    typedef hipError_t (*__hipMemset2D_spt_t)(void * dst, size_t pitch, int value, size_t width, size_t height, void* return_address);
+#endif
+
+#if HAVE_hipDeviceGetDefaultMemPool       
+    hipError_t i_hipDeviceGetDefaultMemPool(hipMemPool_t * mem_pool, int device, void* return_address);
+    typedef hipError_t (*__hipDeviceGetDefaultMemPool_t)(hipMemPool_t * mem_pool, int device, void* return_address);
+#endif
+
+#if HAVE_hipCtxCreate       
+    hipError_t i_hipCtxCreate(hipCtx_t * ctx, unsigned int flags, hipDevice_t device, void* return_address);
+    typedef hipError_t (*__hipCtxCreate_t)(hipCtx_t * ctx, unsigned int flags, hipDevice_t device, void* return_address);
+#endif
+
+#if HAVE_hipStreamIsCapturing       
+    hipError_t i_hipStreamIsCapturing(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, void* return_address);
+    typedef hipError_t (*__hipStreamIsCapturing_t)(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, void* return_address);
+#endif
+
+#if HAVE_hipStreamUpdateCaptureDependencies       
+    hipError_t i_hipStreamUpdateCaptureDependencies(hipStream_t stream, hipGraphNode_t * dependencies, size_t numDependencies, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipStreamUpdateCaptureDependencies_t)(hipStream_t stream, hipGraphNode_t * dependencies, size_t numDependencies, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipDeviceSynchronize       
+    hipError_t i_hipDeviceSynchronize(void* return_address);
+    typedef hipError_t (*__hipDeviceSynchronize_t)(void* return_address);
+#endif
+
+#if HAVE_hipMemcpyFromSymbolAsync       
+    hipError_t i_hipMemcpyFromSymbolAsync(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpyFromSymbolAsync_t)(void * dst, const void * symbol, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipGraphDestroyNode       
+    hipError_t i_hipGraphDestroyNode(hipGraphNode_t node, void* return_address);
+    typedef hipError_t (*__hipGraphDestroyNode_t)(hipGraphNode_t node, void* return_address);
+#endif
+
+#if HAVE_hipUserObjectRetain       
+    hipError_t i_hipUserObjectRetain(hipUserObject_t object, unsigned int count, void* return_address);
+    typedef hipError_t (*__hipUserObjectRetain_t)(hipUserObject_t object, unsigned int count, void* return_address);
+#endif
+
+#if HAVE_hipGraphExecEventWaitNodeSetEvent       
+    hipError_t i_hipGraphExecEventWaitNodeSetEvent(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, hipEvent_t event, void* return_address);
+    typedef hipError_t (*__hipGraphExecEventWaitNodeSetEvent_t)(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, hipEvent_t event, void* return_address);
+#endif
+
+#if HAVE_hipMemAddressReserve       
+    hipError_t i_hipMemAddressReserve(void ** ptr, size_t size, size_t alignment, void * addr, unsigned long long flags, void* return_address);
+    typedef hipError_t (*__hipMemAddressReserve_t)(void ** ptr, size_t size, size_t alignment, void * addr, unsigned long long flags, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddMemsetNode       
+    hipError_t i_hipGraphAddMemsetNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipMemsetParams * pMemsetParams, void* return_address);
+    typedef hipError_t (*__hipGraphAddMemsetNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipMemsetParams * pMemsetParams, void* return_address);
+#endif
+
+#if HAVE_hipGraphicsResourceGetMappedPointer       
+    hipError_t i_hipGraphicsResourceGetMappedPointer(void ** devPtr, size_t * size, hipGraphicsResource_t resource, void* return_address);
+    typedef hipError_t (*__hipGraphicsResourceGetMappedPointer_t)(void ** devPtr, size_t * size, hipGraphicsResource_t resource, void* return_address);
+#endif
+
+#if HAVE_hipStreamBeginCapture_spt       
+    hipError_t i_hipStreamBeginCapture_spt(hipStream_t stream, hipStreamCaptureMode mode, void* return_address);
+    typedef hipError_t (*__hipStreamBeginCapture_spt_t)(hipStream_t stream, hipStreamCaptureMode mode, void* return_address);
+#endif
+
+#if HAVE_hipDeviceGetUuid       
+    hipError_t i_hipDeviceGetUuid(hipUUID * uuid, hipDevice_t device, void* return_address);
+    typedef hipError_t (*__hipDeviceGetUuid_t)(hipUUID * uuid, hipDevice_t device, void* return_address);
+#endif
+
+#if HAVE_hipModuleLaunchKernel       
+    hipError_t i_hipModuleLaunchKernel(hipFunction_t f, unsigned int gridDimX, unsigned int gridDimY, unsigned int gridDimZ, unsigned int blockDimX, unsigned int blockDimY, unsigned int blockDimZ, unsigned int sharedMemBytes, hipStream_t stream, void ** kernelParams, void ** extra, void* return_address);
+    typedef hipError_t (*__hipModuleLaunchKernel_t)(hipFunction_t f, unsigned int gridDimX, unsigned int gridDimY, unsigned int gridDimZ, unsigned int blockDimX, unsigned int blockDimY, unsigned int blockDimZ, unsigned int sharedMemBytes, hipStream_t stream, void ** kernelParams, void ** extra, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddEmptyNode       
+    hipError_t i_hipGraphAddEmptyNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void* return_address);
+    typedef hipError_t (*__hipGraphAddEmptyNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void* return_address);
+#endif
+
+#if HAVE_hipMemRangeGetAttribute       
+    hipError_t i_hipMemRangeGetAttribute(void * data, size_t data_size, hipMemRangeAttribute attribute, const void * dev_ptr, size_t count, void* return_address);
+    typedef hipError_t (*__hipMemRangeGetAttribute_t)(void * data, size_t data_size, hipMemRangeAttribute attribute, const void * dev_ptr, size_t count, void* return_address);
+#endif
+
+#if HAVE_hipGraphInstantiateWithFlags       
+    hipError_t i_hipGraphInstantiateWithFlags(hipGraphExec_t * pGraphExec, hipGraph_t graph, unsigned long long flags, void* return_address);
+    typedef hipError_t (*__hipGraphInstantiateWithFlags_t)(hipGraphExec_t * pGraphExec, hipGraph_t graph, unsigned long long flags, void* return_address);
+#endif
+
+#if HAVE_hipCtxPushCurrent       
+    hipError_t i_hipCtxPushCurrent(hipCtx_t ctx, void* return_address);
+    typedef hipError_t (*__hipCtxPushCurrent_t)(hipCtx_t ctx, void* return_address);
+#endif
+
+#if HAVE_hipCtxGetApiVersion       
+    hipError_t i_hipCtxGetApiVersion(hipCtx_t ctx, int * apiVersion, void* return_address);
+    typedef hipError_t (*__hipCtxGetApiVersion_t)(hipCtx_t ctx, int * apiVersion, void* return_address);
+#endif
+
+#if HAVE_hipBindTexture       
+    hipError_t i_hipBindTexture(size_t * offset, const textureReference * tex, const void * devPtr, const hipChannelFormatDesc * desc, size_t size, void* return_address);
+    typedef hipError_t (*__hipBindTexture_t)(size_t * offset, const textureReference * tex, const void * devPtr, const hipChannelFormatDesc * desc, size_t size, void* return_address);
+#endif
+
+#if HAVE_hipStreamBeginCapture       
+    hipError_t i_hipStreamBeginCapture(hipStream_t stream, hipStreamCaptureMode mode, void* return_address);
+    typedef hipError_t (*__hipStreamBeginCapture_t)(hipStream_t stream, hipStreamCaptureMode mode, void* return_address);
+#endif
+
+#if HAVE_hipProfilerStart       
+    hipError_t i_hipProfilerStart(void* return_address);
+    typedef hipError_t (*__hipProfilerStart_t)(void* return_address);
+#endif
+
+#if HAVE_hipMemcpyHtoDAsync       
+    hipError_t i_hipMemcpyHtoDAsync(hipDeviceptr_t dst, void * src, size_t sizeBytes, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpyHtoDAsync_t)(hipDeviceptr_t dst, void * src, size_t sizeBytes, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipGetDeviceFlags       
+    hipError_t i_hipGetDeviceFlags(unsigned int * flags, void* return_address);
+    typedef hipError_t (*__hipGetDeviceFlags_t)(unsigned int * flags, void* return_address);
+#endif
+
+#if HAVE_hipMemRangeGetAttributes       
+    hipError_t i_hipMemRangeGetAttributes(void ** data, size_t * data_sizes, hipMemRangeAttribute * attributes, size_t num_attributes, const void * dev_ptr, size_t count, void* return_address);
+    typedef hipError_t (*__hipMemRangeGetAttributes_t)(void ** data, size_t * data_sizes, hipMemRangeAttribute * attributes, size_t num_attributes, const void * dev_ptr, size_t count, void* return_address);
+#endif
+
+#if HAVE_hipDestroyExternalSemaphore       
+    hipError_t i_hipDestroyExternalSemaphore(hipExternalSemaphore_t extSem, void* return_address);
+    typedef hipError_t (*__hipDestroyExternalSemaphore_t)(hipExternalSemaphore_t extSem, void* return_address);
+#endif
+
+#if HAVE_hipIpcOpenEventHandle       
+    hipError_t i_hipIpcOpenEventHandle(hipEvent_t * event, hipIpcEventHandle_t handle, void* return_address);
+    typedef hipError_t (*__hipIpcOpenEventHandle_t)(hipEvent_t * event, hipIpcEventHandle_t handle, void* return_address);
+#endif
+
+#if HAVE_hipGraphUpload       
+    hipError_t i_hipGraphUpload(hipGraphExec_t graphExec, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipGraphUpload_t)(hipGraphExec_t graphExec, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMallocAsync       
+    hipError_t i_hipMallocAsync(void ** dev_ptr, size_t size, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMallocAsync_t)(void ** dev_ptr, size_t size, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipOccupancyMaxPotentialBlockSize       
+    hipError_t i_hipOccupancyMaxPotentialBlockSize(int * gridSize, int * blockSize, const void * f, size_t dynSharedMemPerBlk, int blockSizeLimit, void* return_address);
+    typedef hipError_t (*__hipOccupancyMaxPotentialBlockSize_t)(int * gridSize, int * blockSize, const void * f, size_t dynSharedMemPerBlk, int blockSizeLimit, void* return_address);
+#endif
+
+#if HAVE_hipDestroyExternalMemory       
+    hipError_t i_hipDestroyExternalMemory(hipExternalMemory_t extMem, void* return_address);
+    typedef hipError_t (*__hipDestroyExternalMemory_t)(hipExternalMemory_t extMem, void* return_address);
+#endif
+
+#if HAVE_amd_dbgapi_get_build_name       
+    const char * i_amd_dbgapi_get_build_name(void* return_address);
+    typedef const char * (*__amd_dbgapi_get_build_name_t)(void* return_address);
+#endif
+
+#if HAVE_hipGraphAddMemcpyNodeToSymbol       
+    hipError_t i_hipGraphAddMemcpyNodeToSymbol(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipGraphAddMemcpyNodeToSymbol_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipDeviceGetPCIBusId       
+    hipError_t i_hipDeviceGetPCIBusId(char * pciBusId, int len, int device, void* return_address);
+    typedef hipError_t (*__hipDeviceGetPCIBusId_t)(char * pciBusId, int len, int device, void* return_address);
+#endif
+
+#if HAVE_hipGetChannelDesc       
+    hipError_t i_hipGetChannelDesc(hipChannelFormatDesc * desc, hipArray_const_t array, void* return_address);
+    typedef hipError_t (*__hipGetChannelDesc_t)(hipChannelFormatDesc * desc, hipArray_const_t array, void* return_address);
+#endif
+
+#if HAVE_hipDevicePrimaryCtxReset       
+    hipError_t i_hipDevicePrimaryCtxReset(hipDevice_t dev, void* return_address);
+    typedef hipError_t (*__hipDevicePrimaryCtxReset_t)(hipDevice_t dev, void* return_address);
+#endif
+
+#if HAVE_hipImportExternalMemory       
+    hipError_t i_hipImportExternalMemory(hipExternalMemory_t * extMem_out, const hipExternalMemoryHandleDesc * memHandleDesc, void* return_address);
+    typedef hipError_t (*__hipImportExternalMemory_t)(hipExternalMemory_t * extMem_out, const hipExternalMemoryHandleDesc * memHandleDesc, void* return_address);
+#endif
+
+#if HAVE_hipFuncSetSharedMemConfig       
+    hipError_t i_hipFuncSetSharedMemConfig(const void * func, hipSharedMemConfig config, void* return_address);
+    typedef hipError_t (*__hipFuncSetSharedMemConfig_t)(const void * func, hipSharedMemConfig config, void* return_address);
+#endif
+
+#if HAVE_hipStreamWaitEvent       
+    hipError_t i_hipStreamWaitEvent(hipStream_t stream, hipEvent_t event, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipStreamWaitEvent_t)(hipStream_t stream, hipEvent_t event, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipTexRefSetMipmapLevelBias       
+    hipError_t i_hipTexRefSetMipmapLevelBias(textureReference * texRef, float bias, void* return_address);
+    typedef hipError_t (*__hipTexRefSetMipmapLevelBias_t)(textureReference * texRef, float bias, void* return_address);
+#endif
+
+#if HAVE_hipMemPoolImportFromShareableHandle       
+    hipError_t i_hipMemPoolImportFromShareableHandle(hipMemPool_t * mem_pool, void * shared_handle, hipMemAllocationHandleType handle_type, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipMemPoolImportFromShareableHandle_t)(hipMemPool_t * mem_pool, void * shared_handle, hipMemAllocationHandleType handle_type, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipMemPoolExportToShareableHandle       
+    hipError_t i_hipMemPoolExportToShareableHandle(void * shared_handle, hipMemPool_t mem_pool, hipMemAllocationHandleType handle_type, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipMemPoolExportToShareableHandle_t)(void * shared_handle, hipMemPool_t mem_pool, hipMemAllocationHandleType handle_type, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipGraphExecMemcpyNodeSetParamsToSymbol       
+    hipError_t i_hipGraphExecMemcpyNodeSetParamsToSymbol(hipGraphExec_t hGraphExec, hipGraphNode_t node, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipGraphExecMemcpyNodeSetParamsToSymbol_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipTexRefGetMipmapFilterMode       
+    hipError_t i_hipTexRefGetMipmapFilterMode(enum hipTextureFilterMode * pfm, const textureReference * texRef, void* return_address);
+    typedef hipError_t (*__hipTexRefGetMipmapFilterMode_t)(enum hipTextureFilterMode * pfm, const textureReference * texRef, void* return_address);
+#endif
+
+#if HAVE_hipGetProcAddress       
+    hipError_t i_hipGetProcAddress(const char * symbol, void ** pfn, int hipVersion, uint64_t flags, hipDriverProcAddressQueryResult * symbolStatus, void* return_address);
+    typedef hipError_t (*__hipGetProcAddress_t)(const char * symbol, void ** pfn, int hipVersion, uint64_t flags, hipDriverProcAddressQueryResult * symbolStatus, void* return_address);
+#endif
+
+#if HAVE_hipCreateTextureObject       
+    hipError_t i_hipCreateTextureObject(hipTextureObject_t * pTexObject, const hipResourceDesc * pResDesc, const hipTextureDesc * pTexDesc, const struct hipResourceViewDesc * pResViewDesc, void* return_address);
+    typedef hipError_t (*__hipCreateTextureObject_t)(hipTextureObject_t * pTexObject, const hipResourceDesc * pResDesc, const hipTextureDesc * pTexDesc, const struct hipResourceViewDesc * pResViewDesc, void* return_address);
+#endif
+
+#if HAVE_hipGraphKernelNodeCopyAttributes       
+    hipError_t i_hipGraphKernelNodeCopyAttributes(hipGraphNode_t hSrc, hipGraphNode_t hDst, void* return_address);
+    typedef hipError_t (*__hipGraphKernelNodeCopyAttributes_t)(hipGraphNode_t hSrc, hipGraphNode_t hDst, void* return_address);
+#endif
+
+#if HAVE_hipTexRefGetFlags       
+    hipError_t i_hipTexRefGetFlags(unsigned int * pFlags, const textureReference * texRef, void* return_address);
+    typedef hipError_t (*__hipTexRefGetFlags_t)(unsigned int * pFlags, const textureReference * texRef, void* return_address);
+#endif
+
+#if HAVE_hipDrvGraphAddMemcpyNode       
+    hipError_t i_hipDrvGraphAddMemcpyNode(hipGraphNode_t * phGraphNode, hipGraph_t hGraph, const hipGraphNode_t * dependencies, size_t numDependencies, const HIP_MEMCPY3D * copyParams, hipCtx_t ctx, void* return_address);
+    typedef hipError_t (*__hipDrvGraphAddMemcpyNode_t)(hipGraphNode_t * phGraphNode, hipGraph_t hGraph, const hipGraphNode_t * dependencies, size_t numDependencies, const HIP_MEMCPY3D * copyParams, hipCtx_t ctx, void* return_address);
+#endif
+
+#if HAVE_hipMemExportToShareableHandle       
+    hipError_t i_hipMemExportToShareableHandle(void * shareableHandle, hipMemGenericAllocationHandle_t handle, hipMemAllocationHandleType handleType, unsigned long long flags, void* return_address);
+    typedef hipError_t (*__hipMemExportToShareableHandle_t)(void * shareableHandle, hipMemGenericAllocationHandle_t handle, hipMemAllocationHandleType handleType, unsigned long long flags, void* return_address);
+#endif
+
+#if HAVE_hipGraphLaunch_spt       
+    hipError_t i_hipGraphLaunch_spt(hipGraphExec_t graphExec, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipGraphLaunch_spt_t)(hipGraphExec_t graphExec, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipGraphMemcpyNodeSetParamsFromSymbol       
+    hipError_t i_hipGraphMemcpyNodeSetParamsFromSymbol(hipGraphNode_t node, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipGraphMemcpyNodeSetParamsFromSymbol_t)(hipGraphNode_t node, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipGraphNodeGetDependencies       
+    hipError_t i_hipGraphNodeGetDependencies(hipGraphNode_t node, hipGraphNode_t * pDependencies, size_t * pNumDependencies, void* return_address);
+    typedef hipError_t (*__hipGraphNodeGetDependencies_t)(hipGraphNode_t node, hipGraphNode_t * pDependencies, size_t * pNumDependencies, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy3D       
+    hipError_t i_hipMemcpy3D(const struct hipMemcpy3DParms * p, void* return_address);
+    typedef hipError_t (*__hipMemcpy3D_t)(const struct hipMemcpy3DParms * p, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddMemcpyNodeFromSymbol       
+    hipError_t i_hipGraphAddMemcpyNodeFromSymbol(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipGraphAddMemcpyNodeFromSymbol_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dst, const void * symbol, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipStreamGetPriority_spt       
+    hipError_t i_hipStreamGetPriority_spt(hipStream_t stream, int * priority, void* return_address);
+    typedef hipError_t (*__hipStreamGetPriority_spt_t)(hipStream_t stream, int * priority, void* return_address);
+#endif
+
+#if HAVE_hipModuleLoadData       
+    hipError_t i_hipModuleLoadData(hipModule_t * module, const void * image, void* return_address);
+    typedef hipError_t (*__hipModuleLoadData_t)(hipModule_t * module, const void * image, void* return_address);
+#endif
+
+#if HAVE_hipSetDeviceFlags       
+    hipError_t i_hipSetDeviceFlags(unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipSetDeviceFlags_t)(unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipExternalMemoryGetMappedBuffer       
+    hipError_t i_hipExternalMemoryGetMappedBuffer(void ** devPtr, hipExternalMemory_t extMem, const hipExternalMemoryBufferDesc * bufferDesc, void* return_address);
+    typedef hipError_t (*__hipExternalMemoryGetMappedBuffer_t)(void ** devPtr, hipExternalMemory_t extMem, const hipExternalMemoryBufferDesc * bufferDesc, void* return_address);
+#endif
+
+#if HAVE_hipLaunchCooperativeKernel_spt       
+    hipError_t i_hipLaunchCooperativeKernel_spt(const void * f, dim3 gridDim, dim3 blockDim, void ** kernelParams, uint32_t sharedMemBytes, hipStream_t hStream, void* return_address);
+    typedef hipError_t (*__hipLaunchCooperativeKernel_spt_t)(const void * f, dim3 gridDim, dim3 blockDim, void ** kernelParams, uint32_t sharedMemBytes, hipStream_t hStream, void* return_address);
+#endif
+
+#if HAVE_hipLaunchHostFunc       
+    hipError_t i_hipLaunchHostFunc(hipStream_t stream, hipHostFn_t fn, void * userData, void* return_address);
+    typedef hipError_t (*__hipLaunchHostFunc_t)(hipStream_t stream, hipHostFn_t fn, void * userData, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyAsync_spt       
+    hipError_t i_hipMemcpyAsync_spt(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpyAsync_spt_t)(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyPeer       
+    hipError_t i_hipMemcpyPeer(void * dst, int dstDeviceId, const void * src, int srcDeviceId, size_t sizeBytes, void* return_address);
+    typedef hipError_t (*__hipMemcpyPeer_t)(void * dst, int dstDeviceId, const void * src, int srcDeviceId, size_t sizeBytes, void* return_address);
+#endif
+
+#if HAVE_hipDeviceReset       
+    hipError_t i_hipDeviceReset(void* return_address);
+    typedef hipError_t (*__hipDeviceReset_t)(void* return_address);
+#endif
+
+#if HAVE_hipMemAddressFree       
+    hipError_t i_hipMemAddressFree(void * devPtr, size_t size, void* return_address);
+    typedef hipError_t (*__hipMemAddressFree_t)(void * devPtr, size_t size, void* return_address);
+#endif
+
+#if HAVE_hipProfilerStop       
+    hipError_t i_hipProfilerStop(void* return_address);
+    typedef hipError_t (*__hipProfilerStop_t)(void* return_address);
+#endif
+
+#if HAVE_hipGraphEventWaitNodeSetEvent       
+    hipError_t i_hipGraphEventWaitNodeSetEvent(hipGraphNode_t node, hipEvent_t event, void* return_address);
+    typedef hipError_t (*__hipGraphEventWaitNodeSetEvent_t)(hipGraphNode_t node, hipEvent_t event, void* return_address);
+#endif
+
+#if HAVE_hipModuleLaunchCooperativeKernel       
+    hipError_t i_hipModuleLaunchCooperativeKernel(hipFunction_t f, unsigned int gridDimX, unsigned int gridDimY, unsigned int gridDimZ, unsigned int blockDimX, unsigned int blockDimY, unsigned int blockDimZ, unsigned int sharedMemBytes, hipStream_t stream, void ** kernelParams, void* return_address);
+    typedef hipError_t (*__hipModuleLaunchCooperativeKernel_t)(hipFunction_t f, unsigned int gridDimX, unsigned int gridDimY, unsigned int gridDimZ, unsigned int blockDimX, unsigned int blockDimY, unsigned int blockDimZ, unsigned int sharedMemBytes, hipStream_t stream, void ** kernelParams, void* return_address);
+#endif
+
+#if HAVE_hipDeviceGetName       
+    hipError_t i_hipDeviceGetName(char * name, int len, hipDevice_t device, void* return_address);
+    typedef hipError_t (*__hipDeviceGetName_t)(char * name, int len, hipDevice_t device, void* return_address);
+#endif
+
+#if HAVE_hipGraphNodeSetEnabled       
+    hipError_t i_hipGraphNodeSetEnabled(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, unsigned int isEnabled, void* return_address);
+    typedef hipError_t (*__hipGraphNodeSetEnabled_t)(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, unsigned int isEnabled, void* return_address);
+#endif
+
+#if HAVE_hipTexRefSetAddressMode       
+    hipError_t i_hipTexRefSetAddressMode(textureReference * texRef, int dim, enum hipTextureAddressMode am, void* return_address);
+    typedef hipError_t (*__hipTexRefSetAddressMode_t)(textureReference * texRef, int dim, enum hipTextureAddressMode am, void* return_address);
+#endif
+
+#if HAVE_hipEventSynchronize       
+    hipError_t i_hipEventSynchronize(hipEvent_t event, void* return_address);
+    typedef hipError_t (*__hipEventSynchronize_t)(hipEvent_t event, void* return_address);
+#endif
+
+#if HAVE_hipGraphGetRootNodes       
+    hipError_t i_hipGraphGetRootNodes(hipGraph_t graph, hipGraphNode_t * pRootNodes, size_t * pNumRootNodes, void* return_address);
+    typedef hipError_t (*__hipGraphGetRootNodes_t)(hipGraph_t graph, hipGraphNode_t * pRootNodes, size_t * pNumRootNodes, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy2DFromArray       
+    hipError_t i_hipMemcpy2DFromArray(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpy2DFromArray_t)(void * dst, size_t dpitch, hipArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipGraphExternalSemaphoresWaitNodeSetParams       
+    hipError_t i_hipGraphExternalSemaphoresWaitNodeSetParams(hipGraphNode_t hNode, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphExternalSemaphoresWaitNodeSetParams_t)(hipGraphNode_t hNode, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyDtoA       
+    hipError_t i_hipMemcpyDtoA(hipArray_t dstArray, size_t dstOffset, hipDeviceptr_t srcDevice, size_t ByteCount, void* return_address);
+    typedef hipError_t (*__hipMemcpyDtoA_t)(hipArray_t dstArray, size_t dstOffset, hipDeviceptr_t srcDevice, size_t ByteCount, void* return_address);
+#endif
+
+#if HAVE_hipGraphMemcpyNodeGetParams       
+    hipError_t i_hipGraphMemcpyNodeGetParams(hipGraphNode_t node, hipMemcpy3DParms * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphMemcpyNodeGetParams_t)(hipGraphNode_t node, hipMemcpy3DParms * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy       
+    hipError_t i_hipMemcpy(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpy_t)(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipSetValidDevices       
+    hipError_t i_hipSetValidDevices(int * device_arr, int len, void* return_address);
+    typedef hipError_t (*__hipSetValidDevices_t)(int * device_arr, int len, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy2DAsync       
+    hipError_t i_hipMemcpy2DAsync(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpy2DAsync_t)(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipGraphExecExternalSemaphoresWaitNodeSetParams       
+    hipError_t i_hipGraphExecExternalSemaphoresWaitNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphExecExternalSemaphoresWaitNodeSetParams_t)(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, const hipExternalSemaphoreWaitNodeParams * nodeParams, void* return_address);
+#endif
+
+#if HAVE_hipStreamAttachMemAsync       
+    hipError_t i_hipStreamAttachMemAsync(hipStream_t stream, void * dev_ptr, size_t length, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipStreamAttachMemAsync_t)(hipStream_t stream, void * dev_ptr, size_t length, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipMemset2DAsync       
+    hipError_t i_hipMemset2DAsync(void * dst, size_t pitch, int value, size_t width, size_t height, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemset2DAsync_t)(void * dst, size_t pitch, int value, size_t width, size_t height, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipTexObjectGetResourceViewDesc       
+    hipError_t i_hipTexObjectGetResourceViewDesc(HIP_RESOURCE_VIEW_DESC * pResViewDesc, hipTextureObject_t texObject, void* return_address);
+    typedef hipError_t (*__hipTexObjectGetResourceViewDesc_t)(HIP_RESOURCE_VIEW_DESC * pResViewDesc, hipTextureObject_t texObject, void* return_address);
+#endif
+
+#if HAVE_hipEventCreateWithFlags       
+    hipError_t i_hipEventCreateWithFlags(hipEvent_t * event, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipEventCreateWithFlags_t)(hipEvent_t * event, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipMipmappedArrayCreate       
+    hipError_t i_hipMipmappedArrayCreate(hipMipmappedArray_t * pHandle, HIP_ARRAY3D_DESCRIPTOR * pMipmappedArrayDesc, unsigned int numMipmapLevels, void* return_address);
+    typedef hipError_t (*__hipMipmappedArrayCreate_t)(hipMipmappedArray_t * pHandle, HIP_ARRAY3D_DESCRIPTOR * pMipmappedArrayDesc, unsigned int numMipmapLevels, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy2D_spt       
+    hipError_t i_hipMemcpy2D_spt(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpy2D_spt_t)(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddMemcpyNode       
+    hipError_t i_hipGraphAddMemcpyNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipMemcpy3DParms * pCopyParams, void* return_address);
+    typedef hipError_t (*__hipGraphAddMemcpyNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, const hipMemcpy3DParms * pCopyParams, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyToSymbolAsync       
+    hipError_t i_hipMemcpyToSymbolAsync(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpyToSymbolAsync_t)(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMallocFromPoolAsync       
+    hipError_t i_hipMallocFromPoolAsync(void ** dev_ptr, size_t size, hipMemPool_t mem_pool, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMallocFromPoolAsync_t)(void ** dev_ptr, size_t size, hipMemPool_t mem_pool, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags       
+    hipError_t i_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(int * numBlocks, const void * f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t)(int * numBlocks, const void * f, int blockSize, size_t dynSharedMemPerBlk, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddMemFreeNode       
+    hipError_t i_hipGraphAddMemFreeNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dev_ptr, void* return_address);
+    typedef hipError_t (*__hipGraphAddMemFreeNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, void * dev_ptr, void* return_address);
+#endif
+
+#if HAVE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor       
+    hipError_t i_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor(int * numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk, void* return_address);
+    typedef hipError_t (*__hipModuleOccupancyMaxActiveBlocksPerMultiprocessor_t)(int * numBlocks, hipFunction_t f, int blockSize, size_t dynSharedMemPerBlk, void* return_address);
+#endif
+
+#if HAVE_hipEventDestroy       
+    hipError_t i_hipEventDestroy(hipEvent_t event, void* return_address);
+    typedef hipError_t (*__hipEventDestroy_t)(hipEvent_t event, void* return_address);
+#endif
+
+#if HAVE_hipDeviceSetCacheConfig       
+    hipError_t i_hipDeviceSetCacheConfig(hipFuncCache_t cacheConfig, void* return_address);
+    typedef hipError_t (*__hipDeviceSetCacheConfig_t)(hipFuncCache_t cacheConfig, void* return_address);
+#endif
+
+#if HAVE_hipFree       
+    hipError_t i_hipFree(void * ptr, void* return_address);
+    typedef hipError_t (*__hipFree_t)(void * ptr, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy2DToArrayAsync_spt       
+    hipError_t i_hipMemcpy2DToArrayAsync_spt(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpy2DToArrayAsync_spt_t)(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipCtxGetFlags       
+    hipError_t i_hipCtxGetFlags(unsigned int * flags, void* return_address);
+    typedef hipError_t (*__hipCtxGetFlags_t)(unsigned int * flags, void* return_address);
+#endif
+
+#if HAVE_hipGetSymbolAddress       
+    hipError_t i_hipGetSymbolAddress(void ** devPtr, const void * symbol, void* return_address);
+    typedef hipError_t (*__hipGetSymbolAddress_t)(void ** devPtr, const void * symbol, void* return_address);
+#endif
+
+#if HAVE_hipTexRefGetAddress       
+    hipError_t i_hipTexRefGetAddress(hipDeviceptr_t * dev_ptr, const textureReference * texRef, void* return_address);
+    typedef hipError_t (*__hipTexRefGetAddress_t)(hipDeviceptr_t * dev_ptr, const textureReference * texRef, void* return_address);
+#endif
+
+#if HAVE_hipTexObjectCreate       
+    hipError_t i_hipTexObjectCreate(hipTextureObject_t * pTexObject, const HIP_RESOURCE_DESC * pResDesc, const HIP_TEXTURE_DESC * pTexDesc, const HIP_RESOURCE_VIEW_DESC * pResViewDesc, void* return_address);
+    typedef hipError_t (*__hipTexObjectCreate_t)(hipTextureObject_t * pTexObject, const HIP_RESOURCE_DESC * pResDesc, const HIP_TEXTURE_DESC * pTexDesc, const HIP_RESOURCE_VIEW_DESC * pResViewDesc, void* return_address);
+#endif
+
+#if HAVE_hipDeviceGetSharedMemConfig       
+    hipError_t i_hipDeviceGetSharedMemConfig(hipSharedMemConfig * pConfig, void* return_address);
+    typedef hipError_t (*__hipDeviceGetSharedMemConfig_t)(hipSharedMemConfig * pConfig, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyHtoAAsync       
+    hipError_t i_hipMemcpyHtoAAsync(hipArray_t dstArray, size_t dstOffset, const void * srcHost, size_t ByteCount, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpyHtoAAsync_t)(hipArray_t dstArray, size_t dstOffset, const void * srcHost, size_t ByteCount, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMemPoolGetAttribute       
+    hipError_t i_hipMemPoolGetAttribute(hipMemPool_t mem_pool, hipMemPoolAttr attr, void * value, void* return_address);
+    typedef hipError_t (*__hipMemPoolGetAttribute_t)(hipMemPool_t mem_pool, hipMemPoolAttr attr, void * value, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddMemAllocNode       
+    hipError_t i_hipGraphAddMemAllocNode(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipMemAllocNodeParams * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphAddMemAllocNode_t)(hipGraphNode_t * pGraphNode, hipGraph_t graph, const hipGraphNode_t * pDependencies, size_t numDependencies, hipMemAllocNodeParams * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipMemRetainAllocationHandle       
+    hipError_t i_hipMemRetainAllocationHandle(hipMemGenericAllocationHandle_t * handle, void * addr, void* return_address);
+    typedef hipError_t (*__hipMemRetainAllocationHandle_t)(hipMemGenericAllocationHandle_t * handle, void * addr, void* return_address);
+#endif
+
+#if HAVE_hipGetFuncBySymbol       
+    hipError_t i_hipGetFuncBySymbol(hipFunction_t * functionPtr, const void * symbolPtr, void* return_address);
+    typedef hipError_t (*__hipGetFuncBySymbol_t)(hipFunction_t * functionPtr, const void * symbolPtr, void* return_address);
+#endif
+
+#if HAVE_hipDeviceSetMemPool       
+    hipError_t i_hipDeviceSetMemPool(int device, hipMemPool_t mem_pool, void* return_address);
+    typedef hipError_t (*__hipDeviceSetMemPool_t)(int device, hipMemPool_t mem_pool, void* return_address);
+#endif
+
+#if HAVE_hipDeviceSetLimit       
+    hipError_t i_hipDeviceSetLimit(enum hipLimit_t limit, size_t value, void* return_address);
+    typedef hipError_t (*__hipDeviceSetLimit_t)(enum hipLimit_t limit, size_t value, void* return_address);
+#endif
+
+#if HAVE_hipMemGetInfo       
+    hipError_t i_hipMemGetInfo(size_t * free, size_t * total, void* return_address);
+    typedef hipError_t (*__hipMemGetInfo_t)(size_t * free, size_t * total, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyParam2D       
+    hipError_t i_hipMemcpyParam2D(const hip_Memcpy2D * pCopy, void* return_address);
+    typedef hipError_t (*__hipMemcpyParam2D_t)(const hip_Memcpy2D * pCopy, void* return_address);
+#endif
+
+#if HAVE_hipGraphDebugDotPrint       
+    hipError_t i_hipGraphDebugDotPrint(hipGraph_t graph, const char * path, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipGraphDebugDotPrint_t)(hipGraph_t graph, const char * path, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipDeviceSetGraphMemAttribute       
+    hipError_t i_hipDeviceSetGraphMemAttribute(int device, hipGraphMemAttributeType attr, void * value, void* return_address);
+    typedef hipError_t (*__hipDeviceSetGraphMemAttribute_t)(int device, hipGraphMemAttributeType attr, void * value, void* return_address);
+#endif
+
+#if HAVE_hipDrvGetErrorString       
+    hipError_t i_hipDrvGetErrorString(hipError_t hipError, const char ** errorString, void* return_address);
+    typedef hipError_t (*__hipDrvGetErrorString_t)(hipError_t hipError, const char ** errorString, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyDtoDAsync       
+    hipError_t i_hipMemcpyDtoDAsync(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpyDtoDAsync_t)(hipDeviceptr_t dst, hipDeviceptr_t src, size_t sizeBytes, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipCtxSynchronize       
+    hipError_t i_hipCtxSynchronize(void* return_address);
+    typedef hipError_t (*__hipCtxSynchronize_t)(void* return_address);
+#endif
+
+#if HAVE_hipTexObjectDestroy       
+    hipError_t i_hipTexObjectDestroy(hipTextureObject_t texObject, void* return_address);
+    typedef hipError_t (*__hipTexObjectDestroy_t)(hipTextureObject_t texObject, void* return_address);
+#endif
+
+#if HAVE_hipTexRefGetAddressMode       
+    hipError_t i_hipTexRefGetAddressMode(enum hipTextureAddressMode * pam, const textureReference * texRef, int dim, void* return_address);
+    typedef hipError_t (*__hipTexRefGetAddressMode_t)(enum hipTextureAddressMode * pam, const textureReference * texRef, int dim, void* return_address);
+#endif
+
+#if HAVE___hipGetPCH       
+    void i___hipGetPCH(const char ** pch, unsigned int * size, void* return_address);
+    typedef void (*____hipGetPCH_t)(const char ** pch, unsigned int * size, void* return_address);
+#endif
+
+#if HAVE_hipStreamGetFlags       
+    hipError_t i_hipStreamGetFlags(hipStream_t stream, unsigned int * flags, void* return_address);
+    typedef hipError_t (*__hipStreamGetFlags_t)(hipStream_t stream, unsigned int * flags, void* return_address);
+#endif
+
+#if HAVE_hipMemGetAccess       
+    hipError_t i_hipMemGetAccess(unsigned long long * flags, const hipMemLocation * location, void * ptr, void* return_address);
+    typedef hipError_t (*__hipMemGetAccess_t)(unsigned long long * flags, const hipMemLocation * location, void * ptr, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyAtoA       
+    hipError_t i_hipMemcpyAtoA(hipArray_t dstArray, size_t dstOffset, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, void* return_address);
+    typedef hipError_t (*__hipMemcpyAtoA_t)(hipArray_t dstArray, size_t dstOffset, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyToSymbol       
+    hipError_t i_hipMemcpyToSymbol(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpyToSymbol_t)(const void * symbol, const void * src, size_t sizeBytes, size_t offset, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipCtxSetCurrent       
+    hipError_t i_hipCtxSetCurrent(hipCtx_t ctx, void* return_address);
+    typedef hipError_t (*__hipCtxSetCurrent_t)(hipCtx_t ctx, void* return_address);
+#endif
+
+#if HAVE_hipStreamQuery_spt       
+    hipError_t i_hipStreamQuery_spt(hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipStreamQuery_spt_t)(hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipGetSymbolSize       
+    hipError_t i_hipGetSymbolSize(size_t * size, const void * symbol, void* return_address);
+    typedef hipError_t (*__hipGetSymbolSize_t)(size_t * size, const void * symbol, void* return_address);
+#endif
+
+#if HAVE_hipMipmappedArrayGetLevel       
+    hipError_t i_hipMipmappedArrayGetLevel(hipArray_t * pLevelArray, hipMipmappedArray_t hMipMappedArray, unsigned int level, void* return_address);
+    typedef hipError_t (*__hipMipmappedArrayGetLevel_t)(hipArray_t * pLevelArray, hipMipmappedArray_t hMipMappedArray, unsigned int level, void* return_address);
+#endif
+
+#if HAVE_hipExternalMemoryGetMappedMipmappedArray       
+    hipError_t i_hipExternalMemoryGetMappedMipmappedArray(hipMipmappedArray_t * mipmap, hipExternalMemory_t extMem, const hipExternalMemoryMipmappedArrayDesc * mipmapDesc, void* return_address);
+    typedef hipError_t (*__hipExternalMemoryGetMappedMipmappedArray_t)(hipMipmappedArray_t * mipmap, hipExternalMemory_t extMem, const hipExternalMemoryMipmappedArrayDesc * mipmapDesc, void* return_address);
+#endif
+
+#if HAVE_hipGraphExecMemcpyNodeSetParams       
+    hipError_t i_hipGraphExecMemcpyNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t node, hipMemcpy3DParms * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphExecMemcpyNodeSetParams_t)(hipGraphExec_t hGraphExec, hipGraphNode_t node, hipMemcpy3DParms * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipUserObjectCreate       
+    hipError_t i_hipUserObjectCreate(hipUserObject_t * object_out, void * ptr, hipHostFn_t destroy, unsigned int initialRefcount, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipUserObjectCreate_t)(hipUserObject_t * object_out, void * ptr, hipHostFn_t destroy, unsigned int initialRefcount, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipStreamGetCaptureInfo_v2       
+    hipError_t i_hipStreamGetCaptureInfo_v2(hipStream_t stream, hipStreamCaptureStatus * captureStatus_out, unsigned long long * id_out, hipGraph_t * graph_out, const hipGraphNode_t ** dependencies_out, size_t * numDependencies_out, void* return_address);
+    typedef hipError_t (*__hipStreamGetCaptureInfo_v2_t)(hipStream_t stream, hipStreamCaptureStatus * captureStatus_out, unsigned long long * id_out, hipGraph_t * graph_out, const hipGraphNode_t ** dependencies_out, size_t * numDependencies_out, void* return_address);
+#endif
+
+#if HAVE_hipTexRefGetArray       
+    hipError_t i_hipTexRefGetArray(hipArray_t * pArray, const textureReference * texRef, void* return_address);
+    typedef hipError_t (*__hipTexRefGetArray_t)(hipArray_t * pArray, const textureReference * texRef, void* return_address);
+#endif
+
+#if HAVE_hipImportExternalSemaphore       
+    hipError_t i_hipImportExternalSemaphore(hipExternalSemaphore_t * extSem_out, const hipExternalSemaphoreHandleDesc * semHandleDesc, void* return_address);
+    typedef hipError_t (*__hipImportExternalSemaphore_t)(hipExternalSemaphore_t * extSem_out, const hipExternalSemaphoreHandleDesc * semHandleDesc, void* return_address);
+#endif
+
+#if HAVE_hipDeviceGetAttribute       
+    hipError_t i_hipDeviceGetAttribute(int * pi, hipDeviceAttribute_t attr, int deviceId, void* return_address);
+    typedef hipError_t (*__hipDeviceGetAttribute_t)(int * pi, hipDeviceAttribute_t attr, int deviceId, void* return_address);
+#endif
+
+#if HAVE_hipGraphMemFreeNodeGetParams       
+    hipError_t i_hipGraphMemFreeNodeGetParams(hipGraphNode_t node, void * dev_ptr, void* return_address);
+    typedef hipError_t (*__hipGraphMemFreeNodeGetParams_t)(hipGraphNode_t node, void * dev_ptr, void* return_address);
+#endif
+
+#if HAVE_hipCtxGetSharedMemConfig       
+    hipError_t i_hipCtxGetSharedMemConfig(hipSharedMemConfig * pConfig, void* return_address);
+    typedef hipError_t (*__hipCtxGetSharedMemConfig_t)(hipSharedMemConfig * pConfig, void* return_address);
+#endif
+
+#if HAVE_hipGraphMemcpyNodeSetParamsToSymbol       
+    hipError_t i_hipGraphMemcpyNodeSetParamsToSymbol(hipGraphNode_t node, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipGraphMemcpyNodeSetParamsToSymbol_t)(hipGraphNode_t node, const void * symbol, const void * src, size_t count, size_t offset, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy2DToArray       
+    hipError_t i_hipMemcpy2DToArray(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpy2DToArray_t)(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipStreamIsCapturing_spt       
+    hipError_t i_hipStreamIsCapturing_spt(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, void* return_address);
+    typedef hipError_t (*__hipStreamIsCapturing_spt_t)(hipStream_t stream, hipStreamCaptureStatus * pCaptureStatus, void* return_address);
+#endif
+
+#if HAVE_hipFreeHost       
+    hipError_t i_hipFreeHost(void * ptr, void* return_address);
+    typedef hipError_t (*__hipFreeHost_t)(void * ptr, void* return_address);
+#endif
+
+#if HAVE_hipGraphKernelNodeSetParams       
+    hipError_t i_hipGraphKernelNodeSetParams(hipGraphNode_t node, const hipKernelNodeParams * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphKernelNodeSetParams_t)(hipGraphNode_t node, const hipKernelNodeParams * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipMallocHost       
+    hipError_t i_hipMallocHost(void ** ptr, size_t size, void* return_address);
+    typedef hipError_t (*__hipMallocHost_t)(void ** ptr, size_t size, void* return_address);
+#endif
+
+#if HAVE_hipMemset3D_spt       
+    hipError_t i_hipMemset3D_spt(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, void* return_address);
+    typedef hipError_t (*__hipMemset3D_spt_t)(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, void* return_address);
+#endif
+
+#if HAVE_hipStreamGetCaptureInfo_v2_spt       
+    hipError_t i_hipStreamGetCaptureInfo_v2_spt(hipStream_t stream, hipStreamCaptureStatus * captureStatus_out, unsigned long long * id_out, hipGraph_t * graph_out, const hipGraphNode_t ** dependencies_out, size_t * numDependencies_out, void* return_address);
+    typedef hipError_t (*__hipStreamGetCaptureInfo_v2_spt_t)(hipStream_t stream, hipStreamCaptureStatus * captureStatus_out, unsigned long long * id_out, hipGraph_t * graph_out, const hipGraphNode_t ** dependencies_out, size_t * numDependencies_out, void* return_address);
+#endif
+
+#if HAVE_hipGetTextureReference       
+    hipError_t i_hipGetTextureReference(const textureReference ** texref, const void * symbol, void* return_address);
+    typedef hipError_t (*__hipGetTextureReference_t)(const textureReference ** texref, const void * symbol, void* return_address);
+#endif
+
+#if HAVE_hipGraphExecExternalSemaphoresSignalNodeSetParams       
+    hipError_t i_hipGraphExecExternalSemaphoresSignalNodeSetParams(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphExecExternalSemaphoresSignalNodeSetParams_t)(hipGraphExec_t hGraphExec, hipGraphNode_t hNode, const hipExternalSemaphoreSignalNodeParams * nodeParams, void* return_address);
+#endif
+
+#if HAVE_hipGraphAddDependencies       
+    hipError_t i_hipGraphAddDependencies(hipGraph_t graph, const hipGraphNode_t * from, const hipGraphNode_t * to, size_t numDependencies, void* return_address);
+    typedef hipError_t (*__hipGraphAddDependencies_t)(hipGraph_t graph, const hipGraphNode_t * from, const hipGraphNode_t * to, size_t numDependencies, void* return_address);
+#endif
+
+#if HAVE_hipGraphNodeGetType       
+    hipError_t i_hipGraphNodeGetType(hipGraphNode_t node, hipGraphNodeType * pType, void* return_address);
+    typedef hipError_t (*__hipGraphNodeGetType_t)(hipGraphNode_t node, hipGraphNodeType * pType, void* return_address);
+#endif
+
+#if HAVE_hipTexRefSetBorderColor       
+    hipError_t i_hipTexRefSetBorderColor(textureReference * texRef, float * pBorderColor, void* return_address);
+    typedef hipError_t (*__hipTexRefSetBorderColor_t)(textureReference * texRef, float * pBorderColor, void* return_address);
+#endif
+
+#if HAVE_hipMemPrefetchAsync       
+    hipError_t i_hipMemPrefetchAsync(const void * dev_ptr, size_t count, int device, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemPrefetchAsync_t)(const void * dev_ptr, size_t count, int device, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipCtxGetDevice       
+    hipError_t i_hipCtxGetDevice(hipDevice_t * device, void* return_address);
+    typedef hipError_t (*__hipCtxGetDevice_t)(hipDevice_t * device, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy2DArrayToArray       
+    hipError_t i_hipMemcpy2DArrayToArray(hipArray_t dst, size_t wOffsetDst, size_t hOffsetDst, hipArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpy2DArrayToArray_t)(hipArray_t dst, size_t wOffsetDst, size_t hOffsetDst, hipArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipUserObjectRelease       
+    hipError_t i_hipUserObjectRelease(hipUserObject_t object, unsigned int count, void* return_address);
+    typedef hipError_t (*__hipUserObjectRelease_t)(hipUserObject_t object, unsigned int count, void* return_address);
+#endif
+
+#if HAVE_hipHostGetFlags       
+    hipError_t i_hipHostGetFlags(unsigned int * flagsPtr, void * hostPtr, void* return_address);
+    typedef hipError_t (*__hipHostGetFlags_t)(unsigned int * flagsPtr, void * hostPtr, void* return_address);
+#endif
+
+#if HAVE_hipDrvGraphAddMemsetNode       
+    hipError_t i_hipDrvGraphAddMemsetNode(hipGraphNode_t * phGraphNode, hipGraph_t hGraph, const hipGraphNode_t * dependencies, size_t numDependencies, const HIP_MEMSET_NODE_PARAMS * memsetParams, hipCtx_t ctx, void* return_address);
+    typedef hipError_t (*__hipDrvGraphAddMemsetNode_t)(hipGraphNode_t * phGraphNode, hipGraph_t hGraph, const hipGraphNode_t * dependencies, size_t numDependencies, const HIP_MEMSET_NODE_PARAMS * memsetParams, hipCtx_t ctx, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyAtoD       
+    hipError_t i_hipMemcpyAtoD(hipDeviceptr_t dstDevice, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, void* return_address);
+    typedef hipError_t (*__hipMemcpyAtoD_t)(hipDeviceptr_t dstDevice, hipArray_t srcArray, size_t srcOffset, size_t ByteCount, void* return_address);
+#endif
+
+#if HAVE_hipMemPoolCreate       
+    hipError_t i_hipMemPoolCreate(hipMemPool_t * mem_pool, const hipMemPoolProps * pool_props, void* return_address);
+    typedef hipError_t (*__hipMemPoolCreate_t)(hipMemPool_t * mem_pool, const hipMemPoolProps * pool_props, void* return_address);
+#endif
+
+#if HAVE_hipKernelNameRef       
+    const char * i_hipKernelNameRef(const hipFunction_t f, void* return_address);
+    typedef const char * (*__hipKernelNameRef_t)(const hipFunction_t f, void* return_address);
+#endif
+
+#if HAVE_hipMemset3DAsync       
+    hipError_t i_hipMemset3DAsync(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemset3DAsync_t)(hipPitchedPtr pitchedDevPtr, int value, hipExtent extent, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipEventRecord       
+    hipError_t i_hipEventRecord(hipEvent_t event, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipEventRecord_t)(hipEvent_t event, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipMipmappedArrayDestroy       
+    hipError_t i_hipMipmappedArrayDestroy(hipMipmappedArray_t hMipmappedArray, void* return_address);
+    typedef hipError_t (*__hipMipmappedArrayDestroy_t)(hipMipmappedArray_t hMipmappedArray, void* return_address);
+#endif
+
+#if HAVE_hipMemsetAsync_spt       
+    hipError_t i_hipMemsetAsync_spt(void * dst, int value, size_t sizeBytes, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemsetAsync_spt_t)(void * dst, int value, size_t sizeBytes, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipDevicePrimaryCtxSetFlags       
+    hipError_t i_hipDevicePrimaryCtxSetFlags(hipDevice_t dev, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipDevicePrimaryCtxSetFlags_t)(hipDevice_t dev, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipPeekAtLastError       
+    hipError_t i_hipPeekAtLastError(void* return_address);
+    typedef hipError_t (*__hipPeekAtLastError_t)(void* return_address);
+#endif
+
+#if HAVE_hipDeviceGetGraphMemAttribute       
+    hipError_t i_hipDeviceGetGraphMemAttribute(int device, hipGraphMemAttributeType attr, void * value, void* return_address);
+    typedef hipError_t (*__hipDeviceGetGraphMemAttribute_t)(int device, hipGraphMemAttributeType attr, void * value, void* return_address);
+#endif
+
+#if HAVE_hipDrvGetErrorName       
+    hipError_t i_hipDrvGetErrorName(hipError_t hipError, const char ** errorString, void* return_address);
+    typedef hipError_t (*__hipDrvGetErrorName_t)(hipError_t hipError, const char ** errorString, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy_spt       
+    hipError_t i_hipMemcpy_spt(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpy_spt_t)(void * dst, const void * src, size_t sizeBytes, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipCtxSetSharedMemConfig       
+    hipError_t i_hipCtxSetSharedMemConfig(hipSharedMemConfig config, void* return_address);
+    typedef hipError_t (*__hipCtxSetSharedMemConfig_t)(hipSharedMemConfig config, void* return_address);
+#endif
+
+#if HAVE_hipCreateSurfaceObject       
+    hipError_t i_hipCreateSurfaceObject(hipSurfaceObject_t * pSurfObject, const hipResourceDesc * pResDesc, void* return_address);
+    typedef hipError_t (*__hipCreateSurfaceObject_t)(hipSurfaceObject_t * pSurfObject, const hipResourceDesc * pResDesc, void* return_address);
+#endif
+
+#if HAVE_hipGetMipmappedArrayLevel       
+    hipError_t i_hipGetMipmappedArrayLevel(hipArray_t * levelArray, hipMipmappedArray_const_t mipmappedArray, unsigned int level, void* return_address);
+    typedef hipError_t (*__hipGetMipmappedArrayLevel_t)(hipArray_t * levelArray, hipMipmappedArray_const_t mipmappedArray, unsigned int level, void* return_address);
+#endif
+
+#if HAVE_hipGraphExecDestroy       
+    hipError_t i_hipGraphExecDestroy(hipGraphExec_t graphExec, void* return_address);
+    typedef hipError_t (*__hipGraphExecDestroy_t)(hipGraphExec_t graphExec, void* return_address);
+#endif
+
+#if HAVE_hipMemsetD32Async       
+    hipError_t i_hipMemsetD32Async(hipDeviceptr_t dst, int value, size_t count, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemsetD32Async_t)(hipDeviceptr_t dst, int value, size_t count, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipDeviceEnablePeerAccess       
+    hipError_t i_hipDeviceEnablePeerAccess(int peerDeviceId, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipDeviceEnablePeerAccess_t)(int peerDeviceId, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipArray3DCreate       
+    hipError_t i_hipArray3DCreate(hipArray_t * array, const HIP_ARRAY3D_DESCRIPTOR * pAllocateArray, void* return_address);
+    typedef hipError_t (*__hipArray3DCreate_t)(hipArray_t * array, const HIP_ARRAY3D_DESCRIPTOR * pAllocateArray, void* return_address);
+#endif
+
+#if HAVE_hipIpcOpenMemHandle       
+    hipError_t i_hipIpcOpenMemHandle(void ** devPtr, hipIpcMemHandle_t handle, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipIpcOpenMemHandle_t)(void ** devPtr, hipIpcMemHandle_t handle, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipMemPoolTrimTo       
+    hipError_t i_hipMemPoolTrimTo(hipMemPool_t mem_pool, size_t min_bytes_to_hold, void* return_address);
+    typedef hipError_t (*__hipMemPoolTrimTo_t)(hipMemPool_t mem_pool, size_t min_bytes_to_hold, void* return_address);
+#endif
+
+#if HAVE_hipMemcpy2D       
+    hipError_t i_hipMemcpy2D(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpy2D_t)(void * dst, size_t dpitch, const void * src, size_t spitch, size_t width, size_t height, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipFuncGetAttribute       
+    hipError_t i_hipFuncGetAttribute(int * value, hipFunction_attribute attrib, hipFunction_t hfunc, void* return_address);
+    typedef hipError_t (*__hipFuncGetAttribute_t)(int * value, hipFunction_attribute attrib, hipFunction_t hfunc, void* return_address);
+#endif
+
+#if HAVE_hipBindTextureToMipmappedArray       
+    hipError_t i_hipBindTextureToMipmappedArray(const textureReference * tex, hipMipmappedArray_const_t mipmappedArray, const hipChannelFormatDesc * desc, void* return_address);
+    typedef hipError_t (*__hipBindTextureToMipmappedArray_t)(const textureReference * tex, hipMipmappedArray_const_t mipmappedArray, const hipChannelFormatDesc * desc, void* return_address);
+#endif
+
+#if HAVE_hipGraphicsMapResources       
+    hipError_t i_hipGraphicsMapResources(int count, hipGraphicsResource_t * resources, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipGraphicsMapResources_t)(int count, hipGraphicsResource_t * resources, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipArrayCreate       
+    hipError_t i_hipArrayCreate(hipArray_t * pHandle, const HIP_ARRAY_DESCRIPTOR * pAllocateArray, void* return_address);
+    typedef hipError_t (*__hipArrayCreate_t)(hipArray_t * pHandle, const HIP_ARRAY_DESCRIPTOR * pAllocateArray, void* return_address);
+#endif
+
+#if HAVE_hipTexRefSetMaxAnisotropy       
+    hipError_t i_hipTexRefSetMaxAnisotropy(textureReference * texRef, unsigned int maxAniso, void* return_address);
+    typedef hipError_t (*__hipTexRefSetMaxAnisotropy_t)(textureReference * texRef, unsigned int maxAniso, void* return_address);
+#endif
+
+#if HAVE_hipGraphKernelNodeGetAttribute       
+    hipError_t i_hipGraphKernelNodeGetAttribute(hipGraphNode_t hNode, hipLaunchAttributeID attr, hipLaunchAttributeValue * value, void* return_address);
+    typedef hipError_t (*__hipGraphKernelNodeGetAttribute_t)(hipGraphNode_t hNode, hipLaunchAttributeID attr, hipLaunchAttributeValue * value, void* return_address);
+#endif
+
+#if HAVE_hipExtLaunchKernel       
+    hipError_t i_hipExtLaunchKernel(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, hipEvent_t startEvent, hipEvent_t stopEvent, int flags, void* return_address);
+    typedef hipError_t (*__hipExtLaunchKernel_t)(const void * function_address, dim3 numBlocks, dim3 dimBlocks, void ** args, size_t sharedMemBytes, hipStream_t stream, hipEvent_t startEvent, hipEvent_t stopEvent, int flags, void* return_address);
+#endif
+
+#if HAVE_hipTexRefSetMipmapFilterMode       
+    hipError_t i_hipTexRefSetMipmapFilterMode(textureReference * texRef, enum hipTextureFilterMode fm, void* return_address);
+    typedef hipError_t (*__hipTexRefSetMipmapFilterMode_t)(textureReference * texRef, enum hipTextureFilterMode fm, void* return_address);
+#endif
+
+#if HAVE_hipMemImportFromShareableHandle       
+    hipError_t i_hipMemImportFromShareableHandle(hipMemGenericAllocationHandle_t * handle, void * osHandle, hipMemAllocationHandleType shHandleType, void* return_address);
+    typedef hipError_t (*__hipMemImportFromShareableHandle_t)(hipMemGenericAllocationHandle_t * handle, void * osHandle, hipMemAllocationHandleType shHandleType, void* return_address);
+#endif
+
+#if HAVE_hipTexRefSetFormat       
+    hipError_t i_hipTexRefSetFormat(textureReference * texRef, hipArray_Format fmt, int NumPackedComponents, void* return_address);
+    typedef hipError_t (*__hipTexRefSetFormat_t)(textureReference * texRef, hipArray_Format fmt, int NumPackedComponents, void* return_address);
+#endif
+
+#if HAVE_amd_dbgapi_get_git_hash       
+    const char * i_amd_dbgapi_get_git_hash(void* return_address);
+    typedef const char * (*__amd_dbgapi_get_git_hash_t)(void* return_address);
+#endif
+
+#if HAVE_hipLaunchByPtr       
+    hipError_t i_hipLaunchByPtr(const void * func, void* return_address);
+    typedef hipError_t (*__hipLaunchByPtr_t)(const void * func, void* return_address);
+#endif
+
+#if HAVE_amd_dbgapi_get_build_id       
+    size_t i_amd_dbgapi_get_build_id(void* return_address);
+    typedef size_t (*__amd_dbgapi_get_build_id_t)(void* return_address);
+#endif
+
+#if HAVE_hipMemcpy3DAsync       
+    hipError_t i_hipMemcpy3DAsync(const struct hipMemcpy3DParms * p, hipStream_t stream, void* return_address);
+    typedef hipError_t (*__hipMemcpy3DAsync_t)(const struct hipMemcpy3DParms * p, hipStream_t stream, void* return_address);
+#endif
+
+#if HAVE_hipGetTextureObjectResourceViewDesc       
+    hipError_t i_hipGetTextureObjectResourceViewDesc(struct hipResourceViewDesc * pResViewDesc, hipTextureObject_t textureObject, void* return_address);
+    typedef hipError_t (*__hipGetTextureObjectResourceViewDesc_t)(struct hipResourceViewDesc * pResViewDesc, hipTextureObject_t textureObject, void* return_address);
+#endif
+
+#if HAVE_hipTexRefSetFilterMode       
+    hipError_t i_hipTexRefSetFilterMode(textureReference * texRef, enum hipTextureFilterMode fm, void* return_address);
+    typedef hipError_t (*__hipTexRefSetFilterMode_t)(textureReference * texRef, enum hipTextureFilterMode fm, void* return_address);
+#endif
+
+#if HAVE_hipDriverGetVersion       
+    hipError_t i_hipDriverGetVersion(int * driverVersion, void* return_address);
+    typedef hipError_t (*__hipDriverGetVersion_t)(int * driverVersion, void* return_address);
+#endif
+
+#if HAVE_hipStreamWriteValue64       
+    hipError_t i_hipStreamWriteValue64(hipStream_t stream, void * ptr, uint64_t value, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipStreamWriteValue64_t)(hipStream_t stream, void * ptr, uint64_t value, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipMallocMipmappedArray       
+    hipError_t i_hipMallocMipmappedArray(hipMipmappedArray_t * mipmappedArray, const struct hipChannelFormatDesc * desc, struct hipExtent extent, unsigned int numLevels, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipMallocMipmappedArray_t)(hipMipmappedArray_t * mipmappedArray, const struct hipChannelFormatDesc * desc, struct hipExtent extent, unsigned int numLevels, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipMemset_spt       
+    hipError_t i_hipMemset_spt(void * dst, int value, size_t sizeBytes, void* return_address);
+    typedef hipError_t (*__hipMemset_spt_t)(void * dst, int value, size_t sizeBytes, void* return_address);
+#endif
+
+#if HAVE_hipTexRefSetFlags       
+    hipError_t i_hipTexRefSetFlags(textureReference * texRef, unsigned int Flags, void* return_address);
+    typedef hipError_t (*__hipTexRefSetFlags_t)(textureReference * texRef, unsigned int Flags, void* return_address);
+#endif
+
+#if HAVE_hipMemGetAddressRange       
+    hipError_t i_hipMemGetAddressRange(hipDeviceptr_t * pbase, size_t * psize, hipDeviceptr_t dptr, void* return_address);
+    typedef hipError_t (*__hipMemGetAddressRange_t)(hipDeviceptr_t * pbase, size_t * psize, hipDeviceptr_t dptr, void* return_address);
+#endif
+
+#if HAVE_hipTexRefSetMipmapLevelClamp       
+    hipError_t i_hipTexRefSetMipmapLevelClamp(textureReference * texRef, float minMipMapLevelClamp, float maxMipMapLevelClamp, void* return_address);
+    typedef hipError_t (*__hipTexRefSetMipmapLevelClamp_t)(textureReference * texRef, float minMipMapLevelClamp, float maxMipMapLevelClamp, void* return_address);
+#endif
+
+#if HAVE_hipGraphMemcpyNodeSetParams       
+    hipError_t i_hipGraphMemcpyNodeSetParams(hipGraphNode_t node, const hipMemcpy3DParms * pNodeParams, void* return_address);
+    typedef hipError_t (*__hipGraphMemcpyNodeSetParams_t)(hipGraphNode_t node, const hipMemcpy3DParms * pNodeParams, void* return_address);
+#endif
+
+#if HAVE_hipGraphGetEdges       
+    hipError_t i_hipGraphGetEdges(hipGraph_t graph, hipGraphNode_t * from, hipGraphNode_t * to, size_t * numEdges, void* return_address);
+    typedef hipError_t (*__hipGraphGetEdges_t)(hipGraph_t graph, hipGraphNode_t * from, hipGraphNode_t * to, size_t * numEdges, void* return_address);
+#endif
+
+#if HAVE_hipMemcpyToArray       
+    hipError_t i_hipMemcpyToArray(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
+    typedef hipError_t (*__hipMemcpyToArray_t)(hipArray_t dst, size_t wOffset, size_t hOffset, const void * src, size_t count, hipMemcpyKind kind, void* return_address);
+#endif
+
+#if HAVE_hipExtMallocWithFlags       
+    hipError_t i_hipExtMallocWithFlags(void ** ptr, size_t sizeBytes, unsigned int flags, void* return_address);
+    typedef hipError_t (*__hipExtMallocWithFlags_t)(void ** ptr, size_t sizeBytes, unsigned int flags, void* return_address);
+#endif
+
+#if HAVE_hipFuncSetAttribute       
+    hipError_t i_hipFuncSetAttribute(const void * func, hipFuncAttribute attr, int value, void* return_address);
+    typedef hipError_t (*__hipFuncSetAttribute_t)(const void * func, hipFuncAttribute attr, int value, void* return_address);
+#endif
+
+#if HAVE_hipChooseDeviceR0600       
+    hipError_t i_hipChooseDeviceR0600(int * device, const hipDeviceProp_tR0600 * prop, void* return_address);
+    typedef hipError_t (*__hipChooseDeviceR0600_t)(int * device, const hipDeviceProp_tR0600 * prop, void* return_address);
+#endif
+
+#if HAVE_hipTexRefSetMipmappedArray       
+    hipError_t i_hipTexRefSetMipmappedArray(textureReference * texRef, struct hipMipmappedArray * mipmappedArray, unsigned int Flags, void* return_address);
+    typedef hipError_t (*__hipTexRefSetMipmappedArray_t)(textureReference * texRef, struct hipMipmappedArray * mipmappedArray, unsigned int Flags, void* return_address);
+#endif
+
+#if HAVE_hipMemset       
+    hipError_t i_hipMemset(void * dst, int value, size_t sizeBytes, void* return_address);
+    typedef hipError_t (*__hipMemset_t)(void * dst, int value, size_t sizeBytes, void* return_address);
+#endif
+
+#if HAVE_hipTexRefGetMipmapLevelClamp       
+    hipError_t i_hipTexRefGetMipmapLevelClamp(float * pminMipmapLevelClamp, float * pmaxMipmapLevelClamp, const textureReference * texRef, void* return_address);
+    typedef hipError_t (*__hipTexRefGetMipmapLevelClamp_t)(float * pminMipmapLevelClamp, float * pmaxMipmapLevelClamp, const textureReference * texRef, void* return_address);
+#endif
+
 
 #endif // HIP_PROFILED_FUNCTIONS_H

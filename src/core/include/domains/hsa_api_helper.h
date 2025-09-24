@@ -30,253 +30,253 @@
 
 
 #define FOR_EACH_HSA_FUNC(macro) \
-macro(hsa_amd_interop_map_buffer)        \
-macro(hsa_amd_queue_get_info)            \
-macro(hsa_amd_profiling_async_copy_enable) \
-macro(hsa_executable_symbol_get_info)    \
-macro(hsa_signal_cas_scacquire)          \
-macro(hsa_system_get_info)               \
-macro(hsa_queue_cas_write_index_scacq_screl) \
-macro(hsa_ext_image_get_capability)      \
-macro(hsa_executable_load_program_code_object) \
-macro(hsa_queue_cas_write_index_release) \
-macro(hsa_signal_subtract_scacquire)     \
-macro(hsa_signal_cas_release)            \
-macro(hsa_signal_add_scacq_screl)        \
-macro(hsa_signal_group_wait_any_relaxed) \
-macro(hsa_signal_and_relaxed)            \
-macro(hsa_ext_image_clear)               \
-macro(hsa_executable_load_code_object)   \
-macro(hsa_signal_exchange_acquire)       \
-macro(hsa_ext_image_data_get_info_with_layout) \
-macro(hsa_amd_svm_attributes_get)        \
-macro(hsa_ext_image_export)              \
-macro(hsa_memory_register)               \
-macro(hsa_signal_and_scacquire)          \
-macro(hsa_signal_add_acq_rel)            \
-macro(hsa_amd_portable_export_dmabuf)    \
-macro(hsa_code_object_serialize)         \
-macro(hsa_amd_memory_lock)               \
-macro(hsa_executable_iterate_agent_symbols) \
-macro(hsa_code_symbol_get_info)          \
-macro(hsa_signal_xor_acquire)            \
-macro(hsa_amd_image_get_info_max_dim)    \
-macro(hsa_signal_subtract_acq_rel)       \
-macro(hsa_isa_get_exception_policies)    \
-macro(hsa_agent_iterate_regions)         \
-macro(hsa_signal_wait_relaxed)           \
-macro(hsa_ven_amd_pcs_create)            \
-macro(hsa_queue_load_read_index_relaxed) \
-macro(hsa_signal_load_scacquire)         \
-macro(hsa_amd_signal_value_pointer)      \
-macro(hsa_amd_memory_pool_free)          \
-macro(hsa_executable_validate)           \
-macro(hsa_signal_create)                 \
-macro(hsa_amd_spm_acquire)               \
-macro(hsa_queue_load_read_index_scacquire) \
-macro(hsa_queue_load_write_index_acquire) \
-macro(hsa_executable_agent_global_variable_define) \
-macro(hsa_signal_add_relaxed)            \
-macro(hsa_soft_queue_create)             \
-macro(hsa_queue_cas_write_index_screlease) \
-macro(hsa_signal_xor_release)            \
-macro(hsa_signal_wait_scacquire)         \
-macro(hsa_isa_from_name)                 \
-macro(hsa_executable_destroy)            \
-macro(hsa_ext_image_create)              \
-macro(hsa_system_extension_supported)    \
-macro(hsa_executable_load_agent_code_object) \
-macro(hsa_amd_vmem_handle_release)       \
-macro(hsa_memory_free)                   \
-macro(hsa_signal_cas_screlease)          \
-macro(hsa_amd_memory_copy_engine_status) \
-macro(hsa_executable_iterate_program_symbols) \
-macro(hsa_ext_image_copy)                \
-macro(hsa_amd_coherency_get_type)        \
-macro(hsa_executable_freeze)             \
-macro(hsa_queue_store_write_index_release) \
-macro(hsa_amd_vmem_export_shareable_handle) \
-macro(hsa_amd_svm_prefetch_async)        \
-macro(hsa_signal_store_screlease)        \
-macro(hsa_amd_memory_fill)               \
-macro(hsa_amd_vmem_map)                  \
-macro(hsa_signal_subtract_scacq_screl)   \
-macro(hsa_amd_memory_async_copy_rect)    \
-macro(hsa_amd_svm_attributes_set)        \
-macro(hsa_amd_profiling_get_async_copy_time) \
-macro(hsa_amd_agent_set_async_scratch_limit) \
-macro(hsa_signal_subtract_screlease)     \
-macro(hsa_ext_image_import)              \
-macro(hsa_amd_memory_pool_can_migrate)   \
-macro(hsa_amd_ipc_memory_attach)         \
-macro(hsa_amd_portable_close_dmabuf)     \
-macro(hsa_queue_add_write_index_relaxed) \
-macro(hsa_queue_destroy)                 \
-macro(hsa_signal_or_scacq_screl)         \
-macro(hsa_amd_agent_memory_pool_get_info) \
-macro(hsa_executable_create_alt)         \
-macro(hsa_signal_silent_store_relaxed)   \
-macro(hsa_queue_add_write_index_acq_rel) \
-macro(hsa_queue_cas_write_index_acq_rel) \
-macro(hsa_region_get_info)               \
-macro(hsa_executable_get_symbol_by_name) \
-macro(hsa_executable_get_symbol)         \
-macro(hsa_signal_xor_scacquire)          \
-macro(hsa_signal_xor_scacq_screl)        \
-macro(hsa_queue_store_write_index_screlease) \
-macro(hsa_amd_agent_iterate_memory_pools) \
-macro(hsa_amd_memory_pool_get_info)      \
-macro(hsa_amd_spm_release)               \
-macro(hsa_signal_and_scacq_screl)        \
-macro(hsa_wavefront_get_info)            \
-macro(hsa_ven_amd_pcs_destroy)           \
-macro(hsa_system_major_extension_supported) \
-macro(hsa_status_string)                 \
-macro(hsa_signal_cas_relaxed)            \
-macro(hsa_init)                          \
-macro(hsa_memory_allocate)               \
-macro(hsa_ext_image_data_get_info)       \
-macro(hsa_cache_get_info)                \
-macro(hsa_signal_subtract_relaxed)       \
-macro(hsa_queue_load_write_index_relaxed) \
-macro(hsa_amd_signal_async_handler)      \
-macro(hsa_signal_cas_acquire)            \
-macro(hsa_signal_or_scacquire)           \
-macro(hsa_queue_add_write_index_release) \
-macro(hsa_agent_extension_supported)     \
-macro(hsa_signal_exchange_relaxed)       \
-macro(hsa_executable_validate_alt)       \
-macro(hsa_signal_exchange_scacq_screl)   \
-macro(hsa_executable_get_info)           \
-macro(hsa_code_object_reader_create_from_memory) \
-macro(hsa_amd_async_function)            \
-macro(hsa_isa_compatible)                \
-macro(hsa_amd_pointer_info_set_userdata) \
-macro(hsa_signal_and_screlease)          \
-macro(hsa_queue_cas_write_index_acquire) \
-macro(hsa_queue_cas_write_index_relaxed) \
-macro(hsa_queue_store_read_index_release) \
-macro(hsa_amd_pointer_info)              \
-macro(hsa_amd_spm_set_dest_buffer)       \
-macro(hsa_amd_vmem_get_access)           \
-macro(hsa_signal_silent_store_screlease) \
-macro(hsa_signal_add_acquire)            \
-macro(hsa_executable_create)             \
-macro(hsa_signal_store_release)          \
-macro(hsa_signal_xor_screlease)          \
-macro(hsa_executable_iterate_symbols)    \
-macro(hsa_amd_memory_lock_to_pool)       \
-macro(hsa_signal_wait_acquire)           \
-macro(hsa_queue_cas_write_index_scacquire) \
-macro(hsa_code_object_get_symbol)        \
-macro(hsa_signal_group_destroy)          \
-macro(hsa_signal_group_create)           \
-macro(hsa_code_object_reader_destroy)    \
-macro(hsa_extension_get_name)            \
-macro(hsa_signal_group_wait_any_scacquire) \
-macro(hsa_amd_register_system_event_handler) \
-macro(hsa_signal_xor_acq_rel)            \
-macro(hsa_queue_create)                  \
-macro(hsa_amd_profiling_set_profiler_enabled) \
-macro(hsa_amd_profiling_get_dispatch_time) \
-macro(hsa_amd_ipc_memory_create)         \
-macro(hsa_amd_vmem_import_shareable_handle) \
-macro(hsa_queue_add_write_index_acquire) \
-macro(hsa_amd_register_deallocation_callback) \
-macro(hsa_ven_amd_pcs_create_from_id)    \
-macro(hsa_signal_exchange_screlease)     \
-macro(hsa_signal_and_release)            \
-macro(hsa_ext_sampler_create)            \
-macro(hsa_ven_amd_pcs_start)             \
-macro(hsa_executable_readonly_variable_define) \
-macro(hsa_queue_inactivate)              \
-macro(hsa_signal_or_acq_rel)             \
-macro(hsa_system_get_major_extension_table) \
-macro(hsa_queue_store_write_index_relaxed) \
-macro(hsa_agent_major_extension_supported) \
-macro(hsa_amd_memory_migrate)            \
-macro(hsa_amd_vmem_retain_alloc_handle)  \
-macro(hsa_amd_vmem_address_reserve)      \
-macro(hsa_signal_load_relaxed)           \
-macro(hsa_signal_exchange_scacquire)     \
-macro(hsa_code_object_destroy)           \
-macro(hsa_amd_vmem_handle_create)        \
-macro(hsa_amd_vmem_address_free)         \
-macro(hsa_signal_subtract_release)       \
-macro(hsa_queue_load_write_index_scacquire) \
-macro(hsa_code_object_get_info)          \
-macro(hsa_amd_memory_pool_allocate)      \
-macro(hsa_code_object_get_symbol_from_name) \
-macro(hsa_agent_iterate_caches)          \
-macro(hsa_isa_get_round_method)          \
-macro(hsa_amd_queue_set_priority)        \
-macro(hsa_queue_store_read_index_screlease) \
-macro(hsa_amd_vmem_get_alloc_properties_from_handle) \
-macro(hsa_amd_ipc_signal_attach)         \
-macro(hsa_signal_and_acq_rel)            \
-macro(hsa_signal_load_acquire)           \
-macro(hsa_amd_memory_async_copy)         \
-macro(hsa_signal_exchange_acq_rel)       \
-macro(hsa_executable_global_variable_define) \
-macro(hsa_shut_down)                     \
-macro(hsa_amd_signal_create)             \
-macro(hsa_ven_amd_pcs_stop)              \
-macro(hsa_amd_memory_unlock)             \
-macro(hsa_amd_image_create)              \
-macro(hsa_amd_interop_unmap_buffer)      \
-macro(hsa_signal_or_screlease)           \
-macro(hsa_signal_destroy)                \
-macro(hsa_ext_image_destroy)             \
-macro(hsa_amd_vmem_set_access)           \
-macro(hsa_signal_and_acquire)            \
-macro(hsa_memory_deregister)             \
-macro(hsa_amd_profiling_convert_tick_to_system_domain) \
-macro(hsa_signal_add_release)            \
-macro(hsa_signal_exchange_release)       \
-macro(hsa_amd_vmem_address_reserve_align) \
-macro(hsa_ext_sampler_destroy)           \
-macro(hsa_signal_store_relaxed)          \
-macro(hsa_signal_cas_acq_rel)            \
-macro(hsa_signal_xor_relaxed)            \
-macro(hsa_queue_add_write_index_scacquire) \
-macro(hsa_isa_get_info)                  \
-macro(hsa_code_object_reader_create_from_file) \
-macro(hsa_isa_iterate_wavefronts)        \
-macro(hsa_amd_queue_cu_set_mask)         \
-macro(hsa_amd_vmem_unmap)                \
-macro(hsa_signal_or_acquire)             \
-macro(hsa_agent_get_exception_policies)  \
-macro(hsa_system_get_extension_table)    \
-macro(hsa_queue_add_write_index_screlease) \
-macro(hsa_amd_signal_wait_any)           \
-macro(hsa_amd_agents_allow_access)       \
-macro(hsa_queue_add_write_index_scacq_screl) \
-macro(hsa_signal_add_screlease)          \
-macro(hsa_iterate_agents)                \
-macro(hsa_queue_store_read_index_relaxed) \
-macro(hsa_signal_or_relaxed)             \
-macro(hsa_amd_ipc_memory_detach)         \
-macro(hsa_signal_or_release)             \
-macro(hsa_amd_deregister_deallocation_callback) \
-macro(hsa_queue_load_read_index_acquire) \
-macro(hsa_ven_amd_pcs_iterate_configuration) \
-macro(hsa_amd_ipc_signal_create)         \
-macro(hsa_code_object_iterate_symbols)   \
-macro(hsa_ext_image_get_capability_with_layout) \
-macro(hsa_amd_memory_async_copy_on_engine) \
-macro(hsa_agent_iterate_isas)            \
-macro(hsa_signal_cas_scacq_screl)        \
-macro(hsa_amd_coherency_set_type)        \
-macro(hsa_amd_queue_cu_get_mask)         \
-macro(hsa_ext_image_create_with_layout)  \
-macro(hsa_code_object_deserialize)       \
-macro(hsa_memory_assign_agent)           \
-macro(hsa_isa_get_info_alt)              \
-macro(hsa_signal_subtract_acquire)       \
-macro(hsa_memory_copy)                   \
-macro(hsa_agent_get_info)                \
-macro(hsa_signal_add_scacquire)          \
-macro(hsa_ven_amd_pcs_flush)             \
+IF_ENABLED(hsa_amd_interop_map_buffer, macro)      \
+IF_ENABLED(hsa_amd_queue_get_info, macro)          \
+IF_ENABLED(hsa_amd_profiling_async_copy_enable, macro) \
+IF_ENABLED(hsa_executable_symbol_get_info, macro)  \
+IF_ENABLED(hsa_signal_cas_scacquire, macro)        \
+IF_ENABLED(hsa_system_get_info, macro)             \
+IF_ENABLED(hsa_queue_cas_write_index_scacq_screl, macro) \
+IF_ENABLED(hsa_ext_image_get_capability, macro)    \
+IF_ENABLED(hsa_executable_load_program_code_object, macro) \
+IF_ENABLED(hsa_queue_cas_write_index_release, macro) \
+IF_ENABLED(hsa_signal_subtract_scacquire, macro)   \
+IF_ENABLED(hsa_signal_cas_release, macro)          \
+IF_ENABLED(hsa_signal_add_scacq_screl, macro)      \
+IF_ENABLED(hsa_signal_group_wait_any_relaxed, macro) \
+IF_ENABLED(hsa_signal_and_relaxed, macro)          \
+IF_ENABLED(hsa_ext_image_clear, macro)             \
+IF_ENABLED(hsa_executable_load_code_object, macro) \
+IF_ENABLED(hsa_signal_exchange_acquire, macro)     \
+IF_ENABLED(hsa_ext_image_data_get_info_with_layout, macro) \
+IF_ENABLED(hsa_amd_svm_attributes_get, macro)      \
+IF_ENABLED(hsa_ext_image_export, macro)            \
+IF_ENABLED(hsa_memory_register, macro)             \
+IF_ENABLED(hsa_signal_and_scacquire, macro)        \
+IF_ENABLED(hsa_signal_add_acq_rel, macro)          \
+IF_ENABLED(hsa_amd_portable_export_dmabuf, macro)  \
+IF_ENABLED(hsa_code_object_serialize, macro)       \
+IF_ENABLED(hsa_amd_memory_lock, macro)             \
+IF_ENABLED(hsa_executable_iterate_agent_symbols, macro) \
+IF_ENABLED(hsa_code_symbol_get_info, macro)        \
+IF_ENABLED(hsa_signal_xor_acquire, macro)          \
+IF_ENABLED(hsa_amd_image_get_info_max_dim, macro)  \
+IF_ENABLED(hsa_signal_subtract_acq_rel, macro)     \
+IF_ENABLED(hsa_isa_get_exception_policies, macro)  \
+IF_ENABLED(hsa_agent_iterate_regions, macro)       \
+IF_ENABLED(hsa_signal_wait_relaxed, macro)         \
+IF_ENABLED(hsa_ven_amd_pcs_create, macro)          \
+IF_ENABLED(hsa_queue_load_read_index_relaxed, macro) \
+IF_ENABLED(hsa_signal_load_scacquire, macro)       \
+IF_ENABLED(hsa_amd_signal_value_pointer, macro)    \
+IF_ENABLED(hsa_amd_memory_pool_free, macro)        \
+IF_ENABLED(hsa_executable_validate, macro)         \
+IF_ENABLED(hsa_signal_create, macro)               \
+IF_ENABLED(hsa_amd_spm_acquire, macro)             \
+IF_ENABLED(hsa_queue_load_read_index_scacquire, macro) \
+IF_ENABLED(hsa_queue_load_write_index_acquire, macro) \
+IF_ENABLED(hsa_executable_agent_global_variable_define, macro) \
+IF_ENABLED(hsa_signal_add_relaxed, macro)          \
+IF_ENABLED(hsa_soft_queue_create, macro)           \
+IF_ENABLED(hsa_queue_cas_write_index_screlease, macro) \
+IF_ENABLED(hsa_signal_xor_release, macro)          \
+IF_ENABLED(hsa_signal_wait_scacquire, macro)       \
+IF_ENABLED(hsa_isa_from_name, macro)               \
+IF_ENABLED(hsa_executable_destroy, macro)          \
+IF_ENABLED(hsa_ext_image_create, macro)            \
+IF_ENABLED(hsa_system_extension_supported, macro)  \
+IF_ENABLED(hsa_executable_load_agent_code_object, macro) \
+IF_ENABLED(hsa_amd_vmem_handle_release, macro)     \
+IF_ENABLED(hsa_memory_free, macro)                 \
+IF_ENABLED(hsa_signal_cas_screlease, macro)        \
+IF_ENABLED(hsa_amd_memory_copy_engine_status, macro) \
+IF_ENABLED(hsa_executable_iterate_program_symbols, macro) \
+IF_ENABLED(hsa_ext_image_copy, macro)              \
+IF_ENABLED(hsa_amd_coherency_get_type, macro)      \
+IF_ENABLED(hsa_executable_freeze, macro)           \
+IF_ENABLED(hsa_queue_store_write_index_release, macro) \
+IF_ENABLED(hsa_amd_vmem_export_shareable_handle, macro) \
+IF_ENABLED(hsa_amd_svm_prefetch_async, macro)      \
+IF_ENABLED(hsa_signal_store_screlease, macro)      \
+IF_ENABLED(hsa_amd_memory_fill, macro)             \
+IF_ENABLED(hsa_amd_vmem_map, macro)                \
+IF_ENABLED(hsa_signal_subtract_scacq_screl, macro) \
+IF_ENABLED(hsa_amd_memory_async_copy_rect, macro)  \
+IF_ENABLED(hsa_amd_svm_attributes_set, macro)      \
+IF_ENABLED(hsa_amd_profiling_get_async_copy_time, macro) \
+IF_ENABLED(hsa_amd_agent_set_async_scratch_limit, macro) \
+IF_ENABLED(hsa_signal_subtract_screlease, macro)   \
+IF_ENABLED(hsa_ext_image_import, macro)            \
+IF_ENABLED(hsa_amd_memory_pool_can_migrate, macro) \
+IF_ENABLED(hsa_amd_ipc_memory_attach, macro)       \
+IF_ENABLED(hsa_amd_portable_close_dmabuf, macro)   \
+IF_ENABLED(hsa_queue_add_write_index_relaxed, macro) \
+IF_ENABLED(hsa_queue_destroy, macro)               \
+IF_ENABLED(hsa_signal_or_scacq_screl, macro)       \
+IF_ENABLED(hsa_amd_agent_memory_pool_get_info, macro) \
+IF_ENABLED(hsa_executable_create_alt, macro)       \
+IF_ENABLED(hsa_signal_silent_store_relaxed, macro) \
+IF_ENABLED(hsa_queue_add_write_index_acq_rel, macro) \
+IF_ENABLED(hsa_queue_cas_write_index_acq_rel, macro) \
+IF_ENABLED(hsa_region_get_info, macro)             \
+IF_ENABLED(hsa_executable_get_symbol_by_name, macro) \
+IF_ENABLED(hsa_executable_get_symbol, macro)       \
+IF_ENABLED(hsa_signal_xor_scacquire, macro)        \
+IF_ENABLED(hsa_signal_xor_scacq_screl, macro)      \
+IF_ENABLED(hsa_queue_store_write_index_screlease, macro) \
+IF_ENABLED(hsa_amd_agent_iterate_memory_pools, macro) \
+IF_ENABLED(hsa_amd_memory_pool_get_info, macro)    \
+IF_ENABLED(hsa_amd_spm_release, macro)             \
+IF_ENABLED(hsa_signal_and_scacq_screl, macro)      \
+IF_ENABLED(hsa_wavefront_get_info, macro)          \
+IF_ENABLED(hsa_ven_amd_pcs_destroy, macro)         \
+IF_ENABLED(hsa_system_major_extension_supported, macro) \
+IF_ENABLED(hsa_status_string, macro)               \
+IF_ENABLED(hsa_signal_cas_relaxed, macro)          \
+IF_ENABLED(hsa_init, macro)                        \
+IF_ENABLED(hsa_memory_allocate, macro)             \
+IF_ENABLED(hsa_ext_image_data_get_info, macro)     \
+IF_ENABLED(hsa_cache_get_info, macro)              \
+IF_ENABLED(hsa_signal_subtract_relaxed, macro)     \
+IF_ENABLED(hsa_queue_load_write_index_relaxed, macro) \
+IF_ENABLED(hsa_amd_signal_async_handler, macro)    \
+IF_ENABLED(hsa_signal_cas_acquire, macro)          \
+IF_ENABLED(hsa_signal_or_scacquire, macro)         \
+IF_ENABLED(hsa_queue_add_write_index_release, macro) \
+IF_ENABLED(hsa_agent_extension_supported, macro)   \
+IF_ENABLED(hsa_signal_exchange_relaxed, macro)     \
+IF_ENABLED(hsa_executable_validate_alt, macro)     \
+IF_ENABLED(hsa_signal_exchange_scacq_screl, macro) \
+IF_ENABLED(hsa_executable_get_info, macro)         \
+IF_ENABLED(hsa_code_object_reader_create_from_memory, macro) \
+IF_ENABLED(hsa_amd_async_function, macro)          \
+IF_ENABLED(hsa_isa_compatible, macro)              \
+IF_ENABLED(hsa_amd_pointer_info_set_userdata, macro) \
+IF_ENABLED(hsa_signal_and_screlease, macro)        \
+IF_ENABLED(hsa_queue_cas_write_index_acquire, macro) \
+IF_ENABLED(hsa_queue_cas_write_index_relaxed, macro) \
+IF_ENABLED(hsa_queue_store_read_index_release, macro) \
+IF_ENABLED(hsa_amd_pointer_info, macro)            \
+IF_ENABLED(hsa_amd_spm_set_dest_buffer, macro)     \
+IF_ENABLED(hsa_amd_vmem_get_access, macro)         \
+IF_ENABLED(hsa_signal_silent_store_screlease, macro) \
+IF_ENABLED(hsa_signal_add_acquire, macro)          \
+IF_ENABLED(hsa_executable_create, macro)           \
+IF_ENABLED(hsa_signal_store_release, macro)        \
+IF_ENABLED(hsa_signal_xor_screlease, macro)        \
+IF_ENABLED(hsa_executable_iterate_symbols, macro)  \
+IF_ENABLED(hsa_amd_memory_lock_to_pool, macro)     \
+IF_ENABLED(hsa_signal_wait_acquire, macro)         \
+IF_ENABLED(hsa_queue_cas_write_index_scacquire, macro) \
+IF_ENABLED(hsa_code_object_get_symbol, macro)      \
+IF_ENABLED(hsa_signal_group_destroy, macro)        \
+IF_ENABLED(hsa_signal_group_create, macro)         \
+IF_ENABLED(hsa_code_object_reader_destroy, macro)  \
+IF_ENABLED(hsa_extension_get_name, macro)          \
+IF_ENABLED(hsa_signal_group_wait_any_scacquire, macro) \
+IF_ENABLED(hsa_amd_register_system_event_handler, macro) \
+IF_ENABLED(hsa_signal_xor_acq_rel, macro)          \
+IF_ENABLED(hsa_queue_create, macro)                \
+IF_ENABLED(hsa_amd_profiling_set_profiler_enabled, macro) \
+IF_ENABLED(hsa_amd_profiling_get_dispatch_time, macro) \
+IF_ENABLED(hsa_amd_ipc_memory_create, macro)       \
+IF_ENABLED(hsa_amd_vmem_import_shareable_handle, macro) \
+IF_ENABLED(hsa_queue_add_write_index_acquire, macro) \
+IF_ENABLED(hsa_amd_register_deallocation_callback, macro) \
+IF_ENABLED(hsa_ven_amd_pcs_create_from_id, macro)  \
+IF_ENABLED(hsa_signal_exchange_screlease, macro)   \
+IF_ENABLED(hsa_signal_and_release, macro)          \
+IF_ENABLED(hsa_ext_sampler_create, macro)          \
+IF_ENABLED(hsa_ven_amd_pcs_start, macro)           \
+IF_ENABLED(hsa_executable_readonly_variable_define, macro) \
+IF_ENABLED(hsa_queue_inactivate, macro)            \
+IF_ENABLED(hsa_signal_or_acq_rel, macro)           \
+IF_ENABLED(hsa_system_get_major_extension_table, macro) \
+IF_ENABLED(hsa_queue_store_write_index_relaxed, macro) \
+IF_ENABLED(hsa_agent_major_extension_supported, macro) \
+IF_ENABLED(hsa_amd_memory_migrate, macro)          \
+IF_ENABLED(hsa_amd_vmem_retain_alloc_handle, macro) \
+IF_ENABLED(hsa_amd_vmem_address_reserve, macro)    \
+IF_ENABLED(hsa_signal_load_relaxed, macro)         \
+IF_ENABLED(hsa_signal_exchange_scacquire, macro)   \
+IF_ENABLED(hsa_code_object_destroy, macro)         \
+IF_ENABLED(hsa_amd_vmem_handle_create, macro)      \
+IF_ENABLED(hsa_amd_vmem_address_free, macro)       \
+IF_ENABLED(hsa_signal_subtract_release, macro)     \
+IF_ENABLED(hsa_queue_load_write_index_scacquire, macro) \
+IF_ENABLED(hsa_code_object_get_info, macro)        \
+IF_ENABLED(hsa_amd_memory_pool_allocate, macro)    \
+IF_ENABLED(hsa_code_object_get_symbol_from_name, macro) \
+IF_ENABLED(hsa_agent_iterate_caches, macro)        \
+IF_ENABLED(hsa_isa_get_round_method, macro)        \
+IF_ENABLED(hsa_amd_queue_set_priority, macro)      \
+IF_ENABLED(hsa_queue_store_read_index_screlease, macro) \
+IF_ENABLED(hsa_amd_vmem_get_alloc_properties_from_handle, macro) \
+IF_ENABLED(hsa_amd_ipc_signal_attach, macro)       \
+IF_ENABLED(hsa_signal_and_acq_rel, macro)          \
+IF_ENABLED(hsa_signal_load_acquire, macro)         \
+IF_ENABLED(hsa_amd_memory_async_copy, macro)       \
+IF_ENABLED(hsa_signal_exchange_acq_rel, macro)     \
+IF_ENABLED(hsa_executable_global_variable_define, macro) \
+IF_ENABLED(hsa_shut_down, macro)                   \
+IF_ENABLED(hsa_amd_signal_create, macro)           \
+IF_ENABLED(hsa_ven_amd_pcs_stop, macro)            \
+IF_ENABLED(hsa_amd_memory_unlock, macro)           \
+IF_ENABLED(hsa_amd_image_create, macro)            \
+IF_ENABLED(hsa_amd_interop_unmap_buffer, macro)    \
+IF_ENABLED(hsa_signal_or_screlease, macro)         \
+IF_ENABLED(hsa_signal_destroy, macro)              \
+IF_ENABLED(hsa_ext_image_destroy, macro)           \
+IF_ENABLED(hsa_amd_vmem_set_access, macro)         \
+IF_ENABLED(hsa_signal_and_acquire, macro)          \
+IF_ENABLED(hsa_memory_deregister, macro)           \
+IF_ENABLED(hsa_amd_profiling_convert_tick_to_system_domain, macro) \
+IF_ENABLED(hsa_signal_add_release, macro)          \
+IF_ENABLED(hsa_signal_exchange_release, macro)     \
+IF_ENABLED(hsa_amd_vmem_address_reserve_align, macro) \
+IF_ENABLED(hsa_ext_sampler_destroy, macro)         \
+IF_ENABLED(hsa_signal_store_relaxed, macro)        \
+IF_ENABLED(hsa_signal_cas_acq_rel, macro)          \
+IF_ENABLED(hsa_signal_xor_relaxed, macro)          \
+IF_ENABLED(hsa_queue_add_write_index_scacquire, macro) \
+IF_ENABLED(hsa_isa_get_info, macro)                \
+IF_ENABLED(hsa_code_object_reader_create_from_file, macro) \
+IF_ENABLED(hsa_isa_iterate_wavefronts, macro)      \
+IF_ENABLED(hsa_amd_queue_cu_set_mask, macro)       \
+IF_ENABLED(hsa_amd_vmem_unmap, macro)              \
+IF_ENABLED(hsa_signal_or_acquire, macro)           \
+IF_ENABLED(hsa_agent_get_exception_policies, macro) \
+IF_ENABLED(hsa_system_get_extension_table, macro)  \
+IF_ENABLED(hsa_queue_add_write_index_screlease, macro) \
+IF_ENABLED(hsa_amd_signal_wait_any, macro)         \
+IF_ENABLED(hsa_amd_agents_allow_access, macro)     \
+IF_ENABLED(hsa_queue_add_write_index_scacq_screl, macro) \
+IF_ENABLED(hsa_signal_add_screlease, macro)        \
+IF_ENABLED(hsa_iterate_agents, macro)              \
+IF_ENABLED(hsa_queue_store_read_index_relaxed, macro) \
+IF_ENABLED(hsa_signal_or_relaxed, macro)           \
+IF_ENABLED(hsa_amd_ipc_memory_detach, macro)       \
+IF_ENABLED(hsa_signal_or_release, macro)           \
+IF_ENABLED(hsa_amd_deregister_deallocation_callback, macro) \
+IF_ENABLED(hsa_queue_load_read_index_acquire, macro) \
+IF_ENABLED(hsa_ven_amd_pcs_iterate_configuration, macro) \
+IF_ENABLED(hsa_amd_ipc_signal_create, macro)       \
+IF_ENABLED(hsa_code_object_iterate_symbols, macro) \
+IF_ENABLED(hsa_ext_image_get_capability_with_layout, macro) \
+IF_ENABLED(hsa_amd_memory_async_copy_on_engine, macro) \
+IF_ENABLED(hsa_agent_iterate_isas, macro)          \
+IF_ENABLED(hsa_signal_cas_scacq_screl, macro)      \
+IF_ENABLED(hsa_amd_coherency_set_type, macro)      \
+IF_ENABLED(hsa_amd_queue_cu_get_mask, macro)       \
+IF_ENABLED(hsa_ext_image_create_with_layout, macro) \
+IF_ENABLED(hsa_code_object_deserialize, macro)     \
+IF_ENABLED(hsa_memory_assign_agent, macro)         \
+IF_ENABLED(hsa_isa_get_info_alt, macro)            \
+IF_ENABLED(hsa_signal_subtract_acquire, macro)     \
+IF_ENABLED(hsa_memory_copy, macro)                 \
+IF_ENABLED(hsa_agent_get_info, macro)              \
+IF_ENABLED(hsa_signal_add_scacquire, macro)        \
+IF_ENABLED(hsa_ven_amd_pcs_flush, macro)           \
 
 
 /**
@@ -370,6 +370,7 @@ static inline hsa_api_id_t get_hsa_funid_by_name(const char* name)
  *			const void ** metadata (const void **)
  *	)
  */
+#if HAVE_hsa_amd_interop_map_buffer
 struct args_hsa_amd_interop_map_buffer_t {
 	uint32_t num_agents;
 	hsa_agent_t * agents;
@@ -426,6 +427,8 @@ struct args_hsa_amd_interop_map_buffer_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_queue_get_info` function.
  *
@@ -442,6 +445,7 @@ struct args_hsa_amd_interop_map_buffer_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hsa_amd_queue_get_info
 struct args_hsa_amd_queue_get_info_t {
 	hsa_queue_t * queue;
 	struct {
@@ -464,6 +468,8 @@ struct args_hsa_amd_queue_get_info_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_profiling_async_copy_enable` function.
  *
@@ -478,6 +484,7 @@ struct args_hsa_amd_queue_get_info_t {
  *			_Bool enable (unsigned int)
  *	)
  */
+#if HAVE_hsa_amd_profiling_async_copy_enable
 struct args_hsa_amd_profiling_async_copy_enable_t {
 	_Bool enable;
 	hsa_status_t retval;
@@ -486,6 +493,8 @@ struct args_hsa_amd_profiling_async_copy_enable_t {
 #define GET_ARGS_VALUE_hsa_amd_profiling_async_copy_enable(activity) { \
 	activity->hsa_args.hsa_amd_profiling_async_copy_enable.enable = (_Bool) enable; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_symbol_get_info` function.
@@ -503,6 +512,7 @@ struct args_hsa_amd_profiling_async_copy_enable_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hsa_executable_symbol_get_info
 struct args_hsa_executable_symbol_get_info_t {
 	hsa_executable_symbol_t executable_symbol;
 	hsa_executable_symbol_info_t attribute;
@@ -515,6 +525,8 @@ struct args_hsa_executable_symbol_get_info_t {
 	activity->hsa_args.hsa_executable_symbol_get_info.attribute = (hsa_executable_symbol_info_t) attribute; \
 	activity->hsa_args.hsa_executable_symbol_get_info.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_cas_scacquire` function.
@@ -532,6 +544,7 @@ struct args_hsa_executable_symbol_get_info_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_cas_scacquire
 struct args_hsa_signal_cas_scacquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t expected;
@@ -544,6 +557,8 @@ struct args_hsa_signal_cas_scacquire_t {
 	activity->hsa_args.hsa_signal_cas_scacquire.expected = (hsa_signal_value_t) expected; \
 	activity->hsa_args.hsa_signal_cas_scacquire.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_system_get_info` function.
@@ -560,6 +575,7 @@ struct args_hsa_signal_cas_scacquire_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hsa_system_get_info
 struct args_hsa_system_get_info_t {
 	hsa_system_info_t attribute;
 	void * value;
@@ -570,6 +586,8 @@ struct args_hsa_system_get_info_t {
 	activity->hsa_args.hsa_system_get_info.attribute = (hsa_system_info_t) attribute; \
 	activity->hsa_args.hsa_system_get_info.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_cas_write_index_scacq_screl` function.
@@ -587,6 +605,7 @@ struct args_hsa_system_get_info_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_cas_write_index_scacq_screl
 struct args_hsa_queue_cas_write_index_scacq_screl_t {
 	hsa_queue_t * queue;
 	struct {
@@ -609,6 +628,8 @@ struct args_hsa_queue_cas_write_index_scacq_screl_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_ext_image_get_capability` function.
  *
@@ -626,6 +647,7 @@ struct args_hsa_queue_cas_write_index_scacq_screl_t {
  *			uint32_t * capability_mask (unsigned int*)
  *	)
  */
+#if HAVE_hsa_ext_image_get_capability
 struct args_hsa_ext_image_get_capability_t {
 	hsa_agent_t agent;
 	hsa_ext_image_geometry_t geometry;
@@ -656,6 +678,8 @@ struct args_hsa_ext_image_get_capability_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_load_program_code_object` function.
  *
@@ -673,6 +697,7 @@ struct args_hsa_ext_image_get_capability_t {
  *			hsa_loaded_code_object_t * loaded_code_object (struct hsa_loaded_code_object_s*)
  *	)
  */
+#if HAVE_hsa_executable_load_program_code_object
 struct args_hsa_executable_load_program_code_object_t {
 	hsa_executable_t executable;
 	hsa_code_object_reader_t code_object_reader;
@@ -703,6 +728,8 @@ struct args_hsa_executable_load_program_code_object_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_cas_write_index_release` function.
  *
@@ -719,6 +746,7 @@ struct args_hsa_executable_load_program_code_object_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_cas_write_index_release
 struct args_hsa_queue_cas_write_index_release_t {
 	hsa_queue_t * queue;
 	struct {
@@ -741,6 +769,8 @@ struct args_hsa_queue_cas_write_index_release_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_subtract_scacquire` function.
  *
@@ -756,6 +786,7 @@ struct args_hsa_queue_cas_write_index_release_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_subtract_scacquire
 struct args_hsa_signal_subtract_scacquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -765,6 +796,8 @@ struct args_hsa_signal_subtract_scacquire_t {
 	activity->hsa_args.hsa_signal_subtract_scacquire.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_subtract_scacquire.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_cas_release` function.
@@ -782,6 +815,7 @@ struct args_hsa_signal_subtract_scacquire_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_cas_release
 struct args_hsa_signal_cas_release_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t expected;
@@ -794,6 +828,8 @@ struct args_hsa_signal_cas_release_t {
 	activity->hsa_args.hsa_signal_cas_release.expected = (hsa_signal_value_t) expected; \
 	activity->hsa_args.hsa_signal_cas_release.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_add_scacq_screl` function.
@@ -810,6 +846,7 @@ struct args_hsa_signal_cas_release_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_add_scacq_screl
 struct args_hsa_signal_add_scacq_screl_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -819,6 +856,8 @@ struct args_hsa_signal_add_scacq_screl_t {
 	activity->hsa_args.hsa_signal_add_scacq_screl.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_add_scacq_screl.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_group_wait_any_relaxed` function.
@@ -839,6 +878,7 @@ struct args_hsa_signal_add_scacq_screl_t {
  *			hsa_signal_value_t * value (long*)
  *	)
  */
+#if HAVE_hsa_signal_group_wait_any_relaxed
 struct args_hsa_signal_group_wait_any_relaxed_t {
 	hsa_signal_group_t signal_group;
 	hsa_signal_condition_t * conditions;
@@ -885,6 +925,8 @@ struct args_hsa_signal_group_wait_any_relaxed_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_and_relaxed` function.
  *
@@ -900,6 +942,7 @@ struct args_hsa_signal_group_wait_any_relaxed_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_and_relaxed
 struct args_hsa_signal_and_relaxed_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -909,6 +952,8 @@ struct args_hsa_signal_and_relaxed_t {
 	activity->hsa_args.hsa_signal_and_relaxed.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_and_relaxed.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_ext_image_clear` function.
@@ -927,6 +972,7 @@ struct args_hsa_signal_and_relaxed_t {
  *			const hsa_ext_image_region_t * image_region (const struct hsa_ext_image_region_s *)
  *	)
  */
+#if HAVE_hsa_ext_image_clear
 struct args_hsa_ext_image_clear_t {
 	hsa_agent_t agent;
 	hsa_ext_image_t image;
@@ -951,6 +997,8 @@ struct args_hsa_ext_image_clear_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_load_code_object` function.
  *
@@ -968,6 +1016,7 @@ struct args_hsa_ext_image_clear_t {
  *			const char * options (const char *)
  *	)
  */
+#if HAVE_hsa_executable_load_code_object
 struct args_hsa_executable_load_code_object_t {
 	hsa_executable_t executable;
 	hsa_agent_t agent;
@@ -992,6 +1041,8 @@ struct args_hsa_executable_load_code_object_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_exchange_acquire` function.
  *
@@ -1007,6 +1058,7 @@ struct args_hsa_executable_load_code_object_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_exchange_acquire
 struct args_hsa_signal_exchange_acquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -1017,6 +1069,8 @@ struct args_hsa_signal_exchange_acquire_t {
 	activity->hsa_args.hsa_signal_exchange_acquire.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_exchange_acquire.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_ext_image_data_get_info_with_layout` function.
@@ -1038,6 +1092,7 @@ struct args_hsa_signal_exchange_acquire_t {
  *			hsa_ext_image_data_info_t * image_data_info (struct hsa_ext_image_data_info_s*)
  *	)
  */
+#if HAVE_hsa_ext_image_data_get_info_with_layout
 struct args_hsa_ext_image_data_get_info_with_layout_t {
 	hsa_agent_t agent;
 	hsa_ext_image_descriptor_t * image_descriptor;
@@ -1074,6 +1129,8 @@ struct args_hsa_ext_image_data_get_info_with_layout_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_svm_attributes_get` function.
  *
@@ -1091,6 +1148,7 @@ struct args_hsa_ext_image_data_get_info_with_layout_t {
  *			size_t attribute_count (unsigned long)
  *	)
  */
+#if HAVE_hsa_amd_svm_attributes_get
 struct args_hsa_amd_svm_attributes_get_t {
 	void * ptr;
 	size_t size;
@@ -1115,6 +1173,8 @@ struct args_hsa_amd_svm_attributes_get_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_ext_image_export` function.
  *
@@ -1134,6 +1194,7 @@ struct args_hsa_amd_svm_attributes_get_t {
  *			const hsa_ext_image_region_t * image_region (const struct hsa_ext_image_region_s *)
  *	)
  */
+#if HAVE_hsa_ext_image_export
 struct args_hsa_ext_image_export_t {
 	hsa_agent_t agent;
 	hsa_ext_image_t src_image;
@@ -1162,6 +1223,8 @@ struct args_hsa_ext_image_export_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_memory_register` function.
  *
@@ -1177,6 +1240,7 @@ struct args_hsa_ext_image_export_t {
  *			size_t size (unsigned long)
  *	)
  */
+#if HAVE_hsa_memory_register
 struct args_hsa_memory_register_t {
 	void * ptr;
 	size_t size;
@@ -1187,6 +1251,8 @@ struct args_hsa_memory_register_t {
 	activity->hsa_args.hsa_memory_register.ptr = (void *) ptr; \
 	activity->hsa_args.hsa_memory_register.size = (size_t) size; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_and_scacquire` function.
@@ -1203,6 +1269,7 @@ struct args_hsa_memory_register_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_and_scacquire
 struct args_hsa_signal_and_scacquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -1212,6 +1279,8 @@ struct args_hsa_signal_and_scacquire_t {
 	activity->hsa_args.hsa_signal_and_scacquire.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_and_scacquire.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_add_acq_rel` function.
@@ -1228,6 +1297,7 @@ struct args_hsa_signal_and_scacquire_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_add_acq_rel
 struct args_hsa_signal_add_acq_rel_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -1237,6 +1307,8 @@ struct args_hsa_signal_add_acq_rel_t {
 	activity->hsa_args.hsa_signal_add_acq_rel.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_add_acq_rel.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_portable_export_dmabuf` function.
@@ -1255,6 +1327,7 @@ struct args_hsa_signal_add_acq_rel_t {
  *			uint64_t * offset (unsigned long*)
  *	)
  */
+#if HAVE_hsa_amd_portable_export_dmabuf
 struct args_hsa_amd_portable_export_dmabuf_t {
 	void * ptr;
 	size_t size;
@@ -1285,6 +1358,8 @@ struct args_hsa_amd_portable_export_dmabuf_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_code_object_serialize` function.
  *
@@ -1304,6 +1379,7 @@ struct args_hsa_amd_portable_export_dmabuf_t {
  *			size_t * serialized_code_object_size (unsigned long*)
  *	)
  */
+#if HAVE_hsa_code_object_serialize
 struct args_hsa_code_object_serialize_t {
 	hsa_code_object_t code_object;
 	hsa_status_t (* alloc_callback)(size_t, hsa_callback_data_t, void **);
@@ -1344,6 +1420,8 @@ struct args_hsa_code_object_serialize_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_memory_lock` function.
  *
@@ -1362,6 +1440,7 @@ struct args_hsa_code_object_serialize_t {
  *			void ** agent_ptr (void **)
  *	)
  */
+#if HAVE_hsa_amd_memory_lock
 struct args_hsa_amd_memory_lock_t {
 	void * host_ptr;
 	size_t size;
@@ -1394,6 +1473,8 @@ struct args_hsa_amd_memory_lock_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_iterate_agent_symbols` function.
  *
@@ -1411,6 +1492,7 @@ struct args_hsa_amd_memory_lock_t {
  *			void * data (void *)
  *	)
  */
+#if HAVE_hsa_executable_iterate_agent_symbols
 struct args_hsa_executable_iterate_agent_symbols_t {
 	hsa_executable_t executable;
 	hsa_agent_t agent;
@@ -1425,6 +1507,8 @@ struct args_hsa_executable_iterate_agent_symbols_t {
 	activity->hsa_args.hsa_executable_iterate_agent_symbols.callback = (hsa_status_t (*)(hsa_executable_t, hsa_agent_t, hsa_executable_symbol_t, void *)) callback; \
 	activity->hsa_args.hsa_executable_iterate_agent_symbols.data = (void *) data; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_code_symbol_get_info` function.
@@ -1442,6 +1526,7 @@ struct args_hsa_executable_iterate_agent_symbols_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hsa_code_symbol_get_info
 struct args_hsa_code_symbol_get_info_t {
 	hsa_code_symbol_t code_symbol;
 	hsa_code_symbol_info_t attribute;
@@ -1454,6 +1539,8 @@ struct args_hsa_code_symbol_get_info_t {
 	activity->hsa_args.hsa_code_symbol_get_info.attribute = (hsa_code_symbol_info_t) attribute; \
 	activity->hsa_args.hsa_code_symbol_get_info.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_xor_acquire` function.
@@ -1470,6 +1557,7 @@ struct args_hsa_code_symbol_get_info_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_xor_acquire
 struct args_hsa_signal_xor_acquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -1479,6 +1567,8 @@ struct args_hsa_signal_xor_acquire_t {
 	activity->hsa_args.hsa_signal_xor_acquire.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_xor_acquire.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_image_get_info_max_dim` function.
@@ -1496,6 +1586,7 @@ struct args_hsa_signal_xor_acquire_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hsa_amd_image_get_info_max_dim
 struct args_hsa_amd_image_get_info_max_dim_t {
 	hsa_agent_t agent;
 	hsa_agent_info_t attribute;
@@ -1508,6 +1599,8 @@ struct args_hsa_amd_image_get_info_max_dim_t {
 	activity->hsa_args.hsa_amd_image_get_info_max_dim.attribute = (hsa_agent_info_t) attribute; \
 	activity->hsa_args.hsa_amd_image_get_info_max_dim.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_subtract_acq_rel` function.
@@ -1524,6 +1617,7 @@ struct args_hsa_amd_image_get_info_max_dim_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_subtract_acq_rel
 struct args_hsa_signal_subtract_acq_rel_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -1533,6 +1627,8 @@ struct args_hsa_signal_subtract_acq_rel_t {
 	activity->hsa_args.hsa_signal_subtract_acq_rel.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_subtract_acq_rel.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_isa_get_exception_policies` function.
@@ -1550,6 +1646,7 @@ struct args_hsa_signal_subtract_acq_rel_t {
  *			uint16_t * mask (unsigned short*)
  *	)
  */
+#if HAVE_hsa_isa_get_exception_policies
 struct args_hsa_isa_get_exception_policies_t {
 	hsa_isa_t isa;
 	hsa_profile_t profile;
@@ -1572,6 +1669,8 @@ struct args_hsa_isa_get_exception_policies_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_agent_iterate_regions` function.
  *
@@ -1588,6 +1687,7 @@ struct args_hsa_isa_get_exception_policies_t {
  *			void * data (void *)
  *	)
  */
+#if HAVE_hsa_agent_iterate_regions
 struct args_hsa_agent_iterate_regions_t {
 	hsa_agent_t agent;
 	hsa_status_t (* callback)(hsa_region_t, void *);
@@ -1600,6 +1700,8 @@ struct args_hsa_agent_iterate_regions_t {
 	activity->hsa_args.hsa_agent_iterate_regions.callback = (hsa_status_t (*)(hsa_region_t, void *)) callback; \
 	activity->hsa_args.hsa_agent_iterate_regions.data = (void *) data; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_wait_relaxed` function.
@@ -1619,6 +1721,7 @@ struct args_hsa_agent_iterate_regions_t {
  *			hsa_wait_state_t wait_state_hint (enum hsa_wait_state_t)
  *	)
  */
+#if HAVE_hsa_signal_wait_relaxed
 struct args_hsa_signal_wait_relaxed_t {
 	hsa_signal_t signal;
 	hsa_signal_condition_t condition;
@@ -1635,6 +1738,8 @@ struct args_hsa_signal_wait_relaxed_t {
 	activity->hsa_args.hsa_signal_wait_relaxed.timeout_hint = (uint64_t) timeout_hint; \
 	activity->hsa_args.hsa_signal_wait_relaxed.wait_state_hint = (hsa_wait_state_t) wait_state_hint; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_ven_amd_pcs_create` function.
@@ -1658,6 +1763,7 @@ struct args_hsa_signal_wait_relaxed_t {
  *			hsa_ven_amd_pcs_t * pc_sampling (struct hsa_ven_amd_pcs_t*)
  *	)
  */
+#if HAVE_hsa_ven_amd_pcs_create
 struct args_hsa_ven_amd_pcs_create_t {
 	hsa_agent_t agent;
 	hsa_ven_amd_pcs_method_kind_t method;
@@ -1692,6 +1798,8 @@ struct args_hsa_ven_amd_pcs_create_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_load_read_index_relaxed` function.
  *
@@ -1706,6 +1814,7 @@ struct args_hsa_ven_amd_pcs_create_t {
  *			const hsa_queue_t * queue (const struct hsa_queue_s *)
  *	)
  */
+#if HAVE_hsa_queue_load_read_index_relaxed
 struct args_hsa_queue_load_read_index_relaxed_t {
 	hsa_queue_t * queue;
 	struct {
@@ -1724,6 +1833,8 @@ struct args_hsa_queue_load_read_index_relaxed_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_load_scacquire` function.
  *
@@ -1738,6 +1849,7 @@ struct args_hsa_queue_load_read_index_relaxed_t {
  *			hsa_signal_t signal (struct hsa_signal_s)
  *	)
  */
+#if HAVE_hsa_signal_load_scacquire
 struct args_hsa_signal_load_scacquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t retval;
@@ -1746,6 +1858,8 @@ struct args_hsa_signal_load_scacquire_t {
 #define GET_ARGS_VALUE_hsa_signal_load_scacquire(activity) { \
 	activity->hsa_args.hsa_signal_load_scacquire.signal = (hsa_signal_t) signal; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_signal_value_pointer` function.
@@ -1762,6 +1876,7 @@ struct args_hsa_signal_load_scacquire_t {
  *			volatile hsa_signal_value_t ** value_ptr (volatile long **)
  *	)
  */
+#if HAVE_hsa_amd_signal_value_pointer
 struct args_hsa_amd_signal_value_pointer_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t ** value_ptr;
@@ -1786,6 +1901,8 @@ struct args_hsa_amd_signal_value_pointer_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_memory_pool_free` function.
  *
@@ -1800,6 +1917,7 @@ struct args_hsa_amd_signal_value_pointer_t {
  *			void * ptr (void *)
  *	)
  */
+#if HAVE_hsa_amd_memory_pool_free
 struct args_hsa_amd_memory_pool_free_t {
 	void * ptr;
 	hsa_status_t retval;
@@ -1808,6 +1926,8 @@ struct args_hsa_amd_memory_pool_free_t {
 #define GET_ARGS_VALUE_hsa_amd_memory_pool_free(activity) { \
 	activity->hsa_args.hsa_amd_memory_pool_free.ptr = (void *) ptr; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_validate` function.
@@ -1824,6 +1944,7 @@ struct args_hsa_amd_memory_pool_free_t {
  *			uint32_t * result (unsigned int*)
  *	)
  */
+#if HAVE_hsa_executable_validate
 struct args_hsa_executable_validate_t {
 	hsa_executable_t executable;
 	uint32_t * result;
@@ -1844,6 +1965,8 @@ struct args_hsa_executable_validate_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_create` function.
  *
@@ -1861,6 +1984,7 @@ struct args_hsa_executable_validate_t {
  *			hsa_signal_t * signal (struct hsa_signal_s*)
  *	)
  */
+#if HAVE_hsa_signal_create
 struct args_hsa_signal_create_t {
 	hsa_signal_value_t initial_value;
 	uint32_t num_consumers;
@@ -1891,6 +2015,8 @@ struct args_hsa_signal_create_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_spm_acquire` function.
  *
@@ -1905,6 +2031,7 @@ struct args_hsa_signal_create_t {
  *			hsa_agent_t preferred_agent (struct hsa_agent_s)
  *	)
  */
+#if HAVE_hsa_amd_spm_acquire
 struct args_hsa_amd_spm_acquire_t {
 	hsa_agent_t preferred_agent;
 	hsa_status_t retval;
@@ -1913,6 +2040,8 @@ struct args_hsa_amd_spm_acquire_t {
 #define GET_ARGS_VALUE_hsa_amd_spm_acquire(activity) { \
 	activity->hsa_args.hsa_amd_spm_acquire.preferred_agent = (hsa_agent_t) preferred_agent; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_load_read_index_scacquire` function.
@@ -1928,6 +2057,7 @@ struct args_hsa_amd_spm_acquire_t {
  *			const hsa_queue_t * queue (const struct hsa_queue_s *)
  *	)
  */
+#if HAVE_hsa_queue_load_read_index_scacquire
 struct args_hsa_queue_load_read_index_scacquire_t {
 	hsa_queue_t * queue;
 	struct {
@@ -1946,6 +2076,8 @@ struct args_hsa_queue_load_read_index_scacquire_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_load_write_index_acquire` function.
  *
@@ -1960,6 +2092,7 @@ struct args_hsa_queue_load_read_index_scacquire_t {
  *			const hsa_queue_t * queue (const struct hsa_queue_s *)
  *	)
  */
+#if HAVE_hsa_queue_load_write_index_acquire
 struct args_hsa_queue_load_write_index_acquire_t {
 	hsa_queue_t * queue;
 	struct {
@@ -1978,6 +2111,8 @@ struct args_hsa_queue_load_write_index_acquire_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_agent_global_variable_define` function.
  *
@@ -1995,6 +2130,7 @@ struct args_hsa_queue_load_write_index_acquire_t {
  *			void * address (void *)
  *	)
  */
+#if HAVE_hsa_executable_agent_global_variable_define
 struct args_hsa_executable_agent_global_variable_define_t {
 	hsa_executable_t executable;
 	hsa_agent_t agent;
@@ -2019,6 +2155,8 @@ struct args_hsa_executable_agent_global_variable_define_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_add_relaxed` function.
  *
@@ -2034,6 +2172,7 @@ struct args_hsa_executable_agent_global_variable_define_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_add_relaxed
 struct args_hsa_signal_add_relaxed_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -2043,6 +2182,8 @@ struct args_hsa_signal_add_relaxed_t {
 	activity->hsa_args.hsa_signal_add_relaxed.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_add_relaxed.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_soft_queue_create` function.
@@ -2063,6 +2204,7 @@ struct args_hsa_signal_add_relaxed_t {
  *			hsa_queue_t ** queue (struct hsa_queue_s**)
  *	)
  */
+#if HAVE_hsa_soft_queue_create
 struct args_hsa_soft_queue_create_t {
 	hsa_region_t region;
 	uint32_t size;
@@ -2095,6 +2237,8 @@ struct args_hsa_soft_queue_create_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_cas_write_index_screlease` function.
  *
@@ -2111,6 +2255,7 @@ struct args_hsa_soft_queue_create_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_cas_write_index_screlease
 struct args_hsa_queue_cas_write_index_screlease_t {
 	hsa_queue_t * queue;
 	struct {
@@ -2133,6 +2278,8 @@ struct args_hsa_queue_cas_write_index_screlease_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_xor_release` function.
  *
@@ -2148,6 +2295,7 @@ struct args_hsa_queue_cas_write_index_screlease_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_xor_release
 struct args_hsa_signal_xor_release_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -2157,6 +2305,8 @@ struct args_hsa_signal_xor_release_t {
 	activity->hsa_args.hsa_signal_xor_release.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_xor_release.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_wait_scacquire` function.
@@ -2176,6 +2326,7 @@ struct args_hsa_signal_xor_release_t {
  *			hsa_wait_state_t wait_state_hint (enum hsa_wait_state_t)
  *	)
  */
+#if HAVE_hsa_signal_wait_scacquire
 struct args_hsa_signal_wait_scacquire_t {
 	hsa_signal_t signal;
 	hsa_signal_condition_t condition;
@@ -2193,6 +2344,8 @@ struct args_hsa_signal_wait_scacquire_t {
 	activity->hsa_args.hsa_signal_wait_scacquire.wait_state_hint = (hsa_wait_state_t) wait_state_hint; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_isa_from_name` function.
  *
@@ -2208,6 +2361,7 @@ struct args_hsa_signal_wait_scacquire_t {
  *			hsa_isa_t * isa (struct hsa_isa_s*)
  *	)
  */
+#if HAVE_hsa_isa_from_name
 struct args_hsa_isa_from_name_t {
 	char * name;
 	struct {
@@ -2234,6 +2388,8 @@ struct args_hsa_isa_from_name_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_destroy` function.
  *
@@ -2248,6 +2404,7 @@ struct args_hsa_isa_from_name_t {
  *			hsa_executable_t executable (struct hsa_executable_s)
  *	)
  */
+#if HAVE_hsa_executable_destroy
 struct args_hsa_executable_destroy_t {
 	hsa_executable_t executable;
 	hsa_status_t retval;
@@ -2256,6 +2413,8 @@ struct args_hsa_executable_destroy_t {
 #define GET_ARGS_VALUE_hsa_executable_destroy(activity) { \
 	activity->hsa_args.hsa_executable_destroy.executable = (hsa_executable_t) executable; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_ext_image_create` function.
@@ -2275,6 +2434,7 @@ struct args_hsa_executable_destroy_t {
  *			hsa_ext_image_t * image (struct hsa_ext_image_s*)
  *	)
  */
+#if HAVE_hsa_ext_image_create
 struct args_hsa_ext_image_create_t {
 	hsa_agent_t agent;
 	hsa_ext_image_descriptor_t * image_descriptor;
@@ -2307,6 +2467,8 @@ struct args_hsa_ext_image_create_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_system_extension_supported` function.
  *
@@ -2324,6 +2486,7 @@ struct args_hsa_ext_image_create_t {
  *			_Bool * result (unsigned int*)
  *	)
  */
+#if HAVE_hsa_system_extension_supported
 struct args_hsa_system_extension_supported_t {
 	uint16_t extension;
 	uint16_t version_major;
@@ -2348,6 +2511,8 @@ struct args_hsa_system_extension_supported_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_load_agent_code_object` function.
  *
@@ -2366,6 +2531,7 @@ struct args_hsa_system_extension_supported_t {
  *			hsa_loaded_code_object_t * loaded_code_object (struct hsa_loaded_code_object_s*)
  *	)
  */
+#if HAVE_hsa_executable_load_agent_code_object
 struct args_hsa_executable_load_agent_code_object_t {
 	hsa_executable_t executable;
 	hsa_agent_t agent;
@@ -2398,6 +2564,8 @@ struct args_hsa_executable_load_agent_code_object_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_vmem_handle_release` function.
  *
@@ -2412,6 +2580,7 @@ struct args_hsa_executable_load_agent_code_object_t {
  *			hsa_amd_vmem_alloc_handle_t memory_handle (struct hsa_amd_vmem_alloc_handle_s)
  *	)
  */
+#if HAVE_hsa_amd_vmem_handle_release
 struct args_hsa_amd_vmem_handle_release_t {
 	hsa_amd_vmem_alloc_handle_t memory_handle;
 	hsa_status_t retval;
@@ -2420,6 +2589,8 @@ struct args_hsa_amd_vmem_handle_release_t {
 #define GET_ARGS_VALUE_hsa_amd_vmem_handle_release(activity) { \
 	activity->hsa_args.hsa_amd_vmem_handle_release.memory_handle = (hsa_amd_vmem_alloc_handle_t) memory_handle; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_memory_free` function.
@@ -2435,6 +2606,7 @@ struct args_hsa_amd_vmem_handle_release_t {
  *			void * ptr (void *)
  *	)
  */
+#if HAVE_hsa_memory_free
 struct args_hsa_memory_free_t {
 	void * ptr;
 	hsa_status_t retval;
@@ -2443,6 +2615,8 @@ struct args_hsa_memory_free_t {
 #define GET_ARGS_VALUE_hsa_memory_free(activity) { \
 	activity->hsa_args.hsa_memory_free.ptr = (void *) ptr; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_cas_screlease` function.
@@ -2460,6 +2634,7 @@ struct args_hsa_memory_free_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_cas_screlease
 struct args_hsa_signal_cas_screlease_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t expected;
@@ -2472,6 +2647,8 @@ struct args_hsa_signal_cas_screlease_t {
 	activity->hsa_args.hsa_signal_cas_screlease.expected = (hsa_signal_value_t) expected; \
 	activity->hsa_args.hsa_signal_cas_screlease.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_memory_copy_engine_status` function.
@@ -2489,6 +2666,7 @@ struct args_hsa_signal_cas_screlease_t {
  *			uint32_t * engine_ids_mask (unsigned int*)
  *	)
  */
+#if HAVE_hsa_amd_memory_copy_engine_status
 struct args_hsa_amd_memory_copy_engine_status_t {
 	hsa_agent_t dst_agent;
 	hsa_agent_t src_agent;
@@ -2511,6 +2689,8 @@ struct args_hsa_amd_memory_copy_engine_status_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_iterate_program_symbols` function.
  *
@@ -2527,6 +2707,7 @@ struct args_hsa_amd_memory_copy_engine_status_t {
  *			void * data (void *)
  *	)
  */
+#if HAVE_hsa_executable_iterate_program_symbols
 struct args_hsa_executable_iterate_program_symbols_t {
 	hsa_executable_t executable;
 	hsa_status_t (* callback)(hsa_executable_t, hsa_executable_symbol_t, void *);
@@ -2539,6 +2720,8 @@ struct args_hsa_executable_iterate_program_symbols_t {
 	activity->hsa_args.hsa_executable_iterate_program_symbols.callback = (hsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *)) callback; \
 	activity->hsa_args.hsa_executable_iterate_program_symbols.data = (void *) data; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_ext_image_copy` function.
@@ -2559,6 +2742,7 @@ struct args_hsa_executable_iterate_program_symbols_t {
  *			const hsa_dim3_t * range (const struct hsa_dim3_s *)
  *	)
  */
+#if HAVE_hsa_ext_image_copy
 struct args_hsa_ext_image_copy_t {
 	hsa_agent_t agent;
 	hsa_ext_image_t src_image;
@@ -2599,6 +2783,8 @@ struct args_hsa_ext_image_copy_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_coherency_get_type` function.
  *
@@ -2614,6 +2800,7 @@ struct args_hsa_ext_image_copy_t {
  *			hsa_amd_coherency_type_t * type (enum hsa_amd_coherency_type_s*)
  *	)
  */
+#if HAVE_hsa_amd_coherency_get_type
 struct args_hsa_amd_coherency_get_type_t {
 	hsa_agent_t agent;
 	hsa_amd_coherency_type_t * type;
@@ -2634,6 +2821,8 @@ struct args_hsa_amd_coherency_get_type_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_freeze` function.
  *
@@ -2649,6 +2838,7 @@ struct args_hsa_amd_coherency_get_type_t {
  *			const char * options (const char *)
  *	)
  */
+#if HAVE_hsa_executable_freeze
 struct args_hsa_executable_freeze_t {
 	hsa_executable_t executable;
 	char * options;
@@ -2669,6 +2859,8 @@ struct args_hsa_executable_freeze_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_store_write_index_release` function.
  *
@@ -2684,6 +2876,7 @@ struct args_hsa_executable_freeze_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_store_write_index_release
 struct args_hsa_queue_store_write_index_release_t {
 	hsa_queue_t * queue;
 	struct {
@@ -2703,6 +2896,8 @@ struct args_hsa_queue_store_write_index_release_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_vmem_export_shareable_handle` function.
  *
@@ -2719,6 +2914,7 @@ struct args_hsa_queue_store_write_index_release_t {
  *			uint64_t flags (unsigned long)
  *	)
  */
+#if HAVE_hsa_amd_vmem_export_shareable_handle
 struct args_hsa_amd_vmem_export_shareable_handle_t {
 	int * dmabuf_fd;
 	struct {
@@ -2741,6 +2937,8 @@ struct args_hsa_amd_vmem_export_shareable_handle_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_svm_prefetch_async` function.
  *
@@ -2760,6 +2958,7 @@ struct args_hsa_amd_vmem_export_shareable_handle_t {
  *			hsa_signal_t completion_signal (struct hsa_signal_s)
  *	)
  */
+#if HAVE_hsa_amd_svm_prefetch_async
 struct args_hsa_amd_svm_prefetch_async_t {
 	void * ptr;
 	size_t size;
@@ -2788,6 +2987,8 @@ struct args_hsa_amd_svm_prefetch_async_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_store_screlease` function.
  *
@@ -2803,6 +3004,7 @@ struct args_hsa_amd_svm_prefetch_async_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_store_screlease
 struct args_hsa_signal_store_screlease_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -2812,6 +3014,8 @@ struct args_hsa_signal_store_screlease_t {
 	activity->hsa_args.hsa_signal_store_screlease.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_store_screlease.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_memory_fill` function.
@@ -2829,6 +3033,7 @@ struct args_hsa_signal_store_screlease_t {
  *			size_t count (unsigned long)
  *	)
  */
+#if HAVE_hsa_amd_memory_fill
 struct args_hsa_amd_memory_fill_t {
 	void * ptr;
 	uint32_t value;
@@ -2841,6 +3046,8 @@ struct args_hsa_amd_memory_fill_t {
 	activity->hsa_args.hsa_amd_memory_fill.value = (uint32_t) value; \
 	activity->hsa_args.hsa_amd_memory_fill.count = (size_t) count; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_vmem_map` function.
@@ -2860,6 +3067,7 @@ struct args_hsa_amd_memory_fill_t {
  *			uint64_t flags (unsigned long)
  *	)
  */
+#if HAVE_hsa_amd_vmem_map
 struct args_hsa_amd_vmem_map_t {
 	void * va;
 	size_t size;
@@ -2877,6 +3085,8 @@ struct args_hsa_amd_vmem_map_t {
 	activity->hsa_args.hsa_amd_vmem_map.flags = (uint64_t) flags; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_subtract_scacq_screl` function.
  *
@@ -2892,6 +3102,7 @@ struct args_hsa_amd_vmem_map_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_subtract_scacq_screl
 struct args_hsa_signal_subtract_scacq_screl_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -2901,6 +3112,8 @@ struct args_hsa_signal_subtract_scacq_screl_t {
 	activity->hsa_args.hsa_signal_subtract_scacq_screl.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_subtract_scacq_screl.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_memory_async_copy_rect` function.
@@ -2925,6 +3138,7 @@ struct args_hsa_signal_subtract_scacq_screl_t {
  *			hsa_signal_t completion_signal (struct hsa_signal_s)
  *	)
  */
+#if HAVE_hsa_amd_memory_async_copy_rect
 struct args_hsa_amd_memory_async_copy_rect_t {
 	hsa_pitched_ptr_t * dst;
 	struct {
@@ -2991,6 +3205,8 @@ struct args_hsa_amd_memory_async_copy_rect_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_svm_attributes_set` function.
  *
@@ -3008,6 +3224,7 @@ struct args_hsa_amd_memory_async_copy_rect_t {
  *			size_t attribute_count (unsigned long)
  *	)
  */
+#if HAVE_hsa_amd_svm_attributes_set
 struct args_hsa_amd_svm_attributes_set_t {
 	void * ptr;
 	size_t size;
@@ -3032,6 +3249,8 @@ struct args_hsa_amd_svm_attributes_set_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_profiling_get_async_copy_time` function.
  *
@@ -3047,6 +3266,7 @@ struct args_hsa_amd_svm_attributes_set_t {
  *			hsa_amd_profiling_async_copy_time_t * time (struct hsa_amd_profiling_async_copy_time_s*)
  *	)
  */
+#if HAVE_hsa_amd_profiling_get_async_copy_time
 struct args_hsa_amd_profiling_get_async_copy_time_t {
 	hsa_signal_t signal;
 	hsa_amd_profiling_async_copy_time_t * time;
@@ -3067,6 +3287,8 @@ struct args_hsa_amd_profiling_get_async_copy_time_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_agent_set_async_scratch_limit` function.
  *
@@ -3082,6 +3304,7 @@ struct args_hsa_amd_profiling_get_async_copy_time_t {
  *			size_t threshold (unsigned long)
  *	)
  */
+#if HAVE_hsa_amd_agent_set_async_scratch_limit
 struct args_hsa_amd_agent_set_async_scratch_limit_t {
 	hsa_agent_t agent;
 	size_t threshold;
@@ -3092,6 +3315,8 @@ struct args_hsa_amd_agent_set_async_scratch_limit_t {
 	activity->hsa_args.hsa_amd_agent_set_async_scratch_limit.agent = (hsa_agent_t) agent; \
 	activity->hsa_args.hsa_amd_agent_set_async_scratch_limit.threshold = (size_t) threshold; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_subtract_screlease` function.
@@ -3108,6 +3333,7 @@ struct args_hsa_amd_agent_set_async_scratch_limit_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_subtract_screlease
 struct args_hsa_signal_subtract_screlease_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -3117,6 +3343,8 @@ struct args_hsa_signal_subtract_screlease_t {
 	activity->hsa_args.hsa_signal_subtract_screlease.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_subtract_screlease.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_ext_image_import` function.
@@ -3137,6 +3365,7 @@ struct args_hsa_signal_subtract_screlease_t {
  *			const hsa_ext_image_region_t * image_region (const struct hsa_ext_image_region_s *)
  *	)
  */
+#if HAVE_hsa_ext_image_import
 struct args_hsa_ext_image_import_t {
 	hsa_agent_t agent;
 	void * src_memory;
@@ -3165,6 +3394,8 @@ struct args_hsa_ext_image_import_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_memory_pool_can_migrate` function.
  *
@@ -3181,6 +3412,7 @@ struct args_hsa_ext_image_import_t {
  *			_Bool * result (unsigned int*)
  *	)
  */
+#if HAVE_hsa_amd_memory_pool_can_migrate
 struct args_hsa_amd_memory_pool_can_migrate_t {
 	hsa_amd_memory_pool_t src_memory_pool;
 	hsa_amd_memory_pool_t dst_memory_pool;
@@ -3203,6 +3435,8 @@ struct args_hsa_amd_memory_pool_can_migrate_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_ipc_memory_attach` function.
  *
@@ -3221,6 +3455,7 @@ struct args_hsa_amd_memory_pool_can_migrate_t {
  *			void ** mapped_ptr (void **)
  *	)
  */
+#if HAVE_hsa_amd_ipc_memory_attach
 struct args_hsa_amd_ipc_memory_attach_t {
 	hsa_amd_ipc_memory_t * handle;
 	struct {
@@ -3259,6 +3494,8 @@ struct args_hsa_amd_ipc_memory_attach_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_portable_close_dmabuf` function.
  *
@@ -3273,6 +3510,7 @@ struct args_hsa_amd_ipc_memory_attach_t {
  *			int dmabuf (int)
  *	)
  */
+#if HAVE_hsa_amd_portable_close_dmabuf
 struct args_hsa_amd_portable_close_dmabuf_t {
 	int dmabuf;
 	hsa_status_t retval;
@@ -3281,6 +3519,8 @@ struct args_hsa_amd_portable_close_dmabuf_t {
 #define GET_ARGS_VALUE_hsa_amd_portable_close_dmabuf(activity) { \
 	activity->hsa_args.hsa_amd_portable_close_dmabuf.dmabuf = (int) dmabuf; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_add_write_index_relaxed` function.
@@ -3297,6 +3537,7 @@ struct args_hsa_amd_portable_close_dmabuf_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_add_write_index_relaxed
 struct args_hsa_queue_add_write_index_relaxed_t {
 	hsa_queue_t * queue;
 	struct {
@@ -3317,6 +3558,8 @@ struct args_hsa_queue_add_write_index_relaxed_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_destroy` function.
  *
@@ -3331,6 +3574,7 @@ struct args_hsa_queue_add_write_index_relaxed_t {
  *			hsa_queue_t * queue (struct hsa_queue_s*)
  *	)
  */
+#if HAVE_hsa_queue_destroy
 struct args_hsa_queue_destroy_t {
 	hsa_queue_t * queue;
 	struct {
@@ -3349,6 +3593,8 @@ struct args_hsa_queue_destroy_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_or_scacq_screl` function.
  *
@@ -3364,6 +3610,7 @@ struct args_hsa_queue_destroy_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_or_scacq_screl
 struct args_hsa_signal_or_scacq_screl_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -3373,6 +3620,8 @@ struct args_hsa_signal_or_scacq_screl_t {
 	activity->hsa_args.hsa_signal_or_scacq_screl.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_or_scacq_screl.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_agent_memory_pool_get_info` function.
@@ -3391,6 +3640,7 @@ struct args_hsa_signal_or_scacq_screl_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hsa_amd_agent_memory_pool_get_info
 struct args_hsa_amd_agent_memory_pool_get_info_t {
 	hsa_agent_t agent;
 	hsa_amd_memory_pool_t memory_pool;
@@ -3405,6 +3655,8 @@ struct args_hsa_amd_agent_memory_pool_get_info_t {
 	activity->hsa_args.hsa_amd_agent_memory_pool_get_info.attribute = (hsa_amd_agent_memory_pool_info_t) attribute; \
 	activity->hsa_args.hsa_amd_agent_memory_pool_get_info.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_create_alt` function.
@@ -3423,6 +3675,7 @@ struct args_hsa_amd_agent_memory_pool_get_info_t {
  *			hsa_executable_t * executable (struct hsa_executable_s*)
  *	)
  */
+#if HAVE_hsa_executable_create_alt
 struct args_hsa_executable_create_alt_t {
 	hsa_profile_t profile;
 	hsa_default_float_rounding_mode_t default_float_rounding_mode;
@@ -3453,6 +3706,8 @@ struct args_hsa_executable_create_alt_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_silent_store_relaxed` function.
  *
@@ -3468,6 +3723,7 @@ struct args_hsa_executable_create_alt_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_silent_store_relaxed
 struct args_hsa_signal_silent_store_relaxed_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -3477,6 +3733,8 @@ struct args_hsa_signal_silent_store_relaxed_t {
 	activity->hsa_args.hsa_signal_silent_store_relaxed.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_silent_store_relaxed.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_add_write_index_acq_rel` function.
@@ -3493,6 +3751,7 @@ struct args_hsa_signal_silent_store_relaxed_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_add_write_index_acq_rel
 struct args_hsa_queue_add_write_index_acq_rel_t {
 	hsa_queue_t * queue;
 	struct {
@@ -3513,6 +3772,8 @@ struct args_hsa_queue_add_write_index_acq_rel_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_cas_write_index_acq_rel` function.
  *
@@ -3529,6 +3790,7 @@ struct args_hsa_queue_add_write_index_acq_rel_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_cas_write_index_acq_rel
 struct args_hsa_queue_cas_write_index_acq_rel_t {
 	hsa_queue_t * queue;
 	struct {
@@ -3551,6 +3813,8 @@ struct args_hsa_queue_cas_write_index_acq_rel_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_region_get_info` function.
  *
@@ -3567,6 +3831,7 @@ struct args_hsa_queue_cas_write_index_acq_rel_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hsa_region_get_info
 struct args_hsa_region_get_info_t {
 	hsa_region_t region;
 	hsa_region_info_t attribute;
@@ -3579,6 +3844,8 @@ struct args_hsa_region_get_info_t {
 	activity->hsa_args.hsa_region_get_info.attribute = (hsa_region_info_t) attribute; \
 	activity->hsa_args.hsa_region_get_info.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_get_symbol_by_name` function.
@@ -3597,6 +3864,7 @@ struct args_hsa_region_get_info_t {
  *			hsa_executable_symbol_t * symbol (struct hsa_executable_symbol_s*)
  *	)
  */
+#if HAVE_hsa_executable_get_symbol_by_name
 struct args_hsa_executable_get_symbol_by_name_t {
 	hsa_executable_t executable;
 	char * symbol_name;
@@ -3633,6 +3901,8 @@ struct args_hsa_executable_get_symbol_by_name_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_get_symbol` function.
  *
@@ -3652,6 +3922,7 @@ struct args_hsa_executable_get_symbol_by_name_t {
  *			hsa_executable_symbol_t * symbol (struct hsa_executable_symbol_s*)
  *	)
  */
+#if HAVE_hsa_executable_get_symbol
 struct args_hsa_executable_get_symbol_t {
 	hsa_executable_t executable;
 	char * module_name;
@@ -3692,6 +3963,8 @@ struct args_hsa_executable_get_symbol_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_xor_scacquire` function.
  *
@@ -3707,6 +3980,7 @@ struct args_hsa_executable_get_symbol_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_xor_scacquire
 struct args_hsa_signal_xor_scacquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -3716,6 +3990,8 @@ struct args_hsa_signal_xor_scacquire_t {
 	activity->hsa_args.hsa_signal_xor_scacquire.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_xor_scacquire.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_xor_scacq_screl` function.
@@ -3732,6 +4008,7 @@ struct args_hsa_signal_xor_scacquire_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_xor_scacq_screl
 struct args_hsa_signal_xor_scacq_screl_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -3741,6 +4018,8 @@ struct args_hsa_signal_xor_scacq_screl_t {
 	activity->hsa_args.hsa_signal_xor_scacq_screl.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_xor_scacq_screl.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_store_write_index_screlease` function.
@@ -3757,6 +4036,7 @@ struct args_hsa_signal_xor_scacq_screl_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_store_write_index_screlease
 struct args_hsa_queue_store_write_index_screlease_t {
 	hsa_queue_t * queue;
 	struct {
@@ -3776,6 +4056,8 @@ struct args_hsa_queue_store_write_index_screlease_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_agent_iterate_memory_pools` function.
  *
@@ -3792,6 +4074,7 @@ struct args_hsa_queue_store_write_index_screlease_t {
  *			void * data (void *)
  *	)
  */
+#if HAVE_hsa_amd_agent_iterate_memory_pools
 struct args_hsa_amd_agent_iterate_memory_pools_t {
 	hsa_agent_t agent;
 	hsa_status_t (* callback)(hsa_amd_memory_pool_t, void *);
@@ -3804,6 +4087,8 @@ struct args_hsa_amd_agent_iterate_memory_pools_t {
 	activity->hsa_args.hsa_amd_agent_iterate_memory_pools.callback = (hsa_status_t (*)(hsa_amd_memory_pool_t, void *)) callback; \
 	activity->hsa_args.hsa_amd_agent_iterate_memory_pools.data = (void *) data; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_memory_pool_get_info` function.
@@ -3821,6 +4106,7 @@ struct args_hsa_amd_agent_iterate_memory_pools_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hsa_amd_memory_pool_get_info
 struct args_hsa_amd_memory_pool_get_info_t {
 	hsa_amd_memory_pool_t memory_pool;
 	hsa_amd_memory_pool_info_t attribute;
@@ -3833,6 +4119,8 @@ struct args_hsa_amd_memory_pool_get_info_t {
 	activity->hsa_args.hsa_amd_memory_pool_get_info.attribute = (hsa_amd_memory_pool_info_t) attribute; \
 	activity->hsa_args.hsa_amd_memory_pool_get_info.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_spm_release` function.
@@ -3848,6 +4136,7 @@ struct args_hsa_amd_memory_pool_get_info_t {
  *			hsa_agent_t preferred_agent (struct hsa_agent_s)
  *	)
  */
+#if HAVE_hsa_amd_spm_release
 struct args_hsa_amd_spm_release_t {
 	hsa_agent_t preferred_agent;
 	hsa_status_t retval;
@@ -3856,6 +4145,8 @@ struct args_hsa_amd_spm_release_t {
 #define GET_ARGS_VALUE_hsa_amd_spm_release(activity) { \
 	activity->hsa_args.hsa_amd_spm_release.preferred_agent = (hsa_agent_t) preferred_agent; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_and_scacq_screl` function.
@@ -3872,6 +4163,7 @@ struct args_hsa_amd_spm_release_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_and_scacq_screl
 struct args_hsa_signal_and_scacq_screl_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -3881,6 +4173,8 @@ struct args_hsa_signal_and_scacq_screl_t {
 	activity->hsa_args.hsa_signal_and_scacq_screl.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_and_scacq_screl.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_wavefront_get_info` function.
@@ -3898,6 +4192,7 @@ struct args_hsa_signal_and_scacq_screl_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hsa_wavefront_get_info
 struct args_hsa_wavefront_get_info_t {
 	hsa_wavefront_t wavefront;
 	hsa_wavefront_info_t attribute;
@@ -3910,6 +4205,8 @@ struct args_hsa_wavefront_get_info_t {
 	activity->hsa_args.hsa_wavefront_get_info.attribute = (hsa_wavefront_info_t) attribute; \
 	activity->hsa_args.hsa_wavefront_get_info.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_ven_amd_pcs_destroy` function.
@@ -3925,6 +4222,7 @@ struct args_hsa_wavefront_get_info_t {
  *			hsa_ven_amd_pcs_t pc_sampling (struct hsa_ven_amd_pcs_t)
  *	)
  */
+#if HAVE_hsa_ven_amd_pcs_destroy
 struct args_hsa_ven_amd_pcs_destroy_t {
 	hsa_ven_amd_pcs_t pc_sampling;
 	hsa_status_t retval;
@@ -3933,6 +4231,8 @@ struct args_hsa_ven_amd_pcs_destroy_t {
 #define GET_ARGS_VALUE_hsa_ven_amd_pcs_destroy(activity) { \
 	activity->hsa_args.hsa_ven_amd_pcs_destroy.pc_sampling = (hsa_ven_amd_pcs_t) pc_sampling; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_system_major_extension_supported` function.
@@ -3951,6 +4251,7 @@ struct args_hsa_ven_amd_pcs_destroy_t {
  *			_Bool * result (unsigned int*)
  *	)
  */
+#if HAVE_hsa_system_major_extension_supported
 struct args_hsa_system_major_extension_supported_t {
 	uint16_t extension;
 	uint16_t version_major;
@@ -3981,6 +4282,8 @@ struct args_hsa_system_major_extension_supported_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_status_string` function.
  *
@@ -3996,6 +4299,7 @@ struct args_hsa_system_major_extension_supported_t {
  *			const char ** status_string (const char **)
  *	)
  */
+#if HAVE_hsa_status_string
 struct args_hsa_status_string_t {
 	hsa_status_t status;
 	char ** status_string;
@@ -4020,6 +4324,8 @@ struct args_hsa_status_string_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_cas_relaxed` function.
  *
@@ -4036,6 +4342,7 @@ struct args_hsa_status_string_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_cas_relaxed
 struct args_hsa_signal_cas_relaxed_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t expected;
@@ -4048,6 +4355,8 @@ struct args_hsa_signal_cas_relaxed_t {
 	activity->hsa_args.hsa_signal_cas_relaxed.expected = (hsa_signal_value_t) expected; \
 	activity->hsa_args.hsa_signal_cas_relaxed.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_init` function.
@@ -4062,9 +4371,12 @@ struct args_hsa_signal_cas_relaxed_t {
  *	hsa_init (
  *	)
  */
+#if HAVE_hsa_init
 struct args_hsa_init_t {
 	hsa_status_t retval;
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_memory_allocate` function.
@@ -4082,6 +4394,7 @@ struct args_hsa_init_t {
  *			void ** ptr (void **)
  *	)
  */
+#if HAVE_hsa_memory_allocate
 struct args_hsa_memory_allocate_t {
 	hsa_region_t region;
 	size_t size;
@@ -4104,6 +4417,8 @@ struct args_hsa_memory_allocate_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_ext_image_data_get_info` function.
  *
@@ -4121,6 +4436,7 @@ struct args_hsa_memory_allocate_t {
  *			hsa_ext_image_data_info_t * image_data_info (struct hsa_ext_image_data_info_s*)
  *	)
  */
+#if HAVE_hsa_ext_image_data_get_info
 struct args_hsa_ext_image_data_get_info_t {
 	hsa_agent_t agent;
 	hsa_ext_image_descriptor_t * image_descriptor;
@@ -4151,6 +4467,8 @@ struct args_hsa_ext_image_data_get_info_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_cache_get_info` function.
  *
@@ -4167,6 +4485,7 @@ struct args_hsa_ext_image_data_get_info_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hsa_cache_get_info
 struct args_hsa_cache_get_info_t {
 	hsa_cache_t cache;
 	hsa_cache_info_t attribute;
@@ -4179,6 +4498,8 @@ struct args_hsa_cache_get_info_t {
 	activity->hsa_args.hsa_cache_get_info.attribute = (hsa_cache_info_t) attribute; \
 	activity->hsa_args.hsa_cache_get_info.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_subtract_relaxed` function.
@@ -4195,6 +4516,7 @@ struct args_hsa_cache_get_info_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_subtract_relaxed
 struct args_hsa_signal_subtract_relaxed_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -4204,6 +4526,8 @@ struct args_hsa_signal_subtract_relaxed_t {
 	activity->hsa_args.hsa_signal_subtract_relaxed.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_subtract_relaxed.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_load_write_index_relaxed` function.
@@ -4219,6 +4543,7 @@ struct args_hsa_signal_subtract_relaxed_t {
  *			const hsa_queue_t * queue (const struct hsa_queue_s *)
  *	)
  */
+#if HAVE_hsa_queue_load_write_index_relaxed
 struct args_hsa_queue_load_write_index_relaxed_t {
 	hsa_queue_t * queue;
 	struct {
@@ -4236,6 +4561,8 @@ struct args_hsa_queue_load_write_index_relaxed_t {
 		args->hsa_queue_load_write_index_relaxed.queue__ref.val = *args->hsa_queue_load_write_index_relaxed.queue; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_signal_async_handler` function.
@@ -4255,6 +4582,7 @@ struct args_hsa_queue_load_write_index_relaxed_t {
  *			void * arg (void *)
  *	)
  */
+#if HAVE_hsa_amd_signal_async_handler
 struct args_hsa_amd_signal_async_handler_t {
 	hsa_signal_t signal;
 	hsa_signal_condition_t cond;
@@ -4272,6 +4600,8 @@ struct args_hsa_amd_signal_async_handler_t {
 	activity->hsa_args.hsa_amd_signal_async_handler.arg = (void *) arg; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_cas_acquire` function.
  *
@@ -4288,6 +4618,7 @@ struct args_hsa_amd_signal_async_handler_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_cas_acquire
 struct args_hsa_signal_cas_acquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t expected;
@@ -4300,6 +4631,8 @@ struct args_hsa_signal_cas_acquire_t {
 	activity->hsa_args.hsa_signal_cas_acquire.expected = (hsa_signal_value_t) expected; \
 	activity->hsa_args.hsa_signal_cas_acquire.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_or_scacquire` function.
@@ -4316,6 +4649,7 @@ struct args_hsa_signal_cas_acquire_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_or_scacquire
 struct args_hsa_signal_or_scacquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -4325,6 +4659,8 @@ struct args_hsa_signal_or_scacquire_t {
 	activity->hsa_args.hsa_signal_or_scacquire.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_or_scacquire.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_add_write_index_release` function.
@@ -4341,6 +4677,7 @@ struct args_hsa_signal_or_scacquire_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_add_write_index_release
 struct args_hsa_queue_add_write_index_release_t {
 	hsa_queue_t * queue;
 	struct {
@@ -4361,6 +4698,8 @@ struct args_hsa_queue_add_write_index_release_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_agent_extension_supported` function.
  *
@@ -4379,6 +4718,7 @@ struct args_hsa_queue_add_write_index_release_t {
  *			_Bool * result (unsigned int*)
  *	)
  */
+#if HAVE_hsa_agent_extension_supported
 struct args_hsa_agent_extension_supported_t {
 	uint16_t extension;
 	hsa_agent_t agent;
@@ -4405,6 +4745,8 @@ struct args_hsa_agent_extension_supported_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_exchange_relaxed` function.
  *
@@ -4420,6 +4762,7 @@ struct args_hsa_agent_extension_supported_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_exchange_relaxed
 struct args_hsa_signal_exchange_relaxed_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -4430,6 +4773,8 @@ struct args_hsa_signal_exchange_relaxed_t {
 	activity->hsa_args.hsa_signal_exchange_relaxed.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_exchange_relaxed.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_validate_alt` function.
@@ -4447,6 +4792,7 @@ struct args_hsa_signal_exchange_relaxed_t {
  *			uint32_t * result (unsigned int*)
  *	)
  */
+#if HAVE_hsa_executable_validate_alt
 struct args_hsa_executable_validate_alt_t {
 	hsa_executable_t executable;
 	char * options;
@@ -4475,6 +4821,8 @@ struct args_hsa_executable_validate_alt_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_exchange_scacq_screl` function.
  *
@@ -4490,6 +4838,7 @@ struct args_hsa_executable_validate_alt_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_exchange_scacq_screl
 struct args_hsa_signal_exchange_scacq_screl_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -4500,6 +4849,8 @@ struct args_hsa_signal_exchange_scacq_screl_t {
 	activity->hsa_args.hsa_signal_exchange_scacq_screl.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_exchange_scacq_screl.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_get_info` function.
@@ -4517,6 +4868,7 @@ struct args_hsa_signal_exchange_scacq_screl_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hsa_executable_get_info
 struct args_hsa_executable_get_info_t {
 	hsa_executable_t executable;
 	hsa_executable_info_t attribute;
@@ -4529,6 +4881,8 @@ struct args_hsa_executable_get_info_t {
 	activity->hsa_args.hsa_executable_get_info.attribute = (hsa_executable_info_t) attribute; \
 	activity->hsa_args.hsa_executable_get_info.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_code_object_reader_create_from_memory` function.
@@ -4546,6 +4900,7 @@ struct args_hsa_executable_get_info_t {
  *			hsa_code_object_reader_t * code_object_reader (struct hsa_code_object_reader_s*)
  *	)
  */
+#if HAVE_hsa_code_object_reader_create_from_memory
 struct args_hsa_code_object_reader_create_from_memory_t {
 	void * code_object;
 	size_t size;
@@ -4568,6 +4923,8 @@ struct args_hsa_code_object_reader_create_from_memory_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_async_function` function.
  *
@@ -4583,6 +4940,7 @@ struct args_hsa_code_object_reader_create_from_memory_t {
  *			void * arg (void *)
  *	)
  */
+#if HAVE_hsa_amd_async_function
 struct args_hsa_amd_async_function_t {
 	void (* callback)(void *);
 	void * arg;
@@ -4593,6 +4951,8 @@ struct args_hsa_amd_async_function_t {
 	activity->hsa_args.hsa_amd_async_function.callback = (void (*)(void *)) callback; \
 	activity->hsa_args.hsa_amd_async_function.arg = (void *) arg; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_isa_compatible` function.
@@ -4610,6 +4970,7 @@ struct args_hsa_amd_async_function_t {
  *			_Bool * result (unsigned int*)
  *	)
  */
+#if HAVE_hsa_isa_compatible
 struct args_hsa_isa_compatible_t {
 	hsa_isa_t code_object_isa;
 	hsa_isa_t agent_isa;
@@ -4632,6 +4993,8 @@ struct args_hsa_isa_compatible_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_pointer_info_set_userdata` function.
  *
@@ -4647,6 +5010,7 @@ struct args_hsa_isa_compatible_t {
  *			void * userdata (void *)
  *	)
  */
+#if HAVE_hsa_amd_pointer_info_set_userdata
 struct args_hsa_amd_pointer_info_set_userdata_t {
 	void * ptr;
 	void * userdata;
@@ -4657,6 +5021,8 @@ struct args_hsa_amd_pointer_info_set_userdata_t {
 	activity->hsa_args.hsa_amd_pointer_info_set_userdata.ptr = (void *) ptr; \
 	activity->hsa_args.hsa_amd_pointer_info_set_userdata.userdata = (void *) userdata; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_and_screlease` function.
@@ -4673,6 +5039,7 @@ struct args_hsa_amd_pointer_info_set_userdata_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_and_screlease
 struct args_hsa_signal_and_screlease_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -4682,6 +5049,8 @@ struct args_hsa_signal_and_screlease_t {
 	activity->hsa_args.hsa_signal_and_screlease.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_and_screlease.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_cas_write_index_acquire` function.
@@ -4699,6 +5068,7 @@ struct args_hsa_signal_and_screlease_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_cas_write_index_acquire
 struct args_hsa_queue_cas_write_index_acquire_t {
 	hsa_queue_t * queue;
 	struct {
@@ -4721,6 +5091,8 @@ struct args_hsa_queue_cas_write_index_acquire_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_cas_write_index_relaxed` function.
  *
@@ -4737,6 +5109,7 @@ struct args_hsa_queue_cas_write_index_acquire_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_cas_write_index_relaxed
 struct args_hsa_queue_cas_write_index_relaxed_t {
 	hsa_queue_t * queue;
 	struct {
@@ -4759,6 +5132,8 @@ struct args_hsa_queue_cas_write_index_relaxed_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_store_read_index_release` function.
  *
@@ -4774,6 +5149,7 @@ struct args_hsa_queue_cas_write_index_relaxed_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_store_read_index_release
 struct args_hsa_queue_store_read_index_release_t {
 	hsa_queue_t * queue;
 	struct {
@@ -4793,6 +5169,8 @@ struct args_hsa_queue_store_read_index_release_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_pointer_info` function.
  *
@@ -4811,6 +5189,7 @@ struct args_hsa_queue_store_read_index_release_t {
  *			hsa_agent_t ** accessible (struct hsa_agent_s**)
  *	)
  */
+#if HAVE_hsa_amd_pointer_info
 struct args_hsa_amd_pointer_info_t {
 	void * ptr;
 	hsa_amd_pointer_info_t * info;
@@ -4853,6 +5232,8 @@ struct args_hsa_amd_pointer_info_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_spm_set_dest_buffer` function.
  *
@@ -4872,6 +5253,7 @@ struct args_hsa_amd_pointer_info_t {
  *			_Bool * is_data_loss (unsigned int*)
  *	)
  */
+#if HAVE_hsa_amd_spm_set_dest_buffer
 struct args_hsa_amd_spm_set_dest_buffer_t {
 	hsa_agent_t preferred_agent;
 	size_t size_in_bytes;
@@ -4912,6 +5294,8 @@ struct args_hsa_amd_spm_set_dest_buffer_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_vmem_get_access` function.
  *
@@ -4928,6 +5312,7 @@ struct args_hsa_amd_spm_set_dest_buffer_t {
  *			hsa_agent_t agent_handle (struct hsa_agent_s)
  *	)
  */
+#if HAVE_hsa_amd_vmem_get_access
 struct args_hsa_amd_vmem_get_access_t {
 	void * va;
 	hsa_access_permission_t * perms;
@@ -4950,6 +5335,8 @@ struct args_hsa_amd_vmem_get_access_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_silent_store_screlease` function.
  *
@@ -4965,6 +5352,7 @@ struct args_hsa_amd_vmem_get_access_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_silent_store_screlease
 struct args_hsa_signal_silent_store_screlease_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -4974,6 +5362,8 @@ struct args_hsa_signal_silent_store_screlease_t {
 	activity->hsa_args.hsa_signal_silent_store_screlease.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_silent_store_screlease.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_add_acquire` function.
@@ -4990,6 +5380,7 @@ struct args_hsa_signal_silent_store_screlease_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_add_acquire
 struct args_hsa_signal_add_acquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -4999,6 +5390,8 @@ struct args_hsa_signal_add_acquire_t {
 	activity->hsa_args.hsa_signal_add_acquire.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_add_acquire.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_create` function.
@@ -5017,6 +5410,7 @@ struct args_hsa_signal_add_acquire_t {
  *			hsa_executable_t * executable (struct hsa_executable_s*)
  *	)
  */
+#if HAVE_hsa_executable_create
 struct args_hsa_executable_create_t {
 	hsa_profile_t profile;
 	hsa_executable_state_t executable_state;
@@ -5047,6 +5441,8 @@ struct args_hsa_executable_create_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_store_release` function.
  *
@@ -5062,6 +5458,7 @@ struct args_hsa_executable_create_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_store_release
 struct args_hsa_signal_store_release_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -5071,6 +5468,8 @@ struct args_hsa_signal_store_release_t {
 	activity->hsa_args.hsa_signal_store_release.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_store_release.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_xor_screlease` function.
@@ -5087,6 +5486,7 @@ struct args_hsa_signal_store_release_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_xor_screlease
 struct args_hsa_signal_xor_screlease_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -5096,6 +5496,8 @@ struct args_hsa_signal_xor_screlease_t {
 	activity->hsa_args.hsa_signal_xor_screlease.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_xor_screlease.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_iterate_symbols` function.
@@ -5113,6 +5515,7 @@ struct args_hsa_signal_xor_screlease_t {
  *			void * data (void *)
  *	)
  */
+#if HAVE_hsa_executable_iterate_symbols
 struct args_hsa_executable_iterate_symbols_t {
 	hsa_executable_t executable;
 	hsa_status_t (* callback)(hsa_executable_t, hsa_executable_symbol_t, void *);
@@ -5125,6 +5528,8 @@ struct args_hsa_executable_iterate_symbols_t {
 	activity->hsa_args.hsa_executable_iterate_symbols.callback = (hsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *)) callback; \
 	activity->hsa_args.hsa_executable_iterate_symbols.data = (void *) data; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_memory_lock_to_pool` function.
@@ -5146,6 +5551,7 @@ struct args_hsa_executable_iterate_symbols_t {
  *			void ** agent_ptr (void **)
  *	)
  */
+#if HAVE_hsa_amd_memory_lock_to_pool
 struct args_hsa_amd_memory_lock_to_pool_t {
 	void * host_ptr;
 	size_t size;
@@ -5182,6 +5588,8 @@ struct args_hsa_amd_memory_lock_to_pool_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_wait_acquire` function.
  *
@@ -5200,6 +5608,7 @@ struct args_hsa_amd_memory_lock_to_pool_t {
  *			hsa_wait_state_t wait_state_hint (enum hsa_wait_state_t)
  *	)
  */
+#if HAVE_hsa_signal_wait_acquire
 struct args_hsa_signal_wait_acquire_t {
 	hsa_signal_t signal;
 	hsa_signal_condition_t condition;
@@ -5217,6 +5626,8 @@ struct args_hsa_signal_wait_acquire_t {
 	activity->hsa_args.hsa_signal_wait_acquire.wait_state_hint = (hsa_wait_state_t) wait_state_hint; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_cas_write_index_scacquire` function.
  *
@@ -5233,6 +5644,7 @@ struct args_hsa_signal_wait_acquire_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_cas_write_index_scacquire
 struct args_hsa_queue_cas_write_index_scacquire_t {
 	hsa_queue_t * queue;
 	struct {
@@ -5255,6 +5667,8 @@ struct args_hsa_queue_cas_write_index_scacquire_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_code_object_get_symbol` function.
  *
@@ -5271,6 +5685,7 @@ struct args_hsa_queue_cas_write_index_scacquire_t {
  *			hsa_code_symbol_t * symbol (struct hsa_code_symbol_s*)
  *	)
  */
+#if HAVE_hsa_code_object_get_symbol
 struct args_hsa_code_object_get_symbol_t {
 	hsa_code_object_t code_object;
 	char * symbol_name;
@@ -5299,6 +5714,8 @@ struct args_hsa_code_object_get_symbol_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_group_destroy` function.
  *
@@ -5313,6 +5730,7 @@ struct args_hsa_code_object_get_symbol_t {
  *			hsa_signal_group_t signal_group (struct hsa_signal_group_s)
  *	)
  */
+#if HAVE_hsa_signal_group_destroy
 struct args_hsa_signal_group_destroy_t {
 	hsa_signal_group_t signal_group;
 	hsa_status_t retval;
@@ -5321,6 +5739,8 @@ struct args_hsa_signal_group_destroy_t {
 #define GET_ARGS_VALUE_hsa_signal_group_destroy(activity) { \
 	activity->hsa_args.hsa_signal_group_destroy.signal_group = (hsa_signal_group_t) signal_group; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_group_create` function.
@@ -5340,6 +5760,7 @@ struct args_hsa_signal_group_destroy_t {
  *			hsa_signal_group_t * signal_group (struct hsa_signal_group_s*)
  *	)
  */
+#if HAVE_hsa_signal_group_create
 struct args_hsa_signal_group_create_t {
 	uint32_t num_signals;
 	hsa_signal_t * signals;
@@ -5378,6 +5799,8 @@ struct args_hsa_signal_group_create_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_code_object_reader_destroy` function.
  *
@@ -5392,6 +5815,7 @@ struct args_hsa_signal_group_create_t {
  *			hsa_code_object_reader_t code_object_reader (struct hsa_code_object_reader_s)
  *	)
  */
+#if HAVE_hsa_code_object_reader_destroy
 struct args_hsa_code_object_reader_destroy_t {
 	hsa_code_object_reader_t code_object_reader;
 	hsa_status_t retval;
@@ -5400,6 +5824,8 @@ struct args_hsa_code_object_reader_destroy_t {
 #define GET_ARGS_VALUE_hsa_code_object_reader_destroy(activity) { \
 	activity->hsa_args.hsa_code_object_reader_destroy.code_object_reader = (hsa_code_object_reader_t) code_object_reader; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_extension_get_name` function.
@@ -5416,6 +5842,7 @@ struct args_hsa_code_object_reader_destroy_t {
  *			const char ** name (const char **)
  *	)
  */
+#if HAVE_hsa_extension_get_name
 struct args_hsa_extension_get_name_t {
 	uint16_t extension;
 	char ** name;
@@ -5440,6 +5867,8 @@ struct args_hsa_extension_get_name_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_group_wait_any_scacquire` function.
  *
@@ -5459,6 +5888,7 @@ struct args_hsa_extension_get_name_t {
  *			hsa_signal_value_t * value (long*)
  *	)
  */
+#if HAVE_hsa_signal_group_wait_any_scacquire
 struct args_hsa_signal_group_wait_any_scacquire_t {
 	hsa_signal_group_t signal_group;
 	hsa_signal_condition_t * conditions;
@@ -5505,6 +5935,8 @@ struct args_hsa_signal_group_wait_any_scacquire_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_register_system_event_handler` function.
  *
@@ -5520,6 +5952,7 @@ struct args_hsa_signal_group_wait_any_scacquire_t {
  *			void * data (void *)
  *	)
  */
+#if HAVE_hsa_amd_register_system_event_handler
 struct args_hsa_amd_register_system_event_handler_t {
 	hsa_amd_system_event_callback_t callback;
 	void * data;
@@ -5530,6 +5963,8 @@ struct args_hsa_amd_register_system_event_handler_t {
 	activity->hsa_args.hsa_amd_register_system_event_handler.callback = (hsa_amd_system_event_callback_t) callback; \
 	activity->hsa_args.hsa_amd_register_system_event_handler.data = (void *) data; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_xor_acq_rel` function.
@@ -5546,6 +5981,7 @@ struct args_hsa_amd_register_system_event_handler_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_xor_acq_rel
 struct args_hsa_signal_xor_acq_rel_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -5555,6 +5991,8 @@ struct args_hsa_signal_xor_acq_rel_t {
 	activity->hsa_args.hsa_signal_xor_acq_rel.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_xor_acq_rel.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_create` function.
@@ -5577,6 +6015,7 @@ struct args_hsa_signal_xor_acq_rel_t {
  *			hsa_queue_t ** queue (struct hsa_queue_s**)
  *	)
  */
+#if HAVE_hsa_queue_create
 struct args_hsa_queue_create_t {
 	hsa_agent_t agent;
 	uint32_t size;
@@ -5613,6 +6052,8 @@ struct args_hsa_queue_create_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_profiling_set_profiler_enabled` function.
  *
@@ -5628,6 +6069,7 @@ struct args_hsa_queue_create_t {
  *			int enable (int)
  *	)
  */
+#if HAVE_hsa_amd_profiling_set_profiler_enabled
 struct args_hsa_amd_profiling_set_profiler_enabled_t {
 	hsa_queue_t * queue;
 	struct {
@@ -5648,6 +6090,8 @@ struct args_hsa_amd_profiling_set_profiler_enabled_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_profiling_get_dispatch_time` function.
  *
@@ -5664,6 +6108,7 @@ struct args_hsa_amd_profiling_set_profiler_enabled_t {
  *			hsa_amd_profiling_dispatch_time_t * time (struct hsa_amd_profiling_dispatch_time_s*)
  *	)
  */
+#if HAVE_hsa_amd_profiling_get_dispatch_time
 struct args_hsa_amd_profiling_get_dispatch_time_t {
 	hsa_agent_t agent;
 	hsa_signal_t signal;
@@ -5686,6 +6131,8 @@ struct args_hsa_amd_profiling_get_dispatch_time_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_ipc_memory_create` function.
  *
@@ -5702,6 +6149,7 @@ struct args_hsa_amd_profiling_get_dispatch_time_t {
  *			hsa_amd_ipc_memory_t * handle (struct hsa_amd_ipc_memory_s*)
  *	)
  */
+#if HAVE_hsa_amd_ipc_memory_create
 struct args_hsa_amd_ipc_memory_create_t {
 	void * ptr;
 	size_t len;
@@ -5724,6 +6172,8 @@ struct args_hsa_amd_ipc_memory_create_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_vmem_import_shareable_handle` function.
  *
@@ -5739,6 +6189,7 @@ struct args_hsa_amd_ipc_memory_create_t {
  *			hsa_amd_vmem_alloc_handle_t * handle (struct hsa_amd_vmem_alloc_handle_s*)
  *	)
  */
+#if HAVE_hsa_amd_vmem_import_shareable_handle
 struct args_hsa_amd_vmem_import_shareable_handle_t {
 	int dmabuf_fd;
 	hsa_amd_vmem_alloc_handle_t * handle;
@@ -5759,6 +6210,8 @@ struct args_hsa_amd_vmem_import_shareable_handle_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_add_write_index_acquire` function.
  *
@@ -5774,6 +6227,7 @@ struct args_hsa_amd_vmem_import_shareable_handle_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_add_write_index_acquire
 struct args_hsa_queue_add_write_index_acquire_t {
 	hsa_queue_t * queue;
 	struct {
@@ -5794,6 +6248,8 @@ struct args_hsa_queue_add_write_index_acquire_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_register_deallocation_callback` function.
  *
@@ -5810,6 +6266,7 @@ struct args_hsa_queue_add_write_index_acquire_t {
  *			void * user_data (void *)
  *	)
  */
+#if HAVE_hsa_amd_register_deallocation_callback
 struct args_hsa_amd_register_deallocation_callback_t {
 	void * ptr;
 	hsa_amd_deallocation_callback_t callback;
@@ -5822,6 +6279,8 @@ struct args_hsa_amd_register_deallocation_callback_t {
 	activity->hsa_args.hsa_amd_register_deallocation_callback.callback = (hsa_amd_deallocation_callback_t) callback; \
 	activity->hsa_args.hsa_amd_register_deallocation_callback.user_data = (void *) user_data; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_ven_amd_pcs_create_from_id` function.
@@ -5846,6 +6305,7 @@ struct args_hsa_amd_register_deallocation_callback_t {
  *			hsa_ven_amd_pcs_t * pc_sampling (struct hsa_ven_amd_pcs_t*)
  *	)
  */
+#if HAVE_hsa_ven_amd_pcs_create_from_id
 struct args_hsa_ven_amd_pcs_create_from_id_t {
 	uint32_t pcs_id;
 	hsa_agent_t agent;
@@ -5882,6 +6342,8 @@ struct args_hsa_ven_amd_pcs_create_from_id_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_exchange_screlease` function.
  *
@@ -5897,6 +6359,7 @@ struct args_hsa_ven_amd_pcs_create_from_id_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_exchange_screlease
 struct args_hsa_signal_exchange_screlease_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -5907,6 +6370,8 @@ struct args_hsa_signal_exchange_screlease_t {
 	activity->hsa_args.hsa_signal_exchange_screlease.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_exchange_screlease.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_and_release` function.
@@ -5923,6 +6388,7 @@ struct args_hsa_signal_exchange_screlease_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_and_release
 struct args_hsa_signal_and_release_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -5932,6 +6398,8 @@ struct args_hsa_signal_and_release_t {
 	activity->hsa_args.hsa_signal_and_release.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_and_release.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_ext_sampler_create` function.
@@ -5949,6 +6417,7 @@ struct args_hsa_signal_and_release_t {
  *			hsa_ext_sampler_t * sampler (struct hsa_ext_sampler_s*)
  *	)
  */
+#if HAVE_hsa_ext_sampler_create
 struct args_hsa_ext_sampler_create_t {
 	hsa_agent_t agent;
 	hsa_ext_sampler_descriptor_t * sampler_descriptor;
@@ -5977,6 +6446,8 @@ struct args_hsa_ext_sampler_create_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_ven_amd_pcs_start` function.
  *
@@ -5991,6 +6462,7 @@ struct args_hsa_ext_sampler_create_t {
  *			hsa_ven_amd_pcs_t pc_sampling (struct hsa_ven_amd_pcs_t)
  *	)
  */
+#if HAVE_hsa_ven_amd_pcs_start
 struct args_hsa_ven_amd_pcs_start_t {
 	hsa_ven_amd_pcs_t pc_sampling;
 	hsa_status_t retval;
@@ -5999,6 +6471,8 @@ struct args_hsa_ven_amd_pcs_start_t {
 #define GET_ARGS_VALUE_hsa_ven_amd_pcs_start(activity) { \
 	activity->hsa_args.hsa_ven_amd_pcs_start.pc_sampling = (hsa_ven_amd_pcs_t) pc_sampling; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_readonly_variable_define` function.
@@ -6017,6 +6491,7 @@ struct args_hsa_ven_amd_pcs_start_t {
  *			void * address (void *)
  *	)
  */
+#if HAVE_hsa_executable_readonly_variable_define
 struct args_hsa_executable_readonly_variable_define_t {
 	hsa_executable_t executable;
 	hsa_agent_t agent;
@@ -6041,6 +6516,8 @@ struct args_hsa_executable_readonly_variable_define_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_inactivate` function.
  *
@@ -6055,6 +6532,7 @@ struct args_hsa_executable_readonly_variable_define_t {
  *			hsa_queue_t * queue (struct hsa_queue_s*)
  *	)
  */
+#if HAVE_hsa_queue_inactivate
 struct args_hsa_queue_inactivate_t {
 	hsa_queue_t * queue;
 	struct {
@@ -6073,6 +6551,8 @@ struct args_hsa_queue_inactivate_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_or_acq_rel` function.
  *
@@ -6088,6 +6568,7 @@ struct args_hsa_queue_inactivate_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_or_acq_rel
 struct args_hsa_signal_or_acq_rel_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -6097,6 +6578,8 @@ struct args_hsa_signal_or_acq_rel_t {
 	activity->hsa_args.hsa_signal_or_acq_rel.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_or_acq_rel.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_system_get_major_extension_table` function.
@@ -6115,6 +6598,7 @@ struct args_hsa_signal_or_acq_rel_t {
  *			void * table (void *)
  *	)
  */
+#if HAVE_hsa_system_get_major_extension_table
 struct args_hsa_system_get_major_extension_table_t {
 	uint16_t extension;
 	uint16_t version_major;
@@ -6129,6 +6613,8 @@ struct args_hsa_system_get_major_extension_table_t {
 	activity->hsa_args.hsa_system_get_major_extension_table.table_length = (size_t) table_length; \
 	activity->hsa_args.hsa_system_get_major_extension_table.table = (void *) table; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_store_write_index_relaxed` function.
@@ -6145,6 +6631,7 @@ struct args_hsa_system_get_major_extension_table_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_store_write_index_relaxed
 struct args_hsa_queue_store_write_index_relaxed_t {
 	hsa_queue_t * queue;
 	struct {
@@ -6164,6 +6651,8 @@ struct args_hsa_queue_store_write_index_relaxed_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_agent_major_extension_supported` function.
  *
@@ -6182,6 +6671,7 @@ struct args_hsa_queue_store_write_index_relaxed_t {
  *			_Bool * result (unsigned int*)
  *	)
  */
+#if HAVE_hsa_agent_major_extension_supported
 struct args_hsa_agent_major_extension_supported_t {
 	uint16_t extension;
 	hsa_agent_t agent;
@@ -6214,6 +6704,8 @@ struct args_hsa_agent_major_extension_supported_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_memory_migrate` function.
  *
@@ -6230,6 +6722,7 @@ struct args_hsa_agent_major_extension_supported_t {
  *			uint32_t flags (unsigned int)
  *	)
  */
+#if HAVE_hsa_amd_memory_migrate
 struct args_hsa_amd_memory_migrate_t {
 	void * ptr;
 	hsa_amd_memory_pool_t memory_pool;
@@ -6242,6 +6735,8 @@ struct args_hsa_amd_memory_migrate_t {
 	activity->hsa_args.hsa_amd_memory_migrate.memory_pool = (hsa_amd_memory_pool_t) memory_pool; \
 	activity->hsa_args.hsa_amd_memory_migrate.flags = (uint32_t) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_vmem_retain_alloc_handle` function.
@@ -6258,6 +6753,7 @@ struct args_hsa_amd_memory_migrate_t {
  *			void * addr (void *)
  *	)
  */
+#if HAVE_hsa_amd_vmem_retain_alloc_handle
 struct args_hsa_amd_vmem_retain_alloc_handle_t {
 	hsa_amd_vmem_alloc_handle_t * memory_handle;
 	struct {
@@ -6278,6 +6774,8 @@ struct args_hsa_amd_vmem_retain_alloc_handle_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_vmem_address_reserve` function.
  *
@@ -6295,6 +6793,7 @@ struct args_hsa_amd_vmem_retain_alloc_handle_t {
  *			uint64_t flags (unsigned long)
  *	)
  */
+#if HAVE_hsa_amd_vmem_address_reserve
 struct args_hsa_amd_vmem_address_reserve_t {
 	void ** va;
 	struct {
@@ -6319,6 +6818,8 @@ struct args_hsa_amd_vmem_address_reserve_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_load_relaxed` function.
  *
@@ -6333,6 +6834,7 @@ struct args_hsa_amd_vmem_address_reserve_t {
  *			hsa_signal_t signal (struct hsa_signal_s)
  *	)
  */
+#if HAVE_hsa_signal_load_relaxed
 struct args_hsa_signal_load_relaxed_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t retval;
@@ -6341,6 +6843,8 @@ struct args_hsa_signal_load_relaxed_t {
 #define GET_ARGS_VALUE_hsa_signal_load_relaxed(activity) { \
 	activity->hsa_args.hsa_signal_load_relaxed.signal = (hsa_signal_t) signal; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_exchange_scacquire` function.
@@ -6357,6 +6861,7 @@ struct args_hsa_signal_load_relaxed_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_exchange_scacquire
 struct args_hsa_signal_exchange_scacquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -6367,6 +6872,8 @@ struct args_hsa_signal_exchange_scacquire_t {
 	activity->hsa_args.hsa_signal_exchange_scacquire.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_exchange_scacquire.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_code_object_destroy` function.
@@ -6382,6 +6889,7 @@ struct args_hsa_signal_exchange_scacquire_t {
  *			hsa_code_object_t code_object (struct hsa_code_object_s)
  *	)
  */
+#if HAVE_hsa_code_object_destroy
 struct args_hsa_code_object_destroy_t {
 	hsa_code_object_t code_object;
 	hsa_status_t retval;
@@ -6390,6 +6898,8 @@ struct args_hsa_code_object_destroy_t {
 #define GET_ARGS_VALUE_hsa_code_object_destroy(activity) { \
 	activity->hsa_args.hsa_code_object_destroy.code_object = (hsa_code_object_t) code_object; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_vmem_handle_create` function.
@@ -6409,6 +6919,7 @@ struct args_hsa_code_object_destroy_t {
  *			hsa_amd_vmem_alloc_handle_t * memory_handle (struct hsa_amd_vmem_alloc_handle_s*)
  *	)
  */
+#if HAVE_hsa_amd_vmem_handle_create
 struct args_hsa_amd_vmem_handle_create_t {
 	hsa_amd_memory_pool_t pool;
 	size_t size;
@@ -6435,6 +6946,8 @@ struct args_hsa_amd_vmem_handle_create_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_vmem_address_free` function.
  *
@@ -6450,6 +6963,7 @@ struct args_hsa_amd_vmem_handle_create_t {
  *			size_t size (unsigned long)
  *	)
  */
+#if HAVE_hsa_amd_vmem_address_free
 struct args_hsa_amd_vmem_address_free_t {
 	void * va;
 	size_t size;
@@ -6460,6 +6974,8 @@ struct args_hsa_amd_vmem_address_free_t {
 	activity->hsa_args.hsa_amd_vmem_address_free.va = (void *) va; \
 	activity->hsa_args.hsa_amd_vmem_address_free.size = (size_t) size; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_subtract_release` function.
@@ -6476,6 +6992,7 @@ struct args_hsa_amd_vmem_address_free_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_subtract_release
 struct args_hsa_signal_subtract_release_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -6485,6 +7002,8 @@ struct args_hsa_signal_subtract_release_t {
 	activity->hsa_args.hsa_signal_subtract_release.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_subtract_release.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_load_write_index_scacquire` function.
@@ -6500,6 +7019,7 @@ struct args_hsa_signal_subtract_release_t {
  *			const hsa_queue_t * queue (const struct hsa_queue_s *)
  *	)
  */
+#if HAVE_hsa_queue_load_write_index_scacquire
 struct args_hsa_queue_load_write_index_scacquire_t {
 	hsa_queue_t * queue;
 	struct {
@@ -6518,6 +7038,8 @@ struct args_hsa_queue_load_write_index_scacquire_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_code_object_get_info` function.
  *
@@ -6534,6 +7056,7 @@ struct args_hsa_queue_load_write_index_scacquire_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hsa_code_object_get_info
 struct args_hsa_code_object_get_info_t {
 	hsa_code_object_t code_object;
 	hsa_code_object_info_t attribute;
@@ -6546,6 +7069,8 @@ struct args_hsa_code_object_get_info_t {
 	activity->hsa_args.hsa_code_object_get_info.attribute = (hsa_code_object_info_t) attribute; \
 	activity->hsa_args.hsa_code_object_get_info.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_memory_pool_allocate` function.
@@ -6564,6 +7089,7 @@ struct args_hsa_code_object_get_info_t {
  *			void ** ptr (void **)
  *	)
  */
+#if HAVE_hsa_amd_memory_pool_allocate
 struct args_hsa_amd_memory_pool_allocate_t {
 	hsa_amd_memory_pool_t memory_pool;
 	size_t size;
@@ -6588,6 +7114,8 @@ struct args_hsa_amd_memory_pool_allocate_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_code_object_get_symbol_from_name` function.
  *
@@ -6605,6 +7133,7 @@ struct args_hsa_amd_memory_pool_allocate_t {
  *			hsa_code_symbol_t * symbol (struct hsa_code_symbol_s*)
  *	)
  */
+#if HAVE_hsa_code_object_get_symbol_from_name
 struct args_hsa_code_object_get_symbol_from_name_t {
 	hsa_code_object_t code_object;
 	char * module_name;
@@ -6641,6 +7170,8 @@ struct args_hsa_code_object_get_symbol_from_name_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_agent_iterate_caches` function.
  *
@@ -6657,6 +7188,7 @@ struct args_hsa_code_object_get_symbol_from_name_t {
  *			void * data (void *)
  *	)
  */
+#if HAVE_hsa_agent_iterate_caches
 struct args_hsa_agent_iterate_caches_t {
 	hsa_agent_t agent;
 	hsa_status_t (* callback)(hsa_cache_t, void *);
@@ -6669,6 +7201,8 @@ struct args_hsa_agent_iterate_caches_t {
 	activity->hsa_args.hsa_agent_iterate_caches.callback = (hsa_status_t (*)(hsa_cache_t, void *)) callback; \
 	activity->hsa_args.hsa_agent_iterate_caches.data = (void *) data; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_isa_get_round_method` function.
@@ -6687,6 +7221,7 @@ struct args_hsa_agent_iterate_caches_t {
  *			hsa_round_method_t * round_method (enum hsa_round_method_t*)
  *	)
  */
+#if HAVE_hsa_isa_get_round_method
 struct args_hsa_isa_get_round_method_t {
 	hsa_isa_t isa;
 	hsa_fp_type_t fp_type;
@@ -6711,6 +7246,8 @@ struct args_hsa_isa_get_round_method_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_queue_set_priority` function.
  *
@@ -6726,6 +7263,7 @@ struct args_hsa_isa_get_round_method_t {
  *			hsa_amd_queue_priority_t priority (enum hsa_amd_queue_priority_s)
  *	)
  */
+#if HAVE_hsa_amd_queue_set_priority
 struct args_hsa_amd_queue_set_priority_t {
 	hsa_queue_t * queue;
 	struct {
@@ -6746,6 +7284,8 @@ struct args_hsa_amd_queue_set_priority_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_store_read_index_screlease` function.
  *
@@ -6761,6 +7301,7 @@ struct args_hsa_amd_queue_set_priority_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_store_read_index_screlease
 struct args_hsa_queue_store_read_index_screlease_t {
 	hsa_queue_t * queue;
 	struct {
@@ -6780,6 +7321,8 @@ struct args_hsa_queue_store_read_index_screlease_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_vmem_get_alloc_properties_from_handle` function.
  *
@@ -6796,6 +7339,7 @@ struct args_hsa_queue_store_read_index_screlease_t {
  *			hsa_amd_memory_type_t * type (enum hsa_amd_memory_type_t*)
  *	)
  */
+#if HAVE_hsa_amd_vmem_get_alloc_properties_from_handle
 struct args_hsa_amd_vmem_get_alloc_properties_from_handle_t {
 	hsa_amd_vmem_alloc_handle_t memory_handle;
 	hsa_amd_memory_pool_t * pool;
@@ -6824,6 +7368,8 @@ struct args_hsa_amd_vmem_get_alloc_properties_from_handle_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_ipc_signal_attach` function.
  *
@@ -6839,6 +7385,7 @@ struct args_hsa_amd_vmem_get_alloc_properties_from_handle_t {
  *			hsa_signal_t * signal (struct hsa_signal_s*)
  *	)
  */
+#if HAVE_hsa_amd_ipc_signal_attach
 struct args_hsa_amd_ipc_signal_attach_t {
 	hsa_amd_ipc_signal_t * handle;
 	struct {
@@ -6865,6 +7412,8 @@ struct args_hsa_amd_ipc_signal_attach_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_and_acq_rel` function.
  *
@@ -6880,6 +7429,7 @@ struct args_hsa_amd_ipc_signal_attach_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_and_acq_rel
 struct args_hsa_signal_and_acq_rel_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -6889,6 +7439,8 @@ struct args_hsa_signal_and_acq_rel_t {
 	activity->hsa_args.hsa_signal_and_acq_rel.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_and_acq_rel.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_load_acquire` function.
@@ -6904,6 +7456,7 @@ struct args_hsa_signal_and_acq_rel_t {
  *			hsa_signal_t signal (struct hsa_signal_s)
  *	)
  */
+#if HAVE_hsa_signal_load_acquire
 struct args_hsa_signal_load_acquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t retval;
@@ -6912,6 +7465,8 @@ struct args_hsa_signal_load_acquire_t {
 #define GET_ARGS_VALUE_hsa_signal_load_acquire(activity) { \
 	activity->hsa_args.hsa_signal_load_acquire.signal = (hsa_signal_t) signal; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_memory_async_copy` function.
@@ -6934,6 +7489,7 @@ struct args_hsa_signal_load_acquire_t {
  *			hsa_signal_t completion_signal (struct hsa_signal_s)
  *	)
  */
+#if HAVE_hsa_amd_memory_async_copy
 struct args_hsa_amd_memory_async_copy_t {
 	void * dst;
 	hsa_agent_t dst_agent;
@@ -6966,6 +7522,8 @@ struct args_hsa_amd_memory_async_copy_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_exchange_acq_rel` function.
  *
@@ -6981,6 +7539,7 @@ struct args_hsa_amd_memory_async_copy_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_exchange_acq_rel
 struct args_hsa_signal_exchange_acq_rel_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -6991,6 +7550,8 @@ struct args_hsa_signal_exchange_acq_rel_t {
 	activity->hsa_args.hsa_signal_exchange_acq_rel.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_exchange_acq_rel.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_executable_global_variable_define` function.
@@ -7008,6 +7569,7 @@ struct args_hsa_signal_exchange_acq_rel_t {
  *			void * address (void *)
  *	)
  */
+#if HAVE_hsa_executable_global_variable_define
 struct args_hsa_executable_global_variable_define_t {
 	hsa_executable_t executable;
 	char * variable_name;
@@ -7030,6 +7592,8 @@ struct args_hsa_executable_global_variable_define_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_shut_down` function.
  *
@@ -7043,9 +7607,12 @@ struct args_hsa_executable_global_variable_define_t {
  *	hsa_shut_down (
  *	)
  */
+#if HAVE_hsa_shut_down
 struct args_hsa_shut_down_t {
 	hsa_status_t retval;
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_signal_create` function.
@@ -7065,6 +7632,7 @@ struct args_hsa_shut_down_t {
  *			hsa_signal_t * signal (struct hsa_signal_s*)
  *	)
  */
+#if HAVE_hsa_amd_signal_create
 struct args_hsa_amd_signal_create_t {
 	hsa_signal_value_t initial_value;
 	uint32_t num_consumers;
@@ -7097,6 +7665,8 @@ struct args_hsa_amd_signal_create_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_ven_amd_pcs_stop` function.
  *
@@ -7111,6 +7681,7 @@ struct args_hsa_amd_signal_create_t {
  *			hsa_ven_amd_pcs_t pc_sampling (struct hsa_ven_amd_pcs_t)
  *	)
  */
+#if HAVE_hsa_ven_amd_pcs_stop
 struct args_hsa_ven_amd_pcs_stop_t {
 	hsa_ven_amd_pcs_t pc_sampling;
 	hsa_status_t retval;
@@ -7119,6 +7690,8 @@ struct args_hsa_ven_amd_pcs_stop_t {
 #define GET_ARGS_VALUE_hsa_ven_amd_pcs_stop(activity) { \
 	activity->hsa_args.hsa_ven_amd_pcs_stop.pc_sampling = (hsa_ven_amd_pcs_t) pc_sampling; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_memory_unlock` function.
@@ -7134,6 +7707,7 @@ struct args_hsa_ven_amd_pcs_stop_t {
  *			void * host_ptr (void *)
  *	)
  */
+#if HAVE_hsa_amd_memory_unlock
 struct args_hsa_amd_memory_unlock_t {
 	void * host_ptr;
 	hsa_status_t retval;
@@ -7142,6 +7716,8 @@ struct args_hsa_amd_memory_unlock_t {
 #define GET_ARGS_VALUE_hsa_amd_memory_unlock(activity) { \
 	activity->hsa_args.hsa_amd_memory_unlock.host_ptr = (void *) host_ptr; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_image_create` function.
@@ -7162,6 +7738,7 @@ struct args_hsa_amd_memory_unlock_t {
  *			hsa_ext_image_t * image (struct hsa_ext_image_s*)
  *	)
  */
+#if HAVE_hsa_amd_image_create
 struct args_hsa_amd_image_create_t {
 	hsa_agent_t agent;
 	hsa_ext_image_descriptor_t * image_descriptor;
@@ -7202,6 +7779,8 @@ struct args_hsa_amd_image_create_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_interop_unmap_buffer` function.
  *
@@ -7216,6 +7795,7 @@ struct args_hsa_amd_image_create_t {
  *			void * ptr (void *)
  *	)
  */
+#if HAVE_hsa_amd_interop_unmap_buffer
 struct args_hsa_amd_interop_unmap_buffer_t {
 	void * ptr;
 	hsa_status_t retval;
@@ -7224,6 +7804,8 @@ struct args_hsa_amd_interop_unmap_buffer_t {
 #define GET_ARGS_VALUE_hsa_amd_interop_unmap_buffer(activity) { \
 	activity->hsa_args.hsa_amd_interop_unmap_buffer.ptr = (void *) ptr; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_or_screlease` function.
@@ -7240,6 +7822,7 @@ struct args_hsa_amd_interop_unmap_buffer_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_or_screlease
 struct args_hsa_signal_or_screlease_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -7249,6 +7832,8 @@ struct args_hsa_signal_or_screlease_t {
 	activity->hsa_args.hsa_signal_or_screlease.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_or_screlease.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_destroy` function.
@@ -7264,6 +7849,7 @@ struct args_hsa_signal_or_screlease_t {
  *			hsa_signal_t signal (struct hsa_signal_s)
  *	)
  */
+#if HAVE_hsa_signal_destroy
 struct args_hsa_signal_destroy_t {
 	hsa_signal_t signal;
 	hsa_status_t retval;
@@ -7272,6 +7858,8 @@ struct args_hsa_signal_destroy_t {
 #define GET_ARGS_VALUE_hsa_signal_destroy(activity) { \
 	activity->hsa_args.hsa_signal_destroy.signal = (hsa_signal_t) signal; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_ext_image_destroy` function.
@@ -7288,6 +7876,7 @@ struct args_hsa_signal_destroy_t {
  *			hsa_ext_image_t image (struct hsa_ext_image_s)
  *	)
  */
+#if HAVE_hsa_ext_image_destroy
 struct args_hsa_ext_image_destroy_t {
 	hsa_agent_t agent;
 	hsa_ext_image_t image;
@@ -7298,6 +7887,8 @@ struct args_hsa_ext_image_destroy_t {
 	activity->hsa_args.hsa_ext_image_destroy.agent = (hsa_agent_t) agent; \
 	activity->hsa_args.hsa_ext_image_destroy.image = (hsa_ext_image_t) image; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_vmem_set_access` function.
@@ -7316,6 +7907,7 @@ struct args_hsa_ext_image_destroy_t {
  *			size_t desc_cnt (unsigned long)
  *	)
  */
+#if HAVE_hsa_amd_vmem_set_access
 struct args_hsa_amd_vmem_set_access_t {
 	void * va;
 	size_t size;
@@ -7340,6 +7932,8 @@ struct args_hsa_amd_vmem_set_access_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_and_acquire` function.
  *
@@ -7355,6 +7949,7 @@ struct args_hsa_amd_vmem_set_access_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_and_acquire
 struct args_hsa_signal_and_acquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -7364,6 +7959,8 @@ struct args_hsa_signal_and_acquire_t {
 	activity->hsa_args.hsa_signal_and_acquire.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_and_acquire.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_memory_deregister` function.
@@ -7380,6 +7977,7 @@ struct args_hsa_signal_and_acquire_t {
  *			size_t size (unsigned long)
  *	)
  */
+#if HAVE_hsa_memory_deregister
 struct args_hsa_memory_deregister_t {
 	void * ptr;
 	size_t size;
@@ -7390,6 +7988,8 @@ struct args_hsa_memory_deregister_t {
 	activity->hsa_args.hsa_memory_deregister.ptr = (void *) ptr; \
 	activity->hsa_args.hsa_memory_deregister.size = (size_t) size; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_profiling_convert_tick_to_system_domain` function.
@@ -7407,6 +8007,7 @@ struct args_hsa_memory_deregister_t {
  *			uint64_t * system_tick (unsigned long*)
  *	)
  */
+#if HAVE_hsa_amd_profiling_convert_tick_to_system_domain
 struct args_hsa_amd_profiling_convert_tick_to_system_domain_t {
 	hsa_agent_t agent;
 	uint64_t agent_tick;
@@ -7429,6 +8030,8 @@ struct args_hsa_amd_profiling_convert_tick_to_system_domain_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_add_release` function.
  *
@@ -7444,6 +8047,7 @@ struct args_hsa_amd_profiling_convert_tick_to_system_domain_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_add_release
 struct args_hsa_signal_add_release_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -7453,6 +8057,8 @@ struct args_hsa_signal_add_release_t {
 	activity->hsa_args.hsa_signal_add_release.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_add_release.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_exchange_release` function.
@@ -7469,6 +8075,7 @@ struct args_hsa_signal_add_release_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_exchange_release
 struct args_hsa_signal_exchange_release_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -7479,6 +8086,8 @@ struct args_hsa_signal_exchange_release_t {
 	activity->hsa_args.hsa_signal_exchange_release.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_exchange_release.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_vmem_address_reserve_align` function.
@@ -7498,6 +8107,7 @@ struct args_hsa_signal_exchange_release_t {
  *			uint64_t flags (unsigned long)
  *	)
  */
+#if HAVE_hsa_amd_vmem_address_reserve_align
 struct args_hsa_amd_vmem_address_reserve_align_t {
 	void ** va;
 	struct {
@@ -7524,6 +8134,8 @@ struct args_hsa_amd_vmem_address_reserve_align_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_ext_sampler_destroy` function.
  *
@@ -7539,6 +8151,7 @@ struct args_hsa_amd_vmem_address_reserve_align_t {
  *			hsa_ext_sampler_t sampler (struct hsa_ext_sampler_s)
  *	)
  */
+#if HAVE_hsa_ext_sampler_destroy
 struct args_hsa_ext_sampler_destroy_t {
 	hsa_agent_t agent;
 	hsa_ext_sampler_t sampler;
@@ -7549,6 +8162,8 @@ struct args_hsa_ext_sampler_destroy_t {
 	activity->hsa_args.hsa_ext_sampler_destroy.agent = (hsa_agent_t) agent; \
 	activity->hsa_args.hsa_ext_sampler_destroy.sampler = (hsa_ext_sampler_t) sampler; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_store_relaxed` function.
@@ -7565,6 +8180,7 @@ struct args_hsa_ext_sampler_destroy_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_store_relaxed
 struct args_hsa_signal_store_relaxed_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -7574,6 +8190,8 @@ struct args_hsa_signal_store_relaxed_t {
 	activity->hsa_args.hsa_signal_store_relaxed.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_store_relaxed.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_cas_acq_rel` function.
@@ -7591,6 +8209,7 @@ struct args_hsa_signal_store_relaxed_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_cas_acq_rel
 struct args_hsa_signal_cas_acq_rel_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t expected;
@@ -7603,6 +8222,8 @@ struct args_hsa_signal_cas_acq_rel_t {
 	activity->hsa_args.hsa_signal_cas_acq_rel.expected = (hsa_signal_value_t) expected; \
 	activity->hsa_args.hsa_signal_cas_acq_rel.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_xor_relaxed` function.
@@ -7619,6 +8240,7 @@ struct args_hsa_signal_cas_acq_rel_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_xor_relaxed
 struct args_hsa_signal_xor_relaxed_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -7628,6 +8250,8 @@ struct args_hsa_signal_xor_relaxed_t {
 	activity->hsa_args.hsa_signal_xor_relaxed.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_xor_relaxed.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_add_write_index_scacquire` function.
@@ -7644,6 +8268,7 @@ struct args_hsa_signal_xor_relaxed_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_add_write_index_scacquire
 struct args_hsa_queue_add_write_index_scacquire_t {
 	hsa_queue_t * queue;
 	struct {
@@ -7664,6 +8289,8 @@ struct args_hsa_queue_add_write_index_scacquire_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_isa_get_info` function.
  *
@@ -7681,6 +8308,7 @@ struct args_hsa_queue_add_write_index_scacquire_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hsa_isa_get_info
 struct args_hsa_isa_get_info_t {
 	hsa_isa_t isa;
 	hsa_isa_info_t attribute;
@@ -7695,6 +8323,8 @@ struct args_hsa_isa_get_info_t {
 	activity->hsa_args.hsa_isa_get_info.index = (uint32_t) index; \
 	activity->hsa_args.hsa_isa_get_info.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_code_object_reader_create_from_file` function.
@@ -7711,6 +8341,7 @@ struct args_hsa_isa_get_info_t {
  *			hsa_code_object_reader_t * code_object_reader (struct hsa_code_object_reader_s*)
  *	)
  */
+#if HAVE_hsa_code_object_reader_create_from_file
 struct args_hsa_code_object_reader_create_from_file_t {
 	hsa_file_t file;
 	hsa_code_object_reader_t * code_object_reader;
@@ -7731,6 +8362,8 @@ struct args_hsa_code_object_reader_create_from_file_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_isa_iterate_wavefronts` function.
  *
@@ -7747,6 +8380,7 @@ struct args_hsa_code_object_reader_create_from_file_t {
  *			void * data (void *)
  *	)
  */
+#if HAVE_hsa_isa_iterate_wavefronts
 struct args_hsa_isa_iterate_wavefronts_t {
 	hsa_isa_t isa;
 	hsa_status_t (* callback)(hsa_wavefront_t, void *);
@@ -7759,6 +8393,8 @@ struct args_hsa_isa_iterate_wavefronts_t {
 	activity->hsa_args.hsa_isa_iterate_wavefronts.callback = (hsa_status_t (*)(hsa_wavefront_t, void *)) callback; \
 	activity->hsa_args.hsa_isa_iterate_wavefronts.data = (void *) data; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_queue_cu_set_mask` function.
@@ -7776,6 +8412,7 @@ struct args_hsa_isa_iterate_wavefronts_t {
  *			const uint32_t * cu_mask (const unsigned int *)
  *	)
  */
+#if HAVE_hsa_amd_queue_cu_set_mask
 struct args_hsa_amd_queue_cu_set_mask_t {
 	hsa_queue_t * queue;
 	struct {
@@ -7804,6 +8441,8 @@ struct args_hsa_amd_queue_cu_set_mask_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_vmem_unmap` function.
  *
@@ -7819,6 +8458,7 @@ struct args_hsa_amd_queue_cu_set_mask_t {
  *			size_t size (unsigned long)
  *	)
  */
+#if HAVE_hsa_amd_vmem_unmap
 struct args_hsa_amd_vmem_unmap_t {
 	void * va;
 	size_t size;
@@ -7829,6 +8469,8 @@ struct args_hsa_amd_vmem_unmap_t {
 	activity->hsa_args.hsa_amd_vmem_unmap.va = (void *) va; \
 	activity->hsa_args.hsa_amd_vmem_unmap.size = (size_t) size; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_or_acquire` function.
@@ -7845,6 +8487,7 @@ struct args_hsa_amd_vmem_unmap_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_or_acquire
 struct args_hsa_signal_or_acquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -7854,6 +8497,8 @@ struct args_hsa_signal_or_acquire_t {
 	activity->hsa_args.hsa_signal_or_acquire.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_or_acquire.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_agent_get_exception_policies` function.
@@ -7871,6 +8516,7 @@ struct args_hsa_signal_or_acquire_t {
  *			uint16_t * mask (unsigned short*)
  *	)
  */
+#if HAVE_hsa_agent_get_exception_policies
 struct args_hsa_agent_get_exception_policies_t {
 	hsa_agent_t agent;
 	hsa_profile_t profile;
@@ -7893,6 +8539,8 @@ struct args_hsa_agent_get_exception_policies_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_system_get_extension_table` function.
  *
@@ -7910,6 +8558,7 @@ struct args_hsa_agent_get_exception_policies_t {
  *			void * table (void *)
  *	)
  */
+#if HAVE_hsa_system_get_extension_table
 struct args_hsa_system_get_extension_table_t {
 	uint16_t extension;
 	uint16_t version_major;
@@ -7924,6 +8573,8 @@ struct args_hsa_system_get_extension_table_t {
 	activity->hsa_args.hsa_system_get_extension_table.version_minor = (uint16_t) version_minor; \
 	activity->hsa_args.hsa_system_get_extension_table.table = (void *) table; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_add_write_index_screlease` function.
@@ -7940,6 +8591,7 @@ struct args_hsa_system_get_extension_table_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_add_write_index_screlease
 struct args_hsa_queue_add_write_index_screlease_t {
 	hsa_queue_t * queue;
 	struct {
@@ -7959,6 +8611,8 @@ struct args_hsa_queue_add_write_index_screlease_t {
 		args->hsa_queue_add_write_index_screlease.queue__ref.val = *args->hsa_queue_add_write_index_screlease.queue; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_signal_wait_any` function.
@@ -7980,6 +8634,7 @@ struct args_hsa_queue_add_write_index_screlease_t {
  *			hsa_signal_value_t * satisfying_value (long*)
  *	)
  */
+#if HAVE_hsa_amd_signal_wait_any
 struct args_hsa_amd_signal_wait_any_t {
 	uint32_t signal_count;
 	hsa_signal_t * signals;
@@ -8028,6 +8683,8 @@ struct args_hsa_amd_signal_wait_any_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_agents_allow_access` function.
  *
@@ -8045,6 +8702,7 @@ struct args_hsa_amd_signal_wait_any_t {
  *			const void * ptr (const void *)
  *	)
  */
+#if HAVE_hsa_amd_agents_allow_access
 struct args_hsa_amd_agents_allow_access_t {
 	uint32_t num_agents;
 	hsa_agent_t * agents;
@@ -8075,6 +8733,8 @@ struct args_hsa_amd_agents_allow_access_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_add_write_index_scacq_screl` function.
  *
@@ -8090,6 +8750,7 @@ struct args_hsa_amd_agents_allow_access_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_add_write_index_scacq_screl
 struct args_hsa_queue_add_write_index_scacq_screl_t {
 	hsa_queue_t * queue;
 	struct {
@@ -8110,6 +8771,8 @@ struct args_hsa_queue_add_write_index_scacq_screl_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_add_screlease` function.
  *
@@ -8125,6 +8788,7 @@ struct args_hsa_queue_add_write_index_scacq_screl_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_add_screlease
 struct args_hsa_signal_add_screlease_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -8134,6 +8798,8 @@ struct args_hsa_signal_add_screlease_t {
 	activity->hsa_args.hsa_signal_add_screlease.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_add_screlease.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_iterate_agents` function.
@@ -8150,6 +8816,7 @@ struct args_hsa_signal_add_screlease_t {
  *			void * data (void *)
  *	)
  */
+#if HAVE_hsa_iterate_agents
 struct args_hsa_iterate_agents_t {
 	hsa_status_t (* callback)(hsa_agent_t, void *);
 	void * data;
@@ -8160,6 +8827,8 @@ struct args_hsa_iterate_agents_t {
 	activity->hsa_args.hsa_iterate_agents.callback = (hsa_status_t (*)(hsa_agent_t, void *)) callback; \
 	activity->hsa_args.hsa_iterate_agents.data = (void *) data; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_store_read_index_relaxed` function.
@@ -8176,6 +8845,7 @@ struct args_hsa_iterate_agents_t {
  *			uint64_t value (unsigned long)
  *	)
  */
+#if HAVE_hsa_queue_store_read_index_relaxed
 struct args_hsa_queue_store_read_index_relaxed_t {
 	hsa_queue_t * queue;
 	struct {
@@ -8195,6 +8865,8 @@ struct args_hsa_queue_store_read_index_relaxed_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_or_relaxed` function.
  *
@@ -8210,6 +8882,7 @@ struct args_hsa_queue_store_read_index_relaxed_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_or_relaxed
 struct args_hsa_signal_or_relaxed_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -8219,6 +8892,8 @@ struct args_hsa_signal_or_relaxed_t {
 	activity->hsa_args.hsa_signal_or_relaxed.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_or_relaxed.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_ipc_memory_detach` function.
@@ -8234,6 +8909,7 @@ struct args_hsa_signal_or_relaxed_t {
  *			void * mapped_ptr (void *)
  *	)
  */
+#if HAVE_hsa_amd_ipc_memory_detach
 struct args_hsa_amd_ipc_memory_detach_t {
 	void * mapped_ptr;
 	hsa_status_t retval;
@@ -8242,6 +8918,8 @@ struct args_hsa_amd_ipc_memory_detach_t {
 #define GET_ARGS_VALUE_hsa_amd_ipc_memory_detach(activity) { \
 	activity->hsa_args.hsa_amd_ipc_memory_detach.mapped_ptr = (void *) mapped_ptr; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_or_release` function.
@@ -8258,6 +8936,7 @@ struct args_hsa_amd_ipc_memory_detach_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_or_release
 struct args_hsa_signal_or_release_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -8267,6 +8946,8 @@ struct args_hsa_signal_or_release_t {
 	activity->hsa_args.hsa_signal_or_release.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_or_release.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_deregister_deallocation_callback` function.
@@ -8283,6 +8964,7 @@ struct args_hsa_signal_or_release_t {
  *			hsa_amd_deallocation_callback_t callback (void (*)(void *, void *))
  *	)
  */
+#if HAVE_hsa_amd_deregister_deallocation_callback
 struct args_hsa_amd_deregister_deallocation_callback_t {
 	void * ptr;
 	hsa_amd_deallocation_callback_t callback;
@@ -8293,6 +8975,8 @@ struct args_hsa_amd_deregister_deallocation_callback_t {
 	activity->hsa_args.hsa_amd_deregister_deallocation_callback.ptr = (void *) ptr; \
 	activity->hsa_args.hsa_amd_deregister_deallocation_callback.callback = (hsa_amd_deallocation_callback_t) callback; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_queue_load_read_index_acquire` function.
@@ -8308,6 +8992,7 @@ struct args_hsa_amd_deregister_deallocation_callback_t {
  *			const hsa_queue_t * queue (const struct hsa_queue_s *)
  *	)
  */
+#if HAVE_hsa_queue_load_read_index_acquire
 struct args_hsa_queue_load_read_index_acquire_t {
 	hsa_queue_t * queue;
 	struct {
@@ -8326,6 +9011,8 @@ struct args_hsa_queue_load_read_index_acquire_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_ven_amd_pcs_iterate_configuration` function.
  *
@@ -8342,6 +9029,7 @@ struct args_hsa_queue_load_read_index_acquire_t {
  *			void * callback_data (void *)
  *	)
  */
+#if HAVE_hsa_ven_amd_pcs_iterate_configuration
 struct args_hsa_ven_amd_pcs_iterate_configuration_t {
 	hsa_agent_t agent;
 	hsa_ven_amd_pcs_iterate_configuration_callback_t configuration_callback;
@@ -8354,6 +9042,8 @@ struct args_hsa_ven_amd_pcs_iterate_configuration_t {
 	activity->hsa_args.hsa_ven_amd_pcs_iterate_configuration.configuration_callback = (hsa_ven_amd_pcs_iterate_configuration_callback_t) configuration_callback; \
 	activity->hsa_args.hsa_ven_amd_pcs_iterate_configuration.callback_data = (void *) callback_data; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_ipc_signal_create` function.
@@ -8370,6 +9060,7 @@ struct args_hsa_ven_amd_pcs_iterate_configuration_t {
  *			hsa_amd_ipc_signal_t * handle (struct hsa_amd_ipc_memory_s*)
  *	)
  */
+#if HAVE_hsa_amd_ipc_signal_create
 struct args_hsa_amd_ipc_signal_create_t {
 	hsa_signal_t signal;
 	hsa_amd_ipc_signal_t * handle;
@@ -8390,6 +9081,8 @@ struct args_hsa_amd_ipc_signal_create_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_code_object_iterate_symbols` function.
  *
@@ -8406,6 +9099,7 @@ struct args_hsa_amd_ipc_signal_create_t {
  *			void * data (void *)
  *	)
  */
+#if HAVE_hsa_code_object_iterate_symbols
 struct args_hsa_code_object_iterate_symbols_t {
 	hsa_code_object_t code_object;
 	hsa_status_t (* callback)(hsa_code_object_t, hsa_code_symbol_t, void *);
@@ -8418,6 +9112,8 @@ struct args_hsa_code_object_iterate_symbols_t {
 	activity->hsa_args.hsa_code_object_iterate_symbols.callback = (hsa_status_t (*)(hsa_code_object_t, hsa_code_symbol_t, void *)) callback; \
 	activity->hsa_args.hsa_code_object_iterate_symbols.data = (void *) data; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_ext_image_get_capability_with_layout` function.
@@ -8437,6 +9133,7 @@ struct args_hsa_code_object_iterate_symbols_t {
  *			uint32_t * capability_mask (unsigned int*)
  *	)
  */
+#if HAVE_hsa_ext_image_get_capability_with_layout
 struct args_hsa_ext_image_get_capability_with_layout_t {
 	hsa_agent_t agent;
 	hsa_ext_image_geometry_t geometry;
@@ -8469,6 +9166,8 @@ struct args_hsa_ext_image_get_capability_with_layout_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_memory_async_copy_on_engine` function.
  *
@@ -8492,6 +9191,7 @@ struct args_hsa_ext_image_get_capability_with_layout_t {
  *			_Bool force_copy_on_sdma (unsigned int)
  *	)
  */
+#if HAVE_hsa_amd_memory_async_copy_on_engine
 struct args_hsa_amd_memory_async_copy_on_engine_t {
 	void * dst;
 	hsa_agent_t dst_agent;
@@ -8528,6 +9228,8 @@ struct args_hsa_amd_memory_async_copy_on_engine_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_agent_iterate_isas` function.
  *
@@ -8544,6 +9246,7 @@ struct args_hsa_amd_memory_async_copy_on_engine_t {
  *			void * data (void *)
  *	)
  */
+#if HAVE_hsa_agent_iterate_isas
 struct args_hsa_agent_iterate_isas_t {
 	hsa_agent_t agent;
 	hsa_status_t (* callback)(hsa_isa_t, void *);
@@ -8556,6 +9259,8 @@ struct args_hsa_agent_iterate_isas_t {
 	activity->hsa_args.hsa_agent_iterate_isas.callback = (hsa_status_t (*)(hsa_isa_t, void *)) callback; \
 	activity->hsa_args.hsa_agent_iterate_isas.data = (void *) data; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_cas_scacq_screl` function.
@@ -8573,6 +9278,7 @@ struct args_hsa_agent_iterate_isas_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_cas_scacq_screl
 struct args_hsa_signal_cas_scacq_screl_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t expected;
@@ -8585,6 +9291,8 @@ struct args_hsa_signal_cas_scacq_screl_t {
 	activity->hsa_args.hsa_signal_cas_scacq_screl.expected = (hsa_signal_value_t) expected; \
 	activity->hsa_args.hsa_signal_cas_scacq_screl.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_coherency_set_type` function.
@@ -8601,6 +9309,7 @@ struct args_hsa_signal_cas_scacq_screl_t {
  *			hsa_amd_coherency_type_t type (enum hsa_amd_coherency_type_s)
  *	)
  */
+#if HAVE_hsa_amd_coherency_set_type
 struct args_hsa_amd_coherency_set_type_t {
 	hsa_agent_t agent;
 	hsa_amd_coherency_type_t type;
@@ -8611,6 +9320,8 @@ struct args_hsa_amd_coherency_set_type_t {
 	activity->hsa_args.hsa_amd_coherency_set_type.agent = (hsa_agent_t) agent; \
 	activity->hsa_args.hsa_amd_coherency_set_type.type = (hsa_amd_coherency_type_t) type; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_amd_queue_cu_get_mask` function.
@@ -8628,6 +9339,7 @@ struct args_hsa_amd_coherency_set_type_t {
  *			uint32_t * cu_mask (unsigned int*)
  *	)
  */
+#if HAVE_hsa_amd_queue_cu_get_mask
 struct args_hsa_amd_queue_cu_get_mask_t {
 	hsa_queue_t * queue;
 	struct {
@@ -8656,6 +9368,8 @@ struct args_hsa_amd_queue_cu_get_mask_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_ext_image_create_with_layout` function.
  *
@@ -8677,6 +9391,7 @@ struct args_hsa_amd_queue_cu_get_mask_t {
  *			hsa_ext_image_t * image (struct hsa_ext_image_s*)
  *	)
  */
+#if HAVE_hsa_ext_image_create_with_layout
 struct args_hsa_ext_image_create_with_layout_t {
 	hsa_agent_t agent;
 	hsa_ext_image_descriptor_t * image_descriptor;
@@ -8715,6 +9430,8 @@ struct args_hsa_ext_image_create_with_layout_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_code_object_deserialize` function.
  *
@@ -8732,6 +9449,7 @@ struct args_hsa_ext_image_create_with_layout_t {
  *			hsa_code_object_t * code_object (struct hsa_code_object_s*)
  *	)
  */
+#if HAVE_hsa_code_object_deserialize
 struct args_hsa_code_object_deserialize_t {
 	void * serialized_code_object;
 	size_t serialized_code_object_size;
@@ -8762,6 +9480,8 @@ struct args_hsa_code_object_deserialize_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hsa_memory_assign_agent` function.
  *
@@ -8778,6 +9498,7 @@ struct args_hsa_code_object_deserialize_t {
  *			hsa_access_permission_t access (enum hsa_access_permission_t)
  *	)
  */
+#if HAVE_hsa_memory_assign_agent
 struct args_hsa_memory_assign_agent_t {
 	void * ptr;
 	hsa_agent_t agent;
@@ -8790,6 +9511,8 @@ struct args_hsa_memory_assign_agent_t {
 	activity->hsa_args.hsa_memory_assign_agent.agent = (hsa_agent_t) agent; \
 	activity->hsa_args.hsa_memory_assign_agent.access = (hsa_access_permission_t) access; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_isa_get_info_alt` function.
@@ -8807,6 +9530,7 @@ struct args_hsa_memory_assign_agent_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hsa_isa_get_info_alt
 struct args_hsa_isa_get_info_alt_t {
 	hsa_isa_t isa;
 	hsa_isa_info_t attribute;
@@ -8819,6 +9543,8 @@ struct args_hsa_isa_get_info_alt_t {
 	activity->hsa_args.hsa_isa_get_info_alt.attribute = (hsa_isa_info_t) attribute; \
 	activity->hsa_args.hsa_isa_get_info_alt.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_subtract_acquire` function.
@@ -8835,6 +9561,7 @@ struct args_hsa_isa_get_info_alt_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_subtract_acquire
 struct args_hsa_signal_subtract_acquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -8844,6 +9571,8 @@ struct args_hsa_signal_subtract_acquire_t {
 	activity->hsa_args.hsa_signal_subtract_acquire.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_subtract_acquire.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_memory_copy` function.
@@ -8861,6 +9590,7 @@ struct args_hsa_signal_subtract_acquire_t {
  *			size_t size (unsigned long)
  *	)
  */
+#if HAVE_hsa_memory_copy
 struct args_hsa_memory_copy_t {
 	void * dst;
 	void * src;
@@ -8873,6 +9603,8 @@ struct args_hsa_memory_copy_t {
 	activity->hsa_args.hsa_memory_copy.src = (void *) src; \
 	activity->hsa_args.hsa_memory_copy.size = (size_t) size; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_agent_get_info` function.
@@ -8890,6 +9622,7 @@ struct args_hsa_memory_copy_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hsa_agent_get_info
 struct args_hsa_agent_get_info_t {
 	hsa_agent_t agent;
 	hsa_agent_info_t attribute;
@@ -8902,6 +9635,8 @@ struct args_hsa_agent_get_info_t {
 	activity->hsa_args.hsa_agent_get_info.attribute = (hsa_agent_info_t) attribute; \
 	activity->hsa_args.hsa_agent_get_info.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_signal_add_scacquire` function.
@@ -8918,6 +9653,7 @@ struct args_hsa_agent_get_info_t {
  *			hsa_signal_value_t value (long)
  *	)
  */
+#if HAVE_hsa_signal_add_scacquire
 struct args_hsa_signal_add_scacquire_t {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
@@ -8927,6 +9663,8 @@ struct args_hsa_signal_add_scacquire_t {
 	activity->hsa_args.hsa_signal_add_scacquire.signal = (hsa_signal_t) signal; \
 	activity->hsa_args.hsa_signal_add_scacquire.value = (hsa_signal_value_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hsa_ven_amd_pcs_flush` function.
@@ -8942,6 +9680,7 @@ struct args_hsa_signal_add_scacquire_t {
  *			hsa_ven_amd_pcs_t pc_sampling (struct hsa_ven_amd_pcs_t)
  *	)
  */
+#if HAVE_hsa_ven_amd_pcs_flush
 struct args_hsa_ven_amd_pcs_flush_t {
 	hsa_ven_amd_pcs_t pc_sampling;
 	hsa_status_t retval;
@@ -8950,6 +9689,8 @@ struct args_hsa_ven_amd_pcs_flush_t {
 #define GET_ARGS_VALUE_hsa_ven_amd_pcs_flush(activity) { \
 	activity->hsa_args.hsa_ven_amd_pcs_flush.pc_sampling = (hsa_ven_amd_pcs_t) pc_sampling; \
 };
+
+#endif
 
 
 
@@ -8981,370 +9722,610 @@ static inline void get_hsa_pointed_args_for(hsa_api_id_t id, hsa_api_args_t* arg
 {
     if (!is_enter) {
         switch(id) {
+			#if HAVE_hsa_amd_interop_map_buffer
 			case HSA_API_ID_hsa_amd_interop_map_buffer : 
 				GET_PTRS_VALUE_hsa_amd_interop_map_buffer(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_queue_get_info
 			case HSA_API_ID_hsa_amd_queue_get_info : 
 				GET_PTRS_VALUE_hsa_amd_queue_get_info(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_cas_write_index_scacq_screl
 			case HSA_API_ID_hsa_queue_cas_write_index_scacq_screl : 
 				GET_PTRS_VALUE_hsa_queue_cas_write_index_scacq_screl(args);
 				return;
+			#endif
+			#if HAVE_hsa_ext_image_get_capability
 			case HSA_API_ID_hsa_ext_image_get_capability : 
 				GET_PTRS_VALUE_hsa_ext_image_get_capability(args);
 				return;
+			#endif
+			#if HAVE_hsa_executable_load_program_code_object
 			case HSA_API_ID_hsa_executable_load_program_code_object : 
 				GET_PTRS_VALUE_hsa_executable_load_program_code_object(args);
 				return;
+			#endif
+			#if HAVE_hsa_signal_group_wait_any_relaxed
 			case HSA_API_ID_hsa_signal_group_wait_any_relaxed : 
 				GET_PTRS_VALUE_hsa_signal_group_wait_any_relaxed(args);
 				return;
+			#endif
+			#if HAVE_hsa_ext_image_clear
 			case HSA_API_ID_hsa_ext_image_clear : 
 				GET_PTRS_VALUE_hsa_ext_image_clear(args);
 				return;
+			#endif
+			#if HAVE_hsa_executable_load_code_object
 			case HSA_API_ID_hsa_executable_load_code_object : 
 				GET_PTRS_VALUE_hsa_executable_load_code_object(args);
 				return;
+			#endif
+			#if HAVE_hsa_ext_image_data_get_info_with_layout
 			case HSA_API_ID_hsa_ext_image_data_get_info_with_layout : 
 				GET_PTRS_VALUE_hsa_ext_image_data_get_info_with_layout(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_svm_attributes_get
 			case HSA_API_ID_hsa_amd_svm_attributes_get : 
 				GET_PTRS_VALUE_hsa_amd_svm_attributes_get(args);
 				return;
+			#endif
+			#if HAVE_hsa_ext_image_export
 			case HSA_API_ID_hsa_ext_image_export : 
 				GET_PTRS_VALUE_hsa_ext_image_export(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_portable_export_dmabuf
 			case HSA_API_ID_hsa_amd_portable_export_dmabuf : 
 				GET_PTRS_VALUE_hsa_amd_portable_export_dmabuf(args);
 				return;
+			#endif
+			#if HAVE_hsa_code_object_serialize
 			case HSA_API_ID_hsa_code_object_serialize : 
 				GET_PTRS_VALUE_hsa_code_object_serialize(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_memory_lock
 			case HSA_API_ID_hsa_amd_memory_lock : 
 				GET_PTRS_VALUE_hsa_amd_memory_lock(args);
 				return;
+			#endif
+			#if HAVE_hsa_isa_get_exception_policies
 			case HSA_API_ID_hsa_isa_get_exception_policies : 
 				GET_PTRS_VALUE_hsa_isa_get_exception_policies(args);
 				return;
+			#endif
+			#if HAVE_hsa_ven_amd_pcs_create
 			case HSA_API_ID_hsa_ven_amd_pcs_create : 
 				GET_PTRS_VALUE_hsa_ven_amd_pcs_create(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_load_read_index_relaxed
 			case HSA_API_ID_hsa_queue_load_read_index_relaxed : 
 				GET_PTRS_VALUE_hsa_queue_load_read_index_relaxed(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_signal_value_pointer
 			case HSA_API_ID_hsa_amd_signal_value_pointer : 
 				GET_PTRS_VALUE_hsa_amd_signal_value_pointer(args);
 				return;
+			#endif
+			#if HAVE_hsa_executable_validate
 			case HSA_API_ID_hsa_executable_validate : 
 				GET_PTRS_VALUE_hsa_executable_validate(args);
 				return;
+			#endif
+			#if HAVE_hsa_signal_create
 			case HSA_API_ID_hsa_signal_create : 
 				GET_PTRS_VALUE_hsa_signal_create(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_load_read_index_scacquire
 			case HSA_API_ID_hsa_queue_load_read_index_scacquire : 
 				GET_PTRS_VALUE_hsa_queue_load_read_index_scacquire(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_load_write_index_acquire
 			case HSA_API_ID_hsa_queue_load_write_index_acquire : 
 				GET_PTRS_VALUE_hsa_queue_load_write_index_acquire(args);
 				return;
+			#endif
+			#if HAVE_hsa_executable_agent_global_variable_define
 			case HSA_API_ID_hsa_executable_agent_global_variable_define : 
 				GET_PTRS_VALUE_hsa_executable_agent_global_variable_define(args);
 				return;
+			#endif
+			#if HAVE_hsa_soft_queue_create
 			case HSA_API_ID_hsa_soft_queue_create : 
 				GET_PTRS_VALUE_hsa_soft_queue_create(args);
 				return;
+			#endif
+			#if HAVE_hsa_isa_from_name
 			case HSA_API_ID_hsa_isa_from_name : 
 				GET_PTRS_VALUE_hsa_isa_from_name(args);
 				return;
+			#endif
+			#if HAVE_hsa_ext_image_create
 			case HSA_API_ID_hsa_ext_image_create : 
 				GET_PTRS_VALUE_hsa_ext_image_create(args);
 				return;
+			#endif
+			#if HAVE_hsa_system_extension_supported
 			case HSA_API_ID_hsa_system_extension_supported : 
 				GET_PTRS_VALUE_hsa_system_extension_supported(args);
 				return;
+			#endif
+			#if HAVE_hsa_executable_load_agent_code_object
 			case HSA_API_ID_hsa_executable_load_agent_code_object : 
 				GET_PTRS_VALUE_hsa_executable_load_agent_code_object(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_memory_copy_engine_status
 			case HSA_API_ID_hsa_amd_memory_copy_engine_status : 
 				GET_PTRS_VALUE_hsa_amd_memory_copy_engine_status(args);
 				return;
+			#endif
+			#if HAVE_hsa_ext_image_copy
 			case HSA_API_ID_hsa_ext_image_copy : 
 				GET_PTRS_VALUE_hsa_ext_image_copy(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_coherency_get_type
 			case HSA_API_ID_hsa_amd_coherency_get_type : 
 				GET_PTRS_VALUE_hsa_amd_coherency_get_type(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_vmem_export_shareable_handle
 			case HSA_API_ID_hsa_amd_vmem_export_shareable_handle : 
 				GET_PTRS_VALUE_hsa_amd_vmem_export_shareable_handle(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_svm_prefetch_async
 			case HSA_API_ID_hsa_amd_svm_prefetch_async : 
 				GET_PTRS_VALUE_hsa_amd_svm_prefetch_async(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_memory_async_copy_rect
 			case HSA_API_ID_hsa_amd_memory_async_copy_rect : 
 				GET_PTRS_VALUE_hsa_amd_memory_async_copy_rect(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_svm_attributes_set
 			case HSA_API_ID_hsa_amd_svm_attributes_set : 
 				GET_PTRS_VALUE_hsa_amd_svm_attributes_set(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_profiling_get_async_copy_time
 			case HSA_API_ID_hsa_amd_profiling_get_async_copy_time : 
 				GET_PTRS_VALUE_hsa_amd_profiling_get_async_copy_time(args);
 				return;
+			#endif
+			#if HAVE_hsa_ext_image_import
 			case HSA_API_ID_hsa_ext_image_import : 
 				GET_PTRS_VALUE_hsa_ext_image_import(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_memory_pool_can_migrate
 			case HSA_API_ID_hsa_amd_memory_pool_can_migrate : 
 				GET_PTRS_VALUE_hsa_amd_memory_pool_can_migrate(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_ipc_memory_attach
 			case HSA_API_ID_hsa_amd_ipc_memory_attach : 
 				GET_PTRS_VALUE_hsa_amd_ipc_memory_attach(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_add_write_index_relaxed
 			case HSA_API_ID_hsa_queue_add_write_index_relaxed : 
 				GET_PTRS_VALUE_hsa_queue_add_write_index_relaxed(args);
 				return;
+			#endif
+			#if HAVE_hsa_executable_create_alt
 			case HSA_API_ID_hsa_executable_create_alt : 
 				GET_PTRS_VALUE_hsa_executable_create_alt(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_add_write_index_acq_rel
 			case HSA_API_ID_hsa_queue_add_write_index_acq_rel : 
 				GET_PTRS_VALUE_hsa_queue_add_write_index_acq_rel(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_cas_write_index_acq_rel
 			case HSA_API_ID_hsa_queue_cas_write_index_acq_rel : 
 				GET_PTRS_VALUE_hsa_queue_cas_write_index_acq_rel(args);
 				return;
+			#endif
+			#if HAVE_hsa_executable_get_symbol_by_name
 			case HSA_API_ID_hsa_executable_get_symbol_by_name : 
 				GET_PTRS_VALUE_hsa_executable_get_symbol_by_name(args);
 				return;
+			#endif
+			#if HAVE_hsa_executable_get_symbol
 			case HSA_API_ID_hsa_executable_get_symbol : 
 				GET_PTRS_VALUE_hsa_executable_get_symbol(args);
 				return;
+			#endif
+			#if HAVE_hsa_system_major_extension_supported
 			case HSA_API_ID_hsa_system_major_extension_supported : 
 				GET_PTRS_VALUE_hsa_system_major_extension_supported(args);
 				return;
+			#endif
+			#if HAVE_hsa_status_string
 			case HSA_API_ID_hsa_status_string : 
 				GET_PTRS_VALUE_hsa_status_string(args);
 				return;
+			#endif
+			#if HAVE_hsa_memory_allocate
 			case HSA_API_ID_hsa_memory_allocate : 
 				GET_PTRS_VALUE_hsa_memory_allocate(args);
 				return;
+			#endif
+			#if HAVE_hsa_ext_image_data_get_info
 			case HSA_API_ID_hsa_ext_image_data_get_info : 
 				GET_PTRS_VALUE_hsa_ext_image_data_get_info(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_load_write_index_relaxed
 			case HSA_API_ID_hsa_queue_load_write_index_relaxed : 
 				GET_PTRS_VALUE_hsa_queue_load_write_index_relaxed(args);
 				return;
+			#endif
+			#if HAVE_hsa_agent_extension_supported
 			case HSA_API_ID_hsa_agent_extension_supported : 
 				GET_PTRS_VALUE_hsa_agent_extension_supported(args);
 				return;
+			#endif
+			#if HAVE_hsa_executable_validate_alt
 			case HSA_API_ID_hsa_executable_validate_alt : 
 				GET_PTRS_VALUE_hsa_executable_validate_alt(args);
 				return;
+			#endif
+			#if HAVE_hsa_code_object_reader_create_from_memory
 			case HSA_API_ID_hsa_code_object_reader_create_from_memory : 
 				GET_PTRS_VALUE_hsa_code_object_reader_create_from_memory(args);
 				return;
+			#endif
+			#if HAVE_hsa_isa_compatible
 			case HSA_API_ID_hsa_isa_compatible : 
 				GET_PTRS_VALUE_hsa_isa_compatible(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_cas_write_index_acquire
 			case HSA_API_ID_hsa_queue_cas_write_index_acquire : 
 				GET_PTRS_VALUE_hsa_queue_cas_write_index_acquire(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_cas_write_index_relaxed
 			case HSA_API_ID_hsa_queue_cas_write_index_relaxed : 
 				GET_PTRS_VALUE_hsa_queue_cas_write_index_relaxed(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_pointer_info
 			case HSA_API_ID_hsa_amd_pointer_info : 
 				GET_PTRS_VALUE_hsa_amd_pointer_info(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_spm_set_dest_buffer
 			case HSA_API_ID_hsa_amd_spm_set_dest_buffer : 
 				GET_PTRS_VALUE_hsa_amd_spm_set_dest_buffer(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_vmem_get_access
 			case HSA_API_ID_hsa_amd_vmem_get_access : 
 				GET_PTRS_VALUE_hsa_amd_vmem_get_access(args);
 				return;
+			#endif
+			#if HAVE_hsa_executable_create
 			case HSA_API_ID_hsa_executable_create : 
 				GET_PTRS_VALUE_hsa_executable_create(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_memory_lock_to_pool
 			case HSA_API_ID_hsa_amd_memory_lock_to_pool : 
 				GET_PTRS_VALUE_hsa_amd_memory_lock_to_pool(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_cas_write_index_scacquire
 			case HSA_API_ID_hsa_queue_cas_write_index_scacquire : 
 				GET_PTRS_VALUE_hsa_queue_cas_write_index_scacquire(args);
 				return;
+			#endif
+			#if HAVE_hsa_code_object_get_symbol
 			case HSA_API_ID_hsa_code_object_get_symbol : 
 				GET_PTRS_VALUE_hsa_code_object_get_symbol(args);
 				return;
+			#endif
+			#if HAVE_hsa_signal_group_create
 			case HSA_API_ID_hsa_signal_group_create : 
 				GET_PTRS_VALUE_hsa_signal_group_create(args);
 				return;
+			#endif
+			#if HAVE_hsa_extension_get_name
 			case HSA_API_ID_hsa_extension_get_name : 
 				GET_PTRS_VALUE_hsa_extension_get_name(args);
 				return;
+			#endif
+			#if HAVE_hsa_signal_group_wait_any_scacquire
 			case HSA_API_ID_hsa_signal_group_wait_any_scacquire : 
 				GET_PTRS_VALUE_hsa_signal_group_wait_any_scacquire(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_create
 			case HSA_API_ID_hsa_queue_create : 
 				GET_PTRS_VALUE_hsa_queue_create(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_profiling_set_profiler_enabled
 			case HSA_API_ID_hsa_amd_profiling_set_profiler_enabled : 
 				GET_PTRS_VALUE_hsa_amd_profiling_set_profiler_enabled(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_profiling_get_dispatch_time
 			case HSA_API_ID_hsa_amd_profiling_get_dispatch_time : 
 				GET_PTRS_VALUE_hsa_amd_profiling_get_dispatch_time(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_ipc_memory_create
 			case HSA_API_ID_hsa_amd_ipc_memory_create : 
 				GET_PTRS_VALUE_hsa_amd_ipc_memory_create(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_vmem_import_shareable_handle
 			case HSA_API_ID_hsa_amd_vmem_import_shareable_handle : 
 				GET_PTRS_VALUE_hsa_amd_vmem_import_shareable_handle(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_add_write_index_acquire
 			case HSA_API_ID_hsa_queue_add_write_index_acquire : 
 				GET_PTRS_VALUE_hsa_queue_add_write_index_acquire(args);
 				return;
+			#endif
+			#if HAVE_hsa_ven_amd_pcs_create_from_id
 			case HSA_API_ID_hsa_ven_amd_pcs_create_from_id : 
 				GET_PTRS_VALUE_hsa_ven_amd_pcs_create_from_id(args);
 				return;
+			#endif
+			#if HAVE_hsa_ext_sampler_create
 			case HSA_API_ID_hsa_ext_sampler_create : 
 				GET_PTRS_VALUE_hsa_ext_sampler_create(args);
 				return;
+			#endif
+			#if HAVE_hsa_executable_readonly_variable_define
 			case HSA_API_ID_hsa_executable_readonly_variable_define : 
 				GET_PTRS_VALUE_hsa_executable_readonly_variable_define(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_inactivate
 			case HSA_API_ID_hsa_queue_inactivate : 
 				GET_PTRS_VALUE_hsa_queue_inactivate(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_store_write_index_relaxed
 			case HSA_API_ID_hsa_queue_store_write_index_relaxed : 
 				GET_PTRS_VALUE_hsa_queue_store_write_index_relaxed(args);
 				return;
+			#endif
+			#if HAVE_hsa_agent_major_extension_supported
 			case HSA_API_ID_hsa_agent_major_extension_supported : 
 				GET_PTRS_VALUE_hsa_agent_major_extension_supported(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_vmem_retain_alloc_handle
 			case HSA_API_ID_hsa_amd_vmem_retain_alloc_handle : 
 				GET_PTRS_VALUE_hsa_amd_vmem_retain_alloc_handle(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_vmem_address_reserve
 			case HSA_API_ID_hsa_amd_vmem_address_reserve : 
 				GET_PTRS_VALUE_hsa_amd_vmem_address_reserve(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_vmem_handle_create
 			case HSA_API_ID_hsa_amd_vmem_handle_create : 
 				GET_PTRS_VALUE_hsa_amd_vmem_handle_create(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_load_write_index_scacquire
 			case HSA_API_ID_hsa_queue_load_write_index_scacquire : 
 				GET_PTRS_VALUE_hsa_queue_load_write_index_scacquire(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_memory_pool_allocate
 			case HSA_API_ID_hsa_amd_memory_pool_allocate : 
 				GET_PTRS_VALUE_hsa_amd_memory_pool_allocate(args);
 				return;
+			#endif
+			#if HAVE_hsa_code_object_get_symbol_from_name
 			case HSA_API_ID_hsa_code_object_get_symbol_from_name : 
 				GET_PTRS_VALUE_hsa_code_object_get_symbol_from_name(args);
 				return;
+			#endif
+			#if HAVE_hsa_isa_get_round_method
 			case HSA_API_ID_hsa_isa_get_round_method : 
 				GET_PTRS_VALUE_hsa_isa_get_round_method(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_queue_set_priority
 			case HSA_API_ID_hsa_amd_queue_set_priority : 
 				GET_PTRS_VALUE_hsa_amd_queue_set_priority(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_vmem_get_alloc_properties_from_handle
 			case HSA_API_ID_hsa_amd_vmem_get_alloc_properties_from_handle : 
 				GET_PTRS_VALUE_hsa_amd_vmem_get_alloc_properties_from_handle(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_ipc_signal_attach
 			case HSA_API_ID_hsa_amd_ipc_signal_attach : 
 				GET_PTRS_VALUE_hsa_amd_ipc_signal_attach(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_memory_async_copy
 			case HSA_API_ID_hsa_amd_memory_async_copy : 
 				GET_PTRS_VALUE_hsa_amd_memory_async_copy(args);
 				return;
+			#endif
+			#if HAVE_hsa_executable_global_variable_define
 			case HSA_API_ID_hsa_executable_global_variable_define : 
 				GET_PTRS_VALUE_hsa_executable_global_variable_define(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_signal_create
 			case HSA_API_ID_hsa_amd_signal_create : 
 				GET_PTRS_VALUE_hsa_amd_signal_create(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_image_create
 			case HSA_API_ID_hsa_amd_image_create : 
 				GET_PTRS_VALUE_hsa_amd_image_create(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_vmem_set_access
 			case HSA_API_ID_hsa_amd_vmem_set_access : 
 				GET_PTRS_VALUE_hsa_amd_vmem_set_access(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_profiling_convert_tick_to_system_domain
 			case HSA_API_ID_hsa_amd_profiling_convert_tick_to_system_domain : 
 				GET_PTRS_VALUE_hsa_amd_profiling_convert_tick_to_system_domain(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_vmem_address_reserve_align
 			case HSA_API_ID_hsa_amd_vmem_address_reserve_align : 
 				GET_PTRS_VALUE_hsa_amd_vmem_address_reserve_align(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_add_write_index_scacquire
 			case HSA_API_ID_hsa_queue_add_write_index_scacquire : 
 				GET_PTRS_VALUE_hsa_queue_add_write_index_scacquire(args);
 				return;
+			#endif
+			#if HAVE_hsa_code_object_reader_create_from_file
 			case HSA_API_ID_hsa_code_object_reader_create_from_file : 
 				GET_PTRS_VALUE_hsa_code_object_reader_create_from_file(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_queue_cu_set_mask
 			case HSA_API_ID_hsa_amd_queue_cu_set_mask : 
 				GET_PTRS_VALUE_hsa_amd_queue_cu_set_mask(args);
 				return;
+			#endif
+			#if HAVE_hsa_agent_get_exception_policies
 			case HSA_API_ID_hsa_agent_get_exception_policies : 
 				GET_PTRS_VALUE_hsa_agent_get_exception_policies(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_signal_wait_any
 			case HSA_API_ID_hsa_amd_signal_wait_any : 
 				GET_PTRS_VALUE_hsa_amd_signal_wait_any(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_agents_allow_access
 			case HSA_API_ID_hsa_amd_agents_allow_access : 
 				GET_PTRS_VALUE_hsa_amd_agents_allow_access(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_add_write_index_scacq_screl
 			case HSA_API_ID_hsa_queue_add_write_index_scacq_screl : 
 				GET_PTRS_VALUE_hsa_queue_add_write_index_scacq_screl(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_store_read_index_relaxed
 			case HSA_API_ID_hsa_queue_store_read_index_relaxed : 
 				GET_PTRS_VALUE_hsa_queue_store_read_index_relaxed(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_load_read_index_acquire
 			case HSA_API_ID_hsa_queue_load_read_index_acquire : 
 				GET_PTRS_VALUE_hsa_queue_load_read_index_acquire(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_ipc_signal_create
 			case HSA_API_ID_hsa_amd_ipc_signal_create : 
 				GET_PTRS_VALUE_hsa_amd_ipc_signal_create(args);
 				return;
+			#endif
+			#if HAVE_hsa_ext_image_get_capability_with_layout
 			case HSA_API_ID_hsa_ext_image_get_capability_with_layout : 
 				GET_PTRS_VALUE_hsa_ext_image_get_capability_with_layout(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_memory_async_copy_on_engine
 			case HSA_API_ID_hsa_amd_memory_async_copy_on_engine : 
 				GET_PTRS_VALUE_hsa_amd_memory_async_copy_on_engine(args);
 				return;
+			#endif
+			#if HAVE_hsa_amd_queue_cu_get_mask
 			case HSA_API_ID_hsa_amd_queue_cu_get_mask : 
 				GET_PTRS_VALUE_hsa_amd_queue_cu_get_mask(args);
 				return;
+			#endif
+			#if HAVE_hsa_ext_image_create_with_layout
 			case HSA_API_ID_hsa_ext_image_create_with_layout : 
 				GET_PTRS_VALUE_hsa_ext_image_create_with_layout(args);
 				return;
+			#endif
+			#if HAVE_hsa_code_object_deserialize
 			case HSA_API_ID_hsa_code_object_deserialize : 
 				GET_PTRS_VALUE_hsa_code_object_deserialize(args);
 				return;
+			#endif
             default : break;
         }
     } else {
         switch(id) {
+			#if HAVE_hsa_queue_cas_write_index_release
 			case HSA_API_ID_hsa_queue_cas_write_index_release : 
 				GET_PTRS_VALUE_hsa_queue_cas_write_index_release(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_cas_write_index_screlease
 			case HSA_API_ID_hsa_queue_cas_write_index_screlease : 
 				GET_PTRS_VALUE_hsa_queue_cas_write_index_screlease(args);
 				return;
+			#endif
+			#if HAVE_hsa_executable_freeze
 			case HSA_API_ID_hsa_executable_freeze : 
 				GET_PTRS_VALUE_hsa_executable_freeze(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_store_write_index_release
 			case HSA_API_ID_hsa_queue_store_write_index_release : 
 				GET_PTRS_VALUE_hsa_queue_store_write_index_release(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_destroy
 			case HSA_API_ID_hsa_queue_destroy : 
 				GET_PTRS_VALUE_hsa_queue_destroy(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_store_write_index_screlease
 			case HSA_API_ID_hsa_queue_store_write_index_screlease : 
 				GET_PTRS_VALUE_hsa_queue_store_write_index_screlease(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_add_write_index_release
 			case HSA_API_ID_hsa_queue_add_write_index_release : 
 				GET_PTRS_VALUE_hsa_queue_add_write_index_release(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_store_read_index_release
 			case HSA_API_ID_hsa_queue_store_read_index_release : 
 				GET_PTRS_VALUE_hsa_queue_store_read_index_release(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_store_read_index_screlease
 			case HSA_API_ID_hsa_queue_store_read_index_screlease : 
 				GET_PTRS_VALUE_hsa_queue_store_read_index_screlease(args);
 				return;
+			#endif
+			#if HAVE_hsa_queue_add_write_index_screlease
 			case HSA_API_ID_hsa_queue_add_write_index_screlease : 
 				GET_PTRS_VALUE_hsa_queue_add_write_index_screlease(args);
 				return;
+			#endif
             default : break;
         }
     }

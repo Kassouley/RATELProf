@@ -24,6 +24,7 @@
 #ifndef RATELPROF_H
 #define RATELPROF_H
 
+#include "utils/config/config.h"
 #include "utils/utils.h"
 #include "utils/env.h"
 #include "utils/logger.h"

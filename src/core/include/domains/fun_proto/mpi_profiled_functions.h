@@ -8,922 +8,2136 @@
 
 #include "mpi.h" 
 
-// MPI API Function Prototype
-int i_MPI_Cart_shift(MPI_Comm comm, int direction, int disp, int * rank_source, int * rank_dest, void* return_address);
-int i_MPI_Win_flush_local_all(MPI_Win win, void* return_address);
-int i_MPI_File_get_byte_offset(MPI_File fh, MPI_Offset offset, MPI_Offset * disp, void* return_address);
-int i_MPI_T_cvar_get_num(int * num_cvar, void* return_address);
-int i_MPI_Win_get_info(MPI_Win win, MPI_Info * info_used, void* return_address);
-int i_MPI_Rput(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_cout, MPI_Datatype target_datatype, MPI_Win win, MPI_Request * request, void* return_address);
-int i_MPI_Init(int * argc, char *** argv, void* return_address);
-int i_MPI_Dist_graph_neighbors_count(MPI_Comm comm, int * inneighbors, int * outneighbors, int * weighted, void* return_address);
-int i_MPI_Ireduce(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Psend_init(const void * buf, int partitions, MPI_Count count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Reduce_init(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Win_wait(MPI_Win win, void* return_address);
-int i_MPI_Rsend_init(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_File_write_at_all(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-int i_MPI_File_write_ordered_end(MPI_File fh, const void * buf, MPI_Status * status, void* return_address);
-int i_MPI_T_pvar_handle_alloc(MPI_T_pvar_session session, int pvar_index, void * obj_handle, MPI_T_pvar_handle * handle, int * count, void* return_address);
-int i_MPI_Errhandler_free(MPI_Errhandler * errhandler, void* return_address);
-int i_MPI_Win_shared_query(MPI_Win win, int rank, MPI_Aint * size, int * disp_unit, void * baseptr, void* return_address);
-int i_MPI_Win_lock(int lock_type, int rank, int mpi_assert, MPI_Win win, void* return_address);
-int i_MPI_Comm_get_name(MPI_Comm comm, char * comm_name, int * resultlen, void* return_address);
-int i_MPI_Get_accumulate(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, void * result_addr, int result_count, MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, void* return_address);
-int i_MPI_Group_size(MPI_Group group, int * size, void* return_address);
-int i_MPI_Type_get_name(MPI_Datatype type, char * type_name, int * resultlen, void* return_address);
-int i_MPI_File_get_atomicity(MPI_File fh, int * flag, void* return_address);
-int i_MPI_Session_set_info(MPI_Session session, MPI_Info info, void* return_address);
-int i_MPI_Group_from_session_pset(MPI_Session session, const char * pset_name, MPI_Group * newgroup, void* return_address);
-int i_MPI_Comm_idup(MPI_Comm comm, MPI_Comm * newcomm, MPI_Request * request, void* return_address);
-int i_MPI_Win_get_name(MPI_Win win, char * win_name, int * resultlen, void* return_address);
-int i_MPI_Allgatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-int i_MPI_Allgatherv_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Group_range_incl(MPI_Group group, int n, int ranges[][3], MPI_Group * newgroup, void* return_address);
-int i_MPI_Comm_dup_with_info(MPI_Comm comm, MPI_Info info, MPI_Comm * newcomm, void* return_address);
-int i_MPI_Comm_set_name(MPI_Comm comm, const char * comm_name, void* return_address);
-int i_MPI_Session_get_num_psets(MPI_Session session, MPI_Info info, int * npset_names, void* return_address);
-int i_MPI_Igather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Request_free(MPI_Request * request, void* return_address);
-int i_MPI_File_read_at(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-int i_MPI_Type_create_hvector(int count, int blocklength, MPI_Aint stride, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-int i_MPI_File_write_at_all_begin(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, void* return_address);
-int i_MPI_Grequest_start(MPI_Grequest_query_function * query_fn, MPI_Grequest_free_function * free_fn, MPI_Grequest_cancel_function * cancel_fn, void * extra_state, MPI_Request * request, void* return_address);
-int i_MPI_Bsend_init(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_File_set_size(MPI_File fh, MPI_Offset size, void* return_address);
-int i_MPI_Op_c2f(MPI_Op op, void* return_address);
-int i_MPI_Type_set_name(MPI_Datatype type, const char * type_name, void* return_address);
-int i_MPI_Comm_split_type(MPI_Comm comm, int split_type, int key, MPI_Info info, MPI_Comm * newcomm, void* return_address);
-int i_MPI_Get_elements_x(const MPI_Status * status, MPI_Datatype datatype, MPI_Count * count, void* return_address);
-int i_MPI_File_read_at_all_end(MPI_File fh, void * buf, MPI_Status * status, void* return_address);
-int i_MPI_File_write_all(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-int i_MPI_Improbe(int source, int tag, MPI_Comm comm, int * flag, MPI_Message * message, MPI_Status * status, void* return_address);
-int i_MPI_Comm_get_info(MPI_Comm comm, MPI_Info * info_used, void* return_address);
-int i_MPI_File_read_all_end(MPI_File fh, void * buf, MPI_Status * status, void* return_address);
-int i_MPI_Win_unlock_all(MPI_Win win, void* return_address);
-int i_MPI_T_category_get_pvars(int cat_index, int len, int indices[], void* return_address);
-int i_MPI_T_cvar_get_index(const char * name, int * cvar_index, void* return_address);
-int i_MPI_Bcast(void * buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, void* return_address);
-int i_MPI_Win_c2f(MPI_Win win, void* return_address);
-int i_MPI_Type_create_f90_integer(int r, MPI_Datatype * newtype, void* return_address);
-MPI_Group i_MPI_Group_f2c(int group, void* return_address);
-int i_MPI_Exscan_init(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Ibsend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Win_flush_local(int rank, MPI_Win win, void* return_address);
-int i_MPI_Ialltoallw(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Comm_create_from_group(MPI_Group group, const char * tag, MPI_Info info, MPI_Errhandler errhandler, MPI_Comm * newcomm, void* return_address);
-int i_MPI_Type_get_contents(MPI_Datatype mtype, int max_integers, int max_addresses, int max_datatypes, int array_of_integers[], MPI_Aint array_of_addresses[], MPI_Datatype array_of_datatypes[], void* return_address);
-double i_MPI_Wtick(void* return_address);
-int i_MPI_File_iwrite_at(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-int i_MPI_T_cvar_write(MPI_T_cvar_handle handle, const void * buf, void* return_address);
-int i_MPI_Comm_dup(MPI_Comm comm, MPI_Comm * newcomm, void* return_address);
-int i_MPI_Status_set_elements(MPI_Status * status, MPI_Datatype datatype, int count, void* return_address);
-int i_MPI_Send(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
-int i_MPI_File_read_ordered(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-int i_MPI_Is_thread_main(int * flag, void* return_address);
-int i_MPI_T_enum_get_item(MPI_T_enum enumtype, int index, int * value, char * name, int * name_len, void* return_address);
-int i_MPI_Allreduce_init(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Info_get_valuelen(MPI_Info info, const char * key, int * valuelen, int * flag, void* return_address);
-int i_MPI_Type_vector(int count, int blocklength, int stride, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-int i_MPI_Comm_create_errhandler(MPI_Comm_errhandler_function * function, MPI_Errhandler * errhandler, void* return_address);
-int i_MPI_Info_free(MPI_Info * info, void* return_address);
-int i_MPI_Info_get_nthkey(MPI_Info info, int n, char * key, void* return_address);
-int i_MPI_Type_commit(MPI_Datatype * type, void* return_address);
-int i_MPI_Ssend_init(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Comm_set_info(MPI_Comm comm, MPI_Info info, void* return_address);
-int i_MPI_Cart_create(MPI_Comm old_comm, int ndims, const int dims[], const int periods[], int reorder, MPI_Comm * comm_cart, void* return_address);
-int i_MPI_Comm_delete_attr(MPI_Comm comm, int comm_keyval, void* return_address);
-int i_MPI_File_c2f(MPI_File file, void* return_address);
-int i_MPI_File_write_all_begin(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, void* return_address);
-int i_MPI_Scan_init(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Irsend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Neighbor_alltoallv(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-int i_MPI_Pready_list(int length, int partition_list[], MPI_Request request, void* return_address);
-int i_MPI_Request_c2f(MPI_Request request, void* return_address);
-MPI_File i_MPI_File_f2c(int file, void* return_address);
-int i_MPI_Reduce(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, void* return_address);
-int i_MPI_T_category_get_cvars(int cat_index, int len, int indices[], void* return_address);
-int i_MPI_Alltoallw_init(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Info_c2f(MPI_Info info, void* return_address);
-int i_MPI_File_read_ordered_begin(MPI_File fh, void * buf, int count, MPI_Datatype datatype, void* return_address);
-int i_MPI_Dist_graph_create_adjacent(MPI_Comm comm_old, int indegree, const int sources[], const int sourceweights[], int outdegree, const int destinations[], const int destweights[], MPI_Info info, int reorder, MPI_Comm * comm_dist_graph, void* return_address);
-int i_MPI_Reduce_scatter_init(const void * sendbuf, void * recvbuf, const int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Comm_get_parent(MPI_Comm * parent, void* return_address);
-MPI_Info i_MPI_Info_f2c(int info, void* return_address);
-int i_MPI_Keyval_free(int * keyval, void* return_address);
-MPI_Session i_MPI_Session_f2c(int session, void* return_address);
-int i_MPI_Info_set(MPI_Info info, const char * key, const char * value, void* return_address);
-int i_MPI_Keyval_create(MPI_Copy_function * copy_fn, MPI_Delete_function * delete_fn, int * keyval, void * extra_state, void* return_address);
-int i_MPI_Comm_create_keyval(MPI_Comm_copy_attr_function * comm_copy_attr_fn, MPI_Comm_delete_attr_function * comm_delete_attr_fn, int * comm_keyval, void * extra_state, void* return_address);
-int i_MPI_Exscan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
-int i_MPI_Comm_connect(const char * port_name, MPI_Info info, int root, MPI_Comm comm, MPI_Comm * newcomm, void* return_address);
-int i_MPI_Ssend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
-int i_MPI_Scatterv_init(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_File_write_at_all_end(MPI_File fh, const void * buf, MPI_Status * status, void* return_address);
-int i_MPI_T_pvar_get_info(int pvar_index, char * name, int * name_len, int * verbosity, int * var_class, MPI_Datatype * datatype, MPI_T_enum * enumtype, char * desc, int * desc_len, int * bind, int * readonly, int * continuous, int * atomic, void* return_address);
-int i_MPI_File_write_all_end(MPI_File fh, const void * buf, MPI_Status * status, void* return_address);
-int i_MPI_Status_f082f(const MPI_F08_status * f08_status, int * f_status, void* return_address);
-int i_MPI_Buffer_detach(void * buffer, int * size, void* return_address);
-int i_MPI_Status_c2f08(const MPI_Status * c_status, MPI_F08_status * f08_status, void* return_address);
-int i_MPI_Startall(int count, MPI_Request array_of_requests[], void* return_address);
-int i_MPI_T_category_changed(int * stamp, void* return_address);
-int i_MPI_Neighbor_alltoall(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-int i_MPI_Put(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win, void* return_address);
-int i_MPI_Reduce_scatter(const void * sendbuf, void * recvbuf, const int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
-int i_MPI_File_read_ordered_end(MPI_File fh, void * buf, MPI_Status * status, void* return_address);
-int i_MPI_Scatter(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
-int i_MPI_Win_call_errhandler(MPI_Win win, int errorcode, void* return_address);
-int i_MPI_File_write_at(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-int i_MPI_Session_get_pset_info(MPI_Session session, const char * pset_name, MPI_Info * info_used, void* return_address);
-int i_MPI_Topo_test(MPI_Comm comm, int * status, void* return_address);
-int i_MPI_Group_difference(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, void* return_address);
-int i_MPI_Comm_disconnect(MPI_Comm * comm, void* return_address);
-int i_MPI_Add_error_class(int * errorclass, void* return_address);
-int i_MPI_Ireduce_scatter(const void * sendbuf, void * recvbuf, const int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Cart_map(MPI_Comm comm, int ndims, const int dims[], const int periods[], int * newrank, void* return_address);
-int i_MPI_Intercomm_merge(MPI_Comm intercomm, int high, MPI_Comm * newintracomm, void* return_address);
-int i_MPI_Type_create_hindexed(int count, const int array_of_blocklengths[], const MPI_Aint array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-int i_MPI_Info_get_nkeys(MPI_Info info, int * nkeys, void* return_address);
-int i_MPI_File_read(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-int i_MPI_Ineighbor_allgatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_T_pvar_write(MPI_T_pvar_session session, MPI_T_pvar_handle handle, const void * buf, void* return_address);
-int i_MPI_Attr_put(MPI_Comm comm, int keyval, void * attribute_val, void* return_address);
-int i_MPI_File_write_ordered_begin(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, void* return_address);
-int i_MPI_Status_set_elements_x(MPI_Status * status, MPI_Datatype datatype, MPI_Count count, void* return_address);
-int i_MPI_Comm_get_attr(MPI_Comm comm, int comm_keyval, void * attribute_val, int * flag, void* return_address);
-int i_MPI_Group_translate_ranks(MPI_Group group1, int n, const int ranks1[], MPI_Group group2, int ranks2[], void* return_address);
-int i_MPI_Compare_and_swap(const void * origin_addr, const void * compare_addr, void * result_addr, MPI_Datatype datatype, int target_rank, MPI_Aint target_disp, MPI_Win win, void* return_address);
-int i_MPI_Type_create_f90_real(int p, int r, MPI_Datatype * newtype, void* return_address);
-int i_MPI_Type_delete_attr(MPI_Datatype type, int type_keyval, void* return_address);
-int i_MPI_Probe(int source, int tag, MPI_Comm comm, MPI_Status * status, void* return_address);
-int i_MPI_File_close(MPI_File * fh, void* return_address);
-int i_MPI_Request_get_status(MPI_Request request, int * flag, MPI_Status * status, void* return_address);
-int i_MPI_Session_call_errhandler(MPI_Session session, int errorcode, void* return_address);
-int i_MPI_Rget_accumulate(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, void * result_addr, int result_count, MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, MPI_Request * request, void* return_address);
-int i_MPI_File_iread_all(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-int i_MPI_Type_create_resized(MPI_Datatype oldtype, MPI_Aint lb, MPI_Aint extent, MPI_Datatype * newtype, void* return_address);
-int i_MPI_Isendrecv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, int dest, int sendtag, void * recvbuf, int recvcount, MPI_Datatype recvtype, int source, int recvtag, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Pack_external(const char datarep[], const void * inbuf, int incount, MPI_Datatype datatype, void * outbuf, MPI_Aint outsize, MPI_Aint * position, void* return_address);
-int i_MPI_Pready_range(int partition_low, int partition_high, MPI_Request request, void* return_address);
-int i_MPI_Type_get_envelope(MPI_Datatype type, int * num_integers, int * num_addresses, int * num_datatypes, int * combiner, void* return_address);
-MPI_Datatype i_MPI_Type_f2c(int datatype, void* return_address);
-int i_MPI_Win_create(void * base, MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, MPI_Win * win, void* return_address);
-int i_MPI_Isendrecv_replace(void * buf, int count, MPI_Datatype datatype, int dest, int sendtag, int source, int recvtag, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Testsome(int incount, MPI_Request array_of_requests[], int * outcount, int array_of_indices[], MPI_Status array_of_statuses[], void* return_address);
-int i_MPI_Barrier(MPI_Comm comm, void* return_address);
-int i_MPI_Win_set_errhandler(MPI_Win win, MPI_Errhandler errhandler, void* return_address);
-int i_MPI_Fetch_and_op(const void * origin_addr, void * result_addr, MPI_Datatype datatype, int target_rank, MPI_Aint target_disp, MPI_Op op, MPI_Win win, void* return_address);
-int i_MPI_Cartdim_get(MPI_Comm comm, int * ndims, void* return_address);
-int i_MPI_T_pvar_stop(MPI_T_pvar_session session, MPI_T_pvar_handle handle, void* return_address);
-int i_MPI_Dist_graph_neighbors(MPI_Comm comm, int maxindegree, int sources[], int sourceweights[], int maxoutdegree, int destinations[], int destweights[], void* return_address);
-int i_MPI_Comm_remote_size(MPI_Comm comm, int * size, void* return_address);
-int i_MPI_File_seek(MPI_File fh, MPI_Offset offset, int whence, void* return_address);
-int i_MPI_Get(void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win, void* return_address);
-int i_MPI_Pack_external_size(const char datarep[], int incount, MPI_Datatype datatype, MPI_Aint * size, void* return_address);
-int i_MPI_Win_flush_all(MPI_Win win, void* return_address);
-int i_MPI_Type_free(MPI_Datatype * type, void* return_address);
-int i_MPI_T_category_get_categories(int cat_index, int len, int indices[], void* return_address);
-int i_MPI_Rsend(const void * ibuf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
-int i_MPI_Message_c2f(MPI_Message message, void* return_address);
-int i_MPI_Win_free(MPI_Win * win, void* return_address);
-int i_MPI_Type_create_f90_complex(int p, int r, MPI_Datatype * newtype, void* return_address);
-int i_MPI_Neighbor_alltoallw_init(const void * sendbuf, const int sendcounts[], const MPI_Aint sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Wait(MPI_Request * request, MPI_Status * status, void* return_address);
-int i_MPI_Irecv(void * buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Rget(void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win, MPI_Request * request, void* return_address);
-int i_MPI_Win_create_keyval(MPI_Win_copy_attr_function * win_copy_attr_fn, MPI_Win_delete_attr_function * win_delete_attr_fn, int * win_keyval, void * extra_state, void* return_address);
-int i_MPI_Op_commutative(MPI_Op op, int * commute, void* return_address);
-int i_MPI_Neighbor_allgather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-int i_MPI_Comm_call_errhandler(MPI_Comm comm, int errorcode, void* return_address);
-int i_MPI_Scatter_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Info_get_string(MPI_Info info, const char * key, int * buflen, char * value, int * flag, void* return_address);
-int i_MPI_Scatterv(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
-int i_MPI_Op_create(MPI_User_function * function, int commute, MPI_Op * op, void* return_address);
-int i_MPI_T_finalize(void* return_address);
-int i_MPI_Group_excl(MPI_Group group, int n, const int ranks[], MPI_Group * newgroup, void* return_address);
-int i_MPI_Mrecv(void * buf, int count, MPI_Datatype type, MPI_Message * message, MPI_Status * status, void* return_address);
-int i_MPI_Open_port(MPI_Info info, char * port_name, void* return_address);
-int i_MPI_Reduce_scatter_block(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
-int i_MPI_Cart_get(MPI_Comm comm, int maxdims, int dims[], int periods[], int coords[], void* return_address);
-int i_MPI_T_enum_get_info(MPI_T_enum enumtype, int * num, char * name, int * name_len, void* return_address);
-int i_MPI_Lookup_name(const char * service_name, MPI_Info info, char * port_name, void* return_address);
-int i_MPI_Type_get_extent(MPI_Datatype type, MPI_Aint * lb, MPI_Aint * extent, void* return_address);
-int i_MPI_Comm_spawn(const char * command, char * argv[], int maxprocs, MPI_Info info, int root, MPI_Comm comm, MPI_Comm * intercomm, int array_of_errcodes[], void* return_address);
-int i_MPI_Allreduce(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
-int i_MPI_Unpublish_name(const char * service_name, MPI_Info info, const char * port_name, void* return_address);
-int i_MPI_Grequest_complete(MPI_Request request, void* return_address);
-int i_MPI_File_get_group(MPI_File fh, MPI_Group * group, void* return_address);
-int i_MPI_File_iread_at_all(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-int i_MPI_Graphdims_get(MPI_Comm comm, int * nnodes, int * nedges, void* return_address);
-int i_MPI_File_iread_shared(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-int i_MPI_Session_c2f(const MPI_Session session, void* return_address);
-int i_MPI_Comm_idup_with_info(MPI_Comm comm, MPI_Info info, MPI_Comm * newcomm, MPI_Request * request, void* return_address);
-MPI_Message i_MPI_Message_f2c(int message, void* return_address);
-int i_MPI_Get_version(int * version, int * subversion, void* return_address);
-int i_MPI_Win_lock_all(int mpi_assert, MPI_Win win, void* return_address);
-int i_MPI_Intercomm_create_from_groups(MPI_Group local_group, int local_leader, MPI_Group remote_group, int remote_leader, const char * tag, MPI_Info info, MPI_Errhandler errhandler, MPI_Comm * newintercomm, void* return_address);
-int i_MPI_Neighbor_alltoallv_init(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Type_create_darray(int size, int rank, int ndims, const int gsize_array[], const int distrib_array[], const int darg_array[], const int psize_array[], int order, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-int i_MPI_File_get_position_shared(MPI_File fh, MPI_Offset * offset, void* return_address);
-int i_MPI_Win_get_group(MPI_Win win, MPI_Group * group, void* return_address);
-int i_MPI_Error_class(int errorcode, int * errorclass, void* return_address);
-int i_MPI_Win_get_attr(MPI_Win win, int win_keyval, void * attribute_val, int * flag, void* return_address);
-int i_MPI_Allgather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-int i_MPI_Reduce_local(const void * inbuf, void * inoutbuf, int count, MPI_Datatype datatype, MPI_Op op, void* return_address);
-int i_MPI_T_pvar_readreset(MPI_T_pvar_session session, MPI_T_pvar_handle handle, void * buf, void* return_address);
-int i_MPI_Test(MPI_Request * request, int * flag, MPI_Status * status, void* return_address);
-MPI_Errhandler i_MPI_Errhandler_f2c(int errhandler, void* return_address);
-int i_MPI_Ireduce_scatter_block(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Status_set_cancelled(MPI_Status * status, int flag, void* return_address);
-int i_MPI_Alltoallv(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-int i_MPI_Win_test(MPI_Win win, int * flag, void* return_address);
-MPI_Request i_MPI_Request_f2c(int request, void* return_address);
-int i_MPI_Test_cancelled(const MPI_Status * status, int * flag, void* return_address);
-int i_MPI_File_seek_shared(MPI_File fh, MPI_Offset offset, int whence, void* return_address);
-int i_MPI_Error_string(int errorcode, char * string, int * resultlen, void* return_address);
-int i_MPI_Status_c2f(const MPI_Status * c_status, int * f_status, void* return_address);
-int i_MPI_Pack(const void * inbuf, int incount, MPI_Datatype datatype, void * outbuf, int outsize, int * position, MPI_Comm comm, void* return_address);
-MPI_Comm i_MPI_Comm_f2c(int comm, void* return_address);
-int i_MPI_Graph_neighbors_count(MPI_Comm comm, int rank, int * nneighbors, void* return_address);
-int i_MPI_Sendrecv_replace(void * buf, int count, MPI_Datatype datatype, int dest, int sendtag, int source, int recvtag, MPI_Comm comm, MPI_Status * status, void* return_address);
-int i_MPI_Comm_split(MPI_Comm comm, int color, int key, MPI_Comm * newcomm, void* return_address);
-int i_MPI_Session_create_errhandler(MPI_Session_errhandler_function * session_errhandler_fn, MPI_Errhandler * errhandler, void* return_address);
-int i_MPI_Waitall(int count, MPI_Request array_of_requests[], MPI_Status * array_of_statuses, void* return_address);
-int i_MPI_Win_unlock(int rank, MPI_Win win, void* return_address);
-int i_MPI_Iscatter(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_File_read_all(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-int i_MPI_T_pvar_handle_free(MPI_T_pvar_session session, MPI_T_pvar_handle * handle, void* return_address);
-int i_MPI_File_set_errhandler(MPI_File file, MPI_Errhandler errhandler, void* return_address);
-int i_MPI_Type_set_attr(MPI_Datatype type, int type_keyval, void * attr_val, void* return_address);
-int i_MPI_File_get_errhandler(MPI_File file, MPI_Errhandler * errhandler, void* return_address);
-int i_MPI_Session_finalize(MPI_Session * session, void* return_address);
-int i_MPI_Alltoall(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-int i_MPI_Comm_group(MPI_Comm comm, MPI_Group * group, void* return_address);
-int i_MPI_Comm_free_keyval(int * comm_keyval, void* return_address);
-int i_MPI_Sendrecv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, int dest, int sendtag, void * recvbuf, int recvcount, MPI_Datatype recvtype, int source, int recvtag, MPI_Comm comm, MPI_Status * status, void* return_address);
-int i_MPI_File_iwrite_all(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-int i_MPI_Free_mem(void * base, void* return_address);
-int i_MPI_Comm_compare(MPI_Comm comm1, MPI_Comm comm2, int * result, void* return_address);
-int i_MPI_Win_set_info(MPI_Win win, MPI_Info info, void* return_address);
-double i_MPI_Wtime(void* return_address);
-int i_MPI_Alltoallv_init(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Win_attach(MPI_Win win, void * base, MPI_Aint size, void* return_address);
-int i_MPI_T_pvar_session_create(MPI_T_pvar_session * session, void* return_address);
-int i_MPI_File_get_position(MPI_File fh, MPI_Offset * offset, void* return_address);
-int i_MPI_Comm_c2f(MPI_Comm comm, void* return_address);
-int i_MPI_Accumulate(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, void* return_address);
-int i_MPI_File_write_shared(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-int i_MPI_Win_create_dynamic(MPI_Info info, MPI_Comm comm, MPI_Win * win, void* return_address);
-int i_MPI_T_cvar_handle_free(MPI_T_cvar_handle * handle, void* return_address);
-int i_MPI_Neighbor_alltoallw(const void * sendbuf, const int sendcounts[], const MPI_Aint sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, void* return_address);
-int i_MPI_T_category_get_num(int * num_cat, void* return_address);
-int i_MPI_Iexscan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Graph_map(MPI_Comm comm, int nnodes, const int index[], const int edges[], int * newrank, void* return_address);
-int i_MPI_Testany(int count, MPI_Request array_of_requests[], int * index, int * flag, MPI_Status * status, void* return_address);
-int i_MPI_Group_c2f(MPI_Group group, void* return_address);
-int i_MPI_Recv_init(void * buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_T_cvar_read(MPI_T_cvar_handle handle, void * buf, void* return_address);
-int i_MPI_Type_create_subarray(int ndims, const int size_array[], const int subsize_array[], const int start_array[], int order, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-int i_MPI_Comm_create_group(MPI_Comm comm, MPI_Group group, int tag, MPI_Comm * newcomm, void* return_address);
-int i_MPI_Allgather_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Reduce_scatter_block_init(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Type_match_size(int typeclass, int size, MPI_Datatype * type, void* return_address);
-int i_MPI_Type_get_true_extent(MPI_Datatype datatype, MPI_Aint * true_lb, MPI_Aint * true_extent, void* return_address);
-int i_MPI_Alltoall_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Type_contiguous(int count, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-int i_MPI_Send_init(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-MPI_Win i_MPI_Win_f2c(int win, void* return_address);
-int i_MPI_Neighbor_allgather_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Ibcast(void * buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_File_iread(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-int i_MPI_Neighbor_alltoall_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_T_pvar_start(MPI_T_pvar_session session, MPI_T_pvar_handle handle, void* return_address);
-int i_MPI_T_pvar_get_num(int * num_pvar, void* return_address);
-int i_MPI_Cart_rank(MPI_Comm comm, const int coords[], int * rank, void* return_address);
-int i_MPI_Publish_name(const char * service_name, MPI_Info info, const char * port_name, void* return_address);
-int i_MPI_Win_set_attr(MPI_Win win, int win_keyval, void * attribute_val, void* return_address);
-int i_MPI_Win_sync(MPI_Win win, void* return_address);
-int i_MPI_Type_free_keyval(int * type_keyval, void* return_address);
-int i_MPI_Status_f082c(const MPI_F08_status * f08_status, MPI_Status * c_status, void* return_address);
-int i_MPI_File_write(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-int i_MPI_Register_datarep(const char * datarep, MPI_Datarep_conversion_function * read_conversion_fn, MPI_Datarep_conversion_function * write_conversion_fn, MPI_Datarep_extent_function * dtype_file_extent_fn, void * extra_state, void* return_address);
-int i_MPI_Ineighbor_alltoall(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_File_preallocate(MPI_File fh, MPI_Offset size, void* return_address);
-int i_MPI_Iallgatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Comm_remote_group(MPI_Comm comm, MPI_Group * group, void* return_address);
-int i_MPI_Type_indexed(int count, const int array_of_blocklengths[], const int array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-int i_MPI_Op_free(MPI_Op * op, void* return_address);
-int i_MPI_Neighbor_allgatherv_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Iprobe(int source, int tag, MPI_Comm comm, int * flag, MPI_Status * status, void* return_address);
-int i_MPI_Type_get_true_extent_x(MPI_Datatype datatype, MPI_Count * true_lb, MPI_Count * true_extent, void* return_address);
-int i_MPI_Win_complete(MPI_Win win, void* return_address);
-int i_MPI_File_set_atomicity(MPI_File fh, int flag, void* return_address);
-int i_MPI_Unpack_external(const char datarep[], const void * inbuf, MPI_Aint insize, MPI_Aint * position, void * outbuf, int outcount, MPI_Datatype datatype, void* return_address);
-int i_MPI_Get_count(const MPI_Status * status, MPI_Datatype datatype, int * count, void* return_address);
-int i_MPI_Finalize(void* return_address);
-int i_MPI_Pack_size(int incount, MPI_Datatype datatype, MPI_Comm comm, int * size, void* return_address);
-int i_MPI_Errhandler_c2f(MPI_Errhandler errhandler, void* return_address);
-int i_MPI_Group_intersection(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, void* return_address);
-int i_MPI_Mprobe(int source, int tag, MPI_Comm comm, MPI_Message * message, MPI_Status * status, void* return_address);
-int i_MPI_Add_error_code(int errorclass, int * errorcode, void* return_address);
-int i_MPI_Win_delete_attr(MPI_Win win, int win_keyval, void* return_address);
-int i_MPI_File_read_at_all(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-int i_MPI_Pready(int partitions, MPI_Request request, void* return_address);
-int i_MPI_Comm_free(MPI_Comm * comm, void* return_address);
-int i_MPI_Comm_test_inter(MPI_Comm comm, int * flag, void* return_address);
-int i_MPI_Status_f2f08(const int * f_status, MPI_F08_status * f08_status, void* return_address);
-int i_MPI_Iscatterv(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Type_c2f(MPI_Datatype datatype, void* return_address);
-int i_MPI_Win_detach(MPI_Win win, const void * base, void* return_address);
-int i_MPI_File_call_errhandler(MPI_File fh, int errorcode, void* return_address);
-int i_MPI_Iallreduce(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Get_processor_name(char * name, int * resultlen, void* return_address);
-int i_MPI_Start(MPI_Request * request, void* return_address);
-int i_MPI_T_category_get_index(const char * name, int * category_index, void* return_address);
-int i_MPI_Type_create_indexed_block(int count, int blocklength, const int array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-int i_MPI_Status_f2c(const int * f_status, MPI_Status * c_status, void* return_address);
-int i_MPI_File_get_type_extent(MPI_File fh, MPI_Datatype datatype, MPI_Aint * extent, void* return_address);
-int i_MPI_Scan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
-int i_MPI_Group_range_excl(MPI_Group group, int n, int ranges[][3], MPI_Group * newgroup, void* return_address);
-int i_MPI_File_read_shared(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-int i_MPI_Init_thread(int * argc, char *** argv, int required, int * provided, void* return_address);
-int i_MPI_File_open(MPI_Comm comm, const char * filename, int amode, MPI_Info info, MPI_File * fh, void* return_address);
-int i_MPI_File_get_amode(MPI_File fh, int * amode, void* return_address);
-int i_MPI_Gather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
-int i_MPI_Type_create_hindexed_block(int count, int blocklength, const MPI_Aint array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-int i_MPI_Cart_coords(MPI_Comm comm, int rank, int maxdims, int coords[], void* return_address);
-int i_MPI_Initialized(int * flag, void* return_address);
-int i_MPI_Issend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-MPI_Op i_MPI_Op_f2c(int op, void* return_address);
-int i_MPI_T_pvar_read(MPI_T_pvar_session session, MPI_T_pvar_handle handle, void * buf, void* return_address);
-int i_MPI_Group_union(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, void* return_address);
-int i_MPI_T_init_thread(int required, int * provided, void* return_address);
-int i_MPI_Comm_rank(MPI_Comm comm, int * rank, void* return_address);
-int i_MPI_Graph_get(MPI_Comm comm, int maxindex, int maxedges, int index[], int edges[], void* return_address);
-int i_MPI_Win_free_keyval(int * win_keyval, void* return_address);
-int i_MPI_Cancel(MPI_Request * request, void* return_address);
-int i_MPI_Ineighbor_alltoallw(const void * sendbuf, const int sendcounts[], const MPI_Aint sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_File_set_info(MPI_File fh, MPI_Info info, void* return_address);
-int i_MPI_File_iread_at(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-int i_MPI_T_category_get_info(int cat_index, char * name, int * name_len, char * desc, int * desc_len, int * num_cvars, int * num_pvars, int * num_categories, void* return_address);
-int i_MPI_Attr_delete(MPI_Comm comm, int keyval, void* return_address);
-int i_MPI_Testall(int count, MPI_Request array_of_requests[], int * flag, MPI_Status array_of_statuses[], void* return_address);
-int i_MPI_Session_get_info(MPI_Session session, MPI_Info * info_used, void* return_address);
-int i_MPI_Session_get_nth_pset(MPI_Session session, MPI_Info info, int n, int * len, char * pset_name, void* return_address);
-int i_MPI_Type_create_keyval(MPI_Type_copy_attr_function * type_copy_attr_fn, MPI_Type_delete_attr_function * type_delete_attr_fn, int * type_keyval, void * extra_state, void* return_address);
-int i_MPI_Attr_get(MPI_Comm comm, int keyval, void * attribute_val, int * flag, void* return_address);
-int i_MPI_Add_error_string(int errorcode, const char * string, void* return_address);
-int i_MPI_Ineighbor_alltoallv(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Comm_size(MPI_Comm comm, int * size, void* return_address);
-int i_MPI_Imrecv(void * buf, int count, MPI_Datatype type, MPI_Message * message, MPI_Request * request, void* return_address);
-int i_MPI_Alltoallw(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, void* return_address);
-int i_MPI_Bcast_init(void * buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Query_thread(int * provided, void* return_address);
-int i_MPI_Group_incl(MPI_Group group, int n, const int ranks[], MPI_Group * newgroup, void* return_address);
-int i_MPI_Ibarrier(MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_File_iwrite_at_all(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-int i_MPI_Comm_create(MPI_Comm comm, MPI_Group group, MPI_Comm * newcomm, void* return_address);
-int i_MPI_File_get_size(MPI_File fh, MPI_Offset * size, void* return_address);
-int i_MPI_Barrier_init(MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_File_get_view(MPI_File fh, MPI_Offset * disp, MPI_Datatype * etype, MPI_Datatype * filetype, char * datarep, void* return_address);
-int i_MPI_Win_allocate_shared(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void * baseptr, MPI_Win * win, void* return_address);
-int i_MPI_Close_port(const char * port_name, void* return_address);
-int i_MPI_Finalized(int * flag, void* return_address);
-int i_MPI_Info_dup(MPI_Info info, MPI_Info * newinfo, void* return_address);
-int i_MPI_Info_get(MPI_Info info, const char * key, int valuelen, char * value, int * flag, void* return_address);
-int i_MPI_T_pvar_session_free(MPI_T_pvar_session * session, void* return_address);
-int i_MPI_Get_library_version(char * version, int * resultlen, void* return_address);
-int i_MPI_Info_create(MPI_Info * info, void* return_address);
-int i_MPI_Gatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
-int i_MPI_Win_fence(int mpi_assert, MPI_Win win, void* return_address);
-int i_MPI_Iallgather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Comm_spawn_multiple(int count, char * array_of_commands[], char ** array_of_argv[], const int array_of_maxprocs[], const MPI_Info array_of_info[], int root, MPI_Comm comm, MPI_Comm * intercomm, int array_of_errcodes[], void* return_address);
-int i_MPI_Precv_init(void * buf, int partitions, MPI_Count count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Comm_set_errhandler(MPI_Comm comm, MPI_Errhandler errhandler, void* return_address);
-int i_MPI_Get_elements(const MPI_Status * status, MPI_Datatype datatype, int * count, void* return_address);
-int i_MPI_File_set_view(MPI_File fh, MPI_Offset disp, MPI_Datatype etype, MPI_Datatype filetype, const char * datarep, MPI_Info info, void* return_address);
-int i_MPI_Bsend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
-int i_MPI_Type_size(MPI_Datatype type, int * size, void* return_address);
-int i_MPI_Group_rank(MPI_Group group, int * rank, void* return_address);
-int i_MPI_Type_get_attr(MPI_Datatype type, int type_keyval, void * attribute_val, int * flag, void* return_address);
-int i_MPI_File_write_ordered(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-int i_MPI_File_get_info(MPI_File fh, MPI_Info * info_used, void* return_address);
-int i_MPI_Graph_neighbors(MPI_Comm comm, int rank, int maxneighbors, int neighbors[], void* return_address);
-int i_MPI_Igatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Info_delete(MPI_Info info, const char * key, void* return_address);
-int i_MPI_Waitsome(int incount, MPI_Request array_of_requests[], int * outcount, int array_of_indices[], MPI_Status array_of_statuses[], void* return_address);
-int i_MPI_Alloc_mem(MPI_Aint size, MPI_Info info, void * baseptr, void* return_address);
-int i_MPI_Comm_get_errhandler(MPI_Comm comm, MPI_Errhandler * erhandler, void* return_address);
-int i_MPI_Session_init(MPI_Info info, MPI_Errhandler errhandler, MPI_Session * session, void* return_address);
-int i_MPI_Win_post(MPI_Group group, int mpi_assert, MPI_Win win, void* return_address);
-int i_MPI_Intercomm_create(MPI_Comm local_comm, int local_leader, MPI_Comm bridge_comm, int remote_leader, int tag, MPI_Comm * newintercomm, void* return_address);
-int i_MPI_File_read_all_begin(MPI_File fh, void * buf, int count, MPI_Datatype datatype, void* return_address);
-int i_MPI_Ialltoallv(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Isend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_File_delete(const char * filename, MPI_Info info, void* return_address);
-int i_MPI_T_pvar_reset(MPI_T_pvar_session session, MPI_T_pvar_handle handle, void* return_address);
-int i_MPI_Dims_create(int nnodes, int ndims, int dims[], void* return_address);
-int i_MPI_Cart_sub(MPI_Comm comm, const int remain_dims[], MPI_Comm * new_comm, void* return_address);
-int i_MPI_Comm_set_attr(MPI_Comm comm, int comm_keyval, void * attribute_val, void* return_address);
-int i_MPI_Win_allocate(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void * baseptr, MPI_Win * win, void* return_address);
-int i_MPI_Waitany(int count, MPI_Request array_of_requests[], int * index, MPI_Status * status, void* return_address);
-int i_MPI_T_cvar_get_info(int cvar_index, char * name, int * name_len, int * verbosity, MPI_Datatype * datatype, MPI_T_enum * enumtype, char * desc, int * desc_len, int * bind, int * scope, void* return_address);
-int i_MPI_Session_get_errhandler(MPI_Session session, MPI_Errhandler * erhandler, void* return_address);
-int i_MPI_Get_address(const void * location, MPI_Aint * address, void* return_address);
-int i_MPI_Parrived(MPI_Request request, int partition, int * flag, void* return_address);
-int i_MPI_Info_create_env(int argc, char * argv[], MPI_Info * info, void* return_address);
-int i_MPI_File_create_errhandler(MPI_File_errhandler_function * function, MPI_Errhandler * errhandler, void* return_address);
-int i_MPI_Ialltoall(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Raccumulate(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, MPI_Request * request, void* return_address);
-int i_MPI_Type_size_x(MPI_Datatype type, MPI_Count * size, void* return_address);
-int i_MPI_Type_get_extent_x(MPI_Datatype type, MPI_Count * lb, MPI_Count * extent, void* return_address);
-int i_MPI_Group_free(MPI_Group * group, void* return_address);
-int i_MPI_T_pvar_get_index(const char * name, int var_class, int * pvar_index, void* return_address);
-int i_MPI_File_read_at_all_begin(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, void* return_address);
-int i_MPI_Dist_graph_create(MPI_Comm comm_old, int n, const int nodes[], const int degrees[], const int targets[], const int weights[], MPI_Info info, int reorder, MPI_Comm * newcomm, void* return_address);
-int i_MPI_Comm_join(int fd, MPI_Comm * intercomm, void* return_address);
-int i_MPI_Unpack(const void * inbuf, int insize, int * position, void * outbuf, int outcount, MPI_Datatype datatype, MPI_Comm comm, void* return_address);
-int i_MPI_Gatherv_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_File_sync(MPI_File fh, void* return_address);
-int i_MPI_Comm_accept(const char * port_name, MPI_Info info, int root, MPI_Comm comm, MPI_Comm * newcomm, void* return_address);
-int i_MPI_Ineighbor_allgather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Type_dup(MPI_Datatype type, MPI_Datatype * newtype, void* return_address);
-int i_MPI_File_iwrite_shared(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-int i_MPI_Group_compare(MPI_Group group1, MPI_Group group2, int * result, void* return_address);
-int i_MPI_Recv(void * buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Status * status, void* return_address);
-int i_MPI_Win_get_errhandler(MPI_Win win, MPI_Errhandler * errhandler, void* return_address);
-int i_MPI_Iscan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
-int i_MPI_Win_flush(int rank, MPI_Win win, void* return_address);
-int i_MPI_Graph_create(MPI_Comm comm_old, int nnodes, const int index[], const int edges[], int reorder, MPI_Comm * comm_graph, void* return_address);
-int i_MPI_Win_set_name(MPI_Win win, const char * win_name, void* return_address);
-int i_MPI_Win_create_errhandler(MPI_Win_errhandler_function * function, MPI_Errhandler * errhandler, void* return_address);
-int i_MPI_Gather_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-int i_MPI_Neighbor_allgatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-int i_MPI_T_cvar_handle_alloc(int cvar_index, void * obj_handle, MPI_T_cvar_handle * handle, int * count, void* return_address);
-int i_MPI_File_iwrite(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-int i_MPI_Buffer_attach(void * buffer, int size, void* return_address);
-int i_MPI_Type_create_struct(int count, const int array_of_block_lengths[], const MPI_Aint array_of_displacements[], const MPI_Datatype array_of_types[], MPI_Datatype * newtype, void* return_address);
-int i_MPI_Session_set_errhandler(MPI_Session session, MPI_Errhandler errhandler, void* return_address);
-int i_MPI_Abort(MPI_Comm comm, int errorcode, void* return_address);
-int i_MPI_Win_start(MPI_Group group, int mpi_assert, MPI_Win win, void* return_address);
+// MPI API Function Prototype & Functions Types
+#if HAVE_MPI_Init       
+    int i_MPI_Init(int * argc, char *** argv, void* return_address);
+    typedef int (*__MPI_Init_t)(int * argc, char *** argv, void* return_address);
+#endif
 
-// MPI Functions Types
-typedef int (*__MPI_Cart_shift_t)(MPI_Comm comm, int direction, int disp, int * rank_source, int * rank_dest, void* return_address);
-typedef int (*__MPI_Win_flush_local_all_t)(MPI_Win win, void* return_address);
-typedef int (*__MPI_File_get_byte_offset_t)(MPI_File fh, MPI_Offset offset, MPI_Offset * disp, void* return_address);
-typedef int (*__MPI_T_cvar_get_num_t)(int * num_cvar, void* return_address);
-typedef int (*__MPI_Win_get_info_t)(MPI_Win win, MPI_Info * info_used, void* return_address);
-typedef int (*__MPI_Rput_t)(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_cout, MPI_Datatype target_datatype, MPI_Win win, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Init_t)(int * argc, char *** argv, void* return_address);
-typedef int (*__MPI_Dist_graph_neighbors_count_t)(MPI_Comm comm, int * inneighbors, int * outneighbors, int * weighted, void* return_address);
-typedef int (*__MPI_Ireduce_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Psend_init_t)(const void * buf, int partitions, MPI_Count count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Reduce_init_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Win_wait_t)(MPI_Win win, void* return_address);
-typedef int (*__MPI_Rsend_init_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_File_write_at_all_t)(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-typedef int (*__MPI_File_write_ordered_end_t)(MPI_File fh, const void * buf, MPI_Status * status, void* return_address);
-typedef int (*__MPI_T_pvar_handle_alloc_t)(MPI_T_pvar_session session, int pvar_index, void * obj_handle, MPI_T_pvar_handle * handle, int * count, void* return_address);
-typedef int (*__MPI_Errhandler_free_t)(MPI_Errhandler * errhandler, void* return_address);
-typedef int (*__MPI_Win_shared_query_t)(MPI_Win win, int rank, MPI_Aint * size, int * disp_unit, void * baseptr, void* return_address);
-typedef int (*__MPI_Win_lock_t)(int lock_type, int rank, int mpi_assert, MPI_Win win, void* return_address);
-typedef int (*__MPI_Comm_get_name_t)(MPI_Comm comm, char * comm_name, int * resultlen, void* return_address);
-typedef int (*__MPI_Get_accumulate_t)(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, void * result_addr, int result_count, MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, void* return_address);
-typedef int (*__MPI_Group_size_t)(MPI_Group group, int * size, void* return_address);
-typedef int (*__MPI_Type_get_name_t)(MPI_Datatype type, char * type_name, int * resultlen, void* return_address);
-typedef int (*__MPI_File_get_atomicity_t)(MPI_File fh, int * flag, void* return_address);
-typedef int (*__MPI_Session_set_info_t)(MPI_Session session, MPI_Info info, void* return_address);
-typedef int (*__MPI_Group_from_session_pset_t)(MPI_Session session, const char * pset_name, MPI_Group * newgroup, void* return_address);
-typedef int (*__MPI_Comm_idup_t)(MPI_Comm comm, MPI_Comm * newcomm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Win_get_name_t)(MPI_Win win, char * win_name, int * resultlen, void* return_address);
-typedef int (*__MPI_Allgatherv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Allgatherv_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Group_range_incl_t)(MPI_Group group, int n, int ranges[][3], MPI_Group * newgroup, void* return_address);
-typedef int (*__MPI_Comm_dup_with_info_t)(MPI_Comm comm, MPI_Info info, MPI_Comm * newcomm, void* return_address);
-typedef int (*__MPI_Comm_set_name_t)(MPI_Comm comm, const char * comm_name, void* return_address);
-typedef int (*__MPI_Session_get_num_psets_t)(MPI_Session session, MPI_Info info, int * npset_names, void* return_address);
-typedef int (*__MPI_Igather_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Request_free_t)(MPI_Request * request, void* return_address);
-typedef int (*__MPI_File_read_at_t)(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Type_create_hvector_t)(int count, int blocklength, MPI_Aint stride, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-typedef int (*__MPI_File_write_at_all_begin_t)(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, void* return_address);
-typedef int (*__MPI_Grequest_start_t)(MPI_Grequest_query_function * query_fn, MPI_Grequest_free_function * free_fn, MPI_Grequest_cancel_function * cancel_fn, void * extra_state, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Bsend_init_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_File_set_size_t)(MPI_File fh, MPI_Offset size, void* return_address);
-typedef int (*__MPI_Op_c2f_t)(MPI_Op op, void* return_address);
-typedef int (*__MPI_Type_set_name_t)(MPI_Datatype type, const char * type_name, void* return_address);
-typedef int (*__MPI_Comm_split_type_t)(MPI_Comm comm, int split_type, int key, MPI_Info info, MPI_Comm * newcomm, void* return_address);
-typedef int (*__MPI_Get_elements_x_t)(const MPI_Status * status, MPI_Datatype datatype, MPI_Count * count, void* return_address);
-typedef int (*__MPI_File_read_at_all_end_t)(MPI_File fh, void * buf, MPI_Status * status, void* return_address);
-typedef int (*__MPI_File_write_all_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Improbe_t)(int source, int tag, MPI_Comm comm, int * flag, MPI_Message * message, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Comm_get_info_t)(MPI_Comm comm, MPI_Info * info_used, void* return_address);
-typedef int (*__MPI_File_read_all_end_t)(MPI_File fh, void * buf, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Win_unlock_all_t)(MPI_Win win, void* return_address);
-typedef int (*__MPI_T_category_get_pvars_t)(int cat_index, int len, int indices[], void* return_address);
-typedef int (*__MPI_T_cvar_get_index_t)(const char * name, int * cvar_index, void* return_address);
-typedef int (*__MPI_Bcast_t)(void * buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Win_c2f_t)(MPI_Win win, void* return_address);
-typedef int (*__MPI_Type_create_f90_integer_t)(int r, MPI_Datatype * newtype, void* return_address);
-typedef MPI_Group (*__MPI_Group_f2c_t)(int group, void* return_address);
-typedef int (*__MPI_Exscan_init_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Ibsend_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Win_flush_local_t)(int rank, MPI_Win win, void* return_address);
-typedef int (*__MPI_Ialltoallw_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Comm_create_from_group_t)(MPI_Group group, const char * tag, MPI_Info info, MPI_Errhandler errhandler, MPI_Comm * newcomm, void* return_address);
-typedef int (*__MPI_Type_get_contents_t)(MPI_Datatype mtype, int max_integers, int max_addresses, int max_datatypes, int array_of_integers[], MPI_Aint array_of_addresses[], MPI_Datatype array_of_datatypes[], void* return_address);
-typedef double (*__MPI_Wtick_t)(void* return_address);
-typedef int (*__MPI_File_iwrite_at_t)(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-typedef int (*__MPI_T_cvar_write_t)(MPI_T_cvar_handle handle, const void * buf, void* return_address);
-typedef int (*__MPI_Comm_dup_t)(MPI_Comm comm, MPI_Comm * newcomm, void* return_address);
-typedef int (*__MPI_Status_set_elements_t)(MPI_Status * status, MPI_Datatype datatype, int count, void* return_address);
-typedef int (*__MPI_Send_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_File_read_ordered_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Is_thread_main_t)(int * flag, void* return_address);
-typedef int (*__MPI_T_enum_get_item_t)(MPI_T_enum enumtype, int index, int * value, char * name, int * name_len, void* return_address);
-typedef int (*__MPI_Allreduce_init_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Info_get_valuelen_t)(MPI_Info info, const char * key, int * valuelen, int * flag, void* return_address);
-typedef int (*__MPI_Type_vector_t)(int count, int blocklength, int stride, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-typedef int (*__MPI_Comm_create_errhandler_t)(MPI_Comm_errhandler_function * function, MPI_Errhandler * errhandler, void* return_address);
-typedef int (*__MPI_Info_free_t)(MPI_Info * info, void* return_address);
-typedef int (*__MPI_Info_get_nthkey_t)(MPI_Info info, int n, char * key, void* return_address);
-typedef int (*__MPI_Type_commit_t)(MPI_Datatype * type, void* return_address);
-typedef int (*__MPI_Ssend_init_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Comm_set_info_t)(MPI_Comm comm, MPI_Info info, void* return_address);
-typedef int (*__MPI_Cart_create_t)(MPI_Comm old_comm, int ndims, const int dims[], const int periods[], int reorder, MPI_Comm * comm_cart, void* return_address);
-typedef int (*__MPI_Comm_delete_attr_t)(MPI_Comm comm, int comm_keyval, void* return_address);
-typedef int (*__MPI_File_c2f_t)(MPI_File file, void* return_address);
-typedef int (*__MPI_File_write_all_begin_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, void* return_address);
-typedef int (*__MPI_Scan_init_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Irsend_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Neighbor_alltoallv_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Pready_list_t)(int length, int partition_list[], MPI_Request request, void* return_address);
-typedef int (*__MPI_Request_c2f_t)(MPI_Request request, void* return_address);
-typedef MPI_File (*__MPI_File_f2c_t)(int file, void* return_address);
-typedef int (*__MPI_Reduce_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_T_category_get_cvars_t)(int cat_index, int len, int indices[], void* return_address);
-typedef int (*__MPI_Alltoallw_init_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Info_c2f_t)(MPI_Info info, void* return_address);
-typedef int (*__MPI_File_read_ordered_begin_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, void* return_address);
-typedef int (*__MPI_Dist_graph_create_adjacent_t)(MPI_Comm comm_old, int indegree, const int sources[], const int sourceweights[], int outdegree, const int destinations[], const int destweights[], MPI_Info info, int reorder, MPI_Comm * comm_dist_graph, void* return_address);
-typedef int (*__MPI_Reduce_scatter_init_t)(const void * sendbuf, void * recvbuf, const int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Comm_get_parent_t)(MPI_Comm * parent, void* return_address);
-typedef MPI_Info (*__MPI_Info_f2c_t)(int info, void* return_address);
-typedef int (*__MPI_Keyval_free_t)(int * keyval, void* return_address);
-typedef MPI_Session (*__MPI_Session_f2c_t)(int session, void* return_address);
-typedef int (*__MPI_Info_set_t)(MPI_Info info, const char * key, const char * value, void* return_address);
-typedef int (*__MPI_Keyval_create_t)(MPI_Copy_function * copy_fn, MPI_Delete_function * delete_fn, int * keyval, void * extra_state, void* return_address);
-typedef int (*__MPI_Comm_create_keyval_t)(MPI_Comm_copy_attr_function * comm_copy_attr_fn, MPI_Comm_delete_attr_function * comm_delete_attr_fn, int * comm_keyval, void * extra_state, void* return_address);
-typedef int (*__MPI_Exscan_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Comm_connect_t)(const char * port_name, MPI_Info info, int root, MPI_Comm comm, MPI_Comm * newcomm, void* return_address);
-typedef int (*__MPI_Ssend_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Scatterv_init_t)(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_File_write_at_all_end_t)(MPI_File fh, const void * buf, MPI_Status * status, void* return_address);
-typedef int (*__MPI_T_pvar_get_info_t)(int pvar_index, char * name, int * name_len, int * verbosity, int * var_class, MPI_Datatype * datatype, MPI_T_enum * enumtype, char * desc, int * desc_len, int * bind, int * readonly, int * continuous, int * atomic, void* return_address);
-typedef int (*__MPI_File_write_all_end_t)(MPI_File fh, const void * buf, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Status_f082f_t)(const MPI_F08_status * f08_status, int * f_status, void* return_address);
-typedef int (*__MPI_Buffer_detach_t)(void * buffer, int * size, void* return_address);
-typedef int (*__MPI_Status_c2f08_t)(const MPI_Status * c_status, MPI_F08_status * f08_status, void* return_address);
-typedef int (*__MPI_Startall_t)(int count, MPI_Request array_of_requests[], void* return_address);
-typedef int (*__MPI_T_category_changed_t)(int * stamp, void* return_address);
-typedef int (*__MPI_Neighbor_alltoall_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Put_t)(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win, void* return_address);
-typedef int (*__MPI_Reduce_scatter_t)(const void * sendbuf, void * recvbuf, const int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_File_read_ordered_end_t)(MPI_File fh, void * buf, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Scatter_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Win_call_errhandler_t)(MPI_Win win, int errorcode, void* return_address);
-typedef int (*__MPI_File_write_at_t)(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Session_get_pset_info_t)(MPI_Session session, const char * pset_name, MPI_Info * info_used, void* return_address);
-typedef int (*__MPI_Topo_test_t)(MPI_Comm comm, int * status, void* return_address);
-typedef int (*__MPI_Group_difference_t)(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, void* return_address);
-typedef int (*__MPI_Comm_disconnect_t)(MPI_Comm * comm, void* return_address);
-typedef int (*__MPI_Add_error_class_t)(int * errorclass, void* return_address);
-typedef int (*__MPI_Ireduce_scatter_t)(const void * sendbuf, void * recvbuf, const int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Cart_map_t)(MPI_Comm comm, int ndims, const int dims[], const int periods[], int * newrank, void* return_address);
-typedef int (*__MPI_Intercomm_merge_t)(MPI_Comm intercomm, int high, MPI_Comm * newintracomm, void* return_address);
-typedef int (*__MPI_Type_create_hindexed_t)(int count, const int array_of_blocklengths[], const MPI_Aint array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-typedef int (*__MPI_Info_get_nkeys_t)(MPI_Info info, int * nkeys, void* return_address);
-typedef int (*__MPI_File_read_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Ineighbor_allgatherv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_T_pvar_write_t)(MPI_T_pvar_session session, MPI_T_pvar_handle handle, const void * buf, void* return_address);
-typedef int (*__MPI_Attr_put_t)(MPI_Comm comm, int keyval, void * attribute_val, void* return_address);
-typedef int (*__MPI_File_write_ordered_begin_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, void* return_address);
-typedef int (*__MPI_Status_set_elements_x_t)(MPI_Status * status, MPI_Datatype datatype, MPI_Count count, void* return_address);
-typedef int (*__MPI_Comm_get_attr_t)(MPI_Comm comm, int comm_keyval, void * attribute_val, int * flag, void* return_address);
-typedef int (*__MPI_Group_translate_ranks_t)(MPI_Group group1, int n, const int ranks1[], MPI_Group group2, int ranks2[], void* return_address);
-typedef int (*__MPI_Compare_and_swap_t)(const void * origin_addr, const void * compare_addr, void * result_addr, MPI_Datatype datatype, int target_rank, MPI_Aint target_disp, MPI_Win win, void* return_address);
-typedef int (*__MPI_Type_create_f90_real_t)(int p, int r, MPI_Datatype * newtype, void* return_address);
-typedef int (*__MPI_Type_delete_attr_t)(MPI_Datatype type, int type_keyval, void* return_address);
-typedef int (*__MPI_Probe_t)(int source, int tag, MPI_Comm comm, MPI_Status * status, void* return_address);
-typedef int (*__MPI_File_close_t)(MPI_File * fh, void* return_address);
-typedef int (*__MPI_Request_get_status_t)(MPI_Request request, int * flag, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Session_call_errhandler_t)(MPI_Session session, int errorcode, void* return_address);
-typedef int (*__MPI_Rget_accumulate_t)(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, void * result_addr, int result_count, MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, MPI_Request * request, void* return_address);
-typedef int (*__MPI_File_iread_all_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Type_create_resized_t)(MPI_Datatype oldtype, MPI_Aint lb, MPI_Aint extent, MPI_Datatype * newtype, void* return_address);
-typedef int (*__MPI_Isendrecv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, int dest, int sendtag, void * recvbuf, int recvcount, MPI_Datatype recvtype, int source, int recvtag, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Pack_external_t)(const char datarep[], const void * inbuf, int incount, MPI_Datatype datatype, void * outbuf, MPI_Aint outsize, MPI_Aint * position, void* return_address);
-typedef int (*__MPI_Pready_range_t)(int partition_low, int partition_high, MPI_Request request, void* return_address);
-typedef int (*__MPI_Type_get_envelope_t)(MPI_Datatype type, int * num_integers, int * num_addresses, int * num_datatypes, int * combiner, void* return_address);
-typedef MPI_Datatype (*__MPI_Type_f2c_t)(int datatype, void* return_address);
-typedef int (*__MPI_Win_create_t)(void * base, MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, MPI_Win * win, void* return_address);
-typedef int (*__MPI_Isendrecv_replace_t)(void * buf, int count, MPI_Datatype datatype, int dest, int sendtag, int source, int recvtag, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Testsome_t)(int incount, MPI_Request array_of_requests[], int * outcount, int array_of_indices[], MPI_Status array_of_statuses[], void* return_address);
-typedef int (*__MPI_Barrier_t)(MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Win_set_errhandler_t)(MPI_Win win, MPI_Errhandler errhandler, void* return_address);
-typedef int (*__MPI_Fetch_and_op_t)(const void * origin_addr, void * result_addr, MPI_Datatype datatype, int target_rank, MPI_Aint target_disp, MPI_Op op, MPI_Win win, void* return_address);
-typedef int (*__MPI_Cartdim_get_t)(MPI_Comm comm, int * ndims, void* return_address);
-typedef int (*__MPI_T_pvar_stop_t)(MPI_T_pvar_session session, MPI_T_pvar_handle handle, void* return_address);
-typedef int (*__MPI_Dist_graph_neighbors_t)(MPI_Comm comm, int maxindegree, int sources[], int sourceweights[], int maxoutdegree, int destinations[], int destweights[], void* return_address);
-typedef int (*__MPI_Comm_remote_size_t)(MPI_Comm comm, int * size, void* return_address);
-typedef int (*__MPI_File_seek_t)(MPI_File fh, MPI_Offset offset, int whence, void* return_address);
-typedef int (*__MPI_Get_t)(void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win, void* return_address);
-typedef int (*__MPI_Pack_external_size_t)(const char datarep[], int incount, MPI_Datatype datatype, MPI_Aint * size, void* return_address);
-typedef int (*__MPI_Win_flush_all_t)(MPI_Win win, void* return_address);
-typedef int (*__MPI_Type_free_t)(MPI_Datatype * type, void* return_address);
-typedef int (*__MPI_T_category_get_categories_t)(int cat_index, int len, int indices[], void* return_address);
-typedef int (*__MPI_Rsend_t)(const void * ibuf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Message_c2f_t)(MPI_Message message, void* return_address);
-typedef int (*__MPI_Win_free_t)(MPI_Win * win, void* return_address);
-typedef int (*__MPI_Type_create_f90_complex_t)(int p, int r, MPI_Datatype * newtype, void* return_address);
-typedef int (*__MPI_Neighbor_alltoallw_init_t)(const void * sendbuf, const int sendcounts[], const MPI_Aint sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Wait_t)(MPI_Request * request, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Irecv_t)(void * buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Rget_t)(void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Win_create_keyval_t)(MPI_Win_copy_attr_function * win_copy_attr_fn, MPI_Win_delete_attr_function * win_delete_attr_fn, int * win_keyval, void * extra_state, void* return_address);
-typedef int (*__MPI_Op_commutative_t)(MPI_Op op, int * commute, void* return_address);
-typedef int (*__MPI_Neighbor_allgather_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Comm_call_errhandler_t)(MPI_Comm comm, int errorcode, void* return_address);
-typedef int (*__MPI_Scatter_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Info_get_string_t)(MPI_Info info, const char * key, int * buflen, char * value, int * flag, void* return_address);
-typedef int (*__MPI_Scatterv_t)(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Op_create_t)(MPI_User_function * function, int commute, MPI_Op * op, void* return_address);
-typedef int (*__MPI_T_finalize_t)(void* return_address);
-typedef int (*__MPI_Group_excl_t)(MPI_Group group, int n, const int ranks[], MPI_Group * newgroup, void* return_address);
-typedef int (*__MPI_Mrecv_t)(void * buf, int count, MPI_Datatype type, MPI_Message * message, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Open_port_t)(MPI_Info info, char * port_name, void* return_address);
-typedef int (*__MPI_Reduce_scatter_block_t)(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Cart_get_t)(MPI_Comm comm, int maxdims, int dims[], int periods[], int coords[], void* return_address);
-typedef int (*__MPI_T_enum_get_info_t)(MPI_T_enum enumtype, int * num, char * name, int * name_len, void* return_address);
-typedef int (*__MPI_Lookup_name_t)(const char * service_name, MPI_Info info, char * port_name, void* return_address);
-typedef int (*__MPI_Type_get_extent_t)(MPI_Datatype type, MPI_Aint * lb, MPI_Aint * extent, void* return_address);
-typedef int (*__MPI_Comm_spawn_t)(const char * command, char * argv[], int maxprocs, MPI_Info info, int root, MPI_Comm comm, MPI_Comm * intercomm, int array_of_errcodes[], void* return_address);
-typedef int (*__MPI_Allreduce_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Unpublish_name_t)(const char * service_name, MPI_Info info, const char * port_name, void* return_address);
-typedef int (*__MPI_Grequest_complete_t)(MPI_Request request, void* return_address);
-typedef int (*__MPI_File_get_group_t)(MPI_File fh, MPI_Group * group, void* return_address);
-typedef int (*__MPI_File_iread_at_all_t)(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Graphdims_get_t)(MPI_Comm comm, int * nnodes, int * nedges, void* return_address);
-typedef int (*__MPI_File_iread_shared_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Session_c2f_t)(const MPI_Session session, void* return_address);
-typedef int (*__MPI_Comm_idup_with_info_t)(MPI_Comm comm, MPI_Info info, MPI_Comm * newcomm, MPI_Request * request, void* return_address);
-typedef MPI_Message (*__MPI_Message_f2c_t)(int message, void* return_address);
-typedef int (*__MPI_Get_version_t)(int * version, int * subversion, void* return_address);
-typedef int (*__MPI_Win_lock_all_t)(int mpi_assert, MPI_Win win, void* return_address);
-typedef int (*__MPI_Intercomm_create_from_groups_t)(MPI_Group local_group, int local_leader, MPI_Group remote_group, int remote_leader, const char * tag, MPI_Info info, MPI_Errhandler errhandler, MPI_Comm * newintercomm, void* return_address);
-typedef int (*__MPI_Neighbor_alltoallv_init_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Type_create_darray_t)(int size, int rank, int ndims, const int gsize_array[], const int distrib_array[], const int darg_array[], const int psize_array[], int order, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-typedef int (*__MPI_File_get_position_shared_t)(MPI_File fh, MPI_Offset * offset, void* return_address);
-typedef int (*__MPI_Win_get_group_t)(MPI_Win win, MPI_Group * group, void* return_address);
-typedef int (*__MPI_Error_class_t)(int errorcode, int * errorclass, void* return_address);
-typedef int (*__MPI_Win_get_attr_t)(MPI_Win win, int win_keyval, void * attribute_val, int * flag, void* return_address);
-typedef int (*__MPI_Allgather_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Reduce_local_t)(const void * inbuf, void * inoutbuf, int count, MPI_Datatype datatype, MPI_Op op, void* return_address);
-typedef int (*__MPI_T_pvar_readreset_t)(MPI_T_pvar_session session, MPI_T_pvar_handle handle, void * buf, void* return_address);
-typedef int (*__MPI_Test_t)(MPI_Request * request, int * flag, MPI_Status * status, void* return_address);
-typedef MPI_Errhandler (*__MPI_Errhandler_f2c_t)(int errhandler, void* return_address);
-typedef int (*__MPI_Ireduce_scatter_block_t)(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Status_set_cancelled_t)(MPI_Status * status, int flag, void* return_address);
-typedef int (*__MPI_Alltoallv_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Win_test_t)(MPI_Win win, int * flag, void* return_address);
-typedef MPI_Request (*__MPI_Request_f2c_t)(int request, void* return_address);
-typedef int (*__MPI_Test_cancelled_t)(const MPI_Status * status, int * flag, void* return_address);
-typedef int (*__MPI_File_seek_shared_t)(MPI_File fh, MPI_Offset offset, int whence, void* return_address);
-typedef int (*__MPI_Error_string_t)(int errorcode, char * string, int * resultlen, void* return_address);
-typedef int (*__MPI_Status_c2f_t)(const MPI_Status * c_status, int * f_status, void* return_address);
-typedef int (*__MPI_Pack_t)(const void * inbuf, int incount, MPI_Datatype datatype, void * outbuf, int outsize, int * position, MPI_Comm comm, void* return_address);
-typedef MPI_Comm (*__MPI_Comm_f2c_t)(int comm, void* return_address);
-typedef int (*__MPI_Graph_neighbors_count_t)(MPI_Comm comm, int rank, int * nneighbors, void* return_address);
-typedef int (*__MPI_Sendrecv_replace_t)(void * buf, int count, MPI_Datatype datatype, int dest, int sendtag, int source, int recvtag, MPI_Comm comm, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Comm_split_t)(MPI_Comm comm, int color, int key, MPI_Comm * newcomm, void* return_address);
-typedef int (*__MPI_Session_create_errhandler_t)(MPI_Session_errhandler_function * session_errhandler_fn, MPI_Errhandler * errhandler, void* return_address);
-typedef int (*__MPI_Waitall_t)(int count, MPI_Request array_of_requests[], MPI_Status * array_of_statuses, void* return_address);
-typedef int (*__MPI_Win_unlock_t)(int rank, MPI_Win win, void* return_address);
-typedef int (*__MPI_Iscatter_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_File_read_all_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-typedef int (*__MPI_T_pvar_handle_free_t)(MPI_T_pvar_session session, MPI_T_pvar_handle * handle, void* return_address);
-typedef int (*__MPI_File_set_errhandler_t)(MPI_File file, MPI_Errhandler errhandler, void* return_address);
-typedef int (*__MPI_Type_set_attr_t)(MPI_Datatype type, int type_keyval, void * attr_val, void* return_address);
-typedef int (*__MPI_File_get_errhandler_t)(MPI_File file, MPI_Errhandler * errhandler, void* return_address);
-typedef int (*__MPI_Session_finalize_t)(MPI_Session * session, void* return_address);
-typedef int (*__MPI_Alltoall_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Comm_group_t)(MPI_Comm comm, MPI_Group * group, void* return_address);
-typedef int (*__MPI_Comm_free_keyval_t)(int * comm_keyval, void* return_address);
-typedef int (*__MPI_Sendrecv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, int dest, int sendtag, void * recvbuf, int recvcount, MPI_Datatype recvtype, int source, int recvtag, MPI_Comm comm, MPI_Status * status, void* return_address);
-typedef int (*__MPI_File_iwrite_all_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Free_mem_t)(void * base, void* return_address);
-typedef int (*__MPI_Comm_compare_t)(MPI_Comm comm1, MPI_Comm comm2, int * result, void* return_address);
-typedef int (*__MPI_Win_set_info_t)(MPI_Win win, MPI_Info info, void* return_address);
-typedef double (*__MPI_Wtime_t)(void* return_address);
-typedef int (*__MPI_Alltoallv_init_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Win_attach_t)(MPI_Win win, void * base, MPI_Aint size, void* return_address);
-typedef int (*__MPI_T_pvar_session_create_t)(MPI_T_pvar_session * session, void* return_address);
-typedef int (*__MPI_File_get_position_t)(MPI_File fh, MPI_Offset * offset, void* return_address);
-typedef int (*__MPI_Comm_c2f_t)(MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Accumulate_t)(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, void* return_address);
-typedef int (*__MPI_File_write_shared_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Win_create_dynamic_t)(MPI_Info info, MPI_Comm comm, MPI_Win * win, void* return_address);
-typedef int (*__MPI_T_cvar_handle_free_t)(MPI_T_cvar_handle * handle, void* return_address);
-typedef int (*__MPI_Neighbor_alltoallw_t)(const void * sendbuf, const int sendcounts[], const MPI_Aint sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, void* return_address);
-typedef int (*__MPI_T_category_get_num_t)(int * num_cat, void* return_address);
-typedef int (*__MPI_Iexscan_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Graph_map_t)(MPI_Comm comm, int nnodes, const int index[], const int edges[], int * newrank, void* return_address);
-typedef int (*__MPI_Testany_t)(int count, MPI_Request array_of_requests[], int * index, int * flag, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Group_c2f_t)(MPI_Group group, void* return_address);
-typedef int (*__MPI_Recv_init_t)(void * buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_T_cvar_read_t)(MPI_T_cvar_handle handle, void * buf, void* return_address);
-typedef int (*__MPI_Type_create_subarray_t)(int ndims, const int size_array[], const int subsize_array[], const int start_array[], int order, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-typedef int (*__MPI_Comm_create_group_t)(MPI_Comm comm, MPI_Group group, int tag, MPI_Comm * newcomm, void* return_address);
-typedef int (*__MPI_Allgather_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Reduce_scatter_block_init_t)(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Type_match_size_t)(int typeclass, int size, MPI_Datatype * type, void* return_address);
-typedef int (*__MPI_Type_get_true_extent_t)(MPI_Datatype datatype, MPI_Aint * true_lb, MPI_Aint * true_extent, void* return_address);
-typedef int (*__MPI_Alltoall_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Type_contiguous_t)(int count, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-typedef int (*__MPI_Send_init_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef MPI_Win (*__MPI_Win_f2c_t)(int win, void* return_address);
-typedef int (*__MPI_Neighbor_allgather_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Ibcast_t)(void * buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_File_iread_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Neighbor_alltoall_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_T_pvar_start_t)(MPI_T_pvar_session session, MPI_T_pvar_handle handle, void* return_address);
-typedef int (*__MPI_T_pvar_get_num_t)(int * num_pvar, void* return_address);
-typedef int (*__MPI_Cart_rank_t)(MPI_Comm comm, const int coords[], int * rank, void* return_address);
-typedef int (*__MPI_Publish_name_t)(const char * service_name, MPI_Info info, const char * port_name, void* return_address);
-typedef int (*__MPI_Win_set_attr_t)(MPI_Win win, int win_keyval, void * attribute_val, void* return_address);
-typedef int (*__MPI_Win_sync_t)(MPI_Win win, void* return_address);
-typedef int (*__MPI_Type_free_keyval_t)(int * type_keyval, void* return_address);
-typedef int (*__MPI_Status_f082c_t)(const MPI_F08_status * f08_status, MPI_Status * c_status, void* return_address);
-typedef int (*__MPI_File_write_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Register_datarep_t)(const char * datarep, MPI_Datarep_conversion_function * read_conversion_fn, MPI_Datarep_conversion_function * write_conversion_fn, MPI_Datarep_extent_function * dtype_file_extent_fn, void * extra_state, void* return_address);
-typedef int (*__MPI_Ineighbor_alltoall_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_File_preallocate_t)(MPI_File fh, MPI_Offset size, void* return_address);
-typedef int (*__MPI_Iallgatherv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Comm_remote_group_t)(MPI_Comm comm, MPI_Group * group, void* return_address);
-typedef int (*__MPI_Type_indexed_t)(int count, const int array_of_blocklengths[], const int array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-typedef int (*__MPI_Op_free_t)(MPI_Op * op, void* return_address);
-typedef int (*__MPI_Neighbor_allgatherv_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Iprobe_t)(int source, int tag, MPI_Comm comm, int * flag, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Type_get_true_extent_x_t)(MPI_Datatype datatype, MPI_Count * true_lb, MPI_Count * true_extent, void* return_address);
-typedef int (*__MPI_Win_complete_t)(MPI_Win win, void* return_address);
-typedef int (*__MPI_File_set_atomicity_t)(MPI_File fh, int flag, void* return_address);
-typedef int (*__MPI_Unpack_external_t)(const char datarep[], const void * inbuf, MPI_Aint insize, MPI_Aint * position, void * outbuf, int outcount, MPI_Datatype datatype, void* return_address);
-typedef int (*__MPI_Get_count_t)(const MPI_Status * status, MPI_Datatype datatype, int * count, void* return_address);
-typedef int (*__MPI_Finalize_t)(void* return_address);
-typedef int (*__MPI_Pack_size_t)(int incount, MPI_Datatype datatype, MPI_Comm comm, int * size, void* return_address);
-typedef int (*__MPI_Errhandler_c2f_t)(MPI_Errhandler errhandler, void* return_address);
-typedef int (*__MPI_Group_intersection_t)(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, void* return_address);
-typedef int (*__MPI_Mprobe_t)(int source, int tag, MPI_Comm comm, MPI_Message * message, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Add_error_code_t)(int errorclass, int * errorcode, void* return_address);
-typedef int (*__MPI_Win_delete_attr_t)(MPI_Win win, int win_keyval, void* return_address);
-typedef int (*__MPI_File_read_at_all_t)(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Pready_t)(int partitions, MPI_Request request, void* return_address);
-typedef int (*__MPI_Comm_free_t)(MPI_Comm * comm, void* return_address);
-typedef int (*__MPI_Comm_test_inter_t)(MPI_Comm comm, int * flag, void* return_address);
-typedef int (*__MPI_Status_f2f08_t)(const int * f_status, MPI_F08_status * f08_status, void* return_address);
-typedef int (*__MPI_Iscatterv_t)(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Type_c2f_t)(MPI_Datatype datatype, void* return_address);
-typedef int (*__MPI_Win_detach_t)(MPI_Win win, const void * base, void* return_address);
-typedef int (*__MPI_File_call_errhandler_t)(MPI_File fh, int errorcode, void* return_address);
-typedef int (*__MPI_Iallreduce_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Get_processor_name_t)(char * name, int * resultlen, void* return_address);
-typedef int (*__MPI_Start_t)(MPI_Request * request, void* return_address);
-typedef int (*__MPI_T_category_get_index_t)(const char * name, int * category_index, void* return_address);
-typedef int (*__MPI_Type_create_indexed_block_t)(int count, int blocklength, const int array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-typedef int (*__MPI_Status_f2c_t)(const int * f_status, MPI_Status * c_status, void* return_address);
-typedef int (*__MPI_File_get_type_extent_t)(MPI_File fh, MPI_Datatype datatype, MPI_Aint * extent, void* return_address);
-typedef int (*__MPI_Scan_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Group_range_excl_t)(MPI_Group group, int n, int ranges[][3], MPI_Group * newgroup, void* return_address);
-typedef int (*__MPI_File_read_shared_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Init_thread_t)(int * argc, char *** argv, int required, int * provided, void* return_address);
-typedef int (*__MPI_File_open_t)(MPI_Comm comm, const char * filename, int amode, MPI_Info info, MPI_File * fh, void* return_address);
-typedef int (*__MPI_File_get_amode_t)(MPI_File fh, int * amode, void* return_address);
-typedef int (*__MPI_Gather_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Type_create_hindexed_block_t)(int count, int blocklength, const MPI_Aint array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
-typedef int (*__MPI_Cart_coords_t)(MPI_Comm comm, int rank, int maxdims, int coords[], void* return_address);
-typedef int (*__MPI_Initialized_t)(int * flag, void* return_address);
-typedef int (*__MPI_Issend_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef MPI_Op (*__MPI_Op_f2c_t)(int op, void* return_address);
-typedef int (*__MPI_T_pvar_read_t)(MPI_T_pvar_session session, MPI_T_pvar_handle handle, void * buf, void* return_address);
-typedef int (*__MPI_Group_union_t)(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, void* return_address);
-typedef int (*__MPI_T_init_thread_t)(int required, int * provided, void* return_address);
-typedef int (*__MPI_Comm_rank_t)(MPI_Comm comm, int * rank, void* return_address);
-typedef int (*__MPI_Graph_get_t)(MPI_Comm comm, int maxindex, int maxedges, int index[], int edges[], void* return_address);
-typedef int (*__MPI_Win_free_keyval_t)(int * win_keyval, void* return_address);
-typedef int (*__MPI_Cancel_t)(MPI_Request * request, void* return_address);
-typedef int (*__MPI_Ineighbor_alltoallw_t)(const void * sendbuf, const int sendcounts[], const MPI_Aint sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_File_set_info_t)(MPI_File fh, MPI_Info info, void* return_address);
-typedef int (*__MPI_File_iread_at_t)(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-typedef int (*__MPI_T_category_get_info_t)(int cat_index, char * name, int * name_len, char * desc, int * desc_len, int * num_cvars, int * num_pvars, int * num_categories, void* return_address);
-typedef int (*__MPI_Attr_delete_t)(MPI_Comm comm, int keyval, void* return_address);
-typedef int (*__MPI_Testall_t)(int count, MPI_Request array_of_requests[], int * flag, MPI_Status array_of_statuses[], void* return_address);
-typedef int (*__MPI_Session_get_info_t)(MPI_Session session, MPI_Info * info_used, void* return_address);
-typedef int (*__MPI_Session_get_nth_pset_t)(MPI_Session session, MPI_Info info, int n, int * len, char * pset_name, void* return_address);
-typedef int (*__MPI_Type_create_keyval_t)(MPI_Type_copy_attr_function * type_copy_attr_fn, MPI_Type_delete_attr_function * type_delete_attr_fn, int * type_keyval, void * extra_state, void* return_address);
-typedef int (*__MPI_Attr_get_t)(MPI_Comm comm, int keyval, void * attribute_val, int * flag, void* return_address);
-typedef int (*__MPI_Add_error_string_t)(int errorcode, const char * string, void* return_address);
-typedef int (*__MPI_Ineighbor_alltoallv_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Comm_size_t)(MPI_Comm comm, int * size, void* return_address);
-typedef int (*__MPI_Imrecv_t)(void * buf, int count, MPI_Datatype type, MPI_Message * message, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Alltoallw_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Bcast_init_t)(void * buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Query_thread_t)(int * provided, void* return_address);
-typedef int (*__MPI_Group_incl_t)(MPI_Group group, int n, const int ranks[], MPI_Group * newgroup, void* return_address);
-typedef int (*__MPI_Ibarrier_t)(MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_File_iwrite_at_all_t)(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Comm_create_t)(MPI_Comm comm, MPI_Group group, MPI_Comm * newcomm, void* return_address);
-typedef int (*__MPI_File_get_size_t)(MPI_File fh, MPI_Offset * size, void* return_address);
-typedef int (*__MPI_Barrier_init_t)(MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_File_get_view_t)(MPI_File fh, MPI_Offset * disp, MPI_Datatype * etype, MPI_Datatype * filetype, char * datarep, void* return_address);
-typedef int (*__MPI_Win_allocate_shared_t)(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void * baseptr, MPI_Win * win, void* return_address);
-typedef int (*__MPI_Close_port_t)(const char * port_name, void* return_address);
-typedef int (*__MPI_Finalized_t)(int * flag, void* return_address);
-typedef int (*__MPI_Info_dup_t)(MPI_Info info, MPI_Info * newinfo, void* return_address);
-typedef int (*__MPI_Info_get_t)(MPI_Info info, const char * key, int valuelen, char * value, int * flag, void* return_address);
-typedef int (*__MPI_T_pvar_session_free_t)(MPI_T_pvar_session * session, void* return_address);
-typedef int (*__MPI_Get_library_version_t)(char * version, int * resultlen, void* return_address);
-typedef int (*__MPI_Info_create_t)(MPI_Info * info, void* return_address);
-typedef int (*__MPI_Gatherv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Win_fence_t)(int mpi_assert, MPI_Win win, void* return_address);
-typedef int (*__MPI_Iallgather_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Comm_spawn_multiple_t)(int count, char * array_of_commands[], char ** array_of_argv[], const int array_of_maxprocs[], const MPI_Info array_of_info[], int root, MPI_Comm comm, MPI_Comm * intercomm, int array_of_errcodes[], void* return_address);
-typedef int (*__MPI_Precv_init_t)(void * buf, int partitions, MPI_Count count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Comm_set_errhandler_t)(MPI_Comm comm, MPI_Errhandler errhandler, void* return_address);
-typedef int (*__MPI_Get_elements_t)(const MPI_Status * status, MPI_Datatype datatype, int * count, void* return_address);
-typedef int (*__MPI_File_set_view_t)(MPI_File fh, MPI_Offset disp, MPI_Datatype etype, MPI_Datatype filetype, const char * datarep, MPI_Info info, void* return_address);
-typedef int (*__MPI_Bsend_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Type_size_t)(MPI_Datatype type, int * size, void* return_address);
-typedef int (*__MPI_Group_rank_t)(MPI_Group group, int * rank, void* return_address);
-typedef int (*__MPI_Type_get_attr_t)(MPI_Datatype type, int type_keyval, void * attribute_val, int * flag, void* return_address);
-typedef int (*__MPI_File_write_ordered_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
-typedef int (*__MPI_File_get_info_t)(MPI_File fh, MPI_Info * info_used, void* return_address);
-typedef int (*__MPI_Graph_neighbors_t)(MPI_Comm comm, int rank, int maxneighbors, int neighbors[], void* return_address);
-typedef int (*__MPI_Igatherv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Info_delete_t)(MPI_Info info, const char * key, void* return_address);
-typedef int (*__MPI_Waitsome_t)(int incount, MPI_Request array_of_requests[], int * outcount, int array_of_indices[], MPI_Status array_of_statuses[], void* return_address);
-typedef int (*__MPI_Alloc_mem_t)(MPI_Aint size, MPI_Info info, void * baseptr, void* return_address);
-typedef int (*__MPI_Comm_get_errhandler_t)(MPI_Comm comm, MPI_Errhandler * erhandler, void* return_address);
-typedef int (*__MPI_Session_init_t)(MPI_Info info, MPI_Errhandler errhandler, MPI_Session * session, void* return_address);
-typedef int (*__MPI_Win_post_t)(MPI_Group group, int mpi_assert, MPI_Win win, void* return_address);
-typedef int (*__MPI_Intercomm_create_t)(MPI_Comm local_comm, int local_leader, MPI_Comm bridge_comm, int remote_leader, int tag, MPI_Comm * newintercomm, void* return_address);
-typedef int (*__MPI_File_read_all_begin_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, void* return_address);
-typedef int (*__MPI_Ialltoallv_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Isend_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_File_delete_t)(const char * filename, MPI_Info info, void* return_address);
-typedef int (*__MPI_T_pvar_reset_t)(MPI_T_pvar_session session, MPI_T_pvar_handle handle, void* return_address);
-typedef int (*__MPI_Dims_create_t)(int nnodes, int ndims, int dims[], void* return_address);
-typedef int (*__MPI_Cart_sub_t)(MPI_Comm comm, const int remain_dims[], MPI_Comm * new_comm, void* return_address);
-typedef int (*__MPI_Comm_set_attr_t)(MPI_Comm comm, int comm_keyval, void * attribute_val, void* return_address);
-typedef int (*__MPI_Win_allocate_t)(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void * baseptr, MPI_Win * win, void* return_address);
-typedef int (*__MPI_Waitany_t)(int count, MPI_Request array_of_requests[], int * index, MPI_Status * status, void* return_address);
-typedef int (*__MPI_T_cvar_get_info_t)(int cvar_index, char * name, int * name_len, int * verbosity, MPI_Datatype * datatype, MPI_T_enum * enumtype, char * desc, int * desc_len, int * bind, int * scope, void* return_address);
-typedef int (*__MPI_Session_get_errhandler_t)(MPI_Session session, MPI_Errhandler * erhandler, void* return_address);
-typedef int (*__MPI_Get_address_t)(const void * location, MPI_Aint * address, void* return_address);
-typedef int (*__MPI_Parrived_t)(MPI_Request request, int partition, int * flag, void* return_address);
-typedef int (*__MPI_Info_create_env_t)(int argc, char * argv[], MPI_Info * info, void* return_address);
-typedef int (*__MPI_File_create_errhandler_t)(MPI_File_errhandler_function * function, MPI_Errhandler * errhandler, void* return_address);
-typedef int (*__MPI_Ialltoall_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Raccumulate_t)(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Type_size_x_t)(MPI_Datatype type, MPI_Count * size, void* return_address);
-typedef int (*__MPI_Type_get_extent_x_t)(MPI_Datatype type, MPI_Count * lb, MPI_Count * extent, void* return_address);
-typedef int (*__MPI_Group_free_t)(MPI_Group * group, void* return_address);
-typedef int (*__MPI_T_pvar_get_index_t)(const char * name, int var_class, int * pvar_index, void* return_address);
-typedef int (*__MPI_File_read_at_all_begin_t)(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, void* return_address);
-typedef int (*__MPI_Dist_graph_create_t)(MPI_Comm comm_old, int n, const int nodes[], const int degrees[], const int targets[], const int weights[], MPI_Info info, int reorder, MPI_Comm * newcomm, void* return_address);
-typedef int (*__MPI_Comm_join_t)(int fd, MPI_Comm * intercomm, void* return_address);
-typedef int (*__MPI_Unpack_t)(const void * inbuf, int insize, int * position, void * outbuf, int outcount, MPI_Datatype datatype, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_Gatherv_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_File_sync_t)(MPI_File fh, void* return_address);
-typedef int (*__MPI_Comm_accept_t)(const char * port_name, MPI_Info info, int root, MPI_Comm comm, MPI_Comm * newcomm, void* return_address);
-typedef int (*__MPI_Ineighbor_allgather_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Type_dup_t)(MPI_Datatype type, MPI_Datatype * newtype, void* return_address);
-typedef int (*__MPI_File_iwrite_shared_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Group_compare_t)(MPI_Group group1, MPI_Group group2, int * result, void* return_address);
-typedef int (*__MPI_Recv_t)(void * buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Status * status, void* return_address);
-typedef int (*__MPI_Win_get_errhandler_t)(MPI_Win win, MPI_Errhandler * errhandler, void* return_address);
-typedef int (*__MPI_Iscan_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Win_flush_t)(int rank, MPI_Win win, void* return_address);
-typedef int (*__MPI_Graph_create_t)(MPI_Comm comm_old, int nnodes, const int index[], const int edges[], int reorder, MPI_Comm * comm_graph, void* return_address);
-typedef int (*__MPI_Win_set_name_t)(MPI_Win win, const char * win_name, void* return_address);
-typedef int (*__MPI_Win_create_errhandler_t)(MPI_Win_errhandler_function * function, MPI_Errhandler * errhandler, void* return_address);
-typedef int (*__MPI_Gather_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Neighbor_allgatherv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
-typedef int (*__MPI_T_cvar_handle_alloc_t)(int cvar_index, void * obj_handle, MPI_T_cvar_handle * handle, int * count, void* return_address);
-typedef int (*__MPI_File_iwrite_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
-typedef int (*__MPI_Buffer_attach_t)(void * buffer, int size, void* return_address);
-typedef int (*__MPI_Type_create_struct_t)(int count, const int array_of_block_lengths[], const MPI_Aint array_of_displacements[], const MPI_Datatype array_of_types[], MPI_Datatype * newtype, void* return_address);
-typedef int (*__MPI_Session_set_errhandler_t)(MPI_Session session, MPI_Errhandler errhandler, void* return_address);
-typedef int (*__MPI_Abort_t)(MPI_Comm comm, int errorcode, void* return_address);
-typedef int (*__MPI_Win_start_t)(MPI_Group group, int mpi_assert, MPI_Win win, void* return_address);
+#if HAVE_MPI_Init_thread       
+    int i_MPI_Init_thread(int * argc, char *** argv, int required, int * provided, void* return_address);
+    typedef int (*__MPI_Init_thread_t)(int * argc, char *** argv, int required, int * provided, void* return_address);
+#endif
+
+#if HAVE_MPI_Finalize       
+    int i_MPI_Finalize(void* return_address);
+    typedef int (*__MPI_Finalize_t)(void* return_address);
+#endif
+
+#if HAVE_MPI_Initialized       
+    int i_MPI_Initialized(int * flag, void* return_address);
+    typedef int (*__MPI_Initialized_t)(int * flag, void* return_address);
+#endif
+
+#if HAVE_MPI_Query_thread       
+    int i_MPI_Query_thread(int * provided, void* return_address);
+    typedef int (*__MPI_Query_thread_t)(int * provided, void* return_address);
+#endif
+
+#if HAVE_MPI_Abort       
+    int i_MPI_Abort(MPI_Comm comm, int errorcode, void* return_address);
+    typedef int (*__MPI_Abort_t)(MPI_Comm comm, int errorcode, void* return_address);
+#endif
+
+#if HAVE_MPI_Send       
+    int i_MPI_Send(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Send_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Recv       
+    int i_MPI_Recv(void * buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_Recv_t)(void * buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Sendrecv       
+    int i_MPI_Sendrecv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, int dest, int sendtag, void * recvbuf, int recvcount, MPI_Datatype recvtype, int source, int recvtag, MPI_Comm comm, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_Sendrecv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, int dest, int sendtag, void * recvbuf, int recvcount, MPI_Datatype recvtype, int source, int recvtag, MPI_Comm comm, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Sendrecv_replace       
+    int i_MPI_Sendrecv_replace(void * buf, int count, MPI_Datatype datatype, int dest, int sendtag, int source, int recvtag, MPI_Comm comm, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_Sendrecv_replace_t)(void * buf, int count, MPI_Datatype datatype, int dest, int sendtag, int source, int recvtag, MPI_Comm comm, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Isend       
+    int i_MPI_Isend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Isend_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Irecv       
+    int i_MPI_Irecv(void * buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Irecv_t)(void * buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Wait       
+    int i_MPI_Wait(MPI_Request * request, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_Wait_t)(MPI_Request * request, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Waitall       
+    int i_MPI_Waitall(int count, MPI_Request array_of_requests[], MPI_Status * array_of_statuses, void* return_address);
+    typedef int (*__MPI_Waitall_t)(int count, MPI_Request array_of_requests[], MPI_Status * array_of_statuses, void* return_address);
+#endif
+
+#if HAVE_MPI_Waitany       
+    int i_MPI_Waitany(int count, MPI_Request array_of_requests[], int * index, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_Waitany_t)(int count, MPI_Request array_of_requests[], int * index, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Waitsome       
+    int i_MPI_Waitsome(int incount, MPI_Request array_of_requests[], int * outcount, int array_of_indices[], MPI_Status array_of_statuses[], void* return_address);
+    typedef int (*__MPI_Waitsome_t)(int incount, MPI_Request array_of_requests[], int * outcount, int array_of_indices[], MPI_Status array_of_statuses[], void* return_address);
+#endif
+
+#if HAVE_MPI_Test       
+    int i_MPI_Test(MPI_Request * request, int * flag, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_Test_t)(MPI_Request * request, int * flag, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Testall       
+    int i_MPI_Testall(int count, MPI_Request array_of_requests[], int * flag, MPI_Status array_of_statuses[], void* return_address);
+    typedef int (*__MPI_Testall_t)(int count, MPI_Request array_of_requests[], int * flag, MPI_Status array_of_statuses[], void* return_address);
+#endif
+
+#if HAVE_MPI_Testany       
+    int i_MPI_Testany(int count, MPI_Request array_of_requests[], int * index, int * flag, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_Testany_t)(int count, MPI_Request array_of_requests[], int * index, int * flag, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Testsome       
+    int i_MPI_Testsome(int incount, MPI_Request array_of_requests[], int * outcount, int array_of_indices[], MPI_Status array_of_statuses[], void* return_address);
+    typedef int (*__MPI_Testsome_t)(int incount, MPI_Request array_of_requests[], int * outcount, int array_of_indices[], MPI_Status array_of_statuses[], void* return_address);
+#endif
+
+#if HAVE_MPI_Request_free       
+    int i_MPI_Request_free(MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Request_free_t)(MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Cancel       
+    int i_MPI_Cancel(MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Cancel_t)(MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_contiguous       
+    int i_MPI_Type_contiguous(int count, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+    typedef int (*__MPI_Type_contiguous_t)(int count, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_vector       
+    int i_MPI_Type_vector(int count, int blocklength, int stride, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+    typedef int (*__MPI_Type_vector_t)(int count, int blocklength, int stride, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_indexed       
+    int i_MPI_Type_indexed(int count, const int array_of_blocklengths[], const int array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+    typedef int (*__MPI_Type_indexed_t)(int count, const int array_of_blocklengths[], const int array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_create_indexed_block       
+    int i_MPI_Type_create_indexed_block(int count, int blocklength, const int array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+    typedef int (*__MPI_Type_create_indexed_block_t)(int count, int blocklength, const int array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_create_struct       
+    int i_MPI_Type_create_struct(int count, const int array_of_block_lengths[], const MPI_Aint array_of_displacements[], const MPI_Datatype array_of_types[], MPI_Datatype * newtype, void* return_address);
+    typedef int (*__MPI_Type_create_struct_t)(int count, const int array_of_block_lengths[], const MPI_Aint array_of_displacements[], const MPI_Datatype array_of_types[], MPI_Datatype * newtype, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_create_resized       
+    int i_MPI_Type_create_resized(MPI_Datatype oldtype, MPI_Aint lb, MPI_Aint extent, MPI_Datatype * newtype, void* return_address);
+    typedef int (*__MPI_Type_create_resized_t)(MPI_Datatype oldtype, MPI_Aint lb, MPI_Aint extent, MPI_Datatype * newtype, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_commit       
+    int i_MPI_Type_commit(MPI_Datatype * type, void* return_address);
+    typedef int (*__MPI_Type_commit_t)(MPI_Datatype * type, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_free       
+    int i_MPI_Type_free(MPI_Datatype * type, void* return_address);
+    typedef int (*__MPI_Type_free_t)(MPI_Datatype * type, void* return_address);
+#endif
+
+#if HAVE_MPI_Get_count       
+    int i_MPI_Get_count(const MPI_Status * status, MPI_Datatype datatype, int * count, void* return_address);
+    typedef int (*__MPI_Get_count_t)(const MPI_Status * status, MPI_Datatype datatype, int * count, void* return_address);
+#endif
+
+#if HAVE_MPI_Get_elements       
+    int i_MPI_Get_elements(const MPI_Status * status, MPI_Datatype datatype, int * count, void* return_address);
+    typedef int (*__MPI_Get_elements_t)(const MPI_Status * status, MPI_Datatype datatype, int * count, void* return_address);
+#endif
+
+#if HAVE_MPI_Pack       
+    int i_MPI_Pack(const void * inbuf, int incount, MPI_Datatype datatype, void * outbuf, int outsize, int * position, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Pack_t)(const void * inbuf, int incount, MPI_Datatype datatype, void * outbuf, int outsize, int * position, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Unpack       
+    int i_MPI_Unpack(const void * inbuf, int insize, int * position, void * outbuf, int outcount, MPI_Datatype datatype, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Unpack_t)(const void * inbuf, int insize, int * position, void * outbuf, int outcount, MPI_Datatype datatype, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Pack_size       
+    int i_MPI_Pack_size(int incount, MPI_Datatype datatype, MPI_Comm comm, int * size, void* return_address);
+    typedef int (*__MPI_Pack_size_t)(int incount, MPI_Datatype datatype, MPI_Comm comm, int * size, void* return_address);
+#endif
+
+#if HAVE_MPI_Barrier       
+    int i_MPI_Barrier(MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Barrier_t)(MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Bcast       
+    int i_MPI_Bcast(void * buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Bcast_t)(void * buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Gather       
+    int i_MPI_Gather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Gather_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Gatherv       
+    int i_MPI_Gatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Gatherv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Scatter       
+    int i_MPI_Scatter(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Scatter_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Scatterv       
+    int i_MPI_Scatterv(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Scatterv_t)(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Allgather       
+    int i_MPI_Allgather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Allgather_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Allgatherv       
+    int i_MPI_Allgatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Allgatherv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Alltoall       
+    int i_MPI_Alltoall(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Alltoall_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Alltoallv       
+    int i_MPI_Alltoallv(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Alltoallv_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Reduce       
+    int i_MPI_Reduce(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Reduce_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Allreduce       
+    int i_MPI_Allreduce(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Allreduce_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Reduce_scatter       
+    int i_MPI_Reduce_scatter(const void * sendbuf, void * recvbuf, const int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Reduce_scatter_t)(const void * sendbuf, void * recvbuf, const int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Reduce_scatter_block       
+    int i_MPI_Reduce_scatter_block(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Reduce_scatter_block_t)(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Scan       
+    int i_MPI_Scan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Scan_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Exscan       
+    int i_MPI_Exscan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Exscan_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_size       
+    int i_MPI_Comm_size(MPI_Comm comm, int * size, void* return_address);
+    typedef int (*__MPI_Comm_size_t)(MPI_Comm comm, int * size, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_rank       
+    int i_MPI_Comm_rank(MPI_Comm comm, int * rank, void* return_address);
+    typedef int (*__MPI_Comm_rank_t)(MPI_Comm comm, int * rank, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_group       
+    int i_MPI_Comm_group(MPI_Comm comm, MPI_Group * group, void* return_address);
+    typedef int (*__MPI_Comm_group_t)(MPI_Comm comm, MPI_Group * group, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_dup       
+    int i_MPI_Comm_dup(MPI_Comm comm, MPI_Comm * newcomm, void* return_address);
+    typedef int (*__MPI_Comm_dup_t)(MPI_Comm comm, MPI_Comm * newcomm, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_create       
+    int i_MPI_Comm_create(MPI_Comm comm, MPI_Group group, MPI_Comm * newcomm, void* return_address);
+    typedef int (*__MPI_Comm_create_t)(MPI_Comm comm, MPI_Group group, MPI_Comm * newcomm, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_split       
+    int i_MPI_Comm_split(MPI_Comm comm, int color, int key, MPI_Comm * newcomm, void* return_address);
+    typedef int (*__MPI_Comm_split_t)(MPI_Comm comm, int color, int key, MPI_Comm * newcomm, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_free       
+    int i_MPI_Comm_free(MPI_Comm * comm, void* return_address);
+    typedef int (*__MPI_Comm_free_t)(MPI_Comm * comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_test_inter       
+    int i_MPI_Comm_test_inter(MPI_Comm comm, int * flag, void* return_address);
+    typedef int (*__MPI_Comm_test_inter_t)(MPI_Comm comm, int * flag, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_remote_size       
+    int i_MPI_Comm_remote_size(MPI_Comm comm, int * size, void* return_address);
+    typedef int (*__MPI_Comm_remote_size_t)(MPI_Comm comm, int * size, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_remote_group       
+    int i_MPI_Comm_remote_group(MPI_Comm comm, MPI_Group * group, void* return_address);
+    typedef int (*__MPI_Comm_remote_group_t)(MPI_Comm comm, MPI_Group * group, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_compare       
+    int i_MPI_Comm_compare(MPI_Comm comm1, MPI_Comm comm2, int * result, void* return_address);
+    typedef int (*__MPI_Comm_compare_t)(MPI_Comm comm1, MPI_Comm comm2, int * result, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_create_keyval       
+    int i_MPI_Comm_create_keyval(MPI_Comm_copy_attr_function * comm_copy_attr_fn, MPI_Comm_delete_attr_function * comm_delete_attr_fn, int * comm_keyval, void * extra_state, void* return_address);
+    typedef int (*__MPI_Comm_create_keyval_t)(MPI_Comm_copy_attr_function * comm_copy_attr_fn, MPI_Comm_delete_attr_function * comm_delete_attr_fn, int * comm_keyval, void * extra_state, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_set_attr       
+    int i_MPI_Comm_set_attr(MPI_Comm comm, int comm_keyval, void * attribute_val, void* return_address);
+    typedef int (*__MPI_Comm_set_attr_t)(MPI_Comm comm, int comm_keyval, void * attribute_val, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_get_attr       
+    int i_MPI_Comm_get_attr(MPI_Comm comm, int comm_keyval, void * attribute_val, int * flag, void* return_address);
+    typedef int (*__MPI_Comm_get_attr_t)(MPI_Comm comm, int comm_keyval, void * attribute_val, int * flag, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_delete_attr       
+    int i_MPI_Comm_delete_attr(MPI_Comm comm, int comm_keyval, void* return_address);
+    typedef int (*__MPI_Comm_delete_attr_t)(MPI_Comm comm, int comm_keyval, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_get_name       
+    int i_MPI_Comm_get_name(MPI_Comm comm, char * comm_name, int * resultlen, void* return_address);
+    typedef int (*__MPI_Comm_get_name_t)(MPI_Comm comm, char * comm_name, int * resultlen, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_set_name       
+    int i_MPI_Comm_set_name(MPI_Comm comm, const char * comm_name, void* return_address);
+    typedef int (*__MPI_Comm_set_name_t)(MPI_Comm comm, const char * comm_name, void* return_address);
+#endif
+
+#if HAVE_MPI_Group_size       
+    int i_MPI_Group_size(MPI_Group group, int * size, void* return_address);
+    typedef int (*__MPI_Group_size_t)(MPI_Group group, int * size, void* return_address);
+#endif
+
+#if HAVE_MPI_Group_rank       
+    int i_MPI_Group_rank(MPI_Group group, int * rank, void* return_address);
+    typedef int (*__MPI_Group_rank_t)(MPI_Group group, int * rank, void* return_address);
+#endif
+
+#if HAVE_MPI_Group_translate_ranks       
+    int i_MPI_Group_translate_ranks(MPI_Group group1, int n, const int ranks1[], MPI_Group group2, int ranks2[], void* return_address);
+    typedef int (*__MPI_Group_translate_ranks_t)(MPI_Group group1, int n, const int ranks1[], MPI_Group group2, int ranks2[], void* return_address);
+#endif
+
+#if HAVE_MPI_Group_compare       
+    int i_MPI_Group_compare(MPI_Group group1, MPI_Group group2, int * result, void* return_address);
+    typedef int (*__MPI_Group_compare_t)(MPI_Group group1, MPI_Group group2, int * result, void* return_address);
+#endif
+
+#if HAVE_MPI_Group_union       
+    int i_MPI_Group_union(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, void* return_address);
+    typedef int (*__MPI_Group_union_t)(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, void* return_address);
+#endif
+
+#if HAVE_MPI_Group_intersection       
+    int i_MPI_Group_intersection(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, void* return_address);
+    typedef int (*__MPI_Group_intersection_t)(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, void* return_address);
+#endif
+
+#if HAVE_MPI_Group_difference       
+    int i_MPI_Group_difference(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, void* return_address);
+    typedef int (*__MPI_Group_difference_t)(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, void* return_address);
+#endif
+
+#if HAVE_MPI_Group_incl       
+    int i_MPI_Group_incl(MPI_Group group, int n, const int ranks[], MPI_Group * newgroup, void* return_address);
+    typedef int (*__MPI_Group_incl_t)(MPI_Group group, int n, const int ranks[], MPI_Group * newgroup, void* return_address);
+#endif
+
+#if HAVE_MPI_Group_excl       
+    int i_MPI_Group_excl(MPI_Group group, int n, const int ranks[], MPI_Group * newgroup, void* return_address);
+    typedef int (*__MPI_Group_excl_t)(MPI_Group group, int n, const int ranks[], MPI_Group * newgroup, void* return_address);
+#endif
+
+#if HAVE_MPI_Group_range_incl       
+    int i_MPI_Group_range_incl(MPI_Group group, int n, int ranges[][3], MPI_Group * newgroup, void* return_address);
+    typedef int (*__MPI_Group_range_incl_t)(MPI_Group group, int n, int ranges[][3], MPI_Group * newgroup, void* return_address);
+#endif
+
+#if HAVE_MPI_Group_range_excl       
+    int i_MPI_Group_range_excl(MPI_Group group, int n, int ranges[][3], MPI_Group * newgroup, void* return_address);
+    typedef int (*__MPI_Group_range_excl_t)(MPI_Group group, int n, int ranges[][3], MPI_Group * newgroup, void* return_address);
+#endif
+
+#if HAVE_MPI_Group_free       
+    int i_MPI_Group_free(MPI_Group * group, void* return_address);
+    typedef int (*__MPI_Group_free_t)(MPI_Group * group, void* return_address);
+#endif
+
+#if HAVE_MPI_Op_create       
+    int i_MPI_Op_create(MPI_User_function * function, int commute, MPI_Op * op, void* return_address);
+    typedef int (*__MPI_Op_create_t)(MPI_User_function * function, int commute, MPI_Op * op, void* return_address);
+#endif
+
+#if HAVE_MPI_Op_free       
+    int i_MPI_Op_free(MPI_Op * op, void* return_address);
+    typedef int (*__MPI_Op_free_t)(MPI_Op * op, void* return_address);
+#endif
+
+#if HAVE_MPI_Wtime       
+    double i_MPI_Wtime(void* return_address);
+    typedef double (*__MPI_Wtime_t)(void* return_address);
+#endif
+
+#if HAVE_MPI_Wtick       
+    double i_MPI_Wtick(void* return_address);
+    typedef double (*__MPI_Wtick_t)(void* return_address);
+#endif
+
+#if HAVE_MPI_Get_address       
+    int i_MPI_Get_address(const void * location, MPI_Aint * address, void* return_address);
+    typedef int (*__MPI_Get_address_t)(const void * location, MPI_Aint * address, void* return_address);
+#endif
+
+#if HAVE_MPI_Get_elements_x       
+    int i_MPI_Get_elements_x(const MPI_Status * status, MPI_Datatype datatype, MPI_Count * count, void* return_address);
+    typedef int (*__MPI_Get_elements_x_t)(const MPI_Status * status, MPI_Datatype datatype, MPI_Count * count, void* return_address);
+#endif
+
+#if HAVE_MPI_Cart_shift       
+    int i_MPI_Cart_shift(MPI_Comm comm, int direction, int disp, int * rank_source, int * rank_dest, void* return_address);
+    typedef int (*__MPI_Cart_shift_t)(MPI_Comm comm, int direction, int disp, int * rank_source, int * rank_dest, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_flush_local_all       
+    int i_MPI_Win_flush_local_all(MPI_Win win, void* return_address);
+    typedef int (*__MPI_Win_flush_local_all_t)(MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_File_get_byte_offset       
+    int i_MPI_File_get_byte_offset(MPI_File fh, MPI_Offset offset, MPI_Offset * disp, void* return_address);
+    typedef int (*__MPI_File_get_byte_offset_t)(MPI_File fh, MPI_Offset offset, MPI_Offset * disp, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_get_info       
+    int i_MPI_Win_get_info(MPI_Win win, MPI_Info * info_used, void* return_address);
+    typedef int (*__MPI_Win_get_info_t)(MPI_Win win, MPI_Info * info_used, void* return_address);
+#endif
+
+#if HAVE_MPI_Rput       
+    int i_MPI_Rput(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_cout, MPI_Datatype target_datatype, MPI_Win win, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Rput_t)(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_cout, MPI_Datatype target_datatype, MPI_Win win, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Dist_graph_neighbors_count       
+    int i_MPI_Dist_graph_neighbors_count(MPI_Comm comm, int * inneighbors, int * outneighbors, int * weighted, void* return_address);
+    typedef int (*__MPI_Dist_graph_neighbors_count_t)(MPI_Comm comm, int * inneighbors, int * outneighbors, int * weighted, void* return_address);
+#endif
+
+#if HAVE_MPI_Ireduce       
+    int i_MPI_Ireduce(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Ireduce_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Psend_init       
+    int i_MPI_Psend_init(const void * buf, int partitions, MPI_Count count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Psend_init_t)(const void * buf, int partitions, MPI_Count count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Reduce_init       
+    int i_MPI_Reduce_init(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Reduce_init_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_wait       
+    int i_MPI_Win_wait(MPI_Win win, void* return_address);
+    typedef int (*__MPI_Win_wait_t)(MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Rsend_init       
+    int i_MPI_Rsend_init(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Rsend_init_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_write_at_all       
+    int i_MPI_File_write_at_all(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_write_at_all_t)(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_File_write_ordered_end       
+    int i_MPI_File_write_ordered_end(MPI_File fh, const void * buf, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_write_ordered_end_t)(MPI_File fh, const void * buf, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Errhandler_free       
+    int i_MPI_Errhandler_free(MPI_Errhandler * errhandler, void* return_address);
+    typedef int (*__MPI_Errhandler_free_t)(MPI_Errhandler * errhandler, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_shared_query       
+    int i_MPI_Win_shared_query(MPI_Win win, int rank, MPI_Aint * size, int * disp_unit, void * baseptr, void* return_address);
+    typedef int (*__MPI_Win_shared_query_t)(MPI_Win win, int rank, MPI_Aint * size, int * disp_unit, void * baseptr, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_lock       
+    int i_MPI_Win_lock(int lock_type, int rank, int mpi_assert, MPI_Win win, void* return_address);
+    typedef int (*__MPI_Win_lock_t)(int lock_type, int rank, int mpi_assert, MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Get_accumulate       
+    int i_MPI_Get_accumulate(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, void * result_addr, int result_count, MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, void* return_address);
+    typedef int (*__MPI_Get_accumulate_t)(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, void * result_addr, int result_count, MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_get_name       
+    int i_MPI_Type_get_name(MPI_Datatype type, char * type_name, int * resultlen, void* return_address);
+    typedef int (*__MPI_Type_get_name_t)(MPI_Datatype type, char * type_name, int * resultlen, void* return_address);
+#endif
+
+#if HAVE_MPI_File_get_atomicity       
+    int i_MPI_File_get_atomicity(MPI_File fh, int * flag, void* return_address);
+    typedef int (*__MPI_File_get_atomicity_t)(MPI_File fh, int * flag, void* return_address);
+#endif
+
+#if HAVE_MPI_Session_set_info       
+    int i_MPI_Session_set_info(MPI_Session session, MPI_Info info, void* return_address);
+    typedef int (*__MPI_Session_set_info_t)(MPI_Session session, MPI_Info info, void* return_address);
+#endif
+
+#if HAVE_MPI_Group_from_session_pset       
+    int i_MPI_Group_from_session_pset(MPI_Session session, const char * pset_name, MPI_Group * newgroup, void* return_address);
+    typedef int (*__MPI_Group_from_session_pset_t)(MPI_Session session, const char * pset_name, MPI_Group * newgroup, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_idup       
+    int i_MPI_Comm_idup(MPI_Comm comm, MPI_Comm * newcomm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Comm_idup_t)(MPI_Comm comm, MPI_Comm * newcomm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_get_name       
+    int i_MPI_Win_get_name(MPI_Win win, char * win_name, int * resultlen, void* return_address);
+    typedef int (*__MPI_Win_get_name_t)(MPI_Win win, char * win_name, int * resultlen, void* return_address);
+#endif
+
+#if HAVE_MPI_Allgatherv_init       
+    int i_MPI_Allgatherv_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Allgatherv_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_dup_with_info       
+    int i_MPI_Comm_dup_with_info(MPI_Comm comm, MPI_Info info, MPI_Comm * newcomm, void* return_address);
+    typedef int (*__MPI_Comm_dup_with_info_t)(MPI_Comm comm, MPI_Info info, MPI_Comm * newcomm, void* return_address);
+#endif
+
+#if HAVE_MPI_Session_get_num_psets       
+    int i_MPI_Session_get_num_psets(MPI_Session session, MPI_Info info, int * npset_names, void* return_address);
+    typedef int (*__MPI_Session_get_num_psets_t)(MPI_Session session, MPI_Info info, int * npset_names, void* return_address);
+#endif
+
+#if HAVE_MPI_Igather       
+    int i_MPI_Igather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Igather_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_read_at       
+    int i_MPI_File_read_at(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_read_at_t)(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_create_hvector       
+    int i_MPI_Type_create_hvector(int count, int blocklength, MPI_Aint stride, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+    typedef int (*__MPI_Type_create_hvector_t)(int count, int blocklength, MPI_Aint stride, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+#endif
+
+#if HAVE_MPI_File_write_at_all_begin       
+    int i_MPI_File_write_at_all_begin(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, void* return_address);
+    typedef int (*__MPI_File_write_at_all_begin_t)(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, void* return_address);
+#endif
+
+#if HAVE_MPI_Grequest_start       
+    int i_MPI_Grequest_start(MPI_Grequest_query_function * query_fn, MPI_Grequest_free_function * free_fn, MPI_Grequest_cancel_function * cancel_fn, void * extra_state, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Grequest_start_t)(MPI_Grequest_query_function * query_fn, MPI_Grequest_free_function * free_fn, MPI_Grequest_cancel_function * cancel_fn, void * extra_state, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Bsend_init       
+    int i_MPI_Bsend_init(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Bsend_init_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_set_size       
+    int i_MPI_File_set_size(MPI_File fh, MPI_Offset size, void* return_address);
+    typedef int (*__MPI_File_set_size_t)(MPI_File fh, MPI_Offset size, void* return_address);
+#endif
+
+#if HAVE_MPI_Op_c2f       
+    int i_MPI_Op_c2f(MPI_Op op, void* return_address);
+    typedef int (*__MPI_Op_c2f_t)(MPI_Op op, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_set_name       
+    int i_MPI_Type_set_name(MPI_Datatype type, const char * type_name, void* return_address);
+    typedef int (*__MPI_Type_set_name_t)(MPI_Datatype type, const char * type_name, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_split_type       
+    int i_MPI_Comm_split_type(MPI_Comm comm, int split_type, int key, MPI_Info info, MPI_Comm * newcomm, void* return_address);
+    typedef int (*__MPI_Comm_split_type_t)(MPI_Comm comm, int split_type, int key, MPI_Info info, MPI_Comm * newcomm, void* return_address);
+#endif
+
+#if HAVE_MPI_File_read_at_all_end       
+    int i_MPI_File_read_at_all_end(MPI_File fh, void * buf, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_read_at_all_end_t)(MPI_File fh, void * buf, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_File_write_all       
+    int i_MPI_File_write_all(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_write_all_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Improbe       
+    int i_MPI_Improbe(int source, int tag, MPI_Comm comm, int * flag, MPI_Message * message, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_Improbe_t)(int source, int tag, MPI_Comm comm, int * flag, MPI_Message * message, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_get_info       
+    int i_MPI_Comm_get_info(MPI_Comm comm, MPI_Info * info_used, void* return_address);
+    typedef int (*__MPI_Comm_get_info_t)(MPI_Comm comm, MPI_Info * info_used, void* return_address);
+#endif
+
+#if HAVE_MPI_File_read_all_end       
+    int i_MPI_File_read_all_end(MPI_File fh, void * buf, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_read_all_end_t)(MPI_File fh, void * buf, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_unlock_all       
+    int i_MPI_Win_unlock_all(MPI_Win win, void* return_address);
+    typedef int (*__MPI_Win_unlock_all_t)(MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_c2f       
+    int i_MPI_Win_c2f(MPI_Win win, void* return_address);
+    typedef int (*__MPI_Win_c2f_t)(MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_create_f90_integer       
+    int i_MPI_Type_create_f90_integer(int r, MPI_Datatype * newtype, void* return_address);
+    typedef int (*__MPI_Type_create_f90_integer_t)(int r, MPI_Datatype * newtype, void* return_address);
+#endif
+
+#if HAVE_MPI_Group_f2c       
+    MPI_Group i_MPI_Group_f2c(int group, void* return_address);
+    typedef MPI_Group (*__MPI_Group_f2c_t)(int group, void* return_address);
+#endif
+
+#if HAVE_MPI_Exscan_init       
+    int i_MPI_Exscan_init(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Exscan_init_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Ibsend       
+    int i_MPI_Ibsend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Ibsend_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_flush_local       
+    int i_MPI_Win_flush_local(int rank, MPI_Win win, void* return_address);
+    typedef int (*__MPI_Win_flush_local_t)(int rank, MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Ialltoallw       
+    int i_MPI_Ialltoallw(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Ialltoallw_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_create_from_group       
+    int i_MPI_Comm_create_from_group(MPI_Group group, const char * tag, MPI_Info info, MPI_Errhandler errhandler, MPI_Comm * newcomm, void* return_address);
+    typedef int (*__MPI_Comm_create_from_group_t)(MPI_Group group, const char * tag, MPI_Info info, MPI_Errhandler errhandler, MPI_Comm * newcomm, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_get_contents       
+    int i_MPI_Type_get_contents(MPI_Datatype mtype, int max_integers, int max_addresses, int max_datatypes, int array_of_integers[], MPI_Aint array_of_addresses[], MPI_Datatype array_of_datatypes[], void* return_address);
+    typedef int (*__MPI_Type_get_contents_t)(MPI_Datatype mtype, int max_integers, int max_addresses, int max_datatypes, int array_of_integers[], MPI_Aint array_of_addresses[], MPI_Datatype array_of_datatypes[], void* return_address);
+#endif
+
+#if HAVE_MPI_File_iwrite_at       
+    int i_MPI_File_iwrite_at(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_File_iwrite_at_t)(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Status_set_elements       
+    int i_MPI_Status_set_elements(MPI_Status * status, MPI_Datatype datatype, int count, void* return_address);
+    typedef int (*__MPI_Status_set_elements_t)(MPI_Status * status, MPI_Datatype datatype, int count, void* return_address);
+#endif
+
+#if HAVE_MPI_File_read_ordered       
+    int i_MPI_File_read_ordered(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_read_ordered_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Is_thread_main       
+    int i_MPI_Is_thread_main(int * flag, void* return_address);
+    typedef int (*__MPI_Is_thread_main_t)(int * flag, void* return_address);
+#endif
+
+#if HAVE_MPI_Allreduce_init       
+    int i_MPI_Allreduce_init(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Allreduce_init_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Info_get_valuelen       
+    int i_MPI_Info_get_valuelen(MPI_Info info, const char * key, int * valuelen, int * flag, void* return_address);
+    typedef int (*__MPI_Info_get_valuelen_t)(MPI_Info info, const char * key, int * valuelen, int * flag, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_create_errhandler       
+    int i_MPI_Comm_create_errhandler(MPI_Comm_errhandler_function * function, MPI_Errhandler * errhandler, void* return_address);
+    typedef int (*__MPI_Comm_create_errhandler_t)(MPI_Comm_errhandler_function * function, MPI_Errhandler * errhandler, void* return_address);
+#endif
+
+#if HAVE_MPI_Info_free       
+    int i_MPI_Info_free(MPI_Info * info, void* return_address);
+    typedef int (*__MPI_Info_free_t)(MPI_Info * info, void* return_address);
+#endif
+
+#if HAVE_MPI_Info_get_nthkey       
+    int i_MPI_Info_get_nthkey(MPI_Info info, int n, char * key, void* return_address);
+    typedef int (*__MPI_Info_get_nthkey_t)(MPI_Info info, int n, char * key, void* return_address);
+#endif
+
+#if HAVE_MPI_Ssend_init       
+    int i_MPI_Ssend_init(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Ssend_init_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_set_info       
+    int i_MPI_Comm_set_info(MPI_Comm comm, MPI_Info info, void* return_address);
+    typedef int (*__MPI_Comm_set_info_t)(MPI_Comm comm, MPI_Info info, void* return_address);
+#endif
+
+#if HAVE_MPI_Cart_create       
+    int i_MPI_Cart_create(MPI_Comm old_comm, int ndims, const int dims[], const int periods[], int reorder, MPI_Comm * comm_cart, void* return_address);
+    typedef int (*__MPI_Cart_create_t)(MPI_Comm old_comm, int ndims, const int dims[], const int periods[], int reorder, MPI_Comm * comm_cart, void* return_address);
+#endif
+
+#if HAVE_MPI_File_c2f       
+    int i_MPI_File_c2f(MPI_File file, void* return_address);
+    typedef int (*__MPI_File_c2f_t)(MPI_File file, void* return_address);
+#endif
+
+#if HAVE_MPI_File_write_all_begin       
+    int i_MPI_File_write_all_begin(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, void* return_address);
+    typedef int (*__MPI_File_write_all_begin_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, void* return_address);
+#endif
+
+#if HAVE_MPI_Scan_init       
+    int i_MPI_Scan_init(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Scan_init_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Irsend       
+    int i_MPI_Irsend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Irsend_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Neighbor_alltoallv       
+    int i_MPI_Neighbor_alltoallv(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Neighbor_alltoallv_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Pready_list       
+    int i_MPI_Pready_list(int length, int partition_list[], MPI_Request request, void* return_address);
+    typedef int (*__MPI_Pready_list_t)(int length, int partition_list[], MPI_Request request, void* return_address);
+#endif
+
+#if HAVE_MPI_Request_c2f       
+    int i_MPI_Request_c2f(MPI_Request request, void* return_address);
+    typedef int (*__MPI_Request_c2f_t)(MPI_Request request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_f2c       
+    MPI_File i_MPI_File_f2c(int file, void* return_address);
+    typedef MPI_File (*__MPI_File_f2c_t)(int file, void* return_address);
+#endif
+
+#if HAVE_MPI_Alltoallw_init       
+    int i_MPI_Alltoallw_init(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Alltoallw_init_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Info_c2f       
+    int i_MPI_Info_c2f(MPI_Info info, void* return_address);
+    typedef int (*__MPI_Info_c2f_t)(MPI_Info info, void* return_address);
+#endif
+
+#if HAVE_MPI_File_read_ordered_begin       
+    int i_MPI_File_read_ordered_begin(MPI_File fh, void * buf, int count, MPI_Datatype datatype, void* return_address);
+    typedef int (*__MPI_File_read_ordered_begin_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, void* return_address);
+#endif
+
+#if HAVE_MPI_Dist_graph_create_adjacent       
+    int i_MPI_Dist_graph_create_adjacent(MPI_Comm comm_old, int indegree, const int sources[], const int sourceweights[], int outdegree, const int destinations[], const int destweights[], MPI_Info info, int reorder, MPI_Comm * comm_dist_graph, void* return_address);
+    typedef int (*__MPI_Dist_graph_create_adjacent_t)(MPI_Comm comm_old, int indegree, const int sources[], const int sourceweights[], int outdegree, const int destinations[], const int destweights[], MPI_Info info, int reorder, MPI_Comm * comm_dist_graph, void* return_address);
+#endif
+
+#if HAVE_MPI_Reduce_scatter_init       
+    int i_MPI_Reduce_scatter_init(const void * sendbuf, void * recvbuf, const int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Reduce_scatter_init_t)(const void * sendbuf, void * recvbuf, const int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_get_parent       
+    int i_MPI_Comm_get_parent(MPI_Comm * parent, void* return_address);
+    typedef int (*__MPI_Comm_get_parent_t)(MPI_Comm * parent, void* return_address);
+#endif
+
+#if HAVE_MPI_Info_f2c       
+    MPI_Info i_MPI_Info_f2c(int info, void* return_address);
+    typedef MPI_Info (*__MPI_Info_f2c_t)(int info, void* return_address);
+#endif
+
+#if HAVE_MPI_Keyval_free       
+    int i_MPI_Keyval_free(int * keyval, void* return_address);
+    typedef int (*__MPI_Keyval_free_t)(int * keyval, void* return_address);
+#endif
+
+#if HAVE_MPI_Session_f2c       
+    MPI_Session i_MPI_Session_f2c(int session, void* return_address);
+    typedef MPI_Session (*__MPI_Session_f2c_t)(int session, void* return_address);
+#endif
+
+#if HAVE_MPI_Info_set       
+    int i_MPI_Info_set(MPI_Info info, const char * key, const char * value, void* return_address);
+    typedef int (*__MPI_Info_set_t)(MPI_Info info, const char * key, const char * value, void* return_address);
+#endif
+
+#if HAVE_MPI_Keyval_create       
+    int i_MPI_Keyval_create(MPI_Copy_function * copy_fn, MPI_Delete_function * delete_fn, int * keyval, void * extra_state, void* return_address);
+    typedef int (*__MPI_Keyval_create_t)(MPI_Copy_function * copy_fn, MPI_Delete_function * delete_fn, int * keyval, void * extra_state, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_connect       
+    int i_MPI_Comm_connect(const char * port_name, MPI_Info info, int root, MPI_Comm comm, MPI_Comm * newcomm, void* return_address);
+    typedef int (*__MPI_Comm_connect_t)(const char * port_name, MPI_Info info, int root, MPI_Comm comm, MPI_Comm * newcomm, void* return_address);
+#endif
+
+#if HAVE_MPI_Ssend       
+    int i_MPI_Ssend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Ssend_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Scatterv_init       
+    int i_MPI_Scatterv_init(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Scatterv_init_t)(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_write_at_all_end       
+    int i_MPI_File_write_at_all_end(MPI_File fh, const void * buf, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_write_at_all_end_t)(MPI_File fh, const void * buf, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_File_write_all_end       
+    int i_MPI_File_write_all_end(MPI_File fh, const void * buf, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_write_all_end_t)(MPI_File fh, const void * buf, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Status_f082f       
+    int i_MPI_Status_f082f(const MPI_F08_status * f08_status, int * f_status, void* return_address);
+    typedef int (*__MPI_Status_f082f_t)(const MPI_F08_status * f08_status, int * f_status, void* return_address);
+#endif
+
+#if HAVE_MPI_Buffer_detach       
+    int i_MPI_Buffer_detach(void * buffer, int * size, void* return_address);
+    typedef int (*__MPI_Buffer_detach_t)(void * buffer, int * size, void* return_address);
+#endif
+
+#if HAVE_MPI_Status_c2f08       
+    int i_MPI_Status_c2f08(const MPI_Status * c_status, MPI_F08_status * f08_status, void* return_address);
+    typedef int (*__MPI_Status_c2f08_t)(const MPI_Status * c_status, MPI_F08_status * f08_status, void* return_address);
+#endif
+
+#if HAVE_MPI_Startall       
+    int i_MPI_Startall(int count, MPI_Request array_of_requests[], void* return_address);
+    typedef int (*__MPI_Startall_t)(int count, MPI_Request array_of_requests[], void* return_address);
+#endif
+
+#if HAVE_MPI_Neighbor_alltoall       
+    int i_MPI_Neighbor_alltoall(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Neighbor_alltoall_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Put       
+    int i_MPI_Put(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win, void* return_address);
+    typedef int (*__MPI_Put_t)(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_File_read_ordered_end       
+    int i_MPI_File_read_ordered_end(MPI_File fh, void * buf, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_read_ordered_end_t)(MPI_File fh, void * buf, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_call_errhandler       
+    int i_MPI_Win_call_errhandler(MPI_Win win, int errorcode, void* return_address);
+    typedef int (*__MPI_Win_call_errhandler_t)(MPI_Win win, int errorcode, void* return_address);
+#endif
+
+#if HAVE_MPI_File_write_at       
+    int i_MPI_File_write_at(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_write_at_t)(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Session_get_pset_info       
+    int i_MPI_Session_get_pset_info(MPI_Session session, const char * pset_name, MPI_Info * info_used, void* return_address);
+    typedef int (*__MPI_Session_get_pset_info_t)(MPI_Session session, const char * pset_name, MPI_Info * info_used, void* return_address);
+#endif
+
+#if HAVE_MPI_Topo_test       
+    int i_MPI_Topo_test(MPI_Comm comm, int * status, void* return_address);
+    typedef int (*__MPI_Topo_test_t)(MPI_Comm comm, int * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_disconnect       
+    int i_MPI_Comm_disconnect(MPI_Comm * comm, void* return_address);
+    typedef int (*__MPI_Comm_disconnect_t)(MPI_Comm * comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Add_error_class       
+    int i_MPI_Add_error_class(int * errorclass, void* return_address);
+    typedef int (*__MPI_Add_error_class_t)(int * errorclass, void* return_address);
+#endif
+
+#if HAVE_MPI_Ireduce_scatter       
+    int i_MPI_Ireduce_scatter(const void * sendbuf, void * recvbuf, const int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Ireduce_scatter_t)(const void * sendbuf, void * recvbuf, const int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Cart_map       
+    int i_MPI_Cart_map(MPI_Comm comm, int ndims, const int dims[], const int periods[], int * newrank, void* return_address);
+    typedef int (*__MPI_Cart_map_t)(MPI_Comm comm, int ndims, const int dims[], const int periods[], int * newrank, void* return_address);
+#endif
+
+#if HAVE_MPI_Intercomm_merge       
+    int i_MPI_Intercomm_merge(MPI_Comm intercomm, int high, MPI_Comm * newintracomm, void* return_address);
+    typedef int (*__MPI_Intercomm_merge_t)(MPI_Comm intercomm, int high, MPI_Comm * newintracomm, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_create_hindexed       
+    int i_MPI_Type_create_hindexed(int count, const int array_of_blocklengths[], const MPI_Aint array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+    typedef int (*__MPI_Type_create_hindexed_t)(int count, const int array_of_blocklengths[], const MPI_Aint array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+#endif
+
+#if HAVE_MPI_Info_get_nkeys       
+    int i_MPI_Info_get_nkeys(MPI_Info info, int * nkeys, void* return_address);
+    typedef int (*__MPI_Info_get_nkeys_t)(MPI_Info info, int * nkeys, void* return_address);
+#endif
+
+#if HAVE_MPI_File_read       
+    int i_MPI_File_read(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_read_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Ineighbor_allgatherv       
+    int i_MPI_Ineighbor_allgatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Ineighbor_allgatherv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Attr_put       
+    int i_MPI_Attr_put(MPI_Comm comm, int keyval, void * attribute_val, void* return_address);
+    typedef int (*__MPI_Attr_put_t)(MPI_Comm comm, int keyval, void * attribute_val, void* return_address);
+#endif
+
+#if HAVE_MPI_File_write_ordered_begin       
+    int i_MPI_File_write_ordered_begin(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, void* return_address);
+    typedef int (*__MPI_File_write_ordered_begin_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, void* return_address);
+#endif
+
+#if HAVE_MPI_Status_set_elements_x       
+    int i_MPI_Status_set_elements_x(MPI_Status * status, MPI_Datatype datatype, MPI_Count count, void* return_address);
+    typedef int (*__MPI_Status_set_elements_x_t)(MPI_Status * status, MPI_Datatype datatype, MPI_Count count, void* return_address);
+#endif
+
+#if HAVE_MPI_Compare_and_swap       
+    int i_MPI_Compare_and_swap(const void * origin_addr, const void * compare_addr, void * result_addr, MPI_Datatype datatype, int target_rank, MPI_Aint target_disp, MPI_Win win, void* return_address);
+    typedef int (*__MPI_Compare_and_swap_t)(const void * origin_addr, const void * compare_addr, void * result_addr, MPI_Datatype datatype, int target_rank, MPI_Aint target_disp, MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_create_f90_real       
+    int i_MPI_Type_create_f90_real(int p, int r, MPI_Datatype * newtype, void* return_address);
+    typedef int (*__MPI_Type_create_f90_real_t)(int p, int r, MPI_Datatype * newtype, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_delete_attr       
+    int i_MPI_Type_delete_attr(MPI_Datatype type, int type_keyval, void* return_address);
+    typedef int (*__MPI_Type_delete_attr_t)(MPI_Datatype type, int type_keyval, void* return_address);
+#endif
+
+#if HAVE_MPI_Probe       
+    int i_MPI_Probe(int source, int tag, MPI_Comm comm, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_Probe_t)(int source, int tag, MPI_Comm comm, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_File_close       
+    int i_MPI_File_close(MPI_File * fh, void* return_address);
+    typedef int (*__MPI_File_close_t)(MPI_File * fh, void* return_address);
+#endif
+
+#if HAVE_MPI_Request_get_status       
+    int i_MPI_Request_get_status(MPI_Request request, int * flag, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_Request_get_status_t)(MPI_Request request, int * flag, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Session_call_errhandler       
+    int i_MPI_Session_call_errhandler(MPI_Session session, int errorcode, void* return_address);
+    typedef int (*__MPI_Session_call_errhandler_t)(MPI_Session session, int errorcode, void* return_address);
+#endif
+
+#if HAVE_MPI_Rget_accumulate       
+    int i_MPI_Rget_accumulate(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, void * result_addr, int result_count, MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Rget_accumulate_t)(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, void * result_addr, int result_count, MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_iread_all       
+    int i_MPI_File_iread_all(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_File_iread_all_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Isendrecv       
+    int i_MPI_Isendrecv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, int dest, int sendtag, void * recvbuf, int recvcount, MPI_Datatype recvtype, int source, int recvtag, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Isendrecv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, int dest, int sendtag, void * recvbuf, int recvcount, MPI_Datatype recvtype, int source, int recvtag, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Pack_external       
+    int i_MPI_Pack_external(const char datarep[], const void * inbuf, int incount, MPI_Datatype datatype, void * outbuf, MPI_Aint outsize, MPI_Aint * position, void* return_address);
+    typedef int (*__MPI_Pack_external_t)(const char datarep[], const void * inbuf, int incount, MPI_Datatype datatype, void * outbuf, MPI_Aint outsize, MPI_Aint * position, void* return_address);
+#endif
+
+#if HAVE_MPI_Pready_range       
+    int i_MPI_Pready_range(int partition_low, int partition_high, MPI_Request request, void* return_address);
+    typedef int (*__MPI_Pready_range_t)(int partition_low, int partition_high, MPI_Request request, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_get_envelope       
+    int i_MPI_Type_get_envelope(MPI_Datatype type, int * num_integers, int * num_addresses, int * num_datatypes, int * combiner, void* return_address);
+    typedef int (*__MPI_Type_get_envelope_t)(MPI_Datatype type, int * num_integers, int * num_addresses, int * num_datatypes, int * combiner, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_f2c       
+    MPI_Datatype i_MPI_Type_f2c(int datatype, void* return_address);
+    typedef MPI_Datatype (*__MPI_Type_f2c_t)(int datatype, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_create       
+    int i_MPI_Win_create(void * base, MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, MPI_Win * win, void* return_address);
+    typedef int (*__MPI_Win_create_t)(void * base, MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, MPI_Win * win, void* return_address);
+#endif
+
+#if HAVE_MPI_Isendrecv_replace       
+    int i_MPI_Isendrecv_replace(void * buf, int count, MPI_Datatype datatype, int dest, int sendtag, int source, int recvtag, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Isendrecv_replace_t)(void * buf, int count, MPI_Datatype datatype, int dest, int sendtag, int source, int recvtag, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_set_errhandler       
+    int i_MPI_Win_set_errhandler(MPI_Win win, MPI_Errhandler errhandler, void* return_address);
+    typedef int (*__MPI_Win_set_errhandler_t)(MPI_Win win, MPI_Errhandler errhandler, void* return_address);
+#endif
+
+#if HAVE_MPI_Fetch_and_op       
+    int i_MPI_Fetch_and_op(const void * origin_addr, void * result_addr, MPI_Datatype datatype, int target_rank, MPI_Aint target_disp, MPI_Op op, MPI_Win win, void* return_address);
+    typedef int (*__MPI_Fetch_and_op_t)(const void * origin_addr, void * result_addr, MPI_Datatype datatype, int target_rank, MPI_Aint target_disp, MPI_Op op, MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Cartdim_get       
+    int i_MPI_Cartdim_get(MPI_Comm comm, int * ndims, void* return_address);
+    typedef int (*__MPI_Cartdim_get_t)(MPI_Comm comm, int * ndims, void* return_address);
+#endif
+
+#if HAVE_MPI_Dist_graph_neighbors       
+    int i_MPI_Dist_graph_neighbors(MPI_Comm comm, int maxindegree, int sources[], int sourceweights[], int maxoutdegree, int destinations[], int destweights[], void* return_address);
+    typedef int (*__MPI_Dist_graph_neighbors_t)(MPI_Comm comm, int maxindegree, int sources[], int sourceweights[], int maxoutdegree, int destinations[], int destweights[], void* return_address);
+#endif
+
+#if HAVE_MPI_File_seek       
+    int i_MPI_File_seek(MPI_File fh, MPI_Offset offset, int whence, void* return_address);
+    typedef int (*__MPI_File_seek_t)(MPI_File fh, MPI_Offset offset, int whence, void* return_address);
+#endif
+
+#if HAVE_MPI_Get       
+    int i_MPI_Get(void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win, void* return_address);
+    typedef int (*__MPI_Get_t)(void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Pack_external_size       
+    int i_MPI_Pack_external_size(const char datarep[], int incount, MPI_Datatype datatype, MPI_Aint * size, void* return_address);
+    typedef int (*__MPI_Pack_external_size_t)(const char datarep[], int incount, MPI_Datatype datatype, MPI_Aint * size, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_flush_all       
+    int i_MPI_Win_flush_all(MPI_Win win, void* return_address);
+    typedef int (*__MPI_Win_flush_all_t)(MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Rsend       
+    int i_MPI_Rsend(const void * ibuf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Rsend_t)(const void * ibuf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Message_c2f       
+    int i_MPI_Message_c2f(MPI_Message message, void* return_address);
+    typedef int (*__MPI_Message_c2f_t)(MPI_Message message, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_free       
+    int i_MPI_Win_free(MPI_Win * win, void* return_address);
+    typedef int (*__MPI_Win_free_t)(MPI_Win * win, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_create_f90_complex       
+    int i_MPI_Type_create_f90_complex(int p, int r, MPI_Datatype * newtype, void* return_address);
+    typedef int (*__MPI_Type_create_f90_complex_t)(int p, int r, MPI_Datatype * newtype, void* return_address);
+#endif
+
+#if HAVE_MPI_Neighbor_alltoallw_init       
+    int i_MPI_Neighbor_alltoallw_init(const void * sendbuf, const int sendcounts[], const MPI_Aint sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Neighbor_alltoallw_init_t)(const void * sendbuf, const int sendcounts[], const MPI_Aint sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Rget       
+    int i_MPI_Rget(void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Rget_t)(void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_create_keyval       
+    int i_MPI_Win_create_keyval(MPI_Win_copy_attr_function * win_copy_attr_fn, MPI_Win_delete_attr_function * win_delete_attr_fn, int * win_keyval, void * extra_state, void* return_address);
+    typedef int (*__MPI_Win_create_keyval_t)(MPI_Win_copy_attr_function * win_copy_attr_fn, MPI_Win_delete_attr_function * win_delete_attr_fn, int * win_keyval, void * extra_state, void* return_address);
+#endif
+
+#if HAVE_MPI_Op_commutative       
+    int i_MPI_Op_commutative(MPI_Op op, int * commute, void* return_address);
+    typedef int (*__MPI_Op_commutative_t)(MPI_Op op, int * commute, void* return_address);
+#endif
+
+#if HAVE_MPI_Neighbor_allgather       
+    int i_MPI_Neighbor_allgather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Neighbor_allgather_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_call_errhandler       
+    int i_MPI_Comm_call_errhandler(MPI_Comm comm, int errorcode, void* return_address);
+    typedef int (*__MPI_Comm_call_errhandler_t)(MPI_Comm comm, int errorcode, void* return_address);
+#endif
+
+#if HAVE_MPI_Scatter_init       
+    int i_MPI_Scatter_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Scatter_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Info_get_string       
+    int i_MPI_Info_get_string(MPI_Info info, const char * key, int * buflen, char * value, int * flag, void* return_address);
+    typedef int (*__MPI_Info_get_string_t)(MPI_Info info, const char * key, int * buflen, char * value, int * flag, void* return_address);
+#endif
+
+#if HAVE_MPI_Mrecv       
+    int i_MPI_Mrecv(void * buf, int count, MPI_Datatype type, MPI_Message * message, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_Mrecv_t)(void * buf, int count, MPI_Datatype type, MPI_Message * message, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Open_port       
+    int i_MPI_Open_port(MPI_Info info, char * port_name, void* return_address);
+    typedef int (*__MPI_Open_port_t)(MPI_Info info, char * port_name, void* return_address);
+#endif
+
+#if HAVE_MPI_Cart_get       
+    int i_MPI_Cart_get(MPI_Comm comm, int maxdims, int dims[], int periods[], int coords[], void* return_address);
+    typedef int (*__MPI_Cart_get_t)(MPI_Comm comm, int maxdims, int dims[], int periods[], int coords[], void* return_address);
+#endif
+
+#if HAVE_MPI_Lookup_name       
+    int i_MPI_Lookup_name(const char * service_name, MPI_Info info, char * port_name, void* return_address);
+    typedef int (*__MPI_Lookup_name_t)(const char * service_name, MPI_Info info, char * port_name, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_get_extent       
+    int i_MPI_Type_get_extent(MPI_Datatype type, MPI_Aint * lb, MPI_Aint * extent, void* return_address);
+    typedef int (*__MPI_Type_get_extent_t)(MPI_Datatype type, MPI_Aint * lb, MPI_Aint * extent, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_spawn       
+    int i_MPI_Comm_spawn(const char * command, char * argv[], int maxprocs, MPI_Info info, int root, MPI_Comm comm, MPI_Comm * intercomm, int array_of_errcodes[], void* return_address);
+    typedef int (*__MPI_Comm_spawn_t)(const char * command, char * argv[], int maxprocs, MPI_Info info, int root, MPI_Comm comm, MPI_Comm * intercomm, int array_of_errcodes[], void* return_address);
+#endif
+
+#if HAVE_MPI_Unpublish_name       
+    int i_MPI_Unpublish_name(const char * service_name, MPI_Info info, const char * port_name, void* return_address);
+    typedef int (*__MPI_Unpublish_name_t)(const char * service_name, MPI_Info info, const char * port_name, void* return_address);
+#endif
+
+#if HAVE_MPI_Grequest_complete       
+    int i_MPI_Grequest_complete(MPI_Request request, void* return_address);
+    typedef int (*__MPI_Grequest_complete_t)(MPI_Request request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_get_group       
+    int i_MPI_File_get_group(MPI_File fh, MPI_Group * group, void* return_address);
+    typedef int (*__MPI_File_get_group_t)(MPI_File fh, MPI_Group * group, void* return_address);
+#endif
+
+#if HAVE_MPI_File_iread_at_all       
+    int i_MPI_File_iread_at_all(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_File_iread_at_all_t)(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Graphdims_get       
+    int i_MPI_Graphdims_get(MPI_Comm comm, int * nnodes, int * nedges, void* return_address);
+    typedef int (*__MPI_Graphdims_get_t)(MPI_Comm comm, int * nnodes, int * nedges, void* return_address);
+#endif
+
+#if HAVE_MPI_File_iread_shared       
+    int i_MPI_File_iread_shared(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_File_iread_shared_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Session_c2f       
+    int i_MPI_Session_c2f(const MPI_Session session, void* return_address);
+    typedef int (*__MPI_Session_c2f_t)(const MPI_Session session, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_idup_with_info       
+    int i_MPI_Comm_idup_with_info(MPI_Comm comm, MPI_Info info, MPI_Comm * newcomm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Comm_idup_with_info_t)(MPI_Comm comm, MPI_Info info, MPI_Comm * newcomm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Message_f2c       
+    MPI_Message i_MPI_Message_f2c(int message, void* return_address);
+    typedef MPI_Message (*__MPI_Message_f2c_t)(int message, void* return_address);
+#endif
+
+#if HAVE_MPI_Get_version       
+    int i_MPI_Get_version(int * version, int * subversion, void* return_address);
+    typedef int (*__MPI_Get_version_t)(int * version, int * subversion, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_lock_all       
+    int i_MPI_Win_lock_all(int mpi_assert, MPI_Win win, void* return_address);
+    typedef int (*__MPI_Win_lock_all_t)(int mpi_assert, MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Intercomm_create_from_groups       
+    int i_MPI_Intercomm_create_from_groups(MPI_Group local_group, int local_leader, MPI_Group remote_group, int remote_leader, const char * tag, MPI_Info info, MPI_Errhandler errhandler, MPI_Comm * newintercomm, void* return_address);
+    typedef int (*__MPI_Intercomm_create_from_groups_t)(MPI_Group local_group, int local_leader, MPI_Group remote_group, int remote_leader, const char * tag, MPI_Info info, MPI_Errhandler errhandler, MPI_Comm * newintercomm, void* return_address);
+#endif
+
+#if HAVE_MPI_Neighbor_alltoallv_init       
+    int i_MPI_Neighbor_alltoallv_init(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Neighbor_alltoallv_init_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_create_darray       
+    int i_MPI_Type_create_darray(int size, int rank, int ndims, const int gsize_array[], const int distrib_array[], const int darg_array[], const int psize_array[], int order, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+    typedef int (*__MPI_Type_create_darray_t)(int size, int rank, int ndims, const int gsize_array[], const int distrib_array[], const int darg_array[], const int psize_array[], int order, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+#endif
+
+#if HAVE_MPI_File_get_position_shared       
+    int i_MPI_File_get_position_shared(MPI_File fh, MPI_Offset * offset, void* return_address);
+    typedef int (*__MPI_File_get_position_shared_t)(MPI_File fh, MPI_Offset * offset, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_get_group       
+    int i_MPI_Win_get_group(MPI_Win win, MPI_Group * group, void* return_address);
+    typedef int (*__MPI_Win_get_group_t)(MPI_Win win, MPI_Group * group, void* return_address);
+#endif
+
+#if HAVE_MPI_Error_class       
+    int i_MPI_Error_class(int errorcode, int * errorclass, void* return_address);
+    typedef int (*__MPI_Error_class_t)(int errorcode, int * errorclass, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_get_attr       
+    int i_MPI_Win_get_attr(MPI_Win win, int win_keyval, void * attribute_val, int * flag, void* return_address);
+    typedef int (*__MPI_Win_get_attr_t)(MPI_Win win, int win_keyval, void * attribute_val, int * flag, void* return_address);
+#endif
+
+#if HAVE_MPI_Reduce_local       
+    int i_MPI_Reduce_local(const void * inbuf, void * inoutbuf, int count, MPI_Datatype datatype, MPI_Op op, void* return_address);
+    typedef int (*__MPI_Reduce_local_t)(const void * inbuf, void * inoutbuf, int count, MPI_Datatype datatype, MPI_Op op, void* return_address);
+#endif
+
+#if HAVE_MPI_Errhandler_f2c       
+    MPI_Errhandler i_MPI_Errhandler_f2c(int errhandler, void* return_address);
+    typedef MPI_Errhandler (*__MPI_Errhandler_f2c_t)(int errhandler, void* return_address);
+#endif
+
+#if HAVE_MPI_Ireduce_scatter_block       
+    int i_MPI_Ireduce_scatter_block(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Ireduce_scatter_block_t)(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Status_set_cancelled       
+    int i_MPI_Status_set_cancelled(MPI_Status * status, int flag, void* return_address);
+    typedef int (*__MPI_Status_set_cancelled_t)(MPI_Status * status, int flag, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_test       
+    int i_MPI_Win_test(MPI_Win win, int * flag, void* return_address);
+    typedef int (*__MPI_Win_test_t)(MPI_Win win, int * flag, void* return_address);
+#endif
+
+#if HAVE_MPI_Request_f2c       
+    MPI_Request i_MPI_Request_f2c(int request, void* return_address);
+    typedef MPI_Request (*__MPI_Request_f2c_t)(int request, void* return_address);
+#endif
+
+#if HAVE_MPI_Test_cancelled       
+    int i_MPI_Test_cancelled(const MPI_Status * status, int * flag, void* return_address);
+    typedef int (*__MPI_Test_cancelled_t)(const MPI_Status * status, int * flag, void* return_address);
+#endif
+
+#if HAVE_MPI_File_seek_shared       
+    int i_MPI_File_seek_shared(MPI_File fh, MPI_Offset offset, int whence, void* return_address);
+    typedef int (*__MPI_File_seek_shared_t)(MPI_File fh, MPI_Offset offset, int whence, void* return_address);
+#endif
+
+#if HAVE_MPI_Error_string       
+    int i_MPI_Error_string(int errorcode, char * string, int * resultlen, void* return_address);
+    typedef int (*__MPI_Error_string_t)(int errorcode, char * string, int * resultlen, void* return_address);
+#endif
+
+#if HAVE_MPI_Status_c2f       
+    int i_MPI_Status_c2f(const MPI_Status * c_status, int * f_status, void* return_address);
+    typedef int (*__MPI_Status_c2f_t)(const MPI_Status * c_status, int * f_status, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_f2c       
+    MPI_Comm i_MPI_Comm_f2c(int comm, void* return_address);
+    typedef MPI_Comm (*__MPI_Comm_f2c_t)(int comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Graph_neighbors_count       
+    int i_MPI_Graph_neighbors_count(MPI_Comm comm, int rank, int * nneighbors, void* return_address);
+    typedef int (*__MPI_Graph_neighbors_count_t)(MPI_Comm comm, int rank, int * nneighbors, void* return_address);
+#endif
+
+#if HAVE_MPI_Session_create_errhandler       
+    int i_MPI_Session_create_errhandler(MPI_Session_errhandler_function * session_errhandler_fn, MPI_Errhandler * errhandler, void* return_address);
+    typedef int (*__MPI_Session_create_errhandler_t)(MPI_Session_errhandler_function * session_errhandler_fn, MPI_Errhandler * errhandler, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_unlock       
+    int i_MPI_Win_unlock(int rank, MPI_Win win, void* return_address);
+    typedef int (*__MPI_Win_unlock_t)(int rank, MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Iscatter       
+    int i_MPI_Iscatter(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Iscatter_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_read_all       
+    int i_MPI_File_read_all(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_read_all_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_File_set_errhandler       
+    int i_MPI_File_set_errhandler(MPI_File file, MPI_Errhandler errhandler, void* return_address);
+    typedef int (*__MPI_File_set_errhandler_t)(MPI_File file, MPI_Errhandler errhandler, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_set_attr       
+    int i_MPI_Type_set_attr(MPI_Datatype type, int type_keyval, void * attr_val, void* return_address);
+    typedef int (*__MPI_Type_set_attr_t)(MPI_Datatype type, int type_keyval, void * attr_val, void* return_address);
+#endif
+
+#if HAVE_MPI_File_get_errhandler       
+    int i_MPI_File_get_errhandler(MPI_File file, MPI_Errhandler * errhandler, void* return_address);
+    typedef int (*__MPI_File_get_errhandler_t)(MPI_File file, MPI_Errhandler * errhandler, void* return_address);
+#endif
+
+#if HAVE_MPI_Session_finalize       
+    int i_MPI_Session_finalize(MPI_Session * session, void* return_address);
+    typedef int (*__MPI_Session_finalize_t)(MPI_Session * session, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_free_keyval       
+    int i_MPI_Comm_free_keyval(int * comm_keyval, void* return_address);
+    typedef int (*__MPI_Comm_free_keyval_t)(int * comm_keyval, void* return_address);
+#endif
+
+#if HAVE_MPI_File_iwrite_all       
+    int i_MPI_File_iwrite_all(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_File_iwrite_all_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Free_mem       
+    int i_MPI_Free_mem(void * base, void* return_address);
+    typedef int (*__MPI_Free_mem_t)(void * base, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_set_info       
+    int i_MPI_Win_set_info(MPI_Win win, MPI_Info info, void* return_address);
+    typedef int (*__MPI_Win_set_info_t)(MPI_Win win, MPI_Info info, void* return_address);
+#endif
+
+#if HAVE_MPI_Alltoallv_init       
+    int i_MPI_Alltoallv_init(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Alltoallv_init_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_attach       
+    int i_MPI_Win_attach(MPI_Win win, void * base, MPI_Aint size, void* return_address);
+    typedef int (*__MPI_Win_attach_t)(MPI_Win win, void * base, MPI_Aint size, void* return_address);
+#endif
+
+#if HAVE_MPI_File_get_position       
+    int i_MPI_File_get_position(MPI_File fh, MPI_Offset * offset, void* return_address);
+    typedef int (*__MPI_File_get_position_t)(MPI_File fh, MPI_Offset * offset, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_c2f       
+    int i_MPI_Comm_c2f(MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Comm_c2f_t)(MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Accumulate       
+    int i_MPI_Accumulate(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, void* return_address);
+    typedef int (*__MPI_Accumulate_t)(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_File_write_shared       
+    int i_MPI_File_write_shared(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_write_shared_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_create_dynamic       
+    int i_MPI_Win_create_dynamic(MPI_Info info, MPI_Comm comm, MPI_Win * win, void* return_address);
+    typedef int (*__MPI_Win_create_dynamic_t)(MPI_Info info, MPI_Comm comm, MPI_Win * win, void* return_address);
+#endif
+
+#if HAVE_MPI_Neighbor_alltoallw       
+    int i_MPI_Neighbor_alltoallw(const void * sendbuf, const int sendcounts[], const MPI_Aint sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Neighbor_alltoallw_t)(const void * sendbuf, const int sendcounts[], const MPI_Aint sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Iexscan       
+    int i_MPI_Iexscan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Iexscan_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Graph_map       
+    int i_MPI_Graph_map(MPI_Comm comm, int nnodes, const int index[], const int edges[], int * newrank, void* return_address);
+    typedef int (*__MPI_Graph_map_t)(MPI_Comm comm, int nnodes, const int index[], const int edges[], int * newrank, void* return_address);
+#endif
+
+#if HAVE_MPI_Group_c2f       
+    int i_MPI_Group_c2f(MPI_Group group, void* return_address);
+    typedef int (*__MPI_Group_c2f_t)(MPI_Group group, void* return_address);
+#endif
+
+#if HAVE_MPI_Recv_init       
+    int i_MPI_Recv_init(void * buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Recv_init_t)(void * buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_create_subarray       
+    int i_MPI_Type_create_subarray(int ndims, const int size_array[], const int subsize_array[], const int start_array[], int order, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+    typedef int (*__MPI_Type_create_subarray_t)(int ndims, const int size_array[], const int subsize_array[], const int start_array[], int order, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_create_group       
+    int i_MPI_Comm_create_group(MPI_Comm comm, MPI_Group group, int tag, MPI_Comm * newcomm, void* return_address);
+    typedef int (*__MPI_Comm_create_group_t)(MPI_Comm comm, MPI_Group group, int tag, MPI_Comm * newcomm, void* return_address);
+#endif
+
+#if HAVE_MPI_Allgather_init       
+    int i_MPI_Allgather_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Allgather_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Reduce_scatter_block_init       
+    int i_MPI_Reduce_scatter_block_init(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Reduce_scatter_block_init_t)(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_match_size       
+    int i_MPI_Type_match_size(int typeclass, int size, MPI_Datatype * type, void* return_address);
+    typedef int (*__MPI_Type_match_size_t)(int typeclass, int size, MPI_Datatype * type, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_get_true_extent       
+    int i_MPI_Type_get_true_extent(MPI_Datatype datatype, MPI_Aint * true_lb, MPI_Aint * true_extent, void* return_address);
+    typedef int (*__MPI_Type_get_true_extent_t)(MPI_Datatype datatype, MPI_Aint * true_lb, MPI_Aint * true_extent, void* return_address);
+#endif
+
+#if HAVE_MPI_Alltoall_init       
+    int i_MPI_Alltoall_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Alltoall_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Send_init       
+    int i_MPI_Send_init(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Send_init_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_f2c       
+    MPI_Win i_MPI_Win_f2c(int win, void* return_address);
+    typedef MPI_Win (*__MPI_Win_f2c_t)(int win, void* return_address);
+#endif
+
+#if HAVE_MPI_Neighbor_allgather_init       
+    int i_MPI_Neighbor_allgather_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Neighbor_allgather_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Ibcast       
+    int i_MPI_Ibcast(void * buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Ibcast_t)(void * buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_iread       
+    int i_MPI_File_iread(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_File_iread_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Neighbor_alltoall_init       
+    int i_MPI_Neighbor_alltoall_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Neighbor_alltoall_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Cart_rank       
+    int i_MPI_Cart_rank(MPI_Comm comm, const int coords[], int * rank, void* return_address);
+    typedef int (*__MPI_Cart_rank_t)(MPI_Comm comm, const int coords[], int * rank, void* return_address);
+#endif
+
+#if HAVE_MPI_Publish_name       
+    int i_MPI_Publish_name(const char * service_name, MPI_Info info, const char * port_name, void* return_address);
+    typedef int (*__MPI_Publish_name_t)(const char * service_name, MPI_Info info, const char * port_name, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_set_attr       
+    int i_MPI_Win_set_attr(MPI_Win win, int win_keyval, void * attribute_val, void* return_address);
+    typedef int (*__MPI_Win_set_attr_t)(MPI_Win win, int win_keyval, void * attribute_val, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_sync       
+    int i_MPI_Win_sync(MPI_Win win, void* return_address);
+    typedef int (*__MPI_Win_sync_t)(MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_free_keyval       
+    int i_MPI_Type_free_keyval(int * type_keyval, void* return_address);
+    typedef int (*__MPI_Type_free_keyval_t)(int * type_keyval, void* return_address);
+#endif
+
+#if HAVE_MPI_Status_f082c       
+    int i_MPI_Status_f082c(const MPI_F08_status * f08_status, MPI_Status * c_status, void* return_address);
+    typedef int (*__MPI_Status_f082c_t)(const MPI_F08_status * f08_status, MPI_Status * c_status, void* return_address);
+#endif
+
+#if HAVE_MPI_File_write       
+    int i_MPI_File_write(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_write_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Register_datarep       
+    int i_MPI_Register_datarep(const char * datarep, MPI_Datarep_conversion_function * read_conversion_fn, MPI_Datarep_conversion_function * write_conversion_fn, MPI_Datarep_extent_function * dtype_file_extent_fn, void * extra_state, void* return_address);
+    typedef int (*__MPI_Register_datarep_t)(const char * datarep, MPI_Datarep_conversion_function * read_conversion_fn, MPI_Datarep_conversion_function * write_conversion_fn, MPI_Datarep_extent_function * dtype_file_extent_fn, void * extra_state, void* return_address);
+#endif
+
+#if HAVE_MPI_Ineighbor_alltoall       
+    int i_MPI_Ineighbor_alltoall(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Ineighbor_alltoall_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_preallocate       
+    int i_MPI_File_preallocate(MPI_File fh, MPI_Offset size, void* return_address);
+    typedef int (*__MPI_File_preallocate_t)(MPI_File fh, MPI_Offset size, void* return_address);
+#endif
+
+#if HAVE_MPI_Iallgatherv       
+    int i_MPI_Iallgatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Iallgatherv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Neighbor_allgatherv_init       
+    int i_MPI_Neighbor_allgatherv_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Neighbor_allgatherv_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Iprobe       
+    int i_MPI_Iprobe(int source, int tag, MPI_Comm comm, int * flag, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_Iprobe_t)(int source, int tag, MPI_Comm comm, int * flag, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_get_true_extent_x       
+    int i_MPI_Type_get_true_extent_x(MPI_Datatype datatype, MPI_Count * true_lb, MPI_Count * true_extent, void* return_address);
+    typedef int (*__MPI_Type_get_true_extent_x_t)(MPI_Datatype datatype, MPI_Count * true_lb, MPI_Count * true_extent, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_complete       
+    int i_MPI_Win_complete(MPI_Win win, void* return_address);
+    typedef int (*__MPI_Win_complete_t)(MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_File_set_atomicity       
+    int i_MPI_File_set_atomicity(MPI_File fh, int flag, void* return_address);
+    typedef int (*__MPI_File_set_atomicity_t)(MPI_File fh, int flag, void* return_address);
+#endif
+
+#if HAVE_MPI_Unpack_external       
+    int i_MPI_Unpack_external(const char datarep[], const void * inbuf, MPI_Aint insize, MPI_Aint * position, void * outbuf, int outcount, MPI_Datatype datatype, void* return_address);
+    typedef int (*__MPI_Unpack_external_t)(const char datarep[], const void * inbuf, MPI_Aint insize, MPI_Aint * position, void * outbuf, int outcount, MPI_Datatype datatype, void* return_address);
+#endif
+
+#if HAVE_MPI_Errhandler_c2f       
+    int i_MPI_Errhandler_c2f(MPI_Errhandler errhandler, void* return_address);
+    typedef int (*__MPI_Errhandler_c2f_t)(MPI_Errhandler errhandler, void* return_address);
+#endif
+
+#if HAVE_MPI_Mprobe       
+    int i_MPI_Mprobe(int source, int tag, MPI_Comm comm, MPI_Message * message, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_Mprobe_t)(int source, int tag, MPI_Comm comm, MPI_Message * message, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Add_error_code       
+    int i_MPI_Add_error_code(int errorclass, int * errorcode, void* return_address);
+    typedef int (*__MPI_Add_error_code_t)(int errorclass, int * errorcode, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_delete_attr       
+    int i_MPI_Win_delete_attr(MPI_Win win, int win_keyval, void* return_address);
+    typedef int (*__MPI_Win_delete_attr_t)(MPI_Win win, int win_keyval, void* return_address);
+#endif
+
+#if HAVE_MPI_File_read_at_all       
+    int i_MPI_File_read_at_all(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_read_at_all_t)(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_Pready       
+    int i_MPI_Pready(int partitions, MPI_Request request, void* return_address);
+    typedef int (*__MPI_Pready_t)(int partitions, MPI_Request request, void* return_address);
+#endif
+
+#if HAVE_MPI_Status_f2f08       
+    int i_MPI_Status_f2f08(const int * f_status, MPI_F08_status * f08_status, void* return_address);
+    typedef int (*__MPI_Status_f2f08_t)(const int * f_status, MPI_F08_status * f08_status, void* return_address);
+#endif
+
+#if HAVE_MPI_Iscatterv       
+    int i_MPI_Iscatterv(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Iscatterv_t)(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_c2f       
+    int i_MPI_Type_c2f(MPI_Datatype datatype, void* return_address);
+    typedef int (*__MPI_Type_c2f_t)(MPI_Datatype datatype, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_detach       
+    int i_MPI_Win_detach(MPI_Win win, const void * base, void* return_address);
+    typedef int (*__MPI_Win_detach_t)(MPI_Win win, const void * base, void* return_address);
+#endif
+
+#if HAVE_MPI_File_call_errhandler       
+    int i_MPI_File_call_errhandler(MPI_File fh, int errorcode, void* return_address);
+    typedef int (*__MPI_File_call_errhandler_t)(MPI_File fh, int errorcode, void* return_address);
+#endif
+
+#if HAVE_MPI_Iallreduce       
+    int i_MPI_Iallreduce(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Iallreduce_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Get_processor_name       
+    int i_MPI_Get_processor_name(char * name, int * resultlen, void* return_address);
+    typedef int (*__MPI_Get_processor_name_t)(char * name, int * resultlen, void* return_address);
+#endif
+
+#if HAVE_MPI_Start       
+    int i_MPI_Start(MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Start_t)(MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Status_f2c       
+    int i_MPI_Status_f2c(const int * f_status, MPI_Status * c_status, void* return_address);
+    typedef int (*__MPI_Status_f2c_t)(const int * f_status, MPI_Status * c_status, void* return_address);
+#endif
+
+#if HAVE_MPI_File_get_type_extent       
+    int i_MPI_File_get_type_extent(MPI_File fh, MPI_Datatype datatype, MPI_Aint * extent, void* return_address);
+    typedef int (*__MPI_File_get_type_extent_t)(MPI_File fh, MPI_Datatype datatype, MPI_Aint * extent, void* return_address);
+#endif
+
+#if HAVE_MPI_File_read_shared       
+    int i_MPI_File_read_shared(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_read_shared_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_File_open       
+    int i_MPI_File_open(MPI_Comm comm, const char * filename, int amode, MPI_Info info, MPI_File * fh, void* return_address);
+    typedef int (*__MPI_File_open_t)(MPI_Comm comm, const char * filename, int amode, MPI_Info info, MPI_File * fh, void* return_address);
+#endif
+
+#if HAVE_MPI_File_get_amode       
+    int i_MPI_File_get_amode(MPI_File fh, int * amode, void* return_address);
+    typedef int (*__MPI_File_get_amode_t)(MPI_File fh, int * amode, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_create_hindexed_block       
+    int i_MPI_Type_create_hindexed_block(int count, int blocklength, const MPI_Aint array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+    typedef int (*__MPI_Type_create_hindexed_block_t)(int count, int blocklength, const MPI_Aint array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address);
+#endif
+
+#if HAVE_MPI_Cart_coords       
+    int i_MPI_Cart_coords(MPI_Comm comm, int rank, int maxdims, int coords[], void* return_address);
+    typedef int (*__MPI_Cart_coords_t)(MPI_Comm comm, int rank, int maxdims, int coords[], void* return_address);
+#endif
+
+#if HAVE_MPI_Issend       
+    int i_MPI_Issend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Issend_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Op_f2c       
+    MPI_Op i_MPI_Op_f2c(int op, void* return_address);
+    typedef MPI_Op (*__MPI_Op_f2c_t)(int op, void* return_address);
+#endif
+
+#if HAVE_MPI_Graph_get       
+    int i_MPI_Graph_get(MPI_Comm comm, int maxindex, int maxedges, int index[], int edges[], void* return_address);
+    typedef int (*__MPI_Graph_get_t)(MPI_Comm comm, int maxindex, int maxedges, int index[], int edges[], void* return_address);
+#endif
+
+#if HAVE_MPI_Win_free_keyval       
+    int i_MPI_Win_free_keyval(int * win_keyval, void* return_address);
+    typedef int (*__MPI_Win_free_keyval_t)(int * win_keyval, void* return_address);
+#endif
+
+#if HAVE_MPI_Ineighbor_alltoallw       
+    int i_MPI_Ineighbor_alltoallw(const void * sendbuf, const int sendcounts[], const MPI_Aint sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Ineighbor_alltoallw_t)(const void * sendbuf, const int sendcounts[], const MPI_Aint sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_set_info       
+    int i_MPI_File_set_info(MPI_File fh, MPI_Info info, void* return_address);
+    typedef int (*__MPI_File_set_info_t)(MPI_File fh, MPI_Info info, void* return_address);
+#endif
+
+#if HAVE_MPI_File_iread_at       
+    int i_MPI_File_iread_at(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_File_iread_at_t)(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Attr_delete       
+    int i_MPI_Attr_delete(MPI_Comm comm, int keyval, void* return_address);
+    typedef int (*__MPI_Attr_delete_t)(MPI_Comm comm, int keyval, void* return_address);
+#endif
+
+#if HAVE_MPI_Session_get_info       
+    int i_MPI_Session_get_info(MPI_Session session, MPI_Info * info_used, void* return_address);
+    typedef int (*__MPI_Session_get_info_t)(MPI_Session session, MPI_Info * info_used, void* return_address);
+#endif
+
+#if HAVE_MPI_Session_get_nth_pset       
+    int i_MPI_Session_get_nth_pset(MPI_Session session, MPI_Info info, int n, int * len, char * pset_name, void* return_address);
+    typedef int (*__MPI_Session_get_nth_pset_t)(MPI_Session session, MPI_Info info, int n, int * len, char * pset_name, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_create_keyval       
+    int i_MPI_Type_create_keyval(MPI_Type_copy_attr_function * type_copy_attr_fn, MPI_Type_delete_attr_function * type_delete_attr_fn, int * type_keyval, void * extra_state, void* return_address);
+    typedef int (*__MPI_Type_create_keyval_t)(MPI_Type_copy_attr_function * type_copy_attr_fn, MPI_Type_delete_attr_function * type_delete_attr_fn, int * type_keyval, void * extra_state, void* return_address);
+#endif
+
+#if HAVE_MPI_Attr_get       
+    int i_MPI_Attr_get(MPI_Comm comm, int keyval, void * attribute_val, int * flag, void* return_address);
+    typedef int (*__MPI_Attr_get_t)(MPI_Comm comm, int keyval, void * attribute_val, int * flag, void* return_address);
+#endif
+
+#if HAVE_MPI_Add_error_string       
+    int i_MPI_Add_error_string(int errorcode, const char * string, void* return_address);
+    typedef int (*__MPI_Add_error_string_t)(int errorcode, const char * string, void* return_address);
+#endif
+
+#if HAVE_MPI_Ineighbor_alltoallv       
+    int i_MPI_Ineighbor_alltoallv(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Ineighbor_alltoallv_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Imrecv       
+    int i_MPI_Imrecv(void * buf, int count, MPI_Datatype type, MPI_Message * message, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Imrecv_t)(void * buf, int count, MPI_Datatype type, MPI_Message * message, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Alltoallw       
+    int i_MPI_Alltoallw(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Alltoallw_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Bcast_init       
+    int i_MPI_Bcast_init(void * buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Bcast_init_t)(void * buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Ibarrier       
+    int i_MPI_Ibarrier(MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Ibarrier_t)(MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_iwrite_at_all       
+    int i_MPI_File_iwrite_at_all(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_File_iwrite_at_all_t)(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_get_size       
+    int i_MPI_File_get_size(MPI_File fh, MPI_Offset * size, void* return_address);
+    typedef int (*__MPI_File_get_size_t)(MPI_File fh, MPI_Offset * size, void* return_address);
+#endif
+
+#if HAVE_MPI_Barrier_init       
+    int i_MPI_Barrier_init(MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Barrier_init_t)(MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_get_view       
+    int i_MPI_File_get_view(MPI_File fh, MPI_Offset * disp, MPI_Datatype * etype, MPI_Datatype * filetype, char * datarep, void* return_address);
+    typedef int (*__MPI_File_get_view_t)(MPI_File fh, MPI_Offset * disp, MPI_Datatype * etype, MPI_Datatype * filetype, char * datarep, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_allocate_shared       
+    int i_MPI_Win_allocate_shared(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void * baseptr, MPI_Win * win, void* return_address);
+    typedef int (*__MPI_Win_allocate_shared_t)(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void * baseptr, MPI_Win * win, void* return_address);
+#endif
+
+#if HAVE_MPI_Close_port       
+    int i_MPI_Close_port(const char * port_name, void* return_address);
+    typedef int (*__MPI_Close_port_t)(const char * port_name, void* return_address);
+#endif
+
+#if HAVE_MPI_Finalized       
+    int i_MPI_Finalized(int * flag, void* return_address);
+    typedef int (*__MPI_Finalized_t)(int * flag, void* return_address);
+#endif
+
+#if HAVE_MPI_Info_dup       
+    int i_MPI_Info_dup(MPI_Info info, MPI_Info * newinfo, void* return_address);
+    typedef int (*__MPI_Info_dup_t)(MPI_Info info, MPI_Info * newinfo, void* return_address);
+#endif
+
+#if HAVE_MPI_Info_get       
+    int i_MPI_Info_get(MPI_Info info, const char * key, int valuelen, char * value, int * flag, void* return_address);
+    typedef int (*__MPI_Info_get_t)(MPI_Info info, const char * key, int valuelen, char * value, int * flag, void* return_address);
+#endif
+
+#if HAVE_MPI_Get_library_version       
+    int i_MPI_Get_library_version(char * version, int * resultlen, void* return_address);
+    typedef int (*__MPI_Get_library_version_t)(char * version, int * resultlen, void* return_address);
+#endif
+
+#if HAVE_MPI_Info_create       
+    int i_MPI_Info_create(MPI_Info * info, void* return_address);
+    typedef int (*__MPI_Info_create_t)(MPI_Info * info, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_fence       
+    int i_MPI_Win_fence(int mpi_assert, MPI_Win win, void* return_address);
+    typedef int (*__MPI_Win_fence_t)(int mpi_assert, MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Iallgather       
+    int i_MPI_Iallgather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Iallgather_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_spawn_multiple       
+    int i_MPI_Comm_spawn_multiple(int count, char * array_of_commands[], char ** array_of_argv[], const int array_of_maxprocs[], const MPI_Info array_of_info[], int root, MPI_Comm comm, MPI_Comm * intercomm, int array_of_errcodes[], void* return_address);
+    typedef int (*__MPI_Comm_spawn_multiple_t)(int count, char * array_of_commands[], char ** array_of_argv[], const int array_of_maxprocs[], const MPI_Info array_of_info[], int root, MPI_Comm comm, MPI_Comm * intercomm, int array_of_errcodes[], void* return_address);
+#endif
+
+#if HAVE_MPI_Precv_init       
+    int i_MPI_Precv_init(void * buf, int partitions, MPI_Count count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Precv_init_t)(void * buf, int partitions, MPI_Count count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_set_errhandler       
+    int i_MPI_Comm_set_errhandler(MPI_Comm comm, MPI_Errhandler errhandler, void* return_address);
+    typedef int (*__MPI_Comm_set_errhandler_t)(MPI_Comm comm, MPI_Errhandler errhandler, void* return_address);
+#endif
+
+#if HAVE_MPI_File_set_view       
+    int i_MPI_File_set_view(MPI_File fh, MPI_Offset disp, MPI_Datatype etype, MPI_Datatype filetype, const char * datarep, MPI_Info info, void* return_address);
+    typedef int (*__MPI_File_set_view_t)(MPI_File fh, MPI_Offset disp, MPI_Datatype etype, MPI_Datatype filetype, const char * datarep, MPI_Info info, void* return_address);
+#endif
+
+#if HAVE_MPI_Bsend       
+    int i_MPI_Bsend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Bsend_t)(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_size       
+    int i_MPI_Type_size(MPI_Datatype type, int * size, void* return_address);
+    typedef int (*__MPI_Type_size_t)(MPI_Datatype type, int * size, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_get_attr       
+    int i_MPI_Type_get_attr(MPI_Datatype type, int type_keyval, void * attribute_val, int * flag, void* return_address);
+    typedef int (*__MPI_Type_get_attr_t)(MPI_Datatype type, int type_keyval, void * attribute_val, int * flag, void* return_address);
+#endif
+
+#if HAVE_MPI_File_write_ordered       
+    int i_MPI_File_write_ordered(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+    typedef int (*__MPI_File_write_ordered_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address);
+#endif
+
+#if HAVE_MPI_File_get_info       
+    int i_MPI_File_get_info(MPI_File fh, MPI_Info * info_used, void* return_address);
+    typedef int (*__MPI_File_get_info_t)(MPI_File fh, MPI_Info * info_used, void* return_address);
+#endif
+
+#if HAVE_MPI_Graph_neighbors       
+    int i_MPI_Graph_neighbors(MPI_Comm comm, int rank, int maxneighbors, int neighbors[], void* return_address);
+    typedef int (*__MPI_Graph_neighbors_t)(MPI_Comm comm, int rank, int maxneighbors, int neighbors[], void* return_address);
+#endif
+
+#if HAVE_MPI_Igatherv       
+    int i_MPI_Igatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Igatherv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Info_delete       
+    int i_MPI_Info_delete(MPI_Info info, const char * key, void* return_address);
+    typedef int (*__MPI_Info_delete_t)(MPI_Info info, const char * key, void* return_address);
+#endif
+
+#if HAVE_MPI_Alloc_mem       
+    int i_MPI_Alloc_mem(MPI_Aint size, MPI_Info info, void * baseptr, void* return_address);
+    typedef int (*__MPI_Alloc_mem_t)(MPI_Aint size, MPI_Info info, void * baseptr, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_get_errhandler       
+    int i_MPI_Comm_get_errhandler(MPI_Comm comm, MPI_Errhandler * erhandler, void* return_address);
+    typedef int (*__MPI_Comm_get_errhandler_t)(MPI_Comm comm, MPI_Errhandler * erhandler, void* return_address);
+#endif
+
+#if HAVE_MPI_Session_init       
+    int i_MPI_Session_init(MPI_Info info, MPI_Errhandler errhandler, MPI_Session * session, void* return_address);
+    typedef int (*__MPI_Session_init_t)(MPI_Info info, MPI_Errhandler errhandler, MPI_Session * session, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_post       
+    int i_MPI_Win_post(MPI_Group group, int mpi_assert, MPI_Win win, void* return_address);
+    typedef int (*__MPI_Win_post_t)(MPI_Group group, int mpi_assert, MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Intercomm_create       
+    int i_MPI_Intercomm_create(MPI_Comm local_comm, int local_leader, MPI_Comm bridge_comm, int remote_leader, int tag, MPI_Comm * newintercomm, void* return_address);
+    typedef int (*__MPI_Intercomm_create_t)(MPI_Comm local_comm, int local_leader, MPI_Comm bridge_comm, int remote_leader, int tag, MPI_Comm * newintercomm, void* return_address);
+#endif
+
+#if HAVE_MPI_File_read_all_begin       
+    int i_MPI_File_read_all_begin(MPI_File fh, void * buf, int count, MPI_Datatype datatype, void* return_address);
+    typedef int (*__MPI_File_read_all_begin_t)(MPI_File fh, void * buf, int count, MPI_Datatype datatype, void* return_address);
+#endif
+
+#if HAVE_MPI_Ialltoallv       
+    int i_MPI_Ialltoallv(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Ialltoallv_t)(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_delete       
+    int i_MPI_File_delete(const char * filename, MPI_Info info, void* return_address);
+    typedef int (*__MPI_File_delete_t)(const char * filename, MPI_Info info, void* return_address);
+#endif
+
+#if HAVE_MPI_Dims_create       
+    int i_MPI_Dims_create(int nnodes, int ndims, int dims[], void* return_address);
+    typedef int (*__MPI_Dims_create_t)(int nnodes, int ndims, int dims[], void* return_address);
+#endif
+
+#if HAVE_MPI_Cart_sub       
+    int i_MPI_Cart_sub(MPI_Comm comm, const int remain_dims[], MPI_Comm * new_comm, void* return_address);
+    typedef int (*__MPI_Cart_sub_t)(MPI_Comm comm, const int remain_dims[], MPI_Comm * new_comm, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_allocate       
+    int i_MPI_Win_allocate(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void * baseptr, MPI_Win * win, void* return_address);
+    typedef int (*__MPI_Win_allocate_t)(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void * baseptr, MPI_Win * win, void* return_address);
+#endif
+
+#if HAVE_MPI_Session_get_errhandler       
+    int i_MPI_Session_get_errhandler(MPI_Session session, MPI_Errhandler * erhandler, void* return_address);
+    typedef int (*__MPI_Session_get_errhandler_t)(MPI_Session session, MPI_Errhandler * erhandler, void* return_address);
+#endif
+
+#if HAVE_MPI_Parrived       
+    int i_MPI_Parrived(MPI_Request request, int partition, int * flag, void* return_address);
+    typedef int (*__MPI_Parrived_t)(MPI_Request request, int partition, int * flag, void* return_address);
+#endif
+
+#if HAVE_MPI_Info_create_env       
+    int i_MPI_Info_create_env(int argc, char * argv[], MPI_Info * info, void* return_address);
+    typedef int (*__MPI_Info_create_env_t)(int argc, char * argv[], MPI_Info * info, void* return_address);
+#endif
+
+#if HAVE_MPI_File_create_errhandler       
+    int i_MPI_File_create_errhandler(MPI_File_errhandler_function * function, MPI_Errhandler * errhandler, void* return_address);
+    typedef int (*__MPI_File_create_errhandler_t)(MPI_File_errhandler_function * function, MPI_Errhandler * errhandler, void* return_address);
+#endif
+
+#if HAVE_MPI_Ialltoall       
+    int i_MPI_Ialltoall(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Ialltoall_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Raccumulate       
+    int i_MPI_Raccumulate(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Raccumulate_t)(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_size_x       
+    int i_MPI_Type_size_x(MPI_Datatype type, MPI_Count * size, void* return_address);
+    typedef int (*__MPI_Type_size_x_t)(MPI_Datatype type, MPI_Count * size, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_get_extent_x       
+    int i_MPI_Type_get_extent_x(MPI_Datatype type, MPI_Count * lb, MPI_Count * extent, void* return_address);
+    typedef int (*__MPI_Type_get_extent_x_t)(MPI_Datatype type, MPI_Count * lb, MPI_Count * extent, void* return_address);
+#endif
+
+#if HAVE_MPI_File_read_at_all_begin       
+    int i_MPI_File_read_at_all_begin(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, void* return_address);
+    typedef int (*__MPI_File_read_at_all_begin_t)(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, void* return_address);
+#endif
+
+#if HAVE_MPI_Dist_graph_create       
+    int i_MPI_Dist_graph_create(MPI_Comm comm_old, int n, const int nodes[], const int degrees[], const int targets[], const int weights[], MPI_Info info, int reorder, MPI_Comm * newcomm, void* return_address);
+    typedef int (*__MPI_Dist_graph_create_t)(MPI_Comm comm_old, int n, const int nodes[], const int degrees[], const int targets[], const int weights[], MPI_Info info, int reorder, MPI_Comm * newcomm, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_join       
+    int i_MPI_Comm_join(int fd, MPI_Comm * intercomm, void* return_address);
+    typedef int (*__MPI_Comm_join_t)(int fd, MPI_Comm * intercomm, void* return_address);
+#endif
+
+#if HAVE_MPI_Gatherv_init       
+    int i_MPI_Gatherv_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Gatherv_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_File_sync       
+    int i_MPI_File_sync(MPI_File fh, void* return_address);
+    typedef int (*__MPI_File_sync_t)(MPI_File fh, void* return_address);
+#endif
+
+#if HAVE_MPI_Comm_accept       
+    int i_MPI_Comm_accept(const char * port_name, MPI_Info info, int root, MPI_Comm comm, MPI_Comm * newcomm, void* return_address);
+    typedef int (*__MPI_Comm_accept_t)(const char * port_name, MPI_Info info, int root, MPI_Comm comm, MPI_Comm * newcomm, void* return_address);
+#endif
+
+#if HAVE_MPI_Ineighbor_allgather       
+    int i_MPI_Ineighbor_allgather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Ineighbor_allgather_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Type_dup       
+    int i_MPI_Type_dup(MPI_Datatype type, MPI_Datatype * newtype, void* return_address);
+    typedef int (*__MPI_Type_dup_t)(MPI_Datatype type, MPI_Datatype * newtype, void* return_address);
+#endif
+
+#if HAVE_MPI_File_iwrite_shared       
+    int i_MPI_File_iwrite_shared(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_File_iwrite_shared_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_get_errhandler       
+    int i_MPI_Win_get_errhandler(MPI_Win win, MPI_Errhandler * errhandler, void* return_address);
+    typedef int (*__MPI_Win_get_errhandler_t)(MPI_Win win, MPI_Errhandler * errhandler, void* return_address);
+#endif
+
+#if HAVE_MPI_Iscan       
+    int i_MPI_Iscan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Iscan_t)(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_flush       
+    int i_MPI_Win_flush(int rank, MPI_Win win, void* return_address);
+    typedef int (*__MPI_Win_flush_t)(int rank, MPI_Win win, void* return_address);
+#endif
+
+#if HAVE_MPI_Graph_create       
+    int i_MPI_Graph_create(MPI_Comm comm_old, int nnodes, const int index[], const int edges[], int reorder, MPI_Comm * comm_graph, void* return_address);
+    typedef int (*__MPI_Graph_create_t)(MPI_Comm comm_old, int nnodes, const int index[], const int edges[], int reorder, MPI_Comm * comm_graph, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_set_name       
+    int i_MPI_Win_set_name(MPI_Win win, const char * win_name, void* return_address);
+    typedef int (*__MPI_Win_set_name_t)(MPI_Win win, const char * win_name, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_create_errhandler       
+    int i_MPI_Win_create_errhandler(MPI_Win_errhandler_function * function, MPI_Errhandler * errhandler, void* return_address);
+    typedef int (*__MPI_Win_create_errhandler_t)(MPI_Win_errhandler_function * function, MPI_Errhandler * errhandler, void* return_address);
+#endif
+
+#if HAVE_MPI_Gather_init       
+    int i_MPI_Gather_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_Gather_init_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Neighbor_allgatherv       
+    int i_MPI_Neighbor_allgatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+    typedef int (*__MPI_Neighbor_allgatherv_t)(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address);
+#endif
+
+#if HAVE_MPI_File_iwrite       
+    int i_MPI_File_iwrite(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+    typedef int (*__MPI_File_iwrite_t)(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address);
+#endif
+
+#if HAVE_MPI_Buffer_attach       
+    int i_MPI_Buffer_attach(void * buffer, int size, void* return_address);
+    typedef int (*__MPI_Buffer_attach_t)(void * buffer, int size, void* return_address);
+#endif
+
+#if HAVE_MPI_Session_set_errhandler       
+    int i_MPI_Session_set_errhandler(MPI_Session session, MPI_Errhandler errhandler, void* return_address);
+    typedef int (*__MPI_Session_set_errhandler_t)(MPI_Session session, MPI_Errhandler errhandler, void* return_address);
+#endif
+
+#if HAVE_MPI_Win_start       
+    int i_MPI_Win_start(MPI_Group group, int mpi_assert, MPI_Win win, void* return_address);
+    typedef int (*__MPI_Win_start_t)(MPI_Group group, int mpi_assert, MPI_Win win, void* return_address);
+#endif
+
 
 #endif // MPI_PROFILED_FUNCTIONS_H

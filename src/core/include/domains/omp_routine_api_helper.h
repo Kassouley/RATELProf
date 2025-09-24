@@ -29,27 +29,27 @@
 
 
 #define FOR_EACH_OMP_ROUTINE_FUNC(macro) \
-macro(omp_target_memset)                 \
-macro(omp_target_memcpy_async)           \
-macro(omp_target_memcpy_rect_async)      \
-macro(omp_target_alloc)                  \
-macro(omp_target_free)                   \
-macro(omp_target_memcpy_rect)            \
-macro(omp_target_disassociate_ptr)       \
-macro(omp_target_memcpy)                 \
-macro(omp_target_memset_async)           \
-macro(omp_target_is_present)             \
-macro(omp_target_associate_ptr)          \
-macro(omp_get_initial_device)            \
-macro(llvm_omp_target_dynamic_shared_alloc) \
-macro(omp_get_interop_int)               \
-macro(omp_get_interop_name)              \
-macro(omp_get_interop_ptr)               \
-macro(omp_get_interop_str)               \
-macro(omp_get_interop_type_desc)         \
-macro(omp_get_mapped_ptr)                \
-macro(omp_get_num_devices)               \
-macro(omp_is_coarse_grain_mem_region)    \
+IF_ENABLED(omp_target_memset, macro)               \
+IF_ENABLED(omp_target_memcpy_async, macro)         \
+IF_ENABLED(omp_target_memcpy_rect_async, macro)    \
+IF_ENABLED(omp_target_alloc, macro)                \
+IF_ENABLED(omp_target_free, macro)                 \
+IF_ENABLED(omp_target_memcpy_rect, macro)          \
+IF_ENABLED(omp_target_disassociate_ptr, macro)     \
+IF_ENABLED(omp_target_memcpy, macro)               \
+IF_ENABLED(omp_target_memset_async, macro)         \
+IF_ENABLED(omp_target_is_present, macro)           \
+IF_ENABLED(omp_target_associate_ptr, macro)        \
+IF_ENABLED(omp_get_initial_device, macro)          \
+IF_ENABLED(llvm_omp_target_dynamic_shared_alloc, macro) \
+IF_ENABLED(omp_get_interop_int, macro)             \
+IF_ENABLED(omp_get_interop_name, macro)            \
+IF_ENABLED(omp_get_interop_ptr, macro)             \
+IF_ENABLED(omp_get_interop_str, macro)             \
+IF_ENABLED(omp_get_interop_type_desc, macro)       \
+IF_ENABLED(omp_get_mapped_ptr, macro)              \
+IF_ENABLED(omp_get_num_devices, macro)             \
+IF_ENABLED(omp_is_coarse_grain_mem_region, macro)  \
 
 
 /**
@@ -139,6 +139,7 @@ static inline omp_routine_api_id_t get_omp_routine_funid_by_name(const char* nam
  *			int device_num (int)
  *	)
  */
+#if HAVE_omp_target_memset
 struct args_omp_target_memset_t {
 	void * ptr;
 	int value;
@@ -153,6 +154,8 @@ struct args_omp_target_memset_t {
 	activity->omp_routine_args.omp_target_memset.size = (size_t) size; \
 	activity->omp_routine_args.omp_target_memset.device_num = (int) device_num; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_memcpy_async` function.
@@ -176,6 +179,7 @@ struct args_omp_target_memset_t {
  *			omp_depend_t * depend (void **)
  *	)
  */
+#if HAVE_omp_target_memcpy_async
 struct args_omp_target_memcpy_async_t {
 	void * dst;
 	void * src;
@@ -210,6 +214,8 @@ struct args_omp_target_memcpy_async_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `omp_target_memcpy_rect_async` function.
  *
@@ -236,6 +242,7 @@ struct args_omp_target_memcpy_async_t {
  *			omp_depend_t * depobj_list (void **)
  *	)
  */
+#if HAVE_omp_target_memcpy_rect_async
 struct args_omp_target_memcpy_rect_async_t {
 	void * dst;
 	void * src;
@@ -308,6 +315,8 @@ struct args_omp_target_memcpy_rect_async_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `omp_target_alloc` function.
  *
@@ -323,6 +332,7 @@ struct args_omp_target_memcpy_rect_async_t {
  *			int device_num (int)
  *	)
  */
+#if HAVE_omp_target_alloc
 struct args_omp_target_alloc_t {
 	size_t size;
 	int device_num;
@@ -333,6 +343,8 @@ struct args_omp_target_alloc_t {
 	activity->omp_routine_args.omp_target_alloc.size = (size_t) size; \
 	activity->omp_routine_args.omp_target_alloc.device_num = (int) device_num; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_free` function.
@@ -349,6 +361,7 @@ struct args_omp_target_alloc_t {
  *			int device_num (int)
  *	)
  */
+#if HAVE_omp_target_free
 struct args_omp_target_free_t {
 	void * device_ptr;
 	int device_num;
@@ -358,6 +371,8 @@ struct args_omp_target_free_t {
 	activity->omp_routine_args.omp_target_free.device_ptr = (void *) device_ptr; \
 	activity->omp_routine_args.omp_target_free.device_num = (int) device_num; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_memcpy_rect` function.
@@ -383,6 +398,7 @@ struct args_omp_target_free_t {
  *			int src_device_num (int)
  *	)
  */
+#if HAVE_omp_target_memcpy_rect
 struct args_omp_target_memcpy_rect_t {
 	void * dst;
 	void * src;
@@ -445,6 +461,8 @@ struct args_omp_target_memcpy_rect_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `omp_target_disassociate_ptr` function.
  *
@@ -460,6 +478,7 @@ struct args_omp_target_memcpy_rect_t {
  *			int device_num (int)
  *	)
  */
+#if HAVE_omp_target_disassociate_ptr
 struct args_omp_target_disassociate_ptr_t {
 	void * host_ptr;
 	int device_num;
@@ -470,6 +489,8 @@ struct args_omp_target_disassociate_ptr_t {
 	activity->omp_routine_args.omp_target_disassociate_ptr.host_ptr = (void *) host_ptr; \
 	activity->omp_routine_args.omp_target_disassociate_ptr.device_num = (int) device_num; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_memcpy` function.
@@ -491,6 +512,7 @@ struct args_omp_target_disassociate_ptr_t {
  *			int src_device_num (int)
  *	)
  */
+#if HAVE_omp_target_memcpy
 struct args_omp_target_memcpy_t {
 	void * dst;
 	void * src;
@@ -512,6 +534,8 @@ struct args_omp_target_memcpy_t {
 	activity->omp_routine_args.omp_target_memcpy.src_device_num = (int) src_device_num; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `omp_target_memset_async` function.
  *
@@ -531,6 +555,7 @@ struct args_omp_target_memcpy_t {
  *			omp_depend_t * depend (void **)
  *	)
  */
+#if HAVE_omp_target_memset_async
 struct args_omp_target_memset_async_t {
 	void * ptr;
 	int value;
@@ -559,6 +584,8 @@ struct args_omp_target_memset_async_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `omp_target_is_present` function.
  *
@@ -574,6 +601,7 @@ struct args_omp_target_memset_async_t {
  *			int device_num (int)
  *	)
  */
+#if HAVE_omp_target_is_present
 struct args_omp_target_is_present_t {
 	void * host_ptr;
 	int device_num;
@@ -584,6 +612,8 @@ struct args_omp_target_is_present_t {
 	activity->omp_routine_args.omp_target_is_present.host_ptr = (void *) host_ptr; \
 	activity->omp_routine_args.omp_target_is_present.device_num = (int) device_num; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_associate_ptr` function.
@@ -603,6 +633,7 @@ struct args_omp_target_is_present_t {
  *			int device_num (int)
  *	)
  */
+#if HAVE_omp_target_associate_ptr
 struct args_omp_target_associate_ptr_t {
 	void * host_ptr;
 	void * device_ptr;
@@ -620,6 +651,8 @@ struct args_omp_target_associate_ptr_t {
 	activity->omp_routine_args.omp_target_associate_ptr.device_num = (int) device_num; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `omp_get_initial_device` function.
  *
@@ -633,9 +666,12 @@ struct args_omp_target_associate_ptr_t {
  *	omp_get_initial_device (
  *	)
  */
+#if HAVE_omp_get_initial_device
 struct args_omp_get_initial_device_t {
 	int retval;
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `llvm_omp_target_dynamic_shared_alloc` function.
@@ -650,9 +686,12 @@ struct args_omp_get_initial_device_t {
  *	llvm_omp_target_dynamic_shared_alloc (
  *	)
  */
+#if HAVE_llvm_omp_target_dynamic_shared_alloc
 struct args_llvm_omp_target_dynamic_shared_alloc_t {
 	void * retval;
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_get_interop_int` function.
@@ -670,6 +709,7 @@ struct args_llvm_omp_target_dynamic_shared_alloc_t {
  *			int * exists (int *)
  *	)
  */
+#if HAVE_omp_get_interop_int
 struct args_omp_get_interop_int_t {
 	void * interop;
 	omp_interop_property_t prop;
@@ -692,6 +732,8 @@ struct args_omp_get_interop_int_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `omp_get_interop_name` function.
  *
@@ -707,6 +749,7 @@ struct args_omp_get_interop_int_t {
  *			omp_interop_property_t prop (enum omp_interop_property)
  *	)
  */
+#if HAVE_omp_get_interop_name
 struct args_omp_get_interop_name_t {
 	void * interop;
 	omp_interop_property_t prop;
@@ -727,6 +770,8 @@ struct args_omp_get_interop_name_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `omp_get_interop_ptr` function.
  *
@@ -743,6 +788,7 @@ struct args_omp_get_interop_name_t {
  *			int * exists (int *)
  *	)
  */
+#if HAVE_omp_get_interop_ptr
 struct args_omp_get_interop_ptr_t {
 	void * interop;
 	omp_interop_property_t prop;
@@ -765,6 +811,8 @@ struct args_omp_get_interop_ptr_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `omp_get_interop_str` function.
  *
@@ -781,6 +829,7 @@ struct args_omp_get_interop_ptr_t {
  *			int * exists (int *)
  *	)
  */
+#if HAVE_omp_get_interop_str
 struct args_omp_get_interop_str_t {
 	void * interop;
 	omp_interop_property_t prop;
@@ -812,6 +861,8 @@ struct args_omp_get_interop_str_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `omp_get_interop_type_desc` function.
  *
@@ -827,6 +878,7 @@ struct args_omp_get_interop_str_t {
  *			omp_interop_property_t prop (enum omp_interop_property)
  *	)
  */
+#if HAVE_omp_get_interop_type_desc
 struct args_omp_get_interop_type_desc_t {
 	void * interop;
 	omp_interop_property_t prop;
@@ -847,6 +899,8 @@ struct args_omp_get_interop_type_desc_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `omp_get_mapped_ptr` function.
  *
@@ -862,6 +916,7 @@ struct args_omp_get_interop_type_desc_t {
  *			int device_num (int)
  *	)
  */
+#if HAVE_omp_get_mapped_ptr
 struct args_omp_get_mapped_ptr_t {
 	void * ptr;
 	int device_num;
@@ -872,6 +927,8 @@ struct args_omp_get_mapped_ptr_t {
 	activity->omp_routine_args.omp_get_mapped_ptr.ptr = (void *) ptr; \
 	activity->omp_routine_args.omp_get_mapped_ptr.device_num = (int) device_num; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_get_num_devices` function.
@@ -886,9 +943,12 @@ struct args_omp_get_mapped_ptr_t {
  *	omp_get_num_devices (
  *	)
  */
+#if HAVE_omp_get_num_devices
 struct args_omp_get_num_devices_t {
 	int retval;
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_is_coarse_grain_mem_region` function.
@@ -905,6 +965,7 @@ struct args_omp_get_num_devices_t {
  *			size_t size (unsigned long)
  *	)
  */
+#if HAVE_omp_is_coarse_grain_mem_region
 struct args_omp_is_coarse_grain_mem_region_t {
 	void * ptr;
 	size_t size;
@@ -915,6 +976,8 @@ struct args_omp_is_coarse_grain_mem_region_t {
 	activity->omp_routine_args.omp_is_coarse_grain_mem_region.ptr = (void *) ptr; \
 	activity->omp_routine_args.omp_is_coarse_grain_mem_region.size = (size_t) size; \
 };
+
+#endif
 
 
 
@@ -946,34 +1009,52 @@ static inline void get_omp_routine_pointed_args_for(omp_routine_api_id_t id, omp
 {
     if (!is_enter) {
         switch(id) {
+			#if HAVE_omp_target_memcpy_async
 			case OMP_ROUTINE_API_ID_omp_target_memcpy_async : 
 				GET_PTRS_VALUE_omp_target_memcpy_async(args);
 				return;
+			#endif
+			#if HAVE_omp_target_memcpy_rect_async
 			case OMP_ROUTINE_API_ID_omp_target_memcpy_rect_async : 
 				GET_PTRS_VALUE_omp_target_memcpy_rect_async(args);
 				return;
+			#endif
+			#if HAVE_omp_target_memcpy_rect
 			case OMP_ROUTINE_API_ID_omp_target_memcpy_rect : 
 				GET_PTRS_VALUE_omp_target_memcpy_rect(args);
 				return;
+			#endif
+			#if HAVE_omp_target_memset_async
 			case OMP_ROUTINE_API_ID_omp_target_memset_async : 
 				GET_PTRS_VALUE_omp_target_memset_async(args);
 				return;
+			#endif
+			#if HAVE_omp_get_interop_int
 			case OMP_ROUTINE_API_ID_omp_get_interop_int : 
 				GET_PTRS_VALUE_omp_get_interop_int(args);
 				return;
+			#endif
+			#if HAVE_omp_get_interop_name
 			case OMP_ROUTINE_API_ID_omp_get_interop_name : 
 				GET_PTRS_RET_VALUE_omp_get_interop_name(args);
 				return;
+			#endif
+			#if HAVE_omp_get_interop_ptr
 			case OMP_ROUTINE_API_ID_omp_get_interop_ptr : 
 				GET_PTRS_VALUE_omp_get_interop_ptr(args);
 				return;
+			#endif
+			#if HAVE_omp_get_interop_str
 			case OMP_ROUTINE_API_ID_omp_get_interop_str : 
 				GET_PTRS_VALUE_omp_get_interop_str(args);
 				GET_PTRS_RET_VALUE_omp_get_interop_str(args);
 				return;
+			#endif
+			#if HAVE_omp_get_interop_type_desc
 			case OMP_ROUTINE_API_ID_omp_get_interop_type_desc : 
 				GET_PTRS_RET_VALUE_omp_get_interop_type_desc(args);
 				return;
+			#endif
             default : break;
         }
     } else {

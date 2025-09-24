@@ -34,6 +34,7 @@ void on_exit_omp_routine_callback(ratelprof_domain_t domain, ratelprof_api_id_t 
 void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_api_args_t* args, void* user_args)
 {
     switch(funid) {
+		#if HAVE_omp_target_memset
 		case OMP_ROUTINE_API_ID_omp_target_memset :
 			//	void * ptr (void *);
 			//	int value (int);
@@ -49,6 +50,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			printf("\n");
 			break;
 
+		#endif
+		#if HAVE_omp_target_memcpy_async
 		case OMP_ROUTINE_API_ID_omp_target_memcpy_async :
 			//	void * dst (void *);
 			//	const void * src (const void *);
@@ -78,6 +81,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			printf("\tint retval = %d\n", args->omp_target_memcpy_async.retval);
 			break;
 
+		#endif
+		#if HAVE_omp_target_memcpy_rect_async
 		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect_async :
 			//	void * dst (void *);
 			//	const void * src (const void *);
@@ -130,6 +135,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			printf("\tint retval = %d\n", args->omp_target_memcpy_rect_async.retval);
 			break;
 
+		#endif
+		#if HAVE_omp_target_alloc
 		case OMP_ROUTINE_API_ID_omp_target_alloc :
 			//	size_t size (unsigned long);
 			//	int device_num (int);
@@ -140,6 +147,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			printf("\n");
 			break;
 
+		#endif
+		#if HAVE_omp_target_free
 		case OMP_ROUTINE_API_ID_omp_target_free :
 			//	void * device_ptr (void *);
 			//	int device_num (int);
@@ -148,6 +157,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			printf("\tint device_num = %d\n", args->omp_target_free.device_num);
 			break;
 
+		#endif
+		#if HAVE_omp_target_memcpy_rect
 		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect :
 			//	void * dst (void *);
 			//	const void * src (const void *);
@@ -192,6 +203,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			printf("\tint retval = %d\n", args->omp_target_memcpy_rect.retval);
 			break;
 
+		#endif
+		#if HAVE_omp_target_disassociate_ptr
 		case OMP_ROUTINE_API_ID_omp_target_disassociate_ptr :
 			//	const void * host_ptr (const void *);
 			//	int device_num (int);
@@ -202,6 +215,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			printf("\tint retval = %d\n", args->omp_target_disassociate_ptr.retval);
 			break;
 
+		#endif
+		#if HAVE_omp_target_memcpy
 		case OMP_ROUTINE_API_ID_omp_target_memcpy :
 			//	void * dst (void *);
 			//	const void * src (const void *);
@@ -223,6 +238,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			printf("\tint retval = %d\n", args->omp_target_memcpy.retval);
 			break;
 
+		#endif
+		#if HAVE_omp_target_memset_async
 		case OMP_ROUTINE_API_ID_omp_target_memset_async :
 			//	void * ptr (void *);
 			//	int value (int);
@@ -246,6 +263,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			printf("\n");
 			break;
 
+		#endif
+		#if HAVE_omp_target_is_present
 		case OMP_ROUTINE_API_ID_omp_target_is_present :
 			//	const void * host_ptr (const void *);
 			//	int device_num (int);
@@ -256,6 +275,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			printf("\tint retval = %d\n", args->omp_target_is_present.retval);
 			break;
 
+		#endif
+		#if HAVE_omp_target_associate_ptr
 		case OMP_ROUTINE_API_ID_omp_target_associate_ptr :
 			//	const void * host_ptr (const void *);
 			//	const void * device_ptr (const void *);
@@ -273,17 +294,23 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			printf("\tint retval = %d\n", args->omp_target_associate_ptr.retval);
 			break;
 
+		#endif
+		#if HAVE_omp_get_initial_device
 		case OMP_ROUTINE_API_ID_omp_get_initial_device :
 			//	int retval (int);
 			printf("\tint retval = %d\n", args->omp_get_initial_device.retval);
 			break;
 
+		#endif
+		#if HAVE_llvm_omp_target_dynamic_shared_alloc
 		case OMP_ROUTINE_API_ID_llvm_omp_target_dynamic_shared_alloc :
 			//	void * retval (void *);
 			printf("\tvoid * retval = %p", args->llvm_omp_target_dynamic_shared_alloc.retval);
 			printf("\n");
 			break;
 
+		#endif
+		#if HAVE_omp_get_interop_int
 		case OMP_ROUTINE_API_ID_omp_get_interop_int :
 			//	const omp_interop_t interop (const void *);
 			//	omp_interop_property_t prop (enum omp_interop_property);
@@ -299,6 +326,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			printf("\tomp_intptr_t retval = %ld\n", args->omp_get_interop_int.retval);
 			break;
 
+		#endif
+		#if HAVE_omp_get_interop_name
 		case OMP_ROUTINE_API_ID_omp_get_interop_name :
 			//	const omp_interop_t interop (const void *);
 			//	omp_interop_property_t prop (enum omp_interop_property);
@@ -312,6 +341,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			} else { printf("\n"); };
 			break;
 
+		#endif
+		#if HAVE_omp_get_interop_ptr
 		case OMP_ROUTINE_API_ID_omp_get_interop_ptr :
 			//	const omp_interop_t interop (const void *);
 			//	omp_interop_property_t prop (enum omp_interop_property);
@@ -328,6 +359,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			printf("\n");
 			break;
 
+		#endif
+		#if HAVE_omp_get_interop_str
 		case OMP_ROUTINE_API_ID_omp_get_interop_str :
 			//	const omp_interop_t interop (const void *);
 			//	omp_interop_property_t prop (enum omp_interop_property);
@@ -346,6 +379,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			} else { printf("\n"); };
 			break;
 
+		#endif
+		#if HAVE_omp_get_interop_type_desc
 		case OMP_ROUTINE_API_ID_omp_get_interop_type_desc :
 			//	const omp_interop_t interop (const void *);
 			//	omp_interop_property_t prop (enum omp_interop_property);
@@ -359,6 +394,8 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			} else { printf("\n"); };
 			break;
 
+		#endif
+		#if HAVE_omp_get_mapped_ptr
 		case OMP_ROUTINE_API_ID_omp_get_mapped_ptr :
 			//	const void * ptr (const void *);
 			//	int device_num (int);
@@ -370,11 +407,15 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			printf("\n");
 			break;
 
+		#endif
+		#if HAVE_omp_get_num_devices
 		case OMP_ROUTINE_API_ID_omp_get_num_devices :
 			//	int retval (int);
 			printf("\tint retval = %d\n", args->omp_get_num_devices.retval);
 			break;
 
+		#endif
+		#if HAVE_omp_is_coarse_grain_mem_region
 		case OMP_ROUTINE_API_ID_omp_is_coarse_grain_mem_region :
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
@@ -385,6 +426,7 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			printf("\tint retval = %d\n", args->omp_is_coarse_grain_mem_region.retval);
 			break;
 
+		#endif
         default : break;
     }
 }

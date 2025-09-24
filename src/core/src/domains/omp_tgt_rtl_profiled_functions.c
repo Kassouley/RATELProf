@@ -23,6 +23,7 @@
 	__omp_tgt_rtl_activity->omp_tgt_rtl_args.func.retval = (ret_type)__omp_tgt_rtl_ret; \
 
 
+#if HAVE___tgt_rtl_query_async
 int32_t i___tgt_rtl_query_async(int32_t device_id, __tgt_async_info * AsyncInfoPtr, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -32,7 +33,9 @@ int32_t i___tgt_rtl_query_async(int32_t device_id, __tgt_async_info * AsyncInfoP
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_query_async, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_data_submit
 int32_t i___tgt_rtl_data_submit(int32_t device_id, void * target_ptr, void * host_ptr, int64_t size, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -42,7 +45,9 @@ int32_t i___tgt_rtl_data_submit(int32_t device_id, void * target_ptr, void * hos
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_data_submit, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_are_allocations_for_maps_on_apus_disabled
 int i___tgt_rtl_are_allocations_for_maps_on_apus_disabled(void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -51,7 +56,9 @@ int i___tgt_rtl_are_allocations_for_maps_on_apus_disabled(void* return_address) 
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_are_allocations_for_maps_on_apus_disabled, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_data_notify_mapped
 int32_t i___tgt_rtl_data_notify_mapped(int32_t device_id, void * host_ptr, int64_t size, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -61,7 +68,9 @@ int32_t i___tgt_rtl_data_notify_mapped(int32_t device_id, void * host_ptr, int64
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_data_notify_mapped, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_data_submit_async
 int32_t i___tgt_rtl_data_submit_async(int32_t device_id, void * target_ptr, void * host_ptr, int64_t size, __tgt_async_info * AsyncInfo, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -71,7 +80,9 @@ int32_t i___tgt_rtl_data_submit_async(int32_t device_id, void * target_ptr, void
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_data_submit_async, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_init_async_info
 int32_t i___tgt_rtl_init_async_info(int32_t device_id, __tgt_async_info ** async_info_ptr, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -81,7 +92,9 @@ int32_t i___tgt_rtl_init_async_info(int32_t device_id, __tgt_async_info ** async
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_init_async_info, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_is_data_exchangable
 int32_t i___tgt_rtl_is_data_exchangable(int32_t src_dev_id, int32_t dst_dev_id, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -91,7 +104,9 @@ int32_t i___tgt_rtl_is_data_exchangable(int32_t src_dev_id, int32_t dst_dev_id, 
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_is_data_exchangable, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_data_retrieve_async
 int32_t i___tgt_rtl_data_retrieve_async(int32_t device_id, void * host_ptr, void * target_ptr, int64_t size, __tgt_async_info * AsyncInfo, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -101,7 +116,9 @@ int32_t i___tgt_rtl_data_retrieve_async(int32_t device_id, void * host_ptr, void
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_data_retrieve_async, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_data_delete
 int32_t i___tgt_rtl_data_delete(int32_t device_id, void * target_ptr, int32_t kind, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -111,7 +128,9 @@ int32_t i___tgt_rtl_data_delete(int32_t device_id, void * target_ptr, int32_t ki
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_data_delete, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_data_exchange_async
 int32_t i___tgt_rtl_data_exchange_async(int32_t src_dev_id, void * src_ptr, int32_t dst_dev_id, void * dst_ptr, int64_t size, __tgt_async_info * AsyncInfo, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -121,7 +140,9 @@ int32_t i___tgt_rtl_data_exchange_async(int32_t src_dev_id, void * src_ptr, int3
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_data_exchange_async, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_prepopulate_page_table
 int32_t i___tgt_rtl_prepopulate_page_table(int32_t device_id, void * ptr, int64_t size, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -131,7 +152,9 @@ int32_t i___tgt_rtl_prepopulate_page_table(int32_t device_id, void * ptr, int64_
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_prepopulate_page_table, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_data_exchange
 int32_t i___tgt_rtl_data_exchange(int32_t src_dev_id, void * src_ptr, int32_t dst_dev_id, void * dst_ptr, int64_t size, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -141,7 +164,9 @@ int32_t i___tgt_rtl_data_exchange(int32_t src_dev_id, void * src_ptr, int32_t ds
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_data_exchange, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_launch_kernel
 int32_t i___tgt_rtl_launch_kernel(int32_t device_id, void * tgt_entry_ptr, void ** tgt_args, ptrdiff_t * tgt_offsets, KernelArgsTy * KernelArgs, __tgt_async_info * AsyncInfo, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -151,7 +176,9 @@ int32_t i___tgt_rtl_launch_kernel(int32_t device_id, void * tgt_entry_ptr, void 
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_is_valid_binary
 int32_t i___tgt_rtl_is_valid_binary(__tgt_device_image * image, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -161,7 +188,9 @@ int32_t i___tgt_rtl_is_valid_binary(__tgt_device_image * image, void* return_add
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_is_valid_binary, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_data_retrieve
 int32_t i___tgt_rtl_data_retrieve(int32_t device_id, void * host_ptr, void * target_ptr, int64_t size, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -171,7 +200,9 @@ int32_t i___tgt_rtl_data_retrieve(int32_t device_id, void * host_ptr, void * tar
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_data_retrieve, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_data_lock
 int32_t i___tgt_rtl_data_lock(int32_t device_id, void * host_ptr, int64_t size, void ** LockedHostPtr, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -181,7 +212,9 @@ int32_t i___tgt_rtl_data_lock(int32_t device_id, void * host_ptr, int64_t size, 
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_data_lock, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_supports_empty_images
 int32_t i___tgt_rtl_supports_empty_images(void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -190,7 +223,9 @@ int32_t i___tgt_rtl_supports_empty_images(void* return_address) {
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_supports_empty_images, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_destroy_event
 int32_t i___tgt_rtl_destroy_event(int32_t device_id, void * event, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -200,7 +235,9 @@ int32_t i___tgt_rtl_destroy_event(int32_t device_id, void * event, void* return_
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_destroy_event, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_number_of_devices
 int32_t i___tgt_rtl_number_of_devices(void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -209,7 +246,9 @@ int32_t i___tgt_rtl_number_of_devices(void* return_address) {
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_number_of_devices, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_init_requires
 int64_t i___tgt_rtl_init_requires(int64_t RequiresFlags, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -219,7 +258,9 @@ int64_t i___tgt_rtl_init_requires(int64_t RequiresFlags, void* return_address) {
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_init_requires, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_data_notify_unmapped
 int32_t i___tgt_rtl_data_notify_unmapped(int32_t device_id, void * host_ptr, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -229,7 +270,9 @@ int32_t i___tgt_rtl_data_notify_unmapped(int32_t device_id, void * host_ptr, voi
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_data_notify_unmapped, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_init_device_info
 int32_t i___tgt_rtl_init_device_info(int32_t device_id, __tgt_device_info * device_info_ptr, const char ** err_str, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -239,7 +282,9 @@ int32_t i___tgt_rtl_init_device_info(int32_t device_id, __tgt_device_info * devi
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_init_device_info, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_sync_event
 int32_t i___tgt_rtl_sync_event(int32_t device_id, void * event, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -249,7 +294,9 @@ int32_t i___tgt_rtl_sync_event(int32_t device_id, void * event, void* return_add
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_sync_event, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_synchronize
 int32_t i___tgt_rtl_synchronize(int32_t device_id, __tgt_async_info * AsyncInfo, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -259,7 +306,9 @@ int32_t i___tgt_rtl_synchronize(int32_t device_id, __tgt_async_info * AsyncInfo,
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_synchronize, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_set_up_env
 void i___tgt_rtl_set_up_env(void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -268,7 +317,9 @@ void i___tgt_rtl_set_up_env(void* return_address) {
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_set_up_env, __omp_tgt_rtl_activity);
 	return;
 };
+#endif
 
+#if HAVE___tgt_rtl_data_unlock
 int32_t i___tgt_rtl_data_unlock(int device_id, void * host_ptr, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -278,7 +329,9 @@ int32_t i___tgt_rtl_data_unlock(int device_id, void * host_ptr, void* return_add
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_data_unlock, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_is_fine_grained_memory_enabled
 int i___tgt_rtl_is_fine_grained_memory_enabled(void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -287,7 +340,9 @@ int i___tgt_rtl_is_fine_grained_memory_enabled(void* return_address) {
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_is_fine_grained_memory_enabled, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_has_USM_capable_dGPU
 int i___tgt_rtl_has_USM_capable_dGPU(void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -296,7 +351,9 @@ int i___tgt_rtl_has_USM_capable_dGPU(void* return_address) {
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_has_USM_capable_dGPU, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_has_apu_device
 int i___tgt_rtl_has_apu_device(void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -305,7 +362,9 @@ int i___tgt_rtl_has_apu_device(void* return_address) {
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_has_apu_device, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_set_device_offset
 int32_t i___tgt_rtl_set_device_offset(int32_t DeviceIdOffset, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -315,7 +374,9 @@ int32_t i___tgt_rtl_set_device_offset(int32_t DeviceIdOffset, void* return_addre
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_set_device_offset, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_launch_kernel_sync
 int32_t i___tgt_rtl_launch_kernel_sync(int32_t device_id, void * tgt_entry_ptr, void ** tgt_args, ptrdiff_t * tgt_offsets, KernelArgsTy * KernelArgs, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -325,7 +386,9 @@ int32_t i___tgt_rtl_launch_kernel_sync(int32_t device_id, void * tgt_entry_ptr, 
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel_sync, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_record_event
 int32_t i___tgt_rtl_record_event(int32_t device_id, void * event, __tgt_async_info * AsyncInfo, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -335,7 +398,9 @@ int32_t i___tgt_rtl_record_event(int32_t device_id, void * event, __tgt_async_in
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_record_event, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_set_info_flag
 void i___tgt_rtl_set_info_flag(uint32_t NewInfoLevel, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -345,7 +410,9 @@ void i___tgt_rtl_set_info_flag(uint32_t NewInfoLevel, void* return_address) {
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_set_info_flag, __omp_tgt_rtl_activity);
 	return;
 };
+#endif
 
+#if HAVE___tgt_rtl_create_event
 int32_t i___tgt_rtl_create_event(int32_t device_id, void ** event, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -355,7 +422,9 @@ int32_t i___tgt_rtl_create_event(int32_t device_id, void ** event, void* return_
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_create_event, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_print_device_info
 void i___tgt_rtl_print_device_info(int32_t device_id, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -365,7 +434,9 @@ void i___tgt_rtl_print_device_info(int32_t device_id, void* return_address) {
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_print_device_info, __omp_tgt_rtl_activity);
 	return;
 };
+#endif
 
+#if HAVE___tgt_rtl_get_function
 int32_t i___tgt_rtl_get_function(__tgt_device_binary binary, const char * name, void ** kernel_ptr, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -375,7 +446,9 @@ int32_t i___tgt_rtl_get_function(__tgt_device_binary binary, const char * name, 
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_get_function, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_init_plugin
 int32_t i___tgt_rtl_init_plugin(void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -384,7 +457,9 @@ int32_t i___tgt_rtl_init_plugin(void* return_address) {
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_init_plugin, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_number_of_team_procs
 int32_t i___tgt_rtl_number_of_team_procs(int device_id, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -394,7 +469,9 @@ int32_t i___tgt_rtl_number_of_team_procs(int device_id, void* return_address) {
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_number_of_team_procs, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_wait_event
 int32_t i___tgt_rtl_wait_event(int32_t device_id, void * event, __tgt_async_info * AsyncInfo, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -404,7 +481,9 @@ int32_t i___tgt_rtl_wait_event(int32_t device_id, void * event, __tgt_async_info
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_wait_event, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_data_alloc
 void * i___tgt_rtl_data_alloc(int32_t device_id, int64_t size, void * host_ptr, int32_t kind, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -414,7 +493,9 @@ void * i___tgt_rtl_data_alloc(int32_t device_id, int64_t size, void * host_ptr, 
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_data_alloc, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_init_device
 int32_t i___tgt_rtl_init_device(int32_t device_id, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -424,7 +505,9 @@ int32_t i___tgt_rtl_init_device(int32_t device_id, void* return_address) {
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_init_device, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_get_global
 int32_t i___tgt_rtl_get_global(__tgt_device_binary binary, uint64_t size, const char * name, void ** device_ptr, void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -434,7 +517,9 @@ int32_t i___tgt_rtl_get_global(__tgt_device_binary binary, uint64_t size, const 
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_get_global, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif
 
+#if HAVE___tgt_rtl_requested_prepopulate_gpu_page_table
 int i___tgt_rtl_requested_prepopulate_gpu_page_table(void* return_address) {
 	ratelprof_api_activity_t* __omp_tgt_rtl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
 	__omp_tgt_rtl_activity->return_address = return_address;
@@ -443,3 +528,4 @@ int i___tgt_rtl_requested_prepopulate_gpu_page_table(void* return_address) {
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_TGT_RTL](RATELPROF_DOMAIN_OMP_TGT_RTL, OMP_TGT_RTL_API_ID___tgt_rtl_requested_prepopulate_gpu_page_table, __omp_tgt_rtl_activity);
 	return __omp_tgt_rtl_ret;
 };
+#endif

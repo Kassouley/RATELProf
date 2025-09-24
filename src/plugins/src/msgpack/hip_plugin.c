@@ -33,6 +33,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 {
     msgpack_buffer_t* buf = (msgpack_buffer_t*)user_args;
     switch(funid) {
+		#if HAVE_hipMemPtrGetInfo
 		case HIP_API_ID_hipMemPtrGetInfo :
 			//	void * ptr (void *);
 			//	size_t * size (unsigned long*);
@@ -61,6 +62,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecMemcpyNodeSetParams1D
 		case HIP_API_ID_hipGraphExecMemcpyNodeSetParams1D :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -121,6 +124,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxEnablePeerAccess
 		case HIP_API_ID_hipCtxEnablePeerAccess :
 			//	hipCtx_t peerCtx (struct ihipCtx_t *);
 			//	unsigned int flags (unsigned int);
@@ -149,6 +154,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipHostUnregister
 		case HIP_API_ID_hipHostUnregister :
 			//	void * hostPtr (void *);
 			//	hipError_t retval (enum hipError_t);
@@ -169,6 +176,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDevicePrimaryCtxGetState
 		case HIP_API_ID_hipDevicePrimaryCtxGetState :
 			//	hipDevice_t dev (int);
 			//	unsigned int * flags (unsigned int *);
@@ -205,6 +214,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipPointerGetAttribute
 		case HIP_API_ID_hipPointerGetAttribute :
 			//	void * data (void *);
 			//	hipPointer_attribute attribute (enum hipPointer_attribute);
@@ -241,6 +252,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolGetAccess
 		case HIP_API_ID_hipMemPoolGetAccess :
 			//	hipMemAccessFlags * flags (enum hipMemAccessFlags*);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
@@ -277,6 +290,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemsetD32
 		case HIP_API_ID_hipMemsetD32 :
 			//	hipDeviceptr_t dest (void *);
 			//	int value (int);
@@ -313,6 +328,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetMipMappedArray
 		case HIP_API_ID_hipTexRefGetMipMappedArray :
 			//	hipMipmappedArray_t * pArray (struct hipMipmappedArray **);
 			//	const textureReference * texRef (const struct textureReference *);
@@ -341,6 +358,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMalloc3D
 		case HIP_API_ID_hipMalloc3D :
 			//	hipPitchedPtr * pitchedDevPtr (struct hipPitchedPtr*);
 			//	hipExtent extent ({
@@ -394,6 +413,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemsetD8
 		case HIP_API_ID_hipMemsetD8 :
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned char value (unsigned char);
@@ -430,6 +451,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMallocArray
 		case HIP_API_ID_hipMallocArray :
 			//	hipArray_t * array (struct hipArray **);
 			//	const hipChannelFormatDesc * desc (const struct hipChannelFormatDesc *);
@@ -482,6 +505,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphEventWaitNodeGetEvent
 		case HIP_API_ID_hipGraphEventWaitNodeGetEvent :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t * event_out (struct ihipEvent_t **);
@@ -510,6 +535,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDrvMemcpy3D
 		case HIP_API_ID_hipDrvMemcpy3D :
 			//	const HIP_MEMCPY3D * pCopy (const struct HIP_MEMCPY3D *);
 			//	hipError_t retval (enum hipError_t);
@@ -530,6 +557,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
 		case HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags :
 			//	int * numBlocks (int *);
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
@@ -582,6 +611,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipHostMalloc
 		case HIP_API_ID_hipHostMalloc :
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
@@ -618,6 +649,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipModuleGetTexRef
 		case HIP_API_ID_hipModuleGetTexRef :
 			//	textureReference ** texRef (struct textureReference**);
 			//	hipModule_t hmod (struct ihipModule_t *);
@@ -654,6 +687,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipIpcGetMemHandle
 		case HIP_API_ID_hipIpcGetMemHandle :
 			//	hipIpcMemHandle_t * handle (struct hipIpcMemHandle_st*);
 			//	void * devPtr (void *);
@@ -682,6 +717,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyDtoHAsync
 		case HIP_API_ID_hipMemcpyDtoHAsync :
 			//	void * dst (void *);
 			//	hipDeviceptr_t src (void *);
@@ -726,6 +763,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipModuleLoad
 		case HIP_API_ID_hipModuleLoad :
 			//	hipModule_t * module (struct ihipModule_t **);
 			//	const char * fname (const char *);
@@ -754,6 +793,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipWaitExternalSemaphoresAsync
 		case HIP_API_ID_hipWaitExternalSemaphoresAsync :
 			//	const hipExternalSemaphore_t * extSemArray (const void * *);
 			//	const hipExternalSemaphoreWaitParams * paramsArray (const struct hipExternalSemaphoreWaitParams_st *);
@@ -798,6 +839,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphKernelNodeGetParams
 		case HIP_API_ID_hipGraphKernelNodeGetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipKernelNodeParams * pNodeParams (struct hipKernelNodeParams*);
@@ -826,6 +869,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphLaunch
 		case HIP_API_ID_hipGraphLaunch :
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -854,6 +899,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipHostAlloc
 		case HIP_API_ID_hipHostAlloc :
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
@@ -890,6 +937,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipSetDevice
 		case HIP_API_ID_hipSetDevice :
 			//	int deviceId (int);
 			//	hipError_t retval (enum hipError_t);
@@ -910,6 +959,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipModuleOccupancyMaxPotentialBlockSizeWithFlags
 		case HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSizeWithFlags :
 			//	int * gridSize (int *);
 			//	int * blockSize (int *);
@@ -970,6 +1021,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphNodeGetDependentNodes
 		case HIP_API_ID_hipGraphNodeGetDependentNodes :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraphNode_t * pDependentNodes (struct hipGraphNode **);
@@ -1006,6 +1059,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipExtStreamGetCUMask
 		case HIP_API_ID_hipExtStreamGetCUMask :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	uint32_t cuMaskSize (unsigned int);
@@ -1042,6 +1097,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemsetD16
 		case HIP_API_ID_hipMemsetD16 :
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned short value (unsigned short);
@@ -1078,6 +1135,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipLaunchKernel
 		case HIP_API_ID_hipLaunchKernel :
 			//	const void * function_address (const void *);
 			//	dim3 numBlocks ({
@@ -1188,6 +1247,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetErrorString
 		case HIP_API_ID_hipGetErrorString :
 			//	hipError_t hipError (enum hipError_t);
 			//	const char * retval (const char *);
@@ -1208,6 +1269,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipModuleLoadDataEx
 		case HIP_API_ID_hipModuleLoadDataEx :
 			//	hipModule_t * module (struct ihipModule_t **);
 			//	const void * image (const void *);
@@ -1260,6 +1323,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetFilterMode
 		case HIP_API_ID_hipTexRefGetFilterMode :
 			//	enum hipTextureFilterMode * pfm (enum hipTextureFilterMode *);
 			//	const textureReference * texRef (const struct textureReference *);
@@ -1288,6 +1353,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphInstantiateWithParams
 		case HIP_API_ID_hipGraphInstantiateWithParams :
 			//	hipGraphExec_t * pGraphExec (struct hipGraphExec **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -1324,6 +1391,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemcpyNodeSetParams1D
 		case HIP_API_ID_hipGraphMemcpyNodeSetParams1D :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dst (void *);
@@ -1376,6 +1445,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamSynchronize
 		case HIP_API_ID_hipStreamSynchronize :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -1396,6 +1467,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphicsUnmapResources
 		case HIP_API_ID_hipGraphicsUnmapResources :
 			//	int count (int);
 			//	hipGraphicsResource_t * resources (struct _hipGraphicsResource**);
@@ -1432,6 +1505,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DFromArray_spt
 		case HIP_API_ID_hipMemcpy2DFromArray_spt :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -1508,6 +1583,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecMemcpyNodeSetParamsFromSymbol
 		case HIP_API_ID_hipGraphExecMemcpyNodeSetParamsFromSymbol :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -1576,6 +1653,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetMipmapLevelBias
 		case HIP_API_ID_hipTexRefGetMipmapLevelBias :
 			//	float * pbias (float *);
 			//	const textureReference * texRef (const struct textureReference *);
@@ -1604,6 +1683,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddExternalSemaphoresSignalNode
 		case HIP_API_ID_hipGraphAddExternalSemaphoresSignalNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -1656,6 +1737,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipExtGetLastError
 		case HIP_API_ID_hipExtGetLastError :
 			//	hipError_t retval (enum hipError_t);
 			msgpack_encode_map(buf, 1);
@@ -1668,6 +1751,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemMapArrayAsync
 		case HIP_API_ID_hipMemMapArrayAsync :
 			//	hipArrayMapInfo * mapInfoList (struct hipArrayMapInfo*);
 			//	unsigned int count (unsigned int);
@@ -1704,6 +1789,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyAsync
 		case HIP_API_ID_hipMemcpyAsync :
 			//	void * dst (void *);
 			//	const void * src (const void *);
@@ -1756,6 +1843,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphKernelNodeSetAttribute
 		case HIP_API_ID_hipGraphKernelNodeSetAttribute :
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipLaunchAttributeID attr (enum hipLaunchAttributeID);
@@ -1792,6 +1881,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDrvMemcpy2DUnaligned
 		case HIP_API_ID_hipDrvMemcpy2DUnaligned :
 			//	const hip_Memcpy2D * pCopy (const struct hip_Memcpy2D *);
 			//	hipError_t retval (enum hipError_t);
@@ -1812,6 +1903,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolDestroy
 		case HIP_API_ID_hipMemPoolDestroy :
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -1832,6 +1925,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphRemoveDependencies
 		case HIP_API_ID_hipGraphRemoveDependencies :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * from (const struct hipGraphNode * *);
@@ -1876,6 +1971,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphCreate
 		case HIP_API_ID_hipGraphCreate :
 			//	hipGraph_t * pGraph (struct ihipGraph **);
 			//	unsigned int flags (unsigned int);
@@ -1904,6 +2001,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipExtLaunchMultiKernelMultiDevice
 		case HIP_API_ID_hipExtLaunchMultiKernelMultiDevice :
 			//	hipLaunchParams * launchParamsList (struct hipLaunchParams_t*);
 			//	int numDevices (int);
@@ -1940,6 +2039,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetDeviceCount
 		case HIP_API_ID_hipGetDeviceCount :
 			//	int * count (int *);
 			//	hipError_t retval (enum hipError_t);
@@ -1960,6 +2061,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemUnmap
 		case HIP_API_ID_hipMemUnmap :
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
@@ -1988,6 +2091,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexObjectGetResourceDesc
 		case HIP_API_ID_hipTexObjectGetResourceDesc :
 			//	HIP_RESOURCE_DESC * pResDesc (struct HIP_RESOURCE_DESC_st*);
 			//	hipTextureObject_t texObject (struct __hip_texture *);
@@ -2016,6 +2121,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecEventRecordNodeSetEvent
 		case HIP_API_ID_hipGraphExecEventRecordNodeSetEvent :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
@@ -2052,6 +2159,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipInit
 		case HIP_API_ID_hipInit :
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
@@ -2072,6 +2181,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipThreadExchangeStreamCaptureMode
 		case HIP_API_ID_hipThreadExchangeStreamCaptureMode :
 			//	hipStreamCaptureMode * mode (enum hipStreamCaptureMode*);
 			//	hipError_t retval (enum hipError_t);
@@ -2092,6 +2203,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetP2PAttribute
 		case HIP_API_ID_hipDeviceGetP2PAttribute :
 			//	int * value (int *);
 			//	hipDeviceP2PAttr attr (enum hipDeviceP2PAttr);
@@ -2136,6 +2249,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetByPCIBusId
 		case HIP_API_ID_hipDeviceGetByPCIBusId :
 			//	int * device (int *);
 			//	const char * pciBusId (const char *);
@@ -2164,6 +2279,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipHostFree
 		case HIP_API_ID_hipHostFree :
 			//	void * ptr (void *);
 			//	hipError_t retval (enum hipError_t);
@@ -2184,6 +2301,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipExtGetLinkTypeAndHopCount
 		case HIP_API_ID_hipExtGetLinkTypeAndHopCount :
 			//	int device1 (int);
 			//	int device2 (int);
@@ -2228,6 +2347,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyToSymbolAsync_spt
 		case HIP_API_ID_hipMemcpyToSymbolAsync_spt :
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
@@ -2288,6 +2409,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxDisablePeerAccess
 		case HIP_API_ID_hipCtxDisablePeerAccess :
 			//	hipCtx_t peerCtx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -2308,6 +2431,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipSetupArgument
 		case HIP_API_ID_hipSetupArgument :
 			//	const void * arg (const void *);
 			//	size_t size (unsigned long);
@@ -2344,6 +2469,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyAtoHAsync
 		case HIP_API_ID_hipMemcpyAtoHAsync :
 			//	void * dstHost (void *);
 			//	hipArray_t srcArray (struct hipArray *);
@@ -2396,6 +2523,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxSetCacheConfig
 		case HIP_API_ID_hipCtxSetCacheConfig :
 			//	hipFuncCache_t cacheConfig (enum hipFuncCache_t);
 			//	hipError_t retval (enum hipError_t);
@@ -2416,6 +2545,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemRelease
 		case HIP_API_ID_hipMemRelease :
 			//	hipMemGenericAllocationHandle_t handle (struct ihipMemGenericAllocationHandle *);
 			//	hipError_t retval (enum hipError_t);
@@ -2436,6 +2567,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipUnbindTexture
 		case HIP_API_ID_hipUnbindTexture :
 			//	const textureReference * tex (const struct textureReference *);
 			//	hipError_t retval (enum hipError_t);
@@ -2456,6 +2589,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDrvMemcpy3DAsync
 		case HIP_API_ID_hipDrvMemcpy3DAsync :
 			//	const HIP_MEMCPY3D * pCopy (const struct HIP_MEMCPY3D *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -2484,6 +2619,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipIpcGetEventHandle
 		case HIP_API_ID_hipIpcGetEventHandle :
 			//	hipIpcEventHandle_t * handle (struct hipIpcEventHandle_st*);
 			//	hipEvent_t event (struct ihipEvent_t *);
@@ -2512,6 +2649,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphReleaseUserObject
 		case HIP_API_ID_hipGraphReleaseUserObject :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipUserObject_t object (struct hipUserObject *);
@@ -2548,6 +2687,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetMemPool
 		case HIP_API_ID_hipDeviceGetMemPool :
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	int device (int);
@@ -2576,6 +2717,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphHostNodeSetParams
 		case HIP_API_ID_hipGraphHostNodeSetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipHostNodeParams * pNodeParams (const struct hipHostNodeParams *);
@@ -2604,6 +2747,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddEventWaitNode
 		case HIP_API_ID_hipGraphAddEventWaitNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -2656,6 +2801,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DFromArrayAsync_spt
 		case HIP_API_ID_hipMemcpy2DFromArrayAsync_spt :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -2740,6 +2887,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipLaunchHostFunc_spt
 		case HIP_API_ID_hipLaunchHostFunc_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipHostFn_t fn (void (*)(void *));
@@ -2776,6 +2925,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamWaitEvent_spt
 		case HIP_API_ID_hipStreamWaitEvent_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipEvent_t event (struct ihipEvent_t *);
@@ -2812,6 +2963,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipArrayGetDescriptor
 		case HIP_API_ID_hipArrayGetDescriptor :
 			//	HIP_ARRAY_DESCRIPTOR * pArrayDescriptor (struct HIP_ARRAY_DESCRIPTOR*);
 			//	hipArray_t array (struct hipArray *);
@@ -2840,6 +2993,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecUpdate
 		case HIP_API_ID_hipGraphExecUpdate :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraph_t hGraph (struct ihipGraph *);
@@ -2884,6 +3039,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemGetAllocationPropertiesFromHandle
 		case HIP_API_ID_hipMemGetAllocationPropertiesFromHandle :
 			//	hipMemAllocationProp * prop (struct hipMemAllocationProp*);
 			//	hipMemGenericAllocationHandle_t handle (struct ihipMemGenericAllocationHandle *);
@@ -2912,6 +3069,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyWithStream
 		case HIP_API_ID_hipMemcpyWithStream :
 			//	void * dst (void *);
 			//	const void * src (const void *);
@@ -2964,6 +3123,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddExternalSemaphoresWaitNode
 		case HIP_API_ID_hipGraphAddExternalSemaphoresWaitNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -3016,6 +3177,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyAtoH
 		case HIP_API_ID_hipMemcpyAtoH :
 			//	void * dst (void *);
 			//	hipArray_t srcArray (struct hipArray *);
@@ -3060,6 +3223,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamQuery
 		case HIP_API_ID_hipStreamQuery :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -3080,6 +3245,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipIpcCloseMemHandle
 		case HIP_API_ID_hipIpcCloseMemHandle :
 			//	void * devPtr (void *);
 			//	hipError_t retval (enum hipError_t);
@@ -3100,6 +3267,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemsetAsync
 		case HIP_API_ID_hipMemsetAsync :
 			//	void * dst (void *);
 			//	int value (int);
@@ -3144,6 +3313,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyDtoD
 		case HIP_API_ID_hipMemcpyDtoD :
 			//	hipDeviceptr_t dst (void *);
 			//	hipDeviceptr_t src (void *);
@@ -3180,6 +3351,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipModuleUnload
 		case HIP_API_ID_hipModuleUnload :
 			//	hipModule_t module (struct ihipModule_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -3200,6 +3373,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetDevicePropertiesR0600
 		case HIP_API_ID_hipGetDevicePropertiesR0600 :
 			//	hipDeviceProp_tR0600 * prop (struct hipDeviceProp_tR0600*);
 			//	int deviceId (int);
@@ -3228,6 +3403,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyFromArray
 		case HIP_API_ID_hipMemcpyFromArray :
 			//	void * dst (void *);
 			//	hipArray_const_t srcArray (const struct hipArray *);
@@ -3288,6 +3465,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceCanAccessPeer
 		case HIP_API_ID_hipDeviceCanAccessPeer :
 			//	int * canAccessPeer (int *);
 			//	int deviceId (int);
@@ -3324,6 +3503,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemSetAccess
 		case HIP_API_ID_hipMemSetAccess :
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
@@ -3368,6 +3549,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamWaitValue32
 		case HIP_API_ID_hipStreamWaitValue32 :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
@@ -3420,6 +3603,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipApiName
 		case HIP_API_ID_hipApiName :
 			//	uint32_t id (unsigned int);
 			//	const char * retval (const char *);
@@ -3440,6 +3625,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphicsSubResourceGetMappedArray
 		case HIP_API_ID_hipGraphicsSubResourceGetMappedArray :
 			//	hipArray_t * array (struct hipArray **);
 			//	hipGraphicsResource_t resource (struct _hipGraphicsResource*);
@@ -3484,6 +3671,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DToArrayAsync
 		case HIP_API_ID_hipMemcpy2DToArrayAsync :
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
@@ -3568,6 +3757,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphDestroy
 		case HIP_API_ID_hipGraphDestroy :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipError_t retval (enum hipError_t);
@@ -3588,6 +3779,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetBorderColor
 		case HIP_API_ID_hipTexRefGetBorderColor :
 			//	float * pBorderColor (float *);
 			//	const textureReference * texRef (const struct textureReference *);
@@ -3616,6 +3809,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddMemcpyNode1D
 		case HIP_API_ID_hipGraphAddMemcpyNode1D :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -3692,6 +3887,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphGetNodes
 		case HIP_API_ID_hipGraphGetNodes :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphNode_t * nodes (struct hipGraphNode **);
@@ -3728,6 +3925,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetFlags_spt
 		case HIP_API_ID_hipStreamGetFlags_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	unsigned int * flags (unsigned int *);
@@ -3756,6 +3955,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetAddress2D
 		case HIP_API_ID_hipTexRefSetAddress2D :
 			//	textureReference * texRef (struct textureReference*);
 			//	const HIP_ARRAY_DESCRIPTOR * desc (const struct HIP_ARRAY_DESCRIPTOR *);
@@ -3800,6 +4001,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetPriority
 		case HIP_API_ID_hipStreamGetPriority :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	int * priority (int *);
@@ -3828,6 +4031,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamCreate
 		case HIP_API_ID_hipStreamCreate :
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	hipError_t retval (enum hipError_t);
@@ -3848,6 +4053,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyFromSymbol
 		case HIP_API_ID_hipMemcpyFromSymbol :
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
@@ -3900,6 +4107,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphNodeGetEnabled
 		case HIP_API_ID_hipGraphNodeGetEnabled :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
@@ -3936,6 +4145,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCreateChannelDesc
 		case HIP_API_ID_hipCreateChannelDesc :
 			//	int x (int);
 			//	int y (int);
@@ -4029,6 +4240,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipFreeMipmappedArray
 		case HIP_API_ID_hipFreeMipmappedArray :
 			//	hipMipmappedArray_t mipmappedArray (struct hipMipmappedArray *);
 			//	hipError_t retval (enum hipError_t);
@@ -4049,6 +4262,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetTextureAlignmentOffset
 		case HIP_API_ID_hipGetTextureAlignmentOffset :
 			//	size_t * offset (unsigned long*);
 			//	const textureReference * texref (const struct textureReference *);
@@ -4077,6 +4292,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddEventRecordNode
 		case HIP_API_ID_hipGraphAddEventRecordNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -4129,6 +4346,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphNodeFindInClone
 		case HIP_API_ID_hipGraphNodeFindInClone :
 			//	hipGraphNode_t * pNode (struct hipGraphNode **);
 			//	hipGraphNode_t originalNode (struct hipGraphNode *);
@@ -4165,6 +4384,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyFromSymbol_spt
 		case HIP_API_ID_hipMemcpyFromSymbol_spt :
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
@@ -4217,6 +4438,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemset3DAsync_spt
 		case HIP_API_ID_hipMemset3DAsync_spt :
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
@@ -4312,6 +4535,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemsetD16Async
 		case HIP_API_ID_hipMemsetD16Async :
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned short value (unsigned short);
@@ -4356,6 +4581,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetCacheConfig
 		case HIP_API_ID_hipDeviceGetCacheConfig :
 			//	hipFuncCache_t * cacheConfig (enum hipFuncCache_t*);
 			//	hipError_t retval (enum hipError_t);
@@ -4376,6 +4603,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemCreate
 		case HIP_API_ID_hipMemCreate :
 			//	hipMemGenericAllocationHandle_t * handle (struct ihipMemGenericAllocationHandle **);
 			//	size_t size (unsigned long);
@@ -4420,6 +4649,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExternalSemaphoresWaitNodeGetParams
 		case HIP_API_ID_hipGraphExternalSemaphoresWaitNodeGetParams :
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipExternalSemaphoreWaitNodeParams * params_out (struct hipExternalSemaphoreWaitNodeParams*);
@@ -4448,6 +4679,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamEndCapture
 		case HIP_API_ID_hipStreamEndCapture :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraph_t * pGraph (struct ihipGraph **);
@@ -4476,6 +4709,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyFromSymbolAsync_spt
 		case HIP_API_ID_hipMemcpyFromSymbolAsync_spt :
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
@@ -4536,6 +4771,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyHtoA
 		case HIP_API_ID_hipMemcpyHtoA :
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
@@ -4580,6 +4817,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecHostNodeSetParams
 		case HIP_API_ID_hipGraphExecHostNodeSetParams :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -4616,6 +4855,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMalloc
 		case HIP_API_ID_hipMalloc :
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
@@ -4644,6 +4885,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMalloc3DArray
 		case HIP_API_ID_hipMalloc3DArray :
 			//	hipArray_t * array (struct hipArray **);
 			//	const struct hipChannelFormatDesc * desc (const struct hipChannelFormatDesc *);
@@ -4713,6 +4956,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecKernelNodeSetParams
 		case HIP_API_ID_hipGraphExecKernelNodeSetParams :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -4749,6 +4994,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetTextureObjectResourceDesc
 		case HIP_API_ID_hipGetTextureObjectResourceDesc :
 			//	hipResourceDesc * pResDesc (struct hipResourceDesc*);
 			//	hipTextureObject_t textureObject (struct __hip_texture *);
@@ -4777,6 +5024,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE___hipPushCallConfiguration
 		case HIP_API_ID___hipPushCallConfiguration :
 			//	dim3 gridDim ({
 			//		uint32_t x (unsigned int);
@@ -4871,6 +5120,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy3DAsync_spt
 		case HIP_API_ID_hipMemcpy3DAsync_spt :
 			//	const hipMemcpy3DParms * p (const struct hipMemcpy3DParms *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -4899,6 +5150,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemsetD8Async
 		case HIP_API_ID_hipMemsetD8Async :
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned char value (unsigned char);
@@ -4943,6 +5196,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamAddCallback
 		case HIP_API_ID_hipStreamAddCallback :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCallback_t callback (void (*)(struct ihipStream_t *, enum hipError_t, void *));
@@ -4987,6 +5242,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolImportPointer
 		case HIP_API_ID_hipMemPoolImportPointer :
 			//	void ** dev_ptr (void **);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
@@ -5023,6 +5280,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipFuncGetAttributes
 		case HIP_API_ID_hipFuncGetAttributes :
 			//	struct hipFuncAttributes * attr (struct hipFuncAttributes *);
 			//	const void * func (const void *);
@@ -5051,6 +5310,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxGetCurrent
 		case HIP_API_ID_hipCtxGetCurrent :
 			//	hipCtx_t * ctx (struct ihipCtx_t **);
 			//	hipError_t retval (enum hipError_t);
@@ -5071,6 +5332,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddChildGraphNode
 		case HIP_API_ID_hipGraphAddChildGraphNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -5123,6 +5386,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipEventCreate
 		case HIP_API_ID_hipEventCreate :
 			//	hipEvent_t * event (struct ihipEvent_t **);
 			//	hipError_t retval (enum hipError_t);
@@ -5143,6 +5408,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipHostGetDevicePointer
 		case HIP_API_ID_hipHostGetDevicePointer :
 			//	void ** devPtr (void **);
 			//	void * hstPtr (void *);
@@ -5179,6 +5446,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipEventQuery
 		case HIP_API_ID_hipEventQuery :
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -5199,6 +5468,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyPeerAsync
 		case HIP_API_ID_hipMemcpyPeerAsync :
 			//	void * dst (void *);
 			//	int dstDeviceId (int);
@@ -5259,6 +5530,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemMap
 		case HIP_API_ID_hipMemMap :
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
@@ -5311,6 +5584,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipBindTextureToArray
 		case HIP_API_ID_hipBindTextureToArray :
 			//	const textureReference * tex (const struct textureReference *);
 			//	hipArray_const_t array (const struct hipArray *);
@@ -5347,6 +5622,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DAsync_spt
 		case HIP_API_ID_hipMemcpy2DAsync_spt :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -5423,6 +5700,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolSetAttribute
 		case HIP_API_ID_hipMemPoolSetAttribute :
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipMemPoolAttr attr (enum hipMemPoolAttr);
@@ -5459,6 +5738,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetLastError
 		case HIP_API_ID_hipGetLastError :
 			//	hipError_t retval (enum hipError_t);
 			msgpack_encode_map(buf, 1);
@@ -5471,6 +5752,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamEndCapture_spt
 		case HIP_API_ID_hipStreamEndCapture_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraph_t * pGraph (struct ihipGraph **);
@@ -5499,6 +5782,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipModuleOccupancyMaxPotentialBlockSize
 		case HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSize :
 			//	int * gridSize (int *);
 			//	int * blockSize (int *);
@@ -5551,6 +5836,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipKernelNameRefByPtr
 		case HIP_API_ID_hipKernelNameRefByPtr :
 			//	const void * hostFunction (const void *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -5579,6 +5866,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetDevice
 		case HIP_API_ID_hipGetDevice :
 			//	int * deviceId (int *);
 			//	hipError_t retval (enum hipError_t);
@@ -5599,6 +5888,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy3D_spt
 		case HIP_API_ID_hipMemcpy3D_spt :
 			//	const struct hipMemcpy3DParms * p (const struct hipMemcpy3DParms *);
 			//	hipError_t retval (enum hipError_t);
@@ -5619,6 +5910,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexObjectGetTextureDesc
 		case HIP_API_ID_hipTexObjectGetTextureDesc :
 			//	HIP_TEXTURE_DESC * pTexDesc (struct HIP_TEXTURE_DESC_st*);
 			//	hipTextureObject_t texObject (struct __hip_texture *);
@@ -5647,6 +5940,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGet
 		case HIP_API_ID_hipDeviceGet :
 			//	hipDevice_t * device (int*);
 			//	int ordinal (int);
@@ -5675,6 +5970,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExternalSemaphoresSignalNodeSetParams
 		case HIP_API_ID_hipGraphExternalSemaphoresSignalNodeSetParams :
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	const hipExternalSemaphoreSignalNodeParams * nodeParams (const struct hipExternalSemaphoreSignalNodeParams *);
@@ -5703,6 +6000,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDestroySurfaceObject
 		case HIP_API_ID_hipDestroySurfaceObject :
 			//	hipSurfaceObject_t surfaceObject (struct __hip_surface *);
 			//	hipError_t retval (enum hipError_t);
@@ -5723,6 +6022,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetDevice
 		case HIP_API_ID_hipStreamGetDevice :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipDevice_t * device (int*);
@@ -5751,6 +6052,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemAllocPitch
 		case HIP_API_ID_hipMemAllocPitch :
 			//	hipDeviceptr_t * dptr (void **);
 			//	size_t * pitch (unsigned long*);
@@ -5803,6 +6106,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddNode
 		case HIP_API_ID_hipGraphAddNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -5855,6 +6160,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceSetSharedMemConfig
 		case HIP_API_ID_hipDeviceSetSharedMemConfig :
 			//	hipSharedMemConfig config (enum hipSharedMemConfig);
 			//	hipError_t retval (enum hipError_t);
@@ -5875,6 +6182,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipRuntimeGetVersion
 		case HIP_API_ID_hipRuntimeGetVersion :
 			//	int * runtimeVersion (int *);
 			//	hipError_t retval (enum hipError_t);
@@ -5895,6 +6204,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphChildGraphNodeGetGraph
 		case HIP_API_ID_hipGraphChildGraphNodeGetGraph :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraph_t * pGraph (struct ihipGraph **);
@@ -5923,6 +6234,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecMemsetNodeSetParams
 		case HIP_API_ID_hipGraphExecMemsetNodeSetParams :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -5959,6 +6272,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphicsUnregisterResource
 		case HIP_API_ID_hipGraphicsUnregisterResource :
 			//	hipGraphicsResource_t resource (struct _hipGraphicsResource*);
 			//	hipError_t retval (enum hipError_t);
@@ -5979,6 +6294,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipEventElapsedTime
 		case HIP_API_ID_hipEventElapsedTime :
 			//	float * ms (float *);
 			//	hipEvent_t start (struct ihipEvent_t *);
@@ -6015,6 +6332,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipFreeAsync
 		case HIP_API_ID_hipFreeAsync :
 			//	void * dev_ptr (void *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -6043,6 +6362,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamCreateWithFlags
 		case HIP_API_ID_hipStreamCreateWithFlags :
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	unsigned int flags (unsigned int);
@@ -6071,6 +6392,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetAddress
 		case HIP_API_ID_hipTexRefSetAddress :
 			//	size_t * ByteOffset (unsigned long*);
 			//	textureReference * texRef (struct textureReference*);
@@ -6115,6 +6438,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamAddCallback_spt
 		case HIP_API_ID_hipStreamAddCallback_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCallback_t callback (void (*)(struct ihipStream_t *, enum hipError_t, void *));
@@ -6159,6 +6484,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddKernelNode
 		case HIP_API_ID_hipGraphAddKernelNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -6211,6 +6538,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyDtoH
 		case HIP_API_ID_hipMemcpyDtoH :
 			//	void * dst (void *);
 			//	hipDeviceptr_t src (void *);
@@ -6247,6 +6576,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceTotalMem
 		case HIP_API_ID_hipDeviceTotalMem :
 			//	size_t * bytes (unsigned long*);
 			//	hipDevice_t device (int);
@@ -6275,6 +6606,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemset2D
 		case HIP_API_ID_hipMemset2D :
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
@@ -6327,6 +6660,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DToArray_spt
 		case HIP_API_ID_hipMemcpy2DToArray_spt :
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
@@ -6403,6 +6738,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemAllocHost
 		case HIP_API_ID_hipMemAllocHost :
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
@@ -6431,6 +6768,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipPointerSetAttribute
 		case HIP_API_ID_hipPointerSetAttribute :
 			//	const void * value (const void *);
 			//	hipPointer_attribute attribute (enum hipPointer_attribute);
@@ -6467,6 +6806,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphHostNodeGetParams
 		case HIP_API_ID_hipGraphHostNodeGetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipHostNodeParams * pNodeParams (struct hipHostNodeParams*);
@@ -6495,6 +6836,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemset3D
 		case HIP_API_ID_hipMemset3D :
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
@@ -6582,6 +6925,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDestroyTextureObject
 		case HIP_API_ID_hipDestroyTextureObject :
 			//	hipTextureObject_t textureObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
@@ -6602,6 +6947,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemAdvise
 		case HIP_API_ID_hipMemAdvise :
 			//	const void * dev_ptr (const void *);
 			//	size_t count (unsigned long);
@@ -6646,6 +6993,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxGetCacheConfig
 		case HIP_API_ID_hipCtxGetCacheConfig :
 			//	hipFuncCache_t * cacheConfig (enum hipFuncCache_t*);
 			//	hipError_t retval (enum hipError_t);
@@ -6666,6 +7015,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDrvPointerGetAttributes
 		case HIP_API_ID_hipDrvPointerGetAttributes :
 			//	unsigned int numAttributes (unsigned int);
 			//	hipPointer_attribute * attributes (enum hipPointer_attribute*);
@@ -6710,6 +7061,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipModuleLaunchCooperativeKernelMultiDevice
 		case HIP_API_ID_hipModuleLaunchCooperativeKernelMultiDevice :
 			//	hipFunctionLaunchParams * launchParamsList (struct hipFunctionLaunchParams_t*);
 			//	unsigned int numDevices (unsigned int);
@@ -6746,6 +7099,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipModuleGetGlobal
 		case HIP_API_ID_hipModuleGetGlobal :
 			//	hipDeviceptr_t * dptr (void **);
 			//	size_t * bytes (unsigned long*);
@@ -6790,6 +7145,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphEventRecordNodeGetEvent
 		case HIP_API_ID_hipGraphEventRecordNodeGetEvent :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t * event_out (struct ihipEvent_t **);
@@ -6818,6 +7175,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphInstantiate
 		case HIP_API_ID_hipGraphInstantiate :
 			//	hipGraphExec_t * pGraphExec (struct hipGraphExec **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -6870,6 +7229,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphRetainUserObject
 		case HIP_API_ID_hipGraphRetainUserObject :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipUserObject_t object (struct hipUserObject *);
@@ -6914,6 +7275,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemAllocNodeGetParams
 		case HIP_API_ID_hipGraphMemAllocNodeGetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipMemAllocNodeParams * pNodeParams (struct hipMemAllocNodeParams*);
@@ -6942,6 +7305,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetCaptureInfo
 		case HIP_API_ID_hipStreamGetCaptureInfo :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
@@ -6978,6 +7343,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxPopCurrent
 		case HIP_API_ID_hipCtxPopCurrent :
 			//	hipCtx_t * ctx (struct ihipCtx_t **);
 			//	hipError_t retval (enum hipError_t);
@@ -6998,6 +7365,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipPointerGetAttributes
 		case HIP_API_ID_hipPointerGetAttributes :
 			//	hipPointerAttribute_t * attributes (struct hipPointerAttribute_t*);
 			//	const void * ptr (const void *);
@@ -7026,6 +7395,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceDisablePeerAccess
 		case HIP_API_ID_hipDeviceDisablePeerAccess :
 			//	int peerDeviceId (int);
 			//	hipError_t retval (enum hipError_t);
@@ -7046,6 +7417,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMallocPitch
 		case HIP_API_ID_hipMallocPitch :
 			//	void ** ptr (void **);
 			//	size_t * pitch (unsigned long*);
@@ -7090,6 +7463,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DFromArrayAsync
 		case HIP_API_ID_hipMemcpy2DFromArrayAsync :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -7174,6 +7549,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceComputeCapability
 		case HIP_API_ID_hipDeviceComputeCapability :
 			//	int * major (int *);
 			//	int * minor (int *);
@@ -7210,6 +7587,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyHtoD
 		case HIP_API_ID_hipMemcpyHtoD :
 			//	hipDeviceptr_t dst (void *);
 			//	void * src (void *);
@@ -7246,6 +7625,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipOccupancyMaxActiveBlocksPerMultiprocessor
 		case HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessor :
 			//	int * numBlocks (int *);
 			//	const void * f (const void *);
@@ -7290,6 +7671,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipSignalExternalSemaphoresAsync
 		case HIP_API_ID_hipSignalExternalSemaphoresAsync :
 			//	const hipExternalSemaphore_t * extSemArray (const void * *);
 			//	const hipExternalSemaphoreSignalParams * paramsArray (const struct hipExternalSemaphoreSignalParams_st *);
@@ -7334,6 +7717,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipArray3DGetDescriptor
 		case HIP_API_ID_hipArray3DGetDescriptor :
 			//	HIP_ARRAY3D_DESCRIPTOR * pArrayDescriptor (struct HIP_ARRAY3D_DESCRIPTOR*);
 			//	hipArray_t array (struct hipArray *);
@@ -7362,6 +7747,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE___hipPopCallConfiguration
 		case HIP_API_ID___hipPopCallConfiguration :
 			//	dim3 * gridDim (struct dim3*);
 			//	dim3 * blockDim (struct dim3*);
@@ -7406,6 +7793,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDevicePrimaryCtxRelease
 		case HIP_API_ID_hipDevicePrimaryCtxRelease :
 			//	hipDevice_t dev (int);
 			//	hipError_t retval (enum hipError_t);
@@ -7426,6 +7815,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipLaunchCooperativeKernelMultiDevice
 		case HIP_API_ID_hipLaunchCooperativeKernelMultiDevice :
 			//	hipLaunchParams * launchParamsList (struct hipLaunchParams_t*);
 			//	int numDevices (int);
@@ -7462,6 +7853,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipFreeArray
 		case HIP_API_ID_hipFreeArray :
 			//	hipArray_t array (struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
@@ -7482,6 +7875,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemsetNodeSetParams
 		case HIP_API_ID_hipGraphMemsetNodeSetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipMemsetParams * pNodeParams (const struct hipMemsetParams *);
@@ -7510,6 +7905,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolSetAccess
 		case HIP_API_ID_hipMemPoolSetAccess :
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	const hipMemAccessDesc * desc_list (const struct hipMemAccessDesc *);
@@ -7546,6 +7943,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetStreamDeviceId
 		case HIP_API_ID_hipGetStreamDeviceId :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	int retval (int);
@@ -7566,6 +7965,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipExtStreamCreateWithCUMask
 		case HIP_API_ID_hipExtStreamCreateWithCUMask :
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	uint32_t cuMaskSize (unsigned int);
@@ -7602,6 +8003,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetTextureObjectTextureDesc
 		case HIP_API_ID_hipGetTextureObjectTextureDesc :
 			//	hipTextureDesc * pTexDesc (struct hipTextureDesc*);
 			//	hipTextureObject_t textureObject (struct __hip_texture *);
@@ -7630,6 +8033,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipEventRecord_spt
 		case HIP_API_ID_hipEventRecord_spt :
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -7658,6 +8063,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipConfigureCall
 		case HIP_API_ID_hipConfigureCall :
 			//	dim3 gridDim ({
 			//		uint32_t x (unsigned int);
@@ -7752,6 +8159,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyFromArray_spt
 		case HIP_API_ID_hipMemcpyFromArray_spt :
 			//	void * dst (void *);
 			//	hipArray_const_t src (const struct hipArray *);
@@ -7812,6 +8221,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipModuleGetFunction
 		case HIP_API_ID_hipModuleGetFunction :
 			//	hipFunction_t * function (struct ihipModuleSymbol_t **);
 			//	hipModule_t module (struct ihipModule_t *);
@@ -7848,6 +8259,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipFuncSetCacheConfig
 		case HIP_API_ID_hipFuncSetCacheConfig :
 			//	const void * func (const void *);
 			//	hipFuncCache_t config (enum hipFuncCache_t);
@@ -7876,6 +8289,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetLimit
 		case HIP_API_ID_hipDeviceGetLimit :
 			//	size_t * pValue (unsigned long*);
 			//	enum hipLimit_t limit (enum hipLimit_t);
@@ -7904,6 +8319,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetMaxAnisotropy
 		case HIP_API_ID_hipTexRefGetMaxAnisotropy :
 			//	int * pmaxAnsio (int *);
 			//	const textureReference * texRef (const struct textureReference *);
@@ -7932,6 +8349,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipLaunchKernel_spt
 		case HIP_API_ID_hipLaunchKernel_spt :
 			//	const void * function_address (const void *);
 			//	dim3 numBlocks ({
@@ -8042,6 +8461,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamBeginCaptureToGraph
 		case HIP_API_ID_hipStreamBeginCaptureToGraph :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -8102,6 +8523,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetFormat
 		case HIP_API_ID_hipTexRefGetFormat :
 			//	hipArray_Format * pFormat (enum hipArray_Format*);
 			//	int * pNumChannels (int *);
@@ -8138,6 +8561,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamWaitValue64
 		case HIP_API_ID_hipStreamWaitValue64 :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
@@ -8190,6 +8615,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDevicePrimaryCtxRetain
 		case HIP_API_ID_hipDevicePrimaryCtxRetain :
 			//	hipCtx_t * pctx (struct ihipCtx_t **);
 			//	hipDevice_t dev (int);
@@ -8218,6 +8645,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMallocManaged
 		case HIP_API_ID_hipMallocManaged :
 			//	void ** dev_ptr (void **);
 			//	size_t size (unsigned long);
@@ -8254,6 +8683,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamCreateWithPriority
 		case HIP_API_ID_hipStreamCreateWithPriority :
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	unsigned int flags (unsigned int);
@@ -8290,6 +8721,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetCaptureInfo_spt
 		case HIP_API_ID_hipStreamGetCaptureInfo_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
@@ -8326,6 +8759,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddHostNode
 		case HIP_API_ID_hipGraphAddHostNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -8378,6 +8813,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipLaunchCooperativeKernel
 		case HIP_API_ID_hipLaunchCooperativeKernel :
 			//	const void * f (const void *);
 			//	dim3 gridDim ({
@@ -8488,6 +8925,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipHostRegister
 		case HIP_API_ID_hipHostRegister :
 			//	void * hostPtr (void *);
 			//	size_t sizeBytes (unsigned long);
@@ -8524,6 +8963,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetErrorName
 		case HIP_API_ID_hipGetErrorName :
 			//	hipError_t hip_error (enum hipError_t);
 			//	const char * retval (const char *);
@@ -8544,6 +8985,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyToSymbol_spt
 		case HIP_API_ID_hipMemcpyToSymbol_spt :
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
@@ -8596,6 +9039,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemsetNodeGetParams
 		case HIP_API_ID_hipGraphMemsetNodeGetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipMemsetParams * pNodeParams (struct hipMemsetParams*);
@@ -8624,6 +9069,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamWriteValue32
 		case HIP_API_ID_hipStreamWriteValue32 :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
@@ -8668,6 +9115,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamSynchronize_spt
 		case HIP_API_ID_hipStreamSynchronize_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -8688,6 +9137,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGraphMemTrim
 		case HIP_API_ID_hipDeviceGraphMemTrim :
 			//	int device (int);
 			//	hipError_t retval (enum hipError_t);
@@ -8708,6 +9159,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamDestroy
 		case HIP_API_ID_hipStreamDestroy :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -8728,6 +9181,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetArray
 		case HIP_API_ID_hipTexRefSetArray :
 			//	textureReference * tex (struct textureReference*);
 			//	hipArray_const_t array (const struct hipArray *);
@@ -8764,6 +9219,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyParam2DAsync
 		case HIP_API_ID_hipMemcpyParam2DAsync :
 			//	const hip_Memcpy2D * pCopy (const struct hip_Memcpy2D *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -8792,6 +9249,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolExportPointer
 		case HIP_API_ID_hipMemPoolExportPointer :
 			//	hipMemPoolPtrExportData * export_data (struct hipMemPoolPtrExportData*);
 			//	void * dev_ptr (void *);
@@ -8820,6 +9279,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphEventRecordNodeSetEvent
 		case HIP_API_ID_hipGraphEventRecordNodeSetEvent :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t event (struct ihipEvent_t *);
@@ -8848,6 +9309,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxDestroy
 		case HIP_API_ID_hipCtxDestroy :
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -8868,6 +9331,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipArrayDestroy
 		case HIP_API_ID_hipArrayDestroy :
 			//	hipArray_t array (struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
@@ -8888,6 +9353,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemGetAllocationGranularity
 		case HIP_API_ID_hipMemGetAllocationGranularity :
 			//	size_t * granularity (unsigned long*);
 			//	const hipMemAllocationProp * prop (const struct hipMemAllocationProp *);
@@ -8924,6 +9391,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphClone
 		case HIP_API_ID_hipGraphClone :
 			//	hipGraph_t * pGraphClone (struct ihipGraph **);
 			//	hipGraph_t originalGraph (struct ihipGraph *);
@@ -8952,6 +9421,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemset2DAsync_spt
 		case HIP_API_ID_hipMemset2DAsync_spt :
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
@@ -9012,6 +9483,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipBindTexture2D
 		case HIP_API_ID_hipBindTexture2D :
 			//	size_t * offset (unsigned long*);
 			//	const textureReference * tex (const struct textureReference *);
@@ -9080,6 +9553,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipArrayGetInfo
 		case HIP_API_ID_hipArrayGetInfo :
 			//	hipChannelFormatDesc * desc (struct hipChannelFormatDesc*);
 			//	hipExtent * extent (struct hipExtent*);
@@ -9124,6 +9599,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExternalSemaphoresSignalNodeGetParams
 		case HIP_API_ID_hipGraphExternalSemaphoresSignalNodeGetParams :
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipExternalSemaphoreSignalNodeParams * params_out (struct hipExternalSemaphoreSignalNodeParams*);
@@ -9152,6 +9629,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetStreamPriorityRange
 		case HIP_API_ID_hipDeviceGetStreamPriorityRange :
 			//	int * leastPriority (int *);
 			//	int * greatestPriority (int *);
@@ -9180,6 +9659,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecChildGraphNodeSetParams
 		case HIP_API_ID_hipGraphExecChildGraphNodeSetParams :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -9216,6 +9697,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemset2D_spt
 		case HIP_API_ID_hipMemset2D_spt :
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
@@ -9268,6 +9751,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetDefaultMemPool
 		case HIP_API_ID_hipDeviceGetDefaultMemPool :
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	int device (int);
@@ -9296,6 +9781,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxCreate
 		case HIP_API_ID_hipCtxCreate :
 			//	hipCtx_t * ctx (struct ihipCtx_t **);
 			//	unsigned int flags (unsigned int);
@@ -9332,6 +9819,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamIsCapturing
 		case HIP_API_ID_hipStreamIsCapturing :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
@@ -9360,6 +9849,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamUpdateCaptureDependencies
 		case HIP_API_ID_hipStreamUpdateCaptureDependencies :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraphNode_t * dependencies (struct hipGraphNode **);
@@ -9404,6 +9895,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceSynchronize
 		case HIP_API_ID_hipDeviceSynchronize :
 			//	hipError_t retval (enum hipError_t);
 			msgpack_encode_map(buf, 1);
@@ -9416,6 +9909,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyFromSymbolAsync
 		case HIP_API_ID_hipMemcpyFromSymbolAsync :
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
@@ -9476,6 +9971,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphDestroyNode
 		case HIP_API_ID_hipGraphDestroyNode :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipError_t retval (enum hipError_t);
@@ -9496,6 +9993,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipUserObjectRetain
 		case HIP_API_ID_hipUserObjectRetain :
 			//	hipUserObject_t object (struct hipUserObject *);
 			//	unsigned int count (unsigned int);
@@ -9524,6 +10023,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecEventWaitNodeSetEvent
 		case HIP_API_ID_hipGraphExecEventWaitNodeSetEvent :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
@@ -9560,6 +10061,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemAddressReserve
 		case HIP_API_ID_hipMemAddressReserve :
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
@@ -9612,6 +10115,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddMemsetNode
 		case HIP_API_ID_hipGraphAddMemsetNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -9664,6 +10169,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphicsResourceGetMappedPointer
 		case HIP_API_ID_hipGraphicsResourceGetMappedPointer :
 			//	void ** devPtr (void **);
 			//	size_t * size (unsigned long*);
@@ -9700,6 +10207,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamBeginCapture_spt
 		case HIP_API_ID_hipStreamBeginCapture_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureMode mode (enum hipStreamCaptureMode);
@@ -9728,6 +10237,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetUuid
 		case HIP_API_ID_hipDeviceGetUuid :
 			//	hipUUID * uuid (struct hipUUID_t*);
 			//	hipDevice_t device (int);
@@ -9756,6 +10267,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipModuleLaunchKernel
 		case HIP_API_ID_hipModuleLaunchKernel :
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
 			//	unsigned int gridDimX (unsigned int);
@@ -9856,6 +10369,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddEmptyNode
 		case HIP_API_ID_hipGraphAddEmptyNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -9900,6 +10415,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemRangeGetAttribute
 		case HIP_API_ID_hipMemRangeGetAttribute :
 			//	void * data (void *);
 			//	size_t data_size (unsigned long);
@@ -9952,6 +10469,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphInstantiateWithFlags
 		case HIP_API_ID_hipGraphInstantiateWithFlags :
 			//	hipGraphExec_t * pGraphExec (struct hipGraphExec **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -9988,6 +10507,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxPushCurrent
 		case HIP_API_ID_hipCtxPushCurrent :
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -10008,6 +10529,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxGetApiVersion
 		case HIP_API_ID_hipCtxGetApiVersion :
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	int * apiVersion (int *);
@@ -10036,6 +10559,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipBindTexture
 		case HIP_API_ID_hipBindTexture :
 			//	size_t * offset (unsigned long*);
 			//	const textureReference * tex (const struct textureReference *);
@@ -10088,6 +10613,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamBeginCapture
 		case HIP_API_ID_hipStreamBeginCapture :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureMode mode (enum hipStreamCaptureMode);
@@ -10116,6 +10643,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipProfilerStart
 		case HIP_API_ID_hipProfilerStart :
 			//	hipError_t retval (enum hipError_t);
 			msgpack_encode_map(buf, 1);
@@ -10128,6 +10657,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyHtoDAsync
 		case HIP_API_ID_hipMemcpyHtoDAsync :
 			//	hipDeviceptr_t dst (void *);
 			//	void * src (void *);
@@ -10172,6 +10703,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetDeviceFlags
 		case HIP_API_ID_hipGetDeviceFlags :
 			//	unsigned int * flags (unsigned int *);
 			//	hipError_t retval (enum hipError_t);
@@ -10192,6 +10725,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemRangeGetAttributes
 		case HIP_API_ID_hipMemRangeGetAttributes :
 			//	void ** data (void **);
 			//	size_t * data_sizes (unsigned long*);
@@ -10252,6 +10787,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDestroyExternalSemaphore
 		case HIP_API_ID_hipDestroyExternalSemaphore :
 			//	hipExternalSemaphore_t extSem (void *);
 			//	hipError_t retval (enum hipError_t);
@@ -10272,6 +10809,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipIpcOpenEventHandle
 		case HIP_API_ID_hipIpcOpenEventHandle :
 			//	hipEvent_t * event (struct ihipEvent_t **);
 			//	hipIpcEventHandle_t handle ({
@@ -10309,6 +10848,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphUpload
 		case HIP_API_ID_hipGraphUpload :
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -10337,6 +10878,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMallocAsync
 		case HIP_API_ID_hipMallocAsync :
 			//	void ** dev_ptr (void **);
 			//	size_t size (unsigned long);
@@ -10373,6 +10916,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipOccupancyMaxPotentialBlockSize
 		case HIP_API_ID_hipOccupancyMaxPotentialBlockSize :
 			//	int * gridSize (int *);
 			//	int * blockSize (int *);
@@ -10425,6 +10970,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDestroyExternalMemory
 		case HIP_API_ID_hipDestroyExternalMemory :
 			//	hipExternalMemory_t extMem (void *);
 			//	hipError_t retval (enum hipError_t);
@@ -10445,6 +10992,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_amd_dbgapi_get_build_name
 		case HIP_API_ID_amd_dbgapi_get_build_name :
 			//	const char * retval (const char *);
 			msgpack_encode_map(buf, 1);
@@ -10457,6 +11006,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddMemcpyNodeToSymbol
 		case HIP_API_ID_hipGraphAddMemcpyNodeToSymbol :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -10541,6 +11092,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetPCIBusId
 		case HIP_API_ID_hipDeviceGetPCIBusId :
 			//	char * pciBusId (char *);
 			//	int len (int);
@@ -10577,6 +11130,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetChannelDesc
 		case HIP_API_ID_hipGetChannelDesc :
 			//	hipChannelFormatDesc * desc (struct hipChannelFormatDesc*);
 			//	hipArray_const_t array (const struct hipArray *);
@@ -10605,6 +11160,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDevicePrimaryCtxReset
 		case HIP_API_ID_hipDevicePrimaryCtxReset :
 			//	hipDevice_t dev (int);
 			//	hipError_t retval (enum hipError_t);
@@ -10625,6 +11182,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipImportExternalMemory
 		case HIP_API_ID_hipImportExternalMemory :
 			//	hipExternalMemory_t * extMem_out (void **);
 			//	const hipExternalMemoryHandleDesc * memHandleDesc (const struct hipExternalMemoryHandleDesc_st *);
@@ -10653,6 +11212,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipFuncSetSharedMemConfig
 		case HIP_API_ID_hipFuncSetSharedMemConfig :
 			//	const void * func (const void *);
 			//	hipSharedMemConfig config (enum hipSharedMemConfig);
@@ -10681,6 +11242,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamWaitEvent
 		case HIP_API_ID_hipStreamWaitEvent :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipEvent_t event (struct ihipEvent_t *);
@@ -10717,6 +11280,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetMipmapLevelBias
 		case HIP_API_ID_hipTexRefSetMipmapLevelBias :
 			//	textureReference * texRef (struct textureReference*);
 			//	float bias (float);
@@ -10745,6 +11310,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolImportFromShareableHandle
 		case HIP_API_ID_hipMemPoolImportFromShareableHandle :
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	void * shared_handle (void *);
@@ -10789,6 +11356,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolExportToShareableHandle
 		case HIP_API_ID_hipMemPoolExportToShareableHandle :
 			//	void * shared_handle (void *);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
@@ -10833,6 +11402,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecMemcpyNodeSetParamsToSymbol
 		case HIP_API_ID_hipGraphExecMemcpyNodeSetParamsToSymbol :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -10901,6 +11472,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetMipmapFilterMode
 		case HIP_API_ID_hipTexRefGetMipmapFilterMode :
 			//	enum hipTextureFilterMode * pfm (enum hipTextureFilterMode *);
 			//	const textureReference * texRef (const struct textureReference *);
@@ -10929,6 +11502,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetProcAddress
 		case HIP_API_ID_hipGetProcAddress :
 			//	const char * symbol (const char *);
 			//	void ** pfn (void **);
@@ -10981,6 +11556,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCreateTextureObject
 		case HIP_API_ID_hipCreateTextureObject :
 			//	hipTextureObject_t * pTexObject (struct __hip_texture **);
 			//	const hipResourceDesc * pResDesc (const struct hipResourceDesc *);
@@ -11025,6 +11602,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphKernelNodeCopyAttributes
 		case HIP_API_ID_hipGraphKernelNodeCopyAttributes :
 			//	hipGraphNode_t hSrc (struct hipGraphNode *);
 			//	hipGraphNode_t hDst (struct hipGraphNode *);
@@ -11053,6 +11632,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetFlags
 		case HIP_API_ID_hipTexRefGetFlags :
 			//	unsigned int * pFlags (unsigned int *);
 			//	const textureReference * texRef (const struct textureReference *);
@@ -11081,6 +11662,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDrvGraphAddMemcpyNode
 		case HIP_API_ID_hipDrvGraphAddMemcpyNode :
 			//	hipGraphNode_t * phGraphNode (struct hipGraphNode **);
 			//	hipGraph_t hGraph (struct ihipGraph *);
@@ -11141,6 +11724,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemExportToShareableHandle
 		case HIP_API_ID_hipMemExportToShareableHandle :
 			//	void * shareableHandle (void *);
 			//	hipMemGenericAllocationHandle_t handle (struct ihipMemGenericAllocationHandle *);
@@ -11185,6 +11770,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphLaunch_spt
 		case HIP_API_ID_hipGraphLaunch_spt :
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -11213,6 +11800,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemcpyNodeSetParamsFromSymbol
 		case HIP_API_ID_hipGraphMemcpyNodeSetParamsFromSymbol :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dst (void *);
@@ -11273,6 +11862,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphNodeGetDependencies
 		case HIP_API_ID_hipGraphNodeGetDependencies :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraphNode_t * pDependencies (struct hipGraphNode **);
@@ -11309,6 +11900,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy3D
 		case HIP_API_ID_hipMemcpy3D :
 			//	const struct hipMemcpy3DParms * p (const struct hipMemcpy3DParms *);
 			//	hipError_t retval (enum hipError_t);
@@ -11329,6 +11922,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddMemcpyNodeFromSymbol
 		case HIP_API_ID_hipGraphAddMemcpyNodeFromSymbol :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -11413,6 +12008,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetPriority_spt
 		case HIP_API_ID_hipStreamGetPriority_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	int * priority (int *);
@@ -11441,6 +12038,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipModuleLoadData
 		case HIP_API_ID_hipModuleLoadData :
 			//	hipModule_t * module (struct ihipModule_t **);
 			//	const void * image (const void *);
@@ -11469,6 +12068,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipSetDeviceFlags
 		case HIP_API_ID_hipSetDeviceFlags :
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
@@ -11489,6 +12090,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipExternalMemoryGetMappedBuffer
 		case HIP_API_ID_hipExternalMemoryGetMappedBuffer :
 			//	void ** devPtr (void **);
 			//	hipExternalMemory_t extMem (void *);
@@ -11525,6 +12128,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipLaunchCooperativeKernel_spt
 		case HIP_API_ID_hipLaunchCooperativeKernel_spt :
 			//	const void * f (const void *);
 			//	dim3 gridDim ({
@@ -11635,6 +12240,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipLaunchHostFunc
 		case HIP_API_ID_hipLaunchHostFunc :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipHostFn_t fn (void (*)(void *));
@@ -11671,6 +12278,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyAsync_spt
 		case HIP_API_ID_hipMemcpyAsync_spt :
 			//	void * dst (void *);
 			//	const void * src (const void *);
@@ -11723,6 +12332,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyPeer
 		case HIP_API_ID_hipMemcpyPeer :
 			//	void * dst (void *);
 			//	int dstDeviceId (int);
@@ -11775,6 +12386,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceReset
 		case HIP_API_ID_hipDeviceReset :
 			//	hipError_t retval (enum hipError_t);
 			msgpack_encode_map(buf, 1);
@@ -11787,6 +12400,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemAddressFree
 		case HIP_API_ID_hipMemAddressFree :
 			//	void * devPtr (void *);
 			//	size_t size (unsigned long);
@@ -11815,6 +12430,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipProfilerStop
 		case HIP_API_ID_hipProfilerStop :
 			//	hipError_t retval (enum hipError_t);
 			msgpack_encode_map(buf, 1);
@@ -11827,6 +12444,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphEventWaitNodeSetEvent
 		case HIP_API_ID_hipGraphEventWaitNodeSetEvent :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t event (struct ihipEvent_t *);
@@ -11855,6 +12474,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipModuleLaunchCooperativeKernel
 		case HIP_API_ID_hipModuleLaunchCooperativeKernel :
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
 			//	unsigned int gridDimX (unsigned int);
@@ -11947,6 +12568,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetName
 		case HIP_API_ID_hipDeviceGetName :
 			//	char * name (char *);
 			//	int len (int);
@@ -11983,6 +12606,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphNodeSetEnabled
 		case HIP_API_ID_hipGraphNodeSetEnabled :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
@@ -12019,6 +12644,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetAddressMode
 		case HIP_API_ID_hipTexRefSetAddressMode :
 			//	textureReference * texRef (struct textureReference*);
 			//	int dim (int);
@@ -12055,6 +12682,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipEventSynchronize
 		case HIP_API_ID_hipEventSynchronize :
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -12075,6 +12704,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphGetRootNodes
 		case HIP_API_ID_hipGraphGetRootNodes :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphNode_t * pRootNodes (struct hipGraphNode **);
@@ -12111,6 +12742,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DFromArray
 		case HIP_API_ID_hipMemcpy2DFromArray :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -12187,6 +12820,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExternalSemaphoresWaitNodeSetParams
 		case HIP_API_ID_hipGraphExternalSemaphoresWaitNodeSetParams :
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	const hipExternalSemaphoreWaitNodeParams * nodeParams (const struct hipExternalSemaphoreWaitNodeParams *);
@@ -12215,6 +12850,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyDtoA
 		case HIP_API_ID_hipMemcpyDtoA :
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
@@ -12259,6 +12896,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemcpyNodeGetParams
 		case HIP_API_ID_hipGraphMemcpyNodeGetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipMemcpy3DParms * pNodeParams (struct hipMemcpy3DParms*);
@@ -12287,6 +12926,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy
 		case HIP_API_ID_hipMemcpy :
 			//	void * dst (void *);
 			//	const void * src (const void *);
@@ -12331,6 +12972,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipSetValidDevices
 		case HIP_API_ID_hipSetValidDevices :
 			//	int * device_arr (int *);
 			//	int len (int);
@@ -12359,6 +13002,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DAsync
 		case HIP_API_ID_hipMemcpy2DAsync :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -12435,6 +13080,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecExternalSemaphoresWaitNodeSetParams
 		case HIP_API_ID_hipGraphExecExternalSemaphoresWaitNodeSetParams :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
@@ -12471,6 +13118,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamAttachMemAsync
 		case HIP_API_ID_hipStreamAttachMemAsync :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * dev_ptr (void *);
@@ -12515,6 +13164,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemset2DAsync
 		case HIP_API_ID_hipMemset2DAsync :
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
@@ -12575,6 +13226,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexObjectGetResourceViewDesc
 		case HIP_API_ID_hipTexObjectGetResourceViewDesc :
 			//	HIP_RESOURCE_VIEW_DESC * pResViewDesc (struct HIP_RESOURCE_VIEW_DESC_st*);
 			//	hipTextureObject_t texObject (struct __hip_texture *);
@@ -12603,6 +13256,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipEventCreateWithFlags
 		case HIP_API_ID_hipEventCreateWithFlags :
 			//	hipEvent_t * event (struct ihipEvent_t **);
 			//	unsigned int flags (unsigned int);
@@ -12631,6 +13286,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMipmappedArrayCreate
 		case HIP_API_ID_hipMipmappedArrayCreate :
 			//	hipMipmappedArray_t * pHandle (struct hipMipmappedArray **);
 			//	HIP_ARRAY3D_DESCRIPTOR * pMipmappedArrayDesc (struct HIP_ARRAY3D_DESCRIPTOR*);
@@ -12667,6 +13324,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2D_spt
 		case HIP_API_ID_hipMemcpy2D_spt :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -12735,6 +13394,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddMemcpyNode
 		case HIP_API_ID_hipGraphAddMemcpyNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -12787,6 +13448,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyToSymbolAsync
 		case HIP_API_ID_hipMemcpyToSymbolAsync :
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
@@ -12847,6 +13510,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMallocFromPoolAsync
 		case HIP_API_ID_hipMallocFromPoolAsync :
 			//	void ** dev_ptr (void **);
 			//	size_t size (unsigned long);
@@ -12891,6 +13556,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
 		case HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags :
 			//	int * numBlocks (int *);
 			//	const void * f (const void *);
@@ -12943,6 +13610,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddMemFreeNode
 		case HIP_API_ID_hipGraphAddMemFreeNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -12995,6 +13664,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor
 		case HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor :
 			//	int * numBlocks (int *);
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
@@ -13039,6 +13710,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipEventDestroy
 		case HIP_API_ID_hipEventDestroy :
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -13059,6 +13732,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceSetCacheConfig
 		case HIP_API_ID_hipDeviceSetCacheConfig :
 			//	hipFuncCache_t cacheConfig (enum hipFuncCache_t);
 			//	hipError_t retval (enum hipError_t);
@@ -13079,6 +13754,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipFree
 		case HIP_API_ID_hipFree :
 			//	void * ptr (void *);
 			//	hipError_t retval (enum hipError_t);
@@ -13099,6 +13776,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DToArrayAsync_spt
 		case HIP_API_ID_hipMemcpy2DToArrayAsync_spt :
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
@@ -13183,6 +13862,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxGetFlags
 		case HIP_API_ID_hipCtxGetFlags :
 			//	unsigned int * flags (unsigned int *);
 			//	hipError_t retval (enum hipError_t);
@@ -13203,6 +13884,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetSymbolAddress
 		case HIP_API_ID_hipGetSymbolAddress :
 			//	void ** devPtr (void **);
 			//	const void * symbol (const void *);
@@ -13231,6 +13914,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetAddress
 		case HIP_API_ID_hipTexRefGetAddress :
 			//	hipDeviceptr_t * dev_ptr (void **);
 			//	const textureReference * texRef (const struct textureReference *);
@@ -13259,6 +13944,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexObjectCreate
 		case HIP_API_ID_hipTexObjectCreate :
 			//	hipTextureObject_t * pTexObject (struct __hip_texture **);
 			//	const HIP_RESOURCE_DESC * pResDesc (const struct HIP_RESOURCE_DESC_st *);
@@ -13303,6 +13990,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetSharedMemConfig
 		case HIP_API_ID_hipDeviceGetSharedMemConfig :
 			//	hipSharedMemConfig * pConfig (enum hipSharedMemConfig*);
 			//	hipError_t retval (enum hipError_t);
@@ -13323,6 +14012,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyHtoAAsync
 		case HIP_API_ID_hipMemcpyHtoAAsync :
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
@@ -13375,6 +14066,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolGetAttribute
 		case HIP_API_ID_hipMemPoolGetAttribute :
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipMemPoolAttr attr (enum hipMemPoolAttr);
@@ -13411,6 +14104,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddMemAllocNode
 		case HIP_API_ID_hipGraphAddMemAllocNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -13463,6 +14158,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemRetainAllocationHandle
 		case HIP_API_ID_hipMemRetainAllocationHandle :
 			//	hipMemGenericAllocationHandle_t * handle (struct ihipMemGenericAllocationHandle **);
 			//	void * addr (void *);
@@ -13491,6 +14188,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetFuncBySymbol
 		case HIP_API_ID_hipGetFuncBySymbol :
 			//	hipFunction_t * functionPtr (struct ihipModuleSymbol_t **);
 			//	const void * symbolPtr (const void *);
@@ -13519,6 +14218,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceSetMemPool
 		case HIP_API_ID_hipDeviceSetMemPool :
 			//	int device (int);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
@@ -13547,6 +14248,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceSetLimit
 		case HIP_API_ID_hipDeviceSetLimit :
 			//	enum hipLimit_t limit (enum hipLimit_t);
 			//	size_t value (unsigned long);
@@ -13575,6 +14278,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemGetInfo
 		case HIP_API_ID_hipMemGetInfo :
 			//	size_t * free (unsigned long*);
 			//	size_t * total (unsigned long*);
@@ -13603,6 +14308,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyParam2D
 		case HIP_API_ID_hipMemcpyParam2D :
 			//	const hip_Memcpy2D * pCopy (const struct hip_Memcpy2D *);
 			//	hipError_t retval (enum hipError_t);
@@ -13623,6 +14330,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphDebugDotPrint
 		case HIP_API_ID_hipGraphDebugDotPrint :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const char * path (const char *);
@@ -13659,6 +14368,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceSetGraphMemAttribute
 		case HIP_API_ID_hipDeviceSetGraphMemAttribute :
 			//	int device (int);
 			//	hipGraphMemAttributeType attr (enum hipGraphMemAttributeType);
@@ -13695,6 +14406,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDrvGetErrorString
 		case HIP_API_ID_hipDrvGetErrorString :
 			//	hipError_t hipError (enum hipError_t);
 			//	const char ** errorString (const char **);
@@ -13723,6 +14436,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyDtoDAsync
 		case HIP_API_ID_hipMemcpyDtoDAsync :
 			//	hipDeviceptr_t dst (void *);
 			//	hipDeviceptr_t src (void *);
@@ -13767,6 +14482,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxSynchronize
 		case HIP_API_ID_hipCtxSynchronize :
 			//	hipError_t retval (enum hipError_t);
 			msgpack_encode_map(buf, 1);
@@ -13779,6 +14496,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexObjectDestroy
 		case HIP_API_ID_hipTexObjectDestroy :
 			//	hipTextureObject_t texObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
@@ -13799,6 +14518,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetAddressMode
 		case HIP_API_ID_hipTexRefGetAddressMode :
 			//	enum hipTextureAddressMode * pam (enum hipTextureAddressMode *);
 			//	const textureReference * texRef (const struct textureReference *);
@@ -13835,6 +14556,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE___hipGetPCH
 		case HIP_API_ID___hipGetPCH :
 			//	const char ** pch (const char **);
 			//	unsigned int * size (unsigned int *);
@@ -13855,6 +14578,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetFlags
 		case HIP_API_ID_hipStreamGetFlags :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	unsigned int * flags (unsigned int *);
@@ -13883,6 +14608,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemGetAccess
 		case HIP_API_ID_hipMemGetAccess :
 			//	unsigned long long * flags (unsigned long long *);
 			//	const hipMemLocation * location (const struct hipMemLocation *);
@@ -13919,6 +14646,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyAtoA
 		case HIP_API_ID_hipMemcpyAtoA :
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
@@ -13971,6 +14700,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyToSymbol
 		case HIP_API_ID_hipMemcpyToSymbol :
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
@@ -14023,6 +14754,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxSetCurrent
 		case HIP_API_ID_hipCtxSetCurrent :
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -14043,6 +14776,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamQuery_spt
 		case HIP_API_ID_hipStreamQuery_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -14063,6 +14798,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetSymbolSize
 		case HIP_API_ID_hipGetSymbolSize :
 			//	size_t * size (unsigned long*);
 			//	const void * symbol (const void *);
@@ -14091,6 +14828,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMipmappedArrayGetLevel
 		case HIP_API_ID_hipMipmappedArrayGetLevel :
 			//	hipArray_t * pLevelArray (struct hipArray **);
 			//	hipMipmappedArray_t hMipMappedArray (struct hipMipmappedArray *);
@@ -14127,6 +14866,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipExternalMemoryGetMappedMipmappedArray
 		case HIP_API_ID_hipExternalMemoryGetMappedMipmappedArray :
 			//	hipMipmappedArray_t * mipmap (struct hipMipmappedArray **);
 			//	hipExternalMemory_t extMem (void *);
@@ -14163,6 +14904,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecMemcpyNodeSetParams
 		case HIP_API_ID_hipGraphExecMemcpyNodeSetParams :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -14199,6 +14942,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipUserObjectCreate
 		case HIP_API_ID_hipUserObjectCreate :
 			//	hipUserObject_t * object_out (struct hipUserObject **);
 			//	void * ptr (void *);
@@ -14251,6 +14996,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetCaptureInfo_v2
 		case HIP_API_ID_hipStreamGetCaptureInfo_v2 :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * captureStatus_out (enum hipStreamCaptureStatus*);
@@ -14311,6 +15058,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetArray
 		case HIP_API_ID_hipTexRefGetArray :
 			//	hipArray_t * pArray (struct hipArray **);
 			//	const textureReference * texRef (const struct textureReference *);
@@ -14339,6 +15088,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipImportExternalSemaphore
 		case HIP_API_ID_hipImportExternalSemaphore :
 			//	hipExternalSemaphore_t * extSem_out (void **);
 			//	const hipExternalSemaphoreHandleDesc * semHandleDesc (const struct hipExternalSemaphoreHandleDesc_st *);
@@ -14367,6 +15118,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetAttribute
 		case HIP_API_ID_hipDeviceGetAttribute :
 			//	int * pi (int *);
 			//	hipDeviceAttribute_t attr (enum hipDeviceAttribute_t);
@@ -14403,6 +15156,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemFreeNodeGetParams
 		case HIP_API_ID_hipGraphMemFreeNodeGetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dev_ptr (void *);
@@ -14431,6 +15186,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxGetSharedMemConfig
 		case HIP_API_ID_hipCtxGetSharedMemConfig :
 			//	hipSharedMemConfig * pConfig (enum hipSharedMemConfig*);
 			//	hipError_t retval (enum hipError_t);
@@ -14451,6 +15208,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemcpyNodeSetParamsToSymbol
 		case HIP_API_ID_hipGraphMemcpyNodeSetParamsToSymbol :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const void * symbol (const void *);
@@ -14511,6 +15270,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DToArray
 		case HIP_API_ID_hipMemcpy2DToArray :
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
@@ -14587,6 +15348,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamIsCapturing_spt
 		case HIP_API_ID_hipStreamIsCapturing_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
@@ -14615,6 +15378,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipFreeHost
 		case HIP_API_ID_hipFreeHost :
 			//	void * ptr (void *);
 			//	hipError_t retval (enum hipError_t);
@@ -14635,6 +15400,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphKernelNodeSetParams
 		case HIP_API_ID_hipGraphKernelNodeSetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipKernelNodeParams * pNodeParams (const struct hipKernelNodeParams *);
@@ -14663,6 +15430,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMallocHost
 		case HIP_API_ID_hipMallocHost :
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
@@ -14691,6 +15460,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemset3D_spt
 		case HIP_API_ID_hipMemset3D_spt :
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
@@ -14778,6 +15549,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetCaptureInfo_v2_spt
 		case HIP_API_ID_hipStreamGetCaptureInfo_v2_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * captureStatus_out (enum hipStreamCaptureStatus*);
@@ -14838,6 +15611,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetTextureReference
 		case HIP_API_ID_hipGetTextureReference :
 			//	const textureReference ** texref (const struct textureReference **);
 			//	const void * symbol (const void *);
@@ -14866,6 +15641,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecExternalSemaphoresSignalNodeSetParams
 		case HIP_API_ID_hipGraphExecExternalSemaphoresSignalNodeSetParams :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
@@ -14902,6 +15679,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddDependencies
 		case HIP_API_ID_hipGraphAddDependencies :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * from (const struct hipGraphNode * *);
@@ -14946,6 +15725,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphNodeGetType
 		case HIP_API_ID_hipGraphNodeGetType :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraphNodeType * pType (enum hipGraphNodeType*);
@@ -14974,6 +15755,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetBorderColor
 		case HIP_API_ID_hipTexRefSetBorderColor :
 			//	textureReference * texRef (struct textureReference*);
 			//	float * pBorderColor (float *);
@@ -15002,6 +15785,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemPrefetchAsync
 		case HIP_API_ID_hipMemPrefetchAsync :
 			//	const void * dev_ptr (const void *);
 			//	size_t count (unsigned long);
@@ -15046,6 +15831,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxGetDevice
 		case HIP_API_ID_hipCtxGetDevice :
 			//	hipDevice_t * device (int*);
 			//	hipError_t retval (enum hipError_t);
@@ -15066,6 +15853,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DArrayToArray
 		case HIP_API_ID_hipMemcpy2DArrayToArray :
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffsetDst (unsigned long);
@@ -15150,6 +15939,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipUserObjectRelease
 		case HIP_API_ID_hipUserObjectRelease :
 			//	hipUserObject_t object (struct hipUserObject *);
 			//	unsigned int count (unsigned int);
@@ -15178,6 +15969,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipHostGetFlags
 		case HIP_API_ID_hipHostGetFlags :
 			//	unsigned int * flagsPtr (unsigned int *);
 			//	void * hostPtr (void *);
@@ -15206,6 +15999,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDrvGraphAddMemsetNode
 		case HIP_API_ID_hipDrvGraphAddMemsetNode :
 			//	hipGraphNode_t * phGraphNode (struct hipGraphNode **);
 			//	hipGraph_t hGraph (struct ihipGraph *);
@@ -15266,6 +16061,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyAtoD
 		case HIP_API_ID_hipMemcpyAtoD :
 			//	hipDeviceptr_t dstDevice (void *);
 			//	hipArray_t srcArray (struct hipArray *);
@@ -15310,6 +16107,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolCreate
 		case HIP_API_ID_hipMemPoolCreate :
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	const hipMemPoolProps * pool_props (const struct hipMemPoolProps *);
@@ -15338,6 +16137,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipKernelNameRef
 		case HIP_API_ID_hipKernelNameRef :
 			//	const hipFunction_t f (const struct ihipModuleSymbol_t *);
 			//	const char * retval (const char *);
@@ -15358,6 +16159,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemset3DAsync
 		case HIP_API_ID_hipMemset3DAsync :
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
@@ -15453,6 +16256,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipEventRecord
 		case HIP_API_ID_hipEventRecord :
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -15481,6 +16286,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMipmappedArrayDestroy
 		case HIP_API_ID_hipMipmappedArrayDestroy :
 			//	hipMipmappedArray_t hMipmappedArray (struct hipMipmappedArray *);
 			//	hipError_t retval (enum hipError_t);
@@ -15501,6 +16308,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemsetAsync_spt
 		case HIP_API_ID_hipMemsetAsync_spt :
 			//	void * dst (void *);
 			//	int value (int);
@@ -15545,6 +16354,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDevicePrimaryCtxSetFlags
 		case HIP_API_ID_hipDevicePrimaryCtxSetFlags :
 			//	hipDevice_t dev (int);
 			//	unsigned int flags (unsigned int);
@@ -15573,6 +16384,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipPeekAtLastError
 		case HIP_API_ID_hipPeekAtLastError :
 			//	hipError_t retval (enum hipError_t);
 			msgpack_encode_map(buf, 1);
@@ -15585,6 +16398,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetGraphMemAttribute
 		case HIP_API_ID_hipDeviceGetGraphMemAttribute :
 			//	int device (int);
 			//	hipGraphMemAttributeType attr (enum hipGraphMemAttributeType);
@@ -15621,6 +16436,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDrvGetErrorName
 		case HIP_API_ID_hipDrvGetErrorName :
 			//	hipError_t hipError (enum hipError_t);
 			//	const char ** errorString (const char **);
@@ -15649,6 +16466,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy_spt
 		case HIP_API_ID_hipMemcpy_spt :
 			//	void * dst (void *);
 			//	const void * src (const void *);
@@ -15693,6 +16512,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCtxSetSharedMemConfig
 		case HIP_API_ID_hipCtxSetSharedMemConfig :
 			//	hipSharedMemConfig config (enum hipSharedMemConfig);
 			//	hipError_t retval (enum hipError_t);
@@ -15713,6 +16534,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipCreateSurfaceObject
 		case HIP_API_ID_hipCreateSurfaceObject :
 			//	hipSurfaceObject_t * pSurfObject (struct __hip_surface **);
 			//	const hipResourceDesc * pResDesc (const struct hipResourceDesc *);
@@ -15741,6 +16564,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetMipmappedArrayLevel
 		case HIP_API_ID_hipGetMipmappedArrayLevel :
 			//	hipArray_t * levelArray (struct hipArray **);
 			//	hipMipmappedArray_const_t mipmappedArray (const struct hipMipmappedArray *);
@@ -15777,6 +16602,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecDestroy
 		case HIP_API_ID_hipGraphExecDestroy :
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipError_t retval (enum hipError_t);
@@ -15797,6 +16624,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemsetD32Async
 		case HIP_API_ID_hipMemsetD32Async :
 			//	hipDeviceptr_t dst (void *);
 			//	int value (int);
@@ -15841,6 +16670,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDeviceEnablePeerAccess
 		case HIP_API_ID_hipDeviceEnablePeerAccess :
 			//	int peerDeviceId (int);
 			//	unsigned int flags (unsigned int);
@@ -15869,6 +16700,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipArray3DCreate
 		case HIP_API_ID_hipArray3DCreate :
 			//	hipArray_t * array (struct hipArray **);
 			//	const HIP_ARRAY3D_DESCRIPTOR * pAllocateArray (const struct HIP_ARRAY3D_DESCRIPTOR *);
@@ -15897,6 +16730,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipIpcOpenMemHandle
 		case HIP_API_ID_hipIpcOpenMemHandle :
 			//	void ** devPtr (void **);
 			//	hipIpcMemHandle_t handle ({
@@ -15942,6 +16777,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolTrimTo
 		case HIP_API_ID_hipMemPoolTrimTo :
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	size_t min_bytes_to_hold (unsigned long);
@@ -15970,6 +16807,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2D
 		case HIP_API_ID_hipMemcpy2D :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -16038,6 +16877,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipFuncGetAttribute
 		case HIP_API_ID_hipFuncGetAttribute :
 			//	int * value (int *);
 			//	hipFunction_attribute attrib (enum hipFunction_attribute);
@@ -16074,6 +16915,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipBindTextureToMipmappedArray
 		case HIP_API_ID_hipBindTextureToMipmappedArray :
 			//	const textureReference * tex (const struct textureReference *);
 			//	hipMipmappedArray_const_t mipmappedArray (const struct hipMipmappedArray *);
@@ -16110,6 +16953,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphicsMapResources
 		case HIP_API_ID_hipGraphicsMapResources :
 			//	int count (int);
 			//	hipGraphicsResource_t * resources (struct _hipGraphicsResource**);
@@ -16146,6 +16991,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipArrayCreate
 		case HIP_API_ID_hipArrayCreate :
 			//	hipArray_t * pHandle (struct hipArray **);
 			//	const HIP_ARRAY_DESCRIPTOR * pAllocateArray (const struct HIP_ARRAY_DESCRIPTOR *);
@@ -16174,6 +17021,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetMaxAnisotropy
 		case HIP_API_ID_hipTexRefSetMaxAnisotropy :
 			//	textureReference * texRef (struct textureReference*);
 			//	unsigned int maxAniso (unsigned int);
@@ -16202,6 +17051,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphKernelNodeGetAttribute
 		case HIP_API_ID_hipGraphKernelNodeGetAttribute :
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipLaunchAttributeID attr (enum hipLaunchAttributeID);
@@ -16238,6 +17089,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipExtLaunchKernel
 		case HIP_API_ID_hipExtLaunchKernel :
 			//	const void * function_address (const void *);
 			//	dim3 numBlocks ({
@@ -16372,6 +17225,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetMipmapFilterMode
 		case HIP_API_ID_hipTexRefSetMipmapFilterMode :
 			//	textureReference * texRef (struct textureReference*);
 			//	enum hipTextureFilterMode fm (enum hipTextureFilterMode);
@@ -16400,6 +17255,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemImportFromShareableHandle
 		case HIP_API_ID_hipMemImportFromShareableHandle :
 			//	hipMemGenericAllocationHandle_t * handle (struct ihipMemGenericAllocationHandle **);
 			//	void * osHandle (void *);
@@ -16436,6 +17293,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetFormat
 		case HIP_API_ID_hipTexRefSetFormat :
 			//	textureReference * texRef (struct textureReference*);
 			//	hipArray_Format fmt (enum hipArray_Format);
@@ -16472,6 +17331,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_amd_dbgapi_get_git_hash
 		case HIP_API_ID_amd_dbgapi_get_git_hash :
 			//	const char * retval (const char *);
 			msgpack_encode_map(buf, 1);
@@ -16484,6 +17345,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipLaunchByPtr
 		case HIP_API_ID_hipLaunchByPtr :
 			//	const void * func (const void *);
 			//	hipError_t retval (enum hipError_t);
@@ -16504,6 +17367,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_amd_dbgapi_get_build_id
 		case HIP_API_ID_amd_dbgapi_get_build_id :
 			//	size_t retval (unsigned long);
 			msgpack_encode_map(buf, 1);
@@ -16516,6 +17381,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy3DAsync
 		case HIP_API_ID_hipMemcpy3DAsync :
 			//	const struct hipMemcpy3DParms * p (const struct hipMemcpy3DParms *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -16544,6 +17411,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGetTextureObjectResourceViewDesc
 		case HIP_API_ID_hipGetTextureObjectResourceViewDesc :
 			//	struct hipResourceViewDesc * pResViewDesc (struct hipResourceViewDesc *);
 			//	hipTextureObject_t textureObject (struct __hip_texture *);
@@ -16572,6 +17441,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetFilterMode
 		case HIP_API_ID_hipTexRefSetFilterMode :
 			//	textureReference * texRef (struct textureReference*);
 			//	enum hipTextureFilterMode fm (enum hipTextureFilterMode);
@@ -16600,6 +17471,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipDriverGetVersion
 		case HIP_API_ID_hipDriverGetVersion :
 			//	int * driverVersion (int *);
 			//	hipError_t retval (enum hipError_t);
@@ -16620,6 +17493,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipStreamWriteValue64
 		case HIP_API_ID_hipStreamWriteValue64 :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
@@ -16664,6 +17539,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMallocMipmappedArray
 		case HIP_API_ID_hipMallocMipmappedArray :
 			//	hipMipmappedArray_t * mipmappedArray (struct hipMipmappedArray **);
 			//	const struct hipChannelFormatDesc * desc (const struct hipChannelFormatDesc *);
@@ -16741,6 +17618,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemset_spt
 		case HIP_API_ID_hipMemset_spt :
 			//	void * dst (void *);
 			//	int value (int);
@@ -16777,6 +17656,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetFlags
 		case HIP_API_ID_hipTexRefSetFlags :
 			//	textureReference * texRef (struct textureReference*);
 			//	unsigned int Flags (unsigned int);
@@ -16805,6 +17686,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemGetAddressRange
 		case HIP_API_ID_hipMemGetAddressRange :
 			//	hipDeviceptr_t * pbase (void **);
 			//	size_t * psize (unsigned long*);
@@ -16841,6 +17724,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetMipmapLevelClamp
 		case HIP_API_ID_hipTexRefSetMipmapLevelClamp :
 			//	textureReference * texRef (struct textureReference*);
 			//	float minMipMapLevelClamp (float);
@@ -16877,6 +17762,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemcpyNodeSetParams
 		case HIP_API_ID_hipGraphMemcpyNodeSetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipMemcpy3DParms * pNodeParams (const struct hipMemcpy3DParms *);
@@ -16905,6 +17792,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipGraphGetEdges
 		case HIP_API_ID_hipGraphGetEdges :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphNode_t * from (struct hipGraphNode **);
@@ -16949,6 +17838,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyToArray
 		case HIP_API_ID_hipMemcpyToArray :
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
@@ -17009,6 +17900,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipExtMallocWithFlags
 		case HIP_API_ID_hipExtMallocWithFlags :
 			//	void ** ptr (void **);
 			//	size_t sizeBytes (unsigned long);
@@ -17045,6 +17938,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipFuncSetAttribute
 		case HIP_API_ID_hipFuncSetAttribute :
 			//	const void * func (const void *);
 			//	hipFuncAttribute attr (enum hipFuncAttribute);
@@ -17081,6 +17976,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipChooseDeviceR0600
 		case HIP_API_ID_hipChooseDeviceR0600 :
 			//	int * device (int *);
 			//	const hipDeviceProp_tR0600 * prop (const struct hipDeviceProp_tR0600 *);
@@ -17109,6 +18006,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetMipmappedArray
 		case HIP_API_ID_hipTexRefSetMipmappedArray :
 			//	textureReference * texRef (struct textureReference*);
 			//	struct hipMipmappedArray * mipmappedArray (struct hipMipmappedArray *);
@@ -17145,6 +18044,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipMemset
 		case HIP_API_ID_hipMemset :
 			//	void * dst (void *);
 			//	int value (int);
@@ -17181,6 +18082,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetMipmapLevelClamp
 		case HIP_API_ID_hipTexRefGetMipmapLevelClamp :
 			//	float * pminMipmapLevelClamp (float *);
 			//	float * pmaxMipmapLevelClamp (float *);
@@ -17217,6 +18120,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 
 			break;
 
+		#endif
         default : break;
     }
 }

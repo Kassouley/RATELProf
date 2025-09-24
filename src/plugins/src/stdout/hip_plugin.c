@@ -34,6 +34,7 @@ void on_exit_hip_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void
 void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* user_args)
 {
     switch(funid) {
+		#if HAVE_hipMemPtrGetInfo
 		case HIP_API_ID_hipMemPtrGetInfo :
 			//	void * ptr (void *);
 			//	size_t * size (unsigned long*);
@@ -47,6 +48,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemPtrGetInfo.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecMemcpyNodeSetParams1D
 		case HIP_API_ID_hipGraphExecMemcpyNodeSetParams1D :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -68,6 +71,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExecMemcpyNodeSetParams1D.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxEnablePeerAccess
 		case HIP_API_ID_hipCtxEnablePeerAccess :
 			//	hipCtx_t peerCtx (struct ihipCtx_t *);
 			//	unsigned int flags (unsigned int);
@@ -78,6 +83,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCtxEnablePeerAccess.retval);
 			break;
 
+		#endif
+		#if HAVE_hipHostUnregister
 		case HIP_API_ID_hipHostUnregister :
 			//	void * hostPtr (void *);
 			//	hipError_t retval (enum hipError_t);
@@ -86,6 +93,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipHostUnregister.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDevicePrimaryCtxGetState
 		case HIP_API_ID_hipDevicePrimaryCtxGetState :
 			//	hipDevice_t dev (int);
 			//	unsigned int * flags (unsigned int *);
@@ -103,6 +112,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDevicePrimaryCtxGetState.retval);
 			break;
 
+		#endif
+		#if HAVE_hipPointerGetAttribute
 		case HIP_API_ID_hipPointerGetAttribute :
 			//	void * data (void *);
 			//	hipPointer_attribute attribute (enum hipPointer_attribute);
@@ -116,6 +127,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipPointerGetAttribute.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolGetAccess
 		case HIP_API_ID_hipMemPoolGetAccess :
 			//	hipMemAccessFlags * flags (enum hipMemAccessFlags*);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
@@ -140,6 +153,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemPoolGetAccess.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemsetD32
 		case HIP_API_ID_hipMemsetD32 :
 			//	hipDeviceptr_t dest (void *);
 			//	int value (int);
@@ -152,6 +167,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemsetD32.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetMipMappedArray
 		case HIP_API_ID_hipTexRefGetMipMappedArray :
 			//	hipMipmappedArray_t * pArray ({
 			//		void * data (void *);
@@ -246,6 +263,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefGetMipMappedArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMalloc3D
 		case HIP_API_ID_hipMalloc3D :
 			//	hipPitchedPtr * pitchedDevPtr ({
 			//		void * ptr (void *);
@@ -275,6 +294,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMalloc3D.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemsetD8
 		case HIP_API_ID_hipMemsetD8 :
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned char value (unsigned char);
@@ -287,6 +308,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemsetD8.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMallocArray
 		case HIP_API_ID_hipMallocArray :
 			//	hipArray_t * array (struct hipArray **);
 			//	const hipChannelFormatDesc * desc ({
@@ -321,6 +344,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMallocArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphEventWaitNodeGetEvent
 		case HIP_API_ID_hipGraphEventWaitNodeGetEvent :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t * event_out (struct ihipEvent_t **);
@@ -335,6 +360,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphEventWaitNodeGetEvent.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDrvMemcpy3D
 		case HIP_API_ID_hipDrvMemcpy3D :
 			//	const HIP_MEMCPY3D * pCopy ({
 			//		size_t srcXInBytes (unsigned long);
@@ -387,6 +414,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDrvMemcpy3D.retval);
 			break;
 
+		#endif
+		#if HAVE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
 		case HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags :
 			//	int * numBlocks (int *);
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
@@ -406,6 +435,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.retval);
 			break;
 
+		#endif
+		#if HAVE_hipHostMalloc
 		case HIP_API_ID_hipHostMalloc :
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
@@ -421,6 +452,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipHostMalloc.retval);
 			break;
 
+		#endif
+		#if HAVE_hipModuleGetTexRef
 		case HIP_API_ID_hipModuleGetTexRef :
 			//	textureReference ** texRef ({
 			//		int normalized (int);
@@ -483,6 +516,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipModuleGetTexRef.retval);
 			break;
 
+		#endif
+		#if HAVE_hipIpcGetMemHandle
 		case HIP_API_ID_hipIpcGetMemHandle :
 			//	hipIpcMemHandle_t * handle ({
 			//		char[64] reserved (char[64]);
@@ -500,6 +535,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipIpcGetMemHandle.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyDtoHAsync
 		case HIP_API_ID_hipMemcpyDtoHAsync :
 			//	void * dst (void *);
 			//	hipDeviceptr_t src (void *);
@@ -516,6 +553,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyDtoHAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipModuleLoad
 		case HIP_API_ID_hipModuleLoad :
 			//	hipModule_t * module (struct ihipModule_t **);
 			//	const char * fname (const char *);
@@ -532,6 +571,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipModuleLoad.retval);
 			break;
 
+		#endif
+		#if HAVE_hipWaitExternalSemaphoresAsync
 		case HIP_API_ID_hipWaitExternalSemaphoresAsync :
 			//	const hipExternalSemaphore_t * extSemArray (const void * *);
 			//	const hipExternalSemaphoreWaitParams * paramsArray ({
@@ -563,6 +604,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipWaitExternalSemaphoresAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphKernelNodeGetParams
 		case HIP_API_ID_hipGraphKernelNodeGetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipKernelNodeParams * pNodeParams ({
@@ -603,6 +646,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphKernelNodeGetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphLaunch
 		case HIP_API_ID_hipGraphLaunch :
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -614,6 +659,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphLaunch.retval);
 			break;
 
+		#endif
+		#if HAVE_hipHostAlloc
 		case HIP_API_ID_hipHostAlloc :
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
@@ -629,6 +676,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipHostAlloc.retval);
 			break;
 
+		#endif
+		#if HAVE_hipSetDevice
 		case HIP_API_ID_hipSetDevice :
 			//	int deviceId (int);
 			//	hipError_t retval (enum hipError_t);
@@ -636,6 +685,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipSetDevice.retval);
 			break;
 
+		#endif
+		#if HAVE_hipModuleOccupancyMaxPotentialBlockSizeWithFlags
 		case HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSizeWithFlags :
 			//	int * gridSize (int *);
 			//	int * blockSize (int *);
@@ -660,6 +711,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphNodeGetDependentNodes
 		case HIP_API_ID_hipGraphNodeGetDependentNodes :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraphNode_t * pDependentNodes (struct hipGraphNode **);
@@ -679,6 +732,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphNodeGetDependentNodes.retval);
 			break;
 
+		#endif
+		#if HAVE_hipExtStreamGetCUMask
 		case HIP_API_ID_hipExtStreamGetCUMask :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	uint32_t cuMaskSize (unsigned int);
@@ -694,6 +749,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipExtStreamGetCUMask.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemsetD16
 		case HIP_API_ID_hipMemsetD16 :
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned short value (unsigned short);
@@ -706,6 +763,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemsetD16.retval);
 			break;
 
+		#endif
+		#if HAVE_hipLaunchKernel
 		case HIP_API_ID_hipLaunchKernel :
 			//	const void * function_address (const void *);
 			//	dim3 numBlocks ({
@@ -745,6 +804,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipLaunchKernel.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetErrorString
 		case HIP_API_ID_hipGetErrorString :
 			//	hipError_t hipError (enum hipError_t);
 			//	const char * retval (const char *);
@@ -755,6 +816,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			} else { printf("\n"); };
 			break;
 
+		#endif
+		#if HAVE_hipModuleLoadDataEx
 		case HIP_API_ID_hipModuleLoadDataEx :
 			//	hipModule_t * module (struct ihipModule_t **);
 			//	const void * image (const void *);
@@ -782,6 +845,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipModuleLoadDataEx.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetFilterMode
 		case HIP_API_ID_hipTexRefGetFilterMode :
 			//	enum hipTextureFilterMode * pfm (enum hipTextureFilterMode *);
 			//	const textureReference * texRef ({
@@ -838,6 +903,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefGetFilterMode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphInstantiateWithParams
 		case HIP_API_ID_hipGraphInstantiateWithParams :
 			//	hipGraphExec_t * pGraphExec (struct hipGraphExec **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -865,6 +932,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphInstantiateWithParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemcpyNodeSetParams1D
 		case HIP_API_ID_hipGraphMemcpyNodeSetParams1D :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dst (void *);
@@ -883,6 +952,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphMemcpyNodeSetParams1D.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamSynchronize
 		case HIP_API_ID_hipStreamSynchronize :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -891,6 +962,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamSynchronize.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphicsUnmapResources
 		case HIP_API_ID_hipGraphicsUnmapResources :
 			//	int count (int);
 			//	hipGraphicsResource_t * resources (struct _hipGraphicsResource**);
@@ -907,6 +980,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphicsUnmapResources.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DFromArray_spt
 		case HIP_API_ID_hipMemcpy2DFromArray_spt :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -930,6 +1005,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy2DFromArray_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecMemcpyNodeSetParamsFromSymbol
 		case HIP_API_ID_hipGraphExecMemcpyNodeSetParamsFromSymbol :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -953,6 +1030,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExecMemcpyNodeSetParamsFromSymbol.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetMipmapLevelBias
 		case HIP_API_ID_hipTexRefGetMipmapLevelBias :
 			//	float * pbias (float *);
 			//	const textureReference * texRef ({
@@ -1009,6 +1088,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefGetMipmapLevelBias.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddExternalSemaphoresSignalNode
 		case HIP_API_ID_hipGraphAddExternalSemaphoresSignalNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -1041,11 +1122,15 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddExternalSemaphoresSignalNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipExtGetLastError
 		case HIP_API_ID_hipExtGetLastError :
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipError_t retval = %d\n", args->hipExtGetLastError.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemMapArrayAsync
 		case HIP_API_ID_hipMemMapArrayAsync :
 			//	hipArrayMapInfo * mapInfoList ({
 			//		hipResourceType resourceType (enum hipResourceType);
@@ -1091,6 +1176,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemMapArrayAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyAsync
 		case HIP_API_ID_hipMemcpyAsync :
 			//	void * dst (void *);
 			//	const void * src (const void *);
@@ -1109,6 +1196,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphKernelNodeSetAttribute
 		case HIP_API_ID_hipGraphKernelNodeSetAttribute :
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipLaunchAttributeID attr (enum hipLaunchAttributeID);
@@ -1143,6 +1232,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphKernelNodeSetAttribute.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDrvMemcpy2DUnaligned
 		case HIP_API_ID_hipDrvMemcpy2DUnaligned :
 			//	const hip_Memcpy2D * pCopy ({
 			//		size_t srcXInBytes (unsigned long);
@@ -1181,6 +1272,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDrvMemcpy2DUnaligned.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolDestroy
 		case HIP_API_ID_hipMemPoolDestroy :
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -1189,6 +1282,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemPoolDestroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphRemoveDependencies
 		case HIP_API_ID_hipGraphRemoveDependencies :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * from (const struct hipGraphNode * *);
@@ -1211,6 +1306,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphRemoveDependencies.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphCreate
 		case HIP_API_ID_hipGraphCreate :
 			//	hipGraph_t * pGraph (struct ihipGraph **);
 			//	unsigned int flags (unsigned int);
@@ -1224,6 +1321,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphCreate.retval);
 			break;
 
+		#endif
+		#if HAVE_hipExtLaunchMultiKernelMultiDevice
 		case HIP_API_ID_hipExtLaunchMultiKernelMultiDevice :
 			//	hipLaunchParams * launchParamsList ({
 			//		void * func (void *);
@@ -1265,6 +1364,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipExtLaunchMultiKernelMultiDevice.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetDeviceCount
 		case HIP_API_ID_hipGetDeviceCount :
 			//	int * count (int *);
 			//	hipError_t retval (enum hipError_t);
@@ -1275,6 +1376,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGetDeviceCount.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemUnmap
 		case HIP_API_ID_hipMemUnmap :
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
@@ -1285,6 +1388,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemUnmap.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexObjectGetResourceDesc
 		case HIP_API_ID_hipTexObjectGetResourceDesc :
 			//	HIP_RESOURCE_DESC * pResDesc ({
 			//		HIPresourcetype resType (enum HIPresourcetype_enum);
@@ -1308,6 +1413,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexObjectGetResourceDesc.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecEventRecordNodeSetEvent
 		case HIP_API_ID_hipGraphExecEventRecordNodeSetEvent :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
@@ -1322,6 +1429,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExecEventRecordNodeSetEvent.retval);
 			break;
 
+		#endif
+		#if HAVE_hipInit
 		case HIP_API_ID_hipInit :
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
@@ -1329,6 +1438,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipInit.retval);
 			break;
 
+		#endif
+		#if HAVE_hipThreadExchangeStreamCaptureMode
 		case HIP_API_ID_hipThreadExchangeStreamCaptureMode :
 			//	hipStreamCaptureMode * mode (enum hipStreamCaptureMode*);
 			//	hipError_t retval (enum hipError_t);
@@ -1339,6 +1450,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipThreadExchangeStreamCaptureMode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetP2PAttribute
 		case HIP_API_ID_hipDeviceGetP2PAttribute :
 			//	int * value (int *);
 			//	hipDeviceP2PAttr attr (enum hipDeviceP2PAttr);
@@ -1355,6 +1468,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceGetP2PAttribute.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetByPCIBusId
 		case HIP_API_ID_hipDeviceGetByPCIBusId :
 			//	int * device (int *);
 			//	const char * pciBusId (const char *);
@@ -1370,6 +1485,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceGetByPCIBusId.retval);
 			break;
 
+		#endif
+		#if HAVE_hipHostFree
 		case HIP_API_ID_hipHostFree :
 			//	void * ptr (void *);
 			//	hipError_t retval (enum hipError_t);
@@ -1378,6 +1495,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipHostFree.retval);
 			break;
 
+		#endif
+		#if HAVE_hipExtGetLinkTypeAndHopCount
 		case HIP_API_ID_hipExtGetLinkTypeAndHopCount :
 			//	int device1 (int);
 			//	int device2 (int);
@@ -1397,6 +1516,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipExtGetLinkTypeAndHopCount.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyToSymbolAsync_spt
 		case HIP_API_ID_hipMemcpyToSymbolAsync_spt :
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
@@ -1417,6 +1538,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyToSymbolAsync_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxDisablePeerAccess
 		case HIP_API_ID_hipCtxDisablePeerAccess :
 			//	hipCtx_t peerCtx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -1425,6 +1548,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCtxDisablePeerAccess.retval);
 			break;
 
+		#endif
+		#if HAVE_hipSetupArgument
 		case HIP_API_ID_hipSetupArgument :
 			//	const void * arg (const void *);
 			//	size_t size (unsigned long);
@@ -1437,6 +1562,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipSetupArgument.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyAtoHAsync
 		case HIP_API_ID_hipMemcpyAtoHAsync :
 			//	void * dstHost (void *);
 			//	hipArray_t srcArray (struct hipArray *);
@@ -1455,6 +1582,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyAtoHAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxSetCacheConfig
 		case HIP_API_ID_hipCtxSetCacheConfig :
 			//	hipFuncCache_t cacheConfig (enum hipFuncCache_t);
 			//	hipError_t retval (enum hipError_t);
@@ -1462,6 +1591,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCtxSetCacheConfig.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemRelease
 		case HIP_API_ID_hipMemRelease :
 			//	hipMemGenericAllocationHandle_t handle (struct ihipMemGenericAllocationHandle *);
 			//	hipError_t retval (enum hipError_t);
@@ -1470,6 +1601,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemRelease.retval);
 			break;
 
+		#endif
+		#if HAVE_hipUnbindTexture
 		case HIP_API_ID_hipUnbindTexture :
 			//	const textureReference * tex ({
 			//		int normalized (int);
@@ -1521,6 +1654,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipUnbindTexture.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDrvMemcpy3DAsync
 		case HIP_API_ID_hipDrvMemcpy3DAsync :
 			//	const HIP_MEMCPY3D * pCopy ({
 			//		size_t srcXInBytes (unsigned long);
@@ -1576,6 +1711,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDrvMemcpy3DAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipIpcGetEventHandle
 		case HIP_API_ID_hipIpcGetEventHandle :
 			//	hipIpcEventHandle_t * handle ({
 			//		char[64] reserved (char[64]);
@@ -1593,6 +1730,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipIpcGetEventHandle.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphReleaseUserObject
 		case HIP_API_ID_hipGraphReleaseUserObject :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipUserObject_t object (struct hipUserObject *);
@@ -1606,6 +1745,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphReleaseUserObject.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetMemPool
 		case HIP_API_ID_hipDeviceGetMemPool :
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	int device (int);
@@ -1619,6 +1760,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceGetMemPool.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphHostNodeSetParams
 		case HIP_API_ID_hipGraphHostNodeSetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipHostNodeParams * pNodeParams ({
@@ -1637,6 +1780,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphHostNodeSetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddEventWaitNode
 		case HIP_API_ID_hipGraphAddEventWaitNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -1662,6 +1807,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddEventWaitNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DFromArrayAsync_spt
 		case HIP_API_ID_hipMemcpy2DFromArrayAsync_spt :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -1688,6 +1835,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy2DFromArrayAsync_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipLaunchHostFunc_spt
 		case HIP_API_ID_hipLaunchHostFunc_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipHostFn_t fn (void (*)(void *));
@@ -1701,6 +1850,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipLaunchHostFunc_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamWaitEvent_spt
 		case HIP_API_ID_hipStreamWaitEvent_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipEvent_t event (struct ihipEvent_t *);
@@ -1714,6 +1865,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamWaitEvent_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipArrayGetDescriptor
 		case HIP_API_ID_hipArrayGetDescriptor :
 			//	HIP_ARRAY_DESCRIPTOR * pArrayDescriptor ({
 			//		size_t Width (unsigned long);
@@ -1737,6 +1890,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipArrayGetDescriptor.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecUpdate
 		case HIP_API_ID_hipGraphExecUpdate :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraph_t hGraph (struct ihipGraph *);
@@ -1759,6 +1914,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExecUpdate.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemGetAllocationPropertiesFromHandle
 		case HIP_API_ID_hipMemGetAllocationPropertiesFromHandle :
 			//	hipMemAllocationProp * prop ({
 			//		hipMemAllocationType type (enum hipMemAllocationType);
@@ -1791,6 +1948,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemGetAllocationPropertiesFromHandle.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyWithStream
 		case HIP_API_ID_hipMemcpyWithStream :
 			//	void * dst (void *);
 			//	const void * src (const void *);
@@ -1809,6 +1968,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyWithStream.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddExternalSemaphoresWaitNode
 		case HIP_API_ID_hipGraphAddExternalSemaphoresWaitNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -1841,6 +2002,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddExternalSemaphoresWaitNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyAtoH
 		case HIP_API_ID_hipMemcpyAtoH :
 			//	void * dst (void *);
 			//	hipArray_t srcArray (struct hipArray *);
@@ -1856,6 +2019,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyAtoH.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamQuery
 		case HIP_API_ID_hipStreamQuery :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -1864,6 +2029,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamQuery.retval);
 			break;
 
+		#endif
+		#if HAVE_hipIpcCloseMemHandle
 		case HIP_API_ID_hipIpcCloseMemHandle :
 			//	void * devPtr (void *);
 			//	hipError_t retval (enum hipError_t);
@@ -1872,6 +2039,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipIpcCloseMemHandle.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemsetAsync
 		case HIP_API_ID_hipMemsetAsync :
 			//	void * dst (void *);
 			//	int value (int);
@@ -1887,6 +2056,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemsetAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyDtoD
 		case HIP_API_ID_hipMemcpyDtoD :
 			//	hipDeviceptr_t dst (void *);
 			//	hipDeviceptr_t src (void *);
@@ -1900,6 +2071,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyDtoD.retval);
 			break;
 
+		#endif
+		#if HAVE_hipModuleUnload
 		case HIP_API_ID_hipModuleUnload :
 			//	hipModule_t module (struct ihipModule_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -1908,6 +2081,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipModuleUnload.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetDevicePropertiesR0600
 		case HIP_API_ID_hipGetDevicePropertiesR0600 :
 			//	hipDeviceProp_tR0600 * prop ({
 			//		char[256] name (char[256]);
@@ -2172,6 +2347,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGetDevicePropertiesR0600.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyFromArray
 		case HIP_API_ID_hipMemcpyFromArray :
 			//	void * dst (void *);
 			//	hipArray_const_t srcArray (const struct hipArray *);
@@ -2191,6 +2368,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyFromArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceCanAccessPeer
 		case HIP_API_ID_hipDeviceCanAccessPeer :
 			//	int * canAccessPeer (int *);
 			//	int deviceId (int);
@@ -2205,6 +2384,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceCanAccessPeer.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemSetAccess
 		case HIP_API_ID_hipMemSetAccess :
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
@@ -2234,6 +2415,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemSetAccess.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamWaitValue32
 		case HIP_API_ID_hipStreamWaitValue32 :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
@@ -2251,6 +2434,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamWaitValue32.retval);
 			break;
 
+		#endif
+		#if HAVE_hipApiName
 		case HIP_API_ID_hipApiName :
 			//	uint32_t id (unsigned int);
 			//	const char * retval (const char *);
@@ -2261,6 +2446,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			} else { printf("\n"); };
 			break;
 
+		#endif
+		#if HAVE_hipGraphicsSubResourceGetMappedArray
 		case HIP_API_ID_hipGraphicsSubResourceGetMappedArray :
 			//	hipArray_t * array (struct hipArray **);
 			//	hipGraphicsResource_t resource (struct _hipGraphicsResource*);
@@ -2279,6 +2466,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphicsSubResourceGetMappedArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DToArrayAsync
 		case HIP_API_ID_hipMemcpy2DToArrayAsync :
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
@@ -2305,6 +2494,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy2DToArrayAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphDestroy
 		case HIP_API_ID_hipGraphDestroy :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipError_t retval (enum hipError_t);
@@ -2313,6 +2504,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphDestroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetBorderColor
 		case HIP_API_ID_hipTexRefGetBorderColor :
 			//	float * pBorderColor (float *);
 			//	const textureReference * texRef ({
@@ -2369,6 +2562,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefGetBorderColor.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddMemcpyNode1D
 		case HIP_API_ID_hipGraphAddMemcpyNode1D :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -2401,6 +2596,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddMemcpyNode1D.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphGetNodes
 		case HIP_API_ID_hipGraphGetNodes :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphNode_t * nodes (struct hipGraphNode **);
@@ -2420,6 +2617,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphGetNodes.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetFlags_spt
 		case HIP_API_ID_hipStreamGetFlags_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	unsigned int * flags (unsigned int *);
@@ -2433,6 +2632,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamGetFlags_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetAddress2D
 		case HIP_API_ID_hipTexRefSetAddress2D :
 			//	textureReference * texRef ({
 			//		int normalized (int);
@@ -2504,6 +2705,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefSetAddress2D.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetPriority
 		case HIP_API_ID_hipStreamGetPriority :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	int * priority (int *);
@@ -2517,6 +2720,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamGetPriority.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamCreate
 		case HIP_API_ID_hipStreamCreate :
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	hipError_t retval (enum hipError_t);
@@ -2528,6 +2733,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamCreate.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyFromSymbol
 		case HIP_API_ID_hipMemcpyFromSymbol :
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
@@ -2545,6 +2752,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyFromSymbol.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphNodeGetEnabled
 		case HIP_API_ID_hipGraphNodeGetEnabled :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
@@ -2561,6 +2770,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphNodeGetEnabled.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCreateChannelDesc
 		case HIP_API_ID_hipCreateChannelDesc :
 			//	int x (int);
 			//	int y (int);
@@ -2588,6 +2799,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\t}\n");
 			break;
 
+		#endif
+		#if HAVE_hipFreeMipmappedArray
 		case HIP_API_ID_hipFreeMipmappedArray :
 			//	hipMipmappedArray_t mipmappedArray ({
 			//		void * data (void *);
@@ -2633,6 +2846,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipFreeMipmappedArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetTextureAlignmentOffset
 		case HIP_API_ID_hipGetTextureAlignmentOffset :
 			//	size_t * offset (unsigned long*);
 			//	const textureReference * texref ({
@@ -2689,6 +2904,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGetTextureAlignmentOffset.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddEventRecordNode
 		case HIP_API_ID_hipGraphAddEventRecordNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -2714,6 +2931,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddEventRecordNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphNodeFindInClone
 		case HIP_API_ID_hipGraphNodeFindInClone :
 			//	hipGraphNode_t * pNode (struct hipGraphNode **);
 			//	hipGraphNode_t originalNode (struct hipGraphNode *);
@@ -2731,6 +2950,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphNodeFindInClone.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyFromSymbol_spt
 		case HIP_API_ID_hipMemcpyFromSymbol_spt :
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
@@ -2748,6 +2969,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyFromSymbol_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemset3DAsync_spt
 		case HIP_API_ID_hipMemset3DAsync_spt :
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
@@ -2779,6 +3002,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemset3DAsync_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemsetD16Async
 		case HIP_API_ID_hipMemsetD16Async :
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned short value (unsigned short);
@@ -2794,6 +3019,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemsetD16Async.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetCacheConfig
 		case HIP_API_ID_hipDeviceGetCacheConfig :
 			//	hipFuncCache_t * cacheConfig (enum hipFuncCache_t*);
 			//	hipError_t retval (enum hipError_t);
@@ -2804,6 +3031,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceGetCacheConfig.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemCreate
 		case HIP_API_ID_hipMemCreate :
 			//	hipMemGenericAllocationHandle_t * handle (struct ihipMemGenericAllocationHandle **);
 			//	size_t size (unsigned long);
@@ -2843,6 +3072,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemCreate.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExternalSemaphoresWaitNodeGetParams
 		case HIP_API_ID_hipGraphExternalSemaphoresWaitNodeGetParams :
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipExternalSemaphoreWaitNodeParams * params_out ({
@@ -2861,6 +3092,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExternalSemaphoresWaitNodeGetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamEndCapture
 		case HIP_API_ID_hipStreamEndCapture :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraph_t * pGraph (struct ihipGraph **);
@@ -2875,6 +3108,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamEndCapture.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyFromSymbolAsync_spt
 		case HIP_API_ID_hipMemcpyFromSymbolAsync_spt :
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
@@ -2895,6 +3130,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyFromSymbolAsync_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyHtoA
 		case HIP_API_ID_hipMemcpyHtoA :
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
@@ -2910,6 +3147,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyHtoA.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecHostNodeSetParams
 		case HIP_API_ID_hipGraphExecHostNodeSetParams :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -2931,6 +3170,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExecHostNodeSetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMalloc
 		case HIP_API_ID_hipMalloc :
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
@@ -2944,6 +3185,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMalloc.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMalloc3DArray
 		case HIP_API_ID_hipMalloc3DArray :
 			//	hipArray_t * array (struct hipArray **);
 			//	const struct hipChannelFormatDesc * desc ({
@@ -2984,6 +3227,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMalloc3DArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecKernelNodeSetParams
 		case HIP_API_ID_hipGraphExecKernelNodeSetParams :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -3027,6 +3272,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExecKernelNodeSetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetTextureObjectResourceDesc
 		case HIP_API_ID_hipGetTextureObjectResourceDesc :
 			//	hipResourceDesc * pResDesc ({
 			//		enum hipResourceType resType (enum hipResourceType);
@@ -3048,6 +3295,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGetTextureObjectResourceDesc.retval);
 			break;
 
+		#endif
+		#if HAVE___hipPushCallConfiguration
 		case HIP_API_ID___hipPushCallConfiguration :
 			//	dim3 gridDim ({
 			//		uint32_t x (unsigned int);
@@ -3078,6 +3327,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->__hipPushCallConfiguration.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy3DAsync_spt
 		case HIP_API_ID_hipMemcpy3DAsync_spt :
 			//	const hipMemcpy3DParms * p ({
 			//		hipArray_t srcArray (struct hipArray *);
@@ -3149,6 +3400,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy3DAsync_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemsetD8Async
 		case HIP_API_ID_hipMemsetD8Async :
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned char value (unsigned char);
@@ -3164,6 +3417,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemsetD8Async.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamAddCallback
 		case HIP_API_ID_hipStreamAddCallback :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCallback_t callback (void (*)(struct ihipStream_t *, enum hipError_t, void *));
@@ -3179,6 +3434,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamAddCallback.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolImportPointer
 		case HIP_API_ID_hipMemPoolImportPointer :
 			//	void ** dev_ptr (void **);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
@@ -3202,6 +3459,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemPoolImportPointer.retval);
 			break;
 
+		#endif
+		#if HAVE_hipFuncGetAttributes
 		case HIP_API_ID_hipFuncGetAttributes :
 			//	struct hipFuncAttributes * attr ({
 			//		int binaryVersion (int);
@@ -3237,6 +3496,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipFuncGetAttributes.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxGetCurrent
 		case HIP_API_ID_hipCtxGetCurrent :
 			//	hipCtx_t * ctx (struct ihipCtx_t **);
 			//	hipError_t retval (enum hipError_t);
@@ -3248,6 +3509,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCtxGetCurrent.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddChildGraphNode
 		case HIP_API_ID_hipGraphAddChildGraphNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -3273,6 +3536,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddChildGraphNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipEventCreate
 		case HIP_API_ID_hipEventCreate :
 			//	hipEvent_t * event (struct ihipEvent_t **);
 			//	hipError_t retval (enum hipError_t);
@@ -3284,6 +3549,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipEventCreate.retval);
 			break;
 
+		#endif
+		#if HAVE_hipHostGetDevicePointer
 		case HIP_API_ID_hipHostGetDevicePointer :
 			//	void ** devPtr (void **);
 			//	void * hstPtr (void *);
@@ -3300,6 +3567,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipHostGetDevicePointer.retval);
 			break;
 
+		#endif
+		#if HAVE_hipEventQuery
 		case HIP_API_ID_hipEventQuery :
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -3308,6 +3577,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipEventQuery.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyPeerAsync
 		case HIP_API_ID_hipMemcpyPeerAsync :
 			//	void * dst (void *);
 			//	int dstDeviceId (int);
@@ -3328,6 +3599,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyPeerAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemMap
 		case HIP_API_ID_hipMemMap :
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
@@ -3345,6 +3618,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemMap.retval);
 			break;
 
+		#endif
+		#if HAVE_hipBindTextureToArray
 		case HIP_API_ID_hipBindTextureToArray :
 			//	const textureReference * tex ({
 			//		int normalized (int);
@@ -3416,6 +3691,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipBindTextureToArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DAsync_spt
 		case HIP_API_ID_hipMemcpy2DAsync_spt :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -3440,6 +3717,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy2DAsync_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolSetAttribute
 		case HIP_API_ID_hipMemPoolSetAttribute :
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipMemPoolAttr attr (enum hipMemPoolAttr);
@@ -3453,11 +3732,15 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemPoolSetAttribute.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetLastError
 		case HIP_API_ID_hipGetLastError :
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipError_t retval = %d\n", args->hipGetLastError.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamEndCapture_spt
 		case HIP_API_ID_hipStreamEndCapture_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraph_t * pGraph (struct ihipGraph **);
@@ -3472,6 +3755,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamEndCapture_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipModuleOccupancyMaxPotentialBlockSize
 		case HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSize :
 			//	int * gridSize (int *);
 			//	int * blockSize (int *);
@@ -3494,6 +3779,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipModuleOccupancyMaxPotentialBlockSize.retval);
 			break;
 
+		#endif
+		#if HAVE_hipKernelNameRefByPtr
 		case HIP_API_ID_hipKernelNameRefByPtr :
 			//	const void * hostFunction (const void *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -3508,6 +3795,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			} else { printf("\n"); };
 			break;
 
+		#endif
+		#if HAVE_hipGetDevice
 		case HIP_API_ID_hipGetDevice :
 			//	int * deviceId (int *);
 			//	hipError_t retval (enum hipError_t);
@@ -3518,6 +3807,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGetDevice.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy3D_spt
 		case HIP_API_ID_hipMemcpy3D_spt :
 			//	const struct hipMemcpy3DParms * p ({
 			//		hipArray_t srcArray (struct hipArray *);
@@ -3586,6 +3877,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy3D_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexObjectGetTextureDesc
 		case HIP_API_ID_hipTexObjectGetTextureDesc :
 			//	HIP_TEXTURE_DESC * pTexDesc ({
 			//		HIPaddress_mode[3] addressMode (enum HIPaddress_mode_enum[3]);
@@ -3621,6 +3914,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexObjectGetTextureDesc.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGet
 		case HIP_API_ID_hipDeviceGet :
 			//	hipDevice_t * device (int*);
 			//	int ordinal (int);
@@ -3633,6 +3928,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceGet.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExternalSemaphoresSignalNodeSetParams
 		case HIP_API_ID_hipGraphExternalSemaphoresSignalNodeSetParams :
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	const hipExternalSemaphoreSignalNodeParams * nodeParams ({
@@ -3651,6 +3948,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExternalSemaphoresSignalNodeSetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDestroySurfaceObject
 		case HIP_API_ID_hipDestroySurfaceObject :
 			//	hipSurfaceObject_t surfaceObject (struct __hip_surface *);
 			//	hipError_t retval (enum hipError_t);
@@ -3659,6 +3958,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDestroySurfaceObject.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetDevice
 		case HIP_API_ID_hipStreamGetDevice :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipDevice_t * device (int*);
@@ -3672,6 +3973,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamGetDevice.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemAllocPitch
 		case HIP_API_ID_hipMemAllocPitch :
 			//	hipDeviceptr_t * dptr (void **);
 			//	size_t * pitch (unsigned long*);
@@ -3694,6 +3997,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemAllocPitch.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddNode
 		case HIP_API_ID_hipGraphAddNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -3729,6 +4034,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceSetSharedMemConfig
 		case HIP_API_ID_hipDeviceSetSharedMemConfig :
 			//	hipSharedMemConfig config (enum hipSharedMemConfig);
 			//	hipError_t retval (enum hipError_t);
@@ -3736,6 +4043,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceSetSharedMemConfig.retval);
 			break;
 
+		#endif
+		#if HAVE_hipRuntimeGetVersion
 		case HIP_API_ID_hipRuntimeGetVersion :
 			//	int * runtimeVersion (int *);
 			//	hipError_t retval (enum hipError_t);
@@ -3746,6 +4055,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipRuntimeGetVersion.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphChildGraphNodeGetGraph
 		case HIP_API_ID_hipGraphChildGraphNodeGetGraph :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraph_t * pGraph (struct ihipGraph **);
@@ -3760,6 +4071,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphChildGraphNodeGetGraph.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecMemsetNodeSetParams
 		case HIP_API_ID_hipGraphExecMemsetNodeSetParams :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -3789,6 +4102,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExecMemsetNodeSetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphicsUnregisterResource
 		case HIP_API_ID_hipGraphicsUnregisterResource :
 			//	hipGraphicsResource_t resource (struct _hipGraphicsResource*);
 			//	hipError_t retval (enum hipError_t);
@@ -3797,6 +4112,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphicsUnregisterResource.retval);
 			break;
 
+		#endif
+		#if HAVE_hipEventElapsedTime
 		case HIP_API_ID_hipEventElapsedTime :
 			//	float * ms (float *);
 			//	hipEvent_t start (struct ihipEvent_t *);
@@ -3813,6 +4130,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipEventElapsedTime.retval);
 			break;
 
+		#endif
+		#if HAVE_hipFreeAsync
 		case HIP_API_ID_hipFreeAsync :
 			//	void * dev_ptr (void *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -3824,6 +4143,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipFreeAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamCreateWithFlags
 		case HIP_API_ID_hipStreamCreateWithFlags :
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	unsigned int flags (unsigned int);
@@ -3837,6 +4158,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamCreateWithFlags.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetAddress
 		case HIP_API_ID_hipTexRefSetAddress :
 			//	size_t * ByteOffset (unsigned long*);
 			//	textureReference * texRef ({
@@ -3898,6 +4221,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefSetAddress.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamAddCallback_spt
 		case HIP_API_ID_hipStreamAddCallback_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCallback_t callback (void (*)(struct ihipStream_t *, enum hipError_t, void *));
@@ -3913,6 +4238,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamAddCallback_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddKernelNode
 		case HIP_API_ID_hipGraphAddKernelNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -3967,6 +4294,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddKernelNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyDtoH
 		case HIP_API_ID_hipMemcpyDtoH :
 			//	void * dst (void *);
 			//	hipDeviceptr_t src (void *);
@@ -3980,6 +4309,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyDtoH.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceTotalMem
 		case HIP_API_ID_hipDeviceTotalMem :
 			//	size_t * bytes (unsigned long*);
 			//	hipDevice_t device (int);
@@ -3992,6 +4323,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceTotalMem.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemset2D
 		case HIP_API_ID_hipMemset2D :
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
@@ -4008,6 +4341,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemset2D.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DToArray_spt
 		case HIP_API_ID_hipMemcpy2DToArray_spt :
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
@@ -4031,6 +4366,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy2DToArray_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemAllocHost
 		case HIP_API_ID_hipMemAllocHost :
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
@@ -4044,6 +4381,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemAllocHost.retval);
 			break;
 
+		#endif
+		#if HAVE_hipPointerSetAttribute
 		case HIP_API_ID_hipPointerSetAttribute :
 			//	const void * value (const void *);
 			//	hipPointer_attribute attribute (enum hipPointer_attribute);
@@ -4057,6 +4396,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipPointerSetAttribute.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphHostNodeGetParams
 		case HIP_API_ID_hipGraphHostNodeGetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipHostNodeParams * pNodeParams ({
@@ -4075,6 +4416,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphHostNodeGetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemset3D
 		case HIP_API_ID_hipMemset3D :
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
@@ -4103,6 +4446,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemset3D.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDestroyTextureObject
 		case HIP_API_ID_hipDestroyTextureObject :
 			//	hipTextureObject_t textureObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
@@ -4111,6 +4456,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDestroyTextureObject.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemAdvise
 		case HIP_API_ID_hipMemAdvise :
 			//	const void * dev_ptr (const void *);
 			//	size_t count (unsigned long);
@@ -4125,6 +4472,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemAdvise.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxGetCacheConfig
 		case HIP_API_ID_hipCtxGetCacheConfig :
 			//	hipFuncCache_t * cacheConfig (enum hipFuncCache_t*);
 			//	hipError_t retval (enum hipError_t);
@@ -4135,6 +4484,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCtxGetCacheConfig.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDrvPointerGetAttributes
 		case HIP_API_ID_hipDrvPointerGetAttributes :
 			//	unsigned int numAttributes (unsigned int);
 			//	hipPointer_attribute * attributes (enum hipPointer_attribute*);
@@ -4156,6 +4507,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDrvPointerGetAttributes.retval);
 			break;
 
+		#endif
+		#if HAVE_hipModuleLaunchCooperativeKernelMultiDevice
 		case HIP_API_ID_hipModuleLaunchCooperativeKernelMultiDevice :
 			//	hipFunctionLaunchParams * launchParamsList ({
 			//		hipFunction_t function (struct ihipModuleSymbol_t *);
@@ -4189,6 +4542,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipModuleLaunchCooperativeKernelMultiDevice.retval);
 			break;
 
+		#endif
+		#if HAVE_hipModuleGetGlobal
 		case HIP_API_ID_hipModuleGetGlobal :
 			//	hipDeviceptr_t * dptr (void **);
 			//	size_t * bytes (unsigned long*);
@@ -4213,6 +4568,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipModuleGetGlobal.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphEventRecordNodeGetEvent
 		case HIP_API_ID_hipGraphEventRecordNodeGetEvent :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t * event_out (struct ihipEvent_t **);
@@ -4227,6 +4584,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphEventRecordNodeGetEvent.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphInstantiate
 		case HIP_API_ID_hipGraphInstantiate :
 			//	hipGraphExec_t * pGraphExec (struct hipGraphExec **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -4254,6 +4613,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphInstantiate.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphRetainUserObject
 		case HIP_API_ID_hipGraphRetainUserObject :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipUserObject_t object (struct hipUserObject *);
@@ -4269,6 +4630,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphRetainUserObject.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemAllocNodeGetParams
 		case HIP_API_ID_hipGraphMemAllocNodeGetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipMemAllocNodeParams * pNodeParams ({
@@ -4310,6 +4673,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphMemAllocNodeGetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetCaptureInfo
 		case HIP_API_ID_hipStreamGetCaptureInfo :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
@@ -4328,6 +4693,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamGetCaptureInfo.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxPopCurrent
 		case HIP_API_ID_hipCtxPopCurrent :
 			//	hipCtx_t * ctx (struct ihipCtx_t **);
 			//	hipError_t retval (enum hipError_t);
@@ -4339,6 +4706,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCtxPopCurrent.retval);
 			break;
 
+		#endif
+		#if HAVE_hipPointerGetAttributes
 		case HIP_API_ID_hipPointerGetAttributes :
 			//	hipPointerAttribute_t * attributes ({
 			//		enum hipMemoryType type (enum hipMemoryType);
@@ -4364,6 +4733,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipPointerGetAttributes.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceDisablePeerAccess
 		case HIP_API_ID_hipDeviceDisablePeerAccess :
 			//	int peerDeviceId (int);
 			//	hipError_t retval (enum hipError_t);
@@ -4371,6 +4742,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceDisablePeerAccess.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMallocPitch
 		case HIP_API_ID_hipMallocPitch :
 			//	void ** ptr (void **);
 			//	size_t * pitch (unsigned long*);
@@ -4391,6 +4764,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMallocPitch.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DFromArrayAsync
 		case HIP_API_ID_hipMemcpy2DFromArrayAsync :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -4417,6 +4792,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy2DFromArrayAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceComputeCapability
 		case HIP_API_ID_hipDeviceComputeCapability :
 			//	int * major (int *);
 			//	int * minor (int *);
@@ -4434,6 +4811,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceComputeCapability.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyHtoD
 		case HIP_API_ID_hipMemcpyHtoD :
 			//	hipDeviceptr_t dst (void *);
 			//	void * src (void *);
@@ -4447,6 +4826,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyHtoD.retval);
 			break;
 
+		#endif
+		#if HAVE_hipOccupancyMaxActiveBlocksPerMultiprocessor
 		case HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessor :
 			//	int * numBlocks (int *);
 			//	const void * f (const void *);
@@ -4464,6 +4845,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipOccupancyMaxActiveBlocksPerMultiprocessor.retval);
 			break;
 
+		#endif
+		#if HAVE_hipSignalExternalSemaphoresAsync
 		case HIP_API_ID_hipSignalExternalSemaphoresAsync :
 			//	const hipExternalSemaphore_t * extSemArray (const void * *);
 			//	const hipExternalSemaphoreSignalParams * paramsArray ({
@@ -4495,6 +4878,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipSignalExternalSemaphoresAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipArray3DGetDescriptor
 		case HIP_API_ID_hipArray3DGetDescriptor :
 			//	HIP_ARRAY3D_DESCRIPTOR * pArrayDescriptor ({
 			//		size_t Width (unsigned long);
@@ -4522,6 +4907,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipArray3DGetDescriptor.retval);
 			break;
 
+		#endif
+		#if HAVE___hipPopCallConfiguration
 		case HIP_API_ID___hipPopCallConfiguration :
 			//	dim3 * gridDim ({
 			//		uint32_t x (unsigned int);
@@ -4564,6 +4951,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->__hipPopCallConfiguration.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDevicePrimaryCtxRelease
 		case HIP_API_ID_hipDevicePrimaryCtxRelease :
 			//	hipDevice_t dev (int);
 			//	hipError_t retval (enum hipError_t);
@@ -4571,6 +4960,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDevicePrimaryCtxRelease.retval);
 			break;
 
+		#endif
+		#if HAVE_hipLaunchCooperativeKernelMultiDevice
 		case HIP_API_ID_hipLaunchCooperativeKernelMultiDevice :
 			//	hipLaunchParams * launchParamsList ({
 			//		void * func (void *);
@@ -4612,6 +5003,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipLaunchCooperativeKernelMultiDevice.retval);
 			break;
 
+		#endif
+		#if HAVE_hipFreeArray
 		case HIP_API_ID_hipFreeArray :
 			//	hipArray_t array (struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
@@ -4620,6 +5013,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipFreeArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemsetNodeSetParams
 		case HIP_API_ID_hipGraphMemsetNodeSetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipMemsetParams * pNodeParams ({
@@ -4646,6 +5041,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphMemsetNodeSetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolSetAccess
 		case HIP_API_ID_hipMemPoolSetAccess :
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	const hipMemAccessDesc * desc_list ({
@@ -4673,6 +5070,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemPoolSetAccess.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetStreamDeviceId
 		case HIP_API_ID_hipGetStreamDeviceId :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	int retval (int);
@@ -4681,6 +5080,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\tint retval = %d\n", args->hipGetStreamDeviceId.retval);
 			break;
 
+		#endif
+		#if HAVE_hipExtStreamCreateWithCUMask
 		case HIP_API_ID_hipExtStreamCreateWithCUMask :
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	uint32_t cuMaskSize (unsigned int);
@@ -4699,6 +5100,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipExtStreamCreateWithCUMask.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetTextureObjectTextureDesc
 		case HIP_API_ID_hipGetTextureObjectTextureDesc :
 			//	hipTextureDesc * pTexDesc ({
 			//		enum hipTextureAddressMode[3] addressMode (enum hipTextureAddressMode[3]);
@@ -4736,6 +5139,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGetTextureObjectTextureDesc.retval);
 			break;
 
+		#endif
+		#if HAVE_hipEventRecord_spt
 		case HIP_API_ID_hipEventRecord_spt :
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -4747,6 +5152,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipEventRecord_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipConfigureCall
 		case HIP_API_ID_hipConfigureCall :
 			//	dim3 gridDim ({
 			//		uint32_t x (unsigned int);
@@ -4777,6 +5184,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipConfigureCall.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyFromArray_spt
 		case HIP_API_ID_hipMemcpyFromArray_spt :
 			//	void * dst (void *);
 			//	hipArray_const_t src (const struct hipArray *);
@@ -4796,6 +5205,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyFromArray_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipModuleGetFunction
 		case HIP_API_ID_hipModuleGetFunction :
 			//	hipFunction_t * function (struct ihipModuleSymbol_t **);
 			//	hipModule_t module (struct ihipModule_t *);
@@ -4815,6 +5226,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipModuleGetFunction.retval);
 			break;
 
+		#endif
+		#if HAVE_hipFuncSetCacheConfig
 		case HIP_API_ID_hipFuncSetCacheConfig :
 			//	const void * func (const void *);
 			//	hipFuncCache_t config (enum hipFuncCache_t);
@@ -4825,6 +5238,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipFuncSetCacheConfig.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetLimit
 		case HIP_API_ID_hipDeviceGetLimit :
 			//	size_t * pValue (unsigned long*);
 			//	enum hipLimit_t limit (enum hipLimit_t);
@@ -4837,6 +5252,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceGetLimit.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetMaxAnisotropy
 		case HIP_API_ID_hipTexRefGetMaxAnisotropy :
 			//	int * pmaxAnsio (int *);
 			//	const textureReference * texRef ({
@@ -4893,6 +5310,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefGetMaxAnisotropy.retval);
 			break;
 
+		#endif
+		#if HAVE_hipLaunchKernel_spt
 		case HIP_API_ID_hipLaunchKernel_spt :
 			//	const void * function_address (const void *);
 			//	dim3 numBlocks ({
@@ -4932,6 +5351,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipLaunchKernel_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamBeginCaptureToGraph
 		case HIP_API_ID_hipStreamBeginCaptureToGraph :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -4968,6 +5389,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamBeginCaptureToGraph.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetFormat
 		case HIP_API_ID_hipTexRefGetFormat :
 			//	hipArray_Format * pFormat (enum hipArray_Format*);
 			//	int * pNumChannels (int *);
@@ -5029,6 +5452,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefGetFormat.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamWaitValue64
 		case HIP_API_ID_hipStreamWaitValue64 :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
@@ -5046,6 +5471,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamWaitValue64.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDevicePrimaryCtxRetain
 		case HIP_API_ID_hipDevicePrimaryCtxRetain :
 			//	hipCtx_t * pctx (struct ihipCtx_t **);
 			//	hipDevice_t dev (int);
@@ -5059,6 +5486,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDevicePrimaryCtxRetain.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMallocManaged
 		case HIP_API_ID_hipMallocManaged :
 			//	void ** dev_ptr (void **);
 			//	size_t size (unsigned long);
@@ -5074,6 +5503,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMallocManaged.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamCreateWithPriority
 		case HIP_API_ID_hipStreamCreateWithPriority :
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	unsigned int flags (unsigned int);
@@ -5089,6 +5520,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamCreateWithPriority.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetCaptureInfo_spt
 		case HIP_API_ID_hipStreamGetCaptureInfo_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
@@ -5107,6 +5540,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamGetCaptureInfo_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddHostNode
 		case HIP_API_ID_hipGraphAddHostNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -5139,6 +5574,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddHostNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipLaunchCooperativeKernel
 		case HIP_API_ID_hipLaunchCooperativeKernel :
 			//	const void * f (const void *);
 			//	dim3 gridDim ({
@@ -5178,6 +5615,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipLaunchCooperativeKernel.retval);
 			break;
 
+		#endif
+		#if HAVE_hipHostRegister
 		case HIP_API_ID_hipHostRegister :
 			//	void * hostPtr (void *);
 			//	size_t sizeBytes (unsigned long);
@@ -5190,6 +5629,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipHostRegister.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetErrorName
 		case HIP_API_ID_hipGetErrorName :
 			//	hipError_t hip_error (enum hipError_t);
 			//	const char * retval (const char *);
@@ -5200,6 +5641,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			} else { printf("\n"); };
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyToSymbol_spt
 		case HIP_API_ID_hipMemcpyToSymbol_spt :
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
@@ -5217,6 +5660,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyToSymbol_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemsetNodeGetParams
 		case HIP_API_ID_hipGraphMemsetNodeGetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipMemsetParams * pNodeParams ({
@@ -5243,6 +5688,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphMemsetNodeGetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamWriteValue32
 		case HIP_API_ID_hipStreamWriteValue32 :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
@@ -5258,6 +5705,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamWriteValue32.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamSynchronize_spt
 		case HIP_API_ID_hipStreamSynchronize_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -5266,6 +5715,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamSynchronize_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGraphMemTrim
 		case HIP_API_ID_hipDeviceGraphMemTrim :
 			//	int device (int);
 			//	hipError_t retval (enum hipError_t);
@@ -5273,6 +5724,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceGraphMemTrim.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamDestroy
 		case HIP_API_ID_hipStreamDestroy :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -5281,6 +5734,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamDestroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetArray
 		case HIP_API_ID_hipTexRefSetArray :
 			//	textureReference * tex ({
 			//		int normalized (int);
@@ -5337,6 +5792,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefSetArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyParam2DAsync
 		case HIP_API_ID_hipMemcpyParam2DAsync :
 			//	const hip_Memcpy2D * pCopy ({
 			//		size_t srcXInBytes (unsigned long);
@@ -5378,6 +5835,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyParam2DAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolExportPointer
 		case HIP_API_ID_hipMemPoolExportPointer :
 			//	hipMemPoolPtrExportData * export_data ({
 			//		unsigned char[64] reserved (unsigned char[64]);
@@ -5395,6 +5854,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemPoolExportPointer.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphEventRecordNodeSetEvent
 		case HIP_API_ID_hipGraphEventRecordNodeSetEvent :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t event (struct ihipEvent_t *);
@@ -5406,6 +5867,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphEventRecordNodeSetEvent.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxDestroy
 		case HIP_API_ID_hipCtxDestroy :
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -5414,6 +5877,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCtxDestroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hipArrayDestroy
 		case HIP_API_ID_hipArrayDestroy :
 			//	hipArray_t array (struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
@@ -5422,6 +5887,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipArrayDestroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemGetAllocationGranularity
 		case HIP_API_ID_hipMemGetAllocationGranularity :
 			//	size_t * granularity (unsigned long*);
 			//	const hipMemAllocationProp * prop ({
@@ -5458,6 +5925,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemGetAllocationGranularity.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphClone
 		case HIP_API_ID_hipGraphClone :
 			//	hipGraph_t * pGraphClone (struct ihipGraph **);
 			//	hipGraph_t originalGraph (struct ihipGraph *);
@@ -5472,6 +5941,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphClone.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemset2DAsync_spt
 		case HIP_API_ID_hipMemset2DAsync_spt :
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
@@ -5491,6 +5962,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemset2DAsync_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipBindTexture2D
 		case HIP_API_ID_hipBindTexture2D :
 			//	size_t * offset (unsigned long*);
 			//	const textureReference * tex ({
@@ -5573,6 +6046,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipBindTexture2D.retval);
 			break;
 
+		#endif
+		#if HAVE_hipArrayGetInfo
 		case HIP_API_ID_hipArrayGetInfo :
 			//	hipChannelFormatDesc * desc ({
 			//		int x (int);
@@ -5616,6 +6091,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipArrayGetInfo.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExternalSemaphoresSignalNodeGetParams
 		case HIP_API_ID_hipGraphExternalSemaphoresSignalNodeGetParams :
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipExternalSemaphoreSignalNodeParams * params_out ({
@@ -5634,6 +6111,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExternalSemaphoresSignalNodeGetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetStreamPriorityRange
 		case HIP_API_ID_hipDeviceGetStreamPriorityRange :
 			//	int * leastPriority (int *);
 			//	int * greatestPriority (int *);
@@ -5649,6 +6128,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceGetStreamPriorityRange.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecChildGraphNodeSetParams
 		case HIP_API_ID_hipGraphExecChildGraphNodeSetParams :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -5663,6 +6144,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExecChildGraphNodeSetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemset2D_spt
 		case HIP_API_ID_hipMemset2D_spt :
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
@@ -5679,6 +6162,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemset2D_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetDefaultMemPool
 		case HIP_API_ID_hipDeviceGetDefaultMemPool :
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	int device (int);
@@ -5692,6 +6177,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceGetDefaultMemPool.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxCreate
 		case HIP_API_ID_hipCtxCreate :
 			//	hipCtx_t * ctx (struct ihipCtx_t **);
 			//	unsigned int flags (unsigned int);
@@ -5707,6 +6194,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCtxCreate.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamIsCapturing
 		case HIP_API_ID_hipStreamIsCapturing :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
@@ -5720,6 +6209,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamIsCapturing.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamUpdateCaptureDependencies
 		case HIP_API_ID_hipStreamUpdateCaptureDependencies :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraphNode_t * dependencies (struct hipGraphNode **);
@@ -5738,11 +6229,15 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamUpdateCaptureDependencies.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceSynchronize
 		case HIP_API_ID_hipDeviceSynchronize :
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipError_t retval = %d\n", args->hipDeviceSynchronize.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyFromSymbolAsync
 		case HIP_API_ID_hipMemcpyFromSymbolAsync :
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
@@ -5763,6 +6258,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyFromSymbolAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphDestroyNode
 		case HIP_API_ID_hipGraphDestroyNode :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipError_t retval (enum hipError_t);
@@ -5771,6 +6268,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphDestroyNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipUserObjectRetain
 		case HIP_API_ID_hipUserObjectRetain :
 			//	hipUserObject_t object (struct hipUserObject *);
 			//	unsigned int count (unsigned int);
@@ -5781,6 +6280,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipUserObjectRetain.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecEventWaitNodeSetEvent
 		case HIP_API_ID_hipGraphExecEventWaitNodeSetEvent :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
@@ -5795,6 +6296,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExecEventWaitNodeSetEvent.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemAddressReserve
 		case HIP_API_ID_hipMemAddressReserve :
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
@@ -5815,6 +6318,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemAddressReserve.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddMemsetNode
 		case HIP_API_ID_hipGraphAddMemsetNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -5855,6 +6360,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddMemsetNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphicsResourceGetMappedPointer
 		case HIP_API_ID_hipGraphicsResourceGetMappedPointer :
 			//	void ** devPtr (void **);
 			//	size_t * size (unsigned long*);
@@ -5874,6 +6381,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphicsResourceGetMappedPointer.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamBeginCapture_spt
 		case HIP_API_ID_hipStreamBeginCapture_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureMode mode (enum hipStreamCaptureMode);
@@ -5884,6 +6393,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamBeginCapture_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetUuid
 		case HIP_API_ID_hipDeviceGetUuid :
 			//	hipUUID * uuid ({
 			//		char[16] bytes (char[16]);
@@ -5900,6 +6411,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceGetUuid.retval);
 			break;
 
+		#endif
+		#if HAVE_hipModuleLaunchKernel
 		case HIP_API_ID_hipModuleLaunchKernel :
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
 			//	unsigned int gridDimX (unsigned int);
@@ -5937,6 +6450,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipModuleLaunchKernel.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddEmptyNode
 		case HIP_API_ID_hipGraphAddEmptyNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -5959,6 +6474,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddEmptyNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemRangeGetAttribute
 		case HIP_API_ID_hipMemRangeGetAttribute :
 			//	void * data (void *);
 			//	size_t data_size (unsigned long);
@@ -5976,6 +6493,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemRangeGetAttribute.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphInstantiateWithFlags
 		case HIP_API_ID_hipGraphInstantiateWithFlags :
 			//	hipGraphExec_t * pGraphExec (struct hipGraphExec **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -5992,6 +6511,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphInstantiateWithFlags.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxPushCurrent
 		case HIP_API_ID_hipCtxPushCurrent :
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -6000,6 +6521,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCtxPushCurrent.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxGetApiVersion
 		case HIP_API_ID_hipCtxGetApiVersion :
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	int * apiVersion (int *);
@@ -6013,6 +6536,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCtxGetApiVersion.retval);
 			break;
 
+		#endif
+		#if HAVE_hipBindTexture
 		case HIP_API_ID_hipBindTexture :
 			//	size_t * offset (unsigned long*);
 			//	const textureReference * tex ({
@@ -6091,6 +6616,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipBindTexture.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamBeginCapture
 		case HIP_API_ID_hipStreamBeginCapture :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureMode mode (enum hipStreamCaptureMode);
@@ -6101,11 +6628,15 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamBeginCapture.retval);
 			break;
 
+		#endif
+		#if HAVE_hipProfilerStart
 		case HIP_API_ID_hipProfilerStart :
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipError_t retval = %d\n", args->hipProfilerStart.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyHtoDAsync
 		case HIP_API_ID_hipMemcpyHtoDAsync :
 			//	hipDeviceptr_t dst (void *);
 			//	void * src (void *);
@@ -6122,6 +6653,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyHtoDAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetDeviceFlags
 		case HIP_API_ID_hipGetDeviceFlags :
 			//	unsigned int * flags (unsigned int *);
 			//	hipError_t retval (enum hipError_t);
@@ -6132,6 +6665,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGetDeviceFlags.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemRangeGetAttributes
 		case HIP_API_ID_hipMemRangeGetAttributes :
 			//	void ** data (void **);
 			//	size_t * data_sizes (unsigned long*);
@@ -6160,6 +6695,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemRangeGetAttributes.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDestroyExternalSemaphore
 		case HIP_API_ID_hipDestroyExternalSemaphore :
 			//	hipExternalSemaphore_t extSem (void *);
 			//	hipError_t retval (enum hipError_t);
@@ -6168,6 +6705,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDestroyExternalSemaphore.retval);
 			break;
 
+		#endif
+		#if HAVE_hipIpcOpenEventHandle
 		case HIP_API_ID_hipIpcOpenEventHandle :
 			//	hipEvent_t * event (struct ihipEvent_t **);
 			//	hipIpcEventHandle_t handle ({
@@ -6185,6 +6724,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipIpcOpenEventHandle.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphUpload
 		case HIP_API_ID_hipGraphUpload :
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -6196,6 +6737,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphUpload.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMallocAsync
 		case HIP_API_ID_hipMallocAsync :
 			//	void ** dev_ptr (void **);
 			//	size_t size (unsigned long);
@@ -6212,6 +6755,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMallocAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipOccupancyMaxPotentialBlockSize
 		case HIP_API_ID_hipOccupancyMaxPotentialBlockSize :
 			//	int * gridSize (int *);
 			//	int * blockSize (int *);
@@ -6234,6 +6779,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipOccupancyMaxPotentialBlockSize.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDestroyExternalMemory
 		case HIP_API_ID_hipDestroyExternalMemory :
 			//	hipExternalMemory_t extMem (void *);
 			//	hipError_t retval (enum hipError_t);
@@ -6242,6 +6789,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDestroyExternalMemory.retval);
 			break;
 
+		#endif
+		#if HAVE_amd_dbgapi_get_build_name
 		case HIP_API_ID_amd_dbgapi_get_build_name :
 			//	const char * retval (const char *);
 			printf("\tconst char * retval = %p", args->amd_dbgapi_get_build_name.retval);
@@ -6250,6 +6799,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			} else { printf("\n"); };
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddMemcpyNodeToSymbol
 		case HIP_API_ID_hipGraphAddMemcpyNodeToSymbol :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -6284,6 +6835,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddMemcpyNodeToSymbol.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetPCIBusId
 		case HIP_API_ID_hipDeviceGetPCIBusId :
 			//	char * pciBusId (char *);
 			//	int len (int);
@@ -6298,6 +6851,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceGetPCIBusId.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetChannelDesc
 		case HIP_API_ID_hipGetChannelDesc :
 			//	hipChannelFormatDesc * desc ({
 			//		int x (int);
@@ -6323,6 +6878,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGetChannelDesc.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDevicePrimaryCtxReset
 		case HIP_API_ID_hipDevicePrimaryCtxReset :
 			//	hipDevice_t dev (int);
 			//	hipError_t retval (enum hipError_t);
@@ -6330,6 +6887,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDevicePrimaryCtxReset.retval);
 			break;
 
+		#endif
+		#if HAVE_hipImportExternalMemory
 		case HIP_API_ID_hipImportExternalMemory :
 			//	hipExternalMemory_t * extMem_out (void **);
 			//	const hipExternalMemoryHandleDesc * memHandleDesc ({
@@ -6360,6 +6919,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipImportExternalMemory.retval);
 			break;
 
+		#endif
+		#if HAVE_hipFuncSetSharedMemConfig
 		case HIP_API_ID_hipFuncSetSharedMemConfig :
 			//	const void * func (const void *);
 			//	hipSharedMemConfig config (enum hipSharedMemConfig);
@@ -6370,6 +6931,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipFuncSetSharedMemConfig.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamWaitEvent
 		case HIP_API_ID_hipStreamWaitEvent :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipEvent_t event (struct ihipEvent_t *);
@@ -6383,6 +6946,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamWaitEvent.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetMipmapLevelBias
 		case HIP_API_ID_hipTexRefSetMipmapLevelBias :
 			//	textureReference * texRef ({
 			//		int normalized (int);
@@ -6436,6 +7001,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefSetMipmapLevelBias.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolImportFromShareableHandle
 		case HIP_API_ID_hipMemPoolImportFromShareableHandle :
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	void * shared_handle (void *);
@@ -6454,6 +7021,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemPoolImportFromShareableHandle.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolExportToShareableHandle
 		case HIP_API_ID_hipMemPoolExportToShareableHandle :
 			//	void * shared_handle (void *);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
@@ -6469,6 +7038,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemPoolExportToShareableHandle.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecMemcpyNodeSetParamsToSymbol
 		case HIP_API_ID_hipGraphExecMemcpyNodeSetParamsToSymbol :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -6492,6 +7063,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExecMemcpyNodeSetParamsToSymbol.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetMipmapFilterMode
 		case HIP_API_ID_hipTexRefGetMipmapFilterMode :
 			//	enum hipTextureFilterMode * pfm (enum hipTextureFilterMode *);
 			//	const textureReference * texRef ({
@@ -6548,6 +7121,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefGetMipmapFilterMode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetProcAddress
 		case HIP_API_ID_hipGetProcAddress :
 			//	const char * symbol (const char *);
 			//	void ** pfn (void **);
@@ -6573,6 +7148,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGetProcAddress.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCreateTextureObject
 		case HIP_API_ID_hipCreateTextureObject :
 			//	hipTextureObject_t * pTexObject (struct __hip_texture **);
 			//	const hipResourceDesc * pResDesc ({
@@ -6649,6 +7226,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCreateTextureObject.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphKernelNodeCopyAttributes
 		case HIP_API_ID_hipGraphKernelNodeCopyAttributes :
 			//	hipGraphNode_t hSrc (struct hipGraphNode *);
 			//	hipGraphNode_t hDst (struct hipGraphNode *);
@@ -6660,6 +7239,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphKernelNodeCopyAttributes.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetFlags
 		case HIP_API_ID_hipTexRefGetFlags :
 			//	unsigned int * pFlags (unsigned int *);
 			//	const textureReference * texRef ({
@@ -6716,6 +7297,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefGetFlags.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDrvGraphAddMemcpyNode
 		case HIP_API_ID_hipDrvGraphAddMemcpyNode :
 			//	hipGraphNode_t * phGraphNode (struct hipGraphNode **);
 			//	hipGraph_t hGraph (struct ihipGraph *);
@@ -6788,6 +7371,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDrvGraphAddMemcpyNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemExportToShareableHandle
 		case HIP_API_ID_hipMemExportToShareableHandle :
 			//	void * shareableHandle (void *);
 			//	hipMemGenericAllocationHandle_t handle (struct ihipMemGenericAllocationHandle *);
@@ -6803,6 +7388,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemExportToShareableHandle.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphLaunch_spt
 		case HIP_API_ID_hipGraphLaunch_spt :
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -6814,6 +7401,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphLaunch_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemcpyNodeSetParamsFromSymbol
 		case HIP_API_ID_hipGraphMemcpyNodeSetParamsFromSymbol :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dst (void *);
@@ -6834,6 +7423,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphMemcpyNodeSetParamsFromSymbol.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphNodeGetDependencies
 		case HIP_API_ID_hipGraphNodeGetDependencies :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraphNode_t * pDependencies (struct hipGraphNode **);
@@ -6853,6 +7444,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphNodeGetDependencies.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy3D
 		case HIP_API_ID_hipMemcpy3D :
 			//	const struct hipMemcpy3DParms * p ({
 			//		hipArray_t srcArray (struct hipArray *);
@@ -6921,6 +7514,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy3D.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddMemcpyNodeFromSymbol
 		case HIP_API_ID_hipGraphAddMemcpyNodeFromSymbol :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -6955,6 +7550,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddMemcpyNodeFromSymbol.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetPriority_spt
 		case HIP_API_ID_hipStreamGetPriority_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	int * priority (int *);
@@ -6968,6 +7565,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamGetPriority_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipModuleLoadData
 		case HIP_API_ID_hipModuleLoadData :
 			//	hipModule_t * module (struct ihipModule_t **);
 			//	const void * image (const void *);
@@ -6982,6 +7581,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipModuleLoadData.retval);
 			break;
 
+		#endif
+		#if HAVE_hipSetDeviceFlags
 		case HIP_API_ID_hipSetDeviceFlags :
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
@@ -6989,6 +7590,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipSetDeviceFlags.retval);
 			break;
 
+		#endif
+		#if HAVE_hipExternalMemoryGetMappedBuffer
 		case HIP_API_ID_hipExternalMemoryGetMappedBuffer :
 			//	void ** devPtr (void **);
 			//	hipExternalMemory_t extMem (void *);
@@ -7018,6 +7621,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipExternalMemoryGetMappedBuffer.retval);
 			break;
 
+		#endif
+		#if HAVE_hipLaunchCooperativeKernel_spt
 		case HIP_API_ID_hipLaunchCooperativeKernel_spt :
 			//	const void * f (const void *);
 			//	dim3 gridDim ({
@@ -7057,6 +7662,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipLaunchCooperativeKernel_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipLaunchHostFunc
 		case HIP_API_ID_hipLaunchHostFunc :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipHostFn_t fn (void (*)(void *));
@@ -7070,6 +7677,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipLaunchHostFunc.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyAsync_spt
 		case HIP_API_ID_hipMemcpyAsync_spt :
 			//	void * dst (void *);
 			//	const void * src (const void *);
@@ -7088,6 +7697,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyAsync_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyPeer
 		case HIP_API_ID_hipMemcpyPeer :
 			//	void * dst (void *);
 			//	int dstDeviceId (int);
@@ -7105,11 +7716,15 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyPeer.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceReset
 		case HIP_API_ID_hipDeviceReset :
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipError_t retval = %d\n", args->hipDeviceReset.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemAddressFree
 		case HIP_API_ID_hipMemAddressFree :
 			//	void * devPtr (void *);
 			//	size_t size (unsigned long);
@@ -7120,11 +7735,15 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemAddressFree.retval);
 			break;
 
+		#endif
+		#if HAVE_hipProfilerStop
 		case HIP_API_ID_hipProfilerStop :
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipError_t retval = %d\n", args->hipProfilerStop.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphEventWaitNodeSetEvent
 		case HIP_API_ID_hipGraphEventWaitNodeSetEvent :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t event (struct ihipEvent_t *);
@@ -7136,6 +7755,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphEventWaitNodeSetEvent.retval);
 			break;
 
+		#endif
+		#if HAVE_hipModuleLaunchCooperativeKernel
 		case HIP_API_ID_hipModuleLaunchCooperativeKernel :
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
 			//	unsigned int gridDimX (unsigned int);
@@ -7167,6 +7788,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipModuleLaunchCooperativeKernel.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetName
 		case HIP_API_ID_hipDeviceGetName :
 			//	char * name (char *);
 			//	int len (int);
@@ -7181,6 +7804,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceGetName.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphNodeSetEnabled
 		case HIP_API_ID_hipGraphNodeSetEnabled :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
@@ -7194,6 +7819,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphNodeSetEnabled.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetAddressMode
 		case HIP_API_ID_hipTexRefSetAddressMode :
 			//	textureReference * texRef ({
 			//		int normalized (int);
@@ -7249,6 +7876,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefSetAddressMode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipEventSynchronize
 		case HIP_API_ID_hipEventSynchronize :
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -7257,6 +7886,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipEventSynchronize.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphGetRootNodes
 		case HIP_API_ID_hipGraphGetRootNodes :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphNode_t * pRootNodes (struct hipGraphNode **);
@@ -7276,6 +7907,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphGetRootNodes.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DFromArray
 		case HIP_API_ID_hipMemcpy2DFromArray :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -7299,6 +7932,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy2DFromArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExternalSemaphoresWaitNodeSetParams
 		case HIP_API_ID_hipGraphExternalSemaphoresWaitNodeSetParams :
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	const hipExternalSemaphoreWaitNodeParams * nodeParams ({
@@ -7317,6 +7952,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExternalSemaphoresWaitNodeSetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyDtoA
 		case HIP_API_ID_hipMemcpyDtoA :
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
@@ -7332,6 +7969,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyDtoA.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemcpyNodeGetParams
 		case HIP_API_ID_hipGraphMemcpyNodeGetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipMemcpy3DParms * pNodeParams ({
@@ -7403,6 +8042,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphMemcpyNodeGetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy
 		case HIP_API_ID_hipMemcpy :
 			//	void * dst (void *);
 			//	const void * src (const void *);
@@ -7418,6 +8059,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy.retval);
 			break;
 
+		#endif
+		#if HAVE_hipSetValidDevices
 		case HIP_API_ID_hipSetValidDevices :
 			//	int * device_arr (int *);
 			//	int len (int);
@@ -7430,6 +8073,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipSetValidDevices.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DAsync
 		case HIP_API_ID_hipMemcpy2DAsync :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -7454,6 +8099,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy2DAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecExternalSemaphoresWaitNodeSetParams
 		case HIP_API_ID_hipGraphExecExternalSemaphoresWaitNodeSetParams :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
@@ -7475,6 +8122,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExecExternalSemaphoresWaitNodeSetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamAttachMemAsync
 		case HIP_API_ID_hipStreamAttachMemAsync :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * dev_ptr (void *);
@@ -7490,6 +8139,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamAttachMemAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemset2DAsync
 		case HIP_API_ID_hipMemset2DAsync :
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
@@ -7509,6 +8160,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemset2DAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexObjectGetResourceViewDesc
 		case HIP_API_ID_hipTexObjectGetResourceViewDesc :
 			//	HIP_RESOURCE_VIEW_DESC * pResViewDesc ({
 			//		HIPresourceViewFormat format (enum HIPresourceViewFormat_enum);
@@ -7542,6 +8195,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexObjectGetResourceViewDesc.retval);
 			break;
 
+		#endif
+		#if HAVE_hipEventCreateWithFlags
 		case HIP_API_ID_hipEventCreateWithFlags :
 			//	hipEvent_t * event (struct ihipEvent_t **);
 			//	unsigned int flags (unsigned int);
@@ -7555,6 +8210,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipEventCreateWithFlags.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMipmappedArrayCreate
 		case HIP_API_ID_hipMipmappedArrayCreate :
 			//	hipMipmappedArray_t * pHandle ({
 			//		void * data (void *);
@@ -7624,6 +8281,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMipmappedArrayCreate.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2D_spt
 		case HIP_API_ID_hipMemcpy2D_spt :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -7645,6 +8304,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy2D_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddMemcpyNode
 		case HIP_API_ID_hipGraphAddMemcpyNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -7730,6 +8391,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddMemcpyNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyToSymbolAsync
 		case HIP_API_ID_hipMemcpyToSymbolAsync :
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
@@ -7750,6 +8413,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyToSymbolAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMallocFromPoolAsync
 		case HIP_API_ID_hipMallocFromPoolAsync :
 			//	void ** dev_ptr (void **);
 			//	size_t size (unsigned long);
@@ -7769,6 +8434,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMallocFromPoolAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
 		case HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags :
 			//	int * numBlocks (int *);
 			//	const void * f (const void *);
@@ -7788,6 +8455,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddMemFreeNode
 		case HIP_API_ID_hipGraphAddMemFreeNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -7813,6 +8482,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddMemFreeNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor
 		case HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor :
 			//	int * numBlocks (int *);
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
@@ -7830,6 +8501,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.retval);
 			break;
 
+		#endif
+		#if HAVE_hipEventDestroy
 		case HIP_API_ID_hipEventDestroy :
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -7838,6 +8511,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipEventDestroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceSetCacheConfig
 		case HIP_API_ID_hipDeviceSetCacheConfig :
 			//	hipFuncCache_t cacheConfig (enum hipFuncCache_t);
 			//	hipError_t retval (enum hipError_t);
@@ -7845,6 +8520,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceSetCacheConfig.retval);
 			break;
 
+		#endif
+		#if HAVE_hipFree
 		case HIP_API_ID_hipFree :
 			//	void * ptr (void *);
 			//	hipError_t retval (enum hipError_t);
@@ -7853,6 +8530,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipFree.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DToArrayAsync_spt
 		case HIP_API_ID_hipMemcpy2DToArrayAsync_spt :
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
@@ -7879,6 +8558,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy2DToArrayAsync_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxGetFlags
 		case HIP_API_ID_hipCtxGetFlags :
 			//	unsigned int * flags (unsigned int *);
 			//	hipError_t retval (enum hipError_t);
@@ -7889,6 +8570,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCtxGetFlags.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetSymbolAddress
 		case HIP_API_ID_hipGetSymbolAddress :
 			//	void ** devPtr (void **);
 			//	const void * symbol (const void *);
@@ -7903,6 +8586,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGetSymbolAddress.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetAddress
 		case HIP_API_ID_hipTexRefGetAddress :
 			//	hipDeviceptr_t * dev_ptr (void **);
 			//	const textureReference * texRef ({
@@ -7960,6 +8645,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefGetAddress.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexObjectCreate
 		case HIP_API_ID_hipTexObjectCreate :
 			//	hipTextureObject_t * pTexObject (struct __hip_texture **);
 			//	const HIP_RESOURCE_DESC * pResDesc ({
@@ -8038,6 +8725,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexObjectCreate.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetSharedMemConfig
 		case HIP_API_ID_hipDeviceGetSharedMemConfig :
 			//	hipSharedMemConfig * pConfig (enum hipSharedMemConfig*);
 			//	hipError_t retval (enum hipError_t);
@@ -8048,6 +8737,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceGetSharedMemConfig.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyHtoAAsync
 		case HIP_API_ID_hipMemcpyHtoAAsync :
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
@@ -8066,6 +8757,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyHtoAAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolGetAttribute
 		case HIP_API_ID_hipMemPoolGetAttribute :
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipMemPoolAttr attr (enum hipMemPoolAttr);
@@ -8079,6 +8772,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemPoolGetAttribute.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddMemAllocNode
 		case HIP_API_ID_hipGraphAddMemAllocNode :
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
@@ -8134,6 +8829,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddMemAllocNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemRetainAllocationHandle
 		case HIP_API_ID_hipMemRetainAllocationHandle :
 			//	hipMemGenericAllocationHandle_t * handle (struct ihipMemGenericAllocationHandle **);
 			//	void * addr (void *);
@@ -8148,6 +8845,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemRetainAllocationHandle.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetFuncBySymbol
 		case HIP_API_ID_hipGetFuncBySymbol :
 			//	hipFunction_t * functionPtr (struct ihipModuleSymbol_t **);
 			//	const void * symbolPtr (const void *);
@@ -8162,6 +8861,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGetFuncBySymbol.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceSetMemPool
 		case HIP_API_ID_hipDeviceSetMemPool :
 			//	int device (int);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
@@ -8172,6 +8873,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceSetMemPool.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceSetLimit
 		case HIP_API_ID_hipDeviceSetLimit :
 			//	enum hipLimit_t limit (enum hipLimit_t);
 			//	size_t value (unsigned long);
@@ -8181,6 +8884,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceSetLimit.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemGetInfo
 		case HIP_API_ID_hipMemGetInfo :
 			//	size_t * free (unsigned long*);
 			//	size_t * total (unsigned long*);
@@ -8196,6 +8901,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemGetInfo.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyParam2D
 		case HIP_API_ID_hipMemcpyParam2D :
 			//	const hip_Memcpy2D * pCopy ({
 			//		size_t srcXInBytes (unsigned long);
@@ -8234,6 +8941,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyParam2D.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphDebugDotPrint
 		case HIP_API_ID_hipGraphDebugDotPrint :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const char * path (const char *);
@@ -8249,6 +8958,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphDebugDotPrint.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceSetGraphMemAttribute
 		case HIP_API_ID_hipDeviceSetGraphMemAttribute :
 			//	int device (int);
 			//	hipGraphMemAttributeType attr (enum hipGraphMemAttributeType);
@@ -8261,6 +8972,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceSetGraphMemAttribute.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDrvGetErrorString
 		case HIP_API_ID_hipDrvGetErrorString :
 			//	hipError_t hipError (enum hipError_t);
 			//	const char ** errorString (const char **);
@@ -8276,6 +8989,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDrvGetErrorString.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyDtoDAsync
 		case HIP_API_ID_hipMemcpyDtoDAsync :
 			//	hipDeviceptr_t dst (void *);
 			//	hipDeviceptr_t src (void *);
@@ -8292,11 +9007,15 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyDtoDAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxSynchronize
 		case HIP_API_ID_hipCtxSynchronize :
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipError_t retval = %d\n", args->hipCtxSynchronize.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexObjectDestroy
 		case HIP_API_ID_hipTexObjectDestroy :
 			//	hipTextureObject_t texObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
@@ -8305,6 +9024,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexObjectDestroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetAddressMode
 		case HIP_API_ID_hipTexRefGetAddressMode :
 			//	enum hipTextureAddressMode * pam (enum hipTextureAddressMode *);
 			//	const textureReference * texRef ({
@@ -8363,6 +9084,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefGetAddressMode.retval);
 			break;
 
+		#endif
+		#if HAVE___hipGetPCH
 		case HIP_API_ID___hipGetPCH :
 			//	const char ** pch (const char **);
 			//	unsigned int * size (unsigned int *);
@@ -8379,6 +9102,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			} else { printf("\n"); };
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetFlags
 		case HIP_API_ID_hipStreamGetFlags :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	unsigned int * flags (unsigned int *);
@@ -8392,6 +9117,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamGetFlags.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemGetAccess
 		case HIP_API_ID_hipMemGetAccess :
 			//	unsigned long long * flags (unsigned long long *);
 			//	const hipMemLocation * location ({
@@ -8416,6 +9143,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemGetAccess.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyAtoA
 		case HIP_API_ID_hipMemcpyAtoA :
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
@@ -8433,6 +9162,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyAtoA.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyToSymbol
 		case HIP_API_ID_hipMemcpyToSymbol :
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
@@ -8450,6 +9181,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyToSymbol.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxSetCurrent
 		case HIP_API_ID_hipCtxSetCurrent :
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -8458,6 +9191,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCtxSetCurrent.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamQuery_spt
 		case HIP_API_ID_hipStreamQuery_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
@@ -8466,6 +9201,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamQuery_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetSymbolSize
 		case HIP_API_ID_hipGetSymbolSize :
 			//	size_t * size (unsigned long*);
 			//	const void * symbol (const void *);
@@ -8479,6 +9216,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGetSymbolSize.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMipmappedArrayGetLevel
 		case HIP_API_ID_hipMipmappedArrayGetLevel :
 			//	hipArray_t * pLevelArray (struct hipArray **);
 			//	hipMipmappedArray_t hMipMappedArray ({
@@ -8532,6 +9271,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMipmappedArrayGetLevel.retval);
 			break;
 
+		#endif
+		#if HAVE_hipExternalMemoryGetMappedMipmappedArray
 		case HIP_API_ID_hipExternalMemoryGetMappedMipmappedArray :
 			//	hipMipmappedArray_t * mipmap ({
 			//		void * data (void *);
@@ -8620,6 +9361,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipExternalMemoryGetMappedMipmappedArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecMemcpyNodeSetParams
 		case HIP_API_ID_hipGraphExecMemcpyNodeSetParams :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
@@ -8694,6 +9437,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExecMemcpyNodeSetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipUserObjectCreate
 		case HIP_API_ID_hipUserObjectCreate :
 			//	hipUserObject_t * object_out (struct hipUserObject **);
 			//	void * ptr (void *);
@@ -8714,6 +9459,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipUserObjectCreate.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetCaptureInfo_v2
 		case HIP_API_ID_hipStreamGetCaptureInfo_v2 :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * captureStatus_out (enum hipStreamCaptureStatus*);
@@ -8752,6 +9499,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamGetCaptureInfo_v2.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetArray
 		case HIP_API_ID_hipTexRefGetArray :
 			//	hipArray_t * pArray (struct hipArray **);
 			//	const textureReference * texRef ({
@@ -8809,6 +9558,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefGetArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipImportExternalSemaphore
 		case HIP_API_ID_hipImportExternalSemaphore :
 			//	hipExternalSemaphore_t * extSem_out (void **);
 			//	const hipExternalSemaphoreHandleDesc * semHandleDesc ({
@@ -8837,6 +9588,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipImportExternalSemaphore.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetAttribute
 		case HIP_API_ID_hipDeviceGetAttribute :
 			//	int * pi (int *);
 			//	hipDeviceAttribute_t attr (enum hipDeviceAttribute_t);
@@ -8851,6 +9604,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceGetAttribute.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemFreeNodeGetParams
 		case HIP_API_ID_hipGraphMemFreeNodeGetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dev_ptr (void *);
@@ -8862,6 +9617,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphMemFreeNodeGetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxGetSharedMemConfig
 		case HIP_API_ID_hipCtxGetSharedMemConfig :
 			//	hipSharedMemConfig * pConfig (enum hipSharedMemConfig*);
 			//	hipError_t retval (enum hipError_t);
@@ -8872,6 +9629,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCtxGetSharedMemConfig.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemcpyNodeSetParamsToSymbol
 		case HIP_API_ID_hipGraphMemcpyNodeSetParamsToSymbol :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const void * symbol (const void *);
@@ -8892,6 +9651,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphMemcpyNodeSetParamsToSymbol.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DToArray
 		case HIP_API_ID_hipMemcpy2DToArray :
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
@@ -8915,6 +9676,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy2DToArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamIsCapturing_spt
 		case HIP_API_ID_hipStreamIsCapturing_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
@@ -8928,6 +9691,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamIsCapturing_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipFreeHost
 		case HIP_API_ID_hipFreeHost :
 			//	void * ptr (void *);
 			//	hipError_t retval (enum hipError_t);
@@ -8936,6 +9701,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipFreeHost.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphKernelNodeSetParams
 		case HIP_API_ID_hipGraphKernelNodeSetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipKernelNodeParams * pNodeParams ({
@@ -8976,6 +9743,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphKernelNodeSetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMallocHost
 		case HIP_API_ID_hipMallocHost :
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
@@ -8989,6 +9758,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMallocHost.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemset3D_spt
 		case HIP_API_ID_hipMemset3D_spt :
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
@@ -9017,6 +9788,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemset3D_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamGetCaptureInfo_v2_spt
 		case HIP_API_ID_hipStreamGetCaptureInfo_v2_spt :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * captureStatus_out (enum hipStreamCaptureStatus*);
@@ -9055,6 +9828,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamGetCaptureInfo_v2_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetTextureReference
 		case HIP_API_ID_hipGetTextureReference :
 			//	const textureReference ** texref ({
 			//		int normalized (int);
@@ -9112,6 +9887,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGetTextureReference.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecExternalSemaphoresSignalNodeSetParams
 		case HIP_API_ID_hipGraphExecExternalSemaphoresSignalNodeSetParams :
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
@@ -9133,6 +9910,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExecExternalSemaphoresSignalNodeSetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphAddDependencies
 		case HIP_API_ID_hipGraphAddDependencies :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * from (const struct hipGraphNode * *);
@@ -9155,6 +9934,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphAddDependencies.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphNodeGetType
 		case HIP_API_ID_hipGraphNodeGetType :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraphNodeType * pType (enum hipGraphNodeType*);
@@ -9168,6 +9949,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphNodeGetType.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetBorderColor
 		case HIP_API_ID_hipTexRefSetBorderColor :
 			//	textureReference * texRef ({
 			//		int normalized (int);
@@ -9224,6 +10007,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefSetBorderColor.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemPrefetchAsync
 		case HIP_API_ID_hipMemPrefetchAsync :
 			//	const void * dev_ptr (const void *);
 			//	size_t count (unsigned long);
@@ -9239,6 +10024,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemPrefetchAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxGetDevice
 		case HIP_API_ID_hipCtxGetDevice :
 			//	hipDevice_t * device (int*);
 			//	hipError_t retval (enum hipError_t);
@@ -9249,6 +10036,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCtxGetDevice.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2DArrayToArray
 		case HIP_API_ID_hipMemcpy2DArrayToArray :
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffsetDst (unsigned long);
@@ -9274,6 +10063,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy2DArrayToArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipUserObjectRelease
 		case HIP_API_ID_hipUserObjectRelease :
 			//	hipUserObject_t object (struct hipUserObject *);
 			//	unsigned int count (unsigned int);
@@ -9284,6 +10075,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipUserObjectRelease.retval);
 			break;
 
+		#endif
+		#if HAVE_hipHostGetFlags
 		case HIP_API_ID_hipHostGetFlags :
 			//	unsigned int * flagsPtr (unsigned int *);
 			//	void * hostPtr (void *);
@@ -9297,6 +10090,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipHostGetFlags.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDrvGraphAddMemsetNode
 		case HIP_API_ID_hipDrvGraphAddMemsetNode :
 			//	hipGraphNode_t * phGraphNode (struct hipGraphNode **);
 			//	hipGraph_t hGraph (struct ihipGraph *);
@@ -9340,6 +10135,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDrvGraphAddMemsetNode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyAtoD
 		case HIP_API_ID_hipMemcpyAtoD :
 			//	hipDeviceptr_t dstDevice (void *);
 			//	hipArray_t srcArray (struct hipArray *);
@@ -9355,6 +10152,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyAtoD.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolCreate
 		case HIP_API_ID_hipMemPoolCreate :
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	const hipMemPoolProps * pool_props ({
@@ -9390,6 +10189,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemPoolCreate.retval);
 			break;
 
+		#endif
+		#if HAVE_hipKernelNameRef
 		case HIP_API_ID_hipKernelNameRef :
 			//	const hipFunction_t f (const struct ihipModuleSymbol_t *);
 			//	const char * retval (const char *);
@@ -9401,6 +10202,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			} else { printf("\n"); };
 			break;
 
+		#endif
+		#if HAVE_hipMemset3DAsync
 		case HIP_API_ID_hipMemset3DAsync :
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
@@ -9432,6 +10235,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemset3DAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipEventRecord
 		case HIP_API_ID_hipEventRecord :
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipStream_t stream (struct ihipStream_t *);
@@ -9443,6 +10248,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipEventRecord.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMipmappedArrayDestroy
 		case HIP_API_ID_hipMipmappedArrayDestroy :
 			//	hipMipmappedArray_t hMipmappedArray ({
 			//		void * data (void *);
@@ -9488,6 +10295,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMipmappedArrayDestroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemsetAsync_spt
 		case HIP_API_ID_hipMemsetAsync_spt :
 			//	void * dst (void *);
 			//	int value (int);
@@ -9503,6 +10312,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemsetAsync_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDevicePrimaryCtxSetFlags
 		case HIP_API_ID_hipDevicePrimaryCtxSetFlags :
 			//	hipDevice_t dev (int);
 			//	unsigned int flags (unsigned int);
@@ -9512,11 +10323,15 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDevicePrimaryCtxSetFlags.retval);
 			break;
 
+		#endif
+		#if HAVE_hipPeekAtLastError
 		case HIP_API_ID_hipPeekAtLastError :
 			//	hipError_t retval (enum hipError_t);
 			printf("\thipError_t retval = %d\n", args->hipPeekAtLastError.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceGetGraphMemAttribute
 		case HIP_API_ID_hipDeviceGetGraphMemAttribute :
 			//	int device (int);
 			//	hipGraphMemAttributeType attr (enum hipGraphMemAttributeType);
@@ -9529,6 +10344,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceGetGraphMemAttribute.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDrvGetErrorName
 		case HIP_API_ID_hipDrvGetErrorName :
 			//	hipError_t hipError (enum hipError_t);
 			//	const char ** errorString (const char **);
@@ -9544,6 +10361,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDrvGetErrorName.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy_spt
 		case HIP_API_ID_hipMemcpy_spt :
 			//	void * dst (void *);
 			//	const void * src (const void *);
@@ -9559,6 +10378,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCtxSetSharedMemConfig
 		case HIP_API_ID_hipCtxSetSharedMemConfig :
 			//	hipSharedMemConfig config (enum hipSharedMemConfig);
 			//	hipError_t retval (enum hipError_t);
@@ -9566,6 +10387,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCtxSetSharedMemConfig.retval);
 			break;
 
+		#endif
+		#if HAVE_hipCreateSurfaceObject
 		case HIP_API_ID_hipCreateSurfaceObject :
 			//	hipSurfaceObject_t * pSurfObject (struct __hip_surface **);
 			//	const hipResourceDesc * pResDesc ({
@@ -9590,6 +10413,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipCreateSurfaceObject.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetMipmappedArrayLevel
 		case HIP_API_ID_hipGetMipmappedArrayLevel :
 			//	hipArray_t * levelArray (struct hipArray **);
 			//	hipMipmappedArray_const_t mipmappedArray ({
@@ -9643,6 +10468,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGetMipmappedArrayLevel.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphExecDestroy
 		case HIP_API_ID_hipGraphExecDestroy :
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipError_t retval (enum hipError_t);
@@ -9651,6 +10478,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphExecDestroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemsetD32Async
 		case HIP_API_ID_hipMemsetD32Async :
 			//	hipDeviceptr_t dst (void *);
 			//	int value (int);
@@ -9666,6 +10495,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemsetD32Async.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDeviceEnablePeerAccess
 		case HIP_API_ID_hipDeviceEnablePeerAccess :
 			//	int peerDeviceId (int);
 			//	unsigned int flags (unsigned int);
@@ -9675,6 +10506,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDeviceEnablePeerAccess.retval);
 			break;
 
+		#endif
+		#if HAVE_hipArray3DCreate
 		case HIP_API_ID_hipArray3DCreate :
 			//	hipArray_t * array (struct hipArray **);
 			//	const HIP_ARRAY3D_DESCRIPTOR * pAllocateArray ({
@@ -9705,6 +10538,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipArray3DCreate.retval);
 			break;
 
+		#endif
+		#if HAVE_hipIpcOpenMemHandle
 		case HIP_API_ID_hipIpcOpenMemHandle :
 			//	void ** devPtr (void **);
 			//	hipIpcMemHandle_t handle ({
@@ -9724,6 +10559,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipIpcOpenMemHandle.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemPoolTrimTo
 		case HIP_API_ID_hipMemPoolTrimTo :
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	size_t min_bytes_to_hold (unsigned long);
@@ -9734,6 +10571,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemPoolTrimTo.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy2D
 		case HIP_API_ID_hipMemcpy2D :
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
@@ -9755,6 +10594,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy2D.retval);
 			break;
 
+		#endif
+		#if HAVE_hipFuncGetAttribute
 		case HIP_API_ID_hipFuncGetAttribute :
 			//	int * value (int *);
 			//	hipFunction_attribute attrib (enum hipFunction_attribute);
@@ -9770,6 +10611,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipFuncGetAttribute.retval);
 			break;
 
+		#endif
+		#if HAVE_hipBindTextureToMipmappedArray
 		case HIP_API_ID_hipBindTextureToMipmappedArray :
 			//	const textureReference * tex ({
 			//		int normalized (int);
@@ -9878,6 +10721,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipBindTextureToMipmappedArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphicsMapResources
 		case HIP_API_ID_hipGraphicsMapResources :
 			//	int count (int);
 			//	hipGraphicsResource_t * resources (struct _hipGraphicsResource**);
@@ -9894,6 +10739,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphicsMapResources.retval);
 			break;
 
+		#endif
+		#if HAVE_hipArrayCreate
 		case HIP_API_ID_hipArrayCreate :
 			//	hipArray_t * pHandle (struct hipArray **);
 			//	const HIP_ARRAY_DESCRIPTOR * pAllocateArray ({
@@ -9920,6 +10767,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipArrayCreate.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetMaxAnisotropy
 		case HIP_API_ID_hipTexRefSetMaxAnisotropy :
 			//	textureReference * texRef ({
 			//		int normalized (int);
@@ -9973,6 +10822,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefSetMaxAnisotropy.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphKernelNodeGetAttribute
 		case HIP_API_ID_hipGraphKernelNodeGetAttribute :
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipLaunchAttributeID attr (enum hipLaunchAttributeID);
@@ -10007,6 +10858,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphKernelNodeGetAttribute.retval);
 			break;
 
+		#endif
+		#if HAVE_hipExtLaunchKernel
 		case HIP_API_ID_hipExtLaunchKernel :
 			//	const void * function_address (const void *);
 			//	dim3 numBlocks ({
@@ -10054,6 +10907,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipExtLaunchKernel.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetMipmapFilterMode
 		case HIP_API_ID_hipTexRefSetMipmapFilterMode :
 			//	textureReference * texRef ({
 			//		int normalized (int);
@@ -10107,6 +10962,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefSetMipmapFilterMode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemImportFromShareableHandle
 		case HIP_API_ID_hipMemImportFromShareableHandle :
 			//	hipMemGenericAllocationHandle_t * handle (struct ihipMemGenericAllocationHandle **);
 			//	void * osHandle (void *);
@@ -10123,6 +10980,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemImportFromShareableHandle.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetFormat
 		case HIP_API_ID_hipTexRefSetFormat :
 			//	textureReference * texRef ({
 			//		int normalized (int);
@@ -10178,6 +11037,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefSetFormat.retval);
 			break;
 
+		#endif
+		#if HAVE_amd_dbgapi_get_git_hash
 		case HIP_API_ID_amd_dbgapi_get_git_hash :
 			//	const char * retval (const char *);
 			printf("\tconst char * retval = %p", args->amd_dbgapi_get_git_hash.retval);
@@ -10186,6 +11047,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			} else { printf("\n"); };
 			break;
 
+		#endif
+		#if HAVE_hipLaunchByPtr
 		case HIP_API_ID_hipLaunchByPtr :
 			//	const void * func (const void *);
 			//	hipError_t retval (enum hipError_t);
@@ -10194,11 +11057,15 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipLaunchByPtr.retval);
 			break;
 
+		#endif
+		#if HAVE_amd_dbgapi_get_build_id
 		case HIP_API_ID_amd_dbgapi_get_build_id :
 			//	size_t retval (unsigned long);
 			printf("\tsize_t retval = %lu\n", args->amd_dbgapi_get_build_id.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpy3DAsync
 		case HIP_API_ID_hipMemcpy3DAsync :
 			//	const struct hipMemcpy3DParms * p ({
 			//		hipArray_t srcArray (struct hipArray *);
@@ -10270,6 +11137,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpy3DAsync.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGetTextureObjectResourceViewDesc
 		case HIP_API_ID_hipGetTextureObjectResourceViewDesc :
 			//	struct hipResourceViewDesc * pResViewDesc ({
 			//		enum hipResourceViewFormat format (enum hipResourceViewFormat);
@@ -10301,6 +11170,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGetTextureObjectResourceViewDesc.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetFilterMode
 		case HIP_API_ID_hipTexRefSetFilterMode :
 			//	textureReference * texRef ({
 			//		int normalized (int);
@@ -10354,6 +11225,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefSetFilterMode.retval);
 			break;
 
+		#endif
+		#if HAVE_hipDriverGetVersion
 		case HIP_API_ID_hipDriverGetVersion :
 			//	int * driverVersion (int *);
 			//	hipError_t retval (enum hipError_t);
@@ -10364,6 +11237,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipDriverGetVersion.retval);
 			break;
 
+		#endif
+		#if HAVE_hipStreamWriteValue64
 		case HIP_API_ID_hipStreamWriteValue64 :
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
@@ -10379,6 +11254,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipStreamWriteValue64.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMallocMipmappedArray
 		case HIP_API_ID_hipMallocMipmappedArray :
 			//	hipMipmappedArray_t * mipmappedArray ({
 			//		void * data (void *);
@@ -10458,6 +11335,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMallocMipmappedArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemset_spt
 		case HIP_API_ID_hipMemset_spt :
 			//	void * dst (void *);
 			//	int value (int);
@@ -10470,6 +11349,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemset_spt.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetFlags
 		case HIP_API_ID_hipTexRefSetFlags :
 			//	textureReference * texRef ({
 			//		int normalized (int);
@@ -10523,6 +11404,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefSetFlags.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemGetAddressRange
 		case HIP_API_ID_hipMemGetAddressRange :
 			//	hipDeviceptr_t * pbase (void **);
 			//	size_t * psize (unsigned long*);
@@ -10542,6 +11425,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemGetAddressRange.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetMipmapLevelClamp
 		case HIP_API_ID_hipTexRefSetMipmapLevelClamp :
 			//	textureReference * texRef ({
 			//		int normalized (int);
@@ -10597,6 +11482,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefSetMipmapLevelClamp.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphMemcpyNodeSetParams
 		case HIP_API_ID_hipGraphMemcpyNodeSetParams :
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipMemcpy3DParms * pNodeParams ({
@@ -10668,6 +11555,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphMemcpyNodeSetParams.retval);
 			break;
 
+		#endif
+		#if HAVE_hipGraphGetEdges
 		case HIP_API_ID_hipGraphGetEdges :
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphNode_t * from (struct hipGraphNode **);
@@ -10693,6 +11582,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipGraphGetEdges.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemcpyToArray
 		case HIP_API_ID_hipMemcpyToArray :
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
@@ -10712,6 +11603,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemcpyToArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipExtMallocWithFlags
 		case HIP_API_ID_hipExtMallocWithFlags :
 			//	void ** ptr (void **);
 			//	size_t sizeBytes (unsigned long);
@@ -10727,6 +11620,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipExtMallocWithFlags.retval);
 			break;
 
+		#endif
+		#if HAVE_hipFuncSetAttribute
 		case HIP_API_ID_hipFuncSetAttribute :
 			//	const void * func (const void *);
 			//	hipFuncAttribute attr (enum hipFuncAttribute);
@@ -10739,6 +11634,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipFuncSetAttribute.retval);
 			break;
 
+		#endif
+		#if HAVE_hipChooseDeviceR0600
 		case HIP_API_ID_hipChooseDeviceR0600 :
 			//	int * device (int *);
 			//	const hipDeviceProp_tR0600 * prop ({
@@ -11006,6 +11903,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipChooseDeviceR0600.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefSetMipmappedArray
 		case HIP_API_ID_hipTexRefSetMipmappedArray :
 			//	textureReference * texRef ({
 			//		int normalized (int);
@@ -11099,6 +11998,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefSetMipmappedArray.retval);
 			break;
 
+		#endif
+		#if HAVE_hipMemset
 		case HIP_API_ID_hipMemset :
 			//	void * dst (void *);
 			//	int value (int);
@@ -11111,6 +12012,8 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipMemset.retval);
 			break;
 
+		#endif
+		#if HAVE_hipTexRefGetMipmapLevelClamp
 		case HIP_API_ID_hipTexRefGetMipmapLevelClamp :
 			//	float * pminMipmapLevelClamp (float *);
 			//	float * pmaxMipmapLevelClamp (float *);
@@ -11172,6 +12075,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			printf("\thipError_t retval = %d\n", args->hipTexRefGetMipmapLevelClamp.retval);
 			break;
 
+		#endif
         default : break;
     }
 }

@@ -6,6 +6,8 @@
 #ifndef MACRO_H
 #define MACRO_H
 
+#define IF_ENABLED(name, macro)  IF_ENABLED_##name(macro)
+
 #define EXPAND_API_PREFIX_ID(func) ADD_API_PREFIX(ID_##func)
 
 #define GET_FUNC_API_ID(func)      EXPAND_API_PREFIX_ID(func),

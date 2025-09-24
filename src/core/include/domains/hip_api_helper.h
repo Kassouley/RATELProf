@@ -29,458 +29,458 @@
 
 
 #define FOR_EACH_HIP_FUNC(macro) \
-macro(hipMemPtrGetInfo)                  \
-macro(hipGraphExecMemcpyNodeSetParams1D) \
-macro(hipCtxEnablePeerAccess)            \
-macro(hipHostUnregister)                 \
-macro(hipDevicePrimaryCtxGetState)       \
-macro(hipPointerGetAttribute)            \
-macro(hipMemPoolGetAccess)               \
-macro(hipMemsetD32)                      \
-macro(hipTexRefGetMipMappedArray)        \
-macro(hipMalloc3D)                       \
-macro(hipMemsetD8)                       \
-macro(hipMallocArray)                    \
-macro(hipGraphEventWaitNodeGetEvent)     \
-macro(hipDrvMemcpy3D)                    \
-macro(hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags) \
-macro(hipHostMalloc)                     \
-macro(hipModuleGetTexRef)                \
-macro(hipIpcGetMemHandle)                \
-macro(hipMemcpyDtoHAsync)                \
-macro(hipModuleLoad)                     \
-macro(hipWaitExternalSemaphoresAsync)    \
-macro(hipGraphKernelNodeGetParams)       \
-macro(hipGraphLaunch)                    \
-macro(hipHostAlloc)                      \
-macro(hipSetDevice)                      \
-macro(hipModuleOccupancyMaxPotentialBlockSizeWithFlags) \
-macro(hipGraphNodeGetDependentNodes)     \
-macro(hipExtStreamGetCUMask)             \
-macro(hipMemsetD16)                      \
-macro(hipLaunchKernel)                   \
-macro(hipGetErrorString)                 \
-macro(hipModuleLoadDataEx)               \
-macro(hipTexRefGetFilterMode)            \
-macro(hipGraphInstantiateWithParams)     \
-macro(hipGraphMemcpyNodeSetParams1D)     \
-macro(hipStreamSynchronize)              \
-macro(hipGraphicsUnmapResources)         \
-macro(hipMemcpy2DFromArray_spt)          \
-macro(hipGraphExecMemcpyNodeSetParamsFromSymbol) \
-macro(hipTexRefGetMipmapLevelBias)       \
-macro(hipGraphAddExternalSemaphoresSignalNode) \
-macro(hipExtGetLastError)                \
-macro(hipMemMapArrayAsync)               \
-macro(hipMemcpyAsync)                    \
-macro(hipGraphKernelNodeSetAttribute)    \
-macro(hipDrvMemcpy2DUnaligned)           \
-macro(hipMemPoolDestroy)                 \
-macro(hipGraphRemoveDependencies)        \
-macro(hipGraphCreate)                    \
-macro(hipExtLaunchMultiKernelMultiDevice) \
-macro(hipGetDeviceCount)                 \
-macro(hipMemUnmap)                       \
-macro(hipTexObjectGetResourceDesc)       \
-macro(hipGraphExecEventRecordNodeSetEvent) \
-macro(hipInit)                           \
-macro(hipThreadExchangeStreamCaptureMode) \
-macro(hipDeviceGetP2PAttribute)          \
-macro(hipDeviceGetByPCIBusId)            \
-macro(hipHostFree)                       \
-macro(hipExtGetLinkTypeAndHopCount)      \
-macro(hipMemcpyToSymbolAsync_spt)        \
-macro(hipCtxDisablePeerAccess)           \
-macro(hipSetupArgument)                  \
-macro(hipMemcpyAtoHAsync)                \
-macro(hipCtxSetCacheConfig)              \
-macro(hipMemRelease)                     \
-macro(hipUnbindTexture)                  \
-macro(hipDrvMemcpy3DAsync)               \
-macro(hipIpcGetEventHandle)              \
-macro(hipGraphReleaseUserObject)         \
-macro(hipDeviceGetMemPool)               \
-macro(hipGraphHostNodeSetParams)         \
-macro(hipGraphAddEventWaitNode)          \
-macro(hipMemcpy2DFromArrayAsync_spt)     \
-macro(hipLaunchHostFunc_spt)             \
-macro(hipStreamWaitEvent_spt)            \
-macro(hipArrayGetDescriptor)             \
-macro(hipGraphExecUpdate)                \
-macro(hipMemGetAllocationPropertiesFromHandle) \
-macro(hipMemcpyWithStream)               \
-macro(hipGraphAddExternalSemaphoresWaitNode) \
-macro(hipMemcpyAtoH)                     \
-macro(hipStreamQuery)                    \
-macro(hipIpcCloseMemHandle)              \
-macro(hipMemsetAsync)                    \
-macro(hipMemcpyDtoD)                     \
-macro(hipModuleUnload)                   \
-macro(hipGetDevicePropertiesR0600)       \
-macro(hipMemcpyFromArray)                \
-macro(hipDeviceCanAccessPeer)            \
-macro(hipMemSetAccess)                   \
-macro(hipStreamWaitValue32)              \
-macro(hipApiName)                        \
-macro(hipGraphicsSubResourceGetMappedArray) \
-macro(hipMemcpy2DToArrayAsync)           \
-macro(hipGraphDestroy)                   \
-macro(hipTexRefGetBorderColor)           \
-macro(hipGraphAddMemcpyNode1D)           \
-macro(hipGraphGetNodes)                  \
-macro(hipStreamGetFlags_spt)             \
-macro(hipTexRefSetAddress2D)             \
-macro(hipStreamGetPriority)              \
-macro(hipStreamCreate)                   \
-macro(hipMemcpyFromSymbol)               \
-macro(hipGraphNodeGetEnabled)            \
-macro(hipCreateChannelDesc)              \
-macro(hipFreeMipmappedArray)             \
-macro(hipGetTextureAlignmentOffset)      \
-macro(hipGraphAddEventRecordNode)        \
-macro(hipGraphNodeFindInClone)           \
-macro(hipMemcpyFromSymbol_spt)           \
-macro(hipMemset3DAsync_spt)              \
-macro(hipMemsetD16Async)                 \
-macro(hipDeviceGetCacheConfig)           \
-macro(hipMemCreate)                      \
-macro(hipGraphExternalSemaphoresWaitNodeGetParams) \
-macro(hipStreamEndCapture)               \
-macro(hipMemcpyFromSymbolAsync_spt)      \
-macro(hipMemcpyHtoA)                     \
-macro(hipGraphExecHostNodeSetParams)     \
-macro(hipMalloc)                         \
-macro(hipMalloc3DArray)                  \
-macro(hipGraphExecKernelNodeSetParams)   \
-macro(hipGetTextureObjectResourceDesc)   \
-macro(__hipPushCallConfiguration)        \
-macro(hipMemcpy3DAsync_spt)              \
-macro(hipMemsetD8Async)                  \
-macro(hipStreamAddCallback)              \
-macro(hipMemPoolImportPointer)           \
-macro(hipFuncGetAttributes)              \
-macro(hipCtxGetCurrent)                  \
-macro(hipGraphAddChildGraphNode)         \
-macro(hipEventCreate)                    \
-macro(hipHostGetDevicePointer)           \
-macro(hipEventQuery)                     \
-macro(hipMemcpyPeerAsync)                \
-macro(hipMemMap)                         \
-macro(hipBindTextureToArray)             \
-macro(hipMemcpy2DAsync_spt)              \
-macro(hipMemPoolSetAttribute)            \
-macro(hipGetLastError)                   \
-macro(hipStreamEndCapture_spt)           \
-macro(hipModuleOccupancyMaxPotentialBlockSize) \
-macro(hipKernelNameRefByPtr)             \
-macro(hipGetDevice)                      \
-macro(hipMemcpy3D_spt)                   \
-macro(hipTexObjectGetTextureDesc)        \
-macro(hipDeviceGet)                      \
-macro(hipGraphExternalSemaphoresSignalNodeSetParams) \
-macro(hipDestroySurfaceObject)           \
-macro(hipStreamGetDevice)                \
-macro(hipMemAllocPitch)                  \
-macro(hipGraphAddNode)                   \
-macro(hipDeviceSetSharedMemConfig)       \
-macro(hipRuntimeGetVersion)              \
-macro(hipGraphChildGraphNodeGetGraph)    \
-macro(hipGraphExecMemsetNodeSetParams)   \
-macro(hipGraphicsUnregisterResource)     \
-macro(hipEventElapsedTime)               \
-macro(hipFreeAsync)                      \
-macro(hipStreamCreateWithFlags)          \
-macro(hipTexRefSetAddress)               \
-macro(hipStreamAddCallback_spt)          \
-macro(hipGraphAddKernelNode)             \
-macro(hipMemcpyDtoH)                     \
-macro(hipDeviceTotalMem)                 \
-macro(hipMemset2D)                       \
-macro(hipMemcpy2DToArray_spt)            \
-macro(hipMemAllocHost)                   \
-macro(hipPointerSetAttribute)            \
-macro(hipGraphHostNodeGetParams)         \
-macro(hipMemset3D)                       \
-macro(hipDestroyTextureObject)           \
-macro(hipMemAdvise)                      \
-macro(hipCtxGetCacheConfig)              \
-macro(hipDrvPointerGetAttributes)        \
-macro(hipModuleLaunchCooperativeKernelMultiDevice) \
-macro(hipModuleGetGlobal)                \
-macro(hipGraphEventRecordNodeGetEvent)   \
-macro(hipGraphInstantiate)               \
-macro(hipGraphRetainUserObject)          \
-macro(hipGraphMemAllocNodeGetParams)     \
-macro(hipStreamGetCaptureInfo)           \
-macro(hipCtxPopCurrent)                  \
-macro(hipPointerGetAttributes)           \
-macro(hipDeviceDisablePeerAccess)        \
-macro(hipMallocPitch)                    \
-macro(hipMemcpy2DFromArrayAsync)         \
-macro(hipDeviceComputeCapability)        \
-macro(hipMemcpyHtoD)                     \
-macro(hipOccupancyMaxActiveBlocksPerMultiprocessor) \
-macro(hipSignalExternalSemaphoresAsync)  \
-macro(hipArray3DGetDescriptor)           \
-macro(__hipPopCallConfiguration)         \
-macro(hipDevicePrimaryCtxRelease)        \
-macro(hipLaunchCooperativeKernelMultiDevice) \
-macro(hipFreeArray)                      \
-macro(hipGraphMemsetNodeSetParams)       \
-macro(hipMemPoolSetAccess)               \
-macro(hipGetStreamDeviceId)              \
-macro(hipExtStreamCreateWithCUMask)      \
-macro(hipGetTextureObjectTextureDesc)    \
-macro(hipEventRecord_spt)                \
-macro(hipConfigureCall)                  \
-macro(hipMemcpyFromArray_spt)            \
-macro(hipModuleGetFunction)              \
-macro(hipFuncSetCacheConfig)             \
-macro(hipDeviceGetLimit)                 \
-macro(hipTexRefGetMaxAnisotropy)         \
-macro(hipLaunchKernel_spt)               \
-macro(hipStreamBeginCaptureToGraph)      \
-macro(hipTexRefGetFormat)                \
-macro(hipStreamWaitValue64)              \
-macro(hipDevicePrimaryCtxRetain)         \
-macro(hipMallocManaged)                  \
-macro(hipStreamCreateWithPriority)       \
-macro(hipStreamGetCaptureInfo_spt)       \
-macro(hipGraphAddHostNode)               \
-macro(hipLaunchCooperativeKernel)        \
-macro(hipHostRegister)                   \
-macro(hipGetErrorName)                   \
-macro(hipMemcpyToSymbol_spt)             \
-macro(hipGraphMemsetNodeGetParams)       \
-macro(hipStreamWriteValue32)             \
-macro(hipStreamSynchronize_spt)          \
-macro(hipDeviceGraphMemTrim)             \
-macro(hipStreamDestroy)                  \
-macro(hipTexRefSetArray)                 \
-macro(hipMemcpyParam2DAsync)             \
-macro(hipMemPoolExportPointer)           \
-macro(hipGraphEventRecordNodeSetEvent)   \
-macro(hipCtxDestroy)                     \
-macro(hipArrayDestroy)                   \
-macro(hipMemGetAllocationGranularity)    \
-macro(hipGraphClone)                     \
-macro(hipMemset2DAsync_spt)              \
-macro(hipBindTexture2D)                  \
-macro(hipArrayGetInfo)                   \
-macro(hipGraphExternalSemaphoresSignalNodeGetParams) \
-macro(hipDeviceGetStreamPriorityRange)   \
-macro(hipGraphExecChildGraphNodeSetParams) \
-macro(hipMemset2D_spt)                   \
-macro(hipDeviceGetDefaultMemPool)        \
-macro(hipCtxCreate)                      \
-macro(hipStreamIsCapturing)              \
-macro(hipStreamUpdateCaptureDependencies) \
-macro(hipDeviceSynchronize)              \
-macro(hipMemcpyFromSymbolAsync)          \
-macro(hipGraphDestroyNode)               \
-macro(hipUserObjectRetain)               \
-macro(hipGraphExecEventWaitNodeSetEvent) \
-macro(hipMemAddressReserve)              \
-macro(hipGraphAddMemsetNode)             \
-macro(hipGraphicsResourceGetMappedPointer) \
-macro(hipStreamBeginCapture_spt)         \
-macro(hipDeviceGetUuid)                  \
-macro(hipModuleLaunchKernel)             \
-macro(hipGraphAddEmptyNode)              \
-macro(hipMemRangeGetAttribute)           \
-macro(hipGraphInstantiateWithFlags)      \
-macro(hipCtxPushCurrent)                 \
-macro(hipCtxGetApiVersion)               \
-macro(hipBindTexture)                    \
-macro(hipStreamBeginCapture)             \
-macro(hipProfilerStart)                  \
-macro(hipMemcpyHtoDAsync)                \
-macro(hipGetDeviceFlags)                 \
-macro(hipMemRangeGetAttributes)          \
-macro(hipDestroyExternalSemaphore)       \
-macro(hipIpcOpenEventHandle)             \
-macro(hipGraphUpload)                    \
-macro(hipMallocAsync)                    \
-macro(hipOccupancyMaxPotentialBlockSize) \
-macro(hipDestroyExternalMemory)          \
-macro(amd_dbgapi_get_build_name)         \
-macro(hipGraphAddMemcpyNodeToSymbol)     \
-macro(hipDeviceGetPCIBusId)              \
-macro(hipGetChannelDesc)                 \
-macro(hipDevicePrimaryCtxReset)          \
-macro(hipImportExternalMemory)           \
-macro(hipFuncSetSharedMemConfig)         \
-macro(hipStreamWaitEvent)                \
-macro(hipTexRefSetMipmapLevelBias)       \
-macro(hipMemPoolImportFromShareableHandle) \
-macro(hipMemPoolExportToShareableHandle) \
-macro(hipGraphExecMemcpyNodeSetParamsToSymbol) \
-macro(hipTexRefGetMipmapFilterMode)      \
-macro(hipGetProcAddress)                 \
-macro(hipCreateTextureObject)            \
-macro(hipGraphKernelNodeCopyAttributes)  \
-macro(hipTexRefGetFlags)                 \
-macro(hipDrvGraphAddMemcpyNode)          \
-macro(hipMemExportToShareableHandle)     \
-macro(hipGraphLaunch_spt)                \
-macro(hipGraphMemcpyNodeSetParamsFromSymbol) \
-macro(hipGraphNodeGetDependencies)       \
-macro(hipMemcpy3D)                       \
-macro(hipGraphAddMemcpyNodeFromSymbol)   \
-macro(hipStreamGetPriority_spt)          \
-macro(hipModuleLoadData)                 \
-macro(hipSetDeviceFlags)                 \
-macro(hipExternalMemoryGetMappedBuffer)  \
-macro(hipLaunchCooperativeKernel_spt)    \
-macro(hipLaunchHostFunc)                 \
-macro(hipMemcpyAsync_spt)                \
-macro(hipMemcpyPeer)                     \
-macro(hipDeviceReset)                    \
-macro(hipMemAddressFree)                 \
-macro(hipProfilerStop)                   \
-macro(hipGraphEventWaitNodeSetEvent)     \
-macro(hipModuleLaunchCooperativeKernel)  \
-macro(hipDeviceGetName)                  \
-macro(hipGraphNodeSetEnabled)            \
-macro(hipTexRefSetAddressMode)           \
-macro(hipEventSynchronize)               \
-macro(hipGraphGetRootNodes)              \
-macro(hipMemcpy2DFromArray)              \
-macro(hipGraphExternalSemaphoresWaitNodeSetParams) \
-macro(hipMemcpyDtoA)                     \
-macro(hipGraphMemcpyNodeGetParams)       \
-macro(hipMemcpy)                         \
-macro(hipSetValidDevices)                \
-macro(hipMemcpy2DAsync)                  \
-macro(hipGraphExecExternalSemaphoresWaitNodeSetParams) \
-macro(hipStreamAttachMemAsync)           \
-macro(hipMemset2DAsync)                  \
-macro(hipTexObjectGetResourceViewDesc)   \
-macro(hipEventCreateWithFlags)           \
-macro(hipMipmappedArrayCreate)           \
-macro(hipMemcpy2D_spt)                   \
-macro(hipGraphAddMemcpyNode)             \
-macro(hipMemcpyToSymbolAsync)            \
-macro(hipMallocFromPoolAsync)            \
-macro(hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags) \
-macro(hipGraphAddMemFreeNode)            \
-macro(hipModuleOccupancyMaxActiveBlocksPerMultiprocessor) \
-macro(hipEventDestroy)                   \
-macro(hipDeviceSetCacheConfig)           \
-macro(hipFree)                           \
-macro(hipMemcpy2DToArrayAsync_spt)       \
-macro(hipCtxGetFlags)                    \
-macro(hipGetSymbolAddress)               \
-macro(hipTexRefGetAddress)               \
-macro(hipTexObjectCreate)                \
-macro(hipDeviceGetSharedMemConfig)       \
-macro(hipMemcpyHtoAAsync)                \
-macro(hipMemPoolGetAttribute)            \
-macro(hipGraphAddMemAllocNode)           \
-macro(hipMemRetainAllocationHandle)      \
-macro(hipGetFuncBySymbol)                \
-macro(hipDeviceSetMemPool)               \
-macro(hipDeviceSetLimit)                 \
-macro(hipMemGetInfo)                     \
-macro(hipMemcpyParam2D)                  \
-macro(hipGraphDebugDotPrint)             \
-macro(hipDeviceSetGraphMemAttribute)     \
-macro(hipDrvGetErrorString)              \
-macro(hipMemcpyDtoDAsync)                \
-macro(hipCtxSynchronize)                 \
-macro(hipTexObjectDestroy)               \
-macro(hipTexRefGetAddressMode)           \
-macro(__hipGetPCH)                       \
-macro(hipStreamGetFlags)                 \
-macro(hipMemGetAccess)                   \
-macro(hipMemcpyAtoA)                     \
-macro(hipMemcpyToSymbol)                 \
-macro(hipCtxSetCurrent)                  \
-macro(hipStreamQuery_spt)                \
-macro(hipGetSymbolSize)                  \
-macro(hipMipmappedArrayGetLevel)         \
-macro(hipExternalMemoryGetMappedMipmappedArray) \
-macro(hipGraphExecMemcpyNodeSetParams)   \
-macro(hipUserObjectCreate)               \
-macro(hipStreamGetCaptureInfo_v2)        \
-macro(hipTexRefGetArray)                 \
-macro(hipImportExternalSemaphore)        \
-macro(hipDeviceGetAttribute)             \
-macro(hipGraphMemFreeNodeGetParams)      \
-macro(hipCtxGetSharedMemConfig)          \
-macro(hipGraphMemcpyNodeSetParamsToSymbol) \
-macro(hipMemcpy2DToArray)                \
-macro(hipStreamIsCapturing_spt)          \
-macro(hipFreeHost)                       \
-macro(hipGraphKernelNodeSetParams)       \
-macro(hipMallocHost)                     \
-macro(hipMemset3D_spt)                   \
-macro(hipStreamGetCaptureInfo_v2_spt)    \
-macro(hipGetTextureReference)            \
-macro(hipGraphExecExternalSemaphoresSignalNodeSetParams) \
-macro(hipGraphAddDependencies)           \
-macro(hipGraphNodeGetType)               \
-macro(hipTexRefSetBorderColor)           \
-macro(hipMemPrefetchAsync)               \
-macro(hipCtxGetDevice)                   \
-macro(hipMemcpy2DArrayToArray)           \
-macro(hipUserObjectRelease)              \
-macro(hipHostGetFlags)                   \
-macro(hipDrvGraphAddMemsetNode)          \
-macro(hipMemcpyAtoD)                     \
-macro(hipMemPoolCreate)                  \
-macro(hipKernelNameRef)                  \
-macro(hipMemset3DAsync)                  \
-macro(hipEventRecord)                    \
-macro(hipMipmappedArrayDestroy)          \
-macro(hipMemsetAsync_spt)                \
-macro(hipDevicePrimaryCtxSetFlags)       \
-macro(hipPeekAtLastError)                \
-macro(hipDeviceGetGraphMemAttribute)     \
-macro(hipDrvGetErrorName)                \
-macro(hipMemcpy_spt)                     \
-macro(hipCtxSetSharedMemConfig)          \
-macro(hipCreateSurfaceObject)            \
-macro(hipGetMipmappedArrayLevel)         \
-macro(hipGraphExecDestroy)               \
-macro(hipMemsetD32Async)                 \
-macro(hipDeviceEnablePeerAccess)         \
-macro(hipArray3DCreate)                  \
-macro(hipIpcOpenMemHandle)               \
-macro(hipMemPoolTrimTo)                  \
-macro(hipMemcpy2D)                       \
-macro(hipFuncGetAttribute)               \
-macro(hipBindTextureToMipmappedArray)    \
-macro(hipGraphicsMapResources)           \
-macro(hipArrayCreate)                    \
-macro(hipTexRefSetMaxAnisotropy)         \
-macro(hipGraphKernelNodeGetAttribute)    \
-macro(hipExtLaunchKernel)                \
-macro(hipTexRefSetMipmapFilterMode)      \
-macro(hipMemImportFromShareableHandle)   \
-macro(hipTexRefSetFormat)                \
-macro(amd_dbgapi_get_git_hash)           \
-macro(hipLaunchByPtr)                    \
-macro(amd_dbgapi_get_build_id)           \
-macro(hipMemcpy3DAsync)                  \
-macro(hipGetTextureObjectResourceViewDesc) \
-macro(hipTexRefSetFilterMode)            \
-macro(hipDriverGetVersion)               \
-macro(hipStreamWriteValue64)             \
-macro(hipMallocMipmappedArray)           \
-macro(hipMemset_spt)                     \
-macro(hipTexRefSetFlags)                 \
-macro(hipMemGetAddressRange)             \
-macro(hipTexRefSetMipmapLevelClamp)      \
-macro(hipGraphMemcpyNodeSetParams)       \
-macro(hipGraphGetEdges)                  \
-macro(hipMemcpyToArray)                  \
-macro(hipExtMallocWithFlags)             \
-macro(hipFuncSetAttribute)               \
-macro(hipChooseDeviceR0600)              \
-macro(hipTexRefSetMipmappedArray)        \
-macro(hipMemset)                         \
-macro(hipTexRefGetMipmapLevelClamp)      \
+IF_ENABLED(hipMemPtrGetInfo, macro)                \
+IF_ENABLED(hipGraphExecMemcpyNodeSetParams1D, macro) \
+IF_ENABLED(hipCtxEnablePeerAccess, macro)          \
+IF_ENABLED(hipHostUnregister, macro)               \
+IF_ENABLED(hipDevicePrimaryCtxGetState, macro)     \
+IF_ENABLED(hipPointerGetAttribute, macro)          \
+IF_ENABLED(hipMemPoolGetAccess, macro)             \
+IF_ENABLED(hipMemsetD32, macro)                    \
+IF_ENABLED(hipTexRefGetMipMappedArray, macro)      \
+IF_ENABLED(hipMalloc3D, macro)                     \
+IF_ENABLED(hipMemsetD8, macro)                     \
+IF_ENABLED(hipMallocArray, macro)                  \
+IF_ENABLED(hipGraphEventWaitNodeGetEvent, macro)   \
+IF_ENABLED(hipDrvMemcpy3D, macro)                  \
+IF_ENABLED(hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, macro) \
+IF_ENABLED(hipHostMalloc, macro)                   \
+IF_ENABLED(hipModuleGetTexRef, macro)              \
+IF_ENABLED(hipIpcGetMemHandle, macro)              \
+IF_ENABLED(hipMemcpyDtoHAsync, macro)              \
+IF_ENABLED(hipModuleLoad, macro)                   \
+IF_ENABLED(hipWaitExternalSemaphoresAsync, macro)  \
+IF_ENABLED(hipGraphKernelNodeGetParams, macro)     \
+IF_ENABLED(hipGraphLaunch, macro)                  \
+IF_ENABLED(hipHostAlloc, macro)                    \
+IF_ENABLED(hipSetDevice, macro)                    \
+IF_ENABLED(hipModuleOccupancyMaxPotentialBlockSizeWithFlags, macro) \
+IF_ENABLED(hipGraphNodeGetDependentNodes, macro)   \
+IF_ENABLED(hipExtStreamGetCUMask, macro)           \
+IF_ENABLED(hipMemsetD16, macro)                    \
+IF_ENABLED(hipLaunchKernel, macro)                 \
+IF_ENABLED(hipGetErrorString, macro)               \
+IF_ENABLED(hipModuleLoadDataEx, macro)             \
+IF_ENABLED(hipTexRefGetFilterMode, macro)          \
+IF_ENABLED(hipGraphInstantiateWithParams, macro)   \
+IF_ENABLED(hipGraphMemcpyNodeSetParams1D, macro)   \
+IF_ENABLED(hipStreamSynchronize, macro)            \
+IF_ENABLED(hipGraphicsUnmapResources, macro)       \
+IF_ENABLED(hipMemcpy2DFromArray_spt, macro)        \
+IF_ENABLED(hipGraphExecMemcpyNodeSetParamsFromSymbol, macro) \
+IF_ENABLED(hipTexRefGetMipmapLevelBias, macro)     \
+IF_ENABLED(hipGraphAddExternalSemaphoresSignalNode, macro) \
+IF_ENABLED(hipExtGetLastError, macro)              \
+IF_ENABLED(hipMemMapArrayAsync, macro)             \
+IF_ENABLED(hipMemcpyAsync, macro)                  \
+IF_ENABLED(hipGraphKernelNodeSetAttribute, macro)  \
+IF_ENABLED(hipDrvMemcpy2DUnaligned, macro)         \
+IF_ENABLED(hipMemPoolDestroy, macro)               \
+IF_ENABLED(hipGraphRemoveDependencies, macro)      \
+IF_ENABLED(hipGraphCreate, macro)                  \
+IF_ENABLED(hipExtLaunchMultiKernelMultiDevice, macro) \
+IF_ENABLED(hipGetDeviceCount, macro)               \
+IF_ENABLED(hipMemUnmap, macro)                     \
+IF_ENABLED(hipTexObjectGetResourceDesc, macro)     \
+IF_ENABLED(hipGraphExecEventRecordNodeSetEvent, macro) \
+IF_ENABLED(hipInit, macro)                         \
+IF_ENABLED(hipThreadExchangeStreamCaptureMode, macro) \
+IF_ENABLED(hipDeviceGetP2PAttribute, macro)        \
+IF_ENABLED(hipDeviceGetByPCIBusId, macro)          \
+IF_ENABLED(hipHostFree, macro)                     \
+IF_ENABLED(hipExtGetLinkTypeAndHopCount, macro)    \
+IF_ENABLED(hipMemcpyToSymbolAsync_spt, macro)      \
+IF_ENABLED(hipCtxDisablePeerAccess, macro)         \
+IF_ENABLED(hipSetupArgument, macro)                \
+IF_ENABLED(hipMemcpyAtoHAsync, macro)              \
+IF_ENABLED(hipCtxSetCacheConfig, macro)            \
+IF_ENABLED(hipMemRelease, macro)                   \
+IF_ENABLED(hipUnbindTexture, macro)                \
+IF_ENABLED(hipDrvMemcpy3DAsync, macro)             \
+IF_ENABLED(hipIpcGetEventHandle, macro)            \
+IF_ENABLED(hipGraphReleaseUserObject, macro)       \
+IF_ENABLED(hipDeviceGetMemPool, macro)             \
+IF_ENABLED(hipGraphHostNodeSetParams, macro)       \
+IF_ENABLED(hipGraphAddEventWaitNode, macro)        \
+IF_ENABLED(hipMemcpy2DFromArrayAsync_spt, macro)   \
+IF_ENABLED(hipLaunchHostFunc_spt, macro)           \
+IF_ENABLED(hipStreamWaitEvent_spt, macro)          \
+IF_ENABLED(hipArrayGetDescriptor, macro)           \
+IF_ENABLED(hipGraphExecUpdate, macro)              \
+IF_ENABLED(hipMemGetAllocationPropertiesFromHandle, macro) \
+IF_ENABLED(hipMemcpyWithStream, macro)             \
+IF_ENABLED(hipGraphAddExternalSemaphoresWaitNode, macro) \
+IF_ENABLED(hipMemcpyAtoH, macro)                   \
+IF_ENABLED(hipStreamQuery, macro)                  \
+IF_ENABLED(hipIpcCloseMemHandle, macro)            \
+IF_ENABLED(hipMemsetAsync, macro)                  \
+IF_ENABLED(hipMemcpyDtoD, macro)                   \
+IF_ENABLED(hipModuleUnload, macro)                 \
+IF_ENABLED(hipGetDevicePropertiesR0600, macro)     \
+IF_ENABLED(hipMemcpyFromArray, macro)              \
+IF_ENABLED(hipDeviceCanAccessPeer, macro)          \
+IF_ENABLED(hipMemSetAccess, macro)                 \
+IF_ENABLED(hipStreamWaitValue32, macro)            \
+IF_ENABLED(hipApiName, macro)                      \
+IF_ENABLED(hipGraphicsSubResourceGetMappedArray, macro) \
+IF_ENABLED(hipMemcpy2DToArrayAsync, macro)         \
+IF_ENABLED(hipGraphDestroy, macro)                 \
+IF_ENABLED(hipTexRefGetBorderColor, macro)         \
+IF_ENABLED(hipGraphAddMemcpyNode1D, macro)         \
+IF_ENABLED(hipGraphGetNodes, macro)                \
+IF_ENABLED(hipStreamGetFlags_spt, macro)           \
+IF_ENABLED(hipTexRefSetAddress2D, macro)           \
+IF_ENABLED(hipStreamGetPriority, macro)            \
+IF_ENABLED(hipStreamCreate, macro)                 \
+IF_ENABLED(hipMemcpyFromSymbol, macro)             \
+IF_ENABLED(hipGraphNodeGetEnabled, macro)          \
+IF_ENABLED(hipCreateChannelDesc, macro)            \
+IF_ENABLED(hipFreeMipmappedArray, macro)           \
+IF_ENABLED(hipGetTextureAlignmentOffset, macro)    \
+IF_ENABLED(hipGraphAddEventRecordNode, macro)      \
+IF_ENABLED(hipGraphNodeFindInClone, macro)         \
+IF_ENABLED(hipMemcpyFromSymbol_spt, macro)         \
+IF_ENABLED(hipMemset3DAsync_spt, macro)            \
+IF_ENABLED(hipMemsetD16Async, macro)               \
+IF_ENABLED(hipDeviceGetCacheConfig, macro)         \
+IF_ENABLED(hipMemCreate, macro)                    \
+IF_ENABLED(hipGraphExternalSemaphoresWaitNodeGetParams, macro) \
+IF_ENABLED(hipStreamEndCapture, macro)             \
+IF_ENABLED(hipMemcpyFromSymbolAsync_spt, macro)    \
+IF_ENABLED(hipMemcpyHtoA, macro)                   \
+IF_ENABLED(hipGraphExecHostNodeSetParams, macro)   \
+IF_ENABLED(hipMalloc, macro)                       \
+IF_ENABLED(hipMalloc3DArray, macro)                \
+IF_ENABLED(hipGraphExecKernelNodeSetParams, macro) \
+IF_ENABLED(hipGetTextureObjectResourceDesc, macro) \
+IF_ENABLED(__hipPushCallConfiguration, macro)      \
+IF_ENABLED(hipMemcpy3DAsync_spt, macro)            \
+IF_ENABLED(hipMemsetD8Async, macro)                \
+IF_ENABLED(hipStreamAddCallback, macro)            \
+IF_ENABLED(hipMemPoolImportPointer, macro)         \
+IF_ENABLED(hipFuncGetAttributes, macro)            \
+IF_ENABLED(hipCtxGetCurrent, macro)                \
+IF_ENABLED(hipGraphAddChildGraphNode, macro)       \
+IF_ENABLED(hipEventCreate, macro)                  \
+IF_ENABLED(hipHostGetDevicePointer, macro)         \
+IF_ENABLED(hipEventQuery, macro)                   \
+IF_ENABLED(hipMemcpyPeerAsync, macro)              \
+IF_ENABLED(hipMemMap, macro)                       \
+IF_ENABLED(hipBindTextureToArray, macro)           \
+IF_ENABLED(hipMemcpy2DAsync_spt, macro)            \
+IF_ENABLED(hipMemPoolSetAttribute, macro)          \
+IF_ENABLED(hipGetLastError, macro)                 \
+IF_ENABLED(hipStreamEndCapture_spt, macro)         \
+IF_ENABLED(hipModuleOccupancyMaxPotentialBlockSize, macro) \
+IF_ENABLED(hipKernelNameRefByPtr, macro)           \
+IF_ENABLED(hipGetDevice, macro)                    \
+IF_ENABLED(hipMemcpy3D_spt, macro)                 \
+IF_ENABLED(hipTexObjectGetTextureDesc, macro)      \
+IF_ENABLED(hipDeviceGet, macro)                    \
+IF_ENABLED(hipGraphExternalSemaphoresSignalNodeSetParams, macro) \
+IF_ENABLED(hipDestroySurfaceObject, macro)         \
+IF_ENABLED(hipStreamGetDevice, macro)              \
+IF_ENABLED(hipMemAllocPitch, macro)                \
+IF_ENABLED(hipGraphAddNode, macro)                 \
+IF_ENABLED(hipDeviceSetSharedMemConfig, macro)     \
+IF_ENABLED(hipRuntimeGetVersion, macro)            \
+IF_ENABLED(hipGraphChildGraphNodeGetGraph, macro)  \
+IF_ENABLED(hipGraphExecMemsetNodeSetParams, macro) \
+IF_ENABLED(hipGraphicsUnregisterResource, macro)   \
+IF_ENABLED(hipEventElapsedTime, macro)             \
+IF_ENABLED(hipFreeAsync, macro)                    \
+IF_ENABLED(hipStreamCreateWithFlags, macro)        \
+IF_ENABLED(hipTexRefSetAddress, macro)             \
+IF_ENABLED(hipStreamAddCallback_spt, macro)        \
+IF_ENABLED(hipGraphAddKernelNode, macro)           \
+IF_ENABLED(hipMemcpyDtoH, macro)                   \
+IF_ENABLED(hipDeviceTotalMem, macro)               \
+IF_ENABLED(hipMemset2D, macro)                     \
+IF_ENABLED(hipMemcpy2DToArray_spt, macro)          \
+IF_ENABLED(hipMemAllocHost, macro)                 \
+IF_ENABLED(hipPointerSetAttribute, macro)          \
+IF_ENABLED(hipGraphHostNodeGetParams, macro)       \
+IF_ENABLED(hipMemset3D, macro)                     \
+IF_ENABLED(hipDestroyTextureObject, macro)         \
+IF_ENABLED(hipMemAdvise, macro)                    \
+IF_ENABLED(hipCtxGetCacheConfig, macro)            \
+IF_ENABLED(hipDrvPointerGetAttributes, macro)      \
+IF_ENABLED(hipModuleLaunchCooperativeKernelMultiDevice, macro) \
+IF_ENABLED(hipModuleGetGlobal, macro)              \
+IF_ENABLED(hipGraphEventRecordNodeGetEvent, macro) \
+IF_ENABLED(hipGraphInstantiate, macro)             \
+IF_ENABLED(hipGraphRetainUserObject, macro)        \
+IF_ENABLED(hipGraphMemAllocNodeGetParams, macro)   \
+IF_ENABLED(hipStreamGetCaptureInfo, macro)         \
+IF_ENABLED(hipCtxPopCurrent, macro)                \
+IF_ENABLED(hipPointerGetAttributes, macro)         \
+IF_ENABLED(hipDeviceDisablePeerAccess, macro)      \
+IF_ENABLED(hipMallocPitch, macro)                  \
+IF_ENABLED(hipMemcpy2DFromArrayAsync, macro)       \
+IF_ENABLED(hipDeviceComputeCapability, macro)      \
+IF_ENABLED(hipMemcpyHtoD, macro)                   \
+IF_ENABLED(hipOccupancyMaxActiveBlocksPerMultiprocessor, macro) \
+IF_ENABLED(hipSignalExternalSemaphoresAsync, macro) \
+IF_ENABLED(hipArray3DGetDescriptor, macro)         \
+IF_ENABLED(__hipPopCallConfiguration, macro)       \
+IF_ENABLED(hipDevicePrimaryCtxRelease, macro)      \
+IF_ENABLED(hipLaunchCooperativeKernelMultiDevice, macro) \
+IF_ENABLED(hipFreeArray, macro)                    \
+IF_ENABLED(hipGraphMemsetNodeSetParams, macro)     \
+IF_ENABLED(hipMemPoolSetAccess, macro)             \
+IF_ENABLED(hipGetStreamDeviceId, macro)            \
+IF_ENABLED(hipExtStreamCreateWithCUMask, macro)    \
+IF_ENABLED(hipGetTextureObjectTextureDesc, macro)  \
+IF_ENABLED(hipEventRecord_spt, macro)              \
+IF_ENABLED(hipConfigureCall, macro)                \
+IF_ENABLED(hipMemcpyFromArray_spt, macro)          \
+IF_ENABLED(hipModuleGetFunction, macro)            \
+IF_ENABLED(hipFuncSetCacheConfig, macro)           \
+IF_ENABLED(hipDeviceGetLimit, macro)               \
+IF_ENABLED(hipTexRefGetMaxAnisotropy, macro)       \
+IF_ENABLED(hipLaunchKernel_spt, macro)             \
+IF_ENABLED(hipStreamBeginCaptureToGraph, macro)    \
+IF_ENABLED(hipTexRefGetFormat, macro)              \
+IF_ENABLED(hipStreamWaitValue64, macro)            \
+IF_ENABLED(hipDevicePrimaryCtxRetain, macro)       \
+IF_ENABLED(hipMallocManaged, macro)                \
+IF_ENABLED(hipStreamCreateWithPriority, macro)     \
+IF_ENABLED(hipStreamGetCaptureInfo_spt, macro)     \
+IF_ENABLED(hipGraphAddHostNode, macro)             \
+IF_ENABLED(hipLaunchCooperativeKernel, macro)      \
+IF_ENABLED(hipHostRegister, macro)                 \
+IF_ENABLED(hipGetErrorName, macro)                 \
+IF_ENABLED(hipMemcpyToSymbol_spt, macro)           \
+IF_ENABLED(hipGraphMemsetNodeGetParams, macro)     \
+IF_ENABLED(hipStreamWriteValue32, macro)           \
+IF_ENABLED(hipStreamSynchronize_spt, macro)        \
+IF_ENABLED(hipDeviceGraphMemTrim, macro)           \
+IF_ENABLED(hipStreamDestroy, macro)                \
+IF_ENABLED(hipTexRefSetArray, macro)               \
+IF_ENABLED(hipMemcpyParam2DAsync, macro)           \
+IF_ENABLED(hipMemPoolExportPointer, macro)         \
+IF_ENABLED(hipGraphEventRecordNodeSetEvent, macro) \
+IF_ENABLED(hipCtxDestroy, macro)                   \
+IF_ENABLED(hipArrayDestroy, macro)                 \
+IF_ENABLED(hipMemGetAllocationGranularity, macro)  \
+IF_ENABLED(hipGraphClone, macro)                   \
+IF_ENABLED(hipMemset2DAsync_spt, macro)            \
+IF_ENABLED(hipBindTexture2D, macro)                \
+IF_ENABLED(hipArrayGetInfo, macro)                 \
+IF_ENABLED(hipGraphExternalSemaphoresSignalNodeGetParams, macro) \
+IF_ENABLED(hipDeviceGetStreamPriorityRange, macro) \
+IF_ENABLED(hipGraphExecChildGraphNodeSetParams, macro) \
+IF_ENABLED(hipMemset2D_spt, macro)                 \
+IF_ENABLED(hipDeviceGetDefaultMemPool, macro)      \
+IF_ENABLED(hipCtxCreate, macro)                    \
+IF_ENABLED(hipStreamIsCapturing, macro)            \
+IF_ENABLED(hipStreamUpdateCaptureDependencies, macro) \
+IF_ENABLED(hipDeviceSynchronize, macro)            \
+IF_ENABLED(hipMemcpyFromSymbolAsync, macro)        \
+IF_ENABLED(hipGraphDestroyNode, macro)             \
+IF_ENABLED(hipUserObjectRetain, macro)             \
+IF_ENABLED(hipGraphExecEventWaitNodeSetEvent, macro) \
+IF_ENABLED(hipMemAddressReserve, macro)            \
+IF_ENABLED(hipGraphAddMemsetNode, macro)           \
+IF_ENABLED(hipGraphicsResourceGetMappedPointer, macro) \
+IF_ENABLED(hipStreamBeginCapture_spt, macro)       \
+IF_ENABLED(hipDeviceGetUuid, macro)                \
+IF_ENABLED(hipModuleLaunchKernel, macro)           \
+IF_ENABLED(hipGraphAddEmptyNode, macro)            \
+IF_ENABLED(hipMemRangeGetAttribute, macro)         \
+IF_ENABLED(hipGraphInstantiateWithFlags, macro)    \
+IF_ENABLED(hipCtxPushCurrent, macro)               \
+IF_ENABLED(hipCtxGetApiVersion, macro)             \
+IF_ENABLED(hipBindTexture, macro)                  \
+IF_ENABLED(hipStreamBeginCapture, macro)           \
+IF_ENABLED(hipProfilerStart, macro)                \
+IF_ENABLED(hipMemcpyHtoDAsync, macro)              \
+IF_ENABLED(hipGetDeviceFlags, macro)               \
+IF_ENABLED(hipMemRangeGetAttributes, macro)        \
+IF_ENABLED(hipDestroyExternalSemaphore, macro)     \
+IF_ENABLED(hipIpcOpenEventHandle, macro)           \
+IF_ENABLED(hipGraphUpload, macro)                  \
+IF_ENABLED(hipMallocAsync, macro)                  \
+IF_ENABLED(hipOccupancyMaxPotentialBlockSize, macro) \
+IF_ENABLED(hipDestroyExternalMemory, macro)        \
+IF_ENABLED(amd_dbgapi_get_build_name, macro)       \
+IF_ENABLED(hipGraphAddMemcpyNodeToSymbol, macro)   \
+IF_ENABLED(hipDeviceGetPCIBusId, macro)            \
+IF_ENABLED(hipGetChannelDesc, macro)               \
+IF_ENABLED(hipDevicePrimaryCtxReset, macro)        \
+IF_ENABLED(hipImportExternalMemory, macro)         \
+IF_ENABLED(hipFuncSetSharedMemConfig, macro)       \
+IF_ENABLED(hipStreamWaitEvent, macro)              \
+IF_ENABLED(hipTexRefSetMipmapLevelBias, macro)     \
+IF_ENABLED(hipMemPoolImportFromShareableHandle, macro) \
+IF_ENABLED(hipMemPoolExportToShareableHandle, macro) \
+IF_ENABLED(hipGraphExecMemcpyNodeSetParamsToSymbol, macro) \
+IF_ENABLED(hipTexRefGetMipmapFilterMode, macro)    \
+IF_ENABLED(hipGetProcAddress, macro)               \
+IF_ENABLED(hipCreateTextureObject, macro)          \
+IF_ENABLED(hipGraphKernelNodeCopyAttributes, macro) \
+IF_ENABLED(hipTexRefGetFlags, macro)               \
+IF_ENABLED(hipDrvGraphAddMemcpyNode, macro)        \
+IF_ENABLED(hipMemExportToShareableHandle, macro)   \
+IF_ENABLED(hipGraphLaunch_spt, macro)              \
+IF_ENABLED(hipGraphMemcpyNodeSetParamsFromSymbol, macro) \
+IF_ENABLED(hipGraphNodeGetDependencies, macro)     \
+IF_ENABLED(hipMemcpy3D, macro)                     \
+IF_ENABLED(hipGraphAddMemcpyNodeFromSymbol, macro) \
+IF_ENABLED(hipStreamGetPriority_spt, macro)        \
+IF_ENABLED(hipModuleLoadData, macro)               \
+IF_ENABLED(hipSetDeviceFlags, macro)               \
+IF_ENABLED(hipExternalMemoryGetMappedBuffer, macro) \
+IF_ENABLED(hipLaunchCooperativeKernel_spt, macro)  \
+IF_ENABLED(hipLaunchHostFunc, macro)               \
+IF_ENABLED(hipMemcpyAsync_spt, macro)              \
+IF_ENABLED(hipMemcpyPeer, macro)                   \
+IF_ENABLED(hipDeviceReset, macro)                  \
+IF_ENABLED(hipMemAddressFree, macro)               \
+IF_ENABLED(hipProfilerStop, macro)                 \
+IF_ENABLED(hipGraphEventWaitNodeSetEvent, macro)   \
+IF_ENABLED(hipModuleLaunchCooperativeKernel, macro) \
+IF_ENABLED(hipDeviceGetName, macro)                \
+IF_ENABLED(hipGraphNodeSetEnabled, macro)          \
+IF_ENABLED(hipTexRefSetAddressMode, macro)         \
+IF_ENABLED(hipEventSynchronize, macro)             \
+IF_ENABLED(hipGraphGetRootNodes, macro)            \
+IF_ENABLED(hipMemcpy2DFromArray, macro)            \
+IF_ENABLED(hipGraphExternalSemaphoresWaitNodeSetParams, macro) \
+IF_ENABLED(hipMemcpyDtoA, macro)                   \
+IF_ENABLED(hipGraphMemcpyNodeGetParams, macro)     \
+IF_ENABLED(hipMemcpy, macro)                       \
+IF_ENABLED(hipSetValidDevices, macro)              \
+IF_ENABLED(hipMemcpy2DAsync, macro)                \
+IF_ENABLED(hipGraphExecExternalSemaphoresWaitNodeSetParams, macro) \
+IF_ENABLED(hipStreamAttachMemAsync, macro)         \
+IF_ENABLED(hipMemset2DAsync, macro)                \
+IF_ENABLED(hipTexObjectGetResourceViewDesc, macro) \
+IF_ENABLED(hipEventCreateWithFlags, macro)         \
+IF_ENABLED(hipMipmappedArrayCreate, macro)         \
+IF_ENABLED(hipMemcpy2D_spt, macro)                 \
+IF_ENABLED(hipGraphAddMemcpyNode, macro)           \
+IF_ENABLED(hipMemcpyToSymbolAsync, macro)          \
+IF_ENABLED(hipMallocFromPoolAsync, macro)          \
+IF_ENABLED(hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags, macro) \
+IF_ENABLED(hipGraphAddMemFreeNode, macro)          \
+IF_ENABLED(hipModuleOccupancyMaxActiveBlocksPerMultiprocessor, macro) \
+IF_ENABLED(hipEventDestroy, macro)                 \
+IF_ENABLED(hipDeviceSetCacheConfig, macro)         \
+IF_ENABLED(hipFree, macro)                         \
+IF_ENABLED(hipMemcpy2DToArrayAsync_spt, macro)     \
+IF_ENABLED(hipCtxGetFlags, macro)                  \
+IF_ENABLED(hipGetSymbolAddress, macro)             \
+IF_ENABLED(hipTexRefGetAddress, macro)             \
+IF_ENABLED(hipTexObjectCreate, macro)              \
+IF_ENABLED(hipDeviceGetSharedMemConfig, macro)     \
+IF_ENABLED(hipMemcpyHtoAAsync, macro)              \
+IF_ENABLED(hipMemPoolGetAttribute, macro)          \
+IF_ENABLED(hipGraphAddMemAllocNode, macro)         \
+IF_ENABLED(hipMemRetainAllocationHandle, macro)    \
+IF_ENABLED(hipGetFuncBySymbol, macro)              \
+IF_ENABLED(hipDeviceSetMemPool, macro)             \
+IF_ENABLED(hipDeviceSetLimit, macro)               \
+IF_ENABLED(hipMemGetInfo, macro)                   \
+IF_ENABLED(hipMemcpyParam2D, macro)                \
+IF_ENABLED(hipGraphDebugDotPrint, macro)           \
+IF_ENABLED(hipDeviceSetGraphMemAttribute, macro)   \
+IF_ENABLED(hipDrvGetErrorString, macro)            \
+IF_ENABLED(hipMemcpyDtoDAsync, macro)              \
+IF_ENABLED(hipCtxSynchronize, macro)               \
+IF_ENABLED(hipTexObjectDestroy, macro)             \
+IF_ENABLED(hipTexRefGetAddressMode, macro)         \
+IF_ENABLED(__hipGetPCH, macro)                     \
+IF_ENABLED(hipStreamGetFlags, macro)               \
+IF_ENABLED(hipMemGetAccess, macro)                 \
+IF_ENABLED(hipMemcpyAtoA, macro)                   \
+IF_ENABLED(hipMemcpyToSymbol, macro)               \
+IF_ENABLED(hipCtxSetCurrent, macro)                \
+IF_ENABLED(hipStreamQuery_spt, macro)              \
+IF_ENABLED(hipGetSymbolSize, macro)                \
+IF_ENABLED(hipMipmappedArrayGetLevel, macro)       \
+IF_ENABLED(hipExternalMemoryGetMappedMipmappedArray, macro) \
+IF_ENABLED(hipGraphExecMemcpyNodeSetParams, macro) \
+IF_ENABLED(hipUserObjectCreate, macro)             \
+IF_ENABLED(hipStreamGetCaptureInfo_v2, macro)      \
+IF_ENABLED(hipTexRefGetArray, macro)               \
+IF_ENABLED(hipImportExternalSemaphore, macro)      \
+IF_ENABLED(hipDeviceGetAttribute, macro)           \
+IF_ENABLED(hipGraphMemFreeNodeGetParams, macro)    \
+IF_ENABLED(hipCtxGetSharedMemConfig, macro)        \
+IF_ENABLED(hipGraphMemcpyNodeSetParamsToSymbol, macro) \
+IF_ENABLED(hipMemcpy2DToArray, macro)              \
+IF_ENABLED(hipStreamIsCapturing_spt, macro)        \
+IF_ENABLED(hipFreeHost, macro)                     \
+IF_ENABLED(hipGraphKernelNodeSetParams, macro)     \
+IF_ENABLED(hipMallocHost, macro)                   \
+IF_ENABLED(hipMemset3D_spt, macro)                 \
+IF_ENABLED(hipStreamGetCaptureInfo_v2_spt, macro)  \
+IF_ENABLED(hipGetTextureReference, macro)          \
+IF_ENABLED(hipGraphExecExternalSemaphoresSignalNodeSetParams, macro) \
+IF_ENABLED(hipGraphAddDependencies, macro)         \
+IF_ENABLED(hipGraphNodeGetType, macro)             \
+IF_ENABLED(hipTexRefSetBorderColor, macro)         \
+IF_ENABLED(hipMemPrefetchAsync, macro)             \
+IF_ENABLED(hipCtxGetDevice, macro)                 \
+IF_ENABLED(hipMemcpy2DArrayToArray, macro)         \
+IF_ENABLED(hipUserObjectRelease, macro)            \
+IF_ENABLED(hipHostGetFlags, macro)                 \
+IF_ENABLED(hipDrvGraphAddMemsetNode, macro)        \
+IF_ENABLED(hipMemcpyAtoD, macro)                   \
+IF_ENABLED(hipMemPoolCreate, macro)                \
+IF_ENABLED(hipKernelNameRef, macro)                \
+IF_ENABLED(hipMemset3DAsync, macro)                \
+IF_ENABLED(hipEventRecord, macro)                  \
+IF_ENABLED(hipMipmappedArrayDestroy, macro)        \
+IF_ENABLED(hipMemsetAsync_spt, macro)              \
+IF_ENABLED(hipDevicePrimaryCtxSetFlags, macro)     \
+IF_ENABLED(hipPeekAtLastError, macro)              \
+IF_ENABLED(hipDeviceGetGraphMemAttribute, macro)   \
+IF_ENABLED(hipDrvGetErrorName, macro)              \
+IF_ENABLED(hipMemcpy_spt, macro)                   \
+IF_ENABLED(hipCtxSetSharedMemConfig, macro)        \
+IF_ENABLED(hipCreateSurfaceObject, macro)          \
+IF_ENABLED(hipGetMipmappedArrayLevel, macro)       \
+IF_ENABLED(hipGraphExecDestroy, macro)             \
+IF_ENABLED(hipMemsetD32Async, macro)               \
+IF_ENABLED(hipDeviceEnablePeerAccess, macro)       \
+IF_ENABLED(hipArray3DCreate, macro)                \
+IF_ENABLED(hipIpcOpenMemHandle, macro)             \
+IF_ENABLED(hipMemPoolTrimTo, macro)                \
+IF_ENABLED(hipMemcpy2D, macro)                     \
+IF_ENABLED(hipFuncGetAttribute, macro)             \
+IF_ENABLED(hipBindTextureToMipmappedArray, macro)  \
+IF_ENABLED(hipGraphicsMapResources, macro)         \
+IF_ENABLED(hipArrayCreate, macro)                  \
+IF_ENABLED(hipTexRefSetMaxAnisotropy, macro)       \
+IF_ENABLED(hipGraphKernelNodeGetAttribute, macro)  \
+IF_ENABLED(hipExtLaunchKernel, macro)              \
+IF_ENABLED(hipTexRefSetMipmapFilterMode, macro)    \
+IF_ENABLED(hipMemImportFromShareableHandle, macro) \
+IF_ENABLED(hipTexRefSetFormat, macro)              \
+IF_ENABLED(amd_dbgapi_get_git_hash, macro)         \
+IF_ENABLED(hipLaunchByPtr, macro)                  \
+IF_ENABLED(amd_dbgapi_get_build_id, macro)         \
+IF_ENABLED(hipMemcpy3DAsync, macro)                \
+IF_ENABLED(hipGetTextureObjectResourceViewDesc, macro) \
+IF_ENABLED(hipTexRefSetFilterMode, macro)          \
+IF_ENABLED(hipDriverGetVersion, macro)             \
+IF_ENABLED(hipStreamWriteValue64, macro)           \
+IF_ENABLED(hipMallocMipmappedArray, macro)         \
+IF_ENABLED(hipMemset_spt, macro)                   \
+IF_ENABLED(hipTexRefSetFlags, macro)               \
+IF_ENABLED(hipMemGetAddressRange, macro)           \
+IF_ENABLED(hipTexRefSetMipmapLevelClamp, macro)    \
+IF_ENABLED(hipGraphMemcpyNodeSetParams, macro)     \
+IF_ENABLED(hipGraphGetEdges, macro)                \
+IF_ENABLED(hipMemcpyToArray, macro)                \
+IF_ENABLED(hipExtMallocWithFlags, macro)           \
+IF_ENABLED(hipFuncSetAttribute, macro)             \
+IF_ENABLED(hipChooseDeviceR0600, macro)            \
+IF_ENABLED(hipTexRefSetMipmappedArray, macro)      \
+IF_ENABLED(hipMemset, macro)                       \
+IF_ENABLED(hipTexRefGetMipmapLevelClamp, macro)    \
 
 
 /**
@@ -568,6 +568,7 @@ static inline hip_api_id_t get_hip_funid_by_name(const char* name)
  *			size_t * size (unsigned long*)
  *	)
  */
+#if HAVE_hipMemPtrGetInfo
 struct args_hipMemPtrGetInfo_t {
 	void * ptr;
 	size_t * size;
@@ -588,6 +589,8 @@ struct args_hipMemPtrGetInfo_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphExecMemcpyNodeSetParams1D` function.
  *
@@ -607,9 +610,10 @@ struct args_hipMemPtrGetInfo_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipGraphExecMemcpyNodeSetParams1D
 struct args_hipGraphExecMemcpyNodeSetParams1D_t {
-	struct hipGraphExec * hGraphExec;
-	struct hipGraphNode * node;
+	hipGraphExec_t hGraphExec;
+	hipGraphNode_t node;
 	void * dst;
 	void * src;
 	size_t count;
@@ -618,13 +622,15 @@ struct args_hipGraphExecMemcpyNodeSetParams1D_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphExecMemcpyNodeSetParams1D(activity) { \
-	activity->hip_args.hipGraphExecMemcpyNodeSetParams1D.hGraphExec = (struct hipGraphExec *) hGraphExec; \
-	activity->hip_args.hipGraphExecMemcpyNodeSetParams1D.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphExecMemcpyNodeSetParams1D.hGraphExec = (hipGraphExec_t) hGraphExec; \
+	activity->hip_args.hipGraphExecMemcpyNodeSetParams1D.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphExecMemcpyNodeSetParams1D.dst = (void *) dst; \
 	activity->hip_args.hipGraphExecMemcpyNodeSetParams1D.src = (void *) src; \
 	activity->hip_args.hipGraphExecMemcpyNodeSetParams1D.count = (size_t) count; \
 	activity->hip_args.hipGraphExecMemcpyNodeSetParams1D.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipCtxEnablePeerAccess` function.
@@ -641,16 +647,19 @@ struct args_hipGraphExecMemcpyNodeSetParams1D_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipCtxEnablePeerAccess
 struct args_hipCtxEnablePeerAccess_t {
-	struct ihipCtx_t * peerCtx;
+	hipCtx_t peerCtx;
 	unsigned int flags;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipCtxEnablePeerAccess(activity) { \
-	activity->hip_args.hipCtxEnablePeerAccess.peerCtx = (struct ihipCtx_t *) peerCtx; \
+	activity->hip_args.hipCtxEnablePeerAccess.peerCtx = (hipCtx_t) peerCtx; \
 	activity->hip_args.hipCtxEnablePeerAccess.flags = (unsigned int) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipHostUnregister` function.
@@ -666,6 +675,7 @@ struct args_hipCtxEnablePeerAccess_t {
  *			void * hostPtr (void *)
  *	)
  */
+#if HAVE_hipHostUnregister
 struct args_hipHostUnregister_t {
 	void * hostPtr;
 	hipError_t retval;
@@ -674,6 +684,8 @@ struct args_hipHostUnregister_t {
 #define GET_ARGS_VALUE_hipHostUnregister(activity) { \
 	activity->hip_args.hipHostUnregister.hostPtr = (void *) hostPtr; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDevicePrimaryCtxGetState` function.
@@ -691,6 +703,7 @@ struct args_hipHostUnregister_t {
  *			int * active (int *)
  *	)
  */
+#if HAVE_hipDevicePrimaryCtxGetState
 struct args_hipDevicePrimaryCtxGetState_t {
 	hipDevice_t dev;
 	unsigned int * flags;
@@ -719,6 +732,8 @@ struct args_hipDevicePrimaryCtxGetState_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipPointerGetAttribute` function.
  *
@@ -735,6 +750,7 @@ struct args_hipDevicePrimaryCtxGetState_t {
  *			hipDeviceptr_t ptr (void *)
  *	)
  */
+#if HAVE_hipPointerGetAttribute
 struct args_hipPointerGetAttribute_t {
 	void * data;
 	hipPointer_attribute attribute;
@@ -747,6 +763,8 @@ struct args_hipPointerGetAttribute_t {
 	activity->hip_args.hipPointerGetAttribute.attribute = (hipPointer_attribute) attribute; \
 	activity->hip_args.hipPointerGetAttribute.ptr = (void *) ptr; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemPoolGetAccess` function.
@@ -764,12 +782,13 @@ struct args_hipPointerGetAttribute_t {
  *			hipMemLocation * location (struct hipMemLocation*)
  *	)
  */
+#if HAVE_hipMemPoolGetAccess
 struct args_hipMemPoolGetAccess_t {
 	hipMemAccessFlags * flags;
 	struct {
 		hipMemAccessFlags val;
 	} flags__ref;
-	struct ihipMemPoolHandle_t * mem_pool;
+	hipMemPool_t mem_pool;
 	hipMemLocation * location;
 	struct {
 		hipMemLocation val;
@@ -779,7 +798,7 @@ struct args_hipMemPoolGetAccess_t {
 
 #define GET_ARGS_VALUE_hipMemPoolGetAccess(activity) { \
 	activity->hip_args.hipMemPoolGetAccess.flags = (hipMemAccessFlags *) flags; \
-	activity->hip_args.hipMemPoolGetAccess.mem_pool = (struct ihipMemPoolHandle_t *) mem_pool; \
+	activity->hip_args.hipMemPoolGetAccess.mem_pool = (hipMemPool_t) mem_pool; \
 	activity->hip_args.hipMemPoolGetAccess.location = (hipMemLocation *) location; \
 };
 
@@ -791,6 +810,8 @@ struct args_hipMemPoolGetAccess_t {
 		args->hipMemPoolGetAccess.location__ref.val = *args->hipMemPoolGetAccess.location; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemsetD32` function.
@@ -808,6 +829,7 @@ struct args_hipMemPoolGetAccess_t {
  *			size_t count (unsigned long)
  *	)
  */
+#if HAVE_hipMemsetD32
 struct args_hipMemsetD32_t {
 	void * dest;
 	int value;
@@ -820,6 +842,8 @@ struct args_hipMemsetD32_t {
 	activity->hip_args.hipMemsetD32.value = (int) value; \
 	activity->hip_args.hipMemsetD32.count = (size_t) count; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefGetMipMappedArray` function.
@@ -836,6 +860,7 @@ struct args_hipMemsetD32_t {
  *			const textureReference * texRef (const struct textureReference *)
  *	)
  */
+#if HAVE_hipTexRefGetMipMappedArray
 struct args_hipTexRefGetMipMappedArray_t {
 	struct hipMipmappedArray ** pArray;
 	struct {
@@ -866,6 +891,8 @@ struct args_hipTexRefGetMipMappedArray_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMalloc3D` function.
  *
@@ -881,6 +908,7 @@ struct args_hipTexRefGetMipMappedArray_t {
  *			hipExtent extent (struct hipExtent)
  *	)
  */
+#if HAVE_hipMalloc3D
 struct args_hipMalloc3D_t {
 	hipPitchedPtr * pitchedDevPtr;
 	struct {
@@ -901,6 +929,8 @@ struct args_hipMalloc3D_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemsetD8` function.
  *
@@ -917,6 +947,7 @@ struct args_hipMalloc3D_t {
  *			size_t count (unsigned long)
  *	)
  */
+#if HAVE_hipMemsetD8
 struct args_hipMemsetD8_t {
 	void * dest;
 	unsigned char value;
@@ -929,6 +960,8 @@ struct args_hipMemsetD8_t {
 	activity->hip_args.hipMemsetD8.value = (unsigned char) value; \
 	activity->hip_args.hipMemsetD8.count = (size_t) count; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMallocArray` function.
@@ -948,8 +981,9 @@ struct args_hipMemsetD8_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipMallocArray
 struct args_hipMallocArray_t {
-	struct hipArray ** array;
+	hipArray_t * array;
 	struct {
 		void* ptr1;
 	} array__ref;
@@ -964,7 +998,7 @@ struct args_hipMallocArray_t {
 };
 
 #define GET_ARGS_VALUE_hipMallocArray(activity) { \
-	activity->hip_args.hipMallocArray.array = (struct hipArray **) array; \
+	activity->hip_args.hipMallocArray.array = (hipArray_t *) array; \
 	activity->hip_args.hipMallocArray.desc = (hipChannelFormatDesc *) desc; \
 	activity->hip_args.hipMallocArray.width = (size_t) width; \
 	activity->hip_args.hipMallocArray.height = (size_t) height; \
@@ -979,6 +1013,8 @@ struct args_hipMallocArray_t {
 		args->hipMallocArray.desc__ref.val = *args->hipMallocArray.desc; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphEventWaitNodeGetEvent` function.
@@ -995,9 +1031,10 @@ struct args_hipMallocArray_t {
  *			hipEvent_t * event_out (struct ihipEvent_t **)
  *	)
  */
+#if HAVE_hipGraphEventWaitNodeGetEvent
 struct args_hipGraphEventWaitNodeGetEvent_t {
-	struct hipGraphNode * node;
-	struct ihipEvent_t ** event_out;
+	hipGraphNode_t node;
+	hipEvent_t * event_out;
 	struct {
 		void* ptr1;
 	} event_out__ref;
@@ -1005,8 +1042,8 @@ struct args_hipGraphEventWaitNodeGetEvent_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphEventWaitNodeGetEvent(activity) { \
-	activity->hip_args.hipGraphEventWaitNodeGetEvent.node = (struct hipGraphNode *) node; \
-	activity->hip_args.hipGraphEventWaitNodeGetEvent.event_out = (struct ihipEvent_t **) event_out; \
+	activity->hip_args.hipGraphEventWaitNodeGetEvent.node = (hipGraphNode_t) node; \
+	activity->hip_args.hipGraphEventWaitNodeGetEvent.event_out = (hipEvent_t *) event_out; \
 };
 
 #define GET_PTRS_VALUE_hipGraphEventWaitNodeGetEvent(args) { \
@@ -1014,6 +1051,8 @@ struct args_hipGraphEventWaitNodeGetEvent_t {
 		args->hipGraphEventWaitNodeGetEvent.event_out__ref.ptr1 = *args->hipGraphEventWaitNodeGetEvent.event_out; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDrvMemcpy3D` function.
@@ -1029,6 +1068,7 @@ struct args_hipGraphEventWaitNodeGetEvent_t {
  *			const HIP_MEMCPY3D * pCopy (const struct HIP_MEMCPY3D *)
  *	)
  */
+#if HAVE_hipDrvMemcpy3D
 struct args_hipDrvMemcpy3D_t {
 	HIP_MEMCPY3D * pCopy;
 	struct {
@@ -1046,6 +1086,8 @@ struct args_hipDrvMemcpy3D_t {
 		args->hipDrvMemcpy3D.pCopy__ref.val = *args->hipDrvMemcpy3D.pCopy; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags` function.
@@ -1065,12 +1107,13 @@ struct args_hipDrvMemcpy3D_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
 struct args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t {
 	int * numBlocks;
 	struct {
 		int val;
 	} numBlocks__ref;
-	struct ihipModuleSymbol_t * f;
+	hipFunction_t f;
 	int blockSize;
 	size_t dynSharedMemPerBlk;
 	unsigned int flags;
@@ -1079,7 +1122,7 @@ struct args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t {
 
 #define GET_ARGS_VALUE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(activity) { \
 	activity->hip_args.hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.numBlocks = (int *) numBlocks; \
-	activity->hip_args.hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.f = (struct ihipModuleSymbol_t *) f; \
+	activity->hip_args.hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.f = (hipFunction_t) f; \
 	activity->hip_args.hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.blockSize = (int) blockSize; \
 	activity->hip_args.hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.dynSharedMemPerBlk = (size_t) dynSharedMemPerBlk; \
 	activity->hip_args.hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.flags = (unsigned int) flags; \
@@ -1090,6 +1133,8 @@ struct args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t {
 		args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.numBlocks__ref.val = *args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.numBlocks; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipHostMalloc` function.
@@ -1107,6 +1152,7 @@ struct args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipHostMalloc
 struct args_hipHostMalloc_t {
 	void ** ptr;
 	struct {
@@ -1129,6 +1175,8 @@ struct args_hipHostMalloc_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipModuleGetTexRef` function.
  *
@@ -1145,13 +1193,14 @@ struct args_hipHostMalloc_t {
  *			const char * name (const char *)
  *	)
  */
+#if HAVE_hipModuleGetTexRef
 struct args_hipModuleGetTexRef_t {
 	textureReference ** texRef;
 	struct {
 		void* ptr1;
 		textureReference val;
 	} texRef__ref;
-	struct ihipModule_t * hmod;
+	hipModule_t hmod;
 	char * name;
 	struct {
 		char val[HIP_STRING_SIZE_MAX];
@@ -1161,7 +1210,7 @@ struct args_hipModuleGetTexRef_t {
 
 #define GET_ARGS_VALUE_hipModuleGetTexRef(activity) { \
 	activity->hip_args.hipModuleGetTexRef.texRef = (textureReference **) texRef; \
-	activity->hip_args.hipModuleGetTexRef.hmod = (struct ihipModule_t *) hmod; \
+	activity->hip_args.hipModuleGetTexRef.hmod = (hipModule_t) hmod; \
 	activity->hip_args.hipModuleGetTexRef.name = (char *) name; \
 };
 
@@ -1176,6 +1225,8 @@ struct args_hipModuleGetTexRef_t {
 		strncpy(args->hipModuleGetTexRef.name__ref.val, args->hipModuleGetTexRef.name, HIP_STRING_SIZE_MAX-1); \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipIpcGetMemHandle` function.
@@ -1192,6 +1243,7 @@ struct args_hipModuleGetTexRef_t {
  *			void * devPtr (void *)
  *	)
  */
+#if HAVE_hipIpcGetMemHandle
 struct args_hipIpcGetMemHandle_t {
 	hipIpcMemHandle_t * handle;
 	struct {
@@ -1212,6 +1264,8 @@ struct args_hipIpcGetMemHandle_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyDtoHAsync` function.
  *
@@ -1229,11 +1283,12 @@ struct args_hipIpcGetMemHandle_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpyDtoHAsync
 struct args_hipMemcpyDtoHAsync_t {
 	void * dst;
 	void * src;
 	size_t sizeBytes;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -1241,8 +1296,10 @@ struct args_hipMemcpyDtoHAsync_t {
 	activity->hip_args.hipMemcpyDtoHAsync.dst = (void *) dst; \
 	activity->hip_args.hipMemcpyDtoHAsync.src = (void *) src; \
 	activity->hip_args.hipMemcpyDtoHAsync.sizeBytes = (size_t) sizeBytes; \
-	activity->hip_args.hipMemcpyDtoHAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpyDtoHAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipModuleLoad` function.
@@ -1259,8 +1316,9 @@ struct args_hipMemcpyDtoHAsync_t {
  *			const char * fname (const char *)
  *	)
  */
+#if HAVE_hipModuleLoad
 struct args_hipModuleLoad_t {
-	struct ihipModule_t ** module;
+	hipModule_t * module;
 	struct {
 		void* ptr1;
 	} module__ref;
@@ -1272,7 +1330,7 @@ struct args_hipModuleLoad_t {
 };
 
 #define GET_ARGS_VALUE_hipModuleLoad(activity) { \
-	activity->hip_args.hipModuleLoad.module = (struct ihipModule_t **) module; \
+	activity->hip_args.hipModuleLoad.module = (hipModule_t *) module; \
 	activity->hip_args.hipModuleLoad.fname = (char *) fname; \
 };
 
@@ -1284,6 +1342,8 @@ struct args_hipModuleLoad_t {
 		strncpy(args->hipModuleLoad.fname__ref.val, args->hipModuleLoad.fname, HIP_STRING_SIZE_MAX-1); \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipWaitExternalSemaphoresAsync` function.
@@ -1302,6 +1362,7 @@ struct args_hipModuleLoad_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipWaitExternalSemaphoresAsync
 struct args_hipWaitExternalSemaphoresAsync_t {
 	void * * extSemArray;
 	struct {
@@ -1312,7 +1373,7 @@ struct args_hipWaitExternalSemaphoresAsync_t {
 		hipExternalSemaphoreWaitParams val;
 	} paramsArray__ref;
 	unsigned int numExtSems;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -1320,7 +1381,7 @@ struct args_hipWaitExternalSemaphoresAsync_t {
 	activity->hip_args.hipWaitExternalSemaphoresAsync.extSemArray = (void * *) extSemArray; \
 	activity->hip_args.hipWaitExternalSemaphoresAsync.paramsArray = (hipExternalSemaphoreWaitParams *) paramsArray; \
 	activity->hip_args.hipWaitExternalSemaphoresAsync.numExtSems = (unsigned int) numExtSems; \
-	activity->hip_args.hipWaitExternalSemaphoresAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipWaitExternalSemaphoresAsync.stream = (hipStream_t) stream; \
 };
 
 #define GET_PTRS_VALUE_hipWaitExternalSemaphoresAsync(args) { \
@@ -1331,6 +1392,8 @@ struct args_hipWaitExternalSemaphoresAsync_t {
 		args->hipWaitExternalSemaphoresAsync.paramsArray__ref.val = *args->hipWaitExternalSemaphoresAsync.paramsArray; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphKernelNodeGetParams` function.
@@ -1347,8 +1410,9 @@ struct args_hipWaitExternalSemaphoresAsync_t {
  *			hipKernelNodeParams * pNodeParams (struct hipKernelNodeParams*)
  *	)
  */
+#if HAVE_hipGraphKernelNodeGetParams
 struct args_hipGraphKernelNodeGetParams_t {
-	struct hipGraphNode * node;
+	hipGraphNode_t node;
 	hipKernelNodeParams * pNodeParams;
 	struct {
 		hipKernelNodeParams val;
@@ -1357,7 +1421,7 @@ struct args_hipGraphKernelNodeGetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphKernelNodeGetParams(activity) { \
-	activity->hip_args.hipGraphKernelNodeGetParams.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphKernelNodeGetParams.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphKernelNodeGetParams.pNodeParams = (hipKernelNodeParams *) pNodeParams; \
 };
 
@@ -1366,6 +1430,8 @@ struct args_hipGraphKernelNodeGetParams_t {
 		args->hipGraphKernelNodeGetParams.pNodeParams__ref.val = *args->hipGraphKernelNodeGetParams.pNodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphLaunch` function.
@@ -1382,16 +1448,19 @@ struct args_hipGraphKernelNodeGetParams_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipGraphLaunch
 struct args_hipGraphLaunch_t {
-	struct hipGraphExec * graphExec;
-	struct ihipStream_t * stream;
+	hipGraphExec_t graphExec;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphLaunch(activity) { \
-	activity->hip_args.hipGraphLaunch.graphExec = (struct hipGraphExec *) graphExec; \
-	activity->hip_args.hipGraphLaunch.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipGraphLaunch.graphExec = (hipGraphExec_t) graphExec; \
+	activity->hip_args.hipGraphLaunch.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipHostAlloc` function.
@@ -1409,6 +1478,7 @@ struct args_hipGraphLaunch_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipHostAlloc
 struct args_hipHostAlloc_t {
 	void ** ptr;
 	struct {
@@ -1431,6 +1501,8 @@ struct args_hipHostAlloc_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipSetDevice` function.
  *
@@ -1445,6 +1517,7 @@ struct args_hipHostAlloc_t {
  *			int deviceId (int)
  *	)
  */
+#if HAVE_hipSetDevice
 struct args_hipSetDevice_t {
 	int deviceId;
 	hipError_t retval;
@@ -1453,6 +1526,8 @@ struct args_hipSetDevice_t {
 #define GET_ARGS_VALUE_hipSetDevice(activity) { \
 	activity->hip_args.hipSetDevice.deviceId = (int) deviceId; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipModuleOccupancyMaxPotentialBlockSizeWithFlags` function.
@@ -1473,6 +1548,7 @@ struct args_hipSetDevice_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipModuleOccupancyMaxPotentialBlockSizeWithFlags
 struct args_hipModuleOccupancyMaxPotentialBlockSizeWithFlags_t {
 	int * gridSize;
 	struct {
@@ -1482,7 +1558,7 @@ struct args_hipModuleOccupancyMaxPotentialBlockSizeWithFlags_t {
 	struct {
 		int val;
 	} blockSize__ref;
-	struct ihipModuleSymbol_t * f;
+	hipFunction_t f;
 	size_t dynSharedMemPerBlk;
 	int blockSizeLimit;
 	unsigned int flags;
@@ -1492,7 +1568,7 @@ struct args_hipModuleOccupancyMaxPotentialBlockSizeWithFlags_t {
 #define GET_ARGS_VALUE_hipModuleOccupancyMaxPotentialBlockSizeWithFlags(activity) { \
 	activity->hip_args.hipModuleOccupancyMaxPotentialBlockSizeWithFlags.gridSize = (int *) gridSize; \
 	activity->hip_args.hipModuleOccupancyMaxPotentialBlockSizeWithFlags.blockSize = (int *) blockSize; \
-	activity->hip_args.hipModuleOccupancyMaxPotentialBlockSizeWithFlags.f = (struct ihipModuleSymbol_t *) f; \
+	activity->hip_args.hipModuleOccupancyMaxPotentialBlockSizeWithFlags.f = (hipFunction_t) f; \
 	activity->hip_args.hipModuleOccupancyMaxPotentialBlockSizeWithFlags.dynSharedMemPerBlk = (size_t) dynSharedMemPerBlk; \
 	activity->hip_args.hipModuleOccupancyMaxPotentialBlockSizeWithFlags.blockSizeLimit = (int) blockSizeLimit; \
 	activity->hip_args.hipModuleOccupancyMaxPotentialBlockSizeWithFlags.flags = (unsigned int) flags; \
@@ -1506,6 +1582,8 @@ struct args_hipModuleOccupancyMaxPotentialBlockSizeWithFlags_t {
 		args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.blockSize__ref.val = *args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.blockSize; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphNodeGetDependentNodes` function.
@@ -1523,9 +1601,10 @@ struct args_hipModuleOccupancyMaxPotentialBlockSizeWithFlags_t {
  *			size_t * pNumDependentNodes (unsigned long*)
  *	)
  */
+#if HAVE_hipGraphNodeGetDependentNodes
 struct args_hipGraphNodeGetDependentNodes_t {
-	struct hipGraphNode * node;
-	struct hipGraphNode ** pDependentNodes;
+	hipGraphNode_t node;
+	hipGraphNode_t * pDependentNodes;
 	struct {
 		void* ptr1;
 	} pDependentNodes__ref;
@@ -1537,8 +1616,8 @@ struct args_hipGraphNodeGetDependentNodes_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphNodeGetDependentNodes(activity) { \
-	activity->hip_args.hipGraphNodeGetDependentNodes.node = (struct hipGraphNode *) node; \
-	activity->hip_args.hipGraphNodeGetDependentNodes.pDependentNodes = (struct hipGraphNode **) pDependentNodes; \
+	activity->hip_args.hipGraphNodeGetDependentNodes.node = (hipGraphNode_t) node; \
+	activity->hip_args.hipGraphNodeGetDependentNodes.pDependentNodes = (hipGraphNode_t *) pDependentNodes; \
 	activity->hip_args.hipGraphNodeGetDependentNodes.pNumDependentNodes = (size_t *) pNumDependentNodes; \
 };
 
@@ -1550,6 +1629,8 @@ struct args_hipGraphNodeGetDependentNodes_t {
 		args->hipGraphNodeGetDependentNodes.pNumDependentNodes__ref.val = *args->hipGraphNodeGetDependentNodes.pNumDependentNodes; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipExtStreamGetCUMask` function.
@@ -1567,8 +1648,9 @@ struct args_hipGraphNodeGetDependentNodes_t {
  *			uint32_t * cuMask (unsigned int*)
  *	)
  */
+#if HAVE_hipExtStreamGetCUMask
 struct args_hipExtStreamGetCUMask_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	uint32_t cuMaskSize;
 	uint32_t * cuMask;
 	struct {
@@ -1578,7 +1660,7 @@ struct args_hipExtStreamGetCUMask_t {
 };
 
 #define GET_ARGS_VALUE_hipExtStreamGetCUMask(activity) { \
-	activity->hip_args.hipExtStreamGetCUMask.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipExtStreamGetCUMask.stream = (hipStream_t) stream; \
 	activity->hip_args.hipExtStreamGetCUMask.cuMaskSize = (uint32_t) cuMaskSize; \
 	activity->hip_args.hipExtStreamGetCUMask.cuMask = (uint32_t *) cuMask; \
 };
@@ -1588,6 +1670,8 @@ struct args_hipExtStreamGetCUMask_t {
 		args->hipExtStreamGetCUMask.cuMask__ref.val = *args->hipExtStreamGetCUMask.cuMask; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemsetD16` function.
@@ -1605,6 +1689,7 @@ struct args_hipExtStreamGetCUMask_t {
  *			size_t count (unsigned long)
  *	)
  */
+#if HAVE_hipMemsetD16
 struct args_hipMemsetD16_t {
 	void * dest;
 	unsigned short value;
@@ -1617,6 +1702,8 @@ struct args_hipMemsetD16_t {
 	activity->hip_args.hipMemsetD16.value = (unsigned short) value; \
 	activity->hip_args.hipMemsetD16.count = (size_t) count; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipLaunchKernel` function.
@@ -1637,6 +1724,7 @@ struct args_hipMemsetD16_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipLaunchKernel
 struct args_hipLaunchKernel_t {
 	void * function_address;
 	dim3 numBlocks;
@@ -1646,7 +1734,7 @@ struct args_hipLaunchKernel_t {
 		void* ptr1;
 	} args__ref;
 	size_t sharedMemBytes;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -1656,7 +1744,7 @@ struct args_hipLaunchKernel_t {
 	activity->hip_args.hipLaunchKernel.dimBlocks = (dim3) dimBlocks; \
 	activity->hip_args.hipLaunchKernel.args = (void **) args; \
 	activity->hip_args.hipLaunchKernel.sharedMemBytes = (size_t) sharedMemBytes; \
-	activity->hip_args.hipLaunchKernel.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipLaunchKernel.stream = (hipStream_t) stream; \
 };
 
 #define GET_PTRS_VALUE_hipLaunchKernel(args) { \
@@ -1664,6 +1752,8 @@ struct args_hipLaunchKernel_t {
 		args->hipLaunchKernel.args__ref.ptr1 = *args->hipLaunchKernel.args; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGetErrorString` function.
@@ -1679,6 +1769,7 @@ struct args_hipLaunchKernel_t {
  *			hipError_t hipError (enum hipError_t)
  *	)
  */
+#if HAVE_hipGetErrorString
 struct args_hipGetErrorString_t {
 	hipError_t hipError;
 	char * retval;
@@ -1696,6 +1787,8 @@ struct args_hipGetErrorString_t {
 		strncpy(args->hipGetErrorString.retval__ref.val, args->hipGetErrorString.retval, HIP_STRING_SIZE_MAX-1); \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipModuleLoadDataEx` function.
@@ -1715,8 +1808,9 @@ struct args_hipGetErrorString_t {
  *			void ** optionValues (void **)
  *	)
  */
+#if HAVE_hipModuleLoadDataEx
 struct args_hipModuleLoadDataEx_t {
-	struct ihipModule_t ** module;
+	hipModule_t * module;
 	struct {
 		void* ptr1;
 	} module__ref;
@@ -1734,7 +1828,7 @@ struct args_hipModuleLoadDataEx_t {
 };
 
 #define GET_ARGS_VALUE_hipModuleLoadDataEx(activity) { \
-	activity->hip_args.hipModuleLoadDataEx.module = (struct ihipModule_t **) module; \
+	activity->hip_args.hipModuleLoadDataEx.module = (hipModule_t *) module; \
 	activity->hip_args.hipModuleLoadDataEx.image = (void *) image; \
 	activity->hip_args.hipModuleLoadDataEx.numOptions = (unsigned int) numOptions; \
 	activity->hip_args.hipModuleLoadDataEx.options = (hipJitOption *) options; \
@@ -1753,6 +1847,8 @@ struct args_hipModuleLoadDataEx_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipTexRefGetFilterMode` function.
  *
@@ -1768,6 +1864,7 @@ struct args_hipModuleLoadDataEx_t {
  *			const textureReference * texRef (const struct textureReference *)
  *	)
  */
+#if HAVE_hipTexRefGetFilterMode
 struct args_hipTexRefGetFilterMode_t {
 	enum hipTextureFilterMode * pfm;
 	struct {
@@ -1794,6 +1891,8 @@ struct args_hipTexRefGetFilterMode_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphInstantiateWithParams` function.
  *
@@ -1810,12 +1909,13 @@ struct args_hipTexRefGetFilterMode_t {
  *			hipGraphInstantiateParams * instantiateParams (struct hipGraphInstantiateParams*)
  *	)
  */
+#if HAVE_hipGraphInstantiateWithParams
 struct args_hipGraphInstantiateWithParams_t {
-	struct hipGraphExec ** pGraphExec;
+	hipGraphExec_t * pGraphExec;
 	struct {
 		void* ptr1;
 	} pGraphExec__ref;
-	struct ihipGraph * graph;
+	hipGraph_t graph;
 	hipGraphInstantiateParams * instantiateParams;
 	struct {
 		hipGraphInstantiateParams val;
@@ -1824,8 +1924,8 @@ struct args_hipGraphInstantiateWithParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphInstantiateWithParams(activity) { \
-	activity->hip_args.hipGraphInstantiateWithParams.pGraphExec = (struct hipGraphExec **) pGraphExec; \
-	activity->hip_args.hipGraphInstantiateWithParams.graph = (struct ihipGraph *) graph; \
+	activity->hip_args.hipGraphInstantiateWithParams.pGraphExec = (hipGraphExec_t *) pGraphExec; \
+	activity->hip_args.hipGraphInstantiateWithParams.graph = (hipGraph_t) graph; \
 	activity->hip_args.hipGraphInstantiateWithParams.instantiateParams = (hipGraphInstantiateParams *) instantiateParams; \
 };
 
@@ -1837,6 +1937,8 @@ struct args_hipGraphInstantiateWithParams_t {
 		args->hipGraphInstantiateWithParams.instantiateParams__ref.val = *args->hipGraphInstantiateWithParams.instantiateParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphMemcpyNodeSetParams1D` function.
@@ -1856,8 +1958,9 @@ struct args_hipGraphInstantiateWithParams_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipGraphMemcpyNodeSetParams1D
 struct args_hipGraphMemcpyNodeSetParams1D_t {
-	struct hipGraphNode * node;
+	hipGraphNode_t node;
 	void * dst;
 	void * src;
 	size_t count;
@@ -1866,12 +1969,14 @@ struct args_hipGraphMemcpyNodeSetParams1D_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphMemcpyNodeSetParams1D(activity) { \
-	activity->hip_args.hipGraphMemcpyNodeSetParams1D.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphMemcpyNodeSetParams1D.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphMemcpyNodeSetParams1D.dst = (void *) dst; \
 	activity->hip_args.hipGraphMemcpyNodeSetParams1D.src = (void *) src; \
 	activity->hip_args.hipGraphMemcpyNodeSetParams1D.count = (size_t) count; \
 	activity->hip_args.hipGraphMemcpyNodeSetParams1D.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamSynchronize` function.
@@ -1887,14 +1992,17 @@ struct args_hipGraphMemcpyNodeSetParams1D_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipStreamSynchronize
 struct args_hipStreamSynchronize_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipStreamSynchronize(activity) { \
-	activity->hip_args.hipStreamSynchronize.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamSynchronize.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphicsUnmapResources` function.
@@ -1912,20 +2020,21 @@ struct args_hipStreamSynchronize_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipGraphicsUnmapResources
 struct args_hipGraphicsUnmapResources_t {
 	int count;
-	struct _hipGraphicsResource** resources;
+	hipGraphicsResource_t * resources;
 	struct {
 		void* ptr1;
 	} resources__ref;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphicsUnmapResources(activity) { \
 	activity->hip_args.hipGraphicsUnmapResources.count = (int) count; \
-	activity->hip_args.hipGraphicsUnmapResources.resources = (struct _hipGraphicsResource**) resources; \
-	activity->hip_args.hipGraphicsUnmapResources.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipGraphicsUnmapResources.resources = (hipGraphicsResource_t *) resources; \
+	activity->hip_args.hipGraphicsUnmapResources.stream = (hipStream_t) stream; \
 };
 
 #define GET_PTRS_VALUE_hipGraphicsUnmapResources(args) { \
@@ -1933,6 +2042,8 @@ struct args_hipGraphicsUnmapResources_t {
 		args->hipGraphicsUnmapResources.resources__ref.ptr1 = *args->hipGraphicsUnmapResources.resources; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy2DFromArray_spt` function.
@@ -1955,10 +2066,11 @@ struct args_hipGraphicsUnmapResources_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpy2DFromArray_spt
 struct args_hipMemcpy2DFromArray_spt_t {
 	void * dst;
 	size_t dpitch;
-	struct hipArray * src;
+	hipArray_const_t src;
 	size_t wOffset;
 	size_t hOffset;
 	size_t width;
@@ -1970,13 +2082,15 @@ struct args_hipMemcpy2DFromArray_spt_t {
 #define GET_ARGS_VALUE_hipMemcpy2DFromArray_spt(activity) { \
 	activity->hip_args.hipMemcpy2DFromArray_spt.dst = (void *) dst; \
 	activity->hip_args.hipMemcpy2DFromArray_spt.dpitch = (size_t) dpitch; \
-	activity->hip_args.hipMemcpy2DFromArray_spt.src = (struct hipArray *) src; \
+	activity->hip_args.hipMemcpy2DFromArray_spt.src = (hipArray_const_t) src; \
 	activity->hip_args.hipMemcpy2DFromArray_spt.wOffset = (size_t) wOffset; \
 	activity->hip_args.hipMemcpy2DFromArray_spt.hOffset = (size_t) hOffset; \
 	activity->hip_args.hipMemcpy2DFromArray_spt.width = (size_t) width; \
 	activity->hip_args.hipMemcpy2DFromArray_spt.height = (size_t) height; \
 	activity->hip_args.hipMemcpy2DFromArray_spt.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphExecMemcpyNodeSetParamsFromSymbol` function.
@@ -1998,9 +2112,10 @@ struct args_hipMemcpy2DFromArray_spt_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipGraphExecMemcpyNodeSetParamsFromSymbol
 struct args_hipGraphExecMemcpyNodeSetParamsFromSymbol_t {
-	struct hipGraphExec * hGraphExec;
-	struct hipGraphNode * node;
+	hipGraphExec_t hGraphExec;
+	hipGraphNode_t node;
 	void * dst;
 	void * symbol;
 	size_t count;
@@ -2010,14 +2125,16 @@ struct args_hipGraphExecMemcpyNodeSetParamsFromSymbol_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphExecMemcpyNodeSetParamsFromSymbol(activity) { \
-	activity->hip_args.hipGraphExecMemcpyNodeSetParamsFromSymbol.hGraphExec = (struct hipGraphExec *) hGraphExec; \
-	activity->hip_args.hipGraphExecMemcpyNodeSetParamsFromSymbol.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphExecMemcpyNodeSetParamsFromSymbol.hGraphExec = (hipGraphExec_t) hGraphExec; \
+	activity->hip_args.hipGraphExecMemcpyNodeSetParamsFromSymbol.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphExecMemcpyNodeSetParamsFromSymbol.dst = (void *) dst; \
 	activity->hip_args.hipGraphExecMemcpyNodeSetParamsFromSymbol.symbol = (void *) symbol; \
 	activity->hip_args.hipGraphExecMemcpyNodeSetParamsFromSymbol.count = (size_t) count; \
 	activity->hip_args.hipGraphExecMemcpyNodeSetParamsFromSymbol.offset = (size_t) offset; \
 	activity->hip_args.hipGraphExecMemcpyNodeSetParamsFromSymbol.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefGetMipmapLevelBias` function.
@@ -2034,6 +2151,7 @@ struct args_hipGraphExecMemcpyNodeSetParamsFromSymbol_t {
  *			const textureReference * texRef (const struct textureReference *)
  *	)
  */
+#if HAVE_hipTexRefGetMipmapLevelBias
 struct args_hipTexRefGetMipmapLevelBias_t {
 	float * pbias;
 	struct {
@@ -2060,6 +2178,8 @@ struct args_hipTexRefGetMipmapLevelBias_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddExternalSemaphoresSignalNode` function.
  *
@@ -2078,13 +2198,14 @@ struct args_hipTexRefGetMipmapLevelBias_t {
  *			const hipExternalSemaphoreSignalNodeParams * nodeParams (const struct hipExternalSemaphoreSignalNodeParams *)
  *	)
  */
+#if HAVE_hipGraphAddExternalSemaphoresSignalNode
 struct args_hipGraphAddExternalSemaphoresSignalNode_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
@@ -2097,9 +2218,9 @@ struct args_hipGraphAddExternalSemaphoresSignalNode_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphAddExternalSemaphoresSignalNode(activity) { \
-	activity->hip_args.hipGraphAddExternalSemaphoresSignalNode.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddExternalSemaphoresSignalNode.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddExternalSemaphoresSignalNode.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddExternalSemaphoresSignalNode.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddExternalSemaphoresSignalNode.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddExternalSemaphoresSignalNode.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddExternalSemaphoresSignalNode.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipGraphAddExternalSemaphoresSignalNode.nodeParams = (hipExternalSemaphoreSignalNodeParams *) nodeParams; \
 };
@@ -2116,6 +2237,8 @@ struct args_hipGraphAddExternalSemaphoresSignalNode_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipExtGetLastError` function.
  *
@@ -2129,9 +2252,12 @@ struct args_hipGraphAddExternalSemaphoresSignalNode_t {
  *	hipExtGetLastError (
  *	)
  */
+#if HAVE_hipExtGetLastError
 struct args_hipExtGetLastError_t {
 	hipError_t retval;
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemMapArrayAsync` function.
@@ -2149,20 +2275,21 @@ struct args_hipExtGetLastError_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemMapArrayAsync
 struct args_hipMemMapArrayAsync_t {
 	hipArrayMapInfo * mapInfoList;
 	struct {
 		hipArrayMapInfo val;
 	} mapInfoList__ref;
 	unsigned int count;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemMapArrayAsync(activity) { \
 	activity->hip_args.hipMemMapArrayAsync.mapInfoList = (hipArrayMapInfo *) mapInfoList; \
 	activity->hip_args.hipMemMapArrayAsync.count = (unsigned int) count; \
-	activity->hip_args.hipMemMapArrayAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemMapArrayAsync.stream = (hipStream_t) stream; \
 };
 
 #define GET_PTRS_VALUE_hipMemMapArrayAsync(args) { \
@@ -2170,6 +2297,8 @@ struct args_hipMemMapArrayAsync_t {
 		args->hipMemMapArrayAsync.mapInfoList__ref.val = *args->hipMemMapArrayAsync.mapInfoList; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyAsync` function.
@@ -2189,12 +2318,13 @@ struct args_hipMemMapArrayAsync_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpyAsync
 struct args_hipMemcpyAsync_t {
 	void * dst;
 	void * src;
 	size_t sizeBytes;
 	hipMemcpyKind kind;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -2203,8 +2333,10 @@ struct args_hipMemcpyAsync_t {
 	activity->hip_args.hipMemcpyAsync.src = (void *) src; \
 	activity->hip_args.hipMemcpyAsync.sizeBytes = (size_t) sizeBytes; \
 	activity->hip_args.hipMemcpyAsync.kind = (hipMemcpyKind) kind; \
-	activity->hip_args.hipMemcpyAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpyAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphKernelNodeSetAttribute` function.
@@ -2222,8 +2354,9 @@ struct args_hipMemcpyAsync_t {
  *			const hipLaunchAttributeValue * value (const union hipLaunchAttributeValue *)
  *	)
  */
+#if HAVE_hipGraphKernelNodeSetAttribute
 struct args_hipGraphKernelNodeSetAttribute_t {
-	struct hipGraphNode * hNode;
+	hipGraphNode_t hNode;
 	hipLaunchAttributeID attr;
 	hipLaunchAttributeValue * value;
 	struct {
@@ -2233,7 +2366,7 @@ struct args_hipGraphKernelNodeSetAttribute_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphKernelNodeSetAttribute(activity) { \
-	activity->hip_args.hipGraphKernelNodeSetAttribute.hNode = (struct hipGraphNode *) hNode; \
+	activity->hip_args.hipGraphKernelNodeSetAttribute.hNode = (hipGraphNode_t) hNode; \
 	activity->hip_args.hipGraphKernelNodeSetAttribute.attr = (hipLaunchAttributeID) attr; \
 	activity->hip_args.hipGraphKernelNodeSetAttribute.value = (hipLaunchAttributeValue *) value; \
 };
@@ -2243,6 +2376,8 @@ struct args_hipGraphKernelNodeSetAttribute_t {
 		args->hipGraphKernelNodeSetAttribute.value__ref.val = *args->hipGraphKernelNodeSetAttribute.value; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDrvMemcpy2DUnaligned` function.
@@ -2258,6 +2393,7 @@ struct args_hipGraphKernelNodeSetAttribute_t {
  *			const hip_Memcpy2D * pCopy (const struct hip_Memcpy2D *)
  *	)
  */
+#if HAVE_hipDrvMemcpy2DUnaligned
 struct args_hipDrvMemcpy2DUnaligned_t {
 	hip_Memcpy2D * pCopy;
 	struct {
@@ -2276,6 +2412,8 @@ struct args_hipDrvMemcpy2DUnaligned_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemPoolDestroy` function.
  *
@@ -2290,14 +2428,17 @@ struct args_hipDrvMemcpy2DUnaligned_t {
  *			hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *)
  *	)
  */
+#if HAVE_hipMemPoolDestroy
 struct args_hipMemPoolDestroy_t {
-	struct ihipMemPoolHandle_t * mem_pool;
+	hipMemPool_t mem_pool;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemPoolDestroy(activity) { \
-	activity->hip_args.hipMemPoolDestroy.mem_pool = (struct ihipMemPoolHandle_t *) mem_pool; \
+	activity->hip_args.hipMemPoolDestroy.mem_pool = (hipMemPool_t) mem_pool; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphRemoveDependencies` function.
@@ -2316,13 +2457,14 @@ struct args_hipMemPoolDestroy_t {
  *			size_t numDependencies (unsigned long)
  *	)
  */
+#if HAVE_hipGraphRemoveDependencies
 struct args_hipGraphRemoveDependencies_t {
-	struct ihipGraph * graph;
-	struct hipGraphNode * * from;
+	hipGraph_t graph;
+	hipGraphNode_t * from;
 	struct {
 		void* ptr1;
 	} from__ref;
-	struct hipGraphNode * * to;
+	hipGraphNode_t * to;
 	struct {
 		void* ptr1;
 	} to__ref;
@@ -2331,9 +2473,9 @@ struct args_hipGraphRemoveDependencies_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphRemoveDependencies(activity) { \
-	activity->hip_args.hipGraphRemoveDependencies.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphRemoveDependencies.from = (struct hipGraphNode * *) from; \
-	activity->hip_args.hipGraphRemoveDependencies.to = (struct hipGraphNode * *) to; \
+	activity->hip_args.hipGraphRemoveDependencies.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphRemoveDependencies.from = (hipGraphNode_t *) from; \
+	activity->hip_args.hipGraphRemoveDependencies.to = (hipGraphNode_t *) to; \
 	activity->hip_args.hipGraphRemoveDependencies.numDependencies = (size_t) numDependencies; \
 };
 
@@ -2345,6 +2487,8 @@ struct args_hipGraphRemoveDependencies_t {
 		args->hipGraphRemoveDependencies.to__ref.ptr1 = *args->hipGraphRemoveDependencies.to; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphCreate` function.
@@ -2361,8 +2505,9 @@ struct args_hipGraphRemoveDependencies_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipGraphCreate
 struct args_hipGraphCreate_t {
-	struct ihipGraph ** pGraph;
+	hipGraph_t * pGraph;
 	struct {
 		void* ptr1;
 	} pGraph__ref;
@@ -2371,7 +2516,7 @@ struct args_hipGraphCreate_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphCreate(activity) { \
-	activity->hip_args.hipGraphCreate.pGraph = (struct ihipGraph **) pGraph; \
+	activity->hip_args.hipGraphCreate.pGraph = (hipGraph_t *) pGraph; \
 	activity->hip_args.hipGraphCreate.flags = (unsigned int) flags; \
 };
 
@@ -2380,6 +2525,8 @@ struct args_hipGraphCreate_t {
 		args->hipGraphCreate.pGraph__ref.ptr1 = *args->hipGraphCreate.pGraph; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipExtLaunchMultiKernelMultiDevice` function.
@@ -2397,6 +2544,7 @@ struct args_hipGraphCreate_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipExtLaunchMultiKernelMultiDevice
 struct args_hipExtLaunchMultiKernelMultiDevice_t {
 	hipLaunchParams * launchParamsList;
 	struct {
@@ -2419,6 +2567,8 @@ struct args_hipExtLaunchMultiKernelMultiDevice_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGetDeviceCount` function.
  *
@@ -2433,6 +2583,7 @@ struct args_hipExtLaunchMultiKernelMultiDevice_t {
  *			int * count (int *)
  *	)
  */
+#if HAVE_hipGetDeviceCount
 struct args_hipGetDeviceCount_t {
 	int * count;
 	struct {
@@ -2451,6 +2602,8 @@ struct args_hipGetDeviceCount_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemUnmap` function.
  *
@@ -2466,6 +2619,7 @@ struct args_hipGetDeviceCount_t {
  *			size_t size (unsigned long)
  *	)
  */
+#if HAVE_hipMemUnmap
 struct args_hipMemUnmap_t {
 	void * ptr;
 	size_t size;
@@ -2476,6 +2630,8 @@ struct args_hipMemUnmap_t {
 	activity->hip_args.hipMemUnmap.ptr = (void *) ptr; \
 	activity->hip_args.hipMemUnmap.size = (size_t) size; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexObjectGetResourceDesc` function.
@@ -2492,18 +2648,19 @@ struct args_hipMemUnmap_t {
  *			hipTextureObject_t texObject (struct __hip_texture *)
  *	)
  */
+#if HAVE_hipTexObjectGetResourceDesc
 struct args_hipTexObjectGetResourceDesc_t {
 	HIP_RESOURCE_DESC * pResDesc;
 	struct {
 		HIP_RESOURCE_DESC val;
 	} pResDesc__ref;
-	struct __hip_texture * texObject;
+	hipTextureObject_t texObject;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipTexObjectGetResourceDesc(activity) { \
 	activity->hip_args.hipTexObjectGetResourceDesc.pResDesc = (HIP_RESOURCE_DESC *) pResDesc; \
-	activity->hip_args.hipTexObjectGetResourceDesc.texObject = (struct __hip_texture *) texObject; \
+	activity->hip_args.hipTexObjectGetResourceDesc.texObject = (hipTextureObject_t) texObject; \
 };
 
 #define GET_PTRS_VALUE_hipTexObjectGetResourceDesc(args) { \
@@ -2511,6 +2668,8 @@ struct args_hipTexObjectGetResourceDesc_t {
 		args->hipTexObjectGetResourceDesc.pResDesc__ref.val = *args->hipTexObjectGetResourceDesc.pResDesc; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphExecEventRecordNodeSetEvent` function.
@@ -2528,18 +2687,21 @@ struct args_hipTexObjectGetResourceDesc_t {
  *			hipEvent_t event (struct ihipEvent_t *)
  *	)
  */
+#if HAVE_hipGraphExecEventRecordNodeSetEvent
 struct args_hipGraphExecEventRecordNodeSetEvent_t {
-	struct hipGraphExec * hGraphExec;
-	struct hipGraphNode * hNode;
-	struct ihipEvent_t * event;
+	hipGraphExec_t hGraphExec;
+	hipGraphNode_t hNode;
+	hipEvent_t event;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphExecEventRecordNodeSetEvent(activity) { \
-	activity->hip_args.hipGraphExecEventRecordNodeSetEvent.hGraphExec = (struct hipGraphExec *) hGraphExec; \
-	activity->hip_args.hipGraphExecEventRecordNodeSetEvent.hNode = (struct hipGraphNode *) hNode; \
-	activity->hip_args.hipGraphExecEventRecordNodeSetEvent.event = (struct ihipEvent_t *) event; \
+	activity->hip_args.hipGraphExecEventRecordNodeSetEvent.hGraphExec = (hipGraphExec_t) hGraphExec; \
+	activity->hip_args.hipGraphExecEventRecordNodeSetEvent.hNode = (hipGraphNode_t) hNode; \
+	activity->hip_args.hipGraphExecEventRecordNodeSetEvent.event = (hipEvent_t) event; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipInit` function.
@@ -2555,6 +2717,7 @@ struct args_hipGraphExecEventRecordNodeSetEvent_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipInit
 struct args_hipInit_t {
 	unsigned int flags;
 	hipError_t retval;
@@ -2563,6 +2726,8 @@ struct args_hipInit_t {
 #define GET_ARGS_VALUE_hipInit(activity) { \
 	activity->hip_args.hipInit.flags = (unsigned int) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipThreadExchangeStreamCaptureMode` function.
@@ -2578,6 +2743,7 @@ struct args_hipInit_t {
  *			hipStreamCaptureMode * mode (enum hipStreamCaptureMode*)
  *	)
  */
+#if HAVE_hipThreadExchangeStreamCaptureMode
 struct args_hipThreadExchangeStreamCaptureMode_t {
 	hipStreamCaptureMode * mode;
 	struct {
@@ -2596,6 +2762,8 @@ struct args_hipThreadExchangeStreamCaptureMode_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDeviceGetP2PAttribute` function.
  *
@@ -2613,6 +2781,7 @@ struct args_hipThreadExchangeStreamCaptureMode_t {
  *			int dstDevice (int)
  *	)
  */
+#if HAVE_hipDeviceGetP2PAttribute
 struct args_hipDeviceGetP2PAttribute_t {
 	int * value;
 	struct {
@@ -2637,6 +2806,8 @@ struct args_hipDeviceGetP2PAttribute_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDeviceGetByPCIBusId` function.
  *
@@ -2652,6 +2823,7 @@ struct args_hipDeviceGetP2PAttribute_t {
  *			const char * pciBusId (const char *)
  *	)
  */
+#if HAVE_hipDeviceGetByPCIBusId
 struct args_hipDeviceGetByPCIBusId_t {
 	int * device;
 	struct {
@@ -2678,6 +2850,8 @@ struct args_hipDeviceGetByPCIBusId_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipHostFree` function.
  *
@@ -2692,6 +2866,7 @@ struct args_hipDeviceGetByPCIBusId_t {
  *			void * ptr (void *)
  *	)
  */
+#if HAVE_hipHostFree
 struct args_hipHostFree_t {
 	void * ptr;
 	hipError_t retval;
@@ -2700,6 +2875,8 @@ struct args_hipHostFree_t {
 #define GET_ARGS_VALUE_hipHostFree(activity) { \
 	activity->hip_args.hipHostFree.ptr = (void *) ptr; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipExtGetLinkTypeAndHopCount` function.
@@ -2718,6 +2895,7 @@ struct args_hipHostFree_t {
  *			uint32_t * hopcount (unsigned int*)
  *	)
  */
+#if HAVE_hipExtGetLinkTypeAndHopCount
 struct args_hipExtGetLinkTypeAndHopCount_t {
 	int device1;
 	int device2;
@@ -2748,6 +2926,8 @@ struct args_hipExtGetLinkTypeAndHopCount_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyToSymbolAsync_spt` function.
  *
@@ -2767,13 +2947,14 @@ struct args_hipExtGetLinkTypeAndHopCount_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpyToSymbolAsync_spt
 struct args_hipMemcpyToSymbolAsync_spt_t {
 	void * symbol;
 	void * src;
 	size_t sizeBytes;
 	size_t offset;
 	hipMemcpyKind kind;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -2783,8 +2964,10 @@ struct args_hipMemcpyToSymbolAsync_spt_t {
 	activity->hip_args.hipMemcpyToSymbolAsync_spt.sizeBytes = (size_t) sizeBytes; \
 	activity->hip_args.hipMemcpyToSymbolAsync_spt.offset = (size_t) offset; \
 	activity->hip_args.hipMemcpyToSymbolAsync_spt.kind = (hipMemcpyKind) kind; \
-	activity->hip_args.hipMemcpyToSymbolAsync_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpyToSymbolAsync_spt.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipCtxDisablePeerAccess` function.
@@ -2800,14 +2983,17 @@ struct args_hipMemcpyToSymbolAsync_spt_t {
  *			hipCtx_t peerCtx (struct ihipCtx_t *)
  *	)
  */
+#if HAVE_hipCtxDisablePeerAccess
 struct args_hipCtxDisablePeerAccess_t {
-	struct ihipCtx_t * peerCtx;
+	hipCtx_t peerCtx;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipCtxDisablePeerAccess(activity) { \
-	activity->hip_args.hipCtxDisablePeerAccess.peerCtx = (struct ihipCtx_t *) peerCtx; \
+	activity->hip_args.hipCtxDisablePeerAccess.peerCtx = (hipCtx_t) peerCtx; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipSetupArgument` function.
@@ -2825,6 +3011,7 @@ struct args_hipCtxDisablePeerAccess_t {
  *			size_t offset (unsigned long)
  *	)
  */
+#if HAVE_hipSetupArgument
 struct args_hipSetupArgument_t {
 	void * arg;
 	size_t size;
@@ -2837,6 +3024,8 @@ struct args_hipSetupArgument_t {
 	activity->hip_args.hipSetupArgument.size = (size_t) size; \
 	activity->hip_args.hipSetupArgument.offset = (size_t) offset; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyAtoHAsync` function.
@@ -2856,22 +3045,25 @@ struct args_hipSetupArgument_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpyAtoHAsync
 struct args_hipMemcpyAtoHAsync_t {
 	void * dstHost;
-	struct hipArray * srcArray;
+	hipArray_t srcArray;
 	size_t srcOffset;
 	size_t ByteCount;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemcpyAtoHAsync(activity) { \
 	activity->hip_args.hipMemcpyAtoHAsync.dstHost = (void *) dstHost; \
-	activity->hip_args.hipMemcpyAtoHAsync.srcArray = (struct hipArray *) srcArray; \
+	activity->hip_args.hipMemcpyAtoHAsync.srcArray = (hipArray_t) srcArray; \
 	activity->hip_args.hipMemcpyAtoHAsync.srcOffset = (size_t) srcOffset; \
 	activity->hip_args.hipMemcpyAtoHAsync.ByteCount = (size_t) ByteCount; \
-	activity->hip_args.hipMemcpyAtoHAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpyAtoHAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipCtxSetCacheConfig` function.
@@ -2887,6 +3079,7 @@ struct args_hipMemcpyAtoHAsync_t {
  *			hipFuncCache_t cacheConfig (enum hipFuncCache_t)
  *	)
  */
+#if HAVE_hipCtxSetCacheConfig
 struct args_hipCtxSetCacheConfig_t {
 	hipFuncCache_t cacheConfig;
 	hipError_t retval;
@@ -2895,6 +3088,8 @@ struct args_hipCtxSetCacheConfig_t {
 #define GET_ARGS_VALUE_hipCtxSetCacheConfig(activity) { \
 	activity->hip_args.hipCtxSetCacheConfig.cacheConfig = (hipFuncCache_t) cacheConfig; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemRelease` function.
@@ -2910,14 +3105,17 @@ struct args_hipCtxSetCacheConfig_t {
  *			hipMemGenericAllocationHandle_t handle (struct ihipMemGenericAllocationHandle *)
  *	)
  */
+#if HAVE_hipMemRelease
 struct args_hipMemRelease_t {
-	struct ihipMemGenericAllocationHandle * handle;
+	hipMemGenericAllocationHandle_t handle;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemRelease(activity) { \
-	activity->hip_args.hipMemRelease.handle = (struct ihipMemGenericAllocationHandle *) handle; \
+	activity->hip_args.hipMemRelease.handle = (hipMemGenericAllocationHandle_t) handle; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipUnbindTexture` function.
@@ -2933,6 +3131,7 @@ struct args_hipMemRelease_t {
  *			const textureReference * tex (const struct textureReference *)
  *	)
  */
+#if HAVE_hipUnbindTexture
 struct args_hipUnbindTexture_t {
 	textureReference * tex;
 	struct {
@@ -2951,6 +3150,8 @@ struct args_hipUnbindTexture_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDrvMemcpy3DAsync` function.
  *
@@ -2966,18 +3167,19 @@ struct args_hipUnbindTexture_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipDrvMemcpy3DAsync
 struct args_hipDrvMemcpy3DAsync_t {
 	HIP_MEMCPY3D * pCopy;
 	struct {
 		HIP_MEMCPY3D val;
 	} pCopy__ref;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipDrvMemcpy3DAsync(activity) { \
 	activity->hip_args.hipDrvMemcpy3DAsync.pCopy = (HIP_MEMCPY3D *) pCopy; \
-	activity->hip_args.hipDrvMemcpy3DAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipDrvMemcpy3DAsync.stream = (hipStream_t) stream; \
 };
 
 #define GET_PTRS_VALUE_hipDrvMemcpy3DAsync(args) { \
@@ -2985,6 +3187,8 @@ struct args_hipDrvMemcpy3DAsync_t {
 		args->hipDrvMemcpy3DAsync.pCopy__ref.val = *args->hipDrvMemcpy3DAsync.pCopy; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipIpcGetEventHandle` function.
@@ -3001,18 +3205,19 @@ struct args_hipDrvMemcpy3DAsync_t {
  *			hipEvent_t event (struct ihipEvent_t *)
  *	)
  */
+#if HAVE_hipIpcGetEventHandle
 struct args_hipIpcGetEventHandle_t {
 	hipIpcEventHandle_t * handle;
 	struct {
 		hipIpcEventHandle_t val;
 	} handle__ref;
-	struct ihipEvent_t * event;
+	hipEvent_t event;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipIpcGetEventHandle(activity) { \
 	activity->hip_args.hipIpcGetEventHandle.handle = (hipIpcEventHandle_t *) handle; \
-	activity->hip_args.hipIpcGetEventHandle.event = (struct ihipEvent_t *) event; \
+	activity->hip_args.hipIpcGetEventHandle.event = (hipEvent_t) event; \
 };
 
 #define GET_PTRS_VALUE_hipIpcGetEventHandle(args) { \
@@ -3020,6 +3225,8 @@ struct args_hipIpcGetEventHandle_t {
 		args->hipIpcGetEventHandle.handle__ref.val = *args->hipIpcGetEventHandle.handle; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphReleaseUserObject` function.
@@ -3037,18 +3244,21 @@ struct args_hipIpcGetEventHandle_t {
  *			unsigned int count (unsigned int)
  *	)
  */
+#if HAVE_hipGraphReleaseUserObject
 struct args_hipGraphReleaseUserObject_t {
-	struct ihipGraph * graph;
-	struct hipUserObject * object;
+	hipGraph_t graph;
+	hipUserObject_t object;
 	unsigned int count;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphReleaseUserObject(activity) { \
-	activity->hip_args.hipGraphReleaseUserObject.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphReleaseUserObject.object = (struct hipUserObject *) object; \
+	activity->hip_args.hipGraphReleaseUserObject.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphReleaseUserObject.object = (hipUserObject_t) object; \
 	activity->hip_args.hipGraphReleaseUserObject.count = (unsigned int) count; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceGetMemPool` function.
@@ -3065,8 +3275,9 @@ struct args_hipGraphReleaseUserObject_t {
  *			int device (int)
  *	)
  */
+#if HAVE_hipDeviceGetMemPool
 struct args_hipDeviceGetMemPool_t {
-	struct ihipMemPoolHandle_t ** mem_pool;
+	hipMemPool_t * mem_pool;
 	struct {
 		void* ptr1;
 	} mem_pool__ref;
@@ -3075,7 +3286,7 @@ struct args_hipDeviceGetMemPool_t {
 };
 
 #define GET_ARGS_VALUE_hipDeviceGetMemPool(activity) { \
-	activity->hip_args.hipDeviceGetMemPool.mem_pool = (struct ihipMemPoolHandle_t **) mem_pool; \
+	activity->hip_args.hipDeviceGetMemPool.mem_pool = (hipMemPool_t *) mem_pool; \
 	activity->hip_args.hipDeviceGetMemPool.device = (int) device; \
 };
 
@@ -3084,6 +3295,8 @@ struct args_hipDeviceGetMemPool_t {
 		args->hipDeviceGetMemPool.mem_pool__ref.ptr1 = *args->hipDeviceGetMemPool.mem_pool; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphHostNodeSetParams` function.
@@ -3100,8 +3313,9 @@ struct args_hipDeviceGetMemPool_t {
  *			const hipHostNodeParams * pNodeParams (const struct hipHostNodeParams *)
  *	)
  */
+#if HAVE_hipGraphHostNodeSetParams
 struct args_hipGraphHostNodeSetParams_t {
-	struct hipGraphNode * node;
+	hipGraphNode_t node;
 	hipHostNodeParams * pNodeParams;
 	struct {
 		hipHostNodeParams val;
@@ -3110,7 +3324,7 @@ struct args_hipGraphHostNodeSetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphHostNodeSetParams(activity) { \
-	activity->hip_args.hipGraphHostNodeSetParams.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphHostNodeSetParams.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphHostNodeSetParams.pNodeParams = (hipHostNodeParams *) pNodeParams; \
 };
 
@@ -3119,6 +3333,8 @@ struct args_hipGraphHostNodeSetParams_t {
 		args->hipGraphHostNodeSetParams.pNodeParams__ref.val = *args->hipGraphHostNodeSetParams.pNodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddEventWaitNode` function.
@@ -3138,27 +3354,28 @@ struct args_hipGraphHostNodeSetParams_t {
  *			hipEvent_t event (struct ihipEvent_t *)
  *	)
  */
+#if HAVE_hipGraphAddEventWaitNode
 struct args_hipGraphAddEventWaitNode_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
 	size_t numDependencies;
-	struct ihipEvent_t * event;
+	hipEvent_t event;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphAddEventWaitNode(activity) { \
-	activity->hip_args.hipGraphAddEventWaitNode.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddEventWaitNode.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddEventWaitNode.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddEventWaitNode.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddEventWaitNode.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddEventWaitNode.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddEventWaitNode.numDependencies = (size_t) numDependencies; \
-	activity->hip_args.hipGraphAddEventWaitNode.event = (struct ihipEvent_t *) event; \
+	activity->hip_args.hipGraphAddEventWaitNode.event = (hipEvent_t) event; \
 };
 
 #define GET_PTRS_VALUE_hipGraphAddEventWaitNode(args) { \
@@ -3169,6 +3386,8 @@ struct args_hipGraphAddEventWaitNode_t {
 		args->hipGraphAddEventWaitNode.pDependencies__ref.ptr1 = *args->hipGraphAddEventWaitNode.pDependencies; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy2DFromArrayAsync_spt` function.
@@ -3192,30 +3411,33 @@ struct args_hipGraphAddEventWaitNode_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpy2DFromArrayAsync_spt
 struct args_hipMemcpy2DFromArrayAsync_spt_t {
 	void * dst;
 	size_t dpitch;
-	struct hipArray * src;
+	hipArray_const_t src;
 	size_t wOffsetSrc;
 	size_t hOffsetSrc;
 	size_t width;
 	size_t height;
 	hipMemcpyKind kind;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemcpy2DFromArrayAsync_spt(activity) { \
 	activity->hip_args.hipMemcpy2DFromArrayAsync_spt.dst = (void *) dst; \
 	activity->hip_args.hipMemcpy2DFromArrayAsync_spt.dpitch = (size_t) dpitch; \
-	activity->hip_args.hipMemcpy2DFromArrayAsync_spt.src = (struct hipArray *) src; \
+	activity->hip_args.hipMemcpy2DFromArrayAsync_spt.src = (hipArray_const_t) src; \
 	activity->hip_args.hipMemcpy2DFromArrayAsync_spt.wOffsetSrc = (size_t) wOffsetSrc; \
 	activity->hip_args.hipMemcpy2DFromArrayAsync_spt.hOffsetSrc = (size_t) hOffsetSrc; \
 	activity->hip_args.hipMemcpy2DFromArrayAsync_spt.width = (size_t) width; \
 	activity->hip_args.hipMemcpy2DFromArrayAsync_spt.height = (size_t) height; \
 	activity->hip_args.hipMemcpy2DFromArrayAsync_spt.kind = (hipMemcpyKind) kind; \
-	activity->hip_args.hipMemcpy2DFromArrayAsync_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpy2DFromArrayAsync_spt.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipLaunchHostFunc_spt` function.
@@ -3233,18 +3455,21 @@ struct args_hipMemcpy2DFromArrayAsync_spt_t {
  *			void * userData (void *)
  *	)
  */
+#if HAVE_hipLaunchHostFunc_spt
 struct args_hipLaunchHostFunc_spt_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipHostFn_t fn;
 	void * userData;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipLaunchHostFunc_spt(activity) { \
-	activity->hip_args.hipLaunchHostFunc_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipLaunchHostFunc_spt.stream = (hipStream_t) stream; \
 	activity->hip_args.hipLaunchHostFunc_spt.fn = (hipHostFn_t) fn; \
 	activity->hip_args.hipLaunchHostFunc_spt.userData = (void *) userData; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamWaitEvent_spt` function.
@@ -3262,18 +3487,21 @@ struct args_hipLaunchHostFunc_spt_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipStreamWaitEvent_spt
 struct args_hipStreamWaitEvent_spt_t {
-	struct ihipStream_t * stream;
-	struct ihipEvent_t * event;
+	hipStream_t stream;
+	hipEvent_t event;
 	unsigned int flags;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipStreamWaitEvent_spt(activity) { \
-	activity->hip_args.hipStreamWaitEvent_spt.stream = (struct ihipStream_t *) stream; \
-	activity->hip_args.hipStreamWaitEvent_spt.event = (struct ihipEvent_t *) event; \
+	activity->hip_args.hipStreamWaitEvent_spt.stream = (hipStream_t) stream; \
+	activity->hip_args.hipStreamWaitEvent_spt.event = (hipEvent_t) event; \
 	activity->hip_args.hipStreamWaitEvent_spt.flags = (unsigned int) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipArrayGetDescriptor` function.
@@ -3290,18 +3518,19 @@ struct args_hipStreamWaitEvent_spt_t {
  *			hipArray_t array (struct hipArray *)
  *	)
  */
+#if HAVE_hipArrayGetDescriptor
 struct args_hipArrayGetDescriptor_t {
 	HIP_ARRAY_DESCRIPTOR * pArrayDescriptor;
 	struct {
 		HIP_ARRAY_DESCRIPTOR val;
 	} pArrayDescriptor__ref;
-	struct hipArray * array;
+	hipArray_t array;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipArrayGetDescriptor(activity) { \
 	activity->hip_args.hipArrayGetDescriptor.pArrayDescriptor = (HIP_ARRAY_DESCRIPTOR *) pArrayDescriptor; \
-	activity->hip_args.hipArrayGetDescriptor.array = (struct hipArray *) array; \
+	activity->hip_args.hipArrayGetDescriptor.array = (hipArray_t) array; \
 };
 
 #define GET_PTRS_VALUE_hipArrayGetDescriptor(args) { \
@@ -3309,6 +3538,8 @@ struct args_hipArrayGetDescriptor_t {
 		args->hipArrayGetDescriptor.pArrayDescriptor__ref.val = *args->hipArrayGetDescriptor.pArrayDescriptor; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphExecUpdate` function.
@@ -3327,10 +3558,11 @@ struct args_hipArrayGetDescriptor_t {
  *			hipGraphExecUpdateResult * updateResult_out (enum hipGraphExecUpdateResult*)
  *	)
  */
+#if HAVE_hipGraphExecUpdate
 struct args_hipGraphExecUpdate_t {
-	struct hipGraphExec * hGraphExec;
-	struct ihipGraph * hGraph;
-	struct hipGraphNode ** hErrorNode_out;
+	hipGraphExec_t hGraphExec;
+	hipGraph_t hGraph;
+	hipGraphNode_t * hErrorNode_out;
 	struct {
 		void* ptr1;
 	} hErrorNode_out__ref;
@@ -3342,9 +3574,9 @@ struct args_hipGraphExecUpdate_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphExecUpdate(activity) { \
-	activity->hip_args.hipGraphExecUpdate.hGraphExec = (struct hipGraphExec *) hGraphExec; \
-	activity->hip_args.hipGraphExecUpdate.hGraph = (struct ihipGraph *) hGraph; \
-	activity->hip_args.hipGraphExecUpdate.hErrorNode_out = (struct hipGraphNode **) hErrorNode_out; \
+	activity->hip_args.hipGraphExecUpdate.hGraphExec = (hipGraphExec_t) hGraphExec; \
+	activity->hip_args.hipGraphExecUpdate.hGraph = (hipGraph_t) hGraph; \
+	activity->hip_args.hipGraphExecUpdate.hErrorNode_out = (hipGraphNode_t *) hErrorNode_out; \
 	activity->hip_args.hipGraphExecUpdate.updateResult_out = (hipGraphExecUpdateResult *) updateResult_out; \
 };
 
@@ -3356,6 +3588,8 @@ struct args_hipGraphExecUpdate_t {
 		args->hipGraphExecUpdate.updateResult_out__ref.val = *args->hipGraphExecUpdate.updateResult_out; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemGetAllocationPropertiesFromHandle` function.
@@ -3372,18 +3606,19 @@ struct args_hipGraphExecUpdate_t {
  *			hipMemGenericAllocationHandle_t handle (struct ihipMemGenericAllocationHandle *)
  *	)
  */
+#if HAVE_hipMemGetAllocationPropertiesFromHandle
 struct args_hipMemGetAllocationPropertiesFromHandle_t {
 	hipMemAllocationProp * prop;
 	struct {
 		hipMemAllocationProp val;
 	} prop__ref;
-	struct ihipMemGenericAllocationHandle * handle;
+	hipMemGenericAllocationHandle_t handle;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemGetAllocationPropertiesFromHandle(activity) { \
 	activity->hip_args.hipMemGetAllocationPropertiesFromHandle.prop = (hipMemAllocationProp *) prop; \
-	activity->hip_args.hipMemGetAllocationPropertiesFromHandle.handle = (struct ihipMemGenericAllocationHandle *) handle; \
+	activity->hip_args.hipMemGetAllocationPropertiesFromHandle.handle = (hipMemGenericAllocationHandle_t) handle; \
 };
 
 #define GET_PTRS_VALUE_hipMemGetAllocationPropertiesFromHandle(args) { \
@@ -3391,6 +3626,8 @@ struct args_hipMemGetAllocationPropertiesFromHandle_t {
 		args->hipMemGetAllocationPropertiesFromHandle.prop__ref.val = *args->hipMemGetAllocationPropertiesFromHandle.prop; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyWithStream` function.
@@ -3410,12 +3647,13 @@ struct args_hipMemGetAllocationPropertiesFromHandle_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpyWithStream
 struct args_hipMemcpyWithStream_t {
 	void * dst;
 	void * src;
 	size_t sizeBytes;
 	hipMemcpyKind kind;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -3424,8 +3662,10 @@ struct args_hipMemcpyWithStream_t {
 	activity->hip_args.hipMemcpyWithStream.src = (void *) src; \
 	activity->hip_args.hipMemcpyWithStream.sizeBytes = (size_t) sizeBytes; \
 	activity->hip_args.hipMemcpyWithStream.kind = (hipMemcpyKind) kind; \
-	activity->hip_args.hipMemcpyWithStream.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpyWithStream.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddExternalSemaphoresWaitNode` function.
@@ -3445,13 +3685,14 @@ struct args_hipMemcpyWithStream_t {
  *			const hipExternalSemaphoreWaitNodeParams * nodeParams (const struct hipExternalSemaphoreWaitNodeParams *)
  *	)
  */
+#if HAVE_hipGraphAddExternalSemaphoresWaitNode
 struct args_hipGraphAddExternalSemaphoresWaitNode_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
@@ -3464,9 +3705,9 @@ struct args_hipGraphAddExternalSemaphoresWaitNode_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphAddExternalSemaphoresWaitNode(activity) { \
-	activity->hip_args.hipGraphAddExternalSemaphoresWaitNode.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddExternalSemaphoresWaitNode.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddExternalSemaphoresWaitNode.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddExternalSemaphoresWaitNode.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddExternalSemaphoresWaitNode.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddExternalSemaphoresWaitNode.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddExternalSemaphoresWaitNode.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipGraphAddExternalSemaphoresWaitNode.nodeParams = (hipExternalSemaphoreWaitNodeParams *) nodeParams; \
 };
@@ -3482,6 +3723,8 @@ struct args_hipGraphAddExternalSemaphoresWaitNode_t {
 		args->hipGraphAddExternalSemaphoresWaitNode.nodeParams__ref.val = *args->hipGraphAddExternalSemaphoresWaitNode.nodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyAtoH` function.
@@ -3500,9 +3743,10 @@ struct args_hipGraphAddExternalSemaphoresWaitNode_t {
  *			size_t count (unsigned long)
  *	)
  */
+#if HAVE_hipMemcpyAtoH
 struct args_hipMemcpyAtoH_t {
 	void * dst;
-	struct hipArray * srcArray;
+	hipArray_t srcArray;
 	size_t srcOffset;
 	size_t count;
 	hipError_t retval;
@@ -3510,10 +3754,12 @@ struct args_hipMemcpyAtoH_t {
 
 #define GET_ARGS_VALUE_hipMemcpyAtoH(activity) { \
 	activity->hip_args.hipMemcpyAtoH.dst = (void *) dst; \
-	activity->hip_args.hipMemcpyAtoH.srcArray = (struct hipArray *) srcArray; \
+	activity->hip_args.hipMemcpyAtoH.srcArray = (hipArray_t) srcArray; \
 	activity->hip_args.hipMemcpyAtoH.srcOffset = (size_t) srcOffset; \
 	activity->hip_args.hipMemcpyAtoH.count = (size_t) count; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamQuery` function.
@@ -3529,14 +3775,17 @@ struct args_hipMemcpyAtoH_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipStreamQuery
 struct args_hipStreamQuery_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipStreamQuery(activity) { \
-	activity->hip_args.hipStreamQuery.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamQuery.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipIpcCloseMemHandle` function.
@@ -3552,6 +3801,7 @@ struct args_hipStreamQuery_t {
  *			void * devPtr (void *)
  *	)
  */
+#if HAVE_hipIpcCloseMemHandle
 struct args_hipIpcCloseMemHandle_t {
 	void * devPtr;
 	hipError_t retval;
@@ -3560,6 +3810,8 @@ struct args_hipIpcCloseMemHandle_t {
 #define GET_ARGS_VALUE_hipIpcCloseMemHandle(activity) { \
 	activity->hip_args.hipIpcCloseMemHandle.devPtr = (void *) devPtr; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemsetAsync` function.
@@ -3578,11 +3830,12 @@ struct args_hipIpcCloseMemHandle_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemsetAsync
 struct args_hipMemsetAsync_t {
 	void * dst;
 	int value;
 	size_t sizeBytes;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -3590,8 +3843,10 @@ struct args_hipMemsetAsync_t {
 	activity->hip_args.hipMemsetAsync.dst = (void *) dst; \
 	activity->hip_args.hipMemsetAsync.value = (int) value; \
 	activity->hip_args.hipMemsetAsync.sizeBytes = (size_t) sizeBytes; \
-	activity->hip_args.hipMemsetAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemsetAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyDtoD` function.
@@ -3609,6 +3864,7 @@ struct args_hipMemsetAsync_t {
  *			size_t sizeBytes (unsigned long)
  *	)
  */
+#if HAVE_hipMemcpyDtoD
 struct args_hipMemcpyDtoD_t {
 	void * dst;
 	void * src;
@@ -3621,6 +3877,8 @@ struct args_hipMemcpyDtoD_t {
 	activity->hip_args.hipMemcpyDtoD.src = (void *) src; \
 	activity->hip_args.hipMemcpyDtoD.sizeBytes = (size_t) sizeBytes; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipModuleUnload` function.
@@ -3636,14 +3894,17 @@ struct args_hipMemcpyDtoD_t {
  *			hipModule_t module (struct ihipModule_t *)
  *	)
  */
+#if HAVE_hipModuleUnload
 struct args_hipModuleUnload_t {
-	struct ihipModule_t * module;
+	hipModule_t module;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipModuleUnload(activity) { \
-	activity->hip_args.hipModuleUnload.module = (struct ihipModule_t *) module; \
+	activity->hip_args.hipModuleUnload.module = (hipModule_t) module; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGetDevicePropertiesR0600` function.
@@ -3660,6 +3921,7 @@ struct args_hipModuleUnload_t {
  *			int deviceId (int)
  *	)
  */
+#if HAVE_hipGetDevicePropertiesR0600
 struct args_hipGetDevicePropertiesR0600_t {
 	hipDeviceProp_tR0600 * prop;
 	struct {
@@ -3680,6 +3942,8 @@ struct args_hipGetDevicePropertiesR0600_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyFromArray` function.
  *
@@ -3699,9 +3963,10 @@ struct args_hipGetDevicePropertiesR0600_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpyFromArray
 struct args_hipMemcpyFromArray_t {
 	void * dst;
-	struct hipArray * srcArray;
+	hipArray_const_t srcArray;
 	size_t wOffset;
 	size_t hOffset;
 	size_t count;
@@ -3711,12 +3976,14 @@ struct args_hipMemcpyFromArray_t {
 
 #define GET_ARGS_VALUE_hipMemcpyFromArray(activity) { \
 	activity->hip_args.hipMemcpyFromArray.dst = (void *) dst; \
-	activity->hip_args.hipMemcpyFromArray.srcArray = (struct hipArray *) srcArray; \
+	activity->hip_args.hipMemcpyFromArray.srcArray = (hipArray_const_t) srcArray; \
 	activity->hip_args.hipMemcpyFromArray.wOffset = (size_t) wOffset; \
 	activity->hip_args.hipMemcpyFromArray.hOffset = (size_t) hOffset; \
 	activity->hip_args.hipMemcpyFromArray.count = (size_t) count; \
 	activity->hip_args.hipMemcpyFromArray.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceCanAccessPeer` function.
@@ -3734,6 +4001,7 @@ struct args_hipMemcpyFromArray_t {
  *			int peerDeviceId (int)
  *	)
  */
+#if HAVE_hipDeviceCanAccessPeer
 struct args_hipDeviceCanAccessPeer_t {
 	int * canAccessPeer;
 	struct {
@@ -3756,6 +4024,8 @@ struct args_hipDeviceCanAccessPeer_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemSetAccess` function.
  *
@@ -3773,6 +4043,7 @@ struct args_hipDeviceCanAccessPeer_t {
  *			size_t count (unsigned long)
  *	)
  */
+#if HAVE_hipMemSetAccess
 struct args_hipMemSetAccess_t {
 	void * ptr;
 	size_t size;
@@ -3797,6 +4068,8 @@ struct args_hipMemSetAccess_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipStreamWaitValue32` function.
  *
@@ -3815,8 +4088,9 @@ struct args_hipMemSetAccess_t {
  *			uint32_t mask (unsigned int)
  *	)
  */
+#if HAVE_hipStreamWaitValue32
 struct args_hipStreamWaitValue32_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	void * ptr;
 	uint32_t value;
 	unsigned int flags;
@@ -3825,12 +4099,14 @@ struct args_hipStreamWaitValue32_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamWaitValue32(activity) { \
-	activity->hip_args.hipStreamWaitValue32.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamWaitValue32.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamWaitValue32.ptr = (void *) ptr; \
 	activity->hip_args.hipStreamWaitValue32.value = (uint32_t) value; \
 	activity->hip_args.hipStreamWaitValue32.flags = (unsigned int) flags; \
 	activity->hip_args.hipStreamWaitValue32.mask = (uint32_t) mask; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipApiName` function.
@@ -3846,6 +4122,7 @@ struct args_hipStreamWaitValue32_t {
  *			uint32_t id (unsigned int)
  *	)
  */
+#if HAVE_hipApiName
 struct args_hipApiName_t {
 	uint32_t id;
 	char * retval;
@@ -3864,6 +4141,8 @@ struct args_hipApiName_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphicsSubResourceGetMappedArray` function.
  *
@@ -3881,20 +4160,21 @@ struct args_hipApiName_t {
  *			unsigned int mipLevel (unsigned int)
  *	)
  */
+#if HAVE_hipGraphicsSubResourceGetMappedArray
 struct args_hipGraphicsSubResourceGetMappedArray_t {
-	struct hipArray ** array;
+	hipArray_t * array;
 	struct {
 		void* ptr1;
 	} array__ref;
-	struct _hipGraphicsResource* resource;
+	hipGraphicsResource_t resource;
 	unsigned int arrayIndex;
 	unsigned int mipLevel;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphicsSubResourceGetMappedArray(activity) { \
-	activity->hip_args.hipGraphicsSubResourceGetMappedArray.array = (struct hipArray **) array; \
-	activity->hip_args.hipGraphicsSubResourceGetMappedArray.resource = (struct _hipGraphicsResource*) resource; \
+	activity->hip_args.hipGraphicsSubResourceGetMappedArray.array = (hipArray_t *) array; \
+	activity->hip_args.hipGraphicsSubResourceGetMappedArray.resource = (hipGraphicsResource_t) resource; \
 	activity->hip_args.hipGraphicsSubResourceGetMappedArray.arrayIndex = (unsigned int) arrayIndex; \
 	activity->hip_args.hipGraphicsSubResourceGetMappedArray.mipLevel = (unsigned int) mipLevel; \
 };
@@ -3904,6 +4184,8 @@ struct args_hipGraphicsSubResourceGetMappedArray_t {
 		args->hipGraphicsSubResourceGetMappedArray.array__ref.ptr1 = *args->hipGraphicsSubResourceGetMappedArray.array; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy2DToArrayAsync` function.
@@ -3927,8 +4209,9 @@ struct args_hipGraphicsSubResourceGetMappedArray_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpy2DToArrayAsync
 struct args_hipMemcpy2DToArrayAsync_t {
-	struct hipArray * dst;
+	hipArray_t dst;
 	size_t wOffset;
 	size_t hOffset;
 	void * src;
@@ -3936,12 +4219,12 @@ struct args_hipMemcpy2DToArrayAsync_t {
 	size_t width;
 	size_t height;
 	hipMemcpyKind kind;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemcpy2DToArrayAsync(activity) { \
-	activity->hip_args.hipMemcpy2DToArrayAsync.dst = (struct hipArray *) dst; \
+	activity->hip_args.hipMemcpy2DToArrayAsync.dst = (hipArray_t) dst; \
 	activity->hip_args.hipMemcpy2DToArrayAsync.wOffset = (size_t) wOffset; \
 	activity->hip_args.hipMemcpy2DToArrayAsync.hOffset = (size_t) hOffset; \
 	activity->hip_args.hipMemcpy2DToArrayAsync.src = (void *) src; \
@@ -3949,8 +4232,10 @@ struct args_hipMemcpy2DToArrayAsync_t {
 	activity->hip_args.hipMemcpy2DToArrayAsync.width = (size_t) width; \
 	activity->hip_args.hipMemcpy2DToArrayAsync.height = (size_t) height; \
 	activity->hip_args.hipMemcpy2DToArrayAsync.kind = (hipMemcpyKind) kind; \
-	activity->hip_args.hipMemcpy2DToArrayAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpy2DToArrayAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphDestroy` function.
@@ -3966,14 +4251,17 @@ struct args_hipMemcpy2DToArrayAsync_t {
  *			hipGraph_t graph (struct ihipGraph *)
  *	)
  */
+#if HAVE_hipGraphDestroy
 struct args_hipGraphDestroy_t {
-	struct ihipGraph * graph;
+	hipGraph_t graph;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphDestroy(activity) { \
-	activity->hip_args.hipGraphDestroy.graph = (struct ihipGraph *) graph; \
+	activity->hip_args.hipGraphDestroy.graph = (hipGraph_t) graph; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefGetBorderColor` function.
@@ -3990,6 +4278,7 @@ struct args_hipGraphDestroy_t {
  *			const textureReference * texRef (const struct textureReference *)
  *	)
  */
+#if HAVE_hipTexRefGetBorderColor
 struct args_hipTexRefGetBorderColor_t {
 	float * pBorderColor;
 	struct {
@@ -4016,6 +4305,8 @@ struct args_hipTexRefGetBorderColor_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddMemcpyNode1D` function.
  *
@@ -4037,13 +4328,14 @@ struct args_hipTexRefGetBorderColor_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipGraphAddMemcpyNode1D
 struct args_hipGraphAddMemcpyNode1D_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
@@ -4056,9 +4348,9 @@ struct args_hipGraphAddMemcpyNode1D_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphAddMemcpyNode1D(activity) { \
-	activity->hip_args.hipGraphAddMemcpyNode1D.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddMemcpyNode1D.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddMemcpyNode1D.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddMemcpyNode1D.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddMemcpyNode1D.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddMemcpyNode1D.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddMemcpyNode1D.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipGraphAddMemcpyNode1D.dst = (void *) dst; \
 	activity->hip_args.hipGraphAddMemcpyNode1D.src = (void *) src; \
@@ -4074,6 +4366,8 @@ struct args_hipGraphAddMemcpyNode1D_t {
 		args->hipGraphAddMemcpyNode1D.pDependencies__ref.ptr1 = *args->hipGraphAddMemcpyNode1D.pDependencies; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphGetNodes` function.
@@ -4091,9 +4385,10 @@ struct args_hipGraphAddMemcpyNode1D_t {
  *			size_t * numNodes (unsigned long*)
  *	)
  */
+#if HAVE_hipGraphGetNodes
 struct args_hipGraphGetNodes_t {
-	struct ihipGraph * graph;
-	struct hipGraphNode ** nodes;
+	hipGraph_t graph;
+	hipGraphNode_t * nodes;
 	struct {
 		void* ptr1;
 	} nodes__ref;
@@ -4105,8 +4400,8 @@ struct args_hipGraphGetNodes_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphGetNodes(activity) { \
-	activity->hip_args.hipGraphGetNodes.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphGetNodes.nodes = (struct hipGraphNode **) nodes; \
+	activity->hip_args.hipGraphGetNodes.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphGetNodes.nodes = (hipGraphNode_t *) nodes; \
 	activity->hip_args.hipGraphGetNodes.numNodes = (size_t *) numNodes; \
 };
 
@@ -4118,6 +4413,8 @@ struct args_hipGraphGetNodes_t {
 		args->hipGraphGetNodes.numNodes__ref.val = *args->hipGraphGetNodes.numNodes; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamGetFlags_spt` function.
@@ -4134,8 +4431,9 @@ struct args_hipGraphGetNodes_t {
  *			unsigned int * flags (unsigned int *)
  *	)
  */
+#if HAVE_hipStreamGetFlags_spt
 struct args_hipStreamGetFlags_spt_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	unsigned int * flags;
 	struct {
 		unsigned int val;
@@ -4144,7 +4442,7 @@ struct args_hipStreamGetFlags_spt_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamGetFlags_spt(activity) { \
-	activity->hip_args.hipStreamGetFlags_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamGetFlags_spt.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamGetFlags_spt.flags = (unsigned int *) flags; \
 };
 
@@ -4153,6 +4451,8 @@ struct args_hipStreamGetFlags_spt_t {
 		args->hipStreamGetFlags_spt.flags__ref.val = *args->hipStreamGetFlags_spt.flags; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefSetAddress2D` function.
@@ -4171,6 +4471,7 @@ struct args_hipStreamGetFlags_spt_t {
  *			size_t Pitch (unsigned long)
  *	)
  */
+#if HAVE_hipTexRefSetAddress2D
 struct args_hipTexRefSetAddress2D_t {
 	textureReference * texRef;
 	struct {
@@ -4201,6 +4502,8 @@ struct args_hipTexRefSetAddress2D_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipStreamGetPriority` function.
  *
@@ -4216,8 +4519,9 @@ struct args_hipTexRefSetAddress2D_t {
  *			int * priority (int *)
  *	)
  */
+#if HAVE_hipStreamGetPriority
 struct args_hipStreamGetPriority_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	int * priority;
 	struct {
 		int val;
@@ -4226,7 +4530,7 @@ struct args_hipStreamGetPriority_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamGetPriority(activity) { \
-	activity->hip_args.hipStreamGetPriority.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamGetPriority.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamGetPriority.priority = (int *) priority; \
 };
 
@@ -4235,6 +4539,8 @@ struct args_hipStreamGetPriority_t {
 		args->hipStreamGetPriority.priority__ref.val = *args->hipStreamGetPriority.priority; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamCreate` function.
@@ -4250,8 +4556,9 @@ struct args_hipStreamGetPriority_t {
  *			hipStream_t * stream (struct ihipStream_t **)
  *	)
  */
+#if HAVE_hipStreamCreate
 struct args_hipStreamCreate_t {
-	struct ihipStream_t ** stream;
+	hipStream_t * stream;
 	struct {
 		void* ptr1;
 	} stream__ref;
@@ -4259,7 +4566,7 @@ struct args_hipStreamCreate_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamCreate(activity) { \
-	activity->hip_args.hipStreamCreate.stream = (struct ihipStream_t **) stream; \
+	activity->hip_args.hipStreamCreate.stream = (hipStream_t *) stream; \
 };
 
 #define GET_PTRS_VALUE_hipStreamCreate(args) { \
@@ -4267,6 +4574,8 @@ struct args_hipStreamCreate_t {
 		args->hipStreamCreate.stream__ref.ptr1 = *args->hipStreamCreate.stream; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyFromSymbol` function.
@@ -4286,6 +4595,7 @@ struct args_hipStreamCreate_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpyFromSymbol
 struct args_hipMemcpyFromSymbol_t {
 	void * dst;
 	void * symbol;
@@ -4303,6 +4613,8 @@ struct args_hipMemcpyFromSymbol_t {
 	activity->hip_args.hipMemcpyFromSymbol.kind = (hipMemcpyKind) kind; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphNodeGetEnabled` function.
  *
@@ -4319,9 +4631,10 @@ struct args_hipMemcpyFromSymbol_t {
  *			unsigned int * isEnabled (unsigned int *)
  *	)
  */
+#if HAVE_hipGraphNodeGetEnabled
 struct args_hipGraphNodeGetEnabled_t {
-	struct hipGraphExec * hGraphExec;
-	struct hipGraphNode * hNode;
+	hipGraphExec_t hGraphExec;
+	hipGraphNode_t hNode;
 	unsigned int * isEnabled;
 	struct {
 		unsigned int val;
@@ -4330,8 +4643,8 @@ struct args_hipGraphNodeGetEnabled_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphNodeGetEnabled(activity) { \
-	activity->hip_args.hipGraphNodeGetEnabled.hGraphExec = (struct hipGraphExec *) hGraphExec; \
-	activity->hip_args.hipGraphNodeGetEnabled.hNode = (struct hipGraphNode *) hNode; \
+	activity->hip_args.hipGraphNodeGetEnabled.hGraphExec = (hipGraphExec_t) hGraphExec; \
+	activity->hip_args.hipGraphNodeGetEnabled.hNode = (hipGraphNode_t) hNode; \
 	activity->hip_args.hipGraphNodeGetEnabled.isEnabled = (unsigned int *) isEnabled; \
 };
 
@@ -4340,6 +4653,8 @@ struct args_hipGraphNodeGetEnabled_t {
 		args->hipGraphNodeGetEnabled.isEnabled__ref.val = *args->hipGraphNodeGetEnabled.isEnabled; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipCreateChannelDesc` function.
@@ -4359,6 +4674,7 @@ struct args_hipGraphNodeGetEnabled_t {
  *			enum hipChannelFormatKind f (enum hipChannelFormatKind)
  *	)
  */
+#if HAVE_hipCreateChannelDesc
 struct args_hipCreateChannelDesc_t {
 	int x;
 	int y;
@@ -4376,6 +4692,8 @@ struct args_hipCreateChannelDesc_t {
 	activity->hip_args.hipCreateChannelDesc.f = (enum hipChannelFormatKind) f; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipFreeMipmappedArray` function.
  *
@@ -4390,6 +4708,7 @@ struct args_hipCreateChannelDesc_t {
  *			hipMipmappedArray_t mipmappedArray (struct hipMipmappedArray *)
  *	)
  */
+#if HAVE_hipFreeMipmappedArray
 struct args_hipFreeMipmappedArray_t {
 	struct hipMipmappedArray * mipmappedArray;
 	struct {
@@ -4408,6 +4727,8 @@ struct args_hipFreeMipmappedArray_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGetTextureAlignmentOffset` function.
  *
@@ -4423,6 +4744,7 @@ struct args_hipFreeMipmappedArray_t {
  *			const textureReference * texref (const struct textureReference *)
  *	)
  */
+#if HAVE_hipGetTextureAlignmentOffset
 struct args_hipGetTextureAlignmentOffset_t {
 	size_t * offset;
 	struct {
@@ -4449,6 +4771,8 @@ struct args_hipGetTextureAlignmentOffset_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddEventRecordNode` function.
  *
@@ -4467,27 +4791,28 @@ struct args_hipGetTextureAlignmentOffset_t {
  *			hipEvent_t event (struct ihipEvent_t *)
  *	)
  */
+#if HAVE_hipGraphAddEventRecordNode
 struct args_hipGraphAddEventRecordNode_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
 	size_t numDependencies;
-	struct ihipEvent_t * event;
+	hipEvent_t event;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphAddEventRecordNode(activity) { \
-	activity->hip_args.hipGraphAddEventRecordNode.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddEventRecordNode.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddEventRecordNode.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddEventRecordNode.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddEventRecordNode.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddEventRecordNode.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddEventRecordNode.numDependencies = (size_t) numDependencies; \
-	activity->hip_args.hipGraphAddEventRecordNode.event = (struct ihipEvent_t *) event; \
+	activity->hip_args.hipGraphAddEventRecordNode.event = (hipEvent_t) event; \
 };
 
 #define GET_PTRS_VALUE_hipGraphAddEventRecordNode(args) { \
@@ -4498,6 +4823,8 @@ struct args_hipGraphAddEventRecordNode_t {
 		args->hipGraphAddEventRecordNode.pDependencies__ref.ptr1 = *args->hipGraphAddEventRecordNode.pDependencies; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphNodeFindInClone` function.
@@ -4515,20 +4842,21 @@ struct args_hipGraphAddEventRecordNode_t {
  *			hipGraph_t clonedGraph (struct ihipGraph *)
  *	)
  */
+#if HAVE_hipGraphNodeFindInClone
 struct args_hipGraphNodeFindInClone_t {
-	struct hipGraphNode ** pNode;
+	hipGraphNode_t * pNode;
 	struct {
 		void* ptr1;
 	} pNode__ref;
-	struct hipGraphNode * originalNode;
-	struct ihipGraph * clonedGraph;
+	hipGraphNode_t originalNode;
+	hipGraph_t clonedGraph;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphNodeFindInClone(activity) { \
-	activity->hip_args.hipGraphNodeFindInClone.pNode = (struct hipGraphNode **) pNode; \
-	activity->hip_args.hipGraphNodeFindInClone.originalNode = (struct hipGraphNode *) originalNode; \
-	activity->hip_args.hipGraphNodeFindInClone.clonedGraph = (struct ihipGraph *) clonedGraph; \
+	activity->hip_args.hipGraphNodeFindInClone.pNode = (hipGraphNode_t *) pNode; \
+	activity->hip_args.hipGraphNodeFindInClone.originalNode = (hipGraphNode_t) originalNode; \
+	activity->hip_args.hipGraphNodeFindInClone.clonedGraph = (hipGraph_t) clonedGraph; \
 };
 
 #define GET_PTRS_VALUE_hipGraphNodeFindInClone(args) { \
@@ -4536,6 +4864,8 @@ struct args_hipGraphNodeFindInClone_t {
 		args->hipGraphNodeFindInClone.pNode__ref.ptr1 = *args->hipGraphNodeFindInClone.pNode; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyFromSymbol_spt` function.
@@ -4555,6 +4885,7 @@ struct args_hipGraphNodeFindInClone_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpyFromSymbol_spt
 struct args_hipMemcpyFromSymbol_spt_t {
 	void * dst;
 	void * symbol;
@@ -4571,6 +4902,8 @@ struct args_hipMemcpyFromSymbol_spt_t {
 	activity->hip_args.hipMemcpyFromSymbol_spt.offset = (size_t) offset; \
 	activity->hip_args.hipMemcpyFromSymbol_spt.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemset3DAsync_spt` function.
@@ -4589,11 +4922,12 @@ struct args_hipMemcpyFromSymbol_spt_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemset3DAsync_spt
 struct args_hipMemset3DAsync_spt_t {
 	hipPitchedPtr pitchedDevPtr;
 	int value;
 	hipExtent extent;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -4601,8 +4935,10 @@ struct args_hipMemset3DAsync_spt_t {
 	activity->hip_args.hipMemset3DAsync_spt.pitchedDevPtr = (hipPitchedPtr) pitchedDevPtr; \
 	activity->hip_args.hipMemset3DAsync_spt.value = (int) value; \
 	activity->hip_args.hipMemset3DAsync_spt.extent = (hipExtent) extent; \
-	activity->hip_args.hipMemset3DAsync_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemset3DAsync_spt.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemsetD16Async` function.
@@ -4621,11 +4957,12 @@ struct args_hipMemset3DAsync_spt_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemsetD16Async
 struct args_hipMemsetD16Async_t {
 	void * dest;
 	unsigned short value;
 	size_t count;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -4633,8 +4970,10 @@ struct args_hipMemsetD16Async_t {
 	activity->hip_args.hipMemsetD16Async.dest = (void *) dest; \
 	activity->hip_args.hipMemsetD16Async.value = (unsigned short) value; \
 	activity->hip_args.hipMemsetD16Async.count = (size_t) count; \
-	activity->hip_args.hipMemsetD16Async.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemsetD16Async.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceGetCacheConfig` function.
@@ -4650,6 +4989,7 @@ struct args_hipMemsetD16Async_t {
  *			hipFuncCache_t * cacheConfig (enum hipFuncCache_t*)
  *	)
  */
+#if HAVE_hipDeviceGetCacheConfig
 struct args_hipDeviceGetCacheConfig_t {
 	hipFuncCache_t * cacheConfig;
 	struct {
@@ -4668,6 +5008,8 @@ struct args_hipDeviceGetCacheConfig_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemCreate` function.
  *
@@ -4685,8 +5027,9 @@ struct args_hipDeviceGetCacheConfig_t {
  *			unsigned long long flags (unsigned long long)
  *	)
  */
+#if HAVE_hipMemCreate
 struct args_hipMemCreate_t {
-	struct ihipMemGenericAllocationHandle ** handle;
+	hipMemGenericAllocationHandle_t * handle;
 	struct {
 		void* ptr1;
 	} handle__ref;
@@ -4700,7 +5043,7 @@ struct args_hipMemCreate_t {
 };
 
 #define GET_ARGS_VALUE_hipMemCreate(activity) { \
-	activity->hip_args.hipMemCreate.handle = (struct ihipMemGenericAllocationHandle **) handle; \
+	activity->hip_args.hipMemCreate.handle = (hipMemGenericAllocationHandle_t *) handle; \
 	activity->hip_args.hipMemCreate.size = (size_t) size; \
 	activity->hip_args.hipMemCreate.prop = (hipMemAllocationProp *) prop; \
 	activity->hip_args.hipMemCreate.flags = (unsigned long long) flags; \
@@ -4714,6 +5057,8 @@ struct args_hipMemCreate_t {
 		args->hipMemCreate.prop__ref.val = *args->hipMemCreate.prop; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphExternalSemaphoresWaitNodeGetParams` function.
@@ -4730,8 +5075,9 @@ struct args_hipMemCreate_t {
  *			hipExternalSemaphoreWaitNodeParams * params_out (struct hipExternalSemaphoreWaitNodeParams*)
  *	)
  */
+#if HAVE_hipGraphExternalSemaphoresWaitNodeGetParams
 struct args_hipGraphExternalSemaphoresWaitNodeGetParams_t {
-	struct hipGraphNode * hNode;
+	hipGraphNode_t hNode;
 	hipExternalSemaphoreWaitNodeParams * params_out;
 	struct {
 		hipExternalSemaphoreWaitNodeParams val;
@@ -4740,7 +5086,7 @@ struct args_hipGraphExternalSemaphoresWaitNodeGetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphExternalSemaphoresWaitNodeGetParams(activity) { \
-	activity->hip_args.hipGraphExternalSemaphoresWaitNodeGetParams.hNode = (struct hipGraphNode *) hNode; \
+	activity->hip_args.hipGraphExternalSemaphoresWaitNodeGetParams.hNode = (hipGraphNode_t) hNode; \
 	activity->hip_args.hipGraphExternalSemaphoresWaitNodeGetParams.params_out = (hipExternalSemaphoreWaitNodeParams *) params_out; \
 };
 
@@ -4749,6 +5095,8 @@ struct args_hipGraphExternalSemaphoresWaitNodeGetParams_t {
 		args->hipGraphExternalSemaphoresWaitNodeGetParams.params_out__ref.val = *args->hipGraphExternalSemaphoresWaitNodeGetParams.params_out; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamEndCapture` function.
@@ -4765,9 +5113,10 @@ struct args_hipGraphExternalSemaphoresWaitNodeGetParams_t {
  *			hipGraph_t * pGraph (struct ihipGraph **)
  *	)
  */
+#if HAVE_hipStreamEndCapture
 struct args_hipStreamEndCapture_t {
-	struct ihipStream_t * stream;
-	struct ihipGraph ** pGraph;
+	hipStream_t stream;
+	hipGraph_t * pGraph;
 	struct {
 		void* ptr1;
 	} pGraph__ref;
@@ -4775,8 +5124,8 @@ struct args_hipStreamEndCapture_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamEndCapture(activity) { \
-	activity->hip_args.hipStreamEndCapture.stream = (struct ihipStream_t *) stream; \
-	activity->hip_args.hipStreamEndCapture.pGraph = (struct ihipGraph **) pGraph; \
+	activity->hip_args.hipStreamEndCapture.stream = (hipStream_t) stream; \
+	activity->hip_args.hipStreamEndCapture.pGraph = (hipGraph_t *) pGraph; \
 };
 
 #define GET_PTRS_VALUE_hipStreamEndCapture(args) { \
@@ -4784,6 +5133,8 @@ struct args_hipStreamEndCapture_t {
 		args->hipStreamEndCapture.pGraph__ref.ptr1 = *args->hipStreamEndCapture.pGraph; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyFromSymbolAsync_spt` function.
@@ -4804,13 +5155,14 @@ struct args_hipStreamEndCapture_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpyFromSymbolAsync_spt
 struct args_hipMemcpyFromSymbolAsync_spt_t {
 	void * dst;
 	void * symbol;
 	size_t sizeBytes;
 	size_t offset;
 	hipMemcpyKind kind;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -4820,8 +5172,10 @@ struct args_hipMemcpyFromSymbolAsync_spt_t {
 	activity->hip_args.hipMemcpyFromSymbolAsync_spt.sizeBytes = (size_t) sizeBytes; \
 	activity->hip_args.hipMemcpyFromSymbolAsync_spt.offset = (size_t) offset; \
 	activity->hip_args.hipMemcpyFromSymbolAsync_spt.kind = (hipMemcpyKind) kind; \
-	activity->hip_args.hipMemcpyFromSymbolAsync_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpyFromSymbolAsync_spt.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyHtoA` function.
@@ -4840,8 +5194,9 @@ struct args_hipMemcpyFromSymbolAsync_spt_t {
  *			size_t count (unsigned long)
  *	)
  */
+#if HAVE_hipMemcpyHtoA
 struct args_hipMemcpyHtoA_t {
-	struct hipArray * dstArray;
+	hipArray_t dstArray;
 	size_t dstOffset;
 	void * srcHost;
 	size_t count;
@@ -4849,11 +5204,13 @@ struct args_hipMemcpyHtoA_t {
 };
 
 #define GET_ARGS_VALUE_hipMemcpyHtoA(activity) { \
-	activity->hip_args.hipMemcpyHtoA.dstArray = (struct hipArray *) dstArray; \
+	activity->hip_args.hipMemcpyHtoA.dstArray = (hipArray_t) dstArray; \
 	activity->hip_args.hipMemcpyHtoA.dstOffset = (size_t) dstOffset; \
 	activity->hip_args.hipMemcpyHtoA.srcHost = (void *) srcHost; \
 	activity->hip_args.hipMemcpyHtoA.count = (size_t) count; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphExecHostNodeSetParams` function.
@@ -4871,9 +5228,10 @@ struct args_hipMemcpyHtoA_t {
  *			const hipHostNodeParams * pNodeParams (const struct hipHostNodeParams *)
  *	)
  */
+#if HAVE_hipGraphExecHostNodeSetParams
 struct args_hipGraphExecHostNodeSetParams_t {
-	struct hipGraphExec * hGraphExec;
-	struct hipGraphNode * node;
+	hipGraphExec_t hGraphExec;
+	hipGraphNode_t node;
 	hipHostNodeParams * pNodeParams;
 	struct {
 		hipHostNodeParams val;
@@ -4882,8 +5240,8 @@ struct args_hipGraphExecHostNodeSetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphExecHostNodeSetParams(activity) { \
-	activity->hip_args.hipGraphExecHostNodeSetParams.hGraphExec = (struct hipGraphExec *) hGraphExec; \
-	activity->hip_args.hipGraphExecHostNodeSetParams.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphExecHostNodeSetParams.hGraphExec = (hipGraphExec_t) hGraphExec; \
+	activity->hip_args.hipGraphExecHostNodeSetParams.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphExecHostNodeSetParams.pNodeParams = (hipHostNodeParams *) pNodeParams; \
 };
 
@@ -4892,6 +5250,8 @@ struct args_hipGraphExecHostNodeSetParams_t {
 		args->hipGraphExecHostNodeSetParams.pNodeParams__ref.val = *args->hipGraphExecHostNodeSetParams.pNodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMalloc` function.
@@ -4908,6 +5268,7 @@ struct args_hipGraphExecHostNodeSetParams_t {
  *			size_t size (unsigned long)
  *	)
  */
+#if HAVE_hipMalloc
 struct args_hipMalloc_t {
 	void ** ptr;
 	struct {
@@ -4928,6 +5289,8 @@ struct args_hipMalloc_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMalloc3DArray` function.
  *
@@ -4945,8 +5308,9 @@ struct args_hipMalloc_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipMalloc3DArray
 struct args_hipMalloc3DArray_t {
-	struct hipArray ** array;
+	hipArray_t * array;
 	struct {
 		void* ptr1;
 	} array__ref;
@@ -4960,7 +5324,7 @@ struct args_hipMalloc3DArray_t {
 };
 
 #define GET_ARGS_VALUE_hipMalloc3DArray(activity) { \
-	activity->hip_args.hipMalloc3DArray.array = (struct hipArray **) array; \
+	activity->hip_args.hipMalloc3DArray.array = (hipArray_t *) array; \
 	activity->hip_args.hipMalloc3DArray.desc = (struct hipChannelFormatDesc *) desc; \
 	activity->hip_args.hipMalloc3DArray.extent = (struct hipExtent) extent; \
 	activity->hip_args.hipMalloc3DArray.flags = (unsigned int) flags; \
@@ -4974,6 +5338,8 @@ struct args_hipMalloc3DArray_t {
 		args->hipMalloc3DArray.desc__ref.val = *args->hipMalloc3DArray.desc; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphExecKernelNodeSetParams` function.
@@ -4991,9 +5357,10 @@ struct args_hipMalloc3DArray_t {
  *			const hipKernelNodeParams * pNodeParams (const struct hipKernelNodeParams *)
  *	)
  */
+#if HAVE_hipGraphExecKernelNodeSetParams
 struct args_hipGraphExecKernelNodeSetParams_t {
-	struct hipGraphExec * hGraphExec;
-	struct hipGraphNode * node;
+	hipGraphExec_t hGraphExec;
+	hipGraphNode_t node;
 	hipKernelNodeParams * pNodeParams;
 	struct {
 		hipKernelNodeParams val;
@@ -5002,8 +5369,8 @@ struct args_hipGraphExecKernelNodeSetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphExecKernelNodeSetParams(activity) { \
-	activity->hip_args.hipGraphExecKernelNodeSetParams.hGraphExec = (struct hipGraphExec *) hGraphExec; \
-	activity->hip_args.hipGraphExecKernelNodeSetParams.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphExecKernelNodeSetParams.hGraphExec = (hipGraphExec_t) hGraphExec; \
+	activity->hip_args.hipGraphExecKernelNodeSetParams.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphExecKernelNodeSetParams.pNodeParams = (hipKernelNodeParams *) pNodeParams; \
 };
 
@@ -5012,6 +5379,8 @@ struct args_hipGraphExecKernelNodeSetParams_t {
 		args->hipGraphExecKernelNodeSetParams.pNodeParams__ref.val = *args->hipGraphExecKernelNodeSetParams.pNodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGetTextureObjectResourceDesc` function.
@@ -5028,18 +5397,19 @@ struct args_hipGraphExecKernelNodeSetParams_t {
  *			hipTextureObject_t textureObject (struct __hip_texture *)
  *	)
  */
+#if HAVE_hipGetTextureObjectResourceDesc
 struct args_hipGetTextureObjectResourceDesc_t {
 	hipResourceDesc * pResDesc;
 	struct {
 		hipResourceDesc val;
 	} pResDesc__ref;
-	struct __hip_texture * textureObject;
+	hipTextureObject_t textureObject;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGetTextureObjectResourceDesc(activity) { \
 	activity->hip_args.hipGetTextureObjectResourceDesc.pResDesc = (hipResourceDesc *) pResDesc; \
-	activity->hip_args.hipGetTextureObjectResourceDesc.textureObject = (struct __hip_texture *) textureObject; \
+	activity->hip_args.hipGetTextureObjectResourceDesc.textureObject = (hipTextureObject_t) textureObject; \
 };
 
 #define GET_PTRS_VALUE_hipGetTextureObjectResourceDesc(args) { \
@@ -5047,6 +5417,8 @@ struct args_hipGetTextureObjectResourceDesc_t {
 		args->hipGetTextureObjectResourceDesc.pResDesc__ref.val = *args->hipGetTextureObjectResourceDesc.pResDesc; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `__hipPushCallConfiguration` function.
@@ -5065,11 +5437,12 @@ struct args_hipGetTextureObjectResourceDesc_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE___hipPushCallConfiguration
 struct args___hipPushCallConfiguration_t {
 	dim3 gridDim;
 	dim3 blockDim;
 	size_t sharedMem;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -5077,8 +5450,10 @@ struct args___hipPushCallConfiguration_t {
 	activity->hip_args.__hipPushCallConfiguration.gridDim = (dim3) gridDim; \
 	activity->hip_args.__hipPushCallConfiguration.blockDim = (dim3) blockDim; \
 	activity->hip_args.__hipPushCallConfiguration.sharedMem = (size_t) sharedMem; \
-	activity->hip_args.__hipPushCallConfiguration.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.__hipPushCallConfiguration.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy3DAsync_spt` function.
@@ -5095,18 +5470,19 @@ struct args___hipPushCallConfiguration_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpy3DAsync_spt
 struct args_hipMemcpy3DAsync_spt_t {
 	hipMemcpy3DParms * p;
 	struct {
 		hipMemcpy3DParms val;
 	} p__ref;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemcpy3DAsync_spt(activity) { \
 	activity->hip_args.hipMemcpy3DAsync_spt.p = (hipMemcpy3DParms *) p; \
-	activity->hip_args.hipMemcpy3DAsync_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpy3DAsync_spt.stream = (hipStream_t) stream; \
 };
 
 #define GET_PTRS_VALUE_hipMemcpy3DAsync_spt(args) { \
@@ -5114,6 +5490,8 @@ struct args_hipMemcpy3DAsync_spt_t {
 		args->hipMemcpy3DAsync_spt.p__ref.val = *args->hipMemcpy3DAsync_spt.p; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemsetD8Async` function.
@@ -5132,11 +5510,12 @@ struct args_hipMemcpy3DAsync_spt_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemsetD8Async
 struct args_hipMemsetD8Async_t {
 	void * dest;
 	unsigned char value;
 	size_t count;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -5144,8 +5523,10 @@ struct args_hipMemsetD8Async_t {
 	activity->hip_args.hipMemsetD8Async.dest = (void *) dest; \
 	activity->hip_args.hipMemsetD8Async.value = (unsigned char) value; \
 	activity->hip_args.hipMemsetD8Async.count = (size_t) count; \
-	activity->hip_args.hipMemsetD8Async.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemsetD8Async.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamAddCallback` function.
@@ -5164,8 +5545,9 @@ struct args_hipMemsetD8Async_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipStreamAddCallback
 struct args_hipStreamAddCallback_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipStreamCallback_t callback;
 	void * userData;
 	unsigned int flags;
@@ -5173,11 +5555,13 @@ struct args_hipStreamAddCallback_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamAddCallback(activity) { \
-	activity->hip_args.hipStreamAddCallback.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamAddCallback.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamAddCallback.callback = (hipStreamCallback_t) callback; \
 	activity->hip_args.hipStreamAddCallback.userData = (void *) userData; \
 	activity->hip_args.hipStreamAddCallback.flags = (unsigned int) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemPoolImportPointer` function.
@@ -5195,12 +5579,13 @@ struct args_hipStreamAddCallback_t {
  *			hipMemPoolPtrExportData * export_data (struct hipMemPoolPtrExportData*)
  *	)
  */
+#if HAVE_hipMemPoolImportPointer
 struct args_hipMemPoolImportPointer_t {
 	void ** dev_ptr;
 	struct {
 		void* ptr1;
 	} dev_ptr__ref;
-	struct ihipMemPoolHandle_t * mem_pool;
+	hipMemPool_t mem_pool;
 	hipMemPoolPtrExportData * export_data;
 	struct {
 		hipMemPoolPtrExportData val;
@@ -5210,7 +5595,7 @@ struct args_hipMemPoolImportPointer_t {
 
 #define GET_ARGS_VALUE_hipMemPoolImportPointer(activity) { \
 	activity->hip_args.hipMemPoolImportPointer.dev_ptr = (void **) dev_ptr; \
-	activity->hip_args.hipMemPoolImportPointer.mem_pool = (struct ihipMemPoolHandle_t *) mem_pool; \
+	activity->hip_args.hipMemPoolImportPointer.mem_pool = (hipMemPool_t) mem_pool; \
 	activity->hip_args.hipMemPoolImportPointer.export_data = (hipMemPoolPtrExportData *) export_data; \
 };
 
@@ -5222,6 +5607,8 @@ struct args_hipMemPoolImportPointer_t {
 		args->hipMemPoolImportPointer.export_data__ref.val = *args->hipMemPoolImportPointer.export_data; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipFuncGetAttributes` function.
@@ -5238,6 +5625,7 @@ struct args_hipMemPoolImportPointer_t {
  *			const void * func (const void *)
  *	)
  */
+#if HAVE_hipFuncGetAttributes
 struct args_hipFuncGetAttributes_t {
 	struct hipFuncAttributes * attr;
 	struct {
@@ -5258,6 +5646,8 @@ struct args_hipFuncGetAttributes_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipCtxGetCurrent` function.
  *
@@ -5272,8 +5662,9 @@ struct args_hipFuncGetAttributes_t {
  *			hipCtx_t * ctx (struct ihipCtx_t **)
  *	)
  */
+#if HAVE_hipCtxGetCurrent
 struct args_hipCtxGetCurrent_t {
-	struct ihipCtx_t ** ctx;
+	hipCtx_t * ctx;
 	struct {
 		void* ptr1;
 	} ctx__ref;
@@ -5281,7 +5672,7 @@ struct args_hipCtxGetCurrent_t {
 };
 
 #define GET_ARGS_VALUE_hipCtxGetCurrent(activity) { \
-	activity->hip_args.hipCtxGetCurrent.ctx = (struct ihipCtx_t **) ctx; \
+	activity->hip_args.hipCtxGetCurrent.ctx = (hipCtx_t *) ctx; \
 };
 
 #define GET_PTRS_VALUE_hipCtxGetCurrent(args) { \
@@ -5289,6 +5680,8 @@ struct args_hipCtxGetCurrent_t {
 		args->hipCtxGetCurrent.ctx__ref.ptr1 = *args->hipCtxGetCurrent.ctx; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddChildGraphNode` function.
@@ -5308,27 +5701,28 @@ struct args_hipCtxGetCurrent_t {
  *			hipGraph_t childGraph (struct ihipGraph *)
  *	)
  */
+#if HAVE_hipGraphAddChildGraphNode
 struct args_hipGraphAddChildGraphNode_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
 	size_t numDependencies;
-	struct ihipGraph * childGraph;
+	hipGraph_t childGraph;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphAddChildGraphNode(activity) { \
-	activity->hip_args.hipGraphAddChildGraphNode.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddChildGraphNode.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddChildGraphNode.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddChildGraphNode.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddChildGraphNode.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddChildGraphNode.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddChildGraphNode.numDependencies = (size_t) numDependencies; \
-	activity->hip_args.hipGraphAddChildGraphNode.childGraph = (struct ihipGraph *) childGraph; \
+	activity->hip_args.hipGraphAddChildGraphNode.childGraph = (hipGraph_t) childGraph; \
 };
 
 #define GET_PTRS_VALUE_hipGraphAddChildGraphNode(args) { \
@@ -5339,6 +5733,8 @@ struct args_hipGraphAddChildGraphNode_t {
 		args->hipGraphAddChildGraphNode.pDependencies__ref.ptr1 = *args->hipGraphAddChildGraphNode.pDependencies; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipEventCreate` function.
@@ -5354,8 +5750,9 @@ struct args_hipGraphAddChildGraphNode_t {
  *			hipEvent_t * event (struct ihipEvent_t **)
  *	)
  */
+#if HAVE_hipEventCreate
 struct args_hipEventCreate_t {
-	struct ihipEvent_t ** event;
+	hipEvent_t * event;
 	struct {
 		void* ptr1;
 	} event__ref;
@@ -5363,7 +5760,7 @@ struct args_hipEventCreate_t {
 };
 
 #define GET_ARGS_VALUE_hipEventCreate(activity) { \
-	activity->hip_args.hipEventCreate.event = (struct ihipEvent_t **) event; \
+	activity->hip_args.hipEventCreate.event = (hipEvent_t *) event; \
 };
 
 #define GET_PTRS_VALUE_hipEventCreate(args) { \
@@ -5371,6 +5768,8 @@ struct args_hipEventCreate_t {
 		args->hipEventCreate.event__ref.ptr1 = *args->hipEventCreate.event; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipHostGetDevicePointer` function.
@@ -5388,6 +5787,7 @@ struct args_hipEventCreate_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipHostGetDevicePointer
 struct args_hipHostGetDevicePointer_t {
 	void ** devPtr;
 	struct {
@@ -5410,6 +5810,8 @@ struct args_hipHostGetDevicePointer_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipEventQuery` function.
  *
@@ -5424,14 +5826,17 @@ struct args_hipHostGetDevicePointer_t {
  *			hipEvent_t event (struct ihipEvent_t *)
  *	)
  */
+#if HAVE_hipEventQuery
 struct args_hipEventQuery_t {
-	struct ihipEvent_t * event;
+	hipEvent_t event;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipEventQuery(activity) { \
-	activity->hip_args.hipEventQuery.event = (struct ihipEvent_t *) event; \
+	activity->hip_args.hipEventQuery.event = (hipEvent_t) event; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyPeerAsync` function.
@@ -5452,13 +5857,14 @@ struct args_hipEventQuery_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpyPeerAsync
 struct args_hipMemcpyPeerAsync_t {
 	void * dst;
 	int dstDeviceId;
 	void * src;
 	int srcDevice;
 	size_t sizeBytes;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -5468,8 +5874,10 @@ struct args_hipMemcpyPeerAsync_t {
 	activity->hip_args.hipMemcpyPeerAsync.src = (void *) src; \
 	activity->hip_args.hipMemcpyPeerAsync.srcDevice = (int) srcDevice; \
 	activity->hip_args.hipMemcpyPeerAsync.sizeBytes = (size_t) sizeBytes; \
-	activity->hip_args.hipMemcpyPeerAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpyPeerAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemMap` function.
@@ -5489,11 +5897,12 @@ struct args_hipMemcpyPeerAsync_t {
  *			unsigned long long flags (unsigned long long)
  *	)
  */
+#if HAVE_hipMemMap
 struct args_hipMemMap_t {
 	void * ptr;
 	size_t size;
 	size_t offset;
-	struct ihipMemGenericAllocationHandle * handle;
+	hipMemGenericAllocationHandle_t handle;
 	unsigned long long flags;
 	hipError_t retval;
 };
@@ -5502,9 +5911,11 @@ struct args_hipMemMap_t {
 	activity->hip_args.hipMemMap.ptr = (void *) ptr; \
 	activity->hip_args.hipMemMap.size = (size_t) size; \
 	activity->hip_args.hipMemMap.offset = (size_t) offset; \
-	activity->hip_args.hipMemMap.handle = (struct ihipMemGenericAllocationHandle *) handle; \
+	activity->hip_args.hipMemMap.handle = (hipMemGenericAllocationHandle_t) handle; \
 	activity->hip_args.hipMemMap.flags = (unsigned long long) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipBindTextureToArray` function.
@@ -5522,12 +5933,13 @@ struct args_hipMemMap_t {
  *			const hipChannelFormatDesc * desc (const struct hipChannelFormatDesc *)
  *	)
  */
+#if HAVE_hipBindTextureToArray
 struct args_hipBindTextureToArray_t {
 	textureReference * tex;
 	struct {
 		textureReference val;
 	} tex__ref;
-	struct hipArray * array;
+	hipArray_const_t array;
 	hipChannelFormatDesc * desc;
 	struct {
 		hipChannelFormatDesc val;
@@ -5537,7 +5949,7 @@ struct args_hipBindTextureToArray_t {
 
 #define GET_ARGS_VALUE_hipBindTextureToArray(activity) { \
 	activity->hip_args.hipBindTextureToArray.tex = (textureReference *) tex; \
-	activity->hip_args.hipBindTextureToArray.array = (struct hipArray *) array; \
+	activity->hip_args.hipBindTextureToArray.array = (hipArray_const_t) array; \
 	activity->hip_args.hipBindTextureToArray.desc = (hipChannelFormatDesc *) desc; \
 };
 
@@ -5549,6 +5961,8 @@ struct args_hipBindTextureToArray_t {
 		args->hipBindTextureToArray.desc__ref.val = *args->hipBindTextureToArray.desc; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy2DAsync_spt` function.
@@ -5571,6 +5985,7 @@ struct args_hipBindTextureToArray_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpy2DAsync_spt
 struct args_hipMemcpy2DAsync_spt_t {
 	void * dst;
 	size_t dpitch;
@@ -5579,7 +5994,7 @@ struct args_hipMemcpy2DAsync_spt_t {
 	size_t width;
 	size_t height;
 	hipMemcpyKind kind;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -5591,8 +6006,10 @@ struct args_hipMemcpy2DAsync_spt_t {
 	activity->hip_args.hipMemcpy2DAsync_spt.width = (size_t) width; \
 	activity->hip_args.hipMemcpy2DAsync_spt.height = (size_t) height; \
 	activity->hip_args.hipMemcpy2DAsync_spt.kind = (hipMemcpyKind) kind; \
-	activity->hip_args.hipMemcpy2DAsync_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpy2DAsync_spt.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemPoolSetAttribute` function.
@@ -5610,18 +6027,21 @@ struct args_hipMemcpy2DAsync_spt_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hipMemPoolSetAttribute
 struct args_hipMemPoolSetAttribute_t {
-	struct ihipMemPoolHandle_t * mem_pool;
+	hipMemPool_t mem_pool;
 	hipMemPoolAttr attr;
 	void * value;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemPoolSetAttribute(activity) { \
-	activity->hip_args.hipMemPoolSetAttribute.mem_pool = (struct ihipMemPoolHandle_t *) mem_pool; \
+	activity->hip_args.hipMemPoolSetAttribute.mem_pool = (hipMemPool_t) mem_pool; \
 	activity->hip_args.hipMemPoolSetAttribute.attr = (hipMemPoolAttr) attr; \
 	activity->hip_args.hipMemPoolSetAttribute.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGetLastError` function.
@@ -5636,9 +6056,12 @@ struct args_hipMemPoolSetAttribute_t {
  *	hipGetLastError (
  *	)
  */
+#if HAVE_hipGetLastError
 struct args_hipGetLastError_t {
 	hipError_t retval;
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamEndCapture_spt` function.
@@ -5655,9 +6078,10 @@ struct args_hipGetLastError_t {
  *			hipGraph_t * pGraph (struct ihipGraph **)
  *	)
  */
+#if HAVE_hipStreamEndCapture_spt
 struct args_hipStreamEndCapture_spt_t {
-	struct ihipStream_t * stream;
-	struct ihipGraph ** pGraph;
+	hipStream_t stream;
+	hipGraph_t * pGraph;
 	struct {
 		void* ptr1;
 	} pGraph__ref;
@@ -5665,8 +6089,8 @@ struct args_hipStreamEndCapture_spt_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamEndCapture_spt(activity) { \
-	activity->hip_args.hipStreamEndCapture_spt.stream = (struct ihipStream_t *) stream; \
-	activity->hip_args.hipStreamEndCapture_spt.pGraph = (struct ihipGraph **) pGraph; \
+	activity->hip_args.hipStreamEndCapture_spt.stream = (hipStream_t) stream; \
+	activity->hip_args.hipStreamEndCapture_spt.pGraph = (hipGraph_t *) pGraph; \
 };
 
 #define GET_PTRS_VALUE_hipStreamEndCapture_spt(args) { \
@@ -5674,6 +6098,8 @@ struct args_hipStreamEndCapture_spt_t {
 		args->hipStreamEndCapture_spt.pGraph__ref.ptr1 = *args->hipStreamEndCapture_spt.pGraph; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipModuleOccupancyMaxPotentialBlockSize` function.
@@ -5693,6 +6119,7 @@ struct args_hipStreamEndCapture_spt_t {
  *			int blockSizeLimit (int)
  *	)
  */
+#if HAVE_hipModuleOccupancyMaxPotentialBlockSize
 struct args_hipModuleOccupancyMaxPotentialBlockSize_t {
 	int * gridSize;
 	struct {
@@ -5702,7 +6129,7 @@ struct args_hipModuleOccupancyMaxPotentialBlockSize_t {
 	struct {
 		int val;
 	} blockSize__ref;
-	struct ihipModuleSymbol_t * f;
+	hipFunction_t f;
 	size_t dynSharedMemPerBlk;
 	int blockSizeLimit;
 	hipError_t retval;
@@ -5711,7 +6138,7 @@ struct args_hipModuleOccupancyMaxPotentialBlockSize_t {
 #define GET_ARGS_VALUE_hipModuleOccupancyMaxPotentialBlockSize(activity) { \
 	activity->hip_args.hipModuleOccupancyMaxPotentialBlockSize.gridSize = (int *) gridSize; \
 	activity->hip_args.hipModuleOccupancyMaxPotentialBlockSize.blockSize = (int *) blockSize; \
-	activity->hip_args.hipModuleOccupancyMaxPotentialBlockSize.f = (struct ihipModuleSymbol_t *) f; \
+	activity->hip_args.hipModuleOccupancyMaxPotentialBlockSize.f = (hipFunction_t) f; \
 	activity->hip_args.hipModuleOccupancyMaxPotentialBlockSize.dynSharedMemPerBlk = (size_t) dynSharedMemPerBlk; \
 	activity->hip_args.hipModuleOccupancyMaxPotentialBlockSize.blockSizeLimit = (int) blockSizeLimit; \
 };
@@ -5724,6 +6151,8 @@ struct args_hipModuleOccupancyMaxPotentialBlockSize_t {
 		args->hipModuleOccupancyMaxPotentialBlockSize.blockSize__ref.val = *args->hipModuleOccupancyMaxPotentialBlockSize.blockSize; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipKernelNameRefByPtr` function.
@@ -5740,9 +6169,10 @@ struct args_hipModuleOccupancyMaxPotentialBlockSize_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipKernelNameRefByPtr
 struct args_hipKernelNameRefByPtr_t {
 	void * hostFunction;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	char * retval;
 	struct {
 		char val[HIP_STRING_SIZE_MAX];
@@ -5751,7 +6181,7 @@ struct args_hipKernelNameRefByPtr_t {
 
 #define GET_ARGS_VALUE_hipKernelNameRefByPtr(activity) { \
 	activity->hip_args.hipKernelNameRefByPtr.hostFunction = (void *) hostFunction; \
-	activity->hip_args.hipKernelNameRefByPtr.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipKernelNameRefByPtr.stream = (hipStream_t) stream; \
 };
 
 #define GET_PTRS_RET_VALUE_hipKernelNameRefByPtr(args) { \
@@ -5759,6 +6189,8 @@ struct args_hipKernelNameRefByPtr_t {
 		strncpy(args->hipKernelNameRefByPtr.retval__ref.val, args->hipKernelNameRefByPtr.retval, HIP_STRING_SIZE_MAX-1); \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGetDevice` function.
@@ -5774,6 +6206,7 @@ struct args_hipKernelNameRefByPtr_t {
  *			int * deviceId (int *)
  *	)
  */
+#if HAVE_hipGetDevice
 struct args_hipGetDevice_t {
 	int * deviceId;
 	struct {
@@ -5792,6 +6225,8 @@ struct args_hipGetDevice_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy3D_spt` function.
  *
@@ -5806,6 +6241,7 @@ struct args_hipGetDevice_t {
  *			const struct hipMemcpy3DParms * p (const struct hipMemcpy3DParms *)
  *	)
  */
+#if HAVE_hipMemcpy3D_spt
 struct args_hipMemcpy3D_spt_t {
 	struct hipMemcpy3DParms * p;
 	struct {
@@ -5824,6 +6260,8 @@ struct args_hipMemcpy3D_spt_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipTexObjectGetTextureDesc` function.
  *
@@ -5839,18 +6277,19 @@ struct args_hipMemcpy3D_spt_t {
  *			hipTextureObject_t texObject (struct __hip_texture *)
  *	)
  */
+#if HAVE_hipTexObjectGetTextureDesc
 struct args_hipTexObjectGetTextureDesc_t {
 	HIP_TEXTURE_DESC * pTexDesc;
 	struct {
 		HIP_TEXTURE_DESC val;
 	} pTexDesc__ref;
-	struct __hip_texture * texObject;
+	hipTextureObject_t texObject;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipTexObjectGetTextureDesc(activity) { \
 	activity->hip_args.hipTexObjectGetTextureDesc.pTexDesc = (HIP_TEXTURE_DESC *) pTexDesc; \
-	activity->hip_args.hipTexObjectGetTextureDesc.texObject = (struct __hip_texture *) texObject; \
+	activity->hip_args.hipTexObjectGetTextureDesc.texObject = (hipTextureObject_t) texObject; \
 };
 
 #define GET_PTRS_VALUE_hipTexObjectGetTextureDesc(args) { \
@@ -5858,6 +6297,8 @@ struct args_hipTexObjectGetTextureDesc_t {
 		args->hipTexObjectGetTextureDesc.pTexDesc__ref.val = *args->hipTexObjectGetTextureDesc.pTexDesc; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceGet` function.
@@ -5874,6 +6315,7 @@ struct args_hipTexObjectGetTextureDesc_t {
  *			int ordinal (int)
  *	)
  */
+#if HAVE_hipDeviceGet
 struct args_hipDeviceGet_t {
 	hipDevice_t * device;
 	struct {
@@ -5894,6 +6336,8 @@ struct args_hipDeviceGet_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphExternalSemaphoresSignalNodeSetParams` function.
  *
@@ -5909,8 +6353,9 @@ struct args_hipDeviceGet_t {
  *			const hipExternalSemaphoreSignalNodeParams * nodeParams (const struct hipExternalSemaphoreSignalNodeParams *)
  *	)
  */
+#if HAVE_hipGraphExternalSemaphoresSignalNodeSetParams
 struct args_hipGraphExternalSemaphoresSignalNodeSetParams_t {
-	struct hipGraphNode * hNode;
+	hipGraphNode_t hNode;
 	hipExternalSemaphoreSignalNodeParams * nodeParams;
 	struct {
 		hipExternalSemaphoreSignalNodeParams val;
@@ -5919,7 +6364,7 @@ struct args_hipGraphExternalSemaphoresSignalNodeSetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphExternalSemaphoresSignalNodeSetParams(activity) { \
-	activity->hip_args.hipGraphExternalSemaphoresSignalNodeSetParams.hNode = (struct hipGraphNode *) hNode; \
+	activity->hip_args.hipGraphExternalSemaphoresSignalNodeSetParams.hNode = (hipGraphNode_t) hNode; \
 	activity->hip_args.hipGraphExternalSemaphoresSignalNodeSetParams.nodeParams = (hipExternalSemaphoreSignalNodeParams *) nodeParams; \
 };
 
@@ -5928,6 +6373,8 @@ struct args_hipGraphExternalSemaphoresSignalNodeSetParams_t {
 		args->hipGraphExternalSemaphoresSignalNodeSetParams.nodeParams__ref.val = *args->hipGraphExternalSemaphoresSignalNodeSetParams.nodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDestroySurfaceObject` function.
@@ -5943,14 +6390,17 @@ struct args_hipGraphExternalSemaphoresSignalNodeSetParams_t {
  *			hipSurfaceObject_t surfaceObject (struct __hip_surface *)
  *	)
  */
+#if HAVE_hipDestroySurfaceObject
 struct args_hipDestroySurfaceObject_t {
-	struct __hip_surface * surfaceObject;
+	hipSurfaceObject_t surfaceObject;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipDestroySurfaceObject(activity) { \
-	activity->hip_args.hipDestroySurfaceObject.surfaceObject = (struct __hip_surface *) surfaceObject; \
+	activity->hip_args.hipDestroySurfaceObject.surfaceObject = (hipSurfaceObject_t) surfaceObject; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamGetDevice` function.
@@ -5967,8 +6417,9 @@ struct args_hipDestroySurfaceObject_t {
  *			hipDevice_t * device (int*)
  *	)
  */
+#if HAVE_hipStreamGetDevice
 struct args_hipStreamGetDevice_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipDevice_t * device;
 	struct {
 		hipDevice_t val;
@@ -5977,7 +6428,7 @@ struct args_hipStreamGetDevice_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamGetDevice(activity) { \
-	activity->hip_args.hipStreamGetDevice.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamGetDevice.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamGetDevice.device = (hipDevice_t *) device; \
 };
 
@@ -5986,6 +6437,8 @@ struct args_hipStreamGetDevice_t {
 		args->hipStreamGetDevice.device__ref.val = *args->hipStreamGetDevice.device; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemAllocPitch` function.
@@ -6005,6 +6458,7 @@ struct args_hipStreamGetDevice_t {
  *			unsigned int elementSizeBytes (unsigned int)
  *	)
  */
+#if HAVE_hipMemAllocPitch
 struct args_hipMemAllocPitch_t {
 	void ** dptr;
 	struct {
@@ -6037,6 +6491,8 @@ struct args_hipMemAllocPitch_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddNode` function.
  *
@@ -6055,13 +6511,14 @@ struct args_hipMemAllocPitch_t {
  *			hipGraphNodeParams * nodeParams (struct hipGraphNodeParams*)
  *	)
  */
+#if HAVE_hipGraphAddNode
 struct args_hipGraphAddNode_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
@@ -6074,9 +6531,9 @@ struct args_hipGraphAddNode_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphAddNode(activity) { \
-	activity->hip_args.hipGraphAddNode.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddNode.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddNode.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddNode.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddNode.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddNode.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddNode.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipGraphAddNode.nodeParams = (hipGraphNodeParams *) nodeParams; \
 };
@@ -6093,6 +6550,8 @@ struct args_hipGraphAddNode_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDeviceSetSharedMemConfig` function.
  *
@@ -6107,6 +6566,7 @@ struct args_hipGraphAddNode_t {
  *			hipSharedMemConfig config (enum hipSharedMemConfig)
  *	)
  */
+#if HAVE_hipDeviceSetSharedMemConfig
 struct args_hipDeviceSetSharedMemConfig_t {
 	hipSharedMemConfig config;
 	hipError_t retval;
@@ -6115,6 +6575,8 @@ struct args_hipDeviceSetSharedMemConfig_t {
 #define GET_ARGS_VALUE_hipDeviceSetSharedMemConfig(activity) { \
 	activity->hip_args.hipDeviceSetSharedMemConfig.config = (hipSharedMemConfig) config; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipRuntimeGetVersion` function.
@@ -6130,6 +6592,7 @@ struct args_hipDeviceSetSharedMemConfig_t {
  *			int * runtimeVersion (int *)
  *	)
  */
+#if HAVE_hipRuntimeGetVersion
 struct args_hipRuntimeGetVersion_t {
 	int * runtimeVersion;
 	struct {
@@ -6148,6 +6611,8 @@ struct args_hipRuntimeGetVersion_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphChildGraphNodeGetGraph` function.
  *
@@ -6163,9 +6628,10 @@ struct args_hipRuntimeGetVersion_t {
  *			hipGraph_t * pGraph (struct ihipGraph **)
  *	)
  */
+#if HAVE_hipGraphChildGraphNodeGetGraph
 struct args_hipGraphChildGraphNodeGetGraph_t {
-	struct hipGraphNode * node;
-	struct ihipGraph ** pGraph;
+	hipGraphNode_t node;
+	hipGraph_t * pGraph;
 	struct {
 		void* ptr1;
 	} pGraph__ref;
@@ -6173,8 +6639,8 @@ struct args_hipGraphChildGraphNodeGetGraph_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphChildGraphNodeGetGraph(activity) { \
-	activity->hip_args.hipGraphChildGraphNodeGetGraph.node = (struct hipGraphNode *) node; \
-	activity->hip_args.hipGraphChildGraphNodeGetGraph.pGraph = (struct ihipGraph **) pGraph; \
+	activity->hip_args.hipGraphChildGraphNodeGetGraph.node = (hipGraphNode_t) node; \
+	activity->hip_args.hipGraphChildGraphNodeGetGraph.pGraph = (hipGraph_t *) pGraph; \
 };
 
 #define GET_PTRS_VALUE_hipGraphChildGraphNodeGetGraph(args) { \
@@ -6182,6 +6648,8 @@ struct args_hipGraphChildGraphNodeGetGraph_t {
 		args->hipGraphChildGraphNodeGetGraph.pGraph__ref.ptr1 = *args->hipGraphChildGraphNodeGetGraph.pGraph; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphExecMemsetNodeSetParams` function.
@@ -6199,9 +6667,10 @@ struct args_hipGraphChildGraphNodeGetGraph_t {
  *			const hipMemsetParams * pNodeParams (const struct hipMemsetParams *)
  *	)
  */
+#if HAVE_hipGraphExecMemsetNodeSetParams
 struct args_hipGraphExecMemsetNodeSetParams_t {
-	struct hipGraphExec * hGraphExec;
-	struct hipGraphNode * node;
+	hipGraphExec_t hGraphExec;
+	hipGraphNode_t node;
 	hipMemsetParams * pNodeParams;
 	struct {
 		hipMemsetParams val;
@@ -6210,8 +6679,8 @@ struct args_hipGraphExecMemsetNodeSetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphExecMemsetNodeSetParams(activity) { \
-	activity->hip_args.hipGraphExecMemsetNodeSetParams.hGraphExec = (struct hipGraphExec *) hGraphExec; \
-	activity->hip_args.hipGraphExecMemsetNodeSetParams.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphExecMemsetNodeSetParams.hGraphExec = (hipGraphExec_t) hGraphExec; \
+	activity->hip_args.hipGraphExecMemsetNodeSetParams.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphExecMemsetNodeSetParams.pNodeParams = (hipMemsetParams *) pNodeParams; \
 };
 
@@ -6220,6 +6689,8 @@ struct args_hipGraphExecMemsetNodeSetParams_t {
 		args->hipGraphExecMemsetNodeSetParams.pNodeParams__ref.val = *args->hipGraphExecMemsetNodeSetParams.pNodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphicsUnregisterResource` function.
@@ -6235,14 +6706,17 @@ struct args_hipGraphExecMemsetNodeSetParams_t {
  *			hipGraphicsResource_t resource (struct _hipGraphicsResource*)
  *	)
  */
+#if HAVE_hipGraphicsUnregisterResource
 struct args_hipGraphicsUnregisterResource_t {
-	struct _hipGraphicsResource* resource;
+	hipGraphicsResource_t resource;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphicsUnregisterResource(activity) { \
-	activity->hip_args.hipGraphicsUnregisterResource.resource = (struct _hipGraphicsResource*) resource; \
+	activity->hip_args.hipGraphicsUnregisterResource.resource = (hipGraphicsResource_t) resource; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipEventElapsedTime` function.
@@ -6260,20 +6734,21 @@ struct args_hipGraphicsUnregisterResource_t {
  *			hipEvent_t stop (struct ihipEvent_t *)
  *	)
  */
+#if HAVE_hipEventElapsedTime
 struct args_hipEventElapsedTime_t {
 	float * ms;
 	struct {
 		float val;
 	} ms__ref;
-	struct ihipEvent_t * start;
-	struct ihipEvent_t * stop;
+	hipEvent_t start;
+	hipEvent_t stop;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipEventElapsedTime(activity) { \
 	activity->hip_args.hipEventElapsedTime.ms = (float *) ms; \
-	activity->hip_args.hipEventElapsedTime.start = (struct ihipEvent_t *) start; \
-	activity->hip_args.hipEventElapsedTime.stop = (struct ihipEvent_t *) stop; \
+	activity->hip_args.hipEventElapsedTime.start = (hipEvent_t) start; \
+	activity->hip_args.hipEventElapsedTime.stop = (hipEvent_t) stop; \
 };
 
 #define GET_PTRS_VALUE_hipEventElapsedTime(args) { \
@@ -6281,6 +6756,8 @@ struct args_hipEventElapsedTime_t {
 		args->hipEventElapsedTime.ms__ref.val = *args->hipEventElapsedTime.ms; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipFreeAsync` function.
@@ -6297,16 +6774,19 @@ struct args_hipEventElapsedTime_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipFreeAsync
 struct args_hipFreeAsync_t {
 	void * dev_ptr;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipFreeAsync(activity) { \
 	activity->hip_args.hipFreeAsync.dev_ptr = (void *) dev_ptr; \
-	activity->hip_args.hipFreeAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipFreeAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamCreateWithFlags` function.
@@ -6323,8 +6803,9 @@ struct args_hipFreeAsync_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipStreamCreateWithFlags
 struct args_hipStreamCreateWithFlags_t {
-	struct ihipStream_t ** stream;
+	hipStream_t * stream;
 	struct {
 		void* ptr1;
 	} stream__ref;
@@ -6333,7 +6814,7 @@ struct args_hipStreamCreateWithFlags_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamCreateWithFlags(activity) { \
-	activity->hip_args.hipStreamCreateWithFlags.stream = (struct ihipStream_t **) stream; \
+	activity->hip_args.hipStreamCreateWithFlags.stream = (hipStream_t *) stream; \
 	activity->hip_args.hipStreamCreateWithFlags.flags = (unsigned int) flags; \
 };
 
@@ -6342,6 +6823,8 @@ struct args_hipStreamCreateWithFlags_t {
 		args->hipStreamCreateWithFlags.stream__ref.ptr1 = *args->hipStreamCreateWithFlags.stream; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefSetAddress` function.
@@ -6360,6 +6843,7 @@ struct args_hipStreamCreateWithFlags_t {
  *			size_t bytes (unsigned long)
  *	)
  */
+#if HAVE_hipTexRefSetAddress
 struct args_hipTexRefSetAddress_t {
 	size_t * ByteOffset;
 	struct {
@@ -6390,6 +6874,8 @@ struct args_hipTexRefSetAddress_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipStreamAddCallback_spt` function.
  *
@@ -6407,8 +6893,9 @@ struct args_hipTexRefSetAddress_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipStreamAddCallback_spt
 struct args_hipStreamAddCallback_spt_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipStreamCallback_t callback;
 	void * userData;
 	unsigned int flags;
@@ -6416,11 +6903,13 @@ struct args_hipStreamAddCallback_spt_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamAddCallback_spt(activity) { \
-	activity->hip_args.hipStreamAddCallback_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamAddCallback_spt.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamAddCallback_spt.callback = (hipStreamCallback_t) callback; \
 	activity->hip_args.hipStreamAddCallback_spt.userData = (void *) userData; \
 	activity->hip_args.hipStreamAddCallback_spt.flags = (unsigned int) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddKernelNode` function.
@@ -6440,13 +6929,14 @@ struct args_hipStreamAddCallback_spt_t {
  *			const hipKernelNodeParams * pNodeParams (const struct hipKernelNodeParams *)
  *	)
  */
+#if HAVE_hipGraphAddKernelNode
 struct args_hipGraphAddKernelNode_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
@@ -6459,9 +6949,9 @@ struct args_hipGraphAddKernelNode_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphAddKernelNode(activity) { \
-	activity->hip_args.hipGraphAddKernelNode.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddKernelNode.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddKernelNode.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddKernelNode.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddKernelNode.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddKernelNode.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddKernelNode.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipGraphAddKernelNode.pNodeParams = (hipKernelNodeParams *) pNodeParams; \
 };
@@ -6477,6 +6967,8 @@ struct args_hipGraphAddKernelNode_t {
 		args->hipGraphAddKernelNode.pNodeParams__ref.val = *args->hipGraphAddKernelNode.pNodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyDtoH` function.
@@ -6494,6 +6986,7 @@ struct args_hipGraphAddKernelNode_t {
  *			size_t sizeBytes (unsigned long)
  *	)
  */
+#if HAVE_hipMemcpyDtoH
 struct args_hipMemcpyDtoH_t {
 	void * dst;
 	void * src;
@@ -6506,6 +6999,8 @@ struct args_hipMemcpyDtoH_t {
 	activity->hip_args.hipMemcpyDtoH.src = (void *) src; \
 	activity->hip_args.hipMemcpyDtoH.sizeBytes = (size_t) sizeBytes; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceTotalMem` function.
@@ -6522,6 +7017,7 @@ struct args_hipMemcpyDtoH_t {
  *			hipDevice_t device (int)
  *	)
  */
+#if HAVE_hipDeviceTotalMem
 struct args_hipDeviceTotalMem_t {
 	size_t * bytes;
 	struct {
@@ -6542,6 +7038,8 @@ struct args_hipDeviceTotalMem_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemset2D` function.
  *
@@ -6560,6 +7058,7 @@ struct args_hipDeviceTotalMem_t {
  *			size_t height (unsigned long)
  *	)
  */
+#if HAVE_hipMemset2D
 struct args_hipMemset2D_t {
 	void * dst;
 	size_t pitch;
@@ -6576,6 +7075,8 @@ struct args_hipMemset2D_t {
 	activity->hip_args.hipMemset2D.width = (size_t) width; \
 	activity->hip_args.hipMemset2D.height = (size_t) height; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy2DToArray_spt` function.
@@ -6598,8 +7099,9 @@ struct args_hipMemset2D_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpy2DToArray_spt
 struct args_hipMemcpy2DToArray_spt_t {
-	struct hipArray * dst;
+	hipArray_t dst;
 	size_t wOffset;
 	size_t hOffset;
 	void * src;
@@ -6611,7 +7113,7 @@ struct args_hipMemcpy2DToArray_spt_t {
 };
 
 #define GET_ARGS_VALUE_hipMemcpy2DToArray_spt(activity) { \
-	activity->hip_args.hipMemcpy2DToArray_spt.dst = (struct hipArray *) dst; \
+	activity->hip_args.hipMemcpy2DToArray_spt.dst = (hipArray_t) dst; \
 	activity->hip_args.hipMemcpy2DToArray_spt.wOffset = (size_t) wOffset; \
 	activity->hip_args.hipMemcpy2DToArray_spt.hOffset = (size_t) hOffset; \
 	activity->hip_args.hipMemcpy2DToArray_spt.src = (void *) src; \
@@ -6620,6 +7122,8 @@ struct args_hipMemcpy2DToArray_spt_t {
 	activity->hip_args.hipMemcpy2DToArray_spt.height = (size_t) height; \
 	activity->hip_args.hipMemcpy2DToArray_spt.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemAllocHost` function.
@@ -6636,6 +7140,7 @@ struct args_hipMemcpy2DToArray_spt_t {
  *			size_t size (unsigned long)
  *	)
  */
+#if HAVE_hipMemAllocHost
 struct args_hipMemAllocHost_t {
 	void ** ptr;
 	struct {
@@ -6656,6 +7161,8 @@ struct args_hipMemAllocHost_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipPointerSetAttribute` function.
  *
@@ -6672,6 +7179,7 @@ struct args_hipMemAllocHost_t {
  *			hipDeviceptr_t ptr (void *)
  *	)
  */
+#if HAVE_hipPointerSetAttribute
 struct args_hipPointerSetAttribute_t {
 	void * value;
 	hipPointer_attribute attribute;
@@ -6684,6 +7192,8 @@ struct args_hipPointerSetAttribute_t {
 	activity->hip_args.hipPointerSetAttribute.attribute = (hipPointer_attribute) attribute; \
 	activity->hip_args.hipPointerSetAttribute.ptr = (void *) ptr; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphHostNodeGetParams` function.
@@ -6700,8 +7210,9 @@ struct args_hipPointerSetAttribute_t {
  *			hipHostNodeParams * pNodeParams (struct hipHostNodeParams*)
  *	)
  */
+#if HAVE_hipGraphHostNodeGetParams
 struct args_hipGraphHostNodeGetParams_t {
-	struct hipGraphNode * node;
+	hipGraphNode_t node;
 	hipHostNodeParams * pNodeParams;
 	struct {
 		hipHostNodeParams val;
@@ -6710,7 +7221,7 @@ struct args_hipGraphHostNodeGetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphHostNodeGetParams(activity) { \
-	activity->hip_args.hipGraphHostNodeGetParams.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphHostNodeGetParams.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphHostNodeGetParams.pNodeParams = (hipHostNodeParams *) pNodeParams; \
 };
 
@@ -6719,6 +7230,8 @@ struct args_hipGraphHostNodeGetParams_t {
 		args->hipGraphHostNodeGetParams.pNodeParams__ref.val = *args->hipGraphHostNodeGetParams.pNodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemset3D` function.
@@ -6736,6 +7249,7 @@ struct args_hipGraphHostNodeGetParams_t {
  *			hipExtent extent (struct hipExtent)
  *	)
  */
+#if HAVE_hipMemset3D
 struct args_hipMemset3D_t {
 	hipPitchedPtr pitchedDevPtr;
 	int value;
@@ -6748,6 +7262,8 @@ struct args_hipMemset3D_t {
 	activity->hip_args.hipMemset3D.value = (int) value; \
 	activity->hip_args.hipMemset3D.extent = (hipExtent) extent; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDestroyTextureObject` function.
@@ -6763,14 +7279,17 @@ struct args_hipMemset3D_t {
  *			hipTextureObject_t textureObject (struct __hip_texture *)
  *	)
  */
+#if HAVE_hipDestroyTextureObject
 struct args_hipDestroyTextureObject_t {
-	struct __hip_texture * textureObject;
+	hipTextureObject_t textureObject;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipDestroyTextureObject(activity) { \
-	activity->hip_args.hipDestroyTextureObject.textureObject = (struct __hip_texture *) textureObject; \
+	activity->hip_args.hipDestroyTextureObject.textureObject = (hipTextureObject_t) textureObject; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemAdvise` function.
@@ -6789,6 +7308,7 @@ struct args_hipDestroyTextureObject_t {
  *			int device (int)
  *	)
  */
+#if HAVE_hipMemAdvise
 struct args_hipMemAdvise_t {
 	void * dev_ptr;
 	size_t count;
@@ -6804,6 +7324,8 @@ struct args_hipMemAdvise_t {
 	activity->hip_args.hipMemAdvise.device = (int) device; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipCtxGetCacheConfig` function.
  *
@@ -6818,6 +7340,7 @@ struct args_hipMemAdvise_t {
  *			hipFuncCache_t * cacheConfig (enum hipFuncCache_t*)
  *	)
  */
+#if HAVE_hipCtxGetCacheConfig
 struct args_hipCtxGetCacheConfig_t {
 	hipFuncCache_t * cacheConfig;
 	struct {
@@ -6836,6 +7359,8 @@ struct args_hipCtxGetCacheConfig_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDrvPointerGetAttributes` function.
  *
@@ -6853,6 +7378,7 @@ struct args_hipCtxGetCacheConfig_t {
  *			hipDeviceptr_t ptr (void *)
  *	)
  */
+#if HAVE_hipDrvPointerGetAttributes
 struct args_hipDrvPointerGetAttributes_t {
 	unsigned int numAttributes;
 	hipPointer_attribute * attributes;
@@ -6883,6 +7409,8 @@ struct args_hipDrvPointerGetAttributes_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipModuleLaunchCooperativeKernelMultiDevice` function.
  *
@@ -6899,6 +7427,7 @@ struct args_hipDrvPointerGetAttributes_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipModuleLaunchCooperativeKernelMultiDevice
 struct args_hipModuleLaunchCooperativeKernelMultiDevice_t {
 	hipFunctionLaunchParams * launchParamsList;
 	struct {
@@ -6921,6 +7450,8 @@ struct args_hipModuleLaunchCooperativeKernelMultiDevice_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipModuleGetGlobal` function.
  *
@@ -6938,6 +7469,7 @@ struct args_hipModuleLaunchCooperativeKernelMultiDevice_t {
  *			const char * name (const char *)
  *	)
  */
+#if HAVE_hipModuleGetGlobal
 struct args_hipModuleGetGlobal_t {
 	void ** dptr;
 	struct {
@@ -6947,7 +7479,7 @@ struct args_hipModuleGetGlobal_t {
 	struct {
 		size_t val;
 	} bytes__ref;
-	struct ihipModule_t * hmod;
+	hipModule_t hmod;
 	char * name;
 	struct {
 		char val[HIP_STRING_SIZE_MAX];
@@ -6958,7 +7490,7 @@ struct args_hipModuleGetGlobal_t {
 #define GET_ARGS_VALUE_hipModuleGetGlobal(activity) { \
 	activity->hip_args.hipModuleGetGlobal.dptr = (void **) dptr; \
 	activity->hip_args.hipModuleGetGlobal.bytes = (size_t *) bytes; \
-	activity->hip_args.hipModuleGetGlobal.hmod = (struct ihipModule_t *) hmod; \
+	activity->hip_args.hipModuleGetGlobal.hmod = (hipModule_t) hmod; \
 	activity->hip_args.hipModuleGetGlobal.name = (char *) name; \
 };
 
@@ -6973,6 +7505,8 @@ struct args_hipModuleGetGlobal_t {
 		strncpy(args->hipModuleGetGlobal.name__ref.val, args->hipModuleGetGlobal.name, HIP_STRING_SIZE_MAX-1); \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphEventRecordNodeGetEvent` function.
@@ -6989,9 +7523,10 @@ struct args_hipModuleGetGlobal_t {
  *			hipEvent_t * event_out (struct ihipEvent_t **)
  *	)
  */
+#if HAVE_hipGraphEventRecordNodeGetEvent
 struct args_hipGraphEventRecordNodeGetEvent_t {
-	struct hipGraphNode * node;
-	struct ihipEvent_t ** event_out;
+	hipGraphNode_t node;
+	hipEvent_t * event_out;
 	struct {
 		void* ptr1;
 	} event_out__ref;
@@ -6999,8 +7534,8 @@ struct args_hipGraphEventRecordNodeGetEvent_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphEventRecordNodeGetEvent(activity) { \
-	activity->hip_args.hipGraphEventRecordNodeGetEvent.node = (struct hipGraphNode *) node; \
-	activity->hip_args.hipGraphEventRecordNodeGetEvent.event_out = (struct ihipEvent_t **) event_out; \
+	activity->hip_args.hipGraphEventRecordNodeGetEvent.node = (hipGraphNode_t) node; \
+	activity->hip_args.hipGraphEventRecordNodeGetEvent.event_out = (hipEvent_t *) event_out; \
 };
 
 #define GET_PTRS_VALUE_hipGraphEventRecordNodeGetEvent(args) { \
@@ -7008,6 +7543,8 @@ struct args_hipGraphEventRecordNodeGetEvent_t {
 		args->hipGraphEventRecordNodeGetEvent.event_out__ref.ptr1 = *args->hipGraphEventRecordNodeGetEvent.event_out; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphInstantiate` function.
@@ -7027,13 +7564,14 @@ struct args_hipGraphEventRecordNodeGetEvent_t {
  *			size_t bufferSize (unsigned long)
  *	)
  */
+#if HAVE_hipGraphInstantiate
 struct args_hipGraphInstantiate_t {
-	struct hipGraphExec ** pGraphExec;
+	hipGraphExec_t * pGraphExec;
 	struct {
 		void* ptr1;
 	} pGraphExec__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode ** pErrorNode;
+	hipGraph_t graph;
+	hipGraphNode_t * pErrorNode;
 	struct {
 		void* ptr1;
 	} pErrorNode__ref;
@@ -7046,9 +7584,9 @@ struct args_hipGraphInstantiate_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphInstantiate(activity) { \
-	activity->hip_args.hipGraphInstantiate.pGraphExec = (struct hipGraphExec **) pGraphExec; \
-	activity->hip_args.hipGraphInstantiate.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphInstantiate.pErrorNode = (struct hipGraphNode **) pErrorNode; \
+	activity->hip_args.hipGraphInstantiate.pGraphExec = (hipGraphExec_t *) pGraphExec; \
+	activity->hip_args.hipGraphInstantiate.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphInstantiate.pErrorNode = (hipGraphNode_t *) pErrorNode; \
 	activity->hip_args.hipGraphInstantiate.pLogBuffer = (char *) pLogBuffer; \
 	activity->hip_args.hipGraphInstantiate.bufferSize = (size_t) bufferSize; \
 };
@@ -7064,6 +7602,8 @@ struct args_hipGraphInstantiate_t {
 		strncpy(args->hipGraphInstantiate.pLogBuffer__ref.val, args->hipGraphInstantiate.pLogBuffer, HIP_STRING_SIZE_MAX-1); \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphRetainUserObject` function.
@@ -7082,20 +7622,23 @@ struct args_hipGraphInstantiate_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipGraphRetainUserObject
 struct args_hipGraphRetainUserObject_t {
-	struct ihipGraph * graph;
-	struct hipUserObject * object;
+	hipGraph_t graph;
+	hipUserObject_t object;
 	unsigned int count;
 	unsigned int flags;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphRetainUserObject(activity) { \
-	activity->hip_args.hipGraphRetainUserObject.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphRetainUserObject.object = (struct hipUserObject *) object; \
+	activity->hip_args.hipGraphRetainUserObject.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphRetainUserObject.object = (hipUserObject_t) object; \
 	activity->hip_args.hipGraphRetainUserObject.count = (unsigned int) count; \
 	activity->hip_args.hipGraphRetainUserObject.flags = (unsigned int) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphMemAllocNodeGetParams` function.
@@ -7112,8 +7655,9 @@ struct args_hipGraphRetainUserObject_t {
  *			hipMemAllocNodeParams * pNodeParams (struct hipMemAllocNodeParams*)
  *	)
  */
+#if HAVE_hipGraphMemAllocNodeGetParams
 struct args_hipGraphMemAllocNodeGetParams_t {
-	struct hipGraphNode * node;
+	hipGraphNode_t node;
 	hipMemAllocNodeParams * pNodeParams;
 	struct {
 		hipMemAllocNodeParams val;
@@ -7122,7 +7666,7 @@ struct args_hipGraphMemAllocNodeGetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphMemAllocNodeGetParams(activity) { \
-	activity->hip_args.hipGraphMemAllocNodeGetParams.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphMemAllocNodeGetParams.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphMemAllocNodeGetParams.pNodeParams = (hipMemAllocNodeParams *) pNodeParams; \
 };
 
@@ -7131,6 +7675,8 @@ struct args_hipGraphMemAllocNodeGetParams_t {
 		args->hipGraphMemAllocNodeGetParams.pNodeParams__ref.val = *args->hipGraphMemAllocNodeGetParams.pNodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamGetCaptureInfo` function.
@@ -7148,8 +7694,9 @@ struct args_hipGraphMemAllocNodeGetParams_t {
  *			unsigned long long * pId (unsigned long long *)
  *	)
  */
+#if HAVE_hipStreamGetCaptureInfo
 struct args_hipStreamGetCaptureInfo_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipStreamCaptureStatus * pCaptureStatus;
 	struct {
 		hipStreamCaptureStatus val;
@@ -7162,7 +7709,7 @@ struct args_hipStreamGetCaptureInfo_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamGetCaptureInfo(activity) { \
-	activity->hip_args.hipStreamGetCaptureInfo.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamGetCaptureInfo.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamGetCaptureInfo.pCaptureStatus = (hipStreamCaptureStatus *) pCaptureStatus; \
 	activity->hip_args.hipStreamGetCaptureInfo.pId = (unsigned long long *) pId; \
 };
@@ -7175,6 +7722,8 @@ struct args_hipStreamGetCaptureInfo_t {
 		args->hipStreamGetCaptureInfo.pId__ref.val = *args->hipStreamGetCaptureInfo.pId; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipCtxPopCurrent` function.
@@ -7190,8 +7739,9 @@ struct args_hipStreamGetCaptureInfo_t {
  *			hipCtx_t * ctx (struct ihipCtx_t **)
  *	)
  */
+#if HAVE_hipCtxPopCurrent
 struct args_hipCtxPopCurrent_t {
-	struct ihipCtx_t ** ctx;
+	hipCtx_t * ctx;
 	struct {
 		void* ptr1;
 	} ctx__ref;
@@ -7199,7 +7749,7 @@ struct args_hipCtxPopCurrent_t {
 };
 
 #define GET_ARGS_VALUE_hipCtxPopCurrent(activity) { \
-	activity->hip_args.hipCtxPopCurrent.ctx = (struct ihipCtx_t **) ctx; \
+	activity->hip_args.hipCtxPopCurrent.ctx = (hipCtx_t *) ctx; \
 };
 
 #define GET_PTRS_VALUE_hipCtxPopCurrent(args) { \
@@ -7207,6 +7757,8 @@ struct args_hipCtxPopCurrent_t {
 		args->hipCtxPopCurrent.ctx__ref.ptr1 = *args->hipCtxPopCurrent.ctx; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipPointerGetAttributes` function.
@@ -7223,6 +7775,7 @@ struct args_hipCtxPopCurrent_t {
  *			const void * ptr (const void *)
  *	)
  */
+#if HAVE_hipPointerGetAttributes
 struct args_hipPointerGetAttributes_t {
 	hipPointerAttribute_t * attributes;
 	struct {
@@ -7243,6 +7796,8 @@ struct args_hipPointerGetAttributes_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDeviceDisablePeerAccess` function.
  *
@@ -7257,6 +7812,7 @@ struct args_hipPointerGetAttributes_t {
  *			int peerDeviceId (int)
  *	)
  */
+#if HAVE_hipDeviceDisablePeerAccess
 struct args_hipDeviceDisablePeerAccess_t {
 	int peerDeviceId;
 	hipError_t retval;
@@ -7265,6 +7821,8 @@ struct args_hipDeviceDisablePeerAccess_t {
 #define GET_ARGS_VALUE_hipDeviceDisablePeerAccess(activity) { \
 	activity->hip_args.hipDeviceDisablePeerAccess.peerDeviceId = (int) peerDeviceId; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMallocPitch` function.
@@ -7283,6 +7841,7 @@ struct args_hipDeviceDisablePeerAccess_t {
  *			size_t height (unsigned long)
  *	)
  */
+#if HAVE_hipMallocPitch
 struct args_hipMallocPitch_t {
 	void ** ptr;
 	struct {
@@ -7313,6 +7872,8 @@ struct args_hipMallocPitch_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy2DFromArrayAsync` function.
  *
@@ -7335,30 +7896,33 @@ struct args_hipMallocPitch_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpy2DFromArrayAsync
 struct args_hipMemcpy2DFromArrayAsync_t {
 	void * dst;
 	size_t dpitch;
-	struct hipArray * src;
+	hipArray_const_t src;
 	size_t wOffset;
 	size_t hOffset;
 	size_t width;
 	size_t height;
 	hipMemcpyKind kind;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemcpy2DFromArrayAsync(activity) { \
 	activity->hip_args.hipMemcpy2DFromArrayAsync.dst = (void *) dst; \
 	activity->hip_args.hipMemcpy2DFromArrayAsync.dpitch = (size_t) dpitch; \
-	activity->hip_args.hipMemcpy2DFromArrayAsync.src = (struct hipArray *) src; \
+	activity->hip_args.hipMemcpy2DFromArrayAsync.src = (hipArray_const_t) src; \
 	activity->hip_args.hipMemcpy2DFromArrayAsync.wOffset = (size_t) wOffset; \
 	activity->hip_args.hipMemcpy2DFromArrayAsync.hOffset = (size_t) hOffset; \
 	activity->hip_args.hipMemcpy2DFromArrayAsync.width = (size_t) width; \
 	activity->hip_args.hipMemcpy2DFromArrayAsync.height = (size_t) height; \
 	activity->hip_args.hipMemcpy2DFromArrayAsync.kind = (hipMemcpyKind) kind; \
-	activity->hip_args.hipMemcpy2DFromArrayAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpy2DFromArrayAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceComputeCapability` function.
@@ -7376,6 +7940,7 @@ struct args_hipMemcpy2DFromArrayAsync_t {
  *			hipDevice_t device (int)
  *	)
  */
+#if HAVE_hipDeviceComputeCapability
 struct args_hipDeviceComputeCapability_t {
 	int * major;
 	struct {
@@ -7404,6 +7969,8 @@ struct args_hipDeviceComputeCapability_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyHtoD` function.
  *
@@ -7420,6 +7987,7 @@ struct args_hipDeviceComputeCapability_t {
  *			size_t sizeBytes (unsigned long)
  *	)
  */
+#if HAVE_hipMemcpyHtoD
 struct args_hipMemcpyHtoD_t {
 	void * dst;
 	void * src;
@@ -7432,6 +8000,8 @@ struct args_hipMemcpyHtoD_t {
 	activity->hip_args.hipMemcpyHtoD.src = (void *) src; \
 	activity->hip_args.hipMemcpyHtoD.sizeBytes = (size_t) sizeBytes; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipOccupancyMaxActiveBlocksPerMultiprocessor` function.
@@ -7450,6 +8020,7 @@ struct args_hipMemcpyHtoD_t {
  *			size_t dynSharedMemPerBlk (unsigned long)
  *	)
  */
+#if HAVE_hipOccupancyMaxActiveBlocksPerMultiprocessor
 struct args_hipOccupancyMaxActiveBlocksPerMultiprocessor_t {
 	int * numBlocks;
 	struct {
@@ -7474,6 +8045,8 @@ struct args_hipOccupancyMaxActiveBlocksPerMultiprocessor_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipSignalExternalSemaphoresAsync` function.
  *
@@ -7491,6 +8064,7 @@ struct args_hipOccupancyMaxActiveBlocksPerMultiprocessor_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipSignalExternalSemaphoresAsync
 struct args_hipSignalExternalSemaphoresAsync_t {
 	void * * extSemArray;
 	struct {
@@ -7501,7 +8075,7 @@ struct args_hipSignalExternalSemaphoresAsync_t {
 		hipExternalSemaphoreSignalParams val;
 	} paramsArray__ref;
 	unsigned int numExtSems;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -7509,7 +8083,7 @@ struct args_hipSignalExternalSemaphoresAsync_t {
 	activity->hip_args.hipSignalExternalSemaphoresAsync.extSemArray = (void * *) extSemArray; \
 	activity->hip_args.hipSignalExternalSemaphoresAsync.paramsArray = (hipExternalSemaphoreSignalParams *) paramsArray; \
 	activity->hip_args.hipSignalExternalSemaphoresAsync.numExtSems = (unsigned int) numExtSems; \
-	activity->hip_args.hipSignalExternalSemaphoresAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipSignalExternalSemaphoresAsync.stream = (hipStream_t) stream; \
 };
 
 #define GET_PTRS_VALUE_hipSignalExternalSemaphoresAsync(args) { \
@@ -7520,6 +8094,8 @@ struct args_hipSignalExternalSemaphoresAsync_t {
 		args->hipSignalExternalSemaphoresAsync.paramsArray__ref.val = *args->hipSignalExternalSemaphoresAsync.paramsArray; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipArray3DGetDescriptor` function.
@@ -7536,18 +8112,19 @@ struct args_hipSignalExternalSemaphoresAsync_t {
  *			hipArray_t array (struct hipArray *)
  *	)
  */
+#if HAVE_hipArray3DGetDescriptor
 struct args_hipArray3DGetDescriptor_t {
 	HIP_ARRAY3D_DESCRIPTOR * pArrayDescriptor;
 	struct {
 		HIP_ARRAY3D_DESCRIPTOR val;
 	} pArrayDescriptor__ref;
-	struct hipArray * array;
+	hipArray_t array;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipArray3DGetDescriptor(activity) { \
 	activity->hip_args.hipArray3DGetDescriptor.pArrayDescriptor = (HIP_ARRAY3D_DESCRIPTOR *) pArrayDescriptor; \
-	activity->hip_args.hipArray3DGetDescriptor.array = (struct hipArray *) array; \
+	activity->hip_args.hipArray3DGetDescriptor.array = (hipArray_t) array; \
 };
 
 #define GET_PTRS_VALUE_hipArray3DGetDescriptor(args) { \
@@ -7555,6 +8132,8 @@ struct args_hipArray3DGetDescriptor_t {
 		args->hipArray3DGetDescriptor.pArrayDescriptor__ref.val = *args->hipArray3DGetDescriptor.pArrayDescriptor; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `__hipPopCallConfiguration` function.
@@ -7573,6 +8152,7 @@ struct args_hipArray3DGetDescriptor_t {
  *			hipStream_t * stream (struct ihipStream_t **)
  *	)
  */
+#if HAVE___hipPopCallConfiguration
 struct args___hipPopCallConfiguration_t {
 	dim3 * gridDim;
 	struct {
@@ -7586,7 +8166,7 @@ struct args___hipPopCallConfiguration_t {
 	struct {
 		size_t val;
 	} sharedMem__ref;
-	struct ihipStream_t ** stream;
+	hipStream_t * stream;
 	struct {
 		void* ptr1;
 	} stream__ref;
@@ -7597,7 +8177,7 @@ struct args___hipPopCallConfiguration_t {
 	activity->hip_args.__hipPopCallConfiguration.gridDim = (dim3 *) gridDim; \
 	activity->hip_args.__hipPopCallConfiguration.blockDim = (dim3 *) blockDim; \
 	activity->hip_args.__hipPopCallConfiguration.sharedMem = (size_t *) sharedMem; \
-	activity->hip_args.__hipPopCallConfiguration.stream = (struct ihipStream_t **) stream; \
+	activity->hip_args.__hipPopCallConfiguration.stream = (hipStream_t *) stream; \
 };
 
 #define GET_PTRS_VALUE___hipPopCallConfiguration(args) { \
@@ -7615,6 +8195,8 @@ struct args___hipPopCallConfiguration_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDevicePrimaryCtxRelease` function.
  *
@@ -7629,6 +8211,7 @@ struct args___hipPopCallConfiguration_t {
  *			hipDevice_t dev (int)
  *	)
  */
+#if HAVE_hipDevicePrimaryCtxRelease
 struct args_hipDevicePrimaryCtxRelease_t {
 	hipDevice_t dev;
 	hipError_t retval;
@@ -7637,6 +8220,8 @@ struct args_hipDevicePrimaryCtxRelease_t {
 #define GET_ARGS_VALUE_hipDevicePrimaryCtxRelease(activity) { \
 	activity->hip_args.hipDevicePrimaryCtxRelease.dev = (hipDevice_t) dev; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipLaunchCooperativeKernelMultiDevice` function.
@@ -7654,6 +8239,7 @@ struct args_hipDevicePrimaryCtxRelease_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipLaunchCooperativeKernelMultiDevice
 struct args_hipLaunchCooperativeKernelMultiDevice_t {
 	hipLaunchParams * launchParamsList;
 	struct {
@@ -7676,6 +8262,8 @@ struct args_hipLaunchCooperativeKernelMultiDevice_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipFreeArray` function.
  *
@@ -7690,14 +8278,17 @@ struct args_hipLaunchCooperativeKernelMultiDevice_t {
  *			hipArray_t array (struct hipArray *)
  *	)
  */
+#if HAVE_hipFreeArray
 struct args_hipFreeArray_t {
-	struct hipArray * array;
+	hipArray_t array;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipFreeArray(activity) { \
-	activity->hip_args.hipFreeArray.array = (struct hipArray *) array; \
+	activity->hip_args.hipFreeArray.array = (hipArray_t) array; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphMemsetNodeSetParams` function.
@@ -7714,8 +8305,9 @@ struct args_hipFreeArray_t {
  *			const hipMemsetParams * pNodeParams (const struct hipMemsetParams *)
  *	)
  */
+#if HAVE_hipGraphMemsetNodeSetParams
 struct args_hipGraphMemsetNodeSetParams_t {
-	struct hipGraphNode * node;
+	hipGraphNode_t node;
 	hipMemsetParams * pNodeParams;
 	struct {
 		hipMemsetParams val;
@@ -7724,7 +8316,7 @@ struct args_hipGraphMemsetNodeSetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphMemsetNodeSetParams(activity) { \
-	activity->hip_args.hipGraphMemsetNodeSetParams.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphMemsetNodeSetParams.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphMemsetNodeSetParams.pNodeParams = (hipMemsetParams *) pNodeParams; \
 };
 
@@ -7733,6 +8325,8 @@ struct args_hipGraphMemsetNodeSetParams_t {
 		args->hipGraphMemsetNodeSetParams.pNodeParams__ref.val = *args->hipGraphMemsetNodeSetParams.pNodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemPoolSetAccess` function.
@@ -7750,8 +8344,9 @@ struct args_hipGraphMemsetNodeSetParams_t {
  *			size_t count (unsigned long)
  *	)
  */
+#if HAVE_hipMemPoolSetAccess
 struct args_hipMemPoolSetAccess_t {
-	struct ihipMemPoolHandle_t * mem_pool;
+	hipMemPool_t mem_pool;
 	hipMemAccessDesc * desc_list;
 	struct {
 		hipMemAccessDesc val;
@@ -7761,7 +8356,7 @@ struct args_hipMemPoolSetAccess_t {
 };
 
 #define GET_ARGS_VALUE_hipMemPoolSetAccess(activity) { \
-	activity->hip_args.hipMemPoolSetAccess.mem_pool = (struct ihipMemPoolHandle_t *) mem_pool; \
+	activity->hip_args.hipMemPoolSetAccess.mem_pool = (hipMemPool_t) mem_pool; \
 	activity->hip_args.hipMemPoolSetAccess.desc_list = (hipMemAccessDesc *) desc_list; \
 	activity->hip_args.hipMemPoolSetAccess.count = (size_t) count; \
 };
@@ -7771,6 +8366,8 @@ struct args_hipMemPoolSetAccess_t {
 		args->hipMemPoolSetAccess.desc_list__ref.val = *args->hipMemPoolSetAccess.desc_list; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGetStreamDeviceId` function.
@@ -7786,14 +8383,17 @@ struct args_hipMemPoolSetAccess_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipGetStreamDeviceId
 struct args_hipGetStreamDeviceId_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	int retval;
 };
 
 #define GET_ARGS_VALUE_hipGetStreamDeviceId(activity) { \
-	activity->hip_args.hipGetStreamDeviceId.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipGetStreamDeviceId.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipExtStreamCreateWithCUMask` function.
@@ -7811,8 +8411,9 @@ struct args_hipGetStreamDeviceId_t {
  *			const uint32_t * cuMask (const unsigned int *)
  *	)
  */
+#if HAVE_hipExtStreamCreateWithCUMask
 struct args_hipExtStreamCreateWithCUMask_t {
-	struct ihipStream_t ** stream;
+	hipStream_t * stream;
 	struct {
 		void* ptr1;
 	} stream__ref;
@@ -7825,7 +8426,7 @@ struct args_hipExtStreamCreateWithCUMask_t {
 };
 
 #define GET_ARGS_VALUE_hipExtStreamCreateWithCUMask(activity) { \
-	activity->hip_args.hipExtStreamCreateWithCUMask.stream = (struct ihipStream_t **) stream; \
+	activity->hip_args.hipExtStreamCreateWithCUMask.stream = (hipStream_t *) stream; \
 	activity->hip_args.hipExtStreamCreateWithCUMask.cuMaskSize = (uint32_t) cuMaskSize; \
 	activity->hip_args.hipExtStreamCreateWithCUMask.cuMask = (uint32_t *) cuMask; \
 };
@@ -7838,6 +8439,8 @@ struct args_hipExtStreamCreateWithCUMask_t {
 		args->hipExtStreamCreateWithCUMask.cuMask__ref.val = *args->hipExtStreamCreateWithCUMask.cuMask; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGetTextureObjectTextureDesc` function.
@@ -7854,18 +8457,19 @@ struct args_hipExtStreamCreateWithCUMask_t {
  *			hipTextureObject_t textureObject (struct __hip_texture *)
  *	)
  */
+#if HAVE_hipGetTextureObjectTextureDesc
 struct args_hipGetTextureObjectTextureDesc_t {
 	hipTextureDesc * pTexDesc;
 	struct {
 		hipTextureDesc val;
 	} pTexDesc__ref;
-	struct __hip_texture * textureObject;
+	hipTextureObject_t textureObject;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGetTextureObjectTextureDesc(activity) { \
 	activity->hip_args.hipGetTextureObjectTextureDesc.pTexDesc = (hipTextureDesc *) pTexDesc; \
-	activity->hip_args.hipGetTextureObjectTextureDesc.textureObject = (struct __hip_texture *) textureObject; \
+	activity->hip_args.hipGetTextureObjectTextureDesc.textureObject = (hipTextureObject_t) textureObject; \
 };
 
 #define GET_PTRS_VALUE_hipGetTextureObjectTextureDesc(args) { \
@@ -7873,6 +8477,8 @@ struct args_hipGetTextureObjectTextureDesc_t {
 		args->hipGetTextureObjectTextureDesc.pTexDesc__ref.val = *args->hipGetTextureObjectTextureDesc.pTexDesc; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipEventRecord_spt` function.
@@ -7889,16 +8495,19 @@ struct args_hipGetTextureObjectTextureDesc_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipEventRecord_spt
 struct args_hipEventRecord_spt_t {
-	struct ihipEvent_t * event;
-	struct ihipStream_t * stream;
+	hipEvent_t event;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipEventRecord_spt(activity) { \
-	activity->hip_args.hipEventRecord_spt.event = (struct ihipEvent_t *) event; \
-	activity->hip_args.hipEventRecord_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipEventRecord_spt.event = (hipEvent_t) event; \
+	activity->hip_args.hipEventRecord_spt.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipConfigureCall` function.
@@ -7917,11 +8526,12 @@ struct args_hipEventRecord_spt_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipConfigureCall
 struct args_hipConfigureCall_t {
 	dim3 gridDim;
 	dim3 blockDim;
 	size_t sharedMem;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -7929,8 +8539,10 @@ struct args_hipConfigureCall_t {
 	activity->hip_args.hipConfigureCall.gridDim = (dim3) gridDim; \
 	activity->hip_args.hipConfigureCall.blockDim = (dim3) blockDim; \
 	activity->hip_args.hipConfigureCall.sharedMem = (size_t) sharedMem; \
-	activity->hip_args.hipConfigureCall.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipConfigureCall.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyFromArray_spt` function.
@@ -7951,9 +8563,10 @@ struct args_hipConfigureCall_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpyFromArray_spt
 struct args_hipMemcpyFromArray_spt_t {
 	void * dst;
-	struct hipArray * src;
+	hipArray_const_t src;
 	size_t wOffsetSrc;
 	size_t hOffset;
 	size_t count;
@@ -7963,12 +8576,14 @@ struct args_hipMemcpyFromArray_spt_t {
 
 #define GET_ARGS_VALUE_hipMemcpyFromArray_spt(activity) { \
 	activity->hip_args.hipMemcpyFromArray_spt.dst = (void *) dst; \
-	activity->hip_args.hipMemcpyFromArray_spt.src = (struct hipArray *) src; \
+	activity->hip_args.hipMemcpyFromArray_spt.src = (hipArray_const_t) src; \
 	activity->hip_args.hipMemcpyFromArray_spt.wOffsetSrc = (size_t) wOffsetSrc; \
 	activity->hip_args.hipMemcpyFromArray_spt.hOffset = (size_t) hOffset; \
 	activity->hip_args.hipMemcpyFromArray_spt.count = (size_t) count; \
 	activity->hip_args.hipMemcpyFromArray_spt.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipModuleGetFunction` function.
@@ -7986,12 +8601,13 @@ struct args_hipMemcpyFromArray_spt_t {
  *			const char * kname (const char *)
  *	)
  */
+#if HAVE_hipModuleGetFunction
 struct args_hipModuleGetFunction_t {
-	struct ihipModuleSymbol_t ** function;
+	hipFunction_t * function;
 	struct {
 		void* ptr1;
 	} function__ref;
-	struct ihipModule_t * module;
+	hipModule_t module;
 	char * kname;
 	struct {
 		char val[HIP_STRING_SIZE_MAX];
@@ -8000,8 +8616,8 @@ struct args_hipModuleGetFunction_t {
 };
 
 #define GET_ARGS_VALUE_hipModuleGetFunction(activity) { \
-	activity->hip_args.hipModuleGetFunction.function = (struct ihipModuleSymbol_t **) function; \
-	activity->hip_args.hipModuleGetFunction.module = (struct ihipModule_t *) module; \
+	activity->hip_args.hipModuleGetFunction.function = (hipFunction_t *) function; \
+	activity->hip_args.hipModuleGetFunction.module = (hipModule_t) module; \
 	activity->hip_args.hipModuleGetFunction.kname = (char *) kname; \
 };
 
@@ -8013,6 +8629,8 @@ struct args_hipModuleGetFunction_t {
 		strncpy(args->hipModuleGetFunction.kname__ref.val, args->hipModuleGetFunction.kname, HIP_STRING_SIZE_MAX-1); \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipFuncSetCacheConfig` function.
@@ -8029,6 +8647,7 @@ struct args_hipModuleGetFunction_t {
  *			hipFuncCache_t config (enum hipFuncCache_t)
  *	)
  */
+#if HAVE_hipFuncSetCacheConfig
 struct args_hipFuncSetCacheConfig_t {
 	void * func;
 	hipFuncCache_t config;
@@ -8039,6 +8658,8 @@ struct args_hipFuncSetCacheConfig_t {
 	activity->hip_args.hipFuncSetCacheConfig.func = (void *) func; \
 	activity->hip_args.hipFuncSetCacheConfig.config = (hipFuncCache_t) config; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceGetLimit` function.
@@ -8055,6 +8676,7 @@ struct args_hipFuncSetCacheConfig_t {
  *			enum hipLimit_t limit (enum hipLimit_t)
  *	)
  */
+#if HAVE_hipDeviceGetLimit
 struct args_hipDeviceGetLimit_t {
 	size_t * pValue;
 	struct {
@@ -8075,6 +8697,8 @@ struct args_hipDeviceGetLimit_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipTexRefGetMaxAnisotropy` function.
  *
@@ -8090,6 +8714,7 @@ struct args_hipDeviceGetLimit_t {
  *			const textureReference * texRef (const struct textureReference *)
  *	)
  */
+#if HAVE_hipTexRefGetMaxAnisotropy
 struct args_hipTexRefGetMaxAnisotropy_t {
 	int * pmaxAnsio;
 	struct {
@@ -8116,6 +8741,8 @@ struct args_hipTexRefGetMaxAnisotropy_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipLaunchKernel_spt` function.
  *
@@ -8135,6 +8762,7 @@ struct args_hipTexRefGetMaxAnisotropy_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipLaunchKernel_spt
 struct args_hipLaunchKernel_spt_t {
 	void * function_address;
 	dim3 numBlocks;
@@ -8144,7 +8772,7 @@ struct args_hipLaunchKernel_spt_t {
 		void* ptr1;
 	} args__ref;
 	size_t sharedMemBytes;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -8154,7 +8782,7 @@ struct args_hipLaunchKernel_spt_t {
 	activity->hip_args.hipLaunchKernel_spt.dimBlocks = (dim3) dimBlocks; \
 	activity->hip_args.hipLaunchKernel_spt.args = (void **) args; \
 	activity->hip_args.hipLaunchKernel_spt.sharedMemBytes = (size_t) sharedMemBytes; \
-	activity->hip_args.hipLaunchKernel_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipLaunchKernel_spt.stream = (hipStream_t) stream; \
 };
 
 #define GET_PTRS_VALUE_hipLaunchKernel_spt(args) { \
@@ -8162,6 +8790,8 @@ struct args_hipLaunchKernel_spt_t {
 		args->hipLaunchKernel_spt.args__ref.ptr1 = *args->hipLaunchKernel_spt.args; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamBeginCaptureToGraph` function.
@@ -8182,10 +8812,11 @@ struct args_hipLaunchKernel_spt_t {
  *			hipStreamCaptureMode mode (enum hipStreamCaptureMode)
  *	)
  */
+#if HAVE_hipStreamBeginCaptureToGraph
 struct args_hipStreamBeginCaptureToGraph_t {
-	struct ihipStream_t * stream;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * dependencies;
+	hipStream_t stream;
+	hipGraph_t graph;
+	hipGraphNode_t * dependencies;
 	struct {
 		void* ptr1;
 	} dependencies__ref;
@@ -8199,9 +8830,9 @@ struct args_hipStreamBeginCaptureToGraph_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamBeginCaptureToGraph(activity) { \
-	activity->hip_args.hipStreamBeginCaptureToGraph.stream = (struct ihipStream_t *) stream; \
-	activity->hip_args.hipStreamBeginCaptureToGraph.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipStreamBeginCaptureToGraph.dependencies = (struct hipGraphNode * *) dependencies; \
+	activity->hip_args.hipStreamBeginCaptureToGraph.stream = (hipStream_t) stream; \
+	activity->hip_args.hipStreamBeginCaptureToGraph.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipStreamBeginCaptureToGraph.dependencies = (hipGraphNode_t *) dependencies; \
 	activity->hip_args.hipStreamBeginCaptureToGraph.dependencyData = (hipGraphEdgeData *) dependencyData; \
 	activity->hip_args.hipStreamBeginCaptureToGraph.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipStreamBeginCaptureToGraph.mode = (hipStreamCaptureMode) mode; \
@@ -8215,6 +8846,8 @@ struct args_hipStreamBeginCaptureToGraph_t {
 		args->hipStreamBeginCaptureToGraph.dependencyData__ref.val = *args->hipStreamBeginCaptureToGraph.dependencyData; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefGetFormat` function.
@@ -8232,6 +8865,7 @@ struct args_hipStreamBeginCaptureToGraph_t {
  *			const textureReference * texRef (const struct textureReference *)
  *	)
  */
+#if HAVE_hipTexRefGetFormat
 struct args_hipTexRefGetFormat_t {
 	hipArray_Format * pFormat;
 	struct {
@@ -8266,6 +8900,8 @@ struct args_hipTexRefGetFormat_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipStreamWaitValue64` function.
  *
@@ -8284,8 +8920,9 @@ struct args_hipTexRefGetFormat_t {
  *			uint64_t mask (unsigned long)
  *	)
  */
+#if HAVE_hipStreamWaitValue64
 struct args_hipStreamWaitValue64_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	void * ptr;
 	uint64_t value;
 	unsigned int flags;
@@ -8294,12 +8931,14 @@ struct args_hipStreamWaitValue64_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamWaitValue64(activity) { \
-	activity->hip_args.hipStreamWaitValue64.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamWaitValue64.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamWaitValue64.ptr = (void *) ptr; \
 	activity->hip_args.hipStreamWaitValue64.value = (uint64_t) value; \
 	activity->hip_args.hipStreamWaitValue64.flags = (unsigned int) flags; \
 	activity->hip_args.hipStreamWaitValue64.mask = (uint64_t) mask; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDevicePrimaryCtxRetain` function.
@@ -8316,8 +8955,9 @@ struct args_hipStreamWaitValue64_t {
  *			hipDevice_t dev (int)
  *	)
  */
+#if HAVE_hipDevicePrimaryCtxRetain
 struct args_hipDevicePrimaryCtxRetain_t {
-	struct ihipCtx_t ** pctx;
+	hipCtx_t * pctx;
 	struct {
 		void* ptr1;
 	} pctx__ref;
@@ -8326,7 +8966,7 @@ struct args_hipDevicePrimaryCtxRetain_t {
 };
 
 #define GET_ARGS_VALUE_hipDevicePrimaryCtxRetain(activity) { \
-	activity->hip_args.hipDevicePrimaryCtxRetain.pctx = (struct ihipCtx_t **) pctx; \
+	activity->hip_args.hipDevicePrimaryCtxRetain.pctx = (hipCtx_t *) pctx; \
 	activity->hip_args.hipDevicePrimaryCtxRetain.dev = (hipDevice_t) dev; \
 };
 
@@ -8335,6 +8975,8 @@ struct args_hipDevicePrimaryCtxRetain_t {
 		args->hipDevicePrimaryCtxRetain.pctx__ref.ptr1 = *args->hipDevicePrimaryCtxRetain.pctx; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMallocManaged` function.
@@ -8352,6 +8994,7 @@ struct args_hipDevicePrimaryCtxRetain_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipMallocManaged
 struct args_hipMallocManaged_t {
 	void ** dev_ptr;
 	struct {
@@ -8374,6 +9017,8 @@ struct args_hipMallocManaged_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipStreamCreateWithPriority` function.
  *
@@ -8390,8 +9035,9 @@ struct args_hipMallocManaged_t {
  *			int priority (int)
  *	)
  */
+#if HAVE_hipStreamCreateWithPriority
 struct args_hipStreamCreateWithPriority_t {
-	struct ihipStream_t ** stream;
+	hipStream_t * stream;
 	struct {
 		void* ptr1;
 	} stream__ref;
@@ -8401,7 +9047,7 @@ struct args_hipStreamCreateWithPriority_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamCreateWithPriority(activity) { \
-	activity->hip_args.hipStreamCreateWithPriority.stream = (struct ihipStream_t **) stream; \
+	activity->hip_args.hipStreamCreateWithPriority.stream = (hipStream_t *) stream; \
 	activity->hip_args.hipStreamCreateWithPriority.flags = (unsigned int) flags; \
 	activity->hip_args.hipStreamCreateWithPriority.priority = (int) priority; \
 };
@@ -8411,6 +9057,8 @@ struct args_hipStreamCreateWithPriority_t {
 		args->hipStreamCreateWithPriority.stream__ref.ptr1 = *args->hipStreamCreateWithPriority.stream; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamGetCaptureInfo_spt` function.
@@ -8428,8 +9076,9 @@ struct args_hipStreamCreateWithPriority_t {
  *			unsigned long long * pId (unsigned long long *)
  *	)
  */
+#if HAVE_hipStreamGetCaptureInfo_spt
 struct args_hipStreamGetCaptureInfo_spt_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipStreamCaptureStatus * pCaptureStatus;
 	struct {
 		hipStreamCaptureStatus val;
@@ -8442,7 +9091,7 @@ struct args_hipStreamGetCaptureInfo_spt_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamGetCaptureInfo_spt(activity) { \
-	activity->hip_args.hipStreamGetCaptureInfo_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamGetCaptureInfo_spt.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamGetCaptureInfo_spt.pCaptureStatus = (hipStreamCaptureStatus *) pCaptureStatus; \
 	activity->hip_args.hipStreamGetCaptureInfo_spt.pId = (unsigned long long *) pId; \
 };
@@ -8455,6 +9104,8 @@ struct args_hipStreamGetCaptureInfo_spt_t {
 		args->hipStreamGetCaptureInfo_spt.pId__ref.val = *args->hipStreamGetCaptureInfo_spt.pId; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddHostNode` function.
@@ -8474,13 +9125,14 @@ struct args_hipStreamGetCaptureInfo_spt_t {
  *			const hipHostNodeParams * pNodeParams (const struct hipHostNodeParams *)
  *	)
  */
+#if HAVE_hipGraphAddHostNode
 struct args_hipGraphAddHostNode_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
@@ -8493,9 +9145,9 @@ struct args_hipGraphAddHostNode_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphAddHostNode(activity) { \
-	activity->hip_args.hipGraphAddHostNode.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddHostNode.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddHostNode.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddHostNode.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddHostNode.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddHostNode.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddHostNode.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipGraphAddHostNode.pNodeParams = (hipHostNodeParams *) pNodeParams; \
 };
@@ -8511,6 +9163,8 @@ struct args_hipGraphAddHostNode_t {
 		args->hipGraphAddHostNode.pNodeParams__ref.val = *args->hipGraphAddHostNode.pNodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipLaunchCooperativeKernel` function.
@@ -8531,6 +9185,7 @@ struct args_hipGraphAddHostNode_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipLaunchCooperativeKernel
 struct args_hipLaunchCooperativeKernel_t {
 	void * f;
 	dim3 gridDim;
@@ -8540,7 +9195,7 @@ struct args_hipLaunchCooperativeKernel_t {
 		void* ptr1;
 	} kernelParams__ref;
 	unsigned int sharedMemBytes;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -8550,7 +9205,7 @@ struct args_hipLaunchCooperativeKernel_t {
 	activity->hip_args.hipLaunchCooperativeKernel.blockDimX = (dim3) blockDimX; \
 	activity->hip_args.hipLaunchCooperativeKernel.kernelParams = (void **) kernelParams; \
 	activity->hip_args.hipLaunchCooperativeKernel.sharedMemBytes = (unsigned int) sharedMemBytes; \
-	activity->hip_args.hipLaunchCooperativeKernel.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipLaunchCooperativeKernel.stream = (hipStream_t) stream; \
 };
 
 #define GET_PTRS_VALUE_hipLaunchCooperativeKernel(args) { \
@@ -8558,6 +9213,8 @@ struct args_hipLaunchCooperativeKernel_t {
 		args->hipLaunchCooperativeKernel.kernelParams__ref.ptr1 = *args->hipLaunchCooperativeKernel.kernelParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipHostRegister` function.
@@ -8575,6 +9232,7 @@ struct args_hipLaunchCooperativeKernel_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipHostRegister
 struct args_hipHostRegister_t {
 	void * hostPtr;
 	size_t sizeBytes;
@@ -8587,6 +9245,8 @@ struct args_hipHostRegister_t {
 	activity->hip_args.hipHostRegister.sizeBytes = (size_t) sizeBytes; \
 	activity->hip_args.hipHostRegister.flags = (unsigned int) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGetErrorName` function.
@@ -8602,6 +9262,7 @@ struct args_hipHostRegister_t {
  *			hipError_t hip_error (enum hipError_t)
  *	)
  */
+#if HAVE_hipGetErrorName
 struct args_hipGetErrorName_t {
 	hipError_t hip_error;
 	char * retval;
@@ -8619,6 +9280,8 @@ struct args_hipGetErrorName_t {
 		strncpy(args->hipGetErrorName.retval__ref.val, args->hipGetErrorName.retval, HIP_STRING_SIZE_MAX-1); \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyToSymbol_spt` function.
@@ -8638,6 +9301,7 @@ struct args_hipGetErrorName_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpyToSymbol_spt
 struct args_hipMemcpyToSymbol_spt_t {
 	void * symbol;
 	void * src;
@@ -8655,6 +9319,8 @@ struct args_hipMemcpyToSymbol_spt_t {
 	activity->hip_args.hipMemcpyToSymbol_spt.kind = (hipMemcpyKind) kind; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphMemsetNodeGetParams` function.
  *
@@ -8670,8 +9336,9 @@ struct args_hipMemcpyToSymbol_spt_t {
  *			hipMemsetParams * pNodeParams (struct hipMemsetParams*)
  *	)
  */
+#if HAVE_hipGraphMemsetNodeGetParams
 struct args_hipGraphMemsetNodeGetParams_t {
-	struct hipGraphNode * node;
+	hipGraphNode_t node;
 	hipMemsetParams * pNodeParams;
 	struct {
 		hipMemsetParams val;
@@ -8680,7 +9347,7 @@ struct args_hipGraphMemsetNodeGetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphMemsetNodeGetParams(activity) { \
-	activity->hip_args.hipGraphMemsetNodeGetParams.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphMemsetNodeGetParams.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphMemsetNodeGetParams.pNodeParams = (hipMemsetParams *) pNodeParams; \
 };
 
@@ -8689,6 +9356,8 @@ struct args_hipGraphMemsetNodeGetParams_t {
 		args->hipGraphMemsetNodeGetParams.pNodeParams__ref.val = *args->hipGraphMemsetNodeGetParams.pNodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamWriteValue32` function.
@@ -8707,8 +9376,9 @@ struct args_hipGraphMemsetNodeGetParams_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipStreamWriteValue32
 struct args_hipStreamWriteValue32_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	void * ptr;
 	uint32_t value;
 	unsigned int flags;
@@ -8716,11 +9386,13 @@ struct args_hipStreamWriteValue32_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamWriteValue32(activity) { \
-	activity->hip_args.hipStreamWriteValue32.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamWriteValue32.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamWriteValue32.ptr = (void *) ptr; \
 	activity->hip_args.hipStreamWriteValue32.value = (uint32_t) value; \
 	activity->hip_args.hipStreamWriteValue32.flags = (unsigned int) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamSynchronize_spt` function.
@@ -8736,14 +9408,17 @@ struct args_hipStreamWriteValue32_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipStreamSynchronize_spt
 struct args_hipStreamSynchronize_spt_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipStreamSynchronize_spt(activity) { \
-	activity->hip_args.hipStreamSynchronize_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamSynchronize_spt.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceGraphMemTrim` function.
@@ -8759,6 +9434,7 @@ struct args_hipStreamSynchronize_spt_t {
  *			int device (int)
  *	)
  */
+#if HAVE_hipDeviceGraphMemTrim
 struct args_hipDeviceGraphMemTrim_t {
 	int device;
 	hipError_t retval;
@@ -8767,6 +9443,8 @@ struct args_hipDeviceGraphMemTrim_t {
 #define GET_ARGS_VALUE_hipDeviceGraphMemTrim(activity) { \
 	activity->hip_args.hipDeviceGraphMemTrim.device = (int) device; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamDestroy` function.
@@ -8782,14 +9460,17 @@ struct args_hipDeviceGraphMemTrim_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipStreamDestroy
 struct args_hipStreamDestroy_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipStreamDestroy(activity) { \
-	activity->hip_args.hipStreamDestroy.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamDestroy.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefSetArray` function.
@@ -8807,19 +9488,20 @@ struct args_hipStreamDestroy_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipTexRefSetArray
 struct args_hipTexRefSetArray_t {
 	textureReference * tex;
 	struct {
 		textureReference val;
 	} tex__ref;
-	struct hipArray * array;
+	hipArray_const_t array;
 	unsigned int flags;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipTexRefSetArray(activity) { \
 	activity->hip_args.hipTexRefSetArray.tex = (textureReference *) tex; \
-	activity->hip_args.hipTexRefSetArray.array = (struct hipArray *) array; \
+	activity->hip_args.hipTexRefSetArray.array = (hipArray_const_t) array; \
 	activity->hip_args.hipTexRefSetArray.flags = (unsigned int) flags; \
 };
 
@@ -8828,6 +9510,8 @@ struct args_hipTexRefSetArray_t {
 		args->hipTexRefSetArray.tex__ref.val = *args->hipTexRefSetArray.tex; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyParam2DAsync` function.
@@ -8844,18 +9528,19 @@ struct args_hipTexRefSetArray_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpyParam2DAsync
 struct args_hipMemcpyParam2DAsync_t {
 	hip_Memcpy2D * pCopy;
 	struct {
 		hip_Memcpy2D val;
 	} pCopy__ref;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemcpyParam2DAsync(activity) { \
 	activity->hip_args.hipMemcpyParam2DAsync.pCopy = (hip_Memcpy2D *) pCopy; \
-	activity->hip_args.hipMemcpyParam2DAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpyParam2DAsync.stream = (hipStream_t) stream; \
 };
 
 #define GET_PTRS_VALUE_hipMemcpyParam2DAsync(args) { \
@@ -8863,6 +9548,8 @@ struct args_hipMemcpyParam2DAsync_t {
 		args->hipMemcpyParam2DAsync.pCopy__ref.val = *args->hipMemcpyParam2DAsync.pCopy; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemPoolExportPointer` function.
@@ -8879,6 +9566,7 @@ struct args_hipMemcpyParam2DAsync_t {
  *			void * dev_ptr (void *)
  *	)
  */
+#if HAVE_hipMemPoolExportPointer
 struct args_hipMemPoolExportPointer_t {
 	hipMemPoolPtrExportData * export_data;
 	struct {
@@ -8899,6 +9587,8 @@ struct args_hipMemPoolExportPointer_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphEventRecordNodeSetEvent` function.
  *
@@ -8914,16 +9604,19 @@ struct args_hipMemPoolExportPointer_t {
  *			hipEvent_t event (struct ihipEvent_t *)
  *	)
  */
+#if HAVE_hipGraphEventRecordNodeSetEvent
 struct args_hipGraphEventRecordNodeSetEvent_t {
-	struct hipGraphNode * node;
-	struct ihipEvent_t * event;
+	hipGraphNode_t node;
+	hipEvent_t event;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphEventRecordNodeSetEvent(activity) { \
-	activity->hip_args.hipGraphEventRecordNodeSetEvent.node = (struct hipGraphNode *) node; \
-	activity->hip_args.hipGraphEventRecordNodeSetEvent.event = (struct ihipEvent_t *) event; \
+	activity->hip_args.hipGraphEventRecordNodeSetEvent.node = (hipGraphNode_t) node; \
+	activity->hip_args.hipGraphEventRecordNodeSetEvent.event = (hipEvent_t) event; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipCtxDestroy` function.
@@ -8939,14 +9632,17 @@ struct args_hipGraphEventRecordNodeSetEvent_t {
  *			hipCtx_t ctx (struct ihipCtx_t *)
  *	)
  */
+#if HAVE_hipCtxDestroy
 struct args_hipCtxDestroy_t {
-	struct ihipCtx_t * ctx;
+	hipCtx_t ctx;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipCtxDestroy(activity) { \
-	activity->hip_args.hipCtxDestroy.ctx = (struct ihipCtx_t *) ctx; \
+	activity->hip_args.hipCtxDestroy.ctx = (hipCtx_t) ctx; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipArrayDestroy` function.
@@ -8962,14 +9658,17 @@ struct args_hipCtxDestroy_t {
  *			hipArray_t array (struct hipArray *)
  *	)
  */
+#if HAVE_hipArrayDestroy
 struct args_hipArrayDestroy_t {
-	struct hipArray * array;
+	hipArray_t array;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipArrayDestroy(activity) { \
-	activity->hip_args.hipArrayDestroy.array = (struct hipArray *) array; \
+	activity->hip_args.hipArrayDestroy.array = (hipArray_t) array; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemGetAllocationGranularity` function.
@@ -8987,6 +9686,7 @@ struct args_hipArrayDestroy_t {
  *			hipMemAllocationGranularity_flags option (enum hipMemAllocationGranularity_flags)
  *	)
  */
+#if HAVE_hipMemGetAllocationGranularity
 struct args_hipMemGetAllocationGranularity_t {
 	size_t * granularity;
 	struct {
@@ -9015,6 +9715,8 @@ struct args_hipMemGetAllocationGranularity_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphClone` function.
  *
@@ -9030,18 +9732,19 @@ struct args_hipMemGetAllocationGranularity_t {
  *			hipGraph_t originalGraph (struct ihipGraph *)
  *	)
  */
+#if HAVE_hipGraphClone
 struct args_hipGraphClone_t {
-	struct ihipGraph ** pGraphClone;
+	hipGraph_t * pGraphClone;
 	struct {
 		void* ptr1;
 	} pGraphClone__ref;
-	struct ihipGraph * originalGraph;
+	hipGraph_t originalGraph;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphClone(activity) { \
-	activity->hip_args.hipGraphClone.pGraphClone = (struct ihipGraph **) pGraphClone; \
-	activity->hip_args.hipGraphClone.originalGraph = (struct ihipGraph *) originalGraph; \
+	activity->hip_args.hipGraphClone.pGraphClone = (hipGraph_t *) pGraphClone; \
+	activity->hip_args.hipGraphClone.originalGraph = (hipGraph_t) originalGraph; \
 };
 
 #define GET_PTRS_VALUE_hipGraphClone(args) { \
@@ -9049,6 +9752,8 @@ struct args_hipGraphClone_t {
 		args->hipGraphClone.pGraphClone__ref.ptr1 = *args->hipGraphClone.pGraphClone; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemset2DAsync_spt` function.
@@ -9069,13 +9774,14 @@ struct args_hipGraphClone_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemset2DAsync_spt
 struct args_hipMemset2DAsync_spt_t {
 	void * dst;
 	size_t pitch;
 	int value;
 	size_t width;
 	size_t height;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -9085,8 +9791,10 @@ struct args_hipMemset2DAsync_spt_t {
 	activity->hip_args.hipMemset2DAsync_spt.value = (int) value; \
 	activity->hip_args.hipMemset2DAsync_spt.width = (size_t) width; \
 	activity->hip_args.hipMemset2DAsync_spt.height = (size_t) height; \
-	activity->hip_args.hipMemset2DAsync_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemset2DAsync_spt.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipBindTexture2D` function.
@@ -9108,6 +9816,7 @@ struct args_hipMemset2DAsync_spt_t {
  *			size_t pitch (unsigned long)
  *	)
  */
+#if HAVE_hipBindTexture2D
 struct args_hipBindTexture2D_t {
 	size_t * offset;
 	struct {
@@ -9150,6 +9859,8 @@ struct args_hipBindTexture2D_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipArrayGetInfo` function.
  *
@@ -9167,6 +9878,7 @@ struct args_hipBindTexture2D_t {
  *			hipArray_t array (struct hipArray *)
  *	)
  */
+#if HAVE_hipArrayGetInfo
 struct args_hipArrayGetInfo_t {
 	hipChannelFormatDesc * desc;
 	struct {
@@ -9180,7 +9892,7 @@ struct args_hipArrayGetInfo_t {
 	struct {
 		unsigned int val;
 	} flags__ref;
-	struct hipArray * array;
+	hipArray_t array;
 	hipError_t retval;
 };
 
@@ -9188,7 +9900,7 @@ struct args_hipArrayGetInfo_t {
 	activity->hip_args.hipArrayGetInfo.desc = (hipChannelFormatDesc *) desc; \
 	activity->hip_args.hipArrayGetInfo.extent = (hipExtent *) extent; \
 	activity->hip_args.hipArrayGetInfo.flags = (unsigned int *) flags; \
-	activity->hip_args.hipArrayGetInfo.array = (struct hipArray *) array; \
+	activity->hip_args.hipArrayGetInfo.array = (hipArray_t) array; \
 };
 
 #define GET_PTRS_VALUE_hipArrayGetInfo(args) { \
@@ -9202,6 +9914,8 @@ struct args_hipArrayGetInfo_t {
 		args->hipArrayGetInfo.flags__ref.val = *args->hipArrayGetInfo.flags; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphExternalSemaphoresSignalNodeGetParams` function.
@@ -9218,8 +9932,9 @@ struct args_hipArrayGetInfo_t {
  *			hipExternalSemaphoreSignalNodeParams * params_out (struct hipExternalSemaphoreSignalNodeParams*)
  *	)
  */
+#if HAVE_hipGraphExternalSemaphoresSignalNodeGetParams
 struct args_hipGraphExternalSemaphoresSignalNodeGetParams_t {
-	struct hipGraphNode * hNode;
+	hipGraphNode_t hNode;
 	hipExternalSemaphoreSignalNodeParams * params_out;
 	struct {
 		hipExternalSemaphoreSignalNodeParams val;
@@ -9228,7 +9943,7 @@ struct args_hipGraphExternalSemaphoresSignalNodeGetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphExternalSemaphoresSignalNodeGetParams(activity) { \
-	activity->hip_args.hipGraphExternalSemaphoresSignalNodeGetParams.hNode = (struct hipGraphNode *) hNode; \
+	activity->hip_args.hipGraphExternalSemaphoresSignalNodeGetParams.hNode = (hipGraphNode_t) hNode; \
 	activity->hip_args.hipGraphExternalSemaphoresSignalNodeGetParams.params_out = (hipExternalSemaphoreSignalNodeParams *) params_out; \
 };
 
@@ -9237,6 +9952,8 @@ struct args_hipGraphExternalSemaphoresSignalNodeGetParams_t {
 		args->hipGraphExternalSemaphoresSignalNodeGetParams.params_out__ref.val = *args->hipGraphExternalSemaphoresSignalNodeGetParams.params_out; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceGetStreamPriorityRange` function.
@@ -9253,6 +9970,7 @@ struct args_hipGraphExternalSemaphoresSignalNodeGetParams_t {
  *			int * greatestPriority (int *)
  *	)
  */
+#if HAVE_hipDeviceGetStreamPriorityRange
 struct args_hipDeviceGetStreamPriorityRange_t {
 	int * leastPriority;
 	struct {
@@ -9279,6 +9997,8 @@ struct args_hipDeviceGetStreamPriorityRange_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphExecChildGraphNodeSetParams` function.
  *
@@ -9295,18 +10015,21 @@ struct args_hipDeviceGetStreamPriorityRange_t {
  *			hipGraph_t childGraph (struct ihipGraph *)
  *	)
  */
+#if HAVE_hipGraphExecChildGraphNodeSetParams
 struct args_hipGraphExecChildGraphNodeSetParams_t {
-	struct hipGraphExec * hGraphExec;
-	struct hipGraphNode * node;
-	struct ihipGraph * childGraph;
+	hipGraphExec_t hGraphExec;
+	hipGraphNode_t node;
+	hipGraph_t childGraph;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphExecChildGraphNodeSetParams(activity) { \
-	activity->hip_args.hipGraphExecChildGraphNodeSetParams.hGraphExec = (struct hipGraphExec *) hGraphExec; \
-	activity->hip_args.hipGraphExecChildGraphNodeSetParams.node = (struct hipGraphNode *) node; \
-	activity->hip_args.hipGraphExecChildGraphNodeSetParams.childGraph = (struct ihipGraph *) childGraph; \
+	activity->hip_args.hipGraphExecChildGraphNodeSetParams.hGraphExec = (hipGraphExec_t) hGraphExec; \
+	activity->hip_args.hipGraphExecChildGraphNodeSetParams.node = (hipGraphNode_t) node; \
+	activity->hip_args.hipGraphExecChildGraphNodeSetParams.childGraph = (hipGraph_t) childGraph; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemset2D_spt` function.
@@ -9326,6 +10049,7 @@ struct args_hipGraphExecChildGraphNodeSetParams_t {
  *			size_t height (unsigned long)
  *	)
  */
+#if HAVE_hipMemset2D_spt
 struct args_hipMemset2D_spt_t {
 	void * dst;
 	size_t pitch;
@@ -9343,6 +10067,8 @@ struct args_hipMemset2D_spt_t {
 	activity->hip_args.hipMemset2D_spt.height = (size_t) height; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDeviceGetDefaultMemPool` function.
  *
@@ -9358,8 +10084,9 @@ struct args_hipMemset2D_spt_t {
  *			int device (int)
  *	)
  */
+#if HAVE_hipDeviceGetDefaultMemPool
 struct args_hipDeviceGetDefaultMemPool_t {
-	struct ihipMemPoolHandle_t ** mem_pool;
+	hipMemPool_t * mem_pool;
 	struct {
 		void* ptr1;
 	} mem_pool__ref;
@@ -9368,7 +10095,7 @@ struct args_hipDeviceGetDefaultMemPool_t {
 };
 
 #define GET_ARGS_VALUE_hipDeviceGetDefaultMemPool(activity) { \
-	activity->hip_args.hipDeviceGetDefaultMemPool.mem_pool = (struct ihipMemPoolHandle_t **) mem_pool; \
+	activity->hip_args.hipDeviceGetDefaultMemPool.mem_pool = (hipMemPool_t *) mem_pool; \
 	activity->hip_args.hipDeviceGetDefaultMemPool.device = (int) device; \
 };
 
@@ -9377,6 +10104,8 @@ struct args_hipDeviceGetDefaultMemPool_t {
 		args->hipDeviceGetDefaultMemPool.mem_pool__ref.ptr1 = *args->hipDeviceGetDefaultMemPool.mem_pool; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipCtxCreate` function.
@@ -9394,8 +10123,9 @@ struct args_hipDeviceGetDefaultMemPool_t {
  *			hipDevice_t device (int)
  *	)
  */
+#if HAVE_hipCtxCreate
 struct args_hipCtxCreate_t {
-	struct ihipCtx_t ** ctx;
+	hipCtx_t * ctx;
 	struct {
 		void* ptr1;
 	} ctx__ref;
@@ -9405,7 +10135,7 @@ struct args_hipCtxCreate_t {
 };
 
 #define GET_ARGS_VALUE_hipCtxCreate(activity) { \
-	activity->hip_args.hipCtxCreate.ctx = (struct ihipCtx_t **) ctx; \
+	activity->hip_args.hipCtxCreate.ctx = (hipCtx_t *) ctx; \
 	activity->hip_args.hipCtxCreate.flags = (unsigned int) flags; \
 	activity->hip_args.hipCtxCreate.device = (hipDevice_t) device; \
 };
@@ -9415,6 +10145,8 @@ struct args_hipCtxCreate_t {
 		args->hipCtxCreate.ctx__ref.ptr1 = *args->hipCtxCreate.ctx; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamIsCapturing` function.
@@ -9431,8 +10163,9 @@ struct args_hipCtxCreate_t {
  *			hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*)
  *	)
  */
+#if HAVE_hipStreamIsCapturing
 struct args_hipStreamIsCapturing_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipStreamCaptureStatus * pCaptureStatus;
 	struct {
 		hipStreamCaptureStatus val;
@@ -9441,7 +10174,7 @@ struct args_hipStreamIsCapturing_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamIsCapturing(activity) { \
-	activity->hip_args.hipStreamIsCapturing.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamIsCapturing.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamIsCapturing.pCaptureStatus = (hipStreamCaptureStatus *) pCaptureStatus; \
 };
 
@@ -9450,6 +10183,8 @@ struct args_hipStreamIsCapturing_t {
 		args->hipStreamIsCapturing.pCaptureStatus__ref.val = *args->hipStreamIsCapturing.pCaptureStatus; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamUpdateCaptureDependencies` function.
@@ -9468,9 +10203,10 @@ struct args_hipStreamIsCapturing_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipStreamUpdateCaptureDependencies
 struct args_hipStreamUpdateCaptureDependencies_t {
-	struct ihipStream_t * stream;
-	struct hipGraphNode ** dependencies;
+	hipStream_t stream;
+	hipGraphNode_t * dependencies;
 	struct {
 		void* ptr1;
 	} dependencies__ref;
@@ -9480,8 +10216,8 @@ struct args_hipStreamUpdateCaptureDependencies_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamUpdateCaptureDependencies(activity) { \
-	activity->hip_args.hipStreamUpdateCaptureDependencies.stream = (struct ihipStream_t *) stream; \
-	activity->hip_args.hipStreamUpdateCaptureDependencies.dependencies = (struct hipGraphNode **) dependencies; \
+	activity->hip_args.hipStreamUpdateCaptureDependencies.stream = (hipStream_t) stream; \
+	activity->hip_args.hipStreamUpdateCaptureDependencies.dependencies = (hipGraphNode_t *) dependencies; \
 	activity->hip_args.hipStreamUpdateCaptureDependencies.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipStreamUpdateCaptureDependencies.flags = (unsigned int) flags; \
 };
@@ -9491,6 +10227,8 @@ struct args_hipStreamUpdateCaptureDependencies_t {
 		args->hipStreamUpdateCaptureDependencies.dependencies__ref.ptr1 = *args->hipStreamUpdateCaptureDependencies.dependencies; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceSynchronize` function.
@@ -9505,9 +10243,12 @@ struct args_hipStreamUpdateCaptureDependencies_t {
  *	hipDeviceSynchronize (
  *	)
  */
+#if HAVE_hipDeviceSynchronize
 struct args_hipDeviceSynchronize_t {
 	hipError_t retval;
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyFromSymbolAsync` function.
@@ -9528,13 +10269,14 @@ struct args_hipDeviceSynchronize_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpyFromSymbolAsync
 struct args_hipMemcpyFromSymbolAsync_t {
 	void * dst;
 	void * symbol;
 	size_t sizeBytes;
 	size_t offset;
 	hipMemcpyKind kind;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -9544,8 +10286,10 @@ struct args_hipMemcpyFromSymbolAsync_t {
 	activity->hip_args.hipMemcpyFromSymbolAsync.sizeBytes = (size_t) sizeBytes; \
 	activity->hip_args.hipMemcpyFromSymbolAsync.offset = (size_t) offset; \
 	activity->hip_args.hipMemcpyFromSymbolAsync.kind = (hipMemcpyKind) kind; \
-	activity->hip_args.hipMemcpyFromSymbolAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpyFromSymbolAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphDestroyNode` function.
@@ -9561,14 +10305,17 @@ struct args_hipMemcpyFromSymbolAsync_t {
  *			hipGraphNode_t node (struct hipGraphNode *)
  *	)
  */
+#if HAVE_hipGraphDestroyNode
 struct args_hipGraphDestroyNode_t {
-	struct hipGraphNode * node;
+	hipGraphNode_t node;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphDestroyNode(activity) { \
-	activity->hip_args.hipGraphDestroyNode.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphDestroyNode.node = (hipGraphNode_t) node; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipUserObjectRetain` function.
@@ -9585,16 +10332,19 @@ struct args_hipGraphDestroyNode_t {
  *			unsigned int count (unsigned int)
  *	)
  */
+#if HAVE_hipUserObjectRetain
 struct args_hipUserObjectRetain_t {
-	struct hipUserObject * object;
+	hipUserObject_t object;
 	unsigned int count;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipUserObjectRetain(activity) { \
-	activity->hip_args.hipUserObjectRetain.object = (struct hipUserObject *) object; \
+	activity->hip_args.hipUserObjectRetain.object = (hipUserObject_t) object; \
 	activity->hip_args.hipUserObjectRetain.count = (unsigned int) count; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphExecEventWaitNodeSetEvent` function.
@@ -9612,18 +10362,21 @@ struct args_hipUserObjectRetain_t {
  *			hipEvent_t event (struct ihipEvent_t *)
  *	)
  */
+#if HAVE_hipGraphExecEventWaitNodeSetEvent
 struct args_hipGraphExecEventWaitNodeSetEvent_t {
-	struct hipGraphExec * hGraphExec;
-	struct hipGraphNode * hNode;
-	struct ihipEvent_t * event;
+	hipGraphExec_t hGraphExec;
+	hipGraphNode_t hNode;
+	hipEvent_t event;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphExecEventWaitNodeSetEvent(activity) { \
-	activity->hip_args.hipGraphExecEventWaitNodeSetEvent.hGraphExec = (struct hipGraphExec *) hGraphExec; \
-	activity->hip_args.hipGraphExecEventWaitNodeSetEvent.hNode = (struct hipGraphNode *) hNode; \
-	activity->hip_args.hipGraphExecEventWaitNodeSetEvent.event = (struct ihipEvent_t *) event; \
+	activity->hip_args.hipGraphExecEventWaitNodeSetEvent.hGraphExec = (hipGraphExec_t) hGraphExec; \
+	activity->hip_args.hipGraphExecEventWaitNodeSetEvent.hNode = (hipGraphNode_t) hNode; \
+	activity->hip_args.hipGraphExecEventWaitNodeSetEvent.event = (hipEvent_t) event; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemAddressReserve` function.
@@ -9643,6 +10396,7 @@ struct args_hipGraphExecEventWaitNodeSetEvent_t {
  *			unsigned long long flags (unsigned long long)
  *	)
  */
+#if HAVE_hipMemAddressReserve
 struct args_hipMemAddressReserve_t {
 	void ** ptr;
 	struct {
@@ -9669,6 +10423,8 @@ struct args_hipMemAddressReserve_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddMemsetNode` function.
  *
@@ -9687,13 +10443,14 @@ struct args_hipMemAddressReserve_t {
  *			const hipMemsetParams * pMemsetParams (const struct hipMemsetParams *)
  *	)
  */
+#if HAVE_hipGraphAddMemsetNode
 struct args_hipGraphAddMemsetNode_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
@@ -9706,9 +10463,9 @@ struct args_hipGraphAddMemsetNode_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphAddMemsetNode(activity) { \
-	activity->hip_args.hipGraphAddMemsetNode.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddMemsetNode.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddMemsetNode.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddMemsetNode.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddMemsetNode.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddMemsetNode.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddMemsetNode.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipGraphAddMemsetNode.pMemsetParams = (hipMemsetParams *) pMemsetParams; \
 };
@@ -9724,6 +10481,8 @@ struct args_hipGraphAddMemsetNode_t {
 		args->hipGraphAddMemsetNode.pMemsetParams__ref.val = *args->hipGraphAddMemsetNode.pMemsetParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphicsResourceGetMappedPointer` function.
@@ -9741,6 +10500,7 @@ struct args_hipGraphAddMemsetNode_t {
  *			hipGraphicsResource_t resource (struct _hipGraphicsResource*)
  *	)
  */
+#if HAVE_hipGraphicsResourceGetMappedPointer
 struct args_hipGraphicsResourceGetMappedPointer_t {
 	void ** devPtr;
 	struct {
@@ -9750,14 +10510,14 @@ struct args_hipGraphicsResourceGetMappedPointer_t {
 	struct {
 		size_t val;
 	} size__ref;
-	struct _hipGraphicsResource* resource;
+	hipGraphicsResource_t resource;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphicsResourceGetMappedPointer(activity) { \
 	activity->hip_args.hipGraphicsResourceGetMappedPointer.devPtr = (void **) devPtr; \
 	activity->hip_args.hipGraphicsResourceGetMappedPointer.size = (size_t *) size; \
-	activity->hip_args.hipGraphicsResourceGetMappedPointer.resource = (struct _hipGraphicsResource*) resource; \
+	activity->hip_args.hipGraphicsResourceGetMappedPointer.resource = (hipGraphicsResource_t) resource; \
 };
 
 #define GET_PTRS_VALUE_hipGraphicsResourceGetMappedPointer(args) { \
@@ -9768,6 +10528,8 @@ struct args_hipGraphicsResourceGetMappedPointer_t {
 		args->hipGraphicsResourceGetMappedPointer.size__ref.val = *args->hipGraphicsResourceGetMappedPointer.size; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamBeginCapture_spt` function.
@@ -9784,16 +10546,19 @@ struct args_hipGraphicsResourceGetMappedPointer_t {
  *			hipStreamCaptureMode mode (enum hipStreamCaptureMode)
  *	)
  */
+#if HAVE_hipStreamBeginCapture_spt
 struct args_hipStreamBeginCapture_spt_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipStreamCaptureMode mode;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipStreamBeginCapture_spt(activity) { \
-	activity->hip_args.hipStreamBeginCapture_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamBeginCapture_spt.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamBeginCapture_spt.mode = (hipStreamCaptureMode) mode; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceGetUuid` function.
@@ -9810,6 +10575,7 @@ struct args_hipStreamBeginCapture_spt_t {
  *			hipDevice_t device (int)
  *	)
  */
+#if HAVE_hipDeviceGetUuid
 struct args_hipDeviceGetUuid_t {
 	hipUUID * uuid;
 	struct {
@@ -9829,6 +10595,8 @@ struct args_hipDeviceGetUuid_t {
 		args->hipDeviceGetUuid.uuid__ref.val = *args->hipDeviceGetUuid.uuid; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipModuleLaunchKernel` function.
@@ -9854,8 +10622,9 @@ struct args_hipDeviceGetUuid_t {
  *			void ** extra (void **)
  *	)
  */
+#if HAVE_hipModuleLaunchKernel
 struct args_hipModuleLaunchKernel_t {
-	struct ihipModuleSymbol_t * f;
+	hipFunction_t f;
 	unsigned int gridDimX;
 	unsigned int gridDimY;
 	unsigned int gridDimZ;
@@ -9863,7 +10632,7 @@ struct args_hipModuleLaunchKernel_t {
 	unsigned int blockDimY;
 	unsigned int blockDimZ;
 	unsigned int sharedMemBytes;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	void ** kernelParams;
 	struct {
 		void* ptr1;
@@ -9876,7 +10645,7 @@ struct args_hipModuleLaunchKernel_t {
 };
 
 #define GET_ARGS_VALUE_hipModuleLaunchKernel(activity) { \
-	activity->hip_args.hipModuleLaunchKernel.f = (struct ihipModuleSymbol_t *) f; \
+	activity->hip_args.hipModuleLaunchKernel.f = (hipFunction_t) f; \
 	activity->hip_args.hipModuleLaunchKernel.gridDimX = (unsigned int) gridDimX; \
 	activity->hip_args.hipModuleLaunchKernel.gridDimY = (unsigned int) gridDimY; \
 	activity->hip_args.hipModuleLaunchKernel.gridDimZ = (unsigned int) gridDimZ; \
@@ -9884,7 +10653,7 @@ struct args_hipModuleLaunchKernel_t {
 	activity->hip_args.hipModuleLaunchKernel.blockDimY = (unsigned int) blockDimY; \
 	activity->hip_args.hipModuleLaunchKernel.blockDimZ = (unsigned int) blockDimZ; \
 	activity->hip_args.hipModuleLaunchKernel.sharedMemBytes = (unsigned int) sharedMemBytes; \
-	activity->hip_args.hipModuleLaunchKernel.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipModuleLaunchKernel.stream = (hipStream_t) stream; \
 	activity->hip_args.hipModuleLaunchKernel.kernelParams = (void **) kernelParams; \
 	activity->hip_args.hipModuleLaunchKernel.extra = (void **) extra; \
 };
@@ -9897,6 +10666,8 @@ struct args_hipModuleLaunchKernel_t {
 		args->hipModuleLaunchKernel.extra__ref.ptr1 = *args->hipModuleLaunchKernel.extra; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddEmptyNode` function.
@@ -9915,13 +10686,14 @@ struct args_hipModuleLaunchKernel_t {
  *			size_t numDependencies (unsigned long)
  *	)
  */
+#if HAVE_hipGraphAddEmptyNode
 struct args_hipGraphAddEmptyNode_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
@@ -9930,9 +10702,9 @@ struct args_hipGraphAddEmptyNode_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphAddEmptyNode(activity) { \
-	activity->hip_args.hipGraphAddEmptyNode.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddEmptyNode.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddEmptyNode.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddEmptyNode.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddEmptyNode.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddEmptyNode.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddEmptyNode.numDependencies = (size_t) numDependencies; \
 };
 
@@ -9944,6 +10716,8 @@ struct args_hipGraphAddEmptyNode_t {
 		args->hipGraphAddEmptyNode.pDependencies__ref.ptr1 = *args->hipGraphAddEmptyNode.pDependencies; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemRangeGetAttribute` function.
@@ -9963,6 +10737,7 @@ struct args_hipGraphAddEmptyNode_t {
  *			size_t count (unsigned long)
  *	)
  */
+#if HAVE_hipMemRangeGetAttribute
 struct args_hipMemRangeGetAttribute_t {
 	void * data;
 	size_t data_size;
@@ -9980,6 +10755,8 @@ struct args_hipMemRangeGetAttribute_t {
 	activity->hip_args.hipMemRangeGetAttribute.count = (size_t) count; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphInstantiateWithFlags` function.
  *
@@ -9996,19 +10773,20 @@ struct args_hipMemRangeGetAttribute_t {
  *			unsigned long long flags (unsigned long long)
  *	)
  */
+#if HAVE_hipGraphInstantiateWithFlags
 struct args_hipGraphInstantiateWithFlags_t {
-	struct hipGraphExec ** pGraphExec;
+	hipGraphExec_t * pGraphExec;
 	struct {
 		void* ptr1;
 	} pGraphExec__ref;
-	struct ihipGraph * graph;
+	hipGraph_t graph;
 	unsigned long long flags;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphInstantiateWithFlags(activity) { \
-	activity->hip_args.hipGraphInstantiateWithFlags.pGraphExec = (struct hipGraphExec **) pGraphExec; \
-	activity->hip_args.hipGraphInstantiateWithFlags.graph = (struct ihipGraph *) graph; \
+	activity->hip_args.hipGraphInstantiateWithFlags.pGraphExec = (hipGraphExec_t *) pGraphExec; \
+	activity->hip_args.hipGraphInstantiateWithFlags.graph = (hipGraph_t) graph; \
 	activity->hip_args.hipGraphInstantiateWithFlags.flags = (unsigned long long) flags; \
 };
 
@@ -10017,6 +10795,8 @@ struct args_hipGraphInstantiateWithFlags_t {
 		args->hipGraphInstantiateWithFlags.pGraphExec__ref.ptr1 = *args->hipGraphInstantiateWithFlags.pGraphExec; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipCtxPushCurrent` function.
@@ -10032,14 +10812,17 @@ struct args_hipGraphInstantiateWithFlags_t {
  *			hipCtx_t ctx (struct ihipCtx_t *)
  *	)
  */
+#if HAVE_hipCtxPushCurrent
 struct args_hipCtxPushCurrent_t {
-	struct ihipCtx_t * ctx;
+	hipCtx_t ctx;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipCtxPushCurrent(activity) { \
-	activity->hip_args.hipCtxPushCurrent.ctx = (struct ihipCtx_t *) ctx; \
+	activity->hip_args.hipCtxPushCurrent.ctx = (hipCtx_t) ctx; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipCtxGetApiVersion` function.
@@ -10056,8 +10839,9 @@ struct args_hipCtxPushCurrent_t {
  *			int * apiVersion (int *)
  *	)
  */
+#if HAVE_hipCtxGetApiVersion
 struct args_hipCtxGetApiVersion_t {
-	struct ihipCtx_t * ctx;
+	hipCtx_t ctx;
 	int * apiVersion;
 	struct {
 		int val;
@@ -10066,7 +10850,7 @@ struct args_hipCtxGetApiVersion_t {
 };
 
 #define GET_ARGS_VALUE_hipCtxGetApiVersion(activity) { \
-	activity->hip_args.hipCtxGetApiVersion.ctx = (struct ihipCtx_t *) ctx; \
+	activity->hip_args.hipCtxGetApiVersion.ctx = (hipCtx_t) ctx; \
 	activity->hip_args.hipCtxGetApiVersion.apiVersion = (int *) apiVersion; \
 };
 
@@ -10075,6 +10859,8 @@ struct args_hipCtxGetApiVersion_t {
 		args->hipCtxGetApiVersion.apiVersion__ref.val = *args->hipCtxGetApiVersion.apiVersion; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipBindTexture` function.
@@ -10094,6 +10880,7 @@ struct args_hipCtxGetApiVersion_t {
  *			size_t size (unsigned long)
  *	)
  */
+#if HAVE_hipBindTexture
 struct args_hipBindTexture_t {
 	size_t * offset;
 	struct {
@@ -10132,6 +10919,8 @@ struct args_hipBindTexture_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipStreamBeginCapture` function.
  *
@@ -10147,16 +10936,19 @@ struct args_hipBindTexture_t {
  *			hipStreamCaptureMode mode (enum hipStreamCaptureMode)
  *	)
  */
+#if HAVE_hipStreamBeginCapture
 struct args_hipStreamBeginCapture_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipStreamCaptureMode mode;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipStreamBeginCapture(activity) { \
-	activity->hip_args.hipStreamBeginCapture.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamBeginCapture.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamBeginCapture.mode = (hipStreamCaptureMode) mode; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipProfilerStart` function.
@@ -10171,9 +10963,12 @@ struct args_hipStreamBeginCapture_t {
  *	hipProfilerStart (
  *	)
  */
+#if HAVE_hipProfilerStart
 struct args_hipProfilerStart_t {
 	hipError_t retval;
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyHtoDAsync` function.
@@ -10192,11 +10987,12 @@ struct args_hipProfilerStart_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpyHtoDAsync
 struct args_hipMemcpyHtoDAsync_t {
 	void * dst;
 	void * src;
 	size_t sizeBytes;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -10204,8 +11000,10 @@ struct args_hipMemcpyHtoDAsync_t {
 	activity->hip_args.hipMemcpyHtoDAsync.dst = (void *) dst; \
 	activity->hip_args.hipMemcpyHtoDAsync.src = (void *) src; \
 	activity->hip_args.hipMemcpyHtoDAsync.sizeBytes = (size_t) sizeBytes; \
-	activity->hip_args.hipMemcpyHtoDAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpyHtoDAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGetDeviceFlags` function.
@@ -10221,6 +11019,7 @@ struct args_hipMemcpyHtoDAsync_t {
  *			unsigned int * flags (unsigned int *)
  *	)
  */
+#if HAVE_hipGetDeviceFlags
 struct args_hipGetDeviceFlags_t {
 	unsigned int * flags;
 	struct {
@@ -10238,6 +11037,8 @@ struct args_hipGetDeviceFlags_t {
 		args->hipGetDeviceFlags.flags__ref.val = *args->hipGetDeviceFlags.flags; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemRangeGetAttributes` function.
@@ -10258,6 +11059,7 @@ struct args_hipGetDeviceFlags_t {
  *			size_t count (unsigned long)
  *	)
  */
+#if HAVE_hipMemRangeGetAttributes
 struct args_hipMemRangeGetAttributes_t {
 	void ** data;
 	struct {
@@ -10298,6 +11100,8 @@ struct args_hipMemRangeGetAttributes_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDestroyExternalSemaphore` function.
  *
@@ -10312,6 +11116,7 @@ struct args_hipMemRangeGetAttributes_t {
  *			hipExternalSemaphore_t extSem (void *)
  *	)
  */
+#if HAVE_hipDestroyExternalSemaphore
 struct args_hipDestroyExternalSemaphore_t {
 	void * extSem;
 	hipError_t retval;
@@ -10320,6 +11125,8 @@ struct args_hipDestroyExternalSemaphore_t {
 #define GET_ARGS_VALUE_hipDestroyExternalSemaphore(activity) { \
 	activity->hip_args.hipDestroyExternalSemaphore.extSem = (void *) extSem; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipIpcOpenEventHandle` function.
@@ -10336,8 +11143,9 @@ struct args_hipDestroyExternalSemaphore_t {
  *			hipIpcEventHandle_t handle (struct hipIpcEventHandle_st)
  *	)
  */
+#if HAVE_hipIpcOpenEventHandle
 struct args_hipIpcOpenEventHandle_t {
-	struct ihipEvent_t ** event;
+	hipEvent_t * event;
 	struct {
 		void* ptr1;
 	} event__ref;
@@ -10346,7 +11154,7 @@ struct args_hipIpcOpenEventHandle_t {
 };
 
 #define GET_ARGS_VALUE_hipIpcOpenEventHandle(activity) { \
-	activity->hip_args.hipIpcOpenEventHandle.event = (struct ihipEvent_t **) event; \
+	activity->hip_args.hipIpcOpenEventHandle.event = (hipEvent_t *) event; \
 	activity->hip_args.hipIpcOpenEventHandle.handle = (hipIpcEventHandle_t) handle; \
 };
 
@@ -10355,6 +11163,8 @@ struct args_hipIpcOpenEventHandle_t {
 		args->hipIpcOpenEventHandle.event__ref.ptr1 = *args->hipIpcOpenEventHandle.event; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphUpload` function.
@@ -10371,16 +11181,19 @@ struct args_hipIpcOpenEventHandle_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipGraphUpload
 struct args_hipGraphUpload_t {
-	struct hipGraphExec * graphExec;
-	struct ihipStream_t * stream;
+	hipGraphExec_t graphExec;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphUpload(activity) { \
-	activity->hip_args.hipGraphUpload.graphExec = (struct hipGraphExec *) graphExec; \
-	activity->hip_args.hipGraphUpload.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipGraphUpload.graphExec = (hipGraphExec_t) graphExec; \
+	activity->hip_args.hipGraphUpload.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMallocAsync` function.
@@ -10398,20 +11211,21 @@ struct args_hipGraphUpload_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMallocAsync
 struct args_hipMallocAsync_t {
 	void ** dev_ptr;
 	struct {
 		void* ptr1;
 	} dev_ptr__ref;
 	size_t size;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMallocAsync(activity) { \
 	activity->hip_args.hipMallocAsync.dev_ptr = (void **) dev_ptr; \
 	activity->hip_args.hipMallocAsync.size = (size_t) size; \
-	activity->hip_args.hipMallocAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMallocAsync.stream = (hipStream_t) stream; \
 };
 
 #define GET_PTRS_VALUE_hipMallocAsync(args) { \
@@ -10419,6 +11233,8 @@ struct args_hipMallocAsync_t {
 		args->hipMallocAsync.dev_ptr__ref.ptr1 = *args->hipMallocAsync.dev_ptr; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipOccupancyMaxPotentialBlockSize` function.
@@ -10438,6 +11254,7 @@ struct args_hipMallocAsync_t {
  *			int blockSizeLimit (int)
  *	)
  */
+#if HAVE_hipOccupancyMaxPotentialBlockSize
 struct args_hipOccupancyMaxPotentialBlockSize_t {
 	int * gridSize;
 	struct {
@@ -10470,6 +11287,8 @@ struct args_hipOccupancyMaxPotentialBlockSize_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDestroyExternalMemory` function.
  *
@@ -10484,6 +11303,7 @@ struct args_hipOccupancyMaxPotentialBlockSize_t {
  *			hipExternalMemory_t extMem (void *)
  *	)
  */
+#if HAVE_hipDestroyExternalMemory
 struct args_hipDestroyExternalMemory_t {
 	void * extMem;
 	hipError_t retval;
@@ -10492,6 +11312,8 @@ struct args_hipDestroyExternalMemory_t {
 #define GET_ARGS_VALUE_hipDestroyExternalMemory(activity) { \
 	activity->hip_args.hipDestroyExternalMemory.extMem = (void *) extMem; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `amd_dbgapi_get_build_name` function.
@@ -10506,6 +11328,7 @@ struct args_hipDestroyExternalMemory_t {
  *	amd_dbgapi_get_build_name (
  *	)
  */
+#if HAVE_amd_dbgapi_get_build_name
 struct args_amd_dbgapi_get_build_name_t {
 	char * retval;
 	struct {
@@ -10518,6 +11341,8 @@ struct args_amd_dbgapi_get_build_name_t {
 		strncpy(args->amd_dbgapi_get_build_name.retval__ref.val, args->amd_dbgapi_get_build_name.retval, HIP_STRING_SIZE_MAX-1); \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddMemcpyNodeToSymbol` function.
@@ -10541,13 +11366,14 @@ struct args_amd_dbgapi_get_build_name_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipGraphAddMemcpyNodeToSymbol
 struct args_hipGraphAddMemcpyNodeToSymbol_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
@@ -10561,9 +11387,9 @@ struct args_hipGraphAddMemcpyNodeToSymbol_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphAddMemcpyNodeToSymbol(activity) { \
-	activity->hip_args.hipGraphAddMemcpyNodeToSymbol.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddMemcpyNodeToSymbol.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddMemcpyNodeToSymbol.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddMemcpyNodeToSymbol.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddMemcpyNodeToSymbol.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddMemcpyNodeToSymbol.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddMemcpyNodeToSymbol.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipGraphAddMemcpyNodeToSymbol.symbol = (void *) symbol; \
 	activity->hip_args.hipGraphAddMemcpyNodeToSymbol.src = (void *) src; \
@@ -10581,6 +11407,8 @@ struct args_hipGraphAddMemcpyNodeToSymbol_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDeviceGetPCIBusId` function.
  *
@@ -10597,6 +11425,7 @@ struct args_hipGraphAddMemcpyNodeToSymbol_t {
  *			int device (int)
  *	)
  */
+#if HAVE_hipDeviceGetPCIBusId
 struct args_hipDeviceGetPCIBusId_t {
 	char * pciBusId;
 	struct {
@@ -10619,6 +11448,8 @@ struct args_hipDeviceGetPCIBusId_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGetChannelDesc` function.
  *
@@ -10634,18 +11465,19 @@ struct args_hipDeviceGetPCIBusId_t {
  *			hipArray_const_t array (const struct hipArray *)
  *	)
  */
+#if HAVE_hipGetChannelDesc
 struct args_hipGetChannelDesc_t {
 	hipChannelFormatDesc * desc;
 	struct {
 		hipChannelFormatDesc val;
 	} desc__ref;
-	struct hipArray * array;
+	hipArray_const_t array;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGetChannelDesc(activity) { \
 	activity->hip_args.hipGetChannelDesc.desc = (hipChannelFormatDesc *) desc; \
-	activity->hip_args.hipGetChannelDesc.array = (struct hipArray *) array; \
+	activity->hip_args.hipGetChannelDesc.array = (hipArray_const_t) array; \
 };
 
 #define GET_PTRS_VALUE_hipGetChannelDesc(args) { \
@@ -10653,6 +11485,8 @@ struct args_hipGetChannelDesc_t {
 		args->hipGetChannelDesc.desc__ref.val = *args->hipGetChannelDesc.desc; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDevicePrimaryCtxReset` function.
@@ -10668,6 +11502,7 @@ struct args_hipGetChannelDesc_t {
  *			hipDevice_t dev (int)
  *	)
  */
+#if HAVE_hipDevicePrimaryCtxReset
 struct args_hipDevicePrimaryCtxReset_t {
 	hipDevice_t dev;
 	hipError_t retval;
@@ -10676,6 +11511,8 @@ struct args_hipDevicePrimaryCtxReset_t {
 #define GET_ARGS_VALUE_hipDevicePrimaryCtxReset(activity) { \
 	activity->hip_args.hipDevicePrimaryCtxReset.dev = (hipDevice_t) dev; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipImportExternalMemory` function.
@@ -10692,6 +11529,7 @@ struct args_hipDevicePrimaryCtxReset_t {
  *			const hipExternalMemoryHandleDesc * memHandleDesc (const struct hipExternalMemoryHandleDesc_st *)
  *	)
  */
+#if HAVE_hipImportExternalMemory
 struct args_hipImportExternalMemory_t {
 	void ** extMem_out;
 	struct {
@@ -10718,6 +11556,8 @@ struct args_hipImportExternalMemory_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipFuncSetSharedMemConfig` function.
  *
@@ -10733,6 +11573,7 @@ struct args_hipImportExternalMemory_t {
  *			hipSharedMemConfig config (enum hipSharedMemConfig)
  *	)
  */
+#if HAVE_hipFuncSetSharedMemConfig
 struct args_hipFuncSetSharedMemConfig_t {
 	void * func;
 	hipSharedMemConfig config;
@@ -10743,6 +11584,8 @@ struct args_hipFuncSetSharedMemConfig_t {
 	activity->hip_args.hipFuncSetSharedMemConfig.func = (void *) func; \
 	activity->hip_args.hipFuncSetSharedMemConfig.config = (hipSharedMemConfig) config; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamWaitEvent` function.
@@ -10760,18 +11603,21 @@ struct args_hipFuncSetSharedMemConfig_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipStreamWaitEvent
 struct args_hipStreamWaitEvent_t {
-	struct ihipStream_t * stream;
-	struct ihipEvent_t * event;
+	hipStream_t stream;
+	hipEvent_t event;
 	unsigned int flags;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipStreamWaitEvent(activity) { \
-	activity->hip_args.hipStreamWaitEvent.stream = (struct ihipStream_t *) stream; \
-	activity->hip_args.hipStreamWaitEvent.event = (struct ihipEvent_t *) event; \
+	activity->hip_args.hipStreamWaitEvent.stream = (hipStream_t) stream; \
+	activity->hip_args.hipStreamWaitEvent.event = (hipEvent_t) event; \
 	activity->hip_args.hipStreamWaitEvent.flags = (unsigned int) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefSetMipmapLevelBias` function.
@@ -10788,6 +11634,7 @@ struct args_hipStreamWaitEvent_t {
  *			float bias (float)
  *	)
  */
+#if HAVE_hipTexRefSetMipmapLevelBias
 struct args_hipTexRefSetMipmapLevelBias_t {
 	textureReference * texRef;
 	struct {
@@ -10808,6 +11655,8 @@ struct args_hipTexRefSetMipmapLevelBias_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemPoolImportFromShareableHandle` function.
  *
@@ -10825,8 +11674,9 @@ struct args_hipTexRefSetMipmapLevelBias_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipMemPoolImportFromShareableHandle
 struct args_hipMemPoolImportFromShareableHandle_t {
-	struct ihipMemPoolHandle_t ** mem_pool;
+	hipMemPool_t * mem_pool;
 	struct {
 		void* ptr1;
 	} mem_pool__ref;
@@ -10837,7 +11687,7 @@ struct args_hipMemPoolImportFromShareableHandle_t {
 };
 
 #define GET_ARGS_VALUE_hipMemPoolImportFromShareableHandle(activity) { \
-	activity->hip_args.hipMemPoolImportFromShareableHandle.mem_pool = (struct ihipMemPoolHandle_t **) mem_pool; \
+	activity->hip_args.hipMemPoolImportFromShareableHandle.mem_pool = (hipMemPool_t *) mem_pool; \
 	activity->hip_args.hipMemPoolImportFromShareableHandle.shared_handle = (void *) shared_handle; \
 	activity->hip_args.hipMemPoolImportFromShareableHandle.handle_type = (hipMemAllocationHandleType) handle_type; \
 	activity->hip_args.hipMemPoolImportFromShareableHandle.flags = (unsigned int) flags; \
@@ -10848,6 +11698,8 @@ struct args_hipMemPoolImportFromShareableHandle_t {
 		args->hipMemPoolImportFromShareableHandle.mem_pool__ref.ptr1 = *args->hipMemPoolImportFromShareableHandle.mem_pool; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemPoolExportToShareableHandle` function.
@@ -10866,9 +11718,10 @@ struct args_hipMemPoolImportFromShareableHandle_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipMemPoolExportToShareableHandle
 struct args_hipMemPoolExportToShareableHandle_t {
 	void * shared_handle;
-	struct ihipMemPoolHandle_t * mem_pool;
+	hipMemPool_t mem_pool;
 	hipMemAllocationHandleType handle_type;
 	unsigned int flags;
 	hipError_t retval;
@@ -10876,10 +11729,12 @@ struct args_hipMemPoolExportToShareableHandle_t {
 
 #define GET_ARGS_VALUE_hipMemPoolExportToShareableHandle(activity) { \
 	activity->hip_args.hipMemPoolExportToShareableHandle.shared_handle = (void *) shared_handle; \
-	activity->hip_args.hipMemPoolExportToShareableHandle.mem_pool = (struct ihipMemPoolHandle_t *) mem_pool; \
+	activity->hip_args.hipMemPoolExportToShareableHandle.mem_pool = (hipMemPool_t) mem_pool; \
 	activity->hip_args.hipMemPoolExportToShareableHandle.handle_type = (hipMemAllocationHandleType) handle_type; \
 	activity->hip_args.hipMemPoolExportToShareableHandle.flags = (unsigned int) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphExecMemcpyNodeSetParamsToSymbol` function.
@@ -10901,9 +11756,10 @@ struct args_hipMemPoolExportToShareableHandle_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipGraphExecMemcpyNodeSetParamsToSymbol
 struct args_hipGraphExecMemcpyNodeSetParamsToSymbol_t {
-	struct hipGraphExec * hGraphExec;
-	struct hipGraphNode * node;
+	hipGraphExec_t hGraphExec;
+	hipGraphNode_t node;
 	void * symbol;
 	void * src;
 	size_t count;
@@ -10913,14 +11769,16 @@ struct args_hipGraphExecMemcpyNodeSetParamsToSymbol_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphExecMemcpyNodeSetParamsToSymbol(activity) { \
-	activity->hip_args.hipGraphExecMemcpyNodeSetParamsToSymbol.hGraphExec = (struct hipGraphExec *) hGraphExec; \
-	activity->hip_args.hipGraphExecMemcpyNodeSetParamsToSymbol.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphExecMemcpyNodeSetParamsToSymbol.hGraphExec = (hipGraphExec_t) hGraphExec; \
+	activity->hip_args.hipGraphExecMemcpyNodeSetParamsToSymbol.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphExecMemcpyNodeSetParamsToSymbol.symbol = (void *) symbol; \
 	activity->hip_args.hipGraphExecMemcpyNodeSetParamsToSymbol.src = (void *) src; \
 	activity->hip_args.hipGraphExecMemcpyNodeSetParamsToSymbol.count = (size_t) count; \
 	activity->hip_args.hipGraphExecMemcpyNodeSetParamsToSymbol.offset = (size_t) offset; \
 	activity->hip_args.hipGraphExecMemcpyNodeSetParamsToSymbol.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefGetMipmapFilterMode` function.
@@ -10937,6 +11795,7 @@ struct args_hipGraphExecMemcpyNodeSetParamsToSymbol_t {
  *			const textureReference * texRef (const struct textureReference *)
  *	)
  */
+#if HAVE_hipTexRefGetMipmapFilterMode
 struct args_hipTexRefGetMipmapFilterMode_t {
 	enum hipTextureFilterMode * pfm;
 	struct {
@@ -10963,6 +11822,8 @@ struct args_hipTexRefGetMipmapFilterMode_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGetProcAddress` function.
  *
@@ -10981,6 +11842,7 @@ struct args_hipTexRefGetMipmapFilterMode_t {
  *			hipDriverProcAddressQueryResult * symbolStatus (enum hipDriverProcAddressQueryResult*)
  *	)
  */
+#if HAVE_hipGetProcAddress
 struct args_hipGetProcAddress_t {
 	char * symbol;
 	struct {
@@ -11019,6 +11881,8 @@ struct args_hipGetProcAddress_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipCreateTextureObject` function.
  *
@@ -11036,8 +11900,9 @@ struct args_hipGetProcAddress_t {
  *			const struct hipResourceViewDesc * pResViewDesc (const struct hipResourceViewDesc *)
  *	)
  */
+#if HAVE_hipCreateTextureObject
 struct args_hipCreateTextureObject_t {
-	struct __hip_texture ** pTexObject;
+	hipTextureObject_t * pTexObject;
 	struct {
 		void* ptr1;
 	} pTexObject__ref;
@@ -11057,7 +11922,7 @@ struct args_hipCreateTextureObject_t {
 };
 
 #define GET_ARGS_VALUE_hipCreateTextureObject(activity) { \
-	activity->hip_args.hipCreateTextureObject.pTexObject = (struct __hip_texture **) pTexObject; \
+	activity->hip_args.hipCreateTextureObject.pTexObject = (hipTextureObject_t *) pTexObject; \
 	activity->hip_args.hipCreateTextureObject.pResDesc = (hipResourceDesc *) pResDesc; \
 	activity->hip_args.hipCreateTextureObject.pTexDesc = (hipTextureDesc *) pTexDesc; \
 	activity->hip_args.hipCreateTextureObject.pResViewDesc = (struct hipResourceViewDesc *) pResViewDesc; \
@@ -11078,6 +11943,8 @@ struct args_hipCreateTextureObject_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphKernelNodeCopyAttributes` function.
  *
@@ -11093,16 +11960,19 @@ struct args_hipCreateTextureObject_t {
  *			hipGraphNode_t hDst (struct hipGraphNode *)
  *	)
  */
+#if HAVE_hipGraphKernelNodeCopyAttributes
 struct args_hipGraphKernelNodeCopyAttributes_t {
-	struct hipGraphNode * hSrc;
-	struct hipGraphNode * hDst;
+	hipGraphNode_t hSrc;
+	hipGraphNode_t hDst;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphKernelNodeCopyAttributes(activity) { \
-	activity->hip_args.hipGraphKernelNodeCopyAttributes.hSrc = (struct hipGraphNode *) hSrc; \
-	activity->hip_args.hipGraphKernelNodeCopyAttributes.hDst = (struct hipGraphNode *) hDst; \
+	activity->hip_args.hipGraphKernelNodeCopyAttributes.hSrc = (hipGraphNode_t) hSrc; \
+	activity->hip_args.hipGraphKernelNodeCopyAttributes.hDst = (hipGraphNode_t) hDst; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefGetFlags` function.
@@ -11119,6 +11989,7 @@ struct args_hipGraphKernelNodeCopyAttributes_t {
  *			const textureReference * texRef (const struct textureReference *)
  *	)
  */
+#if HAVE_hipTexRefGetFlags
 struct args_hipTexRefGetFlags_t {
 	unsigned int * pFlags;
 	struct {
@@ -11145,6 +12016,8 @@ struct args_hipTexRefGetFlags_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDrvGraphAddMemcpyNode` function.
  *
@@ -11164,13 +12037,14 @@ struct args_hipTexRefGetFlags_t {
  *			hipCtx_t ctx (struct ihipCtx_t *)
  *	)
  */
+#if HAVE_hipDrvGraphAddMemcpyNode
 struct args_hipDrvGraphAddMemcpyNode_t {
-	struct hipGraphNode ** phGraphNode;
+	hipGraphNode_t * phGraphNode;
 	struct {
 		void* ptr1;
 	} phGraphNode__ref;
-	struct ihipGraph * hGraph;
-	struct hipGraphNode * * dependencies;
+	hipGraph_t hGraph;
+	hipGraphNode_t * dependencies;
 	struct {
 		void* ptr1;
 	} dependencies__ref;
@@ -11179,17 +12053,17 @@ struct args_hipDrvGraphAddMemcpyNode_t {
 	struct {
 		HIP_MEMCPY3D val;
 	} copyParams__ref;
-	struct ihipCtx_t * ctx;
+	hipCtx_t ctx;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipDrvGraphAddMemcpyNode(activity) { \
-	activity->hip_args.hipDrvGraphAddMemcpyNode.phGraphNode = (struct hipGraphNode **) phGraphNode; \
-	activity->hip_args.hipDrvGraphAddMemcpyNode.hGraph = (struct ihipGraph *) hGraph; \
-	activity->hip_args.hipDrvGraphAddMemcpyNode.dependencies = (struct hipGraphNode * *) dependencies; \
+	activity->hip_args.hipDrvGraphAddMemcpyNode.phGraphNode = (hipGraphNode_t *) phGraphNode; \
+	activity->hip_args.hipDrvGraphAddMemcpyNode.hGraph = (hipGraph_t) hGraph; \
+	activity->hip_args.hipDrvGraphAddMemcpyNode.dependencies = (hipGraphNode_t *) dependencies; \
 	activity->hip_args.hipDrvGraphAddMemcpyNode.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipDrvGraphAddMemcpyNode.copyParams = (HIP_MEMCPY3D *) copyParams; \
-	activity->hip_args.hipDrvGraphAddMemcpyNode.ctx = (struct ihipCtx_t *) ctx; \
+	activity->hip_args.hipDrvGraphAddMemcpyNode.ctx = (hipCtx_t) ctx; \
 };
 
 #define GET_PTRS_VALUE_hipDrvGraphAddMemcpyNode(args) { \
@@ -11203,6 +12077,8 @@ struct args_hipDrvGraphAddMemcpyNode_t {
 		args->hipDrvGraphAddMemcpyNode.copyParams__ref.val = *args->hipDrvGraphAddMemcpyNode.copyParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemExportToShareableHandle` function.
@@ -11221,9 +12097,10 @@ struct args_hipDrvGraphAddMemcpyNode_t {
  *			unsigned long long flags (unsigned long long)
  *	)
  */
+#if HAVE_hipMemExportToShareableHandle
 struct args_hipMemExportToShareableHandle_t {
 	void * shareableHandle;
-	struct ihipMemGenericAllocationHandle * handle;
+	hipMemGenericAllocationHandle_t handle;
 	hipMemAllocationHandleType handleType;
 	unsigned long long flags;
 	hipError_t retval;
@@ -11231,10 +12108,12 @@ struct args_hipMemExportToShareableHandle_t {
 
 #define GET_ARGS_VALUE_hipMemExportToShareableHandle(activity) { \
 	activity->hip_args.hipMemExportToShareableHandle.shareableHandle = (void *) shareableHandle; \
-	activity->hip_args.hipMemExportToShareableHandle.handle = (struct ihipMemGenericAllocationHandle *) handle; \
+	activity->hip_args.hipMemExportToShareableHandle.handle = (hipMemGenericAllocationHandle_t) handle; \
 	activity->hip_args.hipMemExportToShareableHandle.handleType = (hipMemAllocationHandleType) handleType; \
 	activity->hip_args.hipMemExportToShareableHandle.flags = (unsigned long long) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphLaunch_spt` function.
@@ -11251,16 +12130,19 @@ struct args_hipMemExportToShareableHandle_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipGraphLaunch_spt
 struct args_hipGraphLaunch_spt_t {
-	struct hipGraphExec * graphExec;
-	struct ihipStream_t * stream;
+	hipGraphExec_t graphExec;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphLaunch_spt(activity) { \
-	activity->hip_args.hipGraphLaunch_spt.graphExec = (struct hipGraphExec *) graphExec; \
-	activity->hip_args.hipGraphLaunch_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipGraphLaunch_spt.graphExec = (hipGraphExec_t) graphExec; \
+	activity->hip_args.hipGraphLaunch_spt.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphMemcpyNodeSetParamsFromSymbol` function.
@@ -11281,8 +12163,9 @@ struct args_hipGraphLaunch_spt_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipGraphMemcpyNodeSetParamsFromSymbol
 struct args_hipGraphMemcpyNodeSetParamsFromSymbol_t {
-	struct hipGraphNode * node;
+	hipGraphNode_t node;
 	void * dst;
 	void * symbol;
 	size_t count;
@@ -11292,13 +12175,15 @@ struct args_hipGraphMemcpyNodeSetParamsFromSymbol_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphMemcpyNodeSetParamsFromSymbol(activity) { \
-	activity->hip_args.hipGraphMemcpyNodeSetParamsFromSymbol.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphMemcpyNodeSetParamsFromSymbol.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphMemcpyNodeSetParamsFromSymbol.dst = (void *) dst; \
 	activity->hip_args.hipGraphMemcpyNodeSetParamsFromSymbol.symbol = (void *) symbol; \
 	activity->hip_args.hipGraphMemcpyNodeSetParamsFromSymbol.count = (size_t) count; \
 	activity->hip_args.hipGraphMemcpyNodeSetParamsFromSymbol.offset = (size_t) offset; \
 	activity->hip_args.hipGraphMemcpyNodeSetParamsFromSymbol.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphNodeGetDependencies` function.
@@ -11316,9 +12201,10 @@ struct args_hipGraphMemcpyNodeSetParamsFromSymbol_t {
  *			size_t * pNumDependencies (unsigned long*)
  *	)
  */
+#if HAVE_hipGraphNodeGetDependencies
 struct args_hipGraphNodeGetDependencies_t {
-	struct hipGraphNode * node;
-	struct hipGraphNode ** pDependencies;
+	hipGraphNode_t node;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
@@ -11330,8 +12216,8 @@ struct args_hipGraphNodeGetDependencies_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphNodeGetDependencies(activity) { \
-	activity->hip_args.hipGraphNodeGetDependencies.node = (struct hipGraphNode *) node; \
-	activity->hip_args.hipGraphNodeGetDependencies.pDependencies = (struct hipGraphNode **) pDependencies; \
+	activity->hip_args.hipGraphNodeGetDependencies.node = (hipGraphNode_t) node; \
+	activity->hip_args.hipGraphNodeGetDependencies.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphNodeGetDependencies.pNumDependencies = (size_t *) pNumDependencies; \
 };
 
@@ -11343,6 +12229,8 @@ struct args_hipGraphNodeGetDependencies_t {
 		args->hipGraphNodeGetDependencies.pNumDependencies__ref.val = *args->hipGraphNodeGetDependencies.pNumDependencies; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy3D` function.
@@ -11358,6 +12246,7 @@ struct args_hipGraphNodeGetDependencies_t {
  *			const struct hipMemcpy3DParms * p (const struct hipMemcpy3DParms *)
  *	)
  */
+#if HAVE_hipMemcpy3D
 struct args_hipMemcpy3D_t {
 	struct hipMemcpy3DParms * p;
 	struct {
@@ -11375,6 +12264,8 @@ struct args_hipMemcpy3D_t {
 		args->hipMemcpy3D.p__ref.val = *args->hipMemcpy3D.p; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddMemcpyNodeFromSymbol` function.
@@ -11398,13 +12289,14 @@ struct args_hipMemcpy3D_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipGraphAddMemcpyNodeFromSymbol
 struct args_hipGraphAddMemcpyNodeFromSymbol_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
@@ -11418,9 +12310,9 @@ struct args_hipGraphAddMemcpyNodeFromSymbol_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphAddMemcpyNodeFromSymbol(activity) { \
-	activity->hip_args.hipGraphAddMemcpyNodeFromSymbol.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddMemcpyNodeFromSymbol.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddMemcpyNodeFromSymbol.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddMemcpyNodeFromSymbol.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddMemcpyNodeFromSymbol.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddMemcpyNodeFromSymbol.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddMemcpyNodeFromSymbol.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipGraphAddMemcpyNodeFromSymbol.dst = (void *) dst; \
 	activity->hip_args.hipGraphAddMemcpyNodeFromSymbol.symbol = (void *) symbol; \
@@ -11438,6 +12330,8 @@ struct args_hipGraphAddMemcpyNodeFromSymbol_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipStreamGetPriority_spt` function.
  *
@@ -11453,8 +12347,9 @@ struct args_hipGraphAddMemcpyNodeFromSymbol_t {
  *			int * priority (int *)
  *	)
  */
+#if HAVE_hipStreamGetPriority_spt
 struct args_hipStreamGetPriority_spt_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	int * priority;
 	struct {
 		int val;
@@ -11463,7 +12358,7 @@ struct args_hipStreamGetPriority_spt_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamGetPriority_spt(activity) { \
-	activity->hip_args.hipStreamGetPriority_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamGetPriority_spt.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamGetPriority_spt.priority = (int *) priority; \
 };
 
@@ -11472,6 +12367,8 @@ struct args_hipStreamGetPriority_spt_t {
 		args->hipStreamGetPriority_spt.priority__ref.val = *args->hipStreamGetPriority_spt.priority; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipModuleLoadData` function.
@@ -11488,8 +12385,9 @@ struct args_hipStreamGetPriority_spt_t {
  *			const void * image (const void *)
  *	)
  */
+#if HAVE_hipModuleLoadData
 struct args_hipModuleLoadData_t {
-	struct ihipModule_t ** module;
+	hipModule_t * module;
 	struct {
 		void* ptr1;
 	} module__ref;
@@ -11498,7 +12396,7 @@ struct args_hipModuleLoadData_t {
 };
 
 #define GET_ARGS_VALUE_hipModuleLoadData(activity) { \
-	activity->hip_args.hipModuleLoadData.module = (struct ihipModule_t **) module; \
+	activity->hip_args.hipModuleLoadData.module = (hipModule_t *) module; \
 	activity->hip_args.hipModuleLoadData.image = (void *) image; \
 };
 
@@ -11507,6 +12405,8 @@ struct args_hipModuleLoadData_t {
 		args->hipModuleLoadData.module__ref.ptr1 = *args->hipModuleLoadData.module; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipSetDeviceFlags` function.
@@ -11522,6 +12422,7 @@ struct args_hipModuleLoadData_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipSetDeviceFlags
 struct args_hipSetDeviceFlags_t {
 	unsigned int flags;
 	hipError_t retval;
@@ -11530,6 +12431,8 @@ struct args_hipSetDeviceFlags_t {
 #define GET_ARGS_VALUE_hipSetDeviceFlags(activity) { \
 	activity->hip_args.hipSetDeviceFlags.flags = (unsigned int) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipExternalMemoryGetMappedBuffer` function.
@@ -11547,6 +12450,7 @@ struct args_hipSetDeviceFlags_t {
  *			const hipExternalMemoryBufferDesc * bufferDesc (const struct hipExternalMemoryBufferDesc_st *)
  *	)
  */
+#if HAVE_hipExternalMemoryGetMappedBuffer
 struct args_hipExternalMemoryGetMappedBuffer_t {
 	void ** devPtr;
 	struct {
@@ -11575,6 +12479,8 @@ struct args_hipExternalMemoryGetMappedBuffer_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipLaunchCooperativeKernel_spt` function.
  *
@@ -11594,6 +12500,7 @@ struct args_hipExternalMemoryGetMappedBuffer_t {
  *			hipStream_t hStream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipLaunchCooperativeKernel_spt
 struct args_hipLaunchCooperativeKernel_spt_t {
 	void * f;
 	dim3 gridDim;
@@ -11603,7 +12510,7 @@ struct args_hipLaunchCooperativeKernel_spt_t {
 		void* ptr1;
 	} kernelParams__ref;
 	uint32_t sharedMemBytes;
-	struct ihipStream_t * hStream;
+	hipStream_t hStream;
 	hipError_t retval;
 };
 
@@ -11613,7 +12520,7 @@ struct args_hipLaunchCooperativeKernel_spt_t {
 	activity->hip_args.hipLaunchCooperativeKernel_spt.blockDim = (dim3) blockDim; \
 	activity->hip_args.hipLaunchCooperativeKernel_spt.kernelParams = (void **) kernelParams; \
 	activity->hip_args.hipLaunchCooperativeKernel_spt.sharedMemBytes = (uint32_t) sharedMemBytes; \
-	activity->hip_args.hipLaunchCooperativeKernel_spt.hStream = (struct ihipStream_t *) hStream; \
+	activity->hip_args.hipLaunchCooperativeKernel_spt.hStream = (hipStream_t) hStream; \
 };
 
 #define GET_PTRS_VALUE_hipLaunchCooperativeKernel_spt(args) { \
@@ -11621,6 +12528,8 @@ struct args_hipLaunchCooperativeKernel_spt_t {
 		args->hipLaunchCooperativeKernel_spt.kernelParams__ref.ptr1 = *args->hipLaunchCooperativeKernel_spt.kernelParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipLaunchHostFunc` function.
@@ -11638,18 +12547,21 @@ struct args_hipLaunchCooperativeKernel_spt_t {
  *			void * userData (void *)
  *	)
  */
+#if HAVE_hipLaunchHostFunc
 struct args_hipLaunchHostFunc_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipHostFn_t fn;
 	void * userData;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipLaunchHostFunc(activity) { \
-	activity->hip_args.hipLaunchHostFunc.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipLaunchHostFunc.stream = (hipStream_t) stream; \
 	activity->hip_args.hipLaunchHostFunc.fn = (hipHostFn_t) fn; \
 	activity->hip_args.hipLaunchHostFunc.userData = (void *) userData; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyAsync_spt` function.
@@ -11669,12 +12581,13 @@ struct args_hipLaunchHostFunc_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpyAsync_spt
 struct args_hipMemcpyAsync_spt_t {
 	void * dst;
 	void * src;
 	size_t sizeBytes;
 	hipMemcpyKind kind;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -11683,8 +12596,10 @@ struct args_hipMemcpyAsync_spt_t {
 	activity->hip_args.hipMemcpyAsync_spt.src = (void *) src; \
 	activity->hip_args.hipMemcpyAsync_spt.sizeBytes = (size_t) sizeBytes; \
 	activity->hip_args.hipMemcpyAsync_spt.kind = (hipMemcpyKind) kind; \
-	activity->hip_args.hipMemcpyAsync_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpyAsync_spt.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyPeer` function.
@@ -11704,6 +12619,7 @@ struct args_hipMemcpyAsync_spt_t {
  *			size_t sizeBytes (unsigned long)
  *	)
  */
+#if HAVE_hipMemcpyPeer
 struct args_hipMemcpyPeer_t {
 	void * dst;
 	int dstDeviceId;
@@ -11721,6 +12637,8 @@ struct args_hipMemcpyPeer_t {
 	activity->hip_args.hipMemcpyPeer.sizeBytes = (size_t) sizeBytes; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDeviceReset` function.
  *
@@ -11734,9 +12652,12 @@ struct args_hipMemcpyPeer_t {
  *	hipDeviceReset (
  *	)
  */
+#if HAVE_hipDeviceReset
 struct args_hipDeviceReset_t {
 	hipError_t retval;
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemAddressFree` function.
@@ -11753,6 +12674,7 @@ struct args_hipDeviceReset_t {
  *			size_t size (unsigned long)
  *	)
  */
+#if HAVE_hipMemAddressFree
 struct args_hipMemAddressFree_t {
 	void * devPtr;
 	size_t size;
@@ -11763,6 +12685,8 @@ struct args_hipMemAddressFree_t {
 	activity->hip_args.hipMemAddressFree.devPtr = (void *) devPtr; \
 	activity->hip_args.hipMemAddressFree.size = (size_t) size; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipProfilerStop` function.
@@ -11777,9 +12701,12 @@ struct args_hipMemAddressFree_t {
  *	hipProfilerStop (
  *	)
  */
+#if HAVE_hipProfilerStop
 struct args_hipProfilerStop_t {
 	hipError_t retval;
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphEventWaitNodeSetEvent` function.
@@ -11796,16 +12723,19 @@ struct args_hipProfilerStop_t {
  *			hipEvent_t event (struct ihipEvent_t *)
  *	)
  */
+#if HAVE_hipGraphEventWaitNodeSetEvent
 struct args_hipGraphEventWaitNodeSetEvent_t {
-	struct hipGraphNode * node;
-	struct ihipEvent_t * event;
+	hipGraphNode_t node;
+	hipEvent_t event;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphEventWaitNodeSetEvent(activity) { \
-	activity->hip_args.hipGraphEventWaitNodeSetEvent.node = (struct hipGraphNode *) node; \
-	activity->hip_args.hipGraphEventWaitNodeSetEvent.event = (struct ihipEvent_t *) event; \
+	activity->hip_args.hipGraphEventWaitNodeSetEvent.node = (hipGraphNode_t) node; \
+	activity->hip_args.hipGraphEventWaitNodeSetEvent.event = (hipEvent_t) event; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipModuleLaunchCooperativeKernel` function.
@@ -11830,8 +12760,9 @@ struct args_hipGraphEventWaitNodeSetEvent_t {
  *			void ** kernelParams (void **)
  *	)
  */
+#if HAVE_hipModuleLaunchCooperativeKernel
 struct args_hipModuleLaunchCooperativeKernel_t {
-	struct ihipModuleSymbol_t * f;
+	hipFunction_t f;
 	unsigned int gridDimX;
 	unsigned int gridDimY;
 	unsigned int gridDimZ;
@@ -11839,7 +12770,7 @@ struct args_hipModuleLaunchCooperativeKernel_t {
 	unsigned int blockDimY;
 	unsigned int blockDimZ;
 	unsigned int sharedMemBytes;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	void ** kernelParams;
 	struct {
 		void* ptr1;
@@ -11848,7 +12779,7 @@ struct args_hipModuleLaunchCooperativeKernel_t {
 };
 
 #define GET_ARGS_VALUE_hipModuleLaunchCooperativeKernel(activity) { \
-	activity->hip_args.hipModuleLaunchCooperativeKernel.f = (struct ihipModuleSymbol_t *) f; \
+	activity->hip_args.hipModuleLaunchCooperativeKernel.f = (hipFunction_t) f; \
 	activity->hip_args.hipModuleLaunchCooperativeKernel.gridDimX = (unsigned int) gridDimX; \
 	activity->hip_args.hipModuleLaunchCooperativeKernel.gridDimY = (unsigned int) gridDimY; \
 	activity->hip_args.hipModuleLaunchCooperativeKernel.gridDimZ = (unsigned int) gridDimZ; \
@@ -11856,7 +12787,7 @@ struct args_hipModuleLaunchCooperativeKernel_t {
 	activity->hip_args.hipModuleLaunchCooperativeKernel.blockDimY = (unsigned int) blockDimY; \
 	activity->hip_args.hipModuleLaunchCooperativeKernel.blockDimZ = (unsigned int) blockDimZ; \
 	activity->hip_args.hipModuleLaunchCooperativeKernel.sharedMemBytes = (unsigned int) sharedMemBytes; \
-	activity->hip_args.hipModuleLaunchCooperativeKernel.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipModuleLaunchCooperativeKernel.stream = (hipStream_t) stream; \
 	activity->hip_args.hipModuleLaunchCooperativeKernel.kernelParams = (void **) kernelParams; \
 };
 
@@ -11865,6 +12796,8 @@ struct args_hipModuleLaunchCooperativeKernel_t {
 		args->hipModuleLaunchCooperativeKernel.kernelParams__ref.ptr1 = *args->hipModuleLaunchCooperativeKernel.kernelParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceGetName` function.
@@ -11882,6 +12815,7 @@ struct args_hipModuleLaunchCooperativeKernel_t {
  *			hipDevice_t device (int)
  *	)
  */
+#if HAVE_hipDeviceGetName
 struct args_hipDeviceGetName_t {
 	char * name;
 	struct {
@@ -11904,6 +12838,8 @@ struct args_hipDeviceGetName_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphNodeSetEnabled` function.
  *
@@ -11920,18 +12856,21 @@ struct args_hipDeviceGetName_t {
  *			unsigned int isEnabled (unsigned int)
  *	)
  */
+#if HAVE_hipGraphNodeSetEnabled
 struct args_hipGraphNodeSetEnabled_t {
-	struct hipGraphExec * hGraphExec;
-	struct hipGraphNode * hNode;
+	hipGraphExec_t hGraphExec;
+	hipGraphNode_t hNode;
 	unsigned int isEnabled;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphNodeSetEnabled(activity) { \
-	activity->hip_args.hipGraphNodeSetEnabled.hGraphExec = (struct hipGraphExec *) hGraphExec; \
-	activity->hip_args.hipGraphNodeSetEnabled.hNode = (struct hipGraphNode *) hNode; \
+	activity->hip_args.hipGraphNodeSetEnabled.hGraphExec = (hipGraphExec_t) hGraphExec; \
+	activity->hip_args.hipGraphNodeSetEnabled.hNode = (hipGraphNode_t) hNode; \
 	activity->hip_args.hipGraphNodeSetEnabled.isEnabled = (unsigned int) isEnabled; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefSetAddressMode` function.
@@ -11949,6 +12888,7 @@ struct args_hipGraphNodeSetEnabled_t {
  *			enum hipTextureAddressMode am (enum hipTextureAddressMode)
  *	)
  */
+#if HAVE_hipTexRefSetAddressMode
 struct args_hipTexRefSetAddressMode_t {
 	textureReference * texRef;
 	struct {
@@ -11971,6 +12911,8 @@ struct args_hipTexRefSetAddressMode_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipEventSynchronize` function.
  *
@@ -11985,14 +12927,17 @@ struct args_hipTexRefSetAddressMode_t {
  *			hipEvent_t event (struct ihipEvent_t *)
  *	)
  */
+#if HAVE_hipEventSynchronize
 struct args_hipEventSynchronize_t {
-	struct ihipEvent_t * event;
+	hipEvent_t event;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipEventSynchronize(activity) { \
-	activity->hip_args.hipEventSynchronize.event = (struct ihipEvent_t *) event; \
+	activity->hip_args.hipEventSynchronize.event = (hipEvent_t) event; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphGetRootNodes` function.
@@ -12010,9 +12955,10 @@ struct args_hipEventSynchronize_t {
  *			size_t * pNumRootNodes (unsigned long*)
  *	)
  */
+#if HAVE_hipGraphGetRootNodes
 struct args_hipGraphGetRootNodes_t {
-	struct ihipGraph * graph;
-	struct hipGraphNode ** pRootNodes;
+	hipGraph_t graph;
+	hipGraphNode_t * pRootNodes;
 	struct {
 		void* ptr1;
 	} pRootNodes__ref;
@@ -12024,8 +12970,8 @@ struct args_hipGraphGetRootNodes_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphGetRootNodes(activity) { \
-	activity->hip_args.hipGraphGetRootNodes.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphGetRootNodes.pRootNodes = (struct hipGraphNode **) pRootNodes; \
+	activity->hip_args.hipGraphGetRootNodes.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphGetRootNodes.pRootNodes = (hipGraphNode_t *) pRootNodes; \
 	activity->hip_args.hipGraphGetRootNodes.pNumRootNodes = (size_t *) pNumRootNodes; \
 };
 
@@ -12037,6 +12983,8 @@ struct args_hipGraphGetRootNodes_t {
 		args->hipGraphGetRootNodes.pNumRootNodes__ref.val = *args->hipGraphGetRootNodes.pNumRootNodes; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy2DFromArray` function.
@@ -12059,10 +13007,11 @@ struct args_hipGraphGetRootNodes_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpy2DFromArray
 struct args_hipMemcpy2DFromArray_t {
 	void * dst;
 	size_t dpitch;
-	struct hipArray * src;
+	hipArray_const_t src;
 	size_t wOffset;
 	size_t hOffset;
 	size_t width;
@@ -12074,13 +13023,15 @@ struct args_hipMemcpy2DFromArray_t {
 #define GET_ARGS_VALUE_hipMemcpy2DFromArray(activity) { \
 	activity->hip_args.hipMemcpy2DFromArray.dst = (void *) dst; \
 	activity->hip_args.hipMemcpy2DFromArray.dpitch = (size_t) dpitch; \
-	activity->hip_args.hipMemcpy2DFromArray.src = (struct hipArray *) src; \
+	activity->hip_args.hipMemcpy2DFromArray.src = (hipArray_const_t) src; \
 	activity->hip_args.hipMemcpy2DFromArray.wOffset = (size_t) wOffset; \
 	activity->hip_args.hipMemcpy2DFromArray.hOffset = (size_t) hOffset; \
 	activity->hip_args.hipMemcpy2DFromArray.width = (size_t) width; \
 	activity->hip_args.hipMemcpy2DFromArray.height = (size_t) height; \
 	activity->hip_args.hipMemcpy2DFromArray.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphExternalSemaphoresWaitNodeSetParams` function.
@@ -12097,8 +13048,9 @@ struct args_hipMemcpy2DFromArray_t {
  *			const hipExternalSemaphoreWaitNodeParams * nodeParams (const struct hipExternalSemaphoreWaitNodeParams *)
  *	)
  */
+#if HAVE_hipGraphExternalSemaphoresWaitNodeSetParams
 struct args_hipGraphExternalSemaphoresWaitNodeSetParams_t {
-	struct hipGraphNode * hNode;
+	hipGraphNode_t hNode;
 	hipExternalSemaphoreWaitNodeParams * nodeParams;
 	struct {
 		hipExternalSemaphoreWaitNodeParams val;
@@ -12107,7 +13059,7 @@ struct args_hipGraphExternalSemaphoresWaitNodeSetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphExternalSemaphoresWaitNodeSetParams(activity) { \
-	activity->hip_args.hipGraphExternalSemaphoresWaitNodeSetParams.hNode = (struct hipGraphNode *) hNode; \
+	activity->hip_args.hipGraphExternalSemaphoresWaitNodeSetParams.hNode = (hipGraphNode_t) hNode; \
 	activity->hip_args.hipGraphExternalSemaphoresWaitNodeSetParams.nodeParams = (hipExternalSemaphoreWaitNodeParams *) nodeParams; \
 };
 
@@ -12116,6 +13068,8 @@ struct args_hipGraphExternalSemaphoresWaitNodeSetParams_t {
 		args->hipGraphExternalSemaphoresWaitNodeSetParams.nodeParams__ref.val = *args->hipGraphExternalSemaphoresWaitNodeSetParams.nodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyDtoA` function.
@@ -12134,8 +13088,9 @@ struct args_hipGraphExternalSemaphoresWaitNodeSetParams_t {
  *			size_t ByteCount (unsigned long)
  *	)
  */
+#if HAVE_hipMemcpyDtoA
 struct args_hipMemcpyDtoA_t {
-	struct hipArray * dstArray;
+	hipArray_t dstArray;
 	size_t dstOffset;
 	void * srcDevice;
 	size_t ByteCount;
@@ -12143,11 +13098,13 @@ struct args_hipMemcpyDtoA_t {
 };
 
 #define GET_ARGS_VALUE_hipMemcpyDtoA(activity) { \
-	activity->hip_args.hipMemcpyDtoA.dstArray = (struct hipArray *) dstArray; \
+	activity->hip_args.hipMemcpyDtoA.dstArray = (hipArray_t) dstArray; \
 	activity->hip_args.hipMemcpyDtoA.dstOffset = (size_t) dstOffset; \
 	activity->hip_args.hipMemcpyDtoA.srcDevice = (void *) srcDevice; \
 	activity->hip_args.hipMemcpyDtoA.ByteCount = (size_t) ByteCount; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphMemcpyNodeGetParams` function.
@@ -12164,8 +13121,9 @@ struct args_hipMemcpyDtoA_t {
  *			hipMemcpy3DParms * pNodeParams (struct hipMemcpy3DParms*)
  *	)
  */
+#if HAVE_hipGraphMemcpyNodeGetParams
 struct args_hipGraphMemcpyNodeGetParams_t {
-	struct hipGraphNode * node;
+	hipGraphNode_t node;
 	hipMemcpy3DParms * pNodeParams;
 	struct {
 		hipMemcpy3DParms val;
@@ -12174,7 +13132,7 @@ struct args_hipGraphMemcpyNodeGetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphMemcpyNodeGetParams(activity) { \
-	activity->hip_args.hipGraphMemcpyNodeGetParams.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphMemcpyNodeGetParams.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphMemcpyNodeGetParams.pNodeParams = (hipMemcpy3DParms *) pNodeParams; \
 };
 
@@ -12183,6 +13141,8 @@ struct args_hipGraphMemcpyNodeGetParams_t {
 		args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val = *args->hipGraphMemcpyNodeGetParams.pNodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy` function.
@@ -12201,6 +13161,7 @@ struct args_hipGraphMemcpyNodeGetParams_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpy
 struct args_hipMemcpy_t {
 	void * dst;
 	void * src;
@@ -12215,6 +13176,8 @@ struct args_hipMemcpy_t {
 	activity->hip_args.hipMemcpy.sizeBytes = (size_t) sizeBytes; \
 	activity->hip_args.hipMemcpy.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipSetValidDevices` function.
@@ -12231,6 +13194,7 @@ struct args_hipMemcpy_t {
  *			int len (int)
  *	)
  */
+#if HAVE_hipSetValidDevices
 struct args_hipSetValidDevices_t {
 	int * device_arr;
 	struct {
@@ -12250,6 +13214,8 @@ struct args_hipSetValidDevices_t {
 		args->hipSetValidDevices.device_arr__ref.val = *args->hipSetValidDevices.device_arr; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy2DAsync` function.
@@ -12272,6 +13238,7 @@ struct args_hipSetValidDevices_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpy2DAsync
 struct args_hipMemcpy2DAsync_t {
 	void * dst;
 	size_t dpitch;
@@ -12280,7 +13247,7 @@ struct args_hipMemcpy2DAsync_t {
 	size_t width;
 	size_t height;
 	hipMemcpyKind kind;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -12292,8 +13259,10 @@ struct args_hipMemcpy2DAsync_t {
 	activity->hip_args.hipMemcpy2DAsync.width = (size_t) width; \
 	activity->hip_args.hipMemcpy2DAsync.height = (size_t) height; \
 	activity->hip_args.hipMemcpy2DAsync.kind = (hipMemcpyKind) kind; \
-	activity->hip_args.hipMemcpy2DAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpy2DAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphExecExternalSemaphoresWaitNodeSetParams` function.
@@ -12311,9 +13280,10 @@ struct args_hipMemcpy2DAsync_t {
  *			const hipExternalSemaphoreWaitNodeParams * nodeParams (const struct hipExternalSemaphoreWaitNodeParams *)
  *	)
  */
+#if HAVE_hipGraphExecExternalSemaphoresWaitNodeSetParams
 struct args_hipGraphExecExternalSemaphoresWaitNodeSetParams_t {
-	struct hipGraphExec * hGraphExec;
-	struct hipGraphNode * hNode;
+	hipGraphExec_t hGraphExec;
+	hipGraphNode_t hNode;
 	hipExternalSemaphoreWaitNodeParams * nodeParams;
 	struct {
 		hipExternalSemaphoreWaitNodeParams val;
@@ -12322,8 +13292,8 @@ struct args_hipGraphExecExternalSemaphoresWaitNodeSetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphExecExternalSemaphoresWaitNodeSetParams(activity) { \
-	activity->hip_args.hipGraphExecExternalSemaphoresWaitNodeSetParams.hGraphExec = (struct hipGraphExec *) hGraphExec; \
-	activity->hip_args.hipGraphExecExternalSemaphoresWaitNodeSetParams.hNode = (struct hipGraphNode *) hNode; \
+	activity->hip_args.hipGraphExecExternalSemaphoresWaitNodeSetParams.hGraphExec = (hipGraphExec_t) hGraphExec; \
+	activity->hip_args.hipGraphExecExternalSemaphoresWaitNodeSetParams.hNode = (hipGraphNode_t) hNode; \
 	activity->hip_args.hipGraphExecExternalSemaphoresWaitNodeSetParams.nodeParams = (hipExternalSemaphoreWaitNodeParams *) nodeParams; \
 };
 
@@ -12332,6 +13302,8 @@ struct args_hipGraphExecExternalSemaphoresWaitNodeSetParams_t {
 		args->hipGraphExecExternalSemaphoresWaitNodeSetParams.nodeParams__ref.val = *args->hipGraphExecExternalSemaphoresWaitNodeSetParams.nodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamAttachMemAsync` function.
@@ -12350,8 +13322,9 @@ struct args_hipGraphExecExternalSemaphoresWaitNodeSetParams_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipStreamAttachMemAsync
 struct args_hipStreamAttachMemAsync_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	void * dev_ptr;
 	size_t length;
 	unsigned int flags;
@@ -12359,11 +13332,13 @@ struct args_hipStreamAttachMemAsync_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamAttachMemAsync(activity) { \
-	activity->hip_args.hipStreamAttachMemAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamAttachMemAsync.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamAttachMemAsync.dev_ptr = (void *) dev_ptr; \
 	activity->hip_args.hipStreamAttachMemAsync.length = (size_t) length; \
 	activity->hip_args.hipStreamAttachMemAsync.flags = (unsigned int) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemset2DAsync` function.
@@ -12384,13 +13359,14 @@ struct args_hipStreamAttachMemAsync_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemset2DAsync
 struct args_hipMemset2DAsync_t {
 	void * dst;
 	size_t pitch;
 	int value;
 	size_t width;
 	size_t height;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -12400,8 +13376,10 @@ struct args_hipMemset2DAsync_t {
 	activity->hip_args.hipMemset2DAsync.value = (int) value; \
 	activity->hip_args.hipMemset2DAsync.width = (size_t) width; \
 	activity->hip_args.hipMemset2DAsync.height = (size_t) height; \
-	activity->hip_args.hipMemset2DAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemset2DAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexObjectGetResourceViewDesc` function.
@@ -12418,18 +13396,19 @@ struct args_hipMemset2DAsync_t {
  *			hipTextureObject_t texObject (struct __hip_texture *)
  *	)
  */
+#if HAVE_hipTexObjectGetResourceViewDesc
 struct args_hipTexObjectGetResourceViewDesc_t {
 	HIP_RESOURCE_VIEW_DESC * pResViewDesc;
 	struct {
 		HIP_RESOURCE_VIEW_DESC val;
 	} pResViewDesc__ref;
-	struct __hip_texture * texObject;
+	hipTextureObject_t texObject;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipTexObjectGetResourceViewDesc(activity) { \
 	activity->hip_args.hipTexObjectGetResourceViewDesc.pResViewDesc = (HIP_RESOURCE_VIEW_DESC *) pResViewDesc; \
-	activity->hip_args.hipTexObjectGetResourceViewDesc.texObject = (struct __hip_texture *) texObject; \
+	activity->hip_args.hipTexObjectGetResourceViewDesc.texObject = (hipTextureObject_t) texObject; \
 };
 
 #define GET_PTRS_VALUE_hipTexObjectGetResourceViewDesc(args) { \
@@ -12437,6 +13416,8 @@ struct args_hipTexObjectGetResourceViewDesc_t {
 		args->hipTexObjectGetResourceViewDesc.pResViewDesc__ref.val = *args->hipTexObjectGetResourceViewDesc.pResViewDesc; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipEventCreateWithFlags` function.
@@ -12453,8 +13434,9 @@ struct args_hipTexObjectGetResourceViewDesc_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipEventCreateWithFlags
 struct args_hipEventCreateWithFlags_t {
-	struct ihipEvent_t ** event;
+	hipEvent_t * event;
 	struct {
 		void* ptr1;
 	} event__ref;
@@ -12463,7 +13445,7 @@ struct args_hipEventCreateWithFlags_t {
 };
 
 #define GET_ARGS_VALUE_hipEventCreateWithFlags(activity) { \
-	activity->hip_args.hipEventCreateWithFlags.event = (struct ihipEvent_t **) event; \
+	activity->hip_args.hipEventCreateWithFlags.event = (hipEvent_t *) event; \
 	activity->hip_args.hipEventCreateWithFlags.flags = (unsigned int) flags; \
 };
 
@@ -12472,6 +13454,8 @@ struct args_hipEventCreateWithFlags_t {
 		args->hipEventCreateWithFlags.event__ref.ptr1 = *args->hipEventCreateWithFlags.event; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMipmappedArrayCreate` function.
@@ -12489,6 +13473,7 @@ struct args_hipEventCreateWithFlags_t {
  *			unsigned int numMipmapLevels (unsigned int)
  *	)
  */
+#if HAVE_hipMipmappedArrayCreate
 struct args_hipMipmappedArrayCreate_t {
 	struct hipMipmappedArray ** pHandle;
 	struct {
@@ -12521,6 +13506,8 @@ struct args_hipMipmappedArrayCreate_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy2D_spt` function.
  *
@@ -12541,6 +13528,7 @@ struct args_hipMipmappedArrayCreate_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpy2D_spt
 struct args_hipMemcpy2D_spt_t {
 	void * dst;
 	size_t dpitch;
@@ -12562,6 +13550,8 @@ struct args_hipMemcpy2D_spt_t {
 	activity->hip_args.hipMemcpy2D_spt.kind = (hipMemcpyKind) kind; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddMemcpyNode` function.
  *
@@ -12580,13 +13570,14 @@ struct args_hipMemcpy2D_spt_t {
  *			const hipMemcpy3DParms * pCopyParams (const struct hipMemcpy3DParms *)
  *	)
  */
+#if HAVE_hipGraphAddMemcpyNode
 struct args_hipGraphAddMemcpyNode_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
@@ -12599,9 +13590,9 @@ struct args_hipGraphAddMemcpyNode_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphAddMemcpyNode(activity) { \
-	activity->hip_args.hipGraphAddMemcpyNode.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddMemcpyNode.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddMemcpyNode.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddMemcpyNode.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddMemcpyNode.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddMemcpyNode.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddMemcpyNode.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipGraphAddMemcpyNode.pCopyParams = (hipMemcpy3DParms *) pCopyParams; \
 };
@@ -12617,6 +13608,8 @@ struct args_hipGraphAddMemcpyNode_t {
 		args->hipGraphAddMemcpyNode.pCopyParams__ref.val = *args->hipGraphAddMemcpyNode.pCopyParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyToSymbolAsync` function.
@@ -12637,13 +13630,14 @@ struct args_hipGraphAddMemcpyNode_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpyToSymbolAsync
 struct args_hipMemcpyToSymbolAsync_t {
 	void * symbol;
 	void * src;
 	size_t sizeBytes;
 	size_t offset;
 	hipMemcpyKind kind;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -12653,8 +13647,10 @@ struct args_hipMemcpyToSymbolAsync_t {
 	activity->hip_args.hipMemcpyToSymbolAsync.sizeBytes = (size_t) sizeBytes; \
 	activity->hip_args.hipMemcpyToSymbolAsync.offset = (size_t) offset; \
 	activity->hip_args.hipMemcpyToSymbolAsync.kind = (hipMemcpyKind) kind; \
-	activity->hip_args.hipMemcpyToSymbolAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpyToSymbolAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMallocFromPoolAsync` function.
@@ -12673,22 +13669,23 @@ struct args_hipMemcpyToSymbolAsync_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMallocFromPoolAsync
 struct args_hipMallocFromPoolAsync_t {
 	void ** dev_ptr;
 	struct {
 		void* ptr1;
 	} dev_ptr__ref;
 	size_t size;
-	struct ihipMemPoolHandle_t * mem_pool;
-	struct ihipStream_t * stream;
+	hipMemPool_t mem_pool;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMallocFromPoolAsync(activity) { \
 	activity->hip_args.hipMallocFromPoolAsync.dev_ptr = (void **) dev_ptr; \
 	activity->hip_args.hipMallocFromPoolAsync.size = (size_t) size; \
-	activity->hip_args.hipMallocFromPoolAsync.mem_pool = (struct ihipMemPoolHandle_t *) mem_pool; \
-	activity->hip_args.hipMallocFromPoolAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMallocFromPoolAsync.mem_pool = (hipMemPool_t) mem_pool; \
+	activity->hip_args.hipMallocFromPoolAsync.stream = (hipStream_t) stream; \
 };
 
 #define GET_PTRS_VALUE_hipMallocFromPoolAsync(args) { \
@@ -12696,6 +13693,8 @@ struct args_hipMallocFromPoolAsync_t {
 		args->hipMallocFromPoolAsync.dev_ptr__ref.ptr1 = *args->hipMallocFromPoolAsync.dev_ptr; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags` function.
@@ -12715,6 +13714,7 @@ struct args_hipMallocFromPoolAsync_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
 struct args_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t {
 	int * numBlocks;
 	struct {
@@ -12741,6 +13741,8 @@ struct args_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddMemFreeNode` function.
  *
@@ -12759,13 +13761,14 @@ struct args_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t {
  *			void * dev_ptr (void *)
  *	)
  */
+#if HAVE_hipGraphAddMemFreeNode
 struct args_hipGraphAddMemFreeNode_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
@@ -12775,9 +13778,9 @@ struct args_hipGraphAddMemFreeNode_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphAddMemFreeNode(activity) { \
-	activity->hip_args.hipGraphAddMemFreeNode.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddMemFreeNode.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddMemFreeNode.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddMemFreeNode.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddMemFreeNode.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddMemFreeNode.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddMemFreeNode.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipGraphAddMemFreeNode.dev_ptr = (void *) dev_ptr; \
 };
@@ -12790,6 +13793,8 @@ struct args_hipGraphAddMemFreeNode_t {
 		args->hipGraphAddMemFreeNode.pDependencies__ref.ptr1 = *args->hipGraphAddMemFreeNode.pDependencies; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipModuleOccupancyMaxActiveBlocksPerMultiprocessor` function.
@@ -12808,12 +13813,13 @@ struct args_hipGraphAddMemFreeNode_t {
  *			size_t dynSharedMemPerBlk (unsigned long)
  *	)
  */
+#if HAVE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor
 struct args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor_t {
 	int * numBlocks;
 	struct {
 		int val;
 	} numBlocks__ref;
-	struct ihipModuleSymbol_t * f;
+	hipFunction_t f;
 	int blockSize;
 	size_t dynSharedMemPerBlk;
 	hipError_t retval;
@@ -12821,7 +13827,7 @@ struct args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor_t {
 
 #define GET_ARGS_VALUE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor(activity) { \
 	activity->hip_args.hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.numBlocks = (int *) numBlocks; \
-	activity->hip_args.hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.f = (struct ihipModuleSymbol_t *) f; \
+	activity->hip_args.hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.f = (hipFunction_t) f; \
 	activity->hip_args.hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.blockSize = (int) blockSize; \
 	activity->hip_args.hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.dynSharedMemPerBlk = (size_t) dynSharedMemPerBlk; \
 };
@@ -12831,6 +13837,8 @@ struct args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor_t {
 		args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.numBlocks__ref.val = *args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.numBlocks; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipEventDestroy` function.
@@ -12846,14 +13854,17 @@ struct args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor_t {
  *			hipEvent_t event (struct ihipEvent_t *)
  *	)
  */
+#if HAVE_hipEventDestroy
 struct args_hipEventDestroy_t {
-	struct ihipEvent_t * event;
+	hipEvent_t event;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipEventDestroy(activity) { \
-	activity->hip_args.hipEventDestroy.event = (struct ihipEvent_t *) event; \
+	activity->hip_args.hipEventDestroy.event = (hipEvent_t) event; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceSetCacheConfig` function.
@@ -12869,6 +13880,7 @@ struct args_hipEventDestroy_t {
  *			hipFuncCache_t cacheConfig (enum hipFuncCache_t)
  *	)
  */
+#if HAVE_hipDeviceSetCacheConfig
 struct args_hipDeviceSetCacheConfig_t {
 	hipFuncCache_t cacheConfig;
 	hipError_t retval;
@@ -12877,6 +13889,8 @@ struct args_hipDeviceSetCacheConfig_t {
 #define GET_ARGS_VALUE_hipDeviceSetCacheConfig(activity) { \
 	activity->hip_args.hipDeviceSetCacheConfig.cacheConfig = (hipFuncCache_t) cacheConfig; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipFree` function.
@@ -12892,6 +13906,7 @@ struct args_hipDeviceSetCacheConfig_t {
  *			void * ptr (void *)
  *	)
  */
+#if HAVE_hipFree
 struct args_hipFree_t {
 	void * ptr;
 	hipError_t retval;
@@ -12900,6 +13915,8 @@ struct args_hipFree_t {
 #define GET_ARGS_VALUE_hipFree(activity) { \
 	activity->hip_args.hipFree.ptr = (void *) ptr; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy2DToArrayAsync_spt` function.
@@ -12923,8 +13940,9 @@ struct args_hipFree_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpy2DToArrayAsync_spt
 struct args_hipMemcpy2DToArrayAsync_spt_t {
-	struct hipArray * dst;
+	hipArray_t dst;
 	size_t wOffset;
 	size_t hOffset;
 	void * src;
@@ -12932,12 +13950,12 @@ struct args_hipMemcpy2DToArrayAsync_spt_t {
 	size_t width;
 	size_t height;
 	hipMemcpyKind kind;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemcpy2DToArrayAsync_spt(activity) { \
-	activity->hip_args.hipMemcpy2DToArrayAsync_spt.dst = (struct hipArray *) dst; \
+	activity->hip_args.hipMemcpy2DToArrayAsync_spt.dst = (hipArray_t) dst; \
 	activity->hip_args.hipMemcpy2DToArrayAsync_spt.wOffset = (size_t) wOffset; \
 	activity->hip_args.hipMemcpy2DToArrayAsync_spt.hOffset = (size_t) hOffset; \
 	activity->hip_args.hipMemcpy2DToArrayAsync_spt.src = (void *) src; \
@@ -12945,8 +13963,10 @@ struct args_hipMemcpy2DToArrayAsync_spt_t {
 	activity->hip_args.hipMemcpy2DToArrayAsync_spt.width = (size_t) width; \
 	activity->hip_args.hipMemcpy2DToArrayAsync_spt.height = (size_t) height; \
 	activity->hip_args.hipMemcpy2DToArrayAsync_spt.kind = (hipMemcpyKind) kind; \
-	activity->hip_args.hipMemcpy2DToArrayAsync_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpy2DToArrayAsync_spt.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipCtxGetFlags` function.
@@ -12962,6 +13982,7 @@ struct args_hipMemcpy2DToArrayAsync_spt_t {
  *			unsigned int * flags (unsigned int *)
  *	)
  */
+#if HAVE_hipCtxGetFlags
 struct args_hipCtxGetFlags_t {
 	unsigned int * flags;
 	struct {
@@ -12980,6 +14001,8 @@ struct args_hipCtxGetFlags_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGetSymbolAddress` function.
  *
@@ -12995,6 +14018,7 @@ struct args_hipCtxGetFlags_t {
  *			const void * symbol (const void *)
  *	)
  */
+#if HAVE_hipGetSymbolAddress
 struct args_hipGetSymbolAddress_t {
 	void ** devPtr;
 	struct {
@@ -13015,6 +14039,8 @@ struct args_hipGetSymbolAddress_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipTexRefGetAddress` function.
  *
@@ -13030,6 +14056,7 @@ struct args_hipGetSymbolAddress_t {
  *			const textureReference * texRef (const struct textureReference *)
  *	)
  */
+#if HAVE_hipTexRefGetAddress
 struct args_hipTexRefGetAddress_t {
 	void ** dev_ptr;
 	struct {
@@ -13056,6 +14083,8 @@ struct args_hipTexRefGetAddress_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipTexObjectCreate` function.
  *
@@ -13073,8 +14102,9 @@ struct args_hipTexRefGetAddress_t {
  *			const HIP_RESOURCE_VIEW_DESC * pResViewDesc (const struct HIP_RESOURCE_VIEW_DESC_st *)
  *	)
  */
+#if HAVE_hipTexObjectCreate
 struct args_hipTexObjectCreate_t {
-	struct __hip_texture ** pTexObject;
+	hipTextureObject_t * pTexObject;
 	struct {
 		void* ptr1;
 	} pTexObject__ref;
@@ -13094,7 +14124,7 @@ struct args_hipTexObjectCreate_t {
 };
 
 #define GET_ARGS_VALUE_hipTexObjectCreate(activity) { \
-	activity->hip_args.hipTexObjectCreate.pTexObject = (struct __hip_texture **) pTexObject; \
+	activity->hip_args.hipTexObjectCreate.pTexObject = (hipTextureObject_t *) pTexObject; \
 	activity->hip_args.hipTexObjectCreate.pResDesc = (HIP_RESOURCE_DESC *) pResDesc; \
 	activity->hip_args.hipTexObjectCreate.pTexDesc = (HIP_TEXTURE_DESC *) pTexDesc; \
 	activity->hip_args.hipTexObjectCreate.pResViewDesc = (HIP_RESOURCE_VIEW_DESC *) pResViewDesc; \
@@ -13115,6 +14145,8 @@ struct args_hipTexObjectCreate_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDeviceGetSharedMemConfig` function.
  *
@@ -13129,6 +14161,7 @@ struct args_hipTexObjectCreate_t {
  *			hipSharedMemConfig * pConfig (enum hipSharedMemConfig*)
  *	)
  */
+#if HAVE_hipDeviceGetSharedMemConfig
 struct args_hipDeviceGetSharedMemConfig_t {
 	hipSharedMemConfig * pConfig;
 	struct {
@@ -13146,6 +14179,8 @@ struct args_hipDeviceGetSharedMemConfig_t {
 		args->hipDeviceGetSharedMemConfig.pConfig__ref.val = *args->hipDeviceGetSharedMemConfig.pConfig; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyHtoAAsync` function.
@@ -13165,22 +14200,25 @@ struct args_hipDeviceGetSharedMemConfig_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpyHtoAAsync
 struct args_hipMemcpyHtoAAsync_t {
-	struct hipArray * dstArray;
+	hipArray_t dstArray;
 	size_t dstOffset;
 	void * srcHost;
 	size_t ByteCount;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemcpyHtoAAsync(activity) { \
-	activity->hip_args.hipMemcpyHtoAAsync.dstArray = (struct hipArray *) dstArray; \
+	activity->hip_args.hipMemcpyHtoAAsync.dstArray = (hipArray_t) dstArray; \
 	activity->hip_args.hipMemcpyHtoAAsync.dstOffset = (size_t) dstOffset; \
 	activity->hip_args.hipMemcpyHtoAAsync.srcHost = (void *) srcHost; \
 	activity->hip_args.hipMemcpyHtoAAsync.ByteCount = (size_t) ByteCount; \
-	activity->hip_args.hipMemcpyHtoAAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpyHtoAAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemPoolGetAttribute` function.
@@ -13198,18 +14236,21 @@ struct args_hipMemcpyHtoAAsync_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hipMemPoolGetAttribute
 struct args_hipMemPoolGetAttribute_t {
-	struct ihipMemPoolHandle_t * mem_pool;
+	hipMemPool_t mem_pool;
 	hipMemPoolAttr attr;
 	void * value;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemPoolGetAttribute(activity) { \
-	activity->hip_args.hipMemPoolGetAttribute.mem_pool = (struct ihipMemPoolHandle_t *) mem_pool; \
+	activity->hip_args.hipMemPoolGetAttribute.mem_pool = (hipMemPool_t) mem_pool; \
 	activity->hip_args.hipMemPoolGetAttribute.attr = (hipMemPoolAttr) attr; \
 	activity->hip_args.hipMemPoolGetAttribute.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddMemAllocNode` function.
@@ -13229,13 +14270,14 @@ struct args_hipMemPoolGetAttribute_t {
  *			hipMemAllocNodeParams * pNodeParams (struct hipMemAllocNodeParams*)
  *	)
  */
+#if HAVE_hipGraphAddMemAllocNode
 struct args_hipGraphAddMemAllocNode_t {
-	struct hipGraphNode ** pGraphNode;
+	hipGraphNode_t * pGraphNode;
 	struct {
 		void* ptr1;
 	} pGraphNode__ref;
-	struct ihipGraph * graph;
-	struct hipGraphNode * * pDependencies;
+	hipGraph_t graph;
+	hipGraphNode_t * pDependencies;
 	struct {
 		void* ptr1;
 	} pDependencies__ref;
@@ -13248,9 +14290,9 @@ struct args_hipGraphAddMemAllocNode_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphAddMemAllocNode(activity) { \
-	activity->hip_args.hipGraphAddMemAllocNode.pGraphNode = (struct hipGraphNode **) pGraphNode; \
-	activity->hip_args.hipGraphAddMemAllocNode.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddMemAllocNode.pDependencies = (struct hipGraphNode * *) pDependencies; \
+	activity->hip_args.hipGraphAddMemAllocNode.pGraphNode = (hipGraphNode_t *) pGraphNode; \
+	activity->hip_args.hipGraphAddMemAllocNode.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddMemAllocNode.pDependencies = (hipGraphNode_t *) pDependencies; \
 	activity->hip_args.hipGraphAddMemAllocNode.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipGraphAddMemAllocNode.pNodeParams = (hipMemAllocNodeParams *) pNodeParams; \
 };
@@ -13267,6 +14309,8 @@ struct args_hipGraphAddMemAllocNode_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemRetainAllocationHandle` function.
  *
@@ -13282,8 +14326,9 @@ struct args_hipGraphAddMemAllocNode_t {
  *			void * addr (void *)
  *	)
  */
+#if HAVE_hipMemRetainAllocationHandle
 struct args_hipMemRetainAllocationHandle_t {
-	struct ihipMemGenericAllocationHandle ** handle;
+	hipMemGenericAllocationHandle_t * handle;
 	struct {
 		void* ptr1;
 	} handle__ref;
@@ -13292,7 +14337,7 @@ struct args_hipMemRetainAllocationHandle_t {
 };
 
 #define GET_ARGS_VALUE_hipMemRetainAllocationHandle(activity) { \
-	activity->hip_args.hipMemRetainAllocationHandle.handle = (struct ihipMemGenericAllocationHandle **) handle; \
+	activity->hip_args.hipMemRetainAllocationHandle.handle = (hipMemGenericAllocationHandle_t *) handle; \
 	activity->hip_args.hipMemRetainAllocationHandle.addr = (void *) addr; \
 };
 
@@ -13301,6 +14346,8 @@ struct args_hipMemRetainAllocationHandle_t {
 		args->hipMemRetainAllocationHandle.handle__ref.ptr1 = *args->hipMemRetainAllocationHandle.handle; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGetFuncBySymbol` function.
@@ -13317,8 +14364,9 @@ struct args_hipMemRetainAllocationHandle_t {
  *			const void * symbolPtr (const void *)
  *	)
  */
+#if HAVE_hipGetFuncBySymbol
 struct args_hipGetFuncBySymbol_t {
-	struct ihipModuleSymbol_t ** functionPtr;
+	hipFunction_t * functionPtr;
 	struct {
 		void* ptr1;
 	} functionPtr__ref;
@@ -13327,7 +14375,7 @@ struct args_hipGetFuncBySymbol_t {
 };
 
 #define GET_ARGS_VALUE_hipGetFuncBySymbol(activity) { \
-	activity->hip_args.hipGetFuncBySymbol.functionPtr = (struct ihipModuleSymbol_t **) functionPtr; \
+	activity->hip_args.hipGetFuncBySymbol.functionPtr = (hipFunction_t *) functionPtr; \
 	activity->hip_args.hipGetFuncBySymbol.symbolPtr = (void *) symbolPtr; \
 };
 
@@ -13336,6 +14384,8 @@ struct args_hipGetFuncBySymbol_t {
 		args->hipGetFuncBySymbol.functionPtr__ref.ptr1 = *args->hipGetFuncBySymbol.functionPtr; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceSetMemPool` function.
@@ -13352,16 +14402,19 @@ struct args_hipGetFuncBySymbol_t {
  *			hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *)
  *	)
  */
+#if HAVE_hipDeviceSetMemPool
 struct args_hipDeviceSetMemPool_t {
 	int device;
-	struct ihipMemPoolHandle_t * mem_pool;
+	hipMemPool_t mem_pool;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipDeviceSetMemPool(activity) { \
 	activity->hip_args.hipDeviceSetMemPool.device = (int) device; \
-	activity->hip_args.hipDeviceSetMemPool.mem_pool = (struct ihipMemPoolHandle_t *) mem_pool; \
+	activity->hip_args.hipDeviceSetMemPool.mem_pool = (hipMemPool_t) mem_pool; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceSetLimit` function.
@@ -13378,6 +14431,7 @@ struct args_hipDeviceSetMemPool_t {
  *			size_t value (unsigned long)
  *	)
  */
+#if HAVE_hipDeviceSetLimit
 struct args_hipDeviceSetLimit_t {
 	enum hipLimit_t limit;
 	size_t value;
@@ -13388,6 +14442,8 @@ struct args_hipDeviceSetLimit_t {
 	activity->hip_args.hipDeviceSetLimit.limit = (enum hipLimit_t) limit; \
 	activity->hip_args.hipDeviceSetLimit.value = (size_t) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemGetInfo` function.
@@ -13404,6 +14460,7 @@ struct args_hipDeviceSetLimit_t {
  *			size_t * total (unsigned long*)
  *	)
  */
+#if HAVE_hipMemGetInfo
 struct args_hipMemGetInfo_t {
 	size_t * free;
 	struct {
@@ -13430,6 +14487,8 @@ struct args_hipMemGetInfo_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyParam2D` function.
  *
@@ -13444,6 +14503,7 @@ struct args_hipMemGetInfo_t {
  *			const hip_Memcpy2D * pCopy (const struct hip_Memcpy2D *)
  *	)
  */
+#if HAVE_hipMemcpyParam2D
 struct args_hipMemcpyParam2D_t {
 	hip_Memcpy2D * pCopy;
 	struct {
@@ -13462,6 +14522,8 @@ struct args_hipMemcpyParam2D_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphDebugDotPrint` function.
  *
@@ -13478,8 +14540,9 @@ struct args_hipMemcpyParam2D_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipGraphDebugDotPrint
 struct args_hipGraphDebugDotPrint_t {
-	struct ihipGraph * graph;
+	hipGraph_t graph;
 	char * path;
 	struct {
 		char val[HIP_STRING_SIZE_MAX];
@@ -13489,7 +14552,7 @@ struct args_hipGraphDebugDotPrint_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphDebugDotPrint(activity) { \
-	activity->hip_args.hipGraphDebugDotPrint.graph = (struct ihipGraph *) graph; \
+	activity->hip_args.hipGraphDebugDotPrint.graph = (hipGraph_t) graph; \
 	activity->hip_args.hipGraphDebugDotPrint.path = (char *) path; \
 	activity->hip_args.hipGraphDebugDotPrint.flags = (unsigned int) flags; \
 };
@@ -13499,6 +14562,8 @@ struct args_hipGraphDebugDotPrint_t {
 		strncpy(args->hipGraphDebugDotPrint.path__ref.val, args->hipGraphDebugDotPrint.path, HIP_STRING_SIZE_MAX-1); \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceSetGraphMemAttribute` function.
@@ -13516,6 +14581,7 @@ struct args_hipGraphDebugDotPrint_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hipDeviceSetGraphMemAttribute
 struct args_hipDeviceSetGraphMemAttribute_t {
 	int device;
 	hipGraphMemAttributeType attr;
@@ -13528,6 +14594,8 @@ struct args_hipDeviceSetGraphMemAttribute_t {
 	activity->hip_args.hipDeviceSetGraphMemAttribute.attr = (hipGraphMemAttributeType) attr; \
 	activity->hip_args.hipDeviceSetGraphMemAttribute.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDrvGetErrorString` function.
@@ -13544,6 +14612,7 @@ struct args_hipDeviceSetGraphMemAttribute_t {
  *			const char ** errorString (const char **)
  *	)
  */
+#if HAVE_hipDrvGetErrorString
 struct args_hipDrvGetErrorString_t {
 	hipError_t hipError;
 	char ** errorString;
@@ -13568,6 +14637,8 @@ struct args_hipDrvGetErrorString_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyDtoDAsync` function.
  *
@@ -13585,11 +14656,12 @@ struct args_hipDrvGetErrorString_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpyDtoDAsync
 struct args_hipMemcpyDtoDAsync_t {
 	void * dst;
 	void * src;
 	size_t sizeBytes;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -13597,8 +14669,10 @@ struct args_hipMemcpyDtoDAsync_t {
 	activity->hip_args.hipMemcpyDtoDAsync.dst = (void *) dst; \
 	activity->hip_args.hipMemcpyDtoDAsync.src = (void *) src; \
 	activity->hip_args.hipMemcpyDtoDAsync.sizeBytes = (size_t) sizeBytes; \
-	activity->hip_args.hipMemcpyDtoDAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpyDtoDAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipCtxSynchronize` function.
@@ -13613,9 +14687,12 @@ struct args_hipMemcpyDtoDAsync_t {
  *	hipCtxSynchronize (
  *	)
  */
+#if HAVE_hipCtxSynchronize
 struct args_hipCtxSynchronize_t {
 	hipError_t retval;
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexObjectDestroy` function.
@@ -13631,14 +14708,17 @@ struct args_hipCtxSynchronize_t {
  *			hipTextureObject_t texObject (struct __hip_texture *)
  *	)
  */
+#if HAVE_hipTexObjectDestroy
 struct args_hipTexObjectDestroy_t {
-	struct __hip_texture * texObject;
+	hipTextureObject_t texObject;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipTexObjectDestroy(activity) { \
-	activity->hip_args.hipTexObjectDestroy.texObject = (struct __hip_texture *) texObject; \
+	activity->hip_args.hipTexObjectDestroy.texObject = (hipTextureObject_t) texObject; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefGetAddressMode` function.
@@ -13656,6 +14736,7 @@ struct args_hipTexObjectDestroy_t {
  *			int dim (int)
  *	)
  */
+#if HAVE_hipTexRefGetAddressMode
 struct args_hipTexRefGetAddressMode_t {
 	enum hipTextureAddressMode * pam;
 	struct {
@@ -13684,6 +14765,8 @@ struct args_hipTexRefGetAddressMode_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `__hipGetPCH` function.
  *
@@ -13699,6 +14782,7 @@ struct args_hipTexRefGetAddressMode_t {
  *			unsigned int * size (unsigned int *)
  *	)
  */
+#if HAVE___hipGetPCH
 struct args___hipGetPCH_t {
 	char ** pch;
 	struct {
@@ -13728,6 +14812,8 @@ struct args___hipGetPCH_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipStreamGetFlags` function.
  *
@@ -13743,8 +14829,9 @@ struct args___hipGetPCH_t {
  *			unsigned int * flags (unsigned int *)
  *	)
  */
+#if HAVE_hipStreamGetFlags
 struct args_hipStreamGetFlags_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	unsigned int * flags;
 	struct {
 		unsigned int val;
@@ -13753,7 +14840,7 @@ struct args_hipStreamGetFlags_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamGetFlags(activity) { \
-	activity->hip_args.hipStreamGetFlags.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamGetFlags.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamGetFlags.flags = (unsigned int *) flags; \
 };
 
@@ -13762,6 +14849,8 @@ struct args_hipStreamGetFlags_t {
 		args->hipStreamGetFlags.flags__ref.val = *args->hipStreamGetFlags.flags; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemGetAccess` function.
@@ -13779,6 +14868,7 @@ struct args_hipStreamGetFlags_t {
  *			void * ptr (void *)
  *	)
  */
+#if HAVE_hipMemGetAccess
 struct args_hipMemGetAccess_t {
 	unsigned long long * flags;
 	struct {
@@ -13807,6 +14897,8 @@ struct args_hipMemGetAccess_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyAtoA` function.
  *
@@ -13825,22 +14917,25 @@ struct args_hipMemGetAccess_t {
  *			size_t ByteCount (unsigned long)
  *	)
  */
+#if HAVE_hipMemcpyAtoA
 struct args_hipMemcpyAtoA_t {
-	struct hipArray * dstArray;
+	hipArray_t dstArray;
 	size_t dstOffset;
-	struct hipArray * srcArray;
+	hipArray_t srcArray;
 	size_t srcOffset;
 	size_t ByteCount;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemcpyAtoA(activity) { \
-	activity->hip_args.hipMemcpyAtoA.dstArray = (struct hipArray *) dstArray; \
+	activity->hip_args.hipMemcpyAtoA.dstArray = (hipArray_t) dstArray; \
 	activity->hip_args.hipMemcpyAtoA.dstOffset = (size_t) dstOffset; \
-	activity->hip_args.hipMemcpyAtoA.srcArray = (struct hipArray *) srcArray; \
+	activity->hip_args.hipMemcpyAtoA.srcArray = (hipArray_t) srcArray; \
 	activity->hip_args.hipMemcpyAtoA.srcOffset = (size_t) srcOffset; \
 	activity->hip_args.hipMemcpyAtoA.ByteCount = (size_t) ByteCount; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyToSymbol` function.
@@ -13860,6 +14955,7 @@ struct args_hipMemcpyAtoA_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpyToSymbol
 struct args_hipMemcpyToSymbol_t {
 	void * symbol;
 	void * src;
@@ -13877,6 +14973,8 @@ struct args_hipMemcpyToSymbol_t {
 	activity->hip_args.hipMemcpyToSymbol.kind = (hipMemcpyKind) kind; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipCtxSetCurrent` function.
  *
@@ -13891,14 +14989,17 @@ struct args_hipMemcpyToSymbol_t {
  *			hipCtx_t ctx (struct ihipCtx_t *)
  *	)
  */
+#if HAVE_hipCtxSetCurrent
 struct args_hipCtxSetCurrent_t {
-	struct ihipCtx_t * ctx;
+	hipCtx_t ctx;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipCtxSetCurrent(activity) { \
-	activity->hip_args.hipCtxSetCurrent.ctx = (struct ihipCtx_t *) ctx; \
+	activity->hip_args.hipCtxSetCurrent.ctx = (hipCtx_t) ctx; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamQuery_spt` function.
@@ -13914,14 +15015,17 @@ struct args_hipCtxSetCurrent_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipStreamQuery_spt
 struct args_hipStreamQuery_spt_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipStreamQuery_spt(activity) { \
-	activity->hip_args.hipStreamQuery_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamQuery_spt.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGetSymbolSize` function.
@@ -13938,6 +15042,7 @@ struct args_hipStreamQuery_spt_t {
  *			const void * symbol (const void *)
  *	)
  */
+#if HAVE_hipGetSymbolSize
 struct args_hipGetSymbolSize_t {
 	size_t * size;
 	struct {
@@ -13958,6 +15063,8 @@ struct args_hipGetSymbolSize_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMipmappedArrayGetLevel` function.
  *
@@ -13974,8 +15081,9 @@ struct args_hipGetSymbolSize_t {
  *			unsigned int level (unsigned int)
  *	)
  */
+#if HAVE_hipMipmappedArrayGetLevel
 struct args_hipMipmappedArrayGetLevel_t {
-	struct hipArray ** pLevelArray;
+	hipArray_t * pLevelArray;
 	struct {
 		void* ptr1;
 	} pLevelArray__ref;
@@ -13988,7 +15096,7 @@ struct args_hipMipmappedArrayGetLevel_t {
 };
 
 #define GET_ARGS_VALUE_hipMipmappedArrayGetLevel(activity) { \
-	activity->hip_args.hipMipmappedArrayGetLevel.pLevelArray = (struct hipArray **) pLevelArray; \
+	activity->hip_args.hipMipmappedArrayGetLevel.pLevelArray = (hipArray_t *) pLevelArray; \
 	activity->hip_args.hipMipmappedArrayGetLevel.hMipMappedArray = (struct hipMipmappedArray *) hMipMappedArray; \
 	activity->hip_args.hipMipmappedArrayGetLevel.level = (unsigned int) level; \
 };
@@ -14001,6 +15109,8 @@ struct args_hipMipmappedArrayGetLevel_t {
 		args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val = *args->hipMipmappedArrayGetLevel.hMipMappedArray; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipExternalMemoryGetMappedMipmappedArray` function.
@@ -14018,6 +15128,7 @@ struct args_hipMipmappedArrayGetLevel_t {
  *			const hipExternalMemoryMipmappedArrayDesc * mipmapDesc (const struct hipExternalMemoryMipmappedArrayDesc_st *)
  *	)
  */
+#if HAVE_hipExternalMemoryGetMappedMipmappedArray
 struct args_hipExternalMemoryGetMappedMipmappedArray_t {
 	struct hipMipmappedArray ** mipmap;
 	struct {
@@ -14050,6 +15161,8 @@ struct args_hipExternalMemoryGetMappedMipmappedArray_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphExecMemcpyNodeSetParams` function.
  *
@@ -14066,9 +15179,10 @@ struct args_hipExternalMemoryGetMappedMipmappedArray_t {
  *			hipMemcpy3DParms * pNodeParams (struct hipMemcpy3DParms*)
  *	)
  */
+#if HAVE_hipGraphExecMemcpyNodeSetParams
 struct args_hipGraphExecMemcpyNodeSetParams_t {
-	struct hipGraphExec * hGraphExec;
-	struct hipGraphNode * node;
+	hipGraphExec_t hGraphExec;
+	hipGraphNode_t node;
 	hipMemcpy3DParms * pNodeParams;
 	struct {
 		hipMemcpy3DParms val;
@@ -14077,8 +15191,8 @@ struct args_hipGraphExecMemcpyNodeSetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphExecMemcpyNodeSetParams(activity) { \
-	activity->hip_args.hipGraphExecMemcpyNodeSetParams.hGraphExec = (struct hipGraphExec *) hGraphExec; \
-	activity->hip_args.hipGraphExecMemcpyNodeSetParams.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphExecMemcpyNodeSetParams.hGraphExec = (hipGraphExec_t) hGraphExec; \
+	activity->hip_args.hipGraphExecMemcpyNodeSetParams.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphExecMemcpyNodeSetParams.pNodeParams = (hipMemcpy3DParms *) pNodeParams; \
 };
 
@@ -14087,6 +15201,8 @@ struct args_hipGraphExecMemcpyNodeSetParams_t {
 		args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val = *args->hipGraphExecMemcpyNodeSetParams.pNodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipUserObjectCreate` function.
@@ -14106,8 +15222,9 @@ struct args_hipGraphExecMemcpyNodeSetParams_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipUserObjectCreate
 struct args_hipUserObjectCreate_t {
-	struct hipUserObject ** object_out;
+	hipUserObject_t * object_out;
 	struct {
 		void* ptr1;
 	} object_out__ref;
@@ -14119,7 +15236,7 @@ struct args_hipUserObjectCreate_t {
 };
 
 #define GET_ARGS_VALUE_hipUserObjectCreate(activity) { \
-	activity->hip_args.hipUserObjectCreate.object_out = (struct hipUserObject **) object_out; \
+	activity->hip_args.hipUserObjectCreate.object_out = (hipUserObject_t *) object_out; \
 	activity->hip_args.hipUserObjectCreate.ptr = (void *) ptr; \
 	activity->hip_args.hipUserObjectCreate.destroy = (hipHostFn_t) destroy; \
 	activity->hip_args.hipUserObjectCreate.initialRefcount = (unsigned int) initialRefcount; \
@@ -14131,6 +15248,8 @@ struct args_hipUserObjectCreate_t {
 		args->hipUserObjectCreate.object_out__ref.ptr1 = *args->hipUserObjectCreate.object_out; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamGetCaptureInfo_v2` function.
@@ -14151,8 +15270,9 @@ struct args_hipUserObjectCreate_t {
  *			size_t * numDependencies_out (unsigned long*)
  *	)
  */
+#if HAVE_hipStreamGetCaptureInfo_v2
 struct args_hipStreamGetCaptureInfo_v2_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipStreamCaptureStatus * captureStatus_out;
 	struct {
 		hipStreamCaptureStatus val;
@@ -14161,11 +15281,11 @@ struct args_hipStreamGetCaptureInfo_v2_t {
 	struct {
 		unsigned long long val;
 	} id_out__ref;
-	struct ihipGraph ** graph_out;
+	hipGraph_t * graph_out;
 	struct {
 		void* ptr1;
 	} graph_out__ref;
-	struct hipGraphNode * ** dependencies_out;
+	hipGraphNode_t ** dependencies_out;
 	struct {
 		void* ptr1;
 		void* ptr2;
@@ -14178,11 +15298,11 @@ struct args_hipStreamGetCaptureInfo_v2_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamGetCaptureInfo_v2(activity) { \
-	activity->hip_args.hipStreamGetCaptureInfo_v2.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamGetCaptureInfo_v2.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamGetCaptureInfo_v2.captureStatus_out = (hipStreamCaptureStatus *) captureStatus_out; \
 	activity->hip_args.hipStreamGetCaptureInfo_v2.id_out = (unsigned long long *) id_out; \
-	activity->hip_args.hipStreamGetCaptureInfo_v2.graph_out = (struct ihipGraph **) graph_out; \
-	activity->hip_args.hipStreamGetCaptureInfo_v2.dependencies_out = (struct hipGraphNode * **) dependencies_out; \
+	activity->hip_args.hipStreamGetCaptureInfo_v2.graph_out = (hipGraph_t *) graph_out; \
+	activity->hip_args.hipStreamGetCaptureInfo_v2.dependencies_out = (hipGraphNode_t **) dependencies_out; \
 	activity->hip_args.hipStreamGetCaptureInfo_v2.numDependencies_out = (size_t *) numDependencies_out; \
 };
 
@@ -14207,6 +15327,8 @@ struct args_hipStreamGetCaptureInfo_v2_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipTexRefGetArray` function.
  *
@@ -14222,8 +15344,9 @@ struct args_hipStreamGetCaptureInfo_v2_t {
  *			const textureReference * texRef (const struct textureReference *)
  *	)
  */
+#if HAVE_hipTexRefGetArray
 struct args_hipTexRefGetArray_t {
-	struct hipArray ** pArray;
+	hipArray_t * pArray;
 	struct {
 		void* ptr1;
 	} pArray__ref;
@@ -14235,7 +15358,7 @@ struct args_hipTexRefGetArray_t {
 };
 
 #define GET_ARGS_VALUE_hipTexRefGetArray(activity) { \
-	activity->hip_args.hipTexRefGetArray.pArray = (struct hipArray **) pArray; \
+	activity->hip_args.hipTexRefGetArray.pArray = (hipArray_t *) pArray; \
 	activity->hip_args.hipTexRefGetArray.texRef = (textureReference *) texRef; \
 };
 
@@ -14247,6 +15370,8 @@ struct args_hipTexRefGetArray_t {
 		args->hipTexRefGetArray.texRef__ref.val = *args->hipTexRefGetArray.texRef; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipImportExternalSemaphore` function.
@@ -14263,6 +15388,7 @@ struct args_hipTexRefGetArray_t {
  *			const hipExternalSemaphoreHandleDesc * semHandleDesc (const struct hipExternalSemaphoreHandleDesc_st *)
  *	)
  */
+#if HAVE_hipImportExternalSemaphore
 struct args_hipImportExternalSemaphore_t {
 	void ** extSem_out;
 	struct {
@@ -14289,6 +15415,8 @@ struct args_hipImportExternalSemaphore_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDeviceGetAttribute` function.
  *
@@ -14305,6 +15433,7 @@ struct args_hipImportExternalSemaphore_t {
  *			int deviceId (int)
  *	)
  */
+#if HAVE_hipDeviceGetAttribute
 struct args_hipDeviceGetAttribute_t {
 	int * pi;
 	struct {
@@ -14327,6 +15456,8 @@ struct args_hipDeviceGetAttribute_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphMemFreeNodeGetParams` function.
  *
@@ -14342,16 +15473,19 @@ struct args_hipDeviceGetAttribute_t {
  *			void * dev_ptr (void *)
  *	)
  */
+#if HAVE_hipGraphMemFreeNodeGetParams
 struct args_hipGraphMemFreeNodeGetParams_t {
-	struct hipGraphNode * node;
+	hipGraphNode_t node;
 	void * dev_ptr;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphMemFreeNodeGetParams(activity) { \
-	activity->hip_args.hipGraphMemFreeNodeGetParams.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphMemFreeNodeGetParams.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphMemFreeNodeGetParams.dev_ptr = (void *) dev_ptr; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipCtxGetSharedMemConfig` function.
@@ -14367,6 +15501,7 @@ struct args_hipGraphMemFreeNodeGetParams_t {
  *			hipSharedMemConfig * pConfig (enum hipSharedMemConfig*)
  *	)
  */
+#if HAVE_hipCtxGetSharedMemConfig
 struct args_hipCtxGetSharedMemConfig_t {
 	hipSharedMemConfig * pConfig;
 	struct {
@@ -14384,6 +15519,8 @@ struct args_hipCtxGetSharedMemConfig_t {
 		args->hipCtxGetSharedMemConfig.pConfig__ref.val = *args->hipCtxGetSharedMemConfig.pConfig; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphMemcpyNodeSetParamsToSymbol` function.
@@ -14404,8 +15541,9 @@ struct args_hipCtxGetSharedMemConfig_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipGraphMemcpyNodeSetParamsToSymbol
 struct args_hipGraphMemcpyNodeSetParamsToSymbol_t {
-	struct hipGraphNode * node;
+	hipGraphNode_t node;
 	void * symbol;
 	void * src;
 	size_t count;
@@ -14415,13 +15553,15 @@ struct args_hipGraphMemcpyNodeSetParamsToSymbol_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphMemcpyNodeSetParamsToSymbol(activity) { \
-	activity->hip_args.hipGraphMemcpyNodeSetParamsToSymbol.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphMemcpyNodeSetParamsToSymbol.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphMemcpyNodeSetParamsToSymbol.symbol = (void *) symbol; \
 	activity->hip_args.hipGraphMemcpyNodeSetParamsToSymbol.src = (void *) src; \
 	activity->hip_args.hipGraphMemcpyNodeSetParamsToSymbol.count = (size_t) count; \
 	activity->hip_args.hipGraphMemcpyNodeSetParamsToSymbol.offset = (size_t) offset; \
 	activity->hip_args.hipGraphMemcpyNodeSetParamsToSymbol.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy2DToArray` function.
@@ -14444,8 +15584,9 @@ struct args_hipGraphMemcpyNodeSetParamsToSymbol_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpy2DToArray
 struct args_hipMemcpy2DToArray_t {
-	struct hipArray * dst;
+	hipArray_t dst;
 	size_t wOffset;
 	size_t hOffset;
 	void * src;
@@ -14457,7 +15598,7 @@ struct args_hipMemcpy2DToArray_t {
 };
 
 #define GET_ARGS_VALUE_hipMemcpy2DToArray(activity) { \
-	activity->hip_args.hipMemcpy2DToArray.dst = (struct hipArray *) dst; \
+	activity->hip_args.hipMemcpy2DToArray.dst = (hipArray_t) dst; \
 	activity->hip_args.hipMemcpy2DToArray.wOffset = (size_t) wOffset; \
 	activity->hip_args.hipMemcpy2DToArray.hOffset = (size_t) hOffset; \
 	activity->hip_args.hipMemcpy2DToArray.src = (void *) src; \
@@ -14466,6 +15607,8 @@ struct args_hipMemcpy2DToArray_t {
 	activity->hip_args.hipMemcpy2DToArray.height = (size_t) height; \
 	activity->hip_args.hipMemcpy2DToArray.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamIsCapturing_spt` function.
@@ -14482,8 +15625,9 @@ struct args_hipMemcpy2DToArray_t {
  *			hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*)
  *	)
  */
+#if HAVE_hipStreamIsCapturing_spt
 struct args_hipStreamIsCapturing_spt_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipStreamCaptureStatus * pCaptureStatus;
 	struct {
 		hipStreamCaptureStatus val;
@@ -14492,7 +15636,7 @@ struct args_hipStreamIsCapturing_spt_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamIsCapturing_spt(activity) { \
-	activity->hip_args.hipStreamIsCapturing_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamIsCapturing_spt.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamIsCapturing_spt.pCaptureStatus = (hipStreamCaptureStatus *) pCaptureStatus; \
 };
 
@@ -14501,6 +15645,8 @@ struct args_hipStreamIsCapturing_spt_t {
 		args->hipStreamIsCapturing_spt.pCaptureStatus__ref.val = *args->hipStreamIsCapturing_spt.pCaptureStatus; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipFreeHost` function.
@@ -14516,6 +15662,7 @@ struct args_hipStreamIsCapturing_spt_t {
  *			void * ptr (void *)
  *	)
  */
+#if HAVE_hipFreeHost
 struct args_hipFreeHost_t {
 	void * ptr;
 	hipError_t retval;
@@ -14524,6 +15671,8 @@ struct args_hipFreeHost_t {
 #define GET_ARGS_VALUE_hipFreeHost(activity) { \
 	activity->hip_args.hipFreeHost.ptr = (void *) ptr; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphKernelNodeSetParams` function.
@@ -14540,8 +15689,9 @@ struct args_hipFreeHost_t {
  *			const hipKernelNodeParams * pNodeParams (const struct hipKernelNodeParams *)
  *	)
  */
+#if HAVE_hipGraphKernelNodeSetParams
 struct args_hipGraphKernelNodeSetParams_t {
-	struct hipGraphNode * node;
+	hipGraphNode_t node;
 	hipKernelNodeParams * pNodeParams;
 	struct {
 		hipKernelNodeParams val;
@@ -14550,7 +15700,7 @@ struct args_hipGraphKernelNodeSetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphKernelNodeSetParams(activity) { \
-	activity->hip_args.hipGraphKernelNodeSetParams.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphKernelNodeSetParams.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphKernelNodeSetParams.pNodeParams = (hipKernelNodeParams *) pNodeParams; \
 };
 
@@ -14559,6 +15709,8 @@ struct args_hipGraphKernelNodeSetParams_t {
 		args->hipGraphKernelNodeSetParams.pNodeParams__ref.val = *args->hipGraphKernelNodeSetParams.pNodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMallocHost` function.
@@ -14575,6 +15727,7 @@ struct args_hipGraphKernelNodeSetParams_t {
  *			size_t size (unsigned long)
  *	)
  */
+#if HAVE_hipMallocHost
 struct args_hipMallocHost_t {
 	void ** ptr;
 	struct {
@@ -14595,6 +15748,8 @@ struct args_hipMallocHost_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemset3D_spt` function.
  *
@@ -14611,6 +15766,7 @@ struct args_hipMallocHost_t {
  *			hipExtent extent (struct hipExtent)
  *	)
  */
+#if HAVE_hipMemset3D_spt
 struct args_hipMemset3D_spt_t {
 	hipPitchedPtr pitchedDevPtr;
 	int value;
@@ -14623,6 +15779,8 @@ struct args_hipMemset3D_spt_t {
 	activity->hip_args.hipMemset3D_spt.value = (int) value; \
 	activity->hip_args.hipMemset3D_spt.extent = (hipExtent) extent; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipStreamGetCaptureInfo_v2_spt` function.
@@ -14643,8 +15801,9 @@ struct args_hipMemset3D_spt_t {
  *			size_t * numDependencies_out (unsigned long*)
  *	)
  */
+#if HAVE_hipStreamGetCaptureInfo_v2_spt
 struct args_hipStreamGetCaptureInfo_v2_spt_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipStreamCaptureStatus * captureStatus_out;
 	struct {
 		hipStreamCaptureStatus val;
@@ -14653,11 +15812,11 @@ struct args_hipStreamGetCaptureInfo_v2_spt_t {
 	struct {
 		unsigned long long val;
 	} id_out__ref;
-	struct ihipGraph ** graph_out;
+	hipGraph_t * graph_out;
 	struct {
 		void* ptr1;
 	} graph_out__ref;
-	struct hipGraphNode * ** dependencies_out;
+	hipGraphNode_t ** dependencies_out;
 	struct {
 		void* ptr1;
 		void* ptr2;
@@ -14670,11 +15829,11 @@ struct args_hipStreamGetCaptureInfo_v2_spt_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamGetCaptureInfo_v2_spt(activity) { \
-	activity->hip_args.hipStreamGetCaptureInfo_v2_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamGetCaptureInfo_v2_spt.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamGetCaptureInfo_v2_spt.captureStatus_out = (hipStreamCaptureStatus *) captureStatus_out; \
 	activity->hip_args.hipStreamGetCaptureInfo_v2_spt.id_out = (unsigned long long *) id_out; \
-	activity->hip_args.hipStreamGetCaptureInfo_v2_spt.graph_out = (struct ihipGraph **) graph_out; \
-	activity->hip_args.hipStreamGetCaptureInfo_v2_spt.dependencies_out = (struct hipGraphNode * **) dependencies_out; \
+	activity->hip_args.hipStreamGetCaptureInfo_v2_spt.graph_out = (hipGraph_t *) graph_out; \
+	activity->hip_args.hipStreamGetCaptureInfo_v2_spt.dependencies_out = (hipGraphNode_t **) dependencies_out; \
 	activity->hip_args.hipStreamGetCaptureInfo_v2_spt.numDependencies_out = (size_t *) numDependencies_out; \
 };
 
@@ -14699,6 +15858,8 @@ struct args_hipStreamGetCaptureInfo_v2_spt_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGetTextureReference` function.
  *
@@ -14714,6 +15875,7 @@ struct args_hipStreamGetCaptureInfo_v2_spt_t {
  *			const void * symbol (const void *)
  *	)
  */
+#if HAVE_hipGetTextureReference
 struct args_hipGetTextureReference_t {
 	textureReference ** texref;
 	struct {
@@ -14738,6 +15900,8 @@ struct args_hipGetTextureReference_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphExecExternalSemaphoresSignalNodeSetParams` function.
  *
@@ -14754,9 +15918,10 @@ struct args_hipGetTextureReference_t {
  *			const hipExternalSemaphoreSignalNodeParams * nodeParams (const struct hipExternalSemaphoreSignalNodeParams *)
  *	)
  */
+#if HAVE_hipGraphExecExternalSemaphoresSignalNodeSetParams
 struct args_hipGraphExecExternalSemaphoresSignalNodeSetParams_t {
-	struct hipGraphExec * hGraphExec;
-	struct hipGraphNode * hNode;
+	hipGraphExec_t hGraphExec;
+	hipGraphNode_t hNode;
 	hipExternalSemaphoreSignalNodeParams * nodeParams;
 	struct {
 		hipExternalSemaphoreSignalNodeParams val;
@@ -14765,8 +15930,8 @@ struct args_hipGraphExecExternalSemaphoresSignalNodeSetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphExecExternalSemaphoresSignalNodeSetParams(activity) { \
-	activity->hip_args.hipGraphExecExternalSemaphoresSignalNodeSetParams.hGraphExec = (struct hipGraphExec *) hGraphExec; \
-	activity->hip_args.hipGraphExecExternalSemaphoresSignalNodeSetParams.hNode = (struct hipGraphNode *) hNode; \
+	activity->hip_args.hipGraphExecExternalSemaphoresSignalNodeSetParams.hGraphExec = (hipGraphExec_t) hGraphExec; \
+	activity->hip_args.hipGraphExecExternalSemaphoresSignalNodeSetParams.hNode = (hipGraphNode_t) hNode; \
 	activity->hip_args.hipGraphExecExternalSemaphoresSignalNodeSetParams.nodeParams = (hipExternalSemaphoreSignalNodeParams *) nodeParams; \
 };
 
@@ -14775,6 +15940,8 @@ struct args_hipGraphExecExternalSemaphoresSignalNodeSetParams_t {
 		args->hipGraphExecExternalSemaphoresSignalNodeSetParams.nodeParams__ref.val = *args->hipGraphExecExternalSemaphoresSignalNodeSetParams.nodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphAddDependencies` function.
@@ -14793,13 +15960,14 @@ struct args_hipGraphExecExternalSemaphoresSignalNodeSetParams_t {
  *			size_t numDependencies (unsigned long)
  *	)
  */
+#if HAVE_hipGraphAddDependencies
 struct args_hipGraphAddDependencies_t {
-	struct ihipGraph * graph;
-	struct hipGraphNode * * from;
+	hipGraph_t graph;
+	hipGraphNode_t * from;
 	struct {
 		void* ptr1;
 	} from__ref;
-	struct hipGraphNode * * to;
+	hipGraphNode_t * to;
 	struct {
 		void* ptr1;
 	} to__ref;
@@ -14808,9 +15976,9 @@ struct args_hipGraphAddDependencies_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphAddDependencies(activity) { \
-	activity->hip_args.hipGraphAddDependencies.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphAddDependencies.from = (struct hipGraphNode * *) from; \
-	activity->hip_args.hipGraphAddDependencies.to = (struct hipGraphNode * *) to; \
+	activity->hip_args.hipGraphAddDependencies.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphAddDependencies.from = (hipGraphNode_t *) from; \
+	activity->hip_args.hipGraphAddDependencies.to = (hipGraphNode_t *) to; \
 	activity->hip_args.hipGraphAddDependencies.numDependencies = (size_t) numDependencies; \
 };
 
@@ -14822,6 +15990,8 @@ struct args_hipGraphAddDependencies_t {
 		args->hipGraphAddDependencies.to__ref.ptr1 = *args->hipGraphAddDependencies.to; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphNodeGetType` function.
@@ -14838,8 +16008,9 @@ struct args_hipGraphAddDependencies_t {
  *			hipGraphNodeType * pType (enum hipGraphNodeType*)
  *	)
  */
+#if HAVE_hipGraphNodeGetType
 struct args_hipGraphNodeGetType_t {
-	struct hipGraphNode * node;
+	hipGraphNode_t node;
 	hipGraphNodeType * pType;
 	struct {
 		hipGraphNodeType val;
@@ -14848,7 +16019,7 @@ struct args_hipGraphNodeGetType_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphNodeGetType(activity) { \
-	activity->hip_args.hipGraphNodeGetType.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphNodeGetType.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphNodeGetType.pType = (hipGraphNodeType *) pType; \
 };
 
@@ -14857,6 +16028,8 @@ struct args_hipGraphNodeGetType_t {
 		args->hipGraphNodeGetType.pType__ref.val = *args->hipGraphNodeGetType.pType; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefSetBorderColor` function.
@@ -14873,6 +16046,7 @@ struct args_hipGraphNodeGetType_t {
  *			float * pBorderColor (float *)
  *	)
  */
+#if HAVE_hipTexRefSetBorderColor
 struct args_hipTexRefSetBorderColor_t {
 	textureReference * texRef;
 	struct {
@@ -14899,6 +16073,8 @@ struct args_hipTexRefSetBorderColor_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemPrefetchAsync` function.
  *
@@ -14916,11 +16092,12 @@ struct args_hipTexRefSetBorderColor_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemPrefetchAsync
 struct args_hipMemPrefetchAsync_t {
 	void * dev_ptr;
 	size_t count;
 	int device;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -14928,8 +16105,10 @@ struct args_hipMemPrefetchAsync_t {
 	activity->hip_args.hipMemPrefetchAsync.dev_ptr = (void *) dev_ptr; \
 	activity->hip_args.hipMemPrefetchAsync.count = (size_t) count; \
 	activity->hip_args.hipMemPrefetchAsync.device = (int) device; \
-	activity->hip_args.hipMemPrefetchAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemPrefetchAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipCtxGetDevice` function.
@@ -14945,6 +16124,7 @@ struct args_hipMemPrefetchAsync_t {
  *			hipDevice_t * device (int*)
  *	)
  */
+#if HAVE_hipCtxGetDevice
 struct args_hipCtxGetDevice_t {
 	hipDevice_t * device;
 	struct {
@@ -14962,6 +16142,8 @@ struct args_hipCtxGetDevice_t {
 		args->hipCtxGetDevice.device__ref.val = *args->hipCtxGetDevice.device; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy2DArrayToArray` function.
@@ -14985,11 +16167,12 @@ struct args_hipCtxGetDevice_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpy2DArrayToArray
 struct args_hipMemcpy2DArrayToArray_t {
-	struct hipArray * dst;
+	hipArray_t dst;
 	size_t wOffsetDst;
 	size_t hOffsetDst;
-	struct hipArray * src;
+	hipArray_const_t src;
 	size_t wOffsetSrc;
 	size_t hOffsetSrc;
 	size_t width;
@@ -14999,16 +16182,18 @@ struct args_hipMemcpy2DArrayToArray_t {
 };
 
 #define GET_ARGS_VALUE_hipMemcpy2DArrayToArray(activity) { \
-	activity->hip_args.hipMemcpy2DArrayToArray.dst = (struct hipArray *) dst; \
+	activity->hip_args.hipMemcpy2DArrayToArray.dst = (hipArray_t) dst; \
 	activity->hip_args.hipMemcpy2DArrayToArray.wOffsetDst = (size_t) wOffsetDst; \
 	activity->hip_args.hipMemcpy2DArrayToArray.hOffsetDst = (size_t) hOffsetDst; \
-	activity->hip_args.hipMemcpy2DArrayToArray.src = (struct hipArray *) src; \
+	activity->hip_args.hipMemcpy2DArrayToArray.src = (hipArray_const_t) src; \
 	activity->hip_args.hipMemcpy2DArrayToArray.wOffsetSrc = (size_t) wOffsetSrc; \
 	activity->hip_args.hipMemcpy2DArrayToArray.hOffsetSrc = (size_t) hOffsetSrc; \
 	activity->hip_args.hipMemcpy2DArrayToArray.width = (size_t) width; \
 	activity->hip_args.hipMemcpy2DArrayToArray.height = (size_t) height; \
 	activity->hip_args.hipMemcpy2DArrayToArray.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipUserObjectRelease` function.
@@ -15025,16 +16210,19 @@ struct args_hipMemcpy2DArrayToArray_t {
  *			unsigned int count (unsigned int)
  *	)
  */
+#if HAVE_hipUserObjectRelease
 struct args_hipUserObjectRelease_t {
-	struct hipUserObject * object;
+	hipUserObject_t object;
 	unsigned int count;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipUserObjectRelease(activity) { \
-	activity->hip_args.hipUserObjectRelease.object = (struct hipUserObject *) object; \
+	activity->hip_args.hipUserObjectRelease.object = (hipUserObject_t) object; \
 	activity->hip_args.hipUserObjectRelease.count = (unsigned int) count; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipHostGetFlags` function.
@@ -15051,6 +16239,7 @@ struct args_hipUserObjectRelease_t {
  *			void * hostPtr (void *)
  *	)
  */
+#if HAVE_hipHostGetFlags
 struct args_hipHostGetFlags_t {
 	unsigned int * flagsPtr;
 	struct {
@@ -15071,6 +16260,8 @@ struct args_hipHostGetFlags_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDrvGraphAddMemsetNode` function.
  *
@@ -15090,13 +16281,14 @@ struct args_hipHostGetFlags_t {
  *			hipCtx_t ctx (struct ihipCtx_t *)
  *	)
  */
+#if HAVE_hipDrvGraphAddMemsetNode
 struct args_hipDrvGraphAddMemsetNode_t {
-	struct hipGraphNode ** phGraphNode;
+	hipGraphNode_t * phGraphNode;
 	struct {
 		void* ptr1;
 	} phGraphNode__ref;
-	struct ihipGraph * hGraph;
-	struct hipGraphNode * * dependencies;
+	hipGraph_t hGraph;
+	hipGraphNode_t * dependencies;
 	struct {
 		void* ptr1;
 	} dependencies__ref;
@@ -15105,17 +16297,17 @@ struct args_hipDrvGraphAddMemsetNode_t {
 	struct {
 		HIP_MEMSET_NODE_PARAMS val;
 	} memsetParams__ref;
-	struct ihipCtx_t * ctx;
+	hipCtx_t ctx;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipDrvGraphAddMemsetNode(activity) { \
-	activity->hip_args.hipDrvGraphAddMemsetNode.phGraphNode = (struct hipGraphNode **) phGraphNode; \
-	activity->hip_args.hipDrvGraphAddMemsetNode.hGraph = (struct ihipGraph *) hGraph; \
-	activity->hip_args.hipDrvGraphAddMemsetNode.dependencies = (struct hipGraphNode * *) dependencies; \
+	activity->hip_args.hipDrvGraphAddMemsetNode.phGraphNode = (hipGraphNode_t *) phGraphNode; \
+	activity->hip_args.hipDrvGraphAddMemsetNode.hGraph = (hipGraph_t) hGraph; \
+	activity->hip_args.hipDrvGraphAddMemsetNode.dependencies = (hipGraphNode_t *) dependencies; \
 	activity->hip_args.hipDrvGraphAddMemsetNode.numDependencies = (size_t) numDependencies; \
 	activity->hip_args.hipDrvGraphAddMemsetNode.memsetParams = (HIP_MEMSET_NODE_PARAMS *) memsetParams; \
-	activity->hip_args.hipDrvGraphAddMemsetNode.ctx = (struct ihipCtx_t *) ctx; \
+	activity->hip_args.hipDrvGraphAddMemsetNode.ctx = (hipCtx_t) ctx; \
 };
 
 #define GET_PTRS_VALUE_hipDrvGraphAddMemsetNode(args) { \
@@ -15129,6 +16321,8 @@ struct args_hipDrvGraphAddMemsetNode_t {
 		args->hipDrvGraphAddMemsetNode.memsetParams__ref.val = *args->hipDrvGraphAddMemsetNode.memsetParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyAtoD` function.
@@ -15147,9 +16341,10 @@ struct args_hipDrvGraphAddMemsetNode_t {
  *			size_t ByteCount (unsigned long)
  *	)
  */
+#if HAVE_hipMemcpyAtoD
 struct args_hipMemcpyAtoD_t {
 	void * dstDevice;
-	struct hipArray * srcArray;
+	hipArray_t srcArray;
 	size_t srcOffset;
 	size_t ByteCount;
 	hipError_t retval;
@@ -15157,10 +16352,12 @@ struct args_hipMemcpyAtoD_t {
 
 #define GET_ARGS_VALUE_hipMemcpyAtoD(activity) { \
 	activity->hip_args.hipMemcpyAtoD.dstDevice = (void *) dstDevice; \
-	activity->hip_args.hipMemcpyAtoD.srcArray = (struct hipArray *) srcArray; \
+	activity->hip_args.hipMemcpyAtoD.srcArray = (hipArray_t) srcArray; \
 	activity->hip_args.hipMemcpyAtoD.srcOffset = (size_t) srcOffset; \
 	activity->hip_args.hipMemcpyAtoD.ByteCount = (size_t) ByteCount; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemPoolCreate` function.
@@ -15177,8 +16374,9 @@ struct args_hipMemcpyAtoD_t {
  *			const hipMemPoolProps * pool_props (const struct hipMemPoolProps *)
  *	)
  */
+#if HAVE_hipMemPoolCreate
 struct args_hipMemPoolCreate_t {
-	struct ihipMemPoolHandle_t ** mem_pool;
+	hipMemPool_t * mem_pool;
 	struct {
 		void* ptr1;
 	} mem_pool__ref;
@@ -15190,7 +16388,7 @@ struct args_hipMemPoolCreate_t {
 };
 
 #define GET_ARGS_VALUE_hipMemPoolCreate(activity) { \
-	activity->hip_args.hipMemPoolCreate.mem_pool = (struct ihipMemPoolHandle_t **) mem_pool; \
+	activity->hip_args.hipMemPoolCreate.mem_pool = (hipMemPool_t *) mem_pool; \
 	activity->hip_args.hipMemPoolCreate.pool_props = (hipMemPoolProps *) pool_props; \
 };
 
@@ -15202,6 +16400,8 @@ struct args_hipMemPoolCreate_t {
 		args->hipMemPoolCreate.pool_props__ref.val = *args->hipMemPoolCreate.pool_props; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipKernelNameRef` function.
@@ -15217,8 +16417,9 @@ struct args_hipMemPoolCreate_t {
  *			const hipFunction_t f (const struct ihipModuleSymbol_t *)
  *	)
  */
+#if HAVE_hipKernelNameRef
 struct args_hipKernelNameRef_t {
-	struct ihipModuleSymbol_t * f;
+	hipFunction_t f;
 	char * retval;
 	struct {
 		char val[HIP_STRING_SIZE_MAX];
@@ -15226,7 +16427,7 @@ struct args_hipKernelNameRef_t {
 };
 
 #define GET_ARGS_VALUE_hipKernelNameRef(activity) { \
-	activity->hip_args.hipKernelNameRef.f = (struct ihipModuleSymbol_t *) f; \
+	activity->hip_args.hipKernelNameRef.f = (hipFunction_t) f; \
 };
 
 #define GET_PTRS_RET_VALUE_hipKernelNameRef(args) { \
@@ -15234,6 +16435,8 @@ struct args_hipKernelNameRef_t {
 		strncpy(args->hipKernelNameRef.retval__ref.val, args->hipKernelNameRef.retval, HIP_STRING_SIZE_MAX-1); \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemset3DAsync` function.
@@ -15252,11 +16455,12 @@ struct args_hipKernelNameRef_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemset3DAsync
 struct args_hipMemset3DAsync_t {
 	hipPitchedPtr pitchedDevPtr;
 	int value;
 	hipExtent extent;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -15264,8 +16468,10 @@ struct args_hipMemset3DAsync_t {
 	activity->hip_args.hipMemset3DAsync.pitchedDevPtr = (hipPitchedPtr) pitchedDevPtr; \
 	activity->hip_args.hipMemset3DAsync.value = (int) value; \
 	activity->hip_args.hipMemset3DAsync.extent = (hipExtent) extent; \
-	activity->hip_args.hipMemset3DAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemset3DAsync.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipEventRecord` function.
@@ -15282,16 +16488,19 @@ struct args_hipMemset3DAsync_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipEventRecord
 struct args_hipEventRecord_t {
-	struct ihipEvent_t * event;
-	struct ihipStream_t * stream;
+	hipEvent_t event;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipEventRecord(activity) { \
-	activity->hip_args.hipEventRecord.event = (struct ihipEvent_t *) event; \
-	activity->hip_args.hipEventRecord.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipEventRecord.event = (hipEvent_t) event; \
+	activity->hip_args.hipEventRecord.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMipmappedArrayDestroy` function.
@@ -15307,6 +16516,7 @@ struct args_hipEventRecord_t {
  *			hipMipmappedArray_t hMipmappedArray (struct hipMipmappedArray *)
  *	)
  */
+#if HAVE_hipMipmappedArrayDestroy
 struct args_hipMipmappedArrayDestroy_t {
 	struct hipMipmappedArray * hMipmappedArray;
 	struct {
@@ -15325,6 +16535,8 @@ struct args_hipMipmappedArrayDestroy_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemsetAsync_spt` function.
  *
@@ -15342,11 +16554,12 @@ struct args_hipMipmappedArrayDestroy_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemsetAsync_spt
 struct args_hipMemsetAsync_spt_t {
 	void * dst;
 	int value;
 	size_t sizeBytes;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -15354,8 +16567,10 @@ struct args_hipMemsetAsync_spt_t {
 	activity->hip_args.hipMemsetAsync_spt.dst = (void *) dst; \
 	activity->hip_args.hipMemsetAsync_spt.value = (int) value; \
 	activity->hip_args.hipMemsetAsync_spt.sizeBytes = (size_t) sizeBytes; \
-	activity->hip_args.hipMemsetAsync_spt.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemsetAsync_spt.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDevicePrimaryCtxSetFlags` function.
@@ -15372,6 +16587,7 @@ struct args_hipMemsetAsync_spt_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipDevicePrimaryCtxSetFlags
 struct args_hipDevicePrimaryCtxSetFlags_t {
 	hipDevice_t dev;
 	unsigned int flags;
@@ -15382,6 +16598,8 @@ struct args_hipDevicePrimaryCtxSetFlags_t {
 	activity->hip_args.hipDevicePrimaryCtxSetFlags.dev = (hipDevice_t) dev; \
 	activity->hip_args.hipDevicePrimaryCtxSetFlags.flags = (unsigned int) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipPeekAtLastError` function.
@@ -15396,9 +16614,12 @@ struct args_hipDevicePrimaryCtxSetFlags_t {
  *	hipPeekAtLastError (
  *	)
  */
+#if HAVE_hipPeekAtLastError
 struct args_hipPeekAtLastError_t {
 	hipError_t retval;
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceGetGraphMemAttribute` function.
@@ -15416,6 +16637,7 @@ struct args_hipPeekAtLastError_t {
  *			void * value (void *)
  *	)
  */
+#if HAVE_hipDeviceGetGraphMemAttribute
 struct args_hipDeviceGetGraphMemAttribute_t {
 	int device;
 	hipGraphMemAttributeType attr;
@@ -15428,6 +16650,8 @@ struct args_hipDeviceGetGraphMemAttribute_t {
 	activity->hip_args.hipDeviceGetGraphMemAttribute.attr = (hipGraphMemAttributeType) attr; \
 	activity->hip_args.hipDeviceGetGraphMemAttribute.value = (void *) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDrvGetErrorName` function.
@@ -15444,6 +16668,7 @@ struct args_hipDeviceGetGraphMemAttribute_t {
  *			const char ** errorString (const char **)
  *	)
  */
+#if HAVE_hipDrvGetErrorName
 struct args_hipDrvGetErrorName_t {
 	hipError_t hipError;
 	char ** errorString;
@@ -15468,6 +16693,8 @@ struct args_hipDrvGetErrorName_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy_spt` function.
  *
@@ -15485,6 +16712,7 @@ struct args_hipDrvGetErrorName_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpy_spt
 struct args_hipMemcpy_spt_t {
 	void * dst;
 	void * src;
@@ -15500,6 +16728,8 @@ struct args_hipMemcpy_spt_t {
 	activity->hip_args.hipMemcpy_spt.kind = (hipMemcpyKind) kind; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipCtxSetSharedMemConfig` function.
  *
@@ -15514,6 +16744,7 @@ struct args_hipMemcpy_spt_t {
  *			hipSharedMemConfig config (enum hipSharedMemConfig)
  *	)
  */
+#if HAVE_hipCtxSetSharedMemConfig
 struct args_hipCtxSetSharedMemConfig_t {
 	hipSharedMemConfig config;
 	hipError_t retval;
@@ -15522,6 +16753,8 @@ struct args_hipCtxSetSharedMemConfig_t {
 #define GET_ARGS_VALUE_hipCtxSetSharedMemConfig(activity) { \
 	activity->hip_args.hipCtxSetSharedMemConfig.config = (hipSharedMemConfig) config; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipCreateSurfaceObject` function.
@@ -15538,8 +16771,9 @@ struct args_hipCtxSetSharedMemConfig_t {
  *			const hipResourceDesc * pResDesc (const struct hipResourceDesc *)
  *	)
  */
+#if HAVE_hipCreateSurfaceObject
 struct args_hipCreateSurfaceObject_t {
-	struct __hip_surface ** pSurfObject;
+	hipSurfaceObject_t * pSurfObject;
 	struct {
 		void* ptr1;
 	} pSurfObject__ref;
@@ -15551,7 +16785,7 @@ struct args_hipCreateSurfaceObject_t {
 };
 
 #define GET_ARGS_VALUE_hipCreateSurfaceObject(activity) { \
-	activity->hip_args.hipCreateSurfaceObject.pSurfObject = (struct __hip_surface **) pSurfObject; \
+	activity->hip_args.hipCreateSurfaceObject.pSurfObject = (hipSurfaceObject_t *) pSurfObject; \
 	activity->hip_args.hipCreateSurfaceObject.pResDesc = (hipResourceDesc *) pResDesc; \
 };
 
@@ -15563,6 +16797,8 @@ struct args_hipCreateSurfaceObject_t {
 		args->hipCreateSurfaceObject.pResDesc__ref.val = *args->hipCreateSurfaceObject.pResDesc; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGetMipmappedArrayLevel` function.
@@ -15580,8 +16816,9 @@ struct args_hipCreateSurfaceObject_t {
  *			unsigned int level (unsigned int)
  *	)
  */
+#if HAVE_hipGetMipmappedArrayLevel
 struct args_hipGetMipmappedArrayLevel_t {
-	struct hipArray ** levelArray;
+	hipArray_t * levelArray;
 	struct {
 		void* ptr1;
 	} levelArray__ref;
@@ -15594,7 +16831,7 @@ struct args_hipGetMipmappedArrayLevel_t {
 };
 
 #define GET_ARGS_VALUE_hipGetMipmappedArrayLevel(activity) { \
-	activity->hip_args.hipGetMipmappedArrayLevel.levelArray = (struct hipArray **) levelArray; \
+	activity->hip_args.hipGetMipmappedArrayLevel.levelArray = (hipArray_t *) levelArray; \
 	activity->hip_args.hipGetMipmappedArrayLevel.mipmappedArray = (struct hipMipmappedArray *) mipmappedArray; \
 	activity->hip_args.hipGetMipmappedArrayLevel.level = (unsigned int) level; \
 };
@@ -15607,6 +16844,8 @@ struct args_hipGetMipmappedArrayLevel_t {
 		args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val = *args->hipGetMipmappedArrayLevel.mipmappedArray; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphExecDestroy` function.
@@ -15622,14 +16861,17 @@ struct args_hipGetMipmappedArrayLevel_t {
  *			hipGraphExec_t graphExec (struct hipGraphExec *)
  *	)
  */
+#if HAVE_hipGraphExecDestroy
 struct args_hipGraphExecDestroy_t {
-	struct hipGraphExec * graphExec;
+	hipGraphExec_t graphExec;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphExecDestroy(activity) { \
-	activity->hip_args.hipGraphExecDestroy.graphExec = (struct hipGraphExec *) graphExec; \
+	activity->hip_args.hipGraphExecDestroy.graphExec = (hipGraphExec_t) graphExec; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemsetD32Async` function.
@@ -15648,11 +16890,12 @@ struct args_hipGraphExecDestroy_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemsetD32Async
 struct args_hipMemsetD32Async_t {
 	void * dst;
 	int value;
 	size_t count;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
@@ -15660,8 +16903,10 @@ struct args_hipMemsetD32Async_t {
 	activity->hip_args.hipMemsetD32Async.dst = (void *) dst; \
 	activity->hip_args.hipMemsetD32Async.value = (int) value; \
 	activity->hip_args.hipMemsetD32Async.count = (size_t) count; \
-	activity->hip_args.hipMemsetD32Async.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemsetD32Async.stream = (hipStream_t) stream; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipDeviceEnablePeerAccess` function.
@@ -15678,6 +16923,7 @@ struct args_hipMemsetD32Async_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipDeviceEnablePeerAccess
 struct args_hipDeviceEnablePeerAccess_t {
 	int peerDeviceId;
 	unsigned int flags;
@@ -15688,6 +16934,8 @@ struct args_hipDeviceEnablePeerAccess_t {
 	activity->hip_args.hipDeviceEnablePeerAccess.peerDeviceId = (int) peerDeviceId; \
 	activity->hip_args.hipDeviceEnablePeerAccess.flags = (unsigned int) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipArray3DCreate` function.
@@ -15704,8 +16952,9 @@ struct args_hipDeviceEnablePeerAccess_t {
  *			const HIP_ARRAY3D_DESCRIPTOR * pAllocateArray (const struct HIP_ARRAY3D_DESCRIPTOR *)
  *	)
  */
+#if HAVE_hipArray3DCreate
 struct args_hipArray3DCreate_t {
-	struct hipArray ** array;
+	hipArray_t * array;
 	struct {
 		void* ptr1;
 	} array__ref;
@@ -15717,7 +16966,7 @@ struct args_hipArray3DCreate_t {
 };
 
 #define GET_ARGS_VALUE_hipArray3DCreate(activity) { \
-	activity->hip_args.hipArray3DCreate.array = (struct hipArray **) array; \
+	activity->hip_args.hipArray3DCreate.array = (hipArray_t *) array; \
 	activity->hip_args.hipArray3DCreate.pAllocateArray = (HIP_ARRAY3D_DESCRIPTOR *) pAllocateArray; \
 };
 
@@ -15729,6 +16978,8 @@ struct args_hipArray3DCreate_t {
 		args->hipArray3DCreate.pAllocateArray__ref.val = *args->hipArray3DCreate.pAllocateArray; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipIpcOpenMemHandle` function.
@@ -15746,6 +16997,7 @@ struct args_hipArray3DCreate_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipIpcOpenMemHandle
 struct args_hipIpcOpenMemHandle_t {
 	void ** devPtr;
 	struct {
@@ -15768,6 +17020,8 @@ struct args_hipIpcOpenMemHandle_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemPoolTrimTo` function.
  *
@@ -15783,16 +17037,19 @@ struct args_hipIpcOpenMemHandle_t {
  *			size_t min_bytes_to_hold (unsigned long)
  *	)
  */
+#if HAVE_hipMemPoolTrimTo
 struct args_hipMemPoolTrimTo_t {
-	struct ihipMemPoolHandle_t * mem_pool;
+	hipMemPool_t mem_pool;
 	size_t min_bytes_to_hold;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemPoolTrimTo(activity) { \
-	activity->hip_args.hipMemPoolTrimTo.mem_pool = (struct ihipMemPoolHandle_t *) mem_pool; \
+	activity->hip_args.hipMemPoolTrimTo.mem_pool = (hipMemPool_t) mem_pool; \
 	activity->hip_args.hipMemPoolTrimTo.min_bytes_to_hold = (size_t) min_bytes_to_hold; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy2D` function.
@@ -15814,6 +17071,7 @@ struct args_hipMemPoolTrimTo_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpy2D
 struct args_hipMemcpy2D_t {
 	void * dst;
 	size_t dpitch;
@@ -15835,6 +17093,8 @@ struct args_hipMemcpy2D_t {
 	activity->hip_args.hipMemcpy2D.kind = (hipMemcpyKind) kind; \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipFuncGetAttribute` function.
  *
@@ -15851,20 +17111,21 @@ struct args_hipMemcpy2D_t {
  *			hipFunction_t hfunc (struct ihipModuleSymbol_t *)
  *	)
  */
+#if HAVE_hipFuncGetAttribute
 struct args_hipFuncGetAttribute_t {
 	int * value;
 	struct {
 		int val;
 	} value__ref;
 	hipFunction_attribute attrib;
-	struct ihipModuleSymbol_t * hfunc;
+	hipFunction_t hfunc;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipFuncGetAttribute(activity) { \
 	activity->hip_args.hipFuncGetAttribute.value = (int *) value; \
 	activity->hip_args.hipFuncGetAttribute.attrib = (hipFunction_attribute) attrib; \
-	activity->hip_args.hipFuncGetAttribute.hfunc = (struct ihipModuleSymbol_t *) hfunc; \
+	activity->hip_args.hipFuncGetAttribute.hfunc = (hipFunction_t) hfunc; \
 };
 
 #define GET_PTRS_VALUE_hipFuncGetAttribute(args) { \
@@ -15872,6 +17133,8 @@ struct args_hipFuncGetAttribute_t {
 		args->hipFuncGetAttribute.value__ref.val = *args->hipFuncGetAttribute.value; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipBindTextureToMipmappedArray` function.
@@ -15889,6 +17152,7 @@ struct args_hipFuncGetAttribute_t {
  *			const hipChannelFormatDesc * desc (const struct hipChannelFormatDesc *)
  *	)
  */
+#if HAVE_hipBindTextureToMipmappedArray
 struct args_hipBindTextureToMipmappedArray_t {
 	textureReference * tex;
 	struct {
@@ -15923,6 +17187,8 @@ struct args_hipBindTextureToMipmappedArray_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphicsMapResources` function.
  *
@@ -15939,20 +17205,21 @@ struct args_hipBindTextureToMipmappedArray_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipGraphicsMapResources
 struct args_hipGraphicsMapResources_t {
 	int count;
-	struct _hipGraphicsResource** resources;
+	hipGraphicsResource_t * resources;
 	struct {
 		void* ptr1;
 	} resources__ref;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGraphicsMapResources(activity) { \
 	activity->hip_args.hipGraphicsMapResources.count = (int) count; \
-	activity->hip_args.hipGraphicsMapResources.resources = (struct _hipGraphicsResource**) resources; \
-	activity->hip_args.hipGraphicsMapResources.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipGraphicsMapResources.resources = (hipGraphicsResource_t *) resources; \
+	activity->hip_args.hipGraphicsMapResources.stream = (hipStream_t) stream; \
 };
 
 #define GET_PTRS_VALUE_hipGraphicsMapResources(args) { \
@@ -15960,6 +17227,8 @@ struct args_hipGraphicsMapResources_t {
 		args->hipGraphicsMapResources.resources__ref.ptr1 = *args->hipGraphicsMapResources.resources; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipArrayCreate` function.
@@ -15976,8 +17245,9 @@ struct args_hipGraphicsMapResources_t {
  *			const HIP_ARRAY_DESCRIPTOR * pAllocateArray (const struct HIP_ARRAY_DESCRIPTOR *)
  *	)
  */
+#if HAVE_hipArrayCreate
 struct args_hipArrayCreate_t {
-	struct hipArray ** pHandle;
+	hipArray_t * pHandle;
 	struct {
 		void* ptr1;
 	} pHandle__ref;
@@ -15989,7 +17259,7 @@ struct args_hipArrayCreate_t {
 };
 
 #define GET_ARGS_VALUE_hipArrayCreate(activity) { \
-	activity->hip_args.hipArrayCreate.pHandle = (struct hipArray **) pHandle; \
+	activity->hip_args.hipArrayCreate.pHandle = (hipArray_t *) pHandle; \
 	activity->hip_args.hipArrayCreate.pAllocateArray = (HIP_ARRAY_DESCRIPTOR *) pAllocateArray; \
 };
 
@@ -16001,6 +17271,8 @@ struct args_hipArrayCreate_t {
 		args->hipArrayCreate.pAllocateArray__ref.val = *args->hipArrayCreate.pAllocateArray; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefSetMaxAnisotropy` function.
@@ -16017,6 +17289,7 @@ struct args_hipArrayCreate_t {
  *			unsigned int maxAniso (unsigned int)
  *	)
  */
+#if HAVE_hipTexRefSetMaxAnisotropy
 struct args_hipTexRefSetMaxAnisotropy_t {
 	textureReference * texRef;
 	struct {
@@ -16037,6 +17310,8 @@ struct args_hipTexRefSetMaxAnisotropy_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphKernelNodeGetAttribute` function.
  *
@@ -16053,8 +17328,9 @@ struct args_hipTexRefSetMaxAnisotropy_t {
  *			hipLaunchAttributeValue * value (union hipLaunchAttributeValue*)
  *	)
  */
+#if HAVE_hipGraphKernelNodeGetAttribute
 struct args_hipGraphKernelNodeGetAttribute_t {
-	struct hipGraphNode * hNode;
+	hipGraphNode_t hNode;
 	hipLaunchAttributeID attr;
 	hipLaunchAttributeValue * value;
 	struct {
@@ -16064,7 +17340,7 @@ struct args_hipGraphKernelNodeGetAttribute_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphKernelNodeGetAttribute(activity) { \
-	activity->hip_args.hipGraphKernelNodeGetAttribute.hNode = (struct hipGraphNode *) hNode; \
+	activity->hip_args.hipGraphKernelNodeGetAttribute.hNode = (hipGraphNode_t) hNode; \
 	activity->hip_args.hipGraphKernelNodeGetAttribute.attr = (hipLaunchAttributeID) attr; \
 	activity->hip_args.hipGraphKernelNodeGetAttribute.value = (hipLaunchAttributeValue *) value; \
 };
@@ -16074,6 +17350,8 @@ struct args_hipGraphKernelNodeGetAttribute_t {
 		args->hipGraphKernelNodeGetAttribute.value__ref.val = *args->hipGraphKernelNodeGetAttribute.value; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipExtLaunchKernel` function.
@@ -16097,6 +17375,7 @@ struct args_hipGraphKernelNodeGetAttribute_t {
  *			int flags (int)
  *	)
  */
+#if HAVE_hipExtLaunchKernel
 struct args_hipExtLaunchKernel_t {
 	void * function_address;
 	dim3 numBlocks;
@@ -16106,9 +17385,9 @@ struct args_hipExtLaunchKernel_t {
 		void* ptr1;
 	} args__ref;
 	size_t sharedMemBytes;
-	struct ihipStream_t * stream;
-	struct ihipEvent_t * startEvent;
-	struct ihipEvent_t * stopEvent;
+	hipStream_t stream;
+	hipEvent_t startEvent;
+	hipEvent_t stopEvent;
 	int flags;
 	hipError_t retval;
 };
@@ -16119,9 +17398,9 @@ struct args_hipExtLaunchKernel_t {
 	activity->hip_args.hipExtLaunchKernel.dimBlocks = (dim3) dimBlocks; \
 	activity->hip_args.hipExtLaunchKernel.args = (void **) args; \
 	activity->hip_args.hipExtLaunchKernel.sharedMemBytes = (size_t) sharedMemBytes; \
-	activity->hip_args.hipExtLaunchKernel.stream = (struct ihipStream_t *) stream; \
-	activity->hip_args.hipExtLaunchKernel.startEvent = (struct ihipEvent_t *) startEvent; \
-	activity->hip_args.hipExtLaunchKernel.stopEvent = (struct ihipEvent_t *) stopEvent; \
+	activity->hip_args.hipExtLaunchKernel.stream = (hipStream_t) stream; \
+	activity->hip_args.hipExtLaunchKernel.startEvent = (hipEvent_t) startEvent; \
+	activity->hip_args.hipExtLaunchKernel.stopEvent = (hipEvent_t) stopEvent; \
 	activity->hip_args.hipExtLaunchKernel.flags = (int) flags; \
 };
 
@@ -16130,6 +17409,8 @@ struct args_hipExtLaunchKernel_t {
 		args->hipExtLaunchKernel.args__ref.ptr1 = *args->hipExtLaunchKernel.args; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefSetMipmapFilterMode` function.
@@ -16146,6 +17427,7 @@ struct args_hipExtLaunchKernel_t {
  *			enum hipTextureFilterMode fm (enum hipTextureFilterMode)
  *	)
  */
+#if HAVE_hipTexRefSetMipmapFilterMode
 struct args_hipTexRefSetMipmapFilterMode_t {
 	textureReference * texRef;
 	struct {
@@ -16166,6 +17448,8 @@ struct args_hipTexRefSetMipmapFilterMode_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemImportFromShareableHandle` function.
  *
@@ -16182,8 +17466,9 @@ struct args_hipTexRefSetMipmapFilterMode_t {
  *			hipMemAllocationHandleType shHandleType (enum hipMemAllocationHandleType)
  *	)
  */
+#if HAVE_hipMemImportFromShareableHandle
 struct args_hipMemImportFromShareableHandle_t {
-	struct ihipMemGenericAllocationHandle ** handle;
+	hipMemGenericAllocationHandle_t * handle;
 	struct {
 		void* ptr1;
 	} handle__ref;
@@ -16193,7 +17478,7 @@ struct args_hipMemImportFromShareableHandle_t {
 };
 
 #define GET_ARGS_VALUE_hipMemImportFromShareableHandle(activity) { \
-	activity->hip_args.hipMemImportFromShareableHandle.handle = (struct ihipMemGenericAllocationHandle **) handle; \
+	activity->hip_args.hipMemImportFromShareableHandle.handle = (hipMemGenericAllocationHandle_t *) handle; \
 	activity->hip_args.hipMemImportFromShareableHandle.osHandle = (void *) osHandle; \
 	activity->hip_args.hipMemImportFromShareableHandle.shHandleType = (hipMemAllocationHandleType) shHandleType; \
 };
@@ -16203,6 +17488,8 @@ struct args_hipMemImportFromShareableHandle_t {
 		args->hipMemImportFromShareableHandle.handle__ref.ptr1 = *args->hipMemImportFromShareableHandle.handle; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefSetFormat` function.
@@ -16220,6 +17507,7 @@ struct args_hipMemImportFromShareableHandle_t {
  *			int NumPackedComponents (int)
  *	)
  */
+#if HAVE_hipTexRefSetFormat
 struct args_hipTexRefSetFormat_t {
 	textureReference * texRef;
 	struct {
@@ -16242,6 +17530,8 @@ struct args_hipTexRefSetFormat_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `amd_dbgapi_get_git_hash` function.
  *
@@ -16255,6 +17545,7 @@ struct args_hipTexRefSetFormat_t {
  *	amd_dbgapi_get_git_hash (
  *	)
  */
+#if HAVE_amd_dbgapi_get_git_hash
 struct args_amd_dbgapi_get_git_hash_t {
 	char * retval;
 	struct {
@@ -16267,6 +17558,8 @@ struct args_amd_dbgapi_get_git_hash_t {
 		strncpy(args->amd_dbgapi_get_git_hash.retval__ref.val, args->amd_dbgapi_get_git_hash.retval, HIP_STRING_SIZE_MAX-1); \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipLaunchByPtr` function.
@@ -16282,6 +17575,7 @@ struct args_amd_dbgapi_get_git_hash_t {
  *			const void * func (const void *)
  *	)
  */
+#if HAVE_hipLaunchByPtr
 struct args_hipLaunchByPtr_t {
 	void * func;
 	hipError_t retval;
@@ -16290,6 +17584,8 @@ struct args_hipLaunchByPtr_t {
 #define GET_ARGS_VALUE_hipLaunchByPtr(activity) { \
 	activity->hip_args.hipLaunchByPtr.func = (void *) func; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `amd_dbgapi_get_build_id` function.
@@ -16304,9 +17600,12 @@ struct args_hipLaunchByPtr_t {
  *	amd_dbgapi_get_build_id (
  *	)
  */
+#if HAVE_amd_dbgapi_get_build_id
 struct args_amd_dbgapi_get_build_id_t {
 	size_t retval;
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpy3DAsync` function.
@@ -16323,18 +17622,19 @@ struct args_amd_dbgapi_get_build_id_t {
  *			hipStream_t stream (struct ihipStream_t *)
  *	)
  */
+#if HAVE_hipMemcpy3DAsync
 struct args_hipMemcpy3DAsync_t {
 	struct hipMemcpy3DParms * p;
 	struct {
 		struct hipMemcpy3DParms val;
 	} p__ref;
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipMemcpy3DAsync(activity) { \
 	activity->hip_args.hipMemcpy3DAsync.p = (struct hipMemcpy3DParms *) p; \
-	activity->hip_args.hipMemcpy3DAsync.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipMemcpy3DAsync.stream = (hipStream_t) stream; \
 };
 
 #define GET_PTRS_VALUE_hipMemcpy3DAsync(args) { \
@@ -16342,6 +17642,8 @@ struct args_hipMemcpy3DAsync_t {
 		args->hipMemcpy3DAsync.p__ref.val = *args->hipMemcpy3DAsync.p; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGetTextureObjectResourceViewDesc` function.
@@ -16358,18 +17660,19 @@ struct args_hipMemcpy3DAsync_t {
  *			hipTextureObject_t textureObject (struct __hip_texture *)
  *	)
  */
+#if HAVE_hipGetTextureObjectResourceViewDesc
 struct args_hipGetTextureObjectResourceViewDesc_t {
 	struct hipResourceViewDesc * pResViewDesc;
 	struct {
 		struct hipResourceViewDesc val;
 	} pResViewDesc__ref;
-	struct __hip_texture * textureObject;
+	hipTextureObject_t textureObject;
 	hipError_t retval;
 };
 
 #define GET_ARGS_VALUE_hipGetTextureObjectResourceViewDesc(activity) { \
 	activity->hip_args.hipGetTextureObjectResourceViewDesc.pResViewDesc = (struct hipResourceViewDesc *) pResViewDesc; \
-	activity->hip_args.hipGetTextureObjectResourceViewDesc.textureObject = (struct __hip_texture *) textureObject; \
+	activity->hip_args.hipGetTextureObjectResourceViewDesc.textureObject = (hipTextureObject_t) textureObject; \
 };
 
 #define GET_PTRS_VALUE_hipGetTextureObjectResourceViewDesc(args) { \
@@ -16377,6 +17680,8 @@ struct args_hipGetTextureObjectResourceViewDesc_t {
 		args->hipGetTextureObjectResourceViewDesc.pResViewDesc__ref.val = *args->hipGetTextureObjectResourceViewDesc.pResViewDesc; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefSetFilterMode` function.
@@ -16393,6 +17698,7 @@ struct args_hipGetTextureObjectResourceViewDesc_t {
  *			enum hipTextureFilterMode fm (enum hipTextureFilterMode)
  *	)
  */
+#if HAVE_hipTexRefSetFilterMode
 struct args_hipTexRefSetFilterMode_t {
 	textureReference * texRef;
 	struct {
@@ -16413,6 +17719,8 @@ struct args_hipTexRefSetFilterMode_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipDriverGetVersion` function.
  *
@@ -16427,6 +17735,7 @@ struct args_hipTexRefSetFilterMode_t {
  *			int * driverVersion (int *)
  *	)
  */
+#if HAVE_hipDriverGetVersion
 struct args_hipDriverGetVersion_t {
 	int * driverVersion;
 	struct {
@@ -16445,6 +17754,8 @@ struct args_hipDriverGetVersion_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipStreamWriteValue64` function.
  *
@@ -16462,8 +17773,9 @@ struct args_hipDriverGetVersion_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipStreamWriteValue64
 struct args_hipStreamWriteValue64_t {
-	struct ihipStream_t * stream;
+	hipStream_t stream;
 	void * ptr;
 	uint64_t value;
 	unsigned int flags;
@@ -16471,11 +17783,13 @@ struct args_hipStreamWriteValue64_t {
 };
 
 #define GET_ARGS_VALUE_hipStreamWriteValue64(activity) { \
-	activity->hip_args.hipStreamWriteValue64.stream = (struct ihipStream_t *) stream; \
+	activity->hip_args.hipStreamWriteValue64.stream = (hipStream_t) stream; \
 	activity->hip_args.hipStreamWriteValue64.ptr = (void *) ptr; \
 	activity->hip_args.hipStreamWriteValue64.value = (uint64_t) value; \
 	activity->hip_args.hipStreamWriteValue64.flags = (unsigned int) flags; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMallocMipmappedArray` function.
@@ -16495,6 +17809,7 @@ struct args_hipStreamWriteValue64_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipMallocMipmappedArray
 struct args_hipMallocMipmappedArray_t {
 	struct hipMipmappedArray ** mipmappedArray;
 	struct {
@@ -16531,6 +17846,8 @@ struct args_hipMallocMipmappedArray_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemset_spt` function.
  *
@@ -16547,6 +17864,7 @@ struct args_hipMallocMipmappedArray_t {
  *			size_t sizeBytes (unsigned long)
  *	)
  */
+#if HAVE_hipMemset_spt
 struct args_hipMemset_spt_t {
 	void * dst;
 	int value;
@@ -16559,6 +17877,8 @@ struct args_hipMemset_spt_t {
 	activity->hip_args.hipMemset_spt.value = (int) value; \
 	activity->hip_args.hipMemset_spt.sizeBytes = (size_t) sizeBytes; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefSetFlags` function.
@@ -16575,6 +17895,7 @@ struct args_hipMemset_spt_t {
  *			unsigned int Flags (unsigned int)
  *	)
  */
+#if HAVE_hipTexRefSetFlags
 struct args_hipTexRefSetFlags_t {
 	textureReference * texRef;
 	struct {
@@ -16595,6 +17916,8 @@ struct args_hipTexRefSetFlags_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemGetAddressRange` function.
  *
@@ -16611,6 +17934,7 @@ struct args_hipTexRefSetFlags_t {
  *			hipDeviceptr_t dptr (void *)
  *	)
  */
+#if HAVE_hipMemGetAddressRange
 struct args_hipMemGetAddressRange_t {
 	void ** pbase;
 	struct {
@@ -16639,6 +17963,8 @@ struct args_hipMemGetAddressRange_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipTexRefSetMipmapLevelClamp` function.
  *
@@ -16655,6 +17981,7 @@ struct args_hipMemGetAddressRange_t {
  *			float maxMipMapLevelClamp (float)
  *	)
  */
+#if HAVE_hipTexRefSetMipmapLevelClamp
 struct args_hipTexRefSetMipmapLevelClamp_t {
 	textureReference * texRef;
 	struct {
@@ -16677,6 +18004,8 @@ struct args_hipTexRefSetMipmapLevelClamp_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipGraphMemcpyNodeSetParams` function.
  *
@@ -16692,8 +18021,9 @@ struct args_hipTexRefSetMipmapLevelClamp_t {
  *			const hipMemcpy3DParms * pNodeParams (const struct hipMemcpy3DParms *)
  *	)
  */
+#if HAVE_hipGraphMemcpyNodeSetParams
 struct args_hipGraphMemcpyNodeSetParams_t {
-	struct hipGraphNode * node;
+	hipGraphNode_t node;
 	hipMemcpy3DParms * pNodeParams;
 	struct {
 		hipMemcpy3DParms val;
@@ -16702,7 +18032,7 @@ struct args_hipGraphMemcpyNodeSetParams_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphMemcpyNodeSetParams(activity) { \
-	activity->hip_args.hipGraphMemcpyNodeSetParams.node = (struct hipGraphNode *) node; \
+	activity->hip_args.hipGraphMemcpyNodeSetParams.node = (hipGraphNode_t) node; \
 	activity->hip_args.hipGraphMemcpyNodeSetParams.pNodeParams = (hipMemcpy3DParms *) pNodeParams; \
 };
 
@@ -16711,6 +18041,8 @@ struct args_hipGraphMemcpyNodeSetParams_t {
 		args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val = *args->hipGraphMemcpyNodeSetParams.pNodeParams; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipGraphGetEdges` function.
@@ -16729,13 +18061,14 @@ struct args_hipGraphMemcpyNodeSetParams_t {
  *			size_t * numEdges (unsigned long*)
  *	)
  */
+#if HAVE_hipGraphGetEdges
 struct args_hipGraphGetEdges_t {
-	struct ihipGraph * graph;
-	struct hipGraphNode ** from;
+	hipGraph_t graph;
+	hipGraphNode_t * from;
 	struct {
 		void* ptr1;
 	} from__ref;
-	struct hipGraphNode ** to;
+	hipGraphNode_t * to;
 	struct {
 		void* ptr1;
 	} to__ref;
@@ -16747,9 +18080,9 @@ struct args_hipGraphGetEdges_t {
 };
 
 #define GET_ARGS_VALUE_hipGraphGetEdges(activity) { \
-	activity->hip_args.hipGraphGetEdges.graph = (struct ihipGraph *) graph; \
-	activity->hip_args.hipGraphGetEdges.from = (struct hipGraphNode **) from; \
-	activity->hip_args.hipGraphGetEdges.to = (struct hipGraphNode **) to; \
+	activity->hip_args.hipGraphGetEdges.graph = (hipGraph_t) graph; \
+	activity->hip_args.hipGraphGetEdges.from = (hipGraphNode_t *) from; \
+	activity->hip_args.hipGraphGetEdges.to = (hipGraphNode_t *) to; \
 	activity->hip_args.hipGraphGetEdges.numEdges = (size_t *) numEdges; \
 };
 
@@ -16764,6 +18097,8 @@ struct args_hipGraphGetEdges_t {
 		args->hipGraphGetEdges.numEdges__ref.val = *args->hipGraphGetEdges.numEdges; \
 	} \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipMemcpyToArray` function.
@@ -16784,8 +18119,9 @@ struct args_hipGraphGetEdges_t {
  *			hipMemcpyKind kind (enum hipMemcpyKind)
  *	)
  */
+#if HAVE_hipMemcpyToArray
 struct args_hipMemcpyToArray_t {
-	struct hipArray * dst;
+	hipArray_t dst;
 	size_t wOffset;
 	size_t hOffset;
 	void * src;
@@ -16795,13 +18131,15 @@ struct args_hipMemcpyToArray_t {
 };
 
 #define GET_ARGS_VALUE_hipMemcpyToArray(activity) { \
-	activity->hip_args.hipMemcpyToArray.dst = (struct hipArray *) dst; \
+	activity->hip_args.hipMemcpyToArray.dst = (hipArray_t) dst; \
 	activity->hip_args.hipMemcpyToArray.wOffset = (size_t) wOffset; \
 	activity->hip_args.hipMemcpyToArray.hOffset = (size_t) hOffset; \
 	activity->hip_args.hipMemcpyToArray.src = (void *) src; \
 	activity->hip_args.hipMemcpyToArray.count = (size_t) count; \
 	activity->hip_args.hipMemcpyToArray.kind = (hipMemcpyKind) kind; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipExtMallocWithFlags` function.
@@ -16819,6 +18157,7 @@ struct args_hipMemcpyToArray_t {
  *			unsigned int flags (unsigned int)
  *	)
  */
+#if HAVE_hipExtMallocWithFlags
 struct args_hipExtMallocWithFlags_t {
 	void ** ptr;
 	struct {
@@ -16841,6 +18180,8 @@ struct args_hipExtMallocWithFlags_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipFuncSetAttribute` function.
  *
@@ -16857,6 +18198,7 @@ struct args_hipExtMallocWithFlags_t {
  *			int value (int)
  *	)
  */
+#if HAVE_hipFuncSetAttribute
 struct args_hipFuncSetAttribute_t {
 	void * func;
 	hipFuncAttribute attr;
@@ -16869,6 +18211,8 @@ struct args_hipFuncSetAttribute_t {
 	activity->hip_args.hipFuncSetAttribute.attr = (hipFuncAttribute) attr; \
 	activity->hip_args.hipFuncSetAttribute.value = (int) value; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipChooseDeviceR0600` function.
@@ -16885,6 +18229,7 @@ struct args_hipFuncSetAttribute_t {
  *			const hipDeviceProp_tR0600 * prop (const struct hipDeviceProp_tR0600 *)
  *	)
  */
+#if HAVE_hipChooseDeviceR0600
 struct args_hipChooseDeviceR0600_t {
 	int * device;
 	struct {
@@ -16911,6 +18256,8 @@ struct args_hipChooseDeviceR0600_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipTexRefSetMipmappedArray` function.
  *
@@ -16927,6 +18274,7 @@ struct args_hipChooseDeviceR0600_t {
  *			unsigned int Flags (unsigned int)
  *	)
  */
+#if HAVE_hipTexRefSetMipmappedArray
 struct args_hipTexRefSetMipmappedArray_t {
 	textureReference * texRef;
 	struct {
@@ -16955,6 +18303,8 @@ struct args_hipTexRefSetMipmappedArray_t {
 	} \
 };
 
+#endif
+
 /**
  * @brief Structure to hold the arguments for the `hipMemset` function.
  *
@@ -16971,6 +18321,7 @@ struct args_hipTexRefSetMipmappedArray_t {
  *			size_t sizeBytes (unsigned long)
  *	)
  */
+#if HAVE_hipMemset
 struct args_hipMemset_t {
 	void * dst;
 	int value;
@@ -16983,6 +18334,8 @@ struct args_hipMemset_t {
 	activity->hip_args.hipMemset.value = (int) value; \
 	activity->hip_args.hipMemset.sizeBytes = (size_t) sizeBytes; \
 };
+
+#endif
 
 /**
  * @brief Structure to hold the arguments for the `hipTexRefGetMipmapLevelClamp` function.
@@ -17000,6 +18353,7 @@ struct args_hipMemset_t {
  *			const textureReference * texRef (const struct textureReference *)
  *	)
  */
+#if HAVE_hipTexRefGetMipmapLevelClamp
 struct args_hipTexRefGetMipmapLevelClamp_t {
 	float * pminMipmapLevelClamp;
 	struct {
@@ -17034,6 +18388,8 @@ struct args_hipTexRefGetMipmapLevelClamp_t {
 	} \
 };
 
+#endif
+
 
 
 /**
@@ -17064,820 +18420,1360 @@ static inline void get_hip_pointed_args_for(hip_api_id_t id, hip_api_args_t* arg
 {
     if (!is_enter) {
         switch(id) {
+			#if HAVE_hipMemPtrGetInfo
 			case HIP_API_ID_hipMemPtrGetInfo : 
 				GET_PTRS_VALUE_hipMemPtrGetInfo(args);
 				return;
+			#endif
+			#if HAVE_hipDevicePrimaryCtxGetState
 			case HIP_API_ID_hipDevicePrimaryCtxGetState : 
 				GET_PTRS_VALUE_hipDevicePrimaryCtxGetState(args);
 				return;
+			#endif
+			#if HAVE_hipMemPoolGetAccess
 			case HIP_API_ID_hipMemPoolGetAccess : 
 				GET_PTRS_VALUE_hipMemPoolGetAccess(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefGetMipMappedArray
 			case HIP_API_ID_hipTexRefGetMipMappedArray : 
 				GET_PTRS_VALUE_hipTexRefGetMipMappedArray(args);
 				return;
+			#endif
+			#if HAVE_hipMalloc3D
 			case HIP_API_ID_hipMalloc3D : 
 				GET_PTRS_VALUE_hipMalloc3D(args);
 				return;
+			#endif
+			#if HAVE_hipMallocArray
 			case HIP_API_ID_hipMallocArray : 
 				GET_PTRS_VALUE_hipMallocArray(args);
 				return;
+			#endif
+			#if HAVE_hipGraphEventWaitNodeGetEvent
 			case HIP_API_ID_hipGraphEventWaitNodeGetEvent : 
 				GET_PTRS_VALUE_hipGraphEventWaitNodeGetEvent(args);
 				return;
+			#endif
+			#if HAVE_hipDrvMemcpy3D
 			case HIP_API_ID_hipDrvMemcpy3D : 
 				GET_PTRS_VALUE_hipDrvMemcpy3D(args);
 				return;
+			#endif
+			#if HAVE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
 			case HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags : 
 				GET_PTRS_VALUE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(args);
 				return;
+			#endif
+			#if HAVE_hipHostMalloc
 			case HIP_API_ID_hipHostMalloc : 
 				GET_PTRS_VALUE_hipHostMalloc(args);
 				return;
+			#endif
+			#if HAVE_hipModuleGetTexRef
 			case HIP_API_ID_hipModuleGetTexRef : 
 				GET_PTRS_VALUE_hipModuleGetTexRef(args);
 				return;
+			#endif
+			#if HAVE_hipIpcGetMemHandle
 			case HIP_API_ID_hipIpcGetMemHandle : 
 				GET_PTRS_VALUE_hipIpcGetMemHandle(args);
 				return;
+			#endif
+			#if HAVE_hipModuleLoad
 			case HIP_API_ID_hipModuleLoad : 
 				GET_PTRS_VALUE_hipModuleLoad(args);
 				return;
+			#endif
+			#if HAVE_hipWaitExternalSemaphoresAsync
 			case HIP_API_ID_hipWaitExternalSemaphoresAsync : 
 				GET_PTRS_VALUE_hipWaitExternalSemaphoresAsync(args);
 				return;
+			#endif
+			#if HAVE_hipGraphKernelNodeGetParams
 			case HIP_API_ID_hipGraphKernelNodeGetParams : 
 				GET_PTRS_VALUE_hipGraphKernelNodeGetParams(args);
 				return;
+			#endif
+			#if HAVE_hipHostAlloc
 			case HIP_API_ID_hipHostAlloc : 
 				GET_PTRS_VALUE_hipHostAlloc(args);
 				return;
+			#endif
+			#if HAVE_hipModuleOccupancyMaxPotentialBlockSizeWithFlags
 			case HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSizeWithFlags : 
 				GET_PTRS_VALUE_hipModuleOccupancyMaxPotentialBlockSizeWithFlags(args);
 				return;
+			#endif
+			#if HAVE_hipGraphNodeGetDependentNodes
 			case HIP_API_ID_hipGraphNodeGetDependentNodes : 
 				GET_PTRS_VALUE_hipGraphNodeGetDependentNodes(args);
 				return;
+			#endif
+			#if HAVE_hipExtStreamGetCUMask
 			case HIP_API_ID_hipExtStreamGetCUMask : 
 				GET_PTRS_VALUE_hipExtStreamGetCUMask(args);
 				return;
+			#endif
+			#if HAVE_hipLaunchKernel
 			case HIP_API_ID_hipLaunchKernel : 
 				GET_PTRS_VALUE_hipLaunchKernel(args);
 				return;
+			#endif
+			#if HAVE_hipGetErrorString
 			case HIP_API_ID_hipGetErrorString : 
 				GET_PTRS_RET_VALUE_hipGetErrorString(args);
 				return;
+			#endif
+			#if HAVE_hipModuleLoadDataEx
 			case HIP_API_ID_hipModuleLoadDataEx : 
 				GET_PTRS_VALUE_hipModuleLoadDataEx(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefGetFilterMode
 			case HIP_API_ID_hipTexRefGetFilterMode : 
 				GET_PTRS_VALUE_hipTexRefGetFilterMode(args);
 				return;
+			#endif
+			#if HAVE_hipGraphInstantiateWithParams
 			case HIP_API_ID_hipGraphInstantiateWithParams : 
 				GET_PTRS_VALUE_hipGraphInstantiateWithParams(args);
 				return;
+			#endif
+			#if HAVE_hipGraphicsUnmapResources
 			case HIP_API_ID_hipGraphicsUnmapResources : 
 				GET_PTRS_VALUE_hipGraphicsUnmapResources(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefGetMipmapLevelBias
 			case HIP_API_ID_hipTexRefGetMipmapLevelBias : 
 				GET_PTRS_VALUE_hipTexRefGetMipmapLevelBias(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddExternalSemaphoresSignalNode
 			case HIP_API_ID_hipGraphAddExternalSemaphoresSignalNode : 
 				GET_PTRS_VALUE_hipGraphAddExternalSemaphoresSignalNode(args);
 				return;
+			#endif
+			#if HAVE_hipMemMapArrayAsync
 			case HIP_API_ID_hipMemMapArrayAsync : 
 				GET_PTRS_VALUE_hipMemMapArrayAsync(args);
 				return;
+			#endif
+			#if HAVE_hipGraphKernelNodeSetAttribute
 			case HIP_API_ID_hipGraphKernelNodeSetAttribute : 
 				GET_PTRS_VALUE_hipGraphKernelNodeSetAttribute(args);
 				return;
+			#endif
+			#if HAVE_hipDrvMemcpy2DUnaligned
 			case HIP_API_ID_hipDrvMemcpy2DUnaligned : 
 				GET_PTRS_VALUE_hipDrvMemcpy2DUnaligned(args);
 				return;
+			#endif
+			#if HAVE_hipGraphRemoveDependencies
 			case HIP_API_ID_hipGraphRemoveDependencies : 
 				GET_PTRS_VALUE_hipGraphRemoveDependencies(args);
 				return;
+			#endif
+			#if HAVE_hipGraphCreate
 			case HIP_API_ID_hipGraphCreate : 
 				GET_PTRS_VALUE_hipGraphCreate(args);
 				return;
+			#endif
+			#if HAVE_hipExtLaunchMultiKernelMultiDevice
 			case HIP_API_ID_hipExtLaunchMultiKernelMultiDevice : 
 				GET_PTRS_VALUE_hipExtLaunchMultiKernelMultiDevice(args);
 				return;
+			#endif
+			#if HAVE_hipGetDeviceCount
 			case HIP_API_ID_hipGetDeviceCount : 
 				GET_PTRS_VALUE_hipGetDeviceCount(args);
 				return;
+			#endif
+			#if HAVE_hipTexObjectGetResourceDesc
 			case HIP_API_ID_hipTexObjectGetResourceDesc : 
 				GET_PTRS_VALUE_hipTexObjectGetResourceDesc(args);
 				return;
+			#endif
+			#if HAVE_hipThreadExchangeStreamCaptureMode
 			case HIP_API_ID_hipThreadExchangeStreamCaptureMode : 
 				GET_PTRS_VALUE_hipThreadExchangeStreamCaptureMode(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceGetP2PAttribute
 			case HIP_API_ID_hipDeviceGetP2PAttribute : 
 				GET_PTRS_VALUE_hipDeviceGetP2PAttribute(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceGetByPCIBusId
 			case HIP_API_ID_hipDeviceGetByPCIBusId : 
 				GET_PTRS_VALUE_hipDeviceGetByPCIBusId(args);
 				return;
+			#endif
+			#if HAVE_hipExtGetLinkTypeAndHopCount
 			case HIP_API_ID_hipExtGetLinkTypeAndHopCount : 
 				GET_PTRS_VALUE_hipExtGetLinkTypeAndHopCount(args);
 				return;
+			#endif
+			#if HAVE_hipUnbindTexture
 			case HIP_API_ID_hipUnbindTexture : 
 				GET_PTRS_VALUE_hipUnbindTexture(args);
 				return;
+			#endif
+			#if HAVE_hipDrvMemcpy3DAsync
 			case HIP_API_ID_hipDrvMemcpy3DAsync : 
 				GET_PTRS_VALUE_hipDrvMemcpy3DAsync(args);
 				return;
+			#endif
+			#if HAVE_hipIpcGetEventHandle
 			case HIP_API_ID_hipIpcGetEventHandle : 
 				GET_PTRS_VALUE_hipIpcGetEventHandle(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceGetMemPool
 			case HIP_API_ID_hipDeviceGetMemPool : 
 				GET_PTRS_VALUE_hipDeviceGetMemPool(args);
 				return;
+			#endif
+			#if HAVE_hipGraphHostNodeSetParams
 			case HIP_API_ID_hipGraphHostNodeSetParams : 
 				GET_PTRS_VALUE_hipGraphHostNodeSetParams(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddEventWaitNode
 			case HIP_API_ID_hipGraphAddEventWaitNode : 
 				GET_PTRS_VALUE_hipGraphAddEventWaitNode(args);
 				return;
+			#endif
+			#if HAVE_hipArrayGetDescriptor
 			case HIP_API_ID_hipArrayGetDescriptor : 
 				GET_PTRS_VALUE_hipArrayGetDescriptor(args);
 				return;
+			#endif
+			#if HAVE_hipGraphExecUpdate
 			case HIP_API_ID_hipGraphExecUpdate : 
 				GET_PTRS_VALUE_hipGraphExecUpdate(args);
 				return;
+			#endif
+			#if HAVE_hipMemGetAllocationPropertiesFromHandle
 			case HIP_API_ID_hipMemGetAllocationPropertiesFromHandle : 
 				GET_PTRS_VALUE_hipMemGetAllocationPropertiesFromHandle(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddExternalSemaphoresWaitNode
 			case HIP_API_ID_hipGraphAddExternalSemaphoresWaitNode : 
 				GET_PTRS_VALUE_hipGraphAddExternalSemaphoresWaitNode(args);
 				return;
+			#endif
+			#if HAVE_hipGetDevicePropertiesR0600
 			case HIP_API_ID_hipGetDevicePropertiesR0600 : 
 				GET_PTRS_VALUE_hipGetDevicePropertiesR0600(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceCanAccessPeer
 			case HIP_API_ID_hipDeviceCanAccessPeer : 
 				GET_PTRS_VALUE_hipDeviceCanAccessPeer(args);
 				return;
+			#endif
+			#if HAVE_hipMemSetAccess
 			case HIP_API_ID_hipMemSetAccess : 
 				GET_PTRS_VALUE_hipMemSetAccess(args);
 				return;
+			#endif
+			#if HAVE_hipApiName
 			case HIP_API_ID_hipApiName : 
 				GET_PTRS_RET_VALUE_hipApiName(args);
 				return;
+			#endif
+			#if HAVE_hipGraphicsSubResourceGetMappedArray
 			case HIP_API_ID_hipGraphicsSubResourceGetMappedArray : 
 				GET_PTRS_VALUE_hipGraphicsSubResourceGetMappedArray(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefGetBorderColor
 			case HIP_API_ID_hipTexRefGetBorderColor : 
 				GET_PTRS_VALUE_hipTexRefGetBorderColor(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddMemcpyNode1D
 			case HIP_API_ID_hipGraphAddMemcpyNode1D : 
 				GET_PTRS_VALUE_hipGraphAddMemcpyNode1D(args);
 				return;
+			#endif
+			#if HAVE_hipGraphGetNodes
 			case HIP_API_ID_hipGraphGetNodes : 
 				GET_PTRS_VALUE_hipGraphGetNodes(args);
 				return;
+			#endif
+			#if HAVE_hipStreamGetFlags_spt
 			case HIP_API_ID_hipStreamGetFlags_spt : 
 				GET_PTRS_VALUE_hipStreamGetFlags_spt(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefSetAddress2D
 			case HIP_API_ID_hipTexRefSetAddress2D : 
 				GET_PTRS_VALUE_hipTexRefSetAddress2D(args);
 				return;
+			#endif
+			#if HAVE_hipStreamGetPriority
 			case HIP_API_ID_hipStreamGetPriority : 
 				GET_PTRS_VALUE_hipStreamGetPriority(args);
 				return;
+			#endif
+			#if HAVE_hipStreamCreate
 			case HIP_API_ID_hipStreamCreate : 
 				GET_PTRS_VALUE_hipStreamCreate(args);
 				return;
+			#endif
+			#if HAVE_hipGraphNodeGetEnabled
 			case HIP_API_ID_hipGraphNodeGetEnabled : 
 				GET_PTRS_VALUE_hipGraphNodeGetEnabled(args);
 				return;
+			#endif
+			#if HAVE_hipGetTextureAlignmentOffset
 			case HIP_API_ID_hipGetTextureAlignmentOffset : 
 				GET_PTRS_VALUE_hipGetTextureAlignmentOffset(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddEventRecordNode
 			case HIP_API_ID_hipGraphAddEventRecordNode : 
 				GET_PTRS_VALUE_hipGraphAddEventRecordNode(args);
 				return;
+			#endif
+			#if HAVE_hipGraphNodeFindInClone
 			case HIP_API_ID_hipGraphNodeFindInClone : 
 				GET_PTRS_VALUE_hipGraphNodeFindInClone(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceGetCacheConfig
 			case HIP_API_ID_hipDeviceGetCacheConfig : 
 				GET_PTRS_VALUE_hipDeviceGetCacheConfig(args);
 				return;
+			#endif
+			#if HAVE_hipMemCreate
 			case HIP_API_ID_hipMemCreate : 
 				GET_PTRS_VALUE_hipMemCreate(args);
 				return;
+			#endif
+			#if HAVE_hipGraphExternalSemaphoresWaitNodeGetParams
 			case HIP_API_ID_hipGraphExternalSemaphoresWaitNodeGetParams : 
 				GET_PTRS_VALUE_hipGraphExternalSemaphoresWaitNodeGetParams(args);
 				return;
+			#endif
+			#if HAVE_hipStreamEndCapture
 			case HIP_API_ID_hipStreamEndCapture : 
 				GET_PTRS_VALUE_hipStreamEndCapture(args);
 				return;
+			#endif
+			#if HAVE_hipGraphExecHostNodeSetParams
 			case HIP_API_ID_hipGraphExecHostNodeSetParams : 
 				GET_PTRS_VALUE_hipGraphExecHostNodeSetParams(args);
 				return;
+			#endif
+			#if HAVE_hipMalloc
 			case HIP_API_ID_hipMalloc : 
 				GET_PTRS_VALUE_hipMalloc(args);
 				return;
+			#endif
+			#if HAVE_hipMalloc3DArray
 			case HIP_API_ID_hipMalloc3DArray : 
 				GET_PTRS_VALUE_hipMalloc3DArray(args);
 				return;
+			#endif
+			#if HAVE_hipGraphExecKernelNodeSetParams
 			case HIP_API_ID_hipGraphExecKernelNodeSetParams : 
 				GET_PTRS_VALUE_hipGraphExecKernelNodeSetParams(args);
 				return;
+			#endif
+			#if HAVE_hipGetTextureObjectResourceDesc
 			case HIP_API_ID_hipGetTextureObjectResourceDesc : 
 				GET_PTRS_VALUE_hipGetTextureObjectResourceDesc(args);
 				return;
+			#endif
+			#if HAVE_hipMemcpy3DAsync_spt
 			case HIP_API_ID_hipMemcpy3DAsync_spt : 
 				GET_PTRS_VALUE_hipMemcpy3DAsync_spt(args);
 				return;
+			#endif
+			#if HAVE_hipMemPoolImportPointer
 			case HIP_API_ID_hipMemPoolImportPointer : 
 				GET_PTRS_VALUE_hipMemPoolImportPointer(args);
 				return;
+			#endif
+			#if HAVE_hipFuncGetAttributes
 			case HIP_API_ID_hipFuncGetAttributes : 
 				GET_PTRS_VALUE_hipFuncGetAttributes(args);
 				return;
+			#endif
+			#if HAVE_hipCtxGetCurrent
 			case HIP_API_ID_hipCtxGetCurrent : 
 				GET_PTRS_VALUE_hipCtxGetCurrent(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddChildGraphNode
 			case HIP_API_ID_hipGraphAddChildGraphNode : 
 				GET_PTRS_VALUE_hipGraphAddChildGraphNode(args);
 				return;
+			#endif
+			#if HAVE_hipEventCreate
 			case HIP_API_ID_hipEventCreate : 
 				GET_PTRS_VALUE_hipEventCreate(args);
 				return;
+			#endif
+			#if HAVE_hipHostGetDevicePointer
 			case HIP_API_ID_hipHostGetDevicePointer : 
 				GET_PTRS_VALUE_hipHostGetDevicePointer(args);
 				return;
+			#endif
+			#if HAVE_hipBindTextureToArray
 			case HIP_API_ID_hipBindTextureToArray : 
 				GET_PTRS_VALUE_hipBindTextureToArray(args);
 				return;
+			#endif
+			#if HAVE_hipStreamEndCapture_spt
 			case HIP_API_ID_hipStreamEndCapture_spt : 
 				GET_PTRS_VALUE_hipStreamEndCapture_spt(args);
 				return;
+			#endif
+			#if HAVE_hipModuleOccupancyMaxPotentialBlockSize
 			case HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSize : 
 				GET_PTRS_VALUE_hipModuleOccupancyMaxPotentialBlockSize(args);
 				return;
+			#endif
+			#if HAVE_hipKernelNameRefByPtr
 			case HIP_API_ID_hipKernelNameRefByPtr : 
 				GET_PTRS_RET_VALUE_hipKernelNameRefByPtr(args);
 				return;
+			#endif
+			#if HAVE_hipGetDevice
 			case HIP_API_ID_hipGetDevice : 
 				GET_PTRS_VALUE_hipGetDevice(args);
 				return;
+			#endif
+			#if HAVE_hipMemcpy3D_spt
 			case HIP_API_ID_hipMemcpy3D_spt : 
 				GET_PTRS_VALUE_hipMemcpy3D_spt(args);
 				return;
+			#endif
+			#if HAVE_hipTexObjectGetTextureDesc
 			case HIP_API_ID_hipTexObjectGetTextureDesc : 
 				GET_PTRS_VALUE_hipTexObjectGetTextureDesc(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceGet
 			case HIP_API_ID_hipDeviceGet : 
 				GET_PTRS_VALUE_hipDeviceGet(args);
 				return;
+			#endif
+			#if HAVE_hipGraphExternalSemaphoresSignalNodeSetParams
 			case HIP_API_ID_hipGraphExternalSemaphoresSignalNodeSetParams : 
 				GET_PTRS_VALUE_hipGraphExternalSemaphoresSignalNodeSetParams(args);
 				return;
+			#endif
+			#if HAVE_hipStreamGetDevice
 			case HIP_API_ID_hipStreamGetDevice : 
 				GET_PTRS_VALUE_hipStreamGetDevice(args);
 				return;
+			#endif
+			#if HAVE_hipMemAllocPitch
 			case HIP_API_ID_hipMemAllocPitch : 
 				GET_PTRS_VALUE_hipMemAllocPitch(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddNode
 			case HIP_API_ID_hipGraphAddNode : 
 				GET_PTRS_VALUE_hipGraphAddNode(args);
 				return;
+			#endif
+			#if HAVE_hipRuntimeGetVersion
 			case HIP_API_ID_hipRuntimeGetVersion : 
 				GET_PTRS_VALUE_hipRuntimeGetVersion(args);
 				return;
+			#endif
+			#if HAVE_hipGraphChildGraphNodeGetGraph
 			case HIP_API_ID_hipGraphChildGraphNodeGetGraph : 
 				GET_PTRS_VALUE_hipGraphChildGraphNodeGetGraph(args);
 				return;
+			#endif
+			#if HAVE_hipGraphExecMemsetNodeSetParams
 			case HIP_API_ID_hipGraphExecMemsetNodeSetParams : 
 				GET_PTRS_VALUE_hipGraphExecMemsetNodeSetParams(args);
 				return;
+			#endif
+			#if HAVE_hipEventElapsedTime
 			case HIP_API_ID_hipEventElapsedTime : 
 				GET_PTRS_VALUE_hipEventElapsedTime(args);
 				return;
+			#endif
+			#if HAVE_hipStreamCreateWithFlags
 			case HIP_API_ID_hipStreamCreateWithFlags : 
 				GET_PTRS_VALUE_hipStreamCreateWithFlags(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefSetAddress
 			case HIP_API_ID_hipTexRefSetAddress : 
 				GET_PTRS_VALUE_hipTexRefSetAddress(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddKernelNode
 			case HIP_API_ID_hipGraphAddKernelNode : 
 				GET_PTRS_VALUE_hipGraphAddKernelNode(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceTotalMem
 			case HIP_API_ID_hipDeviceTotalMem : 
 				GET_PTRS_VALUE_hipDeviceTotalMem(args);
 				return;
+			#endif
+			#if HAVE_hipMemAllocHost
 			case HIP_API_ID_hipMemAllocHost : 
 				GET_PTRS_VALUE_hipMemAllocHost(args);
 				return;
+			#endif
+			#if HAVE_hipGraphHostNodeGetParams
 			case HIP_API_ID_hipGraphHostNodeGetParams : 
 				GET_PTRS_VALUE_hipGraphHostNodeGetParams(args);
 				return;
+			#endif
+			#if HAVE_hipCtxGetCacheConfig
 			case HIP_API_ID_hipCtxGetCacheConfig : 
 				GET_PTRS_VALUE_hipCtxGetCacheConfig(args);
 				return;
+			#endif
+			#if HAVE_hipDrvPointerGetAttributes
 			case HIP_API_ID_hipDrvPointerGetAttributes : 
 				GET_PTRS_VALUE_hipDrvPointerGetAttributes(args);
 				return;
+			#endif
+			#if HAVE_hipModuleLaunchCooperativeKernelMultiDevice
 			case HIP_API_ID_hipModuleLaunchCooperativeKernelMultiDevice : 
 				GET_PTRS_VALUE_hipModuleLaunchCooperativeKernelMultiDevice(args);
 				return;
+			#endif
+			#if HAVE_hipModuleGetGlobal
 			case HIP_API_ID_hipModuleGetGlobal : 
 				GET_PTRS_VALUE_hipModuleGetGlobal(args);
 				return;
+			#endif
+			#if HAVE_hipGraphEventRecordNodeGetEvent
 			case HIP_API_ID_hipGraphEventRecordNodeGetEvent : 
 				GET_PTRS_VALUE_hipGraphEventRecordNodeGetEvent(args);
 				return;
+			#endif
+			#if HAVE_hipGraphInstantiate
 			case HIP_API_ID_hipGraphInstantiate : 
 				GET_PTRS_VALUE_hipGraphInstantiate(args);
 				return;
+			#endif
+			#if HAVE_hipGraphMemAllocNodeGetParams
 			case HIP_API_ID_hipGraphMemAllocNodeGetParams : 
 				GET_PTRS_VALUE_hipGraphMemAllocNodeGetParams(args);
 				return;
+			#endif
+			#if HAVE_hipStreamGetCaptureInfo
 			case HIP_API_ID_hipStreamGetCaptureInfo : 
 				GET_PTRS_VALUE_hipStreamGetCaptureInfo(args);
 				return;
+			#endif
+			#if HAVE_hipCtxPopCurrent
 			case HIP_API_ID_hipCtxPopCurrent : 
 				GET_PTRS_VALUE_hipCtxPopCurrent(args);
 				return;
+			#endif
+			#if HAVE_hipPointerGetAttributes
 			case HIP_API_ID_hipPointerGetAttributes : 
 				GET_PTRS_VALUE_hipPointerGetAttributes(args);
 				return;
+			#endif
+			#if HAVE_hipMallocPitch
 			case HIP_API_ID_hipMallocPitch : 
 				GET_PTRS_VALUE_hipMallocPitch(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceComputeCapability
 			case HIP_API_ID_hipDeviceComputeCapability : 
 				GET_PTRS_VALUE_hipDeviceComputeCapability(args);
 				return;
+			#endif
+			#if HAVE_hipOccupancyMaxActiveBlocksPerMultiprocessor
 			case HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessor : 
 				GET_PTRS_VALUE_hipOccupancyMaxActiveBlocksPerMultiprocessor(args);
 				return;
+			#endif
+			#if HAVE_hipSignalExternalSemaphoresAsync
 			case HIP_API_ID_hipSignalExternalSemaphoresAsync : 
 				GET_PTRS_VALUE_hipSignalExternalSemaphoresAsync(args);
 				return;
+			#endif
+			#if HAVE_hipArray3DGetDescriptor
 			case HIP_API_ID_hipArray3DGetDescriptor : 
 				GET_PTRS_VALUE_hipArray3DGetDescriptor(args);
 				return;
+			#endif
+			#if HAVE___hipPopCallConfiguration
 			case HIP_API_ID___hipPopCallConfiguration : 
 				GET_PTRS_VALUE___hipPopCallConfiguration(args);
 				return;
+			#endif
+			#if HAVE_hipLaunchCooperativeKernelMultiDevice
 			case HIP_API_ID_hipLaunchCooperativeKernelMultiDevice : 
 				GET_PTRS_VALUE_hipLaunchCooperativeKernelMultiDevice(args);
 				return;
+			#endif
+			#if HAVE_hipGraphMemsetNodeSetParams
 			case HIP_API_ID_hipGraphMemsetNodeSetParams : 
 				GET_PTRS_VALUE_hipGraphMemsetNodeSetParams(args);
 				return;
+			#endif
+			#if HAVE_hipMemPoolSetAccess
 			case HIP_API_ID_hipMemPoolSetAccess : 
 				GET_PTRS_VALUE_hipMemPoolSetAccess(args);
 				return;
+			#endif
+			#if HAVE_hipExtStreamCreateWithCUMask
 			case HIP_API_ID_hipExtStreamCreateWithCUMask : 
 				GET_PTRS_VALUE_hipExtStreamCreateWithCUMask(args);
 				return;
+			#endif
+			#if HAVE_hipGetTextureObjectTextureDesc
 			case HIP_API_ID_hipGetTextureObjectTextureDesc : 
 				GET_PTRS_VALUE_hipGetTextureObjectTextureDesc(args);
 				return;
+			#endif
+			#if HAVE_hipModuleGetFunction
 			case HIP_API_ID_hipModuleGetFunction : 
 				GET_PTRS_VALUE_hipModuleGetFunction(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceGetLimit
 			case HIP_API_ID_hipDeviceGetLimit : 
 				GET_PTRS_VALUE_hipDeviceGetLimit(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefGetMaxAnisotropy
 			case HIP_API_ID_hipTexRefGetMaxAnisotropy : 
 				GET_PTRS_VALUE_hipTexRefGetMaxAnisotropy(args);
 				return;
+			#endif
+			#if HAVE_hipLaunchKernel_spt
 			case HIP_API_ID_hipLaunchKernel_spt : 
 				GET_PTRS_VALUE_hipLaunchKernel_spt(args);
 				return;
+			#endif
+			#if HAVE_hipStreamBeginCaptureToGraph
 			case HIP_API_ID_hipStreamBeginCaptureToGraph : 
 				GET_PTRS_VALUE_hipStreamBeginCaptureToGraph(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefGetFormat
 			case HIP_API_ID_hipTexRefGetFormat : 
 				GET_PTRS_VALUE_hipTexRefGetFormat(args);
 				return;
+			#endif
+			#if HAVE_hipDevicePrimaryCtxRetain
 			case HIP_API_ID_hipDevicePrimaryCtxRetain : 
 				GET_PTRS_VALUE_hipDevicePrimaryCtxRetain(args);
 				return;
+			#endif
+			#if HAVE_hipMallocManaged
 			case HIP_API_ID_hipMallocManaged : 
 				GET_PTRS_VALUE_hipMallocManaged(args);
 				return;
+			#endif
+			#if HAVE_hipStreamCreateWithPriority
 			case HIP_API_ID_hipStreamCreateWithPriority : 
 				GET_PTRS_VALUE_hipStreamCreateWithPriority(args);
 				return;
+			#endif
+			#if HAVE_hipStreamGetCaptureInfo_spt
 			case HIP_API_ID_hipStreamGetCaptureInfo_spt : 
 				GET_PTRS_VALUE_hipStreamGetCaptureInfo_spt(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddHostNode
 			case HIP_API_ID_hipGraphAddHostNode : 
 				GET_PTRS_VALUE_hipGraphAddHostNode(args);
 				return;
+			#endif
+			#if HAVE_hipLaunchCooperativeKernel
 			case HIP_API_ID_hipLaunchCooperativeKernel : 
 				GET_PTRS_VALUE_hipLaunchCooperativeKernel(args);
 				return;
+			#endif
+			#if HAVE_hipGetErrorName
 			case HIP_API_ID_hipGetErrorName : 
 				GET_PTRS_RET_VALUE_hipGetErrorName(args);
 				return;
+			#endif
+			#if HAVE_hipGraphMemsetNodeGetParams
 			case HIP_API_ID_hipGraphMemsetNodeGetParams : 
 				GET_PTRS_VALUE_hipGraphMemsetNodeGetParams(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefSetArray
 			case HIP_API_ID_hipTexRefSetArray : 
 				GET_PTRS_VALUE_hipTexRefSetArray(args);
 				return;
+			#endif
+			#if HAVE_hipMemcpyParam2DAsync
 			case HIP_API_ID_hipMemcpyParam2DAsync : 
 				GET_PTRS_VALUE_hipMemcpyParam2DAsync(args);
 				return;
+			#endif
+			#if HAVE_hipMemPoolExportPointer
 			case HIP_API_ID_hipMemPoolExportPointer : 
 				GET_PTRS_VALUE_hipMemPoolExportPointer(args);
 				return;
+			#endif
+			#if HAVE_hipMemGetAllocationGranularity
 			case HIP_API_ID_hipMemGetAllocationGranularity : 
 				GET_PTRS_VALUE_hipMemGetAllocationGranularity(args);
 				return;
+			#endif
+			#if HAVE_hipGraphClone
 			case HIP_API_ID_hipGraphClone : 
 				GET_PTRS_VALUE_hipGraphClone(args);
 				return;
+			#endif
+			#if HAVE_hipBindTexture2D
 			case HIP_API_ID_hipBindTexture2D : 
 				GET_PTRS_VALUE_hipBindTexture2D(args);
 				return;
+			#endif
+			#if HAVE_hipArrayGetInfo
 			case HIP_API_ID_hipArrayGetInfo : 
 				GET_PTRS_VALUE_hipArrayGetInfo(args);
 				return;
+			#endif
+			#if HAVE_hipGraphExternalSemaphoresSignalNodeGetParams
 			case HIP_API_ID_hipGraphExternalSemaphoresSignalNodeGetParams : 
 				GET_PTRS_VALUE_hipGraphExternalSemaphoresSignalNodeGetParams(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceGetStreamPriorityRange
 			case HIP_API_ID_hipDeviceGetStreamPriorityRange : 
 				GET_PTRS_VALUE_hipDeviceGetStreamPriorityRange(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceGetDefaultMemPool
 			case HIP_API_ID_hipDeviceGetDefaultMemPool : 
 				GET_PTRS_VALUE_hipDeviceGetDefaultMemPool(args);
 				return;
+			#endif
+			#if HAVE_hipCtxCreate
 			case HIP_API_ID_hipCtxCreate : 
 				GET_PTRS_VALUE_hipCtxCreate(args);
 				return;
+			#endif
+			#if HAVE_hipStreamIsCapturing
 			case HIP_API_ID_hipStreamIsCapturing : 
 				GET_PTRS_VALUE_hipStreamIsCapturing(args);
 				return;
+			#endif
+			#if HAVE_hipStreamUpdateCaptureDependencies
 			case HIP_API_ID_hipStreamUpdateCaptureDependencies : 
 				GET_PTRS_VALUE_hipStreamUpdateCaptureDependencies(args);
 				return;
+			#endif
+			#if HAVE_hipMemAddressReserve
 			case HIP_API_ID_hipMemAddressReserve : 
 				GET_PTRS_VALUE_hipMemAddressReserve(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddMemsetNode
 			case HIP_API_ID_hipGraphAddMemsetNode : 
 				GET_PTRS_VALUE_hipGraphAddMemsetNode(args);
 				return;
+			#endif
+			#if HAVE_hipGraphicsResourceGetMappedPointer
 			case HIP_API_ID_hipGraphicsResourceGetMappedPointer : 
 				GET_PTRS_VALUE_hipGraphicsResourceGetMappedPointer(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceGetUuid
 			case HIP_API_ID_hipDeviceGetUuid : 
 				GET_PTRS_VALUE_hipDeviceGetUuid(args);
 				return;
+			#endif
+			#if HAVE_hipModuleLaunchKernel
 			case HIP_API_ID_hipModuleLaunchKernel : 
 				GET_PTRS_VALUE_hipModuleLaunchKernel(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddEmptyNode
 			case HIP_API_ID_hipGraphAddEmptyNode : 
 				GET_PTRS_VALUE_hipGraphAddEmptyNode(args);
 				return;
+			#endif
+			#if HAVE_hipGraphInstantiateWithFlags
 			case HIP_API_ID_hipGraphInstantiateWithFlags : 
 				GET_PTRS_VALUE_hipGraphInstantiateWithFlags(args);
 				return;
+			#endif
+			#if HAVE_hipCtxGetApiVersion
 			case HIP_API_ID_hipCtxGetApiVersion : 
 				GET_PTRS_VALUE_hipCtxGetApiVersion(args);
 				return;
+			#endif
+			#if HAVE_hipBindTexture
 			case HIP_API_ID_hipBindTexture : 
 				GET_PTRS_VALUE_hipBindTexture(args);
 				return;
+			#endif
+			#if HAVE_hipGetDeviceFlags
 			case HIP_API_ID_hipGetDeviceFlags : 
 				GET_PTRS_VALUE_hipGetDeviceFlags(args);
 				return;
+			#endif
+			#if HAVE_hipMemRangeGetAttributes
 			case HIP_API_ID_hipMemRangeGetAttributes : 
 				GET_PTRS_VALUE_hipMemRangeGetAttributes(args);
 				return;
+			#endif
+			#if HAVE_hipIpcOpenEventHandle
 			case HIP_API_ID_hipIpcOpenEventHandle : 
 				GET_PTRS_VALUE_hipIpcOpenEventHandle(args);
 				return;
+			#endif
+			#if HAVE_hipMallocAsync
 			case HIP_API_ID_hipMallocAsync : 
 				GET_PTRS_VALUE_hipMallocAsync(args);
 				return;
+			#endif
+			#if HAVE_hipOccupancyMaxPotentialBlockSize
 			case HIP_API_ID_hipOccupancyMaxPotentialBlockSize : 
 				GET_PTRS_VALUE_hipOccupancyMaxPotentialBlockSize(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddMemcpyNodeToSymbol
 			case HIP_API_ID_hipGraphAddMemcpyNodeToSymbol : 
 				GET_PTRS_VALUE_hipGraphAddMemcpyNodeToSymbol(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceGetPCIBusId
 			case HIP_API_ID_hipDeviceGetPCIBusId : 
 				GET_PTRS_VALUE_hipDeviceGetPCIBusId(args);
 				return;
+			#endif
+			#if HAVE_hipGetChannelDesc
 			case HIP_API_ID_hipGetChannelDesc : 
 				GET_PTRS_VALUE_hipGetChannelDesc(args);
 				return;
+			#endif
+			#if HAVE_hipImportExternalMemory
 			case HIP_API_ID_hipImportExternalMemory : 
 				GET_PTRS_VALUE_hipImportExternalMemory(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefSetMipmapLevelBias
 			case HIP_API_ID_hipTexRefSetMipmapLevelBias : 
 				GET_PTRS_VALUE_hipTexRefSetMipmapLevelBias(args);
 				return;
+			#endif
+			#if HAVE_hipMemPoolImportFromShareableHandle
 			case HIP_API_ID_hipMemPoolImportFromShareableHandle : 
 				GET_PTRS_VALUE_hipMemPoolImportFromShareableHandle(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefGetMipmapFilterMode
 			case HIP_API_ID_hipTexRefGetMipmapFilterMode : 
 				GET_PTRS_VALUE_hipTexRefGetMipmapFilterMode(args);
 				return;
+			#endif
+			#if HAVE_hipGetProcAddress
 			case HIP_API_ID_hipGetProcAddress : 
 				GET_PTRS_VALUE_hipGetProcAddress(args);
 				return;
+			#endif
+			#if HAVE_hipCreateTextureObject
 			case HIP_API_ID_hipCreateTextureObject : 
 				GET_PTRS_VALUE_hipCreateTextureObject(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefGetFlags
 			case HIP_API_ID_hipTexRefGetFlags : 
 				GET_PTRS_VALUE_hipTexRefGetFlags(args);
 				return;
+			#endif
+			#if HAVE_hipDrvGraphAddMemcpyNode
 			case HIP_API_ID_hipDrvGraphAddMemcpyNode : 
 				GET_PTRS_VALUE_hipDrvGraphAddMemcpyNode(args);
 				return;
+			#endif
+			#if HAVE_hipGraphNodeGetDependencies
 			case HIP_API_ID_hipGraphNodeGetDependencies : 
 				GET_PTRS_VALUE_hipGraphNodeGetDependencies(args);
 				return;
+			#endif
+			#if HAVE_hipMemcpy3D
 			case HIP_API_ID_hipMemcpy3D : 
 				GET_PTRS_VALUE_hipMemcpy3D(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddMemcpyNodeFromSymbol
 			case HIP_API_ID_hipGraphAddMemcpyNodeFromSymbol : 
 				GET_PTRS_VALUE_hipGraphAddMemcpyNodeFromSymbol(args);
 				return;
+			#endif
+			#if HAVE_hipStreamGetPriority_spt
 			case HIP_API_ID_hipStreamGetPriority_spt : 
 				GET_PTRS_VALUE_hipStreamGetPriority_spt(args);
 				return;
+			#endif
+			#if HAVE_hipModuleLoadData
 			case HIP_API_ID_hipModuleLoadData : 
 				GET_PTRS_VALUE_hipModuleLoadData(args);
 				return;
+			#endif
+			#if HAVE_hipExternalMemoryGetMappedBuffer
 			case HIP_API_ID_hipExternalMemoryGetMappedBuffer : 
 				GET_PTRS_VALUE_hipExternalMemoryGetMappedBuffer(args);
 				return;
+			#endif
+			#if HAVE_hipLaunchCooperativeKernel_spt
 			case HIP_API_ID_hipLaunchCooperativeKernel_spt : 
 				GET_PTRS_VALUE_hipLaunchCooperativeKernel_spt(args);
 				return;
+			#endif
+			#if HAVE_hipModuleLaunchCooperativeKernel
 			case HIP_API_ID_hipModuleLaunchCooperativeKernel : 
 				GET_PTRS_VALUE_hipModuleLaunchCooperativeKernel(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceGetName
 			case HIP_API_ID_hipDeviceGetName : 
 				GET_PTRS_VALUE_hipDeviceGetName(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefSetAddressMode
 			case HIP_API_ID_hipTexRefSetAddressMode : 
 				GET_PTRS_VALUE_hipTexRefSetAddressMode(args);
 				return;
+			#endif
+			#if HAVE_hipGraphGetRootNodes
 			case HIP_API_ID_hipGraphGetRootNodes : 
 				GET_PTRS_VALUE_hipGraphGetRootNodes(args);
 				return;
+			#endif
+			#if HAVE_hipGraphExternalSemaphoresWaitNodeSetParams
 			case HIP_API_ID_hipGraphExternalSemaphoresWaitNodeSetParams : 
 				GET_PTRS_VALUE_hipGraphExternalSemaphoresWaitNodeSetParams(args);
 				return;
+			#endif
+			#if HAVE_hipGraphMemcpyNodeGetParams
 			case HIP_API_ID_hipGraphMemcpyNodeGetParams : 
 				GET_PTRS_VALUE_hipGraphMemcpyNodeGetParams(args);
 				return;
+			#endif
+			#if HAVE_hipSetValidDevices
 			case HIP_API_ID_hipSetValidDevices : 
 				GET_PTRS_VALUE_hipSetValidDevices(args);
 				return;
+			#endif
+			#if HAVE_hipGraphExecExternalSemaphoresWaitNodeSetParams
 			case HIP_API_ID_hipGraphExecExternalSemaphoresWaitNodeSetParams : 
 				GET_PTRS_VALUE_hipGraphExecExternalSemaphoresWaitNodeSetParams(args);
 				return;
+			#endif
+			#if HAVE_hipTexObjectGetResourceViewDesc
 			case HIP_API_ID_hipTexObjectGetResourceViewDesc : 
 				GET_PTRS_VALUE_hipTexObjectGetResourceViewDesc(args);
 				return;
+			#endif
+			#if HAVE_hipEventCreateWithFlags
 			case HIP_API_ID_hipEventCreateWithFlags : 
 				GET_PTRS_VALUE_hipEventCreateWithFlags(args);
 				return;
+			#endif
+			#if HAVE_hipMipmappedArrayCreate
 			case HIP_API_ID_hipMipmappedArrayCreate : 
 				GET_PTRS_VALUE_hipMipmappedArrayCreate(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddMemcpyNode
 			case HIP_API_ID_hipGraphAddMemcpyNode : 
 				GET_PTRS_VALUE_hipGraphAddMemcpyNode(args);
 				return;
+			#endif
+			#if HAVE_hipMallocFromPoolAsync
 			case HIP_API_ID_hipMallocFromPoolAsync : 
 				GET_PTRS_VALUE_hipMallocFromPoolAsync(args);
 				return;
+			#endif
+			#if HAVE_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
 			case HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags : 
 				GET_PTRS_VALUE_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(args);
 				return;
+			#endif
+			#if HAVE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor
 			case HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor : 
 				GET_PTRS_VALUE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor(args);
 				return;
+			#endif
+			#if HAVE_hipCtxGetFlags
 			case HIP_API_ID_hipCtxGetFlags : 
 				GET_PTRS_VALUE_hipCtxGetFlags(args);
 				return;
+			#endif
+			#if HAVE_hipGetSymbolAddress
 			case HIP_API_ID_hipGetSymbolAddress : 
 				GET_PTRS_VALUE_hipGetSymbolAddress(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefGetAddress
 			case HIP_API_ID_hipTexRefGetAddress : 
 				GET_PTRS_VALUE_hipTexRefGetAddress(args);
 				return;
+			#endif
+			#if HAVE_hipTexObjectCreate
 			case HIP_API_ID_hipTexObjectCreate : 
 				GET_PTRS_VALUE_hipTexObjectCreate(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceGetSharedMemConfig
 			case HIP_API_ID_hipDeviceGetSharedMemConfig : 
 				GET_PTRS_VALUE_hipDeviceGetSharedMemConfig(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddMemAllocNode
 			case HIP_API_ID_hipGraphAddMemAllocNode : 
 				GET_PTRS_VALUE_hipGraphAddMemAllocNode(args);
 				return;
+			#endif
+			#if HAVE_hipMemRetainAllocationHandle
 			case HIP_API_ID_hipMemRetainAllocationHandle : 
 				GET_PTRS_VALUE_hipMemRetainAllocationHandle(args);
 				return;
+			#endif
+			#if HAVE_hipGetFuncBySymbol
 			case HIP_API_ID_hipGetFuncBySymbol : 
 				GET_PTRS_VALUE_hipGetFuncBySymbol(args);
 				return;
+			#endif
+			#if HAVE_hipMemGetInfo
 			case HIP_API_ID_hipMemGetInfo : 
 				GET_PTRS_VALUE_hipMemGetInfo(args);
 				return;
+			#endif
+			#if HAVE_hipMemcpyParam2D
 			case HIP_API_ID_hipMemcpyParam2D : 
 				GET_PTRS_VALUE_hipMemcpyParam2D(args);
 				return;
+			#endif
+			#if HAVE_hipGraphDebugDotPrint
 			case HIP_API_ID_hipGraphDebugDotPrint : 
 				GET_PTRS_VALUE_hipGraphDebugDotPrint(args);
 				return;
+			#endif
+			#if HAVE_hipDrvGetErrorString
 			case HIP_API_ID_hipDrvGetErrorString : 
 				GET_PTRS_VALUE_hipDrvGetErrorString(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefGetAddressMode
 			case HIP_API_ID_hipTexRefGetAddressMode : 
 				GET_PTRS_VALUE_hipTexRefGetAddressMode(args);
 				return;
+			#endif
+			#if HAVE___hipGetPCH
 			case HIP_API_ID___hipGetPCH : 
 				GET_PTRS_VALUE___hipGetPCH(args);
 				return;
+			#endif
+			#if HAVE_hipStreamGetFlags
 			case HIP_API_ID_hipStreamGetFlags : 
 				GET_PTRS_VALUE_hipStreamGetFlags(args);
 				return;
+			#endif
+			#if HAVE_hipMemGetAccess
 			case HIP_API_ID_hipMemGetAccess : 
 				GET_PTRS_VALUE_hipMemGetAccess(args);
 				return;
+			#endif
+			#if HAVE_hipGetSymbolSize
 			case HIP_API_ID_hipGetSymbolSize : 
 				GET_PTRS_VALUE_hipGetSymbolSize(args);
 				return;
+			#endif
+			#if HAVE_hipMipmappedArrayGetLevel
 			case HIP_API_ID_hipMipmappedArrayGetLevel : 
 				GET_PTRS_VALUE_hipMipmappedArrayGetLevel(args);
 				return;
+			#endif
+			#if HAVE_hipExternalMemoryGetMappedMipmappedArray
 			case HIP_API_ID_hipExternalMemoryGetMappedMipmappedArray : 
 				GET_PTRS_VALUE_hipExternalMemoryGetMappedMipmappedArray(args);
 				return;
+			#endif
+			#if HAVE_hipGraphExecMemcpyNodeSetParams
 			case HIP_API_ID_hipGraphExecMemcpyNodeSetParams : 
 				GET_PTRS_VALUE_hipGraphExecMemcpyNodeSetParams(args);
 				return;
+			#endif
+			#if HAVE_hipUserObjectCreate
 			case HIP_API_ID_hipUserObjectCreate : 
 				GET_PTRS_VALUE_hipUserObjectCreate(args);
 				return;
+			#endif
+			#if HAVE_hipStreamGetCaptureInfo_v2
 			case HIP_API_ID_hipStreamGetCaptureInfo_v2 : 
 				GET_PTRS_VALUE_hipStreamGetCaptureInfo_v2(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefGetArray
 			case HIP_API_ID_hipTexRefGetArray : 
 				GET_PTRS_VALUE_hipTexRefGetArray(args);
 				return;
+			#endif
+			#if HAVE_hipImportExternalSemaphore
 			case HIP_API_ID_hipImportExternalSemaphore : 
 				GET_PTRS_VALUE_hipImportExternalSemaphore(args);
 				return;
+			#endif
+			#if HAVE_hipDeviceGetAttribute
 			case HIP_API_ID_hipDeviceGetAttribute : 
 				GET_PTRS_VALUE_hipDeviceGetAttribute(args);
 				return;
+			#endif
+			#if HAVE_hipCtxGetSharedMemConfig
 			case HIP_API_ID_hipCtxGetSharedMemConfig : 
 				GET_PTRS_VALUE_hipCtxGetSharedMemConfig(args);
 				return;
+			#endif
+			#if HAVE_hipStreamIsCapturing_spt
 			case HIP_API_ID_hipStreamIsCapturing_spt : 
 				GET_PTRS_VALUE_hipStreamIsCapturing_spt(args);
 				return;
+			#endif
+			#if HAVE_hipGraphKernelNodeSetParams
 			case HIP_API_ID_hipGraphKernelNodeSetParams : 
 				GET_PTRS_VALUE_hipGraphKernelNodeSetParams(args);
 				return;
+			#endif
+			#if HAVE_hipMallocHost
 			case HIP_API_ID_hipMallocHost : 
 				GET_PTRS_VALUE_hipMallocHost(args);
 				return;
+			#endif
+			#if HAVE_hipStreamGetCaptureInfo_v2_spt
 			case HIP_API_ID_hipStreamGetCaptureInfo_v2_spt : 
 				GET_PTRS_VALUE_hipStreamGetCaptureInfo_v2_spt(args);
 				return;
+			#endif
+			#if HAVE_hipGetTextureReference
 			case HIP_API_ID_hipGetTextureReference : 
 				GET_PTRS_VALUE_hipGetTextureReference(args);
 				return;
+			#endif
+			#if HAVE_hipGraphExecExternalSemaphoresSignalNodeSetParams
 			case HIP_API_ID_hipGraphExecExternalSemaphoresSignalNodeSetParams : 
 				GET_PTRS_VALUE_hipGraphExecExternalSemaphoresSignalNodeSetParams(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddDependencies
 			case HIP_API_ID_hipGraphAddDependencies : 
 				GET_PTRS_VALUE_hipGraphAddDependencies(args);
 				return;
+			#endif
+			#if HAVE_hipGraphNodeGetType
 			case HIP_API_ID_hipGraphNodeGetType : 
 				GET_PTRS_VALUE_hipGraphNodeGetType(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefSetBorderColor
 			case HIP_API_ID_hipTexRefSetBorderColor : 
 				GET_PTRS_VALUE_hipTexRefSetBorderColor(args);
 				return;
+			#endif
+			#if HAVE_hipCtxGetDevice
 			case HIP_API_ID_hipCtxGetDevice : 
 				GET_PTRS_VALUE_hipCtxGetDevice(args);
 				return;
+			#endif
+			#if HAVE_hipHostGetFlags
 			case HIP_API_ID_hipHostGetFlags : 
 				GET_PTRS_VALUE_hipHostGetFlags(args);
 				return;
+			#endif
+			#if HAVE_hipDrvGraphAddMemsetNode
 			case HIP_API_ID_hipDrvGraphAddMemsetNode : 
 				GET_PTRS_VALUE_hipDrvGraphAddMemsetNode(args);
 				return;
+			#endif
+			#if HAVE_hipMemPoolCreate
 			case HIP_API_ID_hipMemPoolCreate : 
 				GET_PTRS_VALUE_hipMemPoolCreate(args);
 				return;
+			#endif
+			#if HAVE_hipKernelNameRef
 			case HIP_API_ID_hipKernelNameRef : 
 				GET_PTRS_RET_VALUE_hipKernelNameRef(args);
 				return;
+			#endif
+			#if HAVE_hipDrvGetErrorName
 			case HIP_API_ID_hipDrvGetErrorName : 
 				GET_PTRS_VALUE_hipDrvGetErrorName(args);
 				return;
+			#endif
+			#if HAVE_hipCreateSurfaceObject
 			case HIP_API_ID_hipCreateSurfaceObject : 
 				GET_PTRS_VALUE_hipCreateSurfaceObject(args);
 				return;
+			#endif
+			#if HAVE_hipGetMipmappedArrayLevel
 			case HIP_API_ID_hipGetMipmappedArrayLevel : 
 				GET_PTRS_VALUE_hipGetMipmappedArrayLevel(args);
 				return;
+			#endif
+			#if HAVE_hipArray3DCreate
 			case HIP_API_ID_hipArray3DCreate : 
 				GET_PTRS_VALUE_hipArray3DCreate(args);
 				return;
+			#endif
+			#if HAVE_hipIpcOpenMemHandle
 			case HIP_API_ID_hipIpcOpenMemHandle : 
 				GET_PTRS_VALUE_hipIpcOpenMemHandle(args);
 				return;
+			#endif
+			#if HAVE_hipFuncGetAttribute
 			case HIP_API_ID_hipFuncGetAttribute : 
 				GET_PTRS_VALUE_hipFuncGetAttribute(args);
 				return;
+			#endif
+			#if HAVE_hipBindTextureToMipmappedArray
 			case HIP_API_ID_hipBindTextureToMipmappedArray : 
 				GET_PTRS_VALUE_hipBindTextureToMipmappedArray(args);
 				return;
+			#endif
+			#if HAVE_hipGraphicsMapResources
 			case HIP_API_ID_hipGraphicsMapResources : 
 				GET_PTRS_VALUE_hipGraphicsMapResources(args);
 				return;
+			#endif
+			#if HAVE_hipArrayCreate
 			case HIP_API_ID_hipArrayCreate : 
 				GET_PTRS_VALUE_hipArrayCreate(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefSetMaxAnisotropy
 			case HIP_API_ID_hipTexRefSetMaxAnisotropy : 
 				GET_PTRS_VALUE_hipTexRefSetMaxAnisotropy(args);
 				return;
+			#endif
+			#if HAVE_hipGraphKernelNodeGetAttribute
 			case HIP_API_ID_hipGraphKernelNodeGetAttribute : 
 				GET_PTRS_VALUE_hipGraphKernelNodeGetAttribute(args);
 				return;
+			#endif
+			#if HAVE_hipExtLaunchKernel
 			case HIP_API_ID_hipExtLaunchKernel : 
 				GET_PTRS_VALUE_hipExtLaunchKernel(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefSetMipmapFilterMode
 			case HIP_API_ID_hipTexRefSetMipmapFilterMode : 
 				GET_PTRS_VALUE_hipTexRefSetMipmapFilterMode(args);
 				return;
+			#endif
+			#if HAVE_hipMemImportFromShareableHandle
 			case HIP_API_ID_hipMemImportFromShareableHandle : 
 				GET_PTRS_VALUE_hipMemImportFromShareableHandle(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefSetFormat
 			case HIP_API_ID_hipTexRefSetFormat : 
 				GET_PTRS_VALUE_hipTexRefSetFormat(args);
 				return;
+			#endif
+			#if HAVE_hipMemcpy3DAsync
 			case HIP_API_ID_hipMemcpy3DAsync : 
 				GET_PTRS_VALUE_hipMemcpy3DAsync(args);
 				return;
+			#endif
+			#if HAVE_hipGetTextureObjectResourceViewDesc
 			case HIP_API_ID_hipGetTextureObjectResourceViewDesc : 
 				GET_PTRS_VALUE_hipGetTextureObjectResourceViewDesc(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefSetFilterMode
 			case HIP_API_ID_hipTexRefSetFilterMode : 
 				GET_PTRS_VALUE_hipTexRefSetFilterMode(args);
 				return;
+			#endif
+			#if HAVE_hipDriverGetVersion
 			case HIP_API_ID_hipDriverGetVersion : 
 				GET_PTRS_VALUE_hipDriverGetVersion(args);
 				return;
+			#endif
+			#if HAVE_hipMallocMipmappedArray
 			case HIP_API_ID_hipMallocMipmappedArray : 
 				GET_PTRS_VALUE_hipMallocMipmappedArray(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefSetFlags
 			case HIP_API_ID_hipTexRefSetFlags : 
 				GET_PTRS_VALUE_hipTexRefSetFlags(args);
 				return;
+			#endif
+			#if HAVE_hipMemGetAddressRange
 			case HIP_API_ID_hipMemGetAddressRange : 
 				GET_PTRS_VALUE_hipMemGetAddressRange(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefSetMipmapLevelClamp
 			case HIP_API_ID_hipTexRefSetMipmapLevelClamp : 
 				GET_PTRS_VALUE_hipTexRefSetMipmapLevelClamp(args);
 				return;
+			#endif
+			#if HAVE_hipGraphMemcpyNodeSetParams
 			case HIP_API_ID_hipGraphMemcpyNodeSetParams : 
 				GET_PTRS_VALUE_hipGraphMemcpyNodeSetParams(args);
 				return;
+			#endif
+			#if HAVE_hipGraphGetEdges
 			case HIP_API_ID_hipGraphGetEdges : 
 				GET_PTRS_VALUE_hipGraphGetEdges(args);
 				return;
+			#endif
+			#if HAVE_hipExtMallocWithFlags
 			case HIP_API_ID_hipExtMallocWithFlags : 
 				GET_PTRS_VALUE_hipExtMallocWithFlags(args);
 				return;
+			#endif
+			#if HAVE_hipChooseDeviceR0600
 			case HIP_API_ID_hipChooseDeviceR0600 : 
 				GET_PTRS_VALUE_hipChooseDeviceR0600(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefSetMipmappedArray
 			case HIP_API_ID_hipTexRefSetMipmappedArray : 
 				GET_PTRS_VALUE_hipTexRefSetMipmappedArray(args);
 				return;
+			#endif
+			#if HAVE_hipTexRefGetMipmapLevelClamp
 			case HIP_API_ID_hipTexRefGetMipmapLevelClamp : 
 				GET_PTRS_VALUE_hipTexRefGetMipmapLevelClamp(args);
 				return;
+			#endif
             default : break;
         }
     } else {
         switch(id) {
+			#if HAVE_hipFreeMipmappedArray
 			case HIP_API_ID_hipFreeMipmappedArray : 
 				GET_PTRS_VALUE_hipFreeMipmappedArray(args);
 				return;
+			#endif
+			#if HAVE_hipGraphAddMemFreeNode
 			case HIP_API_ID_hipGraphAddMemFreeNode : 
 				GET_PTRS_VALUE_hipGraphAddMemFreeNode(args);
 				return;
+			#endif
+			#if HAVE_hipMipmappedArrayDestroy
 			case HIP_API_ID_hipMipmappedArrayDestroy : 
 				GET_PTRS_VALUE_hipMipmappedArrayDestroy(args);
 				return;
+			#endif
             default : break;
         }
     }

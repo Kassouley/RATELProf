@@ -34,6 +34,7 @@ void on_exit_hsa_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void
 void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* user_args)
 {
     switch(funid) {
+		#if HAVE_hsa_amd_interop_map_buffer
 		case HSA_API_ID_hsa_amd_interop_map_buffer :
 			//	uint32_t num_agents (unsigned int);
 			//	hsa_agent_t * agents ({
@@ -76,6 +77,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_interop_map_buffer.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_queue_get_info
 		case HSA_API_ID_hsa_amd_queue_get_info :
 			//	hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -110,6 +113,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_queue_get_info.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_profiling_async_copy_enable
 		case HSA_API_ID_hsa_amd_profiling_async_copy_enable :
 			//	_Bool enable (unsigned int);
 			//	hsa_status_t retval (enum hsa_status_t);
@@ -117,6 +122,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_profiling_async_copy_enable.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_symbol_get_info
 		case HSA_API_ID_hsa_executable_symbol_get_info :
 			//	hsa_executable_symbol_t executable_symbol ({
 			//		uint64_t handle (unsigned long);
@@ -133,6 +140,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_symbol_get_info.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_cas_scacquire
 		case HSA_API_ID_hsa_signal_cas_scacquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -148,6 +157,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_cas_scacquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_system_get_info
 		case HSA_API_ID_hsa_system_get_info :
 			//	hsa_system_info_t attribute (enum hsa_system_info_t);
 			//	void * value (void *);
@@ -158,6 +169,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_system_get_info.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_cas_write_index_scacq_screl
 		case HSA_API_ID_hsa_queue_cas_write_index_scacq_screl :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -191,6 +204,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_cas_write_index_scacq_screl.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ext_image_get_capability
 		case HSA_API_ID_hsa_ext_image_get_capability :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -220,6 +235,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_get_capability.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_load_program_code_object
 		case HSA_API_ID_hsa_executable_load_program_code_object :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -251,6 +268,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_load_program_code_object.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_cas_write_index_release
 		case HSA_API_ID_hsa_queue_cas_write_index_release :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -284,6 +303,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_cas_write_index_release.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_subtract_scacquire
 		case HSA_API_ID_hsa_signal_subtract_scacquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -295,6 +316,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_subtract_scacquire.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_cas_release
 		case HSA_API_ID_hsa_signal_cas_release :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -310,6 +333,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_cas_release.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_add_scacq_screl
 		case HSA_API_ID_hsa_signal_add_scacq_screl :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -321,6 +346,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_add_scacq_screl.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_group_wait_any_relaxed
 		case HSA_API_ID_hsa_signal_group_wait_any_relaxed :
 			//	hsa_signal_group_t signal_group ({
 			//		uint64_t handle (unsigned long);
@@ -358,6 +385,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_signal_group_wait_any_relaxed.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_and_relaxed
 		case HSA_API_ID_hsa_signal_and_relaxed :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -369,6 +398,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_and_relaxed.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_ext_image_clear
 		case HSA_API_ID_hsa_ext_image_clear :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -416,6 +447,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_clear.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_load_code_object
 		case HSA_API_ID_hsa_executable_load_code_object :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -444,6 +477,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_load_code_object.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_exchange_acquire
 		case HSA_API_ID_hsa_signal_exchange_acquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -457,6 +492,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_exchange_acquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ext_image_data_get_info_with_layout
 		case HSA_API_ID_hsa_ext_image_data_get_info_with_layout :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -512,6 +549,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_data_get_info_with_layout.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_svm_attributes_get
 		case HSA_API_ID_hsa_amd_svm_attributes_get :
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
@@ -535,6 +574,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_svm_attributes_get.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ext_image_export
 		case HSA_API_ID_hsa_ext_image_export :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -586,6 +627,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_export.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_memory_register
 		case HSA_API_ID_hsa_memory_register :
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
@@ -596,6 +639,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_memory_register.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_and_scacquire
 		case HSA_API_ID_hsa_signal_and_scacquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -607,6 +652,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_and_scacquire.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_add_acq_rel
 		case HSA_API_ID_hsa_signal_add_acq_rel :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -618,6 +665,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_add_acq_rel.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_portable_export_dmabuf
 		case HSA_API_ID_hsa_amd_portable_export_dmabuf :
 			//	const void * ptr (const void *);
 			//	size_t size (unsigned long);
@@ -638,6 +687,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_portable_export_dmabuf.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_code_object_serialize
 		case HSA_API_ID_hsa_code_object_serialize :
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
@@ -673,6 +724,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_serialize.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_memory_lock
 		case HSA_API_ID_hsa_amd_memory_lock :
 			//	void * host_ptr (void *);
 			//	size_t size (unsigned long);
@@ -700,6 +753,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_lock.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_iterate_agent_symbols
 		case HSA_API_ID_hsa_executable_iterate_agent_symbols :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -722,6 +777,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_iterate_agent_symbols.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_code_symbol_get_info
 		case HSA_API_ID_hsa_code_symbol_get_info :
 			//	hsa_code_symbol_t code_symbol ({
 			//		uint64_t handle (unsigned long);
@@ -738,6 +795,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_code_symbol_get_info.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_xor_acquire
 		case HSA_API_ID_hsa_signal_xor_acquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -749,6 +808,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_xor_acquire.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_image_get_info_max_dim
 		case HSA_API_ID_hsa_amd_image_get_info_max_dim :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -765,6 +826,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_image_get_info_max_dim.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_subtract_acq_rel
 		case HSA_API_ID_hsa_signal_subtract_acq_rel :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -776,6 +839,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_subtract_acq_rel.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_isa_get_exception_policies
 		case HSA_API_ID_hsa_isa_get_exception_policies :
 			//	hsa_isa_t isa ({
 			//		uint64_t handle (unsigned long);
@@ -794,6 +859,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_isa_get_exception_policies.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_agent_iterate_regions
 		case HSA_API_ID_hsa_agent_iterate_regions :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -810,6 +877,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_agent_iterate_regions.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_wait_relaxed
 		case HSA_API_ID_hsa_signal_wait_relaxed :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -829,6 +898,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_wait_relaxed.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ven_amd_pcs_create
 		case HSA_API_ID_hsa_ven_amd_pcs_create :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -864,6 +935,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ven_amd_pcs_create.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_load_read_index_relaxed
 		case HSA_API_ID_hsa_queue_load_read_index_relaxed :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -893,6 +966,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_load_read_index_relaxed.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_load_scacquire
 		case HSA_API_ID_hsa_signal_load_scacquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -904,6 +979,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_load_scacquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_signal_value_pointer
 		case HSA_API_ID_hsa_amd_signal_value_pointer :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -923,6 +1000,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_signal_value_pointer.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_memory_pool_free
 		case HSA_API_ID_hsa_amd_memory_pool_free :
 			//	void * ptr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
@@ -931,6 +1010,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_pool_free.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_validate
 		case HSA_API_ID_hsa_executable_validate :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -947,6 +1028,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_validate.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_create
 		case HSA_API_ID_hsa_signal_create :
 			//	hsa_signal_value_t initial_value (long);
 			//	uint32_t num_consumers (unsigned int);
@@ -974,6 +1057,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_signal_create.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_spm_acquire
 		case HSA_API_ID_hsa_amd_spm_acquire :
 			//	hsa_agent_t preferred_agent ({
 			//		uint64_t handle (unsigned long);
@@ -985,6 +1070,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_spm_acquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_load_read_index_scacquire
 		case HSA_API_ID_hsa_queue_load_read_index_scacquire :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -1014,6 +1101,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_load_read_index_scacquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_load_write_index_acquire
 		case HSA_API_ID_hsa_queue_load_write_index_acquire :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -1043,6 +1132,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_load_write_index_acquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_agent_global_variable_define
 		case HSA_API_ID_hsa_executable_agent_global_variable_define :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -1068,6 +1159,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_agent_global_variable_define.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_add_relaxed
 		case HSA_API_ID_hsa_signal_add_relaxed :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -1079,6 +1172,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_add_relaxed.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_soft_queue_create
 		case HSA_API_ID_hsa_soft_queue_create :
 			//	hsa_region_t region ({
 			//		uint64_t handle (unsigned long);
@@ -1129,6 +1224,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_soft_queue_create.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_cas_write_index_screlease
 		case HSA_API_ID_hsa_queue_cas_write_index_screlease :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -1162,6 +1259,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_cas_write_index_screlease.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_xor_release
 		case HSA_API_ID_hsa_signal_xor_release :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -1173,6 +1272,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_xor_release.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_wait_scacquire
 		case HSA_API_ID_hsa_signal_wait_scacquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -1192,6 +1293,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_wait_scacquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_isa_from_name
 		case HSA_API_ID_hsa_isa_from_name :
 			//	const char * name (const char *);
 			//	hsa_isa_t * isa ({
@@ -1211,6 +1314,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_isa_from_name.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_destroy
 		case HSA_API_ID_hsa_executable_destroy :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -1222,6 +1327,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_destroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ext_image_create
 		case HSA_API_ID_hsa_ext_image_create :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -1272,6 +1379,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_create.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_system_extension_supported
 		case HSA_API_ID_hsa_system_extension_supported :
 			//	uint16_t extension (unsigned short);
 			//	uint16_t version_major (unsigned short);
@@ -1288,6 +1397,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_system_extension_supported.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_load_agent_code_object
 		case HSA_API_ID_hsa_executable_load_agent_code_object :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -1325,6 +1436,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_load_agent_code_object.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_vmem_handle_release
 		case HSA_API_ID_hsa_amd_vmem_handle_release :
 			//	hsa_amd_vmem_alloc_handle_t memory_handle ({
 			//		uint64_t handle (unsigned long);
@@ -1336,6 +1449,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_handle_release.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_memory_free
 		case HSA_API_ID_hsa_memory_free :
 			//	void * ptr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
@@ -1344,6 +1459,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_memory_free.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_cas_screlease
 		case HSA_API_ID_hsa_signal_cas_screlease :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -1359,6 +1476,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_cas_screlease.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_memory_copy_engine_status
 		case HSA_API_ID_hsa_amd_memory_copy_engine_status :
 			//	hsa_agent_t dst_agent ({
 			//		uint64_t handle (unsigned long);
@@ -1381,6 +1500,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_copy_engine_status.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_iterate_program_symbols
 		case HSA_API_ID_hsa_executable_iterate_program_symbols :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -1397,6 +1518,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_iterate_program_symbols.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ext_image_copy
 		case HSA_API_ID_hsa_ext_image_copy :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -1459,6 +1582,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_copy.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_coherency_get_type
 		case HSA_API_ID_hsa_amd_coherency_get_type :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -1475,6 +1600,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_coherency_get_type.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_freeze
 		case HSA_API_ID_hsa_executable_freeze :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -1491,6 +1618,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_freeze.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_store_write_index_release
 		case HSA_API_ID_hsa_queue_store_write_index_release :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -1520,6 +1649,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t value = %lu\n", args->hsa_queue_store_write_index_release.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_vmem_export_shareable_handle
 		case HSA_API_ID_hsa_amd_vmem_export_shareable_handle :
 			//	int * dmabuf_fd (int *);
 			//	hsa_amd_vmem_alloc_handle_t handle ({
@@ -1538,6 +1669,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_export_shareable_handle.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_svm_prefetch_async
 		case HSA_API_ID_hsa_amd_svm_prefetch_async :
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
@@ -1571,6 +1704,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_svm_prefetch_async.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_store_screlease
 		case HSA_API_ID_hsa_signal_store_screlease :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -1582,6 +1717,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_store_screlease.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_memory_fill
 		case HSA_API_ID_hsa_amd_memory_fill :
 			//	void * ptr (void *);
 			//	uint32_t value (unsigned int);
@@ -1594,6 +1731,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_fill.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_vmem_map
 		case HSA_API_ID_hsa_amd_vmem_map :
 			//	void * va (void *);
 			//	size_t size (unsigned long);
@@ -1614,6 +1753,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_map.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_subtract_scacq_screl
 		case HSA_API_ID_hsa_signal_subtract_scacq_screl :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -1625,6 +1766,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_subtract_scacq_screl.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_memory_async_copy_rect
 		case HSA_API_ID_hsa_amd_memory_async_copy_rect :
 			//	const hsa_pitched_ptr_t * dst ({
 			//		void * base (void *);
@@ -1718,6 +1861,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_async_copy_rect.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_svm_attributes_set
 		case HSA_API_ID_hsa_amd_svm_attributes_set :
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
@@ -1741,6 +1886,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_svm_attributes_set.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_profiling_get_async_copy_time
 		case HSA_API_ID_hsa_amd_profiling_get_async_copy_time :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -1763,6 +1910,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_profiling_get_async_copy_time.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_agent_set_async_scratch_limit
 		case HSA_API_ID_hsa_amd_agent_set_async_scratch_limit :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -1776,6 +1925,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_agent_set_async_scratch_limit.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_subtract_screlease
 		case HSA_API_ID_hsa_signal_subtract_screlease :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -1787,6 +1938,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_subtract_screlease.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_ext_image_import
 		case HSA_API_ID_hsa_ext_image_import :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -1838,6 +1991,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_import.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_memory_pool_can_migrate
 		case HSA_API_ID_hsa_amd_memory_pool_can_migrate :
 			//	hsa_amd_memory_pool_t src_memory_pool ({
 			//		uint64_t handle (unsigned long);
@@ -1860,6 +2015,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_pool_can_migrate.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_ipc_memory_attach
 		case HSA_API_ID_hsa_amd_ipc_memory_attach :
 			//	const hsa_amd_ipc_memory_t * handle ({
 			//		uint32_t[8] handle (unsigned int[8]);
@@ -1893,6 +2050,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_ipc_memory_attach.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_portable_close_dmabuf
 		case HSA_API_ID_hsa_amd_portable_close_dmabuf :
 			//	int dmabuf (int);
 			//	hsa_status_t retval (enum hsa_status_t);
@@ -1900,6 +2059,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_portable_close_dmabuf.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_add_write_index_relaxed
 		case HSA_API_ID_hsa_queue_add_write_index_relaxed :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -1931,6 +2092,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_add_write_index_relaxed.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_destroy
 		case HSA_API_ID_hsa_queue_destroy :
 			//	hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -1960,6 +2123,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_queue_destroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_or_scacq_screl
 		case HSA_API_ID_hsa_signal_or_scacq_screl :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -1971,6 +2136,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_or_scacq_screl.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_agent_memory_pool_get_info
 		case HSA_API_ID_hsa_amd_agent_memory_pool_get_info :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -1993,6 +2160,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_agent_memory_pool_get_info.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_create_alt
 		case HSA_API_ID_hsa_executable_create_alt :
 			//	hsa_profile_t profile (enum hsa_profile_t);
 			//	hsa_default_float_rounding_mode_t default_float_rounding_mode (enum hsa_default_float_rounding_mode_t);
@@ -2016,6 +2185,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_create_alt.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_silent_store_relaxed
 		case HSA_API_ID_hsa_signal_silent_store_relaxed :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2027,6 +2198,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_silent_store_relaxed.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_add_write_index_acq_rel
 		case HSA_API_ID_hsa_queue_add_write_index_acq_rel :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -2058,6 +2231,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_add_write_index_acq_rel.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_cas_write_index_acq_rel
 		case HSA_API_ID_hsa_queue_cas_write_index_acq_rel :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -2091,6 +2266,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_cas_write_index_acq_rel.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_region_get_info
 		case HSA_API_ID_hsa_region_get_info :
 			//	hsa_region_t region ({
 			//		uint64_t handle (unsigned long);
@@ -2107,6 +2284,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_region_get_info.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_get_symbol_by_name
 		case HSA_API_ID_hsa_executable_get_symbol_by_name :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -2141,6 +2320,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_get_symbol_by_name.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_get_symbol
 		case HSA_API_ID_hsa_executable_get_symbol :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -2179,6 +2360,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_get_symbol.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_xor_scacquire
 		case HSA_API_ID_hsa_signal_xor_scacquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2190,6 +2373,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_xor_scacquire.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_xor_scacq_screl
 		case HSA_API_ID_hsa_signal_xor_scacq_screl :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2201,6 +2386,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_xor_scacq_screl.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_store_write_index_screlease
 		case HSA_API_ID_hsa_queue_store_write_index_screlease :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -2230,6 +2417,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t value = %lu\n", args->hsa_queue_store_write_index_screlease.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_agent_iterate_memory_pools
 		case HSA_API_ID_hsa_amd_agent_iterate_memory_pools :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -2246,6 +2435,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_agent_iterate_memory_pools.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_memory_pool_get_info
 		case HSA_API_ID_hsa_amd_memory_pool_get_info :
 			//	hsa_amd_memory_pool_t memory_pool ({
 			//		uint64_t handle (unsigned long);
@@ -2262,6 +2453,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_pool_get_info.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_spm_release
 		case HSA_API_ID_hsa_amd_spm_release :
 			//	hsa_agent_t preferred_agent ({
 			//		uint64_t handle (unsigned long);
@@ -2273,6 +2466,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_spm_release.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_and_scacq_screl
 		case HSA_API_ID_hsa_signal_and_scacq_screl :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2284,6 +2479,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_and_scacq_screl.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_wavefront_get_info
 		case HSA_API_ID_hsa_wavefront_get_info :
 			//	hsa_wavefront_t wavefront ({
 			//		uint64_t handle (unsigned long);
@@ -2300,6 +2497,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_wavefront_get_info.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ven_amd_pcs_destroy
 		case HSA_API_ID_hsa_ven_amd_pcs_destroy :
 			//	hsa_ven_amd_pcs_t pc_sampling ({
 			//		uint64_t handle (unsigned long);
@@ -2311,6 +2510,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ven_amd_pcs_destroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_system_major_extension_supported
 		case HSA_API_ID_hsa_system_major_extension_supported :
 			//	uint16_t extension (unsigned short);
 			//	uint16_t version_major (unsigned short);
@@ -2330,6 +2531,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_system_major_extension_supported.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_status_string
 		case HSA_API_ID_hsa_status_string :
 			//	hsa_status_t status (enum hsa_status_t);
 			//	const char ** status_string (const char **);
@@ -2345,6 +2548,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_status_string.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_cas_relaxed
 		case HSA_API_ID_hsa_signal_cas_relaxed :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2360,11 +2565,15 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_cas_relaxed.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_init
 		case HSA_API_ID_hsa_init :
 			//	hsa_status_t retval (enum hsa_status_t);
 			printf("\thsa_status_t retval = %d\n", args->hsa_init.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_memory_allocate
 		case HSA_API_ID_hsa_memory_allocate :
 			//	hsa_region_t region ({
 			//		uint64_t handle (unsigned long);
@@ -2384,6 +2593,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_memory_allocate.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ext_image_data_get_info
 		case HSA_API_ID_hsa_ext_image_data_get_info :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -2433,6 +2644,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_data_get_info.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_cache_get_info
 		case HSA_API_ID_hsa_cache_get_info :
 			//	hsa_cache_t cache ({
 			//		uint64_t handle (unsigned long);
@@ -2449,6 +2662,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_cache_get_info.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_subtract_relaxed
 		case HSA_API_ID_hsa_signal_subtract_relaxed :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2460,6 +2675,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_subtract_relaxed.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_load_write_index_relaxed
 		case HSA_API_ID_hsa_queue_load_write_index_relaxed :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -2489,6 +2706,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_load_write_index_relaxed.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_signal_async_handler
 		case HSA_API_ID_hsa_amd_signal_async_handler :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2509,6 +2728,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_signal_async_handler.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_cas_acquire
 		case HSA_API_ID_hsa_signal_cas_acquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2524,6 +2745,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_cas_acquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_or_scacquire
 		case HSA_API_ID_hsa_signal_or_scacquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2535,6 +2758,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_or_scacquire.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_add_write_index_release
 		case HSA_API_ID_hsa_queue_add_write_index_release :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -2566,6 +2791,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_add_write_index_release.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_agent_extension_supported
 		case HSA_API_ID_hsa_agent_extension_supported :
 			//	uint16_t extension (unsigned short);
 			//	hsa_agent_t agent ({
@@ -2588,6 +2815,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_agent_extension_supported.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_exchange_relaxed
 		case HSA_API_ID_hsa_signal_exchange_relaxed :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2601,6 +2830,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_exchange_relaxed.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_validate_alt
 		case HSA_API_ID_hsa_executable_validate_alt :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -2622,6 +2853,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_validate_alt.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_exchange_scacq_screl
 		case HSA_API_ID_hsa_signal_exchange_scacq_screl :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2635,6 +2868,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_exchange_scacq_screl.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_get_info
 		case HSA_API_ID_hsa_executable_get_info :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -2651,6 +2886,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_get_info.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_code_object_reader_create_from_memory
 		case HSA_API_ID_hsa_code_object_reader_create_from_memory :
 			//	const void * code_object (const void *);
 			//	size_t size (unsigned long);
@@ -2670,6 +2907,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_reader_create_from_memory.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_async_function
 		case HSA_API_ID_hsa_amd_async_function :
 			//	void (*)(void *) callback (void (*)(void *));
 			//	void * arg (void *);
@@ -2680,6 +2919,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_async_function.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_isa_compatible
 		case HSA_API_ID_hsa_isa_compatible :
 			//	hsa_isa_t code_object_isa ({
 			//		uint64_t handle (unsigned long);
@@ -2702,6 +2943,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_isa_compatible.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_pointer_info_set_userdata
 		case HSA_API_ID_hsa_amd_pointer_info_set_userdata :
 			//	const void * ptr (const void *);
 			//	void * userdata (void *);
@@ -2713,6 +2956,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_pointer_info_set_userdata.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_and_screlease
 		case HSA_API_ID_hsa_signal_and_screlease :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2724,6 +2969,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_and_screlease.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_cas_write_index_acquire
 		case HSA_API_ID_hsa_queue_cas_write_index_acquire :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -2757,6 +3004,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_cas_write_index_acquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_cas_write_index_relaxed
 		case HSA_API_ID_hsa_queue_cas_write_index_relaxed :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -2790,6 +3039,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_cas_write_index_relaxed.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_store_read_index_release
 		case HSA_API_ID_hsa_queue_store_read_index_release :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -2819,6 +3070,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t value = %lu\n", args->hsa_queue_store_read_index_release.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_pointer_info
 		case HSA_API_ID_hsa_amd_pointer_info :
 			//	const void * ptr (const void *);
 			//	hsa_amd_pointer_info_t * info ({
@@ -2870,6 +3123,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_pointer_info.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_spm_set_dest_buffer
 		case HSA_API_ID_hsa_amd_spm_set_dest_buffer :
 			//	hsa_agent_t preferred_agent ({
 			//		uint64_t handle (unsigned long);
@@ -2901,6 +3156,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_spm_set_dest_buffer.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_vmem_get_access
 		case HSA_API_ID_hsa_amd_vmem_get_access :
 			//	void * va (void *);
 			//	hsa_access_permission_t * perms (enum hsa_access_permission_t*);
@@ -2920,6 +3177,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_get_access.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_silent_store_screlease
 		case HSA_API_ID_hsa_signal_silent_store_screlease :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2931,6 +3190,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_silent_store_screlease.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_add_acquire
 		case HSA_API_ID_hsa_signal_add_acquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2942,6 +3203,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_add_acquire.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_create
 		case HSA_API_ID_hsa_executable_create :
 			//	hsa_profile_t profile (enum hsa_profile_t);
 			//	hsa_executable_state_t executable_state (enum hsa_executable_state_t);
@@ -2965,6 +3228,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_create.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_store_release
 		case HSA_API_ID_hsa_signal_store_release :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2976,6 +3241,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_store_release.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_xor_screlease
 		case HSA_API_ID_hsa_signal_xor_screlease :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -2987,6 +3254,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_xor_screlease.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_iterate_symbols
 		case HSA_API_ID_hsa_executable_iterate_symbols :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -3003,6 +3272,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_iterate_symbols.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_memory_lock_to_pool
 		case HSA_API_ID_hsa_amd_memory_lock_to_pool :
 			//	void * host_ptr (void *);
 			//	size_t size (unsigned long);
@@ -3038,6 +3309,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_lock_to_pool.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_wait_acquire
 		case HSA_API_ID_hsa_signal_wait_acquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -3057,6 +3330,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_wait_acquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_cas_write_index_scacquire
 		case HSA_API_ID_hsa_queue_cas_write_index_scacquire :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -3090,6 +3365,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_cas_write_index_scacquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_code_object_get_symbol
 		case HSA_API_ID_hsa_code_object_get_symbol :
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
@@ -3115,6 +3392,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_get_symbol.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_group_destroy
 		case HSA_API_ID_hsa_signal_group_destroy :
 			//	hsa_signal_group_t signal_group ({
 			//		uint64_t handle (unsigned long);
@@ -3126,6 +3405,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_signal_group_destroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_group_create
 		case HSA_API_ID_hsa_signal_group_create :
 			//	uint32_t num_signals (unsigned int);
 			//	const hsa_signal_t * signals ({
@@ -3162,6 +3443,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_signal_group_create.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_code_object_reader_destroy
 		case HSA_API_ID_hsa_code_object_reader_destroy :
 			//	hsa_code_object_reader_t code_object_reader ({
 			//		uint64_t handle (unsigned long);
@@ -3173,6 +3456,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_reader_destroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_extension_get_name
 		case HSA_API_ID_hsa_extension_get_name :
 			//	uint16_t extension (unsigned short);
 			//	const char ** name (const char **);
@@ -3188,6 +3473,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_extension_get_name.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_group_wait_any_scacquire
 		case HSA_API_ID_hsa_signal_group_wait_any_scacquire :
 			//	hsa_signal_group_t signal_group ({
 			//		uint64_t handle (unsigned long);
@@ -3225,6 +3512,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_signal_group_wait_any_scacquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_register_system_event_handler
 		case HSA_API_ID_hsa_amd_register_system_event_handler :
 			//	hsa_amd_system_event_callback_t callback (enum hsa_status_t (*)(const struct hsa_amd_event_s *, void *));
 			//	void * data (void *);
@@ -3235,6 +3524,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_register_system_event_handler.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_xor_acq_rel
 		case HSA_API_ID_hsa_signal_xor_acq_rel :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -3246,6 +3537,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_xor_acq_rel.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_create
 		case HSA_API_ID_hsa_queue_create :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -3297,6 +3590,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_queue_create.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_profiling_set_profiler_enabled
 		case HSA_API_ID_hsa_amd_profiling_set_profiler_enabled :
 			//	hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -3328,6 +3623,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_profiling_set_profiler_enabled.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_profiling_get_dispatch_time
 		case HSA_API_ID_hsa_amd_profiling_get_dispatch_time :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -3356,6 +3653,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_profiling_get_dispatch_time.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_ipc_memory_create
 		case HSA_API_ID_hsa_amd_ipc_memory_create :
 			//	void * ptr (void *);
 			//	size_t len (unsigned long);
@@ -3375,6 +3674,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_ipc_memory_create.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_vmem_import_shareable_handle
 		case HSA_API_ID_hsa_amd_vmem_import_shareable_handle :
 			//	int dmabuf_fd (int);
 			//	hsa_amd_vmem_alloc_handle_t * handle ({
@@ -3391,6 +3692,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_import_shareable_handle.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_add_write_index_acquire
 		case HSA_API_ID_hsa_queue_add_write_index_acquire :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -3422,6 +3725,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_add_write_index_acquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_register_deallocation_callback
 		case HSA_API_ID_hsa_amd_register_deallocation_callback :
 			//	void * ptr (void *);
 			//	hsa_amd_deallocation_callback_t callback (void (*)(void *, void *));
@@ -3435,6 +3740,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_register_deallocation_callback.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ven_amd_pcs_create_from_id
 		case HSA_API_ID_hsa_ven_amd_pcs_create_from_id :
 			//	uint32_t pcs_id (unsigned int);
 			//	hsa_agent_t agent ({
@@ -3472,6 +3779,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ven_amd_pcs_create_from_id.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_exchange_screlease
 		case HSA_API_ID_hsa_signal_exchange_screlease :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -3485,6 +3794,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_exchange_screlease.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_and_release
 		case HSA_API_ID_hsa_signal_and_release :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -3496,6 +3807,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_and_release.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_ext_sampler_create
 		case HSA_API_ID_hsa_ext_sampler_create :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -3529,6 +3842,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ext_sampler_create.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ven_amd_pcs_start
 		case HSA_API_ID_hsa_ven_amd_pcs_start :
 			//	hsa_ven_amd_pcs_t pc_sampling ({
 			//		uint64_t handle (unsigned long);
@@ -3540,6 +3855,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ven_amd_pcs_start.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_readonly_variable_define
 		case HSA_API_ID_hsa_executable_readonly_variable_define :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -3565,6 +3882,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_readonly_variable_define.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_inactivate
 		case HSA_API_ID_hsa_queue_inactivate :
 			//	hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -3594,6 +3913,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_queue_inactivate.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_or_acq_rel
 		case HSA_API_ID_hsa_signal_or_acq_rel :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -3605,6 +3926,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_or_acq_rel.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_system_get_major_extension_table
 		case HSA_API_ID_hsa_system_get_major_extension_table :
 			//	uint16_t extension (unsigned short);
 			//	uint16_t version_major (unsigned short);
@@ -3619,6 +3942,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_system_get_major_extension_table.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_store_write_index_relaxed
 		case HSA_API_ID_hsa_queue_store_write_index_relaxed :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -3648,6 +3973,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t value = %lu\n", args->hsa_queue_store_write_index_relaxed.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_agent_major_extension_supported
 		case HSA_API_ID_hsa_agent_major_extension_supported :
 			//	uint16_t extension (unsigned short);
 			//	hsa_agent_t agent ({
@@ -3673,6 +4000,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_agent_major_extension_supported.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_memory_migrate
 		case HSA_API_ID_hsa_amd_memory_migrate :
 			//	const void * ptr (const void *);
 			//	hsa_amd_memory_pool_t memory_pool ({
@@ -3689,6 +4018,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_migrate.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_vmem_retain_alloc_handle
 		case HSA_API_ID_hsa_amd_vmem_retain_alloc_handle :
 			//	hsa_amd_vmem_alloc_handle_t * memory_handle ({
 			//		uint64_t handle (unsigned long);
@@ -3706,6 +4037,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_retain_alloc_handle.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_vmem_address_reserve
 		case HSA_API_ID_hsa_amd_vmem_address_reserve :
 			//	void ** va (void **);
 			//	size_t size (unsigned long);
@@ -3723,6 +4056,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_address_reserve.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_load_relaxed
 		case HSA_API_ID_hsa_signal_load_relaxed :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -3734,6 +4069,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_load_relaxed.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_exchange_scacquire
 		case HSA_API_ID_hsa_signal_exchange_scacquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -3747,6 +4084,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_exchange_scacquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_code_object_destroy
 		case HSA_API_ID_hsa_code_object_destroy :
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
@@ -3758,6 +4097,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_destroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_vmem_handle_create
 		case HSA_API_ID_hsa_amd_vmem_handle_create :
 			//	hsa_amd_memory_pool_t pool ({
 			//		uint64_t handle (unsigned long);
@@ -3784,6 +4125,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_handle_create.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_vmem_address_free
 		case HSA_API_ID_hsa_amd_vmem_address_free :
 			//	void * va (void *);
 			//	size_t size (unsigned long);
@@ -3794,6 +4137,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_address_free.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_subtract_release
 		case HSA_API_ID_hsa_signal_subtract_release :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -3805,6 +4150,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_subtract_release.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_load_write_index_scacquire
 		case HSA_API_ID_hsa_queue_load_write_index_scacquire :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -3834,6 +4181,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_load_write_index_scacquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_code_object_get_info
 		case HSA_API_ID_hsa_code_object_get_info :
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
@@ -3850,6 +4199,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_get_info.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_memory_pool_allocate
 		case HSA_API_ID_hsa_amd_memory_pool_allocate :
 			//	hsa_amd_memory_pool_t memory_pool ({
 			//		uint64_t handle (unsigned long);
@@ -3871,6 +4222,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_pool_allocate.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_code_object_get_symbol_from_name
 		case HSA_API_ID_hsa_code_object_get_symbol_from_name :
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
@@ -3901,6 +4254,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_get_symbol_from_name.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_agent_iterate_caches
 		case HSA_API_ID_hsa_agent_iterate_caches :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -3917,6 +4272,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_agent_iterate_caches.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_isa_get_round_method
 		case HSA_API_ID_hsa_isa_get_round_method :
 			//	hsa_isa_t isa ({
 			//		uint64_t handle (unsigned long);
@@ -3937,6 +4294,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_isa_get_round_method.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_queue_set_priority
 		case HSA_API_ID_hsa_amd_queue_set_priority :
 			//	hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -3968,6 +4327,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_queue_set_priority.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_store_read_index_screlease
 		case HSA_API_ID_hsa_queue_store_read_index_screlease :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -3997,6 +4358,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t value = %lu\n", args->hsa_queue_store_read_index_screlease.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_vmem_get_alloc_properties_from_handle
 		case HSA_API_ID_hsa_amd_vmem_get_alloc_properties_from_handle :
 			//	hsa_amd_vmem_alloc_handle_t memory_handle ({
 			//		uint64_t handle (unsigned long);
@@ -4022,6 +4385,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_get_alloc_properties_from_handle.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_ipc_signal_attach
 		case HSA_API_ID_hsa_amd_ipc_signal_attach :
 			//	const hsa_amd_ipc_signal_t * handle ({
 			//		uint32_t[8] handle (unsigned int[8]);
@@ -4045,6 +4410,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_ipc_signal_attach.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_and_acq_rel
 		case HSA_API_ID_hsa_signal_and_acq_rel :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4056,6 +4423,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_and_acq_rel.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_load_acquire
 		case HSA_API_ID_hsa_signal_load_acquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4067,6 +4436,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_load_acquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_memory_async_copy
 		case HSA_API_ID_hsa_amd_memory_async_copy :
 			//	void * dst (void *);
 			//	hsa_agent_t dst_agent ({
@@ -4109,6 +4480,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_async_copy.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_exchange_acq_rel
 		case HSA_API_ID_hsa_signal_exchange_acq_rel :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4122,6 +4495,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_exchange_acq_rel.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_executable_global_variable_define
 		case HSA_API_ID_hsa_executable_global_variable_define :
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
@@ -4141,11 +4516,15 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_executable_global_variable_define.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_shut_down
 		case HSA_API_ID_hsa_shut_down :
 			//	hsa_status_t retval (enum hsa_status_t);
 			printf("\thsa_status_t retval = %d\n", args->hsa_shut_down.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_signal_create
 		case HSA_API_ID_hsa_amd_signal_create :
 			//	hsa_signal_value_t initial_value (long);
 			//	uint32_t num_consumers (unsigned int);
@@ -4175,6 +4554,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_signal_create.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ven_amd_pcs_stop
 		case HSA_API_ID_hsa_ven_amd_pcs_stop :
 			//	hsa_ven_amd_pcs_t pc_sampling ({
 			//		uint64_t handle (unsigned long);
@@ -4186,6 +4567,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ven_amd_pcs_stop.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_memory_unlock
 		case HSA_API_ID_hsa_amd_memory_unlock :
 			//	void * host_ptr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
@@ -4194,6 +4577,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_unlock.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_image_create
 		case HSA_API_ID_hsa_amd_image_create :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -4257,6 +4642,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_image_create.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_interop_unmap_buffer
 		case HSA_API_ID_hsa_amd_interop_unmap_buffer :
 			//	void * ptr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
@@ -4265,6 +4652,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_interop_unmap_buffer.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_or_screlease
 		case HSA_API_ID_hsa_signal_or_screlease :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4276,6 +4665,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_or_screlease.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_destroy
 		case HSA_API_ID_hsa_signal_destroy :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4287,6 +4678,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_signal_destroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ext_image_destroy
 		case HSA_API_ID_hsa_ext_image_destroy :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -4304,6 +4697,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_destroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_vmem_set_access
 		case HSA_API_ID_hsa_amd_vmem_set_access :
 			//	void * va (void *);
 			//	size_t size (unsigned long);
@@ -4331,6 +4726,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_set_access.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_and_acquire
 		case HSA_API_ID_hsa_signal_and_acquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4342,6 +4739,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_and_acquire.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_memory_deregister
 		case HSA_API_ID_hsa_memory_deregister :
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
@@ -4352,6 +4751,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_memory_deregister.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_profiling_convert_tick_to_system_domain
 		case HSA_API_ID_hsa_amd_profiling_convert_tick_to_system_domain :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -4370,6 +4771,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_profiling_convert_tick_to_system_domain.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_add_release
 		case HSA_API_ID_hsa_signal_add_release :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4381,6 +4784,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_add_release.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_exchange_release
 		case HSA_API_ID_hsa_signal_exchange_release :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4394,6 +4799,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_exchange_release.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_vmem_address_reserve_align
 		case HSA_API_ID_hsa_amd_vmem_address_reserve_align :
 			//	void ** va (void **);
 			//	size_t size (unsigned long);
@@ -4413,6 +4820,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_address_reserve_align.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ext_sampler_destroy
 		case HSA_API_ID_hsa_ext_sampler_destroy :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -4430,6 +4839,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ext_sampler_destroy.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_store_relaxed
 		case HSA_API_ID_hsa_signal_store_relaxed :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4441,6 +4852,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_store_relaxed.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_cas_acq_rel
 		case HSA_API_ID_hsa_signal_cas_acq_rel :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4456,6 +4869,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_cas_acq_rel.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_xor_relaxed
 		case HSA_API_ID_hsa_signal_xor_relaxed :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4467,6 +4882,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_xor_relaxed.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_add_write_index_scacquire
 		case HSA_API_ID_hsa_queue_add_write_index_scacquire :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -4498,6 +4915,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_add_write_index_scacquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_isa_get_info
 		case HSA_API_ID_hsa_isa_get_info :
 			//	hsa_isa_t isa ({
 			//		uint64_t handle (unsigned long);
@@ -4516,6 +4935,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_isa_get_info.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_code_object_reader_create_from_file
 		case HSA_API_ID_hsa_code_object_reader_create_from_file :
 			//	hsa_file_t file (int);
 			//	hsa_code_object_reader_t * code_object_reader ({
@@ -4532,6 +4953,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_reader_create_from_file.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_isa_iterate_wavefronts
 		case HSA_API_ID_hsa_isa_iterate_wavefronts :
 			//	hsa_isa_t isa ({
 			//		uint64_t handle (unsigned long);
@@ -4548,6 +4971,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_isa_iterate_wavefronts.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_queue_cu_set_mask
 		case HSA_API_ID_hsa_amd_queue_cu_set_mask :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -4584,6 +5009,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_queue_cu_set_mask.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_vmem_unmap
 		case HSA_API_ID_hsa_amd_vmem_unmap :
 			//	void * va (void *);
 			//	size_t size (unsigned long);
@@ -4594,6 +5021,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_unmap.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_or_acquire
 		case HSA_API_ID_hsa_signal_or_acquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4605,6 +5034,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_or_acquire.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_agent_get_exception_policies
 		case HSA_API_ID_hsa_agent_get_exception_policies :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -4623,6 +5054,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_agent_get_exception_policies.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_system_get_extension_table
 		case HSA_API_ID_hsa_system_get_extension_table :
 			//	uint16_t extension (unsigned short);
 			//	uint16_t version_major (unsigned short);
@@ -4637,6 +5070,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_system_get_extension_table.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_add_write_index_screlease
 		case HSA_API_ID_hsa_queue_add_write_index_screlease :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -4668,6 +5103,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_add_write_index_screlease.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_signal_wait_any
 		case HSA_API_ID_hsa_amd_signal_wait_any :
 			//	uint32_t signal_count (unsigned int);
 			//	hsa_signal_t * signals ({
@@ -4703,6 +5140,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint32_t retval = %u\n", args->hsa_amd_signal_wait_any.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_agents_allow_access
 		case HSA_API_ID_hsa_amd_agents_allow_access :
 			//	uint32_t num_agents (unsigned int);
 			//	const hsa_agent_t * agents ({
@@ -4727,6 +5166,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_agents_allow_access.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_add_write_index_scacq_screl
 		case HSA_API_ID_hsa_queue_add_write_index_scacq_screl :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -4758,6 +5199,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_add_write_index_scacq_screl.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_add_screlease
 		case HSA_API_ID_hsa_signal_add_screlease :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4769,6 +5212,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_add_screlease.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_iterate_agents
 		case HSA_API_ID_hsa_iterate_agents :
 			//	hsa_status_t (*)(hsa_agent_t, void *) callback (enum hsa_status_t (*)(struct hsa_agent_s, void *));
 			//	void * data (void *);
@@ -4779,6 +5224,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_iterate_agents.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_store_read_index_relaxed
 		case HSA_API_ID_hsa_queue_store_read_index_relaxed :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -4808,6 +5255,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t value = %lu\n", args->hsa_queue_store_read_index_relaxed.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_or_relaxed
 		case HSA_API_ID_hsa_signal_or_relaxed :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4819,6 +5268,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_or_relaxed.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_ipc_memory_detach
 		case HSA_API_ID_hsa_amd_ipc_memory_detach :
 			//	void * mapped_ptr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
@@ -4827,6 +5278,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_ipc_memory_detach.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_or_release
 		case HSA_API_ID_hsa_signal_or_release :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4838,6 +5291,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_or_release.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_deregister_deallocation_callback
 		case HSA_API_ID_hsa_amd_deregister_deallocation_callback :
 			//	void * ptr (void *);
 			//	hsa_amd_deallocation_callback_t callback (void (*)(void *, void *));
@@ -4848,6 +5303,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_deregister_deallocation_callback.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_queue_load_read_index_acquire
 		case HSA_API_ID_hsa_queue_load_read_index_acquire :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -4877,6 +5334,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\tuint64_t retval = %lu\n", args->hsa_queue_load_read_index_acquire.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ven_amd_pcs_iterate_configuration
 		case HSA_API_ID_hsa_ven_amd_pcs_iterate_configuration :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -4893,6 +5352,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ven_amd_pcs_iterate_configuration.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_ipc_signal_create
 		case HSA_API_ID_hsa_amd_ipc_signal_create :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -4913,6 +5374,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_ipc_signal_create.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_code_object_iterate_symbols
 		case HSA_API_ID_hsa_code_object_iterate_symbols :
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
@@ -4929,6 +5392,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_iterate_symbols.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ext_image_get_capability_with_layout
 		case HSA_API_ID_hsa_ext_image_get_capability_with_layout :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -4960,6 +5425,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_get_capability_with_layout.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_memory_async_copy_on_engine
 		case HSA_API_ID_hsa_amd_memory_async_copy_on_engine :
 			//	void * dst (void *);
 			//	hsa_agent_t dst_agent ({
@@ -5006,6 +5473,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_async_copy_on_engine.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_agent_iterate_isas
 		case HSA_API_ID_hsa_agent_iterate_isas :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -5022,6 +5491,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_agent_iterate_isas.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_cas_scacq_screl
 		case HSA_API_ID_hsa_signal_cas_scacq_screl :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -5037,6 +5508,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_cas_scacq_screl.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_coherency_set_type
 		case HSA_API_ID_hsa_amd_coherency_set_type :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -5050,6 +5523,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_coherency_set_type.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_amd_queue_cu_get_mask
 		case HSA_API_ID_hsa_amd_queue_cu_get_mask :
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
@@ -5086,6 +5561,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_amd_queue_cu_get_mask.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_ext_image_create_with_layout
 		case HSA_API_ID_hsa_ext_image_create_with_layout :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -5142,6 +5619,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_create_with_layout.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_code_object_deserialize
 		case HSA_API_ID_hsa_code_object_deserialize :
 			//	void * serialized_code_object (void *);
 			//	size_t serialized_code_object_size (unsigned long);
@@ -5166,6 +5645,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_deserialize.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_memory_assign_agent
 		case HSA_API_ID_hsa_memory_assign_agent :
 			//	void * ptr (void *);
 			//	hsa_agent_t agent ({
@@ -5182,6 +5663,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_memory_assign_agent.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_isa_get_info_alt
 		case HSA_API_ID_hsa_isa_get_info_alt :
 			//	hsa_isa_t isa ({
 			//		uint64_t handle (unsigned long);
@@ -5198,6 +5681,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_isa_get_info_alt.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_subtract_acquire
 		case HSA_API_ID_hsa_signal_subtract_acquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -5209,6 +5694,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_subtract_acquire.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_memory_copy
 		case HSA_API_ID_hsa_memory_copy :
 			//	void * dst (void *);
 			//	const void * src (const void *);
@@ -5222,6 +5709,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_memory_copy.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_agent_get_info
 		case HSA_API_ID_hsa_agent_get_info :
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -5238,6 +5727,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_agent_get_info.retval);
 			break;
 
+		#endif
+		#if HAVE_hsa_signal_add_scacquire
 		case HSA_API_ID_hsa_signal_add_scacquire :
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
@@ -5249,6 +5740,8 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_add_scacquire.value);
 			break;
 
+		#endif
+		#if HAVE_hsa_ven_amd_pcs_flush
 		case HSA_API_ID_hsa_ven_amd_pcs_flush :
 			//	hsa_ven_amd_pcs_t pc_sampling ({
 			//		uint64_t handle (unsigned long);
@@ -5260,6 +5753,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			printf("\thsa_status_t retval = %d\n", args->hsa_ven_amd_pcs_flush.retval);
 			break;
 
+		#endif
         default : break;
     }
 }

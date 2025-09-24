@@ -7,7 +7,6 @@ Usage: $0 [options]
 
 Options:
   -i, --INSTALL_DIR <dir>     Specify install prefix (default: \$HOME/.local)
-  -b, --BFD_INCLUDE_DIR <dir> Specify path to bfd.h include directory
   -h, --help                  Show this help message and exit
 
 Examples:
@@ -21,17 +20,12 @@ EOF
 
 # Defaults
 INSTALL_DIR="$HOME/.local"
-BFD_INCLUDE_DIR=""
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
     case "$1" in
         -i|--INSTALL_DIR)
             INSTALL_DIR="$2"
-            shift 2
-            ;;
-        -b|--BFD_INCLUDE_DIR)
-            BFD_INCLUDE_DIR="$2"
             shift 2
             ;;
         -h|--help)
@@ -49,7 +43,6 @@ BUILD_DIR=build
 # Configure, build, and install
 cmake -B "$BUILD_DIR" \
     -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" \
-    ${BFD_INCLUDE_DIR:+-DBFD_INCLUDE_DIR="$BFD_INCLUDE_DIR"} \
     .
 
 cmake --build "$BUILD_DIR"
