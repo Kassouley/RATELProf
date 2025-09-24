@@ -59,7 +59,7 @@ function rfs.open_file(filename, mode, ext)
     end
     
     local dirname = rfs.dirname(filename)
-    if not rfs.exists(dirname) then
+    if dirname and dirname ~= "" and not rfs.exists(dirname) then
         rfs.mkdir(dirname)
     end
 
@@ -210,7 +210,7 @@ end
 function rfs.mkdir(p)
     p = get_path(p)
     local dirname = get_path(p)
-    os.execute("mkdir -p \"" .. dirname .. "\"")
+    os.execute('mkdir -p "' .. dirname .. '"')
 end
 
 --- Checks if a file exists.
