@@ -1,5 +1,4 @@
 #define _GNU_SOURCE
-#include <bfd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <dlfcn.h>
@@ -15,67 +14,57 @@
 static cached_source_data_t *location_cache = NULL;
 static pthread_mutex_t cache_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+/*
+ * addr2line:
+ *  - object_path: path to binary/shared-object (from dladdr->dli_fname)
+ *  - addr: the runtime address
+ *  - dli_fbase: base address (from dladdr->dli_fbase if available)
+ *
+ * On success:
+ *   *out_func = strdup(<function name line>)
+ *   *out_fileline = strdup(<file:line line>)
+ * Caller must free() them.
+ */
+static bool addr2line(const char *object_path, void *addr, void *dli_fbase,
+                                   char **out_func, char **out_fileline)
+{
+    // TODO (23/09/2025) : Support escape char in object_path ("'`\s etc.)
+    if (!object_path || !addr || !out_func || !out_fileline) return false;
+    uintptr_t uaddr = (uintptr_t)addr;
+    uintptr_t base  = dli_fbase ? (uintptr_t)dli_fbase : 0;
+    uintptr_t offset = base ? (uaddr - base) : uaddr;
 
-// Cache for BFD data
-// Save for each object file the corresponding BFD data
-static bfd_cache_entry_t *bfd_cache = NULL;
-static pthread_mutex_t bfd_cache_mutex = PTHREAD_MUTEX_INITIALIZER;
+    char addr_hex[32];
+    snprintf(addr_hex, sizeof(addr_hex), "0x%" PRIxPTR, offset);
 
+    char cmd[1024];
+    int n = snprintf(cmd, sizeof(cmd),
+                     "addr2line -e %s -f -C -i %s",
+                     object_path, addr_hex);
+    if (n < 0 || n >= (int)sizeof(cmd)) return false;
 
-static bfd_cache_entry_t *get_cached_bfd(const char *filename) {
-    pthread_mutex_lock(&bfd_cache_mutex);
+    FILE *fp = popen(cmd, "r");
+    if (!fp) return false;
 
-    for (bfd_cache_entry_t *entry = bfd_cache; entry; entry = entry->next) {
-        if (strcmp(entry->filename, filename) == 0) {
-            pthread_mutex_unlock(&bfd_cache_mutex);
-            return entry;
-        }
-    }
+    char *line = NULL;
+    size_t len = 0;
+    ssize_t read;
 
-    bfd *abfd = bfd_openr(filename, NULL);
-    if (!abfd) {
-        pthread_mutex_unlock(&bfd_cache_mutex);
-        return NULL;
-    }
+    /* function name */
+    read = getline(&line, &len, fp);
+    if (read <= 0) { free(line); pclose(fp); return false; }
+    if (read > 0 && line[read-1] == '\n') line[read-1] = '\0';
+    *out_func = strdup(line);
 
-    if (!bfd_check_format(abfd, bfd_object)) {
-        bfd_close(abfd);
-        pthread_mutex_unlock(&bfd_cache_mutex);
-        return NULL;
-    }
+    /* file:line */
+    read = getline(&line, &len, fp);
+    if (read <= 0) { free(line); pclose(fp); free(*out_func); *out_func=NULL; return false; }
+    if (read > 0 && line[read-1] == '\n') line[read-1] = '\0';
+    *out_fileline = strdup(line);
 
-    long symcount = bfd_get_symtab_upper_bound(abfd);
-    if (symcount <= 0) {
-        bfd_close(abfd);
-        pthread_mutex_unlock(&bfd_cache_mutex);
-        return NULL;
-    }
-
-    asymbol **symbols = malloc(symcount);
-    if (!symbols) {
-        bfd_close(abfd);
-        pthread_mutex_unlock(&bfd_cache_mutex);
-        return NULL;
-    }
-
-    symcount = bfd_canonicalize_symtab(abfd, symbols);
-    if (symcount < 0) {
-        free(symbols);
-        bfd_close(abfd);
-        pthread_mutex_unlock(&bfd_cache_mutex);
-        return NULL;
-    }
-
-
-    bfd_cache_entry_t *new_entry = malloc(sizeof(bfd_cache_entry_t));
-    new_entry->filename = strdup(filename);
-    new_entry->abfd = abfd;
-    new_entry->symbols = symbols;
-    new_entry->next = bfd_cache;
-    bfd_cache = new_entry;
-
-    pthread_mutex_unlock(&bfd_cache_mutex);
-    return new_entry;
+    free(line);
+    pclose(fp);
+    return true;
 }
 
 
@@ -108,7 +97,7 @@ static ratelprof_status_t add_new_cache_entry(ratelprof_source_data_t data) {
 }
 
 
-ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, void *addr) {    
+ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, void *addr) {
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
 
     ratelprof_source_data_t tmp = {0};
@@ -126,46 +115,22 @@ ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, v
         return status == RATELPROF_STATUS_SUCCESS ? RATELPROF_STATUS_DLADDR_FAILED : status;
     }
 
-    const char *object_filename = info.dli_fname;
+    data->object_file = info.dli_fname ? strdup(info.dli_fname) : NULL;
 
-    data->object_file = object_filename ? strdup(object_filename) : NULL;
+    char *func   = NULL;
+    char* source = NULL;
 
-    bfd_cache_entry_t *bfd_entry = get_cached_bfd(object_filename);
-    if (!bfd_entry) {
-        status = add_new_cache_entry(*data);
-        return status == RATELPROF_STATUS_SUCCESS ? RATELPROF_STATUS_BFD_FAILED : status;
-    }
-
-    bfd *abfd = bfd_entry->abfd;
-    asymbol **symbols = bfd_entry->symbols;
-
-    bfd_vma pc = (bfd_vma)addr;
-    asection *section = NULL;
-    for (section = abfd->sections; section; section = section->next) {
-        if (section->vma <= pc && pc < section->vma + bfd_section_size(section)) {
-            break;
-        }
-    }
-
-    if (section) {
-        const char *filename = NULL;
-        const char *func = NULL;
-        unsigned int line = 0;
-        if (bfd_find_nearest_line(abfd, section, symbols, pc - section->vma, &filename, &func, &line)) {
-            data->filename = filename ? strdup(filename) : NULL;
-            data->func     = func ? strdup(func) : NULL;
-            data->line     = line;
-        } else {
-            status = add_new_cache_entry(*data);
-            return status == RATELPROF_STATUS_SUCCESS ? RATELPROF_STATUS_BFD_NO_SOURCE_FOUND : status;
-        }
+    if (info.dli_fname && addr2line(info.dli_fname, addr, info.dli_fbase, &func, &source)) {
+        data->func     = func;
+        data->source   = source;
     } else {
         status = add_new_cache_entry(*data);
-        return status == RATELPROF_STATUS_SUCCESS ? RATELPROF_STATUS_BFD_NO_SECTION_FOUND : status;
+        return status;
     }
 
     return add_new_cache_entry(*data);
 }
+
 
 
 bool ratelprof_iterate_location_cache(ratelprof_cache_iter_cb_t callback, void *user_data) {
@@ -183,13 +148,13 @@ bool ratelprof_iterate_location_cache(ratelprof_cache_iter_cb_t callback, void *
 
 const char * ratelprof_format_source_location_string(const ratelprof_source_data_t *loc) {
     const char *func     = loc->func ? loc->func : "??";
-    const char *filename = loc->filename ? loc->filename : "??";
+    const char *source   = loc->source ? loc->source : "??:??";
 
-    size_t len = snprintf(NULL, 0, "%s from %s:%u", func, filename, loc->line);
+    size_t len = snprintf(NULL, 0, "%s from %s", func, source);
     char *buf = malloc(len + 1);
     if (!buf) return NULL;
 
-    snprintf(buf, len + 1, "%s from %s:%u", func, filename, loc->line);
+    snprintf(buf, len + 1, "%s from %s", func, source);
     return buf;
 }
 
@@ -219,25 +184,6 @@ void ratelprof_get_and_print_location(void *addr) {
 
 
 void ratelprof_cleanup_source_location(void) {
-    // ---- Free BFD cache ----
-    pthread_mutex_lock(&bfd_cache_mutex);
-    bfd_cache_entry_t *bfd_entry = bfd_cache;
-    while (bfd_entry) {
-        bfd_cache_entry_t *next = bfd_entry->next;
-
-        if (bfd_entry->symbols)
-            free(bfd_entry->symbols);
-        if (bfd_entry->abfd)
-            bfd_close(bfd_entry->abfd);
-        if (bfd_entry->filename)
-            free((void *)bfd_entry->filename);
-
-        free(bfd_entry);
-        bfd_entry = next;
-    }
-    bfd_cache = NULL;
-    pthread_mutex_unlock(&bfd_cache_mutex);
-
     // ---- Free caller/source location cache ----
     pthread_mutex_lock(&cache_mutex);
     cached_source_data_t *entry = location_cache;
@@ -246,8 +192,8 @@ void ratelprof_cleanup_source_location(void) {
 
         if (entry->location.object_file)
             free((void *)entry->location.object_file);
-        if (entry->location.filename)
-            free((void *)entry->location.filename);
+        if (entry->location.source)
+            free((void *)entry->location.source);
         if (entry->location.func)
             free((void *)entry->location.func);
 

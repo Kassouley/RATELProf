@@ -144,6 +144,7 @@ ratelprof_status_t __ratelprof_stop_impl(void)
 
 ratelprof_status_t __ratelprof_init_impl(unsigned int ndomains)
 {
+	unsetenv("LD_PRELOAD");
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
     RATELPROF_TRY(init_id_system());
 
