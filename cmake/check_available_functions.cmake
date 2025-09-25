@@ -1,38 +1,42 @@
-include(CheckSymbolExists)
-include(CheckCXXSymbolExists)
+include(CheckCSourceCompiles)
 
-function(CHECK_AVAILABLE_FUNCTION LIB_NAME HEADER CONFIG_DIR)
-    # Read the list of functions from the config file
+function(CHECK_AVAILABLE_FUNCTION LIB_NAME HEADERS CONFIG_DIR)
     file(STRINGS "cmake/config_functions/${LIB_NAME}_conf.txt" FUNC_LIST)
 
-    # set(CMAKE_REQUIRED_QUIET ON)
-    SET(CMAKE_REQUIRED_FLAGS "-c")
-
-    # Loop over each function
     foreach(FUNC ${FUNC_LIST})
-        if(FUNC STREQUAL "")  # Skip empty lines
+        if(FUNC STREQUAL "")
             continue()
         endif()
+        SET(CMAKE_REQUIRED_FLAGS "-c")
 
         set(VAR_NAME "HAVE_${FUNC}")
 
-        if(HEADER STREQUAL "NO_CHECK")
-            # Pretend all functions exist
+        if(HEADERS STREQUAL "NO_CHECK")
             set(${VAR_NAME} 1 CACHE INTERNAL "Presume ${FUNC} exists")
         else()
-            # Actually check for the function in the header
-            check_symbol_exists(${FUNC} "${HEADER}" ${VAR_NAME})
+            # Build the includes block
+            set(INCLUDE_CODE "")
+            foreach(H ${HEADERS})
+                string(APPEND INCLUDE_CODE "#include <${H}>\n")
+            endforeach()
+
+            # Build the test source
+            set(CODE "
+            ${INCLUDE_CODE}
+            int main(void) {
+                /* If it's a function, we can take its address */
+                void* ptr = (void*)(${FUNC});
+                (void)ptr;
+                return 0;
+            }")
+
+            check_c_source_compiles("${CODE}" ${VAR_NAME})
         endif()
     endforeach()
 
-    set(CMAKE_REQUIRED_QUIET OFF)
-
-    # Debug message
-    message(STATUS "Configuring: ${CONFIG_DIR}/${LIB_NAME}_conf.h.in")
-
-    # Configure the header
     configure_file(
         "${CONFIG_DIR}/${LIB_NAME}_conf.h.in"
         "${CONFIG_DIR}/${LIB_NAME}_conf.h"
     )
 endfunction()
+
