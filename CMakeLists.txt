@@ -34,7 +34,6 @@ ADD_COMPILE_OPTIONS(
 # SET(CMAKE_C_COMPILER    /usr/bin/gcc CACHE STRING "compiler for C"   FORCE)
 # SET(CMAKE_CXX_COMPILER  /usr/bin/g++ CACHE STRING "compiler for C++" FORCE)
 
-
 CHECK_ROCM_SYMBOLS()
 CHECK_MPI_SYMBOLS()
 
@@ -46,7 +45,6 @@ ADD_SUBDIRECTORY(src/wrappers)
 ADD_SUBDIRECTORY(src/plugins)
 ADD_SUBDIRECTORY(src/lua)
 
-# Remove static build (comment the following line if you want it)
 FUNCTION(REMOVE_STATIC_BUILD TARGET_NAME)
     SET(LIB "${TARGET_NAME}-lib-static")
     IF (TARGET ${LIB})
@@ -55,6 +53,7 @@ FUNCTION(REMOVE_STATIC_BUILD TARGET_NAME)
     endif()
 ENDFUNCTION()
 
+# Remove static build (comment the following line if you want it)
 # REMOVE_STATIC_BUILD(${CORE_PROJECT_NAME})
 # REMOVE_STATIC_BUILD(${EXT_PROJECT_NAME})
 REMOVE_STATIC_BUILD(${WRAPPER_PROJECT_NAME})

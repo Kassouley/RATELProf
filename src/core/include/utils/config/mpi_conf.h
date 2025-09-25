@@ -126,7 +126,6 @@
 #define HAVE_MPI_Grequest_start 1
 #define HAVE_MPI_Bsend_init 1
 #define HAVE_MPI_File_set_size 1
-#define HAVE_MPI_Op_c2f 1
 #define HAVE_MPI_Type_set_name 1
 #define HAVE_MPI_Comm_split_type 1
 #define HAVE_MPI_File_read_at_all_end 1
@@ -135,9 +134,7 @@
 #define HAVE_MPI_Comm_get_info 1
 #define HAVE_MPI_File_read_all_end 1
 #define HAVE_MPI_Win_unlock_all 1
-#define HAVE_MPI_Win_c2f 1
 #define HAVE_MPI_Type_create_f90_integer 1
-#define HAVE_MPI_Group_f2c 1
 #define HAVE_MPI_Exscan_init 1
 #define HAVE_MPI_Ibsend 1
 #define HAVE_MPI_Win_flush_local 1
@@ -156,23 +153,17 @@
 #define HAVE_MPI_Ssend_init 1
 #define HAVE_MPI_Comm_set_info 1
 #define HAVE_MPI_Cart_create 1
-#define HAVE_MPI_File_c2f 1
 #define HAVE_MPI_File_write_all_begin 1
 #define HAVE_MPI_Scan_init 1
 #define HAVE_MPI_Irsend 1
 #define HAVE_MPI_Neighbor_alltoallv 1
 #define HAVE_MPI_Pready_list 1
-#define HAVE_MPI_Request_c2f 1
-#define HAVE_MPI_File_f2c 1
 #define HAVE_MPI_Alltoallw_init 1
-#define HAVE_MPI_Info_c2f 1
 #define HAVE_MPI_File_read_ordered_begin 1
 #define HAVE_MPI_Dist_graph_create_adjacent 1
 #define HAVE_MPI_Reduce_scatter_init 1
 #define HAVE_MPI_Comm_get_parent 1
-#define HAVE_MPI_Info_f2c 1
 #define HAVE_MPI_Keyval_free 1
-#define HAVE_MPI_Session_f2c 1
 #define HAVE_MPI_Info_set 1
 #define HAVE_MPI_Keyval_create 1
 #define HAVE_MPI_Comm_connect 1
@@ -180,9 +171,7 @@
 #define HAVE_MPI_Scatterv_init 1
 #define HAVE_MPI_File_write_at_all_end 1
 #define HAVE_MPI_File_write_all_end 1
-#define HAVE_MPI_Status_f082f 1
 #define HAVE_MPI_Buffer_detach 1
-#define HAVE_MPI_Status_c2f08 1
 #define HAVE_MPI_Startall 1
 #define HAVE_MPI_Neighbor_alltoall 1
 #define HAVE_MPI_Put 1
@@ -216,7 +205,6 @@
 #define HAVE_MPI_Pack_external 1
 #define HAVE_MPI_Pready_range 1
 #define HAVE_MPI_Type_get_envelope 1
-#define HAVE_MPI_Type_f2c 1
 #define HAVE_MPI_Win_create 1
 #define HAVE_MPI_Isendrecv_replace 1
 #define HAVE_MPI_Win_set_errhandler 1
@@ -228,7 +216,6 @@
 #define HAVE_MPI_Pack_external_size 1
 #define HAVE_MPI_Win_flush_all 1
 #define HAVE_MPI_Rsend 1
-#define HAVE_MPI_Message_c2f 1
 #define HAVE_MPI_Win_free 1
 #define HAVE_MPI_Type_create_f90_complex 1
 #define HAVE_MPI_Neighbor_alltoallw_init 1
@@ -251,9 +238,7 @@
 #define HAVE_MPI_File_iread_at_all 1
 #define HAVE_MPI_Graphdims_get 1
 #define HAVE_MPI_File_iread_shared 1
-#define HAVE_MPI_Session_c2f 1
 #define HAVE_MPI_Comm_idup_with_info 1
-#define HAVE_MPI_Message_f2c 1
 #define HAVE_MPI_Get_version 1
 #define HAVE_MPI_Win_lock_all 1
 #define HAVE_MPI_Intercomm_create_from_groups 1
@@ -264,16 +249,12 @@
 #define HAVE_MPI_Error_class 1
 #define HAVE_MPI_Win_get_attr 1
 #define HAVE_MPI_Reduce_local 1
-#define HAVE_MPI_Errhandler_f2c 1
 #define HAVE_MPI_Ireduce_scatter_block 1
 #define HAVE_MPI_Status_set_cancelled 1
 #define HAVE_MPI_Win_test 1
-#define HAVE_MPI_Request_f2c 1
 #define HAVE_MPI_Test_cancelled 1
 #define HAVE_MPI_File_seek_shared 1
 #define HAVE_MPI_Error_string 1
-#define HAVE_MPI_Status_c2f 1
-#define HAVE_MPI_Comm_f2c 1
 #define HAVE_MPI_Graph_neighbors_count 1
 #define HAVE_MPI_Session_create_errhandler 1
 #define HAVE_MPI_Win_unlock 1
@@ -290,14 +271,12 @@
 #define HAVE_MPI_Alltoallv_init 1
 #define HAVE_MPI_Win_attach 1
 #define HAVE_MPI_File_get_position 1
-#define HAVE_MPI_Comm_c2f 1
 #define HAVE_MPI_Accumulate 1
 #define HAVE_MPI_File_write_shared 1
 #define HAVE_MPI_Win_create_dynamic 1
 #define HAVE_MPI_Neighbor_alltoallw 1
 #define HAVE_MPI_Iexscan 1
 #define HAVE_MPI_Graph_map 1
-#define HAVE_MPI_Group_c2f 1
 #define HAVE_MPI_Recv_init 1
 #define HAVE_MPI_Type_create_subarray 1
 #define HAVE_MPI_Comm_create_group 1
@@ -307,7 +286,6 @@
 #define HAVE_MPI_Type_get_true_extent 1
 #define HAVE_MPI_Alltoall_init 1
 #define HAVE_MPI_Send_init 1
-#define HAVE_MPI_Win_f2c 1
 #define HAVE_MPI_Neighbor_allgather_init 1
 #define HAVE_MPI_Ibcast 1
 #define HAVE_MPI_File_iread 1
@@ -317,7 +295,6 @@
 #define HAVE_MPI_Win_set_attr 1
 #define HAVE_MPI_Win_sync 1
 #define HAVE_MPI_Type_free_keyval 1
-#define HAVE_MPI_Status_f082c 1
 #define HAVE_MPI_File_write 1
 #define HAVE_MPI_Register_datarep 1
 #define HAVE_MPI_Ineighbor_alltoall 1
@@ -329,21 +306,17 @@
 #define HAVE_MPI_Win_complete 1
 #define HAVE_MPI_File_set_atomicity 1
 #define HAVE_MPI_Unpack_external 1
-#define HAVE_MPI_Errhandler_c2f 1
 #define HAVE_MPI_Mprobe 1
 #define HAVE_MPI_Add_error_code 1
 #define HAVE_MPI_Win_delete_attr 1
 #define HAVE_MPI_File_read_at_all 1
 #define HAVE_MPI_Pready 1
-#define HAVE_MPI_Status_f2f08 1
 #define HAVE_MPI_Iscatterv 1
-#define HAVE_MPI_Type_c2f 1
 #define HAVE_MPI_Win_detach 1
 #define HAVE_MPI_File_call_errhandler 1
 #define HAVE_MPI_Iallreduce 1
 #define HAVE_MPI_Get_processor_name 1
 #define HAVE_MPI_Start 1
-#define HAVE_MPI_Status_f2c 1
 #define HAVE_MPI_File_get_type_extent 1
 #define HAVE_MPI_File_read_shared 1
 #define HAVE_MPI_File_open 1
@@ -351,7 +324,6 @@
 #define HAVE_MPI_Type_create_hindexed_block 1
 #define HAVE_MPI_Cart_coords 1
 #define HAVE_MPI_Issend 1
-#define HAVE_MPI_Op_f2c 1
 #define HAVE_MPI_Graph_get 1
 #define HAVE_MPI_Win_free_keyval 1
 #define HAVE_MPI_Ineighbor_alltoallw 1
@@ -433,6 +405,34 @@
 #define HAVE_MPI_Buffer_attach 1
 #define HAVE_MPI_Session_set_errhandler 1
 #define HAVE_MPI_Win_start 1
+#define HAVE_MPI_Info_f2c 1
+#define HAVE_MPI_Info_c2f 1
+#define HAVE_MPI_Op_c2f 1
+#define HAVE_MPI_Win_c2f 1
+#define HAVE_MPI_Group_f2c 1
+#define HAVE_MPI_File_c2f 1
+#define HAVE_MPI_Request_c2f 1
+#define HAVE_MPI_File_f2c 1
+#define HAVE_MPI_Session_f2c 1
+#define HAVE_MPI_Status_f082f 1
+#define HAVE_MPI_Status_c2f08 1
+#define HAVE_MPI_Type_f2c 1
+#define HAVE_MPI_Message_c2f 1
+#define HAVE_MPI_Session_c2f 1
+#define HAVE_MPI_Message_f2c 1
+#define HAVE_MPI_Errhandler_f2c 1
+#define HAVE_MPI_Request_f2c 1
+#define HAVE_MPI_Status_c2f 1
+#define HAVE_MPI_Comm_f2c 1
+#define HAVE_MPI_Comm_c2f 1
+#define HAVE_MPI_Group_c2f 1
+#define HAVE_MPI_Win_f2c 1
+#define HAVE_MPI_Status_f082c 1
+#define HAVE_MPI_Errhandler_c2f 1
+#define HAVE_MPI_Status_f2f08 1
+#define HAVE_MPI_Type_c2f 1
+#define HAVE_MPI_Status_f2c 1
+#define HAVE_MPI_Op_f2c 1
 
 
 #if HAVE_MPI_Init
@@ -1268,13 +1268,6 @@
 #endif
 
 
-#if HAVE_MPI_Op_c2f
-    #define IF_ENABLED_MPI_Op_c2f(macro) macro(MPI_Op_c2f)
-#else
-    #define IF_ENABLED_MPI_Op_c2f(macro)
-#endif
-
-
 #if HAVE_MPI_Type_set_name
     #define IF_ENABLED_MPI_Type_set_name(macro) macro(MPI_Type_set_name)
 #else
@@ -1331,24 +1324,10 @@
 #endif
 
 
-#if HAVE_MPI_Win_c2f
-    #define IF_ENABLED_MPI_Win_c2f(macro) macro(MPI_Win_c2f)
-#else
-    #define IF_ENABLED_MPI_Win_c2f(macro)
-#endif
-
-
 #if HAVE_MPI_Type_create_f90_integer
     #define IF_ENABLED_MPI_Type_create_f90_integer(macro) macro(MPI_Type_create_f90_integer)
 #else
     #define IF_ENABLED_MPI_Type_create_f90_integer(macro)
-#endif
-
-
-#if HAVE_MPI_Group_f2c
-    #define IF_ENABLED_MPI_Group_f2c(macro) macro(MPI_Group_f2c)
-#else
-    #define IF_ENABLED_MPI_Group_f2c(macro)
 #endif
 
 
@@ -1478,13 +1457,6 @@
 #endif
 
 
-#if HAVE_MPI_File_c2f
-    #define IF_ENABLED_MPI_File_c2f(macro) macro(MPI_File_c2f)
-#else
-    #define IF_ENABLED_MPI_File_c2f(macro)
-#endif
-
-
 #if HAVE_MPI_File_write_all_begin
     #define IF_ENABLED_MPI_File_write_all_begin(macro) macro(MPI_File_write_all_begin)
 #else
@@ -1520,31 +1492,10 @@
 #endif
 
 
-#if HAVE_MPI_Request_c2f
-    #define IF_ENABLED_MPI_Request_c2f(macro) macro(MPI_Request_c2f)
-#else
-    #define IF_ENABLED_MPI_Request_c2f(macro)
-#endif
-
-
-#if HAVE_MPI_File_f2c
-    #define IF_ENABLED_MPI_File_f2c(macro) macro(MPI_File_f2c)
-#else
-    #define IF_ENABLED_MPI_File_f2c(macro)
-#endif
-
-
 #if HAVE_MPI_Alltoallw_init
     #define IF_ENABLED_MPI_Alltoallw_init(macro) macro(MPI_Alltoallw_init)
 #else
     #define IF_ENABLED_MPI_Alltoallw_init(macro)
-#endif
-
-
-#if HAVE_MPI_Info_c2f
-    #define IF_ENABLED_MPI_Info_c2f(macro) macro(MPI_Info_c2f)
-#else
-    #define IF_ENABLED_MPI_Info_c2f(macro)
 #endif
 
 
@@ -1576,24 +1527,10 @@
 #endif
 
 
-#if HAVE_MPI_Info_f2c
-    #define IF_ENABLED_MPI_Info_f2c(macro) macro(MPI_Info_f2c)
-#else
-    #define IF_ENABLED_MPI_Info_f2c(macro)
-#endif
-
-
 #if HAVE_MPI_Keyval_free
     #define IF_ENABLED_MPI_Keyval_free(macro) macro(MPI_Keyval_free)
 #else
     #define IF_ENABLED_MPI_Keyval_free(macro)
-#endif
-
-
-#if HAVE_MPI_Session_f2c
-    #define IF_ENABLED_MPI_Session_f2c(macro) macro(MPI_Session_f2c)
-#else
-    #define IF_ENABLED_MPI_Session_f2c(macro)
 #endif
 
 
@@ -1646,24 +1583,10 @@
 #endif
 
 
-#if HAVE_MPI_Status_f082f
-    #define IF_ENABLED_MPI_Status_f082f(macro) macro(MPI_Status_f082f)
-#else
-    #define IF_ENABLED_MPI_Status_f082f(macro)
-#endif
-
-
 #if HAVE_MPI_Buffer_detach
     #define IF_ENABLED_MPI_Buffer_detach(macro) macro(MPI_Buffer_detach)
 #else
     #define IF_ENABLED_MPI_Buffer_detach(macro)
-#endif
-
-
-#if HAVE_MPI_Status_c2f08
-    #define IF_ENABLED_MPI_Status_c2f08(macro) macro(MPI_Status_c2f08)
-#else
-    #define IF_ENABLED_MPI_Status_c2f08(macro)
 #endif
 
 
@@ -1898,13 +1821,6 @@
 #endif
 
 
-#if HAVE_MPI_Type_f2c
-    #define IF_ENABLED_MPI_Type_f2c(macro) macro(MPI_Type_f2c)
-#else
-    #define IF_ENABLED_MPI_Type_f2c(macro)
-#endif
-
-
 #if HAVE_MPI_Win_create
     #define IF_ENABLED_MPI_Win_create(macro) macro(MPI_Win_create)
 #else
@@ -1979,13 +1895,6 @@
     #define IF_ENABLED_MPI_Rsend(macro) macro(MPI_Rsend)
 #else
     #define IF_ENABLED_MPI_Rsend(macro)
-#endif
-
-
-#if HAVE_MPI_Message_c2f
-    #define IF_ENABLED_MPI_Message_c2f(macro) macro(MPI_Message_c2f)
-#else
-    #define IF_ENABLED_MPI_Message_c2f(macro)
 #endif
 
 
@@ -2143,24 +2052,10 @@
 #endif
 
 
-#if HAVE_MPI_Session_c2f
-    #define IF_ENABLED_MPI_Session_c2f(macro) macro(MPI_Session_c2f)
-#else
-    #define IF_ENABLED_MPI_Session_c2f(macro)
-#endif
-
-
 #if HAVE_MPI_Comm_idup_with_info
     #define IF_ENABLED_MPI_Comm_idup_with_info(macro) macro(MPI_Comm_idup_with_info)
 #else
     #define IF_ENABLED_MPI_Comm_idup_with_info(macro)
-#endif
-
-
-#if HAVE_MPI_Message_f2c
-    #define IF_ENABLED_MPI_Message_f2c(macro) macro(MPI_Message_f2c)
-#else
-    #define IF_ENABLED_MPI_Message_f2c(macro)
 #endif
 
 
@@ -2234,13 +2129,6 @@
 #endif
 
 
-#if HAVE_MPI_Errhandler_f2c
-    #define IF_ENABLED_MPI_Errhandler_f2c(macro) macro(MPI_Errhandler_f2c)
-#else
-    #define IF_ENABLED_MPI_Errhandler_f2c(macro)
-#endif
-
-
 #if HAVE_MPI_Ireduce_scatter_block
     #define IF_ENABLED_MPI_Ireduce_scatter_block(macro) macro(MPI_Ireduce_scatter_block)
 #else
@@ -2262,13 +2150,6 @@
 #endif
 
 
-#if HAVE_MPI_Request_f2c
-    #define IF_ENABLED_MPI_Request_f2c(macro) macro(MPI_Request_f2c)
-#else
-    #define IF_ENABLED_MPI_Request_f2c(macro)
-#endif
-
-
 #if HAVE_MPI_Test_cancelled
     #define IF_ENABLED_MPI_Test_cancelled(macro) macro(MPI_Test_cancelled)
 #else
@@ -2287,20 +2168,6 @@
     #define IF_ENABLED_MPI_Error_string(macro) macro(MPI_Error_string)
 #else
     #define IF_ENABLED_MPI_Error_string(macro)
-#endif
-
-
-#if HAVE_MPI_Status_c2f
-    #define IF_ENABLED_MPI_Status_c2f(macro) macro(MPI_Status_c2f)
-#else
-    #define IF_ENABLED_MPI_Status_c2f(macro)
-#endif
-
-
-#if HAVE_MPI_Comm_f2c
-    #define IF_ENABLED_MPI_Comm_f2c(macro) macro(MPI_Comm_f2c)
-#else
-    #define IF_ENABLED_MPI_Comm_f2c(macro)
 #endif
 
 
@@ -2416,13 +2283,6 @@
 #endif
 
 
-#if HAVE_MPI_Comm_c2f
-    #define IF_ENABLED_MPI_Comm_c2f(macro) macro(MPI_Comm_c2f)
-#else
-    #define IF_ENABLED_MPI_Comm_c2f(macro)
-#endif
-
-
 #if HAVE_MPI_Accumulate
     #define IF_ENABLED_MPI_Accumulate(macro) macro(MPI_Accumulate)
 #else
@@ -2462,13 +2322,6 @@
     #define IF_ENABLED_MPI_Graph_map(macro) macro(MPI_Graph_map)
 #else
     #define IF_ENABLED_MPI_Graph_map(macro)
-#endif
-
-
-#if HAVE_MPI_Group_c2f
-    #define IF_ENABLED_MPI_Group_c2f(macro) macro(MPI_Group_c2f)
-#else
-    #define IF_ENABLED_MPI_Group_c2f(macro)
 #endif
 
 
@@ -2535,13 +2388,6 @@
 #endif
 
 
-#if HAVE_MPI_Win_f2c
-    #define IF_ENABLED_MPI_Win_f2c(macro) macro(MPI_Win_f2c)
-#else
-    #define IF_ENABLED_MPI_Win_f2c(macro)
-#endif
-
-
 #if HAVE_MPI_Neighbor_allgather_init
     #define IF_ENABLED_MPI_Neighbor_allgather_init(macro) macro(MPI_Neighbor_allgather_init)
 #else
@@ -2602,13 +2448,6 @@
     #define IF_ENABLED_MPI_Type_free_keyval(macro) macro(MPI_Type_free_keyval)
 #else
     #define IF_ENABLED_MPI_Type_free_keyval(macro)
-#endif
-
-
-#if HAVE_MPI_Status_f082c
-    #define IF_ENABLED_MPI_Status_f082c(macro) macro(MPI_Status_f082c)
-#else
-    #define IF_ENABLED_MPI_Status_f082c(macro)
 #endif
 
 
@@ -2689,13 +2528,6 @@
 #endif
 
 
-#if HAVE_MPI_Errhandler_c2f
-    #define IF_ENABLED_MPI_Errhandler_c2f(macro) macro(MPI_Errhandler_c2f)
-#else
-    #define IF_ENABLED_MPI_Errhandler_c2f(macro)
-#endif
-
-
 #if HAVE_MPI_Mprobe
     #define IF_ENABLED_MPI_Mprobe(macro) macro(MPI_Mprobe)
 #else
@@ -2731,24 +2563,10 @@
 #endif
 
 
-#if HAVE_MPI_Status_f2f08
-    #define IF_ENABLED_MPI_Status_f2f08(macro) macro(MPI_Status_f2f08)
-#else
-    #define IF_ENABLED_MPI_Status_f2f08(macro)
-#endif
-
-
 #if HAVE_MPI_Iscatterv
     #define IF_ENABLED_MPI_Iscatterv(macro) macro(MPI_Iscatterv)
 #else
     #define IF_ENABLED_MPI_Iscatterv(macro)
-#endif
-
-
-#if HAVE_MPI_Type_c2f
-    #define IF_ENABLED_MPI_Type_c2f(macro) macro(MPI_Type_c2f)
-#else
-    #define IF_ENABLED_MPI_Type_c2f(macro)
 #endif
 
 
@@ -2784,13 +2602,6 @@
     #define IF_ENABLED_MPI_Start(macro) macro(MPI_Start)
 #else
     #define IF_ENABLED_MPI_Start(macro)
-#endif
-
-
-#if HAVE_MPI_Status_f2c
-    #define IF_ENABLED_MPI_Status_f2c(macro) macro(MPI_Status_f2c)
-#else
-    #define IF_ENABLED_MPI_Status_f2c(macro)
 #endif
 
 
@@ -2840,13 +2651,6 @@
     #define IF_ENABLED_MPI_Issend(macro) macro(MPI_Issend)
 #else
     #define IF_ENABLED_MPI_Issend(macro)
-#endif
-
-
-#if HAVE_MPI_Op_f2c
-    #define IF_ENABLED_MPI_Op_f2c(macro) macro(MPI_Op_f2c)
-#else
-    #define IF_ENABLED_MPI_Op_f2c(macro)
 #endif
 
 
@@ -3414,6 +3218,202 @@
     #define IF_ENABLED_MPI_Win_start(macro) macro(MPI_Win_start)
 #else
     #define IF_ENABLED_MPI_Win_start(macro)
+#endif
+
+
+#if HAVE_MPI_Info_f2c
+    #define IF_ENABLED_MPI_Info_f2c(macro) macro(MPI_Info_f2c)
+#else
+    #define IF_ENABLED_MPI_Info_f2c(macro)
+#endif
+
+
+#if HAVE_MPI_Info_c2f
+    #define IF_ENABLED_MPI_Info_c2f(macro) macro(MPI_Info_c2f)
+#else
+    #define IF_ENABLED_MPI_Info_c2f(macro)
+#endif
+
+
+#if HAVE_MPI_Op_c2f
+    #define IF_ENABLED_MPI_Op_c2f(macro) macro(MPI_Op_c2f)
+#else
+    #define IF_ENABLED_MPI_Op_c2f(macro)
+#endif
+
+
+#if HAVE_MPI_Win_c2f
+    #define IF_ENABLED_MPI_Win_c2f(macro) macro(MPI_Win_c2f)
+#else
+    #define IF_ENABLED_MPI_Win_c2f(macro)
+#endif
+
+
+#if HAVE_MPI_Group_f2c
+    #define IF_ENABLED_MPI_Group_f2c(macro) macro(MPI_Group_f2c)
+#else
+    #define IF_ENABLED_MPI_Group_f2c(macro)
+#endif
+
+
+#if HAVE_MPI_File_c2f
+    #define IF_ENABLED_MPI_File_c2f(macro) macro(MPI_File_c2f)
+#else
+    #define IF_ENABLED_MPI_File_c2f(macro)
+#endif
+
+
+#if HAVE_MPI_Request_c2f
+    #define IF_ENABLED_MPI_Request_c2f(macro) macro(MPI_Request_c2f)
+#else
+    #define IF_ENABLED_MPI_Request_c2f(macro)
+#endif
+
+
+#if HAVE_MPI_File_f2c
+    #define IF_ENABLED_MPI_File_f2c(macro) macro(MPI_File_f2c)
+#else
+    #define IF_ENABLED_MPI_File_f2c(macro)
+#endif
+
+
+#if HAVE_MPI_Session_f2c
+    #define IF_ENABLED_MPI_Session_f2c(macro) macro(MPI_Session_f2c)
+#else
+    #define IF_ENABLED_MPI_Session_f2c(macro)
+#endif
+
+
+#if HAVE_MPI_Status_f082f
+    #define IF_ENABLED_MPI_Status_f082f(macro) macro(MPI_Status_f082f)
+#else
+    #define IF_ENABLED_MPI_Status_f082f(macro)
+#endif
+
+
+#if HAVE_MPI_Status_c2f08
+    #define IF_ENABLED_MPI_Status_c2f08(macro) macro(MPI_Status_c2f08)
+#else
+    #define IF_ENABLED_MPI_Status_c2f08(macro)
+#endif
+
+
+#if HAVE_MPI_Type_f2c
+    #define IF_ENABLED_MPI_Type_f2c(macro) macro(MPI_Type_f2c)
+#else
+    #define IF_ENABLED_MPI_Type_f2c(macro)
+#endif
+
+
+#if HAVE_MPI_Message_c2f
+    #define IF_ENABLED_MPI_Message_c2f(macro) macro(MPI_Message_c2f)
+#else
+    #define IF_ENABLED_MPI_Message_c2f(macro)
+#endif
+
+
+#if HAVE_MPI_Session_c2f
+    #define IF_ENABLED_MPI_Session_c2f(macro) macro(MPI_Session_c2f)
+#else
+    #define IF_ENABLED_MPI_Session_c2f(macro)
+#endif
+
+
+#if HAVE_MPI_Message_f2c
+    #define IF_ENABLED_MPI_Message_f2c(macro) macro(MPI_Message_f2c)
+#else
+    #define IF_ENABLED_MPI_Message_f2c(macro)
+#endif
+
+
+#if HAVE_MPI_Errhandler_f2c
+    #define IF_ENABLED_MPI_Errhandler_f2c(macro) macro(MPI_Errhandler_f2c)
+#else
+    #define IF_ENABLED_MPI_Errhandler_f2c(macro)
+#endif
+
+
+#if HAVE_MPI_Request_f2c
+    #define IF_ENABLED_MPI_Request_f2c(macro) macro(MPI_Request_f2c)
+#else
+    #define IF_ENABLED_MPI_Request_f2c(macro)
+#endif
+
+
+#if HAVE_MPI_Status_c2f
+    #define IF_ENABLED_MPI_Status_c2f(macro) macro(MPI_Status_c2f)
+#else
+    #define IF_ENABLED_MPI_Status_c2f(macro)
+#endif
+
+
+#if HAVE_MPI_Comm_f2c
+    #define IF_ENABLED_MPI_Comm_f2c(macro) macro(MPI_Comm_f2c)
+#else
+    #define IF_ENABLED_MPI_Comm_f2c(macro)
+#endif
+
+
+#if HAVE_MPI_Comm_c2f
+    #define IF_ENABLED_MPI_Comm_c2f(macro) macro(MPI_Comm_c2f)
+#else
+    #define IF_ENABLED_MPI_Comm_c2f(macro)
+#endif
+
+
+#if HAVE_MPI_Group_c2f
+    #define IF_ENABLED_MPI_Group_c2f(macro) macro(MPI_Group_c2f)
+#else
+    #define IF_ENABLED_MPI_Group_c2f(macro)
+#endif
+
+
+#if HAVE_MPI_Win_f2c
+    #define IF_ENABLED_MPI_Win_f2c(macro) macro(MPI_Win_f2c)
+#else
+    #define IF_ENABLED_MPI_Win_f2c(macro)
+#endif
+
+
+#if HAVE_MPI_Status_f082c
+    #define IF_ENABLED_MPI_Status_f082c(macro) macro(MPI_Status_f082c)
+#else
+    #define IF_ENABLED_MPI_Status_f082c(macro)
+#endif
+
+
+#if HAVE_MPI_Errhandler_c2f
+    #define IF_ENABLED_MPI_Errhandler_c2f(macro) macro(MPI_Errhandler_c2f)
+#else
+    #define IF_ENABLED_MPI_Errhandler_c2f(macro)
+#endif
+
+
+#if HAVE_MPI_Status_f2f08
+    #define IF_ENABLED_MPI_Status_f2f08(macro) macro(MPI_Status_f2f08)
+#else
+    #define IF_ENABLED_MPI_Status_f2f08(macro)
+#endif
+
+
+#if HAVE_MPI_Type_c2f
+    #define IF_ENABLED_MPI_Type_c2f(macro) macro(MPI_Type_c2f)
+#else
+    #define IF_ENABLED_MPI_Type_c2f(macro)
+#endif
+
+
+#if HAVE_MPI_Status_f2c
+    #define IF_ENABLED_MPI_Status_f2c(macro) macro(MPI_Status_f2c)
+#else
+    #define IF_ENABLED_MPI_Status_f2c(macro)
+#endif
+
+
+#if HAVE_MPI_Op_f2c
+    #define IF_ENABLED_MPI_Op_f2c(macro) macro(MPI_Op_f2c)
+#else
+    #define IF_ENABLED_MPI_Op_f2c(macro)
 #endif
 
 

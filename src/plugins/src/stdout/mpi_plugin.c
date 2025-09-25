@@ -160,13 +160,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int source (int);
 			//	int tag (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tvoid * buf = %p", args->MPI_Recv.buf);
 			printf("\n");
@@ -179,13 +173,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_Recv.status);
 			if (args->MPI_Recv.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Recv.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Recv.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Recv.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Recv.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Recv.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Recv.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Recv.retval);
 			break;
@@ -204,13 +192,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int source (int);
 			//	int recvtag (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tconst void * sendbuf = %p", args->MPI_Sendrecv.sendbuf);
 			printf("\n");
@@ -230,13 +212,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_Sendrecv.status);
 			if (args->MPI_Sendrecv.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Sendrecv.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Sendrecv.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Sendrecv.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Sendrecv.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Sendrecv.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Sendrecv.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Sendrecv.retval);
 			break;
@@ -252,13 +228,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int source (int);
 			//	int recvtag (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tvoid * buf = %p", args->MPI_Sendrecv_replace.buf);
 			printf("\n");
@@ -273,13 +243,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_Sendrecv_replace.status);
 			if (args->MPI_Sendrecv_replace.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Sendrecv_replace.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Sendrecv_replace.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Sendrecv_replace.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Sendrecv_replace.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Sendrecv_replace.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Sendrecv_replace.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Sendrecv_replace.retval);
 			break;
@@ -342,13 +306,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		#if HAVE_MPI_Wait
 		case MPI_API_ID_MPI_Wait :
 			//	MPI_Request * request (struct mpi_request_t **);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_Request * request = %p", args->MPI_Wait.request);
 			if (args->MPI_Wait.request != NULL) {
@@ -356,13 +314,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Status * status = %p", args->MPI_Wait.status);
 			if (args->MPI_Wait.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Wait.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Wait.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Wait.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Wait.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Wait.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Wait.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Wait.retval);
 			break;
@@ -372,13 +324,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		case MPI_API_ID_MPI_Waitall :
 			//	int count (int);
 			//	MPI_Request[] array_of_requests (struct mpi_request_t *[]);
-			//	MPI_Status * array_of_statuses ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * array_of_statuses (struct opaque **);
 			//	int retval (int);
 			printf("\tint count = %d\n", args->MPI_Waitall.count);
 			printf("\tMPI_Request[] array_of_requests = %p", args->MPI_Waitall.array_of_requests);
@@ -387,13 +333,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Status * array_of_statuses = %p", args->MPI_Waitall.array_of_statuses);
 			if (args->MPI_Waitall.array_of_statuses != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Waitall.array_of_statuses__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Waitall.array_of_statuses__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Waitall.array_of_statuses__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Waitall.array_of_statuses__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Waitall.array_of_statuses__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Waitall.array_of_statuses__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Waitall.retval);
 			break;
@@ -404,13 +344,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int count (int);
 			//	MPI_Request[] array_of_requests (struct mpi_request_t *[]);
 			//	int * index (int *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tint count = %d\n", args->MPI_Waitany.count);
 			printf("\tMPI_Request[] array_of_requests = %p", args->MPI_Waitany.array_of_requests);
@@ -423,13 +357,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Status * status = %p", args->MPI_Waitany.status);
 			if (args->MPI_Waitany.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Waitany.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Waitany.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Waitany.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Waitany.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Waitany.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Waitany.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Waitany.retval);
 			break;
@@ -441,13 +369,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Request[] array_of_requests (struct mpi_request_t *[]);
 			//	int * outcount (int *);
 			//	int[] array_of_indices (int[]);
-			//	MPI_Status[] array_of_statuses ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status[] array_of_statuses (struct opaque *[]);
 			//	int retval (int);
 			printf("\tint incount = %d\n", args->MPI_Waitsome.incount);
 			printf("\tMPI_Request[] array_of_requests = %p", args->MPI_Waitsome.array_of_requests);
@@ -464,13 +386,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Status[] array_of_statuses = %p", args->MPI_Waitsome.array_of_statuses);
 			if (args->MPI_Waitsome.array_of_statuses != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Waitsome.array_of_statuses__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Waitsome.array_of_statuses__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Waitsome.array_of_statuses__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Waitsome.array_of_statuses__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Waitsome.array_of_statuses__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Waitsome.array_of_statuses__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Waitsome.retval);
 			break;
@@ -480,13 +396,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		case MPI_API_ID_MPI_Test :
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int * flag (int *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_Request * request = %p", args->MPI_Test.request);
 			if (args->MPI_Test.request != NULL) {
@@ -498,13 +408,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Status * status = %p", args->MPI_Test.status);
 			if (args->MPI_Test.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Test.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Test.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Test.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Test.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Test.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Test.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Test.retval);
 			break;
@@ -515,13 +419,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int count (int);
 			//	MPI_Request[] array_of_requests (struct mpi_request_t *[]);
 			//	int * flag (int *);
-			//	MPI_Status[] array_of_statuses ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status[] array_of_statuses (struct opaque *[]);
 			//	int retval (int);
 			printf("\tint count = %d\n", args->MPI_Testall.count);
 			printf("\tMPI_Request[] array_of_requests = %p", args->MPI_Testall.array_of_requests);
@@ -534,13 +432,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Status[] array_of_statuses = %p", args->MPI_Testall.array_of_statuses);
 			if (args->MPI_Testall.array_of_statuses != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Testall.array_of_statuses__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Testall.array_of_statuses__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Testall.array_of_statuses__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Testall.array_of_statuses__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Testall.array_of_statuses__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Testall.array_of_statuses__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Testall.retval);
 			break;
@@ -552,13 +444,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Request[] array_of_requests (struct mpi_request_t *[]);
 			//	int * index (int *);
 			//	int * flag (int *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tint count = %d\n", args->MPI_Testany.count);
 			printf("\tMPI_Request[] array_of_requests = %p", args->MPI_Testany.array_of_requests);
@@ -575,13 +461,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Status * status = %p", args->MPI_Testany.status);
 			if (args->MPI_Testany.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Testany.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Testany.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Testany.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Testany.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Testany.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Testany.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Testany.retval);
 			break;
@@ -593,13 +473,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Request[] array_of_requests (struct mpi_request_t *[]);
 			//	int * outcount (int *);
 			//	int[] array_of_indices (int[]);
-			//	MPI_Status[] array_of_statuses ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status[] array_of_statuses (struct opaque *[]);
 			//	int retval (int);
 			printf("\tint incount = %d\n", args->MPI_Testsome.incount);
 			printf("\tMPI_Request[] array_of_requests = %p", args->MPI_Testsome.array_of_requests);
@@ -616,13 +490,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Status[] array_of_statuses = %p", args->MPI_Testsome.array_of_statuses);
 			if (args->MPI_Testsome.array_of_statuses != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Testsome.array_of_statuses__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Testsome.array_of_statuses__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Testsome.array_of_statuses__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Testsome.array_of_statuses__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Testsome.array_of_statuses__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Testsome.array_of_statuses__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Testsome.retval);
 			break;
@@ -815,25 +683,13 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		#endif
 		#if HAVE_MPI_Get_count
 		case MPI_API_ID_MPI_Get_count :
-			//	const MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	const MPI_Status * status (const struct opaque * *);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	int * count (int *);
 			//	int retval (int);
 			printf("\tconst MPI_Status * status = %p", args->MPI_Get_count.status);
 			if (args->MPI_Get_count.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Get_count.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Get_count.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Get_count.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Get_count.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Get_count.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Get_count.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Datatype datatype = %p", args->MPI_Get_count.datatype);
 			printf("\n");
@@ -847,25 +703,13 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		#endif
 		#if HAVE_MPI_Get_elements
 		case MPI_API_ID_MPI_Get_elements :
-			//	const MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	const MPI_Status * status (const struct opaque * *);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	int * count (int *);
 			//	int retval (int);
 			printf("\tconst MPI_Status * status = %p", args->MPI_Get_elements.status);
 			if (args->MPI_Get_elements.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Get_elements.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Get_elements.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Get_elements.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Get_elements.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Get_elements.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Get_elements.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Datatype datatype = %p", args->MPI_Get_elements.datatype);
 			printf("\n");
@@ -1947,25 +1791,13 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		#endif
 		#if HAVE_MPI_Get_elements_x
 		case MPI_API_ID_MPI_Get_elements_x :
-			//	const MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	const MPI_Status * status (const struct opaque * *);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Count * count (long long*);
 			//	int retval (int);
 			printf("\tconst MPI_Status * status = %p", args->MPI_Get_elements_x.status);
 			if (args->MPI_Get_elements_x.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Get_elements_x.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Get_elements_x.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Get_elements_x.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Get_elements_x.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Get_elements_x.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Get_elements_x.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Datatype datatype = %p", args->MPI_Get_elements_x.datatype);
 			printf("\n");
@@ -2241,13 +2073,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_write_at_all.fh);
 			printf("\n");
@@ -2259,13 +2085,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_write_at_all.status);
 			if (args->MPI_File_write_at_all.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_write_at_all.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_write_at_all.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_write_at_all.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_write_at_all.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_write_at_all.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_write_at_all.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_write_at_all.retval);
 			break;
@@ -2275,13 +2095,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		case MPI_API_ID_MPI_File_write_ordered_end :
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_write_ordered_end.fh);
 			printf("\n");
@@ -2289,13 +2103,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_write_ordered_end.status);
 			if (args->MPI_File_write_ordered_end.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_write_ordered_end.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_write_ordered_end.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_write_ordered_end.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_write_ordered_end.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_write_ordered_end.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_write_ordered_end.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_write_ordered_end.retval);
 			break;
@@ -2618,13 +2426,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_read_at.fh);
 			printf("\n");
@@ -2636,13 +2438,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_read_at.status);
 			if (args->MPI_File_read_at.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_read_at.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_read_at.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_read_at.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_read_at.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_read_at.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_read_at.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_read_at.retval);
 			break;
@@ -2691,7 +2487,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		#endif
 		#if HAVE_MPI_Grequest_start
 		case MPI_API_ID_MPI_Grequest_start :
-			//	MPI_Grequest_query_function * query_fn (int (*)(void *, struct mpi_status_public_t *));
+			//	MPI_Grequest_query_function * query_fn (int (*)(void *, struct opaque * *));
 			//	MPI_Grequest_free_function * free_fn (int (*)(void *));
 			//	MPI_Grequest_cancel_function * cancel_fn (int (*)(void *, int));
 			//	void * extra_state (void *);
@@ -2749,16 +2545,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			break;
 
 		#endif
-		#if HAVE_MPI_Op_c2f
-		case MPI_API_ID_MPI_Op_c2f :
-			//	MPI_Op op (struct mpi_op_t *);
-			//	int retval (int);
-			printf("\tMPI_Op op = %p", args->MPI_Op_c2f.op);
-			printf("\n");
-			printf("\tint retval = %d\n", args->MPI_Op_c2f.retval);
-			break;
-
-		#endif
 		#if HAVE_MPI_Type_set_name
 		case MPI_API_ID_MPI_Type_set_name :
 			//	MPI_Datatype type (struct mpi_datatype_t *);
@@ -2800,13 +2586,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		case MPI_API_ID_MPI_File_read_at_all_end :
 			//	MPI_File fh (struct mpi_file_t *);
 			//	void * buf (void *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_read_at_all_end.fh);
 			printf("\n");
@@ -2814,13 +2594,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_read_at_all_end.status);
 			if (args->MPI_File_read_at_all_end.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_read_at_all_end.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_read_at_all_end.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_read_at_all_end.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_read_at_all_end.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_read_at_all_end.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_read_at_all_end.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_read_at_all_end.retval);
 			break;
@@ -2832,13 +2606,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_write_all.fh);
 			printf("\n");
@@ -2849,13 +2617,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_write_all.status);
 			if (args->MPI_File_write_all.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_write_all.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_write_all.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_write_all.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_write_all.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_write_all.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_write_all.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_write_all.retval);
 			break;
@@ -2868,13 +2630,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int * flag (int *);
 			//	MPI_Message * message (struct mpi_message_t **);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tint source = %d\n", args->MPI_Improbe.source);
 			printf("\tint tag = %d\n", args->MPI_Improbe.tag);
@@ -2890,13 +2646,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Status * status = %p", args->MPI_Improbe.status);
 			if (args->MPI_Improbe.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Improbe.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Improbe.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Improbe.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Improbe.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Improbe.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Improbe.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Improbe.retval);
 			break;
@@ -2921,13 +2671,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		case MPI_API_ID_MPI_File_read_all_end :
 			//	MPI_File fh (struct mpi_file_t *);
 			//	void * buf (void *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_read_all_end.fh);
 			printf("\n");
@@ -2935,13 +2679,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_read_all_end.status);
 			if (args->MPI_File_read_all_end.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_read_all_end.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_read_all_end.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_read_all_end.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_read_all_end.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_read_all_end.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_read_all_end.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_read_all_end.retval);
 			break;
@@ -2957,16 +2695,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			break;
 
 		#endif
-		#if HAVE_MPI_Win_c2f
-		case MPI_API_ID_MPI_Win_c2f :
-			//	MPI_Win win (struct mpi_win_t *);
-			//	int retval (int);
-			printf("\tMPI_Win win = %p", args->MPI_Win_c2f.win);
-			printf("\n");
-			printf("\tint retval = %d\n", args->MPI_Win_c2f.retval);
-			break;
-
-		#endif
 		#if HAVE_MPI_Type_create_f90_integer
 		case MPI_API_ID_MPI_Type_create_f90_integer :
 			//	int r (int);
@@ -2978,16 +2706,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 				printf(" -> %p\n", args->MPI_Type_create_f90_integer.newtype__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_create_f90_integer.retval);
-			break;
-
-		#endif
-		#if HAVE_MPI_Group_f2c
-		case MPI_API_ID_MPI_Group_f2c :
-			//	int group (int);
-			//	MPI_Group retval (struct mpi_group_t *);
-			printf("\tint group = %d\n", args->MPI_Group_f2c.group);
-			printf("\tMPI_Group retval = %p", args->MPI_Group_f2c.retval);
-			printf("\n");
 			break;
 
 		#endif
@@ -3197,25 +2915,13 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		#endif
 		#if HAVE_MPI_Status_set_elements
 		case MPI_API_ID_MPI_Status_set_elements :
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	int count (int);
 			//	int retval (int);
 			printf("\tMPI_Status * status = %p", args->MPI_Status_set_elements.status);
 			if (args->MPI_Status_set_elements.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Status_set_elements.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Status_set_elements.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Status_set_elements.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Status_set_elements.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Status_set_elements.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Status_set_elements.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Datatype datatype = %p", args->MPI_Status_set_elements.datatype);
 			printf("\n");
@@ -3230,13 +2936,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_read_ordered.fh);
 			printf("\n");
@@ -3247,13 +2947,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_read_ordered.status);
 			if (args->MPI_File_read_ordered.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_read_ordered.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_read_ordered.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_read_ordered.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_read_ordered.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_read_ordered.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_read_ordered.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_read_ordered.retval);
 			break;
@@ -3440,16 +3134,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			break;
 
 		#endif
-		#if HAVE_MPI_File_c2f
-		case MPI_API_ID_MPI_File_c2f :
-			//	MPI_File file (struct mpi_file_t *);
-			//	int retval (int);
-			printf("\tMPI_File file = %p", args->MPI_File_c2f.file);
-			printf("\n");
-			printf("\tint retval = %d\n", args->MPI_File_c2f.retval);
-			break;
-
-		#endif
 		#if HAVE_MPI_File_write_all_begin
 		case MPI_API_ID_MPI_File_write_all_begin :
 			//	MPI_File fh (struct mpi_file_t *);
@@ -3586,26 +3270,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			break;
 
 		#endif
-		#if HAVE_MPI_Request_c2f
-		case MPI_API_ID_MPI_Request_c2f :
-			//	MPI_Request request (struct mpi_request_t *);
-			//	int retval (int);
-			printf("\tMPI_Request request = %p", args->MPI_Request_c2f.request);
-			printf("\n");
-			printf("\tint retval = %d\n", args->MPI_Request_c2f.retval);
-			break;
-
-		#endif
-		#if HAVE_MPI_File_f2c
-		case MPI_API_ID_MPI_File_f2c :
-			//	int file (int);
-			//	MPI_File retval (struct mpi_file_t *);
-			printf("\tint file = %d\n", args->MPI_File_f2c.file);
-			printf("\tMPI_File retval = %p", args->MPI_File_f2c.retval);
-			printf("\n");
-			break;
-
-		#endif
 		#if HAVE_MPI_Alltoallw_init
 		case MPI_API_ID_MPI_Alltoallw_init :
 			//	const void * sendbuf (const void *);
@@ -3657,16 +3321,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 				printf(" -> %p\n", args->MPI_Alltoallw_init.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Alltoallw_init.retval);
-			break;
-
-		#endif
-		#if HAVE_MPI_Info_c2f
-		case MPI_API_ID_MPI_Info_c2f :
-			//	MPI_Info info (struct mpi_info_t *);
-			//	int retval (int);
-			printf("\tMPI_Info info = %p", args->MPI_Info_c2f.info);
-			printf("\n");
-			printf("\tint retval = %d\n", args->MPI_Info_c2f.retval);
 			break;
 
 		#endif
@@ -3779,16 +3433,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			break;
 
 		#endif
-		#if HAVE_MPI_Info_f2c
-		case MPI_API_ID_MPI_Info_f2c :
-			//	int info (int);
-			//	MPI_Info retval (struct mpi_info_t *);
-			printf("\tint info = %d\n", args->MPI_Info_f2c.info);
-			printf("\tMPI_Info retval = %p", args->MPI_Info_f2c.retval);
-			printf("\n");
-			break;
-
-		#endif
 		#if HAVE_MPI_Keyval_free
 		case MPI_API_ID_MPI_Keyval_free :
 			//	int * keyval (int *);
@@ -3798,16 +3442,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 				printf(" -> %d\n", args->MPI_Keyval_free.keyval__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Keyval_free.retval);
-			break;
-
-		#endif
-		#if HAVE_MPI_Session_f2c
-		case MPI_API_ID_MPI_Session_f2c :
-			//	int session (int);
-			//	MPI_Session retval (struct mpi_instance_t *);
-			printf("\tint session = %d\n", args->MPI_Session_f2c.session);
-			printf("\tMPI_Session retval = %p", args->MPI_Session_f2c.retval);
-			printf("\n");
 			break;
 
 		#endif
@@ -3945,13 +3579,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		case MPI_API_ID_MPI_File_write_at_all_end :
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_write_at_all_end.fh);
 			printf("\n");
@@ -3959,13 +3587,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_write_at_all_end.status);
 			if (args->MPI_File_write_at_all_end.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_write_at_all_end.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_write_at_all_end.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_write_at_all_end.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_write_at_all_end.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_write_at_all_end.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_write_at_all_end.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_write_at_all_end.retval);
 			break;
@@ -3975,13 +3597,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		case MPI_API_ID_MPI_File_write_all_end :
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_write_all_end.fh);
 			printf("\n");
@@ -3989,42 +3605,9 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_write_all_end.status);
 			if (args->MPI_File_write_all_end.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_write_all_end.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_write_all_end.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_write_all_end.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_write_all_end.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_write_all_end.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_write_all_end.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_write_all_end.retval);
-			break;
-
-		#endif
-		#if HAVE_MPI_Status_f082f
-		case MPI_API_ID_MPI_Status_f082f :
-			//	const MPI_F08_status * f08_status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int[3] internal (int[3]);
-			//	});
-			//	int * f_status (int *);
-			//	int retval (int);
-			printf("\tconst MPI_F08_status * f08_status = %p", args->MPI_Status_f082f.f08_status);
-			if (args->MPI_Status_f082f.f08_status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Status_f082f.f08_status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Status_f082f.f08_status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Status_f082f.f08_status__ref.val.MPI_ERROR);
-				printf("\t\tint[3] internal = %d\n", args->MPI_Status_f082f.f08_status__ref.val.internal[0]);
-				printf("\t}\n");
-			} else { printf("\n"); };
-			printf("\tint * f_status = %p", args->MPI_Status_f082f.f_status);
-			if (args->MPI_Status_f082f.f_status != NULL) {
-				printf(" -> %d\n", args->MPI_Status_f082f.f_status__ref.val);
-			} else { printf("\n"); };
-			printf("\tint retval = %d\n", args->MPI_Status_f082f.retval);
 			break;
 
 		#endif
@@ -4040,45 +3623,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 				printf(" -> %d\n", args->MPI_Buffer_detach.size__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Buffer_detach.retval);
-			break;
-
-		#endif
-		#if HAVE_MPI_Status_c2f08
-		case MPI_API_ID_MPI_Status_c2f08 :
-			//	const MPI_Status * c_status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
-			//	MPI_F08_status * f08_status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int[3] internal (int[3]);
-			//	});
-			//	int retval (int);
-			printf("\tconst MPI_Status * c_status = %p", args->MPI_Status_c2f08.c_status);
-			if (args->MPI_Status_c2f08.c_status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Status_c2f08.c_status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Status_c2f08.c_status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Status_c2f08.c_status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Status_c2f08.c_status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Status_c2f08.c_status__ref.val._ucount);
-				printf("\t}\n");
-			} else { printf("\n"); };
-			printf("\tMPI_F08_status * f08_status = %p", args->MPI_Status_c2f08.f08_status);
-			if (args->MPI_Status_c2f08.f08_status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Status_c2f08.f08_status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Status_c2f08.f08_status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Status_c2f08.f08_status__ref.val.MPI_ERROR);
-				printf("\t\tint[3] internal = %d\n", args->MPI_Status_c2f08.f08_status__ref.val.internal[0]);
-				printf("\t}\n");
-			} else { printf("\n"); };
-			printf("\tint retval = %d\n", args->MPI_Status_c2f08.retval);
 			break;
 
 		#endif
@@ -4153,13 +3697,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		case MPI_API_ID_MPI_File_read_ordered_end :
 			//	MPI_File fh (struct mpi_file_t *);
 			//	void * buf (void *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_read_ordered_end.fh);
 			printf("\n");
@@ -4167,13 +3705,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_read_ordered_end.status);
 			if (args->MPI_File_read_ordered_end.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_read_ordered_end.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_read_ordered_end.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_read_ordered_end.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_read_ordered_end.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_read_ordered_end.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_read_ordered_end.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_read_ordered_end.retval);
 			break;
@@ -4198,13 +3730,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_write_at.fh);
 			printf("\n");
@@ -4216,13 +3742,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_write_at.status);
 			if (args->MPI_File_write_at.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_write_at.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_write_at.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_write_at.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_write_at.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_write_at.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_write_at.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_write_at.retval);
 			break;
@@ -4411,13 +3931,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_read.fh);
 			printf("\n");
@@ -4428,13 +3942,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_read.status);
 			if (args->MPI_File_read.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_read.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_read.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_read.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_read.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_read.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_read.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_read.retval);
 			break;
@@ -4514,25 +4022,13 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		#endif
 		#if HAVE_MPI_Status_set_elements_x
 		case MPI_API_ID_MPI_Status_set_elements_x :
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Count count (long long);
 			//	int retval (int);
 			printf("\tMPI_Status * status = %p", args->MPI_Status_set_elements_x.status);
 			if (args->MPI_Status_set_elements_x.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Status_set_elements_x.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Status_set_elements_x.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Status_set_elements_x.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Status_set_elements_x.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Status_set_elements_x.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Status_set_elements_x.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tMPI_Datatype datatype = %p", args->MPI_Status_set_elements_x.datatype);
 			printf("\n");
@@ -4600,13 +4096,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int source (int);
 			//	int tag (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tint source = %d\n", args->MPI_Probe.source);
 			printf("\tint tag = %d\n", args->MPI_Probe.tag);
@@ -4614,13 +4104,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_Probe.status);
 			if (args->MPI_Probe.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Probe.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Probe.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Probe.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Probe.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Probe.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Probe.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Probe.retval);
 			break;
@@ -4642,13 +4126,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		case MPI_API_ID_MPI_Request_get_status :
 			//	MPI_Request request (struct mpi_request_t *);
 			//	int * flag (int *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_Request request = %p", args->MPI_Request_get_status.request);
 			printf("\n");
@@ -4658,13 +4136,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Status * status = %p", args->MPI_Request_get_status.status);
 			if (args->MPI_Request_get_status.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Request_get_status.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Request_get_status.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Request_get_status.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Request_get_status.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Request_get_status.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Request_get_status.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Request_get_status.retval);
 			break;
@@ -4858,16 +4330,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 				printf(" -> %d\n", args->MPI_Type_get_envelope.combiner__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Type_get_envelope.retval);
-			break;
-
-		#endif
-		#if HAVE_MPI_Type_f2c
-		case MPI_API_ID_MPI_Type_f2c :
-			//	int datatype (int);
-			//	MPI_Datatype retval (struct mpi_datatype_t *);
-			printf("\tint datatype = %d\n", args->MPI_Type_f2c.datatype);
-			printf("\tMPI_Datatype retval = %p", args->MPI_Type_f2c.retval);
-			printf("\n");
 			break;
 
 		#endif
@@ -5107,16 +4569,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tMPI_Comm comm = %p", args->MPI_Rsend.comm);
 			printf("\n");
 			printf("\tint retval = %d\n", args->MPI_Rsend.retval);
-			break;
-
-		#endif
-		#if HAVE_MPI_Message_c2f
-		case MPI_API_ID_MPI_Message_c2f :
-			//	MPI_Message message (struct mpi_message_t *);
-			//	int retval (int);
-			printf("\tMPI_Message message = %p", args->MPI_Message_c2f.message);
-			printf("\n");
-			printf("\tint retval = %d\n", args->MPI_Message_c2f.retval);
 			break;
 
 		#endif
@@ -5378,13 +4830,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int count (int);
 			//	MPI_Datatype type (struct mpi_datatype_t *);
 			//	MPI_Message * message (struct mpi_message_t **);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tvoid * buf = %p", args->MPI_Mrecv.buf);
 			printf("\n");
@@ -5397,13 +4843,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Status * status = %p", args->MPI_Mrecv.status);
 			if (args->MPI_Mrecv.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Mrecv.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Mrecv.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Mrecv.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Mrecv.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Mrecv.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Mrecv.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Mrecv.retval);
 			break;
@@ -5644,16 +5084,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			break;
 
 		#endif
-		#if HAVE_MPI_Session_c2f
-		case MPI_API_ID_MPI_Session_c2f :
-			//	const MPI_Session session (const struct mpi_instance_t *);
-			//	int retval (int);
-			printf("\tconst MPI_Session session = %p", args->MPI_Session_c2f.session);
-			printf("\n");
-			printf("\tint retval = %d\n", args->MPI_Session_c2f.retval);
-			break;
-
-		#endif
 		#if HAVE_MPI_Comm_idup_with_info
 		case MPI_API_ID_MPI_Comm_idup_with_info :
 			//	MPI_Comm comm (struct mpi_communicator_t *);
@@ -5674,16 +5104,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 				printf(" -> %p\n", args->MPI_Comm_idup_with_info.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Comm_idup_with_info.retval);
-			break;
-
-		#endif
-		#if HAVE_MPI_Message_f2c
-		case MPI_API_ID_MPI_Message_f2c :
-			//	int message (int);
-			//	MPI_Message retval (struct mpi_message_t *);
-			printf("\tint message = %d\n", args->MPI_Message_f2c.message);
-			printf("\tMPI_Message retval = %p", args->MPI_Message_f2c.retval);
-			printf("\n");
 			break;
 
 		#endif
@@ -5927,16 +5347,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			break;
 
 		#endif
-		#if HAVE_MPI_Errhandler_f2c
-		case MPI_API_ID_MPI_Errhandler_f2c :
-			//	int errhandler (int);
-			//	MPI_Errhandler retval (struct mpi_errhandler_t *);
-			printf("\tint errhandler = %d\n", args->MPI_Errhandler_f2c.errhandler);
-			printf("\tMPI_Errhandler retval = %p", args->MPI_Errhandler_f2c.retval);
-			printf("\n");
-			break;
-
-		#endif
 		#if HAVE_MPI_Ireduce_scatter_block
 		case MPI_API_ID_MPI_Ireduce_scatter_block :
 			//	const void * sendbuf (const void *);
@@ -5968,24 +5378,12 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 		#endif
 		#if HAVE_MPI_Status_set_cancelled
 		case MPI_API_ID_MPI_Status_set_cancelled :
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int flag (int);
 			//	int retval (int);
 			printf("\tMPI_Status * status = %p", args->MPI_Status_set_cancelled.status);
 			if (args->MPI_Status_set_cancelled.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Status_set_cancelled.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Status_set_cancelled.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Status_set_cancelled.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Status_set_cancelled.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Status_set_cancelled.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Status_set_cancelled.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint flag = %d\n", args->MPI_Status_set_cancelled.flag);
 			printf("\tint retval = %d\n", args->MPI_Status_set_cancelled.retval);
@@ -6007,36 +5405,14 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			break;
 
 		#endif
-		#if HAVE_MPI_Request_f2c
-		case MPI_API_ID_MPI_Request_f2c :
-			//	int request (int);
-			//	MPI_Request retval (struct mpi_request_t *);
-			printf("\tint request = %d\n", args->MPI_Request_f2c.request);
-			printf("\tMPI_Request retval = %p", args->MPI_Request_f2c.retval);
-			printf("\n");
-			break;
-
-		#endif
 		#if HAVE_MPI_Test_cancelled
 		case MPI_API_ID_MPI_Test_cancelled :
-			//	const MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	const MPI_Status * status (const struct opaque * *);
 			//	int * flag (int *);
 			//	int retval (int);
 			printf("\tconst MPI_Status * status = %p", args->MPI_Test_cancelled.status);
 			if (args->MPI_Test_cancelled.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Test_cancelled.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Test_cancelled.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Test_cancelled.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Test_cancelled.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Test_cancelled.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Test_cancelled.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint * flag = %p", args->MPI_Test_cancelled.flag);
 			if (args->MPI_Test_cancelled.flag != NULL) {
@@ -6076,45 +5452,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 				printf(" -> %d\n", args->MPI_Error_string.resultlen__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Error_string.retval);
-			break;
-
-		#endif
-		#if HAVE_MPI_Status_c2f
-		case MPI_API_ID_MPI_Status_c2f :
-			//	const MPI_Status * c_status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
-			//	int * f_status (int *);
-			//	int retval (int);
-			printf("\tconst MPI_Status * c_status = %p", args->MPI_Status_c2f.c_status);
-			if (args->MPI_Status_c2f.c_status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Status_c2f.c_status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Status_c2f.c_status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Status_c2f.c_status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Status_c2f.c_status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Status_c2f.c_status__ref.val._ucount);
-				printf("\t}\n");
-			} else { printf("\n"); };
-			printf("\tint * f_status = %p", args->MPI_Status_c2f.f_status);
-			if (args->MPI_Status_c2f.f_status != NULL) {
-				printf(" -> %d\n", args->MPI_Status_c2f.f_status__ref.val);
-			} else { printf("\n"); };
-			printf("\tint retval = %d\n", args->MPI_Status_c2f.retval);
-			break;
-
-		#endif
-		#if HAVE_MPI_Comm_f2c
-		case MPI_API_ID_MPI_Comm_f2c :
-			//	int comm (int);
-			//	MPI_Comm retval (struct mpi_communicator_t *);
-			printf("\tint comm = %d\n", args->MPI_Comm_f2c.comm);
-			printf("\tMPI_Comm retval = %p", args->MPI_Comm_f2c.retval);
-			printf("\n");
 			break;
 
 		#endif
@@ -6200,13 +5537,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_read_all.fh);
 			printf("\n");
@@ -6217,13 +5548,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_read_all.status);
 			if (args->MPI_File_read_all.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_read_all.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_read_all.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_read_all.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_read_all.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_read_all.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_read_all.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_read_all.retval);
 			break;
@@ -6422,16 +5747,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			break;
 
 		#endif
-		#if HAVE_MPI_Comm_c2f
-		case MPI_API_ID_MPI_Comm_c2f :
-			//	MPI_Comm comm (struct mpi_communicator_t *);
-			//	int retval (int);
-			printf("\tMPI_Comm comm = %p", args->MPI_Comm_c2f.comm);
-			printf("\n");
-			printf("\tint retval = %d\n", args->MPI_Comm_c2f.retval);
-			break;
-
-		#endif
 		#if HAVE_MPI_Accumulate
 		case MPI_API_ID_MPI_Accumulate :
 			//	const void * origin_addr (const void *);
@@ -6468,13 +5783,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_write_shared.fh);
 			printf("\n");
@@ -6485,13 +5794,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_write_shared.status);
 			if (args->MPI_File_write_shared.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_write_shared.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_write_shared.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_write_shared.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_write_shared.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_write_shared.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_write_shared.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_write_shared.retval);
 			break;
@@ -6614,16 +5917,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 				printf(" -> %d\n", args->MPI_Graph_map.newrank__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Graph_map.retval);
-			break;
-
-		#endif
-		#if HAVE_MPI_Group_c2f
-		case MPI_API_ID_MPI_Group_c2f :
-			//	MPI_Group group (struct mpi_group_t *);
-			//	int retval (int);
-			printf("\tMPI_Group group = %p", args->MPI_Group_c2f.group);
-			printf("\n");
-			printf("\tint retval = %d\n", args->MPI_Group_c2f.retval);
 			break;
 
 		#endif
@@ -6871,16 +6164,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			break;
 
 		#endif
-		#if HAVE_MPI_Win_f2c
-		case MPI_API_ID_MPI_Win_f2c :
-			//	int win (int);
-			//	MPI_Win retval (struct mpi_win_t *);
-			printf("\tint win = %d\n", args->MPI_Win_f2c.win);
-			printf("\tMPI_Win retval = %p", args->MPI_Win_f2c.retval);
-			printf("\n");
-			break;
-
-		#endif
 		#if HAVE_MPI_Neighbor_allgather_init
 		case MPI_API_ID_MPI_Neighbor_allgather_init :
 			//	const void * sendbuf (const void *);
@@ -7074,58 +6357,13 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			break;
 
 		#endif
-		#if HAVE_MPI_Status_f082c
-		case MPI_API_ID_MPI_Status_f082c :
-			//	const MPI_F08_status * f08_status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int[3] internal (int[3]);
-			//	});
-			//	MPI_Status * c_status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
-			//	int retval (int);
-			printf("\tconst MPI_F08_status * f08_status = %p", args->MPI_Status_f082c.f08_status);
-			if (args->MPI_Status_f082c.f08_status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Status_f082c.f08_status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Status_f082c.f08_status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Status_f082c.f08_status__ref.val.MPI_ERROR);
-				printf("\t\tint[3] internal = %d\n", args->MPI_Status_f082c.f08_status__ref.val.internal[0]);
-				printf("\t}\n");
-			} else { printf("\n"); };
-			printf("\tMPI_Status * c_status = %p", args->MPI_Status_f082c.c_status);
-			if (args->MPI_Status_f082c.c_status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Status_f082c.c_status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Status_f082c.c_status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Status_f082c.c_status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Status_f082c.c_status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Status_f082c.c_status__ref.val._ucount);
-				printf("\t}\n");
-			} else { printf("\n"); };
-			printf("\tint retval = %d\n", args->MPI_Status_f082c.retval);
-			break;
-
-		#endif
 		#if HAVE_MPI_File_write
 		case MPI_API_ID_MPI_File_write :
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_write.fh);
 			printf("\n");
@@ -7136,13 +6374,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_write.status);
 			if (args->MPI_File_write.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_write.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_write.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_write.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_write.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_write.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_write.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_write.retval);
 			break;
@@ -7299,13 +6531,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int tag (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int * flag (int *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tint source = %d\n", args->MPI_Iprobe.source);
 			printf("\tint tag = %d\n", args->MPI_Iprobe.tag);
@@ -7317,13 +6543,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Status * status = %p", args->MPI_Iprobe.status);
 			if (args->MPI_Iprobe.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Iprobe.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Iprobe.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Iprobe.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Iprobe.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Iprobe.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Iprobe.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Iprobe.retval);
 			break;
@@ -7401,29 +6621,13 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			break;
 
 		#endif
-		#if HAVE_MPI_Errhandler_c2f
-		case MPI_API_ID_MPI_Errhandler_c2f :
-			//	MPI_Errhandler errhandler (struct mpi_errhandler_t *);
-			//	int retval (int);
-			printf("\tMPI_Errhandler errhandler = %p", args->MPI_Errhandler_c2f.errhandler);
-			printf("\n");
-			printf("\tint retval = %d\n", args->MPI_Errhandler_c2f.retval);
-			break;
-
-		#endif
 		#if HAVE_MPI_Mprobe
 		case MPI_API_ID_MPI_Mprobe :
 			//	int source (int);
 			//	int tag (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Message * message (struct mpi_message_t **);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tint source = %d\n", args->MPI_Mprobe.source);
 			printf("\tint tag = %d\n", args->MPI_Mprobe.tag);
@@ -7435,13 +6639,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			} else { printf("\n"); };
 			printf("\tMPI_Status * status = %p", args->MPI_Mprobe.status);
 			if (args->MPI_Mprobe.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Mprobe.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Mprobe.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Mprobe.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Mprobe.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Mprobe.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_Mprobe.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Mprobe.retval);
 			break;
@@ -7480,13 +6678,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_read_at_all.fh);
 			printf("\n");
@@ -7498,13 +6690,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_read_at_all.status);
 			if (args->MPI_File_read_at_all.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_read_at_all.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_read_at_all.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_read_at_all.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_read_at_all.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_read_at_all.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_read_at_all.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_read_at_all.retval);
 			break;
@@ -7519,33 +6705,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tMPI_Request request = %p", args->MPI_Pready.request);
 			printf("\n");
 			printf("\tint retval = %d\n", args->MPI_Pready.retval);
-			break;
-
-		#endif
-		#if HAVE_MPI_Status_f2f08
-		case MPI_API_ID_MPI_Status_f2f08 :
-			//	const int * f_status (const int *);
-			//	MPI_F08_status * f08_status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int[3] internal (int[3]);
-			//	});
-			//	int retval (int);
-			printf("\tconst int * f_status = %p", args->MPI_Status_f2f08.f_status);
-			if (args->MPI_Status_f2f08.f_status != NULL) {
-				printf(" -> %d\n", args->MPI_Status_f2f08.f_status__ref.val);
-			} else { printf("\n"); };
-			printf("\tMPI_F08_status * f08_status = %p", args->MPI_Status_f2f08.f08_status);
-			if (args->MPI_Status_f2f08.f08_status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Status_f2f08.f08_status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Status_f2f08.f08_status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Status_f2f08.f08_status__ref.val.MPI_ERROR);
-				printf("\t\tint[3] internal = %d\n", args->MPI_Status_f2f08.f08_status__ref.val.internal[0]);
-				printf("\t}\n");
-			} else { printf("\n"); };
-			printf("\tint retval = %d\n", args->MPI_Status_f2f08.retval);
 			break;
 
 		#endif
@@ -7587,16 +6746,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 				printf(" -> %p\n", args->MPI_Iscatterv.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Iscatterv.retval);
-			break;
-
-		#endif
-		#if HAVE_MPI_Type_c2f
-		case MPI_API_ID_MPI_Type_c2f :
-			//	MPI_Datatype datatype (struct mpi_datatype_t *);
-			//	int retval (int);
-			printf("\tMPI_Datatype datatype = %p", args->MPI_Type_c2f.datatype);
-			printf("\n");
-			printf("\tint retval = %d\n", args->MPI_Type_c2f.retval);
 			break;
 
 		#endif
@@ -7683,35 +6832,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			break;
 
 		#endif
-		#if HAVE_MPI_Status_f2c
-		case MPI_API_ID_MPI_Status_f2c :
-			//	const int * f_status (const int *);
-			//	MPI_Status * c_status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
-			//	int retval (int);
-			printf("\tconst int * f_status = %p", args->MPI_Status_f2c.f_status);
-			if (args->MPI_Status_f2c.f_status != NULL) {
-				printf(" -> %d\n", args->MPI_Status_f2c.f_status__ref.val);
-			} else { printf("\n"); };
-			printf("\tMPI_Status * c_status = %p", args->MPI_Status_f2c.c_status);
-			if (args->MPI_Status_f2c.c_status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_Status_f2c.c_status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_Status_f2c.c_status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_Status_f2c.c_status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_Status_f2c.c_status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_Status_f2c.c_status__ref.val._ucount);
-				printf("\t}\n");
-			} else { printf("\n"); };
-			printf("\tint retval = %d\n", args->MPI_Status_f2c.retval);
-			break;
-
-		#endif
 		#if HAVE_MPI_File_get_type_extent
 		case MPI_API_ID_MPI_File_get_type_extent :
 			//	MPI_File fh (struct mpi_file_t *);
@@ -7736,13 +6856,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_read_shared.fh);
 			printf("\n");
@@ -7753,13 +6867,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_read_shared.status);
 			if (args->MPI_File_read_shared.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_read_shared.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_read_shared.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_read_shared.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_read_shared.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_read_shared.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_read_shared.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_read_shared.retval);
 			break;
@@ -7872,16 +6980,6 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 				printf(" -> %p\n", args->MPI_Issend.request__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_Issend.retval);
-			break;
-
-		#endif
-		#if HAVE_MPI_Op_f2c
-		case MPI_API_ID_MPI_Op_f2c :
-			//	int op (int);
-			//	MPI_Op retval (struct mpi_op_t *);
-			printf("\tint op = %d\n", args->MPI_Op_f2c.op);
-			printf("\tMPI_Op retval = %p", args->MPI_Op_f2c.retval);
-			printf("\n");
 			break;
 
 		#endif
@@ -8714,13 +7812,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
-			//	MPI_Status * status ({
-			//		int MPI_SOURCE (int);
-			//		int MPI_TAG (int);
-			//		int MPI_ERROR (int);
-			//		int _cancelled (int);
-			//		size_t _ucount (unsigned long);
-			//	});
+			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
 			printf("\tMPI_File fh = %p", args->MPI_File_write_ordered.fh);
 			printf("\n");
@@ -8731,13 +7823,7 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\n");
 			printf("\tMPI_Status * status = %p", args->MPI_File_write_ordered.status);
 			if (args->MPI_File_write_ordered.status != NULL) {
-				printf(" -> {\n");
-				printf("\t\tint MPI_SOURCE = %d\n", args->MPI_File_write_ordered.status__ref.val.MPI_SOURCE);
-				printf("\t\tint MPI_TAG = %d\n", args->MPI_File_write_ordered.status__ref.val.MPI_TAG);
-				printf("\t\tint MPI_ERROR = %d\n", args->MPI_File_write_ordered.status__ref.val.MPI_ERROR);
-				printf("\t\tint _cancelled = %d\n", args->MPI_File_write_ordered.status__ref.val._cancelled);
-				printf("\t\tsize_t _ucount = %lu\n", args->MPI_File_write_ordered.status__ref.val._ucount);
-				printf("\t}\n");
+				printf(" -> %p\n", args->MPI_File_write_ordered.status__ref.val);
 			} else { printf("\n"); };
 			printf("\tint retval = %d\n", args->MPI_File_write_ordered.retval);
 			break;
@@ -9698,6 +8784,328 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			printf("\tMPI_Win win = %p", args->MPI_Win_start.win);
 			printf("\n");
 			printf("\tint retval = %d\n", args->MPI_Win_start.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Info_f2c
+		case MPI_API_ID_MPI_Info_f2c :
+			//	int info (int);
+			//	MPI_Info retval (struct mpi_info_t *);
+			printf("\tint info = %d\n", args->MPI_Info_f2c.info);
+			printf("\tMPI_Info retval = %p", args->MPI_Info_f2c.retval);
+			printf("\n");
+			break;
+
+		#endif
+		#if HAVE_MPI_Info_c2f
+		case MPI_API_ID_MPI_Info_c2f :
+			//	MPI_Info info (struct mpi_info_t *);
+			//	int retval (int);
+			printf("\tMPI_Info info = %p", args->MPI_Info_c2f.info);
+			printf("\n");
+			printf("\tint retval = %d\n", args->MPI_Info_c2f.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Op_c2f
+		case MPI_API_ID_MPI_Op_c2f :
+			//	MPI_Op op (struct mpi_op_t *);
+			//	int retval (int);
+			printf("\tMPI_Op op = %p", args->MPI_Op_c2f.op);
+			printf("\n");
+			printf("\tint retval = %d\n", args->MPI_Op_c2f.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Win_c2f
+		case MPI_API_ID_MPI_Win_c2f :
+			//	MPI_Win win (struct mpi_win_t *);
+			//	int retval (int);
+			printf("\tMPI_Win win = %p", args->MPI_Win_c2f.win);
+			printf("\n");
+			printf("\tint retval = %d\n", args->MPI_Win_c2f.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Group_f2c
+		case MPI_API_ID_MPI_Group_f2c :
+			//	int group (int);
+			//	MPI_Group retval (struct mpi_group_t *);
+			printf("\tint group = %d\n", args->MPI_Group_f2c.group);
+			printf("\tMPI_Group retval = %p", args->MPI_Group_f2c.retval);
+			printf("\n");
+			break;
+
+		#endif
+		#if HAVE_MPI_File_c2f
+		case MPI_API_ID_MPI_File_c2f :
+			//	MPI_File file (struct mpi_file_t *);
+			//	int retval (int);
+			printf("\tMPI_File file = %p", args->MPI_File_c2f.file);
+			printf("\n");
+			printf("\tint retval = %d\n", args->MPI_File_c2f.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Request_c2f
+		case MPI_API_ID_MPI_Request_c2f :
+			//	MPI_Request request (struct mpi_request_t *);
+			//	int retval (int);
+			printf("\tMPI_Request request = %p", args->MPI_Request_c2f.request);
+			printf("\n");
+			printf("\tint retval = %d\n", args->MPI_Request_c2f.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_File_f2c
+		case MPI_API_ID_MPI_File_f2c :
+			//	int file (int);
+			//	MPI_File retval (struct mpi_file_t *);
+			printf("\tint file = %d\n", args->MPI_File_f2c.file);
+			printf("\tMPI_File retval = %p", args->MPI_File_f2c.retval);
+			printf("\n");
+			break;
+
+		#endif
+		#if HAVE_MPI_Session_f2c
+		case MPI_API_ID_MPI_Session_f2c :
+			//	int session (int);
+			//	MPI_Session retval (struct mpi_instance_t *);
+			printf("\tint session = %d\n", args->MPI_Session_f2c.session);
+			printf("\tMPI_Session retval = %p", args->MPI_Session_f2c.retval);
+			printf("\n");
+			break;
+
+		#endif
+		#if HAVE_MPI_Status_f082f
+		case MPI_API_ID_MPI_Status_f082f :
+			//	const MPI_F08_status * f08_status (const struct opaque * *);
+			//	int * f_status (int *);
+			//	int retval (int);
+			printf("\tconst MPI_F08_status * f08_status = %p", args->MPI_Status_f082f.f08_status);
+			if (args->MPI_Status_f082f.f08_status != NULL) {
+				printf(" -> %p\n", args->MPI_Status_f082f.f08_status__ref.val);
+			} else { printf("\n"); };
+			printf("\tint * f_status = %p", args->MPI_Status_f082f.f_status);
+			if (args->MPI_Status_f082f.f_status != NULL) {
+				printf(" -> %d\n", args->MPI_Status_f082f.f_status__ref.val);
+			} else { printf("\n"); };
+			printf("\tint retval = %d\n", args->MPI_Status_f082f.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Status_c2f08
+		case MPI_API_ID_MPI_Status_c2f08 :
+			//	const MPI_Status * c_status (const struct opaque * *);
+			//	MPI_F08_status * f08_status (struct opaque **);
+			//	int retval (int);
+			printf("\tconst MPI_Status * c_status = %p", args->MPI_Status_c2f08.c_status);
+			if (args->MPI_Status_c2f08.c_status != NULL) {
+				printf(" -> %p\n", args->MPI_Status_c2f08.c_status__ref.val);
+			} else { printf("\n"); };
+			printf("\tMPI_F08_status * f08_status = %p", args->MPI_Status_c2f08.f08_status);
+			if (args->MPI_Status_c2f08.f08_status != NULL) {
+				printf(" -> %p\n", args->MPI_Status_c2f08.f08_status__ref.val);
+			} else { printf("\n"); };
+			printf("\tint retval = %d\n", args->MPI_Status_c2f08.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Type_f2c
+		case MPI_API_ID_MPI_Type_f2c :
+			//	int datatype (int);
+			//	MPI_Datatype retval (struct mpi_datatype_t *);
+			printf("\tint datatype = %d\n", args->MPI_Type_f2c.datatype);
+			printf("\tMPI_Datatype retval = %p", args->MPI_Type_f2c.retval);
+			printf("\n");
+			break;
+
+		#endif
+		#if HAVE_MPI_Message_c2f
+		case MPI_API_ID_MPI_Message_c2f :
+			//	MPI_Message message (struct mpi_message_t *);
+			//	int retval (int);
+			printf("\tMPI_Message message = %p", args->MPI_Message_c2f.message);
+			printf("\n");
+			printf("\tint retval = %d\n", args->MPI_Message_c2f.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Session_c2f
+		case MPI_API_ID_MPI_Session_c2f :
+			//	const MPI_Session session (const struct mpi_instance_t *);
+			//	int retval (int);
+			printf("\tconst MPI_Session session = %p", args->MPI_Session_c2f.session);
+			printf("\n");
+			printf("\tint retval = %d\n", args->MPI_Session_c2f.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Message_f2c
+		case MPI_API_ID_MPI_Message_f2c :
+			//	int message (int);
+			//	MPI_Message retval (struct mpi_message_t *);
+			printf("\tint message = %d\n", args->MPI_Message_f2c.message);
+			printf("\tMPI_Message retval = %p", args->MPI_Message_f2c.retval);
+			printf("\n");
+			break;
+
+		#endif
+		#if HAVE_MPI_Errhandler_f2c
+		case MPI_API_ID_MPI_Errhandler_f2c :
+			//	int errhandler (int);
+			//	MPI_Errhandler retval (struct mpi_errhandler_t *);
+			printf("\tint errhandler = %d\n", args->MPI_Errhandler_f2c.errhandler);
+			printf("\tMPI_Errhandler retval = %p", args->MPI_Errhandler_f2c.retval);
+			printf("\n");
+			break;
+
+		#endif
+		#if HAVE_MPI_Request_f2c
+		case MPI_API_ID_MPI_Request_f2c :
+			//	int request (int);
+			//	MPI_Request retval (struct mpi_request_t *);
+			printf("\tint request = %d\n", args->MPI_Request_f2c.request);
+			printf("\tMPI_Request retval = %p", args->MPI_Request_f2c.retval);
+			printf("\n");
+			break;
+
+		#endif
+		#if HAVE_MPI_Status_c2f
+		case MPI_API_ID_MPI_Status_c2f :
+			//	const MPI_Status * c_status (const struct opaque * *);
+			//	int * f_status (int *);
+			//	int retval (int);
+			printf("\tconst MPI_Status * c_status = %p", args->MPI_Status_c2f.c_status);
+			if (args->MPI_Status_c2f.c_status != NULL) {
+				printf(" -> %p\n", args->MPI_Status_c2f.c_status__ref.val);
+			} else { printf("\n"); };
+			printf("\tint * f_status = %p", args->MPI_Status_c2f.f_status);
+			if (args->MPI_Status_c2f.f_status != NULL) {
+				printf(" -> %d\n", args->MPI_Status_c2f.f_status__ref.val);
+			} else { printf("\n"); };
+			printf("\tint retval = %d\n", args->MPI_Status_c2f.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Comm_f2c
+		case MPI_API_ID_MPI_Comm_f2c :
+			//	int comm (int);
+			//	MPI_Comm retval (struct mpi_communicator_t *);
+			printf("\tint comm = %d\n", args->MPI_Comm_f2c.comm);
+			printf("\tMPI_Comm retval = %p", args->MPI_Comm_f2c.retval);
+			printf("\n");
+			break;
+
+		#endif
+		#if HAVE_MPI_Comm_c2f
+		case MPI_API_ID_MPI_Comm_c2f :
+			//	MPI_Comm comm (struct mpi_communicator_t *);
+			//	int retval (int);
+			printf("\tMPI_Comm comm = %p", args->MPI_Comm_c2f.comm);
+			printf("\n");
+			printf("\tint retval = %d\n", args->MPI_Comm_c2f.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Group_c2f
+		case MPI_API_ID_MPI_Group_c2f :
+			//	MPI_Group group (struct mpi_group_t *);
+			//	int retval (int);
+			printf("\tMPI_Group group = %p", args->MPI_Group_c2f.group);
+			printf("\n");
+			printf("\tint retval = %d\n", args->MPI_Group_c2f.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Win_f2c
+		case MPI_API_ID_MPI_Win_f2c :
+			//	int win (int);
+			//	MPI_Win retval (struct mpi_win_t *);
+			printf("\tint win = %d\n", args->MPI_Win_f2c.win);
+			printf("\tMPI_Win retval = %p", args->MPI_Win_f2c.retval);
+			printf("\n");
+			break;
+
+		#endif
+		#if HAVE_MPI_Status_f082c
+		case MPI_API_ID_MPI_Status_f082c :
+			//	const MPI_F08_status * f08_status (const struct opaque * *);
+			//	MPI_Status * c_status (struct opaque **);
+			//	int retval (int);
+			printf("\tconst MPI_F08_status * f08_status = %p", args->MPI_Status_f082c.f08_status);
+			if (args->MPI_Status_f082c.f08_status != NULL) {
+				printf(" -> %p\n", args->MPI_Status_f082c.f08_status__ref.val);
+			} else { printf("\n"); };
+			printf("\tMPI_Status * c_status = %p", args->MPI_Status_f082c.c_status);
+			if (args->MPI_Status_f082c.c_status != NULL) {
+				printf(" -> %p\n", args->MPI_Status_f082c.c_status__ref.val);
+			} else { printf("\n"); };
+			printf("\tint retval = %d\n", args->MPI_Status_f082c.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Errhandler_c2f
+		case MPI_API_ID_MPI_Errhandler_c2f :
+			//	MPI_Errhandler errhandler (struct mpi_errhandler_t *);
+			//	int retval (int);
+			printf("\tMPI_Errhandler errhandler = %p", args->MPI_Errhandler_c2f.errhandler);
+			printf("\n");
+			printf("\tint retval = %d\n", args->MPI_Errhandler_c2f.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Status_f2f08
+		case MPI_API_ID_MPI_Status_f2f08 :
+			//	const int * f_status (const int *);
+			//	MPI_F08_status * f08_status (struct opaque **);
+			//	int retval (int);
+			printf("\tconst int * f_status = %p", args->MPI_Status_f2f08.f_status);
+			if (args->MPI_Status_f2f08.f_status != NULL) {
+				printf(" -> %d\n", args->MPI_Status_f2f08.f_status__ref.val);
+			} else { printf("\n"); };
+			printf("\tMPI_F08_status * f08_status = %p", args->MPI_Status_f2f08.f08_status);
+			if (args->MPI_Status_f2f08.f08_status != NULL) {
+				printf(" -> %p\n", args->MPI_Status_f2f08.f08_status__ref.val);
+			} else { printf("\n"); };
+			printf("\tint retval = %d\n", args->MPI_Status_f2f08.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Type_c2f
+		case MPI_API_ID_MPI_Type_c2f :
+			//	MPI_Datatype datatype (struct mpi_datatype_t *);
+			//	int retval (int);
+			printf("\tMPI_Datatype datatype = %p", args->MPI_Type_c2f.datatype);
+			printf("\n");
+			printf("\tint retval = %d\n", args->MPI_Type_c2f.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Status_f2c
+		case MPI_API_ID_MPI_Status_f2c :
+			//	const int * f_status (const int *);
+			//	MPI_Status * c_status (struct opaque **);
+			//	int retval (int);
+			printf("\tconst int * f_status = %p", args->MPI_Status_f2c.f_status);
+			if (args->MPI_Status_f2c.f_status != NULL) {
+				printf(" -> %d\n", args->MPI_Status_f2c.f_status__ref.val);
+			} else { printf("\n"); };
+			printf("\tMPI_Status * c_status = %p", args->MPI_Status_f2c.c_status);
+			if (args->MPI_Status_f2c.c_status != NULL) {
+				printf(" -> %p\n", args->MPI_Status_f2c.c_status__ref.val);
+			} else { printf("\n"); };
+			printf("\tint retval = %d\n", args->MPI_Status_f2c.retval);
+			break;
+
+		#endif
+		#if HAVE_MPI_Op_f2c
+		case MPI_API_ID_MPI_Op_f2c :
+			//	int op (int);
+			//	MPI_Op retval (struct mpi_op_t *);
+			printf("\tint op = %d\n", args->MPI_Op_f2c.op);
+			printf("\tMPI_Op retval = %p", args->MPI_Op_f2c.retval);
+			printf("\n");
 			break;
 
 		#endif

@@ -35,7 +35,7 @@ size_t msgpack_ext_get_string_id(const char *str) {
         }
     }
 
-    msgpack_ext_string_if_full(table);  // Grow table if needed
+    msgpack_ext_string_if_full();  // Grow table if needed
 
     // Copy and store new string
     table.strings[table.count] = strdup(str); 

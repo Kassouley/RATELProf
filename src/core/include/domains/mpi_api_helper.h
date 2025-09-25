@@ -148,7 +148,6 @@ IF_ENABLED(MPI_File_write_at_all_begin, macro)     \
 IF_ENABLED(MPI_Grequest_start, macro)              \
 IF_ENABLED(MPI_Bsend_init, macro)                  \
 IF_ENABLED(MPI_File_set_size, macro)               \
-IF_ENABLED(MPI_Op_c2f, macro)                      \
 IF_ENABLED(MPI_Type_set_name, macro)               \
 IF_ENABLED(MPI_Comm_split_type, macro)             \
 IF_ENABLED(MPI_File_read_at_all_end, macro)        \
@@ -157,9 +156,7 @@ IF_ENABLED(MPI_Improbe, macro)                     \
 IF_ENABLED(MPI_Comm_get_info, macro)               \
 IF_ENABLED(MPI_File_read_all_end, macro)           \
 IF_ENABLED(MPI_Win_unlock_all, macro)              \
-IF_ENABLED(MPI_Win_c2f, macro)                     \
 IF_ENABLED(MPI_Type_create_f90_integer, macro)     \
-IF_ENABLED(MPI_Group_f2c, macro)                   \
 IF_ENABLED(MPI_Exscan_init, macro)                 \
 IF_ENABLED(MPI_Ibsend, macro)                      \
 IF_ENABLED(MPI_Win_flush_local, macro)             \
@@ -178,23 +175,17 @@ IF_ENABLED(MPI_Info_get_nthkey, macro)             \
 IF_ENABLED(MPI_Ssend_init, macro)                  \
 IF_ENABLED(MPI_Comm_set_info, macro)               \
 IF_ENABLED(MPI_Cart_create, macro)                 \
-IF_ENABLED(MPI_File_c2f, macro)                    \
 IF_ENABLED(MPI_File_write_all_begin, macro)        \
 IF_ENABLED(MPI_Scan_init, macro)                   \
 IF_ENABLED(MPI_Irsend, macro)                      \
 IF_ENABLED(MPI_Neighbor_alltoallv, macro)          \
 IF_ENABLED(MPI_Pready_list, macro)                 \
-IF_ENABLED(MPI_Request_c2f, macro)                 \
-IF_ENABLED(MPI_File_f2c, macro)                    \
 IF_ENABLED(MPI_Alltoallw_init, macro)              \
-IF_ENABLED(MPI_Info_c2f, macro)                    \
 IF_ENABLED(MPI_File_read_ordered_begin, macro)     \
 IF_ENABLED(MPI_Dist_graph_create_adjacent, macro)  \
 IF_ENABLED(MPI_Reduce_scatter_init, macro)         \
 IF_ENABLED(MPI_Comm_get_parent, macro)             \
-IF_ENABLED(MPI_Info_f2c, macro)                    \
 IF_ENABLED(MPI_Keyval_free, macro)                 \
-IF_ENABLED(MPI_Session_f2c, macro)                 \
 IF_ENABLED(MPI_Info_set, macro)                    \
 IF_ENABLED(MPI_Keyval_create, macro)               \
 IF_ENABLED(MPI_Comm_connect, macro)                \
@@ -202,9 +193,7 @@ IF_ENABLED(MPI_Ssend, macro)                       \
 IF_ENABLED(MPI_Scatterv_init, macro)               \
 IF_ENABLED(MPI_File_write_at_all_end, macro)       \
 IF_ENABLED(MPI_File_write_all_end, macro)          \
-IF_ENABLED(MPI_Status_f082f, macro)                \
 IF_ENABLED(MPI_Buffer_detach, macro)               \
-IF_ENABLED(MPI_Status_c2f08, macro)                \
 IF_ENABLED(MPI_Startall, macro)                    \
 IF_ENABLED(MPI_Neighbor_alltoall, macro)           \
 IF_ENABLED(MPI_Put, macro)                         \
@@ -238,7 +227,6 @@ IF_ENABLED(MPI_Isendrecv, macro)                   \
 IF_ENABLED(MPI_Pack_external, macro)               \
 IF_ENABLED(MPI_Pready_range, macro)                \
 IF_ENABLED(MPI_Type_get_envelope, macro)           \
-IF_ENABLED(MPI_Type_f2c, macro)                    \
 IF_ENABLED(MPI_Win_create, macro)                  \
 IF_ENABLED(MPI_Isendrecv_replace, macro)           \
 IF_ENABLED(MPI_Win_set_errhandler, macro)          \
@@ -250,7 +238,6 @@ IF_ENABLED(MPI_Get, macro)                         \
 IF_ENABLED(MPI_Pack_external_size, macro)          \
 IF_ENABLED(MPI_Win_flush_all, macro)               \
 IF_ENABLED(MPI_Rsend, macro)                       \
-IF_ENABLED(MPI_Message_c2f, macro)                 \
 IF_ENABLED(MPI_Win_free, macro)                    \
 IF_ENABLED(MPI_Type_create_f90_complex, macro)     \
 IF_ENABLED(MPI_Neighbor_alltoallw_init, macro)     \
@@ -273,9 +260,7 @@ IF_ENABLED(MPI_File_get_group, macro)              \
 IF_ENABLED(MPI_File_iread_at_all, macro)           \
 IF_ENABLED(MPI_Graphdims_get, macro)               \
 IF_ENABLED(MPI_File_iread_shared, macro)           \
-IF_ENABLED(MPI_Session_c2f, macro)                 \
 IF_ENABLED(MPI_Comm_idup_with_info, macro)         \
-IF_ENABLED(MPI_Message_f2c, macro)                 \
 IF_ENABLED(MPI_Get_version, macro)                 \
 IF_ENABLED(MPI_Win_lock_all, macro)                \
 IF_ENABLED(MPI_Intercomm_create_from_groups, macro) \
@@ -286,16 +271,12 @@ IF_ENABLED(MPI_Win_get_group, macro)               \
 IF_ENABLED(MPI_Error_class, macro)                 \
 IF_ENABLED(MPI_Win_get_attr, macro)                \
 IF_ENABLED(MPI_Reduce_local, macro)                \
-IF_ENABLED(MPI_Errhandler_f2c, macro)              \
 IF_ENABLED(MPI_Ireduce_scatter_block, macro)       \
 IF_ENABLED(MPI_Status_set_cancelled, macro)        \
 IF_ENABLED(MPI_Win_test, macro)                    \
-IF_ENABLED(MPI_Request_f2c, macro)                 \
 IF_ENABLED(MPI_Test_cancelled, macro)              \
 IF_ENABLED(MPI_File_seek_shared, macro)            \
 IF_ENABLED(MPI_Error_string, macro)                \
-IF_ENABLED(MPI_Status_c2f, macro)                  \
-IF_ENABLED(MPI_Comm_f2c, macro)                    \
 IF_ENABLED(MPI_Graph_neighbors_count, macro)       \
 IF_ENABLED(MPI_Session_create_errhandler, macro)   \
 IF_ENABLED(MPI_Win_unlock, macro)                  \
@@ -312,14 +293,12 @@ IF_ENABLED(MPI_Win_set_info, macro)                \
 IF_ENABLED(MPI_Alltoallv_init, macro)              \
 IF_ENABLED(MPI_Win_attach, macro)                  \
 IF_ENABLED(MPI_File_get_position, macro)           \
-IF_ENABLED(MPI_Comm_c2f, macro)                    \
 IF_ENABLED(MPI_Accumulate, macro)                  \
 IF_ENABLED(MPI_File_write_shared, macro)           \
 IF_ENABLED(MPI_Win_create_dynamic, macro)          \
 IF_ENABLED(MPI_Neighbor_alltoallw, macro)          \
 IF_ENABLED(MPI_Iexscan, macro)                     \
 IF_ENABLED(MPI_Graph_map, macro)                   \
-IF_ENABLED(MPI_Group_c2f, macro)                   \
 IF_ENABLED(MPI_Recv_init, macro)                   \
 IF_ENABLED(MPI_Type_create_subarray, macro)        \
 IF_ENABLED(MPI_Comm_create_group, macro)           \
@@ -329,7 +308,6 @@ IF_ENABLED(MPI_Type_match_size, macro)             \
 IF_ENABLED(MPI_Type_get_true_extent, macro)        \
 IF_ENABLED(MPI_Alltoall_init, macro)               \
 IF_ENABLED(MPI_Send_init, macro)                   \
-IF_ENABLED(MPI_Win_f2c, macro)                     \
 IF_ENABLED(MPI_Neighbor_allgather_init, macro)     \
 IF_ENABLED(MPI_Ibcast, macro)                      \
 IF_ENABLED(MPI_File_iread, macro)                  \
@@ -339,7 +317,6 @@ IF_ENABLED(MPI_Publish_name, macro)                \
 IF_ENABLED(MPI_Win_set_attr, macro)                \
 IF_ENABLED(MPI_Win_sync, macro)                    \
 IF_ENABLED(MPI_Type_free_keyval, macro)            \
-IF_ENABLED(MPI_Status_f082c, macro)                \
 IF_ENABLED(MPI_File_write, macro)                  \
 IF_ENABLED(MPI_Register_datarep, macro)            \
 IF_ENABLED(MPI_Ineighbor_alltoall, macro)          \
@@ -351,21 +328,17 @@ IF_ENABLED(MPI_Type_get_true_extent_x, macro)      \
 IF_ENABLED(MPI_Win_complete, macro)                \
 IF_ENABLED(MPI_File_set_atomicity, macro)          \
 IF_ENABLED(MPI_Unpack_external, macro)             \
-IF_ENABLED(MPI_Errhandler_c2f, macro)              \
 IF_ENABLED(MPI_Mprobe, macro)                      \
 IF_ENABLED(MPI_Add_error_code, macro)              \
 IF_ENABLED(MPI_Win_delete_attr, macro)             \
 IF_ENABLED(MPI_File_read_at_all, macro)            \
 IF_ENABLED(MPI_Pready, macro)                      \
-IF_ENABLED(MPI_Status_f2f08, macro)                \
 IF_ENABLED(MPI_Iscatterv, macro)                   \
-IF_ENABLED(MPI_Type_c2f, macro)                    \
 IF_ENABLED(MPI_Win_detach, macro)                  \
 IF_ENABLED(MPI_File_call_errhandler, macro)        \
 IF_ENABLED(MPI_Iallreduce, macro)                  \
 IF_ENABLED(MPI_Get_processor_name, macro)          \
 IF_ENABLED(MPI_Start, macro)                       \
-IF_ENABLED(MPI_Status_f2c, macro)                  \
 IF_ENABLED(MPI_File_get_type_extent, macro)        \
 IF_ENABLED(MPI_File_read_shared, macro)            \
 IF_ENABLED(MPI_File_open, macro)                   \
@@ -373,7 +346,6 @@ IF_ENABLED(MPI_File_get_amode, macro)              \
 IF_ENABLED(MPI_Type_create_hindexed_block, macro)  \
 IF_ENABLED(MPI_Cart_coords, macro)                 \
 IF_ENABLED(MPI_Issend, macro)                      \
-IF_ENABLED(MPI_Op_f2c, macro)                      \
 IF_ENABLED(MPI_Graph_get, macro)                   \
 IF_ENABLED(MPI_Win_free_keyval, macro)             \
 IF_ENABLED(MPI_Ineighbor_alltoallw, macro)         \
@@ -455,6 +427,34 @@ IF_ENABLED(MPI_File_iwrite, macro)                 \
 IF_ENABLED(MPI_Buffer_attach, macro)               \
 IF_ENABLED(MPI_Session_set_errhandler, macro)      \
 IF_ENABLED(MPI_Win_start, macro)                   \
+IF_ENABLED(MPI_Info_f2c, macro)                    \
+IF_ENABLED(MPI_Info_c2f, macro)                    \
+IF_ENABLED(MPI_Op_c2f, macro)                      \
+IF_ENABLED(MPI_Win_c2f, macro)                     \
+IF_ENABLED(MPI_Group_f2c, macro)                   \
+IF_ENABLED(MPI_File_c2f, macro)                    \
+IF_ENABLED(MPI_Request_c2f, macro)                 \
+IF_ENABLED(MPI_File_f2c, macro)                    \
+IF_ENABLED(MPI_Session_f2c, macro)                 \
+IF_ENABLED(MPI_Status_f082f, macro)                \
+IF_ENABLED(MPI_Status_c2f08, macro)                \
+IF_ENABLED(MPI_Type_f2c, macro)                    \
+IF_ENABLED(MPI_Message_c2f, macro)                 \
+IF_ENABLED(MPI_Session_c2f, macro)                 \
+IF_ENABLED(MPI_Message_f2c, macro)                 \
+IF_ENABLED(MPI_Errhandler_f2c, macro)              \
+IF_ENABLED(MPI_Request_f2c, macro)                 \
+IF_ENABLED(MPI_Status_c2f, macro)                  \
+IF_ENABLED(MPI_Comm_f2c, macro)                    \
+IF_ENABLED(MPI_Comm_c2f, macro)                    \
+IF_ENABLED(MPI_Group_c2f, macro)                   \
+IF_ENABLED(MPI_Win_f2c, macro)                     \
+IF_ENABLED(MPI_Status_f082c, macro)                \
+IF_ENABLED(MPI_Errhandler_c2f, macro)              \
+IF_ENABLED(MPI_Status_f2f08, macro)                \
+IF_ENABLED(MPI_Type_c2f, macro)                    \
+IF_ENABLED(MPI_Status_f2c, macro)                  \
+IF_ENABLED(MPI_Op_f2c, macro)                      \
 
 
 /**
@@ -820,7 +820,7 @@ struct args_MPI_Send_t {
  *			int source (int)
  *			int tag (int)
  *			MPI_Comm comm (struct mpi_communicator_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_Recv
@@ -878,7 +878,7 @@ struct args_MPI_Recv_t {
  *			int source (int)
  *			int recvtag (int)
  *			MPI_Comm comm (struct mpi_communicator_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_Sendrecv
@@ -943,7 +943,7 @@ struct args_MPI_Sendrecv_t {
  *			int source (int)
  *			int recvtag (int)
  *			MPI_Comm comm (struct mpi_communicator_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_Sendrecv_replace
@@ -1101,7 +1101,7 @@ struct args_MPI_Irecv_t {
  *	int
  *	MPI_Wait (
  *			MPI_Request * request (struct mpi_request_t **)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_Wait
@@ -1146,7 +1146,7 @@ struct args_MPI_Wait_t {
  *	MPI_Waitall (
  *			int count (int)
  *			MPI_Request[] array_of_requests (struct mpi_request_t *[])
- *			MPI_Status * array_of_statuses (struct mpi_status_public_t*)
+ *			MPI_Status * array_of_statuses (struct opaque **)
  *	)
  */
 #if HAVE_MPI_Waitall
@@ -1194,7 +1194,7 @@ struct args_MPI_Waitall_t {
  *			int count (int)
  *			MPI_Request[] array_of_requests (struct mpi_request_t *[])
  *			int * index (int *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_Waitany
@@ -1251,7 +1251,7 @@ struct args_MPI_Waitany_t {
  *			MPI_Request[] array_of_requests (struct mpi_request_t *[])
  *			int * outcount (int *)
  *			int[] array_of_indices (int[])
- *			MPI_Status[] array_of_statuses (struct mpi_status_public_t[])
+ *			MPI_Status[] array_of_statuses (struct opaque *[])
  *	)
  */
 #if HAVE_MPI_Waitsome
@@ -1314,7 +1314,7 @@ struct args_MPI_Waitsome_t {
  *	MPI_Test (
  *			MPI_Request * request (struct mpi_request_t **)
  *			int * flag (int *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_Test
@@ -1368,7 +1368,7 @@ struct args_MPI_Test_t {
  *			int count (int)
  *			MPI_Request[] array_of_requests (struct mpi_request_t *[])
  *			int * flag (int *)
- *			MPI_Status[] array_of_statuses (struct mpi_status_public_t[])
+ *			MPI_Status[] array_of_statuses (struct opaque *[])
  *	)
  */
 #if HAVE_MPI_Testall
@@ -1425,7 +1425,7 @@ struct args_MPI_Testall_t {
  *			MPI_Request[] array_of_requests (struct mpi_request_t *[])
  *			int * index (int *)
  *			int * flag (int *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_Testany
@@ -1490,7 +1490,7 @@ struct args_MPI_Testany_t {
  *			MPI_Request[] array_of_requests (struct mpi_request_t *[])
  *			int * outcount (int *)
  *			int[] array_of_indices (int[])
- *			MPI_Status[] array_of_statuses (struct mpi_status_public_t[])
+ *			MPI_Status[] array_of_statuses (struct opaque *[])
  *	)
  */
 #if HAVE_MPI_Testsome
@@ -2000,7 +2000,7 @@ struct args_MPI_Type_free_t {
  * @note 
  *	int
  *	MPI_Get_count (
- *			const MPI_Status * status (const struct mpi_status_public_t *)
+ *			const MPI_Status * status (const struct opaque * *)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
  *			int * count (int *)
  *	)
@@ -2047,7 +2047,7 @@ struct args_MPI_Get_count_t {
  * @note 
  *	int
  *	MPI_Get_elements (
- *			const MPI_Status * status (const struct mpi_status_public_t *)
+ *			const MPI_Status * status (const struct opaque * *)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
  *			int * count (int *)
  *	)
@@ -4360,7 +4360,7 @@ struct args_MPI_Get_address_t {
  * @note 
  *	int
  *	MPI_Get_elements_x (
- *			const MPI_Status * status (const struct mpi_status_public_t *)
+ *			const MPI_Status * status (const struct opaque * *)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
  *			MPI_Count * count (long long*)
  *	)
@@ -4938,7 +4938,7 @@ struct args_MPI_Rsend_init_t {
  *			const void * buf (const void *)
  *			int count (int)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_write_at_all
@@ -4985,7 +4985,7 @@ struct args_MPI_File_write_at_all_t {
  *	MPI_File_write_ordered_end (
  *			MPI_File fh (struct mpi_file_t *)
  *			const void * buf (const void *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_write_ordered_end
@@ -5681,7 +5681,7 @@ struct args_MPI_Igather_t {
  *			void * buf (void *)
  *			int count (int)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_read_at
@@ -5811,7 +5811,7 @@ struct args_MPI_File_write_at_all_begin_t {
  * @note 
  *	int
  *	MPI_Grequest_start (
- *			MPI_Grequest_query_function * query_fn (int (*)(void *, struct mpi_status_public_t *))
+ *			MPI_Grequest_query_function * query_fn (int (*)(void *, struct opaque * *))
  *			MPI_Grequest_free_function * free_fn (int (*)(void *))
  *			MPI_Grequest_cancel_function * cancel_fn (int (*)(void *, int))
  *			void * extra_state (void *)
@@ -5930,32 +5930,6 @@ struct args_MPI_File_set_size_t {
 #endif
 
 /**
- * @brief Structure to hold the arguments for the `MPI_Op_c2f` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Op_c2f` function call.
- *
- * @struct args_MPI_Op_c2f_t
- *
- * @note 
- *	int
- *	MPI_Op_c2f (
- *			MPI_Op op (struct mpi_op_t *)
- *	)
- */
-#if HAVE_MPI_Op_c2f
-struct args_MPI_Op_c2f_t {
-	MPI_Op op;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Op_c2f(activity) { \
-	activity->mpi_args.MPI_Op_c2f.op = (MPI_Op) op; \
-};
-
-#endif
-
-/**
  * @brief Structure to hold the arguments for the `MPI_Type_set_name` function.
  *
  * This structure encapsulates the parameters and return value used in the 
@@ -6053,7 +6027,7 @@ struct args_MPI_Comm_split_type_t {
  *	MPI_File_read_at_all_end (
  *			MPI_File fh (struct mpi_file_t *)
  *			void * buf (void *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_read_at_all_end
@@ -6096,7 +6070,7 @@ struct args_MPI_File_read_at_all_end_t {
  *			const void * buf (const void *)
  *			int count (int)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_write_all
@@ -6144,7 +6118,7 @@ struct args_MPI_File_write_all_t {
  *			MPI_Comm comm (struct mpi_communicator_t *)
  *			int * flag (int *)
  *			MPI_Message * message (struct mpi_message_t **)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_Improbe
@@ -6241,7 +6215,7 @@ struct args_MPI_Comm_get_info_t {
  *	MPI_File_read_all_end (
  *			MPI_File fh (struct mpi_file_t *)
  *			void * buf (void *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_read_all_end
@@ -6296,32 +6270,6 @@ struct args_MPI_Win_unlock_all_t {
 #endif
 
 /**
- * @brief Structure to hold the arguments for the `MPI_Win_c2f` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Win_c2f` function call.
- *
- * @struct args_MPI_Win_c2f_t
- *
- * @note 
- *	int
- *	MPI_Win_c2f (
- *			MPI_Win win (struct mpi_win_t *)
- *	)
- */
-#if HAVE_MPI_Win_c2f
-struct args_MPI_Win_c2f_t {
-	MPI_Win win;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Win_c2f(activity) { \
-	activity->mpi_args.MPI_Win_c2f.win = (MPI_Win) win; \
-};
-
-#endif
-
-/**
  * @brief Structure to hold the arguments for the `MPI_Type_create_f90_integer` function.
  *
  * This structure encapsulates the parameters and return value used in the 
@@ -6355,32 +6303,6 @@ struct args_MPI_Type_create_f90_integer_t {
 	if (args->MPI_Type_create_f90_integer.newtype != NULL) { \
 		args->MPI_Type_create_f90_integer.newtype__ref.val = *args->MPI_Type_create_f90_integer.newtype; \
 	} \
-};
-
-#endif
-
-/**
- * @brief Structure to hold the arguments for the `MPI_Group_f2c` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Group_f2c` function call.
- *
- * @struct args_MPI_Group_f2c_t
- *
- * @note 
- *	MPI_Group
- *	MPI_Group_f2c (
- *			int group (int)
- *	)
- */
-#if HAVE_MPI_Group_f2c
-struct args_MPI_Group_f2c_t {
-	int group;
-	MPI_Group retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Group_f2c(activity) { \
-	activity->mpi_args.MPI_Group_f2c.group = (int) group; \
 };
 
 #endif
@@ -6800,7 +6722,7 @@ struct args_MPI_File_iwrite_at_t {
  * @note 
  *	int
  *	MPI_Status_set_elements (
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
  *			int count (int)
  *	)
@@ -6845,7 +6767,7 @@ struct args_MPI_Status_set_elements_t {
  *			void * buf (void *)
  *			int count (int)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_read_ordered
@@ -7283,32 +7205,6 @@ struct args_MPI_Cart_create_t {
 #endif
 
 /**
- * @brief Structure to hold the arguments for the `MPI_File_c2f` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_File_c2f` function call.
- *
- * @struct args_MPI_File_c2f_t
- *
- * @note 
- *	int
- *	MPI_File_c2f (
- *			MPI_File file (struct mpi_file_t *)
- *	)
- */
-#if HAVE_MPI_File_c2f
-struct args_MPI_File_c2f_t {
-	MPI_File file;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_File_c2f(activity) { \
-	activity->mpi_args.MPI_File_c2f.file = (MPI_File) file; \
-};
-
-#endif
-
-/**
  * @brief Structure to hold the arguments for the `MPI_File_write_all_begin` function.
  *
  * This structure encapsulates the parameters and return value used in the 
@@ -7571,58 +7467,6 @@ struct args_MPI_Pready_list_t {
 #endif
 
 /**
- * @brief Structure to hold the arguments for the `MPI_Request_c2f` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Request_c2f` function call.
- *
- * @struct args_MPI_Request_c2f_t
- *
- * @note 
- *	int
- *	MPI_Request_c2f (
- *			MPI_Request request (struct mpi_request_t *)
- *	)
- */
-#if HAVE_MPI_Request_c2f
-struct args_MPI_Request_c2f_t {
-	MPI_Request request;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Request_c2f(activity) { \
-	activity->mpi_args.MPI_Request_c2f.request = (MPI_Request) request; \
-};
-
-#endif
-
-/**
- * @brief Structure to hold the arguments for the `MPI_File_f2c` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_File_f2c` function call.
- *
- * @struct args_MPI_File_f2c_t
- *
- * @note 
- *	MPI_File
- *	MPI_File_f2c (
- *			int file (int)
- *	)
- */
-#if HAVE_MPI_File_f2c
-struct args_MPI_File_f2c_t {
-	int file;
-	MPI_File retval;
-};
-
-#define GET_ARGS_VALUE_MPI_File_f2c(activity) { \
-	activity->mpi_args.MPI_File_f2c.file = (int) file; \
-};
-
-#endif
-
-/**
  * @brief Structure to hold the arguments for the `MPI_Alltoallw_init` function.
  *
  * This structure encapsulates the parameters and return value used in the 
@@ -7719,32 +7563,6 @@ struct args_MPI_Alltoallw_init_t {
 	if (args->MPI_Alltoallw_init.request != NULL) { \
 		args->MPI_Alltoallw_init.request__ref.val = *args->MPI_Alltoallw_init.request; \
 	} \
-};
-
-#endif
-
-/**
- * @brief Structure to hold the arguments for the `MPI_Info_c2f` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Info_c2f` function call.
- *
- * @struct args_MPI_Info_c2f_t
- *
- * @note 
- *	int
- *	MPI_Info_c2f (
- *			MPI_Info info (struct mpi_info_t *)
- *	)
- */
-#if HAVE_MPI_Info_c2f
-struct args_MPI_Info_c2f_t {
-	MPI_Info info;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Info_c2f(activity) { \
-	activity->mpi_args.MPI_Info_c2f.info = (MPI_Info) info; \
 };
 
 #endif
@@ -7968,32 +7786,6 @@ struct args_MPI_Comm_get_parent_t {
 #endif
 
 /**
- * @brief Structure to hold the arguments for the `MPI_Info_f2c` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Info_f2c` function call.
- *
- * @struct args_MPI_Info_f2c_t
- *
- * @note 
- *	MPI_Info
- *	MPI_Info_f2c (
- *			int info (int)
- *	)
- */
-#if HAVE_MPI_Info_f2c
-struct args_MPI_Info_f2c_t {
-	int info;
-	MPI_Info retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Info_f2c(activity) { \
-	activity->mpi_args.MPI_Info_f2c.info = (int) info; \
-};
-
-#endif
-
-/**
  * @brief Structure to hold the arguments for the `MPI_Keyval_free` function.
  *
  * This structure encapsulates the parameters and return value used in the 
@@ -8024,32 +7816,6 @@ struct args_MPI_Keyval_free_t {
 	if (args->MPI_Keyval_free.keyval != NULL) { \
 		args->MPI_Keyval_free.keyval__ref.val = *args->MPI_Keyval_free.keyval; \
 	} \
-};
-
-#endif
-
-/**
- * @brief Structure to hold the arguments for the `MPI_Session_f2c` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Session_f2c` function call.
- *
- * @struct args_MPI_Session_f2c_t
- *
- * @note 
- *	MPI_Session
- *	MPI_Session_f2c (
- *			int session (int)
- *	)
- */
-#if HAVE_MPI_Session_f2c
-struct args_MPI_Session_f2c_t {
-	int session;
-	MPI_Session retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Session_f2c(activity) { \
-	activity->mpi_args.MPI_Session_f2c.session = (int) session; \
 };
 
 #endif
@@ -8329,7 +8095,7 @@ struct args_MPI_Scatterv_init_t {
  *	MPI_File_write_at_all_end (
  *			MPI_File fh (struct mpi_file_t *)
  *			const void * buf (const void *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_write_at_all_end
@@ -8370,7 +8136,7 @@ struct args_MPI_File_write_at_all_end_t {
  *	MPI_File_write_all_end (
  *			MPI_File fh (struct mpi_file_t *)
  *			const void * buf (const void *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_write_all_end
@@ -8393,50 +8159,6 @@ struct args_MPI_File_write_all_end_t {
 #define GET_PTRS_VALUE_MPI_File_write_all_end(args) { \
 	if (args->MPI_File_write_all_end.status != NULL) { \
 		args->MPI_File_write_all_end.status__ref.val = *args->MPI_File_write_all_end.status; \
-	} \
-};
-
-#endif
-
-/**
- * @brief Structure to hold the arguments for the `MPI_Status_f082f` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Status_f082f` function call.
- *
- * @struct args_MPI_Status_f082f_t
- *
- * @note 
- *	int
- *	MPI_Status_f082f (
- *			const MPI_F08_status * f08_status (const struct mpi_f08_status_public_t *)
- *			int * f_status (int *)
- *	)
- */
-#if HAVE_MPI_Status_f082f
-struct args_MPI_Status_f082f_t {
-	MPI_F08_status * f08_status;
-	struct {
-		MPI_F08_status val;
-	} f08_status__ref;
-	int * f_status;
-	struct {
-		int val;
-	} f_status__ref;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Status_f082f(activity) { \
-	activity->mpi_args.MPI_Status_f082f.f08_status = (MPI_F08_status *) f08_status; \
-	activity->mpi_args.MPI_Status_f082f.f_status = (int *) f_status; \
-};
-
-#define GET_PTRS_VALUE_MPI_Status_f082f(args) { \
-	if (args->MPI_Status_f082f.f08_status != NULL) { \
-		args->MPI_Status_f082f.f08_status__ref.val = *args->MPI_Status_f082f.f08_status; \
-	} \
-	if (args->MPI_Status_f082f.f_status != NULL) { \
-		args->MPI_Status_f082f.f_status__ref.val = *args->MPI_Status_f082f.f_status; \
 	} \
 };
 
@@ -8475,50 +8197,6 @@ struct args_MPI_Buffer_detach_t {
 #define GET_PTRS_VALUE_MPI_Buffer_detach(args) { \
 	if (args->MPI_Buffer_detach.size != NULL) { \
 		args->MPI_Buffer_detach.size__ref.val = *args->MPI_Buffer_detach.size; \
-	} \
-};
-
-#endif
-
-/**
- * @brief Structure to hold the arguments for the `MPI_Status_c2f08` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Status_c2f08` function call.
- *
- * @struct args_MPI_Status_c2f08_t
- *
- * @note 
- *	int
- *	MPI_Status_c2f08 (
- *			const MPI_Status * c_status (const struct mpi_status_public_t *)
- *			MPI_F08_status * f08_status (struct mpi_f08_status_public_t*)
- *	)
- */
-#if HAVE_MPI_Status_c2f08
-struct args_MPI_Status_c2f08_t {
-	MPI_Status * c_status;
-	struct {
-		MPI_Status val;
-	} c_status__ref;
-	MPI_F08_status * f08_status;
-	struct {
-		MPI_F08_status val;
-	} f08_status__ref;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Status_c2f08(activity) { \
-	activity->mpi_args.MPI_Status_c2f08.c_status = (MPI_Status *) c_status; \
-	activity->mpi_args.MPI_Status_c2f08.f08_status = (MPI_F08_status *) f08_status; \
-};
-
-#define GET_PTRS_VALUE_MPI_Status_c2f08(args) { \
-	if (args->MPI_Status_c2f08.c_status != NULL) { \
-		args->MPI_Status_c2f08.c_status__ref.val = *args->MPI_Status_c2f08.c_status; \
-	} \
-	if (args->MPI_Status_c2f08.f08_status != NULL) { \
-		args->MPI_Status_c2f08.f08_status__ref.val = *args->MPI_Status_c2f08.f08_status; \
 	} \
 };
 
@@ -8666,7 +8344,7 @@ struct args_MPI_Put_t {
  *	MPI_File_read_ordered_end (
  *			MPI_File fh (struct mpi_file_t *)
  *			void * buf (void *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_read_ordered_end
@@ -8739,7 +8417,7 @@ struct args_MPI_Win_call_errhandler_t {
  *			const void * buf (const void *)
  *			int count (int)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_write_at
@@ -9199,7 +8877,7 @@ struct args_MPI_Info_get_nkeys_t {
  *			void * buf (void *)
  *			int count (int)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_read
@@ -9380,7 +9058,7 @@ struct args_MPI_File_write_ordered_begin_t {
  * @note 
  *	int
  *	MPI_Status_set_elements_x (
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
  *			MPI_Count count (long long)
  *	)
@@ -9538,7 +9216,7 @@ struct args_MPI_Type_delete_attr_t {
  *			int source (int)
  *			int tag (int)
  *			MPI_Comm comm (struct mpi_communicator_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_Probe
@@ -9616,7 +9294,7 @@ struct args_MPI_File_close_t {
  *	MPI_Request_get_status (
  *			MPI_Request request (struct mpi_request_t *)
  *			int * flag (int *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_Request_get_status
@@ -10017,32 +9695,6 @@ struct args_MPI_Type_get_envelope_t {
 	if (args->MPI_Type_get_envelope.combiner != NULL) { \
 		args->MPI_Type_get_envelope.combiner__ref.val = *args->MPI_Type_get_envelope.combiner; \
 	} \
-};
-
-#endif
-
-/**
- * @brief Structure to hold the arguments for the `MPI_Type_f2c` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Type_f2c` function call.
- *
- * @struct args_MPI_Type_f2c_t
- *
- * @note 
- *	MPI_Datatype
- *	MPI_Type_f2c (
- *			int datatype (int)
- *	)
- */
-#if HAVE_MPI_Type_f2c
-struct args_MPI_Type_f2c_t {
-	int datatype;
-	MPI_Datatype retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Type_f2c(activity) { \
-	activity->mpi_args.MPI_Type_f2c.datatype = (int) datatype; \
 };
 
 #endif
@@ -10530,32 +10182,6 @@ struct args_MPI_Rsend_t {
 	activity->mpi_args.MPI_Rsend.dest = (int) dest; \
 	activity->mpi_args.MPI_Rsend.tag = (int) tag; \
 	activity->mpi_args.MPI_Rsend.comm = (MPI_Comm) comm; \
-};
-
-#endif
-
-/**
- * @brief Structure to hold the arguments for the `MPI_Message_c2f` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Message_c2f` function call.
- *
- * @struct args_MPI_Message_c2f_t
- *
- * @note 
- *	int
- *	MPI_Message_c2f (
- *			MPI_Message message (struct mpi_message_t *)
- *	)
- */
-#if HAVE_MPI_Message_c2f
-struct args_MPI_Message_c2f_t {
-	MPI_Message message;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Message_c2f(activity) { \
-	activity->mpi_args.MPI_Message_c2f.message = (MPI_Message) message; \
 };
 
 #endif
@@ -11093,7 +10719,7 @@ struct args_MPI_Info_get_string_t {
  *			int count (int)
  *			MPI_Datatype type (struct mpi_datatype_t *)
  *			MPI_Message * message (struct mpi_message_t **)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_Mrecv
@@ -11656,32 +11282,6 @@ struct args_MPI_File_iread_shared_t {
 #endif
 
 /**
- * @brief Structure to hold the arguments for the `MPI_Session_c2f` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Session_c2f` function call.
- *
- * @struct args_MPI_Session_c2f_t
- *
- * @note 
- *	int
- *	MPI_Session_c2f (
- *			const MPI_Session session (const struct mpi_instance_t *)
- *	)
- */
-#if HAVE_MPI_Session_c2f
-struct args_MPI_Session_c2f_t {
-	MPI_Session session;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Session_c2f(activity) { \
-	activity->mpi_args.MPI_Session_c2f.session = (MPI_Session) session; \
-};
-
-#endif
-
-/**
  * @brief Structure to hold the arguments for the `MPI_Comm_idup_with_info` function.
  *
  * This structure encapsulates the parameters and return value used in the 
@@ -11727,32 +11327,6 @@ struct args_MPI_Comm_idup_with_info_t {
 	if (args->MPI_Comm_idup_with_info.request != NULL) { \
 		args->MPI_Comm_idup_with_info.request__ref.val = *args->MPI_Comm_idup_with_info.request; \
 	} \
-};
-
-#endif
-
-/**
- * @brief Structure to hold the arguments for the `MPI_Message_f2c` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Message_f2c` function call.
- *
- * @struct args_MPI_Message_f2c_t
- *
- * @note 
- *	MPI_Message
- *	MPI_Message_f2c (
- *			int message (int)
- *	)
- */
-#if HAVE_MPI_Message_f2c
-struct args_MPI_Message_f2c_t {
-	int message;
-	MPI_Message retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Message_f2c(activity) { \
-	activity->mpi_args.MPI_Message_f2c.message = (int) message; \
 };
 
 #endif
@@ -12264,32 +11838,6 @@ struct args_MPI_Reduce_local_t {
 #endif
 
 /**
- * @brief Structure to hold the arguments for the `MPI_Errhandler_f2c` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Errhandler_f2c` function call.
- *
- * @struct args_MPI_Errhandler_f2c_t
- *
- * @note 
- *	MPI_Errhandler
- *	MPI_Errhandler_f2c (
- *			int errhandler (int)
- *	)
- */
-#if HAVE_MPI_Errhandler_f2c
-struct args_MPI_Errhandler_f2c_t {
-	int errhandler;
-	MPI_Errhandler retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Errhandler_f2c(activity) { \
-	activity->mpi_args.MPI_Errhandler_f2c.errhandler = (int) errhandler; \
-};
-
-#endif
-
-/**
  * @brief Structure to hold the arguments for the `MPI_Ireduce_scatter_block` function.
  *
  * This structure encapsulates the parameters and return value used in the 
@@ -12353,7 +11901,7 @@ struct args_MPI_Ireduce_scatter_block_t {
  * @note 
  *	int
  *	MPI_Status_set_cancelled (
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *			int flag (int)
  *	)
  */
@@ -12419,32 +11967,6 @@ struct args_MPI_Win_test_t {
 #endif
 
 /**
- * @brief Structure to hold the arguments for the `MPI_Request_f2c` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Request_f2c` function call.
- *
- * @struct args_MPI_Request_f2c_t
- *
- * @note 
- *	MPI_Request
- *	MPI_Request_f2c (
- *			int request (int)
- *	)
- */
-#if HAVE_MPI_Request_f2c
-struct args_MPI_Request_f2c_t {
-	int request;
-	MPI_Request retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Request_f2c(activity) { \
-	activity->mpi_args.MPI_Request_f2c.request = (int) request; \
-};
-
-#endif
-
-/**
  * @brief Structure to hold the arguments for the `MPI_Test_cancelled` function.
  *
  * This structure encapsulates the parameters and return value used in the 
@@ -12455,7 +11977,7 @@ struct args_MPI_Request_f2c_t {
  * @note 
  *	int
  *	MPI_Test_cancelled (
- *			const MPI_Status * status (const struct mpi_status_public_t *)
+ *			const MPI_Status * status (const struct opaque * *)
  *			int * flag (int *)
  *	)
  */
@@ -12563,76 +12085,6 @@ struct args_MPI_Error_string_t {
 	if (args->MPI_Error_string.resultlen != NULL) { \
 		args->MPI_Error_string.resultlen__ref.val = *args->MPI_Error_string.resultlen; \
 	} \
-};
-
-#endif
-
-/**
- * @brief Structure to hold the arguments for the `MPI_Status_c2f` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Status_c2f` function call.
- *
- * @struct args_MPI_Status_c2f_t
- *
- * @note 
- *	int
- *	MPI_Status_c2f (
- *			const MPI_Status * c_status (const struct mpi_status_public_t *)
- *			int * f_status (int *)
- *	)
- */
-#if HAVE_MPI_Status_c2f
-struct args_MPI_Status_c2f_t {
-	MPI_Status * c_status;
-	struct {
-		MPI_Status val;
-	} c_status__ref;
-	int * f_status;
-	struct {
-		int val;
-	} f_status__ref;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Status_c2f(activity) { \
-	activity->mpi_args.MPI_Status_c2f.c_status = (MPI_Status *) c_status; \
-	activity->mpi_args.MPI_Status_c2f.f_status = (int *) f_status; \
-};
-
-#define GET_PTRS_VALUE_MPI_Status_c2f(args) { \
-	if (args->MPI_Status_c2f.c_status != NULL) { \
-		args->MPI_Status_c2f.c_status__ref.val = *args->MPI_Status_c2f.c_status; \
-	} \
-	if (args->MPI_Status_c2f.f_status != NULL) { \
-		args->MPI_Status_c2f.f_status__ref.val = *args->MPI_Status_c2f.f_status; \
-	} \
-};
-
-#endif
-
-/**
- * @brief Structure to hold the arguments for the `MPI_Comm_f2c` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Comm_f2c` function call.
- *
- * @struct args_MPI_Comm_f2c_t
- *
- * @note 
- *	MPI_Comm
- *	MPI_Comm_f2c (
- *			int comm (int)
- *	)
- */
-#if HAVE_MPI_Comm_f2c
-struct args_MPI_Comm_f2c_t {
-	int comm;
-	MPI_Comm retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Comm_f2c(activity) { \
-	activity->mpi_args.MPI_Comm_f2c.comm = (int) comm; \
 };
 
 #endif
@@ -12819,7 +12271,7 @@ struct args_MPI_Iscatter_t {
  *			void * buf (void *)
  *			int count (int)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_read_all
@@ -13282,32 +12734,6 @@ struct args_MPI_File_get_position_t {
 #endif
 
 /**
- * @brief Structure to hold the arguments for the `MPI_Comm_c2f` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Comm_c2f` function call.
- *
- * @struct args_MPI_Comm_c2f_t
- *
- * @note 
- *	int
- *	MPI_Comm_c2f (
- *			MPI_Comm comm (struct mpi_communicator_t *)
- *	)
- */
-#if HAVE_MPI_Comm_c2f
-struct args_MPI_Comm_c2f_t {
-	MPI_Comm comm;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Comm_c2f(activity) { \
-	activity->mpi_args.MPI_Comm_c2f.comm = (MPI_Comm) comm; \
-};
-
-#endif
-
-/**
  * @brief Structure to hold the arguments for the `MPI_Accumulate` function.
  *
  * This structure encapsulates the parameters and return value used in the 
@@ -13372,7 +12798,7 @@ struct args_MPI_Accumulate_t {
  *			const void * buf (const void *)
  *			int count (int)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_write_shared
@@ -13642,32 +13068,6 @@ struct args_MPI_Graph_map_t {
 	if (args->MPI_Graph_map.newrank != NULL) { \
 		args->MPI_Graph_map.newrank__ref.val = *args->MPI_Graph_map.newrank; \
 	} \
-};
-
-#endif
-
-/**
- * @brief Structure to hold the arguments for the `MPI_Group_c2f` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Group_c2f` function call.
- *
- * @struct args_MPI_Group_c2f_t
- *
- * @note 
- *	int
- *	MPI_Group_c2f (
- *			MPI_Group group (struct mpi_group_t *)
- *	)
- */
-#if HAVE_MPI_Group_c2f
-struct args_MPI_Group_c2f_t {
-	MPI_Group group;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Group_c2f(activity) { \
-	activity->mpi_args.MPI_Group_c2f.group = (MPI_Group) group; \
 };
 
 #endif
@@ -14156,32 +13556,6 @@ struct args_MPI_Send_init_t {
 #endif
 
 /**
- * @brief Structure to hold the arguments for the `MPI_Win_f2c` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Win_f2c` function call.
- *
- * @struct args_MPI_Win_f2c_t
- *
- * @note 
- *	MPI_Win
- *	MPI_Win_f2c (
- *			int win (int)
- *	)
- */
-#if HAVE_MPI_Win_f2c
-struct args_MPI_Win_f2c_t {
-	int win;
-	MPI_Win retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Win_f2c(activity) { \
-	activity->mpi_args.MPI_Win_f2c.win = (int) win; \
-};
-
-#endif
-
-/**
  * @brief Structure to hold the arguments for the `MPI_Neighbor_allgather_init` function.
  *
  * This structure encapsulates the parameters and return value used in the 
@@ -14584,50 +13958,6 @@ struct args_MPI_Type_free_keyval_t {
 #endif
 
 /**
- * @brief Structure to hold the arguments for the `MPI_Status_f082c` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Status_f082c` function call.
- *
- * @struct args_MPI_Status_f082c_t
- *
- * @note 
- *	int
- *	MPI_Status_f082c (
- *			const MPI_F08_status * f08_status (const struct mpi_f08_status_public_t *)
- *			MPI_Status * c_status (struct mpi_status_public_t*)
- *	)
- */
-#if HAVE_MPI_Status_f082c
-struct args_MPI_Status_f082c_t {
-	MPI_F08_status * f08_status;
-	struct {
-		MPI_F08_status val;
-	} f08_status__ref;
-	MPI_Status * c_status;
-	struct {
-		MPI_Status val;
-	} c_status__ref;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Status_f082c(activity) { \
-	activity->mpi_args.MPI_Status_f082c.f08_status = (MPI_F08_status *) f08_status; \
-	activity->mpi_args.MPI_Status_f082c.c_status = (MPI_Status *) c_status; \
-};
-
-#define GET_PTRS_VALUE_MPI_Status_f082c(args) { \
-	if (args->MPI_Status_f082c.f08_status != NULL) { \
-		args->MPI_Status_f082c.f08_status__ref.val = *args->MPI_Status_f082c.f08_status; \
-	} \
-	if (args->MPI_Status_f082c.c_status != NULL) { \
-		args->MPI_Status_f082c.c_status__ref.val = *args->MPI_Status_f082c.c_status; \
-	} \
-};
-
-#endif
-
-/**
  * @brief Structure to hold the arguments for the `MPI_File_write` function.
  *
  * This structure encapsulates the parameters and return value used in the 
@@ -14642,7 +13972,7 @@ struct args_MPI_Status_f082c_t {
  *			const void * buf (const void *)
  *			int count (int)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_write
@@ -14966,7 +14296,7 @@ struct args_MPI_Neighbor_allgatherv_init_t {
  *			int tag (int)
  *			MPI_Comm comm (struct mpi_communicator_t *)
  *			int * flag (int *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_Iprobe
@@ -15166,32 +14496,6 @@ struct args_MPI_Unpack_external_t {
 #endif
 
 /**
- * @brief Structure to hold the arguments for the `MPI_Errhandler_c2f` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Errhandler_c2f` function call.
- *
- * @struct args_MPI_Errhandler_c2f_t
- *
- * @note 
- *	int
- *	MPI_Errhandler_c2f (
- *			MPI_Errhandler errhandler (struct mpi_errhandler_t *)
- *	)
- */
-#if HAVE_MPI_Errhandler_c2f
-struct args_MPI_Errhandler_c2f_t {
-	MPI_Errhandler errhandler;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Errhandler_c2f(activity) { \
-	activity->mpi_args.MPI_Errhandler_c2f.errhandler = (MPI_Errhandler) errhandler; \
-};
-
-#endif
-
-/**
  * @brief Structure to hold the arguments for the `MPI_Mprobe` function.
  *
  * This structure encapsulates the parameters and return value used in the 
@@ -15206,7 +14510,7 @@ struct args_MPI_Errhandler_c2f_t {
  *			int tag (int)
  *			MPI_Comm comm (struct mpi_communicator_t *)
  *			MPI_Message * message (struct mpi_message_t **)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_Mprobe
@@ -15327,7 +14631,7 @@ struct args_MPI_Win_delete_attr_t {
  *			void * buf (void *)
  *			int count (int)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_read_at_all
@@ -15386,50 +14690,6 @@ struct args_MPI_Pready_t {
 #define GET_ARGS_VALUE_MPI_Pready(activity) { \
 	activity->mpi_args.MPI_Pready.partitions = (int) partitions; \
 	activity->mpi_args.MPI_Pready.request = (MPI_Request) request; \
-};
-
-#endif
-
-/**
- * @brief Structure to hold the arguments for the `MPI_Status_f2f08` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Status_f2f08` function call.
- *
- * @struct args_MPI_Status_f2f08_t
- *
- * @note 
- *	int
- *	MPI_Status_f2f08 (
- *			const int * f_status (const int *)
- *			MPI_F08_status * f08_status (struct mpi_f08_status_public_t*)
- *	)
- */
-#if HAVE_MPI_Status_f2f08
-struct args_MPI_Status_f2f08_t {
-	int * f_status;
-	struct {
-		int val;
-	} f_status__ref;
-	MPI_F08_status * f08_status;
-	struct {
-		MPI_F08_status val;
-	} f08_status__ref;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Status_f2f08(activity) { \
-	activity->mpi_args.MPI_Status_f2f08.f_status = (int *) f_status; \
-	activity->mpi_args.MPI_Status_f2f08.f08_status = (MPI_F08_status *) f08_status; \
-};
-
-#define GET_PTRS_VALUE_MPI_Status_f2f08(args) { \
-	if (args->MPI_Status_f2f08.f_status != NULL) { \
-		args->MPI_Status_f2f08.f_status__ref.val = *args->MPI_Status_f2f08.f_status; \
-	} \
-	if (args->MPI_Status_f2f08.f08_status != NULL) { \
-		args->MPI_Status_f2f08.f08_status__ref.val = *args->MPI_Status_f2f08.f08_status; \
-	} \
 };
 
 #endif
@@ -15504,32 +14764,6 @@ struct args_MPI_Iscatterv_t {
 	if (args->MPI_Iscatterv.request != NULL) { \
 		args->MPI_Iscatterv.request__ref.val = *args->MPI_Iscatterv.request; \
 	} \
-};
-
-#endif
-
-/**
- * @brief Structure to hold the arguments for the `MPI_Type_c2f` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Type_c2f` function call.
- *
- * @struct args_MPI_Type_c2f_t
- *
- * @note 
- *	int
- *	MPI_Type_c2f (
- *			MPI_Datatype datatype (struct mpi_datatype_t *)
- *	)
- */
-#if HAVE_MPI_Type_c2f
-struct args_MPI_Type_c2f_t {
-	MPI_Datatype datatype;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Type_c2f(activity) { \
-	activity->mpi_args.MPI_Type_c2f.datatype = (MPI_Datatype) datatype; \
 };
 
 #endif
@@ -15725,50 +14959,6 @@ struct args_MPI_Start_t {
 #endif
 
 /**
- * @brief Structure to hold the arguments for the `MPI_Status_f2c` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Status_f2c` function call.
- *
- * @struct args_MPI_Status_f2c_t
- *
- * @note 
- *	int
- *	MPI_Status_f2c (
- *			const int * f_status (const int *)
- *			MPI_Status * c_status (struct mpi_status_public_t*)
- *	)
- */
-#if HAVE_MPI_Status_f2c
-struct args_MPI_Status_f2c_t {
-	int * f_status;
-	struct {
-		int val;
-	} f_status__ref;
-	MPI_Status * c_status;
-	struct {
-		MPI_Status val;
-	} c_status__ref;
-	int retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Status_f2c(activity) { \
-	activity->mpi_args.MPI_Status_f2c.f_status = (int *) f_status; \
-	activity->mpi_args.MPI_Status_f2c.c_status = (MPI_Status *) c_status; \
-};
-
-#define GET_PTRS_VALUE_MPI_Status_f2c(args) { \
-	if (args->MPI_Status_f2c.f_status != NULL) { \
-		args->MPI_Status_f2c.f_status__ref.val = *args->MPI_Status_f2c.f_status; \
-	} \
-	if (args->MPI_Status_f2c.c_status != NULL) { \
-		args->MPI_Status_f2c.c_status__ref.val = *args->MPI_Status_f2c.c_status; \
-	} \
-};
-
-#endif
-
-/**
  * @brief Structure to hold the arguments for the `MPI_File_get_type_extent` function.
  *
  * This structure encapsulates the parameters and return value used in the 
@@ -15824,7 +15014,7 @@ struct args_MPI_File_get_type_extent_t {
  *			void * buf (void *)
  *			int count (int)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_read_shared
@@ -16093,32 +15283,6 @@ struct args_MPI_Issend_t {
 	if (args->MPI_Issend.request != NULL) { \
 		args->MPI_Issend.request__ref.val = *args->MPI_Issend.request; \
 	} \
-};
-
-#endif
-
-/**
- * @brief Structure to hold the arguments for the `MPI_Op_f2c` function.
- *
- * This structure encapsulates the parameters and return value used in the 
- * `MPI_Op_f2c` function call.
- *
- * @struct args_MPI_Op_f2c_t
- *
- * @note 
- *	MPI_Op
- *	MPI_Op_f2c (
- *			int op (int)
- *	)
- */
-#if HAVE_MPI_Op_f2c
-struct args_MPI_Op_f2c_t {
-	int op;
-	MPI_Op retval;
-};
-
-#define GET_ARGS_VALUE_MPI_Op_f2c(activity) { \
-	activity->mpi_args.MPI_Op_f2c.op = (int) op; \
 };
 
 #endif
@@ -17905,7 +17069,7 @@ struct args_MPI_Type_get_attr_t {
  *			const void * buf (const void *)
  *			int count (int)
  *			MPI_Datatype datatype (struct mpi_datatype_t *)
- *			MPI_Status * status (struct mpi_status_public_t*)
+ *			MPI_Status * status (struct opaque **)
  *	)
  */
 #if HAVE_MPI_File_write_ordered
@@ -19967,6 +19131,842 @@ struct args_MPI_Win_start_t {
 
 #endif
 
+/**
+ * @brief Structure to hold the arguments for the `MPI_Info_f2c` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Info_f2c` function call.
+ *
+ * @struct args_MPI_Info_f2c_t
+ *
+ * @note 
+ *	MPI_Info
+ *	MPI_Info_f2c (
+ *			int info (int)
+ *	)
+ */
+#if HAVE_MPI_Info_f2c
+struct args_MPI_Info_f2c_t {
+	int info;
+	MPI_Info retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Info_f2c(activity) { \
+	activity->mpi_args.MPI_Info_f2c.info = (int) info; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Info_c2f` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Info_c2f` function call.
+ *
+ * @struct args_MPI_Info_c2f_t
+ *
+ * @note 
+ *	int
+ *	MPI_Info_c2f (
+ *			MPI_Info info (struct mpi_info_t *)
+ *	)
+ */
+#if HAVE_MPI_Info_c2f
+struct args_MPI_Info_c2f_t {
+	MPI_Info info;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Info_c2f(activity) { \
+	activity->mpi_args.MPI_Info_c2f.info = (MPI_Info) info; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Op_c2f` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Op_c2f` function call.
+ *
+ * @struct args_MPI_Op_c2f_t
+ *
+ * @note 
+ *	int
+ *	MPI_Op_c2f (
+ *			MPI_Op op (struct mpi_op_t *)
+ *	)
+ */
+#if HAVE_MPI_Op_c2f
+struct args_MPI_Op_c2f_t {
+	MPI_Op op;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Op_c2f(activity) { \
+	activity->mpi_args.MPI_Op_c2f.op = (MPI_Op) op; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Win_c2f` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Win_c2f` function call.
+ *
+ * @struct args_MPI_Win_c2f_t
+ *
+ * @note 
+ *	int
+ *	MPI_Win_c2f (
+ *			MPI_Win win (struct mpi_win_t *)
+ *	)
+ */
+#if HAVE_MPI_Win_c2f
+struct args_MPI_Win_c2f_t {
+	MPI_Win win;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Win_c2f(activity) { \
+	activity->mpi_args.MPI_Win_c2f.win = (MPI_Win) win; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Group_f2c` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Group_f2c` function call.
+ *
+ * @struct args_MPI_Group_f2c_t
+ *
+ * @note 
+ *	MPI_Group
+ *	MPI_Group_f2c (
+ *			int group (int)
+ *	)
+ */
+#if HAVE_MPI_Group_f2c
+struct args_MPI_Group_f2c_t {
+	int group;
+	MPI_Group retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Group_f2c(activity) { \
+	activity->mpi_args.MPI_Group_f2c.group = (int) group; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_File_c2f` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_File_c2f` function call.
+ *
+ * @struct args_MPI_File_c2f_t
+ *
+ * @note 
+ *	int
+ *	MPI_File_c2f (
+ *			MPI_File file (struct mpi_file_t *)
+ *	)
+ */
+#if HAVE_MPI_File_c2f
+struct args_MPI_File_c2f_t {
+	MPI_File file;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_File_c2f(activity) { \
+	activity->mpi_args.MPI_File_c2f.file = (MPI_File) file; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Request_c2f` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Request_c2f` function call.
+ *
+ * @struct args_MPI_Request_c2f_t
+ *
+ * @note 
+ *	int
+ *	MPI_Request_c2f (
+ *			MPI_Request request (struct mpi_request_t *)
+ *	)
+ */
+#if HAVE_MPI_Request_c2f
+struct args_MPI_Request_c2f_t {
+	MPI_Request request;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Request_c2f(activity) { \
+	activity->mpi_args.MPI_Request_c2f.request = (MPI_Request) request; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_File_f2c` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_File_f2c` function call.
+ *
+ * @struct args_MPI_File_f2c_t
+ *
+ * @note 
+ *	MPI_File
+ *	MPI_File_f2c (
+ *			int file (int)
+ *	)
+ */
+#if HAVE_MPI_File_f2c
+struct args_MPI_File_f2c_t {
+	int file;
+	MPI_File retval;
+};
+
+#define GET_ARGS_VALUE_MPI_File_f2c(activity) { \
+	activity->mpi_args.MPI_File_f2c.file = (int) file; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Session_f2c` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Session_f2c` function call.
+ *
+ * @struct args_MPI_Session_f2c_t
+ *
+ * @note 
+ *	MPI_Session
+ *	MPI_Session_f2c (
+ *			int session (int)
+ *	)
+ */
+#if HAVE_MPI_Session_f2c
+struct args_MPI_Session_f2c_t {
+	int session;
+	MPI_Session retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Session_f2c(activity) { \
+	activity->mpi_args.MPI_Session_f2c.session = (int) session; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Status_f082f` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Status_f082f` function call.
+ *
+ * @struct args_MPI_Status_f082f_t
+ *
+ * @note 
+ *	int
+ *	MPI_Status_f082f (
+ *			const MPI_F08_status * f08_status (const struct opaque * *)
+ *			int * f_status (int *)
+ *	)
+ */
+#if HAVE_MPI_Status_f082f
+struct args_MPI_Status_f082f_t {
+	MPI_F08_status * f08_status;
+	struct {
+		MPI_F08_status val;
+	} f08_status__ref;
+	int * f_status;
+	struct {
+		int val;
+	} f_status__ref;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Status_f082f(activity) { \
+	activity->mpi_args.MPI_Status_f082f.f08_status = (MPI_F08_status *) f08_status; \
+	activity->mpi_args.MPI_Status_f082f.f_status = (int *) f_status; \
+};
+
+#define GET_PTRS_VALUE_MPI_Status_f082f(args) { \
+	if (args->MPI_Status_f082f.f08_status != NULL) { \
+		args->MPI_Status_f082f.f08_status__ref.val = *args->MPI_Status_f082f.f08_status; \
+	} \
+	if (args->MPI_Status_f082f.f_status != NULL) { \
+		args->MPI_Status_f082f.f_status__ref.val = *args->MPI_Status_f082f.f_status; \
+	} \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Status_c2f08` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Status_c2f08` function call.
+ *
+ * @struct args_MPI_Status_c2f08_t
+ *
+ * @note 
+ *	int
+ *	MPI_Status_c2f08 (
+ *			const MPI_Status * c_status (const struct opaque * *)
+ *			MPI_F08_status * f08_status (struct opaque **)
+ *	)
+ */
+#if HAVE_MPI_Status_c2f08
+struct args_MPI_Status_c2f08_t {
+	MPI_Status * c_status;
+	struct {
+		MPI_Status val;
+	} c_status__ref;
+	MPI_F08_status * f08_status;
+	struct {
+		MPI_F08_status val;
+	} f08_status__ref;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Status_c2f08(activity) { \
+	activity->mpi_args.MPI_Status_c2f08.c_status = (MPI_Status *) c_status; \
+	activity->mpi_args.MPI_Status_c2f08.f08_status = (MPI_F08_status *) f08_status; \
+};
+
+#define GET_PTRS_VALUE_MPI_Status_c2f08(args) { \
+	if (args->MPI_Status_c2f08.c_status != NULL) { \
+		args->MPI_Status_c2f08.c_status__ref.val = *args->MPI_Status_c2f08.c_status; \
+	} \
+	if (args->MPI_Status_c2f08.f08_status != NULL) { \
+		args->MPI_Status_c2f08.f08_status__ref.val = *args->MPI_Status_c2f08.f08_status; \
+	} \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Type_f2c` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Type_f2c` function call.
+ *
+ * @struct args_MPI_Type_f2c_t
+ *
+ * @note 
+ *	MPI_Datatype
+ *	MPI_Type_f2c (
+ *			int datatype (int)
+ *	)
+ */
+#if HAVE_MPI_Type_f2c
+struct args_MPI_Type_f2c_t {
+	int datatype;
+	MPI_Datatype retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Type_f2c(activity) { \
+	activity->mpi_args.MPI_Type_f2c.datatype = (int) datatype; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Message_c2f` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Message_c2f` function call.
+ *
+ * @struct args_MPI_Message_c2f_t
+ *
+ * @note 
+ *	int
+ *	MPI_Message_c2f (
+ *			MPI_Message message (struct mpi_message_t *)
+ *	)
+ */
+#if HAVE_MPI_Message_c2f
+struct args_MPI_Message_c2f_t {
+	MPI_Message message;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Message_c2f(activity) { \
+	activity->mpi_args.MPI_Message_c2f.message = (MPI_Message) message; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Session_c2f` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Session_c2f` function call.
+ *
+ * @struct args_MPI_Session_c2f_t
+ *
+ * @note 
+ *	int
+ *	MPI_Session_c2f (
+ *			const MPI_Session session (const struct mpi_instance_t *)
+ *	)
+ */
+#if HAVE_MPI_Session_c2f
+struct args_MPI_Session_c2f_t {
+	MPI_Session session;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Session_c2f(activity) { \
+	activity->mpi_args.MPI_Session_c2f.session = (MPI_Session) session; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Message_f2c` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Message_f2c` function call.
+ *
+ * @struct args_MPI_Message_f2c_t
+ *
+ * @note 
+ *	MPI_Message
+ *	MPI_Message_f2c (
+ *			int message (int)
+ *	)
+ */
+#if HAVE_MPI_Message_f2c
+struct args_MPI_Message_f2c_t {
+	int message;
+	MPI_Message retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Message_f2c(activity) { \
+	activity->mpi_args.MPI_Message_f2c.message = (int) message; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Errhandler_f2c` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Errhandler_f2c` function call.
+ *
+ * @struct args_MPI_Errhandler_f2c_t
+ *
+ * @note 
+ *	MPI_Errhandler
+ *	MPI_Errhandler_f2c (
+ *			int errhandler (int)
+ *	)
+ */
+#if HAVE_MPI_Errhandler_f2c
+struct args_MPI_Errhandler_f2c_t {
+	int errhandler;
+	MPI_Errhandler retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Errhandler_f2c(activity) { \
+	activity->mpi_args.MPI_Errhandler_f2c.errhandler = (int) errhandler; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Request_f2c` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Request_f2c` function call.
+ *
+ * @struct args_MPI_Request_f2c_t
+ *
+ * @note 
+ *	MPI_Request
+ *	MPI_Request_f2c (
+ *			int request (int)
+ *	)
+ */
+#if HAVE_MPI_Request_f2c
+struct args_MPI_Request_f2c_t {
+	int request;
+	MPI_Request retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Request_f2c(activity) { \
+	activity->mpi_args.MPI_Request_f2c.request = (int) request; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Status_c2f` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Status_c2f` function call.
+ *
+ * @struct args_MPI_Status_c2f_t
+ *
+ * @note 
+ *	int
+ *	MPI_Status_c2f (
+ *			const MPI_Status * c_status (const struct opaque * *)
+ *			int * f_status (int *)
+ *	)
+ */
+#if HAVE_MPI_Status_c2f
+struct args_MPI_Status_c2f_t {
+	MPI_Status * c_status;
+	struct {
+		MPI_Status val;
+	} c_status__ref;
+	int * f_status;
+	struct {
+		int val;
+	} f_status__ref;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Status_c2f(activity) { \
+	activity->mpi_args.MPI_Status_c2f.c_status = (MPI_Status *) c_status; \
+	activity->mpi_args.MPI_Status_c2f.f_status = (int *) f_status; \
+};
+
+#define GET_PTRS_VALUE_MPI_Status_c2f(args) { \
+	if (args->MPI_Status_c2f.c_status != NULL) { \
+		args->MPI_Status_c2f.c_status__ref.val = *args->MPI_Status_c2f.c_status; \
+	} \
+	if (args->MPI_Status_c2f.f_status != NULL) { \
+		args->MPI_Status_c2f.f_status__ref.val = *args->MPI_Status_c2f.f_status; \
+	} \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Comm_f2c` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Comm_f2c` function call.
+ *
+ * @struct args_MPI_Comm_f2c_t
+ *
+ * @note 
+ *	MPI_Comm
+ *	MPI_Comm_f2c (
+ *			int comm (int)
+ *	)
+ */
+#if HAVE_MPI_Comm_f2c
+struct args_MPI_Comm_f2c_t {
+	int comm;
+	MPI_Comm retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Comm_f2c(activity) { \
+	activity->mpi_args.MPI_Comm_f2c.comm = (int) comm; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Comm_c2f` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Comm_c2f` function call.
+ *
+ * @struct args_MPI_Comm_c2f_t
+ *
+ * @note 
+ *	int
+ *	MPI_Comm_c2f (
+ *			MPI_Comm comm (struct mpi_communicator_t *)
+ *	)
+ */
+#if HAVE_MPI_Comm_c2f
+struct args_MPI_Comm_c2f_t {
+	MPI_Comm comm;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Comm_c2f(activity) { \
+	activity->mpi_args.MPI_Comm_c2f.comm = (MPI_Comm) comm; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Group_c2f` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Group_c2f` function call.
+ *
+ * @struct args_MPI_Group_c2f_t
+ *
+ * @note 
+ *	int
+ *	MPI_Group_c2f (
+ *			MPI_Group group (struct mpi_group_t *)
+ *	)
+ */
+#if HAVE_MPI_Group_c2f
+struct args_MPI_Group_c2f_t {
+	MPI_Group group;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Group_c2f(activity) { \
+	activity->mpi_args.MPI_Group_c2f.group = (MPI_Group) group; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Win_f2c` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Win_f2c` function call.
+ *
+ * @struct args_MPI_Win_f2c_t
+ *
+ * @note 
+ *	MPI_Win
+ *	MPI_Win_f2c (
+ *			int win (int)
+ *	)
+ */
+#if HAVE_MPI_Win_f2c
+struct args_MPI_Win_f2c_t {
+	int win;
+	MPI_Win retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Win_f2c(activity) { \
+	activity->mpi_args.MPI_Win_f2c.win = (int) win; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Status_f082c` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Status_f082c` function call.
+ *
+ * @struct args_MPI_Status_f082c_t
+ *
+ * @note 
+ *	int
+ *	MPI_Status_f082c (
+ *			const MPI_F08_status * f08_status (const struct opaque * *)
+ *			MPI_Status * c_status (struct opaque **)
+ *	)
+ */
+#if HAVE_MPI_Status_f082c
+struct args_MPI_Status_f082c_t {
+	MPI_F08_status * f08_status;
+	struct {
+		MPI_F08_status val;
+	} f08_status__ref;
+	MPI_Status * c_status;
+	struct {
+		MPI_Status val;
+	} c_status__ref;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Status_f082c(activity) { \
+	activity->mpi_args.MPI_Status_f082c.f08_status = (MPI_F08_status *) f08_status; \
+	activity->mpi_args.MPI_Status_f082c.c_status = (MPI_Status *) c_status; \
+};
+
+#define GET_PTRS_VALUE_MPI_Status_f082c(args) { \
+	if (args->MPI_Status_f082c.f08_status != NULL) { \
+		args->MPI_Status_f082c.f08_status__ref.val = *args->MPI_Status_f082c.f08_status; \
+	} \
+	if (args->MPI_Status_f082c.c_status != NULL) { \
+		args->MPI_Status_f082c.c_status__ref.val = *args->MPI_Status_f082c.c_status; \
+	} \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Errhandler_c2f` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Errhandler_c2f` function call.
+ *
+ * @struct args_MPI_Errhandler_c2f_t
+ *
+ * @note 
+ *	int
+ *	MPI_Errhandler_c2f (
+ *			MPI_Errhandler errhandler (struct mpi_errhandler_t *)
+ *	)
+ */
+#if HAVE_MPI_Errhandler_c2f
+struct args_MPI_Errhandler_c2f_t {
+	MPI_Errhandler errhandler;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Errhandler_c2f(activity) { \
+	activity->mpi_args.MPI_Errhandler_c2f.errhandler = (MPI_Errhandler) errhandler; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Status_f2f08` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Status_f2f08` function call.
+ *
+ * @struct args_MPI_Status_f2f08_t
+ *
+ * @note 
+ *	int
+ *	MPI_Status_f2f08 (
+ *			const int * f_status (const int *)
+ *			MPI_F08_status * f08_status (struct opaque **)
+ *	)
+ */
+#if HAVE_MPI_Status_f2f08
+struct args_MPI_Status_f2f08_t {
+	int * f_status;
+	struct {
+		int val;
+	} f_status__ref;
+	MPI_F08_status * f08_status;
+	struct {
+		MPI_F08_status val;
+	} f08_status__ref;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Status_f2f08(activity) { \
+	activity->mpi_args.MPI_Status_f2f08.f_status = (int *) f_status; \
+	activity->mpi_args.MPI_Status_f2f08.f08_status = (MPI_F08_status *) f08_status; \
+};
+
+#define GET_PTRS_VALUE_MPI_Status_f2f08(args) { \
+	if (args->MPI_Status_f2f08.f_status != NULL) { \
+		args->MPI_Status_f2f08.f_status__ref.val = *args->MPI_Status_f2f08.f_status; \
+	} \
+	if (args->MPI_Status_f2f08.f08_status != NULL) { \
+		args->MPI_Status_f2f08.f08_status__ref.val = *args->MPI_Status_f2f08.f08_status; \
+	} \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Type_c2f` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Type_c2f` function call.
+ *
+ * @struct args_MPI_Type_c2f_t
+ *
+ * @note 
+ *	int
+ *	MPI_Type_c2f (
+ *			MPI_Datatype datatype (struct mpi_datatype_t *)
+ *	)
+ */
+#if HAVE_MPI_Type_c2f
+struct args_MPI_Type_c2f_t {
+	MPI_Datatype datatype;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Type_c2f(activity) { \
+	activity->mpi_args.MPI_Type_c2f.datatype = (MPI_Datatype) datatype; \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Status_f2c` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Status_f2c` function call.
+ *
+ * @struct args_MPI_Status_f2c_t
+ *
+ * @note 
+ *	int
+ *	MPI_Status_f2c (
+ *			const int * f_status (const int *)
+ *			MPI_Status * c_status (struct opaque **)
+ *	)
+ */
+#if HAVE_MPI_Status_f2c
+struct args_MPI_Status_f2c_t {
+	int * f_status;
+	struct {
+		int val;
+	} f_status__ref;
+	MPI_Status * c_status;
+	struct {
+		MPI_Status val;
+	} c_status__ref;
+	int retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Status_f2c(activity) { \
+	activity->mpi_args.MPI_Status_f2c.f_status = (int *) f_status; \
+	activity->mpi_args.MPI_Status_f2c.c_status = (MPI_Status *) c_status; \
+};
+
+#define GET_PTRS_VALUE_MPI_Status_f2c(args) { \
+	if (args->MPI_Status_f2c.f_status != NULL) { \
+		args->MPI_Status_f2c.f_status__ref.val = *args->MPI_Status_f2c.f_status; \
+	} \
+	if (args->MPI_Status_f2c.c_status != NULL) { \
+		args->MPI_Status_f2c.c_status__ref.val = *args->MPI_Status_f2c.c_status; \
+	} \
+};
+
+#endif
+
+/**
+ * @brief Structure to hold the arguments for the `MPI_Op_f2c` function.
+ *
+ * This structure encapsulates the parameters and return value used in the 
+ * `MPI_Op_f2c` function call.
+ *
+ * @struct args_MPI_Op_f2c_t
+ *
+ * @note 
+ *	MPI_Op
+ *	MPI_Op_f2c (
+ *			int op (int)
+ *	)
+ */
+#if HAVE_MPI_Op_f2c
+struct args_MPI_Op_f2c_t {
+	int op;
+	MPI_Op retval;
+};
+
+#define GET_ARGS_VALUE_MPI_Op_f2c(activity) { \
+	activity->mpi_args.MPI_Op_f2c.op = (int) op; \
+};
+
+#endif
+
 
 
 /**
@@ -20622,19 +20622,9 @@ static inline void get_mpi_pointed_args_for(mpi_api_id_t id, mpi_api_args_t* arg
 				GET_PTRS_VALUE_MPI_File_write_all_end(args);
 				return;
 			#endif
-			#if HAVE_MPI_Status_f082f
-			case MPI_API_ID_MPI_Status_f082f : 
-				GET_PTRS_VALUE_MPI_Status_f082f(args);
-				return;
-			#endif
 			#if HAVE_MPI_Buffer_detach
 			case MPI_API_ID_MPI_Buffer_detach : 
 				GET_PTRS_VALUE_MPI_Buffer_detach(args);
-				return;
-			#endif
-			#if HAVE_MPI_Status_c2f08
-			case MPI_API_ID_MPI_Status_c2f08 : 
-				GET_PTRS_VALUE_MPI_Status_c2f08(args);
 				return;
 			#endif
 			#if HAVE_MPI_Startall
@@ -20942,11 +20932,6 @@ static inline void get_mpi_pointed_args_for(mpi_api_id_t id, mpi_api_args_t* arg
 				GET_PTRS_VALUE_MPI_Error_string(args);
 				return;
 			#endif
-			#if HAVE_MPI_Status_c2f
-			case MPI_API_ID_MPI_Status_c2f : 
-				GET_PTRS_VALUE_MPI_Status_c2f(args);
-				return;
-			#endif
 			#if HAVE_MPI_Graph_neighbors_count
 			case MPI_API_ID_MPI_Graph_neighbors_count : 
 				GET_PTRS_VALUE_MPI_Graph_neighbors_count(args);
@@ -21092,11 +21077,6 @@ static inline void get_mpi_pointed_args_for(mpi_api_id_t id, mpi_api_args_t* arg
 				GET_PTRS_VALUE_MPI_Publish_name(args);
 				return;
 			#endif
-			#if HAVE_MPI_Status_f082c
-			case MPI_API_ID_MPI_Status_f082c : 
-				GET_PTRS_VALUE_MPI_Status_f082c(args);
-				return;
-			#endif
 			#if HAVE_MPI_File_write
 			case MPI_API_ID_MPI_File_write : 
 				GET_PTRS_VALUE_MPI_File_write(args);
@@ -21152,11 +21132,6 @@ static inline void get_mpi_pointed_args_for(mpi_api_id_t id, mpi_api_args_t* arg
 				GET_PTRS_VALUE_MPI_File_read_at_all(args);
 				return;
 			#endif
-			#if HAVE_MPI_Status_f2f08
-			case MPI_API_ID_MPI_Status_f2f08 : 
-				GET_PTRS_VALUE_MPI_Status_f2f08(args);
-				return;
-			#endif
 			#if HAVE_MPI_Iscatterv
 			case MPI_API_ID_MPI_Iscatterv : 
 				GET_PTRS_VALUE_MPI_Iscatterv(args);
@@ -21175,11 +21150,6 @@ static inline void get_mpi_pointed_args_for(mpi_api_id_t id, mpi_api_args_t* arg
 			#if HAVE_MPI_Start
 			case MPI_API_ID_MPI_Start : 
 				GET_PTRS_VALUE_MPI_Start(args);
-				return;
-			#endif
-			#if HAVE_MPI_Status_f2c
-			case MPI_API_ID_MPI_Status_f2c : 
-				GET_PTRS_VALUE_MPI_Status_f2c(args);
 				return;
 			#endif
 			#if HAVE_MPI_File_get_type_extent
@@ -21545,6 +21515,36 @@ static inline void get_mpi_pointed_args_for(mpi_api_id_t id, mpi_api_args_t* arg
 			#if HAVE_MPI_File_iwrite
 			case MPI_API_ID_MPI_File_iwrite : 
 				GET_PTRS_VALUE_MPI_File_iwrite(args);
+				return;
+			#endif
+			#if HAVE_MPI_Status_f082f
+			case MPI_API_ID_MPI_Status_f082f : 
+				GET_PTRS_VALUE_MPI_Status_f082f(args);
+				return;
+			#endif
+			#if HAVE_MPI_Status_c2f08
+			case MPI_API_ID_MPI_Status_c2f08 : 
+				GET_PTRS_VALUE_MPI_Status_c2f08(args);
+				return;
+			#endif
+			#if HAVE_MPI_Status_c2f
+			case MPI_API_ID_MPI_Status_c2f : 
+				GET_PTRS_VALUE_MPI_Status_c2f(args);
+				return;
+			#endif
+			#if HAVE_MPI_Status_f082c
+			case MPI_API_ID_MPI_Status_f082c : 
+				GET_PTRS_VALUE_MPI_Status_f082c(args);
+				return;
+			#endif
+			#if HAVE_MPI_Status_f2f08
+			case MPI_API_ID_MPI_Status_f2f08 : 
+				GET_PTRS_VALUE_MPI_Status_f2f08(args);
+				return;
+			#endif
+			#if HAVE_MPI_Status_f2c
+			case MPI_API_ID_MPI_Status_f2c : 
+				GET_PTRS_VALUE_MPI_Status_f2c(args);
 				return;
 			#endif
             default : break;

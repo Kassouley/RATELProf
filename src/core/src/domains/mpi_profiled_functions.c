@@ -1448,18 +1448,6 @@ int i_MPI_File_set_size(MPI_File fh, MPI_Offset size, void* return_address) {
 };
 #endif
 
-#if HAVE_MPI_Op_c2f
-int i_MPI_Op_c2f(MPI_Op op, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Op_c2f, __mpi_activity);
-	CALL_RET(int, MPI_Op_c2f, op, NULL);
-	GET_ARGS_VALUE_MPI_Op_c2f(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Op_c2f, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
 #if HAVE_MPI_Type_set_name
 int i_MPI_Type_set_name(MPI_Datatype type, const char * type_name, void* return_address) {
 	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
@@ -1556,18 +1544,6 @@ int i_MPI_Win_unlock_all(MPI_Win win, void* return_address) {
 };
 #endif
 
-#if HAVE_MPI_Win_c2f
-int i_MPI_Win_c2f(MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_c2f, __mpi_activity);
-	CALL_RET(int, MPI_Win_c2f, win, NULL);
-	GET_ARGS_VALUE_MPI_Win_c2f(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_c2f, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
 #if HAVE_MPI_Type_create_f90_integer
 int i_MPI_Type_create_f90_integer(int r, MPI_Datatype * newtype, void* return_address) {
 	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
@@ -1576,18 +1552,6 @@ int i_MPI_Type_create_f90_integer(int r, MPI_Datatype * newtype, void* return_ad
 	CALL_RET(int, MPI_Type_create_f90_integer, r, newtype, NULL);
 	GET_ARGS_VALUE_MPI_Type_create_f90_integer(__mpi_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_create_f90_integer, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
-#if HAVE_MPI_Group_f2c
-MPI_Group i_MPI_Group_f2c(int group, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_f2c, __mpi_activity);
-	CALL_RET(MPI_Group, MPI_Group_f2c, group, NULL);
-	GET_ARGS_VALUE_MPI_Group_f2c(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_f2c, __mpi_activity);
 	return __mpi_ret;
 };
 #endif
@@ -1808,18 +1772,6 @@ int i_MPI_Cart_create(MPI_Comm old_comm, int ndims, const int dims[], const int 
 };
 #endif
 
-#if HAVE_MPI_File_c2f
-int i_MPI_File_c2f(MPI_File file, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_c2f, __mpi_activity);
-	CALL_RET(int, MPI_File_c2f, file, NULL);
-	GET_ARGS_VALUE_MPI_File_c2f(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_c2f, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
 #if HAVE_MPI_File_write_all_begin
 int i_MPI_File_write_all_begin(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, void* return_address) {
 	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
@@ -1880,30 +1832,6 @@ int i_MPI_Pready_list(int length, int partition_list[], MPI_Request request, voi
 };
 #endif
 
-#if HAVE_MPI_Request_c2f
-int i_MPI_Request_c2f(MPI_Request request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Request_c2f, __mpi_activity);
-	CALL_RET(int, MPI_Request_c2f, request, NULL);
-	GET_ARGS_VALUE_MPI_Request_c2f(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Request_c2f, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
-#if HAVE_MPI_File_f2c
-MPI_File i_MPI_File_f2c(int file, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_f2c, __mpi_activity);
-	CALL_RET(MPI_File, MPI_File_f2c, file, NULL);
-	GET_ARGS_VALUE_MPI_File_f2c(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_f2c, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
 #if HAVE_MPI_Alltoallw_init
 int i_MPI_Alltoallw_init(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
 	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
@@ -1912,18 +1840,6 @@ int i_MPI_Alltoallw_init(const void * sendbuf, const int sendcounts[], const int
 	CALL_RET(int, MPI_Alltoallw_init, sendbuf, sendcounts, sdispls, sendtypes, recvbuf, recvcounts, rdispls, recvtypes, comm, info, request, NULL);
 	GET_ARGS_VALUE_MPI_Alltoallw_init(__mpi_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Alltoallw_init, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
-#if HAVE_MPI_Info_c2f
-int i_MPI_Info_c2f(MPI_Info info, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_c2f, __mpi_activity);
-	CALL_RET(int, MPI_Info_c2f, info, NULL);
-	GET_ARGS_VALUE_MPI_Info_c2f(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_c2f, __mpi_activity);
 	return __mpi_ret;
 };
 #endif
@@ -1976,18 +1892,6 @@ int i_MPI_Comm_get_parent(MPI_Comm * parent, void* return_address) {
 };
 #endif
 
-#if HAVE_MPI_Info_f2c
-MPI_Info i_MPI_Info_f2c(int info, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_f2c, __mpi_activity);
-	CALL_RET(MPI_Info, MPI_Info_f2c, info, NULL);
-	GET_ARGS_VALUE_MPI_Info_f2c(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_f2c, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
 #if HAVE_MPI_Keyval_free
 int i_MPI_Keyval_free(int * keyval, void* return_address) {
 	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
@@ -1996,18 +1900,6 @@ int i_MPI_Keyval_free(int * keyval, void* return_address) {
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Keyval_free, __mpi_activity);
 	CALL_RET(int, MPI_Keyval_free, keyval, NULL);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Keyval_free, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
-#if HAVE_MPI_Session_f2c
-MPI_Session i_MPI_Session_f2c(int session, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_f2c, __mpi_activity);
-	CALL_RET(MPI_Session, MPI_Session_f2c, session, NULL);
-	GET_ARGS_VALUE_MPI_Session_f2c(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_f2c, __mpi_activity);
 	return __mpi_ret;
 };
 #endif
@@ -2096,18 +1988,6 @@ int i_MPI_File_write_all_end(MPI_File fh, const void * buf, MPI_Status * status,
 };
 #endif
 
-#if HAVE_MPI_Status_f082f
-int i_MPI_Status_f082f(const MPI_F08_status * f08_status, int * f_status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f082f, __mpi_activity);
-	CALL_RET(int, MPI_Status_f082f, f08_status, f_status, NULL);
-	GET_ARGS_VALUE_MPI_Status_f082f(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f082f, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
 #if HAVE_MPI_Buffer_detach
 int i_MPI_Buffer_detach(void * buffer, int * size, void* return_address) {
 	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
@@ -2116,18 +1996,6 @@ int i_MPI_Buffer_detach(void * buffer, int * size, void* return_address) {
 	CALL_RET(int, MPI_Buffer_detach, buffer, size, NULL);
 	GET_ARGS_VALUE_MPI_Buffer_detach(__mpi_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Buffer_detach, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
-#if HAVE_MPI_Status_c2f08
-int i_MPI_Status_c2f08(const MPI_Status * c_status, MPI_F08_status * f08_status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_c2f08, __mpi_activity);
-	CALL_RET(int, MPI_Status_c2f08, c_status, f08_status, NULL);
-	GET_ARGS_VALUE_MPI_Status_c2f08(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_c2f08, __mpi_activity);
 	return __mpi_ret;
 };
 #endif
@@ -2528,18 +2396,6 @@ int i_MPI_Type_get_envelope(MPI_Datatype type, int * num_integers, int * num_add
 };
 #endif
 
-#if HAVE_MPI_Type_f2c
-MPI_Datatype i_MPI_Type_f2c(int datatype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_f2c, __mpi_activity);
-	CALL_RET(MPI_Datatype, MPI_Type_f2c, datatype, NULL);
-	GET_ARGS_VALUE_MPI_Type_f2c(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_f2c, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
 #if HAVE_MPI_Win_create
 int i_MPI_Win_create(void * base, MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, MPI_Win * win, void* return_address) {
 	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
@@ -2668,18 +2524,6 @@ int i_MPI_Rsend(const void * ibuf, int count, MPI_Datatype datatype, int dest, i
 	CALL_RET(int, MPI_Rsend, ibuf, count, datatype, dest, tag, comm, NULL);
 	GET_ARGS_VALUE_MPI_Rsend(__mpi_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Rsend, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
-#if HAVE_MPI_Message_c2f
-int i_MPI_Message_c2f(MPI_Message message, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Message_c2f, __mpi_activity);
-	CALL_RET(int, MPI_Message_c2f, message, NULL);
-	GET_ARGS_VALUE_MPI_Message_c2f(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Message_c2f, __mpi_activity);
 	return __mpi_ret;
 };
 #endif
@@ -2948,18 +2792,6 @@ int i_MPI_File_iread_shared(MPI_File fh, void * buf, int count, MPI_Datatype dat
 };
 #endif
 
-#if HAVE_MPI_Session_c2f
-int i_MPI_Session_c2f(const MPI_Session session, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_c2f, __mpi_activity);
-	CALL_RET(int, MPI_Session_c2f, session, NULL);
-	GET_ARGS_VALUE_MPI_Session_c2f(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_c2f, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
 #if HAVE_MPI_Comm_idup_with_info
 int i_MPI_Comm_idup_with_info(MPI_Comm comm, MPI_Info info, MPI_Comm * newcomm, MPI_Request * request, void* return_address) {
 	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
@@ -2968,18 +2800,6 @@ int i_MPI_Comm_idup_with_info(MPI_Comm comm, MPI_Info info, MPI_Comm * newcomm, 
 	CALL_RET(int, MPI_Comm_idup_with_info, comm, info, newcomm, request, NULL);
 	GET_ARGS_VALUE_MPI_Comm_idup_with_info(__mpi_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_idup_with_info, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
-#if HAVE_MPI_Message_f2c
-MPI_Message i_MPI_Message_f2c(int message, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Message_f2c, __mpi_activity);
-	CALL_RET(MPI_Message, MPI_Message_f2c, message, NULL);
-	GET_ARGS_VALUE_MPI_Message_f2c(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Message_f2c, __mpi_activity);
 	return __mpi_ret;
 };
 #endif
@@ -3104,18 +2924,6 @@ int i_MPI_Reduce_local(const void * inbuf, void * inoutbuf, int count, MPI_Datat
 };
 #endif
 
-#if HAVE_MPI_Errhandler_f2c
-MPI_Errhandler i_MPI_Errhandler_f2c(int errhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Errhandler_f2c, __mpi_activity);
-	CALL_RET(MPI_Errhandler, MPI_Errhandler_f2c, errhandler, NULL);
-	GET_ARGS_VALUE_MPI_Errhandler_f2c(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Errhandler_f2c, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
 #if HAVE_MPI_Ireduce_scatter_block
 int i_MPI_Ireduce_scatter_block(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address) {
 	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
@@ -3152,18 +2960,6 @@ int i_MPI_Win_test(MPI_Win win, int * flag, void* return_address) {
 };
 #endif
 
-#if HAVE_MPI_Request_f2c
-MPI_Request i_MPI_Request_f2c(int request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Request_f2c, __mpi_activity);
-	CALL_RET(MPI_Request, MPI_Request_f2c, request, NULL);
-	GET_ARGS_VALUE_MPI_Request_f2c(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Request_f2c, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
 #if HAVE_MPI_Test_cancelled
 int i_MPI_Test_cancelled(const MPI_Status * status, int * flag, void* return_address) {
 	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
@@ -3196,30 +2992,6 @@ int i_MPI_Error_string(int errorcode, char * string, int * resultlen, void* retu
 	CALL_RET(int, MPI_Error_string, errorcode, string, resultlen, NULL);
 	GET_ARGS_VALUE_MPI_Error_string(__mpi_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Error_string, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
-#if HAVE_MPI_Status_c2f
-int i_MPI_Status_c2f(const MPI_Status * c_status, int * f_status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_c2f, __mpi_activity);
-	CALL_RET(int, MPI_Status_c2f, c_status, f_status, NULL);
-	GET_ARGS_VALUE_MPI_Status_c2f(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_c2f, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
-#if HAVE_MPI_Comm_f2c
-MPI_Comm i_MPI_Comm_f2c(int comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_f2c, __mpi_activity);
-	CALL_RET(MPI_Comm, MPI_Comm_f2c, comm, NULL);
-	GET_ARGS_VALUE_MPI_Comm_f2c(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_f2c, __mpi_activity);
 	return __mpi_ret;
 };
 #endif
@@ -3416,18 +3188,6 @@ int i_MPI_File_get_position(MPI_File fh, MPI_Offset * offset, void* return_addre
 };
 #endif
 
-#if HAVE_MPI_Comm_c2f
-int i_MPI_Comm_c2f(MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_c2f, __mpi_activity);
-	CALL_RET(int, MPI_Comm_c2f, comm, NULL);
-	GET_ARGS_VALUE_MPI_Comm_c2f(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_c2f, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
 #if HAVE_MPI_Accumulate
 int i_MPI_Accumulate(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, void* return_address) {
 	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
@@ -3496,18 +3256,6 @@ int i_MPI_Graph_map(MPI_Comm comm, int nnodes, const int index[], const int edge
 	CALL_RET(int, MPI_Graph_map, comm, nnodes, index, edges, newrank, NULL);
 	GET_ARGS_VALUE_MPI_Graph_map(__mpi_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Graph_map, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
-#if HAVE_MPI_Group_c2f
-int i_MPI_Group_c2f(MPI_Group group, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_c2f, __mpi_activity);
-	CALL_RET(int, MPI_Group_c2f, group, NULL);
-	GET_ARGS_VALUE_MPI_Group_c2f(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_c2f, __mpi_activity);
 	return __mpi_ret;
 };
 #endif
@@ -3620,18 +3368,6 @@ int i_MPI_Send_init(const void * buf, int count, MPI_Datatype datatype, int dest
 };
 #endif
 
-#if HAVE_MPI_Win_f2c
-MPI_Win i_MPI_Win_f2c(int win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_f2c, __mpi_activity);
-	CALL_RET(MPI_Win, MPI_Win_f2c, win, NULL);
-	GET_ARGS_VALUE_MPI_Win_f2c(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_f2c, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
 #if HAVE_MPI_Neighbor_allgather_init
 int i_MPI_Neighbor_allgather_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
 	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
@@ -3736,18 +3472,6 @@ int i_MPI_Type_free_keyval(int * type_keyval, void* return_address) {
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_free_keyval, __mpi_activity);
 	CALL_RET(int, MPI_Type_free_keyval, type_keyval, NULL);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_free_keyval, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
-#if HAVE_MPI_Status_f082c
-int i_MPI_Status_f082c(const MPI_F08_status * f08_status, MPI_Status * c_status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f082c, __mpi_activity);
-	CALL_RET(int, MPI_Status_f082c, f08_status, c_status, NULL);
-	GET_ARGS_VALUE_MPI_Status_f082c(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f082c, __mpi_activity);
 	return __mpi_ret;
 };
 #endif
@@ -3884,18 +3608,6 @@ int i_MPI_Unpack_external(const char datarep[], const void * inbuf, MPI_Aint ins
 };
 #endif
 
-#if HAVE_MPI_Errhandler_c2f
-int i_MPI_Errhandler_c2f(MPI_Errhandler errhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Errhandler_c2f, __mpi_activity);
-	CALL_RET(int, MPI_Errhandler_c2f, errhandler, NULL);
-	GET_ARGS_VALUE_MPI_Errhandler_c2f(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Errhandler_c2f, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
 #if HAVE_MPI_Mprobe
 int i_MPI_Mprobe(int source, int tag, MPI_Comm comm, MPI_Message * message, MPI_Status * status, void* return_address) {
 	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
@@ -3956,18 +3668,6 @@ int i_MPI_Pready(int partitions, MPI_Request request, void* return_address) {
 };
 #endif
 
-#if HAVE_MPI_Status_f2f08
-int i_MPI_Status_f2f08(const int * f_status, MPI_F08_status * f08_status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f2f08, __mpi_activity);
-	CALL_RET(int, MPI_Status_f2f08, f_status, f08_status, NULL);
-	GET_ARGS_VALUE_MPI_Status_f2f08(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f2f08, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
 #if HAVE_MPI_Iscatterv
 int i_MPI_Iscatterv(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address) {
 	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
@@ -3976,18 +3676,6 @@ int i_MPI_Iscatterv(const void * sendbuf, const int sendcounts[], const int disp
 	CALL_RET(int, MPI_Iscatterv, sendbuf, sendcounts, displs, sendtype, recvbuf, recvcount, recvtype, root, comm, request, NULL);
 	GET_ARGS_VALUE_MPI_Iscatterv(__mpi_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Iscatterv, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
-#if HAVE_MPI_Type_c2f
-int i_MPI_Type_c2f(MPI_Datatype datatype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_c2f, __mpi_activity);
-	CALL_RET(int, MPI_Type_c2f, datatype, NULL);
-	GET_ARGS_VALUE_MPI_Type_c2f(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_c2f, __mpi_activity);
 	return __mpi_ret;
 };
 #endif
@@ -4048,18 +3736,6 @@ int i_MPI_Start(MPI_Request * request, void* return_address) {
 	CALL_RET(int, MPI_Start, request, NULL);
 	GET_ARGS_VALUE_MPI_Start(__mpi_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Start, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
-#if HAVE_MPI_Status_f2c
-int i_MPI_Status_f2c(const int * f_status, MPI_Status * c_status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f2c, __mpi_activity);
-	CALL_RET(int, MPI_Status_f2c, f_status, c_status, NULL);
-	GET_ARGS_VALUE_MPI_Status_f2c(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f2c, __mpi_activity);
 	return __mpi_ret;
 };
 #endif
@@ -4144,18 +3820,6 @@ int i_MPI_Issend(const void * buf, int count, MPI_Datatype datatype, int dest, i
 	CALL_RET(int, MPI_Issend, buf, count, datatype, dest, tag, comm, request, NULL);
 	GET_ARGS_VALUE_MPI_Issend(__mpi_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Issend, __mpi_activity);
-	return __mpi_ret;
-};
-#endif
-
-#if HAVE_MPI_Op_f2c
-MPI_Op i_MPI_Op_f2c(int op, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
-	__mpi_activity->return_address = return_address;
-	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Op_f2c, __mpi_activity);
-	CALL_RET(MPI_Op, MPI_Op_f2c, op, NULL);
-	GET_ARGS_VALUE_MPI_Op_f2c(__mpi_activity);
-	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Op_f2c, __mpi_activity);
 	return __mpi_ret;
 };
 #endif
@@ -5128,6 +4792,342 @@ int i_MPI_Win_start(MPI_Group group, int mpi_assert, MPI_Win win, void* return_a
 	CALL_RET(int, MPI_Win_start, group, mpi_assert, win, NULL);
 	GET_ARGS_VALUE_MPI_Win_start(__mpi_activity);
 	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_start, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Info_f2c
+MPI_Info i_MPI_Info_f2c(int info, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_f2c, __mpi_activity);
+	CALL_RET(MPI_Info, MPI_Info_f2c, info, NULL);
+	GET_ARGS_VALUE_MPI_Info_f2c(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_f2c, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Info_c2f
+int i_MPI_Info_c2f(MPI_Info info, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_c2f, __mpi_activity);
+	CALL_RET(int, MPI_Info_c2f, info, NULL);
+	GET_ARGS_VALUE_MPI_Info_c2f(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_c2f, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Op_c2f
+int i_MPI_Op_c2f(MPI_Op op, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Op_c2f, __mpi_activity);
+	CALL_RET(int, MPI_Op_c2f, op, NULL);
+	GET_ARGS_VALUE_MPI_Op_c2f(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Op_c2f, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Win_c2f
+int i_MPI_Win_c2f(MPI_Win win, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_c2f, __mpi_activity);
+	CALL_RET(int, MPI_Win_c2f, win, NULL);
+	GET_ARGS_VALUE_MPI_Win_c2f(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_c2f, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Group_f2c
+MPI_Group i_MPI_Group_f2c(int group, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_f2c, __mpi_activity);
+	CALL_RET(MPI_Group, MPI_Group_f2c, group, NULL);
+	GET_ARGS_VALUE_MPI_Group_f2c(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_f2c, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_File_c2f
+int i_MPI_File_c2f(MPI_File file, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_c2f, __mpi_activity);
+	CALL_RET(int, MPI_File_c2f, file, NULL);
+	GET_ARGS_VALUE_MPI_File_c2f(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_c2f, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Request_c2f
+int i_MPI_Request_c2f(MPI_Request request, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Request_c2f, __mpi_activity);
+	CALL_RET(int, MPI_Request_c2f, request, NULL);
+	GET_ARGS_VALUE_MPI_Request_c2f(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Request_c2f, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_File_f2c
+MPI_File i_MPI_File_f2c(int file, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_f2c, __mpi_activity);
+	CALL_RET(MPI_File, MPI_File_f2c, file, NULL);
+	GET_ARGS_VALUE_MPI_File_f2c(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_f2c, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Session_f2c
+MPI_Session i_MPI_Session_f2c(int session, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_f2c, __mpi_activity);
+	CALL_RET(MPI_Session, MPI_Session_f2c, session, NULL);
+	GET_ARGS_VALUE_MPI_Session_f2c(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_f2c, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Status_f082f
+int i_MPI_Status_f082f(const MPI_F08_status * f08_status, int * f_status, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f082f, __mpi_activity);
+	CALL_RET(int, MPI_Status_f082f, f08_status, f_status, NULL);
+	GET_ARGS_VALUE_MPI_Status_f082f(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f082f, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Status_c2f08
+int i_MPI_Status_c2f08(const MPI_Status * c_status, MPI_F08_status * f08_status, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_c2f08, __mpi_activity);
+	CALL_RET(int, MPI_Status_c2f08, c_status, f08_status, NULL);
+	GET_ARGS_VALUE_MPI_Status_c2f08(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_c2f08, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Type_f2c
+MPI_Datatype i_MPI_Type_f2c(int datatype, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_f2c, __mpi_activity);
+	CALL_RET(MPI_Datatype, MPI_Type_f2c, datatype, NULL);
+	GET_ARGS_VALUE_MPI_Type_f2c(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_f2c, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Message_c2f
+int i_MPI_Message_c2f(MPI_Message message, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Message_c2f, __mpi_activity);
+	CALL_RET(int, MPI_Message_c2f, message, NULL);
+	GET_ARGS_VALUE_MPI_Message_c2f(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Message_c2f, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Session_c2f
+int i_MPI_Session_c2f(const MPI_Session session, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_c2f, __mpi_activity);
+	CALL_RET(int, MPI_Session_c2f, session, NULL);
+	GET_ARGS_VALUE_MPI_Session_c2f(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_c2f, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Message_f2c
+MPI_Message i_MPI_Message_f2c(int message, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Message_f2c, __mpi_activity);
+	CALL_RET(MPI_Message, MPI_Message_f2c, message, NULL);
+	GET_ARGS_VALUE_MPI_Message_f2c(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Message_f2c, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Errhandler_f2c
+MPI_Errhandler i_MPI_Errhandler_f2c(int errhandler, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Errhandler_f2c, __mpi_activity);
+	CALL_RET(MPI_Errhandler, MPI_Errhandler_f2c, errhandler, NULL);
+	GET_ARGS_VALUE_MPI_Errhandler_f2c(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Errhandler_f2c, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Request_f2c
+MPI_Request i_MPI_Request_f2c(int request, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Request_f2c, __mpi_activity);
+	CALL_RET(MPI_Request, MPI_Request_f2c, request, NULL);
+	GET_ARGS_VALUE_MPI_Request_f2c(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Request_f2c, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Status_c2f
+int i_MPI_Status_c2f(const MPI_Status * c_status, int * f_status, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_c2f, __mpi_activity);
+	CALL_RET(int, MPI_Status_c2f, c_status, f_status, NULL);
+	GET_ARGS_VALUE_MPI_Status_c2f(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_c2f, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Comm_f2c
+MPI_Comm i_MPI_Comm_f2c(int comm, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_f2c, __mpi_activity);
+	CALL_RET(MPI_Comm, MPI_Comm_f2c, comm, NULL);
+	GET_ARGS_VALUE_MPI_Comm_f2c(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_f2c, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Comm_c2f
+int i_MPI_Comm_c2f(MPI_Comm comm, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_c2f, __mpi_activity);
+	CALL_RET(int, MPI_Comm_c2f, comm, NULL);
+	GET_ARGS_VALUE_MPI_Comm_c2f(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_c2f, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Group_c2f
+int i_MPI_Group_c2f(MPI_Group group, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_c2f, __mpi_activity);
+	CALL_RET(int, MPI_Group_c2f, group, NULL);
+	GET_ARGS_VALUE_MPI_Group_c2f(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_c2f, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Win_f2c
+MPI_Win i_MPI_Win_f2c(int win, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_f2c, __mpi_activity);
+	CALL_RET(MPI_Win, MPI_Win_f2c, win, NULL);
+	GET_ARGS_VALUE_MPI_Win_f2c(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_f2c, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Status_f082c
+int i_MPI_Status_f082c(const MPI_F08_status * f08_status, MPI_Status * c_status, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f082c, __mpi_activity);
+	CALL_RET(int, MPI_Status_f082c, f08_status, c_status, NULL);
+	GET_ARGS_VALUE_MPI_Status_f082c(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f082c, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Errhandler_c2f
+int i_MPI_Errhandler_c2f(MPI_Errhandler errhandler, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Errhandler_c2f, __mpi_activity);
+	CALL_RET(int, MPI_Errhandler_c2f, errhandler, NULL);
+	GET_ARGS_VALUE_MPI_Errhandler_c2f(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Errhandler_c2f, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Status_f2f08
+int i_MPI_Status_f2f08(const int * f_status, MPI_F08_status * f08_status, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f2f08, __mpi_activity);
+	CALL_RET(int, MPI_Status_f2f08, f_status, f08_status, NULL);
+	GET_ARGS_VALUE_MPI_Status_f2f08(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f2f08, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Type_c2f
+int i_MPI_Type_c2f(MPI_Datatype datatype, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_c2f, __mpi_activity);
+	CALL_RET(int, MPI_Type_c2f, datatype, NULL);
+	GET_ARGS_VALUE_MPI_Type_c2f(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_c2f, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Status_f2c
+int i_MPI_Status_f2c(const int * f_status, MPI_Status * c_status, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f2c, __mpi_activity);
+	CALL_RET(int, MPI_Status_f2c, f_status, c_status, NULL);
+	GET_ARGS_VALUE_MPI_Status_f2c(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f2c, __mpi_activity);
+	return __mpi_ret;
+};
+#endif
+
+#if HAVE_MPI_Op_f2c
+MPI_Op i_MPI_Op_f2c(int op, void* return_address) {
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t));
+	__mpi_activity->return_address = return_address;
+	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Op_f2c, __mpi_activity);
+	CALL_RET(MPI_Op, MPI_Op_f2c, op, NULL);
+	GET_ARGS_VALUE_MPI_Op_f2c(__mpi_activity);
+	ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Op_f2c, __mpi_activity);
 	return __mpi_ret;
 };
 #endif

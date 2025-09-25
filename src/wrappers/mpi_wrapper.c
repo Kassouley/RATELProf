@@ -725,12 +725,6 @@ int MPI_File_set_size(MPI_File fh, MPI_Offset size) {
 };
 #endif
 
-#if HAVE_MPI_Op_c2f
-int MPI_Op_c2f(MPI_Op op) {
-	return CALL(MPI_Op_c2f, op, __builtin_return_address(0));
-};
-#endif
-
 #if HAVE_MPI_Type_set_name
 int MPI_Type_set_name(MPI_Datatype type, const char * type_name) {
 	return CALL(MPI_Type_set_name, type, type_name, __builtin_return_address(0));
@@ -779,21 +773,9 @@ int MPI_Win_unlock_all(MPI_Win win) {
 };
 #endif
 
-#if HAVE_MPI_Win_c2f
-int MPI_Win_c2f(MPI_Win win) {
-	return CALL(MPI_Win_c2f, win, __builtin_return_address(0));
-};
-#endif
-
 #if HAVE_MPI_Type_create_f90_integer
 int MPI_Type_create_f90_integer(int r, MPI_Datatype * newtype) {
 	return CALL(MPI_Type_create_f90_integer, r, newtype, __builtin_return_address(0));
-};
-#endif
-
-#if HAVE_MPI_Group_f2c
-MPI_Group MPI_Group_f2c(int group) {
-	return CALL(MPI_Group_f2c, group, __builtin_return_address(0));
 };
 #endif
 
@@ -905,12 +887,6 @@ int MPI_Cart_create(MPI_Comm old_comm, int ndims, const int dims[], const int pe
 };
 #endif
 
-#if HAVE_MPI_File_c2f
-int MPI_File_c2f(MPI_File file) {
-	return CALL(MPI_File_c2f, file, __builtin_return_address(0));
-};
-#endif
-
 #if HAVE_MPI_File_write_all_begin
 int MPI_File_write_all_begin(MPI_File fh, const void * buf, int count, MPI_Datatype datatype) {
 	return CALL(MPI_File_write_all_begin, fh, buf, count, datatype, __builtin_return_address(0));
@@ -941,27 +917,9 @@ int MPI_Pready_list(int length, int partition_list[], MPI_Request request) {
 };
 #endif
 
-#if HAVE_MPI_Request_c2f
-int MPI_Request_c2f(MPI_Request request) {
-	return CALL(MPI_Request_c2f, request, __builtin_return_address(0));
-};
-#endif
-
-#if HAVE_MPI_File_f2c
-MPI_File MPI_File_f2c(int file) {
-	return CALL(MPI_File_f2c, file, __builtin_return_address(0));
-};
-#endif
-
 #if HAVE_MPI_Alltoallw_init
 int MPI_Alltoallw_init(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Info info, MPI_Request * request) {
 	return CALL(MPI_Alltoallw_init, sendbuf, sendcounts, sdispls, sendtypes, recvbuf, recvcounts, rdispls, recvtypes, comm, info, request, __builtin_return_address(0));
-};
-#endif
-
-#if HAVE_MPI_Info_c2f
-int MPI_Info_c2f(MPI_Info info) {
-	return CALL(MPI_Info_c2f, info, __builtin_return_address(0));
 };
 #endif
 
@@ -989,21 +947,9 @@ int MPI_Comm_get_parent(MPI_Comm * parent) {
 };
 #endif
 
-#if HAVE_MPI_Info_f2c
-MPI_Info MPI_Info_f2c(int info) {
-	return CALL(MPI_Info_f2c, info, __builtin_return_address(0));
-};
-#endif
-
 #if HAVE_MPI_Keyval_free
 int MPI_Keyval_free(int * keyval) {
 	return CALL(MPI_Keyval_free, keyval, __builtin_return_address(0));
-};
-#endif
-
-#if HAVE_MPI_Session_f2c
-MPI_Session MPI_Session_f2c(int session) {
-	return CALL(MPI_Session_f2c, session, __builtin_return_address(0));
 };
 #endif
 
@@ -1049,21 +995,9 @@ int MPI_File_write_all_end(MPI_File fh, const void * buf, MPI_Status * status) {
 };
 #endif
 
-#if HAVE_MPI_Status_f082f
-int MPI_Status_f082f(const MPI_F08_status * f08_status, int * f_status) {
-	return CALL(MPI_Status_f082f, f08_status, f_status, __builtin_return_address(0));
-};
-#endif
-
 #if HAVE_MPI_Buffer_detach
 int MPI_Buffer_detach(void * buffer, int * size) {
 	return CALL(MPI_Buffer_detach, buffer, size, __builtin_return_address(0));
-};
-#endif
-
-#if HAVE_MPI_Status_c2f08
-int MPI_Status_c2f08(const MPI_Status * c_status, MPI_F08_status * f08_status) {
-	return CALL(MPI_Status_c2f08, c_status, f08_status, __builtin_return_address(0));
 };
 #endif
 
@@ -1265,12 +1199,6 @@ int MPI_Type_get_envelope(MPI_Datatype type, int * num_integers, int * num_addre
 };
 #endif
 
-#if HAVE_MPI_Type_f2c
-MPI_Datatype MPI_Type_f2c(int datatype) {
-	return CALL(MPI_Type_f2c, datatype, __builtin_return_address(0));
-};
-#endif
-
 #if HAVE_MPI_Win_create
 int MPI_Win_create(void * base, MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, MPI_Win * win) {
 	return CALL(MPI_Win_create, base, size, disp_unit, info, comm, win, __builtin_return_address(0));
@@ -1334,12 +1262,6 @@ int MPI_Win_flush_all(MPI_Win win) {
 #if HAVE_MPI_Rsend
 int MPI_Rsend(const void * ibuf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm) {
 	return CALL(MPI_Rsend, ibuf, count, datatype, dest, tag, comm, __builtin_return_address(0));
-};
-#endif
-
-#if HAVE_MPI_Message_c2f
-int MPI_Message_c2f(MPI_Message message) {
-	return CALL(MPI_Message_c2f, message, __builtin_return_address(0));
 };
 #endif
 
@@ -1475,21 +1397,9 @@ int MPI_File_iread_shared(MPI_File fh, void * buf, int count, MPI_Datatype datat
 };
 #endif
 
-#if HAVE_MPI_Session_c2f
-int MPI_Session_c2f(const MPI_Session session) {
-	return CALL(MPI_Session_c2f, session, __builtin_return_address(0));
-};
-#endif
-
 #if HAVE_MPI_Comm_idup_with_info
 int MPI_Comm_idup_with_info(MPI_Comm comm, MPI_Info info, MPI_Comm * newcomm, MPI_Request * request) {
 	return CALL(MPI_Comm_idup_with_info, comm, info, newcomm, request, __builtin_return_address(0));
-};
-#endif
-
-#if HAVE_MPI_Message_f2c
-MPI_Message MPI_Message_f2c(int message) {
-	return CALL(MPI_Message_f2c, message, __builtin_return_address(0));
 };
 #endif
 
@@ -1553,12 +1463,6 @@ int MPI_Reduce_local(const void * inbuf, void * inoutbuf, int count, MPI_Datatyp
 };
 #endif
 
-#if HAVE_MPI_Errhandler_f2c
-MPI_Errhandler MPI_Errhandler_f2c(int errhandler) {
-	return CALL(MPI_Errhandler_f2c, errhandler, __builtin_return_address(0));
-};
-#endif
-
 #if HAVE_MPI_Ireduce_scatter_block
 int MPI_Ireduce_scatter_block(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request) {
 	return CALL(MPI_Ireduce_scatter_block, sendbuf, recvbuf, recvcount, datatype, op, comm, request, __builtin_return_address(0));
@@ -1577,12 +1481,6 @@ int MPI_Win_test(MPI_Win win, int * flag) {
 };
 #endif
 
-#if HAVE_MPI_Request_f2c
-MPI_Request MPI_Request_f2c(int request) {
-	return CALL(MPI_Request_f2c, request, __builtin_return_address(0));
-};
-#endif
-
 #if HAVE_MPI_Test_cancelled
 int MPI_Test_cancelled(const MPI_Status * status, int * flag) {
 	return CALL(MPI_Test_cancelled, status, flag, __builtin_return_address(0));
@@ -1598,18 +1496,6 @@ int MPI_File_seek_shared(MPI_File fh, MPI_Offset offset, int whence) {
 #if HAVE_MPI_Error_string
 int MPI_Error_string(int errorcode, char * string, int * resultlen) {
 	return CALL(MPI_Error_string, errorcode, string, resultlen, __builtin_return_address(0));
-};
-#endif
-
-#if HAVE_MPI_Status_c2f
-int MPI_Status_c2f(const MPI_Status * c_status, int * f_status) {
-	return CALL(MPI_Status_c2f, c_status, f_status, __builtin_return_address(0));
-};
-#endif
-
-#if HAVE_MPI_Comm_f2c
-MPI_Comm MPI_Comm_f2c(int comm) {
-	return CALL(MPI_Comm_f2c, comm, __builtin_return_address(0));
 };
 #endif
 
@@ -1709,12 +1595,6 @@ int MPI_File_get_position(MPI_File fh, MPI_Offset * offset) {
 };
 #endif
 
-#if HAVE_MPI_Comm_c2f
-int MPI_Comm_c2f(MPI_Comm comm) {
-	return CALL(MPI_Comm_c2f, comm, __builtin_return_address(0));
-};
-#endif
-
 #if HAVE_MPI_Accumulate
 int MPI_Accumulate(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win) {
 	return CALL(MPI_Accumulate, origin_addr, origin_count, origin_datatype, target_rank, target_disp, target_count, target_datatype, op, win, __builtin_return_address(0));
@@ -1748,12 +1628,6 @@ int MPI_Iexscan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype da
 #if HAVE_MPI_Graph_map
 int MPI_Graph_map(MPI_Comm comm, int nnodes, const int index[], const int edges[], int * newrank) {
 	return CALL(MPI_Graph_map, comm, nnodes, index, edges, newrank, __builtin_return_address(0));
-};
-#endif
-
-#if HAVE_MPI_Group_c2f
-int MPI_Group_c2f(MPI_Group group) {
-	return CALL(MPI_Group_c2f, group, __builtin_return_address(0));
 };
 #endif
 
@@ -1811,12 +1685,6 @@ int MPI_Send_init(const void * buf, int count, MPI_Datatype datatype, int dest, 
 };
 #endif
 
-#if HAVE_MPI_Win_f2c
-MPI_Win MPI_Win_f2c(int win) {
-	return CALL(MPI_Win_f2c, win, __builtin_return_address(0));
-};
-#endif
-
 #if HAVE_MPI_Neighbor_allgather_init
 int MPI_Neighbor_allgather_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request) {
 	return CALL(MPI_Neighbor_allgather_init, sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, comm, info, request, __builtin_return_address(0));
@@ -1868,12 +1736,6 @@ int MPI_Win_sync(MPI_Win win) {
 #if HAVE_MPI_Type_free_keyval
 int MPI_Type_free_keyval(int * type_keyval) {
 	return CALL(MPI_Type_free_keyval, type_keyval, __builtin_return_address(0));
-};
-#endif
-
-#if HAVE_MPI_Status_f082c
-int MPI_Status_f082c(const MPI_F08_status * f08_status, MPI_Status * c_status) {
-	return CALL(MPI_Status_f082c, f08_status, c_status, __builtin_return_address(0));
 };
 #endif
 
@@ -1943,12 +1805,6 @@ int MPI_Unpack_external(const char datarep[], const void * inbuf, MPI_Aint insiz
 };
 #endif
 
-#if HAVE_MPI_Errhandler_c2f
-int MPI_Errhandler_c2f(MPI_Errhandler errhandler) {
-	return CALL(MPI_Errhandler_c2f, errhandler, __builtin_return_address(0));
-};
-#endif
-
 #if HAVE_MPI_Mprobe
 int MPI_Mprobe(int source, int tag, MPI_Comm comm, MPI_Message * message, MPI_Status * status) {
 	return CALL(MPI_Mprobe, source, tag, comm, message, status, __builtin_return_address(0));
@@ -1979,21 +1835,9 @@ int MPI_Pready(int partitions, MPI_Request request) {
 };
 #endif
 
-#if HAVE_MPI_Status_f2f08
-int MPI_Status_f2f08(const int * f_status, MPI_F08_status * f08_status) {
-	return CALL(MPI_Status_f2f08, f_status, f08_status, __builtin_return_address(0));
-};
-#endif
-
 #if HAVE_MPI_Iscatterv
 int MPI_Iscatterv(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request) {
 	return CALL(MPI_Iscatterv, sendbuf, sendcounts, displs, sendtype, recvbuf, recvcount, recvtype, root, comm, request, __builtin_return_address(0));
-};
-#endif
-
-#if HAVE_MPI_Type_c2f
-int MPI_Type_c2f(MPI_Datatype datatype) {
-	return CALL(MPI_Type_c2f, datatype, __builtin_return_address(0));
 };
 #endif
 
@@ -2024,12 +1868,6 @@ int MPI_Get_processor_name(char * name, int * resultlen) {
 #if HAVE_MPI_Start
 int MPI_Start(MPI_Request * request) {
 	return CALL(MPI_Start, request, __builtin_return_address(0));
-};
-#endif
-
-#if HAVE_MPI_Status_f2c
-int MPI_Status_f2c(const int * f_status, MPI_Status * c_status) {
-	return CALL(MPI_Status_f2c, f_status, c_status, __builtin_return_address(0));
 };
 #endif
 
@@ -2072,12 +1910,6 @@ int MPI_Cart_coords(MPI_Comm comm, int rank, int maxdims, int coords[]) {
 #if HAVE_MPI_Issend
 int MPI_Issend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request) {
 	return CALL(MPI_Issend, buf, count, datatype, dest, tag, comm, request, __builtin_return_address(0));
-};
-#endif
-
-#if HAVE_MPI_Op_f2c
-MPI_Op MPI_Op_f2c(int op) {
-	return CALL(MPI_Op_f2c, op, __builtin_return_address(0));
 };
 #endif
 
@@ -2564,5 +2396,173 @@ int MPI_Session_set_errhandler(MPI_Session session, MPI_Errhandler errhandler) {
 #if HAVE_MPI_Win_start
 int MPI_Win_start(MPI_Group group, int mpi_assert, MPI_Win win) {
 	return CALL(MPI_Win_start, group, mpi_assert, win, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Info_f2c
+MPI_Info MPI_Info_f2c(int info) {
+	return CALL(MPI_Info_f2c, info, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Info_c2f
+int MPI_Info_c2f(MPI_Info info) {
+	return CALL(MPI_Info_c2f, info, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Op_c2f
+int MPI_Op_c2f(MPI_Op op) {
+	return CALL(MPI_Op_c2f, op, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Win_c2f
+int MPI_Win_c2f(MPI_Win win) {
+	return CALL(MPI_Win_c2f, win, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Group_f2c
+MPI_Group MPI_Group_f2c(int group) {
+	return CALL(MPI_Group_f2c, group, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_File_c2f
+int MPI_File_c2f(MPI_File file) {
+	return CALL(MPI_File_c2f, file, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Request_c2f
+int MPI_Request_c2f(MPI_Request request) {
+	return CALL(MPI_Request_c2f, request, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_File_f2c
+MPI_File MPI_File_f2c(int file) {
+	return CALL(MPI_File_f2c, file, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Session_f2c
+MPI_Session MPI_Session_f2c(int session) {
+	return CALL(MPI_Session_f2c, session, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Status_f082f
+int MPI_Status_f082f(const MPI_F08_status * f08_status, int * f_status) {
+	return CALL(MPI_Status_f082f, f08_status, f_status, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Status_c2f08
+int MPI_Status_c2f08(const MPI_Status * c_status, MPI_F08_status * f08_status) {
+	return CALL(MPI_Status_c2f08, c_status, f08_status, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Type_f2c
+MPI_Datatype MPI_Type_f2c(int datatype) {
+	return CALL(MPI_Type_f2c, datatype, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Message_c2f
+int MPI_Message_c2f(MPI_Message message) {
+	return CALL(MPI_Message_c2f, message, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Session_c2f
+int MPI_Session_c2f(const MPI_Session session) {
+	return CALL(MPI_Session_c2f, session, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Message_f2c
+MPI_Message MPI_Message_f2c(int message) {
+	return CALL(MPI_Message_f2c, message, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Errhandler_f2c
+MPI_Errhandler MPI_Errhandler_f2c(int errhandler) {
+	return CALL(MPI_Errhandler_f2c, errhandler, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Request_f2c
+MPI_Request MPI_Request_f2c(int request) {
+	return CALL(MPI_Request_f2c, request, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Status_c2f
+int MPI_Status_c2f(const MPI_Status * c_status, int * f_status) {
+	return CALL(MPI_Status_c2f, c_status, f_status, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Comm_f2c
+MPI_Comm MPI_Comm_f2c(int comm) {
+	return CALL(MPI_Comm_f2c, comm, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Comm_c2f
+int MPI_Comm_c2f(MPI_Comm comm) {
+	return CALL(MPI_Comm_c2f, comm, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Group_c2f
+int MPI_Group_c2f(MPI_Group group) {
+	return CALL(MPI_Group_c2f, group, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Win_f2c
+MPI_Win MPI_Win_f2c(int win) {
+	return CALL(MPI_Win_f2c, win, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Status_f082c
+int MPI_Status_f082c(const MPI_F08_status * f08_status, MPI_Status * c_status) {
+	return CALL(MPI_Status_f082c, f08_status, c_status, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Errhandler_c2f
+int MPI_Errhandler_c2f(MPI_Errhandler errhandler) {
+	return CALL(MPI_Errhandler_c2f, errhandler, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Status_f2f08
+int MPI_Status_f2f08(const int * f_status, MPI_F08_status * f08_status) {
+	return CALL(MPI_Status_f2f08, f_status, f08_status, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Type_c2f
+int MPI_Type_c2f(MPI_Datatype datatype) {
+	return CALL(MPI_Type_c2f, datatype, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Status_f2c
+int MPI_Status_f2c(const int * f_status, MPI_Status * c_status) {
+	return CALL(MPI_Status_f2c, f_status, c_status, __builtin_return_address(0));
+};
+#endif
+
+#if HAVE_MPI_Op_f2c
+MPI_Op MPI_Op_f2c(int op) {
+	return CALL(MPI_Op_f2c, op, __builtin_return_address(0));
 };
 #endif
