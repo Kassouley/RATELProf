@@ -57,7 +57,7 @@ case "$CMD" in
         ;;
 
     profile|stats|analyze|visualize|inspect|export|summarize)
-        "$LUA_EXEC" "$LUA_DIR/$CMD.lua" $args
+        eval "$LUA_EXEC $LUA_DIR/$CMD.lua $args"
         ;;
 
     *)
