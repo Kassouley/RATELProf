@@ -52,7 +52,7 @@ NEED_PLUGIN_MSGPACK=$(get_json_value "plugin_msgpack")
 CHECK_SYMBOL_VERBOSE=$(get_json_value "check_symbol_verbose")
 
 # Set default install dir if not in JSON
-INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/ratelprof}"
+INSTALL_DIR="${INSTALL_DIR:-$HOME/.local}"/ratelprof
 
 BUILD_DIR=build
 
@@ -76,7 +76,7 @@ cmake --install "$BUILD_DIR"
 echo "Installed to $INSTALL_DIR"
 
 # Normalize the path (remove trailing slash)
-BIN_DIR="${RATELPROF_INSTALL_DIR%/}/bin"
+BIN_DIR="${INSTALL_DIR%/}/bin"
 
 # Check if BIN_DIR is in PATH
 case ":$PATH:" in
