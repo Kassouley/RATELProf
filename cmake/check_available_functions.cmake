@@ -1,30 +1,30 @@
 include(CheckCSourceCompiles)
 
-function(CHECK_AVAILABLE_FUNCTION LIB_NAME HEADERS CONFIG_DIR)
+function(CHECK_AVAILABLE_FUNCTION LIB_NAME INCLUDE_DIRS HEADERS CONFIG_DIR)
     file(STRINGS "cmake/config_functions/${LIB_NAME}_conf.txt" FUNC_LIST)
+
+    # Build the includes block
+    set(INCLUDE_CODE "")
+    foreach(H IN LISTS HEADERS)
+        string(APPEND INCLUDE_CODE "#include <${H}>\n")
+    endforeach()
 
     foreach(FUNC ${FUNC_LIST})
         if(FUNC STREQUAL "")
             continue()
         endif()
         SET(CMAKE_REQUIRED_FLAGS "-c")
+        SET(CMAKE_REQUIRED_INCLUDES ${INCLUDE_DIRS})
 
         set(VAR_NAME "HAVE_${FUNC}")
 
         if(HEADERS STREQUAL "NO_CHECK")
             set(${VAR_NAME} 1 CACHE INTERNAL "Presume ${FUNC} exists")
         else()
-            # Build the includes block
-            set(INCLUDE_CODE "")
-            foreach(H ${HEADERS})
-                string(APPEND INCLUDE_CODE "#include <${H}>\n")
-            endforeach()
-
             # Build the test source
             set(CODE "
             ${INCLUDE_CODE}
             int main(void) {
-                /* If it's a function, we can take its address */
                 void* ptr = (void*)(${FUNC});
                 (void)ptr;
                 return 0;

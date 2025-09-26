@@ -8,8 +8,9 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 PROJECT("RATELProf" VERSION 1.0.0)
 
 # INCLUDE(cmake/check_available_functions.cmake)
-INCLUDE(cmake/check_mpi_symbols.cmake)
-INCLUDE(cmake/check_rocm_symbols.cmake)
+INCLUDE(cmake/check_mpi_dependency.cmake)
+INCLUDE(cmake/check_rocm_dependency.cmake)
+INCLUDE(cmake/check_available_functions.cmake)
 
 # Set output directories for all binaries and libraries
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
@@ -23,19 +24,70 @@ SET(TOOL_PROJECT_NAME       "ratelprof"         CACHE STRING "RATELProf for the 
 
 SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src/tools)
 
 ADD_COMPILE_OPTIONS(
         -O3
         -D__HIP_PLATFORM_AMD__
         -Wall)
 
-# Set the main compiler
-# SET(CMAKE_C_COMPILER    /usr/bin/gcc CACHE STRING "compiler for C"   FORCE)
-# SET(CMAKE_CXX_COMPILER  /usr/bin/g++ CACHE STRING "compiler for C++" FORCE)
 
-CHECK_ROCM_SYMBOLS()
-CHECK_MPI_SYMBOLS()
+SET(CONFIG_DIR ${CMAKE_SOURCE_DIR}/src/core/include/utils/config)
+
+SET(HIP_HEADER  hip/hip_runtime.h)
+SET(HSA_HEADER  hsa/hsa.h hsa/hsa_ext_amd.h)
+SET(OMP_HEADER  omp.h)
+SET(MPI_HEADER  mpi.h)
+# SET(OMPT_HEADER omp-tools.h)
+
+CHECK_MPI_DEPENDENCY(${MPI_HEADER})
+IF(NOT MPI_FOUND)
+    RETURN()
+ENDIF()
+
+CHECK_HSA_DEPENDENCY(${HSA_HEADER})
+IF(NOT HSA_FOUND)
+    RETURN()
+ENDIF()
+
+CHECK_HIP_DEPENDENCY(${HIP_HEADER})
+IF(NOT HIP_FOUND)
+    RETURN()
+ENDIF()
+
+CHECK_OMP_DEPENDENCY(${OMP_HEADER})
+IF(NOT OMP_FOUND)
+    RETURN()
+ENDIF()
+
+set(CHECK_SYMBOL_VERBOSE OFF) # default
+
+if(DEFINED ENV{CHECK_SYMBOL_VERBOSE})
+    set(CHECK_SYMBOL_VERBOSE $ENV{CHECK_SYMBOL_VERBOSE})
+endif()
+
+MESSAGE(STATUS "Verifying required symbols... Please wait.")
+IF(CHECK_SYMBOL_VERBOSE)
+    message(STATUS "(Quiet mode enabled for symbol checks.)")
+ENDIF()
+
+SET(CMAKE_REQUIRED_QUIET ${CHECK_SYMBOL_VERBOSE})
+SET(CMAKE_REQUIRED_DEFINITIONS 	"-D__HIP_PLATFORM_AMD__")
+CHECK_AVAILABLE_FUNCTION(hip         ${HIP_INCLUDE_DIR} "${HIP_HEADER}"                     ${CONFIG_DIR})
+CHECK_AVAILABLE_FUNCTION(hsa         ${HSA_INCLUDE_DIR} "${HSA_HEADER}"                     ${CONFIG_DIR})
+CHECK_AVAILABLE_FUNCTION(omp_routine ${OMP_INCLUDE_DIR} "${OMP_INCLUDE_DIR}/${OMP_HEADER}"  ${CONFIG_DIR})
+CHECK_AVAILABLE_FUNCTION(omp_tgt_rtl "NO_CHECK"         "NO_CHECK"                          ${CONFIG_DIR})
+CHECK_AVAILABLE_FUNCTION(mpi         ${MPI_INCLUDE_DIR} "${MPI_HEADER}"                     ${CONFIG_DIR})
+set(CMAKE_REQUIRED_QUIET OFF)
+
+
+INCLUDE_DIRECTORIES(
+    ${CMAKE_SOURCE_DIR}/src/tools
+    ${MPI_INCLUDE_DIR}
+    ${OMP_INCLUDE_DIR}
+    ${HSA_INCLUDE_DIR}
+    ${HIP_INCLUDE_DIR}
+)
+
 
 # Add subdirectory for the shared library
 ADD_SUBDIRECTORY(src/core)

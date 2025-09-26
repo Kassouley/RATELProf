@@ -16,15 +16,25 @@ EOF
     exit 0
 }
 
-if [[ -z $RATELPROF_INSTALL_DIR ]]; then
-    echo "Error: RATELPROF_INSTALL_DIR env var not defined"
-    exit
-fi
+BIN_DIR=$(dirname $0)
+LUA_DIR=$BIN_DIR/lua
+export LUA_PATH="$LUA_DIR/?.lua;;"
+export INSTALL_DIR="$(realpath "$BIN_DIR/..")"
 
-#!/bin/bash
-SCRIPT_DIR=$(dirname $0)/lua
-export LUA_PATH="$SCRIPT_DIR/?.lua;;"
-export INSTALL_DIR=$(realpath $RATELPROF_INSTALL_DIR)
+# Function to check if a command exists
+command_exists() {
+    which "$1" >/dev/null 2>&1
+}
+
+# Determine which Lua interpreter to use
+if command_exists luajit; then
+    LUA_EXEC="luajit"
+elif command_exists lua; then
+    LUA_EXEC="lua"
+else
+    echo "Error: Neither LuaJIT nor Lua is installed."
+    exit 1
+fi
 
 # Check if no argument is provided
 if [ -z "$1" ]; then
@@ -40,44 +50,20 @@ for arg in "$@"; do
     args="$args '$arg'"
 done
 
-# Use a case statement to check for specific strings
-case "$cmd" in
-    profile)
-        eval "luajit $SCRIPT_DIR/profile.lua $args"
-        ;;
-
-    stats)
-        eval "luajit $SCRIPT_DIR/stats.lua $args"
-        ;;
-
-    analyze)
-        eval "luajit $SCRIPT_DIR/analyze.lua $args"
-        ;;
-
-    visualize)
-        eval "luajit $SCRIPT_DIR/visualize.lua $args"
-        ;;
-
-    inspect)
-        eval "luajit $SCRIPT_DIR/inspect.lua $args"
-        ;;
-
-    export)
-        eval "luajit $SCRIPT_DIR/export.lua $args"
-        ;;
-
-    summarize)
-        eval "luajit $SCRIPT_DIR/summarize.lua $args"
-        ;;
-
+case "$CMD" in
     --help|-h)
         display_help
         ;;
 
+    profile|stats|analyze|visualize|inspect|export|summarize)
+        "$LUA_EXEC" "$LUA_DIR/$CMD.lua" $args
+        ;;
+
     *)
-        echo "Error: Invalid command '$1'."
+        echo "Error: Invalid command '$CMD'."
         display_help
         ;;
 esac
+
 
 

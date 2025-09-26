@@ -1,50 +1,35 @@
-cmake_minimum_required(VERSION 3.10)
+MACRO(BUILD_PLUGIN LIBRARY_NAME DIR)
+    file(GLOB COMMON_SRC "${CMAKE_SOURCE_DIR}/src/common/memory_structure/*.c")   
 
-project(plugin_lib)
-
-
-MACRO(SUBDIRLIST result curdir)
-    file(GLOB_RECURSE ALL_ITEMS LIST_DIRECTORIES true ${curdir} ${curdir}/*)
-    set(SUBDIRS [])
-    foreach(ITEM ${ALL_ITEMS})
-        if(IS_DIRECTORY ${ITEM})
-            list(APPEND SUBDIRS ${ITEM})
-        endif()
-    endforeach()
-    set(${result} ${SUBDIRS})
-ENDMACRO()
-
-SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/*)
-
-file(GLOB SOURCES2 "${CMAKE_SOURCE_DIR}/src/common/memory_structure/*.c")
-
-# Now you have only directories in SUBDIRS
-foreach(SUBDIR ${SUBDIRS})
     file(GLOB_RECURSE SOURCES 
-        "${SUBDIR}/*.cpp" 
-        "${SUBDIR}/*.c"
+        "${DIR}/*.cpp" 
+        "${DIR}/*.c"
     )
 
-    if (SOURCES)
-        get_filename_component(BASENAME ${SUBDIR} NAME)
-        set(LIBRARY_NAME "plugin_${BASENAME}")
+    ADD_LIBRARY(${LIBRARY_NAME} SHARED ${SOURCES} ${COMMON_SRC})
 
-        add_library(${LIBRARY_NAME} SHARED ${SOURCES} ${SOURCES2})
+    target_include_directories(${LIBRARY_NAME}
+        PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}/include
+            ${CMAKE_SOURCE_DIR}/src/core/include
+            ${CMAKE_SOURCE_DIR}/src/ext/include
+            ${CMAKE_SOURCE_DIR}/src/common/memory_structure
+    )
+    
+    target_compile_options(${LIBRARY_NAME} 
+        PUBLIC
+            -O3
+            -D__HIP_PLATFORM_AMD__
+    )
 
-        target_include_directories(${LIBRARY_NAME}
-            PRIVATE
-                ${CMAKE_CURRENT_SOURCE_DIR}/include
-                ${CMAKE_SOURCE_DIR}/src/core/include
-                ${CMAKE_SOURCE_DIR}/src/ext/include
-                ${CMAKE_SOURCE_DIR}/src/common/memory_structure
-        )
-        
-        target_compile_options(${LIBRARY_NAME} 
-            PUBLIC
-                -O3
-                -D__HIP_PLATFORM_AMD__
-        )
+    message(STATUS "Created shared library: ${LIBRARY_NAME}")
+ENDMACRO()
 
-        message(STATUS "Created shared library: ${LIBRARY_NAME}")
-    endif()
-endforeach()
+if(DEFINED ENV{NEED_PLUGIN_STDOUT})
+    BUILD_PLUGIN(plugin_stdout    "${CMAKE_CURRENT_SOURCE_DIR}/src/stdout")
+endif()
+
+if(DEFINED ENV{NEED_PLUGIN_MSGPACK})
+    BUILD_PLUGIN(plugin_msgpack   "${CMAKE_CURRENT_SOURCE_DIR}/src/msgpack")
+endif()
+
