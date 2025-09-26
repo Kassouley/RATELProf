@@ -56,7 +56,7 @@ consts_helper.profile = {
             arg_required    = true,
         },
         plugin = {
-            desc            = "Specify the plugin path for RATELProf (options: msgpack, stdout, json, or custom path)",
+            desc            = "Specify the plugin path for RATELProf (options: msgpack, stdout, or custom path)",
             sname           = nil,
             arg             = "<PLUGIN>",
             arg_required    = true,

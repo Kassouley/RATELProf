@@ -19,8 +19,6 @@ consts._LIBS_NAME = {
       WRAPPERS        = "libratelprof_wrapper.so",
       PLUGIN_STDOUT   = 'libplugin_stdout.so',
       PLUGIN_MSGPACK  = 'libplugin_msgpack.so',
-      PLUGIN_JSON     = 'libplugin_json.so',
-      PLUGIN_JSON_DYN = 'libplugin_json_dyn.so',
 }
 
 consts._LIBS = {
@@ -28,8 +26,6 @@ consts._LIBS = {
       WRAPPERS        = consts._LIBS_DIR..consts._LIBS_NAME.WRAPPERS,
       PLUGIN_STDOUT   = consts._LIBS_DIR..consts._LIBS_NAME.PLUGIN_STDOUT,
       PLUGIN_MSGPACK  = consts._LIBS_DIR..consts._LIBS_NAME.PLUGIN_MSGPACK,
-      PLUGIN_JSON     = consts._LIBS_DIR..consts._LIBS_NAME.PLUGIN_JSON,
-      PLUGIN_JSON_DYN = consts._LIBS_DIR..consts._LIBS_NAME.PLUGIN_JSON_DYN,
 }
 
 consts._PRELOADED_LIBS = {
