@@ -43,7 +43,7 @@ if [ -z "$1" ]; then
     display_help
 fi
 
-cmd="$1"
+CMD="$1"
 shift
 
 args=""
