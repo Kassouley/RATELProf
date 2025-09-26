@@ -47,6 +47,7 @@ HIP_INCLUDE_DIR=$(get_json_value "hip_include_dir")
 HSA_INCLUDE_DIR=$(get_json_value "hsa_include_dir")
 OMP_INCLUDE_DIR=$(get_json_value "omp_include_dir")
 MPI_INCLUDE_DIR=$(get_json_value "mpi_include_dir")
+HIPCC_COMPILER=$(get_json_value "hipcc_compiler")
 NEED_PLUGIN_STDOUT=$(get_json_value "plugin_stdout")
 NEED_PLUGIN_MSGPACK=$(get_json_value "plugin_msgpack")
 CHECK_SYMBOL_VERBOSE=$(get_json_value "check_symbol_verbose")
@@ -64,6 +65,7 @@ CMAKE_ENV=""
 [[ -n "$HSA_INCLUDE_DIR" ]] && CMAKE_ENV="$CMAKE_ENV HSA_INCLUDE_DIR=$HSA_INCLUDE_DIR"
 [[ -n "$OMP_INCLUDE_DIR" ]] && CMAKE_ENV="$CMAKE_ENV OMP_INCLUDE_DIR=$OMP_INCLUDE_DIR"
 [[ -n "$MPI_INCLUDE_DIR" ]] && CMAKE_ENV="$CMAKE_ENV MPI_INCLUDE_DIR=$MPI_INCLUDE_DIR"
+[[ -n "$HIPCC_COMPILER"  ]] && CMAKE_ENV="$CMAKE_ENV HIPCC_COMPILER=$HIPCC_COMPILER"
 [[ "$NEED_PLUGIN_STDOUT"   == "true"  ]] && CMAKE_ENV="$CMAKE_ENV NEED_PLUGIN_STDOUT=ON"
 [[ "$NEED_PLUGIN_MSGPACK"  == "true"  ]] && CMAKE_ENV="$CMAKE_ENV NEED_PLUGIN_MSGPACK=ON"
 [[ "$CHECK_SYMBOL_VERBOSE" == "false" ]] && CMAKE_ENV="$CMAKE_ENV CHECK_SYMBOL_VERBOSE=ON"
