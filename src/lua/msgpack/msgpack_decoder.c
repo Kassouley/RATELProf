@@ -244,10 +244,7 @@ int luaopen_msgpack_decoder(lua_State *L) {
         {"decode_msgpack_binary", lua_decode_msgpack_file},
         {NULL, NULL}
     };
-#if LUA_VERSION_NUM >= 502
-    luaL_newlib(L, funcs);
-#else
-    luaL_register(L, "msgpack_decoder", funcs);  // Lua 5.1
-#endif
+
+    luaL_register(L, "msgpack_decoder", funcs);
     return 1;
 }

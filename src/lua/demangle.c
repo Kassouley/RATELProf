@@ -1,5 +1,6 @@
 #include <lua.h>
 #include <lauxlib.h>
+#include "lua_compatibility.h"
 #include <stdlib.h>
 #include <string.h>
 
