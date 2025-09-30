@@ -6,28 +6,30 @@
 #ifndef OMP_ROUTINE_CONF_H
 #define OMP_ROUTINE_CONF_H
 
+#cmakedefine01 HAVE_OMP_ROUTINE
+
 // OMP_ROUTINE Configuration
-#define HAVE_omp_target_memset 1
-#define HAVE_omp_target_memcpy_async 1
-#define HAVE_omp_target_memcpy_rect_async 1
-#define HAVE_omp_target_alloc 1
-#define HAVE_omp_target_free 1
-#define HAVE_omp_target_memcpy_rect 1
-#define HAVE_omp_target_disassociate_ptr 1
-#define HAVE_omp_target_memcpy 1
-#define HAVE_omp_target_memset_async 1
-#define HAVE_omp_target_is_present 1
-#define HAVE_omp_target_associate_ptr 1
-#define HAVE_omp_get_initial_device 1
-#define HAVE_llvm_omp_target_dynamic_shared_alloc 1
-#define HAVE_omp_get_interop_int 1
-#define HAVE_omp_get_interop_name 1
-#define HAVE_omp_get_interop_ptr 1
-#define HAVE_omp_get_interop_str 1
-#define HAVE_omp_get_interop_type_desc 1
-#define HAVE_omp_get_mapped_ptr 1
-#define HAVE_omp_get_num_devices 1
-#define HAVE_omp_is_coarse_grain_mem_region 1
+#cmakedefine01 HAVE_omp_target_memset
+#cmakedefine01 HAVE_omp_target_memcpy_async
+#cmakedefine01 HAVE_omp_target_memcpy_rect_async
+#cmakedefine01 HAVE_omp_target_alloc
+#cmakedefine01 HAVE_omp_target_free
+#cmakedefine01 HAVE_omp_target_memcpy_rect
+#cmakedefine01 HAVE_omp_target_disassociate_ptr
+#cmakedefine01 HAVE_omp_target_memcpy
+#cmakedefine01 HAVE_omp_target_memset_async
+#cmakedefine01 HAVE_omp_target_is_present
+#cmakedefine01 HAVE_omp_target_associate_ptr
+#cmakedefine01 HAVE_omp_get_initial_device
+#cmakedefine01 HAVE_llvm_omp_target_dynamic_shared_alloc
+#cmakedefine01 HAVE_omp_get_interop_int
+#cmakedefine01 HAVE_omp_get_interop_name
+#cmakedefine01 HAVE_omp_get_interop_ptr
+#cmakedefine01 HAVE_omp_get_interop_str
+#cmakedefine01 HAVE_omp_get_interop_type_desc
+#cmakedefine01 HAVE_omp_get_mapped_ptr
+#cmakedefine01 HAVE_omp_get_num_devices
+#cmakedefine01 HAVE_omp_is_coarse_grain_mem_region
 
 
 #if HAVE_omp_target_memset

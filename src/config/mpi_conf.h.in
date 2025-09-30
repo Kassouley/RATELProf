@@ -6,433 +6,435 @@
 #ifndef MPI_CONF_H
 #define MPI_CONF_H
 
+#cmakedefine01 HAVE_MPI
+
 // MPI Configuration
-#define HAVE_MPI_Init 1
-#define HAVE_MPI_Init_thread 1
-#define HAVE_MPI_Finalize 1
-#define HAVE_MPI_Initialized 1
-#define HAVE_MPI_Query_thread 1
-#define HAVE_MPI_Abort 1
-#define HAVE_MPI_Send 1
-#define HAVE_MPI_Recv 1
-#define HAVE_MPI_Sendrecv 1
-#define HAVE_MPI_Sendrecv_replace 1
-#define HAVE_MPI_Isend 1
-#define HAVE_MPI_Irecv 1
-#define HAVE_MPI_Wait 1
-#define HAVE_MPI_Waitall 1
-#define HAVE_MPI_Waitany 1
-#define HAVE_MPI_Waitsome 1
-#define HAVE_MPI_Test 1
-#define HAVE_MPI_Testall 1
-#define HAVE_MPI_Testany 1
-#define HAVE_MPI_Testsome 1
-#define HAVE_MPI_Request_free 1
-#define HAVE_MPI_Cancel 1
-#define HAVE_MPI_Type_contiguous 1
-#define HAVE_MPI_Type_vector 1
-#define HAVE_MPI_Type_indexed 1
-#define HAVE_MPI_Type_create_indexed_block 1
-#define HAVE_MPI_Type_create_struct 1
-#define HAVE_MPI_Type_create_resized 1
-#define HAVE_MPI_Type_commit 1
-#define HAVE_MPI_Type_free 1
-#define HAVE_MPI_Get_count 1
-#define HAVE_MPI_Get_elements 1
-#define HAVE_MPI_Pack 1
-#define HAVE_MPI_Unpack 1
-#define HAVE_MPI_Pack_size 1
-#define HAVE_MPI_Barrier 1
-#define HAVE_MPI_Bcast 1
-#define HAVE_MPI_Gather 1
-#define HAVE_MPI_Gatherv 1
-#define HAVE_MPI_Scatter 1
-#define HAVE_MPI_Scatterv 1
-#define HAVE_MPI_Allgather 1
-#define HAVE_MPI_Allgatherv 1
-#define HAVE_MPI_Alltoall 1
-#define HAVE_MPI_Alltoallv 1
-#define HAVE_MPI_Reduce 1
-#define HAVE_MPI_Allreduce 1
-#define HAVE_MPI_Reduce_scatter 1
-#define HAVE_MPI_Reduce_scatter_block 1
-#define HAVE_MPI_Scan 1
-#define HAVE_MPI_Exscan 1
-#define HAVE_MPI_Comm_size 1
-#define HAVE_MPI_Comm_rank 1
-#define HAVE_MPI_Comm_group 1
-#define HAVE_MPI_Comm_dup 1
-#define HAVE_MPI_Comm_create 1
-#define HAVE_MPI_Comm_split 1
-#define HAVE_MPI_Comm_free 1
-#define HAVE_MPI_Comm_test_inter 1
-#define HAVE_MPI_Comm_remote_size 1
-#define HAVE_MPI_Comm_remote_group 1
-#define HAVE_MPI_Comm_compare 1
-#define HAVE_MPI_Comm_create_keyval 1
-#define HAVE_MPI_Comm_set_attr 1
-#define HAVE_MPI_Comm_get_attr 1
-#define HAVE_MPI_Comm_delete_attr 1
-#define HAVE_MPI_Comm_get_name 1
-#define HAVE_MPI_Comm_set_name 1
-#define HAVE_MPI_Group_size 1
-#define HAVE_MPI_Group_rank 1
-#define HAVE_MPI_Group_translate_ranks 1
-#define HAVE_MPI_Group_compare 1
-#define HAVE_MPI_Group_union 1
-#define HAVE_MPI_Group_intersection 1
-#define HAVE_MPI_Group_difference 1
-#define HAVE_MPI_Group_incl 1
-#define HAVE_MPI_Group_excl 1
-#define HAVE_MPI_Group_range_incl 1
-#define HAVE_MPI_Group_range_excl 1
-#define HAVE_MPI_Group_free 1
-#define HAVE_MPI_Op_create 1
-#define HAVE_MPI_Op_free 1
-#define HAVE_MPI_Wtime 1
-#define HAVE_MPI_Wtick 1
-#define HAVE_MPI_Get_address 1
-#define HAVE_MPI_Get_elements_x 1
-#define HAVE_MPI_Cart_shift 1
-#define HAVE_MPI_Win_flush_local_all 1
-#define HAVE_MPI_File_get_byte_offset 1
-#define HAVE_MPI_Win_get_info 1
-#define HAVE_MPI_Rput 1
-#define HAVE_MPI_Dist_graph_neighbors_count 1
-#define HAVE_MPI_Ireduce 1
-#define HAVE_MPI_Psend_init 1
-#define HAVE_MPI_Reduce_init 1
-#define HAVE_MPI_Win_wait 1
-#define HAVE_MPI_Rsend_init 1
-#define HAVE_MPI_File_write_at_all 1
-#define HAVE_MPI_File_write_ordered_end 1
-#define HAVE_MPI_Errhandler_free 1
-#define HAVE_MPI_Win_shared_query 1
-#define HAVE_MPI_Win_lock 1
-#define HAVE_MPI_Get_accumulate 1
-#define HAVE_MPI_Type_get_name 1
-#define HAVE_MPI_File_get_atomicity 1
-#define HAVE_MPI_Session_set_info 1
-#define HAVE_MPI_Group_from_session_pset 1
-#define HAVE_MPI_Comm_idup 1
-#define HAVE_MPI_Win_get_name 1
-#define HAVE_MPI_Allgatherv_init 1
-#define HAVE_MPI_Comm_dup_with_info 1
-#define HAVE_MPI_Session_get_num_psets 1
-#define HAVE_MPI_Igather 1
-#define HAVE_MPI_File_read_at 1
-#define HAVE_MPI_Type_create_hvector 1
-#define HAVE_MPI_File_write_at_all_begin 1
-#define HAVE_MPI_Grequest_start 1
-#define HAVE_MPI_Bsend_init 1
-#define HAVE_MPI_File_set_size 1
-#define HAVE_MPI_Type_set_name 1
-#define HAVE_MPI_Comm_split_type 1
-#define HAVE_MPI_File_read_at_all_end 1
-#define HAVE_MPI_File_write_all 1
-#define HAVE_MPI_Improbe 1
-#define HAVE_MPI_Comm_get_info 1
-#define HAVE_MPI_File_read_all_end 1
-#define HAVE_MPI_Win_unlock_all 1
-#define HAVE_MPI_Type_create_f90_integer 1
-#define HAVE_MPI_Exscan_init 1
-#define HAVE_MPI_Ibsend 1
-#define HAVE_MPI_Win_flush_local 1
-#define HAVE_MPI_Ialltoallw 1
-#define HAVE_MPI_Comm_create_from_group 1
-#define HAVE_MPI_Type_get_contents 1
-#define HAVE_MPI_File_iwrite_at 1
-#define HAVE_MPI_Status_set_elements 1
-#define HAVE_MPI_File_read_ordered 1
-#define HAVE_MPI_Is_thread_main 1
-#define HAVE_MPI_Allreduce_init 1
-#define HAVE_MPI_Info_get_valuelen 1
-#define HAVE_MPI_Comm_create_errhandler 1
-#define HAVE_MPI_Info_free 1
-#define HAVE_MPI_Info_get_nthkey 1
-#define HAVE_MPI_Ssend_init 1
-#define HAVE_MPI_Comm_set_info 1
-#define HAVE_MPI_Cart_create 1
-#define HAVE_MPI_File_write_all_begin 1
-#define HAVE_MPI_Scan_init 1
-#define HAVE_MPI_Irsend 1
-#define HAVE_MPI_Neighbor_alltoallv 1
-#define HAVE_MPI_Pready_list 1
-#define HAVE_MPI_Alltoallw_init 1
-#define HAVE_MPI_File_read_ordered_begin 1
-#define HAVE_MPI_Dist_graph_create_adjacent 1
-#define HAVE_MPI_Reduce_scatter_init 1
-#define HAVE_MPI_Comm_get_parent 1
-#define HAVE_MPI_Keyval_free 1
-#define HAVE_MPI_Info_set 1
-#define HAVE_MPI_Keyval_create 1
-#define HAVE_MPI_Comm_connect 1
-#define HAVE_MPI_Ssend 1
-#define HAVE_MPI_Scatterv_init 1
-#define HAVE_MPI_File_write_at_all_end 1
-#define HAVE_MPI_File_write_all_end 1
-#define HAVE_MPI_Buffer_detach 1
-#define HAVE_MPI_Startall 1
-#define HAVE_MPI_Neighbor_alltoall 1
-#define HAVE_MPI_Put 1
-#define HAVE_MPI_File_read_ordered_end 1
-#define HAVE_MPI_Win_call_errhandler 1
-#define HAVE_MPI_File_write_at 1
-#define HAVE_MPI_Session_get_pset_info 1
-#define HAVE_MPI_Topo_test 1
-#define HAVE_MPI_Comm_disconnect 1
-#define HAVE_MPI_Add_error_class 1
-#define HAVE_MPI_Ireduce_scatter 1
-#define HAVE_MPI_Cart_map 1
-#define HAVE_MPI_Intercomm_merge 1
-#define HAVE_MPI_Type_create_hindexed 1
-#define HAVE_MPI_Info_get_nkeys 1
-#define HAVE_MPI_File_read 1
-#define HAVE_MPI_Ineighbor_allgatherv 1
-#define HAVE_MPI_Attr_put 1
-#define HAVE_MPI_File_write_ordered_begin 1
-#define HAVE_MPI_Status_set_elements_x 1
-#define HAVE_MPI_Compare_and_swap 1
-#define HAVE_MPI_Type_create_f90_real 1
-#define HAVE_MPI_Type_delete_attr 1
-#define HAVE_MPI_Probe 1
-#define HAVE_MPI_File_close 1
-#define HAVE_MPI_Request_get_status 1
-#define HAVE_MPI_Session_call_errhandler 1
-#define HAVE_MPI_Rget_accumulate 1
-#define HAVE_MPI_File_iread_all 1
-#define HAVE_MPI_Isendrecv 1
-#define HAVE_MPI_Pack_external 1
-#define HAVE_MPI_Pready_range 1
-#define HAVE_MPI_Type_get_envelope 1
-#define HAVE_MPI_Win_create 1
-#define HAVE_MPI_Isendrecv_replace 1
-#define HAVE_MPI_Win_set_errhandler 1
-#define HAVE_MPI_Fetch_and_op 1
-#define HAVE_MPI_Cartdim_get 1
-#define HAVE_MPI_Dist_graph_neighbors 1
-#define HAVE_MPI_File_seek 1
-#define HAVE_MPI_Get 1
-#define HAVE_MPI_Pack_external_size 1
-#define HAVE_MPI_Win_flush_all 1
-#define HAVE_MPI_Rsend 1
-#define HAVE_MPI_Win_free 1
-#define HAVE_MPI_Type_create_f90_complex 1
-#define HAVE_MPI_Neighbor_alltoallw_init 1
-#define HAVE_MPI_Rget 1
-#define HAVE_MPI_Win_create_keyval 1
-#define HAVE_MPI_Op_commutative 1
-#define HAVE_MPI_Neighbor_allgather 1
-#define HAVE_MPI_Comm_call_errhandler 1
-#define HAVE_MPI_Scatter_init 1
-#define HAVE_MPI_Info_get_string 1
-#define HAVE_MPI_Mrecv 1
-#define HAVE_MPI_Open_port 1
-#define HAVE_MPI_Cart_get 1
-#define HAVE_MPI_Lookup_name 1
-#define HAVE_MPI_Type_get_extent 1
-#define HAVE_MPI_Comm_spawn 1
-#define HAVE_MPI_Unpublish_name 1
-#define HAVE_MPI_Grequest_complete 1
-#define HAVE_MPI_File_get_group 1
-#define HAVE_MPI_File_iread_at_all 1
-#define HAVE_MPI_Graphdims_get 1
-#define HAVE_MPI_File_iread_shared 1
-#define HAVE_MPI_Comm_idup_with_info 1
-#define HAVE_MPI_Get_version 1
-#define HAVE_MPI_Win_lock_all 1
-#define HAVE_MPI_Intercomm_create_from_groups 1
-#define HAVE_MPI_Neighbor_alltoallv_init 1
-#define HAVE_MPI_Type_create_darray 1
-#define HAVE_MPI_File_get_position_shared 1
-#define HAVE_MPI_Win_get_group 1
-#define HAVE_MPI_Error_class 1
-#define HAVE_MPI_Win_get_attr 1
-#define HAVE_MPI_Reduce_local 1
-#define HAVE_MPI_Ireduce_scatter_block 1
-#define HAVE_MPI_Status_set_cancelled 1
-#define HAVE_MPI_Win_test 1
-#define HAVE_MPI_Test_cancelled 1
-#define HAVE_MPI_File_seek_shared 1
-#define HAVE_MPI_Error_string 1
-#define HAVE_MPI_Graph_neighbors_count 1
-#define HAVE_MPI_Session_create_errhandler 1
-#define HAVE_MPI_Win_unlock 1
-#define HAVE_MPI_Iscatter 1
-#define HAVE_MPI_File_read_all 1
-#define HAVE_MPI_File_set_errhandler 1
-#define HAVE_MPI_Type_set_attr 1
-#define HAVE_MPI_File_get_errhandler 1
-#define HAVE_MPI_Session_finalize 1
-#define HAVE_MPI_Comm_free_keyval 1
-#define HAVE_MPI_File_iwrite_all 1
-#define HAVE_MPI_Free_mem 1
-#define HAVE_MPI_Win_set_info 1
-#define HAVE_MPI_Alltoallv_init 1
-#define HAVE_MPI_Win_attach 1
-#define HAVE_MPI_File_get_position 1
-#define HAVE_MPI_Accumulate 1
-#define HAVE_MPI_File_write_shared 1
-#define HAVE_MPI_Win_create_dynamic 1
-#define HAVE_MPI_Neighbor_alltoallw 1
-#define HAVE_MPI_Iexscan 1
-#define HAVE_MPI_Graph_map 1
-#define HAVE_MPI_Recv_init 1
-#define HAVE_MPI_Type_create_subarray 1
-#define HAVE_MPI_Comm_create_group 1
-#define HAVE_MPI_Allgather_init 1
-#define HAVE_MPI_Reduce_scatter_block_init 1
-#define HAVE_MPI_Type_match_size 1
-#define HAVE_MPI_Type_get_true_extent 1
-#define HAVE_MPI_Alltoall_init 1
-#define HAVE_MPI_Send_init 1
-#define HAVE_MPI_Neighbor_allgather_init 1
-#define HAVE_MPI_Ibcast 1
-#define HAVE_MPI_File_iread 1
-#define HAVE_MPI_Neighbor_alltoall_init 1
-#define HAVE_MPI_Cart_rank 1
-#define HAVE_MPI_Publish_name 1
-#define HAVE_MPI_Win_set_attr 1
-#define HAVE_MPI_Win_sync 1
-#define HAVE_MPI_Type_free_keyval 1
-#define HAVE_MPI_File_write 1
-#define HAVE_MPI_Register_datarep 1
-#define HAVE_MPI_Ineighbor_alltoall 1
-#define HAVE_MPI_File_preallocate 1
-#define HAVE_MPI_Iallgatherv 1
-#define HAVE_MPI_Neighbor_allgatherv_init 1
-#define HAVE_MPI_Iprobe 1
-#define HAVE_MPI_Type_get_true_extent_x 1
-#define HAVE_MPI_Win_complete 1
-#define HAVE_MPI_File_set_atomicity 1
-#define HAVE_MPI_Unpack_external 1
-#define HAVE_MPI_Mprobe 1
-#define HAVE_MPI_Add_error_code 1
-#define HAVE_MPI_Win_delete_attr 1
-#define HAVE_MPI_File_read_at_all 1
-#define HAVE_MPI_Pready 1
-#define HAVE_MPI_Iscatterv 1
-#define HAVE_MPI_Win_detach 1
-#define HAVE_MPI_File_call_errhandler 1
-#define HAVE_MPI_Iallreduce 1
-#define HAVE_MPI_Get_processor_name 1
-#define HAVE_MPI_Start 1
-#define HAVE_MPI_File_get_type_extent 1
-#define HAVE_MPI_File_read_shared 1
-#define HAVE_MPI_File_open 1
-#define HAVE_MPI_File_get_amode 1
-#define HAVE_MPI_Type_create_hindexed_block 1
-#define HAVE_MPI_Cart_coords 1
-#define HAVE_MPI_Issend 1
-#define HAVE_MPI_Graph_get 1
-#define HAVE_MPI_Win_free_keyval 1
-#define HAVE_MPI_Ineighbor_alltoallw 1
-#define HAVE_MPI_File_set_info 1
-#define HAVE_MPI_File_iread_at 1
-#define HAVE_MPI_Attr_delete 1
-#define HAVE_MPI_Session_get_info 1
-#define HAVE_MPI_Session_get_nth_pset 1
-#define HAVE_MPI_Type_create_keyval 1
-#define HAVE_MPI_Attr_get 1
-#define HAVE_MPI_Add_error_string 1
-#define HAVE_MPI_Ineighbor_alltoallv 1
-#define HAVE_MPI_Imrecv 1
-#define HAVE_MPI_Alltoallw 1
-#define HAVE_MPI_Bcast_init 1
-#define HAVE_MPI_Ibarrier 1
-#define HAVE_MPI_File_iwrite_at_all 1
-#define HAVE_MPI_File_get_size 1
-#define HAVE_MPI_Barrier_init 1
-#define HAVE_MPI_File_get_view 1
-#define HAVE_MPI_Win_allocate_shared 1
-#define HAVE_MPI_Close_port 1
-#define HAVE_MPI_Finalized 1
-#define HAVE_MPI_Info_dup 1
-#define HAVE_MPI_Info_get 1
-#define HAVE_MPI_Get_library_version 1
-#define HAVE_MPI_Info_create 1
-#define HAVE_MPI_Win_fence 1
-#define HAVE_MPI_Iallgather 1
-#define HAVE_MPI_Comm_spawn_multiple 1
-#define HAVE_MPI_Precv_init 1
-#define HAVE_MPI_Comm_set_errhandler 1
-#define HAVE_MPI_File_set_view 1
-#define HAVE_MPI_Bsend 1
-#define HAVE_MPI_Type_size 1
-#define HAVE_MPI_Type_get_attr 1
-#define HAVE_MPI_File_write_ordered 1
-#define HAVE_MPI_File_get_info 1
-#define HAVE_MPI_Graph_neighbors 1
-#define HAVE_MPI_Igatherv 1
-#define HAVE_MPI_Info_delete 1
-#define HAVE_MPI_Alloc_mem 1
-#define HAVE_MPI_Comm_get_errhandler 1
-#define HAVE_MPI_Session_init 1
-#define HAVE_MPI_Win_post 1
-#define HAVE_MPI_Intercomm_create 1
-#define HAVE_MPI_File_read_all_begin 1
-#define HAVE_MPI_Ialltoallv 1
-#define HAVE_MPI_File_delete 1
-#define HAVE_MPI_Dims_create 1
-#define HAVE_MPI_Cart_sub 1
-#define HAVE_MPI_Win_allocate 1
-#define HAVE_MPI_Session_get_errhandler 1
-#define HAVE_MPI_Parrived 1
-#define HAVE_MPI_Info_create_env 1
-#define HAVE_MPI_File_create_errhandler 1
-#define HAVE_MPI_Ialltoall 1
-#define HAVE_MPI_Raccumulate 1
-#define HAVE_MPI_Type_size_x 1
-#define HAVE_MPI_Type_get_extent_x 1
-#define HAVE_MPI_File_read_at_all_begin 1
-#define HAVE_MPI_Dist_graph_create 1
-#define HAVE_MPI_Comm_join 1
-#define HAVE_MPI_Gatherv_init 1
-#define HAVE_MPI_File_sync 1
-#define HAVE_MPI_Comm_accept 1
-#define HAVE_MPI_Ineighbor_allgather 1
-#define HAVE_MPI_Type_dup 1
-#define HAVE_MPI_File_iwrite_shared 1
-#define HAVE_MPI_Win_get_errhandler 1
-#define HAVE_MPI_Iscan 1
-#define HAVE_MPI_Win_flush 1
-#define HAVE_MPI_Graph_create 1
-#define HAVE_MPI_Win_set_name 1
-#define HAVE_MPI_Win_create_errhandler 1
-#define HAVE_MPI_Gather_init 1
-#define HAVE_MPI_Neighbor_allgatherv 1
-#define HAVE_MPI_File_iwrite 1
-#define HAVE_MPI_Buffer_attach 1
-#define HAVE_MPI_Session_set_errhandler 1
-#define HAVE_MPI_Win_start 1
-#define HAVE_MPI_Info_f2c 1
-#define HAVE_MPI_Info_c2f 1
-#define HAVE_MPI_Op_c2f 1
-#define HAVE_MPI_Win_c2f 1
-#define HAVE_MPI_Group_f2c 1
-#define HAVE_MPI_File_c2f 1
-#define HAVE_MPI_Request_c2f 1
-#define HAVE_MPI_File_f2c 1
-#define HAVE_MPI_Session_f2c 1
-#define HAVE_MPI_Status_f082f 1
-#define HAVE_MPI_Status_c2f08 1
-#define HAVE_MPI_Type_f2c 1
-#define HAVE_MPI_Message_c2f 1
-#define HAVE_MPI_Session_c2f 1
-#define HAVE_MPI_Message_f2c 1
-#define HAVE_MPI_Errhandler_f2c 1
-#define HAVE_MPI_Request_f2c 1
-#define HAVE_MPI_Status_c2f 1
-#define HAVE_MPI_Comm_f2c 1
-#define HAVE_MPI_Comm_c2f 1
-#define HAVE_MPI_Group_c2f 1
-#define HAVE_MPI_Win_f2c 1
-#define HAVE_MPI_Status_f082c 1
-#define HAVE_MPI_Errhandler_c2f 1
-#define HAVE_MPI_Status_f2f08 1
-#define HAVE_MPI_Type_c2f 1
-#define HAVE_MPI_Status_f2c 1
-#define HAVE_MPI_Op_f2c 1
+#cmakedefine01 HAVE_MPI_Init
+#cmakedefine01 HAVE_MPI_Init_thread
+#cmakedefine01 HAVE_MPI_Finalize
+#cmakedefine01 HAVE_MPI_Initialized
+#cmakedefine01 HAVE_MPI_Query_thread
+#cmakedefine01 HAVE_MPI_Abort
+#cmakedefine01 HAVE_MPI_Send
+#cmakedefine01 HAVE_MPI_Recv
+#cmakedefine01 HAVE_MPI_Sendrecv
+#cmakedefine01 HAVE_MPI_Sendrecv_replace
+#cmakedefine01 HAVE_MPI_Isend
+#cmakedefine01 HAVE_MPI_Irecv
+#cmakedefine01 HAVE_MPI_Wait
+#cmakedefine01 HAVE_MPI_Waitall
+#cmakedefine01 HAVE_MPI_Waitany
+#cmakedefine01 HAVE_MPI_Waitsome
+#cmakedefine01 HAVE_MPI_Test
+#cmakedefine01 HAVE_MPI_Testall
+#cmakedefine01 HAVE_MPI_Testany
+#cmakedefine01 HAVE_MPI_Testsome
+#cmakedefine01 HAVE_MPI_Request_free
+#cmakedefine01 HAVE_MPI_Cancel
+#cmakedefine01 HAVE_MPI_Type_contiguous
+#cmakedefine01 HAVE_MPI_Type_vector
+#cmakedefine01 HAVE_MPI_Type_indexed
+#cmakedefine01 HAVE_MPI_Type_create_indexed_block
+#cmakedefine01 HAVE_MPI_Type_create_struct
+#cmakedefine01 HAVE_MPI_Type_create_resized
+#cmakedefine01 HAVE_MPI_Type_commit
+#cmakedefine01 HAVE_MPI_Type_free
+#cmakedefine01 HAVE_MPI_Get_count
+#cmakedefine01 HAVE_MPI_Get_elements
+#cmakedefine01 HAVE_MPI_Pack
+#cmakedefine01 HAVE_MPI_Unpack
+#cmakedefine01 HAVE_MPI_Pack_size
+#cmakedefine01 HAVE_MPI_Barrier
+#cmakedefine01 HAVE_MPI_Bcast
+#cmakedefine01 HAVE_MPI_Gather
+#cmakedefine01 HAVE_MPI_Gatherv
+#cmakedefine01 HAVE_MPI_Scatter
+#cmakedefine01 HAVE_MPI_Scatterv
+#cmakedefine01 HAVE_MPI_Allgather
+#cmakedefine01 HAVE_MPI_Allgatherv
+#cmakedefine01 HAVE_MPI_Alltoall
+#cmakedefine01 HAVE_MPI_Alltoallv
+#cmakedefine01 HAVE_MPI_Reduce
+#cmakedefine01 HAVE_MPI_Allreduce
+#cmakedefine01 HAVE_MPI_Reduce_scatter
+#cmakedefine01 HAVE_MPI_Reduce_scatter_block
+#cmakedefine01 HAVE_MPI_Scan
+#cmakedefine01 HAVE_MPI_Exscan
+#cmakedefine01 HAVE_MPI_Comm_size
+#cmakedefine01 HAVE_MPI_Comm_rank
+#cmakedefine01 HAVE_MPI_Comm_group
+#cmakedefine01 HAVE_MPI_Comm_dup
+#cmakedefine01 HAVE_MPI_Comm_create
+#cmakedefine01 HAVE_MPI_Comm_split
+#cmakedefine01 HAVE_MPI_Comm_free
+#cmakedefine01 HAVE_MPI_Comm_test_inter
+#cmakedefine01 HAVE_MPI_Comm_remote_size
+#cmakedefine01 HAVE_MPI_Comm_remote_group
+#cmakedefine01 HAVE_MPI_Comm_compare
+#cmakedefine01 HAVE_MPI_Comm_create_keyval
+#cmakedefine01 HAVE_MPI_Comm_set_attr
+#cmakedefine01 HAVE_MPI_Comm_get_attr
+#cmakedefine01 HAVE_MPI_Comm_delete_attr
+#cmakedefine01 HAVE_MPI_Comm_get_name
+#cmakedefine01 HAVE_MPI_Comm_set_name
+#cmakedefine01 HAVE_MPI_Group_size
+#cmakedefine01 HAVE_MPI_Group_rank
+#cmakedefine01 HAVE_MPI_Group_translate_ranks
+#cmakedefine01 HAVE_MPI_Group_compare
+#cmakedefine01 HAVE_MPI_Group_union
+#cmakedefine01 HAVE_MPI_Group_intersection
+#cmakedefine01 HAVE_MPI_Group_difference
+#cmakedefine01 HAVE_MPI_Group_incl
+#cmakedefine01 HAVE_MPI_Group_excl
+#cmakedefine01 HAVE_MPI_Group_range_incl
+#cmakedefine01 HAVE_MPI_Group_range_excl
+#cmakedefine01 HAVE_MPI_Group_free
+#cmakedefine01 HAVE_MPI_Op_create
+#cmakedefine01 HAVE_MPI_Op_free
+#cmakedefine01 HAVE_MPI_Wtime
+#cmakedefine01 HAVE_MPI_Wtick
+#cmakedefine01 HAVE_MPI_Get_address
+#cmakedefine01 HAVE_MPI_Get_elements_x
+#cmakedefine01 HAVE_MPI_Cart_shift
+#cmakedefine01 HAVE_MPI_Win_flush_local_all
+#cmakedefine01 HAVE_MPI_File_get_byte_offset
+#cmakedefine01 HAVE_MPI_Win_get_info
+#cmakedefine01 HAVE_MPI_Rput
+#cmakedefine01 HAVE_MPI_Dist_graph_neighbors_count
+#cmakedefine01 HAVE_MPI_Ireduce
+#cmakedefine01 HAVE_MPI_Psend_init
+#cmakedefine01 HAVE_MPI_Reduce_init
+#cmakedefine01 HAVE_MPI_Win_wait
+#cmakedefine01 HAVE_MPI_Rsend_init
+#cmakedefine01 HAVE_MPI_File_write_at_all
+#cmakedefine01 HAVE_MPI_File_write_ordered_end
+#cmakedefine01 HAVE_MPI_Errhandler_free
+#cmakedefine01 HAVE_MPI_Win_shared_query
+#cmakedefine01 HAVE_MPI_Win_lock
+#cmakedefine01 HAVE_MPI_Get_accumulate
+#cmakedefine01 HAVE_MPI_Type_get_name
+#cmakedefine01 HAVE_MPI_File_get_atomicity
+#cmakedefine01 HAVE_MPI_Session_set_info
+#cmakedefine01 HAVE_MPI_Group_from_session_pset
+#cmakedefine01 HAVE_MPI_Comm_idup
+#cmakedefine01 HAVE_MPI_Win_get_name
+#cmakedefine01 HAVE_MPI_Allgatherv_init
+#cmakedefine01 HAVE_MPI_Comm_dup_with_info
+#cmakedefine01 HAVE_MPI_Session_get_num_psets
+#cmakedefine01 HAVE_MPI_Igather
+#cmakedefine01 HAVE_MPI_File_read_at
+#cmakedefine01 HAVE_MPI_Type_create_hvector
+#cmakedefine01 HAVE_MPI_File_write_at_all_begin
+#cmakedefine01 HAVE_MPI_Grequest_start
+#cmakedefine01 HAVE_MPI_Bsend_init
+#cmakedefine01 HAVE_MPI_File_set_size
+#cmakedefine01 HAVE_MPI_Type_set_name
+#cmakedefine01 HAVE_MPI_Comm_split_type
+#cmakedefine01 HAVE_MPI_File_read_at_all_end
+#cmakedefine01 HAVE_MPI_File_write_all
+#cmakedefine01 HAVE_MPI_Improbe
+#cmakedefine01 HAVE_MPI_Comm_get_info
+#cmakedefine01 HAVE_MPI_File_read_all_end
+#cmakedefine01 HAVE_MPI_Win_unlock_all
+#cmakedefine01 HAVE_MPI_Type_create_f90_integer
+#cmakedefine01 HAVE_MPI_Exscan_init
+#cmakedefine01 HAVE_MPI_Ibsend
+#cmakedefine01 HAVE_MPI_Win_flush_local
+#cmakedefine01 HAVE_MPI_Ialltoallw
+#cmakedefine01 HAVE_MPI_Comm_create_from_group
+#cmakedefine01 HAVE_MPI_Type_get_contents
+#cmakedefine01 HAVE_MPI_File_iwrite_at
+#cmakedefine01 HAVE_MPI_Status_set_elements
+#cmakedefine01 HAVE_MPI_File_read_ordered
+#cmakedefine01 HAVE_MPI_Is_thread_main
+#cmakedefine01 HAVE_MPI_Allreduce_init
+#cmakedefine01 HAVE_MPI_Info_get_valuelen
+#cmakedefine01 HAVE_MPI_Comm_create_errhandler
+#cmakedefine01 HAVE_MPI_Info_free
+#cmakedefine01 HAVE_MPI_Info_get_nthkey
+#cmakedefine01 HAVE_MPI_Ssend_init
+#cmakedefine01 HAVE_MPI_Comm_set_info
+#cmakedefine01 HAVE_MPI_Cart_create
+#cmakedefine01 HAVE_MPI_File_write_all_begin
+#cmakedefine01 HAVE_MPI_Scan_init
+#cmakedefine01 HAVE_MPI_Irsend
+#cmakedefine01 HAVE_MPI_Neighbor_alltoallv
+#cmakedefine01 HAVE_MPI_Pready_list
+#cmakedefine01 HAVE_MPI_Alltoallw_init
+#cmakedefine01 HAVE_MPI_File_read_ordered_begin
+#cmakedefine01 HAVE_MPI_Dist_graph_create_adjacent
+#cmakedefine01 HAVE_MPI_Reduce_scatter_init
+#cmakedefine01 HAVE_MPI_Comm_get_parent
+#cmakedefine01 HAVE_MPI_Keyval_free
+#cmakedefine01 HAVE_MPI_Info_set
+#cmakedefine01 HAVE_MPI_Keyval_create
+#cmakedefine01 HAVE_MPI_Comm_connect
+#cmakedefine01 HAVE_MPI_Ssend
+#cmakedefine01 HAVE_MPI_Scatterv_init
+#cmakedefine01 HAVE_MPI_File_write_at_all_end
+#cmakedefine01 HAVE_MPI_File_write_all_end
+#cmakedefine01 HAVE_MPI_Buffer_detach
+#cmakedefine01 HAVE_MPI_Startall
+#cmakedefine01 HAVE_MPI_Neighbor_alltoall
+#cmakedefine01 HAVE_MPI_Put
+#cmakedefine01 HAVE_MPI_File_read_ordered_end
+#cmakedefine01 HAVE_MPI_Win_call_errhandler
+#cmakedefine01 HAVE_MPI_File_write_at
+#cmakedefine01 HAVE_MPI_Session_get_pset_info
+#cmakedefine01 HAVE_MPI_Topo_test
+#cmakedefine01 HAVE_MPI_Comm_disconnect
+#cmakedefine01 HAVE_MPI_Add_error_class
+#cmakedefine01 HAVE_MPI_Ireduce_scatter
+#cmakedefine01 HAVE_MPI_Cart_map
+#cmakedefine01 HAVE_MPI_Intercomm_merge
+#cmakedefine01 HAVE_MPI_Type_create_hindexed
+#cmakedefine01 HAVE_MPI_Info_get_nkeys
+#cmakedefine01 HAVE_MPI_File_read
+#cmakedefine01 HAVE_MPI_Ineighbor_allgatherv
+#cmakedefine01 HAVE_MPI_Attr_put
+#cmakedefine01 HAVE_MPI_File_write_ordered_begin
+#cmakedefine01 HAVE_MPI_Status_set_elements_x
+#cmakedefine01 HAVE_MPI_Compare_and_swap
+#cmakedefine01 HAVE_MPI_Type_create_f90_real
+#cmakedefine01 HAVE_MPI_Type_delete_attr
+#cmakedefine01 HAVE_MPI_Probe
+#cmakedefine01 HAVE_MPI_File_close
+#cmakedefine01 HAVE_MPI_Request_get_status
+#cmakedefine01 HAVE_MPI_Session_call_errhandler
+#cmakedefine01 HAVE_MPI_Rget_accumulate
+#cmakedefine01 HAVE_MPI_File_iread_all
+#cmakedefine01 HAVE_MPI_Isendrecv
+#cmakedefine01 HAVE_MPI_Pack_external
+#cmakedefine01 HAVE_MPI_Pready_range
+#cmakedefine01 HAVE_MPI_Type_get_envelope
+#cmakedefine01 HAVE_MPI_Win_create
+#cmakedefine01 HAVE_MPI_Isendrecv_replace
+#cmakedefine01 HAVE_MPI_Win_set_errhandler
+#cmakedefine01 HAVE_MPI_Fetch_and_op
+#cmakedefine01 HAVE_MPI_Cartdim_get
+#cmakedefine01 HAVE_MPI_Dist_graph_neighbors
+#cmakedefine01 HAVE_MPI_File_seek
+#cmakedefine01 HAVE_MPI_Get
+#cmakedefine01 HAVE_MPI_Pack_external_size
+#cmakedefine01 HAVE_MPI_Win_flush_all
+#cmakedefine01 HAVE_MPI_Rsend
+#cmakedefine01 HAVE_MPI_Win_free
+#cmakedefine01 HAVE_MPI_Type_create_f90_complex
+#cmakedefine01 HAVE_MPI_Neighbor_alltoallw_init
+#cmakedefine01 HAVE_MPI_Rget
+#cmakedefine01 HAVE_MPI_Win_create_keyval
+#cmakedefine01 HAVE_MPI_Op_commutative
+#cmakedefine01 HAVE_MPI_Neighbor_allgather
+#cmakedefine01 HAVE_MPI_Comm_call_errhandler
+#cmakedefine01 HAVE_MPI_Scatter_init
+#cmakedefine01 HAVE_MPI_Info_get_string
+#cmakedefine01 HAVE_MPI_Mrecv
+#cmakedefine01 HAVE_MPI_Open_port
+#cmakedefine01 HAVE_MPI_Cart_get
+#cmakedefine01 HAVE_MPI_Lookup_name
+#cmakedefine01 HAVE_MPI_Type_get_extent
+#cmakedefine01 HAVE_MPI_Comm_spawn
+#cmakedefine01 HAVE_MPI_Unpublish_name
+#cmakedefine01 HAVE_MPI_Grequest_complete
+#cmakedefine01 HAVE_MPI_File_get_group
+#cmakedefine01 HAVE_MPI_File_iread_at_all
+#cmakedefine01 HAVE_MPI_Graphdims_get
+#cmakedefine01 HAVE_MPI_File_iread_shared
+#cmakedefine01 HAVE_MPI_Comm_idup_with_info
+#cmakedefine01 HAVE_MPI_Get_version
+#cmakedefine01 HAVE_MPI_Win_lock_all
+#cmakedefine01 HAVE_MPI_Intercomm_create_from_groups
+#cmakedefine01 HAVE_MPI_Neighbor_alltoallv_init
+#cmakedefine01 HAVE_MPI_Type_create_darray
+#cmakedefine01 HAVE_MPI_File_get_position_shared
+#cmakedefine01 HAVE_MPI_Win_get_group
+#cmakedefine01 HAVE_MPI_Error_class
+#cmakedefine01 HAVE_MPI_Win_get_attr
+#cmakedefine01 HAVE_MPI_Reduce_local
+#cmakedefine01 HAVE_MPI_Ireduce_scatter_block
+#cmakedefine01 HAVE_MPI_Status_set_cancelled
+#cmakedefine01 HAVE_MPI_Win_test
+#cmakedefine01 HAVE_MPI_Test_cancelled
+#cmakedefine01 HAVE_MPI_File_seek_shared
+#cmakedefine01 HAVE_MPI_Error_string
+#cmakedefine01 HAVE_MPI_Graph_neighbors_count
+#cmakedefine01 HAVE_MPI_Session_create_errhandler
+#cmakedefine01 HAVE_MPI_Win_unlock
+#cmakedefine01 HAVE_MPI_Iscatter
+#cmakedefine01 HAVE_MPI_File_read_all
+#cmakedefine01 HAVE_MPI_File_set_errhandler
+#cmakedefine01 HAVE_MPI_Type_set_attr
+#cmakedefine01 HAVE_MPI_File_get_errhandler
+#cmakedefine01 HAVE_MPI_Session_finalize
+#cmakedefine01 HAVE_MPI_Comm_free_keyval
+#cmakedefine01 HAVE_MPI_File_iwrite_all
+#cmakedefine01 HAVE_MPI_Free_mem
+#cmakedefine01 HAVE_MPI_Win_set_info
+#cmakedefine01 HAVE_MPI_Alltoallv_init
+#cmakedefine01 HAVE_MPI_Win_attach
+#cmakedefine01 HAVE_MPI_File_get_position
+#cmakedefine01 HAVE_MPI_Accumulate
+#cmakedefine01 HAVE_MPI_File_write_shared
+#cmakedefine01 HAVE_MPI_Win_create_dynamic
+#cmakedefine01 HAVE_MPI_Neighbor_alltoallw
+#cmakedefine01 HAVE_MPI_Iexscan
+#cmakedefine01 HAVE_MPI_Graph_map
+#cmakedefine01 HAVE_MPI_Recv_init
+#cmakedefine01 HAVE_MPI_Type_create_subarray
+#cmakedefine01 HAVE_MPI_Comm_create_group
+#cmakedefine01 HAVE_MPI_Allgather_init
+#cmakedefine01 HAVE_MPI_Reduce_scatter_block_init
+#cmakedefine01 HAVE_MPI_Type_match_size
+#cmakedefine01 HAVE_MPI_Type_get_true_extent
+#cmakedefine01 HAVE_MPI_Alltoall_init
+#cmakedefine01 HAVE_MPI_Send_init
+#cmakedefine01 HAVE_MPI_Neighbor_allgather_init
+#cmakedefine01 HAVE_MPI_Ibcast
+#cmakedefine01 HAVE_MPI_File_iread
+#cmakedefine01 HAVE_MPI_Neighbor_alltoall_init
+#cmakedefine01 HAVE_MPI_Cart_rank
+#cmakedefine01 HAVE_MPI_Publish_name
+#cmakedefine01 HAVE_MPI_Win_set_attr
+#cmakedefine01 HAVE_MPI_Win_sync
+#cmakedefine01 HAVE_MPI_Type_free_keyval
+#cmakedefine01 HAVE_MPI_File_write
+#cmakedefine01 HAVE_MPI_Register_datarep
+#cmakedefine01 HAVE_MPI_Ineighbor_alltoall
+#cmakedefine01 HAVE_MPI_File_preallocate
+#cmakedefine01 HAVE_MPI_Iallgatherv
+#cmakedefine01 HAVE_MPI_Neighbor_allgatherv_init
+#cmakedefine01 HAVE_MPI_Iprobe
+#cmakedefine01 HAVE_MPI_Type_get_true_extent_x
+#cmakedefine01 HAVE_MPI_Win_complete
+#cmakedefine01 HAVE_MPI_File_set_atomicity
+#cmakedefine01 HAVE_MPI_Unpack_external
+#cmakedefine01 HAVE_MPI_Mprobe
+#cmakedefine01 HAVE_MPI_Add_error_code
+#cmakedefine01 HAVE_MPI_Win_delete_attr
+#cmakedefine01 HAVE_MPI_File_read_at_all
+#cmakedefine01 HAVE_MPI_Pready
+#cmakedefine01 HAVE_MPI_Iscatterv
+#cmakedefine01 HAVE_MPI_Win_detach
+#cmakedefine01 HAVE_MPI_File_call_errhandler
+#cmakedefine01 HAVE_MPI_Iallreduce
+#cmakedefine01 HAVE_MPI_Get_processor_name
+#cmakedefine01 HAVE_MPI_Start
+#cmakedefine01 HAVE_MPI_File_get_type_extent
+#cmakedefine01 HAVE_MPI_File_read_shared
+#cmakedefine01 HAVE_MPI_File_open
+#cmakedefine01 HAVE_MPI_File_get_amode
+#cmakedefine01 HAVE_MPI_Type_create_hindexed_block
+#cmakedefine01 HAVE_MPI_Cart_coords
+#cmakedefine01 HAVE_MPI_Issend
+#cmakedefine01 HAVE_MPI_Graph_get
+#cmakedefine01 HAVE_MPI_Win_free_keyval
+#cmakedefine01 HAVE_MPI_Ineighbor_alltoallw
+#cmakedefine01 HAVE_MPI_File_set_info
+#cmakedefine01 HAVE_MPI_File_iread_at
+#cmakedefine01 HAVE_MPI_Attr_delete
+#cmakedefine01 HAVE_MPI_Session_get_info
+#cmakedefine01 HAVE_MPI_Session_get_nth_pset
+#cmakedefine01 HAVE_MPI_Type_create_keyval
+#cmakedefine01 HAVE_MPI_Attr_get
+#cmakedefine01 HAVE_MPI_Add_error_string
+#cmakedefine01 HAVE_MPI_Ineighbor_alltoallv
+#cmakedefine01 HAVE_MPI_Imrecv
+#cmakedefine01 HAVE_MPI_Alltoallw
+#cmakedefine01 HAVE_MPI_Bcast_init
+#cmakedefine01 HAVE_MPI_Ibarrier
+#cmakedefine01 HAVE_MPI_File_iwrite_at_all
+#cmakedefine01 HAVE_MPI_File_get_size
+#cmakedefine01 HAVE_MPI_Barrier_init
+#cmakedefine01 HAVE_MPI_File_get_view
+#cmakedefine01 HAVE_MPI_Win_allocate_shared
+#cmakedefine01 HAVE_MPI_Close_port
+#cmakedefine01 HAVE_MPI_Finalized
+#cmakedefine01 HAVE_MPI_Info_dup
+#cmakedefine01 HAVE_MPI_Info_get
+#cmakedefine01 HAVE_MPI_Get_library_version
+#cmakedefine01 HAVE_MPI_Info_create
+#cmakedefine01 HAVE_MPI_Win_fence
+#cmakedefine01 HAVE_MPI_Iallgather
+#cmakedefine01 HAVE_MPI_Comm_spawn_multiple
+#cmakedefine01 HAVE_MPI_Precv_init
+#cmakedefine01 HAVE_MPI_Comm_set_errhandler
+#cmakedefine01 HAVE_MPI_File_set_view
+#cmakedefine01 HAVE_MPI_Bsend
+#cmakedefine01 HAVE_MPI_Type_size
+#cmakedefine01 HAVE_MPI_Type_get_attr
+#cmakedefine01 HAVE_MPI_File_write_ordered
+#cmakedefine01 HAVE_MPI_File_get_info
+#cmakedefine01 HAVE_MPI_Graph_neighbors
+#cmakedefine01 HAVE_MPI_Igatherv
+#cmakedefine01 HAVE_MPI_Info_delete
+#cmakedefine01 HAVE_MPI_Alloc_mem
+#cmakedefine01 HAVE_MPI_Comm_get_errhandler
+#cmakedefine01 HAVE_MPI_Session_init
+#cmakedefine01 HAVE_MPI_Win_post
+#cmakedefine01 HAVE_MPI_Intercomm_create
+#cmakedefine01 HAVE_MPI_File_read_all_begin
+#cmakedefine01 HAVE_MPI_Ialltoallv
+#cmakedefine01 HAVE_MPI_File_delete
+#cmakedefine01 HAVE_MPI_Dims_create
+#cmakedefine01 HAVE_MPI_Cart_sub
+#cmakedefine01 HAVE_MPI_Win_allocate
+#cmakedefine01 HAVE_MPI_Session_get_errhandler
+#cmakedefine01 HAVE_MPI_Parrived
+#cmakedefine01 HAVE_MPI_Info_create_env
+#cmakedefine01 HAVE_MPI_File_create_errhandler
+#cmakedefine01 HAVE_MPI_Ialltoall
+#cmakedefine01 HAVE_MPI_Raccumulate
+#cmakedefine01 HAVE_MPI_Type_size_x
+#cmakedefine01 HAVE_MPI_Type_get_extent_x
+#cmakedefine01 HAVE_MPI_File_read_at_all_begin
+#cmakedefine01 HAVE_MPI_Dist_graph_create
+#cmakedefine01 HAVE_MPI_Comm_join
+#cmakedefine01 HAVE_MPI_Gatherv_init
+#cmakedefine01 HAVE_MPI_File_sync
+#cmakedefine01 HAVE_MPI_Comm_accept
+#cmakedefine01 HAVE_MPI_Ineighbor_allgather
+#cmakedefine01 HAVE_MPI_Type_dup
+#cmakedefine01 HAVE_MPI_File_iwrite_shared
+#cmakedefine01 HAVE_MPI_Win_get_errhandler
+#cmakedefine01 HAVE_MPI_Iscan
+#cmakedefine01 HAVE_MPI_Win_flush
+#cmakedefine01 HAVE_MPI_Graph_create
+#cmakedefine01 HAVE_MPI_Win_set_name
+#cmakedefine01 HAVE_MPI_Win_create_errhandler
+#cmakedefine01 HAVE_MPI_Gather_init
+#cmakedefine01 HAVE_MPI_Neighbor_allgatherv
+#cmakedefine01 HAVE_MPI_File_iwrite
+#cmakedefine01 HAVE_MPI_Buffer_attach
+#cmakedefine01 HAVE_MPI_Session_set_errhandler
+#cmakedefine01 HAVE_MPI_Win_start
+#cmakedefine01 HAVE_MPI_Info_f2c
+#cmakedefine01 HAVE_MPI_Info_c2f
+#cmakedefine01 HAVE_MPI_Op_c2f
+#cmakedefine01 HAVE_MPI_Win_c2f
+#cmakedefine01 HAVE_MPI_Group_f2c
+#cmakedefine01 HAVE_MPI_File_c2f
+#cmakedefine01 HAVE_MPI_Request_c2f
+#cmakedefine01 HAVE_MPI_File_f2c
+#cmakedefine01 HAVE_MPI_Session_f2c
+#cmakedefine01 HAVE_MPI_Status_f082f
+#cmakedefine01 HAVE_MPI_Status_c2f08
+#cmakedefine01 HAVE_MPI_Type_f2c
+#cmakedefine01 HAVE_MPI_Message_c2f
+#cmakedefine01 HAVE_MPI_Session_c2f
+#cmakedefine01 HAVE_MPI_Message_f2c
+#cmakedefine01 HAVE_MPI_Errhandler_f2c
+#cmakedefine01 HAVE_MPI_Request_f2c
+#cmakedefine01 HAVE_MPI_Status_c2f
+#cmakedefine01 HAVE_MPI_Comm_f2c
+#cmakedefine01 HAVE_MPI_Comm_c2f
+#cmakedefine01 HAVE_MPI_Group_c2f
+#cmakedefine01 HAVE_MPI_Win_f2c
+#cmakedefine01 HAVE_MPI_Status_f082c
+#cmakedefine01 HAVE_MPI_Errhandler_c2f
+#cmakedefine01 HAVE_MPI_Status_f2f08
+#cmakedefine01 HAVE_MPI_Type_c2f
+#cmakedefine01 HAVE_MPI_Status_f2c
+#cmakedefine01 HAVE_MPI_Op_f2c
 
 
 #if HAVE_MPI_Init

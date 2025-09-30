@@ -6,6 +6,8 @@
 #ifndef HIP_CONF_H
 #define HIP_CONF_H
 
+#cmakedefine01 HAVE_HIP
+
 // HIP Configuration
 #cmakedefine01 HAVE_hipMemPtrGetInfo
 #cmakedefine01 HAVE_hipGraphExecMemcpyNodeSetParams1D
