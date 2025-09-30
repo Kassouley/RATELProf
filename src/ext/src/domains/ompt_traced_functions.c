@@ -24,8 +24,9 @@ void on_ompt_callback_target_emi(
     const void *codeptr_ra)
 {
     if (endpoint == ompt_scope_begin) {
-        ratelprof_ompt_api_activity_t *activity =
-            (ratelprof_ompt_api_activity_t*)malloc(sizeof(ratelprof_ompt_api_activity_t));
+        ratelprof_api_activity_t *activity =
+            (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_target_emi_t));
+        activity->args = (void*)(activity + 1);
 
         activity->return_address = (void *)codeptr_ra;
         GET_ARGS_VALUE_target_emi(activity);
@@ -33,7 +34,7 @@ void on_ompt_callback_target_emi(
 
         ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_TARGET_REGION + kind, activity);
     } else if (endpoint == ompt_scope_end) {
-        ratelprof_ompt_api_activity_t *activity = (ratelprof_ompt_api_activity_t *)(target_task_data->ptr);
+        ratelprof_api_activity_t *activity = (ratelprof_api_activity_t *)(target_task_data->ptr);
         ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_TARGET_REGION + kind, activity);
 
         target_task_data->ptr = 0;  // Clear the pointer
@@ -56,8 +57,9 @@ void on_ompt_callback_target_data_op_emi(
     const void *codeptr_ra)
 {
     if (endpoint == ompt_scope_begin) {
-        ratelprof_ompt_api_activity_t *activity =
-            (ratelprof_ompt_api_activity_t*)malloc(sizeof(ratelprof_ompt_api_activity_t));
+        ratelprof_api_activity_t *activity =
+            (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_target_data_op_t));
+        activity->args = (void*)(activity + 1);
 
         activity->return_address = (void *)codeptr_ra;
         GET_ARGS_VALUE_target_data_op(activity);
@@ -65,7 +67,7 @@ void on_ompt_callback_target_data_op_emi(
 
         ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_TARGET_DATA_REGION + optype, activity);
     } else if (endpoint == ompt_scope_end) {
-        ratelprof_ompt_api_activity_t *activity = (ratelprof_ompt_api_activity_t *)(target_data->ptr);
+        ratelprof_api_activity_t *activity = (ratelprof_api_activity_t *)(target_data->ptr);
 
         ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_TARGET_DATA_REGION + optype, activity);
         target_data->ptr = 0;  // Clear the pointer
@@ -81,8 +83,9 @@ void on_ompt_callback_target_submit_emi(
     unsigned int requested_num_teams)
 {
     if (endpoint == ompt_scope_begin) {
-        ratelprof_ompt_api_activity_t *activity =
-            (ratelprof_ompt_api_activity_t*)malloc(sizeof(ratelprof_ompt_api_activity_t));
+        ratelprof_api_activity_t *activity =
+            (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_target_submit_emi_t));
+        activity->args = (void*)(activity + 1);
 
         activity->return_address = NULL;
         GET_ARGS_VALUE_target_submit_emi(activity);
@@ -90,7 +93,7 @@ void on_ompt_callback_target_submit_emi(
 
         ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_target_submit, activity);
     } else if (endpoint == ompt_scope_end) {
-        ratelprof_ompt_api_activity_t *activity = (ratelprof_ompt_api_activity_t *)(target_data->ptr);
+        ratelprof_api_activity_t *activity = (ratelprof_api_activity_t *)(target_data->ptr);
         ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_target_submit, activity);
         target_data->ptr = 0;  // Clear the pointer
     }
@@ -98,7 +101,7 @@ void on_ompt_callback_target_submit_emi(
 
 // --------------------- Data Mapping Callback ---------------------
 
-// TODO 15/05/2025 : Wrong callback signature (Edit : 9/7, Idk what does it mean)
+
 void on_ompt_callback_target_map_emi(
     ompt_scope_endpoint_t endpoint,
     ompt_data_t *target_task_data,
@@ -111,8 +114,9 @@ void on_ompt_callback_target_map_emi(
     const void *codeptr_ra)
 {
     if (endpoint == ompt_scope_begin) {
-        ratelprof_ompt_api_activity_t *activity =
-            (ratelprof_ompt_api_activity_t*)malloc(sizeof(ratelprof_ompt_api_activity_t));
+        ratelprof_api_activity_t *activity =
+            (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_target_map_emi_t));
+        activity->args = (void*)(activity + 1);
 
         activity->return_address = (void *)codeptr_ra;
         GET_ARGS_VALUE_target_map_emi(activity);
@@ -120,7 +124,7 @@ void on_ompt_callback_target_map_emi(
 
         ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_target_map, activity);
     } else if (endpoint == ompt_scope_end) {
-        ratelprof_ompt_api_activity_t *activity = (ratelprof_ompt_api_activity_t *)(target_data->ptr);
+        ratelprof_api_activity_t *activity = (ratelprof_api_activity_t *)(target_data->ptr);
 
         ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_target_map, activity);
         target_data->ptr = 0;  // Clear the pointer

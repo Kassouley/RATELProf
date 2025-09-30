@@ -173,22 +173,6 @@ const char* ratelprof_get_domain_name(ratelprof_domain_t domain)
 }
 
 
-const char* ratelprof_get_domain_desc(ratelprof_domain_t domain) 
-{
-	switch((int)domain) {
-		case RATELPROF_DOMAIN_ROCTX:        return RATELPROF_DOMAIN_ROCTX_DESC;
-		case RATELPROF_DOMAIN_COPY:         return RATELPROF_DOMAIN_COPY_DESC;
-		case RATELPROF_DOMAIN_KERNEL:       return RATELPROF_DOMAIN_KERNEL_DESC;
-		case RATELPROF_DOMAIN_BARRIEROR:    return RATELPROF_DOMAIN_BARRIEROR_DESC;
-		case RATELPROF_DOMAIN_BARRIERAND:   return RATELPROF_DOMAIN_BARRIERAND_DESC; 
-		case RATELPROF_DOMAIN_PROFILING:    return RATELPROF_DOMAIN_PROFILING_DESC; 
-		case RATELPROF_DOMAIN_OMP_REGION:   return RATELPROF_DOMAIN_OMP_REGION_DESC; 
-		default : return __ratelprof_get_domain_desc_impl(domain) ;
-	}
-	return "Unknown domain";
-}
-
-
 ratelprof_status_t ratelprof_enable_domain(ratelprof_domain_t domain)
 {
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;

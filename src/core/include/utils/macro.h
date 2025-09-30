@@ -6,7 +6,9 @@
 #ifndef MACRO_H
 #define MACRO_H
 
-#define IF_ENABLED(name, macro)  IF_ENABLED_##name(macro)
+#define DOMAIN_STR(name)           "RATELPROF_DOMAIN_" #name
+
+#define IF_ENABLED(name, macro)    IF_ENABLED_##name(macro)
 
 #define EXPAND_API_PREFIX_ID(func) ADD_API_PREFIX(ID_##func)
 
@@ -17,7 +19,5 @@
 #define GET_FUNID_BY_NAME_OF(func) else if (strcmp(name, #func) == 0) return EXPAND_API_PREFIX_ID(func);
 
 #define GET_FUNADDR_BY_ID_OF(func) case EXPAND_API_PREFIX_ID(func): return i_##func;
-
-#define GET_ARGS_STRUCT_OF(func)   struct args_##func##_t func;
 
 #endif // MACRO_H

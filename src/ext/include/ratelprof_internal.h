@@ -4,7 +4,6 @@
 #include <ratelprof.h>
 
 extern const char* __ratelprof_get_domain_name_impl(ratelprof_domain_t domain);
-extern const char* __ratelprof_get_domain_desc_impl(ratelprof_domain_t domain);
 extern const char* __ratelprof_get_funame_by_id_impl(ratelprof_domain_t domain, ratelprof_api_id_t funid);
 extern ratelprof_api_id_t __ratelprof_get_funid_by_name_impl(ratelprof_domain_t domain, const char* funame);
 extern void* __ratelprof_get_funaddr_by_id_impl(ratelprof_domain_t domain, ratelprof_api_id_t funid);

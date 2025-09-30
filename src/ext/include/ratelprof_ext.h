@@ -23,14 +23,6 @@
 #define RATELPROF_DOMAIN_OMP_REGION_NAME    "RATELPROF_DOMAIN_OMP_REGION"
 #define RATELPROF_DOMAIN_ROCTX_NAME         "RATELPROF_DOMAIN_ROCTX"
 
-#define RATELPROF_DOMAIN_COPY_DESC          "The copy operation in GPU programming is responsible for transferring data between memory locations (between host and device memory or between different regions of GPU memory)."
-#define RATELPROF_DOMAIN_KERNEL_DESC        "The kernel dispatch operation is the process of launching a computational kernel on the GPU."
-#define RATELPROF_DOMAIN_BARRIEROR_DESC     "The Barrier OR is a less restrictive synchronization mechanism that allows subsequent operations to proceed as soon as any one of the specified preceding operations has completed."
-#define RATELPROF_DOMAIN_BARRIERAND_DESC    "The Barrier AND is a synchronization primitive that ensures all preceding operations in the command queue have completed before subsequent operations can begin."
-#define RATELPROF_DOMAIN_PROFILING_DESC     "The profiling domain correspond to all HSA function used by RATELProf for GPU Profiling"
-#define RATELPROF_DOMAIN_OMP_REGION_DESC    "OpenMP Target region traces given by the OMPT API"
-#define RATELPROF_DOMAIN_ROCTX_DESC         "ROCTX Support for RATELProf"
-
 extern ratelprof_api_table_t gpu_api_table;
 extern ratelprof_api_table_t profiling_table;
 extern ratelprof_api_table_t roctx_api_table;
@@ -93,28 +85,6 @@ typedef struct ratelprof_gpu_activity_s {
     hsa_signal_t proxy_signal;
     gpu_args_t args;
 } ratelprof_gpu_activity_t;
-
-
-typedef union ompt_api_args_u {
-        struct args_target_map_emi_t target_map_emi;
-        struct args_target_submit_emi_t target_submit_emi;
-        struct args_target_data_op_t target_data_op;
-        struct args_target_emi_t target_emi;
-} ompt_api_args_t;
-
-typedef struct ratelprof_ompt_api_activity_s {
-	ratelprof_domain_t domain;
-    ratelprof_phase_t phase;
-	ratelprof_api_id_t funid;
-    uint64_t id;
-    uint64_t corr_id;
-	uint64_t pid;
-	uint64_t tid;
-    ratelprof_timespec_t start_time;
-    ratelprof_timespec_t stop_time;
-    void* return_address;
-    ompt_api_args_t args;
-} ratelprof_ompt_api_activity_t;
 
 
 typedef struct ratelprof_roctx_activity_s {

@@ -6,125 +6,57 @@
 #include <stdio.h>
 #include "ratelprof.h"
 
-
-ratelprof_api_table_t hsa_api_table;
-ratelprof_api_table_t omp_tgt_rtl_api_table;
-ratelprof_api_table_t omp_routine_api_table;
-ratelprof_api_table_t hip_api_table;
-ratelprof_api_table_t mpi_api_table;
-
-
-struct {
-    ratelprof_api_table_t* api_table_addr;
-    size_t nb_function;
-    const char* lib_path;
-} domains_info[] = {
-{&hsa_api_table, HSA_API_ID_NB_FUNCTION, NULL},
-{&omp_tgt_rtl_api_table, OMP_TGT_RTL_API_ID_NB_FUNCTION, "/opt/rocm/llvm/lib/libomptarget.rtl.amdgpu.so"},
-{&omp_routine_api_table, OMP_ROUTINE_API_ID_NB_FUNCTION, NULL},
-{&hip_api_table, HIP_API_ID_NB_FUNCTION, NULL},
-{&mpi_api_table, MPI_API_ID_NB_FUNCTION, NULL},
-};
-
-
 // ---- Internal implementations ----
+
+// Get the domain name
 const char* __ratelprof_get_domain_name_impl(ratelprof_domain_t domain)
 {
-	switch(domain) {
-		case RATELPROF_DOMAIN_HSA          : return RATELPROF_DOMAIN_HSA_NAME;
-		case RATELPROF_DOMAIN_OMP_TGT_RTL  : return RATELPROF_DOMAIN_OMP_TGT_RTL_NAME;
-		case RATELPROF_DOMAIN_OMP_ROUTINE  : return RATELPROF_DOMAIN_OMP_ROUTINE_NAME;
-		case RATELPROF_DOMAIN_HIP          : return RATELPROF_DOMAIN_HIP_NAME;
-		case RATELPROF_DOMAIN_MPI          : return RATELPROF_DOMAIN_MPI_NAME;
-		default : return "Unknown domain";
-	}
-	return "Unknown domain";
+    if (domain >= RATELPROF_NB_DOMAIN) return "Unknown domain";
+    const char* name = domains_data[domain].name;
+    return name ? name : "Unknown domain";
 }
 
-
-const char* __ratelprof_get_domain_desc_impl(ratelprof_domain_t domain)
-{
-	switch(domain) {
-		case RATELPROF_DOMAIN_HSA          : return RATELPROF_DOMAIN_HSA_DESC;
-		case RATELPROF_DOMAIN_OMP_TGT_RTL  : return RATELPROF_DOMAIN_OMP_TGT_RTL_DESC;
-		case RATELPROF_DOMAIN_OMP_ROUTINE  : return RATELPROF_DOMAIN_OMP_ROUTINE_DESC;
-		case RATELPROF_DOMAIN_HIP          : return RATELPROF_DOMAIN_HIP_DESC;
-		case RATELPROF_DOMAIN_MPI          : return RATELPROF_DOMAIN_MPI_DESC;		
-        default : return "Unknown domain";
-	}
-	return "Unknown domain";
-}
-
-
+// Get function name by ID
 const char* __ratelprof_get_funame_by_id_impl(ratelprof_domain_t domain, ratelprof_api_id_t funid)
 {
-    switch (domain) {
-		case RATELPROF_DOMAIN_HSA          : return get_hsa_funame_by_id(funid);
-		case RATELPROF_DOMAIN_OMP_TGT_RTL  : return get_omp_tgt_rtl_funame_by_id(funid);
-		case RATELPROF_DOMAIN_OMP_ROUTINE  : return get_omp_routine_funame_by_id(funid);
-		case RATELPROF_DOMAIN_HIP          : return get_hip_funame_by_id(funid);
-		case RATELPROF_DOMAIN_MPI          : return get_mpi_funame_by_id(funid);		
-        default: break;
-    }
-    return NULL;
+    if (domain >= RATELPROF_NB_DOMAIN || !domains_data[domain].get_funame_by_id) return NULL;
+    return domains_data[domain].get_funame_by_id(funid);
 }
 
-
+// Get function ID by name
 ratelprof_api_id_t __ratelprof_get_funid_by_name_impl(ratelprof_domain_t domain, const char* funame)
 {
-    switch (domain) {
-		case RATELPROF_DOMAIN_HSA          : return get_hsa_funid_by_name(funame);
-		case RATELPROF_DOMAIN_OMP_TGT_RTL  : return get_omp_tgt_rtl_funid_by_name(funame);
-		case RATELPROF_DOMAIN_OMP_ROUTINE  : return get_omp_routine_funid_by_name(funame);
-		case RATELPROF_DOMAIN_HIP          : return get_hip_funid_by_name(funame);
-		case RATELPROF_DOMAIN_MPI          : return get_mpi_funid_by_name(funame);		
-        default: break;
-    }
-    return -1;
+    if (domain >= RATELPROF_NB_DOMAIN || !domains_data[domain].get_funid_by_name) return -1;
+    return domains_data[domain].get_funid_by_name(funame);
 }
 
-
+// Get function address by ID
 void* __ratelprof_get_funaddr_by_id_impl(ratelprof_domain_t domain, ratelprof_api_id_t funid)
 {
-    switch (domain) {
-		case RATELPROF_DOMAIN_HSA          : return get_hsa_funaddr_by_id(funid);
-		case RATELPROF_DOMAIN_OMP_TGT_RTL  : return get_omp_tgt_rtl_funaddr_by_id(funid);
-		case RATELPROF_DOMAIN_OMP_ROUTINE  : return get_omp_routine_funaddr_by_id(funid);
-		case RATELPROF_DOMAIN_HIP          : return get_hip_funaddr_by_id(funid);
-		case RATELPROF_DOMAIN_MPI          : return get_mpi_funaddr_by_id(funid);		
-        default: break;
-    }
-    return NULL;
+    if (domain >= RATELPROF_NB_DOMAIN || !domains_data[domain].get_funaddr_by_id) return NULL;
+    return domains_data[domain].get_funaddr_by_id(funid);
 }
 
-
+// Enable domain
 ratelprof_status_t __ratelprof_enable_domain_impl(ratelprof_domain_t domain)
 {
-    ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
-    switch (domain) {
-		case RATELPROF_DOMAIN_HSA          : status = ratelprof_enable_api_table(&hsa_api_table, "RATELPROF_DOMAIN_HSA_FUNCTIONS_FILTERED", "RATELPROF_DOMAIN_HSA_FILTER_TYPE"); break;
-		case RATELPROF_DOMAIN_OMP_TGT_RTL  : status = ratelprof_enable_api_table(&omp_tgt_rtl_api_table, "RATELPROF_DOMAIN_OMP_TGT_RTL_FUNCTIONS_FILTERED", "RATELPROF_DOMAIN_OMP_TGT_RTL_FILTER_TYPE"); break;
-		case RATELPROF_DOMAIN_OMP_ROUTINE  : status = ratelprof_enable_api_table(&omp_routine_api_table, "RATELPROF_DOMAIN_OMP_ROUTINE_FUNCTIONS_FILTERED", "RATELPROF_DOMAIN_OMP_ROUTINE_FILTER_TYPE"); break;
-		case RATELPROF_DOMAIN_HIP          : status = ratelprof_enable_api_table(&hip_api_table, "RATELPROF_DOMAIN_HIP_FUNCTIONS_FILTERED", "RATELPROF_DOMAIN_HIP_FILTER_TYPE"); break;
-		case RATELPROF_DOMAIN_MPI          : status = ratelprof_enable_api_table(&mpi_api_table, "RATELPROF_DOMAIN_MPI_FUNCTIONS_FILTERED", "RATELPROF_DOMAIN_MPI_FILTER_TYPE"); break;	
-        default: status = RATELPROF_STATUS_UNKNOWN_DOMAIN;
-    }
-    return status;
+    if (domain >= RATELPROF_NB_DOMAIN || !domains_data[domain].api_table_addr) 
+        return RATELPROF_STATUS_UNKNOWN_DOMAIN;
+
+    return ratelprof_enable_api_table(
+        domains_data[domain].api_table_addr,
+        domains_data[domain].functions_filtered_envname,
+        domains_data[domain].filter_type_envname
+    );
 }
 
-
+// Disable domain
 ratelprof_status_t __ratelprof_disable_domain_impl(ratelprof_domain_t domain)
 {
-    ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
-    switch (domain) {
-		case RATELPROF_DOMAIN_HSA          : status = ratelprof_disable_api_table(&hsa_api_table); break;
-		case RATELPROF_DOMAIN_OMP_TGT_RTL  : status = ratelprof_disable_api_table(&omp_tgt_rtl_api_table); break;
-		case RATELPROF_DOMAIN_OMP_ROUTINE  : status = ratelprof_disable_api_table(&omp_routine_api_table); break;
-		case RATELPROF_DOMAIN_HIP          : status = ratelprof_disable_api_table(&hip_api_table); break;
-		case RATELPROF_DOMAIN_MPI          : status = ratelprof_disable_api_table(&mpi_api_table); break;	
-        default: status = RATELPROF_STATUS_UNKNOWN_DOMAIN;
-    }
-    return status;
+    if (domain >= RATELPROF_NB_DOMAIN || !domains_data[domain].api_table_addr) 
+        return RATELPROF_STATUS_UNKNOWN_DOMAIN;
+
+    return ratelprof_disable_api_table(domains_data[domain].api_table_addr);
 }
 
 
@@ -144,6 +76,7 @@ ratelprof_status_t __ratelprof_stop_impl(void)
 
 ratelprof_status_t __ratelprof_init_impl(unsigned int ndomains)
 {
+	char* lib_path = NULL;
 	unsetenv("LD_PRELOAD");
 
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
@@ -152,11 +85,12 @@ ratelprof_status_t __ratelprof_init_impl(unsigned int ndomains)
 	for (int i = 0; i < RATELPROF_NB_DOMAIN; i++)
 	{
 		RATELPROF_TRY(
-			ratelprof_init_api_table(i, domains_info[i].api_table_addr, domains_info[i].nb_function),
+			ratelprof_init_api_table(i, domains_data[i].api_table_addr, domains_data[i].nb_function),
 			LOG(LOG_LEVEL_ERROR, "Cannot init API table for domain %d. %s (code %d)\n", i, get_error_string(status), status)
 		);
+		lib_path = getenv(domains_data[i].lib_path_envname);
 		RATELPROF_TRY(
-			ratelprof_populate_api_table(domains_info[i].api_table_addr, domains_info[i].lib_path),
+			ratelprof_populate_api_table(domains_data[i].api_table_addr, lib_path),
 			LOG(LOG_LEVEL_ERROR, "Cannot populate API table for domain %d. %s (code %d)\n", i, get_error_string(status), status)
 		);
 	}
@@ -177,7 +111,7 @@ ratelprof_status_t __ratelprof_fini_impl(void)
     
 	for (int i = 0; i < RATELPROF_NB_DOMAIN; i++) {
 		RATELPROF_TRY(
-			ratelprof_cleanup_api_table(domains_info[i].api_table_addr),
+			ratelprof_cleanup_api_table(domains_data[i].api_table_addr),
 			LOG(LOG_LEVEL_ERROR, "Cannot finalize API table for domain %d. %s (code %d)\n", i, get_error_string(status), status)
 		);
 	}
@@ -192,12 +126,6 @@ RATELPROF_PUBLIC_API
 const char* ratelprof_get_domain_name(ratelprof_domain_t domain)
 {
     return __ratelprof_get_domain_name_impl(domain);
-}
-
-RATELPROF_PUBLIC_API
-const char* ratelprof_get_domain_desc(ratelprof_domain_t domain)
-{
-    return __ratelprof_get_domain_desc_impl(domain);
 }
 
 RATELPROF_PUBLIC_API
