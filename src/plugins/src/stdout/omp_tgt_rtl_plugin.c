@@ -10,7 +10,7 @@
 void on_enter_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
 {
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
-    get_omp_tgt_rtl_pointed_args_for(id, &activity->omp_tgt_rtl_args, 1);
+    get_omp_tgt_rtl_pointed_args_for(id, activity->args, 1);
     activity->phase = ratelprof_get_current_phase();
     activity->domain = domain;
     get_correlation_id(&activity->corr_id);
@@ -21,76 +21,84 @@ void on_enter_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t
 void on_exit_omp_tgt_rtl_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
 {
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
-    get_omp_tgt_rtl_pointed_args_for(id, &activity->omp_tgt_rtl_args, 0);
+    get_omp_tgt_rtl_pointed_args_for(id, activity->args, 0);
     activity->pid = get_pid();
     activity->tid = get_tid();
     printf("-----------\n");
     printf("PHASE:%d : %s | ID: %lu | CID: %lu\n", activity->phase, get_omp_tgt_rtl_funame_by_id(activity->funid), activity->id, activity->corr_id);
     ratelprof_get_and_print_location(activity->return_address);
-    process_omp_tgt_rtl_args_for(activity->funid, &activity->omp_tgt_rtl_args, NULL);
+    process_omp_tgt_rtl_args_for(activity->funid, activity->args, NULL);
     pop_id();
 }
 
-void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_api_args_t* args, void* user_args)
+void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const void* func_args, void* user_args)
 {
     switch(funid) {
 		#if HAVE___tgt_rtl_query_async
-		case OMP_TGT_RTL_API_ID___tgt_rtl_query_async :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_query_async : {
 			//	int32_t device_id (int);
 			//	__tgt_async_info * AsyncInfoPtr ({
 			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_query_async.device_id);
-			printf("\t__tgt_async_info * AsyncInfoPtr = %p", args->__tgt_rtl_query_async.AsyncInfoPtr);
-			if (args->__tgt_rtl_query_async.AsyncInfoPtr != NULL) {
+			args___tgt_rtl_query_async_t* args = (args___tgt_rtl_query_async_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\t__tgt_async_info * AsyncInfoPtr = %p", args->AsyncInfoPtr);
+			if (args->AsyncInfoPtr != NULL) {
 				printf(" -> {\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_query_async.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_data_submit
-		case OMP_TGT_RTL_API_ID___tgt_rtl_data_submit :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_data_submit : {
 			//	int32_t device_id (int);
 			//	void * target_ptr (void *);
 			//	void * host_ptr (void *);
 			//	int64_t size (long);
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_submit.device_id);
-			printf("\tvoid * target_ptr = %p", args->__tgt_rtl_data_submit.target_ptr);
+			args___tgt_rtl_data_submit_t* args = (args___tgt_rtl_data_submit_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid * target_ptr = %p", args->target_ptr);
 			printf("\n");
-			printf("\tvoid * host_ptr = %p", args->__tgt_rtl_data_submit.host_ptr);
+			printf("\tvoid * host_ptr = %p", args->host_ptr);
 			printf("\n");
-			printf("\tint64_t size = %ld\n", args->__tgt_rtl_data_submit.size);
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_data_submit.retval);
+			printf("\tint64_t size = %ld\n", args->size);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_are_allocations_for_maps_on_apus_disabled
-		case OMP_TGT_RTL_API_ID___tgt_rtl_are_allocations_for_maps_on_apus_disabled :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_are_allocations_for_maps_on_apus_disabled : {
 			//	int retval (int);
-			printf("\tint retval = %d\n", args->__tgt_rtl_are_allocations_for_maps_on_apus_disabled.retval);
+			args___tgt_rtl_are_allocations_for_maps_on_apus_disabled_t* args = (args___tgt_rtl_are_allocations_for_maps_on_apus_disabled_t*) func_args;
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_data_notify_mapped
-		case OMP_TGT_RTL_API_ID___tgt_rtl_data_notify_mapped :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_data_notify_mapped : {
 			//	int32_t device_id (int);
 			//	void * host_ptr (void *);
 			//	int64_t size (long);
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_notify_mapped.device_id);
-			printf("\tvoid * host_ptr = %p", args->__tgt_rtl_data_notify_mapped.host_ptr);
+			args___tgt_rtl_data_notify_mapped_t* args = (args___tgt_rtl_data_notify_mapped_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid * host_ptr = %p", args->host_ptr);
 			printf("\n");
-			printf("\tint64_t size = %ld\n", args->__tgt_rtl_data_notify_mapped.size);
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_data_notify_mapped.retval);
+			printf("\tint64_t size = %ld\n", args->size);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_data_submit_async
-		case OMP_TGT_RTL_API_ID___tgt_rtl_data_submit_async :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_data_submit_async : {
 			//	int32_t device_id (int);
 			//	void * target_ptr (void *);
 			//	void * host_ptr (void *);
@@ -99,54 +107,60 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_submit_async.device_id);
-			printf("\tvoid * target_ptr = %p", args->__tgt_rtl_data_submit_async.target_ptr);
+			args___tgt_rtl_data_submit_async_t* args = (args___tgt_rtl_data_submit_async_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid * target_ptr = %p", args->target_ptr);
 			printf("\n");
-			printf("\tvoid * host_ptr = %p", args->__tgt_rtl_data_submit_async.host_ptr);
+			printf("\tvoid * host_ptr = %p", args->host_ptr);
 			printf("\n");
-			printf("\tint64_t size = %ld\n", args->__tgt_rtl_data_submit_async.size);
-			printf("\t__tgt_async_info * AsyncInfo = %p", args->__tgt_rtl_data_submit_async.AsyncInfo);
-			if (args->__tgt_rtl_data_submit_async.AsyncInfo != NULL) {
+			printf("\tint64_t size = %ld\n", args->size);
+			printf("\t__tgt_async_info * AsyncInfo = %p", args->AsyncInfo);
+			if (args->AsyncInfo != NULL) {
 				printf(" -> {\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_data_submit_async.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_init_async_info
-		case OMP_TGT_RTL_API_ID___tgt_rtl_init_async_info :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_init_async_info : {
 			//	int32_t device_id (int);
 			//	__tgt_async_info ** async_info_ptr ({
 			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_init_async_info.device_id);
-			printf("\t__tgt_async_info ** async_info_ptr = %p", args->__tgt_rtl_init_async_info.async_info_ptr);
-			if (args->__tgt_rtl_init_async_info.async_info_ptr != NULL) {
-				printf("-> %p", args->__tgt_rtl_init_async_info.async_info_ptr__ref.ptr1);
-				if (args->__tgt_rtl_init_async_info.async_info_ptr__ref.ptr1 != NULL) {
+			args___tgt_rtl_init_async_info_t* args = (args___tgt_rtl_init_async_info_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\t__tgt_async_info ** async_info_ptr = %p", args->async_info_ptr);
+			if (args->async_info_ptr != NULL) {
+				printf("-> %p", args->async_info_ptr__ref.ptr1);
+				if (args->async_info_ptr__ref.ptr1 != NULL) {
 					printf(" -> {\n");
 					printf("\t}\n");
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_init_async_info.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_is_data_exchangable
-		case OMP_TGT_RTL_API_ID___tgt_rtl_is_data_exchangable :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_is_data_exchangable : {
 			//	int32_t src_dev_id (int);
 			//	int32_t dst_dev_id (int);
 			//	int32_t retval (int);
-			printf("\tint32_t src_dev_id = %d\n", args->__tgt_rtl_is_data_exchangable.src_dev_id);
-			printf("\tint32_t dst_dev_id = %d\n", args->__tgt_rtl_is_data_exchangable.dst_dev_id);
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_is_data_exchangable.retval);
+			args___tgt_rtl_is_data_exchangable_t* args = (args___tgt_rtl_is_data_exchangable_t*) func_args;
+			printf("\tint32_t src_dev_id = %d\n", args->src_dev_id);
+			printf("\tint32_t dst_dev_id = %d\n", args->dst_dev_id);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_data_retrieve_async
-		case OMP_TGT_RTL_API_ID___tgt_rtl_data_retrieve_async :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_data_retrieve_async : {
 			//	int32_t device_id (int);
 			//	void * host_ptr (void *);
 			//	void * target_ptr (void *);
@@ -155,37 +169,41 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_retrieve_async.device_id);
-			printf("\tvoid * host_ptr = %p", args->__tgt_rtl_data_retrieve_async.host_ptr);
+			args___tgt_rtl_data_retrieve_async_t* args = (args___tgt_rtl_data_retrieve_async_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid * host_ptr = %p", args->host_ptr);
 			printf("\n");
-			printf("\tvoid * target_ptr = %p", args->__tgt_rtl_data_retrieve_async.target_ptr);
+			printf("\tvoid * target_ptr = %p", args->target_ptr);
 			printf("\n");
-			printf("\tint64_t size = %ld\n", args->__tgt_rtl_data_retrieve_async.size);
-			printf("\t__tgt_async_info * AsyncInfo = %p", args->__tgt_rtl_data_retrieve_async.AsyncInfo);
-			if (args->__tgt_rtl_data_retrieve_async.AsyncInfo != NULL) {
+			printf("\tint64_t size = %ld\n", args->size);
+			printf("\t__tgt_async_info * AsyncInfo = %p", args->AsyncInfo);
+			if (args->AsyncInfo != NULL) {
 				printf(" -> {\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_data_retrieve_async.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_data_delete
-		case OMP_TGT_RTL_API_ID___tgt_rtl_data_delete :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_data_delete : {
 			//	int32_t device_id (int);
 			//	void * target_ptr (void *);
 			//	int32_t kind (int);
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_delete.device_id);
-			printf("\tvoid * target_ptr = %p", args->__tgt_rtl_data_delete.target_ptr);
+			args___tgt_rtl_data_delete_t* args = (args___tgt_rtl_data_delete_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid * target_ptr = %p", args->target_ptr);
 			printf("\n");
-			printf("\tint32_t kind = %d\n", args->__tgt_rtl_data_delete.kind);
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_data_delete.retval);
+			printf("\tint32_t kind = %d\n", args->kind);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_data_exchange_async
-		case OMP_TGT_RTL_API_ID___tgt_rtl_data_exchange_async :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_data_exchange_async : {
 			//	int32_t src_dev_id (int);
 			//	void * src_ptr (void *);
 			//	int32_t dst_dev_id (int);
@@ -195,57 +213,63 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
-			printf("\tint32_t src_dev_id = %d\n", args->__tgt_rtl_data_exchange_async.src_dev_id);
-			printf("\tvoid * src_ptr = %p", args->__tgt_rtl_data_exchange_async.src_ptr);
+			args___tgt_rtl_data_exchange_async_t* args = (args___tgt_rtl_data_exchange_async_t*) func_args;
+			printf("\tint32_t src_dev_id = %d\n", args->src_dev_id);
+			printf("\tvoid * src_ptr = %p", args->src_ptr);
 			printf("\n");
-			printf("\tint32_t dst_dev_id = %d\n", args->__tgt_rtl_data_exchange_async.dst_dev_id);
-			printf("\tvoid * dst_ptr = %p", args->__tgt_rtl_data_exchange_async.dst_ptr);
+			printf("\tint32_t dst_dev_id = %d\n", args->dst_dev_id);
+			printf("\tvoid * dst_ptr = %p", args->dst_ptr);
 			printf("\n");
-			printf("\tint64_t size = %ld\n", args->__tgt_rtl_data_exchange_async.size);
-			printf("\t__tgt_async_info * AsyncInfo = %p", args->__tgt_rtl_data_exchange_async.AsyncInfo);
-			if (args->__tgt_rtl_data_exchange_async.AsyncInfo != NULL) {
+			printf("\tint64_t size = %ld\n", args->size);
+			printf("\t__tgt_async_info * AsyncInfo = %p", args->AsyncInfo);
+			if (args->AsyncInfo != NULL) {
 				printf(" -> {\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_data_exchange_async.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_prepopulate_page_table
-		case OMP_TGT_RTL_API_ID___tgt_rtl_prepopulate_page_table :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_prepopulate_page_table : {
 			//	int32_t device_id (int);
 			//	void * ptr (void *);
 			//	int64_t size (long);
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_prepopulate_page_table.device_id);
-			printf("\tvoid * ptr = %p", args->__tgt_rtl_prepopulate_page_table.ptr);
+			args___tgt_rtl_prepopulate_page_table_t* args = (args___tgt_rtl_prepopulate_page_table_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tint64_t size = %ld\n", args->__tgt_rtl_prepopulate_page_table.size);
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_prepopulate_page_table.retval);
+			printf("\tint64_t size = %ld\n", args->size);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_data_exchange
-		case OMP_TGT_RTL_API_ID___tgt_rtl_data_exchange :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_data_exchange : {
 			//	int32_t src_dev_id (int);
 			//	void * src_ptr (void *);
 			//	int32_t dst_dev_id (int);
 			//	void * dst_ptr (void *);
 			//	int64_t size (long);
 			//	int32_t retval (int);
-			printf("\tint32_t src_dev_id = %d\n", args->__tgt_rtl_data_exchange.src_dev_id);
-			printf("\tvoid * src_ptr = %p", args->__tgt_rtl_data_exchange.src_ptr);
+			args___tgt_rtl_data_exchange_t* args = (args___tgt_rtl_data_exchange_t*) func_args;
+			printf("\tint32_t src_dev_id = %d\n", args->src_dev_id);
+			printf("\tvoid * src_ptr = %p", args->src_ptr);
 			printf("\n");
-			printf("\tint32_t dst_dev_id = %d\n", args->__tgt_rtl_data_exchange.dst_dev_id);
-			printf("\tvoid * dst_ptr = %p", args->__tgt_rtl_data_exchange.dst_ptr);
+			printf("\tint32_t dst_dev_id = %d\n", args->dst_dev_id);
+			printf("\tvoid * dst_ptr = %p", args->dst_ptr);
 			printf("\n");
-			printf("\tint64_t size = %ld\n", args->__tgt_rtl_data_exchange.size);
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_data_exchange.retval);
+			printf("\tint64_t size = %ld\n", args->size);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_launch_kernel
-		case OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel : {
 			//	int32_t device_id (int);
 			//	void * tgt_entry_ptr (void *);
 			//	void ** tgt_args (void **);
@@ -270,144 +294,162 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_launch_kernel.device_id);
-			printf("\tvoid * tgt_entry_ptr = %p", args->__tgt_rtl_launch_kernel.tgt_entry_ptr);
+			args___tgt_rtl_launch_kernel_t* args = (args___tgt_rtl_launch_kernel_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid * tgt_entry_ptr = %p", args->tgt_entry_ptr);
 			printf("\n");
-			printf("\tvoid ** tgt_args = %p", args->__tgt_rtl_launch_kernel.tgt_args);
-			if (args->__tgt_rtl_launch_kernel.tgt_args != NULL) {
-				printf("-> %p", args->__tgt_rtl_launch_kernel.tgt_args__ref.ptr1);
+			printf("\tvoid ** tgt_args = %p", args->tgt_args);
+			if (args->tgt_args != NULL) {
+				printf("-> %p", args->tgt_args__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tptrdiff_t * tgt_offsets = %p", args->__tgt_rtl_launch_kernel.tgt_offsets);
-			if (args->__tgt_rtl_launch_kernel.tgt_offsets != NULL) {
-				printf(" -> %ld\n", args->__tgt_rtl_launch_kernel.tgt_offsets__ref.val);
+			printf("\tptrdiff_t * tgt_offsets = %p", args->tgt_offsets);
+			if (args->tgt_offsets != NULL) {
+				printf(" -> %ld\n", args->tgt_offsets__ref.val);
 			} else { printf("\n"); };
-			printf("\tKernelArgsTy * KernelArgs = %p", args->__tgt_rtl_launch_kernel.KernelArgs);
-			if (args->__tgt_rtl_launch_kernel.KernelArgs != NULL) {
+			printf("\tKernelArgsTy * KernelArgs = %p", args->KernelArgs);
+			if (args->KernelArgs != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t Version = %u\n", args->__tgt_rtl_launch_kernel.KernelArgs__ref.val.Version);
-				printf("\t\tuint32_t NumArgs = %u\n", args->__tgt_rtl_launch_kernel.KernelArgs__ref.val.NumArgs);
-				printf("\t\tuint64_t Tripcount = %lu\n", args->__tgt_rtl_launch_kernel.KernelArgs__ref.val.Tripcount);
+				printf("\t\tuint32_t Version = %u\n", args->KernelArgs__ref.val.Version);
+				printf("\t\tuint32_t NumArgs = %u\n", args->KernelArgs__ref.val.NumArgs);
+				printf("\t\tuint64_t Tripcount = %lu\n", args->KernelArgs__ref.val.Tripcount);
 				printf("\t\tstruct (unnamed at omp_tgt_rtl.h:47:3) Flags = {\n");
-				printf("\t\t\tuint64_t NoWait = %lu\n", args->__tgt_rtl_launch_kernel.KernelArgs__ref.val.Flags.NoWait);
-				printf("\t\t\tuint64_t Unused = %lu\n", args->__tgt_rtl_launch_kernel.KernelArgs__ref.val.Flags.Unused);
+				printf("\t\t\tuint64_t NoWait = %lu\n", args->KernelArgs__ref.val.Flags.NoWait);
+				printf("\t\t\tuint64_t Unused = %lu\n", args->KernelArgs__ref.val.Flags.Unused);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t[3] NumTeams = %u\n", args->__tgt_rtl_launch_kernel.KernelArgs__ref.val.NumTeams[0]);
-				printf("\t\tuint32_t[3] ThreadLimit = %u\n", args->__tgt_rtl_launch_kernel.KernelArgs__ref.val.ThreadLimit[0]);
-				printf("\t\tuint32_t DynCGroupMem = %u\n", args->__tgt_rtl_launch_kernel.KernelArgs__ref.val.DynCGroupMem);
+				printf("\t\tuint32_t[3] NumTeams = %u\n", args->KernelArgs__ref.val.NumTeams[0]);
+				printf("\t\tuint32_t[3] ThreadLimit = %u\n", args->KernelArgs__ref.val.ThreadLimit[0]);
+				printf("\t\tuint32_t DynCGroupMem = %u\n", args->KernelArgs__ref.val.DynCGroupMem);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\t__tgt_async_info * AsyncInfo = %p", args->__tgt_rtl_launch_kernel.AsyncInfo);
-			if (args->__tgt_rtl_launch_kernel.AsyncInfo != NULL) {
+			printf("\t__tgt_async_info * AsyncInfo = %p", args->AsyncInfo);
+			if (args->AsyncInfo != NULL) {
 				printf(" -> {\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_launch_kernel.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_is_valid_binary
-		case OMP_TGT_RTL_API_ID___tgt_rtl_is_valid_binary :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_is_valid_binary : {
 			//	__tgt_device_image * image ({
 			//		void * ImageStart (void *);
 			//		void * ImageEnd (void *);
 			//	});
 			//	int32_t retval (int);
-			printf("\t__tgt_device_image * image = %p", args->__tgt_rtl_is_valid_binary.image);
-			if (args->__tgt_rtl_is_valid_binary.image != NULL) {
+			args___tgt_rtl_is_valid_binary_t* args = (args___tgt_rtl_is_valid_binary_t*) func_args;
+			printf("\t__tgt_device_image * image = %p", args->image);
+			if (args->image != NULL) {
 				printf(" -> {\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_is_valid_binary.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_data_retrieve
-		case OMP_TGT_RTL_API_ID___tgt_rtl_data_retrieve :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_data_retrieve : {
 			//	int32_t device_id (int);
 			//	void * host_ptr (void *);
 			//	void * target_ptr (void *);
 			//	int64_t size (long);
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_retrieve.device_id);
-			printf("\tvoid * host_ptr = %p", args->__tgt_rtl_data_retrieve.host_ptr);
+			args___tgt_rtl_data_retrieve_t* args = (args___tgt_rtl_data_retrieve_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid * host_ptr = %p", args->host_ptr);
 			printf("\n");
-			printf("\tvoid * target_ptr = %p", args->__tgt_rtl_data_retrieve.target_ptr);
+			printf("\tvoid * target_ptr = %p", args->target_ptr);
 			printf("\n");
-			printf("\tint64_t size = %ld\n", args->__tgt_rtl_data_retrieve.size);
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_data_retrieve.retval);
+			printf("\tint64_t size = %ld\n", args->size);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_data_lock
-		case OMP_TGT_RTL_API_ID___tgt_rtl_data_lock :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_data_lock : {
 			//	int32_t device_id (int);
 			//	void * host_ptr (void *);
 			//	int64_t size (long);
 			//	void ** LockedHostPtr (void **);
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_lock.device_id);
-			printf("\tvoid * host_ptr = %p", args->__tgt_rtl_data_lock.host_ptr);
+			args___tgt_rtl_data_lock_t* args = (args___tgt_rtl_data_lock_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid * host_ptr = %p", args->host_ptr);
 			printf("\n");
-			printf("\tint64_t size = %ld\n", args->__tgt_rtl_data_lock.size);
-			printf("\tvoid ** LockedHostPtr = %p", args->__tgt_rtl_data_lock.LockedHostPtr);
-			if (args->__tgt_rtl_data_lock.LockedHostPtr != NULL) {
-				printf("-> %p", args->__tgt_rtl_data_lock.LockedHostPtr__ref.ptr1);
+			printf("\tint64_t size = %ld\n", args->size);
+			printf("\tvoid ** LockedHostPtr = %p", args->LockedHostPtr);
+			if (args->LockedHostPtr != NULL) {
+				printf("-> %p", args->LockedHostPtr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_data_lock.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_supports_empty_images
-		case OMP_TGT_RTL_API_ID___tgt_rtl_supports_empty_images :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_supports_empty_images : {
 			//	int32_t retval (int);
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_supports_empty_images.retval);
+			args___tgt_rtl_supports_empty_images_t* args = (args___tgt_rtl_supports_empty_images_t*) func_args;
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_destroy_event
-		case OMP_TGT_RTL_API_ID___tgt_rtl_destroy_event :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_destroy_event : {
 			//	int32_t device_id (int);
 			//	void * event (void *);
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_destroy_event.device_id);
-			printf("\tvoid * event = %p", args->__tgt_rtl_destroy_event.event);
+			args___tgt_rtl_destroy_event_t* args = (args___tgt_rtl_destroy_event_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid * event = %p", args->event);
 			printf("\n");
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_destroy_event.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_number_of_devices
-		case OMP_TGT_RTL_API_ID___tgt_rtl_number_of_devices :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_number_of_devices : {
 			//	int32_t retval (int);
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_number_of_devices.retval);
+			args___tgt_rtl_number_of_devices_t* args = (args___tgt_rtl_number_of_devices_t*) func_args;
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_init_requires
-		case OMP_TGT_RTL_API_ID___tgt_rtl_init_requires :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_init_requires : {
 			//	int64_t RequiresFlags (long);
 			//	int64_t retval (long);
-			printf("\tint64_t RequiresFlags = %ld\n", args->__tgt_rtl_init_requires.RequiresFlags);
-			printf("\tint64_t retval = %ld\n", args->__tgt_rtl_init_requires.retval);
+			args___tgt_rtl_init_requires_t* args = (args___tgt_rtl_init_requires_t*) func_args;
+			printf("\tint64_t RequiresFlags = %ld\n", args->RequiresFlags);
+			printf("\tint64_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_data_notify_unmapped
-		case OMP_TGT_RTL_API_ID___tgt_rtl_data_notify_unmapped :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_data_notify_unmapped : {
 			//	int32_t device_id (int);
 			//	void * host_ptr (void *);
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_notify_unmapped.device_id);
-			printf("\tvoid * host_ptr = %p", args->__tgt_rtl_data_notify_unmapped.host_ptr);
+			args___tgt_rtl_data_notify_unmapped_t* args = (args___tgt_rtl_data_notify_unmapped_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid * host_ptr = %p", args->host_ptr);
 			printf("\n");
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_data_notify_unmapped.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_init_device_info
-		case OMP_TGT_RTL_API_ID___tgt_rtl_init_device_info :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_init_device_info : {
 			//	int32_t device_id (int);
 			//	__tgt_device_info * device_info_ptr ({
 			//		void * Context (void *);
@@ -415,103 +457,113 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	});
 			//	const char ** err_str (const char **);
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_init_device_info.device_id);
-			printf("\t__tgt_device_info * device_info_ptr = %p", args->__tgt_rtl_init_device_info.device_info_ptr);
-			if (args->__tgt_rtl_init_device_info.device_info_ptr != NULL) {
+			args___tgt_rtl_init_device_info_t* args = (args___tgt_rtl_init_device_info_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\t__tgt_device_info * device_info_ptr = %p", args->device_info_ptr);
+			if (args->device_info_ptr != NULL) {
 				printf(" -> {\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst char ** err_str = %p", args->__tgt_rtl_init_device_info.err_str);
-			if (args->__tgt_rtl_init_device_info.err_str != NULL) {
-				printf("-> %p", args->__tgt_rtl_init_device_info.err_str__ref.ptr1);
-				if (args->__tgt_rtl_init_device_info.err_str__ref.ptr1 != NULL) {
-					printf(" -> %s\n", args->__tgt_rtl_init_device_info.err_str__ref.val);
+			printf("\tconst char ** err_str = %p", args->err_str);
+			if (args->err_str != NULL) {
+				printf("-> %p", args->err_str__ref.ptr1);
+				if (args->err_str__ref.ptr1 != NULL) {
+					printf(" -> %s\n", args->err_str__ref.val);
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_init_device_info.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_sync_event
-		case OMP_TGT_RTL_API_ID___tgt_rtl_sync_event :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_sync_event : {
 			//	int32_t device_id (int);
 			//	void * event (void *);
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_sync_event.device_id);
-			printf("\tvoid * event = %p", args->__tgt_rtl_sync_event.event);
+			args___tgt_rtl_sync_event_t* args = (args___tgt_rtl_sync_event_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid * event = %p", args->event);
 			printf("\n");
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_sync_event.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_synchronize
-		case OMP_TGT_RTL_API_ID___tgt_rtl_synchronize :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_synchronize : {
 			//	int32_t device_id (int);
 			//	__tgt_async_info * AsyncInfo ({
 			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_synchronize.device_id);
-			printf("\t__tgt_async_info * AsyncInfo = %p", args->__tgt_rtl_synchronize.AsyncInfo);
-			if (args->__tgt_rtl_synchronize.AsyncInfo != NULL) {
+			args___tgt_rtl_synchronize_t* args = (args___tgt_rtl_synchronize_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\t__tgt_async_info * AsyncInfo = %p", args->AsyncInfo);
+			if (args->AsyncInfo != NULL) {
 				printf(" -> {\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_synchronize.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
-		#if HAVE___tgt_rtl_set_up_env
-		case OMP_TGT_RTL_API_ID___tgt_rtl_set_up_env :
 
-\
-			break;
-
-		#endif
 		#if HAVE___tgt_rtl_data_unlock
-		case OMP_TGT_RTL_API_ID___tgt_rtl_data_unlock :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_data_unlock : {
 			//	int device_id (int);
 			//	void * host_ptr (void *);
 			//	int32_t retval (int);
-			printf("\tint device_id = %d\n", args->__tgt_rtl_data_unlock.device_id);
-			printf("\tvoid * host_ptr = %p", args->__tgt_rtl_data_unlock.host_ptr);
+			args___tgt_rtl_data_unlock_t* args = (args___tgt_rtl_data_unlock_t*) func_args;
+			printf("\tint device_id = %d\n", args->device_id);
+			printf("\tvoid * host_ptr = %p", args->host_ptr);
 			printf("\n");
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_data_unlock.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_is_fine_grained_memory_enabled
-		case OMP_TGT_RTL_API_ID___tgt_rtl_is_fine_grained_memory_enabled :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_is_fine_grained_memory_enabled : {
 			//	int retval (int);
-			printf("\tint retval = %d\n", args->__tgt_rtl_is_fine_grained_memory_enabled.retval);
+			args___tgt_rtl_is_fine_grained_memory_enabled_t* args = (args___tgt_rtl_is_fine_grained_memory_enabled_t*) func_args;
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_has_USM_capable_dGPU
-		case OMP_TGT_RTL_API_ID___tgt_rtl_has_USM_capable_dGPU :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_has_USM_capable_dGPU : {
 			//	int retval (int);
-			printf("\tint retval = %d\n", args->__tgt_rtl_has_USM_capable_dGPU.retval);
+			args___tgt_rtl_has_USM_capable_dGPU_t* args = (args___tgt_rtl_has_USM_capable_dGPU_t*) func_args;
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_has_apu_device
-		case OMP_TGT_RTL_API_ID___tgt_rtl_has_apu_device :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_has_apu_device : {
 			//	int retval (int);
-			printf("\tint retval = %d\n", args->__tgt_rtl_has_apu_device.retval);
+			args___tgt_rtl_has_apu_device_t* args = (args___tgt_rtl_has_apu_device_t*) func_args;
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_set_device_offset
-		case OMP_TGT_RTL_API_ID___tgt_rtl_set_device_offset :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_set_device_offset : {
 			//	int32_t DeviceIdOffset (int);
 			//	int32_t retval (int);
-			printf("\tint32_t DeviceIdOffset = %d\n", args->__tgt_rtl_set_device_offset.DeviceIdOffset);
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_set_device_offset.retval);
+			args___tgt_rtl_set_device_offset_t* args = (args___tgt_rtl_set_device_offset_t*) func_args;
+			printf("\tint32_t DeviceIdOffset = %d\n", args->DeviceIdOffset);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_launch_kernel_sync
-		case OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel_sync :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel_sync : {
 			//	int32_t device_id (int);
 			//	void * tgt_entry_ptr (void *);
 			//	void ** tgt_args (void **);
@@ -533,174 +585,196 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//		uint32_t DynCGroupMem (unsigned int);
 			//	});
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_launch_kernel_sync.device_id);
-			printf("\tvoid * tgt_entry_ptr = %p", args->__tgt_rtl_launch_kernel_sync.tgt_entry_ptr);
+			args___tgt_rtl_launch_kernel_sync_t* args = (args___tgt_rtl_launch_kernel_sync_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid * tgt_entry_ptr = %p", args->tgt_entry_ptr);
 			printf("\n");
-			printf("\tvoid ** tgt_args = %p", args->__tgt_rtl_launch_kernel_sync.tgt_args);
-			if (args->__tgt_rtl_launch_kernel_sync.tgt_args != NULL) {
-				printf("-> %p", args->__tgt_rtl_launch_kernel_sync.tgt_args__ref.ptr1);
+			printf("\tvoid ** tgt_args = %p", args->tgt_args);
+			if (args->tgt_args != NULL) {
+				printf("-> %p", args->tgt_args__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tptrdiff_t * tgt_offsets = %p", args->__tgt_rtl_launch_kernel_sync.tgt_offsets);
-			if (args->__tgt_rtl_launch_kernel_sync.tgt_offsets != NULL) {
-				printf(" -> %ld\n", args->__tgt_rtl_launch_kernel_sync.tgt_offsets__ref.val);
+			printf("\tptrdiff_t * tgt_offsets = %p", args->tgt_offsets);
+			if (args->tgt_offsets != NULL) {
+				printf(" -> %ld\n", args->tgt_offsets__ref.val);
 			} else { printf("\n"); };
-			printf("\tKernelArgsTy * KernelArgs = %p", args->__tgt_rtl_launch_kernel_sync.KernelArgs);
-			if (args->__tgt_rtl_launch_kernel_sync.KernelArgs != NULL) {
+			printf("\tKernelArgsTy * KernelArgs = %p", args->KernelArgs);
+			if (args->KernelArgs != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t Version = %u\n", args->__tgt_rtl_launch_kernel_sync.KernelArgs__ref.val.Version);
-				printf("\t\tuint32_t NumArgs = %u\n", args->__tgt_rtl_launch_kernel_sync.KernelArgs__ref.val.NumArgs);
-				printf("\t\tuint64_t Tripcount = %lu\n", args->__tgt_rtl_launch_kernel_sync.KernelArgs__ref.val.Tripcount);
+				printf("\t\tuint32_t Version = %u\n", args->KernelArgs__ref.val.Version);
+				printf("\t\tuint32_t NumArgs = %u\n", args->KernelArgs__ref.val.NumArgs);
+				printf("\t\tuint64_t Tripcount = %lu\n", args->KernelArgs__ref.val.Tripcount);
 				printf("\t\tstruct (unnamed at omp_tgt_rtl.h:47:3) Flags = {\n");
-				printf("\t\t\tuint64_t NoWait = %lu\n", args->__tgt_rtl_launch_kernel_sync.KernelArgs__ref.val.Flags.NoWait);
-				printf("\t\t\tuint64_t Unused = %lu\n", args->__tgt_rtl_launch_kernel_sync.KernelArgs__ref.val.Flags.Unused);
+				printf("\t\t\tuint64_t NoWait = %lu\n", args->KernelArgs__ref.val.Flags.NoWait);
+				printf("\t\t\tuint64_t Unused = %lu\n", args->KernelArgs__ref.val.Flags.Unused);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t[3] NumTeams = %u\n", args->__tgt_rtl_launch_kernel_sync.KernelArgs__ref.val.NumTeams[0]);
-				printf("\t\tuint32_t[3] ThreadLimit = %u\n", args->__tgt_rtl_launch_kernel_sync.KernelArgs__ref.val.ThreadLimit[0]);
-				printf("\t\tuint32_t DynCGroupMem = %u\n", args->__tgt_rtl_launch_kernel_sync.KernelArgs__ref.val.DynCGroupMem);
+				printf("\t\tuint32_t[3] NumTeams = %u\n", args->KernelArgs__ref.val.NumTeams[0]);
+				printf("\t\tuint32_t[3] ThreadLimit = %u\n", args->KernelArgs__ref.val.ThreadLimit[0]);
+				printf("\t\tuint32_t DynCGroupMem = %u\n", args->KernelArgs__ref.val.DynCGroupMem);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_launch_kernel_sync.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_record_event
-		case OMP_TGT_RTL_API_ID___tgt_rtl_record_event :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_record_event : {
 			//	int32_t device_id (int);
 			//	void * event (void *);
 			//	__tgt_async_info * AsyncInfo ({
 			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_record_event.device_id);
-			printf("\tvoid * event = %p", args->__tgt_rtl_record_event.event);
+			args___tgt_rtl_record_event_t* args = (args___tgt_rtl_record_event_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid * event = %p", args->event);
 			printf("\n");
-			printf("\t__tgt_async_info * AsyncInfo = %p", args->__tgt_rtl_record_event.AsyncInfo);
-			if (args->__tgt_rtl_record_event.AsyncInfo != NULL) {
+			printf("\t__tgt_async_info * AsyncInfo = %p", args->AsyncInfo);
+			if (args->AsyncInfo != NULL) {
 				printf(" -> {\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_record_event.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_set_info_flag
-		case OMP_TGT_RTL_API_ID___tgt_rtl_set_info_flag :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_set_info_flag : {
 			//	uint32_t NewInfoLevel (unsigned int);
-			printf("\tuint32_t NewInfoLevel = %u\n", args->__tgt_rtl_set_info_flag.NewInfoLevel);
+			args___tgt_rtl_set_info_flag_t* args = (args___tgt_rtl_set_info_flag_t*) func_args;
+			printf("\tuint32_t NewInfoLevel = %u\n", args->NewInfoLevel);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_create_event
-		case OMP_TGT_RTL_API_ID___tgt_rtl_create_event :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_create_event : {
 			//	int32_t device_id (int);
 			//	void ** event (void **);
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_create_event.device_id);
-			printf("\tvoid ** event = %p", args->__tgt_rtl_create_event.event);
-			if (args->__tgt_rtl_create_event.event != NULL) {
-				printf("-> %p", args->__tgt_rtl_create_event.event__ref.ptr1);
+			args___tgt_rtl_create_event_t* args = (args___tgt_rtl_create_event_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid ** event = %p", args->event);
+			if (args->event != NULL) {
+				printf("-> %p", args->event__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_create_event.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_print_device_info
-		case OMP_TGT_RTL_API_ID___tgt_rtl_print_device_info :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_print_device_info : {
 			//	int32_t device_id (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_print_device_info.device_id);
+			args___tgt_rtl_print_device_info_t* args = (args___tgt_rtl_print_device_info_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_get_function
-		case OMP_TGT_RTL_API_ID___tgt_rtl_get_function :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_get_function : {
 			//	__tgt_device_binary binary ({
 			//		uintptr_t handle (unsigned long);
 			//	});
 			//	const char * name (const char *);
 			//	void ** kernel_ptr (void **);
 			//	int32_t retval (int);
+			args___tgt_rtl_get_function_t* args = (args___tgt_rtl_get_function_t*) func_args;
 			printf("\t__tgt_device_binary binary = {\n");
-			printf("\t\tuintptr_t handle = %lu\n", args->__tgt_rtl_get_function.binary.handle);
+			printf("\t\tuintptr_t handle = %lu\n", args->binary.handle);
 			printf("\t}\n");
-			printf("\tconst char * name = %p", args->__tgt_rtl_get_function.name);
-			if (args->__tgt_rtl_get_function.name != NULL) {
-				printf(" -> %s\n", args->__tgt_rtl_get_function.name__ref.val);
+			printf("\tconst char * name = %p", args->name);
+			if (args->name != NULL) {
+				printf(" -> %s\n", args->name__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid ** kernel_ptr = %p", args->__tgt_rtl_get_function.kernel_ptr);
-			if (args->__tgt_rtl_get_function.kernel_ptr != NULL) {
-				printf("-> %p", args->__tgt_rtl_get_function.kernel_ptr__ref.ptr1);
+			printf("\tvoid ** kernel_ptr = %p", args->kernel_ptr);
+			if (args->kernel_ptr != NULL) {
+				printf("-> %p", args->kernel_ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_get_function.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_init_plugin
-		case OMP_TGT_RTL_API_ID___tgt_rtl_init_plugin :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_init_plugin : {
 			//	int32_t retval (int);
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_init_plugin.retval);
+			args___tgt_rtl_init_plugin_t* args = (args___tgt_rtl_init_plugin_t*) func_args;
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_number_of_team_procs
-		case OMP_TGT_RTL_API_ID___tgt_rtl_number_of_team_procs :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_number_of_team_procs : {
 			//	int device_id (int);
 			//	int32_t retval (int);
-			printf("\tint device_id = %d\n", args->__tgt_rtl_number_of_team_procs.device_id);
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_number_of_team_procs.retval);
+			args___tgt_rtl_number_of_team_procs_t* args = (args___tgt_rtl_number_of_team_procs_t*) func_args;
+			printf("\tint device_id = %d\n", args->device_id);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_wait_event
-		case OMP_TGT_RTL_API_ID___tgt_rtl_wait_event :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_wait_event : {
 			//	int32_t device_id (int);
 			//	void * event (void *);
 			//	__tgt_async_info * AsyncInfo ({
 			//		void * Queue (void *);
 			//	});
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_wait_event.device_id);
-			printf("\tvoid * event = %p", args->__tgt_rtl_wait_event.event);
+			args___tgt_rtl_wait_event_t* args = (args___tgt_rtl_wait_event_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tvoid * event = %p", args->event);
 			printf("\n");
-			printf("\t__tgt_async_info * AsyncInfo = %p", args->__tgt_rtl_wait_event.AsyncInfo);
-			if (args->__tgt_rtl_wait_event.AsyncInfo != NULL) {
+			printf("\t__tgt_async_info * AsyncInfo = %p", args->AsyncInfo);
+			if (args->AsyncInfo != NULL) {
 				printf(" -> {\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_wait_event.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_data_alloc
-		case OMP_TGT_RTL_API_ID___tgt_rtl_data_alloc :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_data_alloc : {
 			//	int32_t device_id (int);
 			//	int64_t size (long);
 			//	void * host_ptr (void *);
 			//	int32_t kind (int);
 			//	void * retval (void *);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_data_alloc.device_id);
-			printf("\tint64_t size = %ld\n", args->__tgt_rtl_data_alloc.size);
-			printf("\tvoid * host_ptr = %p", args->__tgt_rtl_data_alloc.host_ptr);
+			args___tgt_rtl_data_alloc_t* args = (args___tgt_rtl_data_alloc_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tint64_t size = %ld\n", args->size);
+			printf("\tvoid * host_ptr = %p", args->host_ptr);
 			printf("\n");
-			printf("\tint32_t kind = %d\n", args->__tgt_rtl_data_alloc.kind);
-			printf("\tvoid * retval = %p", args->__tgt_rtl_data_alloc.retval);
+			printf("\tint32_t kind = %d\n", args->kind);
+			printf("\tvoid * retval = %p", args->retval);
 			printf("\n");
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_init_device
-		case OMP_TGT_RTL_API_ID___tgt_rtl_init_device :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_init_device : {
 			//	int32_t device_id (int);
 			//	int32_t retval (int);
-			printf("\tint32_t device_id = %d\n", args->__tgt_rtl_init_device.device_id);
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_init_device.retval);
+			args___tgt_rtl_init_device_t* args = (args___tgt_rtl_init_device_t*) func_args;
+			printf("\tint32_t device_id = %d\n", args->device_id);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_get_global
-		case OMP_TGT_RTL_API_ID___tgt_rtl_get_global :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_get_global : {
 			//	__tgt_device_binary binary ({
 			//		uintptr_t handle (unsigned long);
 			//	});
@@ -708,29 +782,33 @@ void process_omp_tgt_rtl_args_for(omp_tgt_rtl_api_id_t funid, const omp_tgt_rtl_
 			//	const char * name (const char *);
 			//	void ** device_ptr (void **);
 			//	int32_t retval (int);
+			args___tgt_rtl_get_global_t* args = (args___tgt_rtl_get_global_t*) func_args;
 			printf("\t__tgt_device_binary binary = {\n");
-			printf("\t\tuintptr_t handle = %lu\n", args->__tgt_rtl_get_global.binary.handle);
+			printf("\t\tuintptr_t handle = %lu\n", args->binary.handle);
 			printf("\t}\n");
-			printf("\tuint64_t size = %lu\n", args->__tgt_rtl_get_global.size);
-			printf("\tconst char * name = %p", args->__tgt_rtl_get_global.name);
-			if (args->__tgt_rtl_get_global.name != NULL) {
-				printf(" -> %s\n", args->__tgt_rtl_get_global.name__ref.val);
+			printf("\tuint64_t size = %lu\n", args->size);
+			printf("\tconst char * name = %p", args->name);
+			if (args->name != NULL) {
+				printf(" -> %s\n", args->name__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid ** device_ptr = %p", args->__tgt_rtl_get_global.device_ptr);
-			if (args->__tgt_rtl_get_global.device_ptr != NULL) {
-				printf("-> %p", args->__tgt_rtl_get_global.device_ptr__ref.ptr1);
+			printf("\tvoid ** device_ptr = %p", args->device_ptr);
+			if (args->device_ptr != NULL) {
+				printf("-> %p", args->device_ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tint32_t retval = %d\n", args->__tgt_rtl_get_global.retval);
+			printf("\tint32_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___tgt_rtl_requested_prepopulate_gpu_page_table
-		case OMP_TGT_RTL_API_ID___tgt_rtl_requested_prepopulate_gpu_page_table :
+		case OMP_TGT_RTL_API_ID___tgt_rtl_requested_prepopulate_gpu_page_table : {
 			//	int retval (int);
-			printf("\tint retval = %d\n", args->__tgt_rtl_requested_prepopulate_gpu_page_table.retval);
+			args___tgt_rtl_requested_prepopulate_gpu_page_table_t* args = (args___tgt_rtl_requested_prepopulate_gpu_page_table_t*) func_args;
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
         default : break;
     }

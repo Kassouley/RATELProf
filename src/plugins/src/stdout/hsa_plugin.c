@@ -10,7 +10,7 @@
 void on_enter_hsa_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
 {
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
-    get_hsa_pointed_args_for(id, &activity->hsa_args, 1);
+    get_hsa_pointed_args_for(id, activity->args, 1);
     activity->phase = ratelprof_get_current_phase();
     activity->domain = domain;
     get_correlation_id(&activity->corr_id);
@@ -21,21 +21,21 @@ void on_enter_hsa_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, voi
 void on_exit_hsa_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
 {
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
-    get_hsa_pointed_args_for(id, &activity->hsa_args, 0);
+    get_hsa_pointed_args_for(id, activity->args, 0);
     activity->pid = get_pid();
     activity->tid = get_tid();
     printf("-----------\n");
     printf("PHASE:%d : %s | ID: %lu | CID: %lu\n", activity->phase, get_hsa_funame_by_id(activity->funid), activity->id, activity->corr_id);
     ratelprof_get_and_print_location(activity->return_address);
-    process_hsa_args_for(activity->funid, &activity->hsa_args, NULL);
+    process_hsa_args_for(activity->funid, activity->args, NULL);
     pop_id();
 }
 
-void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* user_args)
+void process_hsa_args_for(hsa_api_id_t funid, const void* func_args, void* user_args)
 {
     switch(funid) {
 		#if HAVE_hsa_amd_interop_map_buffer
-		case HSA_API_ID_hsa_amd_interop_map_buffer :
+		case HSA_API_ID_hsa_amd_interop_map_buffer : {
 			//	uint32_t num_agents (unsigned int);
 			//	hsa_agent_t * agents ({
 			//		uint64_t handle (unsigned long);
@@ -47,39 +47,41 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	size_t * metadata_size (unsigned long*);
 			//	const void ** metadata (const void **);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tuint32_t num_agents = %u\n", args->hsa_amd_interop_map_buffer.num_agents);
-			printf("\thsa_agent_t * agents = %p", args->hsa_amd_interop_map_buffer.agents);
-			if (args->hsa_amd_interop_map_buffer.agents != NULL) {
+			args_hsa_amd_interop_map_buffer_t* args = (args_hsa_amd_interop_map_buffer_t*) func_args;
+			printf("\tuint32_t num_agents = %u\n", args->num_agents);
+			printf("\thsa_agent_t * agents = %p", args->agents);
+			if (args->agents != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_interop_map_buffer.agents__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->agents__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint interop_handle = %d\n", args->hsa_amd_interop_map_buffer.interop_handle);
-			printf("\tuint32_t flags = %u\n", args->hsa_amd_interop_map_buffer.flags);
-			printf("\tsize_t * size = %p", args->hsa_amd_interop_map_buffer.size);
-			if (args->hsa_amd_interop_map_buffer.size != NULL) {
-				printf(" -> %lu\n", args->hsa_amd_interop_map_buffer.size__ref.val);
+			printf("\tint interop_handle = %d\n", args->interop_handle);
+			printf("\tuint32_t flags = %u\n", args->flags);
+			printf("\tsize_t * size = %p", args->size);
+			if (args->size != NULL) {
+				printf(" -> %lu\n", args->size__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid ** ptr = %p", args->hsa_amd_interop_map_buffer.ptr);
-			if (args->hsa_amd_interop_map_buffer.ptr != NULL) {
-				printf("-> %p", args->hsa_amd_interop_map_buffer.ptr__ref.ptr1);
+			printf("\tvoid ** ptr = %p", args->ptr);
+			if (args->ptr != NULL) {
+				printf("-> %p", args->ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t * metadata_size = %p", args->hsa_amd_interop_map_buffer.metadata_size);
-			if (args->hsa_amd_interop_map_buffer.metadata_size != NULL) {
-				printf(" -> %lu\n", args->hsa_amd_interop_map_buffer.metadata_size__ref.val);
+			printf("\tsize_t * metadata_size = %p", args->metadata_size);
+			if (args->metadata_size != NULL) {
+				printf(" -> %lu\n", args->metadata_size__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst void ** metadata = %p", args->hsa_amd_interop_map_buffer.metadata);
-			if (args->hsa_amd_interop_map_buffer.metadata != NULL) {
-				printf("-> %p", args->hsa_amd_interop_map_buffer.metadata__ref.ptr1);
+			printf("\tconst void ** metadata = %p", args->metadata);
+			if (args->metadata != NULL) {
+				printf("-> %p", args->metadata__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_interop_map_buffer.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_queue_get_info
-		case HSA_API_ID_hsa_amd_queue_get_info :
+		case HSA_API_ID_hsa_amd_queue_get_info : {
 			//	hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -94,84 +96,94 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_queue_info_attribute_t attribute (enum hsa_queue_info_attribute_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_queue_t * queue = %p", args->hsa_amd_queue_get_info.queue);
-			if (args->hsa_amd_queue_get_info.queue != NULL) {
+			args_hsa_amd_queue_get_info_t* args = (args_hsa_amd_queue_get_info_t*) func_args;
+			printf("\thsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_amd_queue_get_info.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_amd_queue_get_info.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_amd_queue_get_info.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_amd_queue_get_info.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_amd_queue_get_info.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_amd_queue_get_info.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_queue_info_attribute_t attribute = %d\n", args->hsa_amd_queue_get_info.attribute);
-			printf("\tvoid * value = %p", args->hsa_amd_queue_get_info.value);
+			printf("\thsa_queue_info_attribute_t attribute = %d\n", args->attribute);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_queue_get_info.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_profiling_async_copy_enable
-		case HSA_API_ID_hsa_amd_profiling_async_copy_enable :
+		case HSA_API_ID_hsa_amd_profiling_async_copy_enable : {
 			//	_Bool enable (unsigned int);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\t_Bool enable = %u\n", args->hsa_amd_profiling_async_copy_enable.enable);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_profiling_async_copy_enable.retval);
+			args_hsa_amd_profiling_async_copy_enable_t* args = (args_hsa_amd_profiling_async_copy_enable_t*) func_args;
+			printf("\t_Bool enable = %u\n", args->enable);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_symbol_get_info
-		case HSA_API_ID_hsa_executable_symbol_get_info :
+		case HSA_API_ID_hsa_executable_symbol_get_info : {
 			//	hsa_executable_symbol_t executable_symbol ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_executable_symbol_info_t attribute (enum hsa_executable_symbol_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_symbol_get_info_t* args = (args_hsa_executable_symbol_get_info_t*) func_args;
 			printf("\thsa_executable_symbol_t executable_symbol = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_symbol_get_info.executable_symbol.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable_symbol.handle);
 			printf("\t}\n");
-			printf("\thsa_executable_symbol_info_t attribute = %d\n", args->hsa_executable_symbol_get_info.attribute);
-			printf("\tvoid * value = %p", args->hsa_executable_symbol_get_info.value);
+			printf("\thsa_executable_symbol_info_t attribute = %d\n", args->attribute);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_symbol_get_info.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_cas_scacquire
-		case HSA_API_ID_hsa_signal_cas_scacquire :
+		case HSA_API_ID_hsa_signal_cas_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t expected (long);
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_cas_scacquire_t* args = (args_hsa_signal_cas_scacquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_cas_scacquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t expected = %ld\n", args->hsa_signal_cas_scacquire.expected);
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_cas_scacquire.value);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_cas_scacquire.retval);
+			printf("\thsa_signal_value_t expected = %ld\n", args->expected);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_system_get_info
-		case HSA_API_ID_hsa_system_get_info :
+		case HSA_API_ID_hsa_system_get_info : {
 			//	hsa_system_info_t attribute (enum hsa_system_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_system_info_t attribute = %d\n", args->hsa_system_get_info.attribute);
-			printf("\tvoid * value = %p", args->hsa_system_get_info.value);
+			args_hsa_system_get_info_t* args = (args_hsa_system_get_info_t*) func_args;
+			printf("\thsa_system_info_t attribute = %d\n", args->attribute);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_system_get_info.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_cas_write_index_scacq_screl
-		case HSA_API_ID_hsa_queue_cas_write_index_scacq_screl :
+		case HSA_API_ID_hsa_queue_cas_write_index_scacq_screl : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -186,27 +198,29 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint64_t expected (unsigned long);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_cas_write_index_scacq_screl.queue);
-			if (args->hsa_queue_cas_write_index_scacq_screl.queue != NULL) {
+			args_hsa_queue_cas_write_index_scacq_screl_t* args = (args_hsa_queue_cas_write_index_scacq_screl_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_cas_write_index_scacq_screl.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_cas_write_index_scacq_screl.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_cas_write_index_scacq_screl.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_cas_write_index_scacq_screl.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_cas_write_index_scacq_screl.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_cas_write_index_scacq_screl.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t expected = %lu\n", args->hsa_queue_cas_write_index_scacq_screl.expected);
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_cas_write_index_scacq_screl.value);
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_cas_write_index_scacq_screl.retval);
+			printf("\tuint64_t expected = %lu\n", args->expected);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_get_capability
-		case HSA_API_ID_hsa_ext_image_get_capability :
+		case HSA_API_ID_hsa_ext_image_get_capability : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -217,27 +231,29 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	uint32_t * capability_mask (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_get_capability_t* args = (args_hsa_ext_image_get_capability_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_get_capability.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_ext_image_geometry_t geometry = %d\n", args->hsa_ext_image_get_capability.geometry);
-			printf("\tconst hsa_ext_image_format_t * image_format = %p", args->hsa_ext_image_get_capability.image_format);
-			if (args->hsa_ext_image_get_capability.image_format != NULL) {
+			printf("\thsa_ext_image_geometry_t geometry = %d\n", args->geometry);
+			printf("\tconst hsa_ext_image_format_t * image_format = %p", args->image_format);
+			if (args->image_format != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_ext_image_channel_type32_t channel_type = %u\n", args->hsa_ext_image_get_capability.image_format__ref.val.channel_type);
-				printf("\t\thsa_ext_image_channel_order32_t channel_order = %u\n", args->hsa_ext_image_get_capability.image_format__ref.val.channel_order);
+				printf("\t\thsa_ext_image_channel_type32_t channel_type = %u\n", args->image_format__ref.val.channel_type);
+				printf("\t\thsa_ext_image_channel_order32_t channel_order = %u\n", args->image_format__ref.val.channel_order);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint32_t * capability_mask = %p", args->hsa_ext_image_get_capability.capability_mask);
-			if (args->hsa_ext_image_get_capability.capability_mask != NULL) {
-				printf(" -> %u\n", args->hsa_ext_image_get_capability.capability_mask__ref.val);
+			printf("\tuint32_t * capability_mask = %p", args->capability_mask);
+			if (args->capability_mask != NULL) {
+				printf(" -> %u\n", args->capability_mask__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_get_capability.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_load_program_code_object
-		case HSA_API_ID_hsa_executable_load_program_code_object :
+		case HSA_API_ID_hsa_executable_load_program_code_object : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -249,28 +265,30 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_load_program_code_object_t* args = (args_hsa_executable_load_program_code_object_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_load_program_code_object.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
 			printf("\thsa_code_object_reader_t code_object_reader = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_load_program_code_object.code_object_reader.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->code_object_reader.handle);
 			printf("\t}\n");
-			printf("\tconst char * options = %p", args->hsa_executable_load_program_code_object.options);
-			if (args->hsa_executable_load_program_code_object.options != NULL) {
-				printf(" -> %s\n", args->hsa_executable_load_program_code_object.options__ref.val);
+			printf("\tconst char * options = %p", args->options);
+			if (args->options != NULL) {
+				printf(" -> %s\n", args->options__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_loaded_code_object_t * loaded_code_object = %p", args->hsa_executable_load_program_code_object.loaded_code_object);
-			if (args->hsa_executable_load_program_code_object.loaded_code_object != NULL) {
+			printf("\thsa_loaded_code_object_t * loaded_code_object = %p", args->loaded_code_object);
+			if (args->loaded_code_object != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_load_program_code_object.loaded_code_object__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->loaded_code_object__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_load_program_code_object.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_cas_write_index_release
-		case HSA_API_ID_hsa_queue_cas_write_index_release :
+		case HSA_API_ID_hsa_queue_cas_write_index_release : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -285,70 +303,78 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint64_t expected (unsigned long);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_cas_write_index_release.queue);
-			if (args->hsa_queue_cas_write_index_release.queue != NULL) {
+			args_hsa_queue_cas_write_index_release_t* args = (args_hsa_queue_cas_write_index_release_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_cas_write_index_release.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_cas_write_index_release.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_cas_write_index_release.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_cas_write_index_release.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_cas_write_index_release.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_cas_write_index_release.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t expected = %lu\n", args->hsa_queue_cas_write_index_release.expected);
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_cas_write_index_release.value);
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_cas_write_index_release.retval);
+			printf("\tuint64_t expected = %lu\n", args->expected);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_subtract_scacquire
-		case HSA_API_ID_hsa_signal_subtract_scacquire :
+		case HSA_API_ID_hsa_signal_subtract_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_subtract_scacquire_t* args = (args_hsa_signal_subtract_scacquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_subtract_scacquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_subtract_scacquire.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_cas_release
-		case HSA_API_ID_hsa_signal_cas_release :
+		case HSA_API_ID_hsa_signal_cas_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t expected (long);
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_cas_release_t* args = (args_hsa_signal_cas_release_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_cas_release.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t expected = %ld\n", args->hsa_signal_cas_release.expected);
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_cas_release.value);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_cas_release.retval);
+			printf("\thsa_signal_value_t expected = %ld\n", args->expected);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_add_scacq_screl
-		case HSA_API_ID_hsa_signal_add_scacq_screl :
+		case HSA_API_ID_hsa_signal_add_scacq_screl : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_add_scacq_screl_t* args = (args_hsa_signal_add_scacq_screl_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_add_scacq_screl.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_add_scacq_screl.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_group_wait_any_relaxed
-		case HSA_API_ID_hsa_signal_group_wait_any_relaxed :
+		case HSA_API_ID_hsa_signal_group_wait_any_relaxed : {
 			//	hsa_signal_group_t signal_group ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -360,47 +386,51 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	hsa_signal_value_t * value (long*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_signal_group_wait_any_relaxed_t* args = (args_hsa_signal_group_wait_any_relaxed_t*) func_args;
 			printf("\thsa_signal_group_t signal_group = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_group_wait_any_relaxed.signal_group.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal_group.handle);
 			printf("\t}\n");
-			printf("\tconst hsa_signal_condition_t * conditions = %p", args->hsa_signal_group_wait_any_relaxed.conditions);
-			if (args->hsa_signal_group_wait_any_relaxed.conditions != NULL) {
-				printf(" -> %d\n", args->hsa_signal_group_wait_any_relaxed.conditions__ref.val);
+			printf("\tconst hsa_signal_condition_t * conditions = %p", args->conditions);
+			if (args->conditions != NULL) {
+				printf(" -> %d\n", args->conditions__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst hsa_signal_value_t * compare_values = %p", args->hsa_signal_group_wait_any_relaxed.compare_values);
-			if (args->hsa_signal_group_wait_any_relaxed.compare_values != NULL) {
-				printf(" -> %ld\n", args->hsa_signal_group_wait_any_relaxed.compare_values__ref.val);
+			printf("\tconst hsa_signal_value_t * compare_values = %p", args->compare_values);
+			if (args->compare_values != NULL) {
+				printf(" -> %ld\n", args->compare_values__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_wait_state_t wait_state_hint = %d\n", args->hsa_signal_group_wait_any_relaxed.wait_state_hint);
-			printf("\thsa_signal_t * signal = %p", args->hsa_signal_group_wait_any_relaxed.signal);
-			if (args->hsa_signal_group_wait_any_relaxed.signal != NULL) {
+			printf("\thsa_wait_state_t wait_state_hint = %d\n", args->wait_state_hint);
+			printf("\thsa_signal_t * signal = %p", args->signal);
+			if (args->signal != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_group_wait_any_relaxed.signal__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->signal__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_signal_value_t * value = %p", args->hsa_signal_group_wait_any_relaxed.value);
-			if (args->hsa_signal_group_wait_any_relaxed.value != NULL) {
-				printf(" -> %ld\n", args->hsa_signal_group_wait_any_relaxed.value__ref.val);
+			printf("\thsa_signal_value_t * value = %p", args->value);
+			if (args->value != NULL) {
+				printf(" -> %ld\n", args->value__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_signal_group_wait_any_relaxed.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_and_relaxed
-		case HSA_API_ID_hsa_signal_and_relaxed :
+		case HSA_API_ID_hsa_signal_and_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_and_relaxed_t* args = (args_hsa_signal_and_relaxed_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_and_relaxed.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_and_relaxed.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_clear
-		case HSA_API_ID_hsa_ext_image_clear :
+		case HSA_API_ID_hsa_ext_image_clear : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -421,35 +451,37 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		});
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_clear_t* args = (args_hsa_ext_image_clear_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_clear.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
 			printf("\thsa_ext_image_t image = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_clear.image.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->image.handle);
 			printf("\t}\n");
-			printf("\tconst void * data = %p", args->hsa_ext_image_clear.data);
+			printf("\tconst void * data = %p", args->data);
 			printf("\n");
-			printf("\tconst hsa_ext_image_region_t * image_region = %p", args->hsa_ext_image_clear.image_region);
-			if (args->hsa_ext_image_clear.image_region != NULL) {
+			printf("\tconst hsa_ext_image_region_t * image_region = %p", args->image_region);
+			if (args->image_region != NULL) {
 				printf(" -> {\n");
 				printf("\t\thsa_dim3_t offset = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hsa_ext_image_clear.image_region__ref.val.offset.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hsa_ext_image_clear.image_region__ref.val.offset.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hsa_ext_image_clear.image_region__ref.val.offset.z);
+				printf("\t\t\tuint32_t x = %u\n", args->image_region__ref.val.offset.x);
+				printf("\t\t\tuint32_t y = %u\n", args->image_region__ref.val.offset.y);
+				printf("\t\t\tuint32_t z = %u\n", args->image_region__ref.val.offset.z);
 				printf("\t\t}\n");
 				printf("\t\thsa_dim3_t range = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hsa_ext_image_clear.image_region__ref.val.range.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hsa_ext_image_clear.image_region__ref.val.range.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hsa_ext_image_clear.image_region__ref.val.range.z);
+				printf("\t\t\tuint32_t x = %u\n", args->image_region__ref.val.range.x);
+				printf("\t\t\tuint32_t y = %u\n", args->image_region__ref.val.range.y);
+				printf("\t\t\tuint32_t z = %u\n", args->image_region__ref.val.range.z);
 				printf("\t\t}\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_clear.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_load_code_object
-		case HSA_API_ID_hsa_executable_load_code_object :
+		case HSA_API_ID_hsa_executable_load_code_object : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -461,40 +493,44 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	const char * options (const char *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_load_code_object_t* args = (args_hsa_executable_load_code_object_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_load_code_object.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_load_code_object.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
 			printf("\thsa_code_object_t code_object = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_load_code_object.code_object.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->code_object.handle);
 			printf("\t}\n");
-			printf("\tconst char * options = %p", args->hsa_executable_load_code_object.options);
-			if (args->hsa_executable_load_code_object.options != NULL) {
-				printf(" -> %s\n", args->hsa_executable_load_code_object.options__ref.val);
+			printf("\tconst char * options = %p", args->options);
+			if (args->options != NULL) {
+				printf(" -> %s\n", args->options__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_load_code_object.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_exchange_acquire
-		case HSA_API_ID_hsa_signal_exchange_acquire :
+		case HSA_API_ID_hsa_signal_exchange_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_exchange_acquire_t* args = (args_hsa_signal_exchange_acquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_exchange_acquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_exchange_acquire.value);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_exchange_acquire.retval);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_data_get_info_with_layout
-		case HSA_API_ID_hsa_ext_image_data_get_info_with_layout :
+		case HSA_API_ID_hsa_ext_image_data_get_info_with_layout : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -518,40 +554,42 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		size_t alignment (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_data_get_info_with_layout_t* args = (args_hsa_ext_image_data_get_info_with_layout_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_data_get_info_with_layout.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tconst hsa_ext_image_descriptor_t * image_descriptor = %p", args->hsa_ext_image_data_get_info_with_layout.image_descriptor);
-			if (args->hsa_ext_image_data_get_info_with_layout.image_descriptor != NULL) {
+			printf("\tconst hsa_ext_image_descriptor_t * image_descriptor = %p", args->image_descriptor);
+			if (args->image_descriptor != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_ext_image_geometry_t geometry = %d\n", args->hsa_ext_image_data_get_info_with_layout.image_descriptor__ref.val.geometry);
-				printf("\t\tsize_t width = %lu\n", args->hsa_ext_image_data_get_info_with_layout.image_descriptor__ref.val.width);
-				printf("\t\tsize_t height = %lu\n", args->hsa_ext_image_data_get_info_with_layout.image_descriptor__ref.val.height);
-				printf("\t\tsize_t depth = %lu\n", args->hsa_ext_image_data_get_info_with_layout.image_descriptor__ref.val.depth);
-				printf("\t\tsize_t array_size = %lu\n", args->hsa_ext_image_data_get_info_with_layout.image_descriptor__ref.val.array_size);
+				printf("\t\thsa_ext_image_geometry_t geometry = %d\n", args->image_descriptor__ref.val.geometry);
+				printf("\t\tsize_t width = %lu\n", args->image_descriptor__ref.val.width);
+				printf("\t\tsize_t height = %lu\n", args->image_descriptor__ref.val.height);
+				printf("\t\tsize_t depth = %lu\n", args->image_descriptor__ref.val.depth);
+				printf("\t\tsize_t array_size = %lu\n", args->image_descriptor__ref.val.array_size);
 				printf("\t\thsa_ext_image_format_t format = {\n");
-				printf("\t\t\thsa_ext_image_channel_type32_t channel_type = %u\n", args->hsa_ext_image_data_get_info_with_layout.image_descriptor__ref.val.format.channel_type);
-				printf("\t\t\thsa_ext_image_channel_order32_t channel_order = %u\n", args->hsa_ext_image_data_get_info_with_layout.image_descriptor__ref.val.format.channel_order);
+				printf("\t\t\thsa_ext_image_channel_type32_t channel_type = %u\n", args->image_descriptor__ref.val.format.channel_type);
+				printf("\t\t\thsa_ext_image_channel_order32_t channel_order = %u\n", args->image_descriptor__ref.val.format.channel_order);
 				printf("\t\t}\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_access_permission_t access_permission = %d\n", args->hsa_ext_image_data_get_info_with_layout.access_permission);
-			printf("\thsa_ext_image_data_layout_t image_data_layout = %d\n", args->hsa_ext_image_data_get_info_with_layout.image_data_layout);
-			printf("\tsize_t image_data_row_pitch = %lu\n", args->hsa_ext_image_data_get_info_with_layout.image_data_row_pitch);
-			printf("\tsize_t image_data_slice_pitch = %lu\n", args->hsa_ext_image_data_get_info_with_layout.image_data_slice_pitch);
-			printf("\thsa_ext_image_data_info_t * image_data_info = %p", args->hsa_ext_image_data_get_info_with_layout.image_data_info);
-			if (args->hsa_ext_image_data_get_info_with_layout.image_data_info != NULL) {
+			printf("\thsa_access_permission_t access_permission = %d\n", args->access_permission);
+			printf("\thsa_ext_image_data_layout_t image_data_layout = %d\n", args->image_data_layout);
+			printf("\tsize_t image_data_row_pitch = %lu\n", args->image_data_row_pitch);
+			printf("\tsize_t image_data_slice_pitch = %lu\n", args->image_data_slice_pitch);
+			printf("\thsa_ext_image_data_info_t * image_data_info = %p", args->image_data_info);
+			if (args->image_data_info != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t size = %lu\n", args->hsa_ext_image_data_get_info_with_layout.image_data_info__ref.val.size);
-				printf("\t\tsize_t alignment = %lu\n", args->hsa_ext_image_data_get_info_with_layout.image_data_info__ref.val.alignment);
+				printf("\t\tsize_t size = %lu\n", args->image_data_info__ref.val.size);
+				printf("\t\tsize_t alignment = %lu\n", args->image_data_info__ref.val.alignment);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_data_get_info_with_layout.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_svm_attributes_get
-		case HSA_API_ID_hsa_amd_svm_attributes_get :
+		case HSA_API_ID_hsa_amd_svm_attributes_get : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	hsa_amd_svm_attribute_pair_t * attribute_list ({
@@ -560,23 +598,25 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	size_t attribute_count (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * ptr = %p", args->hsa_amd_svm_attributes_get.ptr);
+			args_hsa_amd_svm_attributes_get_t* args = (args_hsa_amd_svm_attributes_get_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hsa_amd_svm_attributes_get.size);
-			printf("\thsa_amd_svm_attribute_pair_t * attribute_list = %p", args->hsa_amd_svm_attributes_get.attribute_list);
-			if (args->hsa_amd_svm_attributes_get.attribute_list != NULL) {
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thsa_amd_svm_attribute_pair_t * attribute_list = %p", args->attribute_list);
+			if (args->attribute_list != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t attribute = %lu\n", args->hsa_amd_svm_attributes_get.attribute_list__ref.val.attribute);
-				printf("\t\tuint64_t value = %lu\n", args->hsa_amd_svm_attributes_get.attribute_list__ref.val.value);
+				printf("\t\tuint64_t attribute = %lu\n", args->attribute_list__ref.val.attribute);
+				printf("\t\tuint64_t value = %lu\n", args->attribute_list__ref.val.value);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tsize_t attribute_count = %lu\n", args->hsa_amd_svm_attributes_get.attribute_count);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_svm_attributes_get.retval);
+			printf("\tsize_t attribute_count = %lu\n", args->attribute_count);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_export
-		case HSA_API_ID_hsa_ext_image_export :
+		case HSA_API_ID_hsa_ext_image_export : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -599,97 +639,107 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		});
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_export_t* args = (args_hsa_ext_image_export_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_export.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
 			printf("\thsa_ext_image_t src_image = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_export.src_image.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->src_image.handle);
 			printf("\t}\n");
-			printf("\tvoid * dst_memory = %p", args->hsa_ext_image_export.dst_memory);
+			printf("\tvoid * dst_memory = %p", args->dst_memory);
 			printf("\n");
-			printf("\tsize_t dst_row_pitch = %lu\n", args->hsa_ext_image_export.dst_row_pitch);
-			printf("\tsize_t dst_slice_pitch = %lu\n", args->hsa_ext_image_export.dst_slice_pitch);
-			printf("\tconst hsa_ext_image_region_t * image_region = %p", args->hsa_ext_image_export.image_region);
-			if (args->hsa_ext_image_export.image_region != NULL) {
+			printf("\tsize_t dst_row_pitch = %lu\n", args->dst_row_pitch);
+			printf("\tsize_t dst_slice_pitch = %lu\n", args->dst_slice_pitch);
+			printf("\tconst hsa_ext_image_region_t * image_region = %p", args->image_region);
+			if (args->image_region != NULL) {
 				printf(" -> {\n");
 				printf("\t\thsa_dim3_t offset = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hsa_ext_image_export.image_region__ref.val.offset.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hsa_ext_image_export.image_region__ref.val.offset.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hsa_ext_image_export.image_region__ref.val.offset.z);
+				printf("\t\t\tuint32_t x = %u\n", args->image_region__ref.val.offset.x);
+				printf("\t\t\tuint32_t y = %u\n", args->image_region__ref.val.offset.y);
+				printf("\t\t\tuint32_t z = %u\n", args->image_region__ref.val.offset.z);
 				printf("\t\t}\n");
 				printf("\t\thsa_dim3_t range = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hsa_ext_image_export.image_region__ref.val.range.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hsa_ext_image_export.image_region__ref.val.range.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hsa_ext_image_export.image_region__ref.val.range.z);
+				printf("\t\t\tuint32_t x = %u\n", args->image_region__ref.val.range.x);
+				printf("\t\t\tuint32_t y = %u\n", args->image_region__ref.val.range.y);
+				printf("\t\t\tuint32_t z = %u\n", args->image_region__ref.val.range.z);
 				printf("\t\t}\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_export.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_memory_register
-		case HSA_API_ID_hsa_memory_register :
+		case HSA_API_ID_hsa_memory_register : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * ptr = %p", args->hsa_memory_register.ptr);
+			args_hsa_memory_register_t* args = (args_hsa_memory_register_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hsa_memory_register.size);
-			printf("\thsa_status_t retval = %d\n", args->hsa_memory_register.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_and_scacquire
-		case HSA_API_ID_hsa_signal_and_scacquire :
+		case HSA_API_ID_hsa_signal_and_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_and_scacquire_t* args = (args_hsa_signal_and_scacquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_and_scacquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_and_scacquire.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_add_acq_rel
-		case HSA_API_ID_hsa_signal_add_acq_rel :
+		case HSA_API_ID_hsa_signal_add_acq_rel : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_add_acq_rel_t* args = (args_hsa_signal_add_acq_rel_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_add_acq_rel.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_add_acq_rel.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_portable_export_dmabuf
-		case HSA_API_ID_hsa_amd_portable_export_dmabuf :
+		case HSA_API_ID_hsa_amd_portable_export_dmabuf : {
 			//	const void * ptr (const void *);
 			//	size_t size (unsigned long);
 			//	int * dmabuf (int *);
 			//	uint64_t * offset (unsigned long*);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tconst void * ptr = %p", args->hsa_amd_portable_export_dmabuf.ptr);
+			args_hsa_amd_portable_export_dmabuf_t* args = (args_hsa_amd_portable_export_dmabuf_t*) func_args;
+			printf("\tconst void * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hsa_amd_portable_export_dmabuf.size);
-			printf("\tint * dmabuf = %p", args->hsa_amd_portable_export_dmabuf.dmabuf);
-			if (args->hsa_amd_portable_export_dmabuf.dmabuf != NULL) {
-				printf(" -> %d\n", args->hsa_amd_portable_export_dmabuf.dmabuf__ref.val);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tint * dmabuf = %p", args->dmabuf);
+			if (args->dmabuf != NULL) {
+				printf(" -> %d\n", args->dmabuf__ref.val);
 			} else { printf("\n"); };
-			printf("\tuint64_t * offset = %p", args->hsa_amd_portable_export_dmabuf.offset);
-			if (args->hsa_amd_portable_export_dmabuf.offset != NULL) {
-				printf(" -> %lu\n", args->hsa_amd_portable_export_dmabuf.offset__ref.val);
+			printf("\tuint64_t * offset = %p", args->offset);
+			if (args->offset != NULL) {
+				printf(" -> %lu\n", args->offset__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_portable_export_dmabuf.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_serialize
-		case HSA_API_ID_hsa_code_object_serialize :
+		case HSA_API_ID_hsa_code_object_serialize : {
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -701,32 +751,34 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	void ** serialized_code_object (void **);
 			//	size_t * serialized_code_object_size (unsigned long*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_serialize_t* args = (args_hsa_code_object_serialize_t*) func_args;
 			printf("\thsa_code_object_t code_object = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_code_object_serialize.code_object.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->code_object.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t (*)(size_t, hsa_callback_data_t, void **) alloc_callback = %p\n", args->hsa_code_object_serialize.alloc_callback);
+			printf("\thsa_status_t (*)(size_t, hsa_callback_data_t, void **) alloc_callback = %p\n", args->alloc_callback);
 			printf("\thsa_callback_data_t callback_data = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_code_object_serialize.callback_data.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->callback_data.handle);
 			printf("\t}\n");
-			printf("\tconst char * options = %p", args->hsa_code_object_serialize.options);
-			if (args->hsa_code_object_serialize.options != NULL) {
-				printf(" -> %s\n", args->hsa_code_object_serialize.options__ref.val);
+			printf("\tconst char * options = %p", args->options);
+			if (args->options != NULL) {
+				printf(" -> %s\n", args->options__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid ** serialized_code_object = %p", args->hsa_code_object_serialize.serialized_code_object);
-			if (args->hsa_code_object_serialize.serialized_code_object != NULL) {
-				printf("-> %p", args->hsa_code_object_serialize.serialized_code_object__ref.ptr1);
+			printf("\tvoid ** serialized_code_object = %p", args->serialized_code_object);
+			if (args->serialized_code_object != NULL) {
+				printf("-> %p", args->serialized_code_object__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t * serialized_code_object_size = %p", args->hsa_code_object_serialize.serialized_code_object_size);
-			if (args->hsa_code_object_serialize.serialized_code_object_size != NULL) {
-				printf(" -> %lu\n", args->hsa_code_object_serialize.serialized_code_object_size__ref.val);
+			printf("\tsize_t * serialized_code_object_size = %p", args->serialized_code_object_size);
+			if (args->serialized_code_object_size != NULL) {
+				printf(" -> %lu\n", args->serialized_code_object_size__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_serialize.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_lock
-		case HSA_API_ID_hsa_amd_memory_lock :
+		case HSA_API_ID_hsa_amd_memory_lock : {
 			//	void * host_ptr (void *);
 			//	size_t size (unsigned long);
 			//	hsa_agent_t * agents ({
@@ -735,27 +787,29 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	int num_agent (int);
 			//	void ** agent_ptr (void **);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * host_ptr = %p", args->hsa_amd_memory_lock.host_ptr);
+			args_hsa_amd_memory_lock_t* args = (args_hsa_amd_memory_lock_t*) func_args;
+			printf("\tvoid * host_ptr = %p", args->host_ptr);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hsa_amd_memory_lock.size);
-			printf("\thsa_agent_t * agents = %p", args->hsa_amd_memory_lock.agents);
-			if (args->hsa_amd_memory_lock.agents != NULL) {
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thsa_agent_t * agents = %p", args->agents);
+			if (args->agents != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_lock.agents__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->agents__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint num_agent = %d\n", args->hsa_amd_memory_lock.num_agent);
-			printf("\tvoid ** agent_ptr = %p", args->hsa_amd_memory_lock.agent_ptr);
-			if (args->hsa_amd_memory_lock.agent_ptr != NULL) {
-				printf("-> %p", args->hsa_amd_memory_lock.agent_ptr__ref.ptr1);
+			printf("\tint num_agent = %d\n", args->num_agent);
+			printf("\tvoid ** agent_ptr = %p", args->agent_ptr);
+			if (args->agent_ptr != NULL) {
+				printf("-> %p", args->agent_ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_lock.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_iterate_agent_symbols
-		case HSA_API_ID_hsa_executable_iterate_agent_symbols :
+		case HSA_API_ID_hsa_executable_iterate_agent_symbols : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -765,121 +819,135 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_status_t (*)(hsa_executable_t, hsa_agent_t, hsa_executable_symbol_t, void *) callback (enum hsa_status_t (*)(struct hsa_executable_s, struct hsa_agent_s, struct hsa_executable_symbol_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_iterate_agent_symbols_t* args = (args_hsa_executable_iterate_agent_symbols_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_iterate_agent_symbols.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_iterate_agent_symbols.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t (*)(hsa_executable_t, hsa_agent_t, hsa_executable_symbol_t, void *) callback = %p\n", args->hsa_executable_iterate_agent_symbols.callback);
-			printf("\tvoid * data = %p", args->hsa_executable_iterate_agent_symbols.data);
+			printf("\thsa_status_t (*)(hsa_executable_t, hsa_agent_t, hsa_executable_symbol_t, void *) callback = %p\n", args->callback);
+			printf("\tvoid * data = %p", args->data);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_iterate_agent_symbols.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_symbol_get_info
-		case HSA_API_ID_hsa_code_symbol_get_info :
+		case HSA_API_ID_hsa_code_symbol_get_info : {
 			//	hsa_code_symbol_t code_symbol ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_code_symbol_info_t attribute (enum hsa_code_symbol_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_symbol_get_info_t* args = (args_hsa_code_symbol_get_info_t*) func_args;
 			printf("\thsa_code_symbol_t code_symbol = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_code_symbol_get_info.code_symbol.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->code_symbol.handle);
 			printf("\t}\n");
-			printf("\thsa_code_symbol_info_t attribute = %d\n", args->hsa_code_symbol_get_info.attribute);
-			printf("\tvoid * value = %p", args->hsa_code_symbol_get_info.value);
+			printf("\thsa_code_symbol_info_t attribute = %d\n", args->attribute);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_code_symbol_get_info.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_xor_acquire
-		case HSA_API_ID_hsa_signal_xor_acquire :
+		case HSA_API_ID_hsa_signal_xor_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_xor_acquire_t* args = (args_hsa_signal_xor_acquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_xor_acquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_xor_acquire.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_image_get_info_max_dim
-		case HSA_API_ID_hsa_amd_image_get_info_max_dim :
+		case HSA_API_ID_hsa_amd_image_get_info_max_dim : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_agent_info_t attribute (enum hsa_agent_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_image_get_info_max_dim_t* args = (args_hsa_amd_image_get_info_max_dim_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_image_get_info_max_dim.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_agent_info_t attribute = %d\n", args->hsa_amd_image_get_info_max_dim.attribute);
-			printf("\tvoid * value = %p", args->hsa_amd_image_get_info_max_dim.value);
+			printf("\thsa_agent_info_t attribute = %d\n", args->attribute);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_image_get_info_max_dim.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_subtract_acq_rel
-		case HSA_API_ID_hsa_signal_subtract_acq_rel :
+		case HSA_API_ID_hsa_signal_subtract_acq_rel : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_subtract_acq_rel_t* args = (args_hsa_signal_subtract_acq_rel_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_subtract_acq_rel.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_subtract_acq_rel.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_isa_get_exception_policies
-		case HSA_API_ID_hsa_isa_get_exception_policies :
+		case HSA_API_ID_hsa_isa_get_exception_policies : {
 			//	hsa_isa_t isa ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_profile_t profile (enum hsa_profile_t);
 			//	uint16_t * mask (unsigned short*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_isa_get_exception_policies_t* args = (args_hsa_isa_get_exception_policies_t*) func_args;
 			printf("\thsa_isa_t isa = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_isa_get_exception_policies.isa.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->isa.handle);
 			printf("\t}\n");
-			printf("\thsa_profile_t profile = %d\n", args->hsa_isa_get_exception_policies.profile);
-			printf("\tuint16_t * mask = %p", args->hsa_isa_get_exception_policies.mask);
-			if (args->hsa_isa_get_exception_policies.mask != NULL) {
-				printf(" -> %hu\n", args->hsa_isa_get_exception_policies.mask__ref.val);
+			printf("\thsa_profile_t profile = %d\n", args->profile);
+			printf("\tuint16_t * mask = %p", args->mask);
+			if (args->mask != NULL) {
+				printf(" -> %hu\n", args->mask__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_isa_get_exception_policies.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_agent_iterate_regions
-		case HSA_API_ID_hsa_agent_iterate_regions :
+		case HSA_API_ID_hsa_agent_iterate_regions : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_region_t, void *) callback (enum hsa_status_t (*)(struct hsa_region_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_agent_iterate_regions_t* args = (args_hsa_agent_iterate_regions_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_agent_iterate_regions.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t (*)(hsa_region_t, void *) callback = %p\n", args->hsa_agent_iterate_regions.callback);
-			printf("\tvoid * data = %p", args->hsa_agent_iterate_regions.data);
+			printf("\thsa_status_t (*)(hsa_region_t, void *) callback = %p\n", args->callback);
+			printf("\tvoid * data = %p", args->data);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_agent_iterate_regions.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_wait_relaxed
-		case HSA_API_ID_hsa_signal_wait_relaxed :
+		case HSA_API_ID_hsa_signal_wait_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -888,19 +956,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint64_t timeout_hint (unsigned long);
 			//	hsa_wait_state_t wait_state_hint (enum hsa_wait_state_t);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_wait_relaxed_t* args = (args_hsa_signal_wait_relaxed_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_wait_relaxed.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_condition_t condition = %d\n", args->hsa_signal_wait_relaxed.condition);
-			printf("\thsa_signal_value_t compare_value = %ld\n", args->hsa_signal_wait_relaxed.compare_value);
-			printf("\tuint64_t timeout_hint = %lu\n", args->hsa_signal_wait_relaxed.timeout_hint);
-			printf("\thsa_wait_state_t wait_state_hint = %d\n", args->hsa_signal_wait_relaxed.wait_state_hint);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_wait_relaxed.retval);
+			printf("\thsa_signal_condition_t condition = %d\n", args->condition);
+			printf("\thsa_signal_value_t compare_value = %ld\n", args->compare_value);
+			printf("\tuint64_t timeout_hint = %lu\n", args->timeout_hint);
+			printf("\thsa_wait_state_t wait_state_hint = %d\n", args->wait_state_hint);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ven_amd_pcs_create
-		case HSA_API_ID_hsa_ven_amd_pcs_create :
+		case HSA_API_ID_hsa_ven_amd_pcs_create : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -915,29 +985,31 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ven_amd_pcs_create_t* args = (args_hsa_ven_amd_pcs_create_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ven_amd_pcs_create.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_ven_amd_pcs_method_kind_t method = %d\n", args->hsa_ven_amd_pcs_create.method);
-			printf("\thsa_ven_amd_pcs_units_t units = %d\n", args->hsa_ven_amd_pcs_create.units);
-			printf("\tsize_t interval = %lu\n", args->hsa_ven_amd_pcs_create.interval);
-			printf("\tsize_t latency = %lu\n", args->hsa_ven_amd_pcs_create.latency);
-			printf("\tsize_t buffer_size = %lu\n", args->hsa_ven_amd_pcs_create.buffer_size);
-			printf("\thsa_ven_amd_pcs_data_ready_callback_t data_ready_callback = %p\n", args->hsa_ven_amd_pcs_create.data_ready_callback);
-			printf("\tvoid * client_callback_data = %p", args->hsa_ven_amd_pcs_create.client_callback_data);
+			printf("\thsa_ven_amd_pcs_method_kind_t method = %d\n", args->method);
+			printf("\thsa_ven_amd_pcs_units_t units = %d\n", args->units);
+			printf("\tsize_t interval = %lu\n", args->interval);
+			printf("\tsize_t latency = %lu\n", args->latency);
+			printf("\tsize_t buffer_size = %lu\n", args->buffer_size);
+			printf("\thsa_ven_amd_pcs_data_ready_callback_t data_ready_callback = %p\n", args->data_ready_callback);
+			printf("\tvoid * client_callback_data = %p", args->client_callback_data);
 			printf("\n");
-			printf("\thsa_ven_amd_pcs_t * pc_sampling = %p", args->hsa_ven_amd_pcs_create.pc_sampling);
-			if (args->hsa_ven_amd_pcs_create.pc_sampling != NULL) {
+			printf("\thsa_ven_amd_pcs_t * pc_sampling = %p", args->pc_sampling);
+			if (args->pc_sampling != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_ven_amd_pcs_create.pc_sampling__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->pc_sampling__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_ven_amd_pcs_create.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_load_read_index_relaxed
-		case HSA_API_ID_hsa_queue_load_read_index_relaxed :
+		case HSA_API_ID_hsa_queue_load_read_index_relaxed : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -950,87 +1022,97 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_load_read_index_relaxed.queue);
-			if (args->hsa_queue_load_read_index_relaxed.queue != NULL) {
+			args_hsa_queue_load_read_index_relaxed_t* args = (args_hsa_queue_load_read_index_relaxed_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_load_read_index_relaxed.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_load_read_index_relaxed.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_load_read_index_relaxed.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_load_read_index_relaxed.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_load_read_index_relaxed.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_load_read_index_relaxed.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_load_read_index_relaxed.retval);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_load_scacquire
-		case HSA_API_ID_hsa_signal_load_scacquire :
+		case HSA_API_ID_hsa_signal_load_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_load_scacquire_t* args = (args_hsa_signal_load_scacquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_load_scacquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_load_scacquire.retval);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_signal_value_pointer
-		case HSA_API_ID_hsa_amd_signal_value_pointer :
+		case HSA_API_ID_hsa_amd_signal_value_pointer : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	volatile hsa_signal_value_t ** value_ptr (volatile long **);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_signal_value_pointer_t* args = (args_hsa_amd_signal_value_pointer_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_signal_value_pointer.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\tvolatile hsa_signal_value_t ** value_ptr = %p", args->hsa_amd_signal_value_pointer.value_ptr);
-			if (args->hsa_amd_signal_value_pointer.value_ptr != NULL) {
-				printf("-> %p", args->hsa_amd_signal_value_pointer.value_ptr__ref.ptr1);
-				if (args->hsa_amd_signal_value_pointer.value_ptr__ref.ptr1 != NULL) {
-					printf(" -> %ld\n", args->hsa_amd_signal_value_pointer.value_ptr__ref.val);
+			printf("\tvolatile hsa_signal_value_t ** value_ptr = %p", args->value_ptr);
+			if (args->value_ptr != NULL) {
+				printf("-> %p", args->value_ptr__ref.ptr1);
+				if (args->value_ptr__ref.ptr1 != NULL) {
+					printf(" -> %ld\n", args->value_ptr__ref.val);
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_signal_value_pointer.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_pool_free
-		case HSA_API_ID_hsa_amd_memory_pool_free :
+		case HSA_API_ID_hsa_amd_memory_pool_free : {
 			//	void * ptr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * ptr = %p", args->hsa_amd_memory_pool_free.ptr);
+			args_hsa_amd_memory_pool_free_t* args = (args_hsa_amd_memory_pool_free_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_pool_free.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_validate
-		case HSA_API_ID_hsa_executable_validate :
+		case HSA_API_ID_hsa_executable_validate : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	uint32_t * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_validate_t* args = (args_hsa_executable_validate_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_validate.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
-			printf("\tuint32_t * result = %p", args->hsa_executable_validate.result);
-			if (args->hsa_executable_validate.result != NULL) {
-				printf(" -> %u\n", args->hsa_executable_validate.result__ref.val);
+			printf("\tuint32_t * result = %p", args->result);
+			if (args->result != NULL) {
+				printf(" -> %u\n", args->result__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_validate.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_create
-		case HSA_API_ID_hsa_signal_create :
+		case HSA_API_ID_hsa_signal_create : {
 			//	hsa_signal_value_t initial_value (long);
 			//	uint32_t num_consumers (unsigned int);
 			//	const hsa_agent_t * consumers ({
@@ -1040,39 +1122,43 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_signal_value_t initial_value = %ld\n", args->hsa_signal_create.initial_value);
-			printf("\tuint32_t num_consumers = %u\n", args->hsa_signal_create.num_consumers);
-			printf("\tconst hsa_agent_t * consumers = %p", args->hsa_signal_create.consumers);
-			if (args->hsa_signal_create.consumers != NULL) {
+			args_hsa_signal_create_t* args = (args_hsa_signal_create_t*) func_args;
+			printf("\thsa_signal_value_t initial_value = %ld\n", args->initial_value);
+			printf("\tuint32_t num_consumers = %u\n", args->num_consumers);
+			printf("\tconst hsa_agent_t * consumers = %p", args->consumers);
+			if (args->consumers != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_create.consumers__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->consumers__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_signal_t * signal = %p", args->hsa_signal_create.signal);
-			if (args->hsa_signal_create.signal != NULL) {
+			printf("\thsa_signal_t * signal = %p", args->signal);
+			if (args->signal != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_create.signal__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->signal__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_signal_create.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_spm_acquire
-		case HSA_API_ID_hsa_amd_spm_acquire :
+		case HSA_API_ID_hsa_amd_spm_acquire : {
 			//	hsa_agent_t preferred_agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_spm_acquire_t* args = (args_hsa_amd_spm_acquire_t*) func_args;
 			printf("\thsa_agent_t preferred_agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_spm_acquire.preferred_agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->preferred_agent.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_spm_acquire.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_load_read_index_scacquire
-		case HSA_API_ID_hsa_queue_load_read_index_scacquire :
+		case HSA_API_ID_hsa_queue_load_read_index_scacquire : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -1085,25 +1171,27 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_load_read_index_scacquire.queue);
-			if (args->hsa_queue_load_read_index_scacquire.queue != NULL) {
+			args_hsa_queue_load_read_index_scacquire_t* args = (args_hsa_queue_load_read_index_scacquire_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_load_read_index_scacquire.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_load_read_index_scacquire.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_load_read_index_scacquire.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_load_read_index_scacquire.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_load_read_index_scacquire.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_load_read_index_scacquire.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_load_read_index_scacquire.retval);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_load_write_index_acquire
-		case HSA_API_ID_hsa_queue_load_write_index_acquire :
+		case HSA_API_ID_hsa_queue_load_write_index_acquire : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -1116,25 +1204,27 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_load_write_index_acquire.queue);
-			if (args->hsa_queue_load_write_index_acquire.queue != NULL) {
+			args_hsa_queue_load_write_index_acquire_t* args = (args_hsa_queue_load_write_index_acquire_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_load_write_index_acquire.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_load_write_index_acquire.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_load_write_index_acquire.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_load_write_index_acquire.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_load_write_index_acquire.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_load_write_index_acquire.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_load_write_index_acquire.retval);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_agent_global_variable_define
-		case HSA_API_ID_hsa_executable_agent_global_variable_define :
+		case HSA_API_ID_hsa_executable_agent_global_variable_define : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -1144,37 +1234,41 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	const char * variable_name (const char *);
 			//	void * address (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_agent_global_variable_define_t* args = (args_hsa_executable_agent_global_variable_define_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_agent_global_variable_define.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_agent_global_variable_define.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tconst char * variable_name = %p", args->hsa_executable_agent_global_variable_define.variable_name);
-			if (args->hsa_executable_agent_global_variable_define.variable_name != NULL) {
-				printf(" -> %s\n", args->hsa_executable_agent_global_variable_define.variable_name__ref.val);
+			printf("\tconst char * variable_name = %p", args->variable_name);
+			if (args->variable_name != NULL) {
+				printf(" -> %s\n", args->variable_name__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid * address = %p", args->hsa_executable_agent_global_variable_define.address);
+			printf("\tvoid * address = %p", args->address);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_agent_global_variable_define.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_add_relaxed
-		case HSA_API_ID_hsa_signal_add_relaxed :
+		case HSA_API_ID_hsa_signal_add_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_add_relaxed_t* args = (args_hsa_signal_add_relaxed_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_add_relaxed.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_add_relaxed.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_soft_queue_create
-		case HSA_API_ID_hsa_soft_queue_create :
+		case HSA_API_ID_hsa_soft_queue_create : {
 			//	hsa_region_t region ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -1196,37 +1290,39 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_soft_queue_create_t* args = (args_hsa_soft_queue_create_t*) func_args;
 			printf("\thsa_region_t region = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_soft_queue_create.region.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->region.handle);
 			printf("\t}\n");
-			printf("\tuint32_t size = %u\n", args->hsa_soft_queue_create.size);
-			printf("\thsa_queue_type32_t type = %u\n", args->hsa_soft_queue_create.type);
-			printf("\tuint32_t features = %u\n", args->hsa_soft_queue_create.features);
+			printf("\tuint32_t size = %u\n", args->size);
+			printf("\thsa_queue_type32_t type = %u\n", args->type);
+			printf("\tuint32_t features = %u\n", args->features);
 			printf("\thsa_signal_t doorbell_signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_soft_queue_create.doorbell_signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->doorbell_signal.handle);
 			printf("\t}\n");
-			printf("\thsa_queue_t ** queue = %p", args->hsa_soft_queue_create.queue);
-			if (args->hsa_soft_queue_create.queue != NULL) {
-				printf("-> %p", args->hsa_soft_queue_create.queue__ref.ptr1);
-				if (args->hsa_soft_queue_create.queue__ref.ptr1 != NULL) {
+			printf("\thsa_queue_t ** queue = %p", args->queue);
+			if (args->queue != NULL) {
+				printf("-> %p", args->queue__ref.ptr1);
+				if (args->queue__ref.ptr1 != NULL) {
 					printf(" -> {\n");
-					printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_soft_queue_create.queue__ref.val.type);
-					printf("\t\tuint32_t features = %u\n", args->hsa_soft_queue_create.queue__ref.val.features);
+					printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+					printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 					printf("\t\thsa_signal_t doorbell_signal = {\n");
-					printf("\t\t\tuint64_t handle = %lu\n", args->hsa_soft_queue_create.queue__ref.val.doorbell_signal.handle);
+					printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 					printf("\t\t}\n");
-					printf("\t\tuint32_t size = %u\n", args->hsa_soft_queue_create.queue__ref.val.size);
-					printf("\t\tuint32_t reserved1 = %u\n", args->hsa_soft_queue_create.queue__ref.val.reserved1);
-					printf("\t\tuint64_t id = %lu\n", args->hsa_soft_queue_create.queue__ref.val.id);
+					printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+					printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+					printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 					printf("\t}\n");
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_soft_queue_create.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_cas_write_index_screlease
-		case HSA_API_ID_hsa_queue_cas_write_index_screlease :
+		case HSA_API_ID_hsa_queue_cas_write_index_screlease : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -1241,40 +1337,44 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint64_t expected (unsigned long);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_cas_write_index_screlease.queue);
-			if (args->hsa_queue_cas_write_index_screlease.queue != NULL) {
+			args_hsa_queue_cas_write_index_screlease_t* args = (args_hsa_queue_cas_write_index_screlease_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_cas_write_index_screlease.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_cas_write_index_screlease.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_cas_write_index_screlease.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_cas_write_index_screlease.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_cas_write_index_screlease.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_cas_write_index_screlease.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t expected = %lu\n", args->hsa_queue_cas_write_index_screlease.expected);
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_cas_write_index_screlease.value);
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_cas_write_index_screlease.retval);
+			printf("\tuint64_t expected = %lu\n", args->expected);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_xor_release
-		case HSA_API_ID_hsa_signal_xor_release :
+		case HSA_API_ID_hsa_signal_xor_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_xor_release_t* args = (args_hsa_signal_xor_release_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_xor_release.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_xor_release.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_wait_scacquire
-		case HSA_API_ID_hsa_signal_wait_scacquire :
+		case HSA_API_ID_hsa_signal_wait_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -1283,53 +1383,59 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint64_t timeout_hint (unsigned long);
 			//	hsa_wait_state_t wait_state_hint (enum hsa_wait_state_t);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_wait_scacquire_t* args = (args_hsa_signal_wait_scacquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_wait_scacquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_condition_t condition = %d\n", args->hsa_signal_wait_scacquire.condition);
-			printf("\thsa_signal_value_t compare_value = %ld\n", args->hsa_signal_wait_scacquire.compare_value);
-			printf("\tuint64_t timeout_hint = %lu\n", args->hsa_signal_wait_scacquire.timeout_hint);
-			printf("\thsa_wait_state_t wait_state_hint = %d\n", args->hsa_signal_wait_scacquire.wait_state_hint);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_wait_scacquire.retval);
+			printf("\thsa_signal_condition_t condition = %d\n", args->condition);
+			printf("\thsa_signal_value_t compare_value = %ld\n", args->compare_value);
+			printf("\tuint64_t timeout_hint = %lu\n", args->timeout_hint);
+			printf("\thsa_wait_state_t wait_state_hint = %d\n", args->wait_state_hint);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_isa_from_name
-		case HSA_API_ID_hsa_isa_from_name :
+		case HSA_API_ID_hsa_isa_from_name : {
 			//	const char * name (const char *);
 			//	hsa_isa_t * isa ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tconst char * name = %p", args->hsa_isa_from_name.name);
-			if (args->hsa_isa_from_name.name != NULL) {
-				printf(" -> %s\n", args->hsa_isa_from_name.name__ref.val);
+			args_hsa_isa_from_name_t* args = (args_hsa_isa_from_name_t*) func_args;
+			printf("\tconst char * name = %p", args->name);
+			if (args->name != NULL) {
+				printf(" -> %s\n", args->name__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_isa_t * isa = %p", args->hsa_isa_from_name.isa);
-			if (args->hsa_isa_from_name.isa != NULL) {
+			printf("\thsa_isa_t * isa = %p", args->isa);
+			if (args->isa != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_isa_from_name.isa__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->isa__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_isa_from_name.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_destroy
-		case HSA_API_ID_hsa_executable_destroy :
+		case HSA_API_ID_hsa_executable_destroy : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_destroy_t* args = (args_hsa_executable_destroy_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_destroy.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_destroy.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_create
-		case HSA_API_ID_hsa_ext_image_create :
+		case HSA_API_ID_hsa_ext_image_create : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -1350,56 +1456,60 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_create_t* args = (args_hsa_ext_image_create_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_create.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tconst hsa_ext_image_descriptor_t * image_descriptor = %p", args->hsa_ext_image_create.image_descriptor);
-			if (args->hsa_ext_image_create.image_descriptor != NULL) {
+			printf("\tconst hsa_ext_image_descriptor_t * image_descriptor = %p", args->image_descriptor);
+			if (args->image_descriptor != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_ext_image_geometry_t geometry = %d\n", args->hsa_ext_image_create.image_descriptor__ref.val.geometry);
-				printf("\t\tsize_t width = %lu\n", args->hsa_ext_image_create.image_descriptor__ref.val.width);
-				printf("\t\tsize_t height = %lu\n", args->hsa_ext_image_create.image_descriptor__ref.val.height);
-				printf("\t\tsize_t depth = %lu\n", args->hsa_ext_image_create.image_descriptor__ref.val.depth);
-				printf("\t\tsize_t array_size = %lu\n", args->hsa_ext_image_create.image_descriptor__ref.val.array_size);
+				printf("\t\thsa_ext_image_geometry_t geometry = %d\n", args->image_descriptor__ref.val.geometry);
+				printf("\t\tsize_t width = %lu\n", args->image_descriptor__ref.val.width);
+				printf("\t\tsize_t height = %lu\n", args->image_descriptor__ref.val.height);
+				printf("\t\tsize_t depth = %lu\n", args->image_descriptor__ref.val.depth);
+				printf("\t\tsize_t array_size = %lu\n", args->image_descriptor__ref.val.array_size);
 				printf("\t\thsa_ext_image_format_t format = {\n");
-				printf("\t\t\thsa_ext_image_channel_type32_t channel_type = %u\n", args->hsa_ext_image_create.image_descriptor__ref.val.format.channel_type);
-				printf("\t\t\thsa_ext_image_channel_order32_t channel_order = %u\n", args->hsa_ext_image_create.image_descriptor__ref.val.format.channel_order);
+				printf("\t\t\thsa_ext_image_channel_type32_t channel_type = %u\n", args->image_descriptor__ref.val.format.channel_type);
+				printf("\t\t\thsa_ext_image_channel_order32_t channel_order = %u\n", args->image_descriptor__ref.val.format.channel_order);
 				printf("\t\t}\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst void * image_data = %p", args->hsa_ext_image_create.image_data);
+			printf("\tconst void * image_data = %p", args->image_data);
 			printf("\n");
-			printf("\thsa_access_permission_t access_permission = %d\n", args->hsa_ext_image_create.access_permission);
-			printf("\thsa_ext_image_t * image = %p", args->hsa_ext_image_create.image);
-			if (args->hsa_ext_image_create.image != NULL) {
+			printf("\thsa_access_permission_t access_permission = %d\n", args->access_permission);
+			printf("\thsa_ext_image_t * image = %p", args->image);
+			if (args->image != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_create.image__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->image__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_create.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_system_extension_supported
-		case HSA_API_ID_hsa_system_extension_supported :
+		case HSA_API_ID_hsa_system_extension_supported : {
 			//	uint16_t extension (unsigned short);
 			//	uint16_t version_major (unsigned short);
 			//	uint16_t version_minor (unsigned short);
 			//	_Bool * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tuint16_t extension = %hu\n", args->hsa_system_extension_supported.extension);
-			printf("\tuint16_t version_major = %hu\n", args->hsa_system_extension_supported.version_major);
-			printf("\tuint16_t version_minor = %hu\n", args->hsa_system_extension_supported.version_minor);
-			printf("\t_Bool * result = %p", args->hsa_system_extension_supported.result);
-			if (args->hsa_system_extension_supported.result != NULL) {
-				printf(" -> %u\n", args->hsa_system_extension_supported.result__ref.val);
+			args_hsa_system_extension_supported_t* args = (args_hsa_system_extension_supported_t*) func_args;
+			printf("\tuint16_t extension = %hu\n", args->extension);
+			printf("\tuint16_t version_major = %hu\n", args->version_major);
+			printf("\tuint16_t version_minor = %hu\n", args->version_minor);
+			printf("\t_Bool * result = %p", args->result);
+			if (args->result != NULL) {
+				printf(" -> %u\n", args->result__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_system_extension_supported.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_load_agent_code_object
-		case HSA_API_ID_hsa_executable_load_agent_code_object :
+		case HSA_API_ID_hsa_executable_load_agent_code_object : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -1414,71 +1524,79 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_load_agent_code_object_t* args = (args_hsa_executable_load_agent_code_object_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_load_agent_code_object.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_load_agent_code_object.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
 			printf("\thsa_code_object_reader_t code_object_reader = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_load_agent_code_object.code_object_reader.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->code_object_reader.handle);
 			printf("\t}\n");
-			printf("\tconst char * options = %p", args->hsa_executable_load_agent_code_object.options);
-			if (args->hsa_executable_load_agent_code_object.options != NULL) {
-				printf(" -> %s\n", args->hsa_executable_load_agent_code_object.options__ref.val);
+			printf("\tconst char * options = %p", args->options);
+			if (args->options != NULL) {
+				printf(" -> %s\n", args->options__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_loaded_code_object_t * loaded_code_object = %p", args->hsa_executable_load_agent_code_object.loaded_code_object);
-			if (args->hsa_executable_load_agent_code_object.loaded_code_object != NULL) {
+			printf("\thsa_loaded_code_object_t * loaded_code_object = %p", args->loaded_code_object);
+			if (args->loaded_code_object != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_load_agent_code_object.loaded_code_object__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->loaded_code_object__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_load_agent_code_object.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_handle_release
-		case HSA_API_ID_hsa_amd_vmem_handle_release :
+		case HSA_API_ID_hsa_amd_vmem_handle_release : {
 			//	hsa_amd_vmem_alloc_handle_t memory_handle ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_handle_release_t* args = (args_hsa_amd_vmem_handle_release_t*) func_args;
 			printf("\thsa_amd_vmem_alloc_handle_t memory_handle = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_vmem_handle_release.memory_handle.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->memory_handle.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_handle_release.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_memory_free
-		case HSA_API_ID_hsa_memory_free :
+		case HSA_API_ID_hsa_memory_free : {
 			//	void * ptr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * ptr = %p", args->hsa_memory_free.ptr);
+			args_hsa_memory_free_t* args = (args_hsa_memory_free_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_memory_free.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_cas_screlease
-		case HSA_API_ID_hsa_signal_cas_screlease :
+		case HSA_API_ID_hsa_signal_cas_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t expected (long);
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_cas_screlease_t* args = (args_hsa_signal_cas_screlease_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_cas_screlease.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t expected = %ld\n", args->hsa_signal_cas_screlease.expected);
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_cas_screlease.value);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_cas_screlease.retval);
+			printf("\thsa_signal_value_t expected = %ld\n", args->expected);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_copy_engine_status
-		case HSA_API_ID_hsa_amd_memory_copy_engine_status :
+		case HSA_API_ID_hsa_amd_memory_copy_engine_status : {
 			//	hsa_agent_t dst_agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -1487,40 +1605,44 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	uint32_t * engine_ids_mask (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_copy_engine_status_t* args = (args_hsa_amd_memory_copy_engine_status_t*) func_args;
 			printf("\thsa_agent_t dst_agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_copy_engine_status.dst_agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->dst_agent.handle);
 			printf("\t}\n");
 			printf("\thsa_agent_t src_agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_copy_engine_status.src_agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->src_agent.handle);
 			printf("\t}\n");
-			printf("\tuint32_t * engine_ids_mask = %p", args->hsa_amd_memory_copy_engine_status.engine_ids_mask);
-			if (args->hsa_amd_memory_copy_engine_status.engine_ids_mask != NULL) {
-				printf(" -> %u\n", args->hsa_amd_memory_copy_engine_status.engine_ids_mask__ref.val);
+			printf("\tuint32_t * engine_ids_mask = %p", args->engine_ids_mask);
+			if (args->engine_ids_mask != NULL) {
+				printf(" -> %u\n", args->engine_ids_mask__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_copy_engine_status.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_iterate_program_symbols
-		case HSA_API_ID_hsa_executable_iterate_program_symbols :
+		case HSA_API_ID_hsa_executable_iterate_program_symbols : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *) callback (enum hsa_status_t (*)(struct hsa_executable_s, struct hsa_executable_symbol_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_iterate_program_symbols_t* args = (args_hsa_executable_iterate_program_symbols_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_iterate_program_symbols.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *) callback = %p\n", args->hsa_executable_iterate_program_symbols.callback);
-			printf("\tvoid * data = %p", args->hsa_executable_iterate_program_symbols.data);
+			printf("\thsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *) callback = %p\n", args->callback);
+			printf("\tvoid * data = %p", args->data);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_iterate_program_symbols.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_copy
-		case HSA_API_ID_hsa_ext_image_copy :
+		case HSA_API_ID_hsa_ext_image_copy : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -1546,81 +1668,87 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint32_t z (unsigned int);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_copy_t* args = (args_hsa_ext_image_copy_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_copy.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
 			printf("\thsa_ext_image_t src_image = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_copy.src_image.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->src_image.handle);
 			printf("\t}\n");
-			printf("\tconst hsa_dim3_t * src_offset = %p", args->hsa_ext_image_copy.src_offset);
-			if (args->hsa_ext_image_copy.src_offset != NULL) {
+			printf("\tconst hsa_dim3_t * src_offset = %p", args->src_offset);
+			if (args->src_offset != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t x = %u\n", args->hsa_ext_image_copy.src_offset__ref.val.x);
-				printf("\t\tuint32_t y = %u\n", args->hsa_ext_image_copy.src_offset__ref.val.y);
-				printf("\t\tuint32_t z = %u\n", args->hsa_ext_image_copy.src_offset__ref.val.z);
+				printf("\t\tuint32_t x = %u\n", args->src_offset__ref.val.x);
+				printf("\t\tuint32_t y = %u\n", args->src_offset__ref.val.y);
+				printf("\t\tuint32_t z = %u\n", args->src_offset__ref.val.z);
 				printf("\t}\n");
 			} else { printf("\n"); };
 			printf("\thsa_ext_image_t dst_image = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_copy.dst_image.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->dst_image.handle);
 			printf("\t}\n");
-			printf("\tconst hsa_dim3_t * dst_offset = %p", args->hsa_ext_image_copy.dst_offset);
-			if (args->hsa_ext_image_copy.dst_offset != NULL) {
+			printf("\tconst hsa_dim3_t * dst_offset = %p", args->dst_offset);
+			if (args->dst_offset != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t x = %u\n", args->hsa_ext_image_copy.dst_offset__ref.val.x);
-				printf("\t\tuint32_t y = %u\n", args->hsa_ext_image_copy.dst_offset__ref.val.y);
-				printf("\t\tuint32_t z = %u\n", args->hsa_ext_image_copy.dst_offset__ref.val.z);
+				printf("\t\tuint32_t x = %u\n", args->dst_offset__ref.val.x);
+				printf("\t\tuint32_t y = %u\n", args->dst_offset__ref.val.y);
+				printf("\t\tuint32_t z = %u\n", args->dst_offset__ref.val.z);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst hsa_dim3_t * range = %p", args->hsa_ext_image_copy.range);
-			if (args->hsa_ext_image_copy.range != NULL) {
+			printf("\tconst hsa_dim3_t * range = %p", args->range);
+			if (args->range != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t x = %u\n", args->hsa_ext_image_copy.range__ref.val.x);
-				printf("\t\tuint32_t y = %u\n", args->hsa_ext_image_copy.range__ref.val.y);
-				printf("\t\tuint32_t z = %u\n", args->hsa_ext_image_copy.range__ref.val.z);
+				printf("\t\tuint32_t x = %u\n", args->range__ref.val.x);
+				printf("\t\tuint32_t y = %u\n", args->range__ref.val.y);
+				printf("\t\tuint32_t z = %u\n", args->range__ref.val.z);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_copy.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_coherency_get_type
-		case HSA_API_ID_hsa_amd_coherency_get_type :
+		case HSA_API_ID_hsa_amd_coherency_get_type : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_amd_coherency_type_t * type (enum hsa_amd_coherency_type_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_coherency_get_type_t* args = (args_hsa_amd_coherency_get_type_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_coherency_get_type.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_amd_coherency_type_t * type = %p", args->hsa_amd_coherency_get_type.type);
-			if (args->hsa_amd_coherency_get_type.type != NULL) {
-				printf(" -> %d\n", args->hsa_amd_coherency_get_type.type__ref.val);
+			printf("\thsa_amd_coherency_type_t * type = %p", args->type);
+			if (args->type != NULL) {
+				printf(" -> %d\n", args->type__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_coherency_get_type.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_freeze
-		case HSA_API_ID_hsa_executable_freeze :
+		case HSA_API_ID_hsa_executable_freeze : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	const char * options (const char *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_freeze_t* args = (args_hsa_executable_freeze_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_freeze.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
-			printf("\tconst char * options = %p", args->hsa_executable_freeze.options);
-			if (args->hsa_executable_freeze.options != NULL) {
-				printf(" -> %s\n", args->hsa_executable_freeze.options__ref.val);
+			printf("\tconst char * options = %p", args->options);
+			if (args->options != NULL) {
+				printf(" -> %s\n", args->options__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_freeze.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_store_write_index_release
-		case HSA_API_ID_hsa_queue_store_write_index_release :
+		case HSA_API_ID_hsa_queue_store_write_index_release : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -1633,45 +1761,49 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	uint64_t value (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_store_write_index_release.queue);
-			if (args->hsa_queue_store_write_index_release.queue != NULL) {
+			args_hsa_queue_store_write_index_release_t* args = (args_hsa_queue_store_write_index_release_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_store_write_index_release.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_store_write_index_release.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_store_write_index_release.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_store_write_index_release.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_store_write_index_release.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_store_write_index_release.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_store_write_index_release.value);
+			printf("\tuint64_t value = %lu\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_export_shareable_handle
-		case HSA_API_ID_hsa_amd_vmem_export_shareable_handle :
+		case HSA_API_ID_hsa_amd_vmem_export_shareable_handle : {
 			//	int * dmabuf_fd (int *);
 			//	hsa_amd_vmem_alloc_handle_t handle ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	uint64_t flags (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tint * dmabuf_fd = %p", args->hsa_amd_vmem_export_shareable_handle.dmabuf_fd);
-			if (args->hsa_amd_vmem_export_shareable_handle.dmabuf_fd != NULL) {
-				printf(" -> %d\n", args->hsa_amd_vmem_export_shareable_handle.dmabuf_fd__ref.val);
+			args_hsa_amd_vmem_export_shareable_handle_t* args = (args_hsa_amd_vmem_export_shareable_handle_t*) func_args;
+			printf("\tint * dmabuf_fd = %p", args->dmabuf_fd);
+			if (args->dmabuf_fd != NULL) {
+				printf(" -> %d\n", args->dmabuf_fd__ref.val);
 			} else { printf("\n"); };
 			printf("\thsa_amd_vmem_alloc_handle_t handle = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_vmem_export_shareable_handle.handle.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->handle.handle);
 			printf("\t}\n");
-			printf("\tuint64_t flags = %lu\n", args->hsa_amd_vmem_export_shareable_handle.flags);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_export_shareable_handle.retval);
+			printf("\tuint64_t flags = %lu\n", args->flags);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_svm_prefetch_async
-		case HSA_API_ID_hsa_amd_svm_prefetch_async :
+		case HSA_API_ID_hsa_amd_svm_prefetch_async : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	hsa_agent_t agent ({
@@ -1685,55 +1817,61 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * ptr = %p", args->hsa_amd_svm_prefetch_async.ptr);
+			args_hsa_amd_svm_prefetch_async_t* args = (args_hsa_amd_svm_prefetch_async_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hsa_amd_svm_prefetch_async.size);
+			printf("\tsize_t size = %lu\n", args->size);
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_svm_prefetch_async.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tuint32_t num_dep_signals = %u\n", args->hsa_amd_svm_prefetch_async.num_dep_signals);
-			printf("\tconst hsa_signal_t * dep_signals = %p", args->hsa_amd_svm_prefetch_async.dep_signals);
-			if (args->hsa_amd_svm_prefetch_async.dep_signals != NULL) {
+			printf("\tuint32_t num_dep_signals = %u\n", args->num_dep_signals);
+			printf("\tconst hsa_signal_t * dep_signals = %p", args->dep_signals);
+			if (args->dep_signals != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_svm_prefetch_async.dep_signals__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->dep_signals__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
 			printf("\thsa_signal_t completion_signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_svm_prefetch_async.completion_signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->completion_signal.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_svm_prefetch_async.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_store_screlease
-		case HSA_API_ID_hsa_signal_store_screlease :
+		case HSA_API_ID_hsa_signal_store_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_store_screlease_t* args = (args_hsa_signal_store_screlease_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_store_screlease.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_store_screlease.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_fill
-		case HSA_API_ID_hsa_amd_memory_fill :
+		case HSA_API_ID_hsa_amd_memory_fill : {
 			//	void * ptr (void *);
 			//	uint32_t value (unsigned int);
 			//	size_t count (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * ptr = %p", args->hsa_amd_memory_fill.ptr);
+			args_hsa_amd_memory_fill_t* args = (args_hsa_amd_memory_fill_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tuint32_t value = %u\n", args->hsa_amd_memory_fill.value);
-			printf("\tsize_t count = %lu\n", args->hsa_amd_memory_fill.count);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_fill.retval);
+			printf("\tuint32_t value = %u\n", args->value);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_map
-		case HSA_API_ID_hsa_amd_vmem_map :
+		case HSA_API_ID_hsa_amd_vmem_map : {
 			//	void * va (void *);
 			//	size_t size (unsigned long);
 			//	size_t in_offset (unsigned long);
@@ -1742,33 +1880,37 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	uint64_t flags (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * va = %p", args->hsa_amd_vmem_map.va);
+			args_hsa_amd_vmem_map_t* args = (args_hsa_amd_vmem_map_t*) func_args;
+			printf("\tvoid * va = %p", args->va);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hsa_amd_vmem_map.size);
-			printf("\tsize_t in_offset = %lu\n", args->hsa_amd_vmem_map.in_offset);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tsize_t in_offset = %lu\n", args->in_offset);
 			printf("\thsa_amd_vmem_alloc_handle_t memory_handle = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_vmem_map.memory_handle.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->memory_handle.handle);
 			printf("\t}\n");
-			printf("\tuint64_t flags = %lu\n", args->hsa_amd_vmem_map.flags);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_map.retval);
+			printf("\tuint64_t flags = %lu\n", args->flags);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_subtract_scacq_screl
-		case HSA_API_ID_hsa_signal_subtract_scacq_screl :
+		case HSA_API_ID_hsa_signal_subtract_scacq_screl : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_subtract_scacq_screl_t* args = (args_hsa_signal_subtract_scacq_screl_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_subtract_scacq_screl.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_subtract_scacq_screl.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_async_copy_rect
-		case HSA_API_ID_hsa_amd_memory_async_copy_rect :
+		case HSA_API_ID_hsa_amd_memory_async_copy_rect : {
 			//	const hsa_pitched_ptr_t * dst ({
 			//		void * base (void *);
 			//		size_t pitch (unsigned long);
@@ -1806,64 +1948,66 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tconst hsa_pitched_ptr_t * dst = %p", args->hsa_amd_memory_async_copy_rect.dst);
-			if (args->hsa_amd_memory_async_copy_rect.dst != NULL) {
+			args_hsa_amd_memory_async_copy_rect_t* args = (args_hsa_amd_memory_async_copy_rect_t*) func_args;
+			printf("\tconst hsa_pitched_ptr_t * dst = %p", args->dst);
+			if (args->dst != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t pitch = %lu\n", args->hsa_amd_memory_async_copy_rect.dst__ref.val.pitch);
-				printf("\t\tsize_t slice = %lu\n", args->hsa_amd_memory_async_copy_rect.dst__ref.val.slice);
+				printf("\t\tsize_t pitch = %lu\n", args->dst__ref.val.pitch);
+				printf("\t\tsize_t slice = %lu\n", args->dst__ref.val.slice);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst hsa_dim3_t * dst_offset = %p", args->hsa_amd_memory_async_copy_rect.dst_offset);
-			if (args->hsa_amd_memory_async_copy_rect.dst_offset != NULL) {
+			printf("\tconst hsa_dim3_t * dst_offset = %p", args->dst_offset);
+			if (args->dst_offset != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t x = %u\n", args->hsa_amd_memory_async_copy_rect.dst_offset__ref.val.x);
-				printf("\t\tuint32_t y = %u\n", args->hsa_amd_memory_async_copy_rect.dst_offset__ref.val.y);
-				printf("\t\tuint32_t z = %u\n", args->hsa_amd_memory_async_copy_rect.dst_offset__ref.val.z);
+				printf("\t\tuint32_t x = %u\n", args->dst_offset__ref.val.x);
+				printf("\t\tuint32_t y = %u\n", args->dst_offset__ref.val.y);
+				printf("\t\tuint32_t z = %u\n", args->dst_offset__ref.val.z);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst hsa_pitched_ptr_t * src = %p", args->hsa_amd_memory_async_copy_rect.src);
-			if (args->hsa_amd_memory_async_copy_rect.src != NULL) {
+			printf("\tconst hsa_pitched_ptr_t * src = %p", args->src);
+			if (args->src != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t pitch = %lu\n", args->hsa_amd_memory_async_copy_rect.src__ref.val.pitch);
-				printf("\t\tsize_t slice = %lu\n", args->hsa_amd_memory_async_copy_rect.src__ref.val.slice);
+				printf("\t\tsize_t pitch = %lu\n", args->src__ref.val.pitch);
+				printf("\t\tsize_t slice = %lu\n", args->src__ref.val.slice);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst hsa_dim3_t * src_offset = %p", args->hsa_amd_memory_async_copy_rect.src_offset);
-			if (args->hsa_amd_memory_async_copy_rect.src_offset != NULL) {
+			printf("\tconst hsa_dim3_t * src_offset = %p", args->src_offset);
+			if (args->src_offset != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t x = %u\n", args->hsa_amd_memory_async_copy_rect.src_offset__ref.val.x);
-				printf("\t\tuint32_t y = %u\n", args->hsa_amd_memory_async_copy_rect.src_offset__ref.val.y);
-				printf("\t\tuint32_t z = %u\n", args->hsa_amd_memory_async_copy_rect.src_offset__ref.val.z);
+				printf("\t\tuint32_t x = %u\n", args->src_offset__ref.val.x);
+				printf("\t\tuint32_t y = %u\n", args->src_offset__ref.val.y);
+				printf("\t\tuint32_t z = %u\n", args->src_offset__ref.val.z);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst hsa_dim3_t * range = %p", args->hsa_amd_memory_async_copy_rect.range);
-			if (args->hsa_amd_memory_async_copy_rect.range != NULL) {
+			printf("\tconst hsa_dim3_t * range = %p", args->range);
+			if (args->range != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t x = %u\n", args->hsa_amd_memory_async_copy_rect.range__ref.val.x);
-				printf("\t\tuint32_t y = %u\n", args->hsa_amd_memory_async_copy_rect.range__ref.val.y);
-				printf("\t\tuint32_t z = %u\n", args->hsa_amd_memory_async_copy_rect.range__ref.val.z);
+				printf("\t\tuint32_t x = %u\n", args->range__ref.val.x);
+				printf("\t\tuint32_t y = %u\n", args->range__ref.val.y);
+				printf("\t\tuint32_t z = %u\n", args->range__ref.val.z);
 				printf("\t}\n");
 			} else { printf("\n"); };
 			printf("\thsa_agent_t copy_agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_async_copy_rect.copy_agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->copy_agent.handle);
 			printf("\t}\n");
-			printf("\thsa_amd_copy_direction_t dir = %d\n", args->hsa_amd_memory_async_copy_rect.dir);
-			printf("\tuint32_t num_dep_signals = %u\n", args->hsa_amd_memory_async_copy_rect.num_dep_signals);
-			printf("\tconst hsa_signal_t * dep_signals = %p", args->hsa_amd_memory_async_copy_rect.dep_signals);
-			if (args->hsa_amd_memory_async_copy_rect.dep_signals != NULL) {
+			printf("\thsa_amd_copy_direction_t dir = %d\n", args->dir);
+			printf("\tuint32_t num_dep_signals = %u\n", args->num_dep_signals);
+			printf("\tconst hsa_signal_t * dep_signals = %p", args->dep_signals);
+			if (args->dep_signals != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_async_copy_rect.dep_signals__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->dep_signals__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
 			printf("\thsa_signal_t completion_signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_async_copy_rect.completion_signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->completion_signal.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_async_copy_rect.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_svm_attributes_set
-		case HSA_API_ID_hsa_amd_svm_attributes_set :
+		case HSA_API_ID_hsa_amd_svm_attributes_set : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	hsa_amd_svm_attribute_pair_t * attribute_list ({
@@ -1872,23 +2016,25 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	size_t attribute_count (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * ptr = %p", args->hsa_amd_svm_attributes_set.ptr);
+			args_hsa_amd_svm_attributes_set_t* args = (args_hsa_amd_svm_attributes_set_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hsa_amd_svm_attributes_set.size);
-			printf("\thsa_amd_svm_attribute_pair_t * attribute_list = %p", args->hsa_amd_svm_attributes_set.attribute_list);
-			if (args->hsa_amd_svm_attributes_set.attribute_list != NULL) {
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thsa_amd_svm_attribute_pair_t * attribute_list = %p", args->attribute_list);
+			if (args->attribute_list != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t attribute = %lu\n", args->hsa_amd_svm_attributes_set.attribute_list__ref.val.attribute);
-				printf("\t\tuint64_t value = %lu\n", args->hsa_amd_svm_attributes_set.attribute_list__ref.val.value);
+				printf("\t\tuint64_t attribute = %lu\n", args->attribute_list__ref.val.attribute);
+				printf("\t\tuint64_t value = %lu\n", args->attribute_list__ref.val.value);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tsize_t attribute_count = %lu\n", args->hsa_amd_svm_attributes_set.attribute_count);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_svm_attributes_set.retval);
+			printf("\tsize_t attribute_count = %lu\n", args->attribute_count);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_profiling_get_async_copy_time
-		case HSA_API_ID_hsa_amd_profiling_get_async_copy_time :
+		case HSA_API_ID_hsa_amd_profiling_get_async_copy_time : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -1897,50 +2043,56 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t end (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_profiling_get_async_copy_time_t* args = (args_hsa_amd_profiling_get_async_copy_time_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_profiling_get_async_copy_time.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_amd_profiling_async_copy_time_t * time = %p", args->hsa_amd_profiling_get_async_copy_time.time);
-			if (args->hsa_amd_profiling_get_async_copy_time.time != NULL) {
+			printf("\thsa_amd_profiling_async_copy_time_t * time = %p", args->time);
+			if (args->time != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t start = %lu\n", args->hsa_amd_profiling_get_async_copy_time.time__ref.val.start);
-				printf("\t\tuint64_t end = %lu\n", args->hsa_amd_profiling_get_async_copy_time.time__ref.val.end);
+				printf("\t\tuint64_t start = %lu\n", args->time__ref.val.start);
+				printf("\t\tuint64_t end = %lu\n", args->time__ref.val.end);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_profiling_get_async_copy_time.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_agent_set_async_scratch_limit
-		case HSA_API_ID_hsa_amd_agent_set_async_scratch_limit :
+		case HSA_API_ID_hsa_amd_agent_set_async_scratch_limit : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	size_t threshold (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_agent_set_async_scratch_limit_t* args = (args_hsa_amd_agent_set_async_scratch_limit_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_agent_set_async_scratch_limit.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tsize_t threshold = %lu\n", args->hsa_amd_agent_set_async_scratch_limit.threshold);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_agent_set_async_scratch_limit.retval);
+			printf("\tsize_t threshold = %lu\n", args->threshold);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_subtract_screlease
-		case HSA_API_ID_hsa_signal_subtract_screlease :
+		case HSA_API_ID_hsa_signal_subtract_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_subtract_screlease_t* args = (args_hsa_signal_subtract_screlease_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_subtract_screlease.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_subtract_screlease.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_import
-		case HSA_API_ID_hsa_ext_image_import :
+		case HSA_API_ID_hsa_ext_image_import : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -1963,37 +2115,39 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		});
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_import_t* args = (args_hsa_ext_image_import_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_import.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tconst void * src_memory = %p", args->hsa_ext_image_import.src_memory);
+			printf("\tconst void * src_memory = %p", args->src_memory);
 			printf("\n");
-			printf("\tsize_t src_row_pitch = %lu\n", args->hsa_ext_image_import.src_row_pitch);
-			printf("\tsize_t src_slice_pitch = %lu\n", args->hsa_ext_image_import.src_slice_pitch);
+			printf("\tsize_t src_row_pitch = %lu\n", args->src_row_pitch);
+			printf("\tsize_t src_slice_pitch = %lu\n", args->src_slice_pitch);
 			printf("\thsa_ext_image_t dst_image = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_import.dst_image.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->dst_image.handle);
 			printf("\t}\n");
-			printf("\tconst hsa_ext_image_region_t * image_region = %p", args->hsa_ext_image_import.image_region);
-			if (args->hsa_ext_image_import.image_region != NULL) {
+			printf("\tconst hsa_ext_image_region_t * image_region = %p", args->image_region);
+			if (args->image_region != NULL) {
 				printf(" -> {\n");
 				printf("\t\thsa_dim3_t offset = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hsa_ext_image_import.image_region__ref.val.offset.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hsa_ext_image_import.image_region__ref.val.offset.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hsa_ext_image_import.image_region__ref.val.offset.z);
+				printf("\t\t\tuint32_t x = %u\n", args->image_region__ref.val.offset.x);
+				printf("\t\t\tuint32_t y = %u\n", args->image_region__ref.val.offset.y);
+				printf("\t\t\tuint32_t z = %u\n", args->image_region__ref.val.offset.z);
 				printf("\t\t}\n");
 				printf("\t\thsa_dim3_t range = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hsa_ext_image_import.image_region__ref.val.range.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hsa_ext_image_import.image_region__ref.val.range.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hsa_ext_image_import.image_region__ref.val.range.z);
+				printf("\t\t\tuint32_t x = %u\n", args->image_region__ref.val.range.x);
+				printf("\t\t\tuint32_t y = %u\n", args->image_region__ref.val.range.y);
+				printf("\t\t\tuint32_t z = %u\n", args->image_region__ref.val.range.z);
 				printf("\t\t}\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_import.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_pool_can_migrate
-		case HSA_API_ID_hsa_amd_memory_pool_can_migrate :
+		case HSA_API_ID_hsa_amd_memory_pool_can_migrate : {
 			//	hsa_amd_memory_pool_t src_memory_pool ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -2002,22 +2156,24 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	_Bool * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_pool_can_migrate_t* args = (args_hsa_amd_memory_pool_can_migrate_t*) func_args;
 			printf("\thsa_amd_memory_pool_t src_memory_pool = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_pool_can_migrate.src_memory_pool.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->src_memory_pool.handle);
 			printf("\t}\n");
 			printf("\thsa_amd_memory_pool_t dst_memory_pool = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_pool_can_migrate.dst_memory_pool.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->dst_memory_pool.handle);
 			printf("\t}\n");
-			printf("\t_Bool * result = %p", args->hsa_amd_memory_pool_can_migrate.result);
-			if (args->hsa_amd_memory_pool_can_migrate.result != NULL) {
-				printf(" -> %u\n", args->hsa_amd_memory_pool_can_migrate.result__ref.val);
+			printf("\t_Bool * result = %p", args->result);
+			if (args->result != NULL) {
+				printf(" -> %u\n", args->result__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_pool_can_migrate.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_ipc_memory_attach
-		case HSA_API_ID_hsa_amd_ipc_memory_attach :
+		case HSA_API_ID_hsa_amd_ipc_memory_attach : {
 			//	const hsa_amd_ipc_memory_t * handle ({
 			//		uint32_t[8] handle (unsigned int[8]);
 			//	});
@@ -2028,40 +2184,44 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	void ** mapped_ptr (void **);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tconst hsa_amd_ipc_memory_t * handle = %p", args->hsa_amd_ipc_memory_attach.handle);
-			if (args->hsa_amd_ipc_memory_attach.handle != NULL) {
+			args_hsa_amd_ipc_memory_attach_t* args = (args_hsa_amd_ipc_memory_attach_t*) func_args;
+			printf("\tconst hsa_amd_ipc_memory_t * handle = %p", args->handle);
+			if (args->handle != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t[8] handle = %u\n", args->hsa_amd_ipc_memory_attach.handle__ref.val.handle[0]);
+				printf("\t\tuint32_t[8] handle = %u\n", args->handle__ref.val.handle[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tsize_t len = %lu\n", args->hsa_amd_ipc_memory_attach.len);
-			printf("\tuint32_t num_agents = %u\n", args->hsa_amd_ipc_memory_attach.num_agents);
-			printf("\tconst hsa_agent_t * mapping_agents = %p", args->hsa_amd_ipc_memory_attach.mapping_agents);
-			if (args->hsa_amd_ipc_memory_attach.mapping_agents != NULL) {
+			printf("\tsize_t len = %lu\n", args->len);
+			printf("\tuint32_t num_agents = %u\n", args->num_agents);
+			printf("\tconst hsa_agent_t * mapping_agents = %p", args->mapping_agents);
+			if (args->mapping_agents != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_ipc_memory_attach.mapping_agents__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->mapping_agents__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tvoid ** mapped_ptr = %p", args->hsa_amd_ipc_memory_attach.mapped_ptr);
-			if (args->hsa_amd_ipc_memory_attach.mapped_ptr != NULL) {
-				printf("-> %p", args->hsa_amd_ipc_memory_attach.mapped_ptr__ref.ptr1);
+			printf("\tvoid ** mapped_ptr = %p", args->mapped_ptr);
+			if (args->mapped_ptr != NULL) {
+				printf("-> %p", args->mapped_ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_ipc_memory_attach.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_portable_close_dmabuf
-		case HSA_API_ID_hsa_amd_portable_close_dmabuf :
+		case HSA_API_ID_hsa_amd_portable_close_dmabuf : {
 			//	int dmabuf (int);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tint dmabuf = %d\n", args->hsa_amd_portable_close_dmabuf.dmabuf);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_portable_close_dmabuf.retval);
+			args_hsa_amd_portable_close_dmabuf_t* args = (args_hsa_amd_portable_close_dmabuf_t*) func_args;
+			printf("\tint dmabuf = %d\n", args->dmabuf);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_add_write_index_relaxed
-		case HSA_API_ID_hsa_queue_add_write_index_relaxed :
+		case HSA_API_ID_hsa_queue_add_write_index_relaxed : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -2075,26 +2235,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_add_write_index_relaxed.queue);
-			if (args->hsa_queue_add_write_index_relaxed.queue != NULL) {
+			args_hsa_queue_add_write_index_relaxed_t* args = (args_hsa_queue_add_write_index_relaxed_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_add_write_index_relaxed.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_add_write_index_relaxed.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_add_write_index_relaxed.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_add_write_index_relaxed.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_add_write_index_relaxed.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_add_write_index_relaxed.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_add_write_index_relaxed.value);
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_add_write_index_relaxed.retval);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_destroy
-		case HSA_API_ID_hsa_queue_destroy :
+		case HSA_API_ID_hsa_queue_destroy : {
 			//	hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -2107,38 +2269,42 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_queue_t * queue = %p", args->hsa_queue_destroy.queue);
-			if (args->hsa_queue_destroy.queue != NULL) {
+			args_hsa_queue_destroy_t* args = (args_hsa_queue_destroy_t*) func_args;
+			printf("\thsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_destroy.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_destroy.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_destroy.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_destroy.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_destroy.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_destroy.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_queue_destroy.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_or_scacq_screl
-		case HSA_API_ID_hsa_signal_or_scacq_screl :
+		case HSA_API_ID_hsa_signal_or_scacq_screl : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_or_scacq_screl_t* args = (args_hsa_signal_or_scacq_screl_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_or_scacq_screl.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_or_scacq_screl.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_agent_memory_pool_get_info
-		case HSA_API_ID_hsa_amd_agent_memory_pool_get_info :
+		case HSA_API_ID_hsa_amd_agent_memory_pool_get_info : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -2148,21 +2314,23 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_amd_agent_memory_pool_info_t attribute (enum hsa_amd_agent_memory_pool_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_agent_memory_pool_get_info_t* args = (args_hsa_amd_agent_memory_pool_get_info_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_agent_memory_pool_get_info.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
 			printf("\thsa_amd_memory_pool_t memory_pool = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_agent_memory_pool_get_info.memory_pool.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->memory_pool.handle);
 			printf("\t}\n");
-			printf("\thsa_amd_agent_memory_pool_info_t attribute = %d\n", args->hsa_amd_agent_memory_pool_get_info.attribute);
-			printf("\tvoid * value = %p", args->hsa_amd_agent_memory_pool_get_info.value);
+			printf("\thsa_amd_agent_memory_pool_info_t attribute = %d\n", args->attribute);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_agent_memory_pool_get_info.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_create_alt
-		case HSA_API_ID_hsa_executable_create_alt :
+		case HSA_API_ID_hsa_executable_create_alt : {
 			//	hsa_profile_t profile (enum hsa_profile_t);
 			//	hsa_default_float_rounding_mode_t default_float_rounding_mode (enum hsa_default_float_rounding_mode_t);
 			//	const char * options (const char *);
@@ -2170,37 +2338,41 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_profile_t profile = %d\n", args->hsa_executable_create_alt.profile);
-			printf("\thsa_default_float_rounding_mode_t default_float_rounding_mode = %d\n", args->hsa_executable_create_alt.default_float_rounding_mode);
-			printf("\tconst char * options = %p", args->hsa_executable_create_alt.options);
-			if (args->hsa_executable_create_alt.options != NULL) {
-				printf(" -> %s\n", args->hsa_executable_create_alt.options__ref.val);
+			args_hsa_executable_create_alt_t* args = (args_hsa_executable_create_alt_t*) func_args;
+			printf("\thsa_profile_t profile = %d\n", args->profile);
+			printf("\thsa_default_float_rounding_mode_t default_float_rounding_mode = %d\n", args->default_float_rounding_mode);
+			printf("\tconst char * options = %p", args->options);
+			if (args->options != NULL) {
+				printf(" -> %s\n", args->options__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_executable_t * executable = %p", args->hsa_executable_create_alt.executable);
-			if (args->hsa_executable_create_alt.executable != NULL) {
+			printf("\thsa_executable_t * executable = %p", args->executable);
+			if (args->executable != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_create_alt.executable__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->executable__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_create_alt.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_silent_store_relaxed
-		case HSA_API_ID_hsa_signal_silent_store_relaxed :
+		case HSA_API_ID_hsa_signal_silent_store_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_silent_store_relaxed_t* args = (args_hsa_signal_silent_store_relaxed_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_silent_store_relaxed.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_silent_store_relaxed.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_add_write_index_acq_rel
-		case HSA_API_ID_hsa_queue_add_write_index_acq_rel :
+		case HSA_API_ID_hsa_queue_add_write_index_acq_rel : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -2214,26 +2386,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_add_write_index_acq_rel.queue);
-			if (args->hsa_queue_add_write_index_acq_rel.queue != NULL) {
+			args_hsa_queue_add_write_index_acq_rel_t* args = (args_hsa_queue_add_write_index_acq_rel_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_add_write_index_acq_rel.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_add_write_index_acq_rel.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_add_write_index_acq_rel.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_add_write_index_acq_rel.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_add_write_index_acq_rel.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_add_write_index_acq_rel.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_add_write_index_acq_rel.value);
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_add_write_index_acq_rel.retval);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_cas_write_index_acq_rel
-		case HSA_API_ID_hsa_queue_cas_write_index_acq_rel :
+		case HSA_API_ID_hsa_queue_cas_write_index_acq_rel : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -2248,45 +2422,49 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint64_t expected (unsigned long);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_cas_write_index_acq_rel.queue);
-			if (args->hsa_queue_cas_write_index_acq_rel.queue != NULL) {
+			args_hsa_queue_cas_write_index_acq_rel_t* args = (args_hsa_queue_cas_write_index_acq_rel_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_cas_write_index_acq_rel.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_cas_write_index_acq_rel.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_cas_write_index_acq_rel.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_cas_write_index_acq_rel.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_cas_write_index_acq_rel.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_cas_write_index_acq_rel.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t expected = %lu\n", args->hsa_queue_cas_write_index_acq_rel.expected);
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_cas_write_index_acq_rel.value);
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_cas_write_index_acq_rel.retval);
+			printf("\tuint64_t expected = %lu\n", args->expected);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_region_get_info
-		case HSA_API_ID_hsa_region_get_info :
+		case HSA_API_ID_hsa_region_get_info : {
 			//	hsa_region_t region ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_region_info_t attribute (enum hsa_region_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_region_get_info_t* args = (args_hsa_region_get_info_t*) func_args;
 			printf("\thsa_region_t region = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_region_get_info.region.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->region.handle);
 			printf("\t}\n");
-			printf("\thsa_region_info_t attribute = %d\n", args->hsa_region_get_info.attribute);
-			printf("\tvoid * value = %p", args->hsa_region_get_info.value);
+			printf("\thsa_region_info_t attribute = %d\n", args->attribute);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_region_get_info.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_get_symbol_by_name
-		case HSA_API_ID_hsa_executable_get_symbol_by_name :
+		case HSA_API_ID_hsa_executable_get_symbol_by_name : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -2298,31 +2476,33 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_get_symbol_by_name_t* args = (args_hsa_executable_get_symbol_by_name_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_get_symbol_by_name.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
-			printf("\tconst char * symbol_name = %p", args->hsa_executable_get_symbol_by_name.symbol_name);
-			if (args->hsa_executable_get_symbol_by_name.symbol_name != NULL) {
-				printf(" -> %s\n", args->hsa_executable_get_symbol_by_name.symbol_name__ref.val);
+			printf("\tconst char * symbol_name = %p", args->symbol_name);
+			if (args->symbol_name != NULL) {
+				printf(" -> %s\n", args->symbol_name__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst hsa_agent_t * agent = %p", args->hsa_executable_get_symbol_by_name.agent);
-			if (args->hsa_executable_get_symbol_by_name.agent != NULL) {
+			printf("\tconst hsa_agent_t * agent = %p", args->agent);
+			if (args->agent != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_get_symbol_by_name.agent__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->agent__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_executable_symbol_t * symbol = %p", args->hsa_executable_get_symbol_by_name.symbol);
-			if (args->hsa_executable_get_symbol_by_name.symbol != NULL) {
+			printf("\thsa_executable_symbol_t * symbol = %p", args->symbol);
+			if (args->symbol != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_get_symbol_by_name.symbol__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->symbol__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_get_symbol_by_name.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_get_symbol
-		case HSA_API_ID_hsa_executable_get_symbol :
+		case HSA_API_ID_hsa_executable_get_symbol : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -2336,59 +2516,65 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_get_symbol_t* args = (args_hsa_executable_get_symbol_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_get_symbol.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
-			printf("\tconst char * module_name = %p", args->hsa_executable_get_symbol.module_name);
-			if (args->hsa_executable_get_symbol.module_name != NULL) {
-				printf(" -> %s\n", args->hsa_executable_get_symbol.module_name__ref.val);
+			printf("\tconst char * module_name = %p", args->module_name);
+			if (args->module_name != NULL) {
+				printf(" -> %s\n", args->module_name__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst char * symbol_name = %p", args->hsa_executable_get_symbol.symbol_name);
-			if (args->hsa_executable_get_symbol.symbol_name != NULL) {
-				printf(" -> %s\n", args->hsa_executable_get_symbol.symbol_name__ref.val);
+			printf("\tconst char * symbol_name = %p", args->symbol_name);
+			if (args->symbol_name != NULL) {
+				printf(" -> %s\n", args->symbol_name__ref.val);
 			} else { printf("\n"); };
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_get_symbol.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tint32_t call_convention = %d\n", args->hsa_executable_get_symbol.call_convention);
-			printf("\thsa_executable_symbol_t * symbol = %p", args->hsa_executable_get_symbol.symbol);
-			if (args->hsa_executable_get_symbol.symbol != NULL) {
+			printf("\tint32_t call_convention = %d\n", args->call_convention);
+			printf("\thsa_executable_symbol_t * symbol = %p", args->symbol);
+			if (args->symbol != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_get_symbol.symbol__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->symbol__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_get_symbol.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_xor_scacquire
-		case HSA_API_ID_hsa_signal_xor_scacquire :
+		case HSA_API_ID_hsa_signal_xor_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_xor_scacquire_t* args = (args_hsa_signal_xor_scacquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_xor_scacquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_xor_scacquire.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_xor_scacq_screl
-		case HSA_API_ID_hsa_signal_xor_scacq_screl :
+		case HSA_API_ID_hsa_signal_xor_scacq_screl : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_xor_scacq_screl_t* args = (args_hsa_signal_xor_scacq_screl_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_xor_scacq_screl.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_xor_scacq_screl.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_store_write_index_screlease
-		case HSA_API_ID_hsa_queue_store_write_index_screlease :
+		case HSA_API_ID_hsa_queue_store_write_index_screlease : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -2401,201 +2587,225 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	uint64_t value (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_store_write_index_screlease.queue);
-			if (args->hsa_queue_store_write_index_screlease.queue != NULL) {
+			args_hsa_queue_store_write_index_screlease_t* args = (args_hsa_queue_store_write_index_screlease_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_store_write_index_screlease.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_store_write_index_screlease.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_store_write_index_screlease.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_store_write_index_screlease.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_store_write_index_screlease.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_store_write_index_screlease.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_store_write_index_screlease.value);
+			printf("\tuint64_t value = %lu\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_agent_iterate_memory_pools
-		case HSA_API_ID_hsa_amd_agent_iterate_memory_pools :
+		case HSA_API_ID_hsa_amd_agent_iterate_memory_pools : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_amd_memory_pool_t, void *) callback (enum hsa_status_t (*)(struct hsa_amd_memory_pool_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_agent_iterate_memory_pools_t* args = (args_hsa_amd_agent_iterate_memory_pools_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_agent_iterate_memory_pools.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t (*)(hsa_amd_memory_pool_t, void *) callback = %p\n", args->hsa_amd_agent_iterate_memory_pools.callback);
-			printf("\tvoid * data = %p", args->hsa_amd_agent_iterate_memory_pools.data);
+			printf("\thsa_status_t (*)(hsa_amd_memory_pool_t, void *) callback = %p\n", args->callback);
+			printf("\tvoid * data = %p", args->data);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_agent_iterate_memory_pools.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_pool_get_info
-		case HSA_API_ID_hsa_amd_memory_pool_get_info :
+		case HSA_API_ID_hsa_amd_memory_pool_get_info : {
 			//	hsa_amd_memory_pool_t memory_pool ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_amd_memory_pool_info_t attribute (enum hsa_amd_memory_pool_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_pool_get_info_t* args = (args_hsa_amd_memory_pool_get_info_t*) func_args;
 			printf("\thsa_amd_memory_pool_t memory_pool = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_pool_get_info.memory_pool.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->memory_pool.handle);
 			printf("\t}\n");
-			printf("\thsa_amd_memory_pool_info_t attribute = %d\n", args->hsa_amd_memory_pool_get_info.attribute);
-			printf("\tvoid * value = %p", args->hsa_amd_memory_pool_get_info.value);
+			printf("\thsa_amd_memory_pool_info_t attribute = %d\n", args->attribute);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_pool_get_info.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_spm_release
-		case HSA_API_ID_hsa_amd_spm_release :
+		case HSA_API_ID_hsa_amd_spm_release : {
 			//	hsa_agent_t preferred_agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_spm_release_t* args = (args_hsa_amd_spm_release_t*) func_args;
 			printf("\thsa_agent_t preferred_agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_spm_release.preferred_agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->preferred_agent.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_spm_release.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_and_scacq_screl
-		case HSA_API_ID_hsa_signal_and_scacq_screl :
+		case HSA_API_ID_hsa_signal_and_scacq_screl : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_and_scacq_screl_t* args = (args_hsa_signal_and_scacq_screl_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_and_scacq_screl.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_and_scacq_screl.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_wavefront_get_info
-		case HSA_API_ID_hsa_wavefront_get_info :
+		case HSA_API_ID_hsa_wavefront_get_info : {
 			//	hsa_wavefront_t wavefront ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_wavefront_info_t attribute (enum hsa_wavefront_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_wavefront_get_info_t* args = (args_hsa_wavefront_get_info_t*) func_args;
 			printf("\thsa_wavefront_t wavefront = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_wavefront_get_info.wavefront.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->wavefront.handle);
 			printf("\t}\n");
-			printf("\thsa_wavefront_info_t attribute = %d\n", args->hsa_wavefront_get_info.attribute);
-			printf("\tvoid * value = %p", args->hsa_wavefront_get_info.value);
+			printf("\thsa_wavefront_info_t attribute = %d\n", args->attribute);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_wavefront_get_info.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ven_amd_pcs_destroy
-		case HSA_API_ID_hsa_ven_amd_pcs_destroy :
+		case HSA_API_ID_hsa_ven_amd_pcs_destroy : {
 			//	hsa_ven_amd_pcs_t pc_sampling ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ven_amd_pcs_destroy_t* args = (args_hsa_ven_amd_pcs_destroy_t*) func_args;
 			printf("\thsa_ven_amd_pcs_t pc_sampling = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ven_amd_pcs_destroy.pc_sampling.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->pc_sampling.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_ven_amd_pcs_destroy.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_system_major_extension_supported
-		case HSA_API_ID_hsa_system_major_extension_supported :
+		case HSA_API_ID_hsa_system_major_extension_supported : {
 			//	uint16_t extension (unsigned short);
 			//	uint16_t version_major (unsigned short);
 			//	uint16_t * version_minor (unsigned short*);
 			//	_Bool * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tuint16_t extension = %hu\n", args->hsa_system_major_extension_supported.extension);
-			printf("\tuint16_t version_major = %hu\n", args->hsa_system_major_extension_supported.version_major);
-			printf("\tuint16_t * version_minor = %p", args->hsa_system_major_extension_supported.version_minor);
-			if (args->hsa_system_major_extension_supported.version_minor != NULL) {
-				printf(" -> %hu\n", args->hsa_system_major_extension_supported.version_minor__ref.val);
+			args_hsa_system_major_extension_supported_t* args = (args_hsa_system_major_extension_supported_t*) func_args;
+			printf("\tuint16_t extension = %hu\n", args->extension);
+			printf("\tuint16_t version_major = %hu\n", args->version_major);
+			printf("\tuint16_t * version_minor = %p", args->version_minor);
+			if (args->version_minor != NULL) {
+				printf(" -> %hu\n", args->version_minor__ref.val);
 			} else { printf("\n"); };
-			printf("\t_Bool * result = %p", args->hsa_system_major_extension_supported.result);
-			if (args->hsa_system_major_extension_supported.result != NULL) {
-				printf(" -> %u\n", args->hsa_system_major_extension_supported.result__ref.val);
+			printf("\t_Bool * result = %p", args->result);
+			if (args->result != NULL) {
+				printf(" -> %u\n", args->result__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_system_major_extension_supported.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_status_string
-		case HSA_API_ID_hsa_status_string :
+		case HSA_API_ID_hsa_status_string : {
 			//	hsa_status_t status (enum hsa_status_t);
 			//	const char ** status_string (const char **);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_status_t status = %d\n", args->hsa_status_string.status);
-			printf("\tconst char ** status_string = %p", args->hsa_status_string.status_string);
-			if (args->hsa_status_string.status_string != NULL) {
-				printf("-> %p", args->hsa_status_string.status_string__ref.ptr1);
-				if (args->hsa_status_string.status_string__ref.ptr1 != NULL) {
-					printf(" -> %s\n", args->hsa_status_string.status_string__ref.val);
+			args_hsa_status_string_t* args = (args_hsa_status_string_t*) func_args;
+			printf("\thsa_status_t status = %d\n", args->status);
+			printf("\tconst char ** status_string = %p", args->status_string);
+			if (args->status_string != NULL) {
+				printf("-> %p", args->status_string__ref.ptr1);
+				if (args->status_string__ref.ptr1 != NULL) {
+					printf(" -> %s\n", args->status_string__ref.val);
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_status_string.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_cas_relaxed
-		case HSA_API_ID_hsa_signal_cas_relaxed :
+		case HSA_API_ID_hsa_signal_cas_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t expected (long);
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_cas_relaxed_t* args = (args_hsa_signal_cas_relaxed_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_cas_relaxed.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t expected = %ld\n", args->hsa_signal_cas_relaxed.expected);
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_cas_relaxed.value);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_cas_relaxed.retval);
+			printf("\thsa_signal_value_t expected = %ld\n", args->expected);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_init
-		case HSA_API_ID_hsa_init :
+		case HSA_API_ID_hsa_init : {
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_status_t retval = %d\n", args->hsa_init.retval);
+			args_hsa_init_t* args = (args_hsa_init_t*) func_args;
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_memory_allocate
-		case HSA_API_ID_hsa_memory_allocate :
+		case HSA_API_ID_hsa_memory_allocate : {
 			//	hsa_region_t region ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	size_t size (unsigned long);
 			//	void ** ptr (void **);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_memory_allocate_t* args = (args_hsa_memory_allocate_t*) func_args;
 			printf("\thsa_region_t region = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_memory_allocate.region.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->region.handle);
 			printf("\t}\n");
-			printf("\tsize_t size = %lu\n", args->hsa_memory_allocate.size);
-			printf("\tvoid ** ptr = %p", args->hsa_memory_allocate.ptr);
-			if (args->hsa_memory_allocate.ptr != NULL) {
-				printf("-> %p", args->hsa_memory_allocate.ptr__ref.ptr1);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tvoid ** ptr = %p", args->ptr);
+			if (args->ptr != NULL) {
+				printf("-> %p", args->ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_memory_allocate.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_data_get_info
-		case HSA_API_ID_hsa_ext_image_data_get_info :
+		case HSA_API_ID_hsa_ext_image_data_get_info : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -2616,68 +2826,74 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		size_t alignment (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_data_get_info_t* args = (args_hsa_ext_image_data_get_info_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_data_get_info.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tconst hsa_ext_image_descriptor_t * image_descriptor = %p", args->hsa_ext_image_data_get_info.image_descriptor);
-			if (args->hsa_ext_image_data_get_info.image_descriptor != NULL) {
+			printf("\tconst hsa_ext_image_descriptor_t * image_descriptor = %p", args->image_descriptor);
+			if (args->image_descriptor != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_ext_image_geometry_t geometry = %d\n", args->hsa_ext_image_data_get_info.image_descriptor__ref.val.geometry);
-				printf("\t\tsize_t width = %lu\n", args->hsa_ext_image_data_get_info.image_descriptor__ref.val.width);
-				printf("\t\tsize_t height = %lu\n", args->hsa_ext_image_data_get_info.image_descriptor__ref.val.height);
-				printf("\t\tsize_t depth = %lu\n", args->hsa_ext_image_data_get_info.image_descriptor__ref.val.depth);
-				printf("\t\tsize_t array_size = %lu\n", args->hsa_ext_image_data_get_info.image_descriptor__ref.val.array_size);
+				printf("\t\thsa_ext_image_geometry_t geometry = %d\n", args->image_descriptor__ref.val.geometry);
+				printf("\t\tsize_t width = %lu\n", args->image_descriptor__ref.val.width);
+				printf("\t\tsize_t height = %lu\n", args->image_descriptor__ref.val.height);
+				printf("\t\tsize_t depth = %lu\n", args->image_descriptor__ref.val.depth);
+				printf("\t\tsize_t array_size = %lu\n", args->image_descriptor__ref.val.array_size);
 				printf("\t\thsa_ext_image_format_t format = {\n");
-				printf("\t\t\thsa_ext_image_channel_type32_t channel_type = %u\n", args->hsa_ext_image_data_get_info.image_descriptor__ref.val.format.channel_type);
-				printf("\t\t\thsa_ext_image_channel_order32_t channel_order = %u\n", args->hsa_ext_image_data_get_info.image_descriptor__ref.val.format.channel_order);
+				printf("\t\t\thsa_ext_image_channel_type32_t channel_type = %u\n", args->image_descriptor__ref.val.format.channel_type);
+				printf("\t\t\thsa_ext_image_channel_order32_t channel_order = %u\n", args->image_descriptor__ref.val.format.channel_order);
 				printf("\t\t}\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_access_permission_t access_permission = %d\n", args->hsa_ext_image_data_get_info.access_permission);
-			printf("\thsa_ext_image_data_info_t * image_data_info = %p", args->hsa_ext_image_data_get_info.image_data_info);
-			if (args->hsa_ext_image_data_get_info.image_data_info != NULL) {
+			printf("\thsa_access_permission_t access_permission = %d\n", args->access_permission);
+			printf("\thsa_ext_image_data_info_t * image_data_info = %p", args->image_data_info);
+			if (args->image_data_info != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t size = %lu\n", args->hsa_ext_image_data_get_info.image_data_info__ref.val.size);
-				printf("\t\tsize_t alignment = %lu\n", args->hsa_ext_image_data_get_info.image_data_info__ref.val.alignment);
+				printf("\t\tsize_t size = %lu\n", args->image_data_info__ref.val.size);
+				printf("\t\tsize_t alignment = %lu\n", args->image_data_info__ref.val.alignment);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_data_get_info.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_cache_get_info
-		case HSA_API_ID_hsa_cache_get_info :
+		case HSA_API_ID_hsa_cache_get_info : {
 			//	hsa_cache_t cache ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_cache_info_t attribute (enum hsa_cache_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_cache_get_info_t* args = (args_hsa_cache_get_info_t*) func_args;
 			printf("\thsa_cache_t cache = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_cache_get_info.cache.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->cache.handle);
 			printf("\t}\n");
-			printf("\thsa_cache_info_t attribute = %d\n", args->hsa_cache_get_info.attribute);
-			printf("\tvoid * value = %p", args->hsa_cache_get_info.value);
+			printf("\thsa_cache_info_t attribute = %d\n", args->attribute);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_cache_get_info.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_subtract_relaxed
-		case HSA_API_ID_hsa_signal_subtract_relaxed :
+		case HSA_API_ID_hsa_signal_subtract_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_subtract_relaxed_t* args = (args_hsa_signal_subtract_relaxed_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_subtract_relaxed.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_subtract_relaxed.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_load_write_index_relaxed
-		case HSA_API_ID_hsa_queue_load_write_index_relaxed :
+		case HSA_API_ID_hsa_queue_load_write_index_relaxed : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -2690,25 +2906,27 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_load_write_index_relaxed.queue);
-			if (args->hsa_queue_load_write_index_relaxed.queue != NULL) {
+			args_hsa_queue_load_write_index_relaxed_t* args = (args_hsa_queue_load_write_index_relaxed_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_load_write_index_relaxed.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_load_write_index_relaxed.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_load_write_index_relaxed.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_load_write_index_relaxed.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_load_write_index_relaxed.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_load_write_index_relaxed.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_load_write_index_relaxed.retval);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_signal_async_handler
-		case HSA_API_ID_hsa_amd_signal_async_handler :
+		case HSA_API_ID_hsa_amd_signal_async_handler : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -2717,50 +2935,56 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_amd_signal_handler handler (unsigned int (*)(long, void *));
 			//	void * arg (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_signal_async_handler_t* args = (args_hsa_amd_signal_async_handler_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_signal_async_handler.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_condition_t cond = %d\n", args->hsa_amd_signal_async_handler.cond);
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_amd_signal_async_handler.value);
-			printf("\thsa_amd_signal_handler handler = %p\n", args->hsa_amd_signal_async_handler.handler);
-			printf("\tvoid * arg = %p", args->hsa_amd_signal_async_handler.arg);
+			printf("\thsa_signal_condition_t cond = %d\n", args->cond);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
+			printf("\thsa_amd_signal_handler handler = %p\n", args->handler);
+			printf("\tvoid * arg = %p", args->arg);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_signal_async_handler.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_cas_acquire
-		case HSA_API_ID_hsa_signal_cas_acquire :
+		case HSA_API_ID_hsa_signal_cas_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t expected (long);
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_cas_acquire_t* args = (args_hsa_signal_cas_acquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_cas_acquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t expected = %ld\n", args->hsa_signal_cas_acquire.expected);
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_cas_acquire.value);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_cas_acquire.retval);
+			printf("\thsa_signal_value_t expected = %ld\n", args->expected);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_or_scacquire
-		case HSA_API_ID_hsa_signal_or_scacquire :
+		case HSA_API_ID_hsa_signal_or_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_or_scacquire_t* args = (args_hsa_signal_or_scacquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_or_scacquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_or_scacquire.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_add_write_index_release
-		case HSA_API_ID_hsa_queue_add_write_index_release :
+		case HSA_API_ID_hsa_queue_add_write_index_release : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -2774,26 +2998,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_add_write_index_release.queue);
-			if (args->hsa_queue_add_write_index_release.queue != NULL) {
+			args_hsa_queue_add_write_index_release_t* args = (args_hsa_queue_add_write_index_release_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_add_write_index_release.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_add_write_index_release.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_add_write_index_release.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_add_write_index_release.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_add_write_index_release.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_add_write_index_release.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_add_write_index_release.value);
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_add_write_index_release.retval);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_agent_extension_supported
-		case HSA_API_ID_hsa_agent_extension_supported :
+		case HSA_API_ID_hsa_agent_extension_supported : {
 			//	uint16_t extension (unsigned short);
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -2802,126 +3028,140 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint16_t version_minor (unsigned short);
 			//	_Bool * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tuint16_t extension = %hu\n", args->hsa_agent_extension_supported.extension);
+			args_hsa_agent_extension_supported_t* args = (args_hsa_agent_extension_supported_t*) func_args;
+			printf("\tuint16_t extension = %hu\n", args->extension);
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_agent_extension_supported.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tuint16_t version_major = %hu\n", args->hsa_agent_extension_supported.version_major);
-			printf("\tuint16_t version_minor = %hu\n", args->hsa_agent_extension_supported.version_minor);
-			printf("\t_Bool * result = %p", args->hsa_agent_extension_supported.result);
-			if (args->hsa_agent_extension_supported.result != NULL) {
-				printf(" -> %u\n", args->hsa_agent_extension_supported.result__ref.val);
+			printf("\tuint16_t version_major = %hu\n", args->version_major);
+			printf("\tuint16_t version_minor = %hu\n", args->version_minor);
+			printf("\t_Bool * result = %p", args->result);
+			if (args->result != NULL) {
+				printf(" -> %u\n", args->result__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_agent_extension_supported.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_exchange_relaxed
-		case HSA_API_ID_hsa_signal_exchange_relaxed :
+		case HSA_API_ID_hsa_signal_exchange_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_exchange_relaxed_t* args = (args_hsa_signal_exchange_relaxed_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_exchange_relaxed.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_exchange_relaxed.value);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_exchange_relaxed.retval);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_validate_alt
-		case HSA_API_ID_hsa_executable_validate_alt :
+		case HSA_API_ID_hsa_executable_validate_alt : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	const char * options (const char *);
 			//	uint32_t * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_validate_alt_t* args = (args_hsa_executable_validate_alt_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_validate_alt.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
-			printf("\tconst char * options = %p", args->hsa_executable_validate_alt.options);
-			if (args->hsa_executable_validate_alt.options != NULL) {
-				printf(" -> %s\n", args->hsa_executable_validate_alt.options__ref.val);
+			printf("\tconst char * options = %p", args->options);
+			if (args->options != NULL) {
+				printf(" -> %s\n", args->options__ref.val);
 			} else { printf("\n"); };
-			printf("\tuint32_t * result = %p", args->hsa_executable_validate_alt.result);
-			if (args->hsa_executable_validate_alt.result != NULL) {
-				printf(" -> %u\n", args->hsa_executable_validate_alt.result__ref.val);
+			printf("\tuint32_t * result = %p", args->result);
+			if (args->result != NULL) {
+				printf(" -> %u\n", args->result__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_validate_alt.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_exchange_scacq_screl
-		case HSA_API_ID_hsa_signal_exchange_scacq_screl :
+		case HSA_API_ID_hsa_signal_exchange_scacq_screl : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_exchange_scacq_screl_t* args = (args_hsa_signal_exchange_scacq_screl_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_exchange_scacq_screl.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_exchange_scacq_screl.value);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_exchange_scacq_screl.retval);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_get_info
-		case HSA_API_ID_hsa_executable_get_info :
+		case HSA_API_ID_hsa_executable_get_info : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_executable_info_t attribute (enum hsa_executable_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_get_info_t* args = (args_hsa_executable_get_info_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_get_info.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
-			printf("\thsa_executable_info_t attribute = %d\n", args->hsa_executable_get_info.attribute);
-			printf("\tvoid * value = %p", args->hsa_executable_get_info.value);
+			printf("\thsa_executable_info_t attribute = %d\n", args->attribute);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_get_info.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_reader_create_from_memory
-		case HSA_API_ID_hsa_code_object_reader_create_from_memory :
+		case HSA_API_ID_hsa_code_object_reader_create_from_memory : {
 			//	const void * code_object (const void *);
 			//	size_t size (unsigned long);
 			//	hsa_code_object_reader_t * code_object_reader ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tconst void * code_object = %p", args->hsa_code_object_reader_create_from_memory.code_object);
+			args_hsa_code_object_reader_create_from_memory_t* args = (args_hsa_code_object_reader_create_from_memory_t*) func_args;
+			printf("\tconst void * code_object = %p", args->code_object);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hsa_code_object_reader_create_from_memory.size);
-			printf("\thsa_code_object_reader_t * code_object_reader = %p", args->hsa_code_object_reader_create_from_memory.code_object_reader);
-			if (args->hsa_code_object_reader_create_from_memory.code_object_reader != NULL) {
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thsa_code_object_reader_t * code_object_reader = %p", args->code_object_reader);
+			if (args->code_object_reader != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_code_object_reader_create_from_memory.code_object_reader__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->code_object_reader__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_reader_create_from_memory.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_async_function
-		case HSA_API_ID_hsa_amd_async_function :
+		case HSA_API_ID_hsa_amd_async_function : {
 			//	void (*)(void *) callback (void (*)(void *));
 			//	void * arg (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid (*)(void *) callback = %p\n", args->hsa_amd_async_function.callback);
-			printf("\tvoid * arg = %p", args->hsa_amd_async_function.arg);
+			args_hsa_amd_async_function_t* args = (args_hsa_amd_async_function_t*) func_args;
+			printf("\tvoid (*)(void *) callback = %p\n", args->callback);
+			printf("\tvoid * arg = %p", args->arg);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_async_function.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_isa_compatible
-		case HSA_API_ID_hsa_isa_compatible :
+		case HSA_API_ID_hsa_isa_compatible : {
 			//	hsa_isa_t code_object_isa ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -2930,48 +3170,54 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	_Bool * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_isa_compatible_t* args = (args_hsa_isa_compatible_t*) func_args;
 			printf("\thsa_isa_t code_object_isa = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_isa_compatible.code_object_isa.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->code_object_isa.handle);
 			printf("\t}\n");
 			printf("\thsa_isa_t agent_isa = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_isa_compatible.agent_isa.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent_isa.handle);
 			printf("\t}\n");
-			printf("\t_Bool * result = %p", args->hsa_isa_compatible.result);
-			if (args->hsa_isa_compatible.result != NULL) {
-				printf(" -> %u\n", args->hsa_isa_compatible.result__ref.val);
+			printf("\t_Bool * result = %p", args->result);
+			if (args->result != NULL) {
+				printf(" -> %u\n", args->result__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_isa_compatible.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_pointer_info_set_userdata
-		case HSA_API_ID_hsa_amd_pointer_info_set_userdata :
+		case HSA_API_ID_hsa_amd_pointer_info_set_userdata : {
 			//	const void * ptr (const void *);
 			//	void * userdata (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tconst void * ptr = %p", args->hsa_amd_pointer_info_set_userdata.ptr);
+			args_hsa_amd_pointer_info_set_userdata_t* args = (args_hsa_amd_pointer_info_set_userdata_t*) func_args;
+			printf("\tconst void * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tvoid * userdata = %p", args->hsa_amd_pointer_info_set_userdata.userdata);
+			printf("\tvoid * userdata = %p", args->userdata);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_pointer_info_set_userdata.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_and_screlease
-		case HSA_API_ID_hsa_signal_and_screlease :
+		case HSA_API_ID_hsa_signal_and_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_and_screlease_t* args = (args_hsa_signal_and_screlease_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_and_screlease.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_and_screlease.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_cas_write_index_acquire
-		case HSA_API_ID_hsa_queue_cas_write_index_acquire :
+		case HSA_API_ID_hsa_queue_cas_write_index_acquire : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -2986,27 +3232,29 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint64_t expected (unsigned long);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_cas_write_index_acquire.queue);
-			if (args->hsa_queue_cas_write_index_acquire.queue != NULL) {
+			args_hsa_queue_cas_write_index_acquire_t* args = (args_hsa_queue_cas_write_index_acquire_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_cas_write_index_acquire.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_cas_write_index_acquire.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_cas_write_index_acquire.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_cas_write_index_acquire.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_cas_write_index_acquire.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_cas_write_index_acquire.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t expected = %lu\n", args->hsa_queue_cas_write_index_acquire.expected);
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_cas_write_index_acquire.value);
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_cas_write_index_acquire.retval);
+			printf("\tuint64_t expected = %lu\n", args->expected);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_cas_write_index_relaxed
-		case HSA_API_ID_hsa_queue_cas_write_index_relaxed :
+		case HSA_API_ID_hsa_queue_cas_write_index_relaxed : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -3021,27 +3269,29 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint64_t expected (unsigned long);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_cas_write_index_relaxed.queue);
-			if (args->hsa_queue_cas_write_index_relaxed.queue != NULL) {
+			args_hsa_queue_cas_write_index_relaxed_t* args = (args_hsa_queue_cas_write_index_relaxed_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_cas_write_index_relaxed.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_cas_write_index_relaxed.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_cas_write_index_relaxed.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_cas_write_index_relaxed.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_cas_write_index_relaxed.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_cas_write_index_relaxed.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t expected = %lu\n", args->hsa_queue_cas_write_index_relaxed.expected);
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_cas_write_index_relaxed.value);
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_cas_write_index_relaxed.retval);
+			printf("\tuint64_t expected = %lu\n", args->expected);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_store_read_index_release
-		case HSA_API_ID_hsa_queue_store_read_index_release :
+		case HSA_API_ID_hsa_queue_store_read_index_release : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -3054,25 +3304,27 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	uint64_t value (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_store_read_index_release.queue);
-			if (args->hsa_queue_store_read_index_release.queue != NULL) {
+			args_hsa_queue_store_read_index_release_t* args = (args_hsa_queue_store_read_index_release_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_store_read_index_release.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_store_read_index_release.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_store_read_index_release.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_store_read_index_release.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_store_read_index_release.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_store_read_index_release.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_store_read_index_release.value);
+			printf("\tuint64_t value = %lu\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_pointer_info
-		case HSA_API_ID_hsa_amd_pointer_info :
+		case HSA_API_ID_hsa_amd_pointer_info : {
 			//	const void * ptr (const void *);
 			//	hsa_amd_pointer_info_t * info ({
 			//		uint32_t size (unsigned int);
@@ -3092,40 +3344,42 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tconst void * ptr = %p", args->hsa_amd_pointer_info.ptr);
+			args_hsa_amd_pointer_info_t* args = (args_hsa_amd_pointer_info_t*) func_args;
+			printf("\tconst void * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thsa_amd_pointer_info_t * info = %p", args->hsa_amd_pointer_info.info);
-			if (args->hsa_amd_pointer_info.info != NULL) {
+			printf("\thsa_amd_pointer_info_t * info = %p", args->info);
+			if (args->info != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_amd_pointer_info.info__ref.val.size);
-				printf("\t\thsa_amd_pointer_type_t type = %d\n", args->hsa_amd_pointer_info.info__ref.val.type);
-				printf("\t\tsize_t sizeInBytes = %lu\n", args->hsa_amd_pointer_info.info__ref.val.sizeInBytes);
+				printf("\t\tuint32_t size = %u\n", args->info__ref.val.size);
+				printf("\t\thsa_amd_pointer_type_t type = %d\n", args->info__ref.val.type);
+				printf("\t\tsize_t sizeInBytes = %lu\n", args->info__ref.val.sizeInBytes);
 				printf("\t\thsa_agent_t agentOwner = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_amd_pointer_info.info__ref.val.agentOwner.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->info__ref.val.agentOwner.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t global_flags = %u\n", args->hsa_amd_pointer_info.info__ref.val.global_flags);
+				printf("\t\tuint32_t global_flags = %u\n", args->info__ref.val.global_flags);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tvoid *(*)(size_t) alloc = %p\n", args->hsa_amd_pointer_info.alloc);
-			printf("\tuint32_t * num_agents_accessible = %p", args->hsa_amd_pointer_info.num_agents_accessible);
-			if (args->hsa_amd_pointer_info.num_agents_accessible != NULL) {
-				printf(" -> %u\n", args->hsa_amd_pointer_info.num_agents_accessible__ref.val);
+			printf("\tvoid *(*)(size_t) alloc = %p\n", args->alloc);
+			printf("\tuint32_t * num_agents_accessible = %p", args->num_agents_accessible);
+			if (args->num_agents_accessible != NULL) {
+				printf(" -> %u\n", args->num_agents_accessible__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_agent_t ** accessible = %p", args->hsa_amd_pointer_info.accessible);
-			if (args->hsa_amd_pointer_info.accessible != NULL) {
-				printf("-> %p", args->hsa_amd_pointer_info.accessible__ref.ptr1);
-				if (args->hsa_amd_pointer_info.accessible__ref.ptr1 != NULL) {
+			printf("\thsa_agent_t ** accessible = %p", args->accessible);
+			if (args->accessible != NULL) {
+				printf("-> %p", args->accessible__ref.ptr1);
+				if (args->accessible__ref.ptr1 != NULL) {
 					printf(" -> {\n");
-					printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_pointer_info.accessible__ref.val.handle);
+					printf("\t\tuint64_t handle = %lu\n", args->accessible__ref.val.handle);
 					printf("\t}\n");
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_pointer_info.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_spm_set_dest_buffer
-		case HSA_API_ID_hsa_amd_spm_set_dest_buffer :
+		case HSA_API_ID_hsa_amd_spm_set_dest_buffer : {
 			//	hsa_agent_t preferred_agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -3135,77 +3389,85 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	void * dest (void *);
 			//	_Bool * is_data_loss (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_spm_set_dest_buffer_t* args = (args_hsa_amd_spm_set_dest_buffer_t*) func_args;
 			printf("\thsa_agent_t preferred_agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_spm_set_dest_buffer.preferred_agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->preferred_agent.handle);
 			printf("\t}\n");
-			printf("\tsize_t size_in_bytes = %lu\n", args->hsa_amd_spm_set_dest_buffer.size_in_bytes);
-			printf("\tuint32_t * timeout = %p", args->hsa_amd_spm_set_dest_buffer.timeout);
-			if (args->hsa_amd_spm_set_dest_buffer.timeout != NULL) {
-				printf(" -> %u\n", args->hsa_amd_spm_set_dest_buffer.timeout__ref.val);
+			printf("\tsize_t size_in_bytes = %lu\n", args->size_in_bytes);
+			printf("\tuint32_t * timeout = %p", args->timeout);
+			if (args->timeout != NULL) {
+				printf(" -> %u\n", args->timeout__ref.val);
 			} else { printf("\n"); };
-			printf("\tuint32_t * size_copied = %p", args->hsa_amd_spm_set_dest_buffer.size_copied);
-			if (args->hsa_amd_spm_set_dest_buffer.size_copied != NULL) {
-				printf(" -> %u\n", args->hsa_amd_spm_set_dest_buffer.size_copied__ref.val);
+			printf("\tuint32_t * size_copied = %p", args->size_copied);
+			if (args->size_copied != NULL) {
+				printf(" -> %u\n", args->size_copied__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid * dest = %p", args->hsa_amd_spm_set_dest_buffer.dest);
+			printf("\tvoid * dest = %p", args->dest);
 			printf("\n");
-			printf("\t_Bool * is_data_loss = %p", args->hsa_amd_spm_set_dest_buffer.is_data_loss);
-			if (args->hsa_amd_spm_set_dest_buffer.is_data_loss != NULL) {
-				printf(" -> %u\n", args->hsa_amd_spm_set_dest_buffer.is_data_loss__ref.val);
+			printf("\t_Bool * is_data_loss = %p", args->is_data_loss);
+			if (args->is_data_loss != NULL) {
+				printf(" -> %u\n", args->is_data_loss__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_spm_set_dest_buffer.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_get_access
-		case HSA_API_ID_hsa_amd_vmem_get_access :
+		case HSA_API_ID_hsa_amd_vmem_get_access : {
 			//	void * va (void *);
 			//	hsa_access_permission_t * perms (enum hsa_access_permission_t*);
 			//	hsa_agent_t agent_handle ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * va = %p", args->hsa_amd_vmem_get_access.va);
+			args_hsa_amd_vmem_get_access_t* args = (args_hsa_amd_vmem_get_access_t*) func_args;
+			printf("\tvoid * va = %p", args->va);
 			printf("\n");
-			printf("\thsa_access_permission_t * perms = %p", args->hsa_amd_vmem_get_access.perms);
-			if (args->hsa_amd_vmem_get_access.perms != NULL) {
-				printf(" -> %d\n", args->hsa_amd_vmem_get_access.perms__ref.val);
+			printf("\thsa_access_permission_t * perms = %p", args->perms);
+			if (args->perms != NULL) {
+				printf(" -> %d\n", args->perms__ref.val);
 			} else { printf("\n"); };
 			printf("\thsa_agent_t agent_handle = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_vmem_get_access.agent_handle.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent_handle.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_get_access.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_silent_store_screlease
-		case HSA_API_ID_hsa_signal_silent_store_screlease :
+		case HSA_API_ID_hsa_signal_silent_store_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_silent_store_screlease_t* args = (args_hsa_signal_silent_store_screlease_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_silent_store_screlease.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_silent_store_screlease.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_add_acquire
-		case HSA_API_ID_hsa_signal_add_acquire :
+		case HSA_API_ID_hsa_signal_add_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_add_acquire_t* args = (args_hsa_signal_add_acquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_add_acquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_add_acquire.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_create
-		case HSA_API_ID_hsa_executable_create :
+		case HSA_API_ID_hsa_executable_create : {
 			//	hsa_profile_t profile (enum hsa_profile_t);
 			//	hsa_executable_state_t executable_state (enum hsa_executable_state_t);
 			//	const char * options (const char *);
@@ -3213,68 +3475,76 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_profile_t profile = %d\n", args->hsa_executable_create.profile);
-			printf("\thsa_executable_state_t executable_state = %d\n", args->hsa_executable_create.executable_state);
-			printf("\tconst char * options = %p", args->hsa_executable_create.options);
-			if (args->hsa_executable_create.options != NULL) {
-				printf(" -> %s\n", args->hsa_executable_create.options__ref.val);
+			args_hsa_executable_create_t* args = (args_hsa_executable_create_t*) func_args;
+			printf("\thsa_profile_t profile = %d\n", args->profile);
+			printf("\thsa_executable_state_t executable_state = %d\n", args->executable_state);
+			printf("\tconst char * options = %p", args->options);
+			if (args->options != NULL) {
+				printf(" -> %s\n", args->options__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_executable_t * executable = %p", args->hsa_executable_create.executable);
-			if (args->hsa_executable_create.executable != NULL) {
+			printf("\thsa_executable_t * executable = %p", args->executable);
+			if (args->executable != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_create.executable__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->executable__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_create.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_store_release
-		case HSA_API_ID_hsa_signal_store_release :
+		case HSA_API_ID_hsa_signal_store_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_store_release_t* args = (args_hsa_signal_store_release_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_store_release.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_store_release.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_xor_screlease
-		case HSA_API_ID_hsa_signal_xor_screlease :
+		case HSA_API_ID_hsa_signal_xor_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_xor_screlease_t* args = (args_hsa_signal_xor_screlease_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_xor_screlease.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_xor_screlease.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_iterate_symbols
-		case HSA_API_ID_hsa_executable_iterate_symbols :
+		case HSA_API_ID_hsa_executable_iterate_symbols : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *) callback (enum hsa_status_t (*)(struct hsa_executable_s, struct hsa_executable_symbol_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_iterate_symbols_t* args = (args_hsa_executable_iterate_symbols_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_iterate_symbols.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *) callback = %p\n", args->hsa_executable_iterate_symbols.callback);
-			printf("\tvoid * data = %p", args->hsa_executable_iterate_symbols.data);
+			printf("\thsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *) callback = %p\n", args->callback);
+			printf("\tvoid * data = %p", args->data);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_iterate_symbols.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_lock_to_pool
-		case HSA_API_ID_hsa_amd_memory_lock_to_pool :
+		case HSA_API_ID_hsa_amd_memory_lock_to_pool : {
 			//	void * host_ptr (void *);
 			//	size_t size (unsigned long);
 			//	hsa_agent_t * agents ({
@@ -3287,31 +3557,33 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint32_t flags (unsigned int);
 			//	void ** agent_ptr (void **);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * host_ptr = %p", args->hsa_amd_memory_lock_to_pool.host_ptr);
+			args_hsa_amd_memory_lock_to_pool_t* args = (args_hsa_amd_memory_lock_to_pool_t*) func_args;
+			printf("\tvoid * host_ptr = %p", args->host_ptr);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hsa_amd_memory_lock_to_pool.size);
-			printf("\thsa_agent_t * agents = %p", args->hsa_amd_memory_lock_to_pool.agents);
-			if (args->hsa_amd_memory_lock_to_pool.agents != NULL) {
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thsa_agent_t * agents = %p", args->agents);
+			if (args->agents != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_lock_to_pool.agents__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->agents__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint num_agent = %d\n", args->hsa_amd_memory_lock_to_pool.num_agent);
+			printf("\tint num_agent = %d\n", args->num_agent);
 			printf("\thsa_amd_memory_pool_t pool = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_lock_to_pool.pool.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->pool.handle);
 			printf("\t}\n");
-			printf("\tuint32_t flags = %u\n", args->hsa_amd_memory_lock_to_pool.flags);
-			printf("\tvoid ** agent_ptr = %p", args->hsa_amd_memory_lock_to_pool.agent_ptr);
-			if (args->hsa_amd_memory_lock_to_pool.agent_ptr != NULL) {
-				printf("-> %p", args->hsa_amd_memory_lock_to_pool.agent_ptr__ref.ptr1);
+			printf("\tuint32_t flags = %u\n", args->flags);
+			printf("\tvoid ** agent_ptr = %p", args->agent_ptr);
+			if (args->agent_ptr != NULL) {
+				printf("-> %p", args->agent_ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_lock_to_pool.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_wait_acquire
-		case HSA_API_ID_hsa_signal_wait_acquire :
+		case HSA_API_ID_hsa_signal_wait_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -3320,19 +3592,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint64_t timeout_hint (unsigned long);
 			//	hsa_wait_state_t wait_state_hint (enum hsa_wait_state_t);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_wait_acquire_t* args = (args_hsa_signal_wait_acquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_wait_acquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_condition_t condition = %d\n", args->hsa_signal_wait_acquire.condition);
-			printf("\thsa_signal_value_t compare_value = %ld\n", args->hsa_signal_wait_acquire.compare_value);
-			printf("\tuint64_t timeout_hint = %lu\n", args->hsa_signal_wait_acquire.timeout_hint);
-			printf("\thsa_wait_state_t wait_state_hint = %d\n", args->hsa_signal_wait_acquire.wait_state_hint);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_wait_acquire.retval);
+			printf("\thsa_signal_condition_t condition = %d\n", args->condition);
+			printf("\thsa_signal_value_t compare_value = %ld\n", args->compare_value);
+			printf("\tuint64_t timeout_hint = %lu\n", args->timeout_hint);
+			printf("\thsa_wait_state_t wait_state_hint = %d\n", args->wait_state_hint);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_cas_write_index_scacquire
-		case HSA_API_ID_hsa_queue_cas_write_index_scacquire :
+		case HSA_API_ID_hsa_queue_cas_write_index_scacquire : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -3347,27 +3621,29 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint64_t expected (unsigned long);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_cas_write_index_scacquire.queue);
-			if (args->hsa_queue_cas_write_index_scacquire.queue != NULL) {
+			args_hsa_queue_cas_write_index_scacquire_t* args = (args_hsa_queue_cas_write_index_scacquire_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_cas_write_index_scacquire.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_cas_write_index_scacquire.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_cas_write_index_scacquire.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_cas_write_index_scacquire.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_cas_write_index_scacquire.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_cas_write_index_scacquire.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t expected = %lu\n", args->hsa_queue_cas_write_index_scacquire.expected);
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_cas_write_index_scacquire.value);
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_cas_write_index_scacquire.retval);
+			printf("\tuint64_t expected = %lu\n", args->expected);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_get_symbol
-		case HSA_API_ID_hsa_code_object_get_symbol :
+		case HSA_API_ID_hsa_code_object_get_symbol : {
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -3376,38 +3652,42 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_get_symbol_t* args = (args_hsa_code_object_get_symbol_t*) func_args;
 			printf("\thsa_code_object_t code_object = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_code_object_get_symbol.code_object.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->code_object.handle);
 			printf("\t}\n");
-			printf("\tconst char * symbol_name = %p", args->hsa_code_object_get_symbol.symbol_name);
-			if (args->hsa_code_object_get_symbol.symbol_name != NULL) {
-				printf(" -> %s\n", args->hsa_code_object_get_symbol.symbol_name__ref.val);
+			printf("\tconst char * symbol_name = %p", args->symbol_name);
+			if (args->symbol_name != NULL) {
+				printf(" -> %s\n", args->symbol_name__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_code_symbol_t * symbol = %p", args->hsa_code_object_get_symbol.symbol);
-			if (args->hsa_code_object_get_symbol.symbol != NULL) {
+			printf("\thsa_code_symbol_t * symbol = %p", args->symbol);
+			if (args->symbol != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_code_object_get_symbol.symbol__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->symbol__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_get_symbol.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_group_destroy
-		case HSA_API_ID_hsa_signal_group_destroy :
+		case HSA_API_ID_hsa_signal_group_destroy : {
 			//	hsa_signal_group_t signal_group ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_signal_group_destroy_t* args = (args_hsa_signal_group_destroy_t*) func_args;
 			printf("\thsa_signal_group_t signal_group = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_group_destroy.signal_group.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal_group.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_signal_group_destroy.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_group_create
-		case HSA_API_ID_hsa_signal_group_create :
+		case HSA_API_ID_hsa_signal_group_create : {
 			//	uint32_t num_signals (unsigned int);
 			//	const hsa_signal_t * signals ({
 			//		uint64_t handle (unsigned long);
@@ -3420,62 +3700,68 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tuint32_t num_signals = %u\n", args->hsa_signal_group_create.num_signals);
-			printf("\tconst hsa_signal_t * signals = %p", args->hsa_signal_group_create.signals);
-			if (args->hsa_signal_group_create.signals != NULL) {
+			args_hsa_signal_group_create_t* args = (args_hsa_signal_group_create_t*) func_args;
+			printf("\tuint32_t num_signals = %u\n", args->num_signals);
+			printf("\tconst hsa_signal_t * signals = %p", args->signals);
+			if (args->signals != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_group_create.signals__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->signals__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint32_t num_consumers = %u\n", args->hsa_signal_group_create.num_consumers);
-			printf("\tconst hsa_agent_t * consumers = %p", args->hsa_signal_group_create.consumers);
-			if (args->hsa_signal_group_create.consumers != NULL) {
+			printf("\tuint32_t num_consumers = %u\n", args->num_consumers);
+			printf("\tconst hsa_agent_t * consumers = %p", args->consumers);
+			if (args->consumers != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_group_create.consumers__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->consumers__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_signal_group_t * signal_group = %p", args->hsa_signal_group_create.signal_group);
-			if (args->hsa_signal_group_create.signal_group != NULL) {
+			printf("\thsa_signal_group_t * signal_group = %p", args->signal_group);
+			if (args->signal_group != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_group_create.signal_group__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->signal_group__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_signal_group_create.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_reader_destroy
-		case HSA_API_ID_hsa_code_object_reader_destroy :
+		case HSA_API_ID_hsa_code_object_reader_destroy : {
 			//	hsa_code_object_reader_t code_object_reader ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_reader_destroy_t* args = (args_hsa_code_object_reader_destroy_t*) func_args;
 			printf("\thsa_code_object_reader_t code_object_reader = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_code_object_reader_destroy.code_object_reader.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->code_object_reader.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_reader_destroy.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_extension_get_name
-		case HSA_API_ID_hsa_extension_get_name :
+		case HSA_API_ID_hsa_extension_get_name : {
 			//	uint16_t extension (unsigned short);
 			//	const char ** name (const char **);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tuint16_t extension = %hu\n", args->hsa_extension_get_name.extension);
-			printf("\tconst char ** name = %p", args->hsa_extension_get_name.name);
-			if (args->hsa_extension_get_name.name != NULL) {
-				printf("-> %p", args->hsa_extension_get_name.name__ref.ptr1);
-				if (args->hsa_extension_get_name.name__ref.ptr1 != NULL) {
-					printf(" -> %s\n", args->hsa_extension_get_name.name__ref.val);
+			args_hsa_extension_get_name_t* args = (args_hsa_extension_get_name_t*) func_args;
+			printf("\tuint16_t extension = %hu\n", args->extension);
+			printf("\tconst char ** name = %p", args->name);
+			if (args->name != NULL) {
+				printf("-> %p", args->name__ref.ptr1);
+				if (args->name__ref.ptr1 != NULL) {
+					printf(" -> %s\n", args->name__ref.val);
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_extension_get_name.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_group_wait_any_scacquire
-		case HSA_API_ID_hsa_signal_group_wait_any_scacquire :
+		case HSA_API_ID_hsa_signal_group_wait_any_scacquire : {
 			//	hsa_signal_group_t signal_group ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -3487,59 +3773,65 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	hsa_signal_value_t * value (long*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_signal_group_wait_any_scacquire_t* args = (args_hsa_signal_group_wait_any_scacquire_t*) func_args;
 			printf("\thsa_signal_group_t signal_group = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_group_wait_any_scacquire.signal_group.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal_group.handle);
 			printf("\t}\n");
-			printf("\tconst hsa_signal_condition_t * conditions = %p", args->hsa_signal_group_wait_any_scacquire.conditions);
-			if (args->hsa_signal_group_wait_any_scacquire.conditions != NULL) {
-				printf(" -> %d\n", args->hsa_signal_group_wait_any_scacquire.conditions__ref.val);
+			printf("\tconst hsa_signal_condition_t * conditions = %p", args->conditions);
+			if (args->conditions != NULL) {
+				printf(" -> %d\n", args->conditions__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst hsa_signal_value_t * compare_values = %p", args->hsa_signal_group_wait_any_scacquire.compare_values);
-			if (args->hsa_signal_group_wait_any_scacquire.compare_values != NULL) {
-				printf(" -> %ld\n", args->hsa_signal_group_wait_any_scacquire.compare_values__ref.val);
+			printf("\tconst hsa_signal_value_t * compare_values = %p", args->compare_values);
+			if (args->compare_values != NULL) {
+				printf(" -> %ld\n", args->compare_values__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_wait_state_t wait_state_hint = %d\n", args->hsa_signal_group_wait_any_scacquire.wait_state_hint);
-			printf("\thsa_signal_t * signal = %p", args->hsa_signal_group_wait_any_scacquire.signal);
-			if (args->hsa_signal_group_wait_any_scacquire.signal != NULL) {
+			printf("\thsa_wait_state_t wait_state_hint = %d\n", args->wait_state_hint);
+			printf("\thsa_signal_t * signal = %p", args->signal);
+			if (args->signal != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_group_wait_any_scacquire.signal__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->signal__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_signal_value_t * value = %p", args->hsa_signal_group_wait_any_scacquire.value);
-			if (args->hsa_signal_group_wait_any_scacquire.value != NULL) {
-				printf(" -> %ld\n", args->hsa_signal_group_wait_any_scacquire.value__ref.val);
+			printf("\thsa_signal_value_t * value = %p", args->value);
+			if (args->value != NULL) {
+				printf(" -> %ld\n", args->value__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_signal_group_wait_any_scacquire.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_register_system_event_handler
-		case HSA_API_ID_hsa_amd_register_system_event_handler :
+		case HSA_API_ID_hsa_amd_register_system_event_handler : {
 			//	hsa_amd_system_event_callback_t callback (enum hsa_status_t (*)(const struct hsa_amd_event_s *, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_amd_system_event_callback_t callback = %p\n", args->hsa_amd_register_system_event_handler.callback);
-			printf("\tvoid * data = %p", args->hsa_amd_register_system_event_handler.data);
+			args_hsa_amd_register_system_event_handler_t* args = (args_hsa_amd_register_system_event_handler_t*) func_args;
+			printf("\thsa_amd_system_event_callback_t callback = %p\n", args->callback);
+			printf("\tvoid * data = %p", args->data);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_register_system_event_handler.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_xor_acq_rel
-		case HSA_API_ID_hsa_signal_xor_acq_rel :
+		case HSA_API_ID_hsa_signal_xor_acq_rel : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_xor_acq_rel_t* args = (args_hsa_signal_xor_acq_rel_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_xor_acq_rel.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_xor_acq_rel.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_create
-		case HSA_API_ID_hsa_queue_create :
+		case HSA_API_ID_hsa_queue_create : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -3561,38 +3853,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_queue_create_t* args = (args_hsa_queue_create_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_queue_create.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tuint32_t size = %u\n", args->hsa_queue_create.size);
-			printf("\thsa_queue_type32_t type = %u\n", args->hsa_queue_create.type);
-			printf("\tvoid (*)(hsa_status_t, hsa_queue_t *, void *) callback = %p\n", args->hsa_queue_create.callback);
-			printf("\tvoid * data = %p", args->hsa_queue_create.data);
+			printf("\tuint32_t size = %u\n", args->size);
+			printf("\thsa_queue_type32_t type = %u\n", args->type);
+			printf("\tvoid (*)(hsa_status_t, hsa_queue_t *, void *) callback = %p\n", args->callback);
+			printf("\tvoid * data = %p", args->data);
 			printf("\n");
-			printf("\tuint32_t private_segment_size = %u\n", args->hsa_queue_create.private_segment_size);
-			printf("\tuint32_t group_segment_size = %u\n", args->hsa_queue_create.group_segment_size);
-			printf("\thsa_queue_t ** queue = %p", args->hsa_queue_create.queue);
-			if (args->hsa_queue_create.queue != NULL) {
-				printf("-> %p", args->hsa_queue_create.queue__ref.ptr1);
-				if (args->hsa_queue_create.queue__ref.ptr1 != NULL) {
+			printf("\tuint32_t private_segment_size = %u\n", args->private_segment_size);
+			printf("\tuint32_t group_segment_size = %u\n", args->group_segment_size);
+			printf("\thsa_queue_t ** queue = %p", args->queue);
+			if (args->queue != NULL) {
+				printf("-> %p", args->queue__ref.ptr1);
+				if (args->queue__ref.ptr1 != NULL) {
 					printf(" -> {\n");
-					printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_create.queue__ref.val.type);
-					printf("\t\tuint32_t features = %u\n", args->hsa_queue_create.queue__ref.val.features);
+					printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+					printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 					printf("\t\thsa_signal_t doorbell_signal = {\n");
-					printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_create.queue__ref.val.doorbell_signal.handle);
+					printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 					printf("\t\t}\n");
-					printf("\t\tuint32_t size = %u\n", args->hsa_queue_create.queue__ref.val.size);
-					printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_create.queue__ref.val.reserved1);
-					printf("\t\tuint64_t id = %lu\n", args->hsa_queue_create.queue__ref.val.id);
+					printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+					printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+					printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 					printf("\t}\n");
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_queue_create.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_profiling_set_profiler_enabled
-		case HSA_API_ID_hsa_amd_profiling_set_profiler_enabled :
+		case HSA_API_ID_hsa_amd_profiling_set_profiler_enabled : {
 			//	hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -3606,26 +3900,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	int enable (int);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_queue_t * queue = %p", args->hsa_amd_profiling_set_profiler_enabled.queue);
-			if (args->hsa_amd_profiling_set_profiler_enabled.queue != NULL) {
+			args_hsa_amd_profiling_set_profiler_enabled_t* args = (args_hsa_amd_profiling_set_profiler_enabled_t*) func_args;
+			printf("\thsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_amd_profiling_set_profiler_enabled.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_amd_profiling_set_profiler_enabled.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_amd_profiling_set_profiler_enabled.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_amd_profiling_set_profiler_enabled.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_amd_profiling_set_profiler_enabled.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_amd_profiling_set_profiler_enabled.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint enable = %d\n", args->hsa_amd_profiling_set_profiler_enabled.enable);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_profiling_set_profiler_enabled.retval);
+			printf("\tint enable = %d\n", args->enable);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_profiling_get_dispatch_time
-		case HSA_API_ID_hsa_amd_profiling_get_dispatch_time :
+		case HSA_API_ID_hsa_amd_profiling_get_dispatch_time : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -3637,64 +3933,70 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t end (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_profiling_get_dispatch_time_t* args = (args_hsa_amd_profiling_get_dispatch_time_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_profiling_get_dispatch_time.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_profiling_get_dispatch_time.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_amd_profiling_dispatch_time_t * time = %p", args->hsa_amd_profiling_get_dispatch_time.time);
-			if (args->hsa_amd_profiling_get_dispatch_time.time != NULL) {
+			printf("\thsa_amd_profiling_dispatch_time_t * time = %p", args->time);
+			if (args->time != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t start = %lu\n", args->hsa_amd_profiling_get_dispatch_time.time__ref.val.start);
-				printf("\t\tuint64_t end = %lu\n", args->hsa_amd_profiling_get_dispatch_time.time__ref.val.end);
+				printf("\t\tuint64_t start = %lu\n", args->time__ref.val.start);
+				printf("\t\tuint64_t end = %lu\n", args->time__ref.val.end);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_profiling_get_dispatch_time.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_ipc_memory_create
-		case HSA_API_ID_hsa_amd_ipc_memory_create :
+		case HSA_API_ID_hsa_amd_ipc_memory_create : {
 			//	void * ptr (void *);
 			//	size_t len (unsigned long);
 			//	hsa_amd_ipc_memory_t * handle ({
 			//		uint32_t[8] handle (unsigned int[8]);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * ptr = %p", args->hsa_amd_ipc_memory_create.ptr);
+			args_hsa_amd_ipc_memory_create_t* args = (args_hsa_amd_ipc_memory_create_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tsize_t len = %lu\n", args->hsa_amd_ipc_memory_create.len);
-			printf("\thsa_amd_ipc_memory_t * handle = %p", args->hsa_amd_ipc_memory_create.handle);
-			if (args->hsa_amd_ipc_memory_create.handle != NULL) {
+			printf("\tsize_t len = %lu\n", args->len);
+			printf("\thsa_amd_ipc_memory_t * handle = %p", args->handle);
+			if (args->handle != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t[8] handle = %u\n", args->hsa_amd_ipc_memory_create.handle__ref.val.handle[0]);
+				printf("\t\tuint32_t[8] handle = %u\n", args->handle__ref.val.handle[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_ipc_memory_create.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_import_shareable_handle
-		case HSA_API_ID_hsa_amd_vmem_import_shareable_handle :
+		case HSA_API_ID_hsa_amd_vmem_import_shareable_handle : {
 			//	int dmabuf_fd (int);
 			//	hsa_amd_vmem_alloc_handle_t * handle ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tint dmabuf_fd = %d\n", args->hsa_amd_vmem_import_shareable_handle.dmabuf_fd);
-			printf("\thsa_amd_vmem_alloc_handle_t * handle = %p", args->hsa_amd_vmem_import_shareable_handle.handle);
-			if (args->hsa_amd_vmem_import_shareable_handle.handle != NULL) {
+			args_hsa_amd_vmem_import_shareable_handle_t* args = (args_hsa_amd_vmem_import_shareable_handle_t*) func_args;
+			printf("\tint dmabuf_fd = %d\n", args->dmabuf_fd);
+			printf("\thsa_amd_vmem_alloc_handle_t * handle = %p", args->handle);
+			if (args->handle != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_vmem_import_shareable_handle.handle__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->handle__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_import_shareable_handle.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_add_write_index_acquire
-		case HSA_API_ID_hsa_queue_add_write_index_acquire :
+		case HSA_API_ID_hsa_queue_add_write_index_acquire : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -3708,41 +4010,45 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_add_write_index_acquire.queue);
-			if (args->hsa_queue_add_write_index_acquire.queue != NULL) {
+			args_hsa_queue_add_write_index_acquire_t* args = (args_hsa_queue_add_write_index_acquire_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_add_write_index_acquire.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_add_write_index_acquire.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_add_write_index_acquire.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_add_write_index_acquire.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_add_write_index_acquire.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_add_write_index_acquire.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_add_write_index_acquire.value);
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_add_write_index_acquire.retval);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_register_deallocation_callback
-		case HSA_API_ID_hsa_amd_register_deallocation_callback :
+		case HSA_API_ID_hsa_amd_register_deallocation_callback : {
 			//	void * ptr (void *);
 			//	hsa_amd_deallocation_callback_t callback (void (*)(void *, void *));
 			//	void * user_data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * ptr = %p", args->hsa_amd_register_deallocation_callback.ptr);
+			args_hsa_amd_register_deallocation_callback_t* args = (args_hsa_amd_register_deallocation_callback_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thsa_amd_deallocation_callback_t callback = %p\n", args->hsa_amd_register_deallocation_callback.callback);
-			printf("\tvoid * user_data = %p", args->hsa_amd_register_deallocation_callback.user_data);
+			printf("\thsa_amd_deallocation_callback_t callback = %p\n", args->callback);
+			printf("\tvoid * user_data = %p", args->user_data);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_register_deallocation_callback.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ven_amd_pcs_create_from_id
-		case HSA_API_ID_hsa_ven_amd_pcs_create_from_id :
+		case HSA_API_ID_hsa_ven_amd_pcs_create_from_id : {
 			//	uint32_t pcs_id (unsigned int);
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -3758,58 +4064,64 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tuint32_t pcs_id = %u\n", args->hsa_ven_amd_pcs_create_from_id.pcs_id);
+			args_hsa_ven_amd_pcs_create_from_id_t* args = (args_hsa_ven_amd_pcs_create_from_id_t*) func_args;
+			printf("\tuint32_t pcs_id = %u\n", args->pcs_id);
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ven_amd_pcs_create_from_id.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_ven_amd_pcs_method_kind_t method = %d\n", args->hsa_ven_amd_pcs_create_from_id.method);
-			printf("\thsa_ven_amd_pcs_units_t units = %d\n", args->hsa_ven_amd_pcs_create_from_id.units);
-			printf("\tsize_t interval = %lu\n", args->hsa_ven_amd_pcs_create_from_id.interval);
-			printf("\tsize_t latency = %lu\n", args->hsa_ven_amd_pcs_create_from_id.latency);
-			printf("\tsize_t buffer_size = %lu\n", args->hsa_ven_amd_pcs_create_from_id.buffer_size);
-			printf("\thsa_ven_amd_pcs_data_ready_callback_t data_ready_callback = %p\n", args->hsa_ven_amd_pcs_create_from_id.data_ready_callback);
-			printf("\tvoid * client_callback_data = %p", args->hsa_ven_amd_pcs_create_from_id.client_callback_data);
+			printf("\thsa_ven_amd_pcs_method_kind_t method = %d\n", args->method);
+			printf("\thsa_ven_amd_pcs_units_t units = %d\n", args->units);
+			printf("\tsize_t interval = %lu\n", args->interval);
+			printf("\tsize_t latency = %lu\n", args->latency);
+			printf("\tsize_t buffer_size = %lu\n", args->buffer_size);
+			printf("\thsa_ven_amd_pcs_data_ready_callback_t data_ready_callback = %p\n", args->data_ready_callback);
+			printf("\tvoid * client_callback_data = %p", args->client_callback_data);
 			printf("\n");
-			printf("\thsa_ven_amd_pcs_t * pc_sampling = %p", args->hsa_ven_amd_pcs_create_from_id.pc_sampling);
-			if (args->hsa_ven_amd_pcs_create_from_id.pc_sampling != NULL) {
+			printf("\thsa_ven_amd_pcs_t * pc_sampling = %p", args->pc_sampling);
+			if (args->pc_sampling != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_ven_amd_pcs_create_from_id.pc_sampling__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->pc_sampling__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_ven_amd_pcs_create_from_id.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_exchange_screlease
-		case HSA_API_ID_hsa_signal_exchange_screlease :
+		case HSA_API_ID_hsa_signal_exchange_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_exchange_screlease_t* args = (args_hsa_signal_exchange_screlease_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_exchange_screlease.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_exchange_screlease.value);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_exchange_screlease.retval);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_and_release
-		case HSA_API_ID_hsa_signal_and_release :
+		case HSA_API_ID_hsa_signal_and_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_and_release_t* args = (args_hsa_signal_and_release_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_and_release.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_and_release.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_sampler_create
-		case HSA_API_ID_hsa_ext_sampler_create :
+		case HSA_API_ID_hsa_ext_sampler_create : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -3822,42 +4134,46 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_sampler_create_t* args = (args_hsa_ext_sampler_create_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_sampler_create.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tconst hsa_ext_sampler_descriptor_t * sampler_descriptor = %p", args->hsa_ext_sampler_create.sampler_descriptor);
-			if (args->hsa_ext_sampler_create.sampler_descriptor != NULL) {
+			printf("\tconst hsa_ext_sampler_descriptor_t * sampler_descriptor = %p", args->sampler_descriptor);
+			if (args->sampler_descriptor != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_ext_sampler_coordinate_mode32_t coordinate_mode = %u\n", args->hsa_ext_sampler_create.sampler_descriptor__ref.val.coordinate_mode);
-				printf("\t\thsa_ext_sampler_filter_mode32_t filter_mode = %u\n", args->hsa_ext_sampler_create.sampler_descriptor__ref.val.filter_mode);
-				printf("\t\thsa_ext_sampler_addressing_mode32_t address_mode = %u\n", args->hsa_ext_sampler_create.sampler_descriptor__ref.val.address_mode);
+				printf("\t\thsa_ext_sampler_coordinate_mode32_t coordinate_mode = %u\n", args->sampler_descriptor__ref.val.coordinate_mode);
+				printf("\t\thsa_ext_sampler_filter_mode32_t filter_mode = %u\n", args->sampler_descriptor__ref.val.filter_mode);
+				printf("\t\thsa_ext_sampler_addressing_mode32_t address_mode = %u\n", args->sampler_descriptor__ref.val.address_mode);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_ext_sampler_t * sampler = %p", args->hsa_ext_sampler_create.sampler);
-			if (args->hsa_ext_sampler_create.sampler != NULL) {
+			printf("\thsa_ext_sampler_t * sampler = %p", args->sampler);
+			if (args->sampler != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_sampler_create.sampler__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->sampler__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_ext_sampler_create.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ven_amd_pcs_start
-		case HSA_API_ID_hsa_ven_amd_pcs_start :
+		case HSA_API_ID_hsa_ven_amd_pcs_start : {
 			//	hsa_ven_amd_pcs_t pc_sampling ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ven_amd_pcs_start_t* args = (args_hsa_ven_amd_pcs_start_t*) func_args;
 			printf("\thsa_ven_amd_pcs_t pc_sampling = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ven_amd_pcs_start.pc_sampling.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->pc_sampling.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_ven_amd_pcs_start.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_readonly_variable_define
-		case HSA_API_ID_hsa_executable_readonly_variable_define :
+		case HSA_API_ID_hsa_executable_readonly_variable_define : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -3867,24 +4183,26 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	const char * variable_name (const char *);
 			//	void * address (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_readonly_variable_define_t* args = (args_hsa_executable_readonly_variable_define_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_readonly_variable_define.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_readonly_variable_define.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tconst char * variable_name = %p", args->hsa_executable_readonly_variable_define.variable_name);
-			if (args->hsa_executable_readonly_variable_define.variable_name != NULL) {
-				printf(" -> %s\n", args->hsa_executable_readonly_variable_define.variable_name__ref.val);
+			printf("\tconst char * variable_name = %p", args->variable_name);
+			if (args->variable_name != NULL) {
+				printf(" -> %s\n", args->variable_name__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid * address = %p", args->hsa_executable_readonly_variable_define.address);
+			printf("\tvoid * address = %p", args->address);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_readonly_variable_define.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_inactivate
-		case HSA_API_ID_hsa_queue_inactivate :
+		case HSA_API_ID_hsa_queue_inactivate : {
 			//	hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -3897,54 +4215,60 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_queue_t * queue = %p", args->hsa_queue_inactivate.queue);
-			if (args->hsa_queue_inactivate.queue != NULL) {
+			args_hsa_queue_inactivate_t* args = (args_hsa_queue_inactivate_t*) func_args;
+			printf("\thsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_inactivate.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_inactivate.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_inactivate.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_inactivate.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_inactivate.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_inactivate.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_queue_inactivate.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_or_acq_rel
-		case HSA_API_ID_hsa_signal_or_acq_rel :
+		case HSA_API_ID_hsa_signal_or_acq_rel : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_or_acq_rel_t* args = (args_hsa_signal_or_acq_rel_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_or_acq_rel.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_or_acq_rel.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_system_get_major_extension_table
-		case HSA_API_ID_hsa_system_get_major_extension_table :
+		case HSA_API_ID_hsa_system_get_major_extension_table : {
 			//	uint16_t extension (unsigned short);
 			//	uint16_t version_major (unsigned short);
 			//	size_t table_length (unsigned long);
 			//	void * table (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tuint16_t extension = %hu\n", args->hsa_system_get_major_extension_table.extension);
-			printf("\tuint16_t version_major = %hu\n", args->hsa_system_get_major_extension_table.version_major);
-			printf("\tsize_t table_length = %lu\n", args->hsa_system_get_major_extension_table.table_length);
-			printf("\tvoid * table = %p", args->hsa_system_get_major_extension_table.table);
+			args_hsa_system_get_major_extension_table_t* args = (args_hsa_system_get_major_extension_table_t*) func_args;
+			printf("\tuint16_t extension = %hu\n", args->extension);
+			printf("\tuint16_t version_major = %hu\n", args->version_major);
+			printf("\tsize_t table_length = %lu\n", args->table_length);
+			printf("\tvoid * table = %p", args->table);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_system_get_major_extension_table.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_store_write_index_relaxed
-		case HSA_API_ID_hsa_queue_store_write_index_relaxed :
+		case HSA_API_ID_hsa_queue_store_write_index_relaxed : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -3957,25 +4281,27 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	uint64_t value (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_store_write_index_relaxed.queue);
-			if (args->hsa_queue_store_write_index_relaxed.queue != NULL) {
+			args_hsa_queue_store_write_index_relaxed_t* args = (args_hsa_queue_store_write_index_relaxed_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_store_write_index_relaxed.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_store_write_index_relaxed.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_store_write_index_relaxed.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_store_write_index_relaxed.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_store_write_index_relaxed.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_store_write_index_relaxed.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_store_write_index_relaxed.value);
+			printf("\tuint64_t value = %lu\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_agent_major_extension_supported
-		case HSA_API_ID_hsa_agent_major_extension_supported :
+		case HSA_API_ID_hsa_agent_major_extension_supported : {
 			//	uint16_t extension (unsigned short);
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -3984,122 +4310,136 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint16_t * version_minor (unsigned short*);
 			//	_Bool * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tuint16_t extension = %hu\n", args->hsa_agent_major_extension_supported.extension);
+			args_hsa_agent_major_extension_supported_t* args = (args_hsa_agent_major_extension_supported_t*) func_args;
+			printf("\tuint16_t extension = %hu\n", args->extension);
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_agent_major_extension_supported.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tuint16_t version_major = %hu\n", args->hsa_agent_major_extension_supported.version_major);
-			printf("\tuint16_t * version_minor = %p", args->hsa_agent_major_extension_supported.version_minor);
-			if (args->hsa_agent_major_extension_supported.version_minor != NULL) {
-				printf(" -> %hu\n", args->hsa_agent_major_extension_supported.version_minor__ref.val);
+			printf("\tuint16_t version_major = %hu\n", args->version_major);
+			printf("\tuint16_t * version_minor = %p", args->version_minor);
+			if (args->version_minor != NULL) {
+				printf(" -> %hu\n", args->version_minor__ref.val);
 			} else { printf("\n"); };
-			printf("\t_Bool * result = %p", args->hsa_agent_major_extension_supported.result);
-			if (args->hsa_agent_major_extension_supported.result != NULL) {
-				printf(" -> %u\n", args->hsa_agent_major_extension_supported.result__ref.val);
+			printf("\t_Bool * result = %p", args->result);
+			if (args->result != NULL) {
+				printf(" -> %u\n", args->result__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_agent_major_extension_supported.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_migrate
-		case HSA_API_ID_hsa_amd_memory_migrate :
+		case HSA_API_ID_hsa_amd_memory_migrate : {
 			//	const void * ptr (const void *);
 			//	hsa_amd_memory_pool_t memory_pool ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	uint32_t flags (unsigned int);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tconst void * ptr = %p", args->hsa_amd_memory_migrate.ptr);
+			args_hsa_amd_memory_migrate_t* args = (args_hsa_amd_memory_migrate_t*) func_args;
+			printf("\tconst void * ptr = %p", args->ptr);
 			printf("\n");
 			printf("\thsa_amd_memory_pool_t memory_pool = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_migrate.memory_pool.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->memory_pool.handle);
 			printf("\t}\n");
-			printf("\tuint32_t flags = %u\n", args->hsa_amd_memory_migrate.flags);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_migrate.retval);
+			printf("\tuint32_t flags = %u\n", args->flags);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_retain_alloc_handle
-		case HSA_API_ID_hsa_amd_vmem_retain_alloc_handle :
+		case HSA_API_ID_hsa_amd_vmem_retain_alloc_handle : {
 			//	hsa_amd_vmem_alloc_handle_t * memory_handle ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	void * addr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_amd_vmem_alloc_handle_t * memory_handle = %p", args->hsa_amd_vmem_retain_alloc_handle.memory_handle);
-			if (args->hsa_amd_vmem_retain_alloc_handle.memory_handle != NULL) {
+			args_hsa_amd_vmem_retain_alloc_handle_t* args = (args_hsa_amd_vmem_retain_alloc_handle_t*) func_args;
+			printf("\thsa_amd_vmem_alloc_handle_t * memory_handle = %p", args->memory_handle);
+			if (args->memory_handle != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_vmem_retain_alloc_handle.memory_handle__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->memory_handle__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tvoid * addr = %p", args->hsa_amd_vmem_retain_alloc_handle.addr);
+			printf("\tvoid * addr = %p", args->addr);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_retain_alloc_handle.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_address_reserve
-		case HSA_API_ID_hsa_amd_vmem_address_reserve :
+		case HSA_API_ID_hsa_amd_vmem_address_reserve : {
 			//	void ** va (void **);
 			//	size_t size (unsigned long);
 			//	uint64_t address (unsigned long);
 			//	uint64_t flags (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid ** va = %p", args->hsa_amd_vmem_address_reserve.va);
-			if (args->hsa_amd_vmem_address_reserve.va != NULL) {
-				printf("-> %p", args->hsa_amd_vmem_address_reserve.va__ref.ptr1);
+			args_hsa_amd_vmem_address_reserve_t* args = (args_hsa_amd_vmem_address_reserve_t*) func_args;
+			printf("\tvoid ** va = %p", args->va);
+			if (args->va != NULL) {
+				printf("-> %p", args->va__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t size = %lu\n", args->hsa_amd_vmem_address_reserve.size);
-			printf("\tuint64_t address = %lu\n", args->hsa_amd_vmem_address_reserve.address);
-			printf("\tuint64_t flags = %lu\n", args->hsa_amd_vmem_address_reserve.flags);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_address_reserve.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tuint64_t address = %lu\n", args->address);
+			printf("\tuint64_t flags = %lu\n", args->flags);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_load_relaxed
-		case HSA_API_ID_hsa_signal_load_relaxed :
+		case HSA_API_ID_hsa_signal_load_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_load_relaxed_t* args = (args_hsa_signal_load_relaxed_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_load_relaxed.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_load_relaxed.retval);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_exchange_scacquire
-		case HSA_API_ID_hsa_signal_exchange_scacquire :
+		case HSA_API_ID_hsa_signal_exchange_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_exchange_scacquire_t* args = (args_hsa_signal_exchange_scacquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_exchange_scacquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_exchange_scacquire.value);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_exchange_scacquire.retval);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_destroy
-		case HSA_API_ID_hsa_code_object_destroy :
+		case HSA_API_ID_hsa_code_object_destroy : {
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_destroy_t* args = (args_hsa_code_object_destroy_t*) func_args;
 			printf("\thsa_code_object_t code_object = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_code_object_destroy.code_object.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->code_object.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_destroy.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_handle_create
-		case HSA_API_ID_hsa_amd_vmem_handle_create :
+		case HSA_API_ID_hsa_amd_vmem_handle_create : {
 			//	hsa_amd_memory_pool_t pool ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -4110,49 +4450,55 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_handle_create_t* args = (args_hsa_amd_vmem_handle_create_t*) func_args;
 			printf("\thsa_amd_memory_pool_t pool = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_vmem_handle_create.pool.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->pool.handle);
 			printf("\t}\n");
-			printf("\tsize_t size = %lu\n", args->hsa_amd_vmem_handle_create.size);
-			printf("\thsa_amd_memory_type_t type = %d\n", args->hsa_amd_vmem_handle_create.type);
-			printf("\tuint64_t flags = %lu\n", args->hsa_amd_vmem_handle_create.flags);
-			printf("\thsa_amd_vmem_alloc_handle_t * memory_handle = %p", args->hsa_amd_vmem_handle_create.memory_handle);
-			if (args->hsa_amd_vmem_handle_create.memory_handle != NULL) {
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thsa_amd_memory_type_t type = %d\n", args->type);
+			printf("\tuint64_t flags = %lu\n", args->flags);
+			printf("\thsa_amd_vmem_alloc_handle_t * memory_handle = %p", args->memory_handle);
+			if (args->memory_handle != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_vmem_handle_create.memory_handle__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->memory_handle__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_handle_create.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_address_free
-		case HSA_API_ID_hsa_amd_vmem_address_free :
+		case HSA_API_ID_hsa_amd_vmem_address_free : {
 			//	void * va (void *);
 			//	size_t size (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * va = %p", args->hsa_amd_vmem_address_free.va);
+			args_hsa_amd_vmem_address_free_t* args = (args_hsa_amd_vmem_address_free_t*) func_args;
+			printf("\tvoid * va = %p", args->va);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hsa_amd_vmem_address_free.size);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_address_free.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_subtract_release
-		case HSA_API_ID_hsa_signal_subtract_release :
+		case HSA_API_ID_hsa_signal_subtract_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_subtract_release_t* args = (args_hsa_signal_subtract_release_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_subtract_release.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_subtract_release.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_load_write_index_scacquire
-		case HSA_API_ID_hsa_queue_load_write_index_scacquire :
+		case HSA_API_ID_hsa_queue_load_write_index_scacquire : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -4165,43 +4511,47 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_load_write_index_scacquire.queue);
-			if (args->hsa_queue_load_write_index_scacquire.queue != NULL) {
+			args_hsa_queue_load_write_index_scacquire_t* args = (args_hsa_queue_load_write_index_scacquire_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_load_write_index_scacquire.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_load_write_index_scacquire.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_load_write_index_scacquire.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_load_write_index_scacquire.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_load_write_index_scacquire.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_load_write_index_scacquire.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_load_write_index_scacquire.retval);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_get_info
-		case HSA_API_ID_hsa_code_object_get_info :
+		case HSA_API_ID_hsa_code_object_get_info : {
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_code_object_info_t attribute (enum hsa_code_object_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_get_info_t* args = (args_hsa_code_object_get_info_t*) func_args;
 			printf("\thsa_code_object_t code_object = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_code_object_get_info.code_object.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->code_object.handle);
 			printf("\t}\n");
-			printf("\thsa_code_object_info_t attribute = %d\n", args->hsa_code_object_get_info.attribute);
-			printf("\tvoid * value = %p", args->hsa_code_object_get_info.value);
+			printf("\thsa_code_object_info_t attribute = %d\n", args->attribute);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_get_info.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_pool_allocate
-		case HSA_API_ID_hsa_amd_memory_pool_allocate :
+		case HSA_API_ID_hsa_amd_memory_pool_allocate : {
 			//	hsa_amd_memory_pool_t memory_pool ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -4209,22 +4559,24 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint32_t flags (unsigned int);
 			//	void ** ptr (void **);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_pool_allocate_t* args = (args_hsa_amd_memory_pool_allocate_t*) func_args;
 			printf("\thsa_amd_memory_pool_t memory_pool = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_pool_allocate.memory_pool.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->memory_pool.handle);
 			printf("\t}\n");
-			printf("\tsize_t size = %lu\n", args->hsa_amd_memory_pool_allocate.size);
-			printf("\tuint32_t flags = %u\n", args->hsa_amd_memory_pool_allocate.flags);
-			printf("\tvoid ** ptr = %p", args->hsa_amd_memory_pool_allocate.ptr);
-			if (args->hsa_amd_memory_pool_allocate.ptr != NULL) {
-				printf("-> %p", args->hsa_amd_memory_pool_allocate.ptr__ref.ptr1);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tuint32_t flags = %u\n", args->flags);
+			printf("\tvoid ** ptr = %p", args->ptr);
+			if (args->ptr != NULL) {
+				printf("-> %p", args->ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_pool_allocate.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_get_symbol_from_name
-		case HSA_API_ID_hsa_code_object_get_symbol_from_name :
+		case HSA_API_ID_hsa_code_object_get_symbol_from_name : {
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -4234,47 +4586,51 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_get_symbol_from_name_t* args = (args_hsa_code_object_get_symbol_from_name_t*) func_args;
 			printf("\thsa_code_object_t code_object = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_code_object_get_symbol_from_name.code_object.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->code_object.handle);
 			printf("\t}\n");
-			printf("\tconst char * module_name = %p", args->hsa_code_object_get_symbol_from_name.module_name);
-			if (args->hsa_code_object_get_symbol_from_name.module_name != NULL) {
-				printf(" -> %s\n", args->hsa_code_object_get_symbol_from_name.module_name__ref.val);
+			printf("\tconst char * module_name = %p", args->module_name);
+			if (args->module_name != NULL) {
+				printf(" -> %s\n", args->module_name__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst char * symbol_name = %p", args->hsa_code_object_get_symbol_from_name.symbol_name);
-			if (args->hsa_code_object_get_symbol_from_name.symbol_name != NULL) {
-				printf(" -> %s\n", args->hsa_code_object_get_symbol_from_name.symbol_name__ref.val);
+			printf("\tconst char * symbol_name = %p", args->symbol_name);
+			if (args->symbol_name != NULL) {
+				printf(" -> %s\n", args->symbol_name__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_code_symbol_t * symbol = %p", args->hsa_code_object_get_symbol_from_name.symbol);
-			if (args->hsa_code_object_get_symbol_from_name.symbol != NULL) {
+			printf("\thsa_code_symbol_t * symbol = %p", args->symbol);
+			if (args->symbol != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_code_object_get_symbol_from_name.symbol__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->symbol__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_get_symbol_from_name.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_agent_iterate_caches
-		case HSA_API_ID_hsa_agent_iterate_caches :
+		case HSA_API_ID_hsa_agent_iterate_caches : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_cache_t, void *) callback (enum hsa_status_t (*)(struct hsa_cache_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_agent_iterate_caches_t* args = (args_hsa_agent_iterate_caches_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_agent_iterate_caches.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t (*)(hsa_cache_t, void *) callback = %p\n", args->hsa_agent_iterate_caches.callback);
-			printf("\tvoid * data = %p", args->hsa_agent_iterate_caches.data);
+			printf("\thsa_status_t (*)(hsa_cache_t, void *) callback = %p\n", args->callback);
+			printf("\tvoid * data = %p", args->data);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_agent_iterate_caches.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_isa_get_round_method
-		case HSA_API_ID_hsa_isa_get_round_method :
+		case HSA_API_ID_hsa_isa_get_round_method : {
 			//	hsa_isa_t isa ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -4282,21 +4638,23 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_flush_mode_t flush_mode (enum hsa_flush_mode_t);
 			//	hsa_round_method_t * round_method (enum hsa_round_method_t*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_isa_get_round_method_t* args = (args_hsa_isa_get_round_method_t*) func_args;
 			printf("\thsa_isa_t isa = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_isa_get_round_method.isa.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->isa.handle);
 			printf("\t}\n");
-			printf("\thsa_fp_type_t fp_type = %d\n", args->hsa_isa_get_round_method.fp_type);
-			printf("\thsa_flush_mode_t flush_mode = %d\n", args->hsa_isa_get_round_method.flush_mode);
-			printf("\thsa_round_method_t * round_method = %p", args->hsa_isa_get_round_method.round_method);
-			if (args->hsa_isa_get_round_method.round_method != NULL) {
-				printf(" -> %d\n", args->hsa_isa_get_round_method.round_method__ref.val);
+			printf("\thsa_fp_type_t fp_type = %d\n", args->fp_type);
+			printf("\thsa_flush_mode_t flush_mode = %d\n", args->flush_mode);
+			printf("\thsa_round_method_t * round_method = %p", args->round_method);
+			if (args->round_method != NULL) {
+				printf(" -> %d\n", args->round_method__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_isa_get_round_method.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_queue_set_priority
-		case HSA_API_ID_hsa_amd_queue_set_priority :
+		case HSA_API_ID_hsa_amd_queue_set_priority : {
 			//	hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -4310,26 +4668,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	hsa_amd_queue_priority_t priority (enum hsa_amd_queue_priority_s);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_queue_t * queue = %p", args->hsa_amd_queue_set_priority.queue);
-			if (args->hsa_amd_queue_set_priority.queue != NULL) {
+			args_hsa_amd_queue_set_priority_t* args = (args_hsa_amd_queue_set_priority_t*) func_args;
+			printf("\thsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_amd_queue_set_priority.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_amd_queue_set_priority.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_amd_queue_set_priority.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_amd_queue_set_priority.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_amd_queue_set_priority.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_amd_queue_set_priority.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_amd_queue_priority_t priority = %d\n", args->hsa_amd_queue_set_priority.priority);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_queue_set_priority.retval);
+			printf("\thsa_amd_queue_priority_t priority = %d\n", args->priority);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_store_read_index_screlease
-		case HSA_API_ID_hsa_queue_store_read_index_screlease :
+		case HSA_API_ID_hsa_queue_store_read_index_screlease : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -4342,25 +4702,27 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	uint64_t value (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_store_read_index_screlease.queue);
-			if (args->hsa_queue_store_read_index_screlease.queue != NULL) {
+			args_hsa_queue_store_read_index_screlease_t* args = (args_hsa_queue_store_read_index_screlease_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_store_read_index_screlease.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_store_read_index_screlease.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_store_read_index_screlease.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_store_read_index_screlease.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_store_read_index_screlease.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_store_read_index_screlease.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_store_read_index_screlease.value);
+			printf("\tuint64_t value = %lu\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_get_alloc_properties_from_handle
-		case HSA_API_ID_hsa_amd_vmem_get_alloc_properties_from_handle :
+		case HSA_API_ID_hsa_amd_vmem_get_alloc_properties_from_handle : {
 			//	hsa_amd_vmem_alloc_handle_t memory_handle ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -4369,25 +4731,27 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	hsa_amd_memory_type_t * type (enum hsa_amd_memory_type_t*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_get_alloc_properties_from_handle_t* args = (args_hsa_amd_vmem_get_alloc_properties_from_handle_t*) func_args;
 			printf("\thsa_amd_vmem_alloc_handle_t memory_handle = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_vmem_get_alloc_properties_from_handle.memory_handle.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->memory_handle.handle);
 			printf("\t}\n");
-			printf("\thsa_amd_memory_pool_t * pool = %p", args->hsa_amd_vmem_get_alloc_properties_from_handle.pool);
-			if (args->hsa_amd_vmem_get_alloc_properties_from_handle.pool != NULL) {
+			printf("\thsa_amd_memory_pool_t * pool = %p", args->pool);
+			if (args->pool != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_vmem_get_alloc_properties_from_handle.pool__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->pool__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_amd_memory_type_t * type = %p", args->hsa_amd_vmem_get_alloc_properties_from_handle.type);
-			if (args->hsa_amd_vmem_get_alloc_properties_from_handle.type != NULL) {
-				printf(" -> %d\n", args->hsa_amd_vmem_get_alloc_properties_from_handle.type__ref.val);
+			printf("\thsa_amd_memory_type_t * type = %p", args->type);
+			if (args->type != NULL) {
+				printf(" -> %d\n", args->type__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_get_alloc_properties_from_handle.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_ipc_signal_attach
-		case HSA_API_ID_hsa_amd_ipc_signal_attach :
+		case HSA_API_ID_hsa_amd_ipc_signal_attach : {
 			//	const hsa_amd_ipc_signal_t * handle ({
 			//		uint32_t[8] handle (unsigned int[8]);
 			//	});
@@ -4395,50 +4759,56 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tconst hsa_amd_ipc_signal_t * handle = %p", args->hsa_amd_ipc_signal_attach.handle);
-			if (args->hsa_amd_ipc_signal_attach.handle != NULL) {
+			args_hsa_amd_ipc_signal_attach_t* args = (args_hsa_amd_ipc_signal_attach_t*) func_args;
+			printf("\tconst hsa_amd_ipc_signal_t * handle = %p", args->handle);
+			if (args->handle != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t[8] handle = %u\n", args->hsa_amd_ipc_signal_attach.handle__ref.val.handle[0]);
+				printf("\t\tuint32_t[8] handle = %u\n", args->handle__ref.val.handle[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_signal_t * signal = %p", args->hsa_amd_ipc_signal_attach.signal);
-			if (args->hsa_amd_ipc_signal_attach.signal != NULL) {
+			printf("\thsa_signal_t * signal = %p", args->signal);
+			if (args->signal != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_ipc_signal_attach.signal__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->signal__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_ipc_signal_attach.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_and_acq_rel
-		case HSA_API_ID_hsa_signal_and_acq_rel :
+		case HSA_API_ID_hsa_signal_and_acq_rel : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_and_acq_rel_t* args = (args_hsa_signal_and_acq_rel_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_and_acq_rel.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_and_acq_rel.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_load_acquire
-		case HSA_API_ID_hsa_signal_load_acquire :
+		case HSA_API_ID_hsa_signal_load_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_load_acquire_t* args = (args_hsa_signal_load_acquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_load_acquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_load_acquire.retval);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_async_copy
-		case HSA_API_ID_hsa_amd_memory_async_copy :
+		case HSA_API_ID_hsa_amd_memory_async_copy : {
 			//	void * dst (void *);
 			//	hsa_agent_t dst_agent ({
 			//		uint64_t handle (unsigned long);
@@ -4456,76 +4826,84 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * dst = %p", args->hsa_amd_memory_async_copy.dst);
+			args_hsa_amd_memory_async_copy_t* args = (args_hsa_amd_memory_async_copy_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
 			printf("\thsa_agent_t dst_agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_async_copy.dst_agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->dst_agent.handle);
 			printf("\t}\n");
-			printf("\tconst void * src = %p", args->hsa_amd_memory_async_copy.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
 			printf("\thsa_agent_t src_agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_async_copy.src_agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->src_agent.handle);
 			printf("\t}\n");
-			printf("\tsize_t size = %lu\n", args->hsa_amd_memory_async_copy.size);
-			printf("\tuint32_t num_dep_signals = %u\n", args->hsa_amd_memory_async_copy.num_dep_signals);
-			printf("\tconst hsa_signal_t * dep_signals = %p", args->hsa_amd_memory_async_copy.dep_signals);
-			if (args->hsa_amd_memory_async_copy.dep_signals != NULL) {
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tuint32_t num_dep_signals = %u\n", args->num_dep_signals);
+			printf("\tconst hsa_signal_t * dep_signals = %p", args->dep_signals);
+			if (args->dep_signals != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_async_copy.dep_signals__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->dep_signals__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
 			printf("\thsa_signal_t completion_signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_async_copy.completion_signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->completion_signal.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_async_copy.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_exchange_acq_rel
-		case HSA_API_ID_hsa_signal_exchange_acq_rel :
+		case HSA_API_ID_hsa_signal_exchange_acq_rel : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_exchange_acq_rel_t* args = (args_hsa_signal_exchange_acq_rel_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_exchange_acq_rel.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_exchange_acq_rel.value);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_exchange_acq_rel.retval);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_global_variable_define
-		case HSA_API_ID_hsa_executable_global_variable_define :
+		case HSA_API_ID_hsa_executable_global_variable_define : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	const char * variable_name (const char *);
 			//	void * address (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_global_variable_define_t* args = (args_hsa_executable_global_variable_define_t*) func_args;
 			printf("\thsa_executable_t executable = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_executable_global_variable_define.executable.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->executable.handle);
 			printf("\t}\n");
-			printf("\tconst char * variable_name = %p", args->hsa_executable_global_variable_define.variable_name);
-			if (args->hsa_executable_global_variable_define.variable_name != NULL) {
-				printf(" -> %s\n", args->hsa_executable_global_variable_define.variable_name__ref.val);
+			printf("\tconst char * variable_name = %p", args->variable_name);
+			if (args->variable_name != NULL) {
+				printf(" -> %s\n", args->variable_name__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid * address = %p", args->hsa_executable_global_variable_define.address);
+			printf("\tvoid * address = %p", args->address);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_executable_global_variable_define.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_shut_down
-		case HSA_API_ID_hsa_shut_down :
+		case HSA_API_ID_hsa_shut_down : {
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_status_t retval = %d\n", args->hsa_shut_down.retval);
+			args_hsa_shut_down_t* args = (args_hsa_shut_down_t*) func_args;
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_signal_create
-		case HSA_API_ID_hsa_amd_signal_create :
+		case HSA_API_ID_hsa_amd_signal_create : {
 			//	hsa_signal_value_t initial_value (long);
 			//	uint32_t num_consumers (unsigned int);
 			//	const hsa_agent_t * consumers ({
@@ -4536,50 +4914,56 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_signal_value_t initial_value = %ld\n", args->hsa_amd_signal_create.initial_value);
-			printf("\tuint32_t num_consumers = %u\n", args->hsa_amd_signal_create.num_consumers);
-			printf("\tconst hsa_agent_t * consumers = %p", args->hsa_amd_signal_create.consumers);
-			if (args->hsa_amd_signal_create.consumers != NULL) {
+			args_hsa_amd_signal_create_t* args = (args_hsa_amd_signal_create_t*) func_args;
+			printf("\thsa_signal_value_t initial_value = %ld\n", args->initial_value);
+			printf("\tuint32_t num_consumers = %u\n", args->num_consumers);
+			printf("\tconst hsa_agent_t * consumers = %p", args->consumers);
+			if (args->consumers != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_signal_create.consumers__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->consumers__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t attributes = %lu\n", args->hsa_amd_signal_create.attributes);
-			printf("\thsa_signal_t * signal = %p", args->hsa_amd_signal_create.signal);
-			if (args->hsa_amd_signal_create.signal != NULL) {
+			printf("\tuint64_t attributes = %lu\n", args->attributes);
+			printf("\thsa_signal_t * signal = %p", args->signal);
+			if (args->signal != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_signal_create.signal__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->signal__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_signal_create.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ven_amd_pcs_stop
-		case HSA_API_ID_hsa_ven_amd_pcs_stop :
+		case HSA_API_ID_hsa_ven_amd_pcs_stop : {
 			//	hsa_ven_amd_pcs_t pc_sampling ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ven_amd_pcs_stop_t* args = (args_hsa_ven_amd_pcs_stop_t*) func_args;
 			printf("\thsa_ven_amd_pcs_t pc_sampling = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ven_amd_pcs_stop.pc_sampling.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->pc_sampling.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_ven_amd_pcs_stop.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_unlock
-		case HSA_API_ID_hsa_amd_memory_unlock :
+		case HSA_API_ID_hsa_amd_memory_unlock : {
 			//	void * host_ptr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * host_ptr = %p", args->hsa_amd_memory_unlock.host_ptr);
+			args_hsa_amd_memory_unlock_t* args = (args_hsa_amd_memory_unlock_t*) func_args;
+			printf("\tvoid * host_ptr = %p", args->host_ptr);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_unlock.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_image_create
-		case HSA_API_ID_hsa_amd_image_create :
+		case HSA_API_ID_hsa_amd_image_create : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -4605,82 +4989,90 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_image_create_t* args = (args_hsa_amd_image_create_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_image_create.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tconst hsa_ext_image_descriptor_t * image_descriptor = %p", args->hsa_amd_image_create.image_descriptor);
-			if (args->hsa_amd_image_create.image_descriptor != NULL) {
+			printf("\tconst hsa_ext_image_descriptor_t * image_descriptor = %p", args->image_descriptor);
+			if (args->image_descriptor != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_ext_image_geometry_t geometry = %d\n", args->hsa_amd_image_create.image_descriptor__ref.val.geometry);
-				printf("\t\tsize_t width = %lu\n", args->hsa_amd_image_create.image_descriptor__ref.val.width);
-				printf("\t\tsize_t height = %lu\n", args->hsa_amd_image_create.image_descriptor__ref.val.height);
-				printf("\t\tsize_t depth = %lu\n", args->hsa_amd_image_create.image_descriptor__ref.val.depth);
-				printf("\t\tsize_t array_size = %lu\n", args->hsa_amd_image_create.image_descriptor__ref.val.array_size);
+				printf("\t\thsa_ext_image_geometry_t geometry = %d\n", args->image_descriptor__ref.val.geometry);
+				printf("\t\tsize_t width = %lu\n", args->image_descriptor__ref.val.width);
+				printf("\t\tsize_t height = %lu\n", args->image_descriptor__ref.val.height);
+				printf("\t\tsize_t depth = %lu\n", args->image_descriptor__ref.val.depth);
+				printf("\t\tsize_t array_size = %lu\n", args->image_descriptor__ref.val.array_size);
 				printf("\t\thsa_ext_image_format_t format = {\n");
-				printf("\t\t\thsa_ext_image_channel_type32_t channel_type = %u\n", args->hsa_amd_image_create.image_descriptor__ref.val.format.channel_type);
-				printf("\t\t\thsa_ext_image_channel_order32_t channel_order = %u\n", args->hsa_amd_image_create.image_descriptor__ref.val.format.channel_order);
+				printf("\t\t\thsa_ext_image_channel_type32_t channel_type = %u\n", args->image_descriptor__ref.val.format.channel_type);
+				printf("\t\t\thsa_ext_image_channel_order32_t channel_order = %u\n", args->image_descriptor__ref.val.format.channel_order);
 				printf("\t\t}\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst hsa_amd_image_descriptor_t * image_layout = %p", args->hsa_amd_image_create.image_layout);
-			if (args->hsa_amd_image_create.image_layout != NULL) {
+			printf("\tconst hsa_amd_image_descriptor_t * image_layout = %p", args->image_layout);
+			if (args->image_layout != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t version = %u\n", args->hsa_amd_image_create.image_layout__ref.val.version);
-				printf("\t\tuint32_t deviceID = %u\n", args->hsa_amd_image_create.image_layout__ref.val.deviceID);
-				printf("\t\tuint32_t[1] data = %u\n", args->hsa_amd_image_create.image_layout__ref.val.data[0]);
+				printf("\t\tuint32_t version = %u\n", args->image_layout__ref.val.version);
+				printf("\t\tuint32_t deviceID = %u\n", args->image_layout__ref.val.deviceID);
+				printf("\t\tuint32_t[1] data = %u\n", args->image_layout__ref.val.data[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst void * image_data = %p", args->hsa_amd_image_create.image_data);
+			printf("\tconst void * image_data = %p", args->image_data);
 			printf("\n");
-			printf("\thsa_access_permission_t access_permission = %d\n", args->hsa_amd_image_create.access_permission);
-			printf("\thsa_ext_image_t * image = %p", args->hsa_amd_image_create.image);
-			if (args->hsa_amd_image_create.image != NULL) {
+			printf("\thsa_access_permission_t access_permission = %d\n", args->access_permission);
+			printf("\thsa_ext_image_t * image = %p", args->image);
+			if (args->image != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_image_create.image__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->image__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_image_create.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_interop_unmap_buffer
-		case HSA_API_ID_hsa_amd_interop_unmap_buffer :
+		case HSA_API_ID_hsa_amd_interop_unmap_buffer : {
 			//	void * ptr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * ptr = %p", args->hsa_amd_interop_unmap_buffer.ptr);
+			args_hsa_amd_interop_unmap_buffer_t* args = (args_hsa_amd_interop_unmap_buffer_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_interop_unmap_buffer.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_or_screlease
-		case HSA_API_ID_hsa_signal_or_screlease :
+		case HSA_API_ID_hsa_signal_or_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_or_screlease_t* args = (args_hsa_signal_or_screlease_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_or_screlease.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_or_screlease.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_destroy
-		case HSA_API_ID_hsa_signal_destroy :
+		case HSA_API_ID_hsa_signal_destroy : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_signal_destroy_t* args = (args_hsa_signal_destroy_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_destroy.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_signal_destroy.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_destroy
-		case HSA_API_ID_hsa_ext_image_destroy :
+		case HSA_API_ID_hsa_ext_image_destroy : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -4688,18 +5080,20 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_destroy_t* args = (args_hsa_ext_image_destroy_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_destroy.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
 			printf("\thsa_ext_image_t image = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_destroy.image.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->image.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_destroy.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_set_access
-		case HSA_API_ID_hsa_amd_vmem_set_access :
+		case HSA_API_ID_hsa_amd_vmem_set_access : {
 			//	void * va (void *);
 			//	size_t size (unsigned long);
 			//	const hsa_amd_memory_access_desc_t * desc ({
@@ -4710,119 +5104,133 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	size_t desc_cnt (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * va = %p", args->hsa_amd_vmem_set_access.va);
+			args_hsa_amd_vmem_set_access_t* args = (args_hsa_amd_vmem_set_access_t*) func_args;
+			printf("\tvoid * va = %p", args->va);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hsa_amd_vmem_set_access.size);
-			printf("\tconst hsa_amd_memory_access_desc_t * desc = %p", args->hsa_amd_vmem_set_access.desc);
-			if (args->hsa_amd_vmem_set_access.desc != NULL) {
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tconst hsa_amd_memory_access_desc_t * desc = %p", args->desc);
+			if (args->desc != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_access_permission_t permissions = %d\n", args->hsa_amd_vmem_set_access.desc__ref.val.permissions);
+				printf("\t\thsa_access_permission_t permissions = %d\n", args->desc__ref.val.permissions);
 				printf("\t\thsa_agent_t agent_handle = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_amd_vmem_set_access.desc__ref.val.agent_handle.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->desc__ref.val.agent_handle.handle);
 				printf("\t\t}\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tsize_t desc_cnt = %lu\n", args->hsa_amd_vmem_set_access.desc_cnt);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_set_access.retval);
+			printf("\tsize_t desc_cnt = %lu\n", args->desc_cnt);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_and_acquire
-		case HSA_API_ID_hsa_signal_and_acquire :
+		case HSA_API_ID_hsa_signal_and_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_and_acquire_t* args = (args_hsa_signal_and_acquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_and_acquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_and_acquire.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_memory_deregister
-		case HSA_API_ID_hsa_memory_deregister :
+		case HSA_API_ID_hsa_memory_deregister : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * ptr = %p", args->hsa_memory_deregister.ptr);
+			args_hsa_memory_deregister_t* args = (args_hsa_memory_deregister_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hsa_memory_deregister.size);
-			printf("\thsa_status_t retval = %d\n", args->hsa_memory_deregister.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_profiling_convert_tick_to_system_domain
-		case HSA_API_ID_hsa_amd_profiling_convert_tick_to_system_domain :
+		case HSA_API_ID_hsa_amd_profiling_convert_tick_to_system_domain : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	uint64_t agent_tick (unsigned long);
 			//	uint64_t * system_tick (unsigned long*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_profiling_convert_tick_to_system_domain_t* args = (args_hsa_amd_profiling_convert_tick_to_system_domain_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_profiling_convert_tick_to_system_domain.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tuint64_t agent_tick = %lu\n", args->hsa_amd_profiling_convert_tick_to_system_domain.agent_tick);
-			printf("\tuint64_t * system_tick = %p", args->hsa_amd_profiling_convert_tick_to_system_domain.system_tick);
-			if (args->hsa_amd_profiling_convert_tick_to_system_domain.system_tick != NULL) {
-				printf(" -> %lu\n", args->hsa_amd_profiling_convert_tick_to_system_domain.system_tick__ref.val);
+			printf("\tuint64_t agent_tick = %lu\n", args->agent_tick);
+			printf("\tuint64_t * system_tick = %p", args->system_tick);
+			if (args->system_tick != NULL) {
+				printf(" -> %lu\n", args->system_tick__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_profiling_convert_tick_to_system_domain.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_add_release
-		case HSA_API_ID_hsa_signal_add_release :
+		case HSA_API_ID_hsa_signal_add_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_add_release_t* args = (args_hsa_signal_add_release_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_add_release.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_add_release.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_exchange_release
-		case HSA_API_ID_hsa_signal_exchange_release :
+		case HSA_API_ID_hsa_signal_exchange_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_exchange_release_t* args = (args_hsa_signal_exchange_release_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_exchange_release.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_exchange_release.value);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_exchange_release.retval);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_address_reserve_align
-		case HSA_API_ID_hsa_amd_vmem_address_reserve_align :
+		case HSA_API_ID_hsa_amd_vmem_address_reserve_align : {
 			//	void ** va (void **);
 			//	size_t size (unsigned long);
 			//	uint64_t address (unsigned long);
 			//	uint64_t alignment (unsigned long);
 			//	uint64_t flags (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid ** va = %p", args->hsa_amd_vmem_address_reserve_align.va);
-			if (args->hsa_amd_vmem_address_reserve_align.va != NULL) {
-				printf("-> %p", args->hsa_amd_vmem_address_reserve_align.va__ref.ptr1);
+			args_hsa_amd_vmem_address_reserve_align_t* args = (args_hsa_amd_vmem_address_reserve_align_t*) func_args;
+			printf("\tvoid ** va = %p", args->va);
+			if (args->va != NULL) {
+				printf("-> %p", args->va__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t size = %lu\n", args->hsa_amd_vmem_address_reserve_align.size);
-			printf("\tuint64_t address = %lu\n", args->hsa_amd_vmem_address_reserve_align.address);
-			printf("\tuint64_t alignment = %lu\n", args->hsa_amd_vmem_address_reserve_align.alignment);
-			printf("\tuint64_t flags = %lu\n", args->hsa_amd_vmem_address_reserve_align.flags);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_address_reserve_align.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tuint64_t address = %lu\n", args->address);
+			printf("\tuint64_t alignment = %lu\n", args->alignment);
+			printf("\tuint64_t flags = %lu\n", args->flags);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_sampler_destroy
-		case HSA_API_ID_hsa_ext_sampler_destroy :
+		case HSA_API_ID_hsa_ext_sampler_destroy : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -4830,61 +5238,69 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_sampler_destroy_t* args = (args_hsa_ext_sampler_destroy_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_sampler_destroy.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
 			printf("\thsa_ext_sampler_t sampler = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_sampler_destroy.sampler.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->sampler.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_ext_sampler_destroy.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_store_relaxed
-		case HSA_API_ID_hsa_signal_store_relaxed :
+		case HSA_API_ID_hsa_signal_store_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_store_relaxed_t* args = (args_hsa_signal_store_relaxed_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_store_relaxed.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_store_relaxed.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_cas_acq_rel
-		case HSA_API_ID_hsa_signal_cas_acq_rel :
+		case HSA_API_ID_hsa_signal_cas_acq_rel : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t expected (long);
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_cas_acq_rel_t* args = (args_hsa_signal_cas_acq_rel_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_cas_acq_rel.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t expected = %ld\n", args->hsa_signal_cas_acq_rel.expected);
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_cas_acq_rel.value);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_cas_acq_rel.retval);
+			printf("\thsa_signal_value_t expected = %ld\n", args->expected);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_xor_relaxed
-		case HSA_API_ID_hsa_signal_xor_relaxed :
+		case HSA_API_ID_hsa_signal_xor_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_xor_relaxed_t* args = (args_hsa_signal_xor_relaxed_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_xor_relaxed.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_xor_relaxed.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_add_write_index_scacquire
-		case HSA_API_ID_hsa_queue_add_write_index_scacquire :
+		case HSA_API_ID_hsa_queue_add_write_index_scacquire : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -4898,26 +5314,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_add_write_index_scacquire.queue);
-			if (args->hsa_queue_add_write_index_scacquire.queue != NULL) {
+			args_hsa_queue_add_write_index_scacquire_t* args = (args_hsa_queue_add_write_index_scacquire_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_add_write_index_scacquire.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_add_write_index_scacquire.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_add_write_index_scacquire.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_add_write_index_scacquire.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_add_write_index_scacquire.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_add_write_index_scacquire.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_add_write_index_scacquire.value);
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_add_write_index_scacquire.retval);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_isa_get_info
-		case HSA_API_ID_hsa_isa_get_info :
+		case HSA_API_ID_hsa_isa_get_info : {
 			//	hsa_isa_t isa ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -4925,55 +5343,61 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint32_t index (unsigned int);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_isa_get_info_t* args = (args_hsa_isa_get_info_t*) func_args;
 			printf("\thsa_isa_t isa = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_isa_get_info.isa.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->isa.handle);
 			printf("\t}\n");
-			printf("\thsa_isa_info_t attribute = %d\n", args->hsa_isa_get_info.attribute);
-			printf("\tuint32_t index = %u\n", args->hsa_isa_get_info.index);
-			printf("\tvoid * value = %p", args->hsa_isa_get_info.value);
+			printf("\thsa_isa_info_t attribute = %d\n", args->attribute);
+			printf("\tuint32_t index = %u\n", args->index);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_isa_get_info.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_reader_create_from_file
-		case HSA_API_ID_hsa_code_object_reader_create_from_file :
+		case HSA_API_ID_hsa_code_object_reader_create_from_file : {
 			//	hsa_file_t file (int);
 			//	hsa_code_object_reader_t * code_object_reader ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_file_t file = %d\n", args->hsa_code_object_reader_create_from_file.file);
-			printf("\thsa_code_object_reader_t * code_object_reader = %p", args->hsa_code_object_reader_create_from_file.code_object_reader);
-			if (args->hsa_code_object_reader_create_from_file.code_object_reader != NULL) {
+			args_hsa_code_object_reader_create_from_file_t* args = (args_hsa_code_object_reader_create_from_file_t*) func_args;
+			printf("\thsa_file_t file = %d\n", args->file);
+			printf("\thsa_code_object_reader_t * code_object_reader = %p", args->code_object_reader);
+			if (args->code_object_reader != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_code_object_reader_create_from_file.code_object_reader__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->code_object_reader__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_reader_create_from_file.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_isa_iterate_wavefronts
-		case HSA_API_ID_hsa_isa_iterate_wavefronts :
+		case HSA_API_ID_hsa_isa_iterate_wavefronts : {
 			//	hsa_isa_t isa ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_wavefront_t, void *) callback (enum hsa_status_t (*)(struct hsa_wavefront_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_isa_iterate_wavefronts_t* args = (args_hsa_isa_iterate_wavefronts_t*) func_args;
 			printf("\thsa_isa_t isa = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_isa_iterate_wavefronts.isa.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->isa.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t (*)(hsa_wavefront_t, void *) callback = %p\n", args->hsa_isa_iterate_wavefronts.callback);
-			printf("\tvoid * data = %p", args->hsa_isa_iterate_wavefronts.data);
+			printf("\thsa_status_t (*)(hsa_wavefront_t, void *) callback = %p\n", args->callback);
+			printf("\tvoid * data = %p", args->data);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_isa_iterate_wavefronts.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_queue_cu_set_mask
-		case HSA_API_ID_hsa_amd_queue_cu_set_mask :
+		case HSA_API_ID_hsa_amd_queue_cu_set_mask : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -4988,91 +5412,101 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint32_t num_cu_mask_count (unsigned int);
 			//	const uint32_t * cu_mask (const unsigned int *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_amd_queue_cu_set_mask.queue);
-			if (args->hsa_amd_queue_cu_set_mask.queue != NULL) {
+			args_hsa_amd_queue_cu_set_mask_t* args = (args_hsa_amd_queue_cu_set_mask_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_amd_queue_cu_set_mask.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_amd_queue_cu_set_mask.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_amd_queue_cu_set_mask.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_amd_queue_cu_set_mask.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_amd_queue_cu_set_mask.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_amd_queue_cu_set_mask.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint32_t num_cu_mask_count = %u\n", args->hsa_amd_queue_cu_set_mask.num_cu_mask_count);
-			printf("\tconst uint32_t * cu_mask = %p", args->hsa_amd_queue_cu_set_mask.cu_mask);
-			if (args->hsa_amd_queue_cu_set_mask.cu_mask != NULL) {
-				printf(" -> %u\n", args->hsa_amd_queue_cu_set_mask.cu_mask__ref.val);
+			printf("\tuint32_t num_cu_mask_count = %u\n", args->num_cu_mask_count);
+			printf("\tconst uint32_t * cu_mask = %p", args->cu_mask);
+			if (args->cu_mask != NULL) {
+				printf(" -> %u\n", args->cu_mask__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_queue_cu_set_mask.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_unmap
-		case HSA_API_ID_hsa_amd_vmem_unmap :
+		case HSA_API_ID_hsa_amd_vmem_unmap : {
 			//	void * va (void *);
 			//	size_t size (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * va = %p", args->hsa_amd_vmem_unmap.va);
+			args_hsa_amd_vmem_unmap_t* args = (args_hsa_amd_vmem_unmap_t*) func_args;
+			printf("\tvoid * va = %p", args->va);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hsa_amd_vmem_unmap.size);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_vmem_unmap.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_or_acquire
-		case HSA_API_ID_hsa_signal_or_acquire :
+		case HSA_API_ID_hsa_signal_or_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_or_acquire_t* args = (args_hsa_signal_or_acquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_or_acquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_or_acquire.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_agent_get_exception_policies
-		case HSA_API_ID_hsa_agent_get_exception_policies :
+		case HSA_API_ID_hsa_agent_get_exception_policies : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_profile_t profile (enum hsa_profile_t);
 			//	uint16_t * mask (unsigned short*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_agent_get_exception_policies_t* args = (args_hsa_agent_get_exception_policies_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_agent_get_exception_policies.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_profile_t profile = %d\n", args->hsa_agent_get_exception_policies.profile);
-			printf("\tuint16_t * mask = %p", args->hsa_agent_get_exception_policies.mask);
-			if (args->hsa_agent_get_exception_policies.mask != NULL) {
-				printf(" -> %hu\n", args->hsa_agent_get_exception_policies.mask__ref.val);
+			printf("\thsa_profile_t profile = %d\n", args->profile);
+			printf("\tuint16_t * mask = %p", args->mask);
+			if (args->mask != NULL) {
+				printf(" -> %hu\n", args->mask__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_agent_get_exception_policies.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_system_get_extension_table
-		case HSA_API_ID_hsa_system_get_extension_table :
+		case HSA_API_ID_hsa_system_get_extension_table : {
 			//	uint16_t extension (unsigned short);
 			//	uint16_t version_major (unsigned short);
 			//	uint16_t version_minor (unsigned short);
 			//	void * table (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tuint16_t extension = %hu\n", args->hsa_system_get_extension_table.extension);
-			printf("\tuint16_t version_major = %hu\n", args->hsa_system_get_extension_table.version_major);
-			printf("\tuint16_t version_minor = %hu\n", args->hsa_system_get_extension_table.version_minor);
-			printf("\tvoid * table = %p", args->hsa_system_get_extension_table.table);
+			args_hsa_system_get_extension_table_t* args = (args_hsa_system_get_extension_table_t*) func_args;
+			printf("\tuint16_t extension = %hu\n", args->extension);
+			printf("\tuint16_t version_major = %hu\n", args->version_major);
+			printf("\tuint16_t version_minor = %hu\n", args->version_minor);
+			printf("\tvoid * table = %p", args->table);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_system_get_extension_table.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_add_write_index_screlease
-		case HSA_API_ID_hsa_queue_add_write_index_screlease :
+		case HSA_API_ID_hsa_queue_add_write_index_screlease : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -5086,26 +5520,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_add_write_index_screlease.queue);
-			if (args->hsa_queue_add_write_index_screlease.queue != NULL) {
+			args_hsa_queue_add_write_index_screlease_t* args = (args_hsa_queue_add_write_index_screlease_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_add_write_index_screlease.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_add_write_index_screlease.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_add_write_index_screlease.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_add_write_index_screlease.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_add_write_index_screlease.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_add_write_index_screlease.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_add_write_index_screlease.value);
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_add_write_index_screlease.retval);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_signal_wait_any
-		case HSA_API_ID_hsa_amd_signal_wait_any :
+		case HSA_API_ID_hsa_amd_signal_wait_any : {
 			//	uint32_t signal_count (unsigned int);
 			//	hsa_signal_t * signals ({
 			//		uint64_t handle (unsigned long);
@@ -5116,33 +5552,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_wait_state_t wait_hint (enum hsa_wait_state_t);
 			//	hsa_signal_value_t * satisfying_value (long*);
 			//	uint32_t retval (unsigned int);
-			printf("\tuint32_t signal_count = %u\n", args->hsa_amd_signal_wait_any.signal_count);
-			printf("\thsa_signal_t * signals = %p", args->hsa_amd_signal_wait_any.signals);
-			if (args->hsa_amd_signal_wait_any.signals != NULL) {
+			args_hsa_amd_signal_wait_any_t* args = (args_hsa_amd_signal_wait_any_t*) func_args;
+			printf("\tuint32_t signal_count = %u\n", args->signal_count);
+			printf("\thsa_signal_t * signals = %p", args->signals);
+			if (args->signals != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_signal_wait_any.signals__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->signals__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_signal_condition_t * conds = %p", args->hsa_amd_signal_wait_any.conds);
-			if (args->hsa_amd_signal_wait_any.conds != NULL) {
-				printf(" -> %d\n", args->hsa_amd_signal_wait_any.conds__ref.val);
+			printf("\thsa_signal_condition_t * conds = %p", args->conds);
+			if (args->conds != NULL) {
+				printf(" -> %d\n", args->conds__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_signal_value_t * values = %p", args->hsa_amd_signal_wait_any.values);
-			if (args->hsa_amd_signal_wait_any.values != NULL) {
-				printf(" -> %ld\n", args->hsa_amd_signal_wait_any.values__ref.val);
+			printf("\thsa_signal_value_t * values = %p", args->values);
+			if (args->values != NULL) {
+				printf(" -> %ld\n", args->values__ref.val);
 			} else { printf("\n"); };
-			printf("\tuint64_t timeout_hint = %lu\n", args->hsa_amd_signal_wait_any.timeout_hint);
-			printf("\thsa_wait_state_t wait_hint = %d\n", args->hsa_amd_signal_wait_any.wait_hint);
-			printf("\thsa_signal_value_t * satisfying_value = %p", args->hsa_amd_signal_wait_any.satisfying_value);
-			if (args->hsa_amd_signal_wait_any.satisfying_value != NULL) {
-				printf(" -> %ld\n", args->hsa_amd_signal_wait_any.satisfying_value__ref.val);
+			printf("\tuint64_t timeout_hint = %lu\n", args->timeout_hint);
+			printf("\thsa_wait_state_t wait_hint = %d\n", args->wait_hint);
+			printf("\thsa_signal_value_t * satisfying_value = %p", args->satisfying_value);
+			if (args->satisfying_value != NULL) {
+				printf(" -> %ld\n", args->satisfying_value__ref.val);
 			} else { printf("\n"); };
-			printf("\tuint32_t retval = %u\n", args->hsa_amd_signal_wait_any.retval);
+			printf("\tuint32_t retval = %u\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_agents_allow_access
-		case HSA_API_ID_hsa_amd_agents_allow_access :
+		case HSA_API_ID_hsa_amd_agents_allow_access : {
 			//	uint32_t num_agents (unsigned int);
 			//	const hsa_agent_t * agents ({
 			//		uint64_t handle (unsigned long);
@@ -5150,25 +5588,27 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	const uint32_t * flags (const unsigned int *);
 			//	const void * ptr (const void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tuint32_t num_agents = %u\n", args->hsa_amd_agents_allow_access.num_agents);
-			printf("\tconst hsa_agent_t * agents = %p", args->hsa_amd_agents_allow_access.agents);
-			if (args->hsa_amd_agents_allow_access.agents != NULL) {
+			args_hsa_amd_agents_allow_access_t* args = (args_hsa_amd_agents_allow_access_t*) func_args;
+			printf("\tuint32_t num_agents = %u\n", args->num_agents);
+			printf("\tconst hsa_agent_t * agents = %p", args->agents);
+			if (args->agents != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_agents_allow_access.agents__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->agents__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst uint32_t * flags = %p", args->hsa_amd_agents_allow_access.flags);
-			if (args->hsa_amd_agents_allow_access.flags != NULL) {
-				printf(" -> %u\n", args->hsa_amd_agents_allow_access.flags__ref.val);
+			printf("\tconst uint32_t * flags = %p", args->flags);
+			if (args->flags != NULL) {
+				printf(" -> %u\n", args->flags__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst void * ptr = %p", args->hsa_amd_agents_allow_access.ptr);
+			printf("\tconst void * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_agents_allow_access.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_add_write_index_scacq_screl
-		case HSA_API_ID_hsa_queue_add_write_index_scacq_screl :
+		case HSA_API_ID_hsa_queue_add_write_index_scacq_screl : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -5182,51 +5622,57 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_add_write_index_scacq_screl.queue);
-			if (args->hsa_queue_add_write_index_scacq_screl.queue != NULL) {
+			args_hsa_queue_add_write_index_scacq_screl_t* args = (args_hsa_queue_add_write_index_scacq_screl_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_add_write_index_scacq_screl.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_add_write_index_scacq_screl.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_add_write_index_scacq_screl.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_add_write_index_scacq_screl.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_add_write_index_scacq_screl.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_add_write_index_scacq_screl.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_add_write_index_scacq_screl.value);
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_add_write_index_scacq_screl.retval);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_add_screlease
-		case HSA_API_ID_hsa_signal_add_screlease :
+		case HSA_API_ID_hsa_signal_add_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_add_screlease_t* args = (args_hsa_signal_add_screlease_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_add_screlease.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_add_screlease.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_iterate_agents
-		case HSA_API_ID_hsa_iterate_agents :
+		case HSA_API_ID_hsa_iterate_agents : {
 			//	hsa_status_t (*)(hsa_agent_t, void *) callback (enum hsa_status_t (*)(struct hsa_agent_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\thsa_status_t (*)(hsa_agent_t, void *) callback = %p\n", args->hsa_iterate_agents.callback);
-			printf("\tvoid * data = %p", args->hsa_iterate_agents.data);
+			args_hsa_iterate_agents_t* args = (args_hsa_iterate_agents_t*) func_args;
+			printf("\thsa_status_t (*)(hsa_agent_t, void *) callback = %p\n", args->callback);
+			printf("\tvoid * data = %p", args->data);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_iterate_agents.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_store_read_index_relaxed
-		case HSA_API_ID_hsa_queue_store_read_index_relaxed :
+		case HSA_API_ID_hsa_queue_store_read_index_relaxed : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -5239,73 +5685,83 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	uint64_t value (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_store_read_index_relaxed.queue);
-			if (args->hsa_queue_store_read_index_relaxed.queue != NULL) {
+			args_hsa_queue_store_read_index_relaxed_t* args = (args_hsa_queue_store_read_index_relaxed_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_store_read_index_relaxed.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_store_read_index_relaxed.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_store_read_index_relaxed.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_store_read_index_relaxed.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_store_read_index_relaxed.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_store_read_index_relaxed.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t value = %lu\n", args->hsa_queue_store_read_index_relaxed.value);
+			printf("\tuint64_t value = %lu\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_or_relaxed
-		case HSA_API_ID_hsa_signal_or_relaxed :
+		case HSA_API_ID_hsa_signal_or_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_or_relaxed_t* args = (args_hsa_signal_or_relaxed_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_or_relaxed.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_or_relaxed.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_ipc_memory_detach
-		case HSA_API_ID_hsa_amd_ipc_memory_detach :
+		case HSA_API_ID_hsa_amd_ipc_memory_detach : {
 			//	void * mapped_ptr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * mapped_ptr = %p", args->hsa_amd_ipc_memory_detach.mapped_ptr);
+			args_hsa_amd_ipc_memory_detach_t* args = (args_hsa_amd_ipc_memory_detach_t*) func_args;
+			printf("\tvoid * mapped_ptr = %p", args->mapped_ptr);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_ipc_memory_detach.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_or_release
-		case HSA_API_ID_hsa_signal_or_release :
+		case HSA_API_ID_hsa_signal_or_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_or_release_t* args = (args_hsa_signal_or_release_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_or_release.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_or_release.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_deregister_deallocation_callback
-		case HSA_API_ID_hsa_amd_deregister_deallocation_callback :
+		case HSA_API_ID_hsa_amd_deregister_deallocation_callback : {
 			//	void * ptr (void *);
 			//	hsa_amd_deallocation_callback_t callback (void (*)(void *, void *));
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * ptr = %p", args->hsa_amd_deregister_deallocation_callback.ptr);
+			args_hsa_amd_deregister_deallocation_callback_t* args = (args_hsa_amd_deregister_deallocation_callback_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thsa_amd_deallocation_callback_t callback = %p\n", args->hsa_amd_deregister_deallocation_callback.callback);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_deregister_deallocation_callback.retval);
+			printf("\thsa_amd_deallocation_callback_t callback = %p\n", args->callback);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_load_read_index_acquire
-		case HSA_API_ID_hsa_queue_load_read_index_acquire :
+		case HSA_API_ID_hsa_queue_load_read_index_acquire : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -5318,43 +5774,47 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t id (unsigned long);
 			//	});
 			//	uint64_t retval (unsigned long);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_queue_load_read_index_acquire.queue);
-			if (args->hsa_queue_load_read_index_acquire.queue != NULL) {
+			args_hsa_queue_load_read_index_acquire_t* args = (args_hsa_queue_load_read_index_acquire_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_queue_load_read_index_acquire.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_queue_load_read_index_acquire.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_queue_load_read_index_acquire.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_queue_load_read_index_acquire.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_queue_load_read_index_acquire.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_queue_load_read_index_acquire.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint64_t retval = %lu\n", args->hsa_queue_load_read_index_acquire.retval);
+			printf("\tuint64_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ven_amd_pcs_iterate_configuration
-		case HSA_API_ID_hsa_ven_amd_pcs_iterate_configuration :
+		case HSA_API_ID_hsa_ven_amd_pcs_iterate_configuration : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_ven_amd_pcs_iterate_configuration_callback_t configuration_callback (enum hsa_status_t (*)(const struct hsa_ven_amd_pcs_configuration_t *, void *));
 			//	void * callback_data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ven_amd_pcs_iterate_configuration_t* args = (args_hsa_ven_amd_pcs_iterate_configuration_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ven_amd_pcs_iterate_configuration.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_ven_amd_pcs_iterate_configuration_callback_t configuration_callback = %p\n", args->hsa_ven_amd_pcs_iterate_configuration.configuration_callback);
-			printf("\tvoid * callback_data = %p", args->hsa_ven_amd_pcs_iterate_configuration.callback_data);
+			printf("\thsa_ven_amd_pcs_iterate_configuration_callback_t configuration_callback = %p\n", args->configuration_callback);
+			printf("\tvoid * callback_data = %p", args->callback_data);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_ven_amd_pcs_iterate_configuration.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_ipc_signal_create
-		case HSA_API_ID_hsa_amd_ipc_signal_create :
+		case HSA_API_ID_hsa_amd_ipc_signal_create : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -5362,39 +5822,43 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint32_t[8] handle (unsigned int[8]);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_ipc_signal_create_t* args = (args_hsa_amd_ipc_signal_create_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_ipc_signal_create.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_amd_ipc_signal_t * handle = %p", args->hsa_amd_ipc_signal_create.handle);
-			if (args->hsa_amd_ipc_signal_create.handle != NULL) {
+			printf("\thsa_amd_ipc_signal_t * handle = %p", args->handle);
+			if (args->handle != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t[8] handle = %u\n", args->hsa_amd_ipc_signal_create.handle__ref.val.handle[0]);
+				printf("\t\tuint32_t[8] handle = %u\n", args->handle__ref.val.handle[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_ipc_signal_create.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_iterate_symbols
-		case HSA_API_ID_hsa_code_object_iterate_symbols :
+		case HSA_API_ID_hsa_code_object_iterate_symbols : {
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_code_object_t, hsa_code_symbol_t, void *) callback (enum hsa_status_t (*)(struct hsa_code_object_s, struct hsa_code_symbol_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_iterate_symbols_t* args = (args_hsa_code_object_iterate_symbols_t*) func_args;
 			printf("\thsa_code_object_t code_object = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_code_object_iterate_symbols.code_object.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->code_object.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t (*)(hsa_code_object_t, hsa_code_symbol_t, void *) callback = %p\n", args->hsa_code_object_iterate_symbols.callback);
-			printf("\tvoid * data = %p", args->hsa_code_object_iterate_symbols.data);
+			printf("\thsa_status_t (*)(hsa_code_object_t, hsa_code_symbol_t, void *) callback = %p\n", args->callback);
+			printf("\tvoid * data = %p", args->data);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_iterate_symbols.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_get_capability_with_layout
-		case HSA_API_ID_hsa_ext_image_get_capability_with_layout :
+		case HSA_API_ID_hsa_ext_image_get_capability_with_layout : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -5406,28 +5870,30 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_ext_image_data_layout_t image_data_layout (enum hsa_ext_image_data_layout_t);
 			//	uint32_t * capability_mask (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_get_capability_with_layout_t* args = (args_hsa_ext_image_get_capability_with_layout_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_get_capability_with_layout.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_ext_image_geometry_t geometry = %d\n", args->hsa_ext_image_get_capability_with_layout.geometry);
-			printf("\tconst hsa_ext_image_format_t * image_format = %p", args->hsa_ext_image_get_capability_with_layout.image_format);
-			if (args->hsa_ext_image_get_capability_with_layout.image_format != NULL) {
+			printf("\thsa_ext_image_geometry_t geometry = %d\n", args->geometry);
+			printf("\tconst hsa_ext_image_format_t * image_format = %p", args->image_format);
+			if (args->image_format != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_ext_image_channel_type32_t channel_type = %u\n", args->hsa_ext_image_get_capability_with_layout.image_format__ref.val.channel_type);
-				printf("\t\thsa_ext_image_channel_order32_t channel_order = %u\n", args->hsa_ext_image_get_capability_with_layout.image_format__ref.val.channel_order);
+				printf("\t\thsa_ext_image_channel_type32_t channel_type = %u\n", args->image_format__ref.val.channel_type);
+				printf("\t\thsa_ext_image_channel_order32_t channel_order = %u\n", args->image_format__ref.val.channel_order);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_ext_image_data_layout_t image_data_layout = %d\n", args->hsa_ext_image_get_capability_with_layout.image_data_layout);
-			printf("\tuint32_t * capability_mask = %p", args->hsa_ext_image_get_capability_with_layout.capability_mask);
-			if (args->hsa_ext_image_get_capability_with_layout.capability_mask != NULL) {
-				printf(" -> %u\n", args->hsa_ext_image_get_capability_with_layout.capability_mask__ref.val);
+			printf("\thsa_ext_image_data_layout_t image_data_layout = %d\n", args->image_data_layout);
+			printf("\tuint32_t * capability_mask = %p", args->capability_mask);
+			if (args->capability_mask != NULL) {
+				printf(" -> %u\n", args->capability_mask__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_get_capability_with_layout.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_async_copy_on_engine
-		case HSA_API_ID_hsa_amd_memory_async_copy_on_engine :
+		case HSA_API_ID_hsa_amd_memory_async_copy_on_engine : {
 			//	void * dst (void *);
 			//	hsa_agent_t dst_agent ({
 			//		uint64_t handle (unsigned long);
@@ -5447,85 +5913,93 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_amd_sdma_engine_id_t engine_id (enum hsa_amd_sdma_engine_id);
 			//	_Bool force_copy_on_sdma (unsigned int);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * dst = %p", args->hsa_amd_memory_async_copy_on_engine.dst);
+			args_hsa_amd_memory_async_copy_on_engine_t* args = (args_hsa_amd_memory_async_copy_on_engine_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
 			printf("\thsa_agent_t dst_agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_async_copy_on_engine.dst_agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->dst_agent.handle);
 			printf("\t}\n");
-			printf("\tconst void * src = %p", args->hsa_amd_memory_async_copy_on_engine.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
 			printf("\thsa_agent_t src_agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_async_copy_on_engine.src_agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->src_agent.handle);
 			printf("\t}\n");
-			printf("\tsize_t size = %lu\n", args->hsa_amd_memory_async_copy_on_engine.size);
-			printf("\tuint32_t num_dep_signals = %u\n", args->hsa_amd_memory_async_copy_on_engine.num_dep_signals);
-			printf("\tconst hsa_signal_t * dep_signals = %p", args->hsa_amd_memory_async_copy_on_engine.dep_signals);
-			if (args->hsa_amd_memory_async_copy_on_engine.dep_signals != NULL) {
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tuint32_t num_dep_signals = %u\n", args->num_dep_signals);
+			printf("\tconst hsa_signal_t * dep_signals = %p", args->dep_signals);
+			if (args->dep_signals != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_async_copy_on_engine.dep_signals__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->dep_signals__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
 			printf("\thsa_signal_t completion_signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_memory_async_copy_on_engine.completion_signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->completion_signal.handle);
 			printf("\t}\n");
-			printf("\thsa_amd_sdma_engine_id_t engine_id = %d\n", args->hsa_amd_memory_async_copy_on_engine.engine_id);
-			printf("\t_Bool force_copy_on_sdma = %u\n", args->hsa_amd_memory_async_copy_on_engine.force_copy_on_sdma);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_memory_async_copy_on_engine.retval);
+			printf("\thsa_amd_sdma_engine_id_t engine_id = %d\n", args->engine_id);
+			printf("\t_Bool force_copy_on_sdma = %u\n", args->force_copy_on_sdma);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_agent_iterate_isas
-		case HSA_API_ID_hsa_agent_iterate_isas :
+		case HSA_API_ID_hsa_agent_iterate_isas : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_isa_t, void *) callback (enum hsa_status_t (*)(struct hsa_isa_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_agent_iterate_isas_t* args = (args_hsa_agent_iterate_isas_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_agent_iterate_isas.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t (*)(hsa_isa_t, void *) callback = %p\n", args->hsa_agent_iterate_isas.callback);
-			printf("\tvoid * data = %p", args->hsa_agent_iterate_isas.data);
+			printf("\thsa_status_t (*)(hsa_isa_t, void *) callback = %p\n", args->callback);
+			printf("\tvoid * data = %p", args->data);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_agent_iterate_isas.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_cas_scacq_screl
-		case HSA_API_ID_hsa_signal_cas_scacq_screl :
+		case HSA_API_ID_hsa_signal_cas_scacq_screl : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t expected (long);
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_cas_scacq_screl_t* args = (args_hsa_signal_cas_scacq_screl_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_cas_scacq_screl.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t expected = %ld\n", args->hsa_signal_cas_scacq_screl.expected);
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_cas_scacq_screl.value);
-			printf("\thsa_signal_value_t retval = %ld\n", args->hsa_signal_cas_scacq_screl.retval);
+			printf("\thsa_signal_value_t expected = %ld\n", args->expected);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
+			printf("\thsa_signal_value_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_coherency_set_type
-		case HSA_API_ID_hsa_amd_coherency_set_type :
+		case HSA_API_ID_hsa_amd_coherency_set_type : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_amd_coherency_type_t type (enum hsa_amd_coherency_type_s);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_coherency_set_type_t* args = (args_hsa_amd_coherency_set_type_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_amd_coherency_set_type.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_amd_coherency_type_t type = %d\n", args->hsa_amd_coherency_set_type.type);
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_coherency_set_type.retval);
+			printf("\thsa_amd_coherency_type_t type = %d\n", args->type);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_queue_cu_get_mask
-		case HSA_API_ID_hsa_amd_queue_cu_get_mask :
+		case HSA_API_ID_hsa_amd_queue_cu_get_mask : {
 			//	const hsa_queue_t * queue ({
 			//		hsa_queue_type32_t type (unsigned int);
 			//		uint32_t features (unsigned int);
@@ -5540,30 +6014,32 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint32_t num_cu_mask_count (unsigned int);
 			//	uint32_t * cu_mask (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tconst hsa_queue_t * queue = %p", args->hsa_amd_queue_cu_get_mask.queue);
-			if (args->hsa_amd_queue_cu_get_mask.queue != NULL) {
+			args_hsa_amd_queue_cu_get_mask_t* args = (args_hsa_amd_queue_cu_get_mask_t*) func_args;
+			printf("\tconst hsa_queue_t * queue = %p", args->queue);
+			if (args->queue != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_queue_type32_t type = %u\n", args->hsa_amd_queue_cu_get_mask.queue__ref.val.type);
-				printf("\t\tuint32_t features = %u\n", args->hsa_amd_queue_cu_get_mask.queue__ref.val.features);
+				printf("\t\thsa_queue_type32_t type = %u\n", args->queue__ref.val.type);
+				printf("\t\tuint32_t features = %u\n", args->queue__ref.val.features);
 				printf("\t\thsa_signal_t doorbell_signal = {\n");
-				printf("\t\t\tuint64_t handle = %lu\n", args->hsa_amd_queue_cu_get_mask.queue__ref.val.doorbell_signal.handle);
+				printf("\t\t\tuint64_t handle = %lu\n", args->queue__ref.val.doorbell_signal.handle);
 				printf("\t\t}\n");
-				printf("\t\tuint32_t size = %u\n", args->hsa_amd_queue_cu_get_mask.queue__ref.val.size);
-				printf("\t\tuint32_t reserved1 = %u\n", args->hsa_amd_queue_cu_get_mask.queue__ref.val.reserved1);
-				printf("\t\tuint64_t id = %lu\n", args->hsa_amd_queue_cu_get_mask.queue__ref.val.id);
+				printf("\t\tuint32_t size = %u\n", args->queue__ref.val.size);
+				printf("\t\tuint32_t reserved1 = %u\n", args->queue__ref.val.reserved1);
+				printf("\t\tuint64_t id = %lu\n", args->queue__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tuint32_t num_cu_mask_count = %u\n", args->hsa_amd_queue_cu_get_mask.num_cu_mask_count);
-			printf("\tuint32_t * cu_mask = %p", args->hsa_amd_queue_cu_get_mask.cu_mask);
-			if (args->hsa_amd_queue_cu_get_mask.cu_mask != NULL) {
-				printf(" -> %u\n", args->hsa_amd_queue_cu_get_mask.cu_mask__ref.val);
+			printf("\tuint32_t num_cu_mask_count = %u\n", args->num_cu_mask_count);
+			printf("\tuint32_t * cu_mask = %p", args->cu_mask);
+			if (args->cu_mask != NULL) {
+				printf(" -> %u\n", args->cu_mask__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_amd_queue_cu_get_mask.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_create_with_layout
-		case HSA_API_ID_hsa_ext_image_create_with_layout :
+		case HSA_API_ID_hsa_ext_image_create_with_layout : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -5587,41 +6063,43 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_create_with_layout_t* args = (args_hsa_ext_image_create_with_layout_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_create_with_layout.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\tconst hsa_ext_image_descriptor_t * image_descriptor = %p", args->hsa_ext_image_create_with_layout.image_descriptor);
-			if (args->hsa_ext_image_create_with_layout.image_descriptor != NULL) {
+			printf("\tconst hsa_ext_image_descriptor_t * image_descriptor = %p", args->image_descriptor);
+			if (args->image_descriptor != NULL) {
 				printf(" -> {\n");
-				printf("\t\thsa_ext_image_geometry_t geometry = %d\n", args->hsa_ext_image_create_with_layout.image_descriptor__ref.val.geometry);
-				printf("\t\tsize_t width = %lu\n", args->hsa_ext_image_create_with_layout.image_descriptor__ref.val.width);
-				printf("\t\tsize_t height = %lu\n", args->hsa_ext_image_create_with_layout.image_descriptor__ref.val.height);
-				printf("\t\tsize_t depth = %lu\n", args->hsa_ext_image_create_with_layout.image_descriptor__ref.val.depth);
-				printf("\t\tsize_t array_size = %lu\n", args->hsa_ext_image_create_with_layout.image_descriptor__ref.val.array_size);
+				printf("\t\thsa_ext_image_geometry_t geometry = %d\n", args->image_descriptor__ref.val.geometry);
+				printf("\t\tsize_t width = %lu\n", args->image_descriptor__ref.val.width);
+				printf("\t\tsize_t height = %lu\n", args->image_descriptor__ref.val.height);
+				printf("\t\tsize_t depth = %lu\n", args->image_descriptor__ref.val.depth);
+				printf("\t\tsize_t array_size = %lu\n", args->image_descriptor__ref.val.array_size);
 				printf("\t\thsa_ext_image_format_t format = {\n");
-				printf("\t\t\thsa_ext_image_channel_type32_t channel_type = %u\n", args->hsa_ext_image_create_with_layout.image_descriptor__ref.val.format.channel_type);
-				printf("\t\t\thsa_ext_image_channel_order32_t channel_order = %u\n", args->hsa_ext_image_create_with_layout.image_descriptor__ref.val.format.channel_order);
+				printf("\t\t\thsa_ext_image_channel_type32_t channel_type = %u\n", args->image_descriptor__ref.val.format.channel_type);
+				printf("\t\t\thsa_ext_image_channel_order32_t channel_order = %u\n", args->image_descriptor__ref.val.format.channel_order);
 				printf("\t\t}\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst void * image_data = %p", args->hsa_ext_image_create_with_layout.image_data);
+			printf("\tconst void * image_data = %p", args->image_data);
 			printf("\n");
-			printf("\thsa_access_permission_t access_permission = %d\n", args->hsa_ext_image_create_with_layout.access_permission);
-			printf("\thsa_ext_image_data_layout_t image_data_layout = %d\n", args->hsa_ext_image_create_with_layout.image_data_layout);
-			printf("\tsize_t image_data_row_pitch = %lu\n", args->hsa_ext_image_create_with_layout.image_data_row_pitch);
-			printf("\tsize_t image_data_slice_pitch = %lu\n", args->hsa_ext_image_create_with_layout.image_data_slice_pitch);
-			printf("\thsa_ext_image_t * image = %p", args->hsa_ext_image_create_with_layout.image);
-			if (args->hsa_ext_image_create_with_layout.image != NULL) {
+			printf("\thsa_access_permission_t access_permission = %d\n", args->access_permission);
+			printf("\thsa_ext_image_data_layout_t image_data_layout = %d\n", args->image_data_layout);
+			printf("\tsize_t image_data_row_pitch = %lu\n", args->image_data_row_pitch);
+			printf("\tsize_t image_data_slice_pitch = %lu\n", args->image_data_slice_pitch);
+			printf("\thsa_ext_image_t * image = %p", args->image);
+			if (args->image != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_ext_image_create_with_layout.image__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->image__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_ext_image_create_with_layout.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_deserialize
-		case HSA_API_ID_hsa_code_object_deserialize :
+		case HSA_API_ID_hsa_code_object_deserialize : {
 			//	void * serialized_code_object (void *);
 			//	size_t serialized_code_object_size (unsigned long);
 			//	const char * options (const char *);
@@ -5629,130 +6107,146 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * serialized_code_object = %p", args->hsa_code_object_deserialize.serialized_code_object);
+			args_hsa_code_object_deserialize_t* args = (args_hsa_code_object_deserialize_t*) func_args;
+			printf("\tvoid * serialized_code_object = %p", args->serialized_code_object);
 			printf("\n");
-			printf("\tsize_t serialized_code_object_size = %lu\n", args->hsa_code_object_deserialize.serialized_code_object_size);
-			printf("\tconst char * options = %p", args->hsa_code_object_deserialize.options);
-			if (args->hsa_code_object_deserialize.options != NULL) {
-				printf(" -> %s\n", args->hsa_code_object_deserialize.options__ref.val);
+			printf("\tsize_t serialized_code_object_size = %lu\n", args->serialized_code_object_size);
+			printf("\tconst char * options = %p", args->options);
+			if (args->options != NULL) {
+				printf(" -> %s\n", args->options__ref.val);
 			} else { printf("\n"); };
-			printf("\thsa_code_object_t * code_object = %p", args->hsa_code_object_deserialize.code_object);
-			if (args->hsa_code_object_deserialize.code_object != NULL) {
+			printf("\thsa_code_object_t * code_object = %p", args->code_object);
+			if (args->code_object != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint64_t handle = %lu\n", args->hsa_code_object_deserialize.code_object__ref.val.handle);
+				printf("\t\tuint64_t handle = %lu\n", args->code_object__ref.val.handle);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thsa_status_t retval = %d\n", args->hsa_code_object_deserialize.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_memory_assign_agent
-		case HSA_API_ID_hsa_memory_assign_agent :
+		case HSA_API_ID_hsa_memory_assign_agent : {
 			//	void * ptr (void *);
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_access_permission_t access (enum hsa_access_permission_t);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * ptr = %p", args->hsa_memory_assign_agent.ptr);
+			args_hsa_memory_assign_agent_t* args = (args_hsa_memory_assign_agent_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_memory_assign_agent.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_access_permission_t access = %d\n", args->hsa_memory_assign_agent.access);
-			printf("\thsa_status_t retval = %d\n", args->hsa_memory_assign_agent.retval);
+			printf("\thsa_access_permission_t access = %d\n", args->access);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_isa_get_info_alt
-		case HSA_API_ID_hsa_isa_get_info_alt :
+		case HSA_API_ID_hsa_isa_get_info_alt : {
 			//	hsa_isa_t isa ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_isa_info_t attribute (enum hsa_isa_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_isa_get_info_alt_t* args = (args_hsa_isa_get_info_alt_t*) func_args;
 			printf("\thsa_isa_t isa = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_isa_get_info_alt.isa.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->isa.handle);
 			printf("\t}\n");
-			printf("\thsa_isa_info_t attribute = %d\n", args->hsa_isa_get_info_alt.attribute);
-			printf("\tvoid * value = %p", args->hsa_isa_get_info_alt.value);
+			printf("\thsa_isa_info_t attribute = %d\n", args->attribute);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_isa_get_info_alt.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_subtract_acquire
-		case HSA_API_ID_hsa_signal_subtract_acquire :
+		case HSA_API_ID_hsa_signal_subtract_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_subtract_acquire_t* args = (args_hsa_signal_subtract_acquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_subtract_acquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_subtract_acquire.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_memory_copy
-		case HSA_API_ID_hsa_memory_copy :
+		case HSA_API_ID_hsa_memory_copy : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t size (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
-			printf("\tvoid * dst = %p", args->hsa_memory_copy.dst);
+			args_hsa_memory_copy_t* args = (args_hsa_memory_copy_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hsa_memory_copy.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hsa_memory_copy.size);
-			printf("\thsa_status_t retval = %d\n", args->hsa_memory_copy.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_agent_get_info
-		case HSA_API_ID_hsa_agent_get_info :
+		case HSA_API_ID_hsa_agent_get_info : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_agent_info_t attribute (enum hsa_agent_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_agent_get_info_t* args = (args_hsa_agent_get_info_t*) func_args;
 			printf("\thsa_agent_t agent = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_agent_get_info.agent.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->agent.handle);
 			printf("\t}\n");
-			printf("\thsa_agent_info_t attribute = %d\n", args->hsa_agent_get_info.attribute);
-			printf("\tvoid * value = %p", args->hsa_agent_get_info.value);
+			printf("\thsa_agent_info_t attribute = %d\n", args->attribute);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_agent_get_info.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_add_scacquire
-		case HSA_API_ID_hsa_signal_add_scacquire :
+		case HSA_API_ID_hsa_signal_add_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_add_scacquire_t* args = (args_hsa_signal_add_scacquire_t*) func_args;
 			printf("\thsa_signal_t signal = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_signal_add_scacquire.signal.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->signal.handle);
 			printf("\t}\n");
-			printf("\thsa_signal_value_t value = %ld\n", args->hsa_signal_add_scacquire.value);
+			printf("\thsa_signal_value_t value = %ld\n", args->value);
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ven_amd_pcs_flush
-		case HSA_API_ID_hsa_ven_amd_pcs_flush :
+		case HSA_API_ID_hsa_ven_amd_pcs_flush : {
 			//	hsa_ven_amd_pcs_t pc_sampling ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ven_amd_pcs_flush_t* args = (args_hsa_ven_amd_pcs_flush_t*) func_args;
 			printf("\thsa_ven_amd_pcs_t pc_sampling = {\n");
-			printf("\t\tuint64_t handle = %lu\n", args->hsa_ven_amd_pcs_flush.pc_sampling.handle);
+			printf("\t\tuint64_t handle = %lu\n", args->pc_sampling.handle);
 			printf("\t}\n");
-			printf("\thsa_status_t retval = %d\n", args->hsa_ven_amd_pcs_flush.retval);
+			printf("\thsa_status_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
         default : break;
     }

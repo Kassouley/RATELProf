@@ -29,176 +29,188 @@ void on_exit_mpi_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void
     pop_id();
 }
 
-void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* user_args)
+void process_mpi_args_for(mpi_api_id_t funid, const void* func_args, void* user_args)
 {
     msgpack_buffer_t* buf = (msgpack_buffer_t*)user_args;
     switch(funid) {
 		#if HAVE_MPI_Init
-		case MPI_API_ID_MPI_Init :
+		case MPI_API_ID_MPI_Init : {
 			//	int * argc (int *);
 			//	char *** argv (char ***);
 			//	int retval (int);
+			args_MPI_Init_t* args = (args_MPI_Init_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "argc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Init.argc);
+			msgpack_encode_uint(buf, (uintptr_t)args->argc);
 
 			msgpack_encode_string_ext(buf, "argv");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char ***");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Init.argv);
+			msgpack_encode_uint(buf, (uintptr_t)args->argv);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Init_thread
-		case MPI_API_ID_MPI_Init_thread :
+		case MPI_API_ID_MPI_Init_thread : {
 			//	int * argc (int *);
 			//	char *** argv (char ***);
 			//	int required (int);
 			//	int * provided (int *);
 			//	int retval (int);
+			args_MPI_Init_thread_t* args = (args_MPI_Init_thread_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "argc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Init_thread.argc);
+			msgpack_encode_uint(buf, (uintptr_t)args->argc);
 
 			msgpack_encode_string_ext(buf, "argv");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char ***");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Init_thread.argv);
+			msgpack_encode_uint(buf, (uintptr_t)args->argv);
 
 			msgpack_encode_string_ext(buf, "required");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Init_thread.required);
+			msgpack_encode_int(buf, args->required);
 
 			msgpack_encode_string_ext(buf, "provided");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Init_thread.provided);
+			msgpack_encode_uint(buf, (uintptr_t)args->provided);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Init_thread.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Finalize
-		case MPI_API_ID_MPI_Finalize :
+		case MPI_API_ID_MPI_Finalize : {
 			//	int retval (int);
+			args_MPI_Finalize_t* args = (args_MPI_Finalize_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Finalize.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Initialized
-		case MPI_API_ID_MPI_Initialized :
+		case MPI_API_ID_MPI_Initialized : {
 			//	int * flag (int *);
 			//	int retval (int);
+			args_MPI_Initialized_t* args = (args_MPI_Initialized_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Initialized.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Initialized.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Query_thread
-		case MPI_API_ID_MPI_Query_thread :
+		case MPI_API_ID_MPI_Query_thread : {
 			//	int * provided (int *);
 			//	int retval (int);
+			args_MPI_Query_thread_t* args = (args_MPI_Query_thread_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "provided");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Query_thread.provided);
+			msgpack_encode_uint(buf, (uintptr_t)args->provided);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Query_thread.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Abort
-		case MPI_API_ID_MPI_Abort :
+		case MPI_API_ID_MPI_Abort : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int errorcode (int);
 			//	int retval (int);
+			args_MPI_Abort_t* args = (args_MPI_Abort_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Abort.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "errorcode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Abort.errorcode);
+			msgpack_encode_int(buf, args->errorcode);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Abort.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Send
-		case MPI_API_ID_MPI_Send :
+		case MPI_API_ID_MPI_Send : {
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -206,61 +218,63 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int tag (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Send_t* args = (args_MPI_Send_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Send.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Send.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Send.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Send.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Send.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Send.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Send.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Recv
-		case MPI_API_ID_MPI_Recv :
+		case MPI_API_ID_MPI_Recv : {
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -269,68 +283,70 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Recv_t* args = (args_MPI_Recv_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Recv.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Recv.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Recv.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "source");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Recv.source);
+			msgpack_encode_int(buf, args->source);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Recv.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Recv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Recv.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Recv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Sendrecv
-		case MPI_API_ID_MPI_Sendrecv :
+		case MPI_API_ID_MPI_Sendrecv : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -344,103 +360,105 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Sendrecv_t* args = (args_MPI_Sendrecv_t*) func_args;
 			msgpack_encode_map(buf, 13);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Sendrecv.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Sendrecv.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Sendrecv.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Sendrecv.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "sendtag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Sendrecv.sendtag);
+			msgpack_encode_int(buf, args->sendtag);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Sendrecv.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Sendrecv.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Sendrecv.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "source");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Sendrecv.source);
+			msgpack_encode_int(buf, args->source);
 
 			msgpack_encode_string_ext(buf, "recvtag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Sendrecv.recvtag);
+			msgpack_encode_int(buf, args->recvtag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Sendrecv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Sendrecv.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Sendrecv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Sendrecv_replace
-		case MPI_API_ID_MPI_Sendrecv_replace :
+		case MPI_API_ID_MPI_Sendrecv_replace : {
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -451,82 +469,84 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Sendrecv_replace_t* args = (args_MPI_Sendrecv_replace_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Sendrecv_replace.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Sendrecv_replace.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Sendrecv_replace.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Sendrecv_replace.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "sendtag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Sendrecv_replace.sendtag);
+			msgpack_encode_int(buf, args->sendtag);
 
 			msgpack_encode_string_ext(buf, "source");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Sendrecv_replace.source);
+			msgpack_encode_int(buf, args->source);
 
 			msgpack_encode_string_ext(buf, "recvtag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Sendrecv_replace.recvtag);
+			msgpack_encode_int(buf, args->recvtag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Sendrecv_replace.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Sendrecv_replace.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Sendrecv_replace.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Isend
-		case MPI_API_ID_MPI_Isend :
+		case MPI_API_ID_MPI_Isend : {
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -535,68 +555,70 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Isend_t* args = (args_MPI_Isend_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Isend.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isend.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Isend.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isend.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isend.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Isend.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Isend.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isend.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Irecv
-		case MPI_API_ID_MPI_Irecv :
+		case MPI_API_ID_MPI_Irecv : {
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -605,892 +627,934 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Irecv_t* args = (args_MPI_Irecv_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Irecv.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Irecv.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Irecv.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "source");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Irecv.source);
+			msgpack_encode_int(buf, args->source);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Irecv.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Irecv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Irecv.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Irecv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Wait
-		case MPI_API_ID_MPI_Wait :
+		case MPI_API_ID_MPI_Wait : {
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Wait_t* args = (args_MPI_Wait_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Wait.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Wait.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Wait.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Waitall
-		case MPI_API_ID_MPI_Waitall :
+		case MPI_API_ID_MPI_Waitall : {
 			//	int count (int);
 			//	MPI_Request[] array_of_requests (struct mpi_request_t *[]);
 			//	MPI_Status * array_of_statuses (struct opaque **);
 			//	int retval (int);
+			args_MPI_Waitall_t* args = (args_MPI_Waitall_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Waitall.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "array_of_requests");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Waitall.array_of_requests);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_requests);
 
 			msgpack_encode_string_ext(buf, "array_of_statuses");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Waitall.array_of_statuses);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_statuses);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Waitall.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Waitany
-		case MPI_API_ID_MPI_Waitany :
+		case MPI_API_ID_MPI_Waitany : {
 			//	int count (int);
 			//	MPI_Request[] array_of_requests (struct mpi_request_t *[]);
 			//	int * index (int *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Waitany_t* args = (args_MPI_Waitany_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Waitany.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "array_of_requests");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Waitany.array_of_requests);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_requests);
 
 			msgpack_encode_string_ext(buf, "index");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Waitany.index);
+			msgpack_encode_uint(buf, (uintptr_t)args->index);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Waitany.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Waitany.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Waitsome
-		case MPI_API_ID_MPI_Waitsome :
+		case MPI_API_ID_MPI_Waitsome : {
 			//	int incount (int);
 			//	MPI_Request[] array_of_requests (struct mpi_request_t *[]);
 			//	int * outcount (int *);
 			//	int[] array_of_indices (int[]);
 			//	MPI_Status[] array_of_statuses (struct opaque *[]);
 			//	int retval (int);
+			args_MPI_Waitsome_t* args = (args_MPI_Waitsome_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "incount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Waitsome.incount);
+			msgpack_encode_int(buf, args->incount);
 
 			msgpack_encode_string_ext(buf, "array_of_requests");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Waitsome.array_of_requests);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_requests);
 
 			msgpack_encode_string_ext(buf, "outcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Waitsome.outcount);
+			msgpack_encode_uint(buf, (uintptr_t)args->outcount);
 
 			msgpack_encode_string_ext(buf, "array_of_indices");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Waitsome.array_of_indices);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_indices);
 
 			msgpack_encode_string_ext(buf, "array_of_statuses");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Waitsome.array_of_statuses);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_statuses);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Waitsome.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Test
-		case MPI_API_ID_MPI_Test :
+		case MPI_API_ID_MPI_Test : {
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int * flag (int *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Test_t* args = (args_MPI_Test_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Test.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Test.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Test.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Test.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Testall
-		case MPI_API_ID_MPI_Testall :
+		case MPI_API_ID_MPI_Testall : {
 			//	int count (int);
 			//	MPI_Request[] array_of_requests (struct mpi_request_t *[]);
 			//	int * flag (int *);
 			//	MPI_Status[] array_of_statuses (struct opaque *[]);
 			//	int retval (int);
+			args_MPI_Testall_t* args = (args_MPI_Testall_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Testall.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "array_of_requests");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Testall.array_of_requests);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_requests);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Testall.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "array_of_statuses");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Testall.array_of_statuses);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_statuses);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Testall.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Testany
-		case MPI_API_ID_MPI_Testany :
+		case MPI_API_ID_MPI_Testany : {
 			//	int count (int);
 			//	MPI_Request[] array_of_requests (struct mpi_request_t *[]);
 			//	int * index (int *);
 			//	int * flag (int *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Testany_t* args = (args_MPI_Testany_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Testany.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "array_of_requests");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Testany.array_of_requests);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_requests);
 
 			msgpack_encode_string_ext(buf, "index");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Testany.index);
+			msgpack_encode_uint(buf, (uintptr_t)args->index);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Testany.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Testany.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Testany.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Testsome
-		case MPI_API_ID_MPI_Testsome :
+		case MPI_API_ID_MPI_Testsome : {
 			//	int incount (int);
 			//	MPI_Request[] array_of_requests (struct mpi_request_t *[]);
 			//	int * outcount (int *);
 			//	int[] array_of_indices (int[]);
 			//	MPI_Status[] array_of_statuses (struct opaque *[]);
 			//	int retval (int);
+			args_MPI_Testsome_t* args = (args_MPI_Testsome_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "incount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Testsome.incount);
+			msgpack_encode_int(buf, args->incount);
 
 			msgpack_encode_string_ext(buf, "array_of_requests");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Testsome.array_of_requests);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_requests);
 
 			msgpack_encode_string_ext(buf, "outcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Testsome.outcount);
+			msgpack_encode_uint(buf, (uintptr_t)args->outcount);
 
 			msgpack_encode_string_ext(buf, "array_of_indices");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Testsome.array_of_indices);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_indices);
 
 			msgpack_encode_string_ext(buf, "array_of_statuses");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Testsome.array_of_statuses);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_statuses);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Testsome.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Request_free
-		case MPI_API_ID_MPI_Request_free :
+		case MPI_API_ID_MPI_Request_free : {
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Request_free_t* args = (args_MPI_Request_free_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Request_free.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Request_free.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Cancel
-		case MPI_API_ID_MPI_Cancel :
+		case MPI_API_ID_MPI_Cancel : {
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Cancel_t* args = (args_MPI_Cancel_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cancel.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cancel.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_contiguous
-		case MPI_API_ID_MPI_Type_contiguous :
+		case MPI_API_ID_MPI_Type_contiguous : {
 			//	int count (int);
 			//	MPI_Datatype oldtype (struct mpi_datatype_t *);
 			//	MPI_Datatype * newtype (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_contiguous_t* args = (args_MPI_Type_contiguous_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_contiguous.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "oldtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_contiguous.oldtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->oldtype);
 
 			msgpack_encode_string_ext(buf, "newtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_contiguous.newtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->newtype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_contiguous.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_vector
-		case MPI_API_ID_MPI_Type_vector :
+		case MPI_API_ID_MPI_Type_vector : {
 			//	int count (int);
 			//	int blocklength (int);
 			//	int stride (int);
 			//	MPI_Datatype oldtype (struct mpi_datatype_t *);
 			//	MPI_Datatype * newtype (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_vector_t* args = (args_MPI_Type_vector_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_vector.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "blocklength");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_vector.blocklength);
+			msgpack_encode_int(buf, args->blocklength);
 
 			msgpack_encode_string_ext(buf, "stride");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_vector.stride);
+			msgpack_encode_int(buf, args->stride);
 
 			msgpack_encode_string_ext(buf, "oldtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_vector.oldtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->oldtype);
 
 			msgpack_encode_string_ext(buf, "newtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_vector.newtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->newtype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_vector.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_indexed
-		case MPI_API_ID_MPI_Type_indexed :
+		case MPI_API_ID_MPI_Type_indexed : {
 			//	int count (int);
 			//	const int[] array_of_blocklengths (const int[]);
 			//	const int[] array_of_displacements (const int[]);
 			//	MPI_Datatype oldtype (struct mpi_datatype_t *);
 			//	MPI_Datatype * newtype (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_indexed_t* args = (args_MPI_Type_indexed_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_indexed.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "array_of_blocklengths");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_indexed.array_of_blocklengths);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_blocklengths);
 
 			msgpack_encode_string_ext(buf, "array_of_displacements");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_indexed.array_of_displacements);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_displacements);
 
 			msgpack_encode_string_ext(buf, "oldtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_indexed.oldtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->oldtype);
 
 			msgpack_encode_string_ext(buf, "newtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_indexed.newtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->newtype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_indexed.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_create_indexed_block
-		case MPI_API_ID_MPI_Type_create_indexed_block :
+		case MPI_API_ID_MPI_Type_create_indexed_block : {
 			//	int count (int);
 			//	int blocklength (int);
 			//	const int[] array_of_displacements (const int[]);
 			//	MPI_Datatype oldtype (struct mpi_datatype_t *);
 			//	MPI_Datatype * newtype (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_create_indexed_block_t* args = (args_MPI_Type_create_indexed_block_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_indexed_block.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "blocklength");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_indexed_block.blocklength);
+			msgpack_encode_int(buf, args->blocklength);
 
 			msgpack_encode_string_ext(buf, "array_of_displacements");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_indexed_block.array_of_displacements);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_displacements);
 
 			msgpack_encode_string_ext(buf, "oldtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_indexed_block.oldtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->oldtype);
 
 			msgpack_encode_string_ext(buf, "newtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_indexed_block.newtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->newtype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_indexed_block.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_create_struct
-		case MPI_API_ID_MPI_Type_create_struct :
+		case MPI_API_ID_MPI_Type_create_struct : {
 			//	int count (int);
 			//	const int[] array_of_block_lengths (const int[]);
 			//	const MPI_Aint[] array_of_displacements (const long[]);
 			//	const MPI_Datatype[] array_of_types (const struct mpi_datatype_t *[]);
 			//	MPI_Datatype * newtype (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_create_struct_t* args = (args_MPI_Type_create_struct_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_struct.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "array_of_block_lengths");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_struct.array_of_block_lengths);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_block_lengths);
 
 			msgpack_encode_string_ext(buf, "array_of_displacements");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Aint[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_struct.array_of_displacements);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_displacements);
 
 			msgpack_encode_string_ext(buf, "array_of_types");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Datatype[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_struct.array_of_types);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_types);
 
 			msgpack_encode_string_ext(buf, "newtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_struct.newtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->newtype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_struct.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_create_resized
-		case MPI_API_ID_MPI_Type_create_resized :
+		case MPI_API_ID_MPI_Type_create_resized : {
 			//	MPI_Datatype oldtype (struct mpi_datatype_t *);
 			//	MPI_Aint lb (long);
 			//	MPI_Aint extent (long);
 			//	MPI_Datatype * newtype (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_create_resized_t* args = (args_MPI_Type_create_resized_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "oldtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_resized.oldtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->oldtype);
 
 			msgpack_encode_string_ext(buf, "lb");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_resized.lb);
+			msgpack_encode_int(buf, args->lb);
 
 			msgpack_encode_string_ext(buf, "extent");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_resized.extent);
+			msgpack_encode_int(buf, args->extent);
 
 			msgpack_encode_string_ext(buf, "newtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_resized.newtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->newtype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_resized.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_commit
-		case MPI_API_ID_MPI_Type_commit :
+		case MPI_API_ID_MPI_Type_commit : {
 			//	MPI_Datatype * type (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_commit_t* args = (args_MPI_Type_commit_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_commit.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_commit.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_free
-		case MPI_API_ID_MPI_Type_free :
+		case MPI_API_ID_MPI_Type_free : {
 			//	MPI_Datatype * type (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_free_t* args = (args_MPI_Type_free_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_free.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_free.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Get_count
-		case MPI_API_ID_MPI_Get_count :
+		case MPI_API_ID_MPI_Get_count : {
 			//	const MPI_Status * status (const struct opaque * *);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	int * count (int *);
 			//	int retval (int);
+			args_MPI_Get_count_t* args = (args_MPI_Get_count_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_count.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_count.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_count.count);
+			msgpack_encode_uint(buf, (uintptr_t)args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get_count.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Get_elements
-		case MPI_API_ID_MPI_Get_elements :
+		case MPI_API_ID_MPI_Get_elements : {
 			//	const MPI_Status * status (const struct opaque * *);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	int * count (int *);
 			//	int retval (int);
+			args_MPI_Get_elements_t* args = (args_MPI_Get_elements_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_elements.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_elements.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_elements.count);
+			msgpack_encode_uint(buf, (uintptr_t)args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get_elements.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Pack
-		case MPI_API_ID_MPI_Pack :
+		case MPI_API_ID_MPI_Pack : {
 			//	const void * inbuf (const void *);
 			//	int incount (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -1499,68 +1563,70 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int * position (int *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Pack_t* args = (args_MPI_Pack_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "inbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack.inbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->inbuf);
 
 			msgpack_encode_string_ext(buf, "incount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pack.incount);
+			msgpack_encode_int(buf, args->incount);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "outbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack.outbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->outbuf);
 
 			msgpack_encode_string_ext(buf, "outsize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pack.outsize);
+			msgpack_encode_int(buf, args->outsize);
 
 			msgpack_encode_string_ext(buf, "position");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack.position);
+			msgpack_encode_uint(buf, (uintptr_t)args->position);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pack.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Unpack
-		case MPI_API_ID_MPI_Unpack :
+		case MPI_API_ID_MPI_Unpack : {
 			//	const void * inbuf (const void *);
 			//	int insize (int);
 			//	int * position (int *);
@@ -1569,190 +1635,198 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Unpack_t* args = (args_MPI_Unpack_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "inbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Unpack.inbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->inbuf);
 
 			msgpack_encode_string_ext(buf, "insize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Unpack.insize);
+			msgpack_encode_int(buf, args->insize);
 
 			msgpack_encode_string_ext(buf, "position");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Unpack.position);
+			msgpack_encode_uint(buf, (uintptr_t)args->position);
 
 			msgpack_encode_string_ext(buf, "outbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Unpack.outbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->outbuf);
 
 			msgpack_encode_string_ext(buf, "outcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Unpack.outcount);
+			msgpack_encode_int(buf, args->outcount);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Unpack.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Unpack.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Unpack.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Pack_size
-		case MPI_API_ID_MPI_Pack_size :
+		case MPI_API_ID_MPI_Pack_size : {
 			//	int incount (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int * size (int *);
 			//	int retval (int);
+			args_MPI_Pack_size_t* args = (args_MPI_Pack_size_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "incount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pack_size.incount);
+			msgpack_encode_int(buf, args->incount);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack_size.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack_size.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack_size.size);
+			msgpack_encode_uint(buf, (uintptr_t)args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pack_size.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Barrier
-		case MPI_API_ID_MPI_Barrier :
+		case MPI_API_ID_MPI_Barrier : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Barrier_t* args = (args_MPI_Barrier_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Barrier.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Barrier.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Bcast
-		case MPI_API_ID_MPI_Bcast :
+		case MPI_API_ID_MPI_Bcast : {
 			//	void * buffer (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	int root (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Bcast_t* args = (args_MPI_Bcast_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "buffer");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Bcast.buffer);
+			msgpack_encode_uint(buf, (uintptr_t)args->buffer);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Bcast.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Bcast.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Bcast.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Bcast.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Bcast.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Gather
-		case MPI_API_ID_MPI_Gather :
+		case MPI_API_ID_MPI_Gather : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -1762,75 +1836,77 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int root (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Gather_t* args = (args_MPI_Gather_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gather.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Gather.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gather.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gather.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Gather.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gather.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Gather.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gather.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Gather.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Gatherv
-		case MPI_API_ID_MPI_Gatherv :
+		case MPI_API_ID_MPI_Gatherv : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -1841,82 +1917,84 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int root (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Gatherv_t* args = (args_MPI_Gatherv_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Gatherv.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "displs");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv.displs);
+			msgpack_encode_uint(buf, (uintptr_t)args->displs);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Gatherv.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Gatherv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Scatter
-		case MPI_API_ID_MPI_Scatter :
+		case MPI_API_ID_MPI_Scatter : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -1926,75 +2004,77 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int root (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Scatter_t* args = (args_MPI_Scatter_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatter.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scatter.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatter.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatter.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scatter.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatter.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scatter.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatter.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scatter.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Scatterv
-		case MPI_API_ID_MPI_Scatterv :
+		case MPI_API_ID_MPI_Scatterv : {
 			//	const void * sendbuf (const void *);
 			//	const int[] sendcounts (const int[]);
 			//	const int[] displs (const int[]);
@@ -2005,82 +2085,84 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int root (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Scatterv_t* args = (args_MPI_Scatterv_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv.sendcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendcounts);
 
 			msgpack_encode_string_ext(buf, "displs");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv.displs);
+			msgpack_encode_uint(buf, (uintptr_t)args->displs);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scatterv.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scatterv.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scatterv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Allgather
-		case MPI_API_ID_MPI_Allgather :
+		case MPI_API_ID_MPI_Allgather : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -2089,68 +2171,70 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype recvtype (struct mpi_datatype_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Allgather_t* args = (args_MPI_Allgather_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgather.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Allgather.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgather.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgather.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Allgather.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgather.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgather.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Allgather.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Allgatherv
-		case MPI_API_ID_MPI_Allgatherv :
+		case MPI_API_ID_MPI_Allgatherv : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -2160,75 +2244,77 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype recvtype (struct mpi_datatype_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Allgatherv_t* args = (args_MPI_Allgatherv_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Allgatherv.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "displs");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv.displs);
+			msgpack_encode_uint(buf, (uintptr_t)args->displs);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Allgatherv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Alltoall
-		case MPI_API_ID_MPI_Alltoall :
+		case MPI_API_ID_MPI_Alltoall : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -2237,68 +2323,70 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype recvtype (struct mpi_datatype_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Alltoall_t* args = (args_MPI_Alltoall_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoall.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Alltoall.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoall.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoall.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Alltoall.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoall.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoall.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Alltoall.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Alltoallv
-		case MPI_API_ID_MPI_Alltoallv :
+		case MPI_API_ID_MPI_Alltoallv : {
 			//	const void * sendbuf (const void *);
 			//	const int[] sendcounts (const int[]);
 			//	const int[] sdispls (const int[]);
@@ -2309,82 +2397,84 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype recvtype (struct mpi_datatype_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Alltoallv_t* args = (args_MPI_Alltoallv_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv.sendcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendcounts);
 
 			msgpack_encode_string_ext(buf, "sdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv.sdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->sdispls);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "rdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv.rdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->rdispls);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Alltoallv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Reduce
-		case MPI_API_ID_MPI_Reduce :
+		case MPI_API_ID_MPI_Reduce : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	int count (int);
@@ -2393,68 +2483,70 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int root (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Reduce_t* args = (args_MPI_Reduce_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Reduce.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Reduce.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Reduce.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Allreduce
-		case MPI_API_ID_MPI_Allreduce :
+		case MPI_API_ID_MPI_Allreduce : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	int count (int);
@@ -2462,61 +2554,63 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Op op (struct mpi_op_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Allreduce_t* args = (args_MPI_Allreduce_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allreduce.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allreduce.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Allreduce.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allreduce.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allreduce.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allreduce.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Allreduce.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Reduce_scatter
-		case MPI_API_ID_MPI_Reduce_scatter :
+		case MPI_API_ID_MPI_Reduce_scatter : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	const int[] recvcounts (const int[]);
@@ -2524,61 +2618,63 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Op op (struct mpi_op_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Reduce_scatter_t* args = (args_MPI_Reduce_scatter_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Reduce_scatter.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Reduce_scatter_block
-		case MPI_API_ID_MPI_Reduce_scatter_block :
+		case MPI_API_ID_MPI_Reduce_scatter_block : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	int recvcount (int);
@@ -2586,61 +2682,63 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Op op (struct mpi_op_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Reduce_scatter_block_t* args = (args_MPI_Reduce_scatter_block_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_block.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_block.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Reduce_scatter_block.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_block.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_block.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_block.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Reduce_scatter_block.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Scan
-		case MPI_API_ID_MPI_Scan :
+		case MPI_API_ID_MPI_Scan : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	int count (int);
@@ -2648,61 +2746,63 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Op op (struct mpi_op_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Scan_t* args = (args_MPI_Scan_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scan.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scan.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scan.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scan.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scan.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scan.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scan.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Exscan
-		case MPI_API_ID_MPI_Exscan :
+		case MPI_API_ID_MPI_Exscan : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	int count (int);
@@ -2710,1415 +2810,1495 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Op op (struct mpi_op_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Exscan_t* args = (args_MPI_Exscan_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Exscan.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Exscan.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Exscan.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Exscan.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Exscan.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Exscan.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Exscan.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_size
-		case MPI_API_ID_MPI_Comm_size :
+		case MPI_API_ID_MPI_Comm_size : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int * size (int *);
 			//	int retval (int);
+			args_MPI_Comm_size_t* args = (args_MPI_Comm_size_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_size.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_size.size);
+			msgpack_encode_uint(buf, (uintptr_t)args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_size.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_rank
-		case MPI_API_ID_MPI_Comm_rank :
+		case MPI_API_ID_MPI_Comm_rank : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int * rank (int *);
 			//	int retval (int);
+			args_MPI_Comm_rank_t* args = (args_MPI_Comm_rank_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_rank.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_rank.rank);
+			msgpack_encode_uint(buf, (uintptr_t)args->rank);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_rank.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_group
-		case MPI_API_ID_MPI_Comm_group :
+		case MPI_API_ID_MPI_Comm_group : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Group * group (struct mpi_group_t **);
 			//	int retval (int);
+			args_MPI_Comm_group_t* args = (args_MPI_Comm_group_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_group.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_group.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_group.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_dup
-		case MPI_API_ID_MPI_Comm_dup :
+		case MPI_API_ID_MPI_Comm_dup : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Comm * newcomm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Comm_dup_t* args = (args_MPI_Comm_dup_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_dup.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "newcomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_dup.newcomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->newcomm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_dup.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_create
-		case MPI_API_ID_MPI_Comm_create :
+		case MPI_API_ID_MPI_Comm_create : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Group group (struct mpi_group_t *);
 			//	MPI_Comm * newcomm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Comm_create_t* args = (args_MPI_Comm_create_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "newcomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create.newcomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->newcomm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_split
-		case MPI_API_ID_MPI_Comm_split :
+		case MPI_API_ID_MPI_Comm_split : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int color (int);
 			//	int key (int);
 			//	MPI_Comm * newcomm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Comm_split_t* args = (args_MPI_Comm_split_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_split.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "color");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_split.color);
+			msgpack_encode_int(buf, args->color);
 
 			msgpack_encode_string_ext(buf, "key");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_split.key);
+			msgpack_encode_int(buf, args->key);
 
 			msgpack_encode_string_ext(buf, "newcomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_split.newcomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->newcomm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_split.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_free
-		case MPI_API_ID_MPI_Comm_free :
+		case MPI_API_ID_MPI_Comm_free : {
 			//	MPI_Comm * comm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Comm_free_t* args = (args_MPI_Comm_free_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_free.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_free.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_test_inter
-		case MPI_API_ID_MPI_Comm_test_inter :
+		case MPI_API_ID_MPI_Comm_test_inter : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int * flag (int *);
 			//	int retval (int);
+			args_MPI_Comm_test_inter_t* args = (args_MPI_Comm_test_inter_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_test_inter.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_test_inter.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_test_inter.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_remote_size
-		case MPI_API_ID_MPI_Comm_remote_size :
+		case MPI_API_ID_MPI_Comm_remote_size : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int * size (int *);
 			//	int retval (int);
+			args_MPI_Comm_remote_size_t* args = (args_MPI_Comm_remote_size_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_remote_size.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_remote_size.size);
+			msgpack_encode_uint(buf, (uintptr_t)args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_remote_size.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_remote_group
-		case MPI_API_ID_MPI_Comm_remote_group :
+		case MPI_API_ID_MPI_Comm_remote_group : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Group * group (struct mpi_group_t **);
 			//	int retval (int);
+			args_MPI_Comm_remote_group_t* args = (args_MPI_Comm_remote_group_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_remote_group.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_remote_group.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_remote_group.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_compare
-		case MPI_API_ID_MPI_Comm_compare :
+		case MPI_API_ID_MPI_Comm_compare : {
 			//	MPI_Comm comm1 (struct mpi_communicator_t *);
 			//	MPI_Comm comm2 (struct mpi_communicator_t *);
 			//	int * result (int *);
 			//	int retval (int);
+			args_MPI_Comm_compare_t* args = (args_MPI_Comm_compare_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "comm1");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_compare.comm1);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm1);
 
 			msgpack_encode_string_ext(buf, "comm2");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_compare.comm2);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm2);
 
 			msgpack_encode_string_ext(buf, "result");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_compare.result);
+			msgpack_encode_uint(buf, (uintptr_t)args->result);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_compare.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_create_keyval
-		case MPI_API_ID_MPI_Comm_create_keyval :
+		case MPI_API_ID_MPI_Comm_create_keyval : {
 			//	MPI_Comm_copy_attr_function * comm_copy_attr_fn (int (*)(struct mpi_communicator_t *, int, void *, void *, void *, int *));
 			//	MPI_Comm_delete_attr_function * comm_delete_attr_fn (int (*)(struct mpi_communicator_t *, int, void *, void *));
 			//	int * comm_keyval (int *);
 			//	void * extra_state (void *);
 			//	int retval (int);
+			args_MPI_Comm_create_keyval_t* args = (args_MPI_Comm_create_keyval_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "comm_copy_attr_fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm_copy_attr_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create_keyval.comm_copy_attr_fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm_copy_attr_fn);
 
 			msgpack_encode_string_ext(buf, "comm_delete_attr_fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm_delete_attr_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create_keyval.comm_delete_attr_fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm_delete_attr_fn);
 
 			msgpack_encode_string_ext(buf, "comm_keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create_keyval.comm_keyval);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm_keyval);
 
 			msgpack_encode_string_ext(buf, "extra_state");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create_keyval.extra_state);
+			msgpack_encode_uint(buf, (uintptr_t)args->extra_state);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_create_keyval.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_set_attr
-		case MPI_API_ID_MPI_Comm_set_attr :
+		case MPI_API_ID_MPI_Comm_set_attr : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int comm_keyval (int);
 			//	void * attribute_val (void *);
 			//	int retval (int);
+			args_MPI_Comm_set_attr_t* args = (args_MPI_Comm_set_attr_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_set_attr.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "comm_keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_set_attr.comm_keyval);
+			msgpack_encode_int(buf, args->comm_keyval);
 
 			msgpack_encode_string_ext(buf, "attribute_val");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_set_attr.attribute_val);
+			msgpack_encode_uint(buf, (uintptr_t)args->attribute_val);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_set_attr.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_get_attr
-		case MPI_API_ID_MPI_Comm_get_attr :
+		case MPI_API_ID_MPI_Comm_get_attr : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int comm_keyval (int);
 			//	void * attribute_val (void *);
 			//	int * flag (int *);
 			//	int retval (int);
+			args_MPI_Comm_get_attr_t* args = (args_MPI_Comm_get_attr_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_get_attr.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "comm_keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_get_attr.comm_keyval);
+			msgpack_encode_int(buf, args->comm_keyval);
 
 			msgpack_encode_string_ext(buf, "attribute_val");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_get_attr.attribute_val);
+			msgpack_encode_uint(buf, (uintptr_t)args->attribute_val);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_get_attr.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_get_attr.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_delete_attr
-		case MPI_API_ID_MPI_Comm_delete_attr :
+		case MPI_API_ID_MPI_Comm_delete_attr : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int comm_keyval (int);
 			//	int retval (int);
+			args_MPI_Comm_delete_attr_t* args = (args_MPI_Comm_delete_attr_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_delete_attr.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "comm_keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_delete_attr.comm_keyval);
+			msgpack_encode_int(buf, args->comm_keyval);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_delete_attr.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_get_name
-		case MPI_API_ID_MPI_Comm_get_name :
+		case MPI_API_ID_MPI_Comm_get_name : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	char * comm_name (char *);
 			//	int * resultlen (int *);
 			//	int retval (int);
+			args_MPI_Comm_get_name_t* args = (args_MPI_Comm_get_name_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_get_name.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "comm_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_get_name.comm_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm_name);
 
 			msgpack_encode_string_ext(buf, "resultlen");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_get_name.resultlen);
+			msgpack_encode_uint(buf, (uintptr_t)args->resultlen);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_get_name.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_set_name
-		case MPI_API_ID_MPI_Comm_set_name :
+		case MPI_API_ID_MPI_Comm_set_name : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	const char * comm_name (const char *);
 			//	int retval (int);
+			args_MPI_Comm_set_name_t* args = (args_MPI_Comm_set_name_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_set_name.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "comm_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_set_name.comm_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm_name);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_set_name.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Group_size
-		case MPI_API_ID_MPI_Group_size :
+		case MPI_API_ID_MPI_Group_size : {
 			//	MPI_Group group (struct mpi_group_t *);
 			//	int * size (int *);
 			//	int retval (int);
+			args_MPI_Group_size_t* args = (args_MPI_Group_size_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_size.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_size.size);
+			msgpack_encode_uint(buf, (uintptr_t)args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_size.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Group_rank
-		case MPI_API_ID_MPI_Group_rank :
+		case MPI_API_ID_MPI_Group_rank : {
 			//	MPI_Group group (struct mpi_group_t *);
 			//	int * rank (int *);
 			//	int retval (int);
+			args_MPI_Group_rank_t* args = (args_MPI_Group_rank_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_rank.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_rank.rank);
+			msgpack_encode_uint(buf, (uintptr_t)args->rank);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_rank.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Group_translate_ranks
-		case MPI_API_ID_MPI_Group_translate_ranks :
+		case MPI_API_ID_MPI_Group_translate_ranks : {
 			//	MPI_Group group1 (struct mpi_group_t *);
 			//	int n (int);
 			//	const int[] ranks1 (const int[]);
 			//	MPI_Group group2 (struct mpi_group_t *);
 			//	int[] ranks2 (int[]);
 			//	int retval (int);
+			args_MPI_Group_translate_ranks_t* args = (args_MPI_Group_translate_ranks_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "group1");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_translate_ranks.group1);
+			msgpack_encode_uint(buf, (uintptr_t)args->group1);
 
 			msgpack_encode_string_ext(buf, "n");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_translate_ranks.n);
+			msgpack_encode_int(buf, args->n);
 
 			msgpack_encode_string_ext(buf, "ranks1");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_translate_ranks.ranks1);
+			msgpack_encode_uint(buf, (uintptr_t)args->ranks1);
 
 			msgpack_encode_string_ext(buf, "group2");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_translate_ranks.group2);
+			msgpack_encode_uint(buf, (uintptr_t)args->group2);
 
 			msgpack_encode_string_ext(buf, "ranks2");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_translate_ranks.ranks2);
+			msgpack_encode_uint(buf, (uintptr_t)args->ranks2);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_translate_ranks.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Group_compare
-		case MPI_API_ID_MPI_Group_compare :
+		case MPI_API_ID_MPI_Group_compare : {
 			//	MPI_Group group1 (struct mpi_group_t *);
 			//	MPI_Group group2 (struct mpi_group_t *);
 			//	int * result (int *);
 			//	int retval (int);
+			args_MPI_Group_compare_t* args = (args_MPI_Group_compare_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "group1");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_compare.group1);
+			msgpack_encode_uint(buf, (uintptr_t)args->group1);
 
 			msgpack_encode_string_ext(buf, "group2");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_compare.group2);
+			msgpack_encode_uint(buf, (uintptr_t)args->group2);
 
 			msgpack_encode_string_ext(buf, "result");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_compare.result);
+			msgpack_encode_uint(buf, (uintptr_t)args->result);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_compare.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Group_union
-		case MPI_API_ID_MPI_Group_union :
+		case MPI_API_ID_MPI_Group_union : {
 			//	MPI_Group group1 (struct mpi_group_t *);
 			//	MPI_Group group2 (struct mpi_group_t *);
 			//	MPI_Group * newgroup (struct mpi_group_t **);
 			//	int retval (int);
+			args_MPI_Group_union_t* args = (args_MPI_Group_union_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "group1");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_union.group1);
+			msgpack_encode_uint(buf, (uintptr_t)args->group1);
 
 			msgpack_encode_string_ext(buf, "group2");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_union.group2);
+			msgpack_encode_uint(buf, (uintptr_t)args->group2);
 
 			msgpack_encode_string_ext(buf, "newgroup");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_union.newgroup);
+			msgpack_encode_uint(buf, (uintptr_t)args->newgroup);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_union.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Group_intersection
-		case MPI_API_ID_MPI_Group_intersection :
+		case MPI_API_ID_MPI_Group_intersection : {
 			//	MPI_Group group1 (struct mpi_group_t *);
 			//	MPI_Group group2 (struct mpi_group_t *);
 			//	MPI_Group * newgroup (struct mpi_group_t **);
 			//	int retval (int);
+			args_MPI_Group_intersection_t* args = (args_MPI_Group_intersection_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "group1");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_intersection.group1);
+			msgpack_encode_uint(buf, (uintptr_t)args->group1);
 
 			msgpack_encode_string_ext(buf, "group2");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_intersection.group2);
+			msgpack_encode_uint(buf, (uintptr_t)args->group2);
 
 			msgpack_encode_string_ext(buf, "newgroup");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_intersection.newgroup);
+			msgpack_encode_uint(buf, (uintptr_t)args->newgroup);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_intersection.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Group_difference
-		case MPI_API_ID_MPI_Group_difference :
+		case MPI_API_ID_MPI_Group_difference : {
 			//	MPI_Group group1 (struct mpi_group_t *);
 			//	MPI_Group group2 (struct mpi_group_t *);
 			//	MPI_Group * newgroup (struct mpi_group_t **);
 			//	int retval (int);
+			args_MPI_Group_difference_t* args = (args_MPI_Group_difference_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "group1");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_difference.group1);
+			msgpack_encode_uint(buf, (uintptr_t)args->group1);
 
 			msgpack_encode_string_ext(buf, "group2");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_difference.group2);
+			msgpack_encode_uint(buf, (uintptr_t)args->group2);
 
 			msgpack_encode_string_ext(buf, "newgroup");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_difference.newgroup);
+			msgpack_encode_uint(buf, (uintptr_t)args->newgroup);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_difference.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Group_incl
-		case MPI_API_ID_MPI_Group_incl :
+		case MPI_API_ID_MPI_Group_incl : {
 			//	MPI_Group group (struct mpi_group_t *);
 			//	int n (int);
 			//	const int[] ranks (const int[]);
 			//	MPI_Group * newgroup (struct mpi_group_t **);
 			//	int retval (int);
+			args_MPI_Group_incl_t* args = (args_MPI_Group_incl_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_incl.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "n");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_incl.n);
+			msgpack_encode_int(buf, args->n);
 
 			msgpack_encode_string_ext(buf, "ranks");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_incl.ranks);
+			msgpack_encode_uint(buf, (uintptr_t)args->ranks);
 
 			msgpack_encode_string_ext(buf, "newgroup");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_incl.newgroup);
+			msgpack_encode_uint(buf, (uintptr_t)args->newgroup);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_incl.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Group_excl
-		case MPI_API_ID_MPI_Group_excl :
+		case MPI_API_ID_MPI_Group_excl : {
 			//	MPI_Group group (struct mpi_group_t *);
 			//	int n (int);
 			//	const int[] ranks (const int[]);
 			//	MPI_Group * newgroup (struct mpi_group_t **);
 			//	int retval (int);
+			args_MPI_Group_excl_t* args = (args_MPI_Group_excl_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_excl.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "n");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_excl.n);
+			msgpack_encode_int(buf, args->n);
 
 			msgpack_encode_string_ext(buf, "ranks");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_excl.ranks);
+			msgpack_encode_uint(buf, (uintptr_t)args->ranks);
 
 			msgpack_encode_string_ext(buf, "newgroup");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_excl.newgroup);
+			msgpack_encode_uint(buf, (uintptr_t)args->newgroup);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_excl.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Group_range_incl
-		case MPI_API_ID_MPI_Group_range_incl :
+		case MPI_API_ID_MPI_Group_range_incl : {
 			//	MPI_Group group (struct mpi_group_t *);
 			//	int n (int);
 			//	int[][3] ranges (int[][3]);
 			//	MPI_Group * newgroup (struct mpi_group_t **);
 			//	int retval (int);
+			args_MPI_Group_range_incl_t* args = (args_MPI_Group_range_incl_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_range_incl.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "n");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_range_incl.n);
+			msgpack_encode_int(buf, args->n);
 
 			msgpack_encode_string_ext(buf, "ranges");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[][3]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_range_incl.ranges);
+			msgpack_encode_uint(buf, (uintptr_t)args->ranges);
 
 			msgpack_encode_string_ext(buf, "newgroup");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_range_incl.newgroup);
+			msgpack_encode_uint(buf, (uintptr_t)args->newgroup);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_range_incl.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Group_range_excl
-		case MPI_API_ID_MPI_Group_range_excl :
+		case MPI_API_ID_MPI_Group_range_excl : {
 			//	MPI_Group group (struct mpi_group_t *);
 			//	int n (int);
 			//	int[][3] ranges (int[][3]);
 			//	MPI_Group * newgroup (struct mpi_group_t **);
 			//	int retval (int);
+			args_MPI_Group_range_excl_t* args = (args_MPI_Group_range_excl_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_range_excl.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "n");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_range_excl.n);
+			msgpack_encode_int(buf, args->n);
 
 			msgpack_encode_string_ext(buf, "ranges");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[][3]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_range_excl.ranges);
+			msgpack_encode_uint(buf, (uintptr_t)args->ranges);
 
 			msgpack_encode_string_ext(buf, "newgroup");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_range_excl.newgroup);
+			msgpack_encode_uint(buf, (uintptr_t)args->newgroup);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_range_excl.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Group_free
-		case MPI_API_ID_MPI_Group_free :
+		case MPI_API_ID_MPI_Group_free : {
 			//	MPI_Group * group (struct mpi_group_t **);
 			//	int retval (int);
+			args_MPI_Group_free_t* args = (args_MPI_Group_free_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_free.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_free.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Op_create
-		case MPI_API_ID_MPI_Op_create :
+		case MPI_API_ID_MPI_Op_create : {
 			//	MPI_User_function * function (void (*)(void *, void *, int *, struct mpi_datatype_t * *));
 			//	int commute (int);
 			//	MPI_Op * op (struct mpi_op_t **);
 			//	int retval (int);
+			args_MPI_Op_create_t* args = (args_MPI_Op_create_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "function");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_User_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Op_create.function);
+			msgpack_encode_uint(buf, (uintptr_t)args->function);
 
 			msgpack_encode_string_ext(buf, "commute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Op_create.commute);
+			msgpack_encode_int(buf, args->commute);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Op_create.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Op_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Op_free
-		case MPI_API_ID_MPI_Op_free :
+		case MPI_API_ID_MPI_Op_free : {
 			//	MPI_Op * op (struct mpi_op_t **);
 			//	int retval (int);
+			args_MPI_Op_free_t* args = (args_MPI_Op_free_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Op_free.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Op_free.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Wtime
-		case MPI_API_ID_MPI_Wtime :
+		case MPI_API_ID_MPI_Wtime : {
 			//	double retval (double);
+			args_MPI_Wtime_t* args = (args_MPI_Wtime_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "double");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_double(buf, args->MPI_Wtime.retval);
+			msgpack_encode_double(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Wtick
-		case MPI_API_ID_MPI_Wtick :
+		case MPI_API_ID_MPI_Wtick : {
 			//	double retval (double);
+			args_MPI_Wtick_t* args = (args_MPI_Wtick_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "double");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_double(buf, args->MPI_Wtick.retval);
+			msgpack_encode_double(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Get_address
-		case MPI_API_ID_MPI_Get_address :
+		case MPI_API_ID_MPI_Get_address : {
 			//	const void * location (const void *);
 			//	MPI_Aint * address (long*);
 			//	int retval (int);
+			args_MPI_Get_address_t* args = (args_MPI_Get_address_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "location");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_address.location);
+			msgpack_encode_uint(buf, (uintptr_t)args->location);
 
 			msgpack_encode_string_ext(buf, "address");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_address.address);
+			msgpack_encode_uint(buf, (uintptr_t)args->address);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get_address.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Get_elements_x
-		case MPI_API_ID_MPI_Get_elements_x :
+		case MPI_API_ID_MPI_Get_elements_x : {
 			//	const MPI_Status * status (const struct opaque * *);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Count * count (long long*);
 			//	int retval (int);
+			args_MPI_Get_elements_x_t* args = (args_MPI_Get_elements_x_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_elements_x.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_elements_x.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Count *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_elements_x.count);
+			msgpack_encode_uint(buf, (uintptr_t)args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get_elements_x.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Cart_shift
-		case MPI_API_ID_MPI_Cart_shift :
+		case MPI_API_ID_MPI_Cart_shift : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int direction (int);
 			//	int disp (int);
 			//	int * rank_source (int *);
 			//	int * rank_dest (int *);
 			//	int retval (int);
+			args_MPI_Cart_shift_t* args = (args_MPI_Cart_shift_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_shift.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "direction");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cart_shift.direction);
+			msgpack_encode_int(buf, args->direction);
 
 			msgpack_encode_string_ext(buf, "disp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cart_shift.disp);
+			msgpack_encode_int(buf, args->disp);
 
 			msgpack_encode_string_ext(buf, "rank_source");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_shift.rank_source);
+			msgpack_encode_uint(buf, (uintptr_t)args->rank_source);
 
 			msgpack_encode_string_ext(buf, "rank_dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_shift.rank_dest);
+			msgpack_encode_uint(buf, (uintptr_t)args->rank_dest);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cart_shift.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_flush_local_all
-		case MPI_API_ID_MPI_Win_flush_local_all :
+		case MPI_API_ID_MPI_Win_flush_local_all : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Win_flush_local_all_t* args = (args_MPI_Win_flush_local_all_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_flush_local_all.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_flush_local_all.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_get_byte_offset
-		case MPI_API_ID_MPI_File_get_byte_offset :
+		case MPI_API_ID_MPI_File_get_byte_offset : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset offset (long long);
 			//	MPI_Offset * disp (long long*);
 			//	int retval (int);
+			args_MPI_File_get_byte_offset_t* args = (args_MPI_File_get_byte_offset_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_byte_offset.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_get_byte_offset.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "disp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_byte_offset.disp);
+			msgpack_encode_uint(buf, (uintptr_t)args->disp);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_get_byte_offset.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_get_info
-		case MPI_API_ID_MPI_Win_get_info :
+		case MPI_API_ID_MPI_Win_get_info : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	MPI_Info * info_used (struct mpi_info_t **);
 			//	int retval (int);
+			args_MPI_Win_get_info_t* args = (args_MPI_Win_get_info_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_get_info.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "info_used");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_get_info.info_used);
+			msgpack_encode_uint(buf, (uintptr_t)args->info_used);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Rput
-		case MPI_API_ID_MPI_Rput :
+		case MPI_API_ID_MPI_Rput : {
 			//	const void * origin_addr (const void *);
 			//	int origin_count (int);
 			//	MPI_Datatype origin_datatype (struct mpi_datatype_t *);
@@ -4129,128 +4309,132 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Win win (struct mpi_win_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Rput_t* args = (args_MPI_Rput_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "origin_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rput.origin_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_addr);
 
 			msgpack_encode_string_ext(buf, "origin_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rput.origin_count);
+			msgpack_encode_int(buf, args->origin_count);
 
 			msgpack_encode_string_ext(buf, "origin_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rput.origin_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_datatype);
 
 			msgpack_encode_string_ext(buf, "target_rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rput.target_rank);
+			msgpack_encode_int(buf, args->target_rank);
 
 			msgpack_encode_string_ext(buf, "target_disp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rput.target_disp);
+			msgpack_encode_int(buf, args->target_disp);
 
 			msgpack_encode_string_ext(buf, "target_cout");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rput.target_cout);
+			msgpack_encode_int(buf, args->target_cout);
 
 			msgpack_encode_string_ext(buf, "target_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rput.target_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->target_datatype);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rput.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rput.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rput.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Dist_graph_neighbors_count
-		case MPI_API_ID_MPI_Dist_graph_neighbors_count :
+		case MPI_API_ID_MPI_Dist_graph_neighbors_count : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int * inneighbors (int *);
 			//	int * outneighbors (int *);
 			//	int * weighted (int *);
 			//	int retval (int);
+			args_MPI_Dist_graph_neighbors_count_t* args = (args_MPI_Dist_graph_neighbors_count_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_neighbors_count.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "inneighbors");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_neighbors_count.inneighbors);
+			msgpack_encode_uint(buf, (uintptr_t)args->inneighbors);
 
 			msgpack_encode_string_ext(buf, "outneighbors");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_neighbors_count.outneighbors);
+			msgpack_encode_uint(buf, (uintptr_t)args->outneighbors);
 
 			msgpack_encode_string_ext(buf, "weighted");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_neighbors_count.weighted);
+			msgpack_encode_uint(buf, (uintptr_t)args->weighted);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Dist_graph_neighbors_count.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ireduce
-		case MPI_API_ID_MPI_Ireduce :
+		case MPI_API_ID_MPI_Ireduce : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	int count (int);
@@ -4260,75 +4444,77 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Ireduce_t* args = (args_MPI_Ireduce_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ireduce.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ireduce.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ireduce.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Psend_init
-		case MPI_API_ID_MPI_Psend_init :
+		case MPI_API_ID_MPI_Psend_init : {
 			//	const void * buf (const void *);
 			//	int partitions (int);
 			//	MPI_Count count (long long);
@@ -4339,82 +4525,84 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Psend_init_t* args = (args_MPI_Psend_init_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Psend_init.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "partitions");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Psend_init.partitions);
+			msgpack_encode_int(buf, args->partitions);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Count");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Psend_init.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Psend_init.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Psend_init.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Psend_init.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Psend_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Psend_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Psend_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Psend_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Reduce_init
-		case MPI_API_ID_MPI_Reduce_init :
+		case MPI_API_ID_MPI_Reduce_init : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	int count (int);
@@ -4425,104 +4613,108 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Reduce_init_t* args = (args_MPI_Reduce_init_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Reduce_init.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_init.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_init.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Reduce_init.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Reduce_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_wait
-		case MPI_API_ID_MPI_Win_wait :
+		case MPI_API_ID_MPI_Win_wait : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Win_wait_t* args = (args_MPI_Win_wait_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_wait.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_wait.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Rsend_init
-		case MPI_API_ID_MPI_Rsend_init :
+		case MPI_API_ID_MPI_Rsend_init : {
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -4531,68 +4723,70 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Rsend_init_t* args = (args_MPI_Rsend_init_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rsend_init.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rsend_init.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rsend_init.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rsend_init.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rsend_init.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rsend_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rsend_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rsend_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_write_at_all
-		case MPI_API_ID_MPI_File_write_at_all :
+		case MPI_API_ID_MPI_File_write_at_all : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset offset (long long);
 			//	const void * buf (const void *);
@@ -4600,221 +4794,231 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_write_at_all_t* args = (args_MPI_File_write_at_all_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_at_all.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_at_all.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_at_all.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_at_all.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_at_all.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_at_all.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_at_all.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_write_ordered_end
-		case MPI_API_ID_MPI_File_write_ordered_end :
+		case MPI_API_ID_MPI_File_write_ordered_end : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_write_ordered_end_t* args = (args_MPI_File_write_ordered_end_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_ordered_end.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_ordered_end.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_ordered_end.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_ordered_end.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Errhandler_free
-		case MPI_API_ID_MPI_Errhandler_free :
+		case MPI_API_ID_MPI_Errhandler_free : {
 			//	MPI_Errhandler * errhandler (struct mpi_errhandler_t **);
 			//	int retval (int);
+			args_MPI_Errhandler_free_t* args = (args_MPI_Errhandler_free_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Errhandler_free.errhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->errhandler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Errhandler_free.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_shared_query
-		case MPI_API_ID_MPI_Win_shared_query :
+		case MPI_API_ID_MPI_Win_shared_query : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int rank (int);
 			//	MPI_Aint * size (long*);
 			//	int * disp_unit (int *);
 			//	void * baseptr (void *);
 			//	int retval (int);
+			args_MPI_Win_shared_query_t* args = (args_MPI_Win_shared_query_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_shared_query.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_shared_query.rank);
+			msgpack_encode_int(buf, args->rank);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_shared_query.size);
+			msgpack_encode_uint(buf, (uintptr_t)args->size);
 
 			msgpack_encode_string_ext(buf, "disp_unit");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_shared_query.disp_unit);
+			msgpack_encode_uint(buf, (uintptr_t)args->disp_unit);
 
 			msgpack_encode_string_ext(buf, "baseptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_shared_query.baseptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->baseptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_shared_query.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_lock
-		case MPI_API_ID_MPI_Win_lock :
+		case MPI_API_ID_MPI_Win_lock : {
 			//	int lock_type (int);
 			//	int rank (int);
 			//	int mpi_assert (int);
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Win_lock_t* args = (args_MPI_Win_lock_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "lock_type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_lock.lock_type);
+			msgpack_encode_int(buf, args->lock_type);
 
 			msgpack_encode_string_ext(buf, "rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_lock.rank);
+			msgpack_encode_int(buf, args->rank);
 
 			msgpack_encode_string_ext(buf, "mpi_assert");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_lock.mpi_assert);
+			msgpack_encode_int(buf, args->mpi_assert);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_lock.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_lock.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Get_accumulate
-		case MPI_API_ID_MPI_Get_accumulate :
+		case MPI_API_ID_MPI_Get_accumulate : {
 			//	const void * origin_addr (const void *);
 			//	int origin_count (int);
 			//	MPI_Datatype origin_datatype (struct mpi_datatype_t *);
@@ -4828,315 +5032,329 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Op op (struct mpi_op_t *);
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Get_accumulate_t* args = (args_MPI_Get_accumulate_t*) func_args;
 			msgpack_encode_map(buf, 13);
 			msgpack_encode_string_ext(buf, "origin_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_accumulate.origin_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_addr);
 
 			msgpack_encode_string_ext(buf, "origin_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get_accumulate.origin_count);
+			msgpack_encode_int(buf, args->origin_count);
 
 			msgpack_encode_string_ext(buf, "origin_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_accumulate.origin_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_datatype);
 
 			msgpack_encode_string_ext(buf, "result_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_accumulate.result_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->result_addr);
 
 			msgpack_encode_string_ext(buf, "result_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get_accumulate.result_count);
+			msgpack_encode_int(buf, args->result_count);
 
 			msgpack_encode_string_ext(buf, "result_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_accumulate.result_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->result_datatype);
 
 			msgpack_encode_string_ext(buf, "target_rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get_accumulate.target_rank);
+			msgpack_encode_int(buf, args->target_rank);
 
 			msgpack_encode_string_ext(buf, "target_disp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get_accumulate.target_disp);
+			msgpack_encode_int(buf, args->target_disp);
 
 			msgpack_encode_string_ext(buf, "target_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get_accumulate.target_count);
+			msgpack_encode_int(buf, args->target_count);
 
 			msgpack_encode_string_ext(buf, "target_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_accumulate.target_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->target_datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_accumulate.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_accumulate.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get_accumulate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_get_name
-		case MPI_API_ID_MPI_Type_get_name :
+		case MPI_API_ID_MPI_Type_get_name : {
 			//	MPI_Datatype type (struct mpi_datatype_t *);
 			//	char * type_name (char *);
 			//	int * resultlen (int *);
 			//	int retval (int);
+			args_MPI_Type_get_name_t* args = (args_MPI_Type_get_name_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_name.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "type_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_name.type_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->type_name);
 
 			msgpack_encode_string_ext(buf, "resultlen");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_name.resultlen);
+			msgpack_encode_uint(buf, (uintptr_t)args->resultlen);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_get_name.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_get_atomicity
-		case MPI_API_ID_MPI_File_get_atomicity :
+		case MPI_API_ID_MPI_File_get_atomicity : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	int * flag (int *);
 			//	int retval (int);
+			args_MPI_File_get_atomicity_t* args = (args_MPI_File_get_atomicity_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_atomicity.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_atomicity.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_get_atomicity.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Session_set_info
-		case MPI_API_ID_MPI_Session_set_info :
+		case MPI_API_ID_MPI_Session_set_info : {
 			//	MPI_Session session (struct mpi_instance_t *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	int retval (int);
+			args_MPI_Session_set_info_t* args = (args_MPI_Session_set_info_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "session");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Session");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_set_info.session);
+			msgpack_encode_uint(buf, (uintptr_t)args->session);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_set_info.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Session_set_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Group_from_session_pset
-		case MPI_API_ID_MPI_Group_from_session_pset :
+		case MPI_API_ID_MPI_Group_from_session_pset : {
 			//	MPI_Session session (struct mpi_instance_t *);
 			//	const char * pset_name (const char *);
 			//	MPI_Group * newgroup (struct mpi_group_t **);
 			//	int retval (int);
+			args_MPI_Group_from_session_pset_t* args = (args_MPI_Group_from_session_pset_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "session");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Session");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_from_session_pset.session);
+			msgpack_encode_uint(buf, (uintptr_t)args->session);
 
 			msgpack_encode_string_ext(buf, "pset_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_from_session_pset.pset_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->pset_name);
 
 			msgpack_encode_string_ext(buf, "newgroup");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_from_session_pset.newgroup);
+			msgpack_encode_uint(buf, (uintptr_t)args->newgroup);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_from_session_pset.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_idup
-		case MPI_API_ID_MPI_Comm_idup :
+		case MPI_API_ID_MPI_Comm_idup : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Comm * newcomm (struct mpi_communicator_t **);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Comm_idup_t* args = (args_MPI_Comm_idup_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_idup.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "newcomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_idup.newcomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->newcomm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_idup.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_idup.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_get_name
-		case MPI_API_ID_MPI_Win_get_name :
+		case MPI_API_ID_MPI_Win_get_name : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	char * win_name (char *);
 			//	int * resultlen (int *);
 			//	int retval (int);
+			args_MPI_Win_get_name_t* args = (args_MPI_Win_get_name_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_get_name.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "win_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_get_name.win_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->win_name);
 
 			msgpack_encode_string_ext(buf, "resultlen");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_get_name.resultlen);
+			msgpack_encode_uint(buf, (uintptr_t)args->resultlen);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_get_name.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Allgatherv_init
-		case MPI_API_ID_MPI_Allgatherv_init :
+		case MPI_API_ID_MPI_Allgatherv_init : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -5148,165 +5366,171 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Allgatherv_init_t* args = (args_MPI_Allgatherv_init_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Allgatherv_init.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv_init.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv_init.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "displs");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv_init.displs);
+			msgpack_encode_uint(buf, (uintptr_t)args->displs);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv_init.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgatherv_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Allgatherv_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_dup_with_info
-		case MPI_API_ID_MPI_Comm_dup_with_info :
+		case MPI_API_ID_MPI_Comm_dup_with_info : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Comm * newcomm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Comm_dup_with_info_t* args = (args_MPI_Comm_dup_with_info_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_dup_with_info.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_dup_with_info.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "newcomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_dup_with_info.newcomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->newcomm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_dup_with_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Session_get_num_psets
-		case MPI_API_ID_MPI_Session_get_num_psets :
+		case MPI_API_ID_MPI_Session_get_num_psets : {
 			//	MPI_Session session (struct mpi_instance_t *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	int * npset_names (int *);
 			//	int retval (int);
+			args_MPI_Session_get_num_psets_t* args = (args_MPI_Session_get_num_psets_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "session");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Session");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_get_num_psets.session);
+			msgpack_encode_uint(buf, (uintptr_t)args->session);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_get_num_psets.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "npset_names");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_get_num_psets.npset_names);
+			msgpack_encode_uint(buf, (uintptr_t)args->npset_names);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Session_get_num_psets.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Igather
-		case MPI_API_ID_MPI_Igather :
+		case MPI_API_ID_MPI_Igather : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -5317,82 +5541,84 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Igather_t* args = (args_MPI_Igather_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Igather.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Igather.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Igather.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Igather.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Igather.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Igather.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Igather.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Igather.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Igather.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Igather.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_read_at
-		case MPI_API_ID_MPI_File_read_at :
+		case MPI_API_ID_MPI_File_read_at : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset offset (long long);
 			//	void * buf (void *);
@@ -5400,223 +5626,231 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_read_at_t* args = (args_MPI_File_read_at_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_at.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_at.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_at.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_at.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_at.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_at.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_at.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_create_hvector
-		case MPI_API_ID_MPI_Type_create_hvector :
+		case MPI_API_ID_MPI_Type_create_hvector : {
 			//	int count (int);
 			//	int blocklength (int);
 			//	MPI_Aint stride (long);
 			//	MPI_Datatype oldtype (struct mpi_datatype_t *);
 			//	MPI_Datatype * newtype (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_create_hvector_t* args = (args_MPI_Type_create_hvector_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_hvector.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "blocklength");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_hvector.blocklength);
+			msgpack_encode_int(buf, args->blocklength);
 
 			msgpack_encode_string_ext(buf, "stride");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_hvector.stride);
+			msgpack_encode_int(buf, args->stride);
 
 			msgpack_encode_string_ext(buf, "oldtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_hvector.oldtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->oldtype);
 
 			msgpack_encode_string_ext(buf, "newtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_hvector.newtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->newtype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_hvector.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_write_at_all_begin
-		case MPI_API_ID_MPI_File_write_at_all_begin :
+		case MPI_API_ID_MPI_File_write_at_all_begin : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset offset (long long);
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	int retval (int);
+			args_MPI_File_write_at_all_begin_t* args = (args_MPI_File_write_at_all_begin_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_at_all_begin.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_at_all_begin.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_at_all_begin.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_at_all_begin.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_at_all_begin.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_at_all_begin.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Grequest_start
-		case MPI_API_ID_MPI_Grequest_start :
+		case MPI_API_ID_MPI_Grequest_start : {
 			//	MPI_Grequest_query_function * query_fn (int (*)(void *, struct opaque * *));
 			//	MPI_Grequest_free_function * free_fn (int (*)(void *));
 			//	MPI_Grequest_cancel_function * cancel_fn (int (*)(void *, int));
 			//	void * extra_state (void *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Grequest_start_t* args = (args_MPI_Grequest_start_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "query_fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Grequest_query_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Grequest_start.query_fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->query_fn);
 
 			msgpack_encode_string_ext(buf, "free_fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Grequest_free_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Grequest_start.free_fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->free_fn);
 
 			msgpack_encode_string_ext(buf, "cancel_fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Grequest_cancel_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Grequest_start.cancel_fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->cancel_fn);
 
 			msgpack_encode_string_ext(buf, "extra_state");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Grequest_start.extra_state);
+			msgpack_encode_uint(buf, (uintptr_t)args->extra_state);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Grequest_start.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Grequest_start.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Bsend_init
-		case MPI_API_ID_MPI_Bsend_init :
+		case MPI_API_ID_MPI_Bsend_init : {
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -5625,274 +5859,286 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Bsend_init_t* args = (args_MPI_Bsend_init_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Bsend_init.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Bsend_init.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Bsend_init.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Bsend_init.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Bsend_init.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Bsend_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Bsend_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Bsend_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_set_size
-		case MPI_API_ID_MPI_File_set_size :
+		case MPI_API_ID_MPI_File_set_size : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset size (long long);
 			//	int retval (int);
+			args_MPI_File_set_size_t* args = (args_MPI_File_set_size_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_set_size.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_set_size.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_set_size.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_set_name
-		case MPI_API_ID_MPI_Type_set_name :
+		case MPI_API_ID_MPI_Type_set_name : {
 			//	MPI_Datatype type (struct mpi_datatype_t *);
 			//	const char * type_name (const char *);
 			//	int retval (int);
+			args_MPI_Type_set_name_t* args = (args_MPI_Type_set_name_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_set_name.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "type_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_set_name.type_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->type_name);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_set_name.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_split_type
-		case MPI_API_ID_MPI_Comm_split_type :
+		case MPI_API_ID_MPI_Comm_split_type : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int split_type (int);
 			//	int key (int);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Comm * newcomm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Comm_split_type_t* args = (args_MPI_Comm_split_type_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_split_type.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "split_type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_split_type.split_type);
+			msgpack_encode_int(buf, args->split_type);
 
 			msgpack_encode_string_ext(buf, "key");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_split_type.key);
+			msgpack_encode_int(buf, args->key);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_split_type.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "newcomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_split_type.newcomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->newcomm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_split_type.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_read_at_all_end
-		case MPI_API_ID_MPI_File_read_at_all_end :
+		case MPI_API_ID_MPI_File_read_at_all_end : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	void * buf (void *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_read_at_all_end_t* args = (args_MPI_File_read_at_all_end_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_at_all_end.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_at_all_end.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_at_all_end.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_at_all_end.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_write_all
-		case MPI_API_ID_MPI_File_write_all :
+		case MPI_API_ID_MPI_File_write_all : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_write_all_t* args = (args_MPI_File_write_all_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_all.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_all.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_all.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_all.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_all.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_all.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Improbe
-		case MPI_API_ID_MPI_Improbe :
+		case MPI_API_ID_MPI_Improbe : {
 			//	int source (int);
 			//	int tag (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
@@ -5900,181 +6146,191 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Message * message (struct mpi_message_t **);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Improbe_t* args = (args_MPI_Improbe_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "source");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Improbe.source);
+			msgpack_encode_int(buf, args->source);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Improbe.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Improbe.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Improbe.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "message");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Message *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Improbe.message);
+			msgpack_encode_uint(buf, (uintptr_t)args->message);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Improbe.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Improbe.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_get_info
-		case MPI_API_ID_MPI_Comm_get_info :
+		case MPI_API_ID_MPI_Comm_get_info : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Info * info_used (struct mpi_info_t **);
 			//	int retval (int);
+			args_MPI_Comm_get_info_t* args = (args_MPI_Comm_get_info_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_get_info.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info_used");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_get_info.info_used);
+			msgpack_encode_uint(buf, (uintptr_t)args->info_used);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_read_all_end
-		case MPI_API_ID_MPI_File_read_all_end :
+		case MPI_API_ID_MPI_File_read_all_end : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	void * buf (void *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_read_all_end_t* args = (args_MPI_File_read_all_end_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_all_end.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_all_end.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_all_end.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_all_end.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_unlock_all
-		case MPI_API_ID_MPI_Win_unlock_all :
+		case MPI_API_ID_MPI_Win_unlock_all : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Win_unlock_all_t* args = (args_MPI_Win_unlock_all_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_unlock_all.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_unlock_all.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_create_f90_integer
-		case MPI_API_ID_MPI_Type_create_f90_integer :
+		case MPI_API_ID_MPI_Type_create_f90_integer : {
 			//	int r (int);
 			//	MPI_Datatype * newtype (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_create_f90_integer_t* args = (args_MPI_Type_create_f90_integer_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "r");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_f90_integer.r);
+			msgpack_encode_int(buf, args->r);
 
 			msgpack_encode_string_ext(buf, "newtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_f90_integer.newtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->newtype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_f90_integer.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Exscan_init
-		case MPI_API_ID_MPI_Exscan_init :
+		case MPI_API_ID_MPI_Exscan_init : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	int count (int);
@@ -6084,75 +6340,77 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Exscan_init_t* args = (args_MPI_Exscan_init_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Exscan_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Exscan_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Exscan_init.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Exscan_init.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Exscan_init.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Exscan_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Exscan_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Exscan_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Exscan_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ibsend
-		case MPI_API_ID_MPI_Ibsend :
+		case MPI_API_ID_MPI_Ibsend : {
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -6161,98 +6419,102 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Ibsend_t* args = (args_MPI_Ibsend_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ibsend.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ibsend.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ibsend.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ibsend.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ibsend.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ibsend.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ibsend.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ibsend.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_flush_local
-		case MPI_API_ID_MPI_Win_flush_local :
+		case MPI_API_ID_MPI_Win_flush_local : {
 			//	int rank (int);
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Win_flush_local_t* args = (args_MPI_Win_flush_local_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_flush_local.rank);
+			msgpack_encode_int(buf, args->rank);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_flush_local.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_flush_local.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ialltoallw
-		case MPI_API_ID_MPI_Ialltoallw :
+		case MPI_API_ID_MPI_Ialltoallw : {
 			//	const void * sendbuf (const void *);
 			//	const int[] sendcounts (const int[]);
 			//	const int[] sdispls (const int[]);
@@ -6264,143 +6526,147 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Ialltoallw_t* args = (args_MPI_Ialltoallw_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallw.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallw.sendcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendcounts);
 
 			msgpack_encode_string_ext(buf, "sdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallw.sdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->sdispls);
 
 			msgpack_encode_string_ext(buf, "sendtypes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Datatype[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallw.sendtypes);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtypes);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallw.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallw.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "rdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallw.rdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->rdispls);
 
 			msgpack_encode_string_ext(buf, "recvtypes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Datatype[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallw.recvtypes);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtypes);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallw.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallw.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ialltoallw.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_create_from_group
-		case MPI_API_ID_MPI_Comm_create_from_group :
+		case MPI_API_ID_MPI_Comm_create_from_group : {
 			//	MPI_Group group (struct mpi_group_t *);
 			//	const char * tag (const char *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Errhandler errhandler (struct mpi_errhandler_t *);
 			//	MPI_Comm * newcomm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Comm_create_from_group_t* args = (args_MPI_Comm_create_from_group_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create_from_group.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create_from_group.tag);
+			msgpack_encode_uint(buf, (uintptr_t)args->tag);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create_from_group.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create_from_group.errhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->errhandler);
 
 			msgpack_encode_string_ext(buf, "newcomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create_from_group.newcomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->newcomm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_create_from_group.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_get_contents
-		case MPI_API_ID_MPI_Type_get_contents :
+		case MPI_API_ID_MPI_Type_get_contents : {
 			//	MPI_Datatype mtype (struct mpi_datatype_t *);
 			//	int max_integers (int);
 			//	int max_addresses (int);
@@ -6409,68 +6675,70 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Aint[] array_of_addresses (long[]);
 			//	MPI_Datatype[] array_of_datatypes (struct mpi_datatype_t *[]);
 			//	int retval (int);
+			args_MPI_Type_get_contents_t* args = (args_MPI_Type_get_contents_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "mtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_contents.mtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->mtype);
 
 			msgpack_encode_string_ext(buf, "max_integers");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_get_contents.max_integers);
+			msgpack_encode_int(buf, args->max_integers);
 
 			msgpack_encode_string_ext(buf, "max_addresses");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_get_contents.max_addresses);
+			msgpack_encode_int(buf, args->max_addresses);
 
 			msgpack_encode_string_ext(buf, "max_datatypes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_get_contents.max_datatypes);
+			msgpack_encode_int(buf, args->max_datatypes);
 
 			msgpack_encode_string_ext(buf, "array_of_integers");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_contents.array_of_integers);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_integers);
 
 			msgpack_encode_string_ext(buf, "array_of_addresses");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_contents.array_of_addresses);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_addresses);
 
 			msgpack_encode_string_ext(buf, "array_of_datatypes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_contents.array_of_datatypes);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_datatypes);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_get_contents.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_iwrite_at
-		case MPI_API_ID_MPI_File_iwrite_at :
+		case MPI_API_ID_MPI_File_iwrite_at : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset offset (long long);
 			//	const void * buf (const void *);
@@ -6478,175 +6746,183 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_File_iwrite_at_t* args = (args_MPI_File_iwrite_at_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_at.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iwrite_at.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_at.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iwrite_at.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_at.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_at.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iwrite_at.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Status_set_elements
-		case MPI_API_ID_MPI_Status_set_elements :
+		case MPI_API_ID_MPI_Status_set_elements : {
 			//	MPI_Status * status (struct opaque **);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	int count (int);
 			//	int retval (int);
+			args_MPI_Status_set_elements_t* args = (args_MPI_Status_set_elements_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_set_elements.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_set_elements.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Status_set_elements.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Status_set_elements.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_read_ordered
-		case MPI_API_ID_MPI_File_read_ordered :
+		case MPI_API_ID_MPI_File_read_ordered : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_read_ordered_t* args = (args_MPI_File_read_ordered_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_ordered.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_ordered.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_ordered.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_ordered.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_ordered.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_ordered.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Is_thread_main
-		case MPI_API_ID_MPI_Is_thread_main :
+		case MPI_API_ID_MPI_Is_thread_main : {
 			//	int * flag (int *);
 			//	int retval (int);
+			args_MPI_Is_thread_main_t* args = (args_MPI_Is_thread_main_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Is_thread_main.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Is_thread_main.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Allreduce_init
-		case MPI_API_ID_MPI_Allreduce_init :
+		case MPI_API_ID_MPI_Allreduce_init : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	int count (int);
@@ -6656,211 +6932,221 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Allreduce_init_t* args = (args_MPI_Allreduce_init_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allreduce_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allreduce_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Allreduce_init.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allreduce_init.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allreduce_init.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allreduce_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allreduce_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allreduce_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Allreduce_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Info_get_valuelen
-		case MPI_API_ID_MPI_Info_get_valuelen :
+		case MPI_API_ID_MPI_Info_get_valuelen : {
 			//	MPI_Info info (struct mpi_info_t *);
 			//	const char * key (const char *);
 			//	int * valuelen (int *);
 			//	int * flag (int *);
 			//	int retval (int);
+			args_MPI_Info_get_valuelen_t* args = (args_MPI_Info_get_valuelen_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get_valuelen.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "key");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get_valuelen.key);
+			msgpack_encode_uint(buf, (uintptr_t)args->key);
 
 			msgpack_encode_string_ext(buf, "valuelen");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get_valuelen.valuelen);
+			msgpack_encode_uint(buf, (uintptr_t)args->valuelen);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get_valuelen.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_get_valuelen.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_create_errhandler
-		case MPI_API_ID_MPI_Comm_create_errhandler :
+		case MPI_API_ID_MPI_Comm_create_errhandler : {
 			//	MPI_Comm_errhandler_function * function (void (*)(struct mpi_communicator_t * *, int *, ...));
 			//	MPI_Errhandler * errhandler (struct mpi_errhandler_t **);
 			//	int retval (int);
+			args_MPI_Comm_create_errhandler_t* args = (args_MPI_Comm_create_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "function");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm_errhandler_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create_errhandler.function);
+			msgpack_encode_uint(buf, (uintptr_t)args->function);
 
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create_errhandler.errhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->errhandler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_create_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Info_free
-		case MPI_API_ID_MPI_Info_free :
+		case MPI_API_ID_MPI_Info_free : {
 			//	MPI_Info * info (struct mpi_info_t **);
 			//	int retval (int);
+			args_MPI_Info_free_t* args = (args_MPI_Info_free_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_free.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_free.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Info_get_nthkey
-		case MPI_API_ID_MPI_Info_get_nthkey :
+		case MPI_API_ID_MPI_Info_get_nthkey : {
 			//	MPI_Info info (struct mpi_info_t *);
 			//	int n (int);
 			//	char * key (char *);
 			//	int retval (int);
+			args_MPI_Info_get_nthkey_t* args = (args_MPI_Info_get_nthkey_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get_nthkey.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "n");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_get_nthkey.n);
+			msgpack_encode_int(buf, args->n);
 
 			msgpack_encode_string_ext(buf, "key");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get_nthkey.key);
+			msgpack_encode_uint(buf, (uintptr_t)args->key);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_get_nthkey.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ssend_init
-		case MPI_API_ID_MPI_Ssend_init :
+		case MPI_API_ID_MPI_Ssend_init : {
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -6869,98 +7155,102 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Ssend_init_t* args = (args_MPI_Ssend_init_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ssend_init.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ssend_init.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ssend_init.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ssend_init.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ssend_init.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ssend_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ssend_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ssend_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_set_info
-		case MPI_API_ID_MPI_Comm_set_info :
+		case MPI_API_ID_MPI_Comm_set_info : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	int retval (int);
+			args_MPI_Comm_set_info_t* args = (args_MPI_Comm_set_info_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_set_info.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_set_info.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_set_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Cart_create
-		case MPI_API_ID_MPI_Cart_create :
+		case MPI_API_ID_MPI_Cart_create : {
 			//	MPI_Comm old_comm (struct mpi_communicator_t *);
 			//	int ndims (int);
 			//	const int[] dims (const int[]);
@@ -6968,107 +7258,111 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int reorder (int);
 			//	MPI_Comm * comm_cart (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Cart_create_t* args = (args_MPI_Cart_create_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "old_comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_create.old_comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->old_comm);
 
 			msgpack_encode_string_ext(buf, "ndims");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cart_create.ndims);
+			msgpack_encode_int(buf, args->ndims);
 
 			msgpack_encode_string_ext(buf, "dims");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_create.dims);
+			msgpack_encode_uint(buf, (uintptr_t)args->dims);
 
 			msgpack_encode_string_ext(buf, "periods");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_create.periods);
+			msgpack_encode_uint(buf, (uintptr_t)args->periods);
 
 			msgpack_encode_string_ext(buf, "reorder");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cart_create.reorder);
+			msgpack_encode_int(buf, args->reorder);
 
 			msgpack_encode_string_ext(buf, "comm_cart");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_create.comm_cart);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm_cart);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cart_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_write_all_begin
-		case MPI_API_ID_MPI_File_write_all_begin :
+		case MPI_API_ID_MPI_File_write_all_begin : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	int retval (int);
+			args_MPI_File_write_all_begin_t* args = (args_MPI_File_write_all_begin_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_all_begin.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_all_begin.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_all_begin.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_all_begin.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_all_begin.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Scan_init
-		case MPI_API_ID_MPI_Scan_init :
+		case MPI_API_ID_MPI_Scan_init : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	int count (int);
@@ -7078,75 +7372,77 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Scan_init_t* args = (args_MPI_Scan_init_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scan_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scan_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scan_init.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scan_init.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scan_init.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scan_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scan_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scan_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scan_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Irsend
-		case MPI_API_ID_MPI_Irsend :
+		case MPI_API_ID_MPI_Irsend : {
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -7155,68 +7451,70 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Irsend_t* args = (args_MPI_Irsend_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Irsend.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Irsend.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Irsend.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Irsend.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Irsend.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Irsend.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Irsend.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Irsend.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Neighbor_alltoallv
-		case MPI_API_ID_MPI_Neighbor_alltoallv :
+		case MPI_API_ID_MPI_Neighbor_alltoallv : {
 			//	const void * sendbuf (const void *);
 			//	const int[] sendcounts (const int[]);
 			//	const int[] sdispls (const int[]);
@@ -7227,120 +7525,124 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype recvtype (struct mpi_datatype_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Neighbor_alltoallv_t* args = (args_MPI_Neighbor_alltoallv_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv.sendcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendcounts);
 
 			msgpack_encode_string_ext(buf, "sdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv.sdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->sdispls);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "rdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv.rdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->rdispls);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_alltoallv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Pready_list
-		case MPI_API_ID_MPI_Pready_list :
+		case MPI_API_ID_MPI_Pready_list : {
 			//	int length (int);
 			//	int[] partition_list (int[]);
 			//	MPI_Request request (struct mpi_request_t *);
 			//	int retval (int);
+			args_MPI_Pready_list_t* args = (args_MPI_Pready_list_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "length");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pready_list.length);
+			msgpack_encode_int(buf, args->length);
 
 			msgpack_encode_string_ext(buf, "partition_list");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pready_list.partition_list);
+			msgpack_encode_uint(buf, (uintptr_t)args->partition_list);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pready_list.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pready_list.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Alltoallw_init
-		case MPI_API_ID_MPI_Alltoallw_init :
+		case MPI_API_ID_MPI_Alltoallw_init : {
 			//	const void * sendbuf (const void *);
 			//	const int[] sendcounts (const int[]);
 			//	const int[] sdispls (const int[]);
@@ -7353,142 +7655,146 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Alltoallw_init_t* args = (args_MPI_Alltoallw_init_t*) func_args;
 			msgpack_encode_map(buf, 12);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw_init.sendcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendcounts);
 
 			msgpack_encode_string_ext(buf, "sdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw_init.sdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->sdispls);
 
 			msgpack_encode_string_ext(buf, "sendtypes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Datatype[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw_init.sendtypes);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtypes);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw_init.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "rdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw_init.rdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->rdispls);
 
 			msgpack_encode_string_ext(buf, "recvtypes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Datatype[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw_init.recvtypes);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtypes);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Alltoallw_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_read_ordered_begin
-		case MPI_API_ID_MPI_File_read_ordered_begin :
+		case MPI_API_ID_MPI_File_read_ordered_begin : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	int retval (int);
+			args_MPI_File_read_ordered_begin_t* args = (args_MPI_File_read_ordered_begin_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_ordered_begin.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_ordered_begin.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_ordered_begin.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_ordered_begin.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_ordered_begin.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Dist_graph_create_adjacent
-		case MPI_API_ID_MPI_Dist_graph_create_adjacent :
+		case MPI_API_ID_MPI_Dist_graph_create_adjacent : {
 			//	MPI_Comm comm_old (struct mpi_communicator_t *);
 			//	int indegree (int);
 			//	const int[] sources (const int[]);
@@ -7500,89 +7806,91 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int reorder (int);
 			//	MPI_Comm * comm_dist_graph (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Dist_graph_create_adjacent_t* args = (args_MPI_Dist_graph_create_adjacent_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "comm_old");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_create_adjacent.comm_old);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm_old);
 
 			msgpack_encode_string_ext(buf, "indegree");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Dist_graph_create_adjacent.indegree);
+			msgpack_encode_int(buf, args->indegree);
 
 			msgpack_encode_string_ext(buf, "sources");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_create_adjacent.sources);
+			msgpack_encode_uint(buf, (uintptr_t)args->sources);
 
 			msgpack_encode_string_ext(buf, "sourceweights");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_create_adjacent.sourceweights);
+			msgpack_encode_uint(buf, (uintptr_t)args->sourceweights);
 
 			msgpack_encode_string_ext(buf, "outdegree");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Dist_graph_create_adjacent.outdegree);
+			msgpack_encode_int(buf, args->outdegree);
 
 			msgpack_encode_string_ext(buf, "destinations");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_create_adjacent.destinations);
+			msgpack_encode_uint(buf, (uintptr_t)args->destinations);
 
 			msgpack_encode_string_ext(buf, "destweights");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_create_adjacent.destweights);
+			msgpack_encode_uint(buf, (uintptr_t)args->destweights);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_create_adjacent.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "reorder");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Dist_graph_create_adjacent.reorder);
+			msgpack_encode_int(buf, args->reorder);
 
 			msgpack_encode_string_ext(buf, "comm_dist_graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_create_adjacent.comm_dist_graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm_dist_graph);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Dist_graph_create_adjacent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Reduce_scatter_init
-		case MPI_API_ID_MPI_Reduce_scatter_init :
+		case MPI_API_ID_MPI_Reduce_scatter_init : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	const int[] recvcounts (const int[]);
@@ -7592,257 +7900,269 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Reduce_scatter_init_t* args = (args_MPI_Reduce_scatter_init_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_init.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_init.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_init.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Reduce_scatter_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_get_parent
-		case MPI_API_ID_MPI_Comm_get_parent :
+		case MPI_API_ID_MPI_Comm_get_parent : {
 			//	MPI_Comm * parent (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Comm_get_parent_t* args = (args_MPI_Comm_get_parent_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "parent");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_get_parent.parent);
+			msgpack_encode_uint(buf, (uintptr_t)args->parent);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_get_parent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Keyval_free
-		case MPI_API_ID_MPI_Keyval_free :
+		case MPI_API_ID_MPI_Keyval_free : {
 			//	int * keyval (int *);
 			//	int retval (int);
+			args_MPI_Keyval_free_t* args = (args_MPI_Keyval_free_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Keyval_free.keyval);
+			msgpack_encode_uint(buf, (uintptr_t)args->keyval);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Keyval_free.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Info_set
-		case MPI_API_ID_MPI_Info_set :
+		case MPI_API_ID_MPI_Info_set : {
 			//	MPI_Info info (struct mpi_info_t *);
 			//	const char * key (const char *);
 			//	const char * value (const char *);
 			//	int retval (int);
+			args_MPI_Info_set_t* args = (args_MPI_Info_set_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_set.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "key");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_set.key);
+			msgpack_encode_uint(buf, (uintptr_t)args->key);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_set.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_set.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Keyval_create
-		case MPI_API_ID_MPI_Keyval_create :
+		case MPI_API_ID_MPI_Keyval_create : {
 			//	MPI_Copy_function * copy_fn (int (*)(struct mpi_communicator_t *, int, void *, void *, void *, int *));
 			//	MPI_Delete_function * delete_fn (int (*)(struct mpi_communicator_t *, int, void *, void *));
 			//	int * keyval (int *);
 			//	void * extra_state (void *);
 			//	int retval (int);
+			args_MPI_Keyval_create_t* args = (args_MPI_Keyval_create_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "copy_fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Copy_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Keyval_create.copy_fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->copy_fn);
 
 			msgpack_encode_string_ext(buf, "delete_fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Delete_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Keyval_create.delete_fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->delete_fn);
 
 			msgpack_encode_string_ext(buf, "keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Keyval_create.keyval);
+			msgpack_encode_uint(buf, (uintptr_t)args->keyval);
 
 			msgpack_encode_string_ext(buf, "extra_state");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Keyval_create.extra_state);
+			msgpack_encode_uint(buf, (uintptr_t)args->extra_state);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Keyval_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_connect
-		case MPI_API_ID_MPI_Comm_connect :
+		case MPI_API_ID_MPI_Comm_connect : {
 			//	const char * port_name (const char *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	int root (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Comm * newcomm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Comm_connect_t* args = (args_MPI_Comm_connect_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "port_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_connect.port_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->port_name);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_connect.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_connect.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_connect.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "newcomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_connect.newcomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->newcomm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_connect.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ssend
-		case MPI_API_ID_MPI_Ssend :
+		case MPI_API_ID_MPI_Ssend : {
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -7850,61 +8170,63 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int tag (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Ssend_t* args = (args_MPI_Ssend_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ssend.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ssend.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ssend.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ssend.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ssend.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ssend.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ssend.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Scatterv_init
-		case MPI_API_ID_MPI_Scatterv_init :
+		case MPI_API_ID_MPI_Scatterv_init : {
 			//	const void * sendbuf (const void *);
 			//	const int[] sendcounts (const int[]);
 			//	const int[] displs (const int[]);
@@ -7917,232 +8239,242 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Scatterv_init_t* args = (args_MPI_Scatterv_init_t*) func_args;
 			msgpack_encode_map(buf, 12);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv_init.sendcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendcounts);
 
 			msgpack_encode_string_ext(buf, "displs");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv_init.displs);
+			msgpack_encode_uint(buf, (uintptr_t)args->displs);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv_init.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scatterv_init.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv_init.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scatterv_init.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatterv_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scatterv_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_write_at_all_end
-		case MPI_API_ID_MPI_File_write_at_all_end :
+		case MPI_API_ID_MPI_File_write_at_all_end : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_write_at_all_end_t* args = (args_MPI_File_write_at_all_end_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_at_all_end.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_at_all_end.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_at_all_end.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_at_all_end.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_write_all_end
-		case MPI_API_ID_MPI_File_write_all_end :
+		case MPI_API_ID_MPI_File_write_all_end : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_write_all_end_t* args = (args_MPI_File_write_all_end_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_all_end.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_all_end.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_all_end.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_all_end.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Buffer_detach
-		case MPI_API_ID_MPI_Buffer_detach :
+		case MPI_API_ID_MPI_Buffer_detach : {
 			//	void * buffer (void *);
 			//	int * size (int *);
 			//	int retval (int);
+			args_MPI_Buffer_detach_t* args = (args_MPI_Buffer_detach_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "buffer");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Buffer_detach.buffer);
+			msgpack_encode_uint(buf, (uintptr_t)args->buffer);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Buffer_detach.size);
+			msgpack_encode_uint(buf, (uintptr_t)args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Buffer_detach.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Startall
-		case MPI_API_ID_MPI_Startall :
+		case MPI_API_ID_MPI_Startall : {
 			//	int count (int);
 			//	MPI_Request[] array_of_requests (struct mpi_request_t *[]);
 			//	int retval (int);
+			args_MPI_Startall_t* args = (args_MPI_Startall_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Startall.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "array_of_requests");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Startall.array_of_requests);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_requests);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Startall.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Neighbor_alltoall
-		case MPI_API_ID_MPI_Neighbor_alltoall :
+		case MPI_API_ID_MPI_Neighbor_alltoall : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -8151,68 +8483,70 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype recvtype (struct mpi_datatype_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Neighbor_alltoall_t* args = (args_MPI_Neighbor_alltoall_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoall.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_alltoall.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoall.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoall.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_alltoall.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoall.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoall.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_alltoall.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Put
-		case MPI_API_ID_MPI_Put :
+		case MPI_API_ID_MPI_Put : {
 			//	const void * origin_addr (const void *);
 			//	int origin_count (int);
 			//	MPI_Datatype origin_datatype (struct mpi_datatype_t *);
@@ -8222,143 +8556,149 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype target_datatype (struct mpi_datatype_t *);
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Put_t* args = (args_MPI_Put_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "origin_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Put.origin_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_addr);
 
 			msgpack_encode_string_ext(buf, "origin_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Put.origin_count);
+			msgpack_encode_int(buf, args->origin_count);
 
 			msgpack_encode_string_ext(buf, "origin_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Put.origin_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_datatype);
 
 			msgpack_encode_string_ext(buf, "target_rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Put.target_rank);
+			msgpack_encode_int(buf, args->target_rank);
 
 			msgpack_encode_string_ext(buf, "target_disp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Put.target_disp);
+			msgpack_encode_int(buf, args->target_disp);
 
 			msgpack_encode_string_ext(buf, "target_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Put.target_count);
+			msgpack_encode_int(buf, args->target_count);
 
 			msgpack_encode_string_ext(buf, "target_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Put.target_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->target_datatype);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Put.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Put.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_read_ordered_end
-		case MPI_API_ID_MPI_File_read_ordered_end :
+		case MPI_API_ID_MPI_File_read_ordered_end : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	void * buf (void *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_read_ordered_end_t* args = (args_MPI_File_read_ordered_end_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_ordered_end.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_ordered_end.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_ordered_end.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_ordered_end.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_call_errhandler
-		case MPI_API_ID_MPI_Win_call_errhandler :
+		case MPI_API_ID_MPI_Win_call_errhandler : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int errorcode (int);
 			//	int retval (int);
+			args_MPI_Win_call_errhandler_t* args = (args_MPI_Win_call_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_call_errhandler.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "errorcode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_call_errhandler.errorcode);
+			msgpack_encode_int(buf, args->errorcode);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_call_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_write_at
-		case MPI_API_ID_MPI_File_write_at :
+		case MPI_API_ID_MPI_File_write_at : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset offset (long long);
 			//	const void * buf (const void *);
@@ -8366,173 +8706,183 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_write_at_t* args = (args_MPI_File_write_at_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_at.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_at.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_at.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_at.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_at.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_at.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_at.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Session_get_pset_info
-		case MPI_API_ID_MPI_Session_get_pset_info :
+		case MPI_API_ID_MPI_Session_get_pset_info : {
 			//	MPI_Session session (struct mpi_instance_t *);
 			//	const char * pset_name (const char *);
 			//	MPI_Info * info_used (struct mpi_info_t **);
 			//	int retval (int);
+			args_MPI_Session_get_pset_info_t* args = (args_MPI_Session_get_pset_info_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "session");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Session");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_get_pset_info.session);
+			msgpack_encode_uint(buf, (uintptr_t)args->session);
 
 			msgpack_encode_string_ext(buf, "pset_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_get_pset_info.pset_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->pset_name);
 
 			msgpack_encode_string_ext(buf, "info_used");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_get_pset_info.info_used);
+			msgpack_encode_uint(buf, (uintptr_t)args->info_used);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Session_get_pset_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Topo_test
-		case MPI_API_ID_MPI_Topo_test :
+		case MPI_API_ID_MPI_Topo_test : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int * status (int *);
 			//	int retval (int);
+			args_MPI_Topo_test_t* args = (args_MPI_Topo_test_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Topo_test.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Topo_test.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Topo_test.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_disconnect
-		case MPI_API_ID_MPI_Comm_disconnect :
+		case MPI_API_ID_MPI_Comm_disconnect : {
 			//	MPI_Comm * comm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Comm_disconnect_t* args = (args_MPI_Comm_disconnect_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_disconnect.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_disconnect.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Add_error_class
-		case MPI_API_ID_MPI_Add_error_class :
+		case MPI_API_ID_MPI_Add_error_class : {
 			//	int * errorclass (int *);
 			//	int retval (int);
+			args_MPI_Add_error_class_t* args = (args_MPI_Add_error_class_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "errorclass");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Add_error_class.errorclass);
+			msgpack_encode_uint(buf, (uintptr_t)args->errorclass);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Add_error_class.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ireduce_scatter
-		case MPI_API_ID_MPI_Ireduce_scatter :
+		case MPI_API_ID_MPI_Ireduce_scatter : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	const int[] recvcounts (const int[]);
@@ -8541,298 +8891,310 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Ireduce_scatter_t* args = (args_MPI_Ireduce_scatter_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce_scatter.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce_scatter.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce_scatter.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce_scatter.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce_scatter.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce_scatter.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce_scatter.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ireduce_scatter.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Cart_map
-		case MPI_API_ID_MPI_Cart_map :
+		case MPI_API_ID_MPI_Cart_map : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int ndims (int);
 			//	const int[] dims (const int[]);
 			//	const int[] periods (const int[]);
 			//	int * newrank (int *);
 			//	int retval (int);
+			args_MPI_Cart_map_t* args = (args_MPI_Cart_map_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_map.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "ndims");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cart_map.ndims);
+			msgpack_encode_int(buf, args->ndims);
 
 			msgpack_encode_string_ext(buf, "dims");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_map.dims);
+			msgpack_encode_uint(buf, (uintptr_t)args->dims);
 
 			msgpack_encode_string_ext(buf, "periods");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_map.periods);
+			msgpack_encode_uint(buf, (uintptr_t)args->periods);
 
 			msgpack_encode_string_ext(buf, "newrank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_map.newrank);
+			msgpack_encode_uint(buf, (uintptr_t)args->newrank);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cart_map.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Intercomm_merge
-		case MPI_API_ID_MPI_Intercomm_merge :
+		case MPI_API_ID_MPI_Intercomm_merge : {
 			//	MPI_Comm intercomm (struct mpi_communicator_t *);
 			//	int high (int);
 			//	MPI_Comm * newintracomm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Intercomm_merge_t* args = (args_MPI_Intercomm_merge_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "intercomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Intercomm_merge.intercomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->intercomm);
 
 			msgpack_encode_string_ext(buf, "high");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Intercomm_merge.high);
+			msgpack_encode_int(buf, args->high);
 
 			msgpack_encode_string_ext(buf, "newintracomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Intercomm_merge.newintracomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->newintracomm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Intercomm_merge.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_create_hindexed
-		case MPI_API_ID_MPI_Type_create_hindexed :
+		case MPI_API_ID_MPI_Type_create_hindexed : {
 			//	int count (int);
 			//	const int[] array_of_blocklengths (const int[]);
 			//	const MPI_Aint[] array_of_displacements (const long[]);
 			//	MPI_Datatype oldtype (struct mpi_datatype_t *);
 			//	MPI_Datatype * newtype (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_create_hindexed_t* args = (args_MPI_Type_create_hindexed_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_hindexed.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "array_of_blocklengths");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_hindexed.array_of_blocklengths);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_blocklengths);
 
 			msgpack_encode_string_ext(buf, "array_of_displacements");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Aint[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_hindexed.array_of_displacements);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_displacements);
 
 			msgpack_encode_string_ext(buf, "oldtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_hindexed.oldtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->oldtype);
 
 			msgpack_encode_string_ext(buf, "newtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_hindexed.newtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->newtype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_hindexed.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Info_get_nkeys
-		case MPI_API_ID_MPI_Info_get_nkeys :
+		case MPI_API_ID_MPI_Info_get_nkeys : {
 			//	MPI_Info info (struct mpi_info_t *);
 			//	int * nkeys (int *);
 			//	int retval (int);
+			args_MPI_Info_get_nkeys_t* args = (args_MPI_Info_get_nkeys_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get_nkeys.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "nkeys");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get_nkeys.nkeys);
+			msgpack_encode_uint(buf, (uintptr_t)args->nkeys);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_get_nkeys.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_read
-		case MPI_API_ID_MPI_File_read :
+		case MPI_API_ID_MPI_File_read : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_read_t* args = (args_MPI_File_read_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ineighbor_allgatherv
-		case MPI_API_ID_MPI_Ineighbor_allgatherv :
+		case MPI_API_ID_MPI_Ineighbor_allgatherv : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -8843,204 +9205,212 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Ineighbor_allgatherv_t* args = (args_MPI_Ineighbor_allgatherv_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_allgatherv.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ineighbor_allgatherv.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_allgatherv.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_allgatherv.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_allgatherv.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "displs");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_allgatherv.displs);
+			msgpack_encode_uint(buf, (uintptr_t)args->displs);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_allgatherv.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_allgatherv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_allgatherv.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ineighbor_allgatherv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Attr_put
-		case MPI_API_ID_MPI_Attr_put :
+		case MPI_API_ID_MPI_Attr_put : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int keyval (int);
 			//	void * attribute_val (void *);
 			//	int retval (int);
+			args_MPI_Attr_put_t* args = (args_MPI_Attr_put_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Attr_put.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Attr_put.keyval);
+			msgpack_encode_int(buf, args->keyval);
 
 			msgpack_encode_string_ext(buf, "attribute_val");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Attr_put.attribute_val);
+			msgpack_encode_uint(buf, (uintptr_t)args->attribute_val);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Attr_put.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_write_ordered_begin
-		case MPI_API_ID_MPI_File_write_ordered_begin :
+		case MPI_API_ID_MPI_File_write_ordered_begin : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	int retval (int);
+			args_MPI_File_write_ordered_begin_t* args = (args_MPI_File_write_ordered_begin_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_ordered_begin.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_ordered_begin.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_ordered_begin.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_ordered_begin.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_ordered_begin.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Status_set_elements_x
-		case MPI_API_ID_MPI_Status_set_elements_x :
+		case MPI_API_ID_MPI_Status_set_elements_x : {
 			//	MPI_Status * status (struct opaque **);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Count count (long long);
 			//	int retval (int);
+			args_MPI_Status_set_elements_x_t* args = (args_MPI_Status_set_elements_x_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_set_elements_x.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_set_elements_x.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Count");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Status_set_elements_x.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Status_set_elements_x.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Compare_and_swap
-		case MPI_API_ID_MPI_Compare_and_swap :
+		case MPI_API_ID_MPI_Compare_and_swap : {
 			//	const void * origin_addr (const void *);
 			//	const void * compare_addr (const void *);
 			//	void * result_addr (void *);
@@ -9049,272 +9419,286 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Aint target_disp (long);
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Compare_and_swap_t* args = (args_MPI_Compare_and_swap_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "origin_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Compare_and_swap.origin_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_addr);
 
 			msgpack_encode_string_ext(buf, "compare_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Compare_and_swap.compare_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->compare_addr);
 
 			msgpack_encode_string_ext(buf, "result_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Compare_and_swap.result_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->result_addr);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Compare_and_swap.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "target_rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Compare_and_swap.target_rank);
+			msgpack_encode_int(buf, args->target_rank);
 
 			msgpack_encode_string_ext(buf, "target_disp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Compare_and_swap.target_disp);
+			msgpack_encode_int(buf, args->target_disp);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Compare_and_swap.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Compare_and_swap.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_create_f90_real
-		case MPI_API_ID_MPI_Type_create_f90_real :
+		case MPI_API_ID_MPI_Type_create_f90_real : {
 			//	int p (int);
 			//	int r (int);
 			//	MPI_Datatype * newtype (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_create_f90_real_t* args = (args_MPI_Type_create_f90_real_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "p");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_f90_real.p);
+			msgpack_encode_int(buf, args->p);
 
 			msgpack_encode_string_ext(buf, "r");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_f90_real.r);
+			msgpack_encode_int(buf, args->r);
 
 			msgpack_encode_string_ext(buf, "newtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_f90_real.newtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->newtype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_f90_real.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_delete_attr
-		case MPI_API_ID_MPI_Type_delete_attr :
+		case MPI_API_ID_MPI_Type_delete_attr : {
 			//	MPI_Datatype type (struct mpi_datatype_t *);
 			//	int type_keyval (int);
 			//	int retval (int);
+			args_MPI_Type_delete_attr_t* args = (args_MPI_Type_delete_attr_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_delete_attr.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "type_keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_delete_attr.type_keyval);
+			msgpack_encode_int(buf, args->type_keyval);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_delete_attr.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Probe
-		case MPI_API_ID_MPI_Probe :
+		case MPI_API_ID_MPI_Probe : {
 			//	int source (int);
 			//	int tag (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Probe_t* args = (args_MPI_Probe_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "source");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Probe.source);
+			msgpack_encode_int(buf, args->source);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Probe.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Probe.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Probe.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Probe.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_close
-		case MPI_API_ID_MPI_File_close :
+		case MPI_API_ID_MPI_File_close : {
 			//	MPI_File * fh (struct mpi_file_t **);
 			//	int retval (int);
+			args_MPI_File_close_t* args = (args_MPI_File_close_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_close.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_close.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Request_get_status
-		case MPI_API_ID_MPI_Request_get_status :
+		case MPI_API_ID_MPI_Request_get_status : {
 			//	MPI_Request request (struct mpi_request_t *);
 			//	int * flag (int *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Request_get_status_t* args = (args_MPI_Request_get_status_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Request_get_status.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Request_get_status.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Request_get_status.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Request_get_status.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Session_call_errhandler
-		case MPI_API_ID_MPI_Session_call_errhandler :
+		case MPI_API_ID_MPI_Session_call_errhandler : {
 			//	MPI_Session session (struct mpi_instance_t *);
 			//	int errorcode (int);
 			//	int retval (int);
+			args_MPI_Session_call_errhandler_t* args = (args_MPI_Session_call_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "session");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Session");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_call_errhandler.session);
+			msgpack_encode_uint(buf, (uintptr_t)args->session);
 
 			msgpack_encode_string_ext(buf, "errorcode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Session_call_errhandler.errorcode);
+			msgpack_encode_int(buf, args->errorcode);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Session_call_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Rget_accumulate
-		case MPI_API_ID_MPI_Rget_accumulate :
+		case MPI_API_ID_MPI_Rget_accumulate : {
 			//	const void * origin_addr (const void *);
 			//	int origin_count (int);
 			//	MPI_Datatype origin_datatype (struct mpi_datatype_t *);
@@ -9329,164 +9713,168 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Win win (struct mpi_win_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Rget_accumulate_t* args = (args_MPI_Rget_accumulate_t*) func_args;
 			msgpack_encode_map(buf, 14);
 			msgpack_encode_string_ext(buf, "origin_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rget_accumulate.origin_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_addr);
 
 			msgpack_encode_string_ext(buf, "origin_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rget_accumulate.origin_count);
+			msgpack_encode_int(buf, args->origin_count);
 
 			msgpack_encode_string_ext(buf, "origin_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rget_accumulate.origin_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_datatype);
 
 			msgpack_encode_string_ext(buf, "result_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rget_accumulate.result_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->result_addr);
 
 			msgpack_encode_string_ext(buf, "result_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rget_accumulate.result_count);
+			msgpack_encode_int(buf, args->result_count);
 
 			msgpack_encode_string_ext(buf, "result_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rget_accumulate.result_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->result_datatype);
 
 			msgpack_encode_string_ext(buf, "target_rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rget_accumulate.target_rank);
+			msgpack_encode_int(buf, args->target_rank);
 
 			msgpack_encode_string_ext(buf, "target_disp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rget_accumulate.target_disp);
+			msgpack_encode_int(buf, args->target_disp);
 
 			msgpack_encode_string_ext(buf, "target_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rget_accumulate.target_count);
+			msgpack_encode_int(buf, args->target_count);
 
 			msgpack_encode_string_ext(buf, "target_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rget_accumulate.target_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->target_datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rget_accumulate.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rget_accumulate.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rget_accumulate.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rget_accumulate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_iread_all
-		case MPI_API_ID_MPI_File_iread_all :
+		case MPI_API_ID_MPI_File_iread_all : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_File_iread_all_t* args = (args_MPI_File_iread_all_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_all.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_all.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iread_all.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_all.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_all.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iread_all.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Isendrecv
-		case MPI_API_ID_MPI_Isendrecv :
+		case MPI_API_ID_MPI_Isendrecv : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -9500,103 +9888,105 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Isendrecv_t* args = (args_MPI_Isendrecv_t*) func_args;
 			msgpack_encode_map(buf, 13);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Isendrecv.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isendrecv.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Isendrecv.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isendrecv.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "sendtag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isendrecv.sendtag);
+			msgpack_encode_int(buf, args->sendtag);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Isendrecv.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isendrecv.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Isendrecv.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "source");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isendrecv.source);
+			msgpack_encode_int(buf, args->source);
 
 			msgpack_encode_string_ext(buf, "recvtag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isendrecv.recvtag);
+			msgpack_encode_int(buf, args->recvtag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Isendrecv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Isendrecv.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isendrecv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Pack_external
-		case MPI_API_ID_MPI_Pack_external :
+		case MPI_API_ID_MPI_Pack_external : {
 			//	const char[] datarep (const char[]);
 			//	const void * inbuf (const void *);
 			//	int incount (int);
@@ -9605,160 +9995,166 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Aint outsize (long);
 			//	MPI_Aint * position (long*);
 			//	int retval (int);
+			args_MPI_Pack_external_t* args = (args_MPI_Pack_external_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "datarep");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack_external.datarep);
+			msgpack_encode_uint(buf, (uintptr_t)args->datarep);
 
 			msgpack_encode_string_ext(buf, "inbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack_external.inbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->inbuf);
 
 			msgpack_encode_string_ext(buf, "incount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pack_external.incount);
+			msgpack_encode_int(buf, args->incount);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack_external.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "outbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack_external.outbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->outbuf);
 
 			msgpack_encode_string_ext(buf, "outsize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pack_external.outsize);
+			msgpack_encode_int(buf, args->outsize);
 
 			msgpack_encode_string_ext(buf, "position");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack_external.position);
+			msgpack_encode_uint(buf, (uintptr_t)args->position);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pack_external.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Pready_range
-		case MPI_API_ID_MPI_Pready_range :
+		case MPI_API_ID_MPI_Pready_range : {
 			//	int partition_low (int);
 			//	int partition_high (int);
 			//	MPI_Request request (struct mpi_request_t *);
 			//	int retval (int);
+			args_MPI_Pready_range_t* args = (args_MPI_Pready_range_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "partition_low");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pready_range.partition_low);
+			msgpack_encode_int(buf, args->partition_low);
 
 			msgpack_encode_string_ext(buf, "partition_high");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pready_range.partition_high);
+			msgpack_encode_int(buf, args->partition_high);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pready_range.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pready_range.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_get_envelope
-		case MPI_API_ID_MPI_Type_get_envelope :
+		case MPI_API_ID_MPI_Type_get_envelope : {
 			//	MPI_Datatype type (struct mpi_datatype_t *);
 			//	int * num_integers (int *);
 			//	int * num_addresses (int *);
 			//	int * num_datatypes (int *);
 			//	int * combiner (int *);
 			//	int retval (int);
+			args_MPI_Type_get_envelope_t* args = (args_MPI_Type_get_envelope_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_envelope.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "num_integers");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_envelope.num_integers);
+			msgpack_encode_uint(buf, (uintptr_t)args->num_integers);
 
 			msgpack_encode_string_ext(buf, "num_addresses");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_envelope.num_addresses);
+			msgpack_encode_uint(buf, (uintptr_t)args->num_addresses);
 
 			msgpack_encode_string_ext(buf, "num_datatypes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_envelope.num_datatypes);
+			msgpack_encode_uint(buf, (uintptr_t)args->num_datatypes);
 
 			msgpack_encode_string_ext(buf, "combiner");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_envelope.combiner);
+			msgpack_encode_uint(buf, (uintptr_t)args->combiner);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_get_envelope.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_create
-		case MPI_API_ID_MPI_Win_create :
+		case MPI_API_ID_MPI_Win_create : {
 			//	void * base (void *);
 			//	MPI_Aint size (long);
 			//	int disp_unit (int);
@@ -9766,61 +10162,63 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Win * win (struct mpi_win_t **);
 			//	int retval (int);
+			args_MPI_Win_create_t* args = (args_MPI_Win_create_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "base");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_create.base);
+			msgpack_encode_uint(buf, (uintptr_t)args->base);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_create.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "disp_unit");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_create.disp_unit);
+			msgpack_encode_int(buf, args->disp_unit);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_create.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_create.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_create.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Isendrecv_replace
-		case MPI_API_ID_MPI_Isendrecv_replace :
+		case MPI_API_ID_MPI_Isendrecv_replace : {
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -9831,112 +10229,116 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Isendrecv_replace_t* args = (args_MPI_Isendrecv_replace_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Isendrecv_replace.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isendrecv_replace.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Isendrecv_replace.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isendrecv_replace.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "sendtag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isendrecv_replace.sendtag);
+			msgpack_encode_int(buf, args->sendtag);
 
 			msgpack_encode_string_ext(buf, "source");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isendrecv_replace.source);
+			msgpack_encode_int(buf, args->source);
 
 			msgpack_encode_string_ext(buf, "recvtag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isendrecv_replace.recvtag);
+			msgpack_encode_int(buf, args->recvtag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Isendrecv_replace.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Isendrecv_replace.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Isendrecv_replace.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_set_errhandler
-		case MPI_API_ID_MPI_Win_set_errhandler :
+		case MPI_API_ID_MPI_Win_set_errhandler : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	MPI_Errhandler errhandler (struct mpi_errhandler_t *);
 			//	int retval (int);
+			args_MPI_Win_set_errhandler_t* args = (args_MPI_Win_set_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_set_errhandler.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_set_errhandler.errhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->errhandler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_set_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Fetch_and_op
-		case MPI_API_ID_MPI_Fetch_and_op :
+		case MPI_API_ID_MPI_Fetch_and_op : {
 			//	const void * origin_addr (const void *);
 			//	void * result_addr (void *);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -9945,98 +10347,102 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Op op (struct mpi_op_t *);
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Fetch_and_op_t* args = (args_MPI_Fetch_and_op_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "origin_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Fetch_and_op.origin_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_addr);
 
 			msgpack_encode_string_ext(buf, "result_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Fetch_and_op.result_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->result_addr);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Fetch_and_op.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "target_rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Fetch_and_op.target_rank);
+			msgpack_encode_int(buf, args->target_rank);
 
 			msgpack_encode_string_ext(buf, "target_disp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Fetch_and_op.target_disp);
+			msgpack_encode_int(buf, args->target_disp);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Fetch_and_op.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Fetch_and_op.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Fetch_and_op.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Cartdim_get
-		case MPI_API_ID_MPI_Cartdim_get :
+		case MPI_API_ID_MPI_Cartdim_get : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int * ndims (int *);
 			//	int retval (int);
+			args_MPI_Cartdim_get_t* args = (args_MPI_Cartdim_get_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cartdim_get.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "ndims");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cartdim_get.ndims);
+			msgpack_encode_uint(buf, (uintptr_t)args->ndims);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cartdim_get.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Dist_graph_neighbors
-		case MPI_API_ID_MPI_Dist_graph_neighbors :
+		case MPI_API_ID_MPI_Dist_graph_neighbors : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int maxindegree (int);
 			//	int[] sources (int[]);
@@ -10045,106 +10451,110 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int[] destinations (int[]);
 			//	int[] destweights (int[]);
 			//	int retval (int);
+			args_MPI_Dist_graph_neighbors_t* args = (args_MPI_Dist_graph_neighbors_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_neighbors.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "maxindegree");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Dist_graph_neighbors.maxindegree);
+			msgpack_encode_int(buf, args->maxindegree);
 
 			msgpack_encode_string_ext(buf, "sources");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_neighbors.sources);
+			msgpack_encode_uint(buf, (uintptr_t)args->sources);
 
 			msgpack_encode_string_ext(buf, "sourceweights");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_neighbors.sourceweights);
+			msgpack_encode_uint(buf, (uintptr_t)args->sourceweights);
 
 			msgpack_encode_string_ext(buf, "maxoutdegree");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Dist_graph_neighbors.maxoutdegree);
+			msgpack_encode_int(buf, args->maxoutdegree);
 
 			msgpack_encode_string_ext(buf, "destinations");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_neighbors.destinations);
+			msgpack_encode_uint(buf, (uintptr_t)args->destinations);
 
 			msgpack_encode_string_ext(buf, "destweights");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_neighbors.destweights);
+			msgpack_encode_uint(buf, (uintptr_t)args->destweights);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Dist_graph_neighbors.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_seek
-		case MPI_API_ID_MPI_File_seek :
+		case MPI_API_ID_MPI_File_seek : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset offset (long long);
 			//	int whence (int);
 			//	int retval (int);
+			args_MPI_File_seek_t* args = (args_MPI_File_seek_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_seek.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_seek.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "whence");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_seek.whence);
+			msgpack_encode_int(buf, args->whence);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_seek.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Get
-		case MPI_API_ID_MPI_Get :
+		case MPI_API_ID_MPI_Get : {
 			//	void * origin_addr (void *);
 			//	int origin_count (int);
 			//	MPI_Datatype origin_datatype (struct mpi_datatype_t *);
@@ -10154,143 +10564,149 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype target_datatype (struct mpi_datatype_t *);
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Get_t* args = (args_MPI_Get_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "origin_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get.origin_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_addr);
 
 			msgpack_encode_string_ext(buf, "origin_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get.origin_count);
+			msgpack_encode_int(buf, args->origin_count);
 
 			msgpack_encode_string_ext(buf, "origin_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get.origin_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_datatype);
 
 			msgpack_encode_string_ext(buf, "target_rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get.target_rank);
+			msgpack_encode_int(buf, args->target_rank);
 
 			msgpack_encode_string_ext(buf, "target_disp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get.target_disp);
+			msgpack_encode_int(buf, args->target_disp);
 
 			msgpack_encode_string_ext(buf, "target_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get.target_count);
+			msgpack_encode_int(buf, args->target_count);
 
 			msgpack_encode_string_ext(buf, "target_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get.target_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->target_datatype);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Pack_external_size
-		case MPI_API_ID_MPI_Pack_external_size :
+		case MPI_API_ID_MPI_Pack_external_size : {
 			//	const char[] datarep (const char[]);
 			//	int incount (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Aint * size (long*);
 			//	int retval (int);
+			args_MPI_Pack_external_size_t* args = (args_MPI_Pack_external_size_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "datarep");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack_external_size.datarep);
+			msgpack_encode_uint(buf, (uintptr_t)args->datarep);
 
 			msgpack_encode_string_ext(buf, "incount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pack_external_size.incount);
+			msgpack_encode_int(buf, args->incount);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack_external_size.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pack_external_size.size);
+			msgpack_encode_uint(buf, (uintptr_t)args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pack_external_size.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_flush_all
-		case MPI_API_ID_MPI_Win_flush_all :
+		case MPI_API_ID_MPI_Win_flush_all : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Win_flush_all_t* args = (args_MPI_Win_flush_all_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_flush_all.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_flush_all.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Rsend
-		case MPI_API_ID_MPI_Rsend :
+		case MPI_API_ID_MPI_Rsend : {
 			//	const void * ibuf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -10298,121 +10714,127 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int tag (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Rsend_t* args = (args_MPI_Rsend_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "ibuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rsend.ibuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->ibuf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rsend.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rsend.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rsend.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rsend.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rsend.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rsend.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_free
-		case MPI_API_ID_MPI_Win_free :
+		case MPI_API_ID_MPI_Win_free : {
 			//	MPI_Win * win (struct mpi_win_t **);
 			//	int retval (int);
+			args_MPI_Win_free_t* args = (args_MPI_Win_free_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_free.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_free.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_create_f90_complex
-		case MPI_API_ID_MPI_Type_create_f90_complex :
+		case MPI_API_ID_MPI_Type_create_f90_complex : {
 			//	int p (int);
 			//	int r (int);
 			//	MPI_Datatype * newtype (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_create_f90_complex_t* args = (args_MPI_Type_create_f90_complex_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "p");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_f90_complex.p);
+			msgpack_encode_int(buf, args->p);
 
 			msgpack_encode_string_ext(buf, "r");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_f90_complex.r);
+			msgpack_encode_int(buf, args->r);
 
 			msgpack_encode_string_ext(buf, "newtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_f90_complex.newtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->newtype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_f90_complex.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Neighbor_alltoallw_init
-		case MPI_API_ID_MPI_Neighbor_alltoallw_init :
+		case MPI_API_ID_MPI_Neighbor_alltoallw_init : {
 			//	const void * sendbuf (const void *);
 			//	const int[] sendcounts (const int[]);
 			//	const MPI_Aint[] sdispls (const long[]);
@@ -10425,96 +10847,98 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Neighbor_alltoallw_init_t* args = (args_MPI_Neighbor_alltoallw_init_t*) func_args;
 			msgpack_encode_map(buf, 12);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw_init.sendcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendcounts);
 
 			msgpack_encode_string_ext(buf, "sdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Aint[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw_init.sdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->sdispls);
 
 			msgpack_encode_string_ext(buf, "sendtypes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Datatype[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw_init.sendtypes);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtypes);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw_init.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "rdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Aint[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw_init.rdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->rdispls);
 
 			msgpack_encode_string_ext(buf, "recvtypes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Datatype[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw_init.recvtypes);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtypes);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_alltoallw_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Rget
-		case MPI_API_ID_MPI_Rget :
+		case MPI_API_ID_MPI_Rget : {
 			//	void * origin_addr (void *);
 			//	int origin_count (int);
 			//	MPI_Datatype origin_datatype (struct mpi_datatype_t *);
@@ -10525,158 +10949,164 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Win win (struct mpi_win_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Rget_t* args = (args_MPI_Rget_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "origin_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rget.origin_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_addr);
 
 			msgpack_encode_string_ext(buf, "origin_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rget.origin_count);
+			msgpack_encode_int(buf, args->origin_count);
 
 			msgpack_encode_string_ext(buf, "origin_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rget.origin_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_datatype);
 
 			msgpack_encode_string_ext(buf, "target_rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rget.target_rank);
+			msgpack_encode_int(buf, args->target_rank);
 
 			msgpack_encode_string_ext(buf, "target_disp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rget.target_disp);
+			msgpack_encode_int(buf, args->target_disp);
 
 			msgpack_encode_string_ext(buf, "target_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rget.target_count);
+			msgpack_encode_int(buf, args->target_count);
 
 			msgpack_encode_string_ext(buf, "target_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rget.target_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->target_datatype);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rget.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Rget.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Rget.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_create_keyval
-		case MPI_API_ID_MPI_Win_create_keyval :
+		case MPI_API_ID_MPI_Win_create_keyval : {
 			//	MPI_Win_copy_attr_function * win_copy_attr_fn (int (*)(struct mpi_win_t *, int, void *, void *, void *, int *));
 			//	MPI_Win_delete_attr_function * win_delete_attr_fn (int (*)(struct mpi_win_t *, int, void *, void *));
 			//	int * win_keyval (int *);
 			//	void * extra_state (void *);
 			//	int retval (int);
+			args_MPI_Win_create_keyval_t* args = (args_MPI_Win_create_keyval_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "win_copy_attr_fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win_copy_attr_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_create_keyval.win_copy_attr_fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->win_copy_attr_fn);
 
 			msgpack_encode_string_ext(buf, "win_delete_attr_fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win_delete_attr_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_create_keyval.win_delete_attr_fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->win_delete_attr_fn);
 
 			msgpack_encode_string_ext(buf, "win_keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_create_keyval.win_keyval);
+			msgpack_encode_uint(buf, (uintptr_t)args->win_keyval);
 
 			msgpack_encode_string_ext(buf, "extra_state");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_create_keyval.extra_state);
+			msgpack_encode_uint(buf, (uintptr_t)args->extra_state);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_create_keyval.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Op_commutative
-		case MPI_API_ID_MPI_Op_commutative :
+		case MPI_API_ID_MPI_Op_commutative : {
 			//	MPI_Op op (struct mpi_op_t *);
 			//	int * commute (int *);
 			//	int retval (int);
+			args_MPI_Op_commutative_t* args = (args_MPI_Op_commutative_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Op_commutative.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "commute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Op_commutative.commute);
+			msgpack_encode_uint(buf, (uintptr_t)args->commute);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Op_commutative.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Neighbor_allgather
-		case MPI_API_ID_MPI_Neighbor_allgather :
+		case MPI_API_ID_MPI_Neighbor_allgather : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -10685,98 +11115,102 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype recvtype (struct mpi_datatype_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Neighbor_allgather_t* args = (args_MPI_Neighbor_allgather_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgather.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_allgather.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgather.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgather.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_allgather.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgather.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgather.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_allgather.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_call_errhandler
-		case MPI_API_ID_MPI_Comm_call_errhandler :
+		case MPI_API_ID_MPI_Comm_call_errhandler : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int errorcode (int);
 			//	int retval (int);
+			args_MPI_Comm_call_errhandler_t* args = (args_MPI_Comm_call_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_call_errhandler.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "errorcode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_call_errhandler.errorcode);
+			msgpack_encode_int(buf, args->errorcode);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_call_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Scatter_init
-		case MPI_API_ID_MPI_Scatter_init :
+		case MPI_API_ID_MPI_Scatter_init : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -10788,357 +11222,371 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Scatter_init_t* args = (args_MPI_Scatter_init_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatter_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scatter_init.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatter_init.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatter_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scatter_init.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatter_init.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scatter_init.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatter_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatter_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Scatter_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Scatter_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Info_get_string
-		case MPI_API_ID_MPI_Info_get_string :
+		case MPI_API_ID_MPI_Info_get_string : {
 			//	MPI_Info info (struct mpi_info_t *);
 			//	const char * key (const char *);
 			//	int * buflen (int *);
 			//	char * value (char *);
 			//	int * flag (int *);
 			//	int retval (int);
+			args_MPI_Info_get_string_t* args = (args_MPI_Info_get_string_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get_string.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "key");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get_string.key);
+			msgpack_encode_uint(buf, (uintptr_t)args->key);
 
 			msgpack_encode_string_ext(buf, "buflen");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get_string.buflen);
+			msgpack_encode_uint(buf, (uintptr_t)args->buflen);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get_string.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get_string.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_get_string.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Mrecv
-		case MPI_API_ID_MPI_Mrecv :
+		case MPI_API_ID_MPI_Mrecv : {
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype type (struct mpi_datatype_t *);
 			//	MPI_Message * message (struct mpi_message_t **);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Mrecv_t* args = (args_MPI_Mrecv_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Mrecv.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Mrecv.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Mrecv.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "message");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Message *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Mrecv.message);
+			msgpack_encode_uint(buf, (uintptr_t)args->message);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Mrecv.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Mrecv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Open_port
-		case MPI_API_ID_MPI_Open_port :
+		case MPI_API_ID_MPI_Open_port : {
 			//	MPI_Info info (struct mpi_info_t *);
 			//	char * port_name (char *);
 			//	int retval (int);
+			args_MPI_Open_port_t* args = (args_MPI_Open_port_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Open_port.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "port_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Open_port.port_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->port_name);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Open_port.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Cart_get
-		case MPI_API_ID_MPI_Cart_get :
+		case MPI_API_ID_MPI_Cart_get : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int maxdims (int);
 			//	int[] dims (int[]);
 			//	int[] periods (int[]);
 			//	int[] coords (int[]);
 			//	int retval (int);
+			args_MPI_Cart_get_t* args = (args_MPI_Cart_get_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_get.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "maxdims");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cart_get.maxdims);
+			msgpack_encode_int(buf, args->maxdims);
 
 			msgpack_encode_string_ext(buf, "dims");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_get.dims);
+			msgpack_encode_uint(buf, (uintptr_t)args->dims);
 
 			msgpack_encode_string_ext(buf, "periods");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_get.periods);
+			msgpack_encode_uint(buf, (uintptr_t)args->periods);
 
 			msgpack_encode_string_ext(buf, "coords");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_get.coords);
+			msgpack_encode_uint(buf, (uintptr_t)args->coords);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cart_get.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Lookup_name
-		case MPI_API_ID_MPI_Lookup_name :
+		case MPI_API_ID_MPI_Lookup_name : {
 			//	const char * service_name (const char *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	char * port_name (char *);
 			//	int retval (int);
+			args_MPI_Lookup_name_t* args = (args_MPI_Lookup_name_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "service_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Lookup_name.service_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->service_name);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Lookup_name.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "port_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Lookup_name.port_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->port_name);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Lookup_name.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_get_extent
-		case MPI_API_ID_MPI_Type_get_extent :
+		case MPI_API_ID_MPI_Type_get_extent : {
 			//	MPI_Datatype type (struct mpi_datatype_t *);
 			//	MPI_Aint * lb (long*);
 			//	MPI_Aint * extent (long*);
 			//	int retval (int);
+			args_MPI_Type_get_extent_t* args = (args_MPI_Type_get_extent_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_extent.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "lb");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_extent.lb);
+			msgpack_encode_uint(buf, (uintptr_t)args->lb);
 
 			msgpack_encode_string_ext(buf, "extent");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_extent.extent);
+			msgpack_encode_uint(buf, (uintptr_t)args->extent);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_get_extent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_spawn
-		case MPI_API_ID_MPI_Comm_spawn :
+		case MPI_API_ID_MPI_Comm_spawn : {
 			//	const char * command (const char *);
 			//	char *[] argv (char *[]);
 			//	int maxprocs (int);
@@ -11148,165 +11596,173 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm * intercomm (struct mpi_communicator_t **);
 			//	int[] array_of_errcodes (int[]);
 			//	int retval (int);
+			args_MPI_Comm_spawn_t* args = (args_MPI_Comm_spawn_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "command");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_spawn.command);
+			msgpack_encode_uint(buf, (uintptr_t)args->command);
 
 			msgpack_encode_string_ext(buf, "argv");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_spawn.argv);
+			msgpack_encode_uint(buf, (uintptr_t)args->argv);
 
 			msgpack_encode_string_ext(buf, "maxprocs");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_spawn.maxprocs);
+			msgpack_encode_int(buf, args->maxprocs);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_spawn.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_spawn.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_spawn.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "intercomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_spawn.intercomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->intercomm);
 
 			msgpack_encode_string_ext(buf, "array_of_errcodes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_spawn.array_of_errcodes);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_errcodes);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_spawn.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Unpublish_name
-		case MPI_API_ID_MPI_Unpublish_name :
+		case MPI_API_ID_MPI_Unpublish_name : {
 			//	const char * service_name (const char *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	const char * port_name (const char *);
 			//	int retval (int);
+			args_MPI_Unpublish_name_t* args = (args_MPI_Unpublish_name_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "service_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Unpublish_name.service_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->service_name);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Unpublish_name.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "port_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Unpublish_name.port_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->port_name);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Unpublish_name.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Grequest_complete
-		case MPI_API_ID_MPI_Grequest_complete :
+		case MPI_API_ID_MPI_Grequest_complete : {
 			//	MPI_Request request (struct mpi_request_t *);
 			//	int retval (int);
+			args_MPI_Grequest_complete_t* args = (args_MPI_Grequest_complete_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Grequest_complete.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Grequest_complete.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_get_group
-		case MPI_API_ID_MPI_File_get_group :
+		case MPI_API_ID_MPI_File_get_group : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Group * group (struct mpi_group_t **);
 			//	int retval (int);
+			args_MPI_File_get_group_t* args = (args_MPI_File_get_group_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_group.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_group.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_get_group.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_iread_at_all
-		case MPI_API_ID_MPI_File_iread_at_all :
+		case MPI_API_ID_MPI_File_iread_at_all : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset offset (long long);
 			//	void * buf (void *);
@@ -11314,259 +11770,271 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_File_iread_at_all_t* args = (args_MPI_File_iread_at_all_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_at_all.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iread_at_all.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_at_all.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iread_at_all.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_at_all.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_at_all.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iread_at_all.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Graphdims_get
-		case MPI_API_ID_MPI_Graphdims_get :
+		case MPI_API_ID_MPI_Graphdims_get : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int * nnodes (int *);
 			//	int * nedges (int *);
 			//	int retval (int);
+			args_MPI_Graphdims_get_t* args = (args_MPI_Graphdims_get_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graphdims_get.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "nnodes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graphdims_get.nnodes);
+			msgpack_encode_uint(buf, (uintptr_t)args->nnodes);
 
 			msgpack_encode_string_ext(buf, "nedges");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graphdims_get.nedges);
+			msgpack_encode_uint(buf, (uintptr_t)args->nedges);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Graphdims_get.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_iread_shared
-		case MPI_API_ID_MPI_File_iread_shared :
+		case MPI_API_ID_MPI_File_iread_shared : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_File_iread_shared_t* args = (args_MPI_File_iread_shared_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_shared.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_shared.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iread_shared.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_shared.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_shared.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iread_shared.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_idup_with_info
-		case MPI_API_ID_MPI_Comm_idup_with_info :
+		case MPI_API_ID_MPI_Comm_idup_with_info : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Comm * newcomm (struct mpi_communicator_t **);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Comm_idup_with_info_t* args = (args_MPI_Comm_idup_with_info_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_idup_with_info.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_idup_with_info.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "newcomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_idup_with_info.newcomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->newcomm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_idup_with_info.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_idup_with_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Get_version
-		case MPI_API_ID_MPI_Get_version :
+		case MPI_API_ID_MPI_Get_version : {
 			//	int * version (int *);
 			//	int * subversion (int *);
 			//	int retval (int);
+			args_MPI_Get_version_t* args = (args_MPI_Get_version_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "version");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_version.version);
+			msgpack_encode_uint(buf, (uintptr_t)args->version);
 
 			msgpack_encode_string_ext(buf, "subversion");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_version.subversion);
+			msgpack_encode_uint(buf, (uintptr_t)args->subversion);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get_version.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_lock_all
-		case MPI_API_ID_MPI_Win_lock_all :
+		case MPI_API_ID_MPI_Win_lock_all : {
 			//	int mpi_assert (int);
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Win_lock_all_t* args = (args_MPI_Win_lock_all_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "mpi_assert");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_lock_all.mpi_assert);
+			msgpack_encode_int(buf, args->mpi_assert);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_lock_all.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_lock_all.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Intercomm_create_from_groups
-		case MPI_API_ID_MPI_Intercomm_create_from_groups :
+		case MPI_API_ID_MPI_Intercomm_create_from_groups : {
 			//	MPI_Group local_group (struct mpi_group_t *);
 			//	int local_leader (int);
 			//	MPI_Group remote_group (struct mpi_group_t *);
@@ -11576,75 +12044,77 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Errhandler errhandler (struct mpi_errhandler_t *);
 			//	MPI_Comm * newintercomm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Intercomm_create_from_groups_t* args = (args_MPI_Intercomm_create_from_groups_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "local_group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Intercomm_create_from_groups.local_group);
+			msgpack_encode_uint(buf, (uintptr_t)args->local_group);
 
 			msgpack_encode_string_ext(buf, "local_leader");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Intercomm_create_from_groups.local_leader);
+			msgpack_encode_int(buf, args->local_leader);
 
 			msgpack_encode_string_ext(buf, "remote_group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Intercomm_create_from_groups.remote_group);
+			msgpack_encode_uint(buf, (uintptr_t)args->remote_group);
 
 			msgpack_encode_string_ext(buf, "remote_leader");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Intercomm_create_from_groups.remote_leader);
+			msgpack_encode_int(buf, args->remote_leader);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Intercomm_create_from_groups.tag);
+			msgpack_encode_uint(buf, (uintptr_t)args->tag);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Intercomm_create_from_groups.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Intercomm_create_from_groups.errhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->errhandler);
 
 			msgpack_encode_string_ext(buf, "newintercomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Intercomm_create_from_groups.newintercomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->newintercomm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Intercomm_create_from_groups.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Neighbor_alltoallv_init
-		case MPI_API_ID_MPI_Neighbor_alltoallv_init :
+		case MPI_API_ID_MPI_Neighbor_alltoallv_init : {
 			//	const void * sendbuf (const void *);
 			//	const int[] sendcounts (const int[]);
 			//	const int[] sdispls (const int[]);
@@ -11657,96 +12127,98 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Neighbor_alltoallv_init_t* args = (args_MPI_Neighbor_alltoallv_init_t*) func_args;
 			msgpack_encode_map(buf, 12);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv_init.sendcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendcounts);
 
 			msgpack_encode_string_ext(buf, "sdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv_init.sdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->sdispls);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv_init.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv_init.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "rdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv_init.rdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->rdispls);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv_init.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallv_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_alltoallv_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_create_darray
-		case MPI_API_ID_MPI_Type_create_darray :
+		case MPI_API_ID_MPI_Type_create_darray : {
 			//	int size (int);
 			//	int rank (int);
 			//	int ndims (int);
@@ -11758,279 +12230,291 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype oldtype (struct mpi_datatype_t *);
 			//	MPI_Datatype * newtype (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_create_darray_t* args = (args_MPI_Type_create_darray_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_darray.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_darray.rank);
+			msgpack_encode_int(buf, args->rank);
 
 			msgpack_encode_string_ext(buf, "ndims");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_darray.ndims);
+			msgpack_encode_int(buf, args->ndims);
 
 			msgpack_encode_string_ext(buf, "gsize_array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_darray.gsize_array);
+			msgpack_encode_uint(buf, (uintptr_t)args->gsize_array);
 
 			msgpack_encode_string_ext(buf, "distrib_array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_darray.distrib_array);
+			msgpack_encode_uint(buf, (uintptr_t)args->distrib_array);
 
 			msgpack_encode_string_ext(buf, "darg_array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_darray.darg_array);
+			msgpack_encode_uint(buf, (uintptr_t)args->darg_array);
 
 			msgpack_encode_string_ext(buf, "psize_array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_darray.psize_array);
+			msgpack_encode_uint(buf, (uintptr_t)args->psize_array);
 
 			msgpack_encode_string_ext(buf, "order");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_darray.order);
+			msgpack_encode_int(buf, args->order);
 
 			msgpack_encode_string_ext(buf, "oldtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_darray.oldtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->oldtype);
 
 			msgpack_encode_string_ext(buf, "newtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_darray.newtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->newtype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_darray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_get_position_shared
-		case MPI_API_ID_MPI_File_get_position_shared :
+		case MPI_API_ID_MPI_File_get_position_shared : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset * offset (long long*);
 			//	int retval (int);
+			args_MPI_File_get_position_shared_t* args = (args_MPI_File_get_position_shared_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_position_shared.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_position_shared.offset);
+			msgpack_encode_uint(buf, (uintptr_t)args->offset);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_get_position_shared.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_get_group
-		case MPI_API_ID_MPI_Win_get_group :
+		case MPI_API_ID_MPI_Win_get_group : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	MPI_Group * group (struct mpi_group_t **);
 			//	int retval (int);
+			args_MPI_Win_get_group_t* args = (args_MPI_Win_get_group_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_get_group.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_get_group.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_get_group.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Error_class
-		case MPI_API_ID_MPI_Error_class :
+		case MPI_API_ID_MPI_Error_class : {
 			//	int errorcode (int);
 			//	int * errorclass (int *);
 			//	int retval (int);
+			args_MPI_Error_class_t* args = (args_MPI_Error_class_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "errorcode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Error_class.errorcode);
+			msgpack_encode_int(buf, args->errorcode);
 
 			msgpack_encode_string_ext(buf, "errorclass");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Error_class.errorclass);
+			msgpack_encode_uint(buf, (uintptr_t)args->errorclass);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Error_class.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_get_attr
-		case MPI_API_ID_MPI_Win_get_attr :
+		case MPI_API_ID_MPI_Win_get_attr : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int win_keyval (int);
 			//	void * attribute_val (void *);
 			//	int * flag (int *);
 			//	int retval (int);
+			args_MPI_Win_get_attr_t* args = (args_MPI_Win_get_attr_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_get_attr.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "win_keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_get_attr.win_keyval);
+			msgpack_encode_int(buf, args->win_keyval);
 
 			msgpack_encode_string_ext(buf, "attribute_val");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_get_attr.attribute_val);
+			msgpack_encode_uint(buf, (uintptr_t)args->attribute_val);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_get_attr.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_get_attr.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Reduce_local
-		case MPI_API_ID_MPI_Reduce_local :
+		case MPI_API_ID_MPI_Reduce_local : {
 			//	const void * inbuf (const void *);
 			//	void * inoutbuf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Op op (struct mpi_op_t *);
 			//	int retval (int);
+			args_MPI_Reduce_local_t* args = (args_MPI_Reduce_local_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "inbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_local.inbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->inbuf);
 
 			msgpack_encode_string_ext(buf, "inoutbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_local.inoutbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->inoutbuf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Reduce_local.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_local.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_local.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Reduce_local.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ireduce_scatter_block
-		case MPI_API_ID_MPI_Ireduce_scatter_block :
+		case MPI_API_ID_MPI_Ireduce_scatter_block : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	int recvcount (int);
@@ -12039,332 +12523,350 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Ireduce_scatter_block_t* args = (args_MPI_Ireduce_scatter_block_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce_scatter_block.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce_scatter_block.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ireduce_scatter_block.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce_scatter_block.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce_scatter_block.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce_scatter_block.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ireduce_scatter_block.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ireduce_scatter_block.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Status_set_cancelled
-		case MPI_API_ID_MPI_Status_set_cancelled :
+		case MPI_API_ID_MPI_Status_set_cancelled : {
 			//	MPI_Status * status (struct opaque **);
 			//	int flag (int);
 			//	int retval (int);
+			args_MPI_Status_set_cancelled_t* args = (args_MPI_Status_set_cancelled_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_set_cancelled.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Status_set_cancelled.flag);
+			msgpack_encode_int(buf, args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Status_set_cancelled.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_test
-		case MPI_API_ID_MPI_Win_test :
+		case MPI_API_ID_MPI_Win_test : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int * flag (int *);
 			//	int retval (int);
+			args_MPI_Win_test_t* args = (args_MPI_Win_test_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_test.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_test.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_test.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Test_cancelled
-		case MPI_API_ID_MPI_Test_cancelled :
+		case MPI_API_ID_MPI_Test_cancelled : {
 			//	const MPI_Status * status (const struct opaque * *);
 			//	int * flag (int *);
 			//	int retval (int);
+			args_MPI_Test_cancelled_t* args = (args_MPI_Test_cancelled_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Test_cancelled.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Test_cancelled.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Test_cancelled.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_seek_shared
-		case MPI_API_ID_MPI_File_seek_shared :
+		case MPI_API_ID_MPI_File_seek_shared : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset offset (long long);
 			//	int whence (int);
 			//	int retval (int);
+			args_MPI_File_seek_shared_t* args = (args_MPI_File_seek_shared_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_seek_shared.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_seek_shared.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "whence");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_seek_shared.whence);
+			msgpack_encode_int(buf, args->whence);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_seek_shared.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Error_string
-		case MPI_API_ID_MPI_Error_string :
+		case MPI_API_ID_MPI_Error_string : {
 			//	int errorcode (int);
 			//	char * string (char *);
 			//	int * resultlen (int *);
 			//	int retval (int);
+			args_MPI_Error_string_t* args = (args_MPI_Error_string_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "errorcode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Error_string.errorcode);
+			msgpack_encode_int(buf, args->errorcode);
 
 			msgpack_encode_string_ext(buf, "string");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Error_string.string);
+			msgpack_encode_uint(buf, (uintptr_t)args->string);
 
 			msgpack_encode_string_ext(buf, "resultlen");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Error_string.resultlen);
+			msgpack_encode_uint(buf, (uintptr_t)args->resultlen);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Error_string.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Graph_neighbors_count
-		case MPI_API_ID_MPI_Graph_neighbors_count :
+		case MPI_API_ID_MPI_Graph_neighbors_count : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int rank (int);
 			//	int * nneighbors (int *);
 			//	int retval (int);
+			args_MPI_Graph_neighbors_count_t* args = (args_MPI_Graph_neighbors_count_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graph_neighbors_count.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Graph_neighbors_count.rank);
+			msgpack_encode_int(buf, args->rank);
 
 			msgpack_encode_string_ext(buf, "nneighbors");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graph_neighbors_count.nneighbors);
+			msgpack_encode_uint(buf, (uintptr_t)args->nneighbors);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Graph_neighbors_count.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Session_create_errhandler
-		case MPI_API_ID_MPI_Session_create_errhandler :
+		case MPI_API_ID_MPI_Session_create_errhandler : {
 			//	MPI_Session_errhandler_function * session_errhandler_fn (void (*)(struct mpi_instance_t * *, int *, ...));
 			//	MPI_Errhandler * errhandler (struct mpi_errhandler_t **);
 			//	int retval (int);
+			args_MPI_Session_create_errhandler_t* args = (args_MPI_Session_create_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "session_errhandler_fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Session_errhandler_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_create_errhandler.session_errhandler_fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->session_errhandler_fn);
 
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_create_errhandler.errhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->errhandler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Session_create_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_unlock
-		case MPI_API_ID_MPI_Win_unlock :
+		case MPI_API_ID_MPI_Win_unlock : {
 			//	int rank (int);
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Win_unlock_t* args = (args_MPI_Win_unlock_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_unlock.rank);
+			msgpack_encode_int(buf, args->rank);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_unlock.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_unlock.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Iscatter
-		case MPI_API_ID_MPI_Iscatter :
+		case MPI_API_ID_MPI_Iscatter : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -12375,384 +12877,404 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Iscatter_t* args = (args_MPI_Iscatter_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscatter.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iscatter.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscatter.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscatter.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iscatter.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscatter.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iscatter.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscatter.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscatter.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iscatter.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_read_all
-		case MPI_API_ID_MPI_File_read_all :
+		case MPI_API_ID_MPI_File_read_all : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_read_all_t* args = (args_MPI_File_read_all_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_all.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_all.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_all.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_all.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_all.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_all.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_set_errhandler
-		case MPI_API_ID_MPI_File_set_errhandler :
+		case MPI_API_ID_MPI_File_set_errhandler : {
 			//	MPI_File file (struct mpi_file_t *);
 			//	MPI_Errhandler errhandler (struct mpi_errhandler_t *);
 			//	int retval (int);
+			args_MPI_File_set_errhandler_t* args = (args_MPI_File_set_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "file");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_set_errhandler.file);
+			msgpack_encode_uint(buf, (uintptr_t)args->file);
 
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_set_errhandler.errhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->errhandler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_set_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_set_attr
-		case MPI_API_ID_MPI_Type_set_attr :
+		case MPI_API_ID_MPI_Type_set_attr : {
 			//	MPI_Datatype type (struct mpi_datatype_t *);
 			//	int type_keyval (int);
 			//	void * attr_val (void *);
 			//	int retval (int);
+			args_MPI_Type_set_attr_t* args = (args_MPI_Type_set_attr_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_set_attr.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "type_keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_set_attr.type_keyval);
+			msgpack_encode_int(buf, args->type_keyval);
 
 			msgpack_encode_string_ext(buf, "attr_val");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_set_attr.attr_val);
+			msgpack_encode_uint(buf, (uintptr_t)args->attr_val);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_set_attr.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_get_errhandler
-		case MPI_API_ID_MPI_File_get_errhandler :
+		case MPI_API_ID_MPI_File_get_errhandler : {
 			//	MPI_File file (struct mpi_file_t *);
 			//	MPI_Errhandler * errhandler (struct mpi_errhandler_t **);
 			//	int retval (int);
+			args_MPI_File_get_errhandler_t* args = (args_MPI_File_get_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "file");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_errhandler.file);
+			msgpack_encode_uint(buf, (uintptr_t)args->file);
 
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_errhandler.errhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->errhandler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_get_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Session_finalize
-		case MPI_API_ID_MPI_Session_finalize :
+		case MPI_API_ID_MPI_Session_finalize : {
 			//	MPI_Session * session (struct mpi_instance_t **);
 			//	int retval (int);
+			args_MPI_Session_finalize_t* args = (args_MPI_Session_finalize_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "session");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Session *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_finalize.session);
+			msgpack_encode_uint(buf, (uintptr_t)args->session);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Session_finalize.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_free_keyval
-		case MPI_API_ID_MPI_Comm_free_keyval :
+		case MPI_API_ID_MPI_Comm_free_keyval : {
 			//	int * comm_keyval (int *);
 			//	int retval (int);
+			args_MPI_Comm_free_keyval_t* args = (args_MPI_Comm_free_keyval_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "comm_keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_free_keyval.comm_keyval);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm_keyval);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_free_keyval.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_iwrite_all
-		case MPI_API_ID_MPI_File_iwrite_all :
+		case MPI_API_ID_MPI_File_iwrite_all : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_File_iwrite_all_t* args = (args_MPI_File_iwrite_all_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_all.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_all.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iwrite_all.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_all.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_all.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iwrite_all.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Free_mem
-		case MPI_API_ID_MPI_Free_mem :
+		case MPI_API_ID_MPI_Free_mem : {
 			//	void * base (void *);
 			//	int retval (int);
+			args_MPI_Free_mem_t* args = (args_MPI_Free_mem_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "base");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Free_mem.base);
+			msgpack_encode_uint(buf, (uintptr_t)args->base);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Free_mem.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_set_info
-		case MPI_API_ID_MPI_Win_set_info :
+		case MPI_API_ID_MPI_Win_set_info : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	int retval (int);
+			args_MPI_Win_set_info_t* args = (args_MPI_Win_set_info_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_set_info.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_set_info.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_set_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Alltoallv_init
-		case MPI_API_ID_MPI_Alltoallv_init :
+		case MPI_API_ID_MPI_Alltoallv_init : {
 			//	const void * sendbuf (const void *);
 			//	const int[] sendcounts (const int[]);
 			//	const int[] sdispls (const int[]);
@@ -12765,164 +13287,170 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Alltoallv_init_t* args = (args_MPI_Alltoallv_init_t*) func_args;
 			msgpack_encode_map(buf, 12);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv_init.sendcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendcounts);
 
 			msgpack_encode_string_ext(buf, "sdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv_init.sdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->sdispls);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv_init.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv_init.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "rdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv_init.rdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->rdispls);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv_init.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallv_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Alltoallv_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_attach
-		case MPI_API_ID_MPI_Win_attach :
+		case MPI_API_ID_MPI_Win_attach : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	void * base (void *);
 			//	MPI_Aint size (long);
 			//	int retval (int);
+			args_MPI_Win_attach_t* args = (args_MPI_Win_attach_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_attach.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "base");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_attach.base);
+			msgpack_encode_uint(buf, (uintptr_t)args->base);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_attach.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_attach.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_get_position
-		case MPI_API_ID_MPI_File_get_position :
+		case MPI_API_ID_MPI_File_get_position : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset * offset (long long*);
 			//	int retval (int);
+			args_MPI_File_get_position_t* args = (args_MPI_File_get_position_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_position.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_position.offset);
+			msgpack_encode_uint(buf, (uintptr_t)args->offset);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_get_position.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Accumulate
-		case MPI_API_ID_MPI_Accumulate :
+		case MPI_API_ID_MPI_Accumulate : {
 			//	const void * origin_addr (const void *);
 			//	int origin_count (int);
 			//	MPI_Datatype origin_datatype (struct mpi_datatype_t *);
@@ -12933,174 +13461,180 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Op op (struct mpi_op_t *);
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Accumulate_t* args = (args_MPI_Accumulate_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "origin_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Accumulate.origin_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_addr);
 
 			msgpack_encode_string_ext(buf, "origin_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Accumulate.origin_count);
+			msgpack_encode_int(buf, args->origin_count);
 
 			msgpack_encode_string_ext(buf, "origin_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Accumulate.origin_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_datatype);
 
 			msgpack_encode_string_ext(buf, "target_rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Accumulate.target_rank);
+			msgpack_encode_int(buf, args->target_rank);
 
 			msgpack_encode_string_ext(buf, "target_disp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Accumulate.target_disp);
+			msgpack_encode_int(buf, args->target_disp);
 
 			msgpack_encode_string_ext(buf, "target_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Accumulate.target_count);
+			msgpack_encode_int(buf, args->target_count);
 
 			msgpack_encode_string_ext(buf, "target_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Accumulate.target_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->target_datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Accumulate.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Accumulate.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Accumulate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_write_shared
-		case MPI_API_ID_MPI_File_write_shared :
+		case MPI_API_ID_MPI_File_write_shared : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_write_shared_t* args = (args_MPI_File_write_shared_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_shared.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_shared.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_shared.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_shared.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_shared.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_shared.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_create_dynamic
-		case MPI_API_ID_MPI_Win_create_dynamic :
+		case MPI_API_ID_MPI_Win_create_dynamic : {
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Win * win (struct mpi_win_t **);
 			//	int retval (int);
+			args_MPI_Win_create_dynamic_t* args = (args_MPI_Win_create_dynamic_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_create_dynamic.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_create_dynamic.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_create_dynamic.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_create_dynamic.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Neighbor_alltoallw
-		case MPI_API_ID_MPI_Neighbor_alltoallw :
+		case MPI_API_ID_MPI_Neighbor_alltoallw : {
 			//	const void * sendbuf (const void *);
 			//	const int[] sendcounts (const int[]);
 			//	const MPI_Aint[] sdispls (const long[]);
@@ -13111,82 +13645,84 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	const MPI_Datatype[] recvtypes (const struct mpi_datatype_t *[]);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Neighbor_alltoallw_t* args = (args_MPI_Neighbor_alltoallw_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw.sendcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendcounts);
 
 			msgpack_encode_string_ext(buf, "sdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Aint[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw.sdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->sdispls);
 
 			msgpack_encode_string_ext(buf, "sendtypes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Datatype[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw.sendtypes);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtypes);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "rdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Aint[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw.rdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->rdispls);
 
 			msgpack_encode_string_ext(buf, "recvtypes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Datatype[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw.recvtypes);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtypes);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoallw.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_alltoallw.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Iexscan
-		case MPI_API_ID_MPI_Iexscan :
+		case MPI_API_ID_MPI_Iexscan : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	int count (int);
@@ -13195,122 +13731,126 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Iexscan_t* args = (args_MPI_Iexscan_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iexscan.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iexscan.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iexscan.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iexscan.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iexscan.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iexscan.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iexscan.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iexscan.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Graph_map
-		case MPI_API_ID_MPI_Graph_map :
+		case MPI_API_ID_MPI_Graph_map : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int nnodes (int);
 			//	const int[] index (const int[]);
 			//	const int[] edges (const int[]);
 			//	int * newrank (int *);
 			//	int retval (int);
+			args_MPI_Graph_map_t* args = (args_MPI_Graph_map_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graph_map.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "nnodes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Graph_map.nnodes);
+			msgpack_encode_int(buf, args->nnodes);
 
 			msgpack_encode_string_ext(buf, "index");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graph_map.index);
+			msgpack_encode_uint(buf, (uintptr_t)args->index);
 
 			msgpack_encode_string_ext(buf, "edges");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graph_map.edges);
+			msgpack_encode_uint(buf, (uintptr_t)args->edges);
 
 			msgpack_encode_string_ext(buf, "newrank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graph_map.newrank);
+			msgpack_encode_uint(buf, (uintptr_t)args->newrank);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Graph_map.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Recv_init
-		case MPI_API_ID_MPI_Recv_init :
+		case MPI_API_ID_MPI_Recv_init : {
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -13319,68 +13859,70 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Recv_init_t* args = (args_MPI_Recv_init_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Recv_init.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Recv_init.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Recv_init.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "source");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Recv_init.source);
+			msgpack_encode_int(buf, args->source);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Recv_init.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Recv_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Recv_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Recv_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_create_subarray
-		case MPI_API_ID_MPI_Type_create_subarray :
+		case MPI_API_ID_MPI_Type_create_subarray : {
 			//	int ndims (int);
 			//	const int[] size_array (const int[]);
 			//	const int[] subsize_array (const int[]);
@@ -13389,114 +13931,118 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype oldtype (struct mpi_datatype_t *);
 			//	MPI_Datatype * newtype (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_create_subarray_t* args = (args_MPI_Type_create_subarray_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "ndims");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_subarray.ndims);
+			msgpack_encode_int(buf, args->ndims);
 
 			msgpack_encode_string_ext(buf, "size_array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_subarray.size_array);
+			msgpack_encode_uint(buf, (uintptr_t)args->size_array);
 
 			msgpack_encode_string_ext(buf, "subsize_array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_subarray.subsize_array);
+			msgpack_encode_uint(buf, (uintptr_t)args->subsize_array);
 
 			msgpack_encode_string_ext(buf, "start_array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_subarray.start_array);
+			msgpack_encode_uint(buf, (uintptr_t)args->start_array);
 
 			msgpack_encode_string_ext(buf, "order");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_subarray.order);
+			msgpack_encode_int(buf, args->order);
 
 			msgpack_encode_string_ext(buf, "oldtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_subarray.oldtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->oldtype);
 
 			msgpack_encode_string_ext(buf, "newtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_subarray.newtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->newtype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_subarray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_create_group
-		case MPI_API_ID_MPI_Comm_create_group :
+		case MPI_API_ID_MPI_Comm_create_group : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Group group (struct mpi_group_t *);
 			//	int tag (int);
 			//	MPI_Comm * newcomm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Comm_create_group_t* args = (args_MPI_Comm_create_group_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create_group.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create_group.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_create_group.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "newcomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_create_group.newcomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->newcomm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_create_group.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Allgather_init
-		case MPI_API_ID_MPI_Allgather_init :
+		case MPI_API_ID_MPI_Allgather_init : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -13507,82 +14053,84 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Allgather_init_t* args = (args_MPI_Allgather_init_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgather_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Allgather_init.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgather_init.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgather_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Allgather_init.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgather_init.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgather_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgather_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Allgather_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Allgather_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Reduce_scatter_block_init
-		case MPI_API_ID_MPI_Reduce_scatter_block_init :
+		case MPI_API_ID_MPI_Reduce_scatter_block_init : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	int recvcount (int);
@@ -13592,151 +14140,157 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Reduce_scatter_block_init_t* args = (args_MPI_Reduce_scatter_block_init_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_block_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_block_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Reduce_scatter_block_init.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_block_init.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_block_init.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_block_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_block_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Reduce_scatter_block_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Reduce_scatter_block_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_match_size
-		case MPI_API_ID_MPI_Type_match_size :
+		case MPI_API_ID_MPI_Type_match_size : {
 			//	int typeclass (int);
 			//	int size (int);
 			//	MPI_Datatype * type (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_match_size_t* args = (args_MPI_Type_match_size_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "typeclass");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_match_size.typeclass);
+			msgpack_encode_int(buf, args->typeclass);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_match_size.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_match_size.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_match_size.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_get_true_extent
-		case MPI_API_ID_MPI_Type_get_true_extent :
+		case MPI_API_ID_MPI_Type_get_true_extent : {
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Aint * true_lb (long*);
 			//	MPI_Aint * true_extent (long*);
 			//	int retval (int);
+			args_MPI_Type_get_true_extent_t* args = (args_MPI_Type_get_true_extent_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_true_extent.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "true_lb");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_true_extent.true_lb);
+			msgpack_encode_uint(buf, (uintptr_t)args->true_lb);
 
 			msgpack_encode_string_ext(buf, "true_extent");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_true_extent.true_extent);
+			msgpack_encode_uint(buf, (uintptr_t)args->true_extent);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_get_true_extent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Alltoall_init
-		case MPI_API_ID_MPI_Alltoall_init :
+		case MPI_API_ID_MPI_Alltoall_init : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -13747,82 +14301,84 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Alltoall_init_t* args = (args_MPI_Alltoall_init_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoall_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Alltoall_init.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoall_init.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoall_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Alltoall_init.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoall_init.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoall_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoall_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoall_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Alltoall_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Send_init
-		case MPI_API_ID_MPI_Send_init :
+		case MPI_API_ID_MPI_Send_init : {
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -13831,68 +14387,70 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Send_init_t* args = (args_MPI_Send_init_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Send_init.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Send_init.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Send_init.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Send_init.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Send_init.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Send_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Send_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Send_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Neighbor_allgather_init
-		case MPI_API_ID_MPI_Neighbor_allgather_init :
+		case MPI_API_ID_MPI_Neighbor_allgather_init : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -13903,82 +14461,84 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Neighbor_allgather_init_t* args = (args_MPI_Neighbor_allgather_init_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgather_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_allgather_init.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgather_init.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgather_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_allgather_init.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgather_init.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgather_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgather_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgather_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_allgather_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ibcast
-		case MPI_API_ID_MPI_Ibcast :
+		case MPI_API_ID_MPI_Ibcast : {
 			//	void * buffer (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -13986,115 +14546,119 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Ibcast_t* args = (args_MPI_Ibcast_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "buffer");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ibcast.buffer);
+			msgpack_encode_uint(buf, (uintptr_t)args->buffer);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ibcast.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ibcast.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ibcast.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ibcast.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ibcast.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ibcast.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_iread
-		case MPI_API_ID_MPI_File_iread :
+		case MPI_API_ID_MPI_File_iread : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_File_iread_t* args = (args_MPI_File_iread_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iread.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iread.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Neighbor_alltoall_init
-		case MPI_API_ID_MPI_Neighbor_alltoall_init :
+		case MPI_API_ID_MPI_Neighbor_alltoall_init : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -14105,348 +14669,364 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Neighbor_alltoall_init_t* args = (args_MPI_Neighbor_alltoall_init_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoall_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_alltoall_init.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoall_init.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoall_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_alltoall_init.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoall_init.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoall_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoall_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_alltoall_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_alltoall_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Cart_rank
-		case MPI_API_ID_MPI_Cart_rank :
+		case MPI_API_ID_MPI_Cart_rank : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	const int[] coords (const int[]);
 			//	int * rank (int *);
 			//	int retval (int);
+			args_MPI_Cart_rank_t* args = (args_MPI_Cart_rank_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_rank.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "coords");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_rank.coords);
+			msgpack_encode_uint(buf, (uintptr_t)args->coords);
 
 			msgpack_encode_string_ext(buf, "rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_rank.rank);
+			msgpack_encode_uint(buf, (uintptr_t)args->rank);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cart_rank.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Publish_name
-		case MPI_API_ID_MPI_Publish_name :
+		case MPI_API_ID_MPI_Publish_name : {
 			//	const char * service_name (const char *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	const char * port_name (const char *);
 			//	int retval (int);
+			args_MPI_Publish_name_t* args = (args_MPI_Publish_name_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "service_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Publish_name.service_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->service_name);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Publish_name.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "port_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Publish_name.port_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->port_name);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Publish_name.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_set_attr
-		case MPI_API_ID_MPI_Win_set_attr :
+		case MPI_API_ID_MPI_Win_set_attr : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int win_keyval (int);
 			//	void * attribute_val (void *);
 			//	int retval (int);
+			args_MPI_Win_set_attr_t* args = (args_MPI_Win_set_attr_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_set_attr.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "win_keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_set_attr.win_keyval);
+			msgpack_encode_int(buf, args->win_keyval);
 
 			msgpack_encode_string_ext(buf, "attribute_val");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_set_attr.attribute_val);
+			msgpack_encode_uint(buf, (uintptr_t)args->attribute_val);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_set_attr.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_sync
-		case MPI_API_ID_MPI_Win_sync :
+		case MPI_API_ID_MPI_Win_sync : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Win_sync_t* args = (args_MPI_Win_sync_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_sync.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_sync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_free_keyval
-		case MPI_API_ID_MPI_Type_free_keyval :
+		case MPI_API_ID_MPI_Type_free_keyval : {
 			//	int * type_keyval (int *);
 			//	int retval (int);
+			args_MPI_Type_free_keyval_t* args = (args_MPI_Type_free_keyval_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type_keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_free_keyval.type_keyval);
+			msgpack_encode_uint(buf, (uintptr_t)args->type_keyval);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_free_keyval.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_write
-		case MPI_API_ID_MPI_File_write :
+		case MPI_API_ID_MPI_File_write : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_write_t* args = (args_MPI_File_write_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Register_datarep
-		case MPI_API_ID_MPI_Register_datarep :
+		case MPI_API_ID_MPI_Register_datarep : {
 			//	const char * datarep (const char *);
 			//	MPI_Datarep_conversion_function * read_conversion_fn (int (*)(void *, struct mpi_datatype_t *, int, void *, long long, void *));
 			//	MPI_Datarep_conversion_function * write_conversion_fn (int (*)(void *, struct mpi_datatype_t *, int, void *, long long, void *));
 			//	MPI_Datarep_extent_function * dtype_file_extent_fn (int (*)(struct mpi_datatype_t *, long *, void *));
 			//	void * extra_state (void *);
 			//	int retval (int);
+			args_MPI_Register_datarep_t* args = (args_MPI_Register_datarep_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "datarep");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Register_datarep.datarep);
+			msgpack_encode_uint(buf, (uintptr_t)args->datarep);
 
 			msgpack_encode_string_ext(buf, "read_conversion_fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datarep_conversion_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Register_datarep.read_conversion_fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->read_conversion_fn);
 
 			msgpack_encode_string_ext(buf, "write_conversion_fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datarep_conversion_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Register_datarep.write_conversion_fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->write_conversion_fn);
 
 			msgpack_encode_string_ext(buf, "dtype_file_extent_fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datarep_extent_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Register_datarep.dtype_file_extent_fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->dtype_file_extent_fn);
 
 			msgpack_encode_string_ext(buf, "extra_state");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Register_datarep.extra_state);
+			msgpack_encode_uint(buf, (uintptr_t)args->extra_state);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Register_datarep.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ineighbor_alltoall
-		case MPI_API_ID_MPI_Ineighbor_alltoall :
+		case MPI_API_ID_MPI_Ineighbor_alltoall : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -14456,105 +15036,109 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Ineighbor_alltoall_t* args = (args_MPI_Ineighbor_alltoall_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoall.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ineighbor_alltoall.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoall.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoall.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ineighbor_alltoall.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoall.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoall.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoall.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ineighbor_alltoall.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_preallocate
-		case MPI_API_ID_MPI_File_preallocate :
+		case MPI_API_ID_MPI_File_preallocate : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset size (long long);
 			//	int retval (int);
+			args_MPI_File_preallocate_t* args = (args_MPI_File_preallocate_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_preallocate.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_preallocate.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_preallocate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Iallgatherv
-		case MPI_API_ID_MPI_Iallgatherv :
+		case MPI_API_ID_MPI_Iallgatherv : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -14565,82 +15149,84 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Iallgatherv_t* args = (args_MPI_Iallgatherv_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallgatherv.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iallgatherv.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallgatherv.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallgatherv.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallgatherv.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "displs");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallgatherv.displs);
+			msgpack_encode_uint(buf, (uintptr_t)args->displs);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallgatherv.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallgatherv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallgatherv.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iallgatherv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Neighbor_allgatherv_init
-		case MPI_API_ID_MPI_Neighbor_allgatherv_init :
+		case MPI_API_ID_MPI_Neighbor_allgatherv_init : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -14652,233 +15238,243 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Neighbor_allgatherv_init_t* args = (args_MPI_Neighbor_allgatherv_init_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_allgatherv_init.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv_init.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv_init.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "displs");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv_init.displs);
+			msgpack_encode_uint(buf, (uintptr_t)args->displs);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv_init.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_allgatherv_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Iprobe
-		case MPI_API_ID_MPI_Iprobe :
+		case MPI_API_ID_MPI_Iprobe : {
 			//	int source (int);
 			//	int tag (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int * flag (int *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Iprobe_t* args = (args_MPI_Iprobe_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "source");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iprobe.source);
+			msgpack_encode_int(buf, args->source);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iprobe.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iprobe.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iprobe.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iprobe.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iprobe.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_get_true_extent_x
-		case MPI_API_ID_MPI_Type_get_true_extent_x :
+		case MPI_API_ID_MPI_Type_get_true_extent_x : {
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Count * true_lb (long long*);
 			//	MPI_Count * true_extent (long long*);
 			//	int retval (int);
+			args_MPI_Type_get_true_extent_x_t* args = (args_MPI_Type_get_true_extent_x_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_true_extent_x.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "true_lb");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Count *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_true_extent_x.true_lb);
+			msgpack_encode_uint(buf, (uintptr_t)args->true_lb);
 
 			msgpack_encode_string_ext(buf, "true_extent");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Count *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_true_extent_x.true_extent);
+			msgpack_encode_uint(buf, (uintptr_t)args->true_extent);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_get_true_extent_x.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_complete
-		case MPI_API_ID_MPI_Win_complete :
+		case MPI_API_ID_MPI_Win_complete : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Win_complete_t* args = (args_MPI_Win_complete_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_complete.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_complete.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_set_atomicity
-		case MPI_API_ID_MPI_File_set_atomicity :
+		case MPI_API_ID_MPI_File_set_atomicity : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	int flag (int);
 			//	int retval (int);
+			args_MPI_File_set_atomicity_t* args = (args_MPI_File_set_atomicity_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_set_atomicity.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_set_atomicity.flag);
+			msgpack_encode_int(buf, args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_set_atomicity.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Unpack_external
-		case MPI_API_ID_MPI_Unpack_external :
+		case MPI_API_ID_MPI_Unpack_external : {
 			//	const char[] datarep (const char[]);
 			//	const void * inbuf (const void *);
 			//	MPI_Aint insize (long);
@@ -14887,182 +15483,190 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int outcount (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	int retval (int);
+			args_MPI_Unpack_external_t* args = (args_MPI_Unpack_external_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "datarep");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Unpack_external.datarep);
+			msgpack_encode_uint(buf, (uintptr_t)args->datarep);
 
 			msgpack_encode_string_ext(buf, "inbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Unpack_external.inbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->inbuf);
 
 			msgpack_encode_string_ext(buf, "insize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Unpack_external.insize);
+			msgpack_encode_int(buf, args->insize);
 
 			msgpack_encode_string_ext(buf, "position");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Unpack_external.position);
+			msgpack_encode_uint(buf, (uintptr_t)args->position);
 
 			msgpack_encode_string_ext(buf, "outbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Unpack_external.outbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->outbuf);
 
 			msgpack_encode_string_ext(buf, "outcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Unpack_external.outcount);
+			msgpack_encode_int(buf, args->outcount);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Unpack_external.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Unpack_external.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Mprobe
-		case MPI_API_ID_MPI_Mprobe :
+		case MPI_API_ID_MPI_Mprobe : {
 			//	int source (int);
 			//	int tag (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Message * message (struct mpi_message_t **);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Mprobe_t* args = (args_MPI_Mprobe_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "source");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Mprobe.source);
+			msgpack_encode_int(buf, args->source);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Mprobe.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Mprobe.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "message");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Message *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Mprobe.message);
+			msgpack_encode_uint(buf, (uintptr_t)args->message);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Mprobe.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Mprobe.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Add_error_code
-		case MPI_API_ID_MPI_Add_error_code :
+		case MPI_API_ID_MPI_Add_error_code : {
 			//	int errorclass (int);
 			//	int * errorcode (int *);
 			//	int retval (int);
+			args_MPI_Add_error_code_t* args = (args_MPI_Add_error_code_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "errorclass");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Add_error_code.errorclass);
+			msgpack_encode_int(buf, args->errorclass);
 
 			msgpack_encode_string_ext(buf, "errorcode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Add_error_code.errorcode);
+			msgpack_encode_uint(buf, (uintptr_t)args->errorcode);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Add_error_code.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_delete_attr
-		case MPI_API_ID_MPI_Win_delete_attr :
+		case MPI_API_ID_MPI_Win_delete_attr : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int win_keyval (int);
 			//	int retval (int);
+			args_MPI_Win_delete_attr_t* args = (args_MPI_Win_delete_attr_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_delete_attr.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "win_keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_delete_attr.win_keyval);
+			msgpack_encode_int(buf, args->win_keyval);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_delete_attr.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_read_at_all
-		case MPI_API_ID_MPI_File_read_at_all :
+		case MPI_API_ID_MPI_File_read_at_all : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset offset (long long);
 			//	void * buf (void *);
@@ -15070,91 +15674,95 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_read_at_all_t* args = (args_MPI_File_read_at_all_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_at_all.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_at_all.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_at_all.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_at_all.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_at_all.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_at_all.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_at_all.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Pready
-		case MPI_API_ID_MPI_Pready :
+		case MPI_API_ID_MPI_Pready : {
 			//	int partitions (int);
 			//	MPI_Request request (struct mpi_request_t *);
 			//	int retval (int);
+			args_MPI_Pready_t* args = (args_MPI_Pready_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "partitions");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pready.partitions);
+			msgpack_encode_int(buf, args->partitions);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Pready.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Pready.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Iscatterv
-		case MPI_API_ID_MPI_Iscatterv :
+		case MPI_API_ID_MPI_Iscatterv : {
 			//	const void * sendbuf (const void *);
 			//	const int[] sendcounts (const int[]);
 			//	const int[] displs (const int[]);
@@ -15166,149 +15774,155 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Iscatterv_t* args = (args_MPI_Iscatterv_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscatterv.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscatterv.sendcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendcounts);
 
 			msgpack_encode_string_ext(buf, "displs");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscatterv.displs);
+			msgpack_encode_uint(buf, (uintptr_t)args->displs);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscatterv.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscatterv.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iscatterv.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscatterv.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iscatterv.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscatterv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscatterv.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iscatterv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_detach
-		case MPI_API_ID_MPI_Win_detach :
+		case MPI_API_ID_MPI_Win_detach : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	const void * base (const void *);
 			//	int retval (int);
+			args_MPI_Win_detach_t* args = (args_MPI_Win_detach_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_detach.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "base");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_detach.base);
+			msgpack_encode_uint(buf, (uintptr_t)args->base);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_detach.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_call_errhandler
-		case MPI_API_ID_MPI_File_call_errhandler :
+		case MPI_API_ID_MPI_File_call_errhandler : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	int errorcode (int);
 			//	int retval (int);
+			args_MPI_File_call_errhandler_t* args = (args_MPI_File_call_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_call_errhandler.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "errorcode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_call_errhandler.errorcode);
+			msgpack_encode_int(buf, args->errorcode);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_call_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Iallreduce
-		case MPI_API_ID_MPI_Iallreduce :
+		case MPI_API_ID_MPI_Iallreduce : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	int count (int);
@@ -15317,396 +15931,414 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Iallreduce_t* args = (args_MPI_Iallreduce_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallreduce.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallreduce.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iallreduce.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallreduce.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallreduce.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallreduce.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallreduce.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iallreduce.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Get_processor_name
-		case MPI_API_ID_MPI_Get_processor_name :
+		case MPI_API_ID_MPI_Get_processor_name : {
 			//	char * name (char *);
 			//	int * resultlen (int *);
 			//	int retval (int);
+			args_MPI_Get_processor_name_t* args = (args_MPI_Get_processor_name_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_processor_name.name);
+			msgpack_encode_uint(buf, (uintptr_t)args->name);
 
 			msgpack_encode_string_ext(buf, "resultlen");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_processor_name.resultlen);
+			msgpack_encode_uint(buf, (uintptr_t)args->resultlen);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get_processor_name.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Start
-		case MPI_API_ID_MPI_Start :
+		case MPI_API_ID_MPI_Start : {
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Start_t* args = (args_MPI_Start_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Start.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Start.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_get_type_extent
-		case MPI_API_ID_MPI_File_get_type_extent :
+		case MPI_API_ID_MPI_File_get_type_extent : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Aint * extent (long*);
 			//	int retval (int);
+			args_MPI_File_get_type_extent_t* args = (args_MPI_File_get_type_extent_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_type_extent.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_type_extent.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "extent");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_type_extent.extent);
+			msgpack_encode_uint(buf, (uintptr_t)args->extent);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_get_type_extent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_read_shared
-		case MPI_API_ID_MPI_File_read_shared :
+		case MPI_API_ID_MPI_File_read_shared : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_read_shared_t* args = (args_MPI_File_read_shared_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_shared.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_shared.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_shared.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_shared.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_shared.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_shared.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_open
-		case MPI_API_ID_MPI_File_open :
+		case MPI_API_ID_MPI_File_open : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	const char * filename (const char *);
 			//	int amode (int);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_File * fh (struct mpi_file_t **);
 			//	int retval (int);
+			args_MPI_File_open_t* args = (args_MPI_File_open_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_open.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "filename");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_open.filename);
+			msgpack_encode_uint(buf, (uintptr_t)args->filename);
 
 			msgpack_encode_string_ext(buf, "amode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_open.amode);
+			msgpack_encode_int(buf, args->amode);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_open.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_open.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_open.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_get_amode
-		case MPI_API_ID_MPI_File_get_amode :
+		case MPI_API_ID_MPI_File_get_amode : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	int * amode (int *);
 			//	int retval (int);
+			args_MPI_File_get_amode_t* args = (args_MPI_File_get_amode_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_amode.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "amode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_amode.amode);
+			msgpack_encode_uint(buf, (uintptr_t)args->amode);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_get_amode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_create_hindexed_block
-		case MPI_API_ID_MPI_Type_create_hindexed_block :
+		case MPI_API_ID_MPI_Type_create_hindexed_block : {
 			//	int count (int);
 			//	int blocklength (int);
 			//	const MPI_Aint[] array_of_displacements (const long[]);
 			//	MPI_Datatype oldtype (struct mpi_datatype_t *);
 			//	MPI_Datatype * newtype (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_create_hindexed_block_t* args = (args_MPI_Type_create_hindexed_block_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_hindexed_block.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "blocklength");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_hindexed_block.blocklength);
+			msgpack_encode_int(buf, args->blocklength);
 
 			msgpack_encode_string_ext(buf, "array_of_displacements");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Aint[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_hindexed_block.array_of_displacements);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_displacements);
 
 			msgpack_encode_string_ext(buf, "oldtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_hindexed_block.oldtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->oldtype);
 
 			msgpack_encode_string_ext(buf, "newtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_hindexed_block.newtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->newtype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_hindexed_block.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Cart_coords
-		case MPI_API_ID_MPI_Cart_coords :
+		case MPI_API_ID_MPI_Cart_coords : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int rank (int);
 			//	int maxdims (int);
 			//	int[] coords (int[]);
 			//	int retval (int);
+			args_MPI_Cart_coords_t* args = (args_MPI_Cart_coords_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_coords.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cart_coords.rank);
+			msgpack_encode_int(buf, args->rank);
 
 			msgpack_encode_string_ext(buf, "maxdims");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cart_coords.maxdims);
+			msgpack_encode_int(buf, args->maxdims);
 
 			msgpack_encode_string_ext(buf, "coords");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_coords.coords);
+			msgpack_encode_uint(buf, (uintptr_t)args->coords);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cart_coords.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Issend
-		case MPI_API_ID_MPI_Issend :
+		case MPI_API_ID_MPI_Issend : {
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -15715,144 +16347,150 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Issend_t* args = (args_MPI_Issend_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Issend.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Issend.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Issend.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Issend.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Issend.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Issend.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Issend.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Issend.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Graph_get
-		case MPI_API_ID_MPI_Graph_get :
+		case MPI_API_ID_MPI_Graph_get : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int maxindex (int);
 			//	int maxedges (int);
 			//	int[] index (int[]);
 			//	int[] edges (int[]);
 			//	int retval (int);
+			args_MPI_Graph_get_t* args = (args_MPI_Graph_get_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graph_get.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "maxindex");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Graph_get.maxindex);
+			msgpack_encode_int(buf, args->maxindex);
 
 			msgpack_encode_string_ext(buf, "maxedges");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Graph_get.maxedges);
+			msgpack_encode_int(buf, args->maxedges);
 
 			msgpack_encode_string_ext(buf, "index");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graph_get.index);
+			msgpack_encode_uint(buf, (uintptr_t)args->index);
 
 			msgpack_encode_string_ext(buf, "edges");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graph_get.edges);
+			msgpack_encode_uint(buf, (uintptr_t)args->edges);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Graph_get.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_free_keyval
-		case MPI_API_ID_MPI_Win_free_keyval :
+		case MPI_API_ID_MPI_Win_free_keyval : {
 			//	int * win_keyval (int *);
 			//	int retval (int);
+			args_MPI_Win_free_keyval_t* args = (args_MPI_Win_free_keyval_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "win_keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_free_keyval.win_keyval);
+			msgpack_encode_uint(buf, (uintptr_t)args->win_keyval);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_free_keyval.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ineighbor_alltoallw
-		case MPI_API_ID_MPI_Ineighbor_alltoallw :
+		case MPI_API_ID_MPI_Ineighbor_alltoallw : {
 			//	const void * sendbuf (const void *);
 			//	const int[] sendcounts (const int[]);
 			//	const MPI_Aint[] sdispls (const long[]);
@@ -15864,119 +16502,123 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Ineighbor_alltoallw_t* args = (args_MPI_Ineighbor_alltoallw_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallw.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallw.sendcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendcounts);
 
 			msgpack_encode_string_ext(buf, "sdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Aint[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallw.sdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->sdispls);
 
 			msgpack_encode_string_ext(buf, "sendtypes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Datatype[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallw.sendtypes);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtypes);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallw.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallw.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "rdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Aint[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallw.rdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->rdispls);
 
 			msgpack_encode_string_ext(buf, "recvtypes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Datatype[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallw.recvtypes);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtypes);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallw.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallw.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ineighbor_alltoallw.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_set_info
-		case MPI_API_ID_MPI_File_set_info :
+		case MPI_API_ID_MPI_File_set_info : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	int retval (int);
+			args_MPI_File_set_info_t* args = (args_MPI_File_set_info_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_set_info.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_set_info.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_set_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_iread_at
-		case MPI_API_ID_MPI_File_iread_at :
+		case MPI_API_ID_MPI_File_iread_at : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset offset (long long);
 			//	void * buf (void *);
@@ -15984,297 +16626,311 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_File_iread_at_t* args = (args_MPI_File_iread_at_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_at.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iread_at.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_at.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iread_at.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_at.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iread_at.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iread_at.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Attr_delete
-		case MPI_API_ID_MPI_Attr_delete :
+		case MPI_API_ID_MPI_Attr_delete : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int keyval (int);
 			//	int retval (int);
+			args_MPI_Attr_delete_t* args = (args_MPI_Attr_delete_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Attr_delete.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Attr_delete.keyval);
+			msgpack_encode_int(buf, args->keyval);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Attr_delete.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Session_get_info
-		case MPI_API_ID_MPI_Session_get_info :
+		case MPI_API_ID_MPI_Session_get_info : {
 			//	MPI_Session session (struct mpi_instance_t *);
 			//	MPI_Info * info_used (struct mpi_info_t **);
 			//	int retval (int);
+			args_MPI_Session_get_info_t* args = (args_MPI_Session_get_info_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "session");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Session");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_get_info.session);
+			msgpack_encode_uint(buf, (uintptr_t)args->session);
 
 			msgpack_encode_string_ext(buf, "info_used");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_get_info.info_used);
+			msgpack_encode_uint(buf, (uintptr_t)args->info_used);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Session_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Session_get_nth_pset
-		case MPI_API_ID_MPI_Session_get_nth_pset :
+		case MPI_API_ID_MPI_Session_get_nth_pset : {
 			//	MPI_Session session (struct mpi_instance_t *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	int n (int);
 			//	int * len (int *);
 			//	char * pset_name (char *);
 			//	int retval (int);
+			args_MPI_Session_get_nth_pset_t* args = (args_MPI_Session_get_nth_pset_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "session");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Session");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_get_nth_pset.session);
+			msgpack_encode_uint(buf, (uintptr_t)args->session);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_get_nth_pset.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "n");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Session_get_nth_pset.n);
+			msgpack_encode_int(buf, args->n);
 
 			msgpack_encode_string_ext(buf, "len");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_get_nth_pset.len);
+			msgpack_encode_uint(buf, (uintptr_t)args->len);
 
 			msgpack_encode_string_ext(buf, "pset_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_get_nth_pset.pset_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->pset_name);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Session_get_nth_pset.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_create_keyval
-		case MPI_API_ID_MPI_Type_create_keyval :
+		case MPI_API_ID_MPI_Type_create_keyval : {
 			//	MPI_Type_copy_attr_function * type_copy_attr_fn (int (*)(struct mpi_datatype_t *, int, void *, void *, void *, int *));
 			//	MPI_Type_delete_attr_function * type_delete_attr_fn (int (*)(struct mpi_datatype_t *, int, void *, void *));
 			//	int * type_keyval (int *);
 			//	void * extra_state (void *);
 			//	int retval (int);
+			args_MPI_Type_create_keyval_t* args = (args_MPI_Type_create_keyval_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "type_copy_attr_fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Type_copy_attr_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_keyval.type_copy_attr_fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->type_copy_attr_fn);
 
 			msgpack_encode_string_ext(buf, "type_delete_attr_fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Type_delete_attr_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_keyval.type_delete_attr_fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->type_delete_attr_fn);
 
 			msgpack_encode_string_ext(buf, "type_keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_keyval.type_keyval);
+			msgpack_encode_uint(buf, (uintptr_t)args->type_keyval);
 
 			msgpack_encode_string_ext(buf, "extra_state");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_create_keyval.extra_state);
+			msgpack_encode_uint(buf, (uintptr_t)args->extra_state);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_create_keyval.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Attr_get
-		case MPI_API_ID_MPI_Attr_get :
+		case MPI_API_ID_MPI_Attr_get : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int keyval (int);
 			//	void * attribute_val (void *);
 			//	int * flag (int *);
 			//	int retval (int);
+			args_MPI_Attr_get_t* args = (args_MPI_Attr_get_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Attr_get.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Attr_get.keyval);
+			msgpack_encode_int(buf, args->keyval);
 
 			msgpack_encode_string_ext(buf, "attribute_val");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Attr_get.attribute_val);
+			msgpack_encode_uint(buf, (uintptr_t)args->attribute_val);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Attr_get.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Attr_get.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Add_error_string
-		case MPI_API_ID_MPI_Add_error_string :
+		case MPI_API_ID_MPI_Add_error_string : {
 			//	int errorcode (int);
 			//	const char * string (const char *);
 			//	int retval (int);
+			args_MPI_Add_error_string_t* args = (args_MPI_Add_error_string_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "errorcode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Add_error_string.errorcode);
+			msgpack_encode_int(buf, args->errorcode);
 
 			msgpack_encode_string_ext(buf, "string");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Add_error_string.string);
+			msgpack_encode_uint(buf, (uintptr_t)args->string);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Add_error_string.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ineighbor_alltoallv
-		case MPI_API_ID_MPI_Ineighbor_alltoallv :
+		case MPI_API_ID_MPI_Ineighbor_alltoallv : {
 			//	const void * sendbuf (const void *);
 			//	const int[] sendcounts (const int[]);
 			//	const int[] sdispls (const int[]);
@@ -16286,143 +16942,147 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Ineighbor_alltoallv_t* args = (args_MPI_Ineighbor_alltoallv_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallv.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallv.sendcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendcounts);
 
 			msgpack_encode_string_ext(buf, "sdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallv.sdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->sdispls);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallv.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallv.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallv.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "rdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallv.rdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->rdispls);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallv.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_alltoallv.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ineighbor_alltoallv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Imrecv
-		case MPI_API_ID_MPI_Imrecv :
+		case MPI_API_ID_MPI_Imrecv : {
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype type (struct mpi_datatype_t *);
 			//	MPI_Message * message (struct mpi_message_t **);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Imrecv_t* args = (args_MPI_Imrecv_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Imrecv.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Imrecv.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Imrecv.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "message");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Message *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Imrecv.message);
+			msgpack_encode_uint(buf, (uintptr_t)args->message);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Imrecv.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Imrecv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Alltoallw
-		case MPI_API_ID_MPI_Alltoallw :
+		case MPI_API_ID_MPI_Alltoallw : {
 			//	const void * sendbuf (const void *);
 			//	const int[] sendcounts (const int[]);
 			//	const int[] sdispls (const int[]);
@@ -16433,82 +17093,84 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	const MPI_Datatype[] recvtypes (const struct mpi_datatype_t *[]);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Alltoallw_t* args = (args_MPI_Alltoallw_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw.sendcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendcounts);
 
 			msgpack_encode_string_ext(buf, "sdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw.sdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->sdispls);
 
 			msgpack_encode_string_ext(buf, "sendtypes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Datatype[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw.sendtypes);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtypes);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "rdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw.rdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->rdispls);
 
 			msgpack_encode_string_ext(buf, "recvtypes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Datatype[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw.recvtypes);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtypes);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alltoallw.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Alltoallw.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Bcast_init
-		case MPI_API_ID_MPI_Bcast_init :
+		case MPI_API_ID_MPI_Bcast_init : {
 			//	void * buffer (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -16517,98 +17179,102 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Bcast_init_t* args = (args_MPI_Bcast_init_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "buffer");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Bcast_init.buffer);
+			msgpack_encode_uint(buf, (uintptr_t)args->buffer);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Bcast_init.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Bcast_init.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Bcast_init.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Bcast_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Bcast_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Bcast_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Bcast_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ibarrier
-		case MPI_API_ID_MPI_Ibarrier :
+		case MPI_API_ID_MPI_Ibarrier : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Ibarrier_t* args = (args_MPI_Ibarrier_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ibarrier.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ibarrier.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ibarrier.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_iwrite_at_all
-		case MPI_API_ID_MPI_File_iwrite_at_all :
+		case MPI_API_ID_MPI_File_iwrite_at_all : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset offset (long long);
 			//	const void * buf (const void *);
@@ -16616,183 +17282,191 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_File_iwrite_at_all_t* args = (args_MPI_File_iwrite_at_all_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_at_all.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iwrite_at_all.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_at_all.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iwrite_at_all.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_at_all.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_at_all.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iwrite_at_all.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_get_size
-		case MPI_API_ID_MPI_File_get_size :
+		case MPI_API_ID_MPI_File_get_size : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset * size (long long*);
 			//	int retval (int);
+			args_MPI_File_get_size_t* args = (args_MPI_File_get_size_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_size.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_size.size);
+			msgpack_encode_uint(buf, (uintptr_t)args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_get_size.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Barrier_init
-		case MPI_API_ID_MPI_Barrier_init :
+		case MPI_API_ID_MPI_Barrier_init : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Barrier_init_t* args = (args_MPI_Barrier_init_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Barrier_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Barrier_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Barrier_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Barrier_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_get_view
-		case MPI_API_ID_MPI_File_get_view :
+		case MPI_API_ID_MPI_File_get_view : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset * disp (long long*);
 			//	MPI_Datatype * etype (struct mpi_datatype_t **);
 			//	MPI_Datatype * filetype (struct mpi_datatype_t **);
 			//	char * datarep (char *);
 			//	int retval (int);
+			args_MPI_File_get_view_t* args = (args_MPI_File_get_view_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_view.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "disp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_view.disp);
+			msgpack_encode_uint(buf, (uintptr_t)args->disp);
 
 			msgpack_encode_string_ext(buf, "etype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_view.etype);
+			msgpack_encode_uint(buf, (uintptr_t)args->etype);
 
 			msgpack_encode_string_ext(buf, "filetype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_view.filetype);
+			msgpack_encode_uint(buf, (uintptr_t)args->filetype);
 
 			msgpack_encode_string_ext(buf, "datarep");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_view.datarep);
+			msgpack_encode_uint(buf, (uintptr_t)args->datarep);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_get_view.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_allocate_shared
-		case MPI_API_ID_MPI_Win_allocate_shared :
+		case MPI_API_ID_MPI_Win_allocate_shared : {
 			//	MPI_Aint size (long);
 			//	int disp_unit (int);
 			//	MPI_Info info (struct mpi_info_t *);
@@ -16800,271 +17474,287 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	void * baseptr (void *);
 			//	MPI_Win * win (struct mpi_win_t **);
 			//	int retval (int);
+			args_MPI_Win_allocate_shared_t* args = (args_MPI_Win_allocate_shared_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_allocate_shared.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "disp_unit");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_allocate_shared.disp_unit);
+			msgpack_encode_int(buf, args->disp_unit);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_allocate_shared.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_allocate_shared.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "baseptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_allocate_shared.baseptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->baseptr);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_allocate_shared.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_allocate_shared.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Close_port
-		case MPI_API_ID_MPI_Close_port :
+		case MPI_API_ID_MPI_Close_port : {
 			//	const char * port_name (const char *);
 			//	int retval (int);
+			args_MPI_Close_port_t* args = (args_MPI_Close_port_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "port_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Close_port.port_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->port_name);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Close_port.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Finalized
-		case MPI_API_ID_MPI_Finalized :
+		case MPI_API_ID_MPI_Finalized : {
 			//	int * flag (int *);
 			//	int retval (int);
+			args_MPI_Finalized_t* args = (args_MPI_Finalized_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Finalized.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Finalized.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Info_dup
-		case MPI_API_ID_MPI_Info_dup :
+		case MPI_API_ID_MPI_Info_dup : {
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Info * newinfo (struct mpi_info_t **);
 			//	int retval (int);
+			args_MPI_Info_dup_t* args = (args_MPI_Info_dup_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_dup.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "newinfo");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_dup.newinfo);
+			msgpack_encode_uint(buf, (uintptr_t)args->newinfo);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_dup.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Info_get
-		case MPI_API_ID_MPI_Info_get :
+		case MPI_API_ID_MPI_Info_get : {
 			//	MPI_Info info (struct mpi_info_t *);
 			//	const char * key (const char *);
 			//	int valuelen (int);
 			//	char * value (char *);
 			//	int * flag (int *);
 			//	int retval (int);
+			args_MPI_Info_get_t* args = (args_MPI_Info_get_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "key");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get.key);
+			msgpack_encode_uint(buf, (uintptr_t)args->key);
 
 			msgpack_encode_string_ext(buf, "valuelen");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_get.valuelen);
+			msgpack_encode_int(buf, args->valuelen);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_get.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_get.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Get_library_version
-		case MPI_API_ID_MPI_Get_library_version :
+		case MPI_API_ID_MPI_Get_library_version : {
 			//	char * version (char *);
 			//	int * resultlen (int *);
 			//	int retval (int);
+			args_MPI_Get_library_version_t* args = (args_MPI_Get_library_version_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "version");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_library_version.version);
+			msgpack_encode_uint(buf, (uintptr_t)args->version);
 
 			msgpack_encode_string_ext(buf, "resultlen");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Get_library_version.resultlen);
+			msgpack_encode_uint(buf, (uintptr_t)args->resultlen);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Get_library_version.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Info_create
-		case MPI_API_ID_MPI_Info_create :
+		case MPI_API_ID_MPI_Info_create : {
 			//	MPI_Info * info (struct mpi_info_t **);
 			//	int retval (int);
+			args_MPI_Info_create_t* args = (args_MPI_Info_create_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_create.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_fence
-		case MPI_API_ID_MPI_Win_fence :
+		case MPI_API_ID_MPI_Win_fence : {
 			//	int mpi_assert (int);
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Win_fence_t* args = (args_MPI_Win_fence_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "mpi_assert");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_fence.mpi_assert);
+			msgpack_encode_int(buf, args->mpi_assert);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_fence.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_fence.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Iallgather
-		case MPI_API_ID_MPI_Iallgather :
+		case MPI_API_ID_MPI_Iallgather : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -17074,75 +17764,77 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Iallgather_t* args = (args_MPI_Iallgather_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallgather.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iallgather.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallgather.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallgather.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iallgather.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallgather.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallgather.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iallgather.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iallgather.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_spawn_multiple
-		case MPI_API_ID_MPI_Comm_spawn_multiple :
+		case MPI_API_ID_MPI_Comm_spawn_multiple : {
 			//	int count (int);
 			//	char *[] array_of_commands (char *[]);
 			//	char **[] array_of_argv (char **[]);
@@ -17153,82 +17845,84 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm * intercomm (struct mpi_communicator_t **);
 			//	int[] array_of_errcodes (int[]);
 			//	int retval (int);
+			args_MPI_Comm_spawn_multiple_t* args = (args_MPI_Comm_spawn_multiple_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_spawn_multiple.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "array_of_commands");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_spawn_multiple.array_of_commands);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_commands);
 
 			msgpack_encode_string_ext(buf, "array_of_argv");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char **[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_spawn_multiple.array_of_argv);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_argv);
 
 			msgpack_encode_string_ext(buf, "array_of_maxprocs");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_spawn_multiple.array_of_maxprocs);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_maxprocs);
 
 			msgpack_encode_string_ext(buf, "array_of_info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Info[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_spawn_multiple.array_of_info);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_info);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_spawn_multiple.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_spawn_multiple.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "intercomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_spawn_multiple.intercomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->intercomm);
 
 			msgpack_encode_string_ext(buf, "array_of_errcodes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_spawn_multiple.array_of_errcodes);
+			msgpack_encode_uint(buf, (uintptr_t)args->array_of_errcodes);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_spawn_multiple.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Precv_init
-		case MPI_API_ID_MPI_Precv_init :
+		case MPI_API_ID_MPI_Precv_init : {
 			//	void * buf (void *);
 			//	int partitions (int);
 			//	MPI_Count count (long long);
@@ -17239,112 +17933,116 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Precv_init_t* args = (args_MPI_Precv_init_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Precv_init.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "partitions");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Precv_init.partitions);
+			msgpack_encode_int(buf, args->partitions);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Count");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Precv_init.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Precv_init.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "source");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Precv_init.source);
+			msgpack_encode_int(buf, args->source);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Precv_init.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Precv_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Precv_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Precv_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Precv_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_set_errhandler
-		case MPI_API_ID_MPI_Comm_set_errhandler :
+		case MPI_API_ID_MPI_Comm_set_errhandler : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Errhandler errhandler (struct mpi_errhandler_t *);
 			//	int retval (int);
+			args_MPI_Comm_set_errhandler_t* args = (args_MPI_Comm_set_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_set_errhandler.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_set_errhandler.errhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->errhandler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_set_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_set_view
-		case MPI_API_ID_MPI_File_set_view :
+		case MPI_API_ID_MPI_File_set_view : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset disp (long long);
 			//	MPI_Datatype etype (struct mpi_datatype_t *);
@@ -17352,61 +18050,63 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	const char * datarep (const char *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	int retval (int);
+			args_MPI_File_set_view_t* args = (args_MPI_File_set_view_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_set_view.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "disp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_set_view.disp);
+			msgpack_encode_int(buf, args->disp);
 
 			msgpack_encode_string_ext(buf, "etype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_set_view.etype);
+			msgpack_encode_uint(buf, (uintptr_t)args->etype);
 
 			msgpack_encode_string_ext(buf, "filetype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_set_view.filetype);
+			msgpack_encode_uint(buf, (uintptr_t)args->filetype);
 
 			msgpack_encode_string_ext(buf, "datarep");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_set_view.datarep);
+			msgpack_encode_uint(buf, (uintptr_t)args->datarep);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_set_view.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_set_view.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Bsend
-		case MPI_API_ID_MPI_Bsend :
+		case MPI_API_ID_MPI_Bsend : {
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
@@ -17414,267 +18114,279 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int tag (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Bsend_t* args = (args_MPI_Bsend_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Bsend.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Bsend.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Bsend.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Bsend.dest);
+			msgpack_encode_int(buf, args->dest);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Bsend.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Bsend.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Bsend.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_size
-		case MPI_API_ID_MPI_Type_size :
+		case MPI_API_ID_MPI_Type_size : {
 			//	MPI_Datatype type (struct mpi_datatype_t *);
 			//	int * size (int *);
 			//	int retval (int);
+			args_MPI_Type_size_t* args = (args_MPI_Type_size_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_size.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_size.size);
+			msgpack_encode_uint(buf, (uintptr_t)args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_size.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_get_attr
-		case MPI_API_ID_MPI_Type_get_attr :
+		case MPI_API_ID_MPI_Type_get_attr : {
 			//	MPI_Datatype type (struct mpi_datatype_t *);
 			//	int type_keyval (int);
 			//	void * attribute_val (void *);
 			//	int * flag (int *);
 			//	int retval (int);
+			args_MPI_Type_get_attr_t* args = (args_MPI_Type_get_attr_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_attr.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "type_keyval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_get_attr.type_keyval);
+			msgpack_encode_int(buf, args->type_keyval);
 
 			msgpack_encode_string_ext(buf, "attribute_val");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_attr.attribute_val);
+			msgpack_encode_uint(buf, (uintptr_t)args->attribute_val);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_attr.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_get_attr.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_write_ordered
-		case MPI_API_ID_MPI_File_write_ordered :
+		case MPI_API_ID_MPI_File_write_ordered : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Status * status (struct opaque **);
 			//	int retval (int);
+			args_MPI_File_write_ordered_t* args = (args_MPI_File_write_ordered_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_ordered.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_ordered.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_ordered.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_ordered.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_write_ordered.status);
+			msgpack_encode_uint(buf, (uintptr_t)args->status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_write_ordered.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_get_info
-		case MPI_API_ID_MPI_File_get_info :
+		case MPI_API_ID_MPI_File_get_info : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Info * info_used (struct mpi_info_t **);
 			//	int retval (int);
+			args_MPI_File_get_info_t* args = (args_MPI_File_get_info_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_info.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "info_used");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_get_info.info_used);
+			msgpack_encode_uint(buf, (uintptr_t)args->info_used);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Graph_neighbors
-		case MPI_API_ID_MPI_Graph_neighbors :
+		case MPI_API_ID_MPI_Graph_neighbors : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int rank (int);
 			//	int maxneighbors (int);
 			//	int[] neighbors (int[]);
 			//	int retval (int);
+			args_MPI_Graph_neighbors_t* args = (args_MPI_Graph_neighbors_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graph_neighbors.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Graph_neighbors.rank);
+			msgpack_encode_int(buf, args->rank);
 
 			msgpack_encode_string_ext(buf, "maxneighbors");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Graph_neighbors.maxneighbors);
+			msgpack_encode_int(buf, args->maxneighbors);
 
 			msgpack_encode_string_ext(buf, "neighbors");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graph_neighbors.neighbors);
+			msgpack_encode_uint(buf, (uintptr_t)args->neighbors);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Graph_neighbors.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Igatherv
-		case MPI_API_ID_MPI_Igatherv :
+		case MPI_API_ID_MPI_Igatherv : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -17686,263 +18398,275 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Igatherv_t* args = (args_MPI_Igatherv_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Igatherv.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Igatherv.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Igatherv.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Igatherv.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Igatherv.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "displs");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Igatherv.displs);
+			msgpack_encode_uint(buf, (uintptr_t)args->displs);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Igatherv.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Igatherv.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Igatherv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Igatherv.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Igatherv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Info_delete
-		case MPI_API_ID_MPI_Info_delete :
+		case MPI_API_ID_MPI_Info_delete : {
 			//	MPI_Info info (struct mpi_info_t *);
 			//	const char * key (const char *);
 			//	int retval (int);
+			args_MPI_Info_delete_t* args = (args_MPI_Info_delete_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_delete.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "key");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_delete.key);
+			msgpack_encode_uint(buf, (uintptr_t)args->key);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_delete.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Alloc_mem
-		case MPI_API_ID_MPI_Alloc_mem :
+		case MPI_API_ID_MPI_Alloc_mem : {
 			//	MPI_Aint size (long);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	void * baseptr (void *);
 			//	int retval (int);
+			args_MPI_Alloc_mem_t* args = (args_MPI_Alloc_mem_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Alloc_mem.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alloc_mem.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "baseptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Alloc_mem.baseptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->baseptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Alloc_mem.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_get_errhandler
-		case MPI_API_ID_MPI_Comm_get_errhandler :
+		case MPI_API_ID_MPI_Comm_get_errhandler : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Errhandler * erhandler (struct mpi_errhandler_t **);
 			//	int retval (int);
+			args_MPI_Comm_get_errhandler_t* args = (args_MPI_Comm_get_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_get_errhandler.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "erhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_get_errhandler.erhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->erhandler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_get_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Session_init
-		case MPI_API_ID_MPI_Session_init :
+		case MPI_API_ID_MPI_Session_init : {
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Errhandler errhandler (struct mpi_errhandler_t *);
 			//	MPI_Session * session (struct mpi_instance_t **);
 			//	int retval (int);
+			args_MPI_Session_init_t* args = (args_MPI_Session_init_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_init.errhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->errhandler);
 
 			msgpack_encode_string_ext(buf, "session");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Session *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_init.session);
+			msgpack_encode_uint(buf, (uintptr_t)args->session);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Session_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_post
-		case MPI_API_ID_MPI_Win_post :
+		case MPI_API_ID_MPI_Win_post : {
 			//	MPI_Group group (struct mpi_group_t *);
 			//	int mpi_assert (int);
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Win_post_t* args = (args_MPI_Win_post_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_post.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "mpi_assert");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_post.mpi_assert);
+			msgpack_encode_int(buf, args->mpi_assert);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_post.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_post.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Intercomm_create
-		case MPI_API_ID_MPI_Intercomm_create :
+		case MPI_API_ID_MPI_Intercomm_create : {
 			//	MPI_Comm local_comm (struct mpi_communicator_t *);
 			//	int local_leader (int);
 			//	MPI_Comm bridge_comm (struct mpi_communicator_t *);
@@ -17950,107 +18674,111 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int tag (int);
 			//	MPI_Comm * newintercomm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Intercomm_create_t* args = (args_MPI_Intercomm_create_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "local_comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Intercomm_create.local_comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->local_comm);
 
 			msgpack_encode_string_ext(buf, "local_leader");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Intercomm_create.local_leader);
+			msgpack_encode_int(buf, args->local_leader);
 
 			msgpack_encode_string_ext(buf, "bridge_comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Intercomm_create.bridge_comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->bridge_comm);
 
 			msgpack_encode_string_ext(buf, "remote_leader");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Intercomm_create.remote_leader);
+			msgpack_encode_int(buf, args->remote_leader);
 
 			msgpack_encode_string_ext(buf, "tag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Intercomm_create.tag);
+			msgpack_encode_int(buf, args->tag);
 
 			msgpack_encode_string_ext(buf, "newintercomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Intercomm_create.newintercomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->newintercomm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Intercomm_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_read_all_begin
-		case MPI_API_ID_MPI_File_read_all_begin :
+		case MPI_API_ID_MPI_File_read_all_begin : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	int retval (int);
+			args_MPI_File_read_all_begin_t* args = (args_MPI_File_read_all_begin_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_all_begin.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_all_begin.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_all_begin.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_all_begin.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_all_begin.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ialltoallv
-		case MPI_API_ID_MPI_Ialltoallv :
+		case MPI_API_ID_MPI_Ialltoallv : {
 			//	const void * sendbuf (const void *);
 			//	const int[] sendcounts (const int[]);
 			//	const int[] sdispls (const int[]);
@@ -18062,195 +18790,203 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Ialltoallv_t* args = (args_MPI_Ialltoallv_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallv.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallv.sendcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendcounts);
 
 			msgpack_encode_string_ext(buf, "sdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallv.sdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->sdispls);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallv.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallv.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallv.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "rdispls");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallv.rdispls);
+			msgpack_encode_uint(buf, (uintptr_t)args->rdispls);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallv.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoallv.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ialltoallv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_delete
-		case MPI_API_ID_MPI_File_delete :
+		case MPI_API_ID_MPI_File_delete : {
 			//	const char * filename (const char *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	int retval (int);
+			args_MPI_File_delete_t* args = (args_MPI_File_delete_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "filename");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_delete.filename);
+			msgpack_encode_uint(buf, (uintptr_t)args->filename);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_delete.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_delete.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Dims_create
-		case MPI_API_ID_MPI_Dims_create :
+		case MPI_API_ID_MPI_Dims_create : {
 			//	int nnodes (int);
 			//	int ndims (int);
 			//	int[] dims (int[]);
 			//	int retval (int);
+			args_MPI_Dims_create_t* args = (args_MPI_Dims_create_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "nnodes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Dims_create.nnodes);
+			msgpack_encode_int(buf, args->nnodes);
 
 			msgpack_encode_string_ext(buf, "ndims");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Dims_create.ndims);
+			msgpack_encode_int(buf, args->ndims);
 
 			msgpack_encode_string_ext(buf, "dims");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dims_create.dims);
+			msgpack_encode_uint(buf, (uintptr_t)args->dims);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Dims_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Cart_sub
-		case MPI_API_ID_MPI_Cart_sub :
+		case MPI_API_ID_MPI_Cart_sub : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	const int[] remain_dims (const int[]);
 			//	MPI_Comm * new_comm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Cart_sub_t* args = (args_MPI_Cart_sub_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_sub.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "remain_dims");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_sub.remain_dims);
+			msgpack_encode_uint(buf, (uintptr_t)args->remain_dims);
 
 			msgpack_encode_string_ext(buf, "new_comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Cart_sub.new_comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->new_comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Cart_sub.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_allocate
-		case MPI_API_ID_MPI_Win_allocate :
+		case MPI_API_ID_MPI_Win_allocate : {
 			//	MPI_Aint size (long);
 			//	int disp_unit (int);
 			//	MPI_Info info (struct mpi_info_t *);
@@ -18258,197 +18994,207 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	void * baseptr (void *);
 			//	MPI_Win * win (struct mpi_win_t **);
 			//	int retval (int);
+			args_MPI_Win_allocate_t* args = (args_MPI_Win_allocate_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_allocate.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "disp_unit");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_allocate.disp_unit);
+			msgpack_encode_int(buf, args->disp_unit);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_allocate.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_allocate.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "baseptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_allocate.baseptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->baseptr);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_allocate.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_allocate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Session_get_errhandler
-		case MPI_API_ID_MPI_Session_get_errhandler :
+		case MPI_API_ID_MPI_Session_get_errhandler : {
 			//	MPI_Session session (struct mpi_instance_t *);
 			//	MPI_Errhandler * erhandler (struct mpi_errhandler_t **);
 			//	int retval (int);
+			args_MPI_Session_get_errhandler_t* args = (args_MPI_Session_get_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "session");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Session");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_get_errhandler.session);
+			msgpack_encode_uint(buf, (uintptr_t)args->session);
 
 			msgpack_encode_string_ext(buf, "erhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_get_errhandler.erhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->erhandler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Session_get_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Parrived
-		case MPI_API_ID_MPI_Parrived :
+		case MPI_API_ID_MPI_Parrived : {
 			//	MPI_Request request (struct mpi_request_t *);
 			//	int partition (int);
 			//	int * flag (int *);
 			//	int retval (int);
+			args_MPI_Parrived_t* args = (args_MPI_Parrived_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Parrived.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "partition");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Parrived.partition);
+			msgpack_encode_int(buf, args->partition);
 
 			msgpack_encode_string_ext(buf, "flag");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Parrived.flag);
+			msgpack_encode_uint(buf, (uintptr_t)args->flag);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Parrived.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Info_create_env
-		case MPI_API_ID_MPI_Info_create_env :
+		case MPI_API_ID_MPI_Info_create_env : {
 			//	int argc (int);
 			//	char *[] argv (char *[]);
 			//	MPI_Info * info (struct mpi_info_t **);
 			//	int retval (int);
+			args_MPI_Info_create_env_t* args = (args_MPI_Info_create_env_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "argc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_create_env.argc);
+			msgpack_encode_int(buf, args->argc);
 
 			msgpack_encode_string_ext(buf, "argv");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_create_env.argv);
+			msgpack_encode_uint(buf, (uintptr_t)args->argv);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_create_env.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_create_env.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_create_errhandler
-		case MPI_API_ID_MPI_File_create_errhandler :
+		case MPI_API_ID_MPI_File_create_errhandler : {
 			//	MPI_File_errhandler_function * function (void (*)(struct mpi_file_t * *, int *, ...));
 			//	MPI_Errhandler * errhandler (struct mpi_errhandler_t **);
 			//	int retval (int);
+			args_MPI_File_create_errhandler_t* args = (args_MPI_File_create_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "function");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File_errhandler_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_create_errhandler.function);
+			msgpack_encode_uint(buf, (uintptr_t)args->function);
 
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_create_errhandler.errhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->errhandler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_create_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ialltoall
-		case MPI_API_ID_MPI_Ialltoall :
+		case MPI_API_ID_MPI_Ialltoall : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -18458,75 +19204,77 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Ialltoall_t* args = (args_MPI_Ialltoall_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoall.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ialltoall.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoall.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoall.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ialltoall.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoall.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoall.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ialltoall.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ialltoall.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Raccumulate
-		case MPI_API_ID_MPI_Raccumulate :
+		case MPI_API_ID_MPI_Raccumulate : {
 			//	const void * origin_addr (const void *);
 			//	int origin_count (int);
 			//	MPI_Datatype origin_datatype (struct mpi_datatype_t *);
@@ -18538,211 +19286,219 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Win win (struct mpi_win_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Raccumulate_t* args = (args_MPI_Raccumulate_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "origin_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Raccumulate.origin_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_addr);
 
 			msgpack_encode_string_ext(buf, "origin_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Raccumulate.origin_count);
+			msgpack_encode_int(buf, args->origin_count);
 
 			msgpack_encode_string_ext(buf, "origin_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Raccumulate.origin_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->origin_datatype);
 
 			msgpack_encode_string_ext(buf, "target_rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Raccumulate.target_rank);
+			msgpack_encode_int(buf, args->target_rank);
 
 			msgpack_encode_string_ext(buf, "target_disp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Aint");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Raccumulate.target_disp);
+			msgpack_encode_int(buf, args->target_disp);
 
 			msgpack_encode_string_ext(buf, "target_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Raccumulate.target_count);
+			msgpack_encode_int(buf, args->target_count);
 
 			msgpack_encode_string_ext(buf, "target_datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Raccumulate.target_datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->target_datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Raccumulate.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Raccumulate.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Raccumulate.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Raccumulate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_size_x
-		case MPI_API_ID_MPI_Type_size_x :
+		case MPI_API_ID_MPI_Type_size_x : {
 			//	MPI_Datatype type (struct mpi_datatype_t *);
 			//	MPI_Count * size (long long*);
 			//	int retval (int);
+			args_MPI_Type_size_x_t* args = (args_MPI_Type_size_x_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_size_x.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Count *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_size_x.size);
+			msgpack_encode_uint(buf, (uintptr_t)args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_size_x.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_get_extent_x
-		case MPI_API_ID_MPI_Type_get_extent_x :
+		case MPI_API_ID_MPI_Type_get_extent_x : {
 			//	MPI_Datatype type (struct mpi_datatype_t *);
 			//	MPI_Count * lb (long long*);
 			//	MPI_Count * extent (long long*);
 			//	int retval (int);
+			args_MPI_Type_get_extent_x_t* args = (args_MPI_Type_get_extent_x_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_extent_x.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "lb");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Count *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_extent_x.lb);
+			msgpack_encode_uint(buf, (uintptr_t)args->lb);
 
 			msgpack_encode_string_ext(buf, "extent");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Count *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_get_extent_x.extent);
+			msgpack_encode_uint(buf, (uintptr_t)args->extent);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_get_extent_x.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_read_at_all_begin
-		case MPI_API_ID_MPI_File_read_at_all_begin :
+		case MPI_API_ID_MPI_File_read_at_all_begin : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	MPI_Offset offset (long long);
 			//	void * buf (void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	int retval (int);
+			args_MPI_File_read_at_all_begin_t* args = (args_MPI_File_read_at_all_begin_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_at_all_begin.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Offset");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_at_all_begin.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_at_all_begin.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_at_all_begin.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_read_at_all_begin.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_read_at_all_begin.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Dist_graph_create
-		case MPI_API_ID_MPI_Dist_graph_create :
+		case MPI_API_ID_MPI_Dist_graph_create : {
 			//	MPI_Comm comm_old (struct mpi_communicator_t *);
 			//	int n (int);
 			//	const int[] nodes (const int[]);
@@ -18753,112 +19509,116 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int reorder (int);
 			//	MPI_Comm * newcomm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Dist_graph_create_t* args = (args_MPI_Dist_graph_create_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "comm_old");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_create.comm_old);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm_old);
 
 			msgpack_encode_string_ext(buf, "n");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Dist_graph_create.n);
+			msgpack_encode_int(buf, args->n);
 
 			msgpack_encode_string_ext(buf, "nodes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_create.nodes);
+			msgpack_encode_uint(buf, (uintptr_t)args->nodes);
 
 			msgpack_encode_string_ext(buf, "degrees");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_create.degrees);
+			msgpack_encode_uint(buf, (uintptr_t)args->degrees);
 
 			msgpack_encode_string_ext(buf, "targets");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_create.targets);
+			msgpack_encode_uint(buf, (uintptr_t)args->targets);
 
 			msgpack_encode_string_ext(buf, "weights");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_create.weights);
+			msgpack_encode_uint(buf, (uintptr_t)args->weights);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_create.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "reorder");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Dist_graph_create.reorder);
+			msgpack_encode_int(buf, args->reorder);
 
 			msgpack_encode_string_ext(buf, "newcomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Dist_graph_create.newcomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->newcomm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Dist_graph_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_join
-		case MPI_API_ID_MPI_Comm_join :
+		case MPI_API_ID_MPI_Comm_join : {
 			//	int fd (int);
 			//	MPI_Comm * intercomm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Comm_join_t* args = (args_MPI_Comm_join_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "fd");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_join.fd);
+			msgpack_encode_int(buf, args->fd);
 
 			msgpack_encode_string_ext(buf, "intercomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_join.intercomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->intercomm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_join.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Gatherv_init
-		case MPI_API_ID_MPI_Gatherv_init :
+		case MPI_API_ID_MPI_Gatherv_init : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -18871,172 +19631,178 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Gatherv_init_t* args = (args_MPI_Gatherv_init_t*) func_args;
 			msgpack_encode_map(buf, 12);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Gatherv_init.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv_init.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv_init.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "displs");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv_init.displs);
+			msgpack_encode_uint(buf, (uintptr_t)args->displs);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv_init.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Gatherv_init.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gatherv_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Gatherv_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_sync
-		case MPI_API_ID_MPI_File_sync :
+		case MPI_API_ID_MPI_File_sync : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	int retval (int);
+			args_MPI_File_sync_t* args = (args_MPI_File_sync_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_sync.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_sync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_accept
-		case MPI_API_ID_MPI_Comm_accept :
+		case MPI_API_ID_MPI_Comm_accept : {
 			//	const char * port_name (const char *);
 			//	MPI_Info info (struct mpi_info_t *);
 			//	int root (int);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Comm * newcomm (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Comm_accept_t* args = (args_MPI_Comm_accept_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "port_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_accept.port_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->port_name);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_accept.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_accept.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_accept.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "newcomm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_accept.newcomm);
+			msgpack_encode_uint(buf, (uintptr_t)args->newcomm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_accept.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Ineighbor_allgather
-		case MPI_API_ID_MPI_Ineighbor_allgather :
+		case MPI_API_ID_MPI_Ineighbor_allgather : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -19046,189 +19812,197 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Ineighbor_allgather_t* args = (args_MPI_Ineighbor_allgather_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_allgather.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ineighbor_allgather.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_allgather.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_allgather.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ineighbor_allgather.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_allgather.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_allgather.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Ineighbor_allgather.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Ineighbor_allgather.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_dup
-		case MPI_API_ID_MPI_Type_dup :
+		case MPI_API_ID_MPI_Type_dup : {
 			//	MPI_Datatype type (struct mpi_datatype_t *);
 			//	MPI_Datatype * newtype (struct mpi_datatype_t **);
 			//	int retval (int);
+			args_MPI_Type_dup_t* args = (args_MPI_Type_dup_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_dup.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "newtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_dup.newtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->newtype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_dup.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_iwrite_shared
-		case MPI_API_ID_MPI_File_iwrite_shared :
+		case MPI_API_ID_MPI_File_iwrite_shared : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_File_iwrite_shared_t* args = (args_MPI_File_iwrite_shared_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_shared.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_shared.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iwrite_shared.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_shared.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite_shared.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iwrite_shared.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_get_errhandler
-		case MPI_API_ID_MPI_Win_get_errhandler :
+		case MPI_API_ID_MPI_Win_get_errhandler : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	MPI_Errhandler * errhandler (struct mpi_errhandler_t **);
 			//	int retval (int);
+			args_MPI_Win_get_errhandler_t* args = (args_MPI_Win_get_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_get_errhandler.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_get_errhandler.errhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->errhandler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_get_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Iscan
-		case MPI_API_ID_MPI_Iscan :
+		case MPI_API_ID_MPI_Iscan : {
 			//	const void * sendbuf (const void *);
 			//	void * recvbuf (void *);
 			//	int count (int);
@@ -19237,98 +20011,102 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Iscan_t* args = (args_MPI_Iscan_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscan.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscan.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iscan.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscan.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscan.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscan.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Iscan.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Iscan.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_flush
-		case MPI_API_ID_MPI_Win_flush :
+		case MPI_API_ID_MPI_Win_flush : {
 			//	int rank (int);
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Win_flush_t* args = (args_MPI_Win_flush_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "rank");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_flush.rank);
+			msgpack_encode_int(buf, args->rank);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_flush.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_flush.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Graph_create
-		case MPI_API_ID_MPI_Graph_create :
+		case MPI_API_ID_MPI_Graph_create : {
 			//	MPI_Comm comm_old (struct mpi_communicator_t *);
 			//	int nnodes (int);
 			//	const int[] index (const int[]);
@@ -19336,121 +20114,127 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	int reorder (int);
 			//	MPI_Comm * comm_graph (struct mpi_communicator_t **);
 			//	int retval (int);
+			args_MPI_Graph_create_t* args = (args_MPI_Graph_create_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "comm_old");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graph_create.comm_old);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm_old);
 
 			msgpack_encode_string_ext(buf, "nnodes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Graph_create.nnodes);
+			msgpack_encode_int(buf, args->nnodes);
 
 			msgpack_encode_string_ext(buf, "index");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graph_create.index);
+			msgpack_encode_uint(buf, (uintptr_t)args->index);
 
 			msgpack_encode_string_ext(buf, "edges");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graph_create.edges);
+			msgpack_encode_uint(buf, (uintptr_t)args->edges);
 
 			msgpack_encode_string_ext(buf, "reorder");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Graph_create.reorder);
+			msgpack_encode_int(buf, args->reorder);
 
 			msgpack_encode_string_ext(buf, "comm_graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Graph_create.comm_graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm_graph);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Graph_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_set_name
-		case MPI_API_ID_MPI_Win_set_name :
+		case MPI_API_ID_MPI_Win_set_name : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	const char * win_name (const char *);
 			//	int retval (int);
+			args_MPI_Win_set_name_t* args = (args_MPI_Win_set_name_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_set_name.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "win_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_set_name.win_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->win_name);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_set_name.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_create_errhandler
-		case MPI_API_ID_MPI_Win_create_errhandler :
+		case MPI_API_ID_MPI_Win_create_errhandler : {
 			//	MPI_Win_errhandler_function * function (void (*)(struct mpi_win_t * *, int *, ...));
 			//	MPI_Errhandler * errhandler (struct mpi_errhandler_t **);
 			//	int retval (int);
+			args_MPI_Win_create_errhandler_t* args = (args_MPI_Win_create_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "function");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win_errhandler_function *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_create_errhandler.function);
+			msgpack_encode_uint(buf, (uintptr_t)args->function);
 
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_create_errhandler.errhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->errhandler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_create_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Gather_init
-		case MPI_API_ID_MPI_Gather_init :
+		case MPI_API_ID_MPI_Gather_init : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -19462,89 +20246,91 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Info info (struct mpi_info_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_Gather_init_t* args = (args_MPI_Gather_init_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gather_init.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Gather_init.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gather_init.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gather_init.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Gather_init.recvcount);
+			msgpack_encode_int(buf, args->recvcount);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gather_init.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "root");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Gather_init.root);
+			msgpack_encode_int(buf, args->root);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gather_init.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gather_init.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Gather_init.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Gather_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Neighbor_allgatherv
-		case MPI_API_ID_MPI_Neighbor_allgatherv :
+		case MPI_API_ID_MPI_Neighbor_allgatherv : {
 			//	const void * sendbuf (const void *);
 			//	int sendcount (int);
 			//	MPI_Datatype sendtype (struct mpi_datatype_t *);
@@ -19554,888 +20340,954 @@ void process_mpi_args_for(mpi_api_id_t funid, const mpi_api_args_t* args, void* 
 			//	MPI_Datatype recvtype (struct mpi_datatype_t *);
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Neighbor_allgatherv_t* args = (args_MPI_Neighbor_allgatherv_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "sendbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv.sendbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendbuf);
 
 			msgpack_encode_string_ext(buf, "sendcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_allgatherv.sendcount);
+			msgpack_encode_int(buf, args->sendcount);
 
 			msgpack_encode_string_ext(buf, "sendtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv.sendtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->sendtype);
 
 			msgpack_encode_string_ext(buf, "recvbuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv.recvbuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvbuf);
 
 			msgpack_encode_string_ext(buf, "recvcounts");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv.recvcounts);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvcounts);
 
 			msgpack_encode_string_ext(buf, "displs");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int[]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv.displs);
+			msgpack_encode_uint(buf, (uintptr_t)args->displs);
 
 			msgpack_encode_string_ext(buf, "recvtype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv.recvtype);
+			msgpack_encode_uint(buf, (uintptr_t)args->recvtype);
 
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Neighbor_allgatherv.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Neighbor_allgatherv.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_iwrite
-		case MPI_API_ID_MPI_File_iwrite :
+		case MPI_API_ID_MPI_File_iwrite : {
 			//	MPI_File fh (struct mpi_file_t *);
 			//	const void * buf (const void *);
 			//	int count (int);
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	MPI_Request * request (struct mpi_request_t **);
 			//	int retval (int);
+			args_MPI_File_iwrite_t* args = (args_MPI_File_iwrite_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "fh");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite.fh);
+			msgpack_encode_uint(buf, (uintptr_t)args->fh);
 
 			msgpack_encode_string_ext(buf, "buf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite.buf);
+			msgpack_encode_uint(buf, (uintptr_t)args->buf);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iwrite.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_iwrite.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_iwrite.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Buffer_attach
-		case MPI_API_ID_MPI_Buffer_attach :
+		case MPI_API_ID_MPI_Buffer_attach : {
 			//	void * buffer (void *);
 			//	int size (int);
 			//	int retval (int);
+			args_MPI_Buffer_attach_t* args = (args_MPI_Buffer_attach_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "buffer");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Buffer_attach.buffer);
+			msgpack_encode_uint(buf, (uintptr_t)args->buffer);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Buffer_attach.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Buffer_attach.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Session_set_errhandler
-		case MPI_API_ID_MPI_Session_set_errhandler :
+		case MPI_API_ID_MPI_Session_set_errhandler : {
 			//	MPI_Session session (struct mpi_instance_t *);
 			//	MPI_Errhandler errhandler (struct mpi_errhandler_t *);
 			//	int retval (int);
+			args_MPI_Session_set_errhandler_t* args = (args_MPI_Session_set_errhandler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "session");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Session");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_set_errhandler.session);
+			msgpack_encode_uint(buf, (uintptr_t)args->session);
 
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_set_errhandler.errhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->errhandler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Session_set_errhandler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_start
-		case MPI_API_ID_MPI_Win_start :
+		case MPI_API_ID_MPI_Win_start : {
 			//	MPI_Group group (struct mpi_group_t *);
 			//	int mpi_assert (int);
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Win_start_t* args = (args_MPI_Win_start_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_start.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "mpi_assert");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_start.mpi_assert);
+			msgpack_encode_int(buf, args->mpi_assert);
 
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_start.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_start.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Info_f2c
-		case MPI_API_ID_MPI_Info_f2c :
+		case MPI_API_ID_MPI_Info_f2c : {
 			//	int info (int);
 			//	MPI_Info retval (struct mpi_info_t *);
+			args_MPI_Info_f2c_t* args = (args_MPI_Info_f2c_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_f2c.info);
+			msgpack_encode_int(buf, args->info);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_f2c.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Info_c2f
-		case MPI_API_ID_MPI_Info_c2f :
+		case MPI_API_ID_MPI_Info_c2f : {
 			//	MPI_Info info (struct mpi_info_t *);
 			//	int retval (int);
+			args_MPI_Info_c2f_t* args = (args_MPI_Info_c2f_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Info");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Info_c2f.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Info_c2f.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Op_c2f
-		case MPI_API_ID_MPI_Op_c2f :
+		case MPI_API_ID_MPI_Op_c2f : {
 			//	MPI_Op op (struct mpi_op_t *);
 			//	int retval (int);
+			args_MPI_Op_c2f_t* args = (args_MPI_Op_c2f_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Op_c2f.op);
+			msgpack_encode_uint(buf, (uintptr_t)args->op);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Op_c2f.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_c2f
-		case MPI_API_ID_MPI_Win_c2f :
+		case MPI_API_ID_MPI_Win_c2f : {
 			//	MPI_Win win (struct mpi_win_t *);
 			//	int retval (int);
+			args_MPI_Win_c2f_t* args = (args_MPI_Win_c2f_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_c2f.win);
+			msgpack_encode_uint(buf, (uintptr_t)args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_c2f.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Group_f2c
-		case MPI_API_ID_MPI_Group_f2c :
+		case MPI_API_ID_MPI_Group_f2c : {
 			//	int group (int);
 			//	MPI_Group retval (struct mpi_group_t *);
+			args_MPI_Group_f2c_t* args = (args_MPI_Group_f2c_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_f2c.group);
+			msgpack_encode_int(buf, args->group);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_f2c.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_c2f
-		case MPI_API_ID_MPI_File_c2f :
+		case MPI_API_ID_MPI_File_c2f : {
 			//	MPI_File file (struct mpi_file_t *);
 			//	int retval (int);
+			args_MPI_File_c2f_t* args = (args_MPI_File_c2f_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "file");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_c2f.file);
+			msgpack_encode_uint(buf, (uintptr_t)args->file);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_c2f.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Request_c2f
-		case MPI_API_ID_MPI_Request_c2f :
+		case MPI_API_ID_MPI_Request_c2f : {
 			//	MPI_Request request (struct mpi_request_t *);
 			//	int retval (int);
+			args_MPI_Request_c2f_t* args = (args_MPI_Request_c2f_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Request_c2f.request);
+			msgpack_encode_uint(buf, (uintptr_t)args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Request_c2f.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_File_f2c
-		case MPI_API_ID_MPI_File_f2c :
+		case MPI_API_ID_MPI_File_f2c : {
 			//	int file (int);
 			//	MPI_File retval (struct mpi_file_t *);
+			args_MPI_File_f2c_t* args = (args_MPI_File_f2c_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "file");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_File_f2c.file);
+			msgpack_encode_int(buf, args->file);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_File");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_File_f2c.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Session_f2c
-		case MPI_API_ID_MPI_Session_f2c :
+		case MPI_API_ID_MPI_Session_f2c : {
 			//	int session (int);
 			//	MPI_Session retval (struct mpi_instance_t *);
+			args_MPI_Session_f2c_t* args = (args_MPI_Session_f2c_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "session");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Session_f2c.session);
+			msgpack_encode_int(buf, args->session);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Session");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_f2c.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Status_f082f
-		case MPI_API_ID_MPI_Status_f082f :
+		case MPI_API_ID_MPI_Status_f082f : {
 			//	const MPI_F08_status * f08_status (const struct opaque * *);
 			//	int * f_status (int *);
 			//	int retval (int);
+			args_MPI_Status_f082f_t* args = (args_MPI_Status_f082f_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "f08_status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_F08_status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_f082f.f08_status);
+			msgpack_encode_uint(buf, (uintptr_t)args->f08_status);
 
 			msgpack_encode_string_ext(buf, "f_status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_f082f.f_status);
+			msgpack_encode_uint(buf, (uintptr_t)args->f_status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Status_f082f.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Status_c2f08
-		case MPI_API_ID_MPI_Status_c2f08 :
+		case MPI_API_ID_MPI_Status_c2f08 : {
 			//	const MPI_Status * c_status (const struct opaque * *);
 			//	MPI_F08_status * f08_status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Status_c2f08_t* args = (args_MPI_Status_c2f08_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "c_status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_c2f08.c_status);
+			msgpack_encode_uint(buf, (uintptr_t)args->c_status);
 
 			msgpack_encode_string_ext(buf, "f08_status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_F08_status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_c2f08.f08_status);
+			msgpack_encode_uint(buf, (uintptr_t)args->f08_status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Status_c2f08.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_f2c
-		case MPI_API_ID_MPI_Type_f2c :
+		case MPI_API_ID_MPI_Type_f2c : {
 			//	int datatype (int);
 			//	MPI_Datatype retval (struct mpi_datatype_t *);
+			args_MPI_Type_f2c_t* args = (args_MPI_Type_f2c_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_f2c.datatype);
+			msgpack_encode_int(buf, args->datatype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_f2c.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Message_c2f
-		case MPI_API_ID_MPI_Message_c2f :
+		case MPI_API_ID_MPI_Message_c2f : {
 			//	MPI_Message message (struct mpi_message_t *);
 			//	int retval (int);
+			args_MPI_Message_c2f_t* args = (args_MPI_Message_c2f_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "message");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Message");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Message_c2f.message);
+			msgpack_encode_uint(buf, (uintptr_t)args->message);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Message_c2f.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Session_c2f
-		case MPI_API_ID_MPI_Session_c2f :
+		case MPI_API_ID_MPI_Session_c2f : {
 			//	const MPI_Session session (const struct mpi_instance_t *);
 			//	int retval (int);
+			args_MPI_Session_c2f_t* args = (args_MPI_Session_c2f_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "session");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Session");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Session_c2f.session);
+			msgpack_encode_uint(buf, (uintptr_t)args->session);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Session_c2f.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Message_f2c
-		case MPI_API_ID_MPI_Message_f2c :
+		case MPI_API_ID_MPI_Message_f2c : {
 			//	int message (int);
 			//	MPI_Message retval (struct mpi_message_t *);
+			args_MPI_Message_f2c_t* args = (args_MPI_Message_f2c_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "message");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Message_f2c.message);
+			msgpack_encode_int(buf, args->message);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Message");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Message_f2c.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Errhandler_f2c
-		case MPI_API_ID_MPI_Errhandler_f2c :
+		case MPI_API_ID_MPI_Errhandler_f2c : {
 			//	int errhandler (int);
 			//	MPI_Errhandler retval (struct mpi_errhandler_t *);
+			args_MPI_Errhandler_f2c_t* args = (args_MPI_Errhandler_f2c_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Errhandler_f2c.errhandler);
+			msgpack_encode_int(buf, args->errhandler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Errhandler_f2c.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Request_f2c
-		case MPI_API_ID_MPI_Request_f2c :
+		case MPI_API_ID_MPI_Request_f2c : {
 			//	int request (int);
 			//	MPI_Request retval (struct mpi_request_t *);
+			args_MPI_Request_f2c_t* args = (args_MPI_Request_f2c_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "request");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Request_f2c.request);
+			msgpack_encode_int(buf, args->request);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Request");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Request_f2c.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Status_c2f
-		case MPI_API_ID_MPI_Status_c2f :
+		case MPI_API_ID_MPI_Status_c2f : {
 			//	const MPI_Status * c_status (const struct opaque * *);
 			//	int * f_status (int *);
 			//	int retval (int);
+			args_MPI_Status_c2f_t* args = (args_MPI_Status_c2f_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "c_status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_c2f.c_status);
+			msgpack_encode_uint(buf, (uintptr_t)args->c_status);
 
 			msgpack_encode_string_ext(buf, "f_status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_c2f.f_status);
+			msgpack_encode_uint(buf, (uintptr_t)args->f_status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Status_c2f.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_f2c
-		case MPI_API_ID_MPI_Comm_f2c :
+		case MPI_API_ID_MPI_Comm_f2c : {
 			//	int comm (int);
 			//	MPI_Comm retval (struct mpi_communicator_t *);
+			args_MPI_Comm_f2c_t* args = (args_MPI_Comm_f2c_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_f2c.comm);
+			msgpack_encode_int(buf, args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_f2c.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Comm_c2f
-		case MPI_API_ID_MPI_Comm_c2f :
+		case MPI_API_ID_MPI_Comm_c2f : {
 			//	MPI_Comm comm (struct mpi_communicator_t *);
 			//	int retval (int);
+			args_MPI_Comm_c2f_t* args = (args_MPI_Comm_c2f_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "comm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Comm");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Comm_c2f.comm);
+			msgpack_encode_uint(buf, (uintptr_t)args->comm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Comm_c2f.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Group_c2f
-		case MPI_API_ID_MPI_Group_c2f :
+		case MPI_API_ID_MPI_Group_c2f : {
 			//	MPI_Group group (struct mpi_group_t *);
 			//	int retval (int);
+			args_MPI_Group_c2f_t* args = (args_MPI_Group_c2f_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Group");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Group_c2f.group);
+			msgpack_encode_uint(buf, (uintptr_t)args->group);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Group_c2f.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Win_f2c
-		case MPI_API_ID_MPI_Win_f2c :
+		case MPI_API_ID_MPI_Win_f2c : {
 			//	int win (int);
 			//	MPI_Win retval (struct mpi_win_t *);
+			args_MPI_Win_f2c_t* args = (args_MPI_Win_f2c_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "win");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Win_f2c.win);
+			msgpack_encode_int(buf, args->win);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Win");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Win_f2c.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Status_f082c
-		case MPI_API_ID_MPI_Status_f082c :
+		case MPI_API_ID_MPI_Status_f082c : {
 			//	const MPI_F08_status * f08_status (const struct opaque * *);
 			//	MPI_Status * c_status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Status_f082c_t* args = (args_MPI_Status_f082c_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "f08_status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const MPI_F08_status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_f082c.f08_status);
+			msgpack_encode_uint(buf, (uintptr_t)args->f08_status);
 
 			msgpack_encode_string_ext(buf, "c_status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_f082c.c_status);
+			msgpack_encode_uint(buf, (uintptr_t)args->c_status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Status_f082c.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Errhandler_c2f
-		case MPI_API_ID_MPI_Errhandler_c2f :
+		case MPI_API_ID_MPI_Errhandler_c2f : {
 			//	MPI_Errhandler errhandler (struct mpi_errhandler_t *);
 			//	int retval (int);
+			args_MPI_Errhandler_c2f_t* args = (args_MPI_Errhandler_c2f_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "errhandler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Errhandler");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Errhandler_c2f.errhandler);
+			msgpack_encode_uint(buf, (uintptr_t)args->errhandler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Errhandler_c2f.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Status_f2f08
-		case MPI_API_ID_MPI_Status_f2f08 :
+		case MPI_API_ID_MPI_Status_f2f08 : {
 			//	const int * f_status (const int *);
 			//	MPI_F08_status * f08_status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Status_f2f08_t* args = (args_MPI_Status_f2f08_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "f_status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_f2f08.f_status);
+			msgpack_encode_uint(buf, (uintptr_t)args->f_status);
 
 			msgpack_encode_string_ext(buf, "f08_status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_F08_status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_f2f08.f08_status);
+			msgpack_encode_uint(buf, (uintptr_t)args->f08_status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Status_f2f08.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Type_c2f
-		case MPI_API_ID_MPI_Type_c2f :
+		case MPI_API_ID_MPI_Type_c2f : {
 			//	MPI_Datatype datatype (struct mpi_datatype_t *);
 			//	int retval (int);
+			args_MPI_Type_c2f_t* args = (args_MPI_Type_c2f_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "datatype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Datatype");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Type_c2f.datatype);
+			msgpack_encode_uint(buf, (uintptr_t)args->datatype);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Type_c2f.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Status_f2c
-		case MPI_API_ID_MPI_Status_f2c :
+		case MPI_API_ID_MPI_Status_f2c : {
 			//	const int * f_status (const int *);
 			//	MPI_Status * c_status (struct opaque **);
 			//	int retval (int);
+			args_MPI_Status_f2c_t* args = (args_MPI_Status_f2c_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "f_status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_f2c.f_status);
+			msgpack_encode_uint(buf, (uintptr_t)args->f_status);
 
 			msgpack_encode_string_ext(buf, "c_status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Status *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Status_f2c.c_status);
+			msgpack_encode_uint(buf, (uintptr_t)args->c_status);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Status_f2c.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_MPI_Op_f2c
-		case MPI_API_ID_MPI_Op_f2c :
+		case MPI_API_ID_MPI_Op_f2c : {
 			//	int op (int);
 			//	MPI_Op retval (struct mpi_op_t *);
+			args_MPI_Op_f2c_t* args = (args_MPI_Op_f2c_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "op");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->MPI_Op_f2c.op);
+			msgpack_encode_int(buf, args->op);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "MPI_Op");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->MPI_Op_f2c.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
         default : break;
     }

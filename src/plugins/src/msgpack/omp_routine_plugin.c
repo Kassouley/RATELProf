@@ -29,58 +29,60 @@ void on_exit_omp_routine_callback(ratelprof_domain_t domain, ratelprof_api_id_t 
     pop_id();
 }
 
-void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_api_args_t* args, void* user_args)
+void process_omp_routine_args_for(omp_routine_api_id_t funid, const void* func_args, void* user_args)
 {
     msgpack_buffer_t* buf = (msgpack_buffer_t*)user_args;
     switch(funid) {
 		#if HAVE_omp_target_memset
-		case OMP_ROUTINE_API_ID_omp_target_memset :
+		case OMP_ROUTINE_API_ID_omp_target_memset : {
 			//	void * ptr (void *);
 			//	int value (int);
 			//	size_t size (unsigned long);
 			//	int device_num (int);
 			//	void * retval (void *);
+			args_omp_target_memset_t* args = (args_omp_target_memset_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memset.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memset.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memset.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memset.device_num);
+			msgpack_encode_int(buf, args->device_num);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memset.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_memcpy_async
-		case OMP_ROUTINE_API_ID_omp_target_memcpy_async :
+		case OMP_ROUTINE_API_ID_omp_target_memcpy_async : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t size (unsigned long);
@@ -91,82 +93,84 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			//	int async_depend_info (int);
 			//	omp_depend_t * depend (void **);
 			//	int retval (int);
+			args_omp_target_memcpy_async_t* args = (args_omp_target_memcpy_async_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_async.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_async.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_async.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "dst_offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_async.dst_offset);
+			msgpack_encode_int(buf, args->dst_offset);
 
 			msgpack_encode_string_ext(buf, "src_offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_async.src_offset);
+			msgpack_encode_int(buf, args->src_offset);
 
 			msgpack_encode_string_ext(buf, "dst_device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_async.dst_device_num);
+			msgpack_encode_int(buf, args->dst_device_num);
 
 			msgpack_encode_string_ext(buf, "src_device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_async.src_device_num);
+			msgpack_encode_int(buf, args->src_device_num);
 
 			msgpack_encode_string_ext(buf, "async_depend_info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_async.async_depend_info);
+			msgpack_encode_int(buf, args->async_depend_info);
 
 			msgpack_encode_string_ext(buf, "depend");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "omp_depend_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_async.depend);
+			msgpack_encode_uint(buf, (uintptr_t)args->depend);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_async.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_memcpy_rect_async
-		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect_async :
+		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect_async : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t element_size (unsigned long);
@@ -181,162 +185,168 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			//	int depobj_count (int);
 			//	omp_depend_t * depobj_list (void **);
 			//	int retval (int);
+			args_omp_target_memcpy_rect_async_t* args = (args_omp_target_memcpy_rect_async_t*) func_args;
 			msgpack_encode_map(buf, 14);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_rect_async.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_rect_async.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "element_size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_rect_async.element_size);
+			msgpack_encode_int(buf, args->element_size);
 
 			msgpack_encode_string_ext(buf, "num_dims");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_rect_async.num_dims);
+			msgpack_encode_int(buf, args->num_dims);
 
 			msgpack_encode_string_ext(buf, "volume");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_rect_async.volume);
+			msgpack_encode_uint(buf, (uintptr_t)args->volume);
 
 			msgpack_encode_string_ext(buf, "dst_offsets");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_rect_async.dst_offsets);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst_offsets);
 
 			msgpack_encode_string_ext(buf, "src_offsets");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_rect_async.src_offsets);
+			msgpack_encode_uint(buf, (uintptr_t)args->src_offsets);
 
 			msgpack_encode_string_ext(buf, "dst_dimensions");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_rect_async.dst_dimensions);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst_dimensions);
 
 			msgpack_encode_string_ext(buf, "src_dimensions");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_rect_async.src_dimensions);
+			msgpack_encode_uint(buf, (uintptr_t)args->src_dimensions);
 
 			msgpack_encode_string_ext(buf, "dst_device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_rect_async.dst_device_num);
+			msgpack_encode_int(buf, args->dst_device_num);
 
 			msgpack_encode_string_ext(buf, "src_device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_rect_async.src_device_num);
+			msgpack_encode_int(buf, args->src_device_num);
 
 			msgpack_encode_string_ext(buf, "depobj_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_rect_async.depobj_count);
+			msgpack_encode_int(buf, args->depobj_count);
 
 			msgpack_encode_string_ext(buf, "depobj_list");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "omp_depend_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_rect_async.depobj_list);
+			msgpack_encode_uint(buf, (uintptr_t)args->depobj_list);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_rect_async.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_alloc
-		case OMP_ROUTINE_API_ID_omp_target_alloc :
+		case OMP_ROUTINE_API_ID_omp_target_alloc : {
 			//	size_t size (unsigned long);
 			//	int device_num (int);
 			//	void * retval (void *);
+			args_omp_target_alloc_t* args = (args_omp_target_alloc_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_alloc.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_alloc.device_num);
+			msgpack_encode_int(buf, args->device_num);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_alloc.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_free
-		case OMP_ROUTINE_API_ID_omp_target_free :
+		case OMP_ROUTINE_API_ID_omp_target_free : {
 			//	void * device_ptr (void *);
 			//	int device_num (int);
+			args_omp_target_free_t* args = (args_omp_target_free_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "device_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_free.device_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->device_ptr);
 
 			msgpack_encode_string_ext(buf, "device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_free.device_num);
+			msgpack_encode_int(buf, args->device_num);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_memcpy_rect
-		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect :
+		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t element_size (unsigned long);
@@ -349,126 +359,130 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			//	int dst_device_num (int);
 			//	int src_device_num (int);
 			//	int retval (int);
+			args_omp_target_memcpy_rect_t* args = (args_omp_target_memcpy_rect_t*) func_args;
 			msgpack_encode_map(buf, 12);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_rect.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_rect.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "element_size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_rect.element_size);
+			msgpack_encode_int(buf, args->element_size);
 
 			msgpack_encode_string_ext(buf, "num_dims");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_rect.num_dims);
+			msgpack_encode_int(buf, args->num_dims);
 
 			msgpack_encode_string_ext(buf, "volume");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_rect.volume);
+			msgpack_encode_uint(buf, (uintptr_t)args->volume);
 
 			msgpack_encode_string_ext(buf, "dst_offsets");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_rect.dst_offsets);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst_offsets);
 
 			msgpack_encode_string_ext(buf, "src_offsets");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_rect.src_offsets);
+			msgpack_encode_uint(buf, (uintptr_t)args->src_offsets);
 
 			msgpack_encode_string_ext(buf, "dst_dimensions");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_rect.dst_dimensions);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst_dimensions);
 
 			msgpack_encode_string_ext(buf, "src_dimensions");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy_rect.src_dimensions);
+			msgpack_encode_uint(buf, (uintptr_t)args->src_dimensions);
 
 			msgpack_encode_string_ext(buf, "dst_device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_rect.dst_device_num);
+			msgpack_encode_int(buf, args->dst_device_num);
 
 			msgpack_encode_string_ext(buf, "src_device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_rect.src_device_num);
+			msgpack_encode_int(buf, args->src_device_num);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy_rect.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_disassociate_ptr
-		case OMP_ROUTINE_API_ID_omp_target_disassociate_ptr :
+		case OMP_ROUTINE_API_ID_omp_target_disassociate_ptr : {
 			//	const void * host_ptr (const void *);
 			//	int device_num (int);
 			//	int retval (int);
+			args_omp_target_disassociate_ptr_t* args = (args_omp_target_disassociate_ptr_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "host_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_disassociate_ptr.host_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->host_ptr);
 
 			msgpack_encode_string_ext(buf, "device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_disassociate_ptr.device_num);
+			msgpack_encode_int(buf, args->device_num);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_disassociate_ptr.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_memcpy
-		case OMP_ROUTINE_API_ID_omp_target_memcpy :
+		case OMP_ROUTINE_API_ID_omp_target_memcpy : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t size (unsigned long);
@@ -477,68 +491,70 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			//	int dst_device_num (int);
 			//	int src_device_num (int);
 			//	int retval (int);
+			args_omp_target_memcpy_t* args = (args_omp_target_memcpy_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memcpy.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "dst_offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy.dst_offset);
+			msgpack_encode_int(buf, args->dst_offset);
 
 			msgpack_encode_string_ext(buf, "src_offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy.src_offset);
+			msgpack_encode_int(buf, args->src_offset);
 
 			msgpack_encode_string_ext(buf, "dst_device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy.dst_device_num);
+			msgpack_encode_int(buf, args->dst_device_num);
 
 			msgpack_encode_string_ext(buf, "src_device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy.src_device_num);
+			msgpack_encode_int(buf, args->src_device_num);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memcpy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_memset_async
-		case OMP_ROUTINE_API_ID_omp_target_memset_async :
+		case OMP_ROUTINE_API_ID_omp_target_memset_async : {
 			//	void * ptr (void *);
 			//	int value (int);
 			//	size_t size (unsigned long);
@@ -546,418 +562,444 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			//	int async_depend_info (int);
 			//	omp_depend_t * depend (void **);
 			//	void * retval (void *);
+			args_omp_target_memset_async_t* args = (args_omp_target_memset_async_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memset_async.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memset_async.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memset_async.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memset_async.device_num);
+			msgpack_encode_int(buf, args->device_num);
 
 			msgpack_encode_string_ext(buf, "async_depend_info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_memset_async.async_depend_info);
+			msgpack_encode_int(buf, args->async_depend_info);
 
 			msgpack_encode_string_ext(buf, "depend");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "omp_depend_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memset_async.depend);
+			msgpack_encode_uint(buf, (uintptr_t)args->depend);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_memset_async.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_is_present
-		case OMP_ROUTINE_API_ID_omp_target_is_present :
+		case OMP_ROUTINE_API_ID_omp_target_is_present : {
 			//	const void * host_ptr (const void *);
 			//	int device_num (int);
 			//	int retval (int);
+			args_omp_target_is_present_t* args = (args_omp_target_is_present_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "host_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_is_present.host_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->host_ptr);
 
 			msgpack_encode_string_ext(buf, "device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_is_present.device_num);
+			msgpack_encode_int(buf, args->device_num);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_is_present.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_associate_ptr
-		case OMP_ROUTINE_API_ID_omp_target_associate_ptr :
+		case OMP_ROUTINE_API_ID_omp_target_associate_ptr : {
 			//	const void * host_ptr (const void *);
 			//	const void * device_ptr (const void *);
 			//	size_t size (unsigned long);
 			//	size_t alignment (unsigned long);
 			//	int device_num (int);
 			//	int retval (int);
+			args_omp_target_associate_ptr_t* args = (args_omp_target_associate_ptr_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "host_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_associate_ptr.host_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->host_ptr);
 
 			msgpack_encode_string_ext(buf, "device_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_target_associate_ptr.device_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->device_ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_associate_ptr.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "alignment");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_associate_ptr.alignment);
+			msgpack_encode_int(buf, args->alignment);
 
 			msgpack_encode_string_ext(buf, "device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_associate_ptr.device_num);
+			msgpack_encode_int(buf, args->device_num);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_target_associate_ptr.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_initial_device
-		case OMP_ROUTINE_API_ID_omp_get_initial_device :
+		case OMP_ROUTINE_API_ID_omp_get_initial_device : {
 			//	int retval (int);
+			args_omp_get_initial_device_t* args = (args_omp_get_initial_device_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_get_initial_device.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_llvm_omp_target_dynamic_shared_alloc
-		case OMP_ROUTINE_API_ID_llvm_omp_target_dynamic_shared_alloc :
+		case OMP_ROUTINE_API_ID_llvm_omp_target_dynamic_shared_alloc : {
 			//	void * retval (void *);
+			args_llvm_omp_target_dynamic_shared_alloc_t* args = (args_llvm_omp_target_dynamic_shared_alloc_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->llvm_omp_target_dynamic_shared_alloc.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_interop_int
-		case OMP_ROUTINE_API_ID_omp_get_interop_int :
+		case OMP_ROUTINE_API_ID_omp_get_interop_int : {
 			//	const omp_interop_t interop (const void *);
 			//	omp_interop_property_t prop (enum omp_interop_property);
 			//	int * exists (int *);
 			//	omp_intptr_t retval (long);
+			args_omp_get_interop_int_t* args = (args_omp_get_interop_int_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "interop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const omp_interop_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_get_interop_int.interop);
+			msgpack_encode_uint(buf, (uintptr_t)args->interop);
 
 			msgpack_encode_string_ext(buf, "prop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "omp_interop_property_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_get_interop_int.prop);
+			msgpack_encode_int(buf, args->prop);
 
 			msgpack_encode_string_ext(buf, "exists");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_get_interop_int.exists);
+			msgpack_encode_uint(buf, (uintptr_t)args->exists);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "omp_intptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_get_interop_int.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_interop_name
-		case OMP_ROUTINE_API_ID_omp_get_interop_name :
+		case OMP_ROUTINE_API_ID_omp_get_interop_name : {
 			//	const omp_interop_t interop (const void *);
 			//	omp_interop_property_t prop (enum omp_interop_property);
 			//	const char * retval (const char *);
+			args_omp_get_interop_name_t* args = (args_omp_get_interop_name_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "interop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const omp_interop_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_get_interop_name.interop);
+			msgpack_encode_uint(buf, (uintptr_t)args->interop);
 
 			msgpack_encode_string_ext(buf, "prop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "omp_interop_property_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_get_interop_name.prop);
+			msgpack_encode_int(buf, args->prop);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_get_interop_name.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_interop_ptr
-		case OMP_ROUTINE_API_ID_omp_get_interop_ptr :
+		case OMP_ROUTINE_API_ID_omp_get_interop_ptr : {
 			//	const omp_interop_t interop (const void *);
 			//	omp_interop_property_t prop (enum omp_interop_property);
 			//	int * exists (int *);
 			//	void * retval (void *);
+			args_omp_get_interop_ptr_t* args = (args_omp_get_interop_ptr_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "interop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const omp_interop_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_get_interop_ptr.interop);
+			msgpack_encode_uint(buf, (uintptr_t)args->interop);
 
 			msgpack_encode_string_ext(buf, "prop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "omp_interop_property_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_get_interop_ptr.prop);
+			msgpack_encode_int(buf, args->prop);
 
 			msgpack_encode_string_ext(buf, "exists");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_get_interop_ptr.exists);
+			msgpack_encode_uint(buf, (uintptr_t)args->exists);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_get_interop_ptr.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_interop_str
-		case OMP_ROUTINE_API_ID_omp_get_interop_str :
+		case OMP_ROUTINE_API_ID_omp_get_interop_str : {
 			//	const omp_interop_t interop (const void *);
 			//	omp_interop_property_t prop (enum omp_interop_property);
 			//	int * exists (int *);
 			//	const char * retval (const char *);
+			args_omp_get_interop_str_t* args = (args_omp_get_interop_str_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "interop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const omp_interop_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_get_interop_str.interop);
+			msgpack_encode_uint(buf, (uintptr_t)args->interop);
 
 			msgpack_encode_string_ext(buf, "prop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "omp_interop_property_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_get_interop_str.prop);
+			msgpack_encode_int(buf, args->prop);
 
 			msgpack_encode_string_ext(buf, "exists");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_get_interop_str.exists);
+			msgpack_encode_uint(buf, (uintptr_t)args->exists);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_get_interop_str.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_interop_type_desc
-		case OMP_ROUTINE_API_ID_omp_get_interop_type_desc :
+		case OMP_ROUTINE_API_ID_omp_get_interop_type_desc : {
 			//	const omp_interop_t interop (const void *);
 			//	omp_interop_property_t prop (enum omp_interop_property);
 			//	const char * retval (const char *);
+			args_omp_get_interop_type_desc_t* args = (args_omp_get_interop_type_desc_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "interop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const omp_interop_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_get_interop_type_desc.interop);
+			msgpack_encode_uint(buf, (uintptr_t)args->interop);
 
 			msgpack_encode_string_ext(buf, "prop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "omp_interop_property_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_get_interop_type_desc.prop);
+			msgpack_encode_int(buf, args->prop);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_get_interop_type_desc.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_mapped_ptr
-		case OMP_ROUTINE_API_ID_omp_get_mapped_ptr :
+		case OMP_ROUTINE_API_ID_omp_get_mapped_ptr : {
 			//	const void * ptr (const void *);
 			//	int device_num (int);
 			//	void * retval (void *);
+			args_omp_get_mapped_ptr_t* args = (args_omp_get_mapped_ptr_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_get_mapped_ptr.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_get_mapped_ptr.device_num);
+			msgpack_encode_int(buf, args->device_num);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_get_mapped_ptr.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_num_devices
-		case OMP_ROUTINE_API_ID_omp_get_num_devices :
+		case OMP_ROUTINE_API_ID_omp_get_num_devices : {
 			//	int retval (int);
+			args_omp_get_num_devices_t* args = (args_omp_get_num_devices_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_get_num_devices.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_is_coarse_grain_mem_region
-		case OMP_ROUTINE_API_ID_omp_is_coarse_grain_mem_region :
+		case OMP_ROUTINE_API_ID_omp_is_coarse_grain_mem_region : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	int retval (int);
+			args_omp_is_coarse_grain_mem_region_t* args = (args_omp_is_coarse_grain_mem_region_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->omp_is_coarse_grain_mem_region.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_is_coarse_grain_mem_region.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->omp_is_coarse_grain_mem_region.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
         default : break;
     }

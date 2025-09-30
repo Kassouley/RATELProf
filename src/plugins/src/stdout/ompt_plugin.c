@@ -9,7 +9,7 @@
 #include "ompt_plugin.h"
 
 void on_enter_ompt_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity){
-    ratelprof_ompt_api_activity_t* activity = (ratelprof_ompt_api_activity_t*)user_activity;
+    ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
     activity->phase = ratelprof_get_current_phase();
     activity->domain = domain;
     get_correlation_id(&activity->corr_id);
@@ -19,7 +19,7 @@ void on_enter_ompt_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, vo
 }
 
 void on_exit_ompt_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity){
-    ratelprof_ompt_api_activity_t* activity = (ratelprof_ompt_api_activity_t*)user_activity;
+    ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
     activity->stop_time = ratelprof_get_curr_timespec();
     activity->pid = get_pid();
     activity->tid = get_tid();
@@ -30,7 +30,7 @@ void on_exit_ompt_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, voi
     pop_id();
 }
 
-void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, void* user_args){
+void process_ompt_args_for(ompt_api_id_t funid, const void* func_args, void* user_args){
     switch(funid) {
         case OMPT_API_ID_target_data_alloc :
         case OMPT_API_ID_target_data_transfer_to_device :
@@ -41,74 +41,80 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
         case OMPT_API_ID_target_data_alloc_async :
         case OMPT_API_ID_target_data_transfer_to_device_async :
         case OMPT_API_ID_target_data_transfer_from_device_async :
-        case OMPT_API_ID_target_data_delete_async :
+        case OMPT_API_ID_target_data_delete_async : {
 			//	ompt_id_t* host_op_id (unsigned long*);
 			//	void* src_addr (void*);
 			//	int src_device_num (int);
 			//	void* dest_addr (void*);
 			//	int dest_device_num (int);
 			//	size_t bytes (unsigned long);
-			printf("\tompt_id_t* host_op_id = %p", args->target_data_op.host_op_id);
+			args_target_data_op_t* args = (args_target_data_op_t*) func_args;
+
+			printf("\tompt_id_t* host_op_id = %p", args->host_op_id);
 			printf("\n");
-			printf("\tvoid* src_addr = %p", args->target_data_op.src_addr);
+			printf("\tvoid* src_addr = %p", args->src_addr);
 			printf("\n");
-			printf("\tint src_device_num = %d\n", args->target_data_op.src_device_num);
-			printf("\tvoid* dest_addr = %p", args->target_data_op.dest_addr);
+			printf("\tint src_device_num = %d\n", args->src_device_num);
+			printf("\tvoid* dest_addr = %p", args->dest_addr);
 			printf("\n");
-			printf("\tint dest_device_num = %d\n", args->target_data_op.dest_device_num);
-			printf("\tsize_t bytes = %lu\n", args->target_data_op.bytes);
+			printf("\tint dest_device_num = %d\n", args->dest_device_num);
+			printf("\tsize_t bytes = %lu\n", args->bytes);
 			printf("\n");
 			break;
-
-		case OMPT_API_ID_target_map :
+		}
+		case OMPT_API_ID_target_map : {
 			//	unsigned int nitems (unsigned int);
 			//	void** host_addr (void**);
 			//	void** device_addr (void**);
 			//	size_t* bytes (unsigned long*);
 			//	unsigned int* mapping_flags (unsigned int*);
+			args_target_map_emi_t* args = (args_target_map_emi_t*) func_args;
+
 			size_t i = 0;
-			size_t nitems = args->target_map_emi.nitems;
+			size_t nitems = args->nitems;
 			printf("\tunsigned int nitems = %lu\n", nitems);
 			
 			printf("\tvoid** host_addr = [");
 			for (i = 0; i < nitems; i++)
 			{
-				printf("%p,", args->target_map_emi.map[i].host_addr);
+				printf("%p,", args->map[i].host_addr);
 			}
-			printf("%p]\n", args->target_map_emi.map[i].host_addr);
+			printf("%p]\n", args->map[i].host_addr);
 
 			printf("\tvoid** device_addr = [");
 			for (i = 0; i < nitems; i++)
 			{
-				printf("%p,", args->target_map_emi.map[i].device_addr);
+				printf("%p,", args->map[i].device_addr);
 			}
-			printf("%p]\n", args->target_map_emi.map[i].device_addr);
+			printf("%p]\n", args->map[i].device_addr);
 
 			printf("\tsize_t* bytes = [");
 			for (i = 0; i < nitems; i++)
 			{
-				printf("%lu,", args->target_map_emi.map[i].bytes);
+				printf("%lu,", args->map[i].bytes);
 			}
-			printf("%lu]\n", args->target_map_emi.map[i].bytes);
+			printf("%lu]\n", args->map[i].bytes);
 
 			printf("\tompt_target_map_flag_t* mapping_flags = [");
 			for (i = 0; i < nitems; i++)
 			{
-				printf("%s,", get_map_flag_name(args->target_map_emi.map[i].mapping_flags));
+				printf("%s,", get_map_flag_name(args->map[i].mapping_flags));
 			}
-			printf("%s]\n", get_map_flag_name(args->target_map_emi.map[i].mapping_flags));
+			printf("%s]\n", get_map_flag_name(args->map[i].mapping_flags));
 
 			printf("\n");
 			break;
-
-		case OMPT_API_ID_target_submit :
+		}
+		case OMPT_API_ID_target_submit : {
 			//	ompt_id_t* host_op_id (unsigned long*);
 			//	unsigned int requested_num_teams (unsigned int);
-			printf("\tompt_id_t* host_op_id = %p", args->target_submit_emi.host_op_id);
-			printf("\n");
-			printf("\tunsigned int requested_num_teams = %u\n", args->target_submit_emi.requested_num_teams);
-			break;
+			args_target_submit_emi_t* args = (args_target_submit_emi_t*) func_args;
 
+			printf("\tompt_id_t* host_op_id = %p", args->host_op_id);
+			printf("\n");
+			printf("\tunsigned int requested_num_teams = %u\n", args->requested_num_teams);
+			break;
+		}
         case OMPT_API_ID_target :
         case OMPT_API_ID_target_enter_data :
         case OMPT_API_ID_target_exit_data :
@@ -116,12 +122,14 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
         case OMPT_API_ID_target_nowait :
         case OMPT_API_ID_target_enter_data_nowait :
         case OMPT_API_ID_target_exit_data_nowait :
-        case OMPT_API_ID_target_update_nowait :
+        case OMPT_API_ID_target_update_nowait : {
 			//	int device_num (int);
-			printf("\tint device_num = %d\n", args->target_emi.device_num);
+			args_target_emi_t* args = (args_target_emi_t*) func_args;
+
+			printf("\tint device_num = %d\n", args->device_num);
 			printf("\n");
 			break;
- 
+		}
         default : break;
     }
 }

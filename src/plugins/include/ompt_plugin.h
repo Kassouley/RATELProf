@@ -10,6 +10,6 @@
 
 void on_enter_ompt_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity);
 void on_exit_ompt_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity);
-void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, void* user_args);
+void process_ompt_args_for(ompt_api_id_t funid, const void* func_args, void* user_args);
 
 #endif // OMPT_PLUGIN_H

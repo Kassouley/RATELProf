@@ -24,7 +24,6 @@
 #ifndef RATELPROF_H
 #define RATELPROF_H
 
-#include "utils/config/config.h"
 #include "utils/utils.h"
 #include "utils/env.h"
 #include "utils/logger.h"
@@ -38,38 +37,6 @@
 #include "ratelprof/ratelprof_status.h"
 
 #define RATELPROF_PUBLIC_API __attribute__((weak))
-
-#include "domains/hsa_api_helper.h"
-#include "domains/omp_tgt_rtl_api_helper.h"
-#include "domains/omp_routine_api_helper.h"
-#include "domains/hip_api_helper.h"
-#include "domains/mpi_api_helper.h"
-
-/**
- * @def RATELPROF_DOMAIN_*_NAME
- * @brief Domain name macro.
- * 
- * Define the name domain.
- */
-#define RATELPROF_DOMAIN_HSA_NAME "RATELPROF_DOMAIN_HSA"
-#define RATELPROF_DOMAIN_OMP_TGT_RTL_NAME "RATELPROF_DOMAIN_OMP_TGT_RTL"
-#define RATELPROF_DOMAIN_OMP_ROUTINE_NAME "RATELPROF_DOMAIN_OMP_ROUTINE"
-#define RATELPROF_DOMAIN_HIP_NAME "RATELPROF_DOMAIN_HIP"
-#define RATELPROF_DOMAIN_MPI_NAME "RATELPROF_DOMAIN_MPI"
-
-
-/**
- * @def RATELPROF_DOMAIN_*_DESC
- * @brief Domain name macro.
- * 
- * Define a short description for a domain.
- */
-#define RATELPROF_DOMAIN_HSA_DESC "HSA is an AMD low-level library that operates behind the scenes of HIP and OpenMP, enabling communication between CPUs and GPUs for parallel processing. This domain will be only useful for expert or debugging."
-#define RATELPROF_DOMAIN_OMP_TGT_RTL_DESC "Refers to the target runtime library in the OpenMP programming model, working behind the scenes to execute '#pragma omp target' directives by managing data transfers and kernel execution on GPUs."
-#define RATELPROF_DOMAIN_OMP_ROUTINE_DESC "OpenMP Target is a runtime library that provides routines for managing data movement, memory mapping, etc."
-#define RATELPROF_DOMAIN_HIP_DESC "HIP is a programming framework used to launch GPU operations such as kernel dispatch or memory transfer. This domain is useful for anyone looking to understand and optimize the interactions between the CPU and GPU in programming."
-#define RATELPROF_DOMAIN_MPI_DESC "MPI is a standardized library for parallel programming that enables processes to communicate by passing messages, supporting distributed-memory architectures."
-
 
 /**
  * @typedef ratelprof_api_id_t
@@ -181,75 +148,16 @@ typedef struct ratelprof_api_activity_s  {
     void* return_address;
 
     /**
-     * @brief Union of domain-specific API arguments.
-     * 
-     * The structure used to hold arguments specific to the profiling domain.
-     * Each domain has its own argument structure.
+     * @brief Generic pointer to API arguments.
      */
-    union {
-		hsa_api_args_t hsa_args;  /**< Args for HSA domain. */
-		omp_tgt_rtl_api_args_t omp_tgt_rtl_args;  /**< Args for OMP_TGT_RTL domain. */
-		omp_routine_api_args_t omp_routine_args;  /**< Args for OMP_ROUTINE domain. */
-		hip_api_args_t hip_args;  /**< Args for HIP domain. */
-		mpi_api_args_t mpi_args;  /**< Args for MPI domain. */
-	};
+    void* args;
 } ratelprof_api_activity_t;
 
 
 #include "ratelprof/ratelprof_api_table.h"
 #include "ratelprof/ratelprof_callback.h"
 
-
-/**
- * @extern hsa_api_table
- * @brief The API table for HSA domain.
- * 
- * This external variable hold the API table that contains information
- * about HSA functions.
- * It is used to manage and track the tracing of domain functions.
- */        
-extern ratelprof_api_table_t hsa_api_table;
-
-/**
- * @extern omp_tgt_rtl_api_table
- * @brief The API table for OMP_TGT_RTL domain.
- * 
- * This external variable hold the API table that contains information
- * about OMP_TGT_RTL functions.
- * It is used to manage and track the tracing of domain functions.
- */        
-extern ratelprof_api_table_t omp_tgt_rtl_api_table;
-
-/**
- * @extern omp_routine_api_table
- * @brief The API table for OMP_ROUTINE domain.
- * 
- * This external variable hold the API table that contains information
- * about OMP_ROUTINE functions.
- * It is used to manage and track the tracing of domain functions.
- */        
-extern ratelprof_api_table_t omp_routine_api_table;
-
-/**
- * @extern hip_api_table
- * @brief The API table for HIP domain.
- * 
- * This external variable hold the API table that contains information
- * about HIP functions.
- * It is used to manage and track the tracing of domain functions.
- */        
-extern ratelprof_api_table_t hip_api_table;
-
-/**
- * @extern mpi_api_table
- * @brief The API table for MPI domain.
- * 
- * This external variable hold the API table that contains information
- * about MPI functions.
- * It is used to manage and track the tracing of domain functions.
- */        
-extern ratelprof_api_table_t mpi_api_table;
-
+#include "ratelprof_domain.h"
 
 
 /**
@@ -264,21 +172,6 @@ extern ratelprof_api_table_t mpi_api_table;
  *         "Unknown domain" is returned.
  */
 const char* ratelprof_get_domain_name(ratelprof_domain_t domain);
-
-
-/**
- * @brief Retrieves a description of a given domain.
- *
- * This function takes a `ratelprof_domain_t` enum value and returns the corresponding description 
- * of the domain. The description provides further information about the domain and is useful for 
- * logging and debugging purposes, especially when identifying the behavior of different domains.
- *
- * @param domain The domain for which the description is to be retrieved.
- * 
- * @return A pointer to a string containing the domain description. If the domain is unknown, 
- *         "Unknown domain" is returned.
- */
-const char* ratelprof_get_domain_desc(ratelprof_domain_t domain);
 
 
 /**

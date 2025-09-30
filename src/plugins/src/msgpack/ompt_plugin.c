@@ -10,7 +10,7 @@
 #include "msgpack_ext.h"
 
 void on_enter_ompt_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* a){
-	ratelprof_ompt_api_activity_t* activity = (ratelprof_ompt_api_activity_t*) a;
+	ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*) a;
     ratelprof_activity_pool_push_activity(activity);
     get_correlation_id(&activity->corr_id);
     get_id(&activity->id);
@@ -25,13 +25,13 @@ void on_enter_ompt_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, vo
 void on_exit_ompt_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* a){
 	(void)domain;
 	(void)id;
-	ratelprof_ompt_api_activity_t* activity = (ratelprof_ompt_api_activity_t*) a;
+	ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*) a;
     activity->stop_time = ratelprof_get_curr_timespec();
     pop_id();
 }
 
 
-void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, void* user_args) 
+void process_ompt_args_for(ompt_api_id_t funid, const void* func_args, void* user_args) 
 {
     msgpack_buffer_t* buf = (msgpack_buffer_t*)user_args;
     switch(funid) {
@@ -44,81 +44,85 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
         case OMPT_API_ID_target_data_alloc_async :
         case OMPT_API_ID_target_data_transfer_to_device_async :
         case OMPT_API_ID_target_data_transfer_from_device_async :
-        case OMPT_API_ID_target_data_delete_async :
+        case OMPT_API_ID_target_data_delete_async : {
 			//	ompt_id_t* host_op_id (unsigned long);
 			//	void* src_addr (void);
 			//	int src_device_num (int);
 			//	void* dest_addr (void);
 			//	int dest_device_num (int);
 			//	size_t bytes (unsigned long);
+			args_target_data_op_t* args = (args_target_data_op_t*) func_args;
+
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "host_op_id");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "ompt_id_t*");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->target_data_op.host_op_id);
+			msgpack_encode_uint(buf, (uintptr_t)args->host_op_id);
 
 			msgpack_encode_string_ext(buf, "src_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void*");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->target_data_op.src_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->src_addr);
 
 			msgpack_encode_string_ext(buf, "src_device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->target_data_op.src_device_num);
+			msgpack_encode_int(buf, args->src_device_num);
 
 			msgpack_encode_string_ext(buf, "dest_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void*");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->target_data_op.dest_addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dest_addr);
 
 			msgpack_encode_string_ext(buf, "dest_device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->target_data_op.dest_device_num);
+			msgpack_encode_int(buf, args->dest_device_num);
 
 			msgpack_encode_string_ext(buf, "bytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->target_data_op.bytes);
+			msgpack_encode_int(buf, args->bytes);
 
 			break;
-
-		case OMPT_API_ID_target_map :
+		}
+		case OMPT_API_ID_target_map : {
 			//	unsigned int nitems (unsigned int);
 			//	void** host_addr (void);
 			//	void** device_addr (void);
 			//	size_t* bytes (unsigned long);
 			//	unsigned int* mapping_flags (unsigned int);
+			args_target_map_emi_t* args = (args_target_map_emi_t*) func_args;
+
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "nitems");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->target_map_emi.nitems);
+			msgpack_encode_int(buf, args->nitems);
 
 			msgpack_encode_string_ext(buf, "host_addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void**");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_array(buf, args->target_map_emi.nitems);
-			for (int i = 0; i < args->target_map_emi.nitems; i++)
+			msgpack_encode_array(buf, args->nitems);
+			for (int i = 0; i < args->nitems; i++)
 			{
-				msgpack_encode_uint(buf, (uintptr_t)args->target_map_emi.map[i].host_addr);
+				msgpack_encode_uint(buf, (uintptr_t)args->map[i].host_addr);
 			}
 
 			msgpack_encode_string_ext(buf, "device_addr");
@@ -126,10 +130,10 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void**");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_array(buf, args->target_map_emi.nitems);
-			for (int i = 0; i < args->target_map_emi.nitems; i++)
+			msgpack_encode_array(buf, args->nitems);
+			for (int i = 0; i < args->nitems; i++)
 			{
-				msgpack_encode_uint(buf, (uintptr_t)args->target_map_emi.map[i].device_addr);
+				msgpack_encode_uint(buf, (uintptr_t)args->map[i].device_addr);
 			}
 
 			msgpack_encode_string_ext(buf, "bytes");
@@ -137,10 +141,10 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t*");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_array(buf, args->target_map_emi.nitems);
-			for (int i = 0; i < args->target_map_emi.nitems; i++)
+			msgpack_encode_array(buf, args->nitems);
+			for (int i = 0; i < args->nitems; i++)
 			{
-				msgpack_encode_uint(buf, args->target_map_emi.map[i].bytes);
+				msgpack_encode_uint(buf, args->map[i].bytes);
 			}
 
 			msgpack_encode_string_ext(buf, "mapping_flags");
@@ -148,33 +152,36 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "ompt_target_map_flag_t*");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_array(buf, args->target_map_emi.nitems);
-			for (int i = 0; i < args->target_map_emi.nitems; i++)
+			msgpack_encode_array(buf, args->nitems);
+			for (int i = 0; i < args->nitems; i++)
 			{
-				msgpack_encode_string_ext(buf, get_map_flag_name(args->target_map_emi.map[i].mapping_flags));
+				msgpack_encode_string_ext(buf, get_map_flag_name(args->map[i].mapping_flags));
 			}
 
 			break;
-
-		case OMPT_API_ID_target_submit :
+		}
+		case OMPT_API_ID_target_submit : {
 			//	ompt_id_t* host_op_id (unsigned long);
 			//	unsigned int requested_num_teams (unsigned int);
+			args_target_submit_emi_t* args = (args_target_submit_emi_t*) func_args;
+
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "host_op_id");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "ompt_id_t*");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->target_submit_emi.host_op_id);
+			msgpack_encode_uint(buf, (uintptr_t)args->host_op_id);
 
 			msgpack_encode_string_ext(buf, "requested_num_teams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->target_submit_emi.requested_num_teams);
+			msgpack_encode_int(buf, args->requested_num_teams);
 
 			break;
+		}
         case OMPT_API_ID_target :
         case OMPT_API_ID_target_enter_data :
         case OMPT_API_ID_target_exit_data :
@@ -182,18 +189,20 @@ void process_ompt_args_for(ompt_api_id_t funid, const ompt_api_args_t* args, voi
         case OMPT_API_ID_target_nowait :
         case OMPT_API_ID_target_enter_data_nowait :
         case OMPT_API_ID_target_exit_data_nowait :
-        case OMPT_API_ID_target_update_nowait :
+        case OMPT_API_ID_target_update_nowait : {
 			//	int device_num (int);
+			args_target_emi_t* args = (args_target_emi_t*) func_args;
+
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "device_num");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->target_emi.device_num);
+			msgpack_encode_int(buf, args->device_num);
 
 			break;
- 
+ 		}
         default : break;
     }
 }

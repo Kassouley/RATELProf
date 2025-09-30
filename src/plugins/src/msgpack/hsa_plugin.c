@@ -29,12 +29,12 @@ void on_exit_hsa_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void
     pop_id();
 }
 
-void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* user_args)
+void process_hsa_args_for(hsa_api_id_t funid, const void* func_args, void* user_args)
 {
     msgpack_buffer_t* buf = (msgpack_buffer_t*)user_args;
     switch(funid) {
 		#if HAVE_hsa_amd_interop_map_buffer
-		case HSA_API_ID_hsa_amd_interop_map_buffer :
+		case HSA_API_ID_hsa_amd_interop_map_buffer : {
 			//	uint32_t num_agents (unsigned int);
 			//	hsa_agent_t * agents (struct hsa_agent_s*);
 			//	int interop_handle (int);
@@ -44,141 +44,148 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	size_t * metadata_size (unsigned long*);
 			//	const void ** metadata (const void **);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_interop_map_buffer_t* args = (args_hsa_amd_interop_map_buffer_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "num_agents");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_interop_map_buffer.num_agents);
+			msgpack_encode_int(buf, args->num_agents);
 
 			msgpack_encode_string_ext(buf, "agents");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_agent_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_interop_map_buffer.agents);
+			msgpack_encode_uint(buf, (uintptr_t)args->agents);
 
 			msgpack_encode_string_ext(buf, "interop_handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_interop_map_buffer.interop_handle);
+			msgpack_encode_int(buf, args->interop_handle);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_interop_map_buffer.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_interop_map_buffer.size);
+			msgpack_encode_uint(buf, (uintptr_t)args->size);
 
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_interop_map_buffer.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "metadata_size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_interop_map_buffer.metadata_size);
+			msgpack_encode_uint(buf, (uintptr_t)args->metadata_size);
 
 			msgpack_encode_string_ext(buf, "metadata");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_interop_map_buffer.metadata);
+			msgpack_encode_uint(buf, (uintptr_t)args->metadata);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_interop_map_buffer.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_queue_get_info
-		case HSA_API_ID_hsa_amd_queue_get_info :
+		case HSA_API_ID_hsa_amd_queue_get_info : {
 			//	hsa_queue_t * queue (struct hsa_queue_s*);
 			//	hsa_queue_info_attribute_t attribute (enum hsa_queue_info_attribute_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_queue_get_info_t* args = (args_hsa_amd_queue_get_info_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_queue_get_info.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_queue_info_attribute_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_queue_get_info.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_queue_get_info.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_queue_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_profiling_async_copy_enable
-		case HSA_API_ID_hsa_amd_profiling_async_copy_enable :
+		case HSA_API_ID_hsa_amd_profiling_async_copy_enable : {
 			//	_Bool enable (unsigned int);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_profiling_async_copy_enable_t* args = (args_hsa_amd_profiling_async_copy_enable_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "enable");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "_Bool");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_profiling_async_copy_enable.enable);
+			msgpack_encode_int(buf, args->enable);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_profiling_async_copy_enable.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_symbol_get_info
-		case HSA_API_ID_hsa_executable_symbol_get_info :
+		case HSA_API_ID_hsa_executable_symbol_get_info : {
 			//	hsa_executable_symbol_t executable_symbol ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_executable_symbol_info_t attribute (enum hsa_executable_symbol_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_symbol_get_info_t* args = (args_hsa_executable_symbol_get_info_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "executable_symbol");
 			msgpack_encode_map(buf, 2);
@@ -192,40 +199,42 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_symbol_get_info.executable_symbol.handle);
+			msgpack_encode_int(buf, args->executable_symbol.handle);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_executable_symbol_info_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_symbol_get_info.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_symbol_get_info.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_symbol_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_cas_scacquire
-		case HSA_API_ID_hsa_signal_cas_scacquire :
+		case HSA_API_ID_hsa_signal_cas_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t expected (long);
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_cas_scacquire_t* args = (args_hsa_signal_cas_scacquire_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -239,102 +248,107 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_scacquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "expected");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_scacquire.expected);
+			msgpack_encode_int(buf, args->expected);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_scacquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_scacquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_system_get_info
-		case HSA_API_ID_hsa_system_get_info :
+		case HSA_API_ID_hsa_system_get_info : {
 			//	hsa_system_info_t attribute (enum hsa_system_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_system_get_info_t* args = (args_hsa_system_get_info_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_system_info_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_get_info.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_system_get_info.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_cas_write_index_scacq_screl
-		case HSA_API_ID_hsa_queue_cas_write_index_scacq_screl :
+		case HSA_API_ID_hsa_queue_cas_write_index_scacq_screl : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t expected (unsigned long);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_cas_write_index_scacq_screl_t* args = (args_hsa_queue_cas_write_index_scacq_screl_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_cas_write_index_scacq_screl.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "expected");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_scacq_screl.expected);
+			msgpack_encode_int(buf, args->expected);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_scacq_screl.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_scacq_screl.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_get_capability
-		case HSA_API_ID_hsa_ext_image_get_capability :
+		case HSA_API_ID_hsa_ext_image_get_capability : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -342,6 +356,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	const hsa_ext_image_format_t * image_format (const struct hsa_ext_image_format_s *);
 			//	uint32_t * capability_mask (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_get_capability_t* args = (args_hsa_ext_image_get_capability_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -355,41 +370,42 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_get_capability.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "geometry");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ext_image_geometry_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_get_capability.geometry);
+			msgpack_encode_int(buf, args->geometry);
 
 			msgpack_encode_string_ext(buf, "image_format");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_ext_image_format_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_get_capability.image_format);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_format);
 
 			msgpack_encode_string_ext(buf, "capability_mask");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_get_capability.capability_mask);
+			msgpack_encode_uint(buf, (uintptr_t)args->capability_mask);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_get_capability.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_load_program_code_object
-		case HSA_API_ID_hsa_executable_load_program_code_object :
+		case HSA_API_ID_hsa_executable_load_program_code_object : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -399,6 +415,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	const char * options (const char *);
 			//	hsa_loaded_code_object_t * loaded_code_object (struct hsa_loaded_code_object_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_load_program_code_object_t* args = (args_hsa_executable_load_program_code_object_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -412,7 +429,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_load_program_code_object.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "code_object_reader");
 			msgpack_encode_map(buf, 2);
@@ -426,76 +443,80 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_load_program_code_object.code_object_reader.handle);
+			msgpack_encode_int(buf, args->code_object_reader.handle);
 
 			msgpack_encode_string_ext(buf, "options");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_load_program_code_object.options);
+			msgpack_encode_uint(buf, (uintptr_t)args->options);
 
 			msgpack_encode_string_ext(buf, "loaded_code_object");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_loaded_code_object_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_load_program_code_object.loaded_code_object);
+			msgpack_encode_uint(buf, (uintptr_t)args->loaded_code_object);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_load_program_code_object.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_cas_write_index_release
-		case HSA_API_ID_hsa_queue_cas_write_index_release :
+		case HSA_API_ID_hsa_queue_cas_write_index_release : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t expected (unsigned long);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_cas_write_index_release_t* args = (args_hsa_queue_cas_write_index_release_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_cas_write_index_release.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "expected");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_release.expected);
+			msgpack_encode_int(buf, args->expected);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_release.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_release.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_subtract_scacquire
-		case HSA_API_ID_hsa_signal_subtract_scacquire :
+		case HSA_API_ID_hsa_signal_subtract_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_subtract_scacquire_t* args = (args_hsa_signal_subtract_scacquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -509,26 +530,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_subtract_scacquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_subtract_scacquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_cas_release
-		case HSA_API_ID_hsa_signal_cas_release :
+		case HSA_API_ID_hsa_signal_cas_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t expected (long);
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_cas_release_t* args = (args_hsa_signal_cas_release_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -542,38 +565,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_release.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "expected");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_release.expected);
+			msgpack_encode_int(buf, args->expected);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_release.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_release.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_add_scacq_screl
-		case HSA_API_ID_hsa_signal_add_scacq_screl :
+		case HSA_API_ID_hsa_signal_add_scacq_screl : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_add_scacq_screl_t* args = (args_hsa_signal_add_scacq_screl_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -587,20 +612,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_add_scacq_screl.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_add_scacq_screl.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_group_wait_any_relaxed
-		case HSA_API_ID_hsa_signal_group_wait_any_relaxed :
+		case HSA_API_ID_hsa_signal_group_wait_any_relaxed : {
 			//	hsa_signal_group_t signal_group ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -610,6 +636,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_signal_t * signal (struct hsa_signal_s*);
 			//	hsa_signal_value_t * value (long*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_signal_group_wait_any_relaxed_t* args = (args_hsa_signal_group_wait_any_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "signal_group");
 			msgpack_encode_map(buf, 2);
@@ -623,59 +650,61 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_group_wait_any_relaxed.signal_group.handle);
+			msgpack_encode_int(buf, args->signal_group.handle);
 
 			msgpack_encode_string_ext(buf, "conditions");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_signal_condition_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_signal_group_wait_any_relaxed.conditions);
+			msgpack_encode_uint(buf, (uintptr_t)args->conditions);
 
 			msgpack_encode_string_ext(buf, "compare_values");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_signal_value_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_signal_group_wait_any_relaxed.compare_values);
+			msgpack_encode_uint(buf, (uintptr_t)args->compare_values);
 
 			msgpack_encode_string_ext(buf, "wait_state_hint");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_wait_state_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_group_wait_any_relaxed.wait_state_hint);
+			msgpack_encode_int(buf, args->wait_state_hint);
 
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_signal_group_wait_any_relaxed.signal);
+			msgpack_encode_uint(buf, (uintptr_t)args->signal);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_signal_group_wait_any_relaxed.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_group_wait_any_relaxed.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_and_relaxed
-		case HSA_API_ID_hsa_signal_and_relaxed :
+		case HSA_API_ID_hsa_signal_and_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_and_relaxed_t* args = (args_hsa_signal_and_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -689,20 +718,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_and_relaxed.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_and_relaxed.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_clear
-		case HSA_API_ID_hsa_ext_image_clear :
+		case HSA_API_ID_hsa_ext_image_clear : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -712,6 +742,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	const void * data (const void *);
 			//	const hsa_ext_image_region_t * image_region (const struct hsa_ext_image_region_s *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_clear_t* args = (args_hsa_ext_image_clear_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -725,7 +756,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_clear.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "image");
 			msgpack_encode_map(buf, 2);
@@ -739,34 +770,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_clear.image.handle);
+			msgpack_encode_int(buf, args->image.handle);
 
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_clear.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "image_region");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_ext_image_region_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_clear.image_region);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_region);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_clear.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_load_code_object
-		case HSA_API_ID_hsa_executable_load_code_object :
+		case HSA_API_ID_hsa_executable_load_code_object : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -778,6 +810,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	const char * options (const char *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_load_code_object_t* args = (args_hsa_executable_load_code_object_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -791,7 +824,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_load_code_object.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -805,7 +838,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_load_code_object.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "code_object");
 			msgpack_encode_map(buf, 2);
@@ -819,32 +852,34 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_load_code_object.code_object.handle);
+			msgpack_encode_int(buf, args->code_object.handle);
 
 			msgpack_encode_string_ext(buf, "options");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_load_code_object.options);
+			msgpack_encode_uint(buf, (uintptr_t)args->options);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_load_code_object.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_exchange_acquire
-		case HSA_API_ID_hsa_signal_exchange_acquire :
+		case HSA_API_ID_hsa_signal_exchange_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_exchange_acquire_t* args = (args_hsa_signal_exchange_acquire_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -858,27 +893,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_acquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_acquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_acquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_data_get_info_with_layout
-		case HSA_API_ID_hsa_ext_image_data_get_info_with_layout :
+		case HSA_API_ID_hsa_ext_image_data_get_info_with_layout : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -889,6 +925,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	size_t image_data_slice_pitch (unsigned long);
 			//	hsa_ext_image_data_info_t * image_data_info (struct hsa_ext_image_data_info_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_data_get_info_with_layout_t* args = (args_hsa_ext_image_data_get_info_with_layout_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -902,108 +939,111 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_data_get_info_with_layout.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "image_descriptor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_ext_image_descriptor_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_data_get_info_with_layout.image_descriptor);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_descriptor);
 
 			msgpack_encode_string_ext(buf, "access_permission");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_access_permission_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_data_get_info_with_layout.access_permission);
+			msgpack_encode_int(buf, args->access_permission);
 
 			msgpack_encode_string_ext(buf, "image_data_layout");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ext_image_data_layout_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_data_get_info_with_layout.image_data_layout);
+			msgpack_encode_int(buf, args->image_data_layout);
 
 			msgpack_encode_string_ext(buf, "image_data_row_pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_data_get_info_with_layout.image_data_row_pitch);
+			msgpack_encode_int(buf, args->image_data_row_pitch);
 
 			msgpack_encode_string_ext(buf, "image_data_slice_pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_data_get_info_with_layout.image_data_slice_pitch);
+			msgpack_encode_int(buf, args->image_data_slice_pitch);
 
 			msgpack_encode_string_ext(buf, "image_data_info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ext_image_data_info_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_data_get_info_with_layout.image_data_info);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_data_info);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_data_get_info_with_layout.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_svm_attributes_get
-		case HSA_API_ID_hsa_amd_svm_attributes_get :
+		case HSA_API_ID_hsa_amd_svm_attributes_get : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	hsa_amd_svm_attribute_pair_t * attribute_list (struct hsa_amd_svm_attribute_pair_s*);
 			//	size_t attribute_count (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_svm_attributes_get_t* args = (args_hsa_amd_svm_attributes_get_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_svm_attributes_get.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_svm_attributes_get.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "attribute_list");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_svm_attribute_pair_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_svm_attributes_get.attribute_list);
+			msgpack_encode_uint(buf, (uintptr_t)args->attribute_list);
 
 			msgpack_encode_string_ext(buf, "attribute_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_svm_attributes_get.attribute_count);
+			msgpack_encode_int(buf, args->attribute_count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_svm_attributes_get.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_export
-		case HSA_API_ID_hsa_ext_image_export :
+		case HSA_API_ID_hsa_ext_image_export : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -1015,6 +1055,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	size_t dst_slice_pitch (unsigned long);
 			//	const hsa_ext_image_region_t * image_region (const struct hsa_ext_image_region_s *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_export_t* args = (args_hsa_ext_image_export_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -1028,7 +1069,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_export.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "src_image");
 			msgpack_encode_map(buf, 2);
@@ -1042,82 +1083,86 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_export.src_image.handle);
+			msgpack_encode_int(buf, args->src_image.handle);
 
 			msgpack_encode_string_ext(buf, "dst_memory");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_export.dst_memory);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst_memory);
 
 			msgpack_encode_string_ext(buf, "dst_row_pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_export.dst_row_pitch);
+			msgpack_encode_int(buf, args->dst_row_pitch);
 
 			msgpack_encode_string_ext(buf, "dst_slice_pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_export.dst_slice_pitch);
+			msgpack_encode_int(buf, args->dst_slice_pitch);
 
 			msgpack_encode_string_ext(buf, "image_region");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_ext_image_region_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_export.image_region);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_region);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_export.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_memory_register
-		case HSA_API_ID_hsa_memory_register :
+		case HSA_API_ID_hsa_memory_register : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_memory_register_t* args = (args_hsa_memory_register_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_memory_register.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_memory_register.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_memory_register.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_and_scacquire
-		case HSA_API_ID_hsa_signal_and_scacquire :
+		case HSA_API_ID_hsa_signal_and_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_and_scacquire_t* args = (args_hsa_signal_and_scacquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -1131,24 +1176,26 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_and_scacquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_and_scacquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_add_acq_rel
-		case HSA_API_ID_hsa_signal_add_acq_rel :
+		case HSA_API_ID_hsa_signal_add_acq_rel : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_add_acq_rel_t* args = (args_hsa_signal_add_acq_rel_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -1162,66 +1209,69 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_add_acq_rel.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_add_acq_rel.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_portable_export_dmabuf
-		case HSA_API_ID_hsa_amd_portable_export_dmabuf :
+		case HSA_API_ID_hsa_amd_portable_export_dmabuf : {
 			//	const void * ptr (const void *);
 			//	size_t size (unsigned long);
 			//	int * dmabuf (int *);
 			//	uint64_t * offset (unsigned long*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_portable_export_dmabuf_t* args = (args_hsa_amd_portable_export_dmabuf_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_portable_export_dmabuf.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_portable_export_dmabuf.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "dmabuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_portable_export_dmabuf.dmabuf);
+			msgpack_encode_uint(buf, (uintptr_t)args->dmabuf);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_portable_export_dmabuf.offset);
+			msgpack_encode_uint(buf, (uintptr_t)args->offset);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_portable_export_dmabuf.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_serialize
-		case HSA_API_ID_hsa_code_object_serialize :
+		case HSA_API_ID_hsa_code_object_serialize : {
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -1233,6 +1283,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	void ** serialized_code_object (void **);
 			//	size_t * serialized_code_object_size (unsigned long*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_serialize_t* args = (args_hsa_code_object_serialize_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "code_object");
 			msgpack_encode_map(buf, 2);
@@ -1246,14 +1297,14 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_serialize.code_object.handle);
+			msgpack_encode_int(buf, args->code_object.handle);
 
 			msgpack_encode_string_ext(buf, "alloc_callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t (*)(size_t, hsa_callback_data_t, void **)");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_serialize.alloc_callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->alloc_callback);
 
 			msgpack_encode_string_ext(buf, "callback_data");
 			msgpack_encode_map(buf, 2);
@@ -1267,95 +1318,98 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_serialize.callback_data.handle);
+			msgpack_encode_int(buf, args->callback_data.handle);
 
 			msgpack_encode_string_ext(buf, "options");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_serialize.options);
+			msgpack_encode_uint(buf, (uintptr_t)args->options);
 
 			msgpack_encode_string_ext(buf, "serialized_code_object");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_serialize.serialized_code_object);
+			msgpack_encode_uint(buf, (uintptr_t)args->serialized_code_object);
 
 			msgpack_encode_string_ext(buf, "serialized_code_object_size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_serialize.serialized_code_object_size);
+			msgpack_encode_uint(buf, (uintptr_t)args->serialized_code_object_size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_serialize.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_lock
-		case HSA_API_ID_hsa_amd_memory_lock :
+		case HSA_API_ID_hsa_amd_memory_lock : {
 			//	void * host_ptr (void *);
 			//	size_t size (unsigned long);
 			//	hsa_agent_t * agents (struct hsa_agent_s*);
 			//	int num_agent (int);
 			//	void ** agent_ptr (void **);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_lock_t* args = (args_hsa_amd_memory_lock_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "host_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_lock.host_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->host_ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_lock.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "agents");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_agent_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_lock.agents);
+			msgpack_encode_uint(buf, (uintptr_t)args->agents);
 
 			msgpack_encode_string_ext(buf, "num_agent");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_lock.num_agent);
+			msgpack_encode_int(buf, args->num_agent);
 
 			msgpack_encode_string_ext(buf, "agent_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_lock.agent_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->agent_ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_lock.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_iterate_agent_symbols
-		case HSA_API_ID_hsa_executable_iterate_agent_symbols :
+		case HSA_API_ID_hsa_executable_iterate_agent_symbols : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -1365,6 +1419,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_status_t (*)(hsa_executable_t, hsa_agent_t, hsa_executable_symbol_t, void *) callback (enum hsa_status_t (*)(struct hsa_executable_s, struct hsa_agent_s, struct hsa_executable_symbol_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_iterate_agent_symbols_t* args = (args_hsa_executable_iterate_agent_symbols_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -1378,7 +1433,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_iterate_agent_symbols.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -1392,40 +1447,42 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_iterate_agent_symbols.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t (*)(hsa_executable_t, hsa_agent_t, hsa_executable_symbol_t, void *)");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_iterate_agent_symbols.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_iterate_agent_symbols.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_iterate_agent_symbols.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_symbol_get_info
-		case HSA_API_ID_hsa_code_symbol_get_info :
+		case HSA_API_ID_hsa_code_symbol_get_info : {
 			//	hsa_code_symbol_t code_symbol ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_code_symbol_info_t attribute (enum hsa_code_symbol_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_symbol_get_info_t* args = (args_hsa_code_symbol_get_info_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "code_symbol");
 			msgpack_encode_map(buf, 2);
@@ -1439,38 +1496,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_symbol_get_info.code_symbol.handle);
+			msgpack_encode_int(buf, args->code_symbol.handle);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_code_symbol_info_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_symbol_get_info.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_symbol_get_info.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_symbol_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_xor_acquire
-		case HSA_API_ID_hsa_signal_xor_acquire :
+		case HSA_API_ID_hsa_signal_xor_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_xor_acquire_t* args = (args_hsa_signal_xor_acquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -1484,26 +1543,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_xor_acquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_xor_acquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_image_get_info_max_dim
-		case HSA_API_ID_hsa_amd_image_get_info_max_dim :
+		case HSA_API_ID_hsa_amd_image_get_info_max_dim : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_agent_info_t attribute (enum hsa_agent_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_image_get_info_max_dim_t* args = (args_hsa_amd_image_get_info_max_dim_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -1517,38 +1578,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_image_get_info_max_dim.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_agent_info_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_image_get_info_max_dim.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_image_get_info_max_dim.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_image_get_info_max_dim.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_subtract_acq_rel
-		case HSA_API_ID_hsa_signal_subtract_acq_rel :
+		case HSA_API_ID_hsa_signal_subtract_acq_rel : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_subtract_acq_rel_t* args = (args_hsa_signal_subtract_acq_rel_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -1562,26 +1625,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_subtract_acq_rel.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_subtract_acq_rel.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_isa_get_exception_policies
-		case HSA_API_ID_hsa_isa_get_exception_policies :
+		case HSA_API_ID_hsa_isa_get_exception_policies : {
 			//	hsa_isa_t isa ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_profile_t profile (enum hsa_profile_t);
 			//	uint16_t * mask (unsigned short*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_isa_get_exception_policies_t* args = (args_hsa_isa_get_exception_policies_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "isa");
 			msgpack_encode_map(buf, 2);
@@ -1595,40 +1660,42 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_get_exception_policies.isa.handle);
+			msgpack_encode_int(buf, args->isa.handle);
 
 			msgpack_encode_string_ext(buf, "profile");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_profile_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_get_exception_policies.profile);
+			msgpack_encode_int(buf, args->profile);
 
 			msgpack_encode_string_ext(buf, "mask");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_isa_get_exception_policies.mask);
+			msgpack_encode_uint(buf, (uintptr_t)args->mask);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_get_exception_policies.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_agent_iterate_regions
-		case HSA_API_ID_hsa_agent_iterate_regions :
+		case HSA_API_ID_hsa_agent_iterate_regions : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_region_t, void *) callback (enum hsa_status_t (*)(struct hsa_region_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_agent_iterate_regions_t* args = (args_hsa_agent_iterate_regions_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -1642,34 +1709,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_iterate_regions.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t (*)(hsa_region_t, void *)");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_agent_iterate_regions.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_agent_iterate_regions.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_iterate_regions.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_wait_relaxed
-		case HSA_API_ID_hsa_signal_wait_relaxed :
+		case HSA_API_ID_hsa_signal_wait_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -1678,6 +1746,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint64_t timeout_hint (unsigned long);
 			//	hsa_wait_state_t wait_state_hint (enum hsa_wait_state_t);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_wait_relaxed_t* args = (args_hsa_signal_wait_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -1691,48 +1760,49 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_relaxed.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "condition");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_condition_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_relaxed.condition);
+			msgpack_encode_int(buf, args->condition);
 
 			msgpack_encode_string_ext(buf, "compare_value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_relaxed.compare_value);
+			msgpack_encode_int(buf, args->compare_value);
 
 			msgpack_encode_string_ext(buf, "timeout_hint");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_relaxed.timeout_hint);
+			msgpack_encode_int(buf, args->timeout_hint);
 
 			msgpack_encode_string_ext(buf, "wait_state_hint");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_wait_state_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_relaxed.wait_state_hint);
+			msgpack_encode_int(buf, args->wait_state_hint);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_relaxed.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ven_amd_pcs_create
-		case HSA_API_ID_hsa_ven_amd_pcs_create :
+		case HSA_API_ID_hsa_ven_amd_pcs_create : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -1745,6 +1815,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	void * client_callback_data (void *);
 			//	hsa_ven_amd_pcs_t * pc_sampling (struct hsa_ven_amd_pcs_t*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ven_amd_pcs_create_t* args = (args_hsa_ven_amd_pcs_create_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -1758,102 +1829,106 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_create.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "method");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ven_amd_pcs_method_kind_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_create.method);
+			msgpack_encode_int(buf, args->method);
 
 			msgpack_encode_string_ext(buf, "units");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ven_amd_pcs_units_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_create.units);
+			msgpack_encode_int(buf, args->units);
 
 			msgpack_encode_string_ext(buf, "interval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_create.interval);
+			msgpack_encode_int(buf, args->interval);
 
 			msgpack_encode_string_ext(buf, "latency");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_create.latency);
+			msgpack_encode_int(buf, args->latency);
 
 			msgpack_encode_string_ext(buf, "buffer_size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_create.buffer_size);
+			msgpack_encode_int(buf, args->buffer_size);
 
 			msgpack_encode_string_ext(buf, "data_ready_callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ven_amd_pcs_data_ready_callback_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ven_amd_pcs_create.data_ready_callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->data_ready_callback);
 
 			msgpack_encode_string_ext(buf, "client_callback_data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ven_amd_pcs_create.client_callback_data);
+			msgpack_encode_uint(buf, (uintptr_t)args->client_callback_data);
 
 			msgpack_encode_string_ext(buf, "pc_sampling");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ven_amd_pcs_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ven_amd_pcs_create.pc_sampling);
+			msgpack_encode_uint(buf, (uintptr_t)args->pc_sampling);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_load_read_index_relaxed
-		case HSA_API_ID_hsa_queue_load_read_index_relaxed :
+		case HSA_API_ID_hsa_queue_load_read_index_relaxed : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_load_read_index_relaxed_t* args = (args_hsa_queue_load_read_index_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_load_read_index_relaxed.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_load_read_index_relaxed.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_load_scacquire
-		case HSA_API_ID_hsa_signal_load_scacquire :
+		case HSA_API_ID_hsa_signal_load_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_load_scacquire_t* args = (args_hsa_signal_load_scacquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -1867,25 +1942,27 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_load_scacquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_load_scacquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_signal_value_pointer
-		case HSA_API_ID_hsa_amd_signal_value_pointer :
+		case HSA_API_ID_hsa_amd_signal_value_pointer : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	volatile hsa_signal_value_t ** value_ptr (volatile long **);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_signal_value_pointer_t* args = (args_hsa_amd_signal_value_pointer_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -1899,54 +1976,58 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_signal_value_pointer.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "volatile hsa_signal_value_t **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_signal_value_pointer.value_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->value_ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_signal_value_pointer.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_pool_free
-		case HSA_API_ID_hsa_amd_memory_pool_free :
+		case HSA_API_ID_hsa_amd_memory_pool_free : {
 			//	void * ptr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_pool_free_t* args = (args_hsa_amd_memory_pool_free_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_pool_free.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_pool_free.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_validate
-		case HSA_API_ID_hsa_executable_validate :
+		case HSA_API_ID_hsa_executable_validate : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	uint32_t * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_validate_t* args = (args_hsa_executable_validate_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -1960,77 +2041,81 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_validate.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "result");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_validate.result);
+			msgpack_encode_uint(buf, (uintptr_t)args->result);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_validate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_create
-		case HSA_API_ID_hsa_signal_create :
+		case HSA_API_ID_hsa_signal_create : {
 			//	hsa_signal_value_t initial_value (long);
 			//	uint32_t num_consumers (unsigned int);
 			//	const hsa_agent_t * consumers (const struct hsa_agent_s *);
 			//	hsa_signal_t * signal (struct hsa_signal_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_signal_create_t* args = (args_hsa_signal_create_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "initial_value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_create.initial_value);
+			msgpack_encode_int(buf, args->initial_value);
 
 			msgpack_encode_string_ext(buf, "num_consumers");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_create.num_consumers);
+			msgpack_encode_int(buf, args->num_consumers);
 
 			msgpack_encode_string_ext(buf, "consumers");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_agent_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_signal_create.consumers);
+			msgpack_encode_uint(buf, (uintptr_t)args->consumers);
 
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_signal_create.signal);
+			msgpack_encode_uint(buf, (uintptr_t)args->signal);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_spm_acquire
-		case HSA_API_ID_hsa_amd_spm_acquire :
+		case HSA_API_ID_hsa_amd_spm_acquire : {
 			//	hsa_agent_t preferred_agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_spm_acquire_t* args = (args_hsa_amd_spm_acquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "preferred_agent");
 			msgpack_encode_map(buf, 2);
@@ -2044,64 +2129,69 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_spm_acquire.preferred_agent.handle);
+			msgpack_encode_int(buf, args->preferred_agent.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_spm_acquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_load_read_index_scacquire
-		case HSA_API_ID_hsa_queue_load_read_index_scacquire :
+		case HSA_API_ID_hsa_queue_load_read_index_scacquire : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_load_read_index_scacquire_t* args = (args_hsa_queue_load_read_index_scacquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_load_read_index_scacquire.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_load_read_index_scacquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_load_write_index_acquire
-		case HSA_API_ID_hsa_queue_load_write_index_acquire :
+		case HSA_API_ID_hsa_queue_load_write_index_acquire : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_load_write_index_acquire_t* args = (args_hsa_queue_load_write_index_acquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_load_write_index_acquire.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_load_write_index_acquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_agent_global_variable_define
-		case HSA_API_ID_hsa_executable_agent_global_variable_define :
+		case HSA_API_ID_hsa_executable_agent_global_variable_define : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -2111,6 +2201,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	const char * variable_name (const char *);
 			//	void * address (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_agent_global_variable_define_t* args = (args_hsa_executable_agent_global_variable_define_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -2124,7 +2215,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_agent_global_variable_define.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -2138,38 +2229,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_agent_global_variable_define.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "variable_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_agent_global_variable_define.variable_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->variable_name);
 
 			msgpack_encode_string_ext(buf, "address");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_agent_global_variable_define.address);
+			msgpack_encode_uint(buf, (uintptr_t)args->address);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_agent_global_variable_define.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_add_relaxed
-		case HSA_API_ID_hsa_signal_add_relaxed :
+		case HSA_API_ID_hsa_signal_add_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_add_relaxed_t* args = (args_hsa_signal_add_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -2183,20 +2276,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_add_relaxed.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_add_relaxed.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_soft_queue_create
-		case HSA_API_ID_hsa_soft_queue_create :
+		case HSA_API_ID_hsa_soft_queue_create : {
 			//	hsa_region_t region ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -2208,6 +2302,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	hsa_queue_t ** queue (struct hsa_queue_s**);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_soft_queue_create_t* args = (args_hsa_soft_queue_create_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "region");
 			msgpack_encode_map(buf, 2);
@@ -2221,28 +2316,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_soft_queue_create.region.handle);
+			msgpack_encode_int(buf, args->region.handle);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_soft_queue_create.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_queue_type32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_soft_queue_create.type);
+			msgpack_encode_int(buf, args->type);
 
 			msgpack_encode_string_ext(buf, "features");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_soft_queue_create.features);
+			msgpack_encode_int(buf, args->features);
 
 			msgpack_encode_string_ext(buf, "doorbell_signal");
 			msgpack_encode_map(buf, 2);
@@ -2256,69 +2351,73 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_soft_queue_create.doorbell_signal.handle);
+			msgpack_encode_int(buf, args->doorbell_signal.handle);
 
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_queue_t **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_soft_queue_create.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_soft_queue_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_cas_write_index_screlease
-		case HSA_API_ID_hsa_queue_cas_write_index_screlease :
+		case HSA_API_ID_hsa_queue_cas_write_index_screlease : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t expected (unsigned long);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_cas_write_index_screlease_t* args = (args_hsa_queue_cas_write_index_screlease_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_cas_write_index_screlease.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "expected");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_screlease.expected);
+			msgpack_encode_int(buf, args->expected);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_screlease.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_screlease.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_xor_release
-		case HSA_API_ID_hsa_signal_xor_release :
+		case HSA_API_ID_hsa_signal_xor_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_xor_release_t* args = (args_hsa_signal_xor_release_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -2332,20 +2431,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_xor_release.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_xor_release.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_wait_scacquire
-		case HSA_API_ID_hsa_signal_wait_scacquire :
+		case HSA_API_ID_hsa_signal_wait_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -2354,6 +2454,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint64_t timeout_hint (unsigned long);
 			//	hsa_wait_state_t wait_state_hint (enum hsa_wait_state_t);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_wait_scacquire_t* args = (args_hsa_signal_wait_scacquire_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -2367,82 +2468,86 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_scacquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "condition");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_condition_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_scacquire.condition);
+			msgpack_encode_int(buf, args->condition);
 
 			msgpack_encode_string_ext(buf, "compare_value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_scacquire.compare_value);
+			msgpack_encode_int(buf, args->compare_value);
 
 			msgpack_encode_string_ext(buf, "timeout_hint");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_scacquire.timeout_hint);
+			msgpack_encode_int(buf, args->timeout_hint);
 
 			msgpack_encode_string_ext(buf, "wait_state_hint");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_wait_state_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_scacquire.wait_state_hint);
+			msgpack_encode_int(buf, args->wait_state_hint);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_scacquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_isa_from_name
-		case HSA_API_ID_hsa_isa_from_name :
+		case HSA_API_ID_hsa_isa_from_name : {
 			//	const char * name (const char *);
 			//	hsa_isa_t * isa (struct hsa_isa_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_isa_from_name_t* args = (args_hsa_isa_from_name_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_isa_from_name.name);
+			msgpack_encode_uint(buf, (uintptr_t)args->name);
 
 			msgpack_encode_string_ext(buf, "isa");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_isa_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_isa_from_name.isa);
+			msgpack_encode_uint(buf, (uintptr_t)args->isa);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_from_name.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_destroy
-		case HSA_API_ID_hsa_executable_destroy :
+		case HSA_API_ID_hsa_executable_destroy : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_destroy_t* args = (args_hsa_executable_destroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -2456,20 +2561,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_destroy.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_destroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_create
-		case HSA_API_ID_hsa_ext_image_create :
+		case HSA_API_ID_hsa_ext_image_create : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -2478,6 +2584,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_access_permission_t access_permission (enum hsa_access_permission_t);
 			//	hsa_ext_image_t * image (struct hsa_ext_image_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_create_t* args = (args_hsa_ext_image_create_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -2491,94 +2598,97 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_create.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "image_descriptor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_ext_image_descriptor_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_create.image_descriptor);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_descriptor);
 
 			msgpack_encode_string_ext(buf, "image_data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_create.image_data);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_data);
 
 			msgpack_encode_string_ext(buf, "access_permission");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_access_permission_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_create.access_permission);
+			msgpack_encode_int(buf, args->access_permission);
 
 			msgpack_encode_string_ext(buf, "image");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ext_image_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_create.image);
+			msgpack_encode_uint(buf, (uintptr_t)args->image);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_system_extension_supported
-		case HSA_API_ID_hsa_system_extension_supported :
+		case HSA_API_ID_hsa_system_extension_supported : {
 			//	uint16_t extension (unsigned short);
 			//	uint16_t version_major (unsigned short);
 			//	uint16_t version_minor (unsigned short);
 			//	_Bool * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_system_extension_supported_t* args = (args_hsa_system_extension_supported_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "extension");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_extension_supported.extension);
+			msgpack_encode_int(buf, args->extension);
 
 			msgpack_encode_string_ext(buf, "version_major");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_extension_supported.version_major);
+			msgpack_encode_int(buf, args->version_major);
 
 			msgpack_encode_string_ext(buf, "version_minor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_extension_supported.version_minor);
+			msgpack_encode_int(buf, args->version_minor);
 
 			msgpack_encode_string_ext(buf, "result");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "_Bool *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_system_extension_supported.result);
+			msgpack_encode_uint(buf, (uintptr_t)args->result);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_extension_supported.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_load_agent_code_object
-		case HSA_API_ID_hsa_executable_load_agent_code_object :
+		case HSA_API_ID_hsa_executable_load_agent_code_object : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -2591,6 +2701,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	const char * options (const char *);
 			//	hsa_loaded_code_object_t * loaded_code_object (struct hsa_loaded_code_object_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_load_agent_code_object_t* args = (args_hsa_executable_load_agent_code_object_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -2604,7 +2715,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_load_agent_code_object.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -2618,7 +2729,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_load_agent_code_object.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "code_object_reader");
 			msgpack_encode_map(buf, 2);
@@ -2632,38 +2743,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_load_agent_code_object.code_object_reader.handle);
+			msgpack_encode_int(buf, args->code_object_reader.handle);
 
 			msgpack_encode_string_ext(buf, "options");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_load_agent_code_object.options);
+			msgpack_encode_uint(buf, (uintptr_t)args->options);
 
 			msgpack_encode_string_ext(buf, "loaded_code_object");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_loaded_code_object_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_load_agent_code_object.loaded_code_object);
+			msgpack_encode_uint(buf, (uintptr_t)args->loaded_code_object);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_load_agent_code_object.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_handle_release
-		case HSA_API_ID_hsa_amd_vmem_handle_release :
+		case HSA_API_ID_hsa_amd_vmem_handle_release : {
 			//	hsa_amd_vmem_alloc_handle_t memory_handle ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_handle_release_t* args = (args_hsa_amd_vmem_handle_release_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "memory_handle");
 			msgpack_encode_map(buf, 2);
@@ -2677,48 +2790,52 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_handle_release.memory_handle.handle);
+			msgpack_encode_int(buf, args->memory_handle.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_handle_release.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_memory_free
-		case HSA_API_ID_hsa_memory_free :
+		case HSA_API_ID_hsa_memory_free : {
 			//	void * ptr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_memory_free_t* args = (args_hsa_memory_free_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_memory_free.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_memory_free.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_cas_screlease
-		case HSA_API_ID_hsa_signal_cas_screlease :
+		case HSA_API_ID_hsa_signal_cas_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t expected (long);
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_cas_screlease_t* args = (args_hsa_signal_cas_screlease_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -2732,34 +2849,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_screlease.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "expected");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_screlease.expected);
+			msgpack_encode_int(buf, args->expected);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_screlease.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_screlease.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_copy_engine_status
-		case HSA_API_ID_hsa_amd_memory_copy_engine_status :
+		case HSA_API_ID_hsa_amd_memory_copy_engine_status : {
 			//	hsa_agent_t dst_agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -2768,6 +2886,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	uint32_t * engine_ids_mask (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_copy_engine_status_t* args = (args_hsa_amd_memory_copy_engine_status_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "dst_agent");
 			msgpack_encode_map(buf, 2);
@@ -2781,7 +2900,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_copy_engine_status.dst_agent.handle);
+			msgpack_encode_int(buf, args->dst_agent.handle);
 
 			msgpack_encode_string_ext(buf, "src_agent");
 			msgpack_encode_map(buf, 2);
@@ -2795,33 +2914,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_copy_engine_status.src_agent.handle);
+			msgpack_encode_int(buf, args->src_agent.handle);
 
 			msgpack_encode_string_ext(buf, "engine_ids_mask");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_copy_engine_status.engine_ids_mask);
+			msgpack_encode_uint(buf, (uintptr_t)args->engine_ids_mask);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_copy_engine_status.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_iterate_program_symbols
-		case HSA_API_ID_hsa_executable_iterate_program_symbols :
+		case HSA_API_ID_hsa_executable_iterate_program_symbols : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *) callback (enum hsa_status_t (*)(struct hsa_executable_s, struct hsa_executable_symbol_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_iterate_program_symbols_t* args = (args_hsa_executable_iterate_program_symbols_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -2835,34 +2956,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_iterate_program_symbols.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *)");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_iterate_program_symbols.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_iterate_program_symbols.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_iterate_program_symbols.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_copy
-		case HSA_API_ID_hsa_ext_image_copy :
+		case HSA_API_ID_hsa_ext_image_copy : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -2876,6 +2998,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	const hsa_dim3_t * dst_offset (const struct hsa_dim3_s *);
 			//	const hsa_dim3_t * range (const struct hsa_dim3_s *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_copy_t* args = (args_hsa_ext_image_copy_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -2889,7 +3012,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_copy.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "src_image");
 			msgpack_encode_map(buf, 2);
@@ -2903,14 +3026,14 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_copy.src_image.handle);
+			msgpack_encode_int(buf, args->src_image.handle);
 
 			msgpack_encode_string_ext(buf, "src_offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_dim3_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_copy.src_offset);
+			msgpack_encode_uint(buf, (uintptr_t)args->src_offset);
 
 			msgpack_encode_string_ext(buf, "dst_image");
 			msgpack_encode_map(buf, 2);
@@ -2924,39 +3047,41 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_copy.dst_image.handle);
+			msgpack_encode_int(buf, args->dst_image.handle);
 
 			msgpack_encode_string_ext(buf, "dst_offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_dim3_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_copy.dst_offset);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst_offset);
 
 			msgpack_encode_string_ext(buf, "range");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_dim3_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_copy.range);
+			msgpack_encode_uint(buf, (uintptr_t)args->range);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_copy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_coherency_get_type
-		case HSA_API_ID_hsa_amd_coherency_get_type :
+		case HSA_API_ID_hsa_amd_coherency_get_type : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_amd_coherency_type_t * type (enum hsa_amd_coherency_type_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_coherency_get_type_t* args = (args_hsa_amd_coherency_get_type_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -2970,32 +3095,34 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_coherency_get_type.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_coherency_type_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_coherency_get_type.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_coherency_get_type.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_freeze
-		case HSA_API_ID_hsa_executable_freeze :
+		case HSA_API_ID_hsa_executable_freeze : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	const char * options (const char *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_freeze_t* args = (args_hsa_executable_freeze_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -3009,62 +3136,66 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_freeze.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "options");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_freeze.options);
+			msgpack_encode_uint(buf, (uintptr_t)args->options);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_freeze.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_store_write_index_release
-		case HSA_API_ID_hsa_queue_store_write_index_release :
+		case HSA_API_ID_hsa_queue_store_write_index_release : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t value (unsigned long);
+			args_hsa_queue_store_write_index_release_t* args = (args_hsa_queue_store_write_index_release_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_store_write_index_release.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_store_write_index_release.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_export_shareable_handle
-		case HSA_API_ID_hsa_amd_vmem_export_shareable_handle :
+		case HSA_API_ID_hsa_amd_vmem_export_shareable_handle : {
 			//	int * dmabuf_fd (int *);
 			//	hsa_amd_vmem_alloc_handle_t handle ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	uint64_t flags (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_export_shareable_handle_t* args = (args_hsa_amd_vmem_export_shareable_handle_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "dmabuf_fd");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_export_shareable_handle.dmabuf_fd);
+			msgpack_encode_uint(buf, (uintptr_t)args->dmabuf_fd);
 
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
@@ -3078,27 +3209,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_export_shareable_handle.handle.handle);
+			msgpack_encode_int(buf, args->handle.handle);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_export_shareable_handle.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_export_shareable_handle.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_svm_prefetch_async
-		case HSA_API_ID_hsa_amd_svm_prefetch_async :
+		case HSA_API_ID_hsa_amd_svm_prefetch_async : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	hsa_agent_t agent ({
@@ -3110,20 +3242,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_svm_prefetch_async_t* args = (args_hsa_amd_svm_prefetch_async_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_svm_prefetch_async.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_svm_prefetch_async.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -3137,21 +3270,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_svm_prefetch_async.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "num_dep_signals");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_svm_prefetch_async.num_dep_signals);
+			msgpack_encode_int(buf, args->num_dep_signals);
 
 			msgpack_encode_string_ext(buf, "dep_signals");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_signal_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_svm_prefetch_async.dep_signals);
+			msgpack_encode_uint(buf, (uintptr_t)args->dep_signals);
 
 			msgpack_encode_string_ext(buf, "completion_signal");
 			msgpack_encode_map(buf, 2);
@@ -3165,24 +3298,26 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_svm_prefetch_async.completion_signal.handle);
+			msgpack_encode_int(buf, args->completion_signal.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_svm_prefetch_async.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_store_screlease
-		case HSA_API_ID_hsa_signal_store_screlease :
+		case HSA_API_ID_hsa_signal_store_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_store_screlease_t* args = (args_hsa_signal_store_screlease_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -3196,58 +3331,61 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_store_screlease.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_store_screlease.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_fill
-		case HSA_API_ID_hsa_amd_memory_fill :
+		case HSA_API_ID_hsa_amd_memory_fill : {
 			//	void * ptr (void *);
 			//	uint32_t value (unsigned int);
 			//	size_t count (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_fill_t* args = (args_hsa_amd_memory_fill_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_fill.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_fill.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_fill.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_fill.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_map
-		case HSA_API_ID_hsa_amd_vmem_map :
+		case HSA_API_ID_hsa_amd_vmem_map : {
 			//	void * va (void *);
 			//	size_t size (unsigned long);
 			//	size_t in_offset (unsigned long);
@@ -3256,27 +3394,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	uint64_t flags (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_map_t* args = (args_hsa_amd_vmem_map_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "va");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_map.va);
+			msgpack_encode_uint(buf, (uintptr_t)args->va);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_map.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "in_offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_map.in_offset);
+			msgpack_encode_int(buf, args->in_offset);
 
 			msgpack_encode_string_ext(buf, "memory_handle");
 			msgpack_encode_map(buf, 2);
@@ -3290,31 +3429,33 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_map.memory_handle.handle);
+			msgpack_encode_int(buf, args->memory_handle.handle);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_map.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_map.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_subtract_scacq_screl
-		case HSA_API_ID_hsa_signal_subtract_scacq_screl :
+		case HSA_API_ID_hsa_signal_subtract_scacq_screl : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_subtract_scacq_screl_t* args = (args_hsa_signal_subtract_scacq_screl_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -3328,20 +3469,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_subtract_scacq_screl.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_subtract_scacq_screl.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_async_copy_rect
-		case HSA_API_ID_hsa_amd_memory_async_copy_rect :
+		case HSA_API_ID_hsa_amd_memory_async_copy_rect : {
 			//	const hsa_pitched_ptr_t * dst (const struct hsa_pitched_ptr_s *);
 			//	const hsa_dim3_t * dst_offset (const struct hsa_dim3_s *);
 			//	const hsa_pitched_ptr_t * src (const struct hsa_pitched_ptr_s *);
@@ -3357,41 +3499,42 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_async_copy_rect_t* args = (args_hsa_amd_memory_async_copy_rect_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_pitched_ptr_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_async_copy_rect.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "dst_offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_dim3_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_async_copy_rect.dst_offset);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst_offset);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_pitched_ptr_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_async_copy_rect.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "src_offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_dim3_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_async_copy_rect.src_offset);
+			msgpack_encode_uint(buf, (uintptr_t)args->src_offset);
 
 			msgpack_encode_string_ext(buf, "range");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_dim3_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_async_copy_rect.range);
+			msgpack_encode_uint(buf, (uintptr_t)args->range);
 
 			msgpack_encode_string_ext(buf, "copy_agent");
 			msgpack_encode_map(buf, 2);
@@ -3405,28 +3548,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy_rect.copy_agent.handle);
+			msgpack_encode_int(buf, args->copy_agent.handle);
 
 			msgpack_encode_string_ext(buf, "dir");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_copy_direction_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy_rect.dir);
+			msgpack_encode_int(buf, args->dir);
 
 			msgpack_encode_string_ext(buf, "num_dep_signals");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy_rect.num_dep_signals);
+			msgpack_encode_int(buf, args->num_dep_signals);
 
 			msgpack_encode_string_ext(buf, "dep_signals");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_signal_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_async_copy_rect.dep_signals);
+			msgpack_encode_uint(buf, (uintptr_t)args->dep_signals);
 
 			msgpack_encode_string_ext(buf, "completion_signal");
 			msgpack_encode_map(buf, 2);
@@ -3440,71 +3583,75 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy_rect.completion_signal.handle);
+			msgpack_encode_int(buf, args->completion_signal.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy_rect.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_svm_attributes_set
-		case HSA_API_ID_hsa_amd_svm_attributes_set :
+		case HSA_API_ID_hsa_amd_svm_attributes_set : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	hsa_amd_svm_attribute_pair_t * attribute_list (struct hsa_amd_svm_attribute_pair_s*);
 			//	size_t attribute_count (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_svm_attributes_set_t* args = (args_hsa_amd_svm_attributes_set_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_svm_attributes_set.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_svm_attributes_set.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "attribute_list");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_svm_attribute_pair_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_svm_attributes_set.attribute_list);
+			msgpack_encode_uint(buf, (uintptr_t)args->attribute_list);
 
 			msgpack_encode_string_ext(buf, "attribute_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_svm_attributes_set.attribute_count);
+			msgpack_encode_int(buf, args->attribute_count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_svm_attributes_set.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_profiling_get_async_copy_time
-		case HSA_API_ID_hsa_amd_profiling_get_async_copy_time :
+		case HSA_API_ID_hsa_amd_profiling_get_async_copy_time : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_amd_profiling_async_copy_time_t * time (struct hsa_amd_profiling_async_copy_time_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_profiling_get_async_copy_time_t* args = (args_hsa_amd_profiling_get_async_copy_time_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -3518,32 +3665,34 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_profiling_get_async_copy_time.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "time");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_profiling_async_copy_time_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_profiling_get_async_copy_time.time);
+			msgpack_encode_uint(buf, (uintptr_t)args->time);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_profiling_get_async_copy_time.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_agent_set_async_scratch_limit
-		case HSA_API_ID_hsa_amd_agent_set_async_scratch_limit :
+		case HSA_API_ID_hsa_amd_agent_set_async_scratch_limit : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	size_t threshold (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_agent_set_async_scratch_limit_t* args = (args_hsa_amd_agent_set_async_scratch_limit_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -3557,31 +3706,33 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_agent_set_async_scratch_limit.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "threshold");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_agent_set_async_scratch_limit.threshold);
+			msgpack_encode_int(buf, args->threshold);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_agent_set_async_scratch_limit.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_subtract_screlease
-		case HSA_API_ID_hsa_signal_subtract_screlease :
+		case HSA_API_ID_hsa_signal_subtract_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_subtract_screlease_t* args = (args_hsa_signal_subtract_screlease_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -3595,20 +3746,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_subtract_screlease.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_subtract_screlease.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_import
-		case HSA_API_ID_hsa_ext_image_import :
+		case HSA_API_ID_hsa_ext_image_import : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -3620,6 +3772,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	const hsa_ext_image_region_t * image_region (const struct hsa_ext_image_region_s *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_import_t* args = (args_hsa_ext_image_import_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -3633,28 +3786,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_import.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "src_memory");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_import.src_memory);
+			msgpack_encode_uint(buf, (uintptr_t)args->src_memory);
 
 			msgpack_encode_string_ext(buf, "src_row_pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_import.src_row_pitch);
+			msgpack_encode_int(buf, args->src_row_pitch);
 
 			msgpack_encode_string_ext(buf, "src_slice_pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_import.src_slice_pitch);
+			msgpack_encode_int(buf, args->src_slice_pitch);
 
 			msgpack_encode_string_ext(buf, "dst_image");
 			msgpack_encode_map(buf, 2);
@@ -3668,27 +3821,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_import.dst_image.handle);
+			msgpack_encode_int(buf, args->dst_image.handle);
 
 			msgpack_encode_string_ext(buf, "image_region");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_ext_image_region_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_import.image_region);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_region);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_import.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_pool_can_migrate
-		case HSA_API_ID_hsa_amd_memory_pool_can_migrate :
+		case HSA_API_ID_hsa_amd_memory_pool_can_migrate : {
 			//	hsa_amd_memory_pool_t src_memory_pool ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -3697,6 +3851,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	_Bool * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_pool_can_migrate_t* args = (args_hsa_amd_memory_pool_can_migrate_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "src_memory_pool");
 			msgpack_encode_map(buf, 2);
@@ -3710,7 +3865,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_pool_can_migrate.src_memory_pool.handle);
+			msgpack_encode_int(buf, args->src_memory_pool.handle);
 
 			msgpack_encode_string_ext(buf, "dst_memory_pool");
 			msgpack_encode_map(buf, 2);
@@ -3724,159 +3879,169 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_pool_can_migrate.dst_memory_pool.handle);
+			msgpack_encode_int(buf, args->dst_memory_pool.handle);
 
 			msgpack_encode_string_ext(buf, "result");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "_Bool *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_pool_can_migrate.result);
+			msgpack_encode_uint(buf, (uintptr_t)args->result);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_pool_can_migrate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_ipc_memory_attach
-		case HSA_API_ID_hsa_amd_ipc_memory_attach :
+		case HSA_API_ID_hsa_amd_ipc_memory_attach : {
 			//	const hsa_amd_ipc_memory_t * handle (const struct hsa_amd_ipc_memory_s *);
 			//	size_t len (unsigned long);
 			//	uint32_t num_agents (unsigned int);
 			//	const hsa_agent_t * mapping_agents (const struct hsa_agent_s *);
 			//	void ** mapped_ptr (void **);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_ipc_memory_attach_t* args = (args_hsa_amd_ipc_memory_attach_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_amd_ipc_memory_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_ipc_memory_attach.handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->handle);
 
 			msgpack_encode_string_ext(buf, "len");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_ipc_memory_attach.len);
+			msgpack_encode_int(buf, args->len);
 
 			msgpack_encode_string_ext(buf, "num_agents");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_ipc_memory_attach.num_agents);
+			msgpack_encode_int(buf, args->num_agents);
 
 			msgpack_encode_string_ext(buf, "mapping_agents");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_agent_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_ipc_memory_attach.mapping_agents);
+			msgpack_encode_uint(buf, (uintptr_t)args->mapping_agents);
 
 			msgpack_encode_string_ext(buf, "mapped_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_ipc_memory_attach.mapped_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->mapped_ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_ipc_memory_attach.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_portable_close_dmabuf
-		case HSA_API_ID_hsa_amd_portable_close_dmabuf :
+		case HSA_API_ID_hsa_amd_portable_close_dmabuf : {
 			//	int dmabuf (int);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_portable_close_dmabuf_t* args = (args_hsa_amd_portable_close_dmabuf_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "dmabuf");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_portable_close_dmabuf.dmabuf);
+			msgpack_encode_int(buf, args->dmabuf);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_portable_close_dmabuf.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_add_write_index_relaxed
-		case HSA_API_ID_hsa_queue_add_write_index_relaxed :
+		case HSA_API_ID_hsa_queue_add_write_index_relaxed : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_add_write_index_relaxed_t* args = (args_hsa_queue_add_write_index_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_add_write_index_relaxed.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_add_write_index_relaxed.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_add_write_index_relaxed.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_destroy
-		case HSA_API_ID_hsa_queue_destroy :
+		case HSA_API_ID_hsa_queue_destroy : {
 			//	hsa_queue_t * queue (struct hsa_queue_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_queue_destroy_t* args = (args_hsa_queue_destroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_destroy.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_destroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_or_scacq_screl
-		case HSA_API_ID_hsa_signal_or_scacq_screl :
+		case HSA_API_ID_hsa_signal_or_scacq_screl : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_or_scacq_screl_t* args = (args_hsa_signal_or_scacq_screl_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -3890,20 +4055,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_or_scacq_screl.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_or_scacq_screl.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_agent_memory_pool_get_info
-		case HSA_API_ID_hsa_amd_agent_memory_pool_get_info :
+		case HSA_API_ID_hsa_amd_agent_memory_pool_get_info : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -3913,6 +4079,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_amd_agent_memory_pool_info_t attribute (enum hsa_amd_agent_memory_pool_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_agent_memory_pool_get_info_t* args = (args_hsa_amd_agent_memory_pool_get_info_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -3926,7 +4093,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_agent_memory_pool_get_info.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "memory_pool");
 			msgpack_encode_map(buf, 2);
@@ -3940,84 +4107,88 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_agent_memory_pool_get_info.memory_pool.handle);
+			msgpack_encode_int(buf, args->memory_pool.handle);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_agent_memory_pool_info_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_agent_memory_pool_get_info.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_agent_memory_pool_get_info.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_agent_memory_pool_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_create_alt
-		case HSA_API_ID_hsa_executable_create_alt :
+		case HSA_API_ID_hsa_executable_create_alt : {
 			//	hsa_profile_t profile (enum hsa_profile_t);
 			//	hsa_default_float_rounding_mode_t default_float_rounding_mode (enum hsa_default_float_rounding_mode_t);
 			//	const char * options (const char *);
 			//	hsa_executable_t * executable (struct hsa_executable_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_create_alt_t* args = (args_hsa_executable_create_alt_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "profile");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_profile_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_create_alt.profile);
+			msgpack_encode_int(buf, args->profile);
 
 			msgpack_encode_string_ext(buf, "default_float_rounding_mode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_default_float_rounding_mode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_float(buf, args->hsa_executable_create_alt.default_float_rounding_mode);
+			msgpack_encode_float(buf, args->default_float_rounding_mode);
 
 			msgpack_encode_string_ext(buf, "options");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_create_alt.options);
+			msgpack_encode_uint(buf, (uintptr_t)args->options);
 
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_executable_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_create_alt.executable);
+			msgpack_encode_uint(buf, (uintptr_t)args->executable);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_create_alt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_silent_store_relaxed
-		case HSA_API_ID_hsa_signal_silent_store_relaxed :
+		case HSA_API_ID_hsa_signal_silent_store_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_silent_store_relaxed_t* args = (args_hsa_signal_silent_store_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -4031,94 +4202,100 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_silent_store_relaxed.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_silent_store_relaxed.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_add_write_index_acq_rel
-		case HSA_API_ID_hsa_queue_add_write_index_acq_rel :
+		case HSA_API_ID_hsa_queue_add_write_index_acq_rel : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_add_write_index_acq_rel_t* args = (args_hsa_queue_add_write_index_acq_rel_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_add_write_index_acq_rel.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_add_write_index_acq_rel.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_add_write_index_acq_rel.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_cas_write_index_acq_rel
-		case HSA_API_ID_hsa_queue_cas_write_index_acq_rel :
+		case HSA_API_ID_hsa_queue_cas_write_index_acq_rel : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t expected (unsigned long);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_cas_write_index_acq_rel_t* args = (args_hsa_queue_cas_write_index_acq_rel_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_cas_write_index_acq_rel.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "expected");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_acq_rel.expected);
+			msgpack_encode_int(buf, args->expected);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_acq_rel.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_acq_rel.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_region_get_info
-		case HSA_API_ID_hsa_region_get_info :
+		case HSA_API_ID_hsa_region_get_info : {
 			//	hsa_region_t region ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_region_info_t attribute (enum hsa_region_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_region_get_info_t* args = (args_hsa_region_get_info_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "region");
 			msgpack_encode_map(buf, 2);
@@ -4132,34 +4309,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_region_get_info.region.handle);
+			msgpack_encode_int(buf, args->region.handle);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_region_info_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_region_get_info.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_region_get_info.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_region_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_get_symbol_by_name
-		case HSA_API_ID_hsa_executable_get_symbol_by_name :
+		case HSA_API_ID_hsa_executable_get_symbol_by_name : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -4167,6 +4345,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	const hsa_agent_t * agent (const struct hsa_agent_s *);
 			//	hsa_executable_symbol_t * symbol (struct hsa_executable_symbol_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_get_symbol_by_name_t* args = (args_hsa_executable_get_symbol_by_name_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -4180,41 +4359,42 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_get_symbol_by_name.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "symbol_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_get_symbol_by_name.symbol_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol_name);
 
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_agent_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_get_symbol_by_name.agent);
+			msgpack_encode_uint(buf, (uintptr_t)args->agent);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_executable_symbol_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_get_symbol_by_name.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_get_symbol_by_name.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_get_symbol
-		case HSA_API_ID_hsa_executable_get_symbol :
+		case HSA_API_ID_hsa_executable_get_symbol : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -4226,6 +4406,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	int32_t call_convention (int);
 			//	hsa_executable_symbol_t * symbol (struct hsa_executable_symbol_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_get_symbol_t* args = (args_hsa_executable_get_symbol_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -4239,21 +4420,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_get_symbol.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "module_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_get_symbol.module_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->module_name);
 
 			msgpack_encode_string_ext(buf, "symbol_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_get_symbol.symbol_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol_name);
 
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -4267,38 +4448,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_get_symbol.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "call_convention");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_get_symbol.call_convention);
+			msgpack_encode_int(buf, args->call_convention);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_executable_symbol_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_get_symbol.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_get_symbol.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_xor_scacquire
-		case HSA_API_ID_hsa_signal_xor_scacquire :
+		case HSA_API_ID_hsa_signal_xor_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_xor_scacquire_t* args = (args_hsa_signal_xor_scacquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -4312,24 +4495,26 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_xor_scacquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_xor_scacquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_xor_scacq_screl
-		case HSA_API_ID_hsa_signal_xor_scacq_screl :
+		case HSA_API_ID_hsa_signal_xor_scacq_screl : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_xor_scacq_screl_t* args = (args_hsa_signal_xor_scacq_screl_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -4343,48 +4528,52 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_xor_scacq_screl.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_xor_scacq_screl.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_store_write_index_screlease
-		case HSA_API_ID_hsa_queue_store_write_index_screlease :
+		case HSA_API_ID_hsa_queue_store_write_index_screlease : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t value (unsigned long);
+			args_hsa_queue_store_write_index_screlease_t* args = (args_hsa_queue_store_write_index_screlease_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_store_write_index_screlease.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_store_write_index_screlease.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_agent_iterate_memory_pools
-		case HSA_API_ID_hsa_amd_agent_iterate_memory_pools :
+		case HSA_API_ID_hsa_amd_agent_iterate_memory_pools : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_amd_memory_pool_t, void *) callback (enum hsa_status_t (*)(struct hsa_amd_memory_pool_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_agent_iterate_memory_pools_t* args = (args_hsa_amd_agent_iterate_memory_pools_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -4398,40 +4587,42 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_agent_iterate_memory_pools.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t (*)(hsa_amd_memory_pool_t, void *)");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_agent_iterate_memory_pools.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_agent_iterate_memory_pools.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_agent_iterate_memory_pools.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_pool_get_info
-		case HSA_API_ID_hsa_amd_memory_pool_get_info :
+		case HSA_API_ID_hsa_amd_memory_pool_get_info : {
 			//	hsa_amd_memory_pool_t memory_pool ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_amd_memory_pool_info_t attribute (enum hsa_amd_memory_pool_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_pool_get_info_t* args = (args_hsa_amd_memory_pool_get_info_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "memory_pool");
 			msgpack_encode_map(buf, 2);
@@ -4445,38 +4636,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_pool_get_info.memory_pool.handle);
+			msgpack_encode_int(buf, args->memory_pool.handle);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_memory_pool_info_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_pool_get_info.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_pool_get_info.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_pool_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_spm_release
-		case HSA_API_ID_hsa_amd_spm_release :
+		case HSA_API_ID_hsa_amd_spm_release : {
 			//	hsa_agent_t preferred_agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_spm_release_t* args = (args_hsa_amd_spm_release_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "preferred_agent");
 			msgpack_encode_map(buf, 2);
@@ -4490,24 +4683,26 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_spm_release.preferred_agent.handle);
+			msgpack_encode_int(buf, args->preferred_agent.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_spm_release.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_and_scacq_screl
-		case HSA_API_ID_hsa_signal_and_scacq_screl :
+		case HSA_API_ID_hsa_signal_and_scacq_screl : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_and_scacq_screl_t* args = (args_hsa_signal_and_scacq_screl_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -4521,26 +4716,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_and_scacq_screl.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_and_scacq_screl.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_wavefront_get_info
-		case HSA_API_ID_hsa_wavefront_get_info :
+		case HSA_API_ID_hsa_wavefront_get_info : {
 			//	hsa_wavefront_t wavefront ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_wavefront_info_t attribute (enum hsa_wavefront_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_wavefront_get_info_t* args = (args_hsa_wavefront_get_info_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "wavefront");
 			msgpack_encode_map(buf, 2);
@@ -4554,38 +4751,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_wavefront_get_info.wavefront.handle);
+			msgpack_encode_int(buf, args->wavefront.handle);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_wavefront_info_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_wavefront_get_info.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_wavefront_get_info.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_wavefront_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ven_amd_pcs_destroy
-		case HSA_API_ID_hsa_ven_amd_pcs_destroy :
+		case HSA_API_ID_hsa_ven_amd_pcs_destroy : {
 			//	hsa_ven_amd_pcs_t pc_sampling ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ven_amd_pcs_destroy_t* args = (args_hsa_ven_amd_pcs_destroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "pc_sampling");
 			msgpack_encode_map(buf, 2);
@@ -4599,102 +4798,108 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_destroy.pc_sampling.handle);
+			msgpack_encode_int(buf, args->pc_sampling.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_destroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_system_major_extension_supported
-		case HSA_API_ID_hsa_system_major_extension_supported :
+		case HSA_API_ID_hsa_system_major_extension_supported : {
 			//	uint16_t extension (unsigned short);
 			//	uint16_t version_major (unsigned short);
 			//	uint16_t * version_minor (unsigned short*);
 			//	_Bool * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_system_major_extension_supported_t* args = (args_hsa_system_major_extension_supported_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "extension");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_major_extension_supported.extension);
+			msgpack_encode_int(buf, args->extension);
 
 			msgpack_encode_string_ext(buf, "version_major");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_major_extension_supported.version_major);
+			msgpack_encode_int(buf, args->version_major);
 
 			msgpack_encode_string_ext(buf, "version_minor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_system_major_extension_supported.version_minor);
+			msgpack_encode_uint(buf, (uintptr_t)args->version_minor);
 
 			msgpack_encode_string_ext(buf, "result");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "_Bool *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_system_major_extension_supported.result);
+			msgpack_encode_uint(buf, (uintptr_t)args->result);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_major_extension_supported.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_status_string
-		case HSA_API_ID_hsa_status_string :
+		case HSA_API_ID_hsa_status_string : {
 			//	hsa_status_t status (enum hsa_status_t);
 			//	const char ** status_string (const char **);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_status_string_t* args = (args_hsa_status_string_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "status");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_status_string.status);
+			msgpack_encode_int(buf, args->status);
 
 			msgpack_encode_string_ext(buf, "status_string");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_status_string.status_string);
+			msgpack_encode_uint(buf, (uintptr_t)args->status_string);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_status_string.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_cas_relaxed
-		case HSA_API_ID_hsa_signal_cas_relaxed :
+		case HSA_API_ID_hsa_signal_cas_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t expected (long);
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_cas_relaxed_t* args = (args_hsa_signal_cas_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -4708,54 +4913,58 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_relaxed.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "expected");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_relaxed.expected);
+			msgpack_encode_int(buf, args->expected);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_relaxed.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_relaxed.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_init
-		case HSA_API_ID_hsa_init :
+		case HSA_API_ID_hsa_init : {
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_init_t* args = (args_hsa_init_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_init.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_memory_allocate
-		case HSA_API_ID_hsa_memory_allocate :
+		case HSA_API_ID_hsa_memory_allocate : {
 			//	hsa_region_t region ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	size_t size (unsigned long);
 			//	void ** ptr (void **);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_memory_allocate_t* args = (args_hsa_memory_allocate_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "region");
 			msgpack_encode_map(buf, 2);
@@ -4769,34 +4978,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_memory_allocate.region.handle);
+			msgpack_encode_int(buf, args->region.handle);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_memory_allocate.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_memory_allocate.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_memory_allocate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_data_get_info
-		case HSA_API_ID_hsa_ext_image_data_get_info :
+		case HSA_API_ID_hsa_ext_image_data_get_info : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -4804,6 +5014,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_access_permission_t access_permission (enum hsa_access_permission_t);
 			//	hsa_ext_image_data_info_t * image_data_info (struct hsa_ext_image_data_info_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_data_get_info_t* args = (args_hsa_ext_image_data_get_info_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -4817,47 +5028,49 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_data_get_info.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "image_descriptor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_ext_image_descriptor_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_data_get_info.image_descriptor);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_descriptor);
 
 			msgpack_encode_string_ext(buf, "access_permission");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_access_permission_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_data_get_info.access_permission);
+			msgpack_encode_int(buf, args->access_permission);
 
 			msgpack_encode_string_ext(buf, "image_data_info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ext_image_data_info_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_data_get_info.image_data_info);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_data_info);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_data_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_cache_get_info
-		case HSA_API_ID_hsa_cache_get_info :
+		case HSA_API_ID_hsa_cache_get_info : {
 			//	hsa_cache_t cache ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_cache_info_t attribute (enum hsa_cache_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_cache_get_info_t* args = (args_hsa_cache_get_info_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "cache");
 			msgpack_encode_map(buf, 2);
@@ -4871,38 +5084,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_cache_get_info.cache.handle);
+			msgpack_encode_int(buf, args->cache.handle);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_cache_info_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_cache_get_info.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_cache_get_info.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_cache_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_subtract_relaxed
-		case HSA_API_ID_hsa_signal_subtract_relaxed :
+		case HSA_API_ID_hsa_signal_subtract_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_subtract_relaxed_t* args = (args_hsa_signal_subtract_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -4916,42 +5131,45 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_subtract_relaxed.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_subtract_relaxed.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_load_write_index_relaxed
-		case HSA_API_ID_hsa_queue_load_write_index_relaxed :
+		case HSA_API_ID_hsa_queue_load_write_index_relaxed : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_load_write_index_relaxed_t* args = (args_hsa_queue_load_write_index_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_load_write_index_relaxed.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_load_write_index_relaxed.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_signal_async_handler
-		case HSA_API_ID_hsa_amd_signal_async_handler :
+		case HSA_API_ID_hsa_amd_signal_async_handler : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -4960,6 +5178,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_amd_signal_handler handler (unsigned int (*)(long, void *));
 			//	void * arg (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_signal_async_handler_t* args = (args_hsa_amd_signal_async_handler_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -4973,54 +5192,56 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_signal_async_handler.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "cond");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_condition_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_signal_async_handler.cond);
+			msgpack_encode_int(buf, args->cond);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_signal_async_handler.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "handler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_signal_handler");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_signal_async_handler.handler);
+			msgpack_encode_uint(buf, (uintptr_t)args->handler);
 
 			msgpack_encode_string_ext(buf, "arg");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_signal_async_handler.arg);
+			msgpack_encode_uint(buf, (uintptr_t)args->arg);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_signal_async_handler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_cas_acquire
-		case HSA_API_ID_hsa_signal_cas_acquire :
+		case HSA_API_ID_hsa_signal_cas_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t expected (long);
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_cas_acquire_t* args = (args_hsa_signal_cas_acquire_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -5034,38 +5255,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_acquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "expected");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_acquire.expected);
+			msgpack_encode_int(buf, args->expected);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_acquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_acquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_or_scacquire
-		case HSA_API_ID_hsa_signal_or_scacquire :
+		case HSA_API_ID_hsa_signal_or_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_or_scacquire_t* args = (args_hsa_signal_or_scacquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -5079,50 +5302,53 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_or_scacquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_or_scacquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_add_write_index_release
-		case HSA_API_ID_hsa_queue_add_write_index_release :
+		case HSA_API_ID_hsa_queue_add_write_index_release : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_add_write_index_release_t* args = (args_hsa_queue_add_write_index_release_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_add_write_index_release.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_add_write_index_release.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_add_write_index_release.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_agent_extension_supported
-		case HSA_API_ID_hsa_agent_extension_supported :
+		case HSA_API_ID_hsa_agent_extension_supported : {
 			//	uint16_t extension (unsigned short);
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -5131,13 +5357,14 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint16_t version_minor (unsigned short);
 			//	_Bool * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_agent_extension_supported_t* args = (args_hsa_agent_extension_supported_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "extension");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_extension_supported.extension);
+			msgpack_encode_int(buf, args->extension);
 
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -5151,46 +5378,48 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_extension_supported.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "version_major");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_extension_supported.version_major);
+			msgpack_encode_int(buf, args->version_major);
 
 			msgpack_encode_string_ext(buf, "version_minor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_extension_supported.version_minor);
+			msgpack_encode_int(buf, args->version_minor);
 
 			msgpack_encode_string_ext(buf, "result");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "_Bool *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_agent_extension_supported.result);
+			msgpack_encode_uint(buf, (uintptr_t)args->result);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_extension_supported.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_exchange_relaxed
-		case HSA_API_ID_hsa_signal_exchange_relaxed :
+		case HSA_API_ID_hsa_signal_exchange_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_exchange_relaxed_t* args = (args_hsa_signal_exchange_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -5204,33 +5433,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_relaxed.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_relaxed.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_relaxed.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_validate_alt
-		case HSA_API_ID_hsa_executable_validate_alt :
+		case HSA_API_ID_hsa_executable_validate_alt : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	const char * options (const char *);
 			//	uint32_t * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_validate_alt_t* args = (args_hsa_executable_validate_alt_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -5244,39 +5475,41 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_validate_alt.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "options");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_validate_alt.options);
+			msgpack_encode_uint(buf, (uintptr_t)args->options);
 
 			msgpack_encode_string_ext(buf, "result");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_validate_alt.result);
+			msgpack_encode_uint(buf, (uintptr_t)args->result);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_validate_alt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_exchange_scacq_screl
-		case HSA_API_ID_hsa_signal_exchange_scacq_screl :
+		case HSA_API_ID_hsa_signal_exchange_scacq_screl : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_exchange_scacq_screl_t* args = (args_hsa_signal_exchange_scacq_screl_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -5290,33 +5523,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_scacq_screl.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_scacq_screl.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_scacq_screl.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_get_info
-		case HSA_API_ID_hsa_executable_get_info :
+		case HSA_API_ID_hsa_executable_get_info : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_executable_info_t attribute (enum hsa_executable_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_get_info_t* args = (args_hsa_executable_get_info_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -5330,102 +5565,107 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_get_info.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_executable_info_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_get_info.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_get_info.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_reader_create_from_memory
-		case HSA_API_ID_hsa_code_object_reader_create_from_memory :
+		case HSA_API_ID_hsa_code_object_reader_create_from_memory : {
 			//	const void * code_object (const void *);
 			//	size_t size (unsigned long);
 			//	hsa_code_object_reader_t * code_object_reader (struct hsa_code_object_reader_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_reader_create_from_memory_t* args = (args_hsa_code_object_reader_create_from_memory_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "code_object");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_reader_create_from_memory.code_object);
+			msgpack_encode_uint(buf, (uintptr_t)args->code_object);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_reader_create_from_memory.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "code_object_reader");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_code_object_reader_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_reader_create_from_memory.code_object_reader);
+			msgpack_encode_uint(buf, (uintptr_t)args->code_object_reader);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_reader_create_from_memory.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_async_function
-		case HSA_API_ID_hsa_amd_async_function :
+		case HSA_API_ID_hsa_amd_async_function : {
 			//	void (*)(void *) callback (void (*)(void *));
 			//	void * arg (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_async_function_t* args = (args_hsa_amd_async_function_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void (*)(void *)");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_async_function.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "arg");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_async_function.arg);
+			msgpack_encode_uint(buf, (uintptr_t)args->arg);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_async_function.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_isa_compatible
-		case HSA_API_ID_hsa_isa_compatible :
+		case HSA_API_ID_hsa_isa_compatible : {
 			//	hsa_isa_t code_object_isa ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -5434,6 +5674,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	_Bool * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_isa_compatible_t* args = (args_hsa_isa_compatible_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "code_object_isa");
 			msgpack_encode_map(buf, 2);
@@ -5447,7 +5688,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_compatible.code_object_isa.handle);
+			msgpack_encode_int(buf, args->code_object_isa.handle);
 
 			msgpack_encode_string_ext(buf, "agent_isa");
 			msgpack_encode_map(buf, 2);
@@ -5461,61 +5702,65 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_compatible.agent_isa.handle);
+			msgpack_encode_int(buf, args->agent_isa.handle);
 
 			msgpack_encode_string_ext(buf, "result");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "_Bool *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_isa_compatible.result);
+			msgpack_encode_uint(buf, (uintptr_t)args->result);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_compatible.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_pointer_info_set_userdata
-		case HSA_API_ID_hsa_amd_pointer_info_set_userdata :
+		case HSA_API_ID_hsa_amd_pointer_info_set_userdata : {
 			//	const void * ptr (const void *);
 			//	void * userdata (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_pointer_info_set_userdata_t* args = (args_hsa_amd_pointer_info_set_userdata_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_pointer_info_set_userdata.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "userdata");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_pointer_info_set_userdata.userdata);
+			msgpack_encode_uint(buf, (uintptr_t)args->userdata);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_pointer_info_set_userdata.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_and_screlease
-		case HSA_API_ID_hsa_signal_and_screlease :
+		case HSA_API_ID_hsa_signal_and_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_and_screlease_t* args = (args_hsa_signal_and_screlease_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -5529,172 +5774,181 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_and_screlease.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_and_screlease.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_cas_write_index_acquire
-		case HSA_API_ID_hsa_queue_cas_write_index_acquire :
+		case HSA_API_ID_hsa_queue_cas_write_index_acquire : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t expected (unsigned long);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_cas_write_index_acquire_t* args = (args_hsa_queue_cas_write_index_acquire_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_cas_write_index_acquire.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "expected");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_acquire.expected);
+			msgpack_encode_int(buf, args->expected);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_acquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_acquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_cas_write_index_relaxed
-		case HSA_API_ID_hsa_queue_cas_write_index_relaxed :
+		case HSA_API_ID_hsa_queue_cas_write_index_relaxed : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t expected (unsigned long);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_cas_write_index_relaxed_t* args = (args_hsa_queue_cas_write_index_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_cas_write_index_relaxed.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "expected");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_relaxed.expected);
+			msgpack_encode_int(buf, args->expected);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_relaxed.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_relaxed.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_store_read_index_release
-		case HSA_API_ID_hsa_queue_store_read_index_release :
+		case HSA_API_ID_hsa_queue_store_read_index_release : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t value (unsigned long);
+			args_hsa_queue_store_read_index_release_t* args = (args_hsa_queue_store_read_index_release_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_store_read_index_release.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_store_read_index_release.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_pointer_info
-		case HSA_API_ID_hsa_amd_pointer_info :
+		case HSA_API_ID_hsa_amd_pointer_info : {
 			//	const void * ptr (const void *);
 			//	hsa_amd_pointer_info_t * info (struct hsa_amd_pointer_info_s*);
 			//	void *(*)(size_t) alloc (void *(*)(unsigned long));
 			//	uint32_t * num_agents_accessible (unsigned int*);
 			//	hsa_agent_t ** accessible (struct hsa_agent_s**);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_pointer_info_t* args = (args_hsa_amd_pointer_info_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_pointer_info.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "info");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_pointer_info_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_pointer_info.info);
+			msgpack_encode_uint(buf, (uintptr_t)args->info);
 
 			msgpack_encode_string_ext(buf, "alloc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *(*)(size_t)");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_pointer_info.alloc);
+			msgpack_encode_uint(buf, (uintptr_t)args->alloc);
 
 			msgpack_encode_string_ext(buf, "num_agents_accessible");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_pointer_info.num_agents_accessible);
+			msgpack_encode_uint(buf, (uintptr_t)args->num_agents_accessible);
 
 			msgpack_encode_string_ext(buf, "accessible");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_agent_t **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_pointer_info.accessible);
+			msgpack_encode_uint(buf, (uintptr_t)args->accessible);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_pointer_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_spm_set_dest_buffer
-		case HSA_API_ID_hsa_amd_spm_set_dest_buffer :
+		case HSA_API_ID_hsa_amd_spm_set_dest_buffer : {
 			//	hsa_agent_t preferred_agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -5704,6 +5958,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	void * dest (void *);
 			//	_Bool * is_data_loss (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_spm_set_dest_buffer_t* args = (args_hsa_amd_spm_set_dest_buffer_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "preferred_agent");
 			msgpack_encode_map(buf, 2);
@@ -5717,75 +5972,77 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_spm_set_dest_buffer.preferred_agent.handle);
+			msgpack_encode_int(buf, args->preferred_agent.handle);
 
 			msgpack_encode_string_ext(buf, "size_in_bytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_spm_set_dest_buffer.size_in_bytes);
+			msgpack_encode_int(buf, args->size_in_bytes);
 
 			msgpack_encode_string_ext(buf, "timeout");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_spm_set_dest_buffer.timeout);
+			msgpack_encode_uint(buf, (uintptr_t)args->timeout);
 
 			msgpack_encode_string_ext(buf, "size_copied");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_spm_set_dest_buffer.size_copied);
+			msgpack_encode_uint(buf, (uintptr_t)args->size_copied);
 
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_spm_set_dest_buffer.dest);
+			msgpack_encode_uint(buf, (uintptr_t)args->dest);
 
 			msgpack_encode_string_ext(buf, "is_data_loss");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "_Bool *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_spm_set_dest_buffer.is_data_loss);
+			msgpack_encode_uint(buf, (uintptr_t)args->is_data_loss);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_spm_set_dest_buffer.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_get_access
-		case HSA_API_ID_hsa_amd_vmem_get_access :
+		case HSA_API_ID_hsa_amd_vmem_get_access : {
 			//	void * va (void *);
 			//	hsa_access_permission_t * perms (enum hsa_access_permission_t*);
 			//	hsa_agent_t agent_handle ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_get_access_t* args = (args_hsa_amd_vmem_get_access_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "va");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_get_access.va);
+			msgpack_encode_uint(buf, (uintptr_t)args->va);
 
 			msgpack_encode_string_ext(buf, "perms");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_access_permission_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_get_access.perms);
+			msgpack_encode_uint(buf, (uintptr_t)args->perms);
 
 			msgpack_encode_string_ext(buf, "agent_handle");
 			msgpack_encode_map(buf, 2);
@@ -5799,24 +6056,26 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_get_access.agent_handle.handle);
+			msgpack_encode_int(buf, args->agent_handle.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_get_access.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_silent_store_screlease
-		case HSA_API_ID_hsa_signal_silent_store_screlease :
+		case HSA_API_ID_hsa_signal_silent_store_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_silent_store_screlease_t* args = (args_hsa_signal_silent_store_screlease_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -5830,24 +6089,26 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_silent_store_screlease.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_silent_store_screlease.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_add_acquire
-		case HSA_API_ID_hsa_signal_add_acquire :
+		case HSA_API_ID_hsa_signal_add_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_add_acquire_t* args = (args_hsa_signal_add_acquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -5861,70 +6122,74 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_add_acquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_add_acquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_create
-		case HSA_API_ID_hsa_executable_create :
+		case HSA_API_ID_hsa_executable_create : {
 			//	hsa_profile_t profile (enum hsa_profile_t);
 			//	hsa_executable_state_t executable_state (enum hsa_executable_state_t);
 			//	const char * options (const char *);
 			//	hsa_executable_t * executable (struct hsa_executable_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_create_t* args = (args_hsa_executable_create_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "profile");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_profile_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_create.profile);
+			msgpack_encode_int(buf, args->profile);
 
 			msgpack_encode_string_ext(buf, "executable_state");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_executable_state_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_create.executable_state);
+			msgpack_encode_int(buf, args->executable_state);
 
 			msgpack_encode_string_ext(buf, "options");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_create.options);
+			msgpack_encode_uint(buf, (uintptr_t)args->options);
 
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_executable_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_create.executable);
+			msgpack_encode_uint(buf, (uintptr_t)args->executable);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_store_release
-		case HSA_API_ID_hsa_signal_store_release :
+		case HSA_API_ID_hsa_signal_store_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_store_release_t* args = (args_hsa_signal_store_release_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -5938,24 +6203,26 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_store_release.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_store_release.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_xor_screlease
-		case HSA_API_ID_hsa_signal_xor_screlease :
+		case HSA_API_ID_hsa_signal_xor_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_xor_screlease_t* args = (args_hsa_signal_xor_screlease_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -5969,26 +6236,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_xor_screlease.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_xor_screlease.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_iterate_symbols
-		case HSA_API_ID_hsa_executable_iterate_symbols :
+		case HSA_API_ID_hsa_executable_iterate_symbols : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *) callback (enum hsa_status_t (*)(struct hsa_executable_s, struct hsa_executable_symbol_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_iterate_symbols_t* args = (args_hsa_executable_iterate_symbols_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -6002,34 +6271,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_iterate_symbols.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *)");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_iterate_symbols.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_iterate_symbols.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_iterate_symbols.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_lock_to_pool
-		case HSA_API_ID_hsa_amd_memory_lock_to_pool :
+		case HSA_API_ID_hsa_amd_memory_lock_to_pool : {
 			//	void * host_ptr (void *);
 			//	size_t size (unsigned long);
 			//	hsa_agent_t * agents (struct hsa_agent_s*);
@@ -6040,34 +6310,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint32_t flags (unsigned int);
 			//	void ** agent_ptr (void **);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_lock_to_pool_t* args = (args_hsa_amd_memory_lock_to_pool_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "host_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_lock_to_pool.host_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->host_ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_lock_to_pool.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "agents");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_agent_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_lock_to_pool.agents);
+			msgpack_encode_uint(buf, (uintptr_t)args->agents);
 
 			msgpack_encode_string_ext(buf, "num_agent");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_lock_to_pool.num_agent);
+			msgpack_encode_int(buf, args->num_agent);
 
 			msgpack_encode_string_ext(buf, "pool");
 			msgpack_encode_map(buf, 2);
@@ -6081,34 +6352,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_lock_to_pool.pool.handle);
+			msgpack_encode_int(buf, args->pool.handle);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_lock_to_pool.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "agent_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_lock_to_pool.agent_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->agent_ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_lock_to_pool.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_wait_acquire
-		case HSA_API_ID_hsa_signal_wait_acquire :
+		case HSA_API_ID_hsa_signal_wait_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -6117,6 +6389,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint64_t timeout_hint (unsigned long);
 			//	hsa_wait_state_t wait_state_hint (enum hsa_wait_state_t);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_wait_acquire_t* args = (args_hsa_signal_wait_acquire_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -6130,92 +6403,96 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_acquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "condition");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_condition_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_acquire.condition);
+			msgpack_encode_int(buf, args->condition);
 
 			msgpack_encode_string_ext(buf, "compare_value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_acquire.compare_value);
+			msgpack_encode_int(buf, args->compare_value);
 
 			msgpack_encode_string_ext(buf, "timeout_hint");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_acquire.timeout_hint);
+			msgpack_encode_int(buf, args->timeout_hint);
 
 			msgpack_encode_string_ext(buf, "wait_state_hint");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_wait_state_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_acquire.wait_state_hint);
+			msgpack_encode_int(buf, args->wait_state_hint);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_wait_acquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_cas_write_index_scacquire
-		case HSA_API_ID_hsa_queue_cas_write_index_scacquire :
+		case HSA_API_ID_hsa_queue_cas_write_index_scacquire : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t expected (unsigned long);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_cas_write_index_scacquire_t* args = (args_hsa_queue_cas_write_index_scacquire_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_cas_write_index_scacquire.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "expected");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_scacquire.expected);
+			msgpack_encode_int(buf, args->expected);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_scacquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_cas_write_index_scacquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_get_symbol
-		case HSA_API_ID_hsa_code_object_get_symbol :
+		case HSA_API_ID_hsa_code_object_get_symbol : {
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	const char * symbol_name (const char *);
 			//	hsa_code_symbol_t * symbol (struct hsa_code_symbol_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_get_symbol_t* args = (args_hsa_code_object_get_symbol_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "code_object");
 			msgpack_encode_map(buf, 2);
@@ -6229,38 +6506,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_get_symbol.code_object.handle);
+			msgpack_encode_int(buf, args->code_object.handle);
 
 			msgpack_encode_string_ext(buf, "symbol_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_get_symbol.symbol_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol_name);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_code_symbol_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_get_symbol.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_get_symbol.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_group_destroy
-		case HSA_API_ID_hsa_signal_group_destroy :
+		case HSA_API_ID_hsa_signal_group_destroy : {
 			//	hsa_signal_group_t signal_group ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_signal_group_destroy_t* args = (args_hsa_signal_group_destroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal_group");
 			msgpack_encode_map(buf, 2);
@@ -6274,78 +6553,82 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_group_destroy.signal_group.handle);
+			msgpack_encode_int(buf, args->signal_group.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_group_destroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_group_create
-		case HSA_API_ID_hsa_signal_group_create :
+		case HSA_API_ID_hsa_signal_group_create : {
 			//	uint32_t num_signals (unsigned int);
 			//	const hsa_signal_t * signals (const struct hsa_signal_s *);
 			//	uint32_t num_consumers (unsigned int);
 			//	const hsa_agent_t * consumers (const struct hsa_agent_s *);
 			//	hsa_signal_group_t * signal_group (struct hsa_signal_group_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_signal_group_create_t* args = (args_hsa_signal_group_create_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "num_signals");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_group_create.num_signals);
+			msgpack_encode_int(buf, args->num_signals);
 
 			msgpack_encode_string_ext(buf, "signals");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_signal_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_signal_group_create.signals);
+			msgpack_encode_uint(buf, (uintptr_t)args->signals);
 
 			msgpack_encode_string_ext(buf, "num_consumers");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_group_create.num_consumers);
+			msgpack_encode_int(buf, args->num_consumers);
 
 			msgpack_encode_string_ext(buf, "consumers");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_agent_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_signal_group_create.consumers);
+			msgpack_encode_uint(buf, (uintptr_t)args->consumers);
 
 			msgpack_encode_string_ext(buf, "signal_group");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_group_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_signal_group_create.signal_group);
+			msgpack_encode_uint(buf, (uintptr_t)args->signal_group);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_group_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_reader_destroy
-		case HSA_API_ID_hsa_code_object_reader_destroy :
+		case HSA_API_ID_hsa_code_object_reader_destroy : {
 			//	hsa_code_object_reader_t code_object_reader ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_reader_destroy_t* args = (args_hsa_code_object_reader_destroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "code_object_reader");
 			msgpack_encode_map(buf, 2);
@@ -6359,50 +6642,53 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_reader_destroy.code_object_reader.handle);
+			msgpack_encode_int(buf, args->code_object_reader.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_reader_destroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_extension_get_name
-		case HSA_API_ID_hsa_extension_get_name :
+		case HSA_API_ID_hsa_extension_get_name : {
 			//	uint16_t extension (unsigned short);
 			//	const char ** name (const char **);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_extension_get_name_t* args = (args_hsa_extension_get_name_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "extension");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_extension_get_name.extension);
+			msgpack_encode_int(buf, args->extension);
 
 			msgpack_encode_string_ext(buf, "name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_extension_get_name.name);
+			msgpack_encode_uint(buf, (uintptr_t)args->name);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_extension_get_name.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_group_wait_any_scacquire
-		case HSA_API_ID_hsa_signal_group_wait_any_scacquire :
+		case HSA_API_ID_hsa_signal_group_wait_any_scacquire : {
 			//	hsa_signal_group_t signal_group ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -6412,6 +6698,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_signal_t * signal (struct hsa_signal_s*);
 			//	hsa_signal_value_t * value (long*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_signal_group_wait_any_scacquire_t* args = (args_hsa_signal_group_wait_any_scacquire_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "signal_group");
 			msgpack_encode_map(buf, 2);
@@ -6425,89 +6712,93 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_group_wait_any_scacquire.signal_group.handle);
+			msgpack_encode_int(buf, args->signal_group.handle);
 
 			msgpack_encode_string_ext(buf, "conditions");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_signal_condition_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_signal_group_wait_any_scacquire.conditions);
+			msgpack_encode_uint(buf, (uintptr_t)args->conditions);
 
 			msgpack_encode_string_ext(buf, "compare_values");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_signal_value_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_signal_group_wait_any_scacquire.compare_values);
+			msgpack_encode_uint(buf, (uintptr_t)args->compare_values);
 
 			msgpack_encode_string_ext(buf, "wait_state_hint");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_wait_state_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_group_wait_any_scacquire.wait_state_hint);
+			msgpack_encode_int(buf, args->wait_state_hint);
 
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_signal_group_wait_any_scacquire.signal);
+			msgpack_encode_uint(buf, (uintptr_t)args->signal);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_signal_group_wait_any_scacquire.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_group_wait_any_scacquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_register_system_event_handler
-		case HSA_API_ID_hsa_amd_register_system_event_handler :
+		case HSA_API_ID_hsa_amd_register_system_event_handler : {
 			//	hsa_amd_system_event_callback_t callback (enum hsa_status_t (*)(const struct hsa_amd_event_s *, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_register_system_event_handler_t* args = (args_hsa_amd_register_system_event_handler_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_system_event_callback_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_register_system_event_handler.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_register_system_event_handler.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_register_system_event_handler.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_xor_acq_rel
-		case HSA_API_ID_hsa_signal_xor_acq_rel :
+		case HSA_API_ID_hsa_signal_xor_acq_rel : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_xor_acq_rel_t* args = (args_hsa_signal_xor_acq_rel_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -6521,20 +6812,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_xor_acq_rel.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_xor_acq_rel.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_create
-		case HSA_API_ID_hsa_queue_create :
+		case HSA_API_ID_hsa_queue_create : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -6546,6 +6838,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint32_t group_segment_size (unsigned int);
 			//	hsa_queue_t ** queue (struct hsa_queue_s**);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_queue_create_t* args = (args_hsa_queue_create_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -6559,99 +6852,102 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_create.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_create.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_queue_type32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_create.type);
+			msgpack_encode_int(buf, args->type);
 
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void (*)(hsa_status_t, hsa_queue_t *, void *)");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_create.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_create.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "private_segment_size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_create.private_segment_size);
+			msgpack_encode_int(buf, args->private_segment_size);
 
 			msgpack_encode_string_ext(buf, "group_segment_size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_create.group_segment_size);
+			msgpack_encode_int(buf, args->group_segment_size);
 
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_queue_t **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_create.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_profiling_set_profiler_enabled
-		case HSA_API_ID_hsa_amd_profiling_set_profiler_enabled :
+		case HSA_API_ID_hsa_amd_profiling_set_profiler_enabled : {
 			//	hsa_queue_t * queue (struct hsa_queue_s*);
 			//	int enable (int);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_profiling_set_profiler_enabled_t* args = (args_hsa_amd_profiling_set_profiler_enabled_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_profiling_set_profiler_enabled.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "enable");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_profiling_set_profiler_enabled.enable);
+			msgpack_encode_int(buf, args->enable);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_profiling_set_profiler_enabled.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_profiling_get_dispatch_time
-		case HSA_API_ID_hsa_amd_profiling_get_dispatch_time :
+		case HSA_API_ID_hsa_amd_profiling_get_dispatch_time : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -6660,6 +6956,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	});
 			//	hsa_amd_profiling_dispatch_time_t * time (struct hsa_amd_profiling_dispatch_time_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_profiling_get_dispatch_time_t* args = (args_hsa_amd_profiling_get_dispatch_time_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -6673,7 +6970,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_profiling_get_dispatch_time.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -6687,163 +6984,172 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_profiling_get_dispatch_time.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "time");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_profiling_dispatch_time_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_profiling_get_dispatch_time.time);
+			msgpack_encode_uint(buf, (uintptr_t)args->time);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_profiling_get_dispatch_time.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_ipc_memory_create
-		case HSA_API_ID_hsa_amd_ipc_memory_create :
+		case HSA_API_ID_hsa_amd_ipc_memory_create : {
 			//	void * ptr (void *);
 			//	size_t len (unsigned long);
 			//	hsa_amd_ipc_memory_t * handle (struct hsa_amd_ipc_memory_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_ipc_memory_create_t* args = (args_hsa_amd_ipc_memory_create_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_ipc_memory_create.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "len");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_ipc_memory_create.len);
+			msgpack_encode_int(buf, args->len);
 
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_ipc_memory_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_ipc_memory_create.handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_ipc_memory_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_import_shareable_handle
-		case HSA_API_ID_hsa_amd_vmem_import_shareable_handle :
+		case HSA_API_ID_hsa_amd_vmem_import_shareable_handle : {
 			//	int dmabuf_fd (int);
 			//	hsa_amd_vmem_alloc_handle_t * handle (struct hsa_amd_vmem_alloc_handle_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_import_shareable_handle_t* args = (args_hsa_amd_vmem_import_shareable_handle_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "dmabuf_fd");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_import_shareable_handle.dmabuf_fd);
+			msgpack_encode_int(buf, args->dmabuf_fd);
 
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_vmem_alloc_handle_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_import_shareable_handle.handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_import_shareable_handle.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_add_write_index_acquire
-		case HSA_API_ID_hsa_queue_add_write_index_acquire :
+		case HSA_API_ID_hsa_queue_add_write_index_acquire : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_add_write_index_acquire_t* args = (args_hsa_queue_add_write_index_acquire_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_add_write_index_acquire.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_add_write_index_acquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_add_write_index_acquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_register_deallocation_callback
-		case HSA_API_ID_hsa_amd_register_deallocation_callback :
+		case HSA_API_ID_hsa_amd_register_deallocation_callback : {
 			//	void * ptr (void *);
 			//	hsa_amd_deallocation_callback_t callback (void (*)(void *, void *));
 			//	void * user_data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_register_deallocation_callback_t* args = (args_hsa_amd_register_deallocation_callback_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_register_deallocation_callback.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_deallocation_callback_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_register_deallocation_callback.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "user_data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_register_deallocation_callback.user_data);
+			msgpack_encode_uint(buf, (uintptr_t)args->user_data);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_register_deallocation_callback.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ven_amd_pcs_create_from_id
-		case HSA_API_ID_hsa_ven_amd_pcs_create_from_id :
+		case HSA_API_ID_hsa_ven_amd_pcs_create_from_id : {
 			//	uint32_t pcs_id (unsigned int);
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -6857,13 +7163,14 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	void * client_callback_data (void *);
 			//	hsa_ven_amd_pcs_t * pc_sampling (struct hsa_ven_amd_pcs_t*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ven_amd_pcs_create_from_id_t* args = (args_hsa_ven_amd_pcs_create_from_id_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "pcs_id");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_create_from_id.pcs_id);
+			msgpack_encode_int(buf, args->pcs_id);
 
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -6877,81 +7184,83 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_create_from_id.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "method");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ven_amd_pcs_method_kind_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_create_from_id.method);
+			msgpack_encode_int(buf, args->method);
 
 			msgpack_encode_string_ext(buf, "units");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ven_amd_pcs_units_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_create_from_id.units);
+			msgpack_encode_int(buf, args->units);
 
 			msgpack_encode_string_ext(buf, "interval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_create_from_id.interval);
+			msgpack_encode_int(buf, args->interval);
 
 			msgpack_encode_string_ext(buf, "latency");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_create_from_id.latency);
+			msgpack_encode_int(buf, args->latency);
 
 			msgpack_encode_string_ext(buf, "buffer_size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_create_from_id.buffer_size);
+			msgpack_encode_int(buf, args->buffer_size);
 
 			msgpack_encode_string_ext(buf, "data_ready_callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ven_amd_pcs_data_ready_callback_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ven_amd_pcs_create_from_id.data_ready_callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->data_ready_callback);
 
 			msgpack_encode_string_ext(buf, "client_callback_data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ven_amd_pcs_create_from_id.client_callback_data);
+			msgpack_encode_uint(buf, (uintptr_t)args->client_callback_data);
 
 			msgpack_encode_string_ext(buf, "pc_sampling");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ven_amd_pcs_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ven_amd_pcs_create_from_id.pc_sampling);
+			msgpack_encode_uint(buf, (uintptr_t)args->pc_sampling);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_create_from_id.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_exchange_screlease
-		case HSA_API_ID_hsa_signal_exchange_screlease :
+		case HSA_API_ID_hsa_signal_exchange_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_exchange_screlease_t* args = (args_hsa_signal_exchange_screlease_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -6965,31 +7274,33 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_screlease.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_screlease.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_screlease.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_and_release
-		case HSA_API_ID_hsa_signal_and_release :
+		case HSA_API_ID_hsa_signal_and_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_and_release_t* args = (args_hsa_signal_and_release_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -7003,26 +7314,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_and_release.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_and_release.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_sampler_create
-		case HSA_API_ID_hsa_ext_sampler_create :
+		case HSA_API_ID_hsa_ext_sampler_create : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	const hsa_ext_sampler_descriptor_t * sampler_descriptor (const struct hsa_ext_sampler_descriptor_s *);
 			//	hsa_ext_sampler_t * sampler (struct hsa_ext_sampler_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_sampler_create_t* args = (args_hsa_ext_sampler_create_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -7036,38 +7349,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_sampler_create.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "sampler_descriptor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_ext_sampler_descriptor_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_sampler_create.sampler_descriptor);
+			msgpack_encode_uint(buf, (uintptr_t)args->sampler_descriptor);
 
 			msgpack_encode_string_ext(buf, "sampler");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ext_sampler_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_sampler_create.sampler);
+			msgpack_encode_uint(buf, (uintptr_t)args->sampler);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_sampler_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ven_amd_pcs_start
-		case HSA_API_ID_hsa_ven_amd_pcs_start :
+		case HSA_API_ID_hsa_ven_amd_pcs_start : {
 			//	hsa_ven_amd_pcs_t pc_sampling ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ven_amd_pcs_start_t* args = (args_hsa_ven_amd_pcs_start_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "pc_sampling");
 			msgpack_encode_map(buf, 2);
@@ -7081,20 +7396,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_start.pc_sampling.handle);
+			msgpack_encode_int(buf, args->pc_sampling.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_start.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_readonly_variable_define
-		case HSA_API_ID_hsa_executable_readonly_variable_define :
+		case HSA_API_ID_hsa_executable_readonly_variable_define : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -7104,6 +7420,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	const char * variable_name (const char *);
 			//	void * address (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_readonly_variable_define_t* args = (args_hsa_executable_readonly_variable_define_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -7117,7 +7434,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_readonly_variable_define.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -7131,60 +7448,64 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_readonly_variable_define.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "variable_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_readonly_variable_define.variable_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->variable_name);
 
 			msgpack_encode_string_ext(buf, "address");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_readonly_variable_define.address);
+			msgpack_encode_uint(buf, (uintptr_t)args->address);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_readonly_variable_define.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_inactivate
-		case HSA_API_ID_hsa_queue_inactivate :
+		case HSA_API_ID_hsa_queue_inactivate : {
 			//	hsa_queue_t * queue (struct hsa_queue_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_queue_inactivate_t* args = (args_hsa_queue_inactivate_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_inactivate.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_inactivate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_or_acq_rel
-		case HSA_API_ID_hsa_signal_or_acq_rel :
+		case HSA_API_ID_hsa_signal_or_acq_rel : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_or_acq_rel_t* args = (args_hsa_signal_or_acq_rel_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -7198,88 +7519,93 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_or_acq_rel.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_or_acq_rel.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_system_get_major_extension_table
-		case HSA_API_ID_hsa_system_get_major_extension_table :
+		case HSA_API_ID_hsa_system_get_major_extension_table : {
 			//	uint16_t extension (unsigned short);
 			//	uint16_t version_major (unsigned short);
 			//	size_t table_length (unsigned long);
 			//	void * table (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_system_get_major_extension_table_t* args = (args_hsa_system_get_major_extension_table_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "extension");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_get_major_extension_table.extension);
+			msgpack_encode_int(buf, args->extension);
 
 			msgpack_encode_string_ext(buf, "version_major");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_get_major_extension_table.version_major);
+			msgpack_encode_int(buf, args->version_major);
 
 			msgpack_encode_string_ext(buf, "table_length");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_get_major_extension_table.table_length);
+			msgpack_encode_int(buf, args->table_length);
 
 			msgpack_encode_string_ext(buf, "table");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_system_get_major_extension_table.table);
+			msgpack_encode_uint(buf, (uintptr_t)args->table);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_get_major_extension_table.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_store_write_index_relaxed
-		case HSA_API_ID_hsa_queue_store_write_index_relaxed :
+		case HSA_API_ID_hsa_queue_store_write_index_relaxed : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t value (unsigned long);
+			args_hsa_queue_store_write_index_relaxed_t* args = (args_hsa_queue_store_write_index_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_store_write_index_relaxed.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_store_write_index_relaxed.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_agent_major_extension_supported
-		case HSA_API_ID_hsa_agent_major_extension_supported :
+		case HSA_API_ID_hsa_agent_major_extension_supported : {
 			//	uint16_t extension (unsigned short);
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
@@ -7288,13 +7614,14 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint16_t * version_minor (unsigned short*);
 			//	_Bool * result (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_agent_major_extension_supported_t* args = (args_hsa_agent_major_extension_supported_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "extension");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_major_extension_supported.extension);
+			msgpack_encode_int(buf, args->extension);
 
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -7308,54 +7635,56 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_major_extension_supported.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "version_major");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_major_extension_supported.version_major);
+			msgpack_encode_int(buf, args->version_major);
 
 			msgpack_encode_string_ext(buf, "version_minor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_agent_major_extension_supported.version_minor);
+			msgpack_encode_uint(buf, (uintptr_t)args->version_minor);
 
 			msgpack_encode_string_ext(buf, "result");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "_Bool *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_agent_major_extension_supported.result);
+			msgpack_encode_uint(buf, (uintptr_t)args->result);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_major_extension_supported.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_migrate
-		case HSA_API_ID_hsa_amd_memory_migrate :
+		case HSA_API_ID_hsa_amd_memory_migrate : {
 			//	const void * ptr (const void *);
 			//	hsa_amd_memory_pool_t memory_pool ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	uint32_t flags (unsigned int);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_migrate_t* args = (args_hsa_amd_memory_migrate_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_migrate.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "memory_pool");
 			msgpack_encode_map(buf, 2);
@@ -7369,107 +7698,113 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_migrate.memory_pool.handle);
+			msgpack_encode_int(buf, args->memory_pool.handle);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_migrate.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_migrate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_retain_alloc_handle
-		case HSA_API_ID_hsa_amd_vmem_retain_alloc_handle :
+		case HSA_API_ID_hsa_amd_vmem_retain_alloc_handle : {
 			//	hsa_amd_vmem_alloc_handle_t * memory_handle (struct hsa_amd_vmem_alloc_handle_s*);
 			//	void * addr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_retain_alloc_handle_t* args = (args_hsa_amd_vmem_retain_alloc_handle_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "memory_handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_vmem_alloc_handle_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_retain_alloc_handle.memory_handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->memory_handle);
 
 			msgpack_encode_string_ext(buf, "addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_retain_alloc_handle.addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->addr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_retain_alloc_handle.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_address_reserve
-		case HSA_API_ID_hsa_amd_vmem_address_reserve :
+		case HSA_API_ID_hsa_amd_vmem_address_reserve : {
 			//	void ** va (void **);
 			//	size_t size (unsigned long);
 			//	uint64_t address (unsigned long);
 			//	uint64_t flags (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_address_reserve_t* args = (args_hsa_amd_vmem_address_reserve_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "va");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_address_reserve.va);
+			msgpack_encode_uint(buf, (uintptr_t)args->va);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_address_reserve.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "address");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_address_reserve.address);
+			msgpack_encode_int(buf, args->address);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_address_reserve.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_address_reserve.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_load_relaxed
-		case HSA_API_ID_hsa_signal_load_relaxed :
+		case HSA_API_ID_hsa_signal_load_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_load_relaxed_t* args = (args_hsa_signal_load_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -7483,25 +7818,27 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_load_relaxed.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_load_relaxed.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_exchange_scacquire
-		case HSA_API_ID_hsa_signal_exchange_scacquire :
+		case HSA_API_ID_hsa_signal_exchange_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_exchange_scacquire_t* args = (args_hsa_signal_exchange_scacquire_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -7515,31 +7852,33 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_scacquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_scacquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_scacquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_destroy
-		case HSA_API_ID_hsa_code_object_destroy :
+		case HSA_API_ID_hsa_code_object_destroy : {
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_destroy_t* args = (args_hsa_code_object_destroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "code_object");
 			msgpack_encode_map(buf, 2);
@@ -7553,20 +7892,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_destroy.code_object.handle);
+			msgpack_encode_int(buf, args->code_object.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_destroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_handle_create
-		case HSA_API_ID_hsa_amd_vmem_handle_create :
+		case HSA_API_ID_hsa_amd_vmem_handle_create : {
 			//	hsa_amd_memory_pool_t pool ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -7575,6 +7915,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint64_t flags (unsigned long);
 			//	hsa_amd_vmem_alloc_handle_t * memory_handle (struct hsa_amd_vmem_alloc_handle_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_handle_create_t* args = (args_hsa_amd_vmem_handle_create_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "pool");
 			msgpack_encode_map(buf, 2);
@@ -7588,82 +7929,86 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_handle_create.pool.handle);
+			msgpack_encode_int(buf, args->pool.handle);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_handle_create.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_memory_type_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_handle_create.type);
+			msgpack_encode_int(buf, args->type);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_handle_create.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "memory_handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_vmem_alloc_handle_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_handle_create.memory_handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->memory_handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_handle_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_address_free
-		case HSA_API_ID_hsa_amd_vmem_address_free :
+		case HSA_API_ID_hsa_amd_vmem_address_free : {
 			//	void * va (void *);
 			//	size_t size (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_address_free_t* args = (args_hsa_amd_vmem_address_free_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "va");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_address_free.va);
+			msgpack_encode_uint(buf, (uintptr_t)args->va);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_address_free.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_address_free.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_subtract_release
-		case HSA_API_ID_hsa_signal_subtract_release :
+		case HSA_API_ID_hsa_signal_subtract_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_subtract_release_t* args = (args_hsa_signal_subtract_release_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -7677,48 +8022,52 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_subtract_release.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_subtract_release.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_load_write_index_scacquire
-		case HSA_API_ID_hsa_queue_load_write_index_scacquire :
+		case HSA_API_ID_hsa_queue_load_write_index_scacquire : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_load_write_index_scacquire_t* args = (args_hsa_queue_load_write_index_scacquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_load_write_index_scacquire.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_load_write_index_scacquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_get_info
-		case HSA_API_ID_hsa_code_object_get_info :
+		case HSA_API_ID_hsa_code_object_get_info : {
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_code_object_info_t attribute (enum hsa_code_object_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_get_info_t* args = (args_hsa_code_object_get_info_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "code_object");
 			msgpack_encode_map(buf, 2);
@@ -7732,34 +8081,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_get_info.code_object.handle);
+			msgpack_encode_int(buf, args->code_object.handle);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_code_object_info_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_get_info.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_get_info.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_pool_allocate
-		case HSA_API_ID_hsa_amd_memory_pool_allocate :
+		case HSA_API_ID_hsa_amd_memory_pool_allocate : {
 			//	hsa_amd_memory_pool_t memory_pool ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -7767,6 +8117,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint32_t flags (unsigned int);
 			//	void ** ptr (void **);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_pool_allocate_t* args = (args_hsa_amd_memory_pool_allocate_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "memory_pool");
 			msgpack_encode_map(buf, 2);
@@ -7780,41 +8131,42 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_pool_allocate.memory_pool.handle);
+			msgpack_encode_int(buf, args->memory_pool.handle);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_pool_allocate.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_pool_allocate.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_pool_allocate.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_pool_allocate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_get_symbol_from_name
-		case HSA_API_ID_hsa_code_object_get_symbol_from_name :
+		case HSA_API_ID_hsa_code_object_get_symbol_from_name : {
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -7822,6 +8174,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	const char * symbol_name (const char *);
 			//	hsa_code_symbol_t * symbol (struct hsa_code_symbol_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_get_symbol_from_name_t* args = (args_hsa_code_object_get_symbol_from_name_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "code_object");
 			msgpack_encode_map(buf, 2);
@@ -7835,47 +8188,49 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_get_symbol_from_name.code_object.handle);
+			msgpack_encode_int(buf, args->code_object.handle);
 
 			msgpack_encode_string_ext(buf, "module_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_get_symbol_from_name.module_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->module_name);
 
 			msgpack_encode_string_ext(buf, "symbol_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_get_symbol_from_name.symbol_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol_name);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_code_symbol_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_get_symbol_from_name.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_get_symbol_from_name.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_agent_iterate_caches
-		case HSA_API_ID_hsa_agent_iterate_caches :
+		case HSA_API_ID_hsa_agent_iterate_caches : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_cache_t, void *) callback (enum hsa_status_t (*)(struct hsa_cache_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_agent_iterate_caches_t* args = (args_hsa_agent_iterate_caches_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -7889,34 +8244,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_iterate_caches.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t (*)(hsa_cache_t, void *)");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_agent_iterate_caches.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_agent_iterate_caches.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_iterate_caches.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_isa_get_round_method
-		case HSA_API_ID_hsa_isa_get_round_method :
+		case HSA_API_ID_hsa_isa_get_round_method : {
 			//	hsa_isa_t isa ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -7924,6 +8280,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_flush_mode_t flush_mode (enum hsa_flush_mode_t);
 			//	hsa_round_method_t * round_method (enum hsa_round_method_t*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_isa_get_round_method_t* args = (args_hsa_isa_get_round_method_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "isa");
 			msgpack_encode_map(buf, 2);
@@ -7937,99 +8294,105 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_get_round_method.isa.handle);
+			msgpack_encode_int(buf, args->isa.handle);
 
 			msgpack_encode_string_ext(buf, "fp_type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_fp_type_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_get_round_method.fp_type);
+			msgpack_encode_int(buf, args->fp_type);
 
 			msgpack_encode_string_ext(buf, "flush_mode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_flush_mode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_get_round_method.flush_mode);
+			msgpack_encode_int(buf, args->flush_mode);
 
 			msgpack_encode_string_ext(buf, "round_method");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_round_method_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_isa_get_round_method.round_method);
+			msgpack_encode_uint(buf, (uintptr_t)args->round_method);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_get_round_method.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_queue_set_priority
-		case HSA_API_ID_hsa_amd_queue_set_priority :
+		case HSA_API_ID_hsa_amd_queue_set_priority : {
 			//	hsa_queue_t * queue (struct hsa_queue_s*);
 			//	hsa_amd_queue_priority_t priority (enum hsa_amd_queue_priority_s);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_queue_set_priority_t* args = (args_hsa_amd_queue_set_priority_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_queue_set_priority.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "priority");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_queue_priority_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_queue_set_priority.priority);
+			msgpack_encode_int(buf, args->priority);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_queue_set_priority.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_store_read_index_screlease
-		case HSA_API_ID_hsa_queue_store_read_index_screlease :
+		case HSA_API_ID_hsa_queue_store_read_index_screlease : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t value (unsigned long);
+			args_hsa_queue_store_read_index_screlease_t* args = (args_hsa_queue_store_read_index_screlease_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_store_read_index_screlease.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_store_read_index_screlease.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_get_alloc_properties_from_handle
-		case HSA_API_ID_hsa_amd_vmem_get_alloc_properties_from_handle :
+		case HSA_API_ID_hsa_amd_vmem_get_alloc_properties_from_handle : {
 			//	hsa_amd_vmem_alloc_handle_t memory_handle ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_amd_memory_pool_t * pool (struct hsa_amd_memory_pool_s*);
 			//	hsa_amd_memory_type_t * type (enum hsa_amd_memory_type_t*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_get_alloc_properties_from_handle_t* args = (args_hsa_amd_vmem_get_alloc_properties_from_handle_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "memory_handle");
 			msgpack_encode_map(buf, 2);
@@ -8043,68 +8406,72 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_get_alloc_properties_from_handle.memory_handle.handle);
+			msgpack_encode_int(buf, args->memory_handle.handle);
 
 			msgpack_encode_string_ext(buf, "pool");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_memory_pool_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_get_alloc_properties_from_handle.pool);
+			msgpack_encode_uint(buf, (uintptr_t)args->pool);
 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_memory_type_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_get_alloc_properties_from_handle.type);
+			msgpack_encode_uint(buf, (uintptr_t)args->type);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_get_alloc_properties_from_handle.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_ipc_signal_attach
-		case HSA_API_ID_hsa_amd_ipc_signal_attach :
+		case HSA_API_ID_hsa_amd_ipc_signal_attach : {
 			//	const hsa_amd_ipc_signal_t * handle (const struct hsa_amd_ipc_memory_s *);
 			//	hsa_signal_t * signal (struct hsa_signal_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_ipc_signal_attach_t* args = (args_hsa_amd_ipc_signal_attach_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_amd_ipc_signal_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_ipc_signal_attach.handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->handle);
 
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_ipc_signal_attach.signal);
+			msgpack_encode_uint(buf, (uintptr_t)args->signal);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_ipc_signal_attach.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_and_acq_rel
-		case HSA_API_ID_hsa_signal_and_acq_rel :
+		case HSA_API_ID_hsa_signal_and_acq_rel : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_and_acq_rel_t* args = (args_hsa_signal_and_acq_rel_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -8118,24 +8485,26 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_and_acq_rel.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_and_acq_rel.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_load_acquire
-		case HSA_API_ID_hsa_signal_load_acquire :
+		case HSA_API_ID_hsa_signal_load_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_load_acquire_t* args = (args_hsa_signal_load_acquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -8149,20 +8518,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_load_acquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_load_acquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_async_copy
-		case HSA_API_ID_hsa_amd_memory_async_copy :
+		case HSA_API_ID_hsa_amd_memory_async_copy : {
 			//	void * dst (void *);
 			//	hsa_agent_t dst_agent ({
 			//		uint64_t handle (unsigned long);
@@ -8178,13 +8548,14 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_async_copy_t* args = (args_hsa_amd_memory_async_copy_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_async_copy.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "dst_agent");
 			msgpack_encode_map(buf, 2);
@@ -8198,14 +8569,14 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy.dst_agent.handle);
+			msgpack_encode_int(buf, args->dst_agent.handle);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_async_copy.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "src_agent");
 			msgpack_encode_map(buf, 2);
@@ -8219,28 +8590,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy.src_agent.handle);
+			msgpack_encode_int(buf, args->src_agent.handle);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "num_dep_signals");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy.num_dep_signals);
+			msgpack_encode_int(buf, args->num_dep_signals);
 
 			msgpack_encode_string_ext(buf, "dep_signals");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_signal_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_async_copy.dep_signals);
+			msgpack_encode_uint(buf, (uintptr_t)args->dep_signals);
 
 			msgpack_encode_string_ext(buf, "completion_signal");
 			msgpack_encode_map(buf, 2);
@@ -8254,25 +8625,27 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy.completion_signal.handle);
+			msgpack_encode_int(buf, args->completion_signal.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_exchange_acq_rel
-		case HSA_API_ID_hsa_signal_exchange_acq_rel :
+		case HSA_API_ID_hsa_signal_exchange_acq_rel : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_exchange_acq_rel_t* args = (args_hsa_signal_exchange_acq_rel_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -8286,33 +8659,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_acq_rel.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_acq_rel.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_acq_rel.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_executable_global_variable_define
-		case HSA_API_ID_hsa_executable_global_variable_define :
+		case HSA_API_ID_hsa_executable_global_variable_define : {
 			//	hsa_executable_t executable ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	const char * variable_name (const char *);
 			//	void * address (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_executable_global_variable_define_t* args = (args_hsa_executable_global_variable_define_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "executable");
 			msgpack_encode_map(buf, 2);
@@ -8326,106 +8701,112 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_global_variable_define.executable.handle);
+			msgpack_encode_int(buf, args->executable.handle);
 
 			msgpack_encode_string_ext(buf, "variable_name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_global_variable_define.variable_name);
+			msgpack_encode_uint(buf, (uintptr_t)args->variable_name);
 
 			msgpack_encode_string_ext(buf, "address");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_executable_global_variable_define.address);
+			msgpack_encode_uint(buf, (uintptr_t)args->address);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_executable_global_variable_define.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_shut_down
-		case HSA_API_ID_hsa_shut_down :
+		case HSA_API_ID_hsa_shut_down : {
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_shut_down_t* args = (args_hsa_shut_down_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_shut_down.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_signal_create
-		case HSA_API_ID_hsa_amd_signal_create :
+		case HSA_API_ID_hsa_amd_signal_create : {
 			//	hsa_signal_value_t initial_value (long);
 			//	uint32_t num_consumers (unsigned int);
 			//	const hsa_agent_t * consumers (const struct hsa_agent_s *);
 			//	uint64_t attributes (unsigned long);
 			//	hsa_signal_t * signal (struct hsa_signal_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_signal_create_t* args = (args_hsa_amd_signal_create_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "initial_value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_signal_create.initial_value);
+			msgpack_encode_int(buf, args->initial_value);
 
 			msgpack_encode_string_ext(buf, "num_consumers");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_signal_create.num_consumers);
+			msgpack_encode_int(buf, args->num_consumers);
 
 			msgpack_encode_string_ext(buf, "consumers");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_agent_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_signal_create.consumers);
+			msgpack_encode_uint(buf, (uintptr_t)args->consumers);
 
 			msgpack_encode_string_ext(buf, "attributes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_signal_create.attributes);
+			msgpack_encode_int(buf, args->attributes);
 
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_signal_create.signal);
+			msgpack_encode_uint(buf, (uintptr_t)args->signal);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_signal_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ven_amd_pcs_stop
-		case HSA_API_ID_hsa_ven_amd_pcs_stop :
+		case HSA_API_ID_hsa_ven_amd_pcs_stop : {
 			//	hsa_ven_amd_pcs_t pc_sampling ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ven_amd_pcs_stop_t* args = (args_hsa_ven_amd_pcs_stop_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "pc_sampling");
 			msgpack_encode_map(buf, 2);
@@ -8439,42 +8820,45 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_stop.pc_sampling.handle);
+			msgpack_encode_int(buf, args->pc_sampling.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_stop.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_unlock
-		case HSA_API_ID_hsa_amd_memory_unlock :
+		case HSA_API_ID_hsa_amd_memory_unlock : {
 			//	void * host_ptr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_unlock_t* args = (args_hsa_amd_memory_unlock_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "host_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_unlock.host_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->host_ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_unlock.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_image_create
-		case HSA_API_ID_hsa_amd_image_create :
+		case HSA_API_ID_hsa_amd_image_create : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -8484,6 +8868,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_access_permission_t access_permission (enum hsa_access_permission_t);
 			//	hsa_ext_image_t * image (struct hsa_ext_image_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_image_create_t* args = (args_hsa_amd_image_create_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -8497,81 +8882,85 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_image_create.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "image_descriptor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_ext_image_descriptor_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_image_create.image_descriptor);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_descriptor);
 
 			msgpack_encode_string_ext(buf, "image_layout");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_amd_image_descriptor_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_image_create.image_layout);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_layout);
 
 			msgpack_encode_string_ext(buf, "image_data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_image_create.image_data);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_data);
 
 			msgpack_encode_string_ext(buf, "access_permission");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_access_permission_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_image_create.access_permission);
+			msgpack_encode_int(buf, args->access_permission);
 
 			msgpack_encode_string_ext(buf, "image");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ext_image_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_image_create.image);
+			msgpack_encode_uint(buf, (uintptr_t)args->image);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_image_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_interop_unmap_buffer
-		case HSA_API_ID_hsa_amd_interop_unmap_buffer :
+		case HSA_API_ID_hsa_amd_interop_unmap_buffer : {
 			//	void * ptr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_interop_unmap_buffer_t* args = (args_hsa_amd_interop_unmap_buffer_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_interop_unmap_buffer.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_interop_unmap_buffer.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_or_screlease
-		case HSA_API_ID_hsa_signal_or_screlease :
+		case HSA_API_ID_hsa_signal_or_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_or_screlease_t* args = (args_hsa_signal_or_screlease_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -8585,24 +8974,26 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_or_screlease.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_or_screlease.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_destroy
-		case HSA_API_ID_hsa_signal_destroy :
+		case HSA_API_ID_hsa_signal_destroy : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_signal_destroy_t* args = (args_hsa_signal_destroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -8616,20 +9007,21 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_destroy.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_destroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_destroy
-		case HSA_API_ID_hsa_ext_image_destroy :
+		case HSA_API_ID_hsa_ext_image_destroy : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -8637,6 +9029,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_destroy_t* args = (args_hsa_ext_image_destroy_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -8650,7 +9043,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_destroy.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "image");
 			msgpack_encode_map(buf, 2);
@@ -8664,70 +9057,74 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_destroy.image.handle);
+			msgpack_encode_int(buf, args->image.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_destroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_set_access
-		case HSA_API_ID_hsa_amd_vmem_set_access :
+		case HSA_API_ID_hsa_amd_vmem_set_access : {
 			//	void * va (void *);
 			//	size_t size (unsigned long);
 			//	const hsa_amd_memory_access_desc_t * desc (const struct hsa_amd_memory_access_desc_s *);
 			//	size_t desc_cnt (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_set_access_t* args = (args_hsa_amd_vmem_set_access_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "va");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_set_access.va);
+			msgpack_encode_uint(buf, (uintptr_t)args->va);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_set_access.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "desc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_amd_memory_access_desc_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_set_access.desc);
+			msgpack_encode_uint(buf, (uintptr_t)args->desc);
 
 			msgpack_encode_string_ext(buf, "desc_cnt");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_set_access.desc_cnt);
+			msgpack_encode_int(buf, args->desc_cnt);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_set_access.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_and_acquire
-		case HSA_API_ID_hsa_signal_and_acquire :
+		case HSA_API_ID_hsa_signal_and_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_and_acquire_t* args = (args_hsa_signal_and_acquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -8741,56 +9138,60 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_and_acquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_and_acquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_memory_deregister
-		case HSA_API_ID_hsa_memory_deregister :
+		case HSA_API_ID_hsa_memory_deregister : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_memory_deregister_t* args = (args_hsa_memory_deregister_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_memory_deregister.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_memory_deregister.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_memory_deregister.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_profiling_convert_tick_to_system_domain
-		case HSA_API_ID_hsa_amd_profiling_convert_tick_to_system_domain :
+		case HSA_API_ID_hsa_amd_profiling_convert_tick_to_system_domain : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	uint64_t agent_tick (unsigned long);
 			//	uint64_t * system_tick (unsigned long*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_profiling_convert_tick_to_system_domain_t* args = (args_hsa_amd_profiling_convert_tick_to_system_domain_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -8804,38 +9205,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_profiling_convert_tick_to_system_domain.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "agent_tick");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_profiling_convert_tick_to_system_domain.agent_tick);
+			msgpack_encode_int(buf, args->agent_tick);
 
 			msgpack_encode_string_ext(buf, "system_tick");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_profiling_convert_tick_to_system_domain.system_tick);
+			msgpack_encode_uint(buf, (uintptr_t)args->system_tick);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_profiling_convert_tick_to_system_domain.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_add_release
-		case HSA_API_ID_hsa_signal_add_release :
+		case HSA_API_ID_hsa_signal_add_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_add_release_t* args = (args_hsa_signal_add_release_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -8849,25 +9252,27 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_add_release.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_add_release.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_exchange_release
-		case HSA_API_ID_hsa_signal_exchange_release :
+		case HSA_API_ID_hsa_signal_exchange_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_exchange_release_t* args = (args_hsa_signal_exchange_release_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -8881,81 +9286,84 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_release.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_release.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_exchange_release.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_address_reserve_align
-		case HSA_API_ID_hsa_amd_vmem_address_reserve_align :
+		case HSA_API_ID_hsa_amd_vmem_address_reserve_align : {
 			//	void ** va (void **);
 			//	size_t size (unsigned long);
 			//	uint64_t address (unsigned long);
 			//	uint64_t alignment (unsigned long);
 			//	uint64_t flags (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_address_reserve_align_t* args = (args_hsa_amd_vmem_address_reserve_align_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "va");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_address_reserve_align.va);
+			msgpack_encode_uint(buf, (uintptr_t)args->va);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_address_reserve_align.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "address");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_address_reserve_align.address);
+			msgpack_encode_int(buf, args->address);
 
 			msgpack_encode_string_ext(buf, "alignment");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_address_reserve_align.alignment);
+			msgpack_encode_int(buf, args->alignment);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_address_reserve_align.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_address_reserve_align.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_sampler_destroy
-		case HSA_API_ID_hsa_ext_sampler_destroy :
+		case HSA_API_ID_hsa_ext_sampler_destroy : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -8963,6 +9371,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_sampler_destroy_t* args = (args_hsa_ext_sampler_destroy_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -8976,7 +9385,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_sampler_destroy.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "sampler");
 			msgpack_encode_map(buf, 2);
@@ -8990,24 +9399,26 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_sampler_destroy.sampler.handle);
+			msgpack_encode_int(buf, args->sampler.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_sampler_destroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_store_relaxed
-		case HSA_API_ID_hsa_signal_store_relaxed :
+		case HSA_API_ID_hsa_signal_store_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_store_relaxed_t* args = (args_hsa_signal_store_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -9021,26 +9432,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_store_relaxed.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_store_relaxed.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_cas_acq_rel
-		case HSA_API_ID_hsa_signal_cas_acq_rel :
+		case HSA_API_ID_hsa_signal_cas_acq_rel : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t expected (long);
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_cas_acq_rel_t* args = (args_hsa_signal_cas_acq_rel_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -9054,38 +9467,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_acq_rel.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "expected");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_acq_rel.expected);
+			msgpack_encode_int(buf, args->expected);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_acq_rel.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_acq_rel.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_xor_relaxed
-		case HSA_API_ID_hsa_signal_xor_relaxed :
+		case HSA_API_ID_hsa_signal_xor_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_xor_relaxed_t* args = (args_hsa_signal_xor_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -9099,50 +9514,53 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_xor_relaxed.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_xor_relaxed.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_add_write_index_scacquire
-		case HSA_API_ID_hsa_queue_add_write_index_scacquire :
+		case HSA_API_ID_hsa_queue_add_write_index_scacquire : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_add_write_index_scacquire_t* args = (args_hsa_queue_add_write_index_scacquire_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_add_write_index_scacquire.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_add_write_index_scacquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_add_write_index_scacquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_isa_get_info
-		case HSA_API_ID_hsa_isa_get_info :
+		case HSA_API_ID_hsa_isa_get_info : {
 			//	hsa_isa_t isa ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -9150,6 +9568,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	uint32_t index (unsigned int);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_isa_get_info_t* args = (args_hsa_isa_get_info_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "isa");
 			msgpack_encode_map(buf, 2);
@@ -9163,77 +9582,81 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_get_info.isa.handle);
+			msgpack_encode_int(buf, args->isa.handle);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_isa_info_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_get_info.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "index");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_get_info.index);
+			msgpack_encode_int(buf, args->index);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_isa_get_info.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_reader_create_from_file
-		case HSA_API_ID_hsa_code_object_reader_create_from_file :
+		case HSA_API_ID_hsa_code_object_reader_create_from_file : {
 			//	hsa_file_t file (int);
 			//	hsa_code_object_reader_t * code_object_reader (struct hsa_code_object_reader_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_reader_create_from_file_t* args = (args_hsa_code_object_reader_create_from_file_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "file");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_file_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_reader_create_from_file.file);
+			msgpack_encode_int(buf, args->file);
 
 			msgpack_encode_string_ext(buf, "code_object_reader");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_code_object_reader_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_reader_create_from_file.code_object_reader);
+			msgpack_encode_uint(buf, (uintptr_t)args->code_object_reader);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_reader_create_from_file.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_isa_iterate_wavefronts
-		case HSA_API_ID_hsa_isa_iterate_wavefronts :
+		case HSA_API_ID_hsa_isa_iterate_wavefronts : {
 			//	hsa_isa_t isa ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_wavefront_t, void *) callback (enum hsa_status_t (*)(struct hsa_wavefront_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_isa_iterate_wavefronts_t* args = (args_hsa_isa_iterate_wavefronts_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "isa");
 			msgpack_encode_map(buf, 2);
@@ -9247,106 +9670,112 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_iterate_wavefronts.isa.handle);
+			msgpack_encode_int(buf, args->isa.handle);
 
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t (*)(hsa_wavefront_t, void *)");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_isa_iterate_wavefronts.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_isa_iterate_wavefronts.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_iterate_wavefronts.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_queue_cu_set_mask
-		case HSA_API_ID_hsa_amd_queue_cu_set_mask :
+		case HSA_API_ID_hsa_amd_queue_cu_set_mask : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint32_t num_cu_mask_count (unsigned int);
 			//	const uint32_t * cu_mask (const unsigned int *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_queue_cu_set_mask_t* args = (args_hsa_amd_queue_cu_set_mask_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_queue_cu_set_mask.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "num_cu_mask_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_queue_cu_set_mask.num_cu_mask_count);
+			msgpack_encode_int(buf, args->num_cu_mask_count);
 
 			msgpack_encode_string_ext(buf, "cu_mask");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const uint32_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_queue_cu_set_mask.cu_mask);
+			msgpack_encode_uint(buf, (uintptr_t)args->cu_mask);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_queue_cu_set_mask.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_vmem_unmap
-		case HSA_API_ID_hsa_amd_vmem_unmap :
+		case HSA_API_ID_hsa_amd_vmem_unmap : {
 			//	void * va (void *);
 			//	size_t size (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_vmem_unmap_t* args = (args_hsa_amd_vmem_unmap_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "va");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_vmem_unmap.va);
+			msgpack_encode_uint(buf, (uintptr_t)args->va);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_unmap.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_vmem_unmap.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_or_acquire
-		case HSA_API_ID_hsa_signal_or_acquire :
+		case HSA_API_ID_hsa_signal_or_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_or_acquire_t* args = (args_hsa_signal_or_acquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -9360,26 +9789,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_or_acquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_or_acquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_agent_get_exception_policies
-		case HSA_API_ID_hsa_agent_get_exception_policies :
+		case HSA_API_ID_hsa_agent_get_exception_policies : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_profile_t profile (enum hsa_profile_t);
 			//	uint16_t * mask (unsigned short*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_agent_get_exception_policies_t* args = (args_hsa_agent_get_exception_policies_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -9393,110 +9824,115 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_get_exception_policies.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "profile");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_profile_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_get_exception_policies.profile);
+			msgpack_encode_int(buf, args->profile);
 
 			msgpack_encode_string_ext(buf, "mask");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_agent_get_exception_policies.mask);
+			msgpack_encode_uint(buf, (uintptr_t)args->mask);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_get_exception_policies.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_system_get_extension_table
-		case HSA_API_ID_hsa_system_get_extension_table :
+		case HSA_API_ID_hsa_system_get_extension_table : {
 			//	uint16_t extension (unsigned short);
 			//	uint16_t version_major (unsigned short);
 			//	uint16_t version_minor (unsigned short);
 			//	void * table (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_system_get_extension_table_t* args = (args_hsa_system_get_extension_table_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "extension");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_get_extension_table.extension);
+			msgpack_encode_int(buf, args->extension);
 
 			msgpack_encode_string_ext(buf, "version_major");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_get_extension_table.version_major);
+			msgpack_encode_int(buf, args->version_major);
 
 			msgpack_encode_string_ext(buf, "version_minor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint16_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_get_extension_table.version_minor);
+			msgpack_encode_int(buf, args->version_minor);
 
 			msgpack_encode_string_ext(buf, "table");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_system_get_extension_table.table);
+			msgpack_encode_uint(buf, (uintptr_t)args->table);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_system_get_extension_table.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_add_write_index_screlease
-		case HSA_API_ID_hsa_queue_add_write_index_screlease :
+		case HSA_API_ID_hsa_queue_add_write_index_screlease : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_add_write_index_screlease_t* args = (args_hsa_queue_add_write_index_screlease_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_add_write_index_screlease.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_add_write_index_screlease.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_add_write_index_screlease.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_signal_wait_any
-		case HSA_API_ID_hsa_amd_signal_wait_any :
+		case HSA_API_ID_hsa_amd_signal_wait_any : {
 			//	uint32_t signal_count (unsigned int);
 			//	hsa_signal_t * signals (struct hsa_signal_s*);
 			//	hsa_signal_condition_t * conds (enum hsa_signal_condition_t*);
@@ -9505,148 +9941,155 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_wait_state_t wait_hint (enum hsa_wait_state_t);
 			//	hsa_signal_value_t * satisfying_value (long*);
 			//	uint32_t retval (unsigned int);
+			args_hsa_amd_signal_wait_any_t* args = (args_hsa_amd_signal_wait_any_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "signal_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_signal_wait_any.signal_count);
+			msgpack_encode_int(buf, args->signal_count);
 
 			msgpack_encode_string_ext(buf, "signals");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_signal_wait_any.signals);
+			msgpack_encode_uint(buf, (uintptr_t)args->signals);
 
 			msgpack_encode_string_ext(buf, "conds");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_condition_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_signal_wait_any.conds);
+			msgpack_encode_uint(buf, (uintptr_t)args->conds);
 
 			msgpack_encode_string_ext(buf, "values");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_signal_wait_any.values);
+			msgpack_encode_uint(buf, (uintptr_t)args->values);
 
 			msgpack_encode_string_ext(buf, "timeout_hint");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_signal_wait_any.timeout_hint);
+			msgpack_encode_int(buf, args->timeout_hint);
 
 			msgpack_encode_string_ext(buf, "wait_hint");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_wait_state_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_signal_wait_any.wait_hint);
+			msgpack_encode_int(buf, args->wait_hint);
 
 			msgpack_encode_string_ext(buf, "satisfying_value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_signal_wait_any.satisfying_value);
+			msgpack_encode_uint(buf, (uintptr_t)args->satisfying_value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_signal_wait_any.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_agents_allow_access
-		case HSA_API_ID_hsa_amd_agents_allow_access :
+		case HSA_API_ID_hsa_amd_agents_allow_access : {
 			//	uint32_t num_agents (unsigned int);
 			//	const hsa_agent_t * agents (const struct hsa_agent_s *);
 			//	const uint32_t * flags (const unsigned int *);
 			//	const void * ptr (const void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_agents_allow_access_t* args = (args_hsa_amd_agents_allow_access_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "num_agents");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_agents_allow_access.num_agents);
+			msgpack_encode_int(buf, args->num_agents);
 
 			msgpack_encode_string_ext(buf, "agents");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_agent_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_agents_allow_access.agents);
+			msgpack_encode_uint(buf, (uintptr_t)args->agents);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const uint32_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_agents_allow_access.flags);
+			msgpack_encode_uint(buf, (uintptr_t)args->flags);
 
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_agents_allow_access.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_agents_allow_access.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_add_write_index_scacq_screl
-		case HSA_API_ID_hsa_queue_add_write_index_scacq_screl :
+		case HSA_API_ID_hsa_queue_add_write_index_scacq_screl : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t value (unsigned long);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_add_write_index_scacq_screl_t* args = (args_hsa_queue_add_write_index_scacq_screl_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_add_write_index_scacq_screl.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_add_write_index_scacq_screl.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_add_write_index_scacq_screl.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_add_screlease
-		case HSA_API_ID_hsa_signal_add_screlease :
+		case HSA_API_ID_hsa_signal_add_screlease : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_add_screlease_t* args = (args_hsa_signal_add_screlease_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -9660,76 +10103,82 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_add_screlease.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_add_screlease.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_iterate_agents
-		case HSA_API_ID_hsa_iterate_agents :
+		case HSA_API_ID_hsa_iterate_agents : {
 			//	hsa_status_t (*)(hsa_agent_t, void *) callback (enum hsa_status_t (*)(struct hsa_agent_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_iterate_agents_t* args = (args_hsa_iterate_agents_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t (*)(hsa_agent_t, void *)");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_iterate_agents.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_iterate_agents.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_iterate_agents.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_store_read_index_relaxed
-		case HSA_API_ID_hsa_queue_store_read_index_relaxed :
+		case HSA_API_ID_hsa_queue_store_read_index_relaxed : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t value (unsigned long);
+			args_hsa_queue_store_read_index_relaxed_t* args = (args_hsa_queue_store_read_index_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_store_read_index_relaxed.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_store_read_index_relaxed.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_or_relaxed
-		case HSA_API_ID_hsa_signal_or_relaxed :
+		case HSA_API_ID_hsa_signal_or_relaxed : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_or_relaxed_t* args = (args_hsa_signal_or_relaxed_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -9743,46 +10192,50 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_or_relaxed.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_or_relaxed.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_ipc_memory_detach
-		case HSA_API_ID_hsa_amd_ipc_memory_detach :
+		case HSA_API_ID_hsa_amd_ipc_memory_detach : {
 			//	void * mapped_ptr (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_ipc_memory_detach_t* args = (args_hsa_amd_ipc_memory_detach_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "mapped_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_ipc_memory_detach.mapped_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->mapped_ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_ipc_memory_detach.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_or_release
-		case HSA_API_ID_hsa_signal_or_release :
+		case HSA_API_ID_hsa_signal_or_release : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_or_release_t* args = (args_hsa_signal_or_release_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -9796,78 +10249,84 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_or_release.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_or_release.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_deregister_deallocation_callback
-		case HSA_API_ID_hsa_amd_deregister_deallocation_callback :
+		case HSA_API_ID_hsa_amd_deregister_deallocation_callback : {
 			//	void * ptr (void *);
 			//	hsa_amd_deallocation_callback_t callback (void (*)(void *, void *));
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_deregister_deallocation_callback_t* args = (args_hsa_amd_deregister_deallocation_callback_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_deregister_deallocation_callback.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_deallocation_callback_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_deregister_deallocation_callback.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_deregister_deallocation_callback.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_queue_load_read_index_acquire
-		case HSA_API_ID_hsa_queue_load_read_index_acquire :
+		case HSA_API_ID_hsa_queue_load_read_index_acquire : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint64_t retval (unsigned long);
+			args_hsa_queue_load_read_index_acquire_t* args = (args_hsa_queue_load_read_index_acquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_queue_load_read_index_acquire.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_queue_load_read_index_acquire.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ven_amd_pcs_iterate_configuration
-		case HSA_API_ID_hsa_ven_amd_pcs_iterate_configuration :
+		case HSA_API_ID_hsa_ven_amd_pcs_iterate_configuration : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_ven_amd_pcs_iterate_configuration_callback_t configuration_callback (enum hsa_status_t (*)(const struct hsa_ven_amd_pcs_configuration_t *, void *));
 			//	void * callback_data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ven_amd_pcs_iterate_configuration_t* args = (args_hsa_ven_amd_pcs_iterate_configuration_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -9881,39 +10340,41 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_iterate_configuration.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "configuration_callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ven_amd_pcs_iterate_configuration_callback_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ven_amd_pcs_iterate_configuration.configuration_callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->configuration_callback);
 
 			msgpack_encode_string_ext(buf, "callback_data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ven_amd_pcs_iterate_configuration.callback_data);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback_data);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_iterate_configuration.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_ipc_signal_create
-		case HSA_API_ID_hsa_amd_ipc_signal_create :
+		case HSA_API_ID_hsa_amd_ipc_signal_create : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_amd_ipc_signal_t * handle (struct hsa_amd_ipc_memory_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_ipc_signal_create_t* args = (args_hsa_amd_ipc_signal_create_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -9927,33 +10388,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_ipc_signal_create.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_ipc_signal_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_ipc_signal_create.handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_ipc_signal_create.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_iterate_symbols
-		case HSA_API_ID_hsa_code_object_iterate_symbols :
+		case HSA_API_ID_hsa_code_object_iterate_symbols : {
 			//	hsa_code_object_t code_object ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_code_object_t, hsa_code_symbol_t, void *) callback (enum hsa_status_t (*)(struct hsa_code_object_s, struct hsa_code_symbol_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_iterate_symbols_t* args = (args_hsa_code_object_iterate_symbols_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "code_object");
 			msgpack_encode_map(buf, 2);
@@ -9967,34 +10430,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_iterate_symbols.code_object.handle);
+			msgpack_encode_int(buf, args->code_object.handle);
 
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t (*)(hsa_code_object_t, hsa_code_symbol_t, void *)");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_iterate_symbols.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_iterate_symbols.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_iterate_symbols.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_get_capability_with_layout
-		case HSA_API_ID_hsa_ext_image_get_capability_with_layout :
+		case HSA_API_ID_hsa_ext_image_get_capability_with_layout : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -10003,6 +10467,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_ext_image_data_layout_t image_data_layout (enum hsa_ext_image_data_layout_t);
 			//	uint32_t * capability_mask (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_get_capability_with_layout_t* args = (args_hsa_ext_image_get_capability_with_layout_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -10016,48 +10481,49 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_get_capability_with_layout.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "geometry");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ext_image_geometry_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_get_capability_with_layout.geometry);
+			msgpack_encode_int(buf, args->geometry);
 
 			msgpack_encode_string_ext(buf, "image_format");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_ext_image_format_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_get_capability_with_layout.image_format);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_format);
 
 			msgpack_encode_string_ext(buf, "image_data_layout");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ext_image_data_layout_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_get_capability_with_layout.image_data_layout);
+			msgpack_encode_int(buf, args->image_data_layout);
 
 			msgpack_encode_string_ext(buf, "capability_mask");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_get_capability_with_layout.capability_mask);
+			msgpack_encode_uint(buf, (uintptr_t)args->capability_mask);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_get_capability_with_layout.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_memory_async_copy_on_engine
-		case HSA_API_ID_hsa_amd_memory_async_copy_on_engine :
+		case HSA_API_ID_hsa_amd_memory_async_copy_on_engine : {
 			//	void * dst (void *);
 			//	hsa_agent_t dst_agent ({
 			//		uint64_t handle (unsigned long);
@@ -10075,13 +10541,14 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	hsa_amd_sdma_engine_id_t engine_id (enum hsa_amd_sdma_engine_id);
 			//	_Bool force_copy_on_sdma (unsigned int);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_memory_async_copy_on_engine_t* args = (args_hsa_amd_memory_async_copy_on_engine_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_async_copy_on_engine.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "dst_agent");
 			msgpack_encode_map(buf, 2);
@@ -10095,14 +10562,14 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy_on_engine.dst_agent.handle);
+			msgpack_encode_int(buf, args->dst_agent.handle);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_async_copy_on_engine.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "src_agent");
 			msgpack_encode_map(buf, 2);
@@ -10116,28 +10583,28 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy_on_engine.src_agent.handle);
+			msgpack_encode_int(buf, args->src_agent.handle);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy_on_engine.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "num_dep_signals");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy_on_engine.num_dep_signals);
+			msgpack_encode_int(buf, args->num_dep_signals);
 
 			msgpack_encode_string_ext(buf, "dep_signals");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_signal_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_memory_async_copy_on_engine.dep_signals);
+			msgpack_encode_uint(buf, (uintptr_t)args->dep_signals);
 
 			msgpack_encode_string_ext(buf, "completion_signal");
 			msgpack_encode_map(buf, 2);
@@ -10151,40 +10618,42 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy_on_engine.completion_signal.handle);
+			msgpack_encode_int(buf, args->completion_signal.handle);
 
 			msgpack_encode_string_ext(buf, "engine_id");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_sdma_engine_id_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy_on_engine.engine_id);
+			msgpack_encode_int(buf, args->engine_id);
 
 			msgpack_encode_string_ext(buf, "force_copy_on_sdma");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "_Bool");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy_on_engine.force_copy_on_sdma);
+			msgpack_encode_int(buf, args->force_copy_on_sdma);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_memory_async_copy_on_engine.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_agent_iterate_isas
-		case HSA_API_ID_hsa_agent_iterate_isas :
+		case HSA_API_ID_hsa_agent_iterate_isas : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t (*)(hsa_isa_t, void *) callback (enum hsa_status_t (*)(struct hsa_isa_s, void *));
 			//	void * data (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_agent_iterate_isas_t* args = (args_hsa_agent_iterate_isas_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -10198,40 +10667,42 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_iterate_isas.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t (*)(hsa_isa_t, void *)");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_agent_iterate_isas.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_agent_iterate_isas.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_iterate_isas.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_cas_scacq_screl
-		case HSA_API_ID_hsa_signal_cas_scacq_screl :
+		case HSA_API_ID_hsa_signal_cas_scacq_screl : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t expected (long);
 			//	hsa_signal_value_t value (long);
 			//	hsa_signal_value_t retval (long);
+			args_hsa_signal_cas_scacq_screl_t* args = (args_hsa_signal_cas_scacq_screl_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -10245,39 +10716,41 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_scacq_screl.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "expected");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_scacq_screl.expected);
+			msgpack_encode_int(buf, args->expected);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_scacq_screl.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_cas_scacq_screl.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_coherency_set_type
-		case HSA_API_ID_hsa_amd_coherency_set_type :
+		case HSA_API_ID_hsa_amd_coherency_set_type : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_amd_coherency_type_t type (enum hsa_amd_coherency_type_s);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_coherency_set_type_t* args = (args_hsa_amd_coherency_set_type_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -10291,65 +10764,68 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_coherency_set_type.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_amd_coherency_type_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_coherency_set_type.type);
+			msgpack_encode_int(buf, args->type);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_coherency_set_type.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_amd_queue_cu_get_mask
-		case HSA_API_ID_hsa_amd_queue_cu_get_mask :
+		case HSA_API_ID_hsa_amd_queue_cu_get_mask : {
 			//	const hsa_queue_t * queue (const struct hsa_queue_s *);
 			//	uint32_t num_cu_mask_count (unsigned int);
 			//	uint32_t * cu_mask (unsigned int*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_amd_queue_cu_get_mask_t* args = (args_hsa_amd_queue_cu_get_mask_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "queue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_queue_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_queue_cu_get_mask.queue);
+			msgpack_encode_uint(buf, (uintptr_t)args->queue);
 
 			msgpack_encode_string_ext(buf, "num_cu_mask_count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_queue_cu_get_mask.num_cu_mask_count);
+			msgpack_encode_int(buf, args->num_cu_mask_count);
 
 			msgpack_encode_string_ext(buf, "cu_mask");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_amd_queue_cu_get_mask.cu_mask);
+			msgpack_encode_uint(buf, (uintptr_t)args->cu_mask);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_amd_queue_cu_get_mask.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ext_image_create_with_layout
-		case HSA_API_ID_hsa_ext_image_create_with_layout :
+		case HSA_API_ID_hsa_ext_image_create_with_layout : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
@@ -10361,6 +10837,7 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			//	size_t image_data_slice_pitch (unsigned long);
 			//	hsa_ext_image_t * image (struct hsa_ext_image_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ext_image_create_with_layout_t* args = (args_hsa_ext_image_create_with_layout_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -10374,128 +10851,132 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_create_with_layout.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "image_descriptor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hsa_ext_image_descriptor_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_create_with_layout.image_descriptor);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_descriptor);
 
 			msgpack_encode_string_ext(buf, "image_data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_create_with_layout.image_data);
+			msgpack_encode_uint(buf, (uintptr_t)args->image_data);
 
 			msgpack_encode_string_ext(buf, "access_permission");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_access_permission_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_create_with_layout.access_permission);
+			msgpack_encode_int(buf, args->access_permission);
 
 			msgpack_encode_string_ext(buf, "image_data_layout");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ext_image_data_layout_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_create_with_layout.image_data_layout);
+			msgpack_encode_int(buf, args->image_data_layout);
 
 			msgpack_encode_string_ext(buf, "image_data_row_pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_create_with_layout.image_data_row_pitch);
+			msgpack_encode_int(buf, args->image_data_row_pitch);
 
 			msgpack_encode_string_ext(buf, "image_data_slice_pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_create_with_layout.image_data_slice_pitch);
+			msgpack_encode_int(buf, args->image_data_slice_pitch);
 
 			msgpack_encode_string_ext(buf, "image");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_ext_image_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_ext_image_create_with_layout.image);
+			msgpack_encode_uint(buf, (uintptr_t)args->image);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ext_image_create_with_layout.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_code_object_deserialize
-		case HSA_API_ID_hsa_code_object_deserialize :
+		case HSA_API_ID_hsa_code_object_deserialize : {
 			//	void * serialized_code_object (void *);
 			//	size_t serialized_code_object_size (unsigned long);
 			//	const char * options (const char *);
 			//	hsa_code_object_t * code_object (struct hsa_code_object_s*);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_code_object_deserialize_t* args = (args_hsa_code_object_deserialize_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "serialized_code_object");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_deserialize.serialized_code_object);
+			msgpack_encode_uint(buf, (uintptr_t)args->serialized_code_object);
 
 			msgpack_encode_string_ext(buf, "serialized_code_object_size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_deserialize.serialized_code_object_size);
+			msgpack_encode_int(buf, args->serialized_code_object_size);
 
 			msgpack_encode_string_ext(buf, "options");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_deserialize.options);
+			msgpack_encode_uint(buf, (uintptr_t)args->options);
 
 			msgpack_encode_string_ext(buf, "code_object");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_code_object_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_code_object_deserialize.code_object);
+			msgpack_encode_uint(buf, (uintptr_t)args->code_object);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_code_object_deserialize.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_memory_assign_agent
-		case HSA_API_ID_hsa_memory_assign_agent :
+		case HSA_API_ID_hsa_memory_assign_agent : {
 			//	void * ptr (void *);
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_access_permission_t access (enum hsa_access_permission_t);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_memory_assign_agent_t* args = (args_hsa_memory_assign_agent_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_memory_assign_agent.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -10509,33 +10990,35 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_memory_assign_agent.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "access");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_access_permission_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_memory_assign_agent.access);
+			msgpack_encode_int(buf, args->access);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_memory_assign_agent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_isa_get_info_alt
-		case HSA_API_ID_hsa_isa_get_info_alt :
+		case HSA_API_ID_hsa_isa_get_info_alt : {
 			//	hsa_isa_t isa ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_isa_info_t attribute (enum hsa_isa_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_isa_get_info_alt_t* args = (args_hsa_isa_get_info_alt_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "isa");
 			msgpack_encode_map(buf, 2);
@@ -10549,38 +11032,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_get_info_alt.isa.handle);
+			msgpack_encode_int(buf, args->isa.handle);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_isa_info_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_get_info_alt.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_isa_get_info_alt.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_isa_get_info_alt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_subtract_acquire
-		case HSA_API_ID_hsa_signal_subtract_acquire :
+		case HSA_API_ID_hsa_signal_subtract_acquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_subtract_acquire_t* args = (args_hsa_signal_subtract_acquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -10594,64 +11079,68 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_subtract_acquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_subtract_acquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_memory_copy
-		case HSA_API_ID_hsa_memory_copy :
+		case HSA_API_ID_hsa_memory_copy : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t size (unsigned long);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_memory_copy_t* args = (args_hsa_memory_copy_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_memory_copy.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_memory_copy.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_memory_copy.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_memory_copy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_agent_get_info
-		case HSA_API_ID_hsa_agent_get_info :
+		case HSA_API_ID_hsa_agent_get_info : {
 			//	hsa_agent_t agent ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_agent_info_t attribute (enum hsa_agent_info_t);
 			//	void * value (void *);
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_agent_get_info_t* args = (args_hsa_agent_get_info_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "agent");
 			msgpack_encode_map(buf, 2);
@@ -10665,38 +11154,40 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_get_info.agent.handle);
+			msgpack_encode_int(buf, args->agent.handle);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_agent_info_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_get_info.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hsa_agent_get_info.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_agent_get_info.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_signal_add_scacquire
-		case HSA_API_ID_hsa_signal_add_scacquire :
+		case HSA_API_ID_hsa_signal_add_scacquire : {
 			//	hsa_signal_t signal ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_signal_value_t value (long);
+			args_hsa_signal_add_scacquire_t* args = (args_hsa_signal_add_scacquire_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "signal");
 			msgpack_encode_map(buf, 2);
@@ -10710,24 +11201,26 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_add_scacquire.signal.handle);
+			msgpack_encode_int(buf, args->signal.handle);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_signal_value_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_signal_add_scacquire.value);
+			msgpack_encode_int(buf, args->value);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hsa_ven_amd_pcs_flush
-		case HSA_API_ID_hsa_ven_amd_pcs_flush :
+		case HSA_API_ID_hsa_ven_amd_pcs_flush : {
 			//	hsa_ven_amd_pcs_t pc_sampling ({
 			//		uint64_t handle (unsigned long);
 			//	});
 			//	hsa_status_t retval (enum hsa_status_t);
+			args_hsa_ven_amd_pcs_flush_t* args = (args_hsa_ven_amd_pcs_flush_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "pc_sampling");
 			msgpack_encode_map(buf, 2);
@@ -10741,17 +11234,18 @@ void process_hsa_args_for(hsa_api_id_t funid, const hsa_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_flush.pc_sampling.handle);
+			msgpack_encode_int(buf, args->pc_sampling.handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hsa_status_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hsa_ven_amd_pcs_flush.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
         default : break;
     }

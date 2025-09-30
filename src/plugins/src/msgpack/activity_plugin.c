@@ -55,44 +55,10 @@ void add_activity_data_to_buffer(msgpack_buffer_t* buf,
     msgpack_encode_string_ext(buf, "args");
 }
 
-void ompt_activity_callback(const ratelprof_ompt_api_activity_t* activity, msgpack_buffer_t* buf)
+void ompt_activity_callback(const ratelprof_api_activity_t* activity, msgpack_buffer_t* buf)
 {
-    ratelprof_time_t start = ratelprof_get_timestamp_ns(activity->start_time);
-    ratelprof_time_t stop  = ratelprof_get_timestamp_ns(activity->stop_time);
-    ratelprof_time_t dur   = stop - start;
-
-    msgpack_encode_uint(buf, activity->id);
-    msgpack_encode_map(buf, 9);
-
-    msgpack_encode_string_ext(buf, "phase");
-    msgpack_encode_string_ext(buf, ratelprof_get_phase_name(activity->phase));
-    
-    msgpack_encode_string_ext(buf, "name");
-    msgpack_encode_string_ext(buf, get_ompt_funame_by_id(activity->funid));
-    
-    msgpack_encode_string_ext(buf, "corr_id");
-    msgpack_encode_uint(buf, activity->corr_id);
-    
-    msgpack_encode_string_ext(buf, "start");
-    msgpack_encode_uint(buf, ratelprof_get_normalized_time(start));
-    
-    msgpack_encode_string_ext(buf, "dur");
-    msgpack_encode_uint(buf, dur);
-    
-    msgpack_encode_string_ext(buf, "pid");
-    msgpack_encode_uint(buf, activity->pid);
-    
-    msgpack_encode_string_ext(buf, "tid");
-    msgpack_encode_uint(buf, activity->tid);
-
-    msgpack_encode_string_ext(buf, "return_address");
-    msgpack_encode_uint(buf, (uintptr_t)activity->return_address);
-
-    // Put location in cache for later use
-    ratelprof_get_source_location(NULL, activity->return_address);
-    
-    msgpack_encode_string_ext(buf, "args");
-    process_ompt_args_for(activity->funid, &activity->args, buf);
+    add_activity_data_to_buffer(buf, activity, get_ompt_funame_by_id(activity->funid));
+    process_ompt_args_for(activity->funid, activity->args, buf);
 }
 
 void roctx_activity_callback(const ratelprof_roctx_activity_t* activity, msgpack_buffer_t* buf)
@@ -129,31 +95,31 @@ void roctx_activity_callback(const ratelprof_roctx_activity_t* activity, msgpack
 void omp_routine_activity_callback(const ratelprof_api_activity_t* activity, msgpack_buffer_t* buf)
 {
     add_activity_data_to_buffer(buf, activity, get_omp_routine_funame_by_id(activity->funid));
-    process_omp_routine_args_for(activity->funid, &activity->omp_routine_args, buf);
+    process_omp_routine_args_for(activity->funid, activity->args, buf);
 }
 
 void omp_tgt_rtl_activity_callback(const ratelprof_api_activity_t* activity, msgpack_buffer_t* buf)
 {
     add_activity_data_to_buffer(buf, activity, get_omp_tgt_rtl_funame_by_id(activity->funid));
-    process_omp_tgt_rtl_args_for(activity->funid, &activity->omp_tgt_rtl_args, buf);
+    process_omp_tgt_rtl_args_for(activity->funid, activity->args, buf);
 }
 
 void mpi_activity_callback(const ratelprof_api_activity_t* activity, msgpack_buffer_t* buf)
 {
     add_activity_data_to_buffer(buf, activity, get_mpi_funame_by_id(activity->funid));
-    process_mpi_args_for(activity->funid, &activity->mpi_args, buf);
+    process_mpi_args_for(activity->funid, activity->args, buf);
 }
 
 void hsa_activity_callback(const ratelprof_api_activity_t* activity, msgpack_buffer_t* buf)
 {
     add_activity_data_to_buffer(buf, activity, get_hsa_funame_by_id(activity->funid));
-    process_hsa_args_for(activity->funid, &activity->hsa_args, buf);
+    process_hsa_args_for(activity->funid, activity->args, buf);
 }
 
 void hip_activity_callback(const ratelprof_api_activity_t* activity, msgpack_buffer_t* buf)
 {
     add_activity_data_to_buffer(buf, activity, get_hip_funame_by_id(activity->funid));
-    process_hip_args_for(activity->funid, &activity->hip_args, buf);
+    process_hip_args_for(activity->funid, activity->args, buf);
 }
 
 

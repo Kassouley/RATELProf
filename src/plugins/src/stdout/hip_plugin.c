@@ -10,7 +10,7 @@
 void on_enter_hip_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
 {
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
-    get_hip_pointed_args_for(id, &activity->hip_args, 1);
+    get_hip_pointed_args_for(id, activity->args, 1);
     activity->phase = ratelprof_get_current_phase();
     activity->domain = domain;
     get_correlation_id(&activity->corr_id);
@@ -21,36 +21,38 @@ void on_enter_hip_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, voi
 void on_exit_hip_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
 {
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
-    get_hip_pointed_args_for(id, &activity->hip_args, 0);
+    get_hip_pointed_args_for(id, activity->args, 0);
     activity->pid = get_pid();
     activity->tid = get_tid();
     printf("-----------\n");
     printf("PHASE:%d : %s | ID: %lu | CID: %lu\n", activity->phase, get_hip_funame_by_id(activity->funid), activity->id, activity->corr_id);
     ratelprof_get_and_print_location(activity->return_address);
-    process_hip_args_for(activity->funid, &activity->hip_args, NULL);
+    process_hip_args_for(activity->funid, activity->args, NULL);
     pop_id();
 }
 
-void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* user_args)
+void process_hip_args_for(hip_api_id_t funid, const void* func_args, void* user_args)
 {
     switch(funid) {
 		#if HAVE_hipMemPtrGetInfo
-		case HIP_API_ID_hipMemPtrGetInfo :
+		case HIP_API_ID_hipMemPtrGetInfo : {
 			//	void * ptr (void *);
 			//	size_t * size (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * ptr = %p", args->hipMemPtrGetInfo.ptr);
+			args_hipMemPtrGetInfo_t* args = (args_hipMemPtrGetInfo_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tsize_t * size = %p", args->hipMemPtrGetInfo.size);
-			if (args->hipMemPtrGetInfo.size != NULL) {
-				printf(" -> %lu\n", args->hipMemPtrGetInfo.size__ref.val);
+			printf("\tsize_t * size = %p", args->size);
+			if (args->size != NULL) {
+				printf(" -> %lu\n", args->size__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipMemPtrGetInfo.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecMemcpyNodeSetParams1D
-		case HIP_API_ID_hipGraphExecMemcpyNodeSetParams1D :
+		case HIP_API_ID_hipGraphExecMemcpyNodeSetParams1D : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dst (void *);
@@ -58,78 +60,88 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t count (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t hGraphExec = %p", args->hipGraphExecMemcpyNodeSetParams1D.hGraphExec);
+			args_hipGraphExecMemcpyNodeSetParams1D_t* args = (args_hipGraphExecMemcpyNodeSetParams1D_t*) func_args;
+			printf("\thipGraphExec_t hGraphExec = %p", args->hGraphExec);
 			printf("\n");
-			printf("\thipGraphNode_t node = %p", args->hipGraphExecMemcpyNodeSetParams1D.node);
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\tvoid * dst = %p", args->hipGraphExecMemcpyNodeSetParams1D.dst);
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hipGraphExecMemcpyNodeSetParams1D.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t count = %lu\n", args->hipGraphExecMemcpyNodeSetParams1D.count);
-			printf("\thipMemcpyKind kind = %d\n", args->hipGraphExecMemcpyNodeSetParams1D.kind);
-			printf("\thipError_t retval = %d\n", args->hipGraphExecMemcpyNodeSetParams1D.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxEnablePeerAccess
-		case HIP_API_ID_hipCtxEnablePeerAccess :
+		case HIP_API_ID_hipCtxEnablePeerAccess : {
 			//	hipCtx_t peerCtx (struct ihipCtx_t *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipCtx_t peerCtx = %p", args->hipCtxEnablePeerAccess.peerCtx);
+			args_hipCtxEnablePeerAccess_t* args = (args_hipCtxEnablePeerAccess_t*) func_args;
+			printf("\thipCtx_t peerCtx = %p", args->peerCtx);
 			printf("\n");
-			printf("\tunsigned int flags = %u\n", args->hipCtxEnablePeerAccess.flags);
-			printf("\thipError_t retval = %d\n", args->hipCtxEnablePeerAccess.retval);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipHostUnregister
-		case HIP_API_ID_hipHostUnregister :
+		case HIP_API_ID_hipHostUnregister : {
 			//	void * hostPtr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * hostPtr = %p", args->hipHostUnregister.hostPtr);
+			args_hipHostUnregister_t* args = (args_hipHostUnregister_t*) func_args;
+			printf("\tvoid * hostPtr = %p", args->hostPtr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipHostUnregister.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDevicePrimaryCtxGetState
-		case HIP_API_ID_hipDevicePrimaryCtxGetState :
+		case HIP_API_ID_hipDevicePrimaryCtxGetState : {
 			//	hipDevice_t dev (int);
 			//	unsigned int * flags (unsigned int *);
 			//	int * active (int *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDevice_t dev = %d\n", args->hipDevicePrimaryCtxGetState.dev);
-			printf("\tunsigned int * flags = %p", args->hipDevicePrimaryCtxGetState.flags);
-			if (args->hipDevicePrimaryCtxGetState.flags != NULL) {
-				printf(" -> %u\n", args->hipDevicePrimaryCtxGetState.flags__ref.val);
+			args_hipDevicePrimaryCtxGetState_t* args = (args_hipDevicePrimaryCtxGetState_t*) func_args;
+			printf("\thipDevice_t dev = %d\n", args->dev);
+			printf("\tunsigned int * flags = %p", args->flags);
+			if (args->flags != NULL) {
+				printf(" -> %u\n", args->flags__ref.val);
 			} else { printf("\n"); };
-			printf("\tint * active = %p", args->hipDevicePrimaryCtxGetState.active);
-			if (args->hipDevicePrimaryCtxGetState.active != NULL) {
-				printf(" -> %d\n", args->hipDevicePrimaryCtxGetState.active__ref.val);
+			printf("\tint * active = %p", args->active);
+			if (args->active != NULL) {
+				printf(" -> %d\n", args->active__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipDevicePrimaryCtxGetState.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipPointerGetAttribute
-		case HIP_API_ID_hipPointerGetAttribute :
+		case HIP_API_ID_hipPointerGetAttribute : {
 			//	void * data (void *);
 			//	hipPointer_attribute attribute (enum hipPointer_attribute);
 			//	hipDeviceptr_t ptr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * data = %p", args->hipPointerGetAttribute.data);
+			args_hipPointerGetAttribute_t* args = (args_hipPointerGetAttribute_t*) func_args;
+			printf("\tvoid * data = %p", args->data);
 			printf("\n");
-			printf("\thipPointer_attribute attribute = %d\n", args->hipPointerGetAttribute.attribute);
-			printf("\thipDeviceptr_t ptr = %p", args->hipPointerGetAttribute.ptr);
+			printf("\thipPointer_attribute attribute = %d\n", args->attribute);
+			printf("\thipDeviceptr_t ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipPointerGetAttribute.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolGetAccess
-		case HIP_API_ID_hipMemPoolGetAccess :
+		case HIP_API_ID_hipMemPoolGetAccess : {
 			//	hipMemAccessFlags * flags (enum hipMemAccessFlags*);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipMemLocation * location ({
@@ -137,39 +149,43 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		int id (int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemAccessFlags * flags = %p", args->hipMemPoolGetAccess.flags);
-			if (args->hipMemPoolGetAccess.flags != NULL) {
-				printf(" -> %d\n", args->hipMemPoolGetAccess.flags__ref.val);
+			args_hipMemPoolGetAccess_t* args = (args_hipMemPoolGetAccess_t*) func_args;
+			printf("\thipMemAccessFlags * flags = %p", args->flags);
+			if (args->flags != NULL) {
+				printf(" -> %d\n", args->flags__ref.val);
 			} else { printf("\n"); };
-			printf("\thipMemPool_t mem_pool = %p", args->hipMemPoolGetAccess.mem_pool);
+			printf("\thipMemPool_t mem_pool = %p", args->mem_pool);
 			printf("\n");
-			printf("\thipMemLocation * location = %p", args->hipMemPoolGetAccess.location);
-			if (args->hipMemPoolGetAccess.location != NULL) {
+			printf("\thipMemLocation * location = %p", args->location);
+			if (args->location != NULL) {
 				printf(" -> {\n");
-				printf("\t\thipMemLocationType type = %d\n", args->hipMemPoolGetAccess.location__ref.val.type);
-				printf("\t\tint id = %d\n", args->hipMemPoolGetAccess.location__ref.val.id);
+				printf("\t\thipMemLocationType type = %d\n", args->location__ref.val.type);
+				printf("\t\tint id = %d\n", args->location__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipMemPoolGetAccess.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetD32
-		case HIP_API_ID_hipMemsetD32 :
+		case HIP_API_ID_hipMemsetD32 : {
 			//	hipDeviceptr_t dest (void *);
 			//	int value (int);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceptr_t dest = %p", args->hipMemsetD32.dest);
+			args_hipMemsetD32_t* args = (args_hipMemsetD32_t*) func_args;
+			printf("\thipDeviceptr_t dest = %p", args->dest);
 			printf("\n");
-			printf("\tint value = %d\n", args->hipMemsetD32.value);
-			printf("\tsize_t count = %lu\n", args->hipMemsetD32.count);
-			printf("\thipError_t retval = %d\n", args->hipMemsetD32.retval);
+			printf("\tint value = %d\n", args->value);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetMipMappedArray
-		case HIP_API_ID_hipTexRefGetMipMappedArray :
+		case HIP_API_ID_hipTexRefGetMipMappedArray : {
 			//	hipMipmappedArray_t * pArray ({
 			//		void * data (void *);
 			//		struct hipChannelFormatDesc desc ({
@@ -212,60 +228,62 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipArray_Format format (enum hipArray_Format);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMipmappedArray_t * pArray = %p", args->hipTexRefGetMipMappedArray.pArray);
-			if (args->hipTexRefGetMipMappedArray.pArray != NULL) {
-				printf("-> %p", args->hipTexRefGetMipMappedArray.pArray__ref.ptr1);
-				if (args->hipTexRefGetMipMappedArray.pArray__ref.ptr1 != NULL) {
+			args_hipTexRefGetMipMappedArray_t* args = (args_hipTexRefGetMipMappedArray_t*) func_args;
+			printf("\thipMipmappedArray_t * pArray = %p", args->pArray);
+			if (args->pArray != NULL) {
+				printf("-> %p", args->pArray__ref.ptr1);
+				if (args->pArray__ref.ptr1 != NULL) {
 					printf(" -> {\n");
 					printf("\t\tstruct hipChannelFormatDesc desc = {\n");
-					printf("\t\t\tint x = %d\n", args->hipTexRefGetMipMappedArray.pArray__ref.val.desc.x);
-					printf("\t\t\tint y = %d\n", args->hipTexRefGetMipMappedArray.pArray__ref.val.desc.y);
-					printf("\t\t\tint z = %d\n", args->hipTexRefGetMipMappedArray.pArray__ref.val.desc.z);
-					printf("\t\t\tint w = %d\n", args->hipTexRefGetMipMappedArray.pArray__ref.val.desc.w);
-					printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefGetMipMappedArray.pArray__ref.val.desc.f);
+					printf("\t\t\tint x = %d\n", args->pArray__ref.val.desc.x);
+					printf("\t\t\tint y = %d\n", args->pArray__ref.val.desc.y);
+					printf("\t\t\tint z = %d\n", args->pArray__ref.val.desc.z);
+					printf("\t\t\tint w = %d\n", args->pArray__ref.val.desc.w);
+					printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->pArray__ref.val.desc.f);
 					printf("\t\t}\n");
-					printf("\t\tunsigned int type = %u\n", args->hipTexRefGetMipMappedArray.pArray__ref.val.type);
-					printf("\t\tunsigned int width = %u\n", args->hipTexRefGetMipMappedArray.pArray__ref.val.width);
-					printf("\t\tunsigned int height = %u\n", args->hipTexRefGetMipMappedArray.pArray__ref.val.height);
-					printf("\t\tunsigned int depth = %u\n", args->hipTexRefGetMipMappedArray.pArray__ref.val.depth);
-					printf("\t\tunsigned int min_mipmap_level = %u\n", args->hipTexRefGetMipMappedArray.pArray__ref.val.min_mipmap_level);
-					printf("\t\tunsigned int max_mipmap_level = %u\n", args->hipTexRefGetMipMappedArray.pArray__ref.val.max_mipmap_level);
-					printf("\t\tunsigned int flags = %u\n", args->hipTexRefGetMipMappedArray.pArray__ref.val.flags);
-					printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefGetMipMappedArray.pArray__ref.val.format);
-					printf("\t\tunsigned int num_channels = %u\n", args->hipTexRefGetMipMappedArray.pArray__ref.val.num_channels);
+					printf("\t\tunsigned int type = %u\n", args->pArray__ref.val.type);
+					printf("\t\tunsigned int width = %u\n", args->pArray__ref.val.width);
+					printf("\t\tunsigned int height = %u\n", args->pArray__ref.val.height);
+					printf("\t\tunsigned int depth = %u\n", args->pArray__ref.val.depth);
+					printf("\t\tunsigned int min_mipmap_level = %u\n", args->pArray__ref.val.min_mipmap_level);
+					printf("\t\tunsigned int max_mipmap_level = %u\n", args->pArray__ref.val.max_mipmap_level);
+					printf("\t\tunsigned int flags = %u\n", args->pArray__ref.val.flags);
+					printf("\t\tenum hipArray_Format format = %d\n", args->pArray__ref.val.format);
+					printf("\t\tunsigned int num_channels = %u\n", args->pArray__ref.val.num_channels);
 					printf("\t}\n");
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\tconst textureReference * texRef = %p", args->hipTexRefGetMipMappedArray.texRef);
-			if (args->hipTexRefGetMipMappedArray.texRef != NULL) {
+			printf("\tconst textureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefGetMipMappedArray.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipTexRefGetMipMappedArray.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMalloc3D
-		case HIP_API_ID_hipMalloc3D :
+		case HIP_API_ID_hipMalloc3D : {
 			//	hipPitchedPtr * pitchedDevPtr ({
 			//		void * ptr (void *);
 			//		size_t pitch (unsigned long);
@@ -278,39 +296,43 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		size_t depth (unsigned long);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipPitchedPtr * pitchedDevPtr = %p", args->hipMalloc3D.pitchedDevPtr);
-			if (args->hipMalloc3D.pitchedDevPtr != NULL) {
+			args_hipMalloc3D_t* args = (args_hipMalloc3D_t*) func_args;
+			printf("\thipPitchedPtr * pitchedDevPtr = %p", args->pitchedDevPtr);
+			if (args->pitchedDevPtr != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t pitch = %lu\n", args->hipMalloc3D.pitchedDevPtr__ref.val.pitch);
-				printf("\t\tsize_t xsize = %lu\n", args->hipMalloc3D.pitchedDevPtr__ref.val.xsize);
-				printf("\t\tsize_t ysize = %lu\n", args->hipMalloc3D.pitchedDevPtr__ref.val.ysize);
+				printf("\t\tsize_t pitch = %lu\n", args->pitchedDevPtr__ref.val.pitch);
+				printf("\t\tsize_t xsize = %lu\n", args->pitchedDevPtr__ref.val.xsize);
+				printf("\t\tsize_t ysize = %lu\n", args->pitchedDevPtr__ref.val.ysize);
 				printf("\t}\n");
 			} else { printf("\n"); };
 			printf("\thipExtent extent = {\n");
-			printf("\t\tsize_t width = %lu\n", args->hipMalloc3D.extent.width);
-			printf("\t\tsize_t height = %lu\n", args->hipMalloc3D.extent.height);
-			printf("\t\tsize_t depth = %lu\n", args->hipMalloc3D.extent.depth);
+			printf("\t\tsize_t width = %lu\n", args->extent.width);
+			printf("\t\tsize_t height = %lu\n", args->extent.height);
+			printf("\t\tsize_t depth = %lu\n", args->extent.depth);
 			printf("\t}\n");
-			printf("\thipError_t retval = %d\n", args->hipMalloc3D.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetD8
-		case HIP_API_ID_hipMemsetD8 :
+		case HIP_API_ID_hipMemsetD8 : {
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned char value (unsigned char);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceptr_t dest = %p", args->hipMemsetD8.dest);
+			args_hipMemsetD8_t* args = (args_hipMemsetD8_t*) func_args;
+			printf("\thipDeviceptr_t dest = %p", args->dest);
 			printf("\n");
-			printf("\tunsigned char value = %hhu\n", args->hipMemsetD8.value);
-			printf("\tsize_t count = %lu\n", args->hipMemsetD8.count);
-			printf("\thipError_t retval = %d\n", args->hipMemsetD8.retval);
+			printf("\tunsigned char value = %hhu\n", args->value);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMallocArray
-		case HIP_API_ID_hipMallocArray :
+		case HIP_API_ID_hipMallocArray : {
 			//	hipArray_t * array (struct hipArray **);
 			//	const hipChannelFormatDesc * desc ({
 			//		int x (int);
@@ -323,44 +345,48 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t * array = %p", args->hipMallocArray.array);
-			if (args->hipMallocArray.array != NULL) {
-				printf(" -> %p\n", args->hipMallocArray.array__ref.val);
+			args_hipMallocArray_t* args = (args_hipMallocArray_t*) func_args;
+			printf("\thipArray_t * array = %p", args->array);
+			if (args->array != NULL) {
+				printf(" -> %p\n", args->array__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst hipChannelFormatDesc * desc = %p", args->hipMallocArray.desc);
-			if (args->hipMallocArray.desc != NULL) {
+			printf("\tconst hipChannelFormatDesc * desc = %p", args->desc);
+			if (args->desc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint x = %d\n", args->hipMallocArray.desc__ref.val.x);
-				printf("\t\tint y = %d\n", args->hipMallocArray.desc__ref.val.y);
-				printf("\t\tint z = %d\n", args->hipMallocArray.desc__ref.val.z);
-				printf("\t\tint w = %d\n", args->hipMallocArray.desc__ref.val.w);
-				printf("\t\tenum hipChannelFormatKind f = %d\n", args->hipMallocArray.desc__ref.val.f);
+				printf("\t\tint x = %d\n", args->desc__ref.val.x);
+				printf("\t\tint y = %d\n", args->desc__ref.val.y);
+				printf("\t\tint z = %d\n", args->desc__ref.val.z);
+				printf("\t\tint w = %d\n", args->desc__ref.val.w);
+				printf("\t\tenum hipChannelFormatKind f = %d\n", args->desc__ref.val.f);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tsize_t width = %lu\n", args->hipMallocArray.width);
-			printf("\tsize_t height = %lu\n", args->hipMallocArray.height);
-			printf("\tunsigned int flags = %u\n", args->hipMallocArray.flags);
-			printf("\thipError_t retval = %d\n", args->hipMallocArray.retval);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphEventWaitNodeGetEvent
-		case HIP_API_ID_hipGraphEventWaitNodeGetEvent :
+		case HIP_API_ID_hipGraphEventWaitNodeGetEvent : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t * event_out (struct ihipEvent_t **);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphEventWaitNodeGetEvent.node);
+			args_hipGraphEventWaitNodeGetEvent_t* args = (args_hipGraphEventWaitNodeGetEvent_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipEvent_t * event_out = %p", args->hipGraphEventWaitNodeGetEvent.event_out);
-			if (args->hipGraphEventWaitNodeGetEvent.event_out != NULL) {
-				printf(" -> %p\n", args->hipGraphEventWaitNodeGetEvent.event_out__ref.val);
+			printf("\thipEvent_t * event_out = %p", args->event_out);
+			if (args->event_out != NULL) {
+				printf(" -> %p\n", args->event_out__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphEventWaitNodeGetEvent.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvMemcpy3D
-		case HIP_API_ID_hipDrvMemcpy3D :
+		case HIP_API_ID_hipDrvMemcpy3D : {
 			//	const HIP_MEMCPY3D * pCopy ({
 			//		size_t srcXInBytes (unsigned long);
 			//		size_t srcY (unsigned long);
@@ -387,72 +413,78 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		size_t Depth (unsigned long);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst HIP_MEMCPY3D * pCopy = %p", args->hipDrvMemcpy3D.pCopy);
-			if (args->hipDrvMemcpy3D.pCopy != NULL) {
+			args_hipDrvMemcpy3D_t* args = (args_hipDrvMemcpy3D_t*) func_args;
+			printf("\tconst HIP_MEMCPY3D * pCopy = %p", args->pCopy);
+			if (args->pCopy != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t srcXInBytes = %lu\n", args->hipDrvMemcpy3D.pCopy__ref.val.srcXInBytes);
-				printf("\t\tsize_t srcY = %lu\n", args->hipDrvMemcpy3D.pCopy__ref.val.srcY);
-				printf("\t\tsize_t srcZ = %lu\n", args->hipDrvMemcpy3D.pCopy__ref.val.srcZ);
-				printf("\t\tsize_t srcLOD = %lu\n", args->hipDrvMemcpy3D.pCopy__ref.val.srcLOD);
-				printf("\t\thipMemoryType srcMemoryType = %d\n", args->hipDrvMemcpy3D.pCopy__ref.val.srcMemoryType);
-				printf("\t\tsize_t srcPitch = %lu\n", args->hipDrvMemcpy3D.pCopy__ref.val.srcPitch);
-				printf("\t\tsize_t srcHeight = %lu\n", args->hipDrvMemcpy3D.pCopy__ref.val.srcHeight);
-				printf("\t\tsize_t dstXInBytes = %lu\n", args->hipDrvMemcpy3D.pCopy__ref.val.dstXInBytes);
-				printf("\t\tsize_t dstY = %lu\n", args->hipDrvMemcpy3D.pCopy__ref.val.dstY);
-				printf("\t\tsize_t dstZ = %lu\n", args->hipDrvMemcpy3D.pCopy__ref.val.dstZ);
-				printf("\t\tsize_t dstLOD = %lu\n", args->hipDrvMemcpy3D.pCopy__ref.val.dstLOD);
-				printf("\t\thipMemoryType dstMemoryType = %d\n", args->hipDrvMemcpy3D.pCopy__ref.val.dstMemoryType);
-				printf("\t\tsize_t dstPitch = %lu\n", args->hipDrvMemcpy3D.pCopy__ref.val.dstPitch);
-				printf("\t\tsize_t dstHeight = %lu\n", args->hipDrvMemcpy3D.pCopy__ref.val.dstHeight);
-				printf("\t\tsize_t WidthInBytes = %lu\n", args->hipDrvMemcpy3D.pCopy__ref.val.WidthInBytes);
-				printf("\t\tsize_t Height = %lu\n", args->hipDrvMemcpy3D.pCopy__ref.val.Height);
-				printf("\t\tsize_t Depth = %lu\n", args->hipDrvMemcpy3D.pCopy__ref.val.Depth);
+				printf("\t\tsize_t srcXInBytes = %lu\n", args->pCopy__ref.val.srcXInBytes);
+				printf("\t\tsize_t srcY = %lu\n", args->pCopy__ref.val.srcY);
+				printf("\t\tsize_t srcZ = %lu\n", args->pCopy__ref.val.srcZ);
+				printf("\t\tsize_t srcLOD = %lu\n", args->pCopy__ref.val.srcLOD);
+				printf("\t\thipMemoryType srcMemoryType = %d\n", args->pCopy__ref.val.srcMemoryType);
+				printf("\t\tsize_t srcPitch = %lu\n", args->pCopy__ref.val.srcPitch);
+				printf("\t\tsize_t srcHeight = %lu\n", args->pCopy__ref.val.srcHeight);
+				printf("\t\tsize_t dstXInBytes = %lu\n", args->pCopy__ref.val.dstXInBytes);
+				printf("\t\tsize_t dstY = %lu\n", args->pCopy__ref.val.dstY);
+				printf("\t\tsize_t dstZ = %lu\n", args->pCopy__ref.val.dstZ);
+				printf("\t\tsize_t dstLOD = %lu\n", args->pCopy__ref.val.dstLOD);
+				printf("\t\thipMemoryType dstMemoryType = %d\n", args->pCopy__ref.val.dstMemoryType);
+				printf("\t\tsize_t dstPitch = %lu\n", args->pCopy__ref.val.dstPitch);
+				printf("\t\tsize_t dstHeight = %lu\n", args->pCopy__ref.val.dstHeight);
+				printf("\t\tsize_t WidthInBytes = %lu\n", args->pCopy__ref.val.WidthInBytes);
+				printf("\t\tsize_t Height = %lu\n", args->pCopy__ref.val.Height);
+				printf("\t\tsize_t Depth = %lu\n", args->pCopy__ref.val.Depth);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipDrvMemcpy3D.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
-		case HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags :
+		case HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags : {
 			//	int * numBlocks (int *);
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
 			//	int blockSize (int);
 			//	size_t dynSharedMemPerBlk (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * numBlocks = %p", args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.numBlocks);
-			if (args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.numBlocks != NULL) {
-				printf(" -> %d\n", args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.numBlocks__ref.val);
+			args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t* args = (args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t*) func_args;
+			printf("\tint * numBlocks = %p", args->numBlocks);
+			if (args->numBlocks != NULL) {
+				printf(" -> %d\n", args->numBlocks__ref.val);
 			} else { printf("\n"); };
-			printf("\thipFunction_t f = %p", args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.f);
+			printf("\thipFunction_t f = %p", args->f);
 			printf("\n");
-			printf("\tint blockSize = %d\n", args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.blockSize);
-			printf("\tsize_t dynSharedMemPerBlk = %lu\n", args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.dynSharedMemPerBlk);
-			printf("\tunsigned int flags = %u\n", args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.flags);
-			printf("\thipError_t retval = %d\n", args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.retval);
+			printf("\tint blockSize = %d\n", args->blockSize);
+			printf("\tsize_t dynSharedMemPerBlk = %lu\n", args->dynSharedMemPerBlk);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipHostMalloc
-		case HIP_API_ID_hipHostMalloc :
+		case HIP_API_ID_hipHostMalloc : {
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** ptr = %p", args->hipHostMalloc.ptr);
-			if (args->hipHostMalloc.ptr != NULL) {
-				printf("-> %p", args->hipHostMalloc.ptr__ref.ptr1);
+			args_hipHostMalloc_t* args = (args_hipHostMalloc_t*) func_args;
+			printf("\tvoid ** ptr = %p", args->ptr);
+			if (args->ptr != NULL) {
+				printf("-> %p", args->ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t size = %lu\n", args->hipHostMalloc.size);
-			printf("\tunsigned int flags = %u\n", args->hipHostMalloc.flags);
-			printf("\thipError_t retval = %d\n", args->hipHostMalloc.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleGetTexRef
-		case HIP_API_ID_hipModuleGetTexRef :
+		case HIP_API_ID_hipModuleGetTexRef : {
 			//	textureReference ** texRef ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -478,99 +510,107 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipModule_t hmod (struct ihipModule_t *);
 			//	const char * name (const char *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\ttextureReference ** texRef = %p", args->hipModuleGetTexRef.texRef);
-			if (args->hipModuleGetTexRef.texRef != NULL) {
-				printf("-> %p", args->hipModuleGetTexRef.texRef__ref.ptr1);
-				if (args->hipModuleGetTexRef.texRef__ref.ptr1 != NULL) {
+			args_hipModuleGetTexRef_t* args = (args_hipModuleGetTexRef_t*) func_args;
+			printf("\ttextureReference ** texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
+				printf("-> %p", args->texRef__ref.ptr1);
+				if (args->texRef__ref.ptr1 != NULL) {
 					printf(" -> {\n");
-					printf("\t\tint normalized = %d\n", args->hipModuleGetTexRef.texRef__ref.val.normalized);
-					printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipModuleGetTexRef.texRef__ref.val.readMode);
-					printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipModuleGetTexRef.texRef__ref.val.filterMode);
-					printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipModuleGetTexRef.texRef__ref.val.addressMode[0]);
+					printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+					printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+					printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+					printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 					printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-					printf("\t\t\tint x = %d\n", args->hipModuleGetTexRef.texRef__ref.val.channelDesc.x);
-					printf("\t\t\tint y = %d\n", args->hipModuleGetTexRef.texRef__ref.val.channelDesc.y);
-					printf("\t\t\tint z = %d\n", args->hipModuleGetTexRef.texRef__ref.val.channelDesc.z);
-					printf("\t\t\tint w = %d\n", args->hipModuleGetTexRef.texRef__ref.val.channelDesc.w);
-					printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipModuleGetTexRef.texRef__ref.val.channelDesc.f);
+					printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+					printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+					printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+					printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+					printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 					printf("\t\t}\n");
-					printf("\t\tint sRGB = %d\n", args->hipModuleGetTexRef.texRef__ref.val.sRGB);
-					printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipModuleGetTexRef.texRef__ref.val.maxAnisotropy);
-					printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipModuleGetTexRef.texRef__ref.val.mipmapFilterMode);
-					printf("\t\tfloat mipmapLevelBias = %f\n", args->hipModuleGetTexRef.texRef__ref.val.mipmapLevelBias);
-					printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipModuleGetTexRef.texRef__ref.val.minMipmapLevelClamp);
-					printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipModuleGetTexRef.texRef__ref.val.maxMipmapLevelClamp);
-					printf("\t\tint numChannels = %d\n", args->hipModuleGetTexRef.texRef__ref.val.numChannels);
-					printf("\t\tenum hipArray_Format format = %d\n", args->hipModuleGetTexRef.texRef__ref.val.format);
+					printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+					printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+					printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+					printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+					printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+					printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+					printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+					printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 					printf("\t}\n");
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\thipModule_t hmod = %p", args->hipModuleGetTexRef.hmod);
+			printf("\thipModule_t hmod = %p", args->hmod);
 			printf("\n");
-			printf("\tconst char * name = %p", args->hipModuleGetTexRef.name);
-			if (args->hipModuleGetTexRef.name != NULL) {
-				printf(" -> %s\n", args->hipModuleGetTexRef.name__ref.val);
+			printf("\tconst char * name = %p", args->name);
+			if (args->name != NULL) {
+				printf(" -> %s\n", args->name__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipModuleGetTexRef.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipIpcGetMemHandle
-		case HIP_API_ID_hipIpcGetMemHandle :
+		case HIP_API_ID_hipIpcGetMemHandle : {
 			//	hipIpcMemHandle_t * handle ({
 			//		char[64] reserved (char[64]);
 			//	});
 			//	void * devPtr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipIpcMemHandle_t * handle = %p", args->hipIpcGetMemHandle.handle);
-			if (args->hipIpcGetMemHandle.handle != NULL) {
+			args_hipIpcGetMemHandle_t* args = (args_hipIpcGetMemHandle_t*) func_args;
+			printf("\thipIpcMemHandle_t * handle = %p", args->handle);
+			if (args->handle != NULL) {
 				printf(" -> {\n");
-				printf("\t\tchar[64] reserved = %c\n", args->hipIpcGetMemHandle.handle__ref.val.reserved[0]);
+				printf("\t\tchar[64] reserved = %c\n", args->handle__ref.val.reserved[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tvoid * devPtr = %p", args->hipIpcGetMemHandle.devPtr);
+			printf("\tvoid * devPtr = %p", args->devPtr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipIpcGetMemHandle.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyDtoHAsync
-		case HIP_API_ID_hipMemcpyDtoHAsync :
+		case HIP_API_ID_hipMemcpyDtoHAsync : {
 			//	void * dst (void *);
 			//	hipDeviceptr_t src (void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpyDtoHAsync.dst);
+			args_hipMemcpyDtoHAsync_t* args = (args_hipMemcpyDtoHAsync_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\thipDeviceptr_t src = %p", args->hipMemcpyDtoHAsync.src);
+			printf("\thipDeviceptr_t src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyDtoHAsync.sizeBytes);
-			printf("\thipStream_t stream = %p", args->hipMemcpyDtoHAsync.stream);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpyDtoHAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleLoad
-		case HIP_API_ID_hipModuleLoad :
+		case HIP_API_ID_hipModuleLoad : {
 			//	hipModule_t * module (struct ihipModule_t **);
 			//	const char * fname (const char *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipModule_t * module = %p", args->hipModuleLoad.module);
-			if (args->hipModuleLoad.module != NULL) {
-				printf(" -> %p\n", args->hipModuleLoad.module__ref.val);
+			args_hipModuleLoad_t* args = (args_hipModuleLoad_t*) func_args;
+			printf("\thipModule_t * module = %p", args->module);
+			if (args->module != NULL) {
+				printf(" -> %p\n", args->module__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst char * fname = %p", args->hipModuleLoad.fname);
-			if (args->hipModuleLoad.fname != NULL) {
-				printf(" -> %s\n", args->hipModuleLoad.fname__ref.val);
+			printf("\tconst char * fname = %p", args->fname);
+			if (args->fname != NULL) {
+				printf(" -> %s\n", args->fname__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipModuleLoad.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipWaitExternalSemaphoresAsync
-		case HIP_API_ID_hipWaitExternalSemaphoresAsync :
+		case HIP_API_ID_hipWaitExternalSemaphoresAsync : {
 			//	const hipExternalSemaphore_t * extSemArray (const void * *);
 			//	const hipExternalSemaphoreWaitParams * paramsArray ({
 			//		struct (unnamed struct at header/hip/hip.h:1505:2) params ({
@@ -581,29 +621,31 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	unsigned int numExtSems (unsigned int);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst hipExternalSemaphore_t * extSemArray = %p", args->hipWaitExternalSemaphoresAsync.extSemArray);
-			if (args->hipWaitExternalSemaphoresAsync.extSemArray != NULL) {
-				printf("-> %p", args->hipWaitExternalSemaphoresAsync.extSemArray__ref.ptr1);
+			args_hipWaitExternalSemaphoresAsync_t* args = (args_hipWaitExternalSemaphoresAsync_t*) func_args;
+			printf("\tconst hipExternalSemaphore_t * extSemArray = %p", args->extSemArray);
+			if (args->extSemArray != NULL) {
+				printf("-> %p", args->extSemArray__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tconst hipExternalSemaphoreWaitParams * paramsArray = %p", args->hipWaitExternalSemaphoresAsync.paramsArray);
-			if (args->hipWaitExternalSemaphoresAsync.paramsArray != NULL) {
+			printf("\tconst hipExternalSemaphoreWaitParams * paramsArray = %p", args->paramsArray);
+			if (args->paramsArray != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct (unnamed struct at header/hip/hip.h:1505:2) params = {\n");
 				printf("\t\t}\n");
-				printf("\t\tunsigned int flags = %u\n", args->hipWaitExternalSemaphoresAsync.paramsArray__ref.val.flags);
-				printf("\t\tunsigned int[16] reserved = %u\n", args->hipWaitExternalSemaphoresAsync.paramsArray__ref.val.reserved[0]);
+				printf("\t\tunsigned int flags = %u\n", args->paramsArray__ref.val.flags);
+				printf("\t\tunsigned int[16] reserved = %u\n", args->paramsArray__ref.val.reserved[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tunsigned int numExtSems = %u\n", args->hipWaitExternalSemaphoresAsync.numExtSems);
-			printf("\thipStream_t stream = %p", args->hipWaitExternalSemaphoresAsync.stream);
+			printf("\tunsigned int numExtSems = %u\n", args->numExtSems);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipWaitExternalSemaphoresAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphKernelNodeGetParams
-		case HIP_API_ID_hipGraphKernelNodeGetParams :
+		case HIP_API_ID_hipGraphKernelNodeGetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipKernelNodeParams * pNodeParams ({
 			//		dim3 blockDim ({
@@ -622,69 +664,77 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int sharedMemBytes (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphKernelNodeGetParams.node);
+			args_hipGraphKernelNodeGetParams_t* args = (args_hipGraphKernelNodeGetParams_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipKernelNodeParams * pNodeParams = %p", args->hipGraphKernelNodeGetParams.pNodeParams);
-			if (args->hipGraphKernelNodeGetParams.pNodeParams != NULL) {
+			printf("\thipKernelNodeParams * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
 				printf("\t\tdim3 blockDim = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hipGraphKernelNodeGetParams.pNodeParams__ref.val.blockDim.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hipGraphKernelNodeGetParams.pNodeParams__ref.val.blockDim.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hipGraphKernelNodeGetParams.pNodeParams__ref.val.blockDim.z);
+				printf("\t\t\tuint32_t x = %u\n", args->pNodeParams__ref.val.blockDim.x);
+				printf("\t\t\tuint32_t y = %u\n", args->pNodeParams__ref.val.blockDim.y);
+				printf("\t\t\tuint32_t z = %u\n", args->pNodeParams__ref.val.blockDim.z);
 				printf("\t\t}\n");
 				printf("\t\tdim3 gridDim = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hipGraphKernelNodeGetParams.pNodeParams__ref.val.gridDim.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hipGraphKernelNodeGetParams.pNodeParams__ref.val.gridDim.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hipGraphKernelNodeGetParams.pNodeParams__ref.val.gridDim.z);
+				printf("\t\t\tuint32_t x = %u\n", args->pNodeParams__ref.val.gridDim.x);
+				printf("\t\t\tuint32_t y = %u\n", args->pNodeParams__ref.val.gridDim.y);
+				printf("\t\t\tuint32_t z = %u\n", args->pNodeParams__ref.val.gridDim.z);
 				printf("\t\t}\n");
-				printf("\t\tunsigned int sharedMemBytes = %u\n", args->hipGraphKernelNodeGetParams.pNodeParams__ref.val.sharedMemBytes);
+				printf("\t\tunsigned int sharedMemBytes = %u\n", args->pNodeParams__ref.val.sharedMemBytes);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphKernelNodeGetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphLaunch
-		case HIP_API_ID_hipGraphLaunch :
+		case HIP_API_ID_hipGraphLaunch : {
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t graphExec = %p", args->hipGraphLaunch.graphExec);
+			args_hipGraphLaunch_t* args = (args_hipGraphLaunch_t*) func_args;
+			printf("\thipGraphExec_t graphExec = %p", args->graphExec);
 			printf("\n");
-			printf("\thipStream_t stream = %p", args->hipGraphLaunch.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphLaunch.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipHostAlloc
-		case HIP_API_ID_hipHostAlloc :
+		case HIP_API_ID_hipHostAlloc : {
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** ptr = %p", args->hipHostAlloc.ptr);
-			if (args->hipHostAlloc.ptr != NULL) {
-				printf("-> %p", args->hipHostAlloc.ptr__ref.ptr1);
+			args_hipHostAlloc_t* args = (args_hipHostAlloc_t*) func_args;
+			printf("\tvoid ** ptr = %p", args->ptr);
+			if (args->ptr != NULL) {
+				printf("-> %p", args->ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t size = %lu\n", args->hipHostAlloc.size);
-			printf("\tunsigned int flags = %u\n", args->hipHostAlloc.flags);
-			printf("\thipError_t retval = %d\n", args->hipHostAlloc.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipSetDevice
-		case HIP_API_ID_hipSetDevice :
+		case HIP_API_ID_hipSetDevice : {
 			//	int deviceId (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint deviceId = %d\n", args->hipSetDevice.deviceId);
-			printf("\thipError_t retval = %d\n", args->hipSetDevice.retval);
+			args_hipSetDevice_t* args = (args_hipSetDevice_t*) func_args;
+			printf("\tint deviceId = %d\n", args->deviceId);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleOccupancyMaxPotentialBlockSizeWithFlags
-		case HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSizeWithFlags :
+		case HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSizeWithFlags : {
 			//	int * gridSize (int *);
 			//	int * blockSize (int *);
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
@@ -692,76 +742,84 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	int blockSizeLimit (int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * gridSize = %p", args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.gridSize);
-			if (args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.gridSize != NULL) {
-				printf(" -> %d\n", args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.gridSize__ref.val);
+			args_hipModuleOccupancyMaxPotentialBlockSizeWithFlags_t* args = (args_hipModuleOccupancyMaxPotentialBlockSizeWithFlags_t*) func_args;
+			printf("\tint * gridSize = %p", args->gridSize);
+			if (args->gridSize != NULL) {
+				printf(" -> %d\n", args->gridSize__ref.val);
 			} else { printf("\n"); };
-			printf("\tint * blockSize = %p", args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.blockSize);
-			if (args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.blockSize != NULL) {
-				printf(" -> %d\n", args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.blockSize__ref.val);
+			printf("\tint * blockSize = %p", args->blockSize);
+			if (args->blockSize != NULL) {
+				printf(" -> %d\n", args->blockSize__ref.val);
 			} else { printf("\n"); };
-			printf("\thipFunction_t f = %p", args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.f);
+			printf("\thipFunction_t f = %p", args->f);
 			printf("\n");
-			printf("\tsize_t dynSharedMemPerBlk = %lu\n", args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.dynSharedMemPerBlk);
-			printf("\tint blockSizeLimit = %d\n", args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.blockSizeLimit);
-			printf("\tunsigned int flags = %u\n", args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.flags);
-			printf("\thipError_t retval = %d\n", args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.retval);
+			printf("\tsize_t dynSharedMemPerBlk = %lu\n", args->dynSharedMemPerBlk);
+			printf("\tint blockSizeLimit = %d\n", args->blockSizeLimit);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphNodeGetDependentNodes
-		case HIP_API_ID_hipGraphNodeGetDependentNodes :
+		case HIP_API_ID_hipGraphNodeGetDependentNodes : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraphNode_t * pDependentNodes (struct hipGraphNode **);
 			//	size_t * pNumDependentNodes (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphNodeGetDependentNodes.node);
+			args_hipGraphNodeGetDependentNodes_t* args = (args_hipGraphNodeGetDependentNodes_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipGraphNode_t * pDependentNodes = %p", args->hipGraphNodeGetDependentNodes.pDependentNodes);
-			if (args->hipGraphNodeGetDependentNodes.pDependentNodes != NULL) {
-				printf(" -> %p\n", args->hipGraphNodeGetDependentNodes.pDependentNodes__ref.val);
+			printf("\thipGraphNode_t * pDependentNodes = %p", args->pDependentNodes);
+			if (args->pDependentNodes != NULL) {
+				printf(" -> %p\n", args->pDependentNodes__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t * pNumDependentNodes = %p", args->hipGraphNodeGetDependentNodes.pNumDependentNodes);
-			if (args->hipGraphNodeGetDependentNodes.pNumDependentNodes != NULL) {
-				printf(" -> %lu\n", args->hipGraphNodeGetDependentNodes.pNumDependentNodes__ref.val);
+			printf("\tsize_t * pNumDependentNodes = %p", args->pNumDependentNodes);
+			if (args->pNumDependentNodes != NULL) {
+				printf(" -> %lu\n", args->pNumDependentNodes__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphNodeGetDependentNodes.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExtStreamGetCUMask
-		case HIP_API_ID_hipExtStreamGetCUMask :
+		case HIP_API_ID_hipExtStreamGetCUMask : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	uint32_t cuMaskSize (unsigned int);
 			//	uint32_t * cuMask (unsigned int*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipExtStreamGetCUMask.stream);
+			args_hipExtStreamGetCUMask_t* args = (args_hipExtStreamGetCUMask_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\tuint32_t cuMaskSize = %u\n", args->hipExtStreamGetCUMask.cuMaskSize);
-			printf("\tuint32_t * cuMask = %p", args->hipExtStreamGetCUMask.cuMask);
-			if (args->hipExtStreamGetCUMask.cuMask != NULL) {
-				printf(" -> %u\n", args->hipExtStreamGetCUMask.cuMask__ref.val);
+			printf("\tuint32_t cuMaskSize = %u\n", args->cuMaskSize);
+			printf("\tuint32_t * cuMask = %p", args->cuMask);
+			if (args->cuMask != NULL) {
+				printf(" -> %u\n", args->cuMask__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipExtStreamGetCUMask.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetD16
-		case HIP_API_ID_hipMemsetD16 :
+		case HIP_API_ID_hipMemsetD16 : {
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned short value (unsigned short);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceptr_t dest = %p", args->hipMemsetD16.dest);
+			args_hipMemsetD16_t* args = (args_hipMemsetD16_t*) func_args;
+			printf("\thipDeviceptr_t dest = %p", args->dest);
 			printf("\n");
-			printf("\tunsigned short value = %hu\n", args->hipMemsetD16.value);
-			printf("\tsize_t count = %lu\n", args->hipMemsetD16.count);
-			printf("\thipError_t retval = %d\n", args->hipMemsetD16.retval);
+			printf("\tunsigned short value = %hu\n", args->value);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchKernel
-		case HIP_API_ID_hipLaunchKernel :
+		case HIP_API_ID_hipLaunchKernel : {
 			//	const void * function_address (const void *);
 			//	dim3 numBlocks ({
 			//		uint32_t x (unsigned int);
@@ -777,72 +835,78 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t sharedMemBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * function_address = %p", args->hipLaunchKernel.function_address);
+			args_hipLaunchKernel_t* args = (args_hipLaunchKernel_t*) func_args;
+			printf("\tconst void * function_address = %p", args->function_address);
 			printf("\n");
 			printf("\tdim3 numBlocks = {\n");
-			printf("\t\tuint32_t x = %u\n", args->hipLaunchKernel.numBlocks.x);
-			printf("\t\tuint32_t y = %u\n", args->hipLaunchKernel.numBlocks.y);
-			printf("\t\tuint32_t z = %u\n", args->hipLaunchKernel.numBlocks.z);
+			printf("\t\tuint32_t x = %u\n", args->numBlocks.x);
+			printf("\t\tuint32_t y = %u\n", args->numBlocks.y);
+			printf("\t\tuint32_t z = %u\n", args->numBlocks.z);
 			printf("\t}\n");
 			printf("\tdim3 dimBlocks = {\n");
-			printf("\t\tuint32_t x = %u\n", args->hipLaunchKernel.dimBlocks.x);
-			printf("\t\tuint32_t y = %u\n", args->hipLaunchKernel.dimBlocks.y);
-			printf("\t\tuint32_t z = %u\n", args->hipLaunchKernel.dimBlocks.z);
+			printf("\t\tuint32_t x = %u\n", args->dimBlocks.x);
+			printf("\t\tuint32_t y = %u\n", args->dimBlocks.y);
+			printf("\t\tuint32_t z = %u\n", args->dimBlocks.z);
 			printf("\t}\n");
-			printf("\tvoid ** args = %p", args->hipLaunchKernel.args);
-			if (args->hipLaunchKernel.args != NULL) {
-				printf("-> %p", args->hipLaunchKernel.args__ref.ptr1);
+			printf("\tvoid ** args = %p", args->args);
+			if (args->args != NULL) {
+				printf("-> %p", args->args__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t sharedMemBytes = %lu\n", args->hipLaunchKernel.sharedMemBytes);
-			printf("\thipStream_t stream = %p", args->hipLaunchKernel.stream);
+			printf("\tsize_t sharedMemBytes = %lu\n", args->sharedMemBytes);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipLaunchKernel.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetErrorString
-		case HIP_API_ID_hipGetErrorString :
+		case HIP_API_ID_hipGetErrorString : {
 			//	hipError_t hipError (enum hipError_t);
 			//	const char * retval (const char *);
-			printf("\thipError_t hipError = %d\n", args->hipGetErrorString.hipError);
-			printf("\tconst char * retval = %p", args->hipGetErrorString.retval);
-			if (args->hipGetErrorString.retval != NULL) {
-				printf(" -> %s\n", args->hipGetErrorString.retval__ref.val);
+			args_hipGetErrorString_t* args = (args_hipGetErrorString_t*) func_args;
+			printf("\thipError_t hipError = %d\n", args->hipError);
+			printf("\tconst char * retval = %p", args->retval);
+			if (args->retval != NULL) {
+				printf(" -> %s\n", args->retval__ref.val);
 			} else { printf("\n"); };
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleLoadDataEx
-		case HIP_API_ID_hipModuleLoadDataEx :
+		case HIP_API_ID_hipModuleLoadDataEx : {
 			//	hipModule_t * module (struct ihipModule_t **);
 			//	const void * image (const void *);
 			//	unsigned int numOptions (unsigned int);
 			//	hipJitOption * options (enum hipJitOption*);
 			//	void ** optionValues (void **);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipModule_t * module = %p", args->hipModuleLoadDataEx.module);
-			if (args->hipModuleLoadDataEx.module != NULL) {
-				printf(" -> %p\n", args->hipModuleLoadDataEx.module__ref.val);
+			args_hipModuleLoadDataEx_t* args = (args_hipModuleLoadDataEx_t*) func_args;
+			printf("\thipModule_t * module = %p", args->module);
+			if (args->module != NULL) {
+				printf(" -> %p\n", args->module__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst void * image = %p", args->hipModuleLoadDataEx.image);
+			printf("\tconst void * image = %p", args->image);
 			printf("\n");
-			printf("\tunsigned int numOptions = %u\n", args->hipModuleLoadDataEx.numOptions);
-			printf("\thipJitOption * options = %p", args->hipModuleLoadDataEx.options);
-			if (args->hipModuleLoadDataEx.options != NULL) {
-				printf(" -> %d\n", args->hipModuleLoadDataEx.options__ref.val);
+			printf("\tunsigned int numOptions = %u\n", args->numOptions);
+			printf("\thipJitOption * options = %p", args->options);
+			if (args->options != NULL) {
+				printf(" -> %d\n", args->options__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid ** optionValues = %p", args->hipModuleLoadDataEx.optionValues);
-			if (args->hipModuleLoadDataEx.optionValues != NULL) {
-				printf("-> %p", args->hipModuleLoadDataEx.optionValues__ref.ptr1);
+			printf("\tvoid ** optionValues = %p", args->optionValues);
+			if (args->optionValues != NULL) {
+				printf("-> %p", args->optionValues__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipModuleLoadDataEx.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetFilterMode
-		case HIP_API_ID_hipTexRefGetFilterMode :
+		case HIP_API_ID_hipTexRefGetFilterMode : {
 			//	enum hipTextureFilterMode * pfm (enum hipTextureFilterMode *);
 			//	const textureReference * texRef ({
 			//		int normalized (int);
@@ -867,40 +931,42 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipArray_Format format (enum hipArray_Format);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tenum hipTextureFilterMode * pfm = %p", args->hipTexRefGetFilterMode.pfm);
-			if (args->hipTexRefGetFilterMode.pfm != NULL) {
-				printf(" -> %d\n", args->hipTexRefGetFilterMode.pfm__ref.val);
+			args_hipTexRefGetFilterMode_t* args = (args_hipTexRefGetFilterMode_t*) func_args;
+			printf("\tenum hipTextureFilterMode * pfm = %p", args->pfm);
+			if (args->pfm != NULL) {
+				printf(" -> %d\n", args->pfm__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst textureReference * texRef = %p", args->hipTexRefGetFilterMode.texRef);
-			if (args->hipTexRefGetFilterMode.texRef != NULL) {
+			printf("\tconst textureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefGetFilterMode.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefGetFilterMode.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefGetFilterMode.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefGetFilterMode.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefGetFilterMode.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefGetFilterMode.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefGetFilterMode.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefGetFilterMode.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefGetFilterMode.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefGetFilterMode.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefGetFilterMode.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefGetFilterMode.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefGetFilterMode.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefGetFilterMode.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefGetFilterMode.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefGetFilterMode.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefGetFilterMode.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipTexRefGetFilterMode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphInstantiateWithParams
-		case HIP_API_ID_hipGraphInstantiateWithParams :
+		case HIP_API_ID_hipGraphInstantiateWithParams : {
 			//	hipGraphExec_t * pGraphExec (struct hipGraphExec **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphInstantiateParams * instantiateParams ({
@@ -910,72 +976,80 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		hipStream_t uploadStream (struct ihipStream_t *);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t * pGraphExec = %p", args->hipGraphInstantiateWithParams.pGraphExec);
-			if (args->hipGraphInstantiateWithParams.pGraphExec != NULL) {
-				printf(" -> %p\n", args->hipGraphInstantiateWithParams.pGraphExec__ref.val);
+			args_hipGraphInstantiateWithParams_t* args = (args_hipGraphInstantiateWithParams_t*) func_args;
+			printf("\thipGraphExec_t * pGraphExec = %p", args->pGraphExec);
+			if (args->pGraphExec != NULL) {
+				printf(" -> %p\n", args->pGraphExec__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphInstantiateWithParams.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\thipGraphInstantiateParams * instantiateParams = %p", args->hipGraphInstantiateWithParams.instantiateParams);
-			if (args->hipGraphInstantiateWithParams.instantiateParams != NULL) {
+			printf("\thipGraphInstantiateParams * instantiateParams = %p", args->instantiateParams);
+			if (args->instantiateParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned long long flags = %llu\n", args->hipGraphInstantiateWithParams.instantiateParams__ref.val.flags);
-				printf("\t\thipGraphInstantiateResult result_out = %d\n", args->hipGraphInstantiateWithParams.instantiateParams__ref.val.result_out);
+				printf("\t\tunsigned long long flags = %llu\n", args->instantiateParams__ref.val.flags);
+				printf("\t\thipGraphInstantiateResult result_out = %d\n", args->instantiateParams__ref.val.result_out);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphInstantiateWithParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemcpyNodeSetParams1D
-		case HIP_API_ID_hipGraphMemcpyNodeSetParams1D :
+		case HIP_API_ID_hipGraphMemcpyNodeSetParams1D : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t count (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphMemcpyNodeSetParams1D.node);
+			args_hipGraphMemcpyNodeSetParams1D_t* args = (args_hipGraphMemcpyNodeSetParams1D_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\tvoid * dst = %p", args->hipGraphMemcpyNodeSetParams1D.dst);
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hipGraphMemcpyNodeSetParams1D.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t count = %lu\n", args->hipGraphMemcpyNodeSetParams1D.count);
-			printf("\thipMemcpyKind kind = %d\n", args->hipGraphMemcpyNodeSetParams1D.kind);
-			printf("\thipError_t retval = %d\n", args->hipGraphMemcpyNodeSetParams1D.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamSynchronize
-		case HIP_API_ID_hipStreamSynchronize :
+		case HIP_API_ID_hipStreamSynchronize : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamSynchronize.stream);
+			args_hipStreamSynchronize_t* args = (args_hipStreamSynchronize_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipStreamSynchronize.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphicsUnmapResources
-		case HIP_API_ID_hipGraphicsUnmapResources :
+		case HIP_API_ID_hipGraphicsUnmapResources : {
 			//	int count (int);
 			//	hipGraphicsResource_t * resources (struct _hipGraphicsResource**);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint count = %d\n", args->hipGraphicsUnmapResources.count);
-			printf("\thipGraphicsResource_t * resources = %p", args->hipGraphicsUnmapResources.resources);
-			if (args->hipGraphicsUnmapResources.resources != NULL) {
-				printf(" -> %p\n", args->hipGraphicsUnmapResources.resources__ref.val);
+			args_hipGraphicsUnmapResources_t* args = (args_hipGraphicsUnmapResources_t*) func_args;
+			printf("\tint count = %d\n", args->count);
+			printf("\thipGraphicsResource_t * resources = %p", args->resources);
+			if (args->resources != NULL) {
+				printf(" -> %p\n", args->resources__ref.val);
 			} else { printf("\n"); };
-			printf("\thipStream_t stream = %p", args->hipGraphicsUnmapResources.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphicsUnmapResources.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DFromArray_spt
-		case HIP_API_ID_hipMemcpy2DFromArray_spt :
+		case HIP_API_ID_hipMemcpy2DFromArray_spt : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	hipArray_const_t src (const struct hipArray *);
@@ -985,22 +1059,24 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpy2DFromArray_spt.dst);
+			args_hipMemcpy2DFromArray_spt_t* args = (args_hipMemcpy2DFromArray_spt_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t dpitch = %lu\n", args->hipMemcpy2DFromArray_spt.dpitch);
-			printf("\thipArray_const_t src = %p", args->hipMemcpy2DFromArray_spt.src);
+			printf("\tsize_t dpitch = %lu\n", args->dpitch);
+			printf("\thipArray_const_t src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t wOffset = %lu\n", args->hipMemcpy2DFromArray_spt.wOffset);
-			printf("\tsize_t hOffset = %lu\n", args->hipMemcpy2DFromArray_spt.hOffset);
-			printf("\tsize_t width = %lu\n", args->hipMemcpy2DFromArray_spt.width);
-			printf("\tsize_t height = %lu\n", args->hipMemcpy2DFromArray_spt.height);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpy2DFromArray_spt.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpy2DFromArray_spt.retval);
+			printf("\tsize_t wOffset = %lu\n", args->wOffset);
+			printf("\tsize_t hOffset = %lu\n", args->hOffset);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecMemcpyNodeSetParamsFromSymbol
-		case HIP_API_ID_hipGraphExecMemcpyNodeSetParamsFromSymbol :
+		case HIP_API_ID_hipGraphExecMemcpyNodeSetParamsFromSymbol : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dst (void *);
@@ -1009,23 +1085,25 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t hGraphExec = %p", args->hipGraphExecMemcpyNodeSetParamsFromSymbol.hGraphExec);
+			args_hipGraphExecMemcpyNodeSetParamsFromSymbol_t* args = (args_hipGraphExecMemcpyNodeSetParamsFromSymbol_t*) func_args;
+			printf("\thipGraphExec_t hGraphExec = %p", args->hGraphExec);
 			printf("\n");
-			printf("\thipGraphNode_t node = %p", args->hipGraphExecMemcpyNodeSetParamsFromSymbol.node);
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\tvoid * dst = %p", args->hipGraphExecMemcpyNodeSetParamsFromSymbol.dst);
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * symbol = %p", args->hipGraphExecMemcpyNodeSetParamsFromSymbol.symbol);
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\tsize_t count = %lu\n", args->hipGraphExecMemcpyNodeSetParamsFromSymbol.count);
-			printf("\tsize_t offset = %lu\n", args->hipGraphExecMemcpyNodeSetParamsFromSymbol.offset);
-			printf("\thipMemcpyKind kind = %d\n", args->hipGraphExecMemcpyNodeSetParamsFromSymbol.kind);
-			printf("\thipError_t retval = %d\n", args->hipGraphExecMemcpyNodeSetParamsFromSymbol.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetMipmapLevelBias
-		case HIP_API_ID_hipTexRefGetMipmapLevelBias :
+		case HIP_API_ID_hipTexRefGetMipmapLevelBias : {
 			//	float * pbias (float *);
 			//	const textureReference * texRef ({
 			//		int normalized (int);
@@ -1050,40 +1128,42 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipArray_Format format (enum hipArray_Format);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tfloat * pbias = %p", args->hipTexRefGetMipmapLevelBias.pbias);
-			if (args->hipTexRefGetMipmapLevelBias.pbias != NULL) {
-				printf(" -> %f\n", args->hipTexRefGetMipmapLevelBias.pbias__ref.val);
+			args_hipTexRefGetMipmapLevelBias_t* args = (args_hipTexRefGetMipmapLevelBias_t*) func_args;
+			printf("\tfloat * pbias = %p", args->pbias);
+			if (args->pbias != NULL) {
+				printf(" -> %f\n", args->pbias__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst textureReference * texRef = %p", args->hipTexRefGetMipmapLevelBias.texRef);
-			if (args->hipTexRefGetMipmapLevelBias.texRef != NULL) {
+			printf("\tconst textureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefGetMipmapLevelBias.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipTexRefGetMipmapLevelBias.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddExternalSemaphoresSignalNode
-		case HIP_API_ID_hipGraphAddExternalSemaphoresSignalNode :
+		case HIP_API_ID_hipGraphAddExternalSemaphoresSignalNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
@@ -1093,36 +1173,40 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int numExtSems (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddExternalSemaphoresSignalNode.pGraphNode);
-			if (args->hipGraphAddExternalSemaphoresSignalNode.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddExternalSemaphoresSignalNode.pGraphNode__ref.val);
+			args_hipGraphAddExternalSemaphoresSignalNode_t* args = (args_hipGraphAddExternalSemaphoresSignalNode_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddExternalSemaphoresSignalNode.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddExternalSemaphoresSignalNode.pDependencies);
-			if (args->hipGraphAddExternalSemaphoresSignalNode.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddExternalSemaphoresSignalNode.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddExternalSemaphoresSignalNode.numDependencies);
-			printf("\tconst hipExternalSemaphoreSignalNodeParams * nodeParams = %p", args->hipGraphAddExternalSemaphoresSignalNode.nodeParams);
-			if (args->hipGraphAddExternalSemaphoresSignalNode.nodeParams != NULL) {
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\tconst hipExternalSemaphoreSignalNodeParams * nodeParams = %p", args->nodeParams);
+			if (args->nodeParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned int numExtSems = %u\n", args->hipGraphAddExternalSemaphoresSignalNode.nodeParams__ref.val.numExtSems);
+				printf("\t\tunsigned int numExtSems = %u\n", args->nodeParams__ref.val.numExtSems);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphAddExternalSemaphoresSignalNode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExtGetLastError
-		case HIP_API_ID_hipExtGetLastError :
+		case HIP_API_ID_hipExtGetLastError : {
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipError_t retval = %d\n", args->hipExtGetLastError.retval);
+			args_hipExtGetLastError_t* args = (args_hipExtGetLastError_t*) func_args;
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemMapArrayAsync
-		case HIP_API_ID_hipMemMapArrayAsync :
+		case HIP_API_ID_hipMemMapArrayAsync : {
 			//	hipArrayMapInfo * mapInfoList ({
 			//		hipResourceType resourceType (enum hipResourceType);
 			//		union (unnamed union at header/hip/hip.h:1643:2) resource ({
@@ -1142,54 +1226,58 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	unsigned int count (unsigned int);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArrayMapInfo * mapInfoList = %p", args->hipMemMapArrayAsync.mapInfoList);
-			if (args->hipMemMapArrayAsync.mapInfoList != NULL) {
+			args_hipMemMapArrayAsync_t* args = (args_hipMemMapArrayAsync_t*) func_args;
+			printf("\thipArrayMapInfo * mapInfoList = %p", args->mapInfoList);
+			if (args->mapInfoList != NULL) {
 				printf(" -> {\n");
-				printf("\t\thipResourceType resourceType = %d\n", args->hipMemMapArrayAsync.mapInfoList__ref.val.resourceType);
+				printf("\t\thipResourceType resourceType = %d\n", args->mapInfoList__ref.val.resourceType);
 				printf("\t\tunion (unnamed union at header/hip/hip.h:1643:2) resource = {\n");
 				printf("\t\t}\n");
-				printf("\t\thipArraySparseSubresourceType subresourceType = %d\n", args->hipMemMapArrayAsync.mapInfoList__ref.val.subresourceType);
+				printf("\t\thipArraySparseSubresourceType subresourceType = %d\n", args->mapInfoList__ref.val.subresourceType);
 				printf("\t\tunion (unnamed union at header/hip/hip.h:1648:2) subresource = {\n");
 				printf("\t\t}\n");
-				printf("\t\thipMemOperationType memOperationType = %d\n", args->hipMemMapArrayAsync.mapInfoList__ref.val.memOperationType);
-				printf("\t\thipMemHandleType memHandleType = %d\n", args->hipMemMapArrayAsync.mapInfoList__ref.val.memHandleType);
+				printf("\t\thipMemOperationType memOperationType = %d\n", args->mapInfoList__ref.val.memOperationType);
+				printf("\t\thipMemHandleType memHandleType = %d\n", args->mapInfoList__ref.val.memHandleType);
 				printf("\t\tunion (unnamed union at header/hip/hip.h:1667:2) memHandle = {\n");
 				printf("\t\t}\n");
-				printf("\t\tunsigned long long offset = %llu\n", args->hipMemMapArrayAsync.mapInfoList__ref.val.offset);
-				printf("\t\tunsigned int deviceBitMask = %u\n", args->hipMemMapArrayAsync.mapInfoList__ref.val.deviceBitMask);
-				printf("\t\tunsigned int flags = %u\n", args->hipMemMapArrayAsync.mapInfoList__ref.val.flags);
-				printf("\t\tunsigned int[2] reserved = %u\n", args->hipMemMapArrayAsync.mapInfoList__ref.val.reserved[0]);
+				printf("\t\tunsigned long long offset = %llu\n", args->mapInfoList__ref.val.offset);
+				printf("\t\tunsigned int deviceBitMask = %u\n", args->mapInfoList__ref.val.deviceBitMask);
+				printf("\t\tunsigned int flags = %u\n", args->mapInfoList__ref.val.flags);
+				printf("\t\tunsigned int[2] reserved = %u\n", args->mapInfoList__ref.val.reserved[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tunsigned int count = %u\n", args->hipMemMapArrayAsync.count);
-			printf("\thipStream_t stream = %p", args->hipMemMapArrayAsync.stream);
+			printf("\tunsigned int count = %u\n", args->count);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemMapArrayAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyAsync
-		case HIP_API_ID_hipMemcpyAsync :
+		case HIP_API_ID_hipMemcpyAsync : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpyAsync.dst);
+			args_hipMemcpyAsync_t* args = (args_hipMemcpyAsync_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hipMemcpyAsync.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyAsync.sizeBytes);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpyAsync.kind);
-			printf("\thipStream_t stream = %p", args->hipMemcpyAsync.stream);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpyAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphKernelNodeSetAttribute
-		case HIP_API_ID_hipGraphKernelNodeSetAttribute :
+		case HIP_API_ID_hipGraphKernelNodeSetAttribute : {
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipLaunchAttributeID attr (enum hipLaunchAttributeID);
 			//	const hipLaunchAttributeValue * value ({
@@ -1204,28 +1292,30 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		int priority (int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t hNode = %p", args->hipGraphKernelNodeSetAttribute.hNode);
+			args_hipGraphKernelNodeSetAttribute_t* args = (args_hipGraphKernelNodeSetAttribute_t*) func_args;
+			printf("\thipGraphNode_t hNode = %p", args->hNode);
 			printf("\n");
-			printf("\thipLaunchAttributeID attr = %d\n", args->hipGraphKernelNodeSetAttribute.attr);
-			printf("\tconst hipLaunchAttributeValue * value = %p", args->hipGraphKernelNodeSetAttribute.value);
-			if (args->hipGraphKernelNodeSetAttribute.value != NULL) {
+			printf("\thipLaunchAttributeID attr = %d\n", args->attr);
+			printf("\tconst hipLaunchAttributeValue * value = %p", args->value);
+			if (args->value != NULL) {
 				printf(" -> {\n");
 				printf("\t\thipAccessPolicyWindow accessPolicyWindow = {\n");
-				printf("\t\t\thipAccessProperty hitProp = %d\n", args->hipGraphKernelNodeSetAttribute.value__ref.val.accessPolicyWindow.hitProp);
-				printf("\t\t\tfloat hitRatio = %f\n", args->hipGraphKernelNodeSetAttribute.value__ref.val.accessPolicyWindow.hitRatio);
-				printf("\t\t\thipAccessProperty missProp = %d\n", args->hipGraphKernelNodeSetAttribute.value__ref.val.accessPolicyWindow.missProp);
-				printf("\t\t\tsize_t num_bytes = %lu\n", args->hipGraphKernelNodeSetAttribute.value__ref.val.accessPolicyWindow.num_bytes);
+				printf("\t\t\thipAccessProperty hitProp = %d\n", args->value__ref.val.accessPolicyWindow.hitProp);
+				printf("\t\t\tfloat hitRatio = %f\n", args->value__ref.val.accessPolicyWindow.hitRatio);
+				printf("\t\t\thipAccessProperty missProp = %d\n", args->value__ref.val.accessPolicyWindow.missProp);
+				printf("\t\t\tsize_t num_bytes = %lu\n", args->value__ref.val.accessPolicyWindow.num_bytes);
 				printf("\t\t}\n");
-				printf("\t\tint cooperative = %d\n", args->hipGraphKernelNodeSetAttribute.value__ref.val.cooperative);
-				printf("\t\tint priority = %d\n", args->hipGraphKernelNodeSetAttribute.value__ref.val.priority);
+				printf("\t\tint cooperative = %d\n", args->value__ref.val.cooperative);
+				printf("\t\tint priority = %d\n", args->value__ref.val.priority);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphKernelNodeSetAttribute.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvMemcpy2DUnaligned
-		case HIP_API_ID_hipDrvMemcpy2DUnaligned :
+		case HIP_API_ID_hipDrvMemcpy2DUnaligned : {
 			//	const hip_Memcpy2D * pCopy ({
 			//		size_t srcXInBytes (unsigned long);
 			//		size_t srcY (unsigned long);
@@ -1245,73 +1335,81 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		size_t Height (unsigned long);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst hip_Memcpy2D * pCopy = %p", args->hipDrvMemcpy2DUnaligned.pCopy);
-			if (args->hipDrvMemcpy2DUnaligned.pCopy != NULL) {
+			args_hipDrvMemcpy2DUnaligned_t* args = (args_hipDrvMemcpy2DUnaligned_t*) func_args;
+			printf("\tconst hip_Memcpy2D * pCopy = %p", args->pCopy);
+			if (args->pCopy != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t srcXInBytes = %lu\n", args->hipDrvMemcpy2DUnaligned.pCopy__ref.val.srcXInBytes);
-				printf("\t\tsize_t srcY = %lu\n", args->hipDrvMemcpy2DUnaligned.pCopy__ref.val.srcY);
-				printf("\t\thipMemoryType srcMemoryType = %d\n", args->hipDrvMemcpy2DUnaligned.pCopy__ref.val.srcMemoryType);
-				printf("\t\tsize_t srcPitch = %lu\n", args->hipDrvMemcpy2DUnaligned.pCopy__ref.val.srcPitch);
-				printf("\t\tsize_t dstXInBytes = %lu\n", args->hipDrvMemcpy2DUnaligned.pCopy__ref.val.dstXInBytes);
-				printf("\t\tsize_t dstY = %lu\n", args->hipDrvMemcpy2DUnaligned.pCopy__ref.val.dstY);
-				printf("\t\thipMemoryType dstMemoryType = %d\n", args->hipDrvMemcpy2DUnaligned.pCopy__ref.val.dstMemoryType);
-				printf("\t\tsize_t dstPitch = %lu\n", args->hipDrvMemcpy2DUnaligned.pCopy__ref.val.dstPitch);
-				printf("\t\tsize_t WidthInBytes = %lu\n", args->hipDrvMemcpy2DUnaligned.pCopy__ref.val.WidthInBytes);
-				printf("\t\tsize_t Height = %lu\n", args->hipDrvMemcpy2DUnaligned.pCopy__ref.val.Height);
+				printf("\t\tsize_t srcXInBytes = %lu\n", args->pCopy__ref.val.srcXInBytes);
+				printf("\t\tsize_t srcY = %lu\n", args->pCopy__ref.val.srcY);
+				printf("\t\thipMemoryType srcMemoryType = %d\n", args->pCopy__ref.val.srcMemoryType);
+				printf("\t\tsize_t srcPitch = %lu\n", args->pCopy__ref.val.srcPitch);
+				printf("\t\tsize_t dstXInBytes = %lu\n", args->pCopy__ref.val.dstXInBytes);
+				printf("\t\tsize_t dstY = %lu\n", args->pCopy__ref.val.dstY);
+				printf("\t\thipMemoryType dstMemoryType = %d\n", args->pCopy__ref.val.dstMemoryType);
+				printf("\t\tsize_t dstPitch = %lu\n", args->pCopy__ref.val.dstPitch);
+				printf("\t\tsize_t WidthInBytes = %lu\n", args->pCopy__ref.val.WidthInBytes);
+				printf("\t\tsize_t Height = %lu\n", args->pCopy__ref.val.Height);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipDrvMemcpy2DUnaligned.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolDestroy
-		case HIP_API_ID_hipMemPoolDestroy :
+		case HIP_API_ID_hipMemPoolDestroy : {
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemPool_t mem_pool = %p", args->hipMemPoolDestroy.mem_pool);
+			args_hipMemPoolDestroy_t* args = (args_hipMemPoolDestroy_t*) func_args;
+			printf("\thipMemPool_t mem_pool = %p", args->mem_pool);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemPoolDestroy.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphRemoveDependencies
-		case HIP_API_ID_hipGraphRemoveDependencies :
+		case HIP_API_ID_hipGraphRemoveDependencies : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * from (const struct hipGraphNode * *);
 			//	const hipGraphNode_t * to (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraph_t graph = %p", args->hipGraphRemoveDependencies.graph);
+			args_hipGraphRemoveDependencies_t* args = (args_hipGraphRemoveDependencies_t*) func_args;
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * from = %p", args->hipGraphRemoveDependencies.from);
-			if (args->hipGraphRemoveDependencies.from != NULL) {
-				printf(" -> %p\n", args->hipGraphRemoveDependencies.from__ref.val);
+			printf("\tconst hipGraphNode_t * from = %p", args->from);
+			if (args->from != NULL) {
+				printf(" -> %p\n", args->from__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst hipGraphNode_t * to = %p", args->hipGraphRemoveDependencies.to);
-			if (args->hipGraphRemoveDependencies.to != NULL) {
-				printf(" -> %p\n", args->hipGraphRemoveDependencies.to__ref.val);
+			printf("\tconst hipGraphNode_t * to = %p", args->to);
+			if (args->to != NULL) {
+				printf(" -> %p\n", args->to__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphRemoveDependencies.numDependencies);
-			printf("\thipError_t retval = %d\n", args->hipGraphRemoveDependencies.retval);
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphCreate
-		case HIP_API_ID_hipGraphCreate :
+		case HIP_API_ID_hipGraphCreate : {
 			//	hipGraph_t * pGraph (struct ihipGraph **);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraph_t * pGraph = %p", args->hipGraphCreate.pGraph);
-			if (args->hipGraphCreate.pGraph != NULL) {
-				printf(" -> %p\n", args->hipGraphCreate.pGraph__ref.val);
+			args_hipGraphCreate_t* args = (args_hipGraphCreate_t*) func_args;
+			printf("\thipGraph_t * pGraph = %p", args->pGraph);
+			if (args->pGraph != NULL) {
+				printf(" -> %p\n", args->pGraph__ref.val);
 			} else { printf("\n"); };
-			printf("\tunsigned int flags = %u\n", args->hipGraphCreate.flags);
-			printf("\thipError_t retval = %d\n", args->hipGraphCreate.retval);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExtLaunchMultiKernelMultiDevice
-		case HIP_API_ID_hipExtLaunchMultiKernelMultiDevice :
+		case HIP_API_ID_hipExtLaunchMultiKernelMultiDevice : {
 			//	hipLaunchParams * launchParamsList ({
 			//		void * func (void *);
 			//		dim3 gridDim ({
@@ -1331,54 +1429,60 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	int numDevices (int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipLaunchParams * launchParamsList = %p", args->hipExtLaunchMultiKernelMultiDevice.launchParamsList);
-			if (args->hipExtLaunchMultiKernelMultiDevice.launchParamsList != NULL) {
+			args_hipExtLaunchMultiKernelMultiDevice_t* args = (args_hipExtLaunchMultiKernelMultiDevice_t*) func_args;
+			printf("\thipLaunchParams * launchParamsList = %p", args->launchParamsList);
+			if (args->launchParamsList != NULL) {
 				printf(" -> {\n");
 				printf("\t\tdim3 gridDim = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hipExtLaunchMultiKernelMultiDevice.launchParamsList__ref.val.gridDim.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hipExtLaunchMultiKernelMultiDevice.launchParamsList__ref.val.gridDim.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hipExtLaunchMultiKernelMultiDevice.launchParamsList__ref.val.gridDim.z);
+				printf("\t\t\tuint32_t x = %u\n", args->launchParamsList__ref.val.gridDim.x);
+				printf("\t\t\tuint32_t y = %u\n", args->launchParamsList__ref.val.gridDim.y);
+				printf("\t\t\tuint32_t z = %u\n", args->launchParamsList__ref.val.gridDim.z);
 				printf("\t\t}\n");
 				printf("\t\tdim3 blockDim = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hipExtLaunchMultiKernelMultiDevice.launchParamsList__ref.val.blockDim.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hipExtLaunchMultiKernelMultiDevice.launchParamsList__ref.val.blockDim.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hipExtLaunchMultiKernelMultiDevice.launchParamsList__ref.val.blockDim.z);
+				printf("\t\t\tuint32_t x = %u\n", args->launchParamsList__ref.val.blockDim.x);
+				printf("\t\t\tuint32_t y = %u\n", args->launchParamsList__ref.val.blockDim.y);
+				printf("\t\t\tuint32_t z = %u\n", args->launchParamsList__ref.val.blockDim.z);
 				printf("\t\t}\n");
-				printf("\t\tsize_t sharedMem = %lu\n", args->hipExtLaunchMultiKernelMultiDevice.launchParamsList__ref.val.sharedMem);
+				printf("\t\tsize_t sharedMem = %lu\n", args->launchParamsList__ref.val.sharedMem);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint numDevices = %d\n", args->hipExtLaunchMultiKernelMultiDevice.numDevices);
-			printf("\tunsigned int flags = %u\n", args->hipExtLaunchMultiKernelMultiDevice.flags);
-			printf("\thipError_t retval = %d\n", args->hipExtLaunchMultiKernelMultiDevice.retval);
+			printf("\tint numDevices = %d\n", args->numDevices);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetDeviceCount
-		case HIP_API_ID_hipGetDeviceCount :
+		case HIP_API_ID_hipGetDeviceCount : {
 			//	int * count (int *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * count = %p", args->hipGetDeviceCount.count);
-			if (args->hipGetDeviceCount.count != NULL) {
-				printf(" -> %d\n", args->hipGetDeviceCount.count__ref.val);
+			args_hipGetDeviceCount_t* args = (args_hipGetDeviceCount_t*) func_args;
+			printf("\tint * count = %p", args->count);
+			if (args->count != NULL) {
+				printf(" -> %d\n", args->count__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGetDeviceCount.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemUnmap
-		case HIP_API_ID_hipMemUnmap :
+		case HIP_API_ID_hipMemUnmap : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * ptr = %p", args->hipMemUnmap.ptr);
+			args_hipMemUnmap_t* args = (args_hipMemUnmap_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hipMemUnmap.size);
-			printf("\thipError_t retval = %d\n", args->hipMemUnmap.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexObjectGetResourceDesc
-		case HIP_API_ID_hipTexObjectGetResourceDesc :
+		case HIP_API_ID_hipTexObjectGetResourceDesc : {
 			//	HIP_RESOURCE_DESC * pResDesc ({
 			//		HIPresourcetype resType (enum HIPresourcetype_enum);
 			//		union (unnamed union at header/hip/hip.h:635:2) res ({
@@ -1387,126 +1491,142 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipTextureObject_t texObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tHIP_RESOURCE_DESC * pResDesc = %p", args->hipTexObjectGetResourceDesc.pResDesc);
-			if (args->hipTexObjectGetResourceDesc.pResDesc != NULL) {
+			args_hipTexObjectGetResourceDesc_t* args = (args_hipTexObjectGetResourceDesc_t*) func_args;
+			printf("\tHIP_RESOURCE_DESC * pResDesc = %p", args->pResDesc);
+			if (args->pResDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tHIPresourcetype resType = %d\n", args->hipTexObjectGetResourceDesc.pResDesc__ref.val.resType);
+				printf("\t\tHIPresourcetype resType = %d\n", args->pResDesc__ref.val.resType);
 				printf("\t\tunion (unnamed union at header/hip/hip.h:635:2) res = {\n");
 				printf("\t\t}\n");
-				printf("\t\tunsigned int flags = %u\n", args->hipTexObjectGetResourceDesc.pResDesc__ref.val.flags);
+				printf("\t\tunsigned int flags = %u\n", args->pResDesc__ref.val.flags);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipTextureObject_t texObject = %p", args->hipTexObjectGetResourceDesc.texObject);
+			printf("\thipTextureObject_t texObject = %p", args->texObject);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipTexObjectGetResourceDesc.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecEventRecordNodeSetEvent
-		case HIP_API_ID_hipGraphExecEventRecordNodeSetEvent :
+		case HIP_API_ID_hipGraphExecEventRecordNodeSetEvent : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t hGraphExec = %p", args->hipGraphExecEventRecordNodeSetEvent.hGraphExec);
+			args_hipGraphExecEventRecordNodeSetEvent_t* args = (args_hipGraphExecEventRecordNodeSetEvent_t*) func_args;
+			printf("\thipGraphExec_t hGraphExec = %p", args->hGraphExec);
 			printf("\n");
-			printf("\thipGraphNode_t hNode = %p", args->hipGraphExecEventRecordNodeSetEvent.hNode);
+			printf("\thipGraphNode_t hNode = %p", args->hNode);
 			printf("\n");
-			printf("\thipEvent_t event = %p", args->hipGraphExecEventRecordNodeSetEvent.event);
+			printf("\thipEvent_t event = %p", args->event);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphExecEventRecordNodeSetEvent.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipInit
-		case HIP_API_ID_hipInit :
+		case HIP_API_ID_hipInit : {
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tunsigned int flags = %u\n", args->hipInit.flags);
-			printf("\thipError_t retval = %d\n", args->hipInit.retval);
+			args_hipInit_t* args = (args_hipInit_t*) func_args;
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipThreadExchangeStreamCaptureMode
-		case HIP_API_ID_hipThreadExchangeStreamCaptureMode :
+		case HIP_API_ID_hipThreadExchangeStreamCaptureMode : {
 			//	hipStreamCaptureMode * mode (enum hipStreamCaptureMode*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStreamCaptureMode * mode = %p", args->hipThreadExchangeStreamCaptureMode.mode);
-			if (args->hipThreadExchangeStreamCaptureMode.mode != NULL) {
-				printf(" -> %d\n", args->hipThreadExchangeStreamCaptureMode.mode__ref.val);
+			args_hipThreadExchangeStreamCaptureMode_t* args = (args_hipThreadExchangeStreamCaptureMode_t*) func_args;
+			printf("\thipStreamCaptureMode * mode = %p", args->mode);
+			if (args->mode != NULL) {
+				printf(" -> %d\n", args->mode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipThreadExchangeStreamCaptureMode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetP2PAttribute
-		case HIP_API_ID_hipDeviceGetP2PAttribute :
+		case HIP_API_ID_hipDeviceGetP2PAttribute : {
 			//	int * value (int *);
 			//	hipDeviceP2PAttr attr (enum hipDeviceP2PAttr);
 			//	int srcDevice (int);
 			//	int dstDevice (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * value = %p", args->hipDeviceGetP2PAttribute.value);
-			if (args->hipDeviceGetP2PAttribute.value != NULL) {
-				printf(" -> %d\n", args->hipDeviceGetP2PAttribute.value__ref.val);
+			args_hipDeviceGetP2PAttribute_t* args = (args_hipDeviceGetP2PAttribute_t*) func_args;
+			printf("\tint * value = %p", args->value);
+			if (args->value != NULL) {
+				printf(" -> %d\n", args->value__ref.val);
 			} else { printf("\n"); };
-			printf("\thipDeviceP2PAttr attr = %d\n", args->hipDeviceGetP2PAttribute.attr);
-			printf("\tint srcDevice = %d\n", args->hipDeviceGetP2PAttribute.srcDevice);
-			printf("\tint dstDevice = %d\n", args->hipDeviceGetP2PAttribute.dstDevice);
-			printf("\thipError_t retval = %d\n", args->hipDeviceGetP2PAttribute.retval);
+			printf("\thipDeviceP2PAttr attr = %d\n", args->attr);
+			printf("\tint srcDevice = %d\n", args->srcDevice);
+			printf("\tint dstDevice = %d\n", args->dstDevice);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetByPCIBusId
-		case HIP_API_ID_hipDeviceGetByPCIBusId :
+		case HIP_API_ID_hipDeviceGetByPCIBusId : {
 			//	int * device (int *);
 			//	const char * pciBusId (const char *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * device = %p", args->hipDeviceGetByPCIBusId.device);
-			if (args->hipDeviceGetByPCIBusId.device != NULL) {
-				printf(" -> %d\n", args->hipDeviceGetByPCIBusId.device__ref.val);
+			args_hipDeviceGetByPCIBusId_t* args = (args_hipDeviceGetByPCIBusId_t*) func_args;
+			printf("\tint * device = %p", args->device);
+			if (args->device != NULL) {
+				printf(" -> %d\n", args->device__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst char * pciBusId = %p", args->hipDeviceGetByPCIBusId.pciBusId);
-			if (args->hipDeviceGetByPCIBusId.pciBusId != NULL) {
-				printf(" -> %s\n", args->hipDeviceGetByPCIBusId.pciBusId__ref.val);
+			printf("\tconst char * pciBusId = %p", args->pciBusId);
+			if (args->pciBusId != NULL) {
+				printf(" -> %s\n", args->pciBusId__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipDeviceGetByPCIBusId.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipHostFree
-		case HIP_API_ID_hipHostFree :
+		case HIP_API_ID_hipHostFree : {
 			//	void * ptr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * ptr = %p", args->hipHostFree.ptr);
+			args_hipHostFree_t* args = (args_hipHostFree_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipHostFree.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExtGetLinkTypeAndHopCount
-		case HIP_API_ID_hipExtGetLinkTypeAndHopCount :
+		case HIP_API_ID_hipExtGetLinkTypeAndHopCount : {
 			//	int device1 (int);
 			//	int device2 (int);
 			//	uint32_t * linktype (unsigned int*);
 			//	uint32_t * hopcount (unsigned int*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint device1 = %d\n", args->hipExtGetLinkTypeAndHopCount.device1);
-			printf("\tint device2 = %d\n", args->hipExtGetLinkTypeAndHopCount.device2);
-			printf("\tuint32_t * linktype = %p", args->hipExtGetLinkTypeAndHopCount.linktype);
-			if (args->hipExtGetLinkTypeAndHopCount.linktype != NULL) {
-				printf(" -> %u\n", args->hipExtGetLinkTypeAndHopCount.linktype__ref.val);
+			args_hipExtGetLinkTypeAndHopCount_t* args = (args_hipExtGetLinkTypeAndHopCount_t*) func_args;
+			printf("\tint device1 = %d\n", args->device1);
+			printf("\tint device2 = %d\n", args->device2);
+			printf("\tuint32_t * linktype = %p", args->linktype);
+			if (args->linktype != NULL) {
+				printf(" -> %u\n", args->linktype__ref.val);
 			} else { printf("\n"); };
-			printf("\tuint32_t * hopcount = %p", args->hipExtGetLinkTypeAndHopCount.hopcount);
-			if (args->hipExtGetLinkTypeAndHopCount.hopcount != NULL) {
-				printf(" -> %u\n", args->hipExtGetLinkTypeAndHopCount.hopcount__ref.val);
+			printf("\tuint32_t * hopcount = %p", args->hopcount);
+			if (args->hopcount != NULL) {
+				printf(" -> %u\n", args->hopcount__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipExtGetLinkTypeAndHopCount.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyToSymbolAsync_spt
-		case HIP_API_ID_hipMemcpyToSymbolAsync_spt :
+		case HIP_API_ID_hipMemcpyToSymbolAsync_spt : {
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
@@ -1514,84 +1634,96 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * symbol = %p", args->hipMemcpyToSymbolAsync_spt.symbol);
+			args_hipMemcpyToSymbolAsync_spt_t* args = (args_hipMemcpyToSymbolAsync_spt_t*) func_args;
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hipMemcpyToSymbolAsync_spt.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyToSymbolAsync_spt.sizeBytes);
-			printf("\tsize_t offset = %lu\n", args->hipMemcpyToSymbolAsync_spt.offset);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpyToSymbolAsync_spt.kind);
-			printf("\thipStream_t stream = %p", args->hipMemcpyToSymbolAsync_spt.stream);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpyToSymbolAsync_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxDisablePeerAccess
-		case HIP_API_ID_hipCtxDisablePeerAccess :
+		case HIP_API_ID_hipCtxDisablePeerAccess : {
 			//	hipCtx_t peerCtx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipCtx_t peerCtx = %p", args->hipCtxDisablePeerAccess.peerCtx);
+			args_hipCtxDisablePeerAccess_t* args = (args_hipCtxDisablePeerAccess_t*) func_args;
+			printf("\thipCtx_t peerCtx = %p", args->peerCtx);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipCtxDisablePeerAccess.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipSetupArgument
-		case HIP_API_ID_hipSetupArgument :
+		case HIP_API_ID_hipSetupArgument : {
 			//	const void * arg (const void *);
 			//	size_t size (unsigned long);
 			//	size_t offset (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * arg = %p", args->hipSetupArgument.arg);
+			args_hipSetupArgument_t* args = (args_hipSetupArgument_t*) func_args;
+			printf("\tconst void * arg = %p", args->arg);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hipSetupArgument.size);
-			printf("\tsize_t offset = %lu\n", args->hipSetupArgument.offset);
-			printf("\thipError_t retval = %d\n", args->hipSetupArgument.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyAtoHAsync
-		case HIP_API_ID_hipMemcpyAtoHAsync :
+		case HIP_API_ID_hipMemcpyAtoHAsync : {
 			//	void * dstHost (void *);
 			//	hipArray_t srcArray (struct hipArray *);
 			//	size_t srcOffset (unsigned long);
 			//	size_t ByteCount (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dstHost = %p", args->hipMemcpyAtoHAsync.dstHost);
+			args_hipMemcpyAtoHAsync_t* args = (args_hipMemcpyAtoHAsync_t*) func_args;
+			printf("\tvoid * dstHost = %p", args->dstHost);
 			printf("\n");
-			printf("\thipArray_t srcArray = %p", args->hipMemcpyAtoHAsync.srcArray);
+			printf("\thipArray_t srcArray = %p", args->srcArray);
 			printf("\n");
-			printf("\tsize_t srcOffset = %lu\n", args->hipMemcpyAtoHAsync.srcOffset);
-			printf("\tsize_t ByteCount = %lu\n", args->hipMemcpyAtoHAsync.ByteCount);
-			printf("\thipStream_t stream = %p", args->hipMemcpyAtoHAsync.stream);
+			printf("\tsize_t srcOffset = %lu\n", args->srcOffset);
+			printf("\tsize_t ByteCount = %lu\n", args->ByteCount);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpyAtoHAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxSetCacheConfig
-		case HIP_API_ID_hipCtxSetCacheConfig :
+		case HIP_API_ID_hipCtxSetCacheConfig : {
 			//	hipFuncCache_t cacheConfig (enum hipFuncCache_t);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipFuncCache_t cacheConfig = %d\n", args->hipCtxSetCacheConfig.cacheConfig);
-			printf("\thipError_t retval = %d\n", args->hipCtxSetCacheConfig.retval);
+			args_hipCtxSetCacheConfig_t* args = (args_hipCtxSetCacheConfig_t*) func_args;
+			printf("\thipFuncCache_t cacheConfig = %d\n", args->cacheConfig);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemRelease
-		case HIP_API_ID_hipMemRelease :
+		case HIP_API_ID_hipMemRelease : {
 			//	hipMemGenericAllocationHandle_t handle (struct ihipMemGenericAllocationHandle *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemGenericAllocationHandle_t handle = %p", args->hipMemRelease.handle);
+			args_hipMemRelease_t* args = (args_hipMemRelease_t*) func_args;
+			printf("\thipMemGenericAllocationHandle_t handle = %p", args->handle);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemRelease.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipUnbindTexture
-		case HIP_API_ID_hipUnbindTexture :
+		case HIP_API_ID_hipUnbindTexture : {
 			//	const textureReference * tex ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -1615,36 +1747,38 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipArray_Format format (enum hipArray_Format);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst textureReference * tex = %p", args->hipUnbindTexture.tex);
-			if (args->hipUnbindTexture.tex != NULL) {
+			args_hipUnbindTexture_t* args = (args_hipUnbindTexture_t*) func_args;
+			printf("\tconst textureReference * tex = %p", args->tex);
+			if (args->tex != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipUnbindTexture.tex__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipUnbindTexture.tex__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipUnbindTexture.tex__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipUnbindTexture.tex__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->tex__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->tex__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->tex__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->tex__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipUnbindTexture.tex__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipUnbindTexture.tex__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipUnbindTexture.tex__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipUnbindTexture.tex__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipUnbindTexture.tex__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->tex__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->tex__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->tex__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->tex__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->tex__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipUnbindTexture.tex__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipUnbindTexture.tex__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipUnbindTexture.tex__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipUnbindTexture.tex__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipUnbindTexture.tex__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipUnbindTexture.tex__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipUnbindTexture.tex__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipUnbindTexture.tex__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->tex__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->tex__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->tex__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->tex__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->tex__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->tex__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->tex__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->tex__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipUnbindTexture.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvMemcpy3DAsync
-		case HIP_API_ID_hipDrvMemcpy3DAsync :
+		case HIP_API_ID_hipDrvMemcpy3DAsync : {
 			//	const HIP_MEMCPY3D * pCopy ({
 			//		size_t srcXInBytes (unsigned long);
 			//		size_t srcY (unsigned long);
@@ -1672,129 +1806,141 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst HIP_MEMCPY3D * pCopy = %p", args->hipDrvMemcpy3DAsync.pCopy);
-			if (args->hipDrvMemcpy3DAsync.pCopy != NULL) {
+			args_hipDrvMemcpy3DAsync_t* args = (args_hipDrvMemcpy3DAsync_t*) func_args;
+			printf("\tconst HIP_MEMCPY3D * pCopy = %p", args->pCopy);
+			if (args->pCopy != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t srcXInBytes = %lu\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.srcXInBytes);
-				printf("\t\tsize_t srcY = %lu\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.srcY);
-				printf("\t\tsize_t srcZ = %lu\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.srcZ);
-				printf("\t\tsize_t srcLOD = %lu\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.srcLOD);
-				printf("\t\thipMemoryType srcMemoryType = %d\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.srcMemoryType);
-				printf("\t\tsize_t srcPitch = %lu\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.srcPitch);
-				printf("\t\tsize_t srcHeight = %lu\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.srcHeight);
-				printf("\t\tsize_t dstXInBytes = %lu\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.dstXInBytes);
-				printf("\t\tsize_t dstY = %lu\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.dstY);
-				printf("\t\tsize_t dstZ = %lu\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.dstZ);
-				printf("\t\tsize_t dstLOD = %lu\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.dstLOD);
-				printf("\t\thipMemoryType dstMemoryType = %d\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.dstMemoryType);
-				printf("\t\tsize_t dstPitch = %lu\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.dstPitch);
-				printf("\t\tsize_t dstHeight = %lu\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.dstHeight);
-				printf("\t\tsize_t WidthInBytes = %lu\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.WidthInBytes);
-				printf("\t\tsize_t Height = %lu\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.Height);
-				printf("\t\tsize_t Depth = %lu\n", args->hipDrvMemcpy3DAsync.pCopy__ref.val.Depth);
+				printf("\t\tsize_t srcXInBytes = %lu\n", args->pCopy__ref.val.srcXInBytes);
+				printf("\t\tsize_t srcY = %lu\n", args->pCopy__ref.val.srcY);
+				printf("\t\tsize_t srcZ = %lu\n", args->pCopy__ref.val.srcZ);
+				printf("\t\tsize_t srcLOD = %lu\n", args->pCopy__ref.val.srcLOD);
+				printf("\t\thipMemoryType srcMemoryType = %d\n", args->pCopy__ref.val.srcMemoryType);
+				printf("\t\tsize_t srcPitch = %lu\n", args->pCopy__ref.val.srcPitch);
+				printf("\t\tsize_t srcHeight = %lu\n", args->pCopy__ref.val.srcHeight);
+				printf("\t\tsize_t dstXInBytes = %lu\n", args->pCopy__ref.val.dstXInBytes);
+				printf("\t\tsize_t dstY = %lu\n", args->pCopy__ref.val.dstY);
+				printf("\t\tsize_t dstZ = %lu\n", args->pCopy__ref.val.dstZ);
+				printf("\t\tsize_t dstLOD = %lu\n", args->pCopy__ref.val.dstLOD);
+				printf("\t\thipMemoryType dstMemoryType = %d\n", args->pCopy__ref.val.dstMemoryType);
+				printf("\t\tsize_t dstPitch = %lu\n", args->pCopy__ref.val.dstPitch);
+				printf("\t\tsize_t dstHeight = %lu\n", args->pCopy__ref.val.dstHeight);
+				printf("\t\tsize_t WidthInBytes = %lu\n", args->pCopy__ref.val.WidthInBytes);
+				printf("\t\tsize_t Height = %lu\n", args->pCopy__ref.val.Height);
+				printf("\t\tsize_t Depth = %lu\n", args->pCopy__ref.val.Depth);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipStream_t stream = %p", args->hipDrvMemcpy3DAsync.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipDrvMemcpy3DAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipIpcGetEventHandle
-		case HIP_API_ID_hipIpcGetEventHandle :
+		case HIP_API_ID_hipIpcGetEventHandle : {
 			//	hipIpcEventHandle_t * handle ({
 			//		char[64] reserved (char[64]);
 			//	});
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipIpcEventHandle_t * handle = %p", args->hipIpcGetEventHandle.handle);
-			if (args->hipIpcGetEventHandle.handle != NULL) {
+			args_hipIpcGetEventHandle_t* args = (args_hipIpcGetEventHandle_t*) func_args;
+			printf("\thipIpcEventHandle_t * handle = %p", args->handle);
+			if (args->handle != NULL) {
 				printf(" -> {\n");
-				printf("\t\tchar[64] reserved = %c\n", args->hipIpcGetEventHandle.handle__ref.val.reserved[0]);
+				printf("\t\tchar[64] reserved = %c\n", args->handle__ref.val.reserved[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipEvent_t event = %p", args->hipIpcGetEventHandle.event);
+			printf("\thipEvent_t event = %p", args->event);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipIpcGetEventHandle.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphReleaseUserObject
-		case HIP_API_ID_hipGraphReleaseUserObject :
+		case HIP_API_ID_hipGraphReleaseUserObject : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipUserObject_t object (struct hipUserObject *);
 			//	unsigned int count (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraph_t graph = %p", args->hipGraphReleaseUserObject.graph);
+			args_hipGraphReleaseUserObject_t* args = (args_hipGraphReleaseUserObject_t*) func_args;
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\thipUserObject_t object = %p", args->hipGraphReleaseUserObject.object);
+			printf("\thipUserObject_t object = %p", args->object);
 			printf("\n");
-			printf("\tunsigned int count = %u\n", args->hipGraphReleaseUserObject.count);
-			printf("\thipError_t retval = %d\n", args->hipGraphReleaseUserObject.retval);
+			printf("\tunsigned int count = %u\n", args->count);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetMemPool
-		case HIP_API_ID_hipDeviceGetMemPool :
+		case HIP_API_ID_hipDeviceGetMemPool : {
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	int device (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemPool_t * mem_pool = %p", args->hipDeviceGetMemPool.mem_pool);
-			if (args->hipDeviceGetMemPool.mem_pool != NULL) {
-				printf(" -> %p\n", args->hipDeviceGetMemPool.mem_pool__ref.val);
+			args_hipDeviceGetMemPool_t* args = (args_hipDeviceGetMemPool_t*) func_args;
+			printf("\thipMemPool_t * mem_pool = %p", args->mem_pool);
+			if (args->mem_pool != NULL) {
+				printf(" -> %p\n", args->mem_pool__ref.val);
 			} else { printf("\n"); };
-			printf("\tint device = %d\n", args->hipDeviceGetMemPool.device);
-			printf("\thipError_t retval = %d\n", args->hipDeviceGetMemPool.retval);
+			printf("\tint device = %d\n", args->device);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphHostNodeSetParams
-		case HIP_API_ID_hipGraphHostNodeSetParams :
+		case HIP_API_ID_hipGraphHostNodeSetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipHostNodeParams * pNodeParams ({
 			//		hipHostFn_t fn (void (*)(void *));
 			//		void * userData (void *);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphHostNodeSetParams.node);
+			args_hipGraphHostNodeSetParams_t* args = (args_hipGraphHostNodeSetParams_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\tconst hipHostNodeParams * pNodeParams = %p", args->hipGraphHostNodeSetParams.pNodeParams);
-			if (args->hipGraphHostNodeSetParams.pNodeParams != NULL) {
+			printf("\tconst hipHostNodeParams * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\thipHostFn_t fn = %p\n", args->hipGraphHostNodeSetParams.pNodeParams__ref.val.fn);
+				printf("\t\thipHostFn_t fn = %p\n", args->pNodeParams__ref.val.fn);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphHostNodeSetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddEventWaitNode
-		case HIP_API_ID_hipGraphAddEventWaitNode :
+		case HIP_API_ID_hipGraphAddEventWaitNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddEventWaitNode.pGraphNode);
-			if (args->hipGraphAddEventWaitNode.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddEventWaitNode.pGraphNode__ref.val);
+			args_hipGraphAddEventWaitNode_t* args = (args_hipGraphAddEventWaitNode_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddEventWaitNode.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddEventWaitNode.pDependencies);
-			if (args->hipGraphAddEventWaitNode.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddEventWaitNode.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddEventWaitNode.numDependencies);
-			printf("\thipEvent_t event = %p", args->hipGraphAddEventWaitNode.event);
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\thipEvent_t event = %p", args->event);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphAddEventWaitNode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DFromArrayAsync_spt
-		case HIP_API_ID_hipMemcpy2DFromArrayAsync_spt :
+		case HIP_API_ID_hipMemcpy2DFromArrayAsync_spt : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	hipArray_const_t src (const struct hipArray *);
@@ -1805,54 +1951,60 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpy2DFromArrayAsync_spt.dst);
+			args_hipMemcpy2DFromArrayAsync_spt_t* args = (args_hipMemcpy2DFromArrayAsync_spt_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t dpitch = %lu\n", args->hipMemcpy2DFromArrayAsync_spt.dpitch);
-			printf("\thipArray_const_t src = %p", args->hipMemcpy2DFromArrayAsync_spt.src);
+			printf("\tsize_t dpitch = %lu\n", args->dpitch);
+			printf("\thipArray_const_t src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t wOffsetSrc = %lu\n", args->hipMemcpy2DFromArrayAsync_spt.wOffsetSrc);
-			printf("\tsize_t hOffsetSrc = %lu\n", args->hipMemcpy2DFromArrayAsync_spt.hOffsetSrc);
-			printf("\tsize_t width = %lu\n", args->hipMemcpy2DFromArrayAsync_spt.width);
-			printf("\tsize_t height = %lu\n", args->hipMemcpy2DFromArrayAsync_spt.height);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpy2DFromArrayAsync_spt.kind);
-			printf("\thipStream_t stream = %p", args->hipMemcpy2DFromArrayAsync_spt.stream);
+			printf("\tsize_t wOffsetSrc = %lu\n", args->wOffsetSrc);
+			printf("\tsize_t hOffsetSrc = %lu\n", args->hOffsetSrc);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpy2DFromArrayAsync_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchHostFunc_spt
-		case HIP_API_ID_hipLaunchHostFunc_spt :
+		case HIP_API_ID_hipLaunchHostFunc_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipHostFn_t fn (void (*)(void *));
 			//	void * userData (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipLaunchHostFunc_spt.stream);
+			args_hipLaunchHostFunc_spt_t* args = (args_hipLaunchHostFunc_spt_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipHostFn_t fn = %p\n", args->hipLaunchHostFunc_spt.fn);
-			printf("\tvoid * userData = %p", args->hipLaunchHostFunc_spt.userData);
+			printf("\thipHostFn_t fn = %p\n", args->fn);
+			printf("\tvoid * userData = %p", args->userData);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipLaunchHostFunc_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamWaitEvent_spt
-		case HIP_API_ID_hipStreamWaitEvent_spt :
+		case HIP_API_ID_hipStreamWaitEvent_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamWaitEvent_spt.stream);
+			args_hipStreamWaitEvent_spt_t* args = (args_hipStreamWaitEvent_spt_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipEvent_t event = %p", args->hipStreamWaitEvent_spt.event);
+			printf("\thipEvent_t event = %p", args->event);
 			printf("\n");
-			printf("\tunsigned int flags = %u\n", args->hipStreamWaitEvent_spt.flags);
-			printf("\thipError_t retval = %d\n", args->hipStreamWaitEvent_spt.retval);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipArrayGetDescriptor
-		case HIP_API_ID_hipArrayGetDescriptor :
+		case HIP_API_ID_hipArrayGetDescriptor : {
 			//	HIP_ARRAY_DESCRIPTOR * pArrayDescriptor ({
 			//		size_t Width (unsigned long);
 			//		size_t Height (unsigned long);
@@ -1861,46 +2013,50 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipArray_t array (struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tHIP_ARRAY_DESCRIPTOR * pArrayDescriptor = %p", args->hipArrayGetDescriptor.pArrayDescriptor);
-			if (args->hipArrayGetDescriptor.pArrayDescriptor != NULL) {
+			args_hipArrayGetDescriptor_t* args = (args_hipArrayGetDescriptor_t*) func_args;
+			printf("\tHIP_ARRAY_DESCRIPTOR * pArrayDescriptor = %p", args->pArrayDescriptor);
+			if (args->pArrayDescriptor != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t Width = %lu\n", args->hipArrayGetDescriptor.pArrayDescriptor__ref.val.Width);
-				printf("\t\tsize_t Height = %lu\n", args->hipArrayGetDescriptor.pArrayDescriptor__ref.val.Height);
-				printf("\t\tenum hipArray_Format Format = %d\n", args->hipArrayGetDescriptor.pArrayDescriptor__ref.val.Format);
-				printf("\t\tunsigned int NumChannels = %u\n", args->hipArrayGetDescriptor.pArrayDescriptor__ref.val.NumChannels);
+				printf("\t\tsize_t Width = %lu\n", args->pArrayDescriptor__ref.val.Width);
+				printf("\t\tsize_t Height = %lu\n", args->pArrayDescriptor__ref.val.Height);
+				printf("\t\tenum hipArray_Format Format = %d\n", args->pArrayDescriptor__ref.val.Format);
+				printf("\t\tunsigned int NumChannels = %u\n", args->pArrayDescriptor__ref.val.NumChannels);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipArray_t array = %p", args->hipArrayGetDescriptor.array);
+			printf("\thipArray_t array = %p", args->array);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipArrayGetDescriptor.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecUpdate
-		case HIP_API_ID_hipGraphExecUpdate :
+		case HIP_API_ID_hipGraphExecUpdate : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraph_t hGraph (struct ihipGraph *);
 			//	hipGraphNode_t * hErrorNode_out (struct hipGraphNode **);
 			//	hipGraphExecUpdateResult * updateResult_out (enum hipGraphExecUpdateResult*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t hGraphExec = %p", args->hipGraphExecUpdate.hGraphExec);
+			args_hipGraphExecUpdate_t* args = (args_hipGraphExecUpdate_t*) func_args;
+			printf("\thipGraphExec_t hGraphExec = %p", args->hGraphExec);
 			printf("\n");
-			printf("\thipGraph_t hGraph = %p", args->hipGraphExecUpdate.hGraph);
+			printf("\thipGraph_t hGraph = %p", args->hGraph);
 			printf("\n");
-			printf("\thipGraphNode_t * hErrorNode_out = %p", args->hipGraphExecUpdate.hErrorNode_out);
-			if (args->hipGraphExecUpdate.hErrorNode_out != NULL) {
-				printf(" -> %p\n", args->hipGraphExecUpdate.hErrorNode_out__ref.val);
+			printf("\thipGraphNode_t * hErrorNode_out = %p", args->hErrorNode_out);
+			if (args->hErrorNode_out != NULL) {
+				printf(" -> %p\n", args->hErrorNode_out__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraphExecUpdateResult * updateResult_out = %p", args->hipGraphExecUpdate.updateResult_out);
-			if (args->hipGraphExecUpdate.updateResult_out != NULL) {
-				printf(" -> %d\n", args->hipGraphExecUpdate.updateResult_out__ref.val);
+			printf("\thipGraphExecUpdateResult * updateResult_out = %p", args->updateResult_out);
+			if (args->updateResult_out != NULL) {
+				printf(" -> %d\n", args->updateResult_out__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphExecUpdate.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemGetAllocationPropertiesFromHandle
-		case HIP_API_ID_hipMemGetAllocationPropertiesFromHandle :
+		case HIP_API_ID_hipMemGetAllocationPropertiesFromHandle : {
 			//	hipMemAllocationProp * prop ({
 			//		hipMemAllocationType type (enum hipMemAllocationType);
 			//		hipMemAllocationHandleType requestedHandleType (enum hipMemAllocationHandleType);
@@ -1914,47 +2070,51 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipMemGenericAllocationHandle_t handle (struct ihipMemGenericAllocationHandle *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemAllocationProp * prop = %p", args->hipMemGetAllocationPropertiesFromHandle.prop);
-			if (args->hipMemGetAllocationPropertiesFromHandle.prop != NULL) {
+			args_hipMemGetAllocationPropertiesFromHandle_t* args = (args_hipMemGetAllocationPropertiesFromHandle_t*) func_args;
+			printf("\thipMemAllocationProp * prop = %p", args->prop);
+			if (args->prop != NULL) {
 				printf(" -> {\n");
-				printf("\t\thipMemAllocationType type = %d\n", args->hipMemGetAllocationPropertiesFromHandle.prop__ref.val.type);
-				printf("\t\thipMemAllocationHandleType requestedHandleType = %d\n", args->hipMemGetAllocationPropertiesFromHandle.prop__ref.val.requestedHandleType);
+				printf("\t\thipMemAllocationType type = %d\n", args->prop__ref.val.type);
+				printf("\t\thipMemAllocationHandleType requestedHandleType = %d\n", args->prop__ref.val.requestedHandleType);
 				printf("\t\thipMemLocation location = {\n");
-				printf("\t\t\thipMemLocationType type = %d\n", args->hipMemGetAllocationPropertiesFromHandle.prop__ref.val.location.type);
-				printf("\t\t\tint id = %d\n", args->hipMemGetAllocationPropertiesFromHandle.prop__ref.val.location.id);
+				printf("\t\t\thipMemLocationType type = %d\n", args->prop__ref.val.location.type);
+				printf("\t\t\tint id = %d\n", args->prop__ref.val.location.id);
 				printf("\t\t}\n");
 				printf("\t\tstruct (unnamed struct at header/hip/hip.h:1616:2) allocFlags = {\n");
 				printf("\t\t}\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipMemGenericAllocationHandle_t handle = %p", args->hipMemGetAllocationPropertiesFromHandle.handle);
+			printf("\thipMemGenericAllocationHandle_t handle = %p", args->handle);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemGetAllocationPropertiesFromHandle.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyWithStream
-		case HIP_API_ID_hipMemcpyWithStream :
+		case HIP_API_ID_hipMemcpyWithStream : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpyWithStream.dst);
+			args_hipMemcpyWithStream_t* args = (args_hipMemcpyWithStream_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hipMemcpyWithStream.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyWithStream.sizeBytes);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpyWithStream.kind);
-			printf("\thipStream_t stream = %p", args->hipMemcpyWithStream.stream);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpyWithStream.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddExternalSemaphoresWaitNode
-		case HIP_API_ID_hipGraphAddExternalSemaphoresWaitNode :
+		case HIP_API_ID_hipGraphAddExternalSemaphoresWaitNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
@@ -1964,108 +2124,122 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int numExtSems (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddExternalSemaphoresWaitNode.pGraphNode);
-			if (args->hipGraphAddExternalSemaphoresWaitNode.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddExternalSemaphoresWaitNode.pGraphNode__ref.val);
+			args_hipGraphAddExternalSemaphoresWaitNode_t* args = (args_hipGraphAddExternalSemaphoresWaitNode_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddExternalSemaphoresWaitNode.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddExternalSemaphoresWaitNode.pDependencies);
-			if (args->hipGraphAddExternalSemaphoresWaitNode.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddExternalSemaphoresWaitNode.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddExternalSemaphoresWaitNode.numDependencies);
-			printf("\tconst hipExternalSemaphoreWaitNodeParams * nodeParams = %p", args->hipGraphAddExternalSemaphoresWaitNode.nodeParams);
-			if (args->hipGraphAddExternalSemaphoresWaitNode.nodeParams != NULL) {
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\tconst hipExternalSemaphoreWaitNodeParams * nodeParams = %p", args->nodeParams);
+			if (args->nodeParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned int numExtSems = %u\n", args->hipGraphAddExternalSemaphoresWaitNode.nodeParams__ref.val.numExtSems);
+				printf("\t\tunsigned int numExtSems = %u\n", args->nodeParams__ref.val.numExtSems);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphAddExternalSemaphoresWaitNode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyAtoH
-		case HIP_API_ID_hipMemcpyAtoH :
+		case HIP_API_ID_hipMemcpyAtoH : {
 			//	void * dst (void *);
 			//	hipArray_t srcArray (struct hipArray *);
 			//	size_t srcOffset (unsigned long);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpyAtoH.dst);
+			args_hipMemcpyAtoH_t* args = (args_hipMemcpyAtoH_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\thipArray_t srcArray = %p", args->hipMemcpyAtoH.srcArray);
+			printf("\thipArray_t srcArray = %p", args->srcArray);
 			printf("\n");
-			printf("\tsize_t srcOffset = %lu\n", args->hipMemcpyAtoH.srcOffset);
-			printf("\tsize_t count = %lu\n", args->hipMemcpyAtoH.count);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyAtoH.retval);
+			printf("\tsize_t srcOffset = %lu\n", args->srcOffset);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamQuery
-		case HIP_API_ID_hipStreamQuery :
+		case HIP_API_ID_hipStreamQuery : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamQuery.stream);
+			args_hipStreamQuery_t* args = (args_hipStreamQuery_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipStreamQuery.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipIpcCloseMemHandle
-		case HIP_API_ID_hipIpcCloseMemHandle :
+		case HIP_API_ID_hipIpcCloseMemHandle : {
 			//	void * devPtr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * devPtr = %p", args->hipIpcCloseMemHandle.devPtr);
+			args_hipIpcCloseMemHandle_t* args = (args_hipIpcCloseMemHandle_t*) func_args;
+			printf("\tvoid * devPtr = %p", args->devPtr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipIpcCloseMemHandle.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetAsync
-		case HIP_API_ID_hipMemsetAsync :
+		case HIP_API_ID_hipMemsetAsync : {
 			//	void * dst (void *);
 			//	int value (int);
 			//	size_t sizeBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemsetAsync.dst);
+			args_hipMemsetAsync_t* args = (args_hipMemsetAsync_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tint value = %d\n", args->hipMemsetAsync.value);
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemsetAsync.sizeBytes);
-			printf("\thipStream_t stream = %p", args->hipMemsetAsync.stream);
+			printf("\tint value = %d\n", args->value);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemsetAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyDtoD
-		case HIP_API_ID_hipMemcpyDtoD :
+		case HIP_API_ID_hipMemcpyDtoD : {
 			//	hipDeviceptr_t dst (void *);
 			//	hipDeviceptr_t src (void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceptr_t dst = %p", args->hipMemcpyDtoD.dst);
+			args_hipMemcpyDtoD_t* args = (args_hipMemcpyDtoD_t*) func_args;
+			printf("\thipDeviceptr_t dst = %p", args->dst);
 			printf("\n");
-			printf("\thipDeviceptr_t src = %p", args->hipMemcpyDtoD.src);
+			printf("\thipDeviceptr_t src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyDtoD.sizeBytes);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyDtoD.retval);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleUnload
-		case HIP_API_ID_hipModuleUnload :
+		case HIP_API_ID_hipModuleUnload : {
 			//	hipModule_t module (struct ihipModule_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipModule_t module = %p", args->hipModuleUnload.module);
+			args_hipModuleUnload_t* args = (args_hipModuleUnload_t*) func_args;
+			printf("\thipModule_t module = %p", args->module);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipModuleUnload.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetDevicePropertiesR0600
-		case HIP_API_ID_hipGetDevicePropertiesR0600 :
+		case HIP_API_ID_hipGetDevicePropertiesR0600 : {
 			//	hipDeviceProp_tR0600 * prop ({
 			//		char[256] name (char[256]);
 			//		hipUUID uuid ({
@@ -2195,143 +2369,145 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	int deviceId (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceProp_tR0600 * prop = %p", args->hipGetDevicePropertiesR0600.prop);
-			if (args->hipGetDevicePropertiesR0600.prop != NULL) {
+			args_hipGetDevicePropertiesR0600_t* args = (args_hipGetDevicePropertiesR0600_t*) func_args;
+			printf("\thipDeviceProp_tR0600 * prop = %p", args->prop);
+			if (args->prop != NULL) {
 				printf(" -> {\n");
-				printf("\t\tchar[256] name = %c\n", args->hipGetDevicePropertiesR0600.prop__ref.val.name[0]);
+				printf("\t\tchar[256] name = %c\n", args->prop__ref.val.name[0]);
 				printf("\t\thipUUID uuid = {\n");
-				printf("\t\t\tchar[16] bytes = %c\n", args->hipGetDevicePropertiesR0600.prop__ref.val.uuid.bytes[0]);
+				printf("\t\t\tchar[16] bytes = %c\n", args->prop__ref.val.uuid.bytes[0]);
 				printf("\t\t}\n");
-				printf("\t\tchar[8] luid = %c\n", args->hipGetDevicePropertiesR0600.prop__ref.val.luid[0]);
-				printf("\t\tunsigned int luidDeviceNodeMask = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.luidDeviceNodeMask);
-				printf("\t\tsize_t totalGlobalMem = %lu\n", args->hipGetDevicePropertiesR0600.prop__ref.val.totalGlobalMem);
-				printf("\t\tsize_t sharedMemPerBlock = %lu\n", args->hipGetDevicePropertiesR0600.prop__ref.val.sharedMemPerBlock);
-				printf("\t\tint regsPerBlock = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.regsPerBlock);
-				printf("\t\tint warpSize = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.warpSize);
-				printf("\t\tsize_t memPitch = %lu\n", args->hipGetDevicePropertiesR0600.prop__ref.val.memPitch);
-				printf("\t\tint maxThreadsPerBlock = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxThreadsPerBlock);
-				printf("\t\tint[3] maxThreadsDim = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxThreadsDim[0]);
-				printf("\t\tint[3] maxGridSize = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxGridSize[0]);
-				printf("\t\tint clockRate = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.clockRate);
-				printf("\t\tsize_t totalConstMem = %lu\n", args->hipGetDevicePropertiesR0600.prop__ref.val.totalConstMem);
-				printf("\t\tint major = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.major);
-				printf("\t\tint minor = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.minor);
-				printf("\t\tsize_t textureAlignment = %lu\n", args->hipGetDevicePropertiesR0600.prop__ref.val.textureAlignment);
-				printf("\t\tsize_t texturePitchAlignment = %lu\n", args->hipGetDevicePropertiesR0600.prop__ref.val.texturePitchAlignment);
-				printf("\t\tint deviceOverlap = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.deviceOverlap);
-				printf("\t\tint multiProcessorCount = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.multiProcessorCount);
-				printf("\t\tint kernelExecTimeoutEnabled = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.kernelExecTimeoutEnabled);
-				printf("\t\tint integrated = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.integrated);
-				printf("\t\tint canMapHostMemory = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.canMapHostMemory);
-				printf("\t\tint computeMode = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.computeMode);
-				printf("\t\tint maxTexture1D = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxTexture1D);
-				printf("\t\tint maxTexture1DMipmap = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxTexture1DMipmap);
-				printf("\t\tint maxTexture1DLinear = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxTexture1DLinear);
-				printf("\t\tint[2] maxTexture2D = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxTexture2D[0]);
-				printf("\t\tint[2] maxTexture2DMipmap = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxTexture2DMipmap[0]);
-				printf("\t\tint[3] maxTexture2DLinear = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxTexture2DLinear[0]);
-				printf("\t\tint[2] maxTexture2DGather = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxTexture2DGather[0]);
-				printf("\t\tint[3] maxTexture3D = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxTexture3D[0]);
-				printf("\t\tint[3] maxTexture3DAlt = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxTexture3DAlt[0]);
-				printf("\t\tint maxTextureCubemap = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxTextureCubemap);
-				printf("\t\tint[2] maxTexture1DLayered = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxTexture1DLayered[0]);
-				printf("\t\tint[3] maxTexture2DLayered = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxTexture2DLayered[0]);
-				printf("\t\tint[2] maxTextureCubemapLayered = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxTextureCubemapLayered[0]);
-				printf("\t\tint maxSurface1D = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxSurface1D);
-				printf("\t\tint[2] maxSurface2D = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxSurface2D[0]);
-				printf("\t\tint[3] maxSurface3D = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxSurface3D[0]);
-				printf("\t\tint[2] maxSurface1DLayered = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxSurface1DLayered[0]);
-				printf("\t\tint[3] maxSurface2DLayered = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxSurface2DLayered[0]);
-				printf("\t\tint maxSurfaceCubemap = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxSurfaceCubemap);
-				printf("\t\tint[2] maxSurfaceCubemapLayered = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxSurfaceCubemapLayered[0]);
-				printf("\t\tsize_t surfaceAlignment = %lu\n", args->hipGetDevicePropertiesR0600.prop__ref.val.surfaceAlignment);
-				printf("\t\tint concurrentKernels = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.concurrentKernels);
-				printf("\t\tint ECCEnabled = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.ECCEnabled);
-				printf("\t\tint pciBusID = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.pciBusID);
-				printf("\t\tint pciDeviceID = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.pciDeviceID);
-				printf("\t\tint pciDomainID = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.pciDomainID);
-				printf("\t\tint tccDriver = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.tccDriver);
-				printf("\t\tint asyncEngineCount = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.asyncEngineCount);
-				printf("\t\tint unifiedAddressing = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.unifiedAddressing);
-				printf("\t\tint memoryClockRate = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.memoryClockRate);
-				printf("\t\tint memoryBusWidth = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.memoryBusWidth);
-				printf("\t\tint l2CacheSize = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.l2CacheSize);
-				printf("\t\tint persistingL2CacheMaxSize = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.persistingL2CacheMaxSize);
-				printf("\t\tint maxThreadsPerMultiProcessor = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxThreadsPerMultiProcessor);
-				printf("\t\tint streamPrioritiesSupported = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.streamPrioritiesSupported);
-				printf("\t\tint globalL1CacheSupported = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.globalL1CacheSupported);
-				printf("\t\tint localL1CacheSupported = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.localL1CacheSupported);
-				printf("\t\tsize_t sharedMemPerMultiprocessor = %lu\n", args->hipGetDevicePropertiesR0600.prop__ref.val.sharedMemPerMultiprocessor);
-				printf("\t\tint regsPerMultiprocessor = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.regsPerMultiprocessor);
-				printf("\t\tint managedMemory = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.managedMemory);
-				printf("\t\tint isMultiGpuBoard = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.isMultiGpuBoard);
-				printf("\t\tint multiGpuBoardGroupID = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.multiGpuBoardGroupID);
-				printf("\t\tint hostNativeAtomicSupported = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.hostNativeAtomicSupported);
-				printf("\t\tint singleToDoublePrecisionPerfRatio = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.singleToDoublePrecisionPerfRatio);
-				printf("\t\tint pageableMemoryAccess = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.pageableMemoryAccess);
-				printf("\t\tint concurrentManagedAccess = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.concurrentManagedAccess);
-				printf("\t\tint computePreemptionSupported = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.computePreemptionSupported);
-				printf("\t\tint canUseHostPointerForRegisteredMem = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.canUseHostPointerForRegisteredMem);
-				printf("\t\tint cooperativeLaunch = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.cooperativeLaunch);
-				printf("\t\tint cooperativeMultiDeviceLaunch = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.cooperativeMultiDeviceLaunch);
-				printf("\t\tsize_t sharedMemPerBlockOptin = %lu\n", args->hipGetDevicePropertiesR0600.prop__ref.val.sharedMemPerBlockOptin);
-				printf("\t\tint pageableMemoryAccessUsesHostPageTables = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.pageableMemoryAccessUsesHostPageTables);
-				printf("\t\tint directManagedMemAccessFromHost = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.directManagedMemAccessFromHost);
-				printf("\t\tint maxBlocksPerMultiProcessor = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxBlocksPerMultiProcessor);
-				printf("\t\tint accessPolicyMaxWindowSize = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.accessPolicyMaxWindowSize);
-				printf("\t\tsize_t reservedSharedMemPerBlock = %lu\n", args->hipGetDevicePropertiesR0600.prop__ref.val.reservedSharedMemPerBlock);
-				printf("\t\tint hostRegisterSupported = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.hostRegisterSupported);
-				printf("\t\tint sparseHipArraySupported = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.sparseHipArraySupported);
-				printf("\t\tint hostRegisterReadOnlySupported = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.hostRegisterReadOnlySupported);
-				printf("\t\tint timelineSemaphoreInteropSupported = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.timelineSemaphoreInteropSupported);
-				printf("\t\tint memoryPoolsSupported = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.memoryPoolsSupported);
-				printf("\t\tint gpuDirectRDMASupported = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.gpuDirectRDMASupported);
-				printf("\t\tunsigned int gpuDirectRDMAFlushWritesOptions = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.gpuDirectRDMAFlushWritesOptions);
-				printf("\t\tint gpuDirectRDMAWritesOrdering = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.gpuDirectRDMAWritesOrdering);
-				printf("\t\tunsigned int memoryPoolSupportedHandleTypes = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.memoryPoolSupportedHandleTypes);
-				printf("\t\tint deferredMappingHipArraySupported = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.deferredMappingHipArraySupported);
-				printf("\t\tint ipcEventSupported = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.ipcEventSupported);
-				printf("\t\tint clusterLaunch = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.clusterLaunch);
-				printf("\t\tint unifiedFunctionPointers = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.unifiedFunctionPointers);
-				printf("\t\tint[63] reserved = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.reserved[0]);
-				printf("\t\tint[32] hipReserved = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.hipReserved[0]);
-				printf("\t\tchar[256] gcnArchName = %c\n", args->hipGetDevicePropertiesR0600.prop__ref.val.gcnArchName[0]);
-				printf("\t\tsize_t maxSharedMemoryPerMultiProcessor = %lu\n", args->hipGetDevicePropertiesR0600.prop__ref.val.maxSharedMemoryPerMultiProcessor);
-				printf("\t\tint clockInstructionRate = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.clockInstructionRate);
+				printf("\t\tchar[8] luid = %c\n", args->prop__ref.val.luid[0]);
+				printf("\t\tunsigned int luidDeviceNodeMask = %u\n", args->prop__ref.val.luidDeviceNodeMask);
+				printf("\t\tsize_t totalGlobalMem = %lu\n", args->prop__ref.val.totalGlobalMem);
+				printf("\t\tsize_t sharedMemPerBlock = %lu\n", args->prop__ref.val.sharedMemPerBlock);
+				printf("\t\tint regsPerBlock = %d\n", args->prop__ref.val.regsPerBlock);
+				printf("\t\tint warpSize = %d\n", args->prop__ref.val.warpSize);
+				printf("\t\tsize_t memPitch = %lu\n", args->prop__ref.val.memPitch);
+				printf("\t\tint maxThreadsPerBlock = %d\n", args->prop__ref.val.maxThreadsPerBlock);
+				printf("\t\tint[3] maxThreadsDim = %d\n", args->prop__ref.val.maxThreadsDim[0]);
+				printf("\t\tint[3] maxGridSize = %d\n", args->prop__ref.val.maxGridSize[0]);
+				printf("\t\tint clockRate = %d\n", args->prop__ref.val.clockRate);
+				printf("\t\tsize_t totalConstMem = %lu\n", args->prop__ref.val.totalConstMem);
+				printf("\t\tint major = %d\n", args->prop__ref.val.major);
+				printf("\t\tint minor = %d\n", args->prop__ref.val.minor);
+				printf("\t\tsize_t textureAlignment = %lu\n", args->prop__ref.val.textureAlignment);
+				printf("\t\tsize_t texturePitchAlignment = %lu\n", args->prop__ref.val.texturePitchAlignment);
+				printf("\t\tint deviceOverlap = %d\n", args->prop__ref.val.deviceOverlap);
+				printf("\t\tint multiProcessorCount = %d\n", args->prop__ref.val.multiProcessorCount);
+				printf("\t\tint kernelExecTimeoutEnabled = %d\n", args->prop__ref.val.kernelExecTimeoutEnabled);
+				printf("\t\tint integrated = %d\n", args->prop__ref.val.integrated);
+				printf("\t\tint canMapHostMemory = %d\n", args->prop__ref.val.canMapHostMemory);
+				printf("\t\tint computeMode = %d\n", args->prop__ref.val.computeMode);
+				printf("\t\tint maxTexture1D = %d\n", args->prop__ref.val.maxTexture1D);
+				printf("\t\tint maxTexture1DMipmap = %d\n", args->prop__ref.val.maxTexture1DMipmap);
+				printf("\t\tint maxTexture1DLinear = %d\n", args->prop__ref.val.maxTexture1DLinear);
+				printf("\t\tint[2] maxTexture2D = %d\n", args->prop__ref.val.maxTexture2D[0]);
+				printf("\t\tint[2] maxTexture2DMipmap = %d\n", args->prop__ref.val.maxTexture2DMipmap[0]);
+				printf("\t\tint[3] maxTexture2DLinear = %d\n", args->prop__ref.val.maxTexture2DLinear[0]);
+				printf("\t\tint[2] maxTexture2DGather = %d\n", args->prop__ref.val.maxTexture2DGather[0]);
+				printf("\t\tint[3] maxTexture3D = %d\n", args->prop__ref.val.maxTexture3D[0]);
+				printf("\t\tint[3] maxTexture3DAlt = %d\n", args->prop__ref.val.maxTexture3DAlt[0]);
+				printf("\t\tint maxTextureCubemap = %d\n", args->prop__ref.val.maxTextureCubemap);
+				printf("\t\tint[2] maxTexture1DLayered = %d\n", args->prop__ref.val.maxTexture1DLayered[0]);
+				printf("\t\tint[3] maxTexture2DLayered = %d\n", args->prop__ref.val.maxTexture2DLayered[0]);
+				printf("\t\tint[2] maxTextureCubemapLayered = %d\n", args->prop__ref.val.maxTextureCubemapLayered[0]);
+				printf("\t\tint maxSurface1D = %d\n", args->prop__ref.val.maxSurface1D);
+				printf("\t\tint[2] maxSurface2D = %d\n", args->prop__ref.val.maxSurface2D[0]);
+				printf("\t\tint[3] maxSurface3D = %d\n", args->prop__ref.val.maxSurface3D[0]);
+				printf("\t\tint[2] maxSurface1DLayered = %d\n", args->prop__ref.val.maxSurface1DLayered[0]);
+				printf("\t\tint[3] maxSurface2DLayered = %d\n", args->prop__ref.val.maxSurface2DLayered[0]);
+				printf("\t\tint maxSurfaceCubemap = %d\n", args->prop__ref.val.maxSurfaceCubemap);
+				printf("\t\tint[2] maxSurfaceCubemapLayered = %d\n", args->prop__ref.val.maxSurfaceCubemapLayered[0]);
+				printf("\t\tsize_t surfaceAlignment = %lu\n", args->prop__ref.val.surfaceAlignment);
+				printf("\t\tint concurrentKernels = %d\n", args->prop__ref.val.concurrentKernels);
+				printf("\t\tint ECCEnabled = %d\n", args->prop__ref.val.ECCEnabled);
+				printf("\t\tint pciBusID = %d\n", args->prop__ref.val.pciBusID);
+				printf("\t\tint pciDeviceID = %d\n", args->prop__ref.val.pciDeviceID);
+				printf("\t\tint pciDomainID = %d\n", args->prop__ref.val.pciDomainID);
+				printf("\t\tint tccDriver = %d\n", args->prop__ref.val.tccDriver);
+				printf("\t\tint asyncEngineCount = %d\n", args->prop__ref.val.asyncEngineCount);
+				printf("\t\tint unifiedAddressing = %d\n", args->prop__ref.val.unifiedAddressing);
+				printf("\t\tint memoryClockRate = %d\n", args->prop__ref.val.memoryClockRate);
+				printf("\t\tint memoryBusWidth = %d\n", args->prop__ref.val.memoryBusWidth);
+				printf("\t\tint l2CacheSize = %d\n", args->prop__ref.val.l2CacheSize);
+				printf("\t\tint persistingL2CacheMaxSize = %d\n", args->prop__ref.val.persistingL2CacheMaxSize);
+				printf("\t\tint maxThreadsPerMultiProcessor = %d\n", args->prop__ref.val.maxThreadsPerMultiProcessor);
+				printf("\t\tint streamPrioritiesSupported = %d\n", args->prop__ref.val.streamPrioritiesSupported);
+				printf("\t\tint globalL1CacheSupported = %d\n", args->prop__ref.val.globalL1CacheSupported);
+				printf("\t\tint localL1CacheSupported = %d\n", args->prop__ref.val.localL1CacheSupported);
+				printf("\t\tsize_t sharedMemPerMultiprocessor = %lu\n", args->prop__ref.val.sharedMemPerMultiprocessor);
+				printf("\t\tint regsPerMultiprocessor = %d\n", args->prop__ref.val.regsPerMultiprocessor);
+				printf("\t\tint managedMemory = %d\n", args->prop__ref.val.managedMemory);
+				printf("\t\tint isMultiGpuBoard = %d\n", args->prop__ref.val.isMultiGpuBoard);
+				printf("\t\tint multiGpuBoardGroupID = %d\n", args->prop__ref.val.multiGpuBoardGroupID);
+				printf("\t\tint hostNativeAtomicSupported = %d\n", args->prop__ref.val.hostNativeAtomicSupported);
+				printf("\t\tint singleToDoublePrecisionPerfRatio = %d\n", args->prop__ref.val.singleToDoublePrecisionPerfRatio);
+				printf("\t\tint pageableMemoryAccess = %d\n", args->prop__ref.val.pageableMemoryAccess);
+				printf("\t\tint concurrentManagedAccess = %d\n", args->prop__ref.val.concurrentManagedAccess);
+				printf("\t\tint computePreemptionSupported = %d\n", args->prop__ref.val.computePreemptionSupported);
+				printf("\t\tint canUseHostPointerForRegisteredMem = %d\n", args->prop__ref.val.canUseHostPointerForRegisteredMem);
+				printf("\t\tint cooperativeLaunch = %d\n", args->prop__ref.val.cooperativeLaunch);
+				printf("\t\tint cooperativeMultiDeviceLaunch = %d\n", args->prop__ref.val.cooperativeMultiDeviceLaunch);
+				printf("\t\tsize_t sharedMemPerBlockOptin = %lu\n", args->prop__ref.val.sharedMemPerBlockOptin);
+				printf("\t\tint pageableMemoryAccessUsesHostPageTables = %d\n", args->prop__ref.val.pageableMemoryAccessUsesHostPageTables);
+				printf("\t\tint directManagedMemAccessFromHost = %d\n", args->prop__ref.val.directManagedMemAccessFromHost);
+				printf("\t\tint maxBlocksPerMultiProcessor = %d\n", args->prop__ref.val.maxBlocksPerMultiProcessor);
+				printf("\t\tint accessPolicyMaxWindowSize = %d\n", args->prop__ref.val.accessPolicyMaxWindowSize);
+				printf("\t\tsize_t reservedSharedMemPerBlock = %lu\n", args->prop__ref.val.reservedSharedMemPerBlock);
+				printf("\t\tint hostRegisterSupported = %d\n", args->prop__ref.val.hostRegisterSupported);
+				printf("\t\tint sparseHipArraySupported = %d\n", args->prop__ref.val.sparseHipArraySupported);
+				printf("\t\tint hostRegisterReadOnlySupported = %d\n", args->prop__ref.val.hostRegisterReadOnlySupported);
+				printf("\t\tint timelineSemaphoreInteropSupported = %d\n", args->prop__ref.val.timelineSemaphoreInteropSupported);
+				printf("\t\tint memoryPoolsSupported = %d\n", args->prop__ref.val.memoryPoolsSupported);
+				printf("\t\tint gpuDirectRDMASupported = %d\n", args->prop__ref.val.gpuDirectRDMASupported);
+				printf("\t\tunsigned int gpuDirectRDMAFlushWritesOptions = %u\n", args->prop__ref.val.gpuDirectRDMAFlushWritesOptions);
+				printf("\t\tint gpuDirectRDMAWritesOrdering = %d\n", args->prop__ref.val.gpuDirectRDMAWritesOrdering);
+				printf("\t\tunsigned int memoryPoolSupportedHandleTypes = %u\n", args->prop__ref.val.memoryPoolSupportedHandleTypes);
+				printf("\t\tint deferredMappingHipArraySupported = %d\n", args->prop__ref.val.deferredMappingHipArraySupported);
+				printf("\t\tint ipcEventSupported = %d\n", args->prop__ref.val.ipcEventSupported);
+				printf("\t\tint clusterLaunch = %d\n", args->prop__ref.val.clusterLaunch);
+				printf("\t\tint unifiedFunctionPointers = %d\n", args->prop__ref.val.unifiedFunctionPointers);
+				printf("\t\tint[63] reserved = %d\n", args->prop__ref.val.reserved[0]);
+				printf("\t\tint[32] hipReserved = %d\n", args->prop__ref.val.hipReserved[0]);
+				printf("\t\tchar[256] gcnArchName = %c\n", args->prop__ref.val.gcnArchName[0]);
+				printf("\t\tsize_t maxSharedMemoryPerMultiProcessor = %lu\n", args->prop__ref.val.maxSharedMemoryPerMultiProcessor);
+				printf("\t\tint clockInstructionRate = %d\n", args->prop__ref.val.clockInstructionRate);
 				printf("\t\thipDeviceArch_t arch = {\n");
-				printf("\t\t\tunsigned int hasGlobalInt32Atomics = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasGlobalInt32Atomics);
-				printf("\t\t\tunsigned int hasGlobalFloatAtomicExch = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasGlobalFloatAtomicExch);
-				printf("\t\t\tunsigned int hasSharedInt32Atomics = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasSharedInt32Atomics);
-				printf("\t\t\tunsigned int hasSharedFloatAtomicExch = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasSharedFloatAtomicExch);
-				printf("\t\t\tunsigned int hasFloatAtomicAdd = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasFloatAtomicAdd);
-				printf("\t\t\tunsigned int hasGlobalInt64Atomics = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasGlobalInt64Atomics);
-				printf("\t\t\tunsigned int hasSharedInt64Atomics = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasSharedInt64Atomics);
-				printf("\t\t\tunsigned int hasDoubles = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasDoubles);
-				printf("\t\t\tunsigned int hasWarpVote = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasWarpVote);
-				printf("\t\t\tunsigned int hasWarpBallot = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasWarpBallot);
-				printf("\t\t\tunsigned int hasWarpShuffle = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasWarpShuffle);
-				printf("\t\t\tunsigned int hasFunnelShift = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasFunnelShift);
-				printf("\t\t\tunsigned int hasThreadFenceSystem = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasThreadFenceSystem);
-				printf("\t\t\tunsigned int hasSyncThreadsExt = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasSyncThreadsExt);
-				printf("\t\t\tunsigned int hasSurfaceFuncs = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasSurfaceFuncs);
-				printf("\t\t\tunsigned int has3dGrid = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.has3dGrid);
-				printf("\t\t\tunsigned int hasDynamicParallelism = %u\n", args->hipGetDevicePropertiesR0600.prop__ref.val.arch.hasDynamicParallelism);
+				printf("\t\t\tunsigned int hasGlobalInt32Atomics = %u\n", args->prop__ref.val.arch.hasGlobalInt32Atomics);
+				printf("\t\t\tunsigned int hasGlobalFloatAtomicExch = %u\n", args->prop__ref.val.arch.hasGlobalFloatAtomicExch);
+				printf("\t\t\tunsigned int hasSharedInt32Atomics = %u\n", args->prop__ref.val.arch.hasSharedInt32Atomics);
+				printf("\t\t\tunsigned int hasSharedFloatAtomicExch = %u\n", args->prop__ref.val.arch.hasSharedFloatAtomicExch);
+				printf("\t\t\tunsigned int hasFloatAtomicAdd = %u\n", args->prop__ref.val.arch.hasFloatAtomicAdd);
+				printf("\t\t\tunsigned int hasGlobalInt64Atomics = %u\n", args->prop__ref.val.arch.hasGlobalInt64Atomics);
+				printf("\t\t\tunsigned int hasSharedInt64Atomics = %u\n", args->prop__ref.val.arch.hasSharedInt64Atomics);
+				printf("\t\t\tunsigned int hasDoubles = %u\n", args->prop__ref.val.arch.hasDoubles);
+				printf("\t\t\tunsigned int hasWarpVote = %u\n", args->prop__ref.val.arch.hasWarpVote);
+				printf("\t\t\tunsigned int hasWarpBallot = %u\n", args->prop__ref.val.arch.hasWarpBallot);
+				printf("\t\t\tunsigned int hasWarpShuffle = %u\n", args->prop__ref.val.arch.hasWarpShuffle);
+				printf("\t\t\tunsigned int hasFunnelShift = %u\n", args->prop__ref.val.arch.hasFunnelShift);
+				printf("\t\t\tunsigned int hasThreadFenceSystem = %u\n", args->prop__ref.val.arch.hasThreadFenceSystem);
+				printf("\t\t\tunsigned int hasSyncThreadsExt = %u\n", args->prop__ref.val.arch.hasSyncThreadsExt);
+				printf("\t\t\tunsigned int hasSurfaceFuncs = %u\n", args->prop__ref.val.arch.hasSurfaceFuncs);
+				printf("\t\t\tunsigned int has3dGrid = %u\n", args->prop__ref.val.arch.has3dGrid);
+				printf("\t\t\tunsigned int hasDynamicParallelism = %u\n", args->prop__ref.val.arch.hasDynamicParallelism);
 				printf("\t\t}\n");
-				printf("\t\tint cooperativeMultiDeviceUnmatchedFunc = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.cooperativeMultiDeviceUnmatchedFunc);
-				printf("\t\tint cooperativeMultiDeviceUnmatchedGridDim = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.cooperativeMultiDeviceUnmatchedGridDim);
-				printf("\t\tint cooperativeMultiDeviceUnmatchedBlockDim = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.cooperativeMultiDeviceUnmatchedBlockDim);
-				printf("\t\tint cooperativeMultiDeviceUnmatchedSharedMem = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.cooperativeMultiDeviceUnmatchedSharedMem);
-				printf("\t\tint isLargeBar = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.isLargeBar);
-				printf("\t\tint asicRevision = %d\n", args->hipGetDevicePropertiesR0600.prop__ref.val.asicRevision);
+				printf("\t\tint cooperativeMultiDeviceUnmatchedFunc = %d\n", args->prop__ref.val.cooperativeMultiDeviceUnmatchedFunc);
+				printf("\t\tint cooperativeMultiDeviceUnmatchedGridDim = %d\n", args->prop__ref.val.cooperativeMultiDeviceUnmatchedGridDim);
+				printf("\t\tint cooperativeMultiDeviceUnmatchedBlockDim = %d\n", args->prop__ref.val.cooperativeMultiDeviceUnmatchedBlockDim);
+				printf("\t\tint cooperativeMultiDeviceUnmatchedSharedMem = %d\n", args->prop__ref.val.cooperativeMultiDeviceUnmatchedSharedMem);
+				printf("\t\tint isLargeBar = %d\n", args->prop__ref.val.isLargeBar);
+				printf("\t\tint asicRevision = %d\n", args->prop__ref.val.asicRevision);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint deviceId = %d\n", args->hipGetDevicePropertiesR0600.deviceId);
-			printf("\thipError_t retval = %d\n", args->hipGetDevicePropertiesR0600.retval);
+			printf("\tint deviceId = %d\n", args->deviceId);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyFromArray
-		case HIP_API_ID_hipMemcpyFromArray :
+		case HIP_API_ID_hipMemcpyFromArray : {
 			//	void * dst (void *);
 			//	hipArray_const_t srcArray (const struct hipArray *);
 			//	size_t wOffset (unsigned long);
@@ -2339,36 +2515,40 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t count (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpyFromArray.dst);
+			args_hipMemcpyFromArray_t* args = (args_hipMemcpyFromArray_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\thipArray_const_t srcArray = %p", args->hipMemcpyFromArray.srcArray);
+			printf("\thipArray_const_t srcArray = %p", args->srcArray);
 			printf("\n");
-			printf("\tsize_t wOffset = %lu\n", args->hipMemcpyFromArray.wOffset);
-			printf("\tsize_t hOffset = %lu\n", args->hipMemcpyFromArray.hOffset);
-			printf("\tsize_t count = %lu\n", args->hipMemcpyFromArray.count);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpyFromArray.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyFromArray.retval);
+			printf("\tsize_t wOffset = %lu\n", args->wOffset);
+			printf("\tsize_t hOffset = %lu\n", args->hOffset);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceCanAccessPeer
-		case HIP_API_ID_hipDeviceCanAccessPeer :
+		case HIP_API_ID_hipDeviceCanAccessPeer : {
 			//	int * canAccessPeer (int *);
 			//	int deviceId (int);
 			//	int peerDeviceId (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * canAccessPeer = %p", args->hipDeviceCanAccessPeer.canAccessPeer);
-			if (args->hipDeviceCanAccessPeer.canAccessPeer != NULL) {
-				printf(" -> %d\n", args->hipDeviceCanAccessPeer.canAccessPeer__ref.val);
+			args_hipDeviceCanAccessPeer_t* args = (args_hipDeviceCanAccessPeer_t*) func_args;
+			printf("\tint * canAccessPeer = %p", args->canAccessPeer);
+			if (args->canAccessPeer != NULL) {
+				printf(" -> %d\n", args->canAccessPeer__ref.val);
 			} else { printf("\n"); };
-			printf("\tint deviceId = %d\n", args->hipDeviceCanAccessPeer.deviceId);
-			printf("\tint peerDeviceId = %d\n", args->hipDeviceCanAccessPeer.peerDeviceId);
-			printf("\thipError_t retval = %d\n", args->hipDeviceCanAccessPeer.retval);
+			printf("\tint deviceId = %d\n", args->deviceId);
+			printf("\tint peerDeviceId = %d\n", args->peerDeviceId);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemSetAccess
-		case HIP_API_ID_hipMemSetAccess :
+		case HIP_API_ID_hipMemSetAccess : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	const hipMemAccessDesc * desc ({
@@ -2380,76 +2560,84 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * ptr = %p", args->hipMemSetAccess.ptr);
+			args_hipMemSetAccess_t* args = (args_hipMemSetAccess_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hipMemSetAccess.size);
-			printf("\tconst hipMemAccessDesc * desc = %p", args->hipMemSetAccess.desc);
-			if (args->hipMemSetAccess.desc != NULL) {
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tconst hipMemAccessDesc * desc = %p", args->desc);
+			if (args->desc != NULL) {
 				printf(" -> {\n");
 				printf("\t\thipMemLocation location = {\n");
-				printf("\t\t\thipMemLocationType type = %d\n", args->hipMemSetAccess.desc__ref.val.location.type);
-				printf("\t\t\tint id = %d\n", args->hipMemSetAccess.desc__ref.val.location.id);
+				printf("\t\t\thipMemLocationType type = %d\n", args->desc__ref.val.location.type);
+				printf("\t\t\tint id = %d\n", args->desc__ref.val.location.id);
 				printf("\t\t}\n");
-				printf("\t\thipMemAccessFlags flags = %d\n", args->hipMemSetAccess.desc__ref.val.flags);
+				printf("\t\thipMemAccessFlags flags = %d\n", args->desc__ref.val.flags);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tsize_t count = %lu\n", args->hipMemSetAccess.count);
-			printf("\thipError_t retval = %d\n", args->hipMemSetAccess.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamWaitValue32
-		case HIP_API_ID_hipStreamWaitValue32 :
+		case HIP_API_ID_hipStreamWaitValue32 : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
 			//	uint32_t value (unsigned int);
 			//	unsigned int flags (unsigned int);
 			//	uint32_t mask (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamWaitValue32.stream);
+			args_hipStreamWaitValue32_t* args = (args_hipStreamWaitValue32_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\tvoid * ptr = %p", args->hipStreamWaitValue32.ptr);
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tuint32_t value = %u\n", args->hipStreamWaitValue32.value);
-			printf("\tunsigned int flags = %u\n", args->hipStreamWaitValue32.flags);
-			printf("\tuint32_t mask = %u\n", args->hipStreamWaitValue32.mask);
-			printf("\thipError_t retval = %d\n", args->hipStreamWaitValue32.retval);
+			printf("\tuint32_t value = %u\n", args->value);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\tuint32_t mask = %u\n", args->mask);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipApiName
-		case HIP_API_ID_hipApiName :
+		case HIP_API_ID_hipApiName : {
 			//	uint32_t id (unsigned int);
 			//	const char * retval (const char *);
-			printf("\tuint32_t id = %u\n", args->hipApiName.id);
-			printf("\tconst char * retval = %p", args->hipApiName.retval);
-			if (args->hipApiName.retval != NULL) {
-				printf(" -> %s\n", args->hipApiName.retval__ref.val);
+			args_hipApiName_t* args = (args_hipApiName_t*) func_args;
+			printf("\tuint32_t id = %u\n", args->id);
+			printf("\tconst char * retval = %p", args->retval);
+			if (args->retval != NULL) {
+				printf(" -> %s\n", args->retval__ref.val);
 			} else { printf("\n"); };
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphicsSubResourceGetMappedArray
-		case HIP_API_ID_hipGraphicsSubResourceGetMappedArray :
+		case HIP_API_ID_hipGraphicsSubResourceGetMappedArray : {
 			//	hipArray_t * array (struct hipArray **);
 			//	hipGraphicsResource_t resource (struct _hipGraphicsResource*);
 			//	unsigned int arrayIndex (unsigned int);
 			//	unsigned int mipLevel (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t * array = %p", args->hipGraphicsSubResourceGetMappedArray.array);
-			if (args->hipGraphicsSubResourceGetMappedArray.array != NULL) {
-				printf(" -> %p\n", args->hipGraphicsSubResourceGetMappedArray.array__ref.val);
+			args_hipGraphicsSubResourceGetMappedArray_t* args = (args_hipGraphicsSubResourceGetMappedArray_t*) func_args;
+			printf("\thipArray_t * array = %p", args->array);
+			if (args->array != NULL) {
+				printf(" -> %p\n", args->array__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraphicsResource_t resource = %p", args->hipGraphicsSubResourceGetMappedArray.resource);
+			printf("\thipGraphicsResource_t resource = %p", args->resource);
 			printf("\n");
-			printf("\tunsigned int arrayIndex = %u\n", args->hipGraphicsSubResourceGetMappedArray.arrayIndex);
-			printf("\tunsigned int mipLevel = %u\n", args->hipGraphicsSubResourceGetMappedArray.mipLevel);
-			printf("\thipError_t retval = %d\n", args->hipGraphicsSubResourceGetMappedArray.retval);
+			printf("\tunsigned int arrayIndex = %u\n", args->arrayIndex);
+			printf("\tunsigned int mipLevel = %u\n", args->mipLevel);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DToArrayAsync
-		case HIP_API_ID_hipMemcpy2DToArrayAsync :
+		case HIP_API_ID_hipMemcpy2DToArrayAsync : {
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
 			//	size_t hOffset (unsigned long);
@@ -2460,34 +2648,38 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t dst = %p", args->hipMemcpy2DToArrayAsync.dst);
+			args_hipMemcpy2DToArrayAsync_t* args = (args_hipMemcpy2DToArrayAsync_t*) func_args;
+			printf("\thipArray_t dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t wOffset = %lu\n", args->hipMemcpy2DToArrayAsync.wOffset);
-			printf("\tsize_t hOffset = %lu\n", args->hipMemcpy2DToArrayAsync.hOffset);
-			printf("\tconst void * src = %p", args->hipMemcpy2DToArrayAsync.src);
+			printf("\tsize_t wOffset = %lu\n", args->wOffset);
+			printf("\tsize_t hOffset = %lu\n", args->hOffset);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t spitch = %lu\n", args->hipMemcpy2DToArrayAsync.spitch);
-			printf("\tsize_t width = %lu\n", args->hipMemcpy2DToArrayAsync.width);
-			printf("\tsize_t height = %lu\n", args->hipMemcpy2DToArrayAsync.height);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpy2DToArrayAsync.kind);
-			printf("\thipStream_t stream = %p", args->hipMemcpy2DToArrayAsync.stream);
+			printf("\tsize_t spitch = %lu\n", args->spitch);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpy2DToArrayAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphDestroy
-		case HIP_API_ID_hipGraphDestroy :
+		case HIP_API_ID_hipGraphDestroy : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraph_t graph = %p", args->hipGraphDestroy.graph);
+			args_hipGraphDestroy_t* args = (args_hipGraphDestroy_t*) func_args;
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphDestroy.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetBorderColor
-		case HIP_API_ID_hipTexRefGetBorderColor :
+		case HIP_API_ID_hipTexRefGetBorderColor : {
 			//	float * pBorderColor (float *);
 			//	const textureReference * texRef ({
 			//		int normalized (int);
@@ -2512,40 +2704,42 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipArray_Format format (enum hipArray_Format);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tfloat * pBorderColor = %p", args->hipTexRefGetBorderColor.pBorderColor);
-			if (args->hipTexRefGetBorderColor.pBorderColor != NULL) {
-				printf(" -> %f\n", args->hipTexRefGetBorderColor.pBorderColor__ref.val);
+			args_hipTexRefGetBorderColor_t* args = (args_hipTexRefGetBorderColor_t*) func_args;
+			printf("\tfloat * pBorderColor = %p", args->pBorderColor);
+			if (args->pBorderColor != NULL) {
+				printf(" -> %f\n", args->pBorderColor__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst textureReference * texRef = %p", args->hipTexRefGetBorderColor.texRef);
-			if (args->hipTexRefGetBorderColor.texRef != NULL) {
+			printf("\tconst textureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefGetBorderColor.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefGetBorderColor.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefGetBorderColor.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefGetBorderColor.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefGetBorderColor.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefGetBorderColor.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefGetBorderColor.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefGetBorderColor.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefGetBorderColor.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefGetBorderColor.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefGetBorderColor.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefGetBorderColor.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefGetBorderColor.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefGetBorderColor.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefGetBorderColor.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefGetBorderColor.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefGetBorderColor.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipTexRefGetBorderColor.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddMemcpyNode1D
-		case HIP_API_ID_hipGraphAddMemcpyNode1D :
+		case HIP_API_ID_hipGraphAddMemcpyNode1D : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
@@ -2555,64 +2749,70 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t count (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddMemcpyNode1D.pGraphNode);
-			if (args->hipGraphAddMemcpyNode1D.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddMemcpyNode1D.pGraphNode__ref.val);
+			args_hipGraphAddMemcpyNode1D_t* args = (args_hipGraphAddMemcpyNode1D_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddMemcpyNode1D.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddMemcpyNode1D.pDependencies);
-			if (args->hipGraphAddMemcpyNode1D.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddMemcpyNode1D.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddMemcpyNode1D.numDependencies);
-			printf("\tvoid * dst = %p", args->hipGraphAddMemcpyNode1D.dst);
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hipGraphAddMemcpyNode1D.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t count = %lu\n", args->hipGraphAddMemcpyNode1D.count);
-			printf("\thipMemcpyKind kind = %d\n", args->hipGraphAddMemcpyNode1D.kind);
-			printf("\thipError_t retval = %d\n", args->hipGraphAddMemcpyNode1D.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphGetNodes
-		case HIP_API_ID_hipGraphGetNodes :
+		case HIP_API_ID_hipGraphGetNodes : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphNode_t * nodes (struct hipGraphNode **);
 			//	size_t * numNodes (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraph_t graph = %p", args->hipGraphGetNodes.graph);
+			args_hipGraphGetNodes_t* args = (args_hipGraphGetNodes_t*) func_args;
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\thipGraphNode_t * nodes = %p", args->hipGraphGetNodes.nodes);
-			if (args->hipGraphGetNodes.nodes != NULL) {
-				printf(" -> %p\n", args->hipGraphGetNodes.nodes__ref.val);
+			printf("\thipGraphNode_t * nodes = %p", args->nodes);
+			if (args->nodes != NULL) {
+				printf(" -> %p\n", args->nodes__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t * numNodes = %p", args->hipGraphGetNodes.numNodes);
-			if (args->hipGraphGetNodes.numNodes != NULL) {
-				printf(" -> %lu\n", args->hipGraphGetNodes.numNodes__ref.val);
+			printf("\tsize_t * numNodes = %p", args->numNodes);
+			if (args->numNodes != NULL) {
+				printf(" -> %lu\n", args->numNodes__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphGetNodes.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetFlags_spt
-		case HIP_API_ID_hipStreamGetFlags_spt :
+		case HIP_API_ID_hipStreamGetFlags_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	unsigned int * flags (unsigned int *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamGetFlags_spt.stream);
+			args_hipStreamGetFlags_spt_t* args = (args_hipStreamGetFlags_spt_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\tunsigned int * flags = %p", args->hipStreamGetFlags_spt.flags);
-			if (args->hipStreamGetFlags_spt.flags != NULL) {
-				printf(" -> %u\n", args->hipStreamGetFlags_spt.flags__ref.val);
+			printf("\tunsigned int * flags = %p", args->flags);
+			if (args->flags != NULL) {
+				printf(" -> %u\n", args->flags__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipStreamGetFlags_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetAddress2D
-		case HIP_API_ID_hipTexRefSetAddress2D :
+		case HIP_API_ID_hipTexRefSetAddress2D : {
 			//	textureReference * texRef ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -2644,112 +2844,122 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipDeviceptr_t dptr (void *);
 			//	size_t Pitch (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\ttextureReference * texRef = %p", args->hipTexRefSetAddress2D.texRef);
-			if (args->hipTexRefSetAddress2D.texRef != NULL) {
+			args_hipTexRefSetAddress2D_t* args = (args_hipTexRefSetAddress2D_t*) func_args;
+			printf("\ttextureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefSetAddress2D.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefSetAddress2D.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefSetAddress2D.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefSetAddress2D.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefSetAddress2D.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefSetAddress2D.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefSetAddress2D.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefSetAddress2D.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefSetAddress2D.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefSetAddress2D.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefSetAddress2D.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefSetAddress2D.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefSetAddress2D.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefSetAddress2D.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefSetAddress2D.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefSetAddress2D.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefSetAddress2D.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst HIP_ARRAY_DESCRIPTOR * desc = %p", args->hipTexRefSetAddress2D.desc);
-			if (args->hipTexRefSetAddress2D.desc != NULL) {
+			printf("\tconst HIP_ARRAY_DESCRIPTOR * desc = %p", args->desc);
+			if (args->desc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t Width = %lu\n", args->hipTexRefSetAddress2D.desc__ref.val.Width);
-				printf("\t\tsize_t Height = %lu\n", args->hipTexRefSetAddress2D.desc__ref.val.Height);
-				printf("\t\tenum hipArray_Format Format = %d\n", args->hipTexRefSetAddress2D.desc__ref.val.Format);
-				printf("\t\tunsigned int NumChannels = %u\n", args->hipTexRefSetAddress2D.desc__ref.val.NumChannels);
+				printf("\t\tsize_t Width = %lu\n", args->desc__ref.val.Width);
+				printf("\t\tsize_t Height = %lu\n", args->desc__ref.val.Height);
+				printf("\t\tenum hipArray_Format Format = %d\n", args->desc__ref.val.Format);
+				printf("\t\tunsigned int NumChannels = %u\n", args->desc__ref.val.NumChannels);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipDeviceptr_t dptr = %p", args->hipTexRefSetAddress2D.dptr);
+			printf("\thipDeviceptr_t dptr = %p", args->dptr);
 			printf("\n");
-			printf("\tsize_t Pitch = %lu\n", args->hipTexRefSetAddress2D.Pitch);
-			printf("\thipError_t retval = %d\n", args->hipTexRefSetAddress2D.retval);
+			printf("\tsize_t Pitch = %lu\n", args->Pitch);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetPriority
-		case HIP_API_ID_hipStreamGetPriority :
+		case HIP_API_ID_hipStreamGetPriority : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	int * priority (int *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamGetPriority.stream);
+			args_hipStreamGetPriority_t* args = (args_hipStreamGetPriority_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\tint * priority = %p", args->hipStreamGetPriority.priority);
-			if (args->hipStreamGetPriority.priority != NULL) {
-				printf(" -> %d\n", args->hipStreamGetPriority.priority__ref.val);
+			printf("\tint * priority = %p", args->priority);
+			if (args->priority != NULL) {
+				printf(" -> %d\n", args->priority__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipStreamGetPriority.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamCreate
-		case HIP_API_ID_hipStreamCreate :
+		case HIP_API_ID_hipStreamCreate : {
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t * stream = %p", args->hipStreamCreate.stream);
-			if (args->hipStreamCreate.stream != NULL) {
-				printf(" -> %p\n", args->hipStreamCreate.stream__ref.val);
+			args_hipStreamCreate_t* args = (args_hipStreamCreate_t*) func_args;
+			printf("\thipStream_t * stream = %p", args->stream);
+			if (args->stream != NULL) {
+				printf(" -> %p\n", args->stream__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipStreamCreate.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyFromSymbol
-		case HIP_API_ID_hipMemcpyFromSymbol :
+		case HIP_API_ID_hipMemcpyFromSymbol : {
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpyFromSymbol.dst);
+			args_hipMemcpyFromSymbol_t* args = (args_hipMemcpyFromSymbol_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * symbol = %p", args->hipMemcpyFromSymbol.symbol);
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyFromSymbol.sizeBytes);
-			printf("\tsize_t offset = %lu\n", args->hipMemcpyFromSymbol.offset);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpyFromSymbol.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyFromSymbol.retval);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphNodeGetEnabled
-		case HIP_API_ID_hipGraphNodeGetEnabled :
+		case HIP_API_ID_hipGraphNodeGetEnabled : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	unsigned int * isEnabled (unsigned int *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t hGraphExec = %p", args->hipGraphNodeGetEnabled.hGraphExec);
+			args_hipGraphNodeGetEnabled_t* args = (args_hipGraphNodeGetEnabled_t*) func_args;
+			printf("\thipGraphExec_t hGraphExec = %p", args->hGraphExec);
 			printf("\n");
-			printf("\thipGraphNode_t hNode = %p", args->hipGraphNodeGetEnabled.hNode);
+			printf("\thipGraphNode_t hNode = %p", args->hNode);
 			printf("\n");
-			printf("\tunsigned int * isEnabled = %p", args->hipGraphNodeGetEnabled.isEnabled);
-			if (args->hipGraphNodeGetEnabled.isEnabled != NULL) {
-				printf(" -> %u\n", args->hipGraphNodeGetEnabled.isEnabled__ref.val);
+			printf("\tunsigned int * isEnabled = %p", args->isEnabled);
+			if (args->isEnabled != NULL) {
+				printf(" -> %u\n", args->isEnabled__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphNodeGetEnabled.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCreateChannelDesc
-		case HIP_API_ID_hipCreateChannelDesc :
+		case HIP_API_ID_hipCreateChannelDesc : {
 			//	int x (int);
 			//	int y (int);
 			//	int z (int);
@@ -2762,23 +2972,25 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		int w (int);
 			//		enum hipChannelFormatKind f (enum hipChannelFormatKind);
 			//	});
-			printf("\tint x = %d\n", args->hipCreateChannelDesc.x);
-			printf("\tint y = %d\n", args->hipCreateChannelDesc.y);
-			printf("\tint z = %d\n", args->hipCreateChannelDesc.z);
-			printf("\tint w = %d\n", args->hipCreateChannelDesc.w);
-			printf("\tenum hipChannelFormatKind f = %d\n", args->hipCreateChannelDesc.f);
+			args_hipCreateChannelDesc_t* args = (args_hipCreateChannelDesc_t*) func_args;
+			printf("\tint x = %d\n", args->x);
+			printf("\tint y = %d\n", args->y);
+			printf("\tint z = %d\n", args->z);
+			printf("\tint w = %d\n", args->w);
+			printf("\tenum hipChannelFormatKind f = %d\n", args->f);
 			printf("\tstruct hipChannelFormatDesc retval = {\n");
-			printf("\t\tint x = %d\n", args->hipCreateChannelDesc.retval.x);
-			printf("\t\tint y = %d\n", args->hipCreateChannelDesc.retval.y);
-			printf("\t\tint z = %d\n", args->hipCreateChannelDesc.retval.z);
-			printf("\t\tint w = %d\n", args->hipCreateChannelDesc.retval.w);
-			printf("\t\tenum hipChannelFormatKind f = %d\n", args->hipCreateChannelDesc.retval.f);
+			printf("\t\tint x = %d\n", args->retval.x);
+			printf("\t\tint y = %d\n", args->retval.y);
+			printf("\t\tint z = %d\n", args->retval.z);
+			printf("\t\tint w = %d\n", args->retval.w);
+			printf("\t\tenum hipChannelFormatKind f = %d\n", args->retval.f);
 			printf("\t}\n");
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFreeMipmappedArray
-		case HIP_API_ID_hipFreeMipmappedArray :
+		case HIP_API_ID_hipFreeMipmappedArray : {
 			//	hipMipmappedArray_t mipmappedArray ({
 			//		void * data (void *);
 			//		struct hipChannelFormatDesc desc ({
@@ -2799,33 +3011,35 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int num_channels (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMipmappedArray_t mipmappedArray = %p", args->hipFreeMipmappedArray.mipmappedArray);
-			if (args->hipFreeMipmappedArray.mipmappedArray != NULL) {
+			args_hipFreeMipmappedArray_t* args = (args_hipFreeMipmappedArray_t*) func_args;
+			printf("\thipMipmappedArray_t mipmappedArray = %p", args->mipmappedArray);
+			if (args->mipmappedArray != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct hipChannelFormatDesc desc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipFreeMipmappedArray.mipmappedArray__ref.val.desc.x);
-				printf("\t\t\tint y = %d\n", args->hipFreeMipmappedArray.mipmappedArray__ref.val.desc.y);
-				printf("\t\t\tint z = %d\n", args->hipFreeMipmappedArray.mipmappedArray__ref.val.desc.z);
-				printf("\t\t\tint w = %d\n", args->hipFreeMipmappedArray.mipmappedArray__ref.val.desc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipFreeMipmappedArray.mipmappedArray__ref.val.desc.f);
+				printf("\t\t\tint x = %d\n", args->mipmappedArray__ref.val.desc.x);
+				printf("\t\t\tint y = %d\n", args->mipmappedArray__ref.val.desc.y);
+				printf("\t\t\tint z = %d\n", args->mipmappedArray__ref.val.desc.z);
+				printf("\t\t\tint w = %d\n", args->mipmappedArray__ref.val.desc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->mipmappedArray__ref.val.desc.f);
 				printf("\t\t}\n");
-				printf("\t\tunsigned int type = %u\n", args->hipFreeMipmappedArray.mipmappedArray__ref.val.type);
-				printf("\t\tunsigned int width = %u\n", args->hipFreeMipmappedArray.mipmappedArray__ref.val.width);
-				printf("\t\tunsigned int height = %u\n", args->hipFreeMipmappedArray.mipmappedArray__ref.val.height);
-				printf("\t\tunsigned int depth = %u\n", args->hipFreeMipmappedArray.mipmappedArray__ref.val.depth);
-				printf("\t\tunsigned int min_mipmap_level = %u\n", args->hipFreeMipmappedArray.mipmappedArray__ref.val.min_mipmap_level);
-				printf("\t\tunsigned int max_mipmap_level = %u\n", args->hipFreeMipmappedArray.mipmappedArray__ref.val.max_mipmap_level);
-				printf("\t\tunsigned int flags = %u\n", args->hipFreeMipmappedArray.mipmappedArray__ref.val.flags);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipFreeMipmappedArray.mipmappedArray__ref.val.format);
-				printf("\t\tunsigned int num_channels = %u\n", args->hipFreeMipmappedArray.mipmappedArray__ref.val.num_channels);
+				printf("\t\tunsigned int type = %u\n", args->mipmappedArray__ref.val.type);
+				printf("\t\tunsigned int width = %u\n", args->mipmappedArray__ref.val.width);
+				printf("\t\tunsigned int height = %u\n", args->mipmappedArray__ref.val.height);
+				printf("\t\tunsigned int depth = %u\n", args->mipmappedArray__ref.val.depth);
+				printf("\t\tunsigned int min_mipmap_level = %u\n", args->mipmappedArray__ref.val.min_mipmap_level);
+				printf("\t\tunsigned int max_mipmap_level = %u\n", args->mipmappedArray__ref.val.max_mipmap_level);
+				printf("\t\tunsigned int flags = %u\n", args->mipmappedArray__ref.val.flags);
+				printf("\t\tenum hipArray_Format format = %d\n", args->mipmappedArray__ref.val.format);
+				printf("\t\tunsigned int num_channels = %u\n", args->mipmappedArray__ref.val.num_channels);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipFreeMipmappedArray.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetTextureAlignmentOffset
-		case HIP_API_ID_hipGetTextureAlignmentOffset :
+		case HIP_API_ID_hipGetTextureAlignmentOffset : {
 			//	size_t * offset (unsigned long*);
 			//	const textureReference * texref ({
 			//		int normalized (int);
@@ -2850,102 +3064,110 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipArray_Format format (enum hipArray_Format);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tsize_t * offset = %p", args->hipGetTextureAlignmentOffset.offset);
-			if (args->hipGetTextureAlignmentOffset.offset != NULL) {
-				printf(" -> %lu\n", args->hipGetTextureAlignmentOffset.offset__ref.val);
+			args_hipGetTextureAlignmentOffset_t* args = (args_hipGetTextureAlignmentOffset_t*) func_args;
+			printf("\tsize_t * offset = %p", args->offset);
+			if (args->offset != NULL) {
+				printf(" -> %lu\n", args->offset__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst textureReference * texref = %p", args->hipGetTextureAlignmentOffset.texref);
-			if (args->hipGetTextureAlignmentOffset.texref != NULL) {
+			printf("\tconst textureReference * texref = %p", args->texref);
+			if (args->texref != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipGetTextureAlignmentOffset.texref__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipGetTextureAlignmentOffset.texref__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipGetTextureAlignmentOffset.texref__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipGetTextureAlignmentOffset.texref__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texref__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texref__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texref__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texref__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipGetTextureAlignmentOffset.texref__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipGetTextureAlignmentOffset.texref__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipGetTextureAlignmentOffset.texref__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipGetTextureAlignmentOffset.texref__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipGetTextureAlignmentOffset.texref__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texref__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texref__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texref__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texref__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texref__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipGetTextureAlignmentOffset.texref__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipGetTextureAlignmentOffset.texref__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipGetTextureAlignmentOffset.texref__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipGetTextureAlignmentOffset.texref__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipGetTextureAlignmentOffset.texref__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipGetTextureAlignmentOffset.texref__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipGetTextureAlignmentOffset.texref__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipGetTextureAlignmentOffset.texref__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texref__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texref__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texref__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texref__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texref__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texref__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texref__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texref__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGetTextureAlignmentOffset.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddEventRecordNode
-		case HIP_API_ID_hipGraphAddEventRecordNode :
+		case HIP_API_ID_hipGraphAddEventRecordNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddEventRecordNode.pGraphNode);
-			if (args->hipGraphAddEventRecordNode.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddEventRecordNode.pGraphNode__ref.val);
+			args_hipGraphAddEventRecordNode_t* args = (args_hipGraphAddEventRecordNode_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddEventRecordNode.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddEventRecordNode.pDependencies);
-			if (args->hipGraphAddEventRecordNode.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddEventRecordNode.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddEventRecordNode.numDependencies);
-			printf("\thipEvent_t event = %p", args->hipGraphAddEventRecordNode.event);
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\thipEvent_t event = %p", args->event);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphAddEventRecordNode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphNodeFindInClone
-		case HIP_API_ID_hipGraphNodeFindInClone :
+		case HIP_API_ID_hipGraphNodeFindInClone : {
 			//	hipGraphNode_t * pNode (struct hipGraphNode **);
 			//	hipGraphNode_t originalNode (struct hipGraphNode *);
 			//	hipGraph_t clonedGraph (struct ihipGraph *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pNode = %p", args->hipGraphNodeFindInClone.pNode);
-			if (args->hipGraphNodeFindInClone.pNode != NULL) {
-				printf(" -> %p\n", args->hipGraphNodeFindInClone.pNode__ref.val);
+			args_hipGraphNodeFindInClone_t* args = (args_hipGraphNodeFindInClone_t*) func_args;
+			printf("\thipGraphNode_t * pNode = %p", args->pNode);
+			if (args->pNode != NULL) {
+				printf(" -> %p\n", args->pNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraphNode_t originalNode = %p", args->hipGraphNodeFindInClone.originalNode);
+			printf("\thipGraphNode_t originalNode = %p", args->originalNode);
 			printf("\n");
-			printf("\thipGraph_t clonedGraph = %p", args->hipGraphNodeFindInClone.clonedGraph);
+			printf("\thipGraph_t clonedGraph = %p", args->clonedGraph);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphNodeFindInClone.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyFromSymbol_spt
-		case HIP_API_ID_hipMemcpyFromSymbol_spt :
+		case HIP_API_ID_hipMemcpyFromSymbol_spt : {
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpyFromSymbol_spt.dst);
+			args_hipMemcpyFromSymbol_spt_t* args = (args_hipMemcpyFromSymbol_spt_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * symbol = %p", args->hipMemcpyFromSymbol_spt.symbol);
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyFromSymbol_spt.sizeBytes);
-			printf("\tsize_t offset = %lu\n", args->hipMemcpyFromSymbol_spt.offset);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpyFromSymbol_spt.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyFromSymbol_spt.retval);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset3DAsync_spt
-		case HIP_API_ID_hipMemset3DAsync_spt :
+		case HIP_API_ID_hipMemset3DAsync_spt : {
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
 			//		size_t pitch (unsigned long);
@@ -2960,54 +3182,60 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemset3DAsync_spt_t* args = (args_hipMemset3DAsync_spt_t*) func_args;
 			printf("\thipPitchedPtr pitchedDevPtr = {\n");
-			printf("\t\tsize_t pitch = %lu\n", args->hipMemset3DAsync_spt.pitchedDevPtr.pitch);
-			printf("\t\tsize_t xsize = %lu\n", args->hipMemset3DAsync_spt.pitchedDevPtr.xsize);
-			printf("\t\tsize_t ysize = %lu\n", args->hipMemset3DAsync_spt.pitchedDevPtr.ysize);
+			printf("\t\tsize_t pitch = %lu\n", args->pitchedDevPtr.pitch);
+			printf("\t\tsize_t xsize = %lu\n", args->pitchedDevPtr.xsize);
+			printf("\t\tsize_t ysize = %lu\n", args->pitchedDevPtr.ysize);
 			printf("\t}\n");
-			printf("\tint value = %d\n", args->hipMemset3DAsync_spt.value);
+			printf("\tint value = %d\n", args->value);
 			printf("\thipExtent extent = {\n");
-			printf("\t\tsize_t width = %lu\n", args->hipMemset3DAsync_spt.extent.width);
-			printf("\t\tsize_t height = %lu\n", args->hipMemset3DAsync_spt.extent.height);
-			printf("\t\tsize_t depth = %lu\n", args->hipMemset3DAsync_spt.extent.depth);
+			printf("\t\tsize_t width = %lu\n", args->extent.width);
+			printf("\t\tsize_t height = %lu\n", args->extent.height);
+			printf("\t\tsize_t depth = %lu\n", args->extent.depth);
 			printf("\t}\n");
-			printf("\thipStream_t stream = %p", args->hipMemset3DAsync_spt.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemset3DAsync_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetD16Async
-		case HIP_API_ID_hipMemsetD16Async :
+		case HIP_API_ID_hipMemsetD16Async : {
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned short value (unsigned short);
 			//	size_t count (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceptr_t dest = %p", args->hipMemsetD16Async.dest);
+			args_hipMemsetD16Async_t* args = (args_hipMemsetD16Async_t*) func_args;
+			printf("\thipDeviceptr_t dest = %p", args->dest);
 			printf("\n");
-			printf("\tunsigned short value = %hu\n", args->hipMemsetD16Async.value);
-			printf("\tsize_t count = %lu\n", args->hipMemsetD16Async.count);
-			printf("\thipStream_t stream = %p", args->hipMemsetD16Async.stream);
+			printf("\tunsigned short value = %hu\n", args->value);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemsetD16Async.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetCacheConfig
-		case HIP_API_ID_hipDeviceGetCacheConfig :
+		case HIP_API_ID_hipDeviceGetCacheConfig : {
 			//	hipFuncCache_t * cacheConfig (enum hipFuncCache_t*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipFuncCache_t * cacheConfig = %p", args->hipDeviceGetCacheConfig.cacheConfig);
-			if (args->hipDeviceGetCacheConfig.cacheConfig != NULL) {
-				printf(" -> %d\n", args->hipDeviceGetCacheConfig.cacheConfig__ref.val);
+			args_hipDeviceGetCacheConfig_t* args = (args_hipDeviceGetCacheConfig_t*) func_args;
+			printf("\thipFuncCache_t * cacheConfig = %p", args->cacheConfig);
+			if (args->cacheConfig != NULL) {
+				printf(" -> %d\n", args->cacheConfig__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipDeviceGetCacheConfig.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemCreate
-		case HIP_API_ID_hipMemCreate :
+		case HIP_API_ID_hipMemCreate : {
 			//	hipMemGenericAllocationHandle_t * handle (struct ihipMemGenericAllocationHandle **);
 			//	size_t size (unsigned long);
 			//	const hipMemAllocationProp * prop ({
@@ -3023,66 +3251,72 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	unsigned long long flags (unsigned long long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemGenericAllocationHandle_t * handle = %p", args->hipMemCreate.handle);
-			if (args->hipMemCreate.handle != NULL) {
-				printf(" -> %p\n", args->hipMemCreate.handle__ref.val);
+			args_hipMemCreate_t* args = (args_hipMemCreate_t*) func_args;
+			printf("\thipMemGenericAllocationHandle_t * handle = %p", args->handle);
+			if (args->handle != NULL) {
+				printf(" -> %p\n", args->handle__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t size = %lu\n", args->hipMemCreate.size);
-			printf("\tconst hipMemAllocationProp * prop = %p", args->hipMemCreate.prop);
-			if (args->hipMemCreate.prop != NULL) {
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tconst hipMemAllocationProp * prop = %p", args->prop);
+			if (args->prop != NULL) {
 				printf(" -> {\n");
-				printf("\t\thipMemAllocationType type = %d\n", args->hipMemCreate.prop__ref.val.type);
-				printf("\t\thipMemAllocationHandleType requestedHandleType = %d\n", args->hipMemCreate.prop__ref.val.requestedHandleType);
+				printf("\t\thipMemAllocationType type = %d\n", args->prop__ref.val.type);
+				printf("\t\thipMemAllocationHandleType requestedHandleType = %d\n", args->prop__ref.val.requestedHandleType);
 				printf("\t\thipMemLocation location = {\n");
-				printf("\t\t\thipMemLocationType type = %d\n", args->hipMemCreate.prop__ref.val.location.type);
-				printf("\t\t\tint id = %d\n", args->hipMemCreate.prop__ref.val.location.id);
+				printf("\t\t\thipMemLocationType type = %d\n", args->prop__ref.val.location.type);
+				printf("\t\t\tint id = %d\n", args->prop__ref.val.location.id);
 				printf("\t\t}\n");
 				printf("\t\tstruct (unnamed struct at header/hip/hip.h:1616:2) allocFlags = {\n");
 				printf("\t\t}\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tunsigned long long flags = %llu\n", args->hipMemCreate.flags);
-			printf("\thipError_t retval = %d\n", args->hipMemCreate.retval);
+			printf("\tunsigned long long flags = %llu\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExternalSemaphoresWaitNodeGetParams
-		case HIP_API_ID_hipGraphExternalSemaphoresWaitNodeGetParams :
+		case HIP_API_ID_hipGraphExternalSemaphoresWaitNodeGetParams : {
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipExternalSemaphoreWaitNodeParams * params_out ({
 			//		hipExternalSemaphore_t * extSemArray (void **);
 			//		unsigned int numExtSems (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t hNode = %p", args->hipGraphExternalSemaphoresWaitNodeGetParams.hNode);
+			args_hipGraphExternalSemaphoresWaitNodeGetParams_t* args = (args_hipGraphExternalSemaphoresWaitNodeGetParams_t*) func_args;
+			printf("\thipGraphNode_t hNode = %p", args->hNode);
 			printf("\n");
-			printf("\thipExternalSemaphoreWaitNodeParams * params_out = %p", args->hipGraphExternalSemaphoresWaitNodeGetParams.params_out);
-			if (args->hipGraphExternalSemaphoresWaitNodeGetParams.params_out != NULL) {
+			printf("\thipExternalSemaphoreWaitNodeParams * params_out = %p", args->params_out);
+			if (args->params_out != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned int numExtSems = %u\n", args->hipGraphExternalSemaphoresWaitNodeGetParams.params_out__ref.val.numExtSems);
+				printf("\t\tunsigned int numExtSems = %u\n", args->params_out__ref.val.numExtSems);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphExternalSemaphoresWaitNodeGetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamEndCapture
-		case HIP_API_ID_hipStreamEndCapture :
+		case HIP_API_ID_hipStreamEndCapture : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraph_t * pGraph (struct ihipGraph **);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamEndCapture.stream);
+			args_hipStreamEndCapture_t* args = (args_hipStreamEndCapture_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipGraph_t * pGraph = %p", args->hipStreamEndCapture.pGraph);
-			if (args->hipStreamEndCapture.pGraph != NULL) {
-				printf(" -> %p\n", args->hipStreamEndCapture.pGraph__ref.val);
+			printf("\thipGraph_t * pGraph = %p", args->pGraph);
+			if (args->pGraph != NULL) {
+				printf(" -> %p\n", args->pGraph__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipStreamEndCapture.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyFromSymbolAsync_spt
-		case HIP_API_ID_hipMemcpyFromSymbolAsync_spt :
+		case HIP_API_ID_hipMemcpyFromSymbolAsync_spt : {
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
 			//	size_t sizeBytes (unsigned long);
@@ -3090,38 +3324,42 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpyFromSymbolAsync_spt.dst);
+			args_hipMemcpyFromSymbolAsync_spt_t* args = (args_hipMemcpyFromSymbolAsync_spt_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * symbol = %p", args->hipMemcpyFromSymbolAsync_spt.symbol);
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyFromSymbolAsync_spt.sizeBytes);
-			printf("\tsize_t offset = %lu\n", args->hipMemcpyFromSymbolAsync_spt.offset);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpyFromSymbolAsync_spt.kind);
-			printf("\thipStream_t stream = %p", args->hipMemcpyFromSymbolAsync_spt.stream);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpyFromSymbolAsync_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyHtoA
-		case HIP_API_ID_hipMemcpyHtoA :
+		case HIP_API_ID_hipMemcpyHtoA : {
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
 			//	const void * srcHost (const void *);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t dstArray = %p", args->hipMemcpyHtoA.dstArray);
+			args_hipMemcpyHtoA_t* args = (args_hipMemcpyHtoA_t*) func_args;
+			printf("\thipArray_t dstArray = %p", args->dstArray);
 			printf("\n");
-			printf("\tsize_t dstOffset = %lu\n", args->hipMemcpyHtoA.dstOffset);
-			printf("\tconst void * srcHost = %p", args->hipMemcpyHtoA.srcHost);
+			printf("\tsize_t dstOffset = %lu\n", args->dstOffset);
+			printf("\tconst void * srcHost = %p", args->srcHost);
 			printf("\n");
-			printf("\tsize_t count = %lu\n", args->hipMemcpyHtoA.count);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyHtoA.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecHostNodeSetParams
-		case HIP_API_ID_hipGraphExecHostNodeSetParams :
+		case HIP_API_ID_hipGraphExecHostNodeSetParams : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipHostNodeParams * pNodeParams ({
@@ -3129,37 +3367,41 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		void * userData (void *);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t hGraphExec = %p", args->hipGraphExecHostNodeSetParams.hGraphExec);
+			args_hipGraphExecHostNodeSetParams_t* args = (args_hipGraphExecHostNodeSetParams_t*) func_args;
+			printf("\thipGraphExec_t hGraphExec = %p", args->hGraphExec);
 			printf("\n");
-			printf("\thipGraphNode_t node = %p", args->hipGraphExecHostNodeSetParams.node);
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\tconst hipHostNodeParams * pNodeParams = %p", args->hipGraphExecHostNodeSetParams.pNodeParams);
-			if (args->hipGraphExecHostNodeSetParams.pNodeParams != NULL) {
+			printf("\tconst hipHostNodeParams * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\thipHostFn_t fn = %p\n", args->hipGraphExecHostNodeSetParams.pNodeParams__ref.val.fn);
+				printf("\t\thipHostFn_t fn = %p\n", args->pNodeParams__ref.val.fn);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphExecHostNodeSetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMalloc
-		case HIP_API_ID_hipMalloc :
+		case HIP_API_ID_hipMalloc : {
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** ptr = %p", args->hipMalloc.ptr);
-			if (args->hipMalloc.ptr != NULL) {
-				printf("-> %p", args->hipMalloc.ptr__ref.ptr1);
+			args_hipMalloc_t* args = (args_hipMalloc_t*) func_args;
+			printf("\tvoid ** ptr = %p", args->ptr);
+			if (args->ptr != NULL) {
+				printf("-> %p", args->ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t size = %lu\n", args->hipMalloc.size);
-			printf("\thipError_t retval = %d\n", args->hipMalloc.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMalloc3DArray
-		case HIP_API_ID_hipMalloc3DArray :
+		case HIP_API_ID_hipMalloc3DArray : {
 			//	hipArray_t * array (struct hipArray **);
 			//	const struct hipChannelFormatDesc * desc ({
 			//		int x (int);
@@ -3175,32 +3417,34 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t * array = %p", args->hipMalloc3DArray.array);
-			if (args->hipMalloc3DArray.array != NULL) {
-				printf(" -> %p\n", args->hipMalloc3DArray.array__ref.val);
+			args_hipMalloc3DArray_t* args = (args_hipMalloc3DArray_t*) func_args;
+			printf("\thipArray_t * array = %p", args->array);
+			if (args->array != NULL) {
+				printf(" -> %p\n", args->array__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst struct hipChannelFormatDesc * desc = %p", args->hipMalloc3DArray.desc);
-			if (args->hipMalloc3DArray.desc != NULL) {
+			printf("\tconst struct hipChannelFormatDesc * desc = %p", args->desc);
+			if (args->desc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint x = %d\n", args->hipMalloc3DArray.desc__ref.val.x);
-				printf("\t\tint y = %d\n", args->hipMalloc3DArray.desc__ref.val.y);
-				printf("\t\tint z = %d\n", args->hipMalloc3DArray.desc__ref.val.z);
-				printf("\t\tint w = %d\n", args->hipMalloc3DArray.desc__ref.val.w);
-				printf("\t\tenum hipChannelFormatKind f = %d\n", args->hipMalloc3DArray.desc__ref.val.f);
+				printf("\t\tint x = %d\n", args->desc__ref.val.x);
+				printf("\t\tint y = %d\n", args->desc__ref.val.y);
+				printf("\t\tint z = %d\n", args->desc__ref.val.z);
+				printf("\t\tint w = %d\n", args->desc__ref.val.w);
+				printf("\t\tenum hipChannelFormatKind f = %d\n", args->desc__ref.val.f);
 				printf("\t}\n");
 			} else { printf("\n"); };
 			printf("\tstruct hipExtent extent = {\n");
-			printf("\t\tsize_t width = %lu\n", args->hipMalloc3DArray.extent.width);
-			printf("\t\tsize_t height = %lu\n", args->hipMalloc3DArray.extent.height);
-			printf("\t\tsize_t depth = %lu\n", args->hipMalloc3DArray.extent.depth);
+			printf("\t\tsize_t width = %lu\n", args->extent.width);
+			printf("\t\tsize_t height = %lu\n", args->extent.height);
+			printf("\t\tsize_t depth = %lu\n", args->extent.depth);
 			printf("\t}\n");
-			printf("\tunsigned int flags = %u\n", args->hipMalloc3DArray.flags);
-			printf("\thipError_t retval = %d\n", args->hipMalloc3DArray.retval);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecKernelNodeSetParams
-		case HIP_API_ID_hipGraphExecKernelNodeSetParams :
+		case HIP_API_ID_hipGraphExecKernelNodeSetParams : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipKernelNodeParams * pNodeParams ({
@@ -3220,32 +3464,34 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int sharedMemBytes (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t hGraphExec = %p", args->hipGraphExecKernelNodeSetParams.hGraphExec);
+			args_hipGraphExecKernelNodeSetParams_t* args = (args_hipGraphExecKernelNodeSetParams_t*) func_args;
+			printf("\thipGraphExec_t hGraphExec = %p", args->hGraphExec);
 			printf("\n");
-			printf("\thipGraphNode_t node = %p", args->hipGraphExecKernelNodeSetParams.node);
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\tconst hipKernelNodeParams * pNodeParams = %p", args->hipGraphExecKernelNodeSetParams.pNodeParams);
-			if (args->hipGraphExecKernelNodeSetParams.pNodeParams != NULL) {
+			printf("\tconst hipKernelNodeParams * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
 				printf("\t\tdim3 blockDim = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hipGraphExecKernelNodeSetParams.pNodeParams__ref.val.blockDim.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hipGraphExecKernelNodeSetParams.pNodeParams__ref.val.blockDim.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hipGraphExecKernelNodeSetParams.pNodeParams__ref.val.blockDim.z);
+				printf("\t\t\tuint32_t x = %u\n", args->pNodeParams__ref.val.blockDim.x);
+				printf("\t\t\tuint32_t y = %u\n", args->pNodeParams__ref.val.blockDim.y);
+				printf("\t\t\tuint32_t z = %u\n", args->pNodeParams__ref.val.blockDim.z);
 				printf("\t\t}\n");
 				printf("\t\tdim3 gridDim = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hipGraphExecKernelNodeSetParams.pNodeParams__ref.val.gridDim.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hipGraphExecKernelNodeSetParams.pNodeParams__ref.val.gridDim.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hipGraphExecKernelNodeSetParams.pNodeParams__ref.val.gridDim.z);
+				printf("\t\t\tuint32_t x = %u\n", args->pNodeParams__ref.val.gridDim.x);
+				printf("\t\t\tuint32_t y = %u\n", args->pNodeParams__ref.val.gridDim.y);
+				printf("\t\t\tuint32_t z = %u\n", args->pNodeParams__ref.val.gridDim.z);
 				printf("\t\t}\n");
-				printf("\t\tunsigned int sharedMemBytes = %u\n", args->hipGraphExecKernelNodeSetParams.pNodeParams__ref.val.sharedMemBytes);
+				printf("\t\tunsigned int sharedMemBytes = %u\n", args->pNodeParams__ref.val.sharedMemBytes);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphExecKernelNodeSetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetTextureObjectResourceDesc
-		case HIP_API_ID_hipGetTextureObjectResourceDesc :
+		case HIP_API_ID_hipGetTextureObjectResourceDesc : {
 			//	hipResourceDesc * pResDesc ({
 			//		enum hipResourceType resType (enum hipResourceType);
 			//		union (unnamed union at header/hip/hip.h:612:2) res ({
@@ -3253,22 +3499,24 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipTextureObject_t textureObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipResourceDesc * pResDesc = %p", args->hipGetTextureObjectResourceDesc.pResDesc);
-			if (args->hipGetTextureObjectResourceDesc.pResDesc != NULL) {
+			args_hipGetTextureObjectResourceDesc_t* args = (args_hipGetTextureObjectResourceDesc_t*) func_args;
+			printf("\thipResourceDesc * pResDesc = %p", args->pResDesc);
+			if (args->pResDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tenum hipResourceType resType = %d\n", args->hipGetTextureObjectResourceDesc.pResDesc__ref.val.resType);
+				printf("\t\tenum hipResourceType resType = %d\n", args->pResDesc__ref.val.resType);
 				printf("\t\tunion (unnamed union at header/hip/hip.h:612:2) res = {\n");
 				printf("\t\t}\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipTextureObject_t textureObject = %p", args->hipGetTextureObjectResourceDesc.textureObject);
+			printf("\thipTextureObject_t textureObject = %p", args->textureObject);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGetTextureObjectResourceDesc.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___hipPushCallConfiguration
-		case HIP_API_ID___hipPushCallConfiguration :
+		case HIP_API_ID___hipPushCallConfiguration : {
 			//	dim3 gridDim ({
 			//		uint32_t x (unsigned int);
 			//		uint32_t y (unsigned int);
@@ -3282,25 +3530,27 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t sharedMem (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args___hipPushCallConfiguration_t* args = (args___hipPushCallConfiguration_t*) func_args;
 			printf("\tdim3 gridDim = {\n");
-			printf("\t\tuint32_t x = %u\n", args->__hipPushCallConfiguration.gridDim.x);
-			printf("\t\tuint32_t y = %u\n", args->__hipPushCallConfiguration.gridDim.y);
-			printf("\t\tuint32_t z = %u\n", args->__hipPushCallConfiguration.gridDim.z);
+			printf("\t\tuint32_t x = %u\n", args->gridDim.x);
+			printf("\t\tuint32_t y = %u\n", args->gridDim.y);
+			printf("\t\tuint32_t z = %u\n", args->gridDim.z);
 			printf("\t}\n");
 			printf("\tdim3 blockDim = {\n");
-			printf("\t\tuint32_t x = %u\n", args->__hipPushCallConfiguration.blockDim.x);
-			printf("\t\tuint32_t y = %u\n", args->__hipPushCallConfiguration.blockDim.y);
-			printf("\t\tuint32_t z = %u\n", args->__hipPushCallConfiguration.blockDim.z);
+			printf("\t\tuint32_t x = %u\n", args->blockDim.x);
+			printf("\t\tuint32_t y = %u\n", args->blockDim.y);
+			printf("\t\tuint32_t z = %u\n", args->blockDim.z);
 			printf("\t}\n");
-			printf("\tsize_t sharedMem = %lu\n", args->__hipPushCallConfiguration.sharedMem);
-			printf("\thipStream_t stream = %p", args->__hipPushCallConfiguration.stream);
+			printf("\tsize_t sharedMem = %lu\n", args->sharedMem);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->__hipPushCallConfiguration.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy3DAsync_spt
-		case HIP_API_ID_hipMemcpy3DAsync_spt :
+		case HIP_API_ID_hipMemcpy3DAsync_spt : {
 			//	const hipMemcpy3DParms * p ({
 			//		hipArray_t srcArray (struct hipArray *);
 			//		struct hipPos srcPos ({
@@ -3335,104 +3585,112 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst hipMemcpy3DParms * p = %p", args->hipMemcpy3DAsync_spt.p);
-			if (args->hipMemcpy3DAsync_spt.p != NULL) {
+			args_hipMemcpy3DAsync_spt_t* args = (args_hipMemcpy3DAsync_spt_t*) func_args;
+			printf("\tconst hipMemcpy3DParms * p = %p", args->p);
+			if (args->p != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct hipPos srcPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipMemcpy3DAsync_spt.p__ref.val.srcPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipMemcpy3DAsync_spt.p__ref.val.srcPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipMemcpy3DAsync_spt.p__ref.val.srcPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->p__ref.val.srcPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->p__ref.val.srcPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->p__ref.val.srcPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr srcPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipMemcpy3DAsync_spt.p__ref.val.srcPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipMemcpy3DAsync_spt.p__ref.val.srcPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipMemcpy3DAsync_spt.p__ref.val.srcPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->p__ref.val.srcPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->p__ref.val.srcPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->p__ref.val.srcPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPos dstPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipMemcpy3DAsync_spt.p__ref.val.dstPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipMemcpy3DAsync_spt.p__ref.val.dstPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipMemcpy3DAsync_spt.p__ref.val.dstPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->p__ref.val.dstPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->p__ref.val.dstPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->p__ref.val.dstPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr dstPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipMemcpy3DAsync_spt.p__ref.val.dstPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipMemcpy3DAsync_spt.p__ref.val.dstPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipMemcpy3DAsync_spt.p__ref.val.dstPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->p__ref.val.dstPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->p__ref.val.dstPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->p__ref.val.dstPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipExtent extent = {\n");
-				printf("\t\t\tsize_t width = %lu\n", args->hipMemcpy3DAsync_spt.p__ref.val.extent.width);
-				printf("\t\t\tsize_t height = %lu\n", args->hipMemcpy3DAsync_spt.p__ref.val.extent.height);
-				printf("\t\t\tsize_t depth = %lu\n", args->hipMemcpy3DAsync_spt.p__ref.val.extent.depth);
+				printf("\t\t\tsize_t width = %lu\n", args->p__ref.val.extent.width);
+				printf("\t\t\tsize_t height = %lu\n", args->p__ref.val.extent.height);
+				printf("\t\t\tsize_t depth = %lu\n", args->p__ref.val.extent.depth);
 				printf("\t\t}\n");
-				printf("\t\tenum hipMemcpyKind kind = %d\n", args->hipMemcpy3DAsync_spt.p__ref.val.kind);
+				printf("\t\tenum hipMemcpyKind kind = %d\n", args->p__ref.val.kind);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipStream_t stream = %p", args->hipMemcpy3DAsync_spt.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpy3DAsync_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetD8Async
-		case HIP_API_ID_hipMemsetD8Async :
+		case HIP_API_ID_hipMemsetD8Async : {
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned char value (unsigned char);
 			//	size_t count (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceptr_t dest = %p", args->hipMemsetD8Async.dest);
+			args_hipMemsetD8Async_t* args = (args_hipMemsetD8Async_t*) func_args;
+			printf("\thipDeviceptr_t dest = %p", args->dest);
 			printf("\n");
-			printf("\tunsigned char value = %hhu\n", args->hipMemsetD8Async.value);
-			printf("\tsize_t count = %lu\n", args->hipMemsetD8Async.count);
-			printf("\thipStream_t stream = %p", args->hipMemsetD8Async.stream);
+			printf("\tunsigned char value = %hhu\n", args->value);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemsetD8Async.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamAddCallback
-		case HIP_API_ID_hipStreamAddCallback :
+		case HIP_API_ID_hipStreamAddCallback : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCallback_t callback (void (*)(struct ihipStream_t *, enum hipError_t, void *));
 			//	void * userData (void *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamAddCallback.stream);
+			args_hipStreamAddCallback_t* args = (args_hipStreamAddCallback_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipStreamCallback_t callback = %p\n", args->hipStreamAddCallback.callback);
-			printf("\tvoid * userData = %p", args->hipStreamAddCallback.userData);
+			printf("\thipStreamCallback_t callback = %p\n", args->callback);
+			printf("\tvoid * userData = %p", args->userData);
 			printf("\n");
-			printf("\tunsigned int flags = %u\n", args->hipStreamAddCallback.flags);
-			printf("\thipError_t retval = %d\n", args->hipStreamAddCallback.retval);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolImportPointer
-		case HIP_API_ID_hipMemPoolImportPointer :
+		case HIP_API_ID_hipMemPoolImportPointer : {
 			//	void ** dev_ptr (void **);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipMemPoolPtrExportData * export_data ({
 			//		unsigned char[64] reserved (unsigned char[64]);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** dev_ptr = %p", args->hipMemPoolImportPointer.dev_ptr);
-			if (args->hipMemPoolImportPointer.dev_ptr != NULL) {
-				printf("-> %p", args->hipMemPoolImportPointer.dev_ptr__ref.ptr1);
+			args_hipMemPoolImportPointer_t* args = (args_hipMemPoolImportPointer_t*) func_args;
+			printf("\tvoid ** dev_ptr = %p", args->dev_ptr);
+			if (args->dev_ptr != NULL) {
+				printf("-> %p", args->dev_ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\thipMemPool_t mem_pool = %p", args->hipMemPoolImportPointer.mem_pool);
+			printf("\thipMemPool_t mem_pool = %p", args->mem_pool);
 			printf("\n");
-			printf("\thipMemPoolPtrExportData * export_data = %p", args->hipMemPoolImportPointer.export_data);
-			if (args->hipMemPoolImportPointer.export_data != NULL) {
+			printf("\thipMemPoolPtrExportData * export_data = %p", args->export_data);
+			if (args->export_data != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned char[64] reserved = %hhu\n", args->hipMemPoolImportPointer.export_data__ref.val.reserved[0]);
+				printf("\t\tunsigned char[64] reserved = %hhu\n", args->export_data__ref.val.reserved[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipMemPoolImportPointer.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFuncGetAttributes
-		case HIP_API_ID_hipFuncGetAttributes :
+		case HIP_API_ID_hipFuncGetAttributes : {
 			//	struct hipFuncAttributes * attr ({
 			//		int binaryVersion (int);
 			//		int cacheModeCA (int);
@@ -3447,106 +3705,118 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	const void * func (const void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tstruct hipFuncAttributes * attr = %p", args->hipFuncGetAttributes.attr);
-			if (args->hipFuncGetAttributes.attr != NULL) {
+			args_hipFuncGetAttributes_t* args = (args_hipFuncGetAttributes_t*) func_args;
+			printf("\tstruct hipFuncAttributes * attr = %p", args->attr);
+			if (args->attr != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint binaryVersion = %d\n", args->hipFuncGetAttributes.attr__ref.val.binaryVersion);
-				printf("\t\tint cacheModeCA = %d\n", args->hipFuncGetAttributes.attr__ref.val.cacheModeCA);
-				printf("\t\tsize_t constSizeBytes = %lu\n", args->hipFuncGetAttributes.attr__ref.val.constSizeBytes);
-				printf("\t\tsize_t localSizeBytes = %lu\n", args->hipFuncGetAttributes.attr__ref.val.localSizeBytes);
-				printf("\t\tint maxDynamicSharedSizeBytes = %d\n", args->hipFuncGetAttributes.attr__ref.val.maxDynamicSharedSizeBytes);
-				printf("\t\tint maxThreadsPerBlock = %d\n", args->hipFuncGetAttributes.attr__ref.val.maxThreadsPerBlock);
-				printf("\t\tint numRegs = %d\n", args->hipFuncGetAttributes.attr__ref.val.numRegs);
-				printf("\t\tint preferredShmemCarveout = %d\n", args->hipFuncGetAttributes.attr__ref.val.preferredShmemCarveout);
-				printf("\t\tint ptxVersion = %d\n", args->hipFuncGetAttributes.attr__ref.val.ptxVersion);
-				printf("\t\tsize_t sharedSizeBytes = %lu\n", args->hipFuncGetAttributes.attr__ref.val.sharedSizeBytes);
+				printf("\t\tint binaryVersion = %d\n", args->attr__ref.val.binaryVersion);
+				printf("\t\tint cacheModeCA = %d\n", args->attr__ref.val.cacheModeCA);
+				printf("\t\tsize_t constSizeBytes = %lu\n", args->attr__ref.val.constSizeBytes);
+				printf("\t\tsize_t localSizeBytes = %lu\n", args->attr__ref.val.localSizeBytes);
+				printf("\t\tint maxDynamicSharedSizeBytes = %d\n", args->attr__ref.val.maxDynamicSharedSizeBytes);
+				printf("\t\tint maxThreadsPerBlock = %d\n", args->attr__ref.val.maxThreadsPerBlock);
+				printf("\t\tint numRegs = %d\n", args->attr__ref.val.numRegs);
+				printf("\t\tint preferredShmemCarveout = %d\n", args->attr__ref.val.preferredShmemCarveout);
+				printf("\t\tint ptxVersion = %d\n", args->attr__ref.val.ptxVersion);
+				printf("\t\tsize_t sharedSizeBytes = %lu\n", args->attr__ref.val.sharedSizeBytes);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst void * func = %p", args->hipFuncGetAttributes.func);
+			printf("\tconst void * func = %p", args->func);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipFuncGetAttributes.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxGetCurrent
-		case HIP_API_ID_hipCtxGetCurrent :
+		case HIP_API_ID_hipCtxGetCurrent : {
 			//	hipCtx_t * ctx (struct ihipCtx_t **);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipCtx_t * ctx = %p", args->hipCtxGetCurrent.ctx);
-			if (args->hipCtxGetCurrent.ctx != NULL) {
-				printf(" -> %p\n", args->hipCtxGetCurrent.ctx__ref.val);
+			args_hipCtxGetCurrent_t* args = (args_hipCtxGetCurrent_t*) func_args;
+			printf("\thipCtx_t * ctx = %p", args->ctx);
+			if (args->ctx != NULL) {
+				printf(" -> %p\n", args->ctx__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipCtxGetCurrent.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddChildGraphNode
-		case HIP_API_ID_hipGraphAddChildGraphNode :
+		case HIP_API_ID_hipGraphAddChildGraphNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	hipGraph_t childGraph (struct ihipGraph *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddChildGraphNode.pGraphNode);
-			if (args->hipGraphAddChildGraphNode.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddChildGraphNode.pGraphNode__ref.val);
+			args_hipGraphAddChildGraphNode_t* args = (args_hipGraphAddChildGraphNode_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddChildGraphNode.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddChildGraphNode.pDependencies);
-			if (args->hipGraphAddChildGraphNode.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddChildGraphNode.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddChildGraphNode.numDependencies);
-			printf("\thipGraph_t childGraph = %p", args->hipGraphAddChildGraphNode.childGraph);
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\thipGraph_t childGraph = %p", args->childGraph);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphAddChildGraphNode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventCreate
-		case HIP_API_ID_hipEventCreate :
+		case HIP_API_ID_hipEventCreate : {
 			//	hipEvent_t * event (struct ihipEvent_t **);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipEvent_t * event = %p", args->hipEventCreate.event);
-			if (args->hipEventCreate.event != NULL) {
-				printf(" -> %p\n", args->hipEventCreate.event__ref.val);
+			args_hipEventCreate_t* args = (args_hipEventCreate_t*) func_args;
+			printf("\thipEvent_t * event = %p", args->event);
+			if (args->event != NULL) {
+				printf(" -> %p\n", args->event__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipEventCreate.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipHostGetDevicePointer
-		case HIP_API_ID_hipHostGetDevicePointer :
+		case HIP_API_ID_hipHostGetDevicePointer : {
 			//	void ** devPtr (void **);
 			//	void * hstPtr (void *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** devPtr = %p", args->hipHostGetDevicePointer.devPtr);
-			if (args->hipHostGetDevicePointer.devPtr != NULL) {
-				printf("-> %p", args->hipHostGetDevicePointer.devPtr__ref.ptr1);
+			args_hipHostGetDevicePointer_t* args = (args_hipHostGetDevicePointer_t*) func_args;
+			printf("\tvoid ** devPtr = %p", args->devPtr);
+			if (args->devPtr != NULL) {
+				printf("-> %p", args->devPtr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tvoid * hstPtr = %p", args->hipHostGetDevicePointer.hstPtr);
+			printf("\tvoid * hstPtr = %p", args->hstPtr);
 			printf("\n");
-			printf("\tunsigned int flags = %u\n", args->hipHostGetDevicePointer.flags);
-			printf("\thipError_t retval = %d\n", args->hipHostGetDevicePointer.retval);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventQuery
-		case HIP_API_ID_hipEventQuery :
+		case HIP_API_ID_hipEventQuery : {
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipEvent_t event = %p", args->hipEventQuery.event);
+			args_hipEventQuery_t* args = (args_hipEventQuery_t*) func_args;
+			printf("\thipEvent_t event = %p", args->event);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipEventQuery.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyPeerAsync
-		case HIP_API_ID_hipMemcpyPeerAsync :
+		case HIP_API_ID_hipMemcpyPeerAsync : {
 			//	void * dst (void *);
 			//	int dstDeviceId (int);
 			//	const void * src (const void *);
@@ -3554,40 +3824,44 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t sizeBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpyPeerAsync.dst);
+			args_hipMemcpyPeerAsync_t* args = (args_hipMemcpyPeerAsync_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tint dstDeviceId = %d\n", args->hipMemcpyPeerAsync.dstDeviceId);
-			printf("\tconst void * src = %p", args->hipMemcpyPeerAsync.src);
+			printf("\tint dstDeviceId = %d\n", args->dstDeviceId);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tint srcDevice = %d\n", args->hipMemcpyPeerAsync.srcDevice);
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyPeerAsync.sizeBytes);
-			printf("\thipStream_t stream = %p", args->hipMemcpyPeerAsync.stream);
+			printf("\tint srcDevice = %d\n", args->srcDevice);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpyPeerAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemMap
-		case HIP_API_ID_hipMemMap :
+		case HIP_API_ID_hipMemMap : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	size_t offset (unsigned long);
 			//	hipMemGenericAllocationHandle_t handle (struct ihipMemGenericAllocationHandle *);
 			//	unsigned long long flags (unsigned long long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * ptr = %p", args->hipMemMap.ptr);
+			args_hipMemMap_t* args = (args_hipMemMap_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hipMemMap.size);
-			printf("\tsize_t offset = %lu\n", args->hipMemMap.offset);
-			printf("\thipMemGenericAllocationHandle_t handle = %p", args->hipMemMap.handle);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipMemGenericAllocationHandle_t handle = %p", args->handle);
 			printf("\n");
-			printf("\tunsigned long long flags = %llu\n", args->hipMemMap.flags);
-			printf("\thipError_t retval = %d\n", args->hipMemMap.retval);
+			printf("\tunsigned long long flags = %llu\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipBindTextureToArray
-		case HIP_API_ID_hipBindTextureToArray :
+		case HIP_API_ID_hipBindTextureToArray : {
 			//	const textureReference * tex ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -3619,48 +3893,50 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipChannelFormatKind f (enum hipChannelFormatKind);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst textureReference * tex = %p", args->hipBindTextureToArray.tex);
-			if (args->hipBindTextureToArray.tex != NULL) {
+			args_hipBindTextureToArray_t* args = (args_hipBindTextureToArray_t*) func_args;
+			printf("\tconst textureReference * tex = %p", args->tex);
+			if (args->tex != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipBindTextureToArray.tex__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipBindTextureToArray.tex__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipBindTextureToArray.tex__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipBindTextureToArray.tex__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->tex__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->tex__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->tex__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->tex__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipBindTextureToArray.tex__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipBindTextureToArray.tex__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipBindTextureToArray.tex__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipBindTextureToArray.tex__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipBindTextureToArray.tex__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->tex__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->tex__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->tex__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->tex__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->tex__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipBindTextureToArray.tex__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipBindTextureToArray.tex__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipBindTextureToArray.tex__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipBindTextureToArray.tex__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipBindTextureToArray.tex__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipBindTextureToArray.tex__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipBindTextureToArray.tex__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipBindTextureToArray.tex__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->tex__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->tex__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->tex__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->tex__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->tex__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->tex__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->tex__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->tex__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipArray_const_t array = %p", args->hipBindTextureToArray.array);
+			printf("\thipArray_const_t array = %p", args->array);
 			printf("\n");
-			printf("\tconst hipChannelFormatDesc * desc = %p", args->hipBindTextureToArray.desc);
-			if (args->hipBindTextureToArray.desc != NULL) {
+			printf("\tconst hipChannelFormatDesc * desc = %p", args->desc);
+			if (args->desc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint x = %d\n", args->hipBindTextureToArray.desc__ref.val.x);
-				printf("\t\tint y = %d\n", args->hipBindTextureToArray.desc__ref.val.y);
-				printf("\t\tint z = %d\n", args->hipBindTextureToArray.desc__ref.val.z);
-				printf("\t\tint w = %d\n", args->hipBindTextureToArray.desc__ref.val.w);
-				printf("\t\tenum hipChannelFormatKind f = %d\n", args->hipBindTextureToArray.desc__ref.val.f);
+				printf("\t\tint x = %d\n", args->desc__ref.val.x);
+				printf("\t\tint y = %d\n", args->desc__ref.val.y);
+				printf("\t\tint z = %d\n", args->desc__ref.val.z);
+				printf("\t\tint w = %d\n", args->desc__ref.val.w);
+				printf("\t\tenum hipChannelFormatKind f = %d\n", args->desc__ref.val.f);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipBindTextureToArray.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DAsync_spt
-		case HIP_API_ID_hipMemcpy2DAsync_spt :
+		case HIP_API_ID_hipMemcpy2DAsync_spt : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	const void * src (const void *);
@@ -3670,112 +3946,126 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpy2DAsync_spt.dst);
+			args_hipMemcpy2DAsync_spt_t* args = (args_hipMemcpy2DAsync_spt_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t dpitch = %lu\n", args->hipMemcpy2DAsync_spt.dpitch);
-			printf("\tconst void * src = %p", args->hipMemcpy2DAsync_spt.src);
+			printf("\tsize_t dpitch = %lu\n", args->dpitch);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t spitch = %lu\n", args->hipMemcpy2DAsync_spt.spitch);
-			printf("\tsize_t width = %lu\n", args->hipMemcpy2DAsync_spt.width);
-			printf("\tsize_t height = %lu\n", args->hipMemcpy2DAsync_spt.height);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpy2DAsync_spt.kind);
-			printf("\thipStream_t stream = %p", args->hipMemcpy2DAsync_spt.stream);
+			printf("\tsize_t spitch = %lu\n", args->spitch);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpy2DAsync_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolSetAttribute
-		case HIP_API_ID_hipMemPoolSetAttribute :
+		case HIP_API_ID_hipMemPoolSetAttribute : {
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipMemPoolAttr attr (enum hipMemPoolAttr);
 			//	void * value (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemPool_t mem_pool = %p", args->hipMemPoolSetAttribute.mem_pool);
+			args_hipMemPoolSetAttribute_t* args = (args_hipMemPoolSetAttribute_t*) func_args;
+			printf("\thipMemPool_t mem_pool = %p", args->mem_pool);
 			printf("\n");
-			printf("\thipMemPoolAttr attr = %d\n", args->hipMemPoolSetAttribute.attr);
-			printf("\tvoid * value = %p", args->hipMemPoolSetAttribute.value);
+			printf("\thipMemPoolAttr attr = %d\n", args->attr);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemPoolSetAttribute.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetLastError
-		case HIP_API_ID_hipGetLastError :
+		case HIP_API_ID_hipGetLastError : {
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipError_t retval = %d\n", args->hipGetLastError.retval);
+			args_hipGetLastError_t* args = (args_hipGetLastError_t*) func_args;
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamEndCapture_spt
-		case HIP_API_ID_hipStreamEndCapture_spt :
+		case HIP_API_ID_hipStreamEndCapture_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraph_t * pGraph (struct ihipGraph **);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamEndCapture_spt.stream);
+			args_hipStreamEndCapture_spt_t* args = (args_hipStreamEndCapture_spt_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipGraph_t * pGraph = %p", args->hipStreamEndCapture_spt.pGraph);
-			if (args->hipStreamEndCapture_spt.pGraph != NULL) {
-				printf(" -> %p\n", args->hipStreamEndCapture_spt.pGraph__ref.val);
+			printf("\thipGraph_t * pGraph = %p", args->pGraph);
+			if (args->pGraph != NULL) {
+				printf(" -> %p\n", args->pGraph__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipStreamEndCapture_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleOccupancyMaxPotentialBlockSize
-		case HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSize :
+		case HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSize : {
 			//	int * gridSize (int *);
 			//	int * blockSize (int *);
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
 			//	size_t dynSharedMemPerBlk (unsigned long);
 			//	int blockSizeLimit (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * gridSize = %p", args->hipModuleOccupancyMaxPotentialBlockSize.gridSize);
-			if (args->hipModuleOccupancyMaxPotentialBlockSize.gridSize != NULL) {
-				printf(" -> %d\n", args->hipModuleOccupancyMaxPotentialBlockSize.gridSize__ref.val);
+			args_hipModuleOccupancyMaxPotentialBlockSize_t* args = (args_hipModuleOccupancyMaxPotentialBlockSize_t*) func_args;
+			printf("\tint * gridSize = %p", args->gridSize);
+			if (args->gridSize != NULL) {
+				printf(" -> %d\n", args->gridSize__ref.val);
 			} else { printf("\n"); };
-			printf("\tint * blockSize = %p", args->hipModuleOccupancyMaxPotentialBlockSize.blockSize);
-			if (args->hipModuleOccupancyMaxPotentialBlockSize.blockSize != NULL) {
-				printf(" -> %d\n", args->hipModuleOccupancyMaxPotentialBlockSize.blockSize__ref.val);
+			printf("\tint * blockSize = %p", args->blockSize);
+			if (args->blockSize != NULL) {
+				printf(" -> %d\n", args->blockSize__ref.val);
 			} else { printf("\n"); };
-			printf("\thipFunction_t f = %p", args->hipModuleOccupancyMaxPotentialBlockSize.f);
+			printf("\thipFunction_t f = %p", args->f);
 			printf("\n");
-			printf("\tsize_t dynSharedMemPerBlk = %lu\n", args->hipModuleOccupancyMaxPotentialBlockSize.dynSharedMemPerBlk);
-			printf("\tint blockSizeLimit = %d\n", args->hipModuleOccupancyMaxPotentialBlockSize.blockSizeLimit);
-			printf("\thipError_t retval = %d\n", args->hipModuleOccupancyMaxPotentialBlockSize.retval);
+			printf("\tsize_t dynSharedMemPerBlk = %lu\n", args->dynSharedMemPerBlk);
+			printf("\tint blockSizeLimit = %d\n", args->blockSizeLimit);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipKernelNameRefByPtr
-		case HIP_API_ID_hipKernelNameRefByPtr :
+		case HIP_API_ID_hipKernelNameRefByPtr : {
 			//	const void * hostFunction (const void *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	const char * retval (const char *);
-			printf("\tconst void * hostFunction = %p", args->hipKernelNameRefByPtr.hostFunction);
+			args_hipKernelNameRefByPtr_t* args = (args_hipKernelNameRefByPtr_t*) func_args;
+			printf("\tconst void * hostFunction = %p", args->hostFunction);
 			printf("\n");
-			printf("\thipStream_t stream = %p", args->hipKernelNameRefByPtr.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\tconst char * retval = %p", args->hipKernelNameRefByPtr.retval);
-			if (args->hipKernelNameRefByPtr.retval != NULL) {
-				printf(" -> %s\n", args->hipKernelNameRefByPtr.retval__ref.val);
+			printf("\tconst char * retval = %p", args->retval);
+			if (args->retval != NULL) {
+				printf(" -> %s\n", args->retval__ref.val);
 			} else { printf("\n"); };
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetDevice
-		case HIP_API_ID_hipGetDevice :
+		case HIP_API_ID_hipGetDevice : {
 			//	int * deviceId (int *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * deviceId = %p", args->hipGetDevice.deviceId);
-			if (args->hipGetDevice.deviceId != NULL) {
-				printf(" -> %d\n", args->hipGetDevice.deviceId__ref.val);
+			args_hipGetDevice_t* args = (args_hipGetDevice_t*) func_args;
+			printf("\tint * deviceId = %p", args->deviceId);
+			if (args->deviceId != NULL) {
+				printf(" -> %d\n", args->deviceId__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGetDevice.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy3D_spt
-		case HIP_API_ID_hipMemcpy3D_spt :
+		case HIP_API_ID_hipMemcpy3D_spt : {
 			//	const struct hipMemcpy3DParms * p ({
 			//		hipArray_t srcArray (struct hipArray *);
 			//		struct hipPos srcPos ({
@@ -3809,43 +4099,45 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipMemcpyKind kind (enum hipMemcpyKind);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst struct hipMemcpy3DParms * p = %p", args->hipMemcpy3D_spt.p);
-			if (args->hipMemcpy3D_spt.p != NULL) {
+			args_hipMemcpy3D_spt_t* args = (args_hipMemcpy3D_spt_t*) func_args;
+			printf("\tconst struct hipMemcpy3DParms * p = %p", args->p);
+			if (args->p != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct hipPos srcPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipMemcpy3D_spt.p__ref.val.srcPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipMemcpy3D_spt.p__ref.val.srcPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipMemcpy3D_spt.p__ref.val.srcPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->p__ref.val.srcPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->p__ref.val.srcPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->p__ref.val.srcPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr srcPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipMemcpy3D_spt.p__ref.val.srcPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipMemcpy3D_spt.p__ref.val.srcPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipMemcpy3D_spt.p__ref.val.srcPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->p__ref.val.srcPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->p__ref.val.srcPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->p__ref.val.srcPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPos dstPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipMemcpy3D_spt.p__ref.val.dstPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipMemcpy3D_spt.p__ref.val.dstPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipMemcpy3D_spt.p__ref.val.dstPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->p__ref.val.dstPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->p__ref.val.dstPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->p__ref.val.dstPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr dstPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipMemcpy3D_spt.p__ref.val.dstPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipMemcpy3D_spt.p__ref.val.dstPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipMemcpy3D_spt.p__ref.val.dstPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->p__ref.val.dstPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->p__ref.val.dstPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->p__ref.val.dstPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipExtent extent = {\n");
-				printf("\t\t\tsize_t width = %lu\n", args->hipMemcpy3D_spt.p__ref.val.extent.width);
-				printf("\t\t\tsize_t height = %lu\n", args->hipMemcpy3D_spt.p__ref.val.extent.height);
-				printf("\t\t\tsize_t depth = %lu\n", args->hipMemcpy3D_spt.p__ref.val.extent.depth);
+				printf("\t\t\tsize_t width = %lu\n", args->p__ref.val.extent.width);
+				printf("\t\t\tsize_t height = %lu\n", args->p__ref.val.extent.height);
+				printf("\t\t\tsize_t depth = %lu\n", args->p__ref.val.extent.depth);
 				printf("\t\t}\n");
-				printf("\t\tenum hipMemcpyKind kind = %d\n", args->hipMemcpy3D_spt.p__ref.val.kind);
+				printf("\t\tenum hipMemcpyKind kind = %d\n", args->p__ref.val.kind);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipMemcpy3D_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexObjectGetTextureDesc
-		case HIP_API_ID_hipTexObjectGetTextureDesc :
+		case HIP_API_ID_hipTexObjectGetTextureDesc : {
 			//	HIP_TEXTURE_DESC * pTexDesc ({
 			//		HIPaddress_mode[3] addressMode (enum HIPaddress_mode_enum[3]);
 			//		HIPfilter_mode filterMode (enum HIPfilter_mode_enum);
@@ -3860,112 +4152,124 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipTextureObject_t texObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tHIP_TEXTURE_DESC * pTexDesc = %p", args->hipTexObjectGetTextureDesc.pTexDesc);
-			if (args->hipTexObjectGetTextureDesc.pTexDesc != NULL) {
+			args_hipTexObjectGetTextureDesc_t* args = (args_hipTexObjectGetTextureDesc_t*) func_args;
+			printf("\tHIP_TEXTURE_DESC * pTexDesc = %p", args->pTexDesc);
+			if (args->pTexDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tHIPaddress_mode[3] addressMode = %d\n", args->hipTexObjectGetTextureDesc.pTexDesc__ref.val.addressMode[0]);
-				printf("\t\tHIPfilter_mode filterMode = %d\n", args->hipTexObjectGetTextureDesc.pTexDesc__ref.val.filterMode);
-				printf("\t\tunsigned int flags = %u\n", args->hipTexObjectGetTextureDesc.pTexDesc__ref.val.flags);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexObjectGetTextureDesc.pTexDesc__ref.val.maxAnisotropy);
-				printf("\t\tHIPfilter_mode mipmapFilterMode = %d\n", args->hipTexObjectGetTextureDesc.pTexDesc__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexObjectGetTextureDesc.pTexDesc__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexObjectGetTextureDesc.pTexDesc__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexObjectGetTextureDesc.pTexDesc__ref.val.maxMipmapLevelClamp);
-				printf("\t\tfloat[4] borderColor = %f\n", args->hipTexObjectGetTextureDesc.pTexDesc__ref.val.borderColor[0]);
-				printf("\t\tint[12] reserved = %d\n", args->hipTexObjectGetTextureDesc.pTexDesc__ref.val.reserved[0]);
+				printf("\t\tHIPaddress_mode[3] addressMode = %d\n", args->pTexDesc__ref.val.addressMode[0]);
+				printf("\t\tHIPfilter_mode filterMode = %d\n", args->pTexDesc__ref.val.filterMode);
+				printf("\t\tunsigned int flags = %u\n", args->pTexDesc__ref.val.flags);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->pTexDesc__ref.val.maxAnisotropy);
+				printf("\t\tHIPfilter_mode mipmapFilterMode = %d\n", args->pTexDesc__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->pTexDesc__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->pTexDesc__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->pTexDesc__ref.val.maxMipmapLevelClamp);
+				printf("\t\tfloat[4] borderColor = %f\n", args->pTexDesc__ref.val.borderColor[0]);
+				printf("\t\tint[12] reserved = %d\n", args->pTexDesc__ref.val.reserved[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipTextureObject_t texObject = %p", args->hipTexObjectGetTextureDesc.texObject);
+			printf("\thipTextureObject_t texObject = %p", args->texObject);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipTexObjectGetTextureDesc.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGet
-		case HIP_API_ID_hipDeviceGet :
+		case HIP_API_ID_hipDeviceGet : {
 			//	hipDevice_t * device (int*);
 			//	int ordinal (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDevice_t * device = %p", args->hipDeviceGet.device);
-			if (args->hipDeviceGet.device != NULL) {
-				printf(" -> %d\n", args->hipDeviceGet.device__ref.val);
+			args_hipDeviceGet_t* args = (args_hipDeviceGet_t*) func_args;
+			printf("\thipDevice_t * device = %p", args->device);
+			if (args->device != NULL) {
+				printf(" -> %d\n", args->device__ref.val);
 			} else { printf("\n"); };
-			printf("\tint ordinal = %d\n", args->hipDeviceGet.ordinal);
-			printf("\thipError_t retval = %d\n", args->hipDeviceGet.retval);
+			printf("\tint ordinal = %d\n", args->ordinal);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExternalSemaphoresSignalNodeSetParams
-		case HIP_API_ID_hipGraphExternalSemaphoresSignalNodeSetParams :
+		case HIP_API_ID_hipGraphExternalSemaphoresSignalNodeSetParams : {
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	const hipExternalSemaphoreSignalNodeParams * nodeParams ({
 			//		hipExternalSemaphore_t * extSemArray (void **);
 			//		unsigned int numExtSems (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t hNode = %p", args->hipGraphExternalSemaphoresSignalNodeSetParams.hNode);
+			args_hipGraphExternalSemaphoresSignalNodeSetParams_t* args = (args_hipGraphExternalSemaphoresSignalNodeSetParams_t*) func_args;
+			printf("\thipGraphNode_t hNode = %p", args->hNode);
 			printf("\n");
-			printf("\tconst hipExternalSemaphoreSignalNodeParams * nodeParams = %p", args->hipGraphExternalSemaphoresSignalNodeSetParams.nodeParams);
-			if (args->hipGraphExternalSemaphoresSignalNodeSetParams.nodeParams != NULL) {
+			printf("\tconst hipExternalSemaphoreSignalNodeParams * nodeParams = %p", args->nodeParams);
+			if (args->nodeParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned int numExtSems = %u\n", args->hipGraphExternalSemaphoresSignalNodeSetParams.nodeParams__ref.val.numExtSems);
+				printf("\t\tunsigned int numExtSems = %u\n", args->nodeParams__ref.val.numExtSems);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphExternalSemaphoresSignalNodeSetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDestroySurfaceObject
-		case HIP_API_ID_hipDestroySurfaceObject :
+		case HIP_API_ID_hipDestroySurfaceObject : {
 			//	hipSurfaceObject_t surfaceObject (struct __hip_surface *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipSurfaceObject_t surfaceObject = %p", args->hipDestroySurfaceObject.surfaceObject);
+			args_hipDestroySurfaceObject_t* args = (args_hipDestroySurfaceObject_t*) func_args;
+			printf("\thipSurfaceObject_t surfaceObject = %p", args->surfaceObject);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipDestroySurfaceObject.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetDevice
-		case HIP_API_ID_hipStreamGetDevice :
+		case HIP_API_ID_hipStreamGetDevice : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipDevice_t * device (int*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamGetDevice.stream);
+			args_hipStreamGetDevice_t* args = (args_hipStreamGetDevice_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipDevice_t * device = %p", args->hipStreamGetDevice.device);
-			if (args->hipStreamGetDevice.device != NULL) {
-				printf(" -> %d\n", args->hipStreamGetDevice.device__ref.val);
+			printf("\thipDevice_t * device = %p", args->device);
+			if (args->device != NULL) {
+				printf(" -> %d\n", args->device__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipStreamGetDevice.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemAllocPitch
-		case HIP_API_ID_hipMemAllocPitch :
+		case HIP_API_ID_hipMemAllocPitch : {
 			//	hipDeviceptr_t * dptr (void **);
 			//	size_t * pitch (unsigned long*);
 			//	size_t widthInBytes (unsigned long);
 			//	size_t height (unsigned long);
 			//	unsigned int elementSizeBytes (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceptr_t * dptr = %p", args->hipMemAllocPitch.dptr);
-			if (args->hipMemAllocPitch.dptr != NULL) {
-				printf("-> %p", args->hipMemAllocPitch.dptr__ref.ptr1);
+			args_hipMemAllocPitch_t* args = (args_hipMemAllocPitch_t*) func_args;
+			printf("\thipDeviceptr_t * dptr = %p", args->dptr);
+			if (args->dptr != NULL) {
+				printf("-> %p", args->dptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t * pitch = %p", args->hipMemAllocPitch.pitch);
-			if (args->hipMemAllocPitch.pitch != NULL) {
-				printf(" -> %lu\n", args->hipMemAllocPitch.pitch__ref.val);
+			printf("\tsize_t * pitch = %p", args->pitch);
+			if (args->pitch != NULL) {
+				printf(" -> %lu\n", args->pitch__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t widthInBytes = %lu\n", args->hipMemAllocPitch.widthInBytes);
-			printf("\tsize_t height = %lu\n", args->hipMemAllocPitch.height);
-			printf("\tunsigned int elementSizeBytes = %u\n", args->hipMemAllocPitch.elementSizeBytes);
-			printf("\thipError_t retval = %d\n", args->hipMemAllocPitch.retval);
+			printf("\tsize_t widthInBytes = %lu\n", args->widthInBytes);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\tunsigned int elementSizeBytes = %u\n", args->elementSizeBytes);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddNode
-		case HIP_API_ID_hipGraphAddNode :
+		case HIP_API_ID_hipGraphAddNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
@@ -3976,67 +4280,75 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		long long reserved2 (long long);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddNode.pGraphNode);
-			if (args->hipGraphAddNode.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddNode.pGraphNode__ref.val);
+			args_hipGraphAddNode_t* args = (args_hipGraphAddNode_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddNode.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddNode.pDependencies);
-			if (args->hipGraphAddNode.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddNode.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddNode.numDependencies);
-			printf("\thipGraphNodeParams * nodeParams = %p", args->hipGraphAddNode.nodeParams);
-			if (args->hipGraphAddNode.nodeParams != NULL) {
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\thipGraphNodeParams * nodeParams = %p", args->nodeParams);
+			if (args->nodeParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\thipGraphNodeType type = %d\n", args->hipGraphAddNode.nodeParams__ref.val.type);
-				printf("\t\tint[3] reserved0 = %d\n", args->hipGraphAddNode.nodeParams__ref.val.reserved0[0]);
-				printf("\t\tlong long reserved2 = %lld\n", args->hipGraphAddNode.nodeParams__ref.val.reserved2);
+				printf("\t\thipGraphNodeType type = %d\n", args->nodeParams__ref.val.type);
+				printf("\t\tint[3] reserved0 = %d\n", args->nodeParams__ref.val.reserved0[0]);
+				printf("\t\tlong long reserved2 = %lld\n", args->nodeParams__ref.val.reserved2);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphAddNode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceSetSharedMemConfig
-		case HIP_API_ID_hipDeviceSetSharedMemConfig :
+		case HIP_API_ID_hipDeviceSetSharedMemConfig : {
 			//	hipSharedMemConfig config (enum hipSharedMemConfig);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipSharedMemConfig config = %d\n", args->hipDeviceSetSharedMemConfig.config);
-			printf("\thipError_t retval = %d\n", args->hipDeviceSetSharedMemConfig.retval);
+			args_hipDeviceSetSharedMemConfig_t* args = (args_hipDeviceSetSharedMemConfig_t*) func_args;
+			printf("\thipSharedMemConfig config = %d\n", args->config);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipRuntimeGetVersion
-		case HIP_API_ID_hipRuntimeGetVersion :
+		case HIP_API_ID_hipRuntimeGetVersion : {
 			//	int * runtimeVersion (int *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * runtimeVersion = %p", args->hipRuntimeGetVersion.runtimeVersion);
-			if (args->hipRuntimeGetVersion.runtimeVersion != NULL) {
-				printf(" -> %d\n", args->hipRuntimeGetVersion.runtimeVersion__ref.val);
+			args_hipRuntimeGetVersion_t* args = (args_hipRuntimeGetVersion_t*) func_args;
+			printf("\tint * runtimeVersion = %p", args->runtimeVersion);
+			if (args->runtimeVersion != NULL) {
+				printf(" -> %d\n", args->runtimeVersion__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipRuntimeGetVersion.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphChildGraphNodeGetGraph
-		case HIP_API_ID_hipGraphChildGraphNodeGetGraph :
+		case HIP_API_ID_hipGraphChildGraphNodeGetGraph : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraph_t * pGraph (struct ihipGraph **);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphChildGraphNodeGetGraph.node);
+			args_hipGraphChildGraphNodeGetGraph_t* args = (args_hipGraphChildGraphNodeGetGraph_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipGraph_t * pGraph = %p", args->hipGraphChildGraphNodeGetGraph.pGraph);
-			if (args->hipGraphChildGraphNodeGetGraph.pGraph != NULL) {
-				printf(" -> %p\n", args->hipGraphChildGraphNodeGetGraph.pGraph__ref.val);
+			printf("\thipGraph_t * pGraph = %p", args->pGraph);
+			if (args->pGraph != NULL) {
+				printf(" -> %p\n", args->pGraph__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphChildGraphNodeGetGraph.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecMemsetNodeSetParams
-		case HIP_API_ID_hipGraphExecMemsetNodeSetParams :
+		case HIP_API_ID_hipGraphExecMemsetNodeSetParams : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipMemsetParams * pNodeParams ({
@@ -4048,81 +4360,91 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		size_t width (unsigned long);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t hGraphExec = %p", args->hipGraphExecMemsetNodeSetParams.hGraphExec);
+			args_hipGraphExecMemsetNodeSetParams_t* args = (args_hipGraphExecMemsetNodeSetParams_t*) func_args;
+			printf("\thipGraphExec_t hGraphExec = %p", args->hGraphExec);
 			printf("\n");
-			printf("\thipGraphNode_t node = %p", args->hipGraphExecMemsetNodeSetParams.node);
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\tconst hipMemsetParams * pNodeParams = %p", args->hipGraphExecMemsetNodeSetParams.pNodeParams);
-			if (args->hipGraphExecMemsetNodeSetParams.pNodeParams != NULL) {
+			printf("\tconst hipMemsetParams * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned int elementSize = %u\n", args->hipGraphExecMemsetNodeSetParams.pNodeParams__ref.val.elementSize);
-				printf("\t\tsize_t height = %lu\n", args->hipGraphExecMemsetNodeSetParams.pNodeParams__ref.val.height);
-				printf("\t\tsize_t pitch = %lu\n", args->hipGraphExecMemsetNodeSetParams.pNodeParams__ref.val.pitch);
-				printf("\t\tunsigned int value = %u\n", args->hipGraphExecMemsetNodeSetParams.pNodeParams__ref.val.value);
-				printf("\t\tsize_t width = %lu\n", args->hipGraphExecMemsetNodeSetParams.pNodeParams__ref.val.width);
+				printf("\t\tunsigned int elementSize = %u\n", args->pNodeParams__ref.val.elementSize);
+				printf("\t\tsize_t height = %lu\n", args->pNodeParams__ref.val.height);
+				printf("\t\tsize_t pitch = %lu\n", args->pNodeParams__ref.val.pitch);
+				printf("\t\tunsigned int value = %u\n", args->pNodeParams__ref.val.value);
+				printf("\t\tsize_t width = %lu\n", args->pNodeParams__ref.val.width);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphExecMemsetNodeSetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphicsUnregisterResource
-		case HIP_API_ID_hipGraphicsUnregisterResource :
+		case HIP_API_ID_hipGraphicsUnregisterResource : {
 			//	hipGraphicsResource_t resource (struct _hipGraphicsResource*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphicsResource_t resource = %p", args->hipGraphicsUnregisterResource.resource);
+			args_hipGraphicsUnregisterResource_t* args = (args_hipGraphicsUnregisterResource_t*) func_args;
+			printf("\thipGraphicsResource_t resource = %p", args->resource);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphicsUnregisterResource.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventElapsedTime
-		case HIP_API_ID_hipEventElapsedTime :
+		case HIP_API_ID_hipEventElapsedTime : {
 			//	float * ms (float *);
 			//	hipEvent_t start (struct ihipEvent_t *);
 			//	hipEvent_t stop (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tfloat * ms = %p", args->hipEventElapsedTime.ms);
-			if (args->hipEventElapsedTime.ms != NULL) {
-				printf(" -> %f\n", args->hipEventElapsedTime.ms__ref.val);
+			args_hipEventElapsedTime_t* args = (args_hipEventElapsedTime_t*) func_args;
+			printf("\tfloat * ms = %p", args->ms);
+			if (args->ms != NULL) {
+				printf(" -> %f\n", args->ms__ref.val);
 			} else { printf("\n"); };
-			printf("\thipEvent_t start = %p", args->hipEventElapsedTime.start);
+			printf("\thipEvent_t start = %p", args->start);
 			printf("\n");
-			printf("\thipEvent_t stop = %p", args->hipEventElapsedTime.stop);
+			printf("\thipEvent_t stop = %p", args->stop);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipEventElapsedTime.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFreeAsync
-		case HIP_API_ID_hipFreeAsync :
+		case HIP_API_ID_hipFreeAsync : {
 			//	void * dev_ptr (void *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dev_ptr = %p", args->hipFreeAsync.dev_ptr);
+			args_hipFreeAsync_t* args = (args_hipFreeAsync_t*) func_args;
+			printf("\tvoid * dev_ptr = %p", args->dev_ptr);
 			printf("\n");
-			printf("\thipStream_t stream = %p", args->hipFreeAsync.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipFreeAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamCreateWithFlags
-		case HIP_API_ID_hipStreamCreateWithFlags :
+		case HIP_API_ID_hipStreamCreateWithFlags : {
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t * stream = %p", args->hipStreamCreateWithFlags.stream);
-			if (args->hipStreamCreateWithFlags.stream != NULL) {
-				printf(" -> %p\n", args->hipStreamCreateWithFlags.stream__ref.val);
+			args_hipStreamCreateWithFlags_t* args = (args_hipStreamCreateWithFlags_t*) func_args;
+			printf("\thipStream_t * stream = %p", args->stream);
+			if (args->stream != NULL) {
+				printf(" -> %p\n", args->stream__ref.val);
 			} else { printf("\n"); };
-			printf("\tunsigned int flags = %u\n", args->hipStreamCreateWithFlags.flags);
-			printf("\thipError_t retval = %d\n", args->hipStreamCreateWithFlags.retval);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetAddress
-		case HIP_API_ID_hipTexRefSetAddress :
+		case HIP_API_ID_hipTexRefSetAddress : {
 			//	size_t * ByteOffset (unsigned long*);
 			//	textureReference * texRef ({
 			//		int normalized (int);
@@ -4149,60 +4471,64 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipDeviceptr_t dptr (void *);
 			//	size_t bytes (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tsize_t * ByteOffset = %p", args->hipTexRefSetAddress.ByteOffset);
-			if (args->hipTexRefSetAddress.ByteOffset != NULL) {
-				printf(" -> %lu\n", args->hipTexRefSetAddress.ByteOffset__ref.val);
+			args_hipTexRefSetAddress_t* args = (args_hipTexRefSetAddress_t*) func_args;
+			printf("\tsize_t * ByteOffset = %p", args->ByteOffset);
+			if (args->ByteOffset != NULL) {
+				printf(" -> %lu\n", args->ByteOffset__ref.val);
 			} else { printf("\n"); };
-			printf("\ttextureReference * texRef = %p", args->hipTexRefSetAddress.texRef);
-			if (args->hipTexRefSetAddress.texRef != NULL) {
+			printf("\ttextureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefSetAddress.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefSetAddress.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefSetAddress.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefSetAddress.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefSetAddress.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefSetAddress.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefSetAddress.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefSetAddress.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefSetAddress.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefSetAddress.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefSetAddress.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefSetAddress.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefSetAddress.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefSetAddress.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefSetAddress.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefSetAddress.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefSetAddress.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipDeviceptr_t dptr = %p", args->hipTexRefSetAddress.dptr);
+			printf("\thipDeviceptr_t dptr = %p", args->dptr);
 			printf("\n");
-			printf("\tsize_t bytes = %lu\n", args->hipTexRefSetAddress.bytes);
-			printf("\thipError_t retval = %d\n", args->hipTexRefSetAddress.retval);
+			printf("\tsize_t bytes = %lu\n", args->bytes);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamAddCallback_spt
-		case HIP_API_ID_hipStreamAddCallback_spt :
+		case HIP_API_ID_hipStreamAddCallback_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCallback_t callback (void (*)(struct ihipStream_t *, enum hipError_t, void *));
 			//	void * userData (void *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamAddCallback_spt.stream);
+			args_hipStreamAddCallback_spt_t* args = (args_hipStreamAddCallback_spt_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipStreamCallback_t callback = %p\n", args->hipStreamAddCallback_spt.callback);
-			printf("\tvoid * userData = %p", args->hipStreamAddCallback_spt.userData);
+			printf("\thipStreamCallback_t callback = %p\n", args->callback);
+			printf("\tvoid * userData = %p", args->userData);
 			printf("\n");
-			printf("\tunsigned int flags = %u\n", args->hipStreamAddCallback_spt.flags);
-			printf("\thipError_t retval = %d\n", args->hipStreamAddCallback_spt.retval);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddKernelNode
-		case HIP_API_ID_hipGraphAddKernelNode :
+		case HIP_API_ID_hipGraphAddKernelNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
@@ -4224,86 +4550,94 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int sharedMemBytes (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddKernelNode.pGraphNode);
-			if (args->hipGraphAddKernelNode.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddKernelNode.pGraphNode__ref.val);
+			args_hipGraphAddKernelNode_t* args = (args_hipGraphAddKernelNode_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddKernelNode.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddKernelNode.pDependencies);
-			if (args->hipGraphAddKernelNode.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddKernelNode.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddKernelNode.numDependencies);
-			printf("\tconst hipKernelNodeParams * pNodeParams = %p", args->hipGraphAddKernelNode.pNodeParams);
-			if (args->hipGraphAddKernelNode.pNodeParams != NULL) {
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\tconst hipKernelNodeParams * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
 				printf("\t\tdim3 blockDim = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hipGraphAddKernelNode.pNodeParams__ref.val.blockDim.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hipGraphAddKernelNode.pNodeParams__ref.val.blockDim.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hipGraphAddKernelNode.pNodeParams__ref.val.blockDim.z);
+				printf("\t\t\tuint32_t x = %u\n", args->pNodeParams__ref.val.blockDim.x);
+				printf("\t\t\tuint32_t y = %u\n", args->pNodeParams__ref.val.blockDim.y);
+				printf("\t\t\tuint32_t z = %u\n", args->pNodeParams__ref.val.blockDim.z);
 				printf("\t\t}\n");
 				printf("\t\tdim3 gridDim = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hipGraphAddKernelNode.pNodeParams__ref.val.gridDim.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hipGraphAddKernelNode.pNodeParams__ref.val.gridDim.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hipGraphAddKernelNode.pNodeParams__ref.val.gridDim.z);
+				printf("\t\t\tuint32_t x = %u\n", args->pNodeParams__ref.val.gridDim.x);
+				printf("\t\t\tuint32_t y = %u\n", args->pNodeParams__ref.val.gridDim.y);
+				printf("\t\t\tuint32_t z = %u\n", args->pNodeParams__ref.val.gridDim.z);
 				printf("\t\t}\n");
-				printf("\t\tunsigned int sharedMemBytes = %u\n", args->hipGraphAddKernelNode.pNodeParams__ref.val.sharedMemBytes);
+				printf("\t\tunsigned int sharedMemBytes = %u\n", args->pNodeParams__ref.val.sharedMemBytes);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphAddKernelNode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyDtoH
-		case HIP_API_ID_hipMemcpyDtoH :
+		case HIP_API_ID_hipMemcpyDtoH : {
 			//	void * dst (void *);
 			//	hipDeviceptr_t src (void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpyDtoH.dst);
+			args_hipMemcpyDtoH_t* args = (args_hipMemcpyDtoH_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\thipDeviceptr_t src = %p", args->hipMemcpyDtoH.src);
+			printf("\thipDeviceptr_t src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyDtoH.sizeBytes);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyDtoH.retval);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceTotalMem
-		case HIP_API_ID_hipDeviceTotalMem :
+		case HIP_API_ID_hipDeviceTotalMem : {
 			//	size_t * bytes (unsigned long*);
 			//	hipDevice_t device (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tsize_t * bytes = %p", args->hipDeviceTotalMem.bytes);
-			if (args->hipDeviceTotalMem.bytes != NULL) {
-				printf(" -> %lu\n", args->hipDeviceTotalMem.bytes__ref.val);
+			args_hipDeviceTotalMem_t* args = (args_hipDeviceTotalMem_t*) func_args;
+			printf("\tsize_t * bytes = %p", args->bytes);
+			if (args->bytes != NULL) {
+				printf(" -> %lu\n", args->bytes__ref.val);
 			} else { printf("\n"); };
-			printf("\thipDevice_t device = %d\n", args->hipDeviceTotalMem.device);
-			printf("\thipError_t retval = %d\n", args->hipDeviceTotalMem.retval);
+			printf("\thipDevice_t device = %d\n", args->device);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset2D
-		case HIP_API_ID_hipMemset2D :
+		case HIP_API_ID_hipMemset2D : {
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
 			//	int value (int);
 			//	size_t width (unsigned long);
 			//	size_t height (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemset2D.dst);
+			args_hipMemset2D_t* args = (args_hipMemset2D_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t pitch = %lu\n", args->hipMemset2D.pitch);
-			printf("\tint value = %d\n", args->hipMemset2D.value);
-			printf("\tsize_t width = %lu\n", args->hipMemset2D.width);
-			printf("\tsize_t height = %lu\n", args->hipMemset2D.height);
-			printf("\thipError_t retval = %d\n", args->hipMemset2D.retval);
+			printf("\tsize_t pitch = %lu\n", args->pitch);
+			printf("\tint value = %d\n", args->value);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DToArray_spt
-		case HIP_API_ID_hipMemcpy2DToArray_spt :
+		case HIP_API_ID_hipMemcpy2DToArray_spt : {
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
 			//	size_t hOffset (unsigned long);
@@ -4313,72 +4647,80 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t dst = %p", args->hipMemcpy2DToArray_spt.dst);
+			args_hipMemcpy2DToArray_spt_t* args = (args_hipMemcpy2DToArray_spt_t*) func_args;
+			printf("\thipArray_t dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t wOffset = %lu\n", args->hipMemcpy2DToArray_spt.wOffset);
-			printf("\tsize_t hOffset = %lu\n", args->hipMemcpy2DToArray_spt.hOffset);
-			printf("\tconst void * src = %p", args->hipMemcpy2DToArray_spt.src);
+			printf("\tsize_t wOffset = %lu\n", args->wOffset);
+			printf("\tsize_t hOffset = %lu\n", args->hOffset);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t spitch = %lu\n", args->hipMemcpy2DToArray_spt.spitch);
-			printf("\tsize_t width = %lu\n", args->hipMemcpy2DToArray_spt.width);
-			printf("\tsize_t height = %lu\n", args->hipMemcpy2DToArray_spt.height);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpy2DToArray_spt.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpy2DToArray_spt.retval);
+			printf("\tsize_t spitch = %lu\n", args->spitch);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemAllocHost
-		case HIP_API_ID_hipMemAllocHost :
+		case HIP_API_ID_hipMemAllocHost : {
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** ptr = %p", args->hipMemAllocHost.ptr);
-			if (args->hipMemAllocHost.ptr != NULL) {
-				printf("-> %p", args->hipMemAllocHost.ptr__ref.ptr1);
+			args_hipMemAllocHost_t* args = (args_hipMemAllocHost_t*) func_args;
+			printf("\tvoid ** ptr = %p", args->ptr);
+			if (args->ptr != NULL) {
+				printf("-> %p", args->ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t size = %lu\n", args->hipMemAllocHost.size);
-			printf("\thipError_t retval = %d\n", args->hipMemAllocHost.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipPointerSetAttribute
-		case HIP_API_ID_hipPointerSetAttribute :
+		case HIP_API_ID_hipPointerSetAttribute : {
 			//	const void * value (const void *);
 			//	hipPointer_attribute attribute (enum hipPointer_attribute);
 			//	hipDeviceptr_t ptr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * value = %p", args->hipPointerSetAttribute.value);
+			args_hipPointerSetAttribute_t* args = (args_hipPointerSetAttribute_t*) func_args;
+			printf("\tconst void * value = %p", args->value);
 			printf("\n");
-			printf("\thipPointer_attribute attribute = %d\n", args->hipPointerSetAttribute.attribute);
-			printf("\thipDeviceptr_t ptr = %p", args->hipPointerSetAttribute.ptr);
+			printf("\thipPointer_attribute attribute = %d\n", args->attribute);
+			printf("\thipDeviceptr_t ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipPointerSetAttribute.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphHostNodeGetParams
-		case HIP_API_ID_hipGraphHostNodeGetParams :
+		case HIP_API_ID_hipGraphHostNodeGetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipHostNodeParams * pNodeParams ({
 			//		hipHostFn_t fn (void (*)(void *));
 			//		void * userData (void *);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphHostNodeGetParams.node);
+			args_hipGraphHostNodeGetParams_t* args = (args_hipGraphHostNodeGetParams_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipHostNodeParams * pNodeParams = %p", args->hipGraphHostNodeGetParams.pNodeParams);
-			if (args->hipGraphHostNodeGetParams.pNodeParams != NULL) {
+			printf("\thipHostNodeParams * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\thipHostFn_t fn = %p\n", args->hipGraphHostNodeGetParams.pNodeParams__ref.val.fn);
+				printf("\t\thipHostFn_t fn = %p\n", args->pNodeParams__ref.val.fn);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphHostNodeGetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset3D
-		case HIP_API_ID_hipMemset3D :
+		case HIP_API_ID_hipMemset3D : {
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
 			//		size_t pitch (unsigned long);
@@ -4392,84 +4734,94 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		size_t depth (unsigned long);
 			//	});
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemset3D_t* args = (args_hipMemset3D_t*) func_args;
 			printf("\thipPitchedPtr pitchedDevPtr = {\n");
-			printf("\t\tsize_t pitch = %lu\n", args->hipMemset3D.pitchedDevPtr.pitch);
-			printf("\t\tsize_t xsize = %lu\n", args->hipMemset3D.pitchedDevPtr.xsize);
-			printf("\t\tsize_t ysize = %lu\n", args->hipMemset3D.pitchedDevPtr.ysize);
+			printf("\t\tsize_t pitch = %lu\n", args->pitchedDevPtr.pitch);
+			printf("\t\tsize_t xsize = %lu\n", args->pitchedDevPtr.xsize);
+			printf("\t\tsize_t ysize = %lu\n", args->pitchedDevPtr.ysize);
 			printf("\t}\n");
-			printf("\tint value = %d\n", args->hipMemset3D.value);
+			printf("\tint value = %d\n", args->value);
 			printf("\thipExtent extent = {\n");
-			printf("\t\tsize_t width = %lu\n", args->hipMemset3D.extent.width);
-			printf("\t\tsize_t height = %lu\n", args->hipMemset3D.extent.height);
-			printf("\t\tsize_t depth = %lu\n", args->hipMemset3D.extent.depth);
+			printf("\t\tsize_t width = %lu\n", args->extent.width);
+			printf("\t\tsize_t height = %lu\n", args->extent.height);
+			printf("\t\tsize_t depth = %lu\n", args->extent.depth);
 			printf("\t}\n");
-			printf("\thipError_t retval = %d\n", args->hipMemset3D.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDestroyTextureObject
-		case HIP_API_ID_hipDestroyTextureObject :
+		case HIP_API_ID_hipDestroyTextureObject : {
 			//	hipTextureObject_t textureObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipTextureObject_t textureObject = %p", args->hipDestroyTextureObject.textureObject);
+			args_hipDestroyTextureObject_t* args = (args_hipDestroyTextureObject_t*) func_args;
+			printf("\thipTextureObject_t textureObject = %p", args->textureObject);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipDestroyTextureObject.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemAdvise
-		case HIP_API_ID_hipMemAdvise :
+		case HIP_API_ID_hipMemAdvise : {
 			//	const void * dev_ptr (const void *);
 			//	size_t count (unsigned long);
 			//	hipMemoryAdvise advice (enum hipMemoryAdvise);
 			//	int device (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * dev_ptr = %p", args->hipMemAdvise.dev_ptr);
+			args_hipMemAdvise_t* args = (args_hipMemAdvise_t*) func_args;
+			printf("\tconst void * dev_ptr = %p", args->dev_ptr);
 			printf("\n");
-			printf("\tsize_t count = %lu\n", args->hipMemAdvise.count);
-			printf("\thipMemoryAdvise advice = %d\n", args->hipMemAdvise.advice);
-			printf("\tint device = %d\n", args->hipMemAdvise.device);
-			printf("\thipError_t retval = %d\n", args->hipMemAdvise.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipMemoryAdvise advice = %d\n", args->advice);
+			printf("\tint device = %d\n", args->device);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxGetCacheConfig
-		case HIP_API_ID_hipCtxGetCacheConfig :
+		case HIP_API_ID_hipCtxGetCacheConfig : {
 			//	hipFuncCache_t * cacheConfig (enum hipFuncCache_t*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipFuncCache_t * cacheConfig = %p", args->hipCtxGetCacheConfig.cacheConfig);
-			if (args->hipCtxGetCacheConfig.cacheConfig != NULL) {
-				printf(" -> %d\n", args->hipCtxGetCacheConfig.cacheConfig__ref.val);
+			args_hipCtxGetCacheConfig_t* args = (args_hipCtxGetCacheConfig_t*) func_args;
+			printf("\thipFuncCache_t * cacheConfig = %p", args->cacheConfig);
+			if (args->cacheConfig != NULL) {
+				printf(" -> %d\n", args->cacheConfig__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipCtxGetCacheConfig.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvPointerGetAttributes
-		case HIP_API_ID_hipDrvPointerGetAttributes :
+		case HIP_API_ID_hipDrvPointerGetAttributes : {
 			//	unsigned int numAttributes (unsigned int);
 			//	hipPointer_attribute * attributes (enum hipPointer_attribute*);
 			//	void ** data (void **);
 			//	hipDeviceptr_t ptr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tunsigned int numAttributes = %u\n", args->hipDrvPointerGetAttributes.numAttributes);
-			printf("\thipPointer_attribute * attributes = %p", args->hipDrvPointerGetAttributes.attributes);
-			if (args->hipDrvPointerGetAttributes.attributes != NULL) {
-				printf(" -> %d\n", args->hipDrvPointerGetAttributes.attributes__ref.val);
+			args_hipDrvPointerGetAttributes_t* args = (args_hipDrvPointerGetAttributes_t*) func_args;
+			printf("\tunsigned int numAttributes = %u\n", args->numAttributes);
+			printf("\thipPointer_attribute * attributes = %p", args->attributes);
+			if (args->attributes != NULL) {
+				printf(" -> %d\n", args->attributes__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid ** data = %p", args->hipDrvPointerGetAttributes.data);
-			if (args->hipDrvPointerGetAttributes.data != NULL) {
-				printf("-> %p", args->hipDrvPointerGetAttributes.data__ref.ptr1);
+			printf("\tvoid ** data = %p", args->data);
+			if (args->data != NULL) {
+				printf("-> %p", args->data__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\thipDeviceptr_t ptr = %p", args->hipDrvPointerGetAttributes.ptr);
+			printf("\thipDeviceptr_t ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipDrvPointerGetAttributes.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleLaunchCooperativeKernelMultiDevice
-		case HIP_API_ID_hipModuleLaunchCooperativeKernelMultiDevice :
+		case HIP_API_ID_hipModuleLaunchCooperativeKernelMultiDevice : {
 			//	hipFunctionLaunchParams * launchParamsList ({
 			//		hipFunction_t function (struct ihipModuleSymbol_t *);
 			//		unsigned int gridDimX (unsigned int);
@@ -4485,111 +4837,121 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	unsigned int numDevices (unsigned int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipFunctionLaunchParams * launchParamsList = %p", args->hipModuleLaunchCooperativeKernelMultiDevice.launchParamsList);
-			if (args->hipModuleLaunchCooperativeKernelMultiDevice.launchParamsList != NULL) {
+			args_hipModuleLaunchCooperativeKernelMultiDevice_t* args = (args_hipModuleLaunchCooperativeKernelMultiDevice_t*) func_args;
+			printf("\thipFunctionLaunchParams * launchParamsList = %p", args->launchParamsList);
+			if (args->launchParamsList != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned int gridDimX = %u\n", args->hipModuleLaunchCooperativeKernelMultiDevice.launchParamsList__ref.val.gridDimX);
-				printf("\t\tunsigned int gridDimY = %u\n", args->hipModuleLaunchCooperativeKernelMultiDevice.launchParamsList__ref.val.gridDimY);
-				printf("\t\tunsigned int gridDimZ = %u\n", args->hipModuleLaunchCooperativeKernelMultiDevice.launchParamsList__ref.val.gridDimZ);
-				printf("\t\tunsigned int blockDimX = %u\n", args->hipModuleLaunchCooperativeKernelMultiDevice.launchParamsList__ref.val.blockDimX);
-				printf("\t\tunsigned int blockDimY = %u\n", args->hipModuleLaunchCooperativeKernelMultiDevice.launchParamsList__ref.val.blockDimY);
-				printf("\t\tunsigned int blockDimZ = %u\n", args->hipModuleLaunchCooperativeKernelMultiDevice.launchParamsList__ref.val.blockDimZ);
-				printf("\t\tunsigned int sharedMemBytes = %u\n", args->hipModuleLaunchCooperativeKernelMultiDevice.launchParamsList__ref.val.sharedMemBytes);
+				printf("\t\tunsigned int gridDimX = %u\n", args->launchParamsList__ref.val.gridDimX);
+				printf("\t\tunsigned int gridDimY = %u\n", args->launchParamsList__ref.val.gridDimY);
+				printf("\t\tunsigned int gridDimZ = %u\n", args->launchParamsList__ref.val.gridDimZ);
+				printf("\t\tunsigned int blockDimX = %u\n", args->launchParamsList__ref.val.blockDimX);
+				printf("\t\tunsigned int blockDimY = %u\n", args->launchParamsList__ref.val.blockDimY);
+				printf("\t\tunsigned int blockDimZ = %u\n", args->launchParamsList__ref.val.blockDimZ);
+				printf("\t\tunsigned int sharedMemBytes = %u\n", args->launchParamsList__ref.val.sharedMemBytes);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tunsigned int numDevices = %u\n", args->hipModuleLaunchCooperativeKernelMultiDevice.numDevices);
-			printf("\tunsigned int flags = %u\n", args->hipModuleLaunchCooperativeKernelMultiDevice.flags);
-			printf("\thipError_t retval = %d\n", args->hipModuleLaunchCooperativeKernelMultiDevice.retval);
+			printf("\tunsigned int numDevices = %u\n", args->numDevices);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleGetGlobal
-		case HIP_API_ID_hipModuleGetGlobal :
+		case HIP_API_ID_hipModuleGetGlobal : {
 			//	hipDeviceptr_t * dptr (void **);
 			//	size_t * bytes (unsigned long*);
 			//	hipModule_t hmod (struct ihipModule_t *);
 			//	const char * name (const char *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceptr_t * dptr = %p", args->hipModuleGetGlobal.dptr);
-			if (args->hipModuleGetGlobal.dptr != NULL) {
-				printf("-> %p", args->hipModuleGetGlobal.dptr__ref.ptr1);
+			args_hipModuleGetGlobal_t* args = (args_hipModuleGetGlobal_t*) func_args;
+			printf("\thipDeviceptr_t * dptr = %p", args->dptr);
+			if (args->dptr != NULL) {
+				printf("-> %p", args->dptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t * bytes = %p", args->hipModuleGetGlobal.bytes);
-			if (args->hipModuleGetGlobal.bytes != NULL) {
-				printf(" -> %lu\n", args->hipModuleGetGlobal.bytes__ref.val);
+			printf("\tsize_t * bytes = %p", args->bytes);
+			if (args->bytes != NULL) {
+				printf(" -> %lu\n", args->bytes__ref.val);
 			} else { printf("\n"); };
-			printf("\thipModule_t hmod = %p", args->hipModuleGetGlobal.hmod);
+			printf("\thipModule_t hmod = %p", args->hmod);
 			printf("\n");
-			printf("\tconst char * name = %p", args->hipModuleGetGlobal.name);
-			if (args->hipModuleGetGlobal.name != NULL) {
-				printf(" -> %s\n", args->hipModuleGetGlobal.name__ref.val);
+			printf("\tconst char * name = %p", args->name);
+			if (args->name != NULL) {
+				printf(" -> %s\n", args->name__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipModuleGetGlobal.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphEventRecordNodeGetEvent
-		case HIP_API_ID_hipGraphEventRecordNodeGetEvent :
+		case HIP_API_ID_hipGraphEventRecordNodeGetEvent : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t * event_out (struct ihipEvent_t **);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphEventRecordNodeGetEvent.node);
+			args_hipGraphEventRecordNodeGetEvent_t* args = (args_hipGraphEventRecordNodeGetEvent_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipEvent_t * event_out = %p", args->hipGraphEventRecordNodeGetEvent.event_out);
-			if (args->hipGraphEventRecordNodeGetEvent.event_out != NULL) {
-				printf(" -> %p\n", args->hipGraphEventRecordNodeGetEvent.event_out__ref.val);
+			printf("\thipEvent_t * event_out = %p", args->event_out);
+			if (args->event_out != NULL) {
+				printf(" -> %p\n", args->event_out__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphEventRecordNodeGetEvent.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphInstantiate
-		case HIP_API_ID_hipGraphInstantiate :
+		case HIP_API_ID_hipGraphInstantiate : {
 			//	hipGraphExec_t * pGraphExec (struct hipGraphExec **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphNode_t * pErrorNode (struct hipGraphNode **);
 			//	char * pLogBuffer (char *);
 			//	size_t bufferSize (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t * pGraphExec = %p", args->hipGraphInstantiate.pGraphExec);
-			if (args->hipGraphInstantiate.pGraphExec != NULL) {
-				printf(" -> %p\n", args->hipGraphInstantiate.pGraphExec__ref.val);
+			args_hipGraphInstantiate_t* args = (args_hipGraphInstantiate_t*) func_args;
+			printf("\thipGraphExec_t * pGraphExec = %p", args->pGraphExec);
+			if (args->pGraphExec != NULL) {
+				printf(" -> %p\n", args->pGraphExec__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphInstantiate.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\thipGraphNode_t * pErrorNode = %p", args->hipGraphInstantiate.pErrorNode);
-			if (args->hipGraphInstantiate.pErrorNode != NULL) {
-				printf(" -> %p\n", args->hipGraphInstantiate.pErrorNode__ref.val);
+			printf("\thipGraphNode_t * pErrorNode = %p", args->pErrorNode);
+			if (args->pErrorNode != NULL) {
+				printf(" -> %p\n", args->pErrorNode__ref.val);
 			} else { printf("\n"); };
-			printf("\tchar * pLogBuffer = %p", args->hipGraphInstantiate.pLogBuffer);
-			if (args->hipGraphInstantiate.pLogBuffer != NULL) {
-				printf(" -> %s\n", args->hipGraphInstantiate.pLogBuffer__ref.val);
+			printf("\tchar * pLogBuffer = %p", args->pLogBuffer);
+			if (args->pLogBuffer != NULL) {
+				printf(" -> %s\n", args->pLogBuffer__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t bufferSize = %lu\n", args->hipGraphInstantiate.bufferSize);
-			printf("\thipError_t retval = %d\n", args->hipGraphInstantiate.retval);
+			printf("\tsize_t bufferSize = %lu\n", args->bufferSize);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphRetainUserObject
-		case HIP_API_ID_hipGraphRetainUserObject :
+		case HIP_API_ID_hipGraphRetainUserObject : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipUserObject_t object (struct hipUserObject *);
 			//	unsigned int count (unsigned int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraph_t graph = %p", args->hipGraphRetainUserObject.graph);
+			args_hipGraphRetainUserObject_t* args = (args_hipGraphRetainUserObject_t*) func_args;
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\thipUserObject_t object = %p", args->hipGraphRetainUserObject.object);
+			printf("\thipUserObject_t object = %p", args->object);
 			printf("\n");
-			printf("\tunsigned int count = %u\n", args->hipGraphRetainUserObject.count);
-			printf("\tunsigned int flags = %u\n", args->hipGraphRetainUserObject.flags);
-			printf("\thipError_t retval = %d\n", args->hipGraphRetainUserObject.retval);
+			printf("\tunsigned int count = %u\n", args->count);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemAllocNodeGetParams
-		case HIP_API_ID_hipGraphMemAllocNodeGetParams :
+		case HIP_API_ID_hipGraphMemAllocNodeGetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipMemAllocNodeParams * pNodeParams ({
 			//		hipMemPoolProps poolProps ({
@@ -4608,63 +4970,69 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		void * dptr (void *);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphMemAllocNodeGetParams.node);
+			args_hipGraphMemAllocNodeGetParams_t* args = (args_hipGraphMemAllocNodeGetParams_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipMemAllocNodeParams * pNodeParams = %p", args->hipGraphMemAllocNodeGetParams.pNodeParams);
-			if (args->hipGraphMemAllocNodeGetParams.pNodeParams != NULL) {
+			printf("\thipMemAllocNodeParams * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
 				printf("\t\thipMemPoolProps poolProps = {\n");
-				printf("\t\t\thipMemAllocationType allocType = %d\n", args->hipGraphMemAllocNodeGetParams.pNodeParams__ref.val.poolProps.allocType);
-				printf("\t\t\thipMemAllocationHandleType handleTypes = %d\n", args->hipGraphMemAllocNodeGetParams.pNodeParams__ref.val.poolProps.handleTypes);
+				printf("\t\t\thipMemAllocationType allocType = %d\n", args->pNodeParams__ref.val.poolProps.allocType);
+				printf("\t\t\thipMemAllocationHandleType handleTypes = %d\n", args->pNodeParams__ref.val.poolProps.handleTypes);
 				printf("\t\t\thipMemLocation location = {\n");
-				printf("\t\t\t\thipMemLocationType type = %d\n", args->hipGraphMemAllocNodeGetParams.pNodeParams__ref.val.poolProps.location.type);
-				printf("\t\t\t\tint id = %d\n", args->hipGraphMemAllocNodeGetParams.pNodeParams__ref.val.poolProps.location.id);
+				printf("\t\t\t\thipMemLocationType type = %d\n", args->pNodeParams__ref.val.poolProps.location.type);
+				printf("\t\t\t\tint id = %d\n", args->pNodeParams__ref.val.poolProps.location.id);
 				printf("\t\t\t}\n");
-				printf("\t\t\tsize_t maxSize = %lu\n", args->hipGraphMemAllocNodeGetParams.pNodeParams__ref.val.poolProps.maxSize);
-				printf("\t\t\tunsigned char[56] reserved = %hhu\n", args->hipGraphMemAllocNodeGetParams.pNodeParams__ref.val.poolProps.reserved[0]);
+				printf("\t\t\tsize_t maxSize = %lu\n", args->pNodeParams__ref.val.poolProps.maxSize);
+				printf("\t\t\tunsigned char[56] reserved = %hhu\n", args->pNodeParams__ref.val.poolProps.reserved[0]);
 				printf("\t\t}\n");
-				printf("\t\tsize_t accessDescCount = %lu\n", args->hipGraphMemAllocNodeGetParams.pNodeParams__ref.val.accessDescCount);
-				printf("\t\tsize_t bytesize = %lu\n", args->hipGraphMemAllocNodeGetParams.pNodeParams__ref.val.bytesize);
+				printf("\t\tsize_t accessDescCount = %lu\n", args->pNodeParams__ref.val.accessDescCount);
+				printf("\t\tsize_t bytesize = %lu\n", args->pNodeParams__ref.val.bytesize);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphMemAllocNodeGetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetCaptureInfo
-		case HIP_API_ID_hipStreamGetCaptureInfo :
+		case HIP_API_ID_hipStreamGetCaptureInfo : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
 			//	unsigned long long * pId (unsigned long long *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamGetCaptureInfo.stream);
+			args_hipStreamGetCaptureInfo_t* args = (args_hipStreamGetCaptureInfo_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipStreamCaptureStatus * pCaptureStatus = %p", args->hipStreamGetCaptureInfo.pCaptureStatus);
-			if (args->hipStreamGetCaptureInfo.pCaptureStatus != NULL) {
-				printf(" -> %d\n", args->hipStreamGetCaptureInfo.pCaptureStatus__ref.val);
+			printf("\thipStreamCaptureStatus * pCaptureStatus = %p", args->pCaptureStatus);
+			if (args->pCaptureStatus != NULL) {
+				printf(" -> %d\n", args->pCaptureStatus__ref.val);
 			} else { printf("\n"); };
-			printf("\tunsigned long long * pId = %p", args->hipStreamGetCaptureInfo.pId);
-			if (args->hipStreamGetCaptureInfo.pId != NULL) {
-				printf(" -> %llu\n", args->hipStreamGetCaptureInfo.pId__ref.val);
+			printf("\tunsigned long long * pId = %p", args->pId);
+			if (args->pId != NULL) {
+				printf(" -> %llu\n", args->pId__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipStreamGetCaptureInfo.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxPopCurrent
-		case HIP_API_ID_hipCtxPopCurrent :
+		case HIP_API_ID_hipCtxPopCurrent : {
 			//	hipCtx_t * ctx (struct ihipCtx_t **);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipCtx_t * ctx = %p", args->hipCtxPopCurrent.ctx);
-			if (args->hipCtxPopCurrent.ctx != NULL) {
-				printf(" -> %p\n", args->hipCtxPopCurrent.ctx__ref.val);
+			args_hipCtxPopCurrent_t* args = (args_hipCtxPopCurrent_t*) func_args;
+			printf("\thipCtx_t * ctx = %p", args->ctx);
+			if (args->ctx != NULL) {
+				printf(" -> %p\n", args->ctx__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipCtxPopCurrent.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipPointerGetAttributes
-		case HIP_API_ID_hipPointerGetAttributes :
+		case HIP_API_ID_hipPointerGetAttributes : {
 			//	hipPointerAttribute_t * attributes ({
 			//		enum hipMemoryType type (enum hipMemoryType);
 			//		int device (int);
@@ -4675,54 +5043,60 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	const void * ptr (const void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipPointerAttribute_t * attributes = %p", args->hipPointerGetAttributes.attributes);
-			if (args->hipPointerGetAttributes.attributes != NULL) {
+			args_hipPointerGetAttributes_t* args = (args_hipPointerGetAttributes_t*) func_args;
+			printf("\thipPointerAttribute_t * attributes = %p", args->attributes);
+			if (args->attributes != NULL) {
 				printf(" -> {\n");
-				printf("\t\tenum hipMemoryType type = %d\n", args->hipPointerGetAttributes.attributes__ref.val.type);
-				printf("\t\tint device = %d\n", args->hipPointerGetAttributes.attributes__ref.val.device);
-				printf("\t\tint isManaged = %d\n", args->hipPointerGetAttributes.attributes__ref.val.isManaged);
-				printf("\t\tunsigned int allocationFlags = %u\n", args->hipPointerGetAttributes.attributes__ref.val.allocationFlags);
+				printf("\t\tenum hipMemoryType type = %d\n", args->attributes__ref.val.type);
+				printf("\t\tint device = %d\n", args->attributes__ref.val.device);
+				printf("\t\tint isManaged = %d\n", args->attributes__ref.val.isManaged);
+				printf("\t\tunsigned int allocationFlags = %u\n", args->attributes__ref.val.allocationFlags);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst void * ptr = %p", args->hipPointerGetAttributes.ptr);
+			printf("\tconst void * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipPointerGetAttributes.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceDisablePeerAccess
-		case HIP_API_ID_hipDeviceDisablePeerAccess :
+		case HIP_API_ID_hipDeviceDisablePeerAccess : {
 			//	int peerDeviceId (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint peerDeviceId = %d\n", args->hipDeviceDisablePeerAccess.peerDeviceId);
-			printf("\thipError_t retval = %d\n", args->hipDeviceDisablePeerAccess.retval);
+			args_hipDeviceDisablePeerAccess_t* args = (args_hipDeviceDisablePeerAccess_t*) func_args;
+			printf("\tint peerDeviceId = %d\n", args->peerDeviceId);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMallocPitch
-		case HIP_API_ID_hipMallocPitch :
+		case HIP_API_ID_hipMallocPitch : {
 			//	void ** ptr (void **);
 			//	size_t * pitch (unsigned long*);
 			//	size_t width (unsigned long);
 			//	size_t height (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** ptr = %p", args->hipMallocPitch.ptr);
-			if (args->hipMallocPitch.ptr != NULL) {
-				printf("-> %p", args->hipMallocPitch.ptr__ref.ptr1);
+			args_hipMallocPitch_t* args = (args_hipMallocPitch_t*) func_args;
+			printf("\tvoid ** ptr = %p", args->ptr);
+			if (args->ptr != NULL) {
+				printf("-> %p", args->ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t * pitch = %p", args->hipMallocPitch.pitch);
-			if (args->hipMallocPitch.pitch != NULL) {
-				printf(" -> %lu\n", args->hipMallocPitch.pitch__ref.val);
+			printf("\tsize_t * pitch = %p", args->pitch);
+			if (args->pitch != NULL) {
+				printf(" -> %lu\n", args->pitch__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t width = %lu\n", args->hipMallocPitch.width);
-			printf("\tsize_t height = %lu\n", args->hipMallocPitch.height);
-			printf("\thipError_t retval = %d\n", args->hipMallocPitch.retval);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DFromArrayAsync
-		case HIP_API_ID_hipMemcpy2DFromArrayAsync :
+		case HIP_API_ID_hipMemcpy2DFromArrayAsync : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	hipArray_const_t src (const struct hipArray *);
@@ -4733,77 +5107,85 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpy2DFromArrayAsync.dst);
+			args_hipMemcpy2DFromArrayAsync_t* args = (args_hipMemcpy2DFromArrayAsync_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t dpitch = %lu\n", args->hipMemcpy2DFromArrayAsync.dpitch);
-			printf("\thipArray_const_t src = %p", args->hipMemcpy2DFromArrayAsync.src);
+			printf("\tsize_t dpitch = %lu\n", args->dpitch);
+			printf("\thipArray_const_t src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t wOffset = %lu\n", args->hipMemcpy2DFromArrayAsync.wOffset);
-			printf("\tsize_t hOffset = %lu\n", args->hipMemcpy2DFromArrayAsync.hOffset);
-			printf("\tsize_t width = %lu\n", args->hipMemcpy2DFromArrayAsync.width);
-			printf("\tsize_t height = %lu\n", args->hipMemcpy2DFromArrayAsync.height);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpy2DFromArrayAsync.kind);
-			printf("\thipStream_t stream = %p", args->hipMemcpy2DFromArrayAsync.stream);
+			printf("\tsize_t wOffset = %lu\n", args->wOffset);
+			printf("\tsize_t hOffset = %lu\n", args->hOffset);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpy2DFromArrayAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceComputeCapability
-		case HIP_API_ID_hipDeviceComputeCapability :
+		case HIP_API_ID_hipDeviceComputeCapability : {
 			//	int * major (int *);
 			//	int * minor (int *);
 			//	hipDevice_t device (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * major = %p", args->hipDeviceComputeCapability.major);
-			if (args->hipDeviceComputeCapability.major != NULL) {
-				printf(" -> %d\n", args->hipDeviceComputeCapability.major__ref.val);
+			args_hipDeviceComputeCapability_t* args = (args_hipDeviceComputeCapability_t*) func_args;
+			printf("\tint * major = %p", args->major);
+			if (args->major != NULL) {
+				printf(" -> %d\n", args->major__ref.val);
 			} else { printf("\n"); };
-			printf("\tint * minor = %p", args->hipDeviceComputeCapability.minor);
-			if (args->hipDeviceComputeCapability.minor != NULL) {
-				printf(" -> %d\n", args->hipDeviceComputeCapability.minor__ref.val);
+			printf("\tint * minor = %p", args->minor);
+			if (args->minor != NULL) {
+				printf(" -> %d\n", args->minor__ref.val);
 			} else { printf("\n"); };
-			printf("\thipDevice_t device = %d\n", args->hipDeviceComputeCapability.device);
-			printf("\thipError_t retval = %d\n", args->hipDeviceComputeCapability.retval);
+			printf("\thipDevice_t device = %d\n", args->device);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyHtoD
-		case HIP_API_ID_hipMemcpyHtoD :
+		case HIP_API_ID_hipMemcpyHtoD : {
 			//	hipDeviceptr_t dst (void *);
 			//	void * src (void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceptr_t dst = %p", args->hipMemcpyHtoD.dst);
+			args_hipMemcpyHtoD_t* args = (args_hipMemcpyHtoD_t*) func_args;
+			printf("\thipDeviceptr_t dst = %p", args->dst);
 			printf("\n");
-			printf("\tvoid * src = %p", args->hipMemcpyHtoD.src);
+			printf("\tvoid * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyHtoD.sizeBytes);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyHtoD.retval);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipOccupancyMaxActiveBlocksPerMultiprocessor
-		case HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessor :
+		case HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessor : {
 			//	int * numBlocks (int *);
 			//	const void * f (const void *);
 			//	int blockSize (int);
 			//	size_t dynSharedMemPerBlk (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * numBlocks = %p", args->hipOccupancyMaxActiveBlocksPerMultiprocessor.numBlocks);
-			if (args->hipOccupancyMaxActiveBlocksPerMultiprocessor.numBlocks != NULL) {
-				printf(" -> %d\n", args->hipOccupancyMaxActiveBlocksPerMultiprocessor.numBlocks__ref.val);
+			args_hipOccupancyMaxActiveBlocksPerMultiprocessor_t* args = (args_hipOccupancyMaxActiveBlocksPerMultiprocessor_t*) func_args;
+			printf("\tint * numBlocks = %p", args->numBlocks);
+			if (args->numBlocks != NULL) {
+				printf(" -> %d\n", args->numBlocks__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst void * f = %p", args->hipOccupancyMaxActiveBlocksPerMultiprocessor.f);
+			printf("\tconst void * f = %p", args->f);
 			printf("\n");
-			printf("\tint blockSize = %d\n", args->hipOccupancyMaxActiveBlocksPerMultiprocessor.blockSize);
-			printf("\tsize_t dynSharedMemPerBlk = %lu\n", args->hipOccupancyMaxActiveBlocksPerMultiprocessor.dynSharedMemPerBlk);
-			printf("\thipError_t retval = %d\n", args->hipOccupancyMaxActiveBlocksPerMultiprocessor.retval);
+			printf("\tint blockSize = %d\n", args->blockSize);
+			printf("\tsize_t dynSharedMemPerBlk = %lu\n", args->dynSharedMemPerBlk);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipSignalExternalSemaphoresAsync
-		case HIP_API_ID_hipSignalExternalSemaphoresAsync :
+		case HIP_API_ID_hipSignalExternalSemaphoresAsync : {
 			//	const hipExternalSemaphore_t * extSemArray (const void * *);
 			//	const hipExternalSemaphoreSignalParams * paramsArray ({
 			//		struct (unnamed struct at header/hip/hip.h:1488:2) params ({
@@ -4814,29 +5196,31 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	unsigned int numExtSems (unsigned int);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst hipExternalSemaphore_t * extSemArray = %p", args->hipSignalExternalSemaphoresAsync.extSemArray);
-			if (args->hipSignalExternalSemaphoresAsync.extSemArray != NULL) {
-				printf("-> %p", args->hipSignalExternalSemaphoresAsync.extSemArray__ref.ptr1);
+			args_hipSignalExternalSemaphoresAsync_t* args = (args_hipSignalExternalSemaphoresAsync_t*) func_args;
+			printf("\tconst hipExternalSemaphore_t * extSemArray = %p", args->extSemArray);
+			if (args->extSemArray != NULL) {
+				printf("-> %p", args->extSemArray__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tconst hipExternalSemaphoreSignalParams * paramsArray = %p", args->hipSignalExternalSemaphoresAsync.paramsArray);
-			if (args->hipSignalExternalSemaphoresAsync.paramsArray != NULL) {
+			printf("\tconst hipExternalSemaphoreSignalParams * paramsArray = %p", args->paramsArray);
+			if (args->paramsArray != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct (unnamed struct at header/hip/hip.h:1488:2) params = {\n");
 				printf("\t\t}\n");
-				printf("\t\tunsigned int flags = %u\n", args->hipSignalExternalSemaphoresAsync.paramsArray__ref.val.flags);
-				printf("\t\tunsigned int[16] reserved = %u\n", args->hipSignalExternalSemaphoresAsync.paramsArray__ref.val.reserved[0]);
+				printf("\t\tunsigned int flags = %u\n", args->paramsArray__ref.val.flags);
+				printf("\t\tunsigned int[16] reserved = %u\n", args->paramsArray__ref.val.reserved[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tunsigned int numExtSems = %u\n", args->hipSignalExternalSemaphoresAsync.numExtSems);
-			printf("\thipStream_t stream = %p", args->hipSignalExternalSemaphoresAsync.stream);
+			printf("\tunsigned int numExtSems = %u\n", args->numExtSems);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipSignalExternalSemaphoresAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipArray3DGetDescriptor
-		case HIP_API_ID_hipArray3DGetDescriptor :
+		case HIP_API_ID_hipArray3DGetDescriptor : {
 			//	HIP_ARRAY3D_DESCRIPTOR * pArrayDescriptor ({
 			//		size_t Width (unsigned long);
 			//		size_t Height (unsigned long);
@@ -4847,25 +5231,27 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipArray_t array (struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tHIP_ARRAY3D_DESCRIPTOR * pArrayDescriptor = %p", args->hipArray3DGetDescriptor.pArrayDescriptor);
-			if (args->hipArray3DGetDescriptor.pArrayDescriptor != NULL) {
+			args_hipArray3DGetDescriptor_t* args = (args_hipArray3DGetDescriptor_t*) func_args;
+			printf("\tHIP_ARRAY3D_DESCRIPTOR * pArrayDescriptor = %p", args->pArrayDescriptor);
+			if (args->pArrayDescriptor != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t Width = %lu\n", args->hipArray3DGetDescriptor.pArrayDescriptor__ref.val.Width);
-				printf("\t\tsize_t Height = %lu\n", args->hipArray3DGetDescriptor.pArrayDescriptor__ref.val.Height);
-				printf("\t\tsize_t Depth = %lu\n", args->hipArray3DGetDescriptor.pArrayDescriptor__ref.val.Depth);
-				printf("\t\tenum hipArray_Format Format = %d\n", args->hipArray3DGetDescriptor.pArrayDescriptor__ref.val.Format);
-				printf("\t\tunsigned int NumChannels = %u\n", args->hipArray3DGetDescriptor.pArrayDescriptor__ref.val.NumChannels);
-				printf("\t\tunsigned int Flags = %u\n", args->hipArray3DGetDescriptor.pArrayDescriptor__ref.val.Flags);
+				printf("\t\tsize_t Width = %lu\n", args->pArrayDescriptor__ref.val.Width);
+				printf("\t\tsize_t Height = %lu\n", args->pArrayDescriptor__ref.val.Height);
+				printf("\t\tsize_t Depth = %lu\n", args->pArrayDescriptor__ref.val.Depth);
+				printf("\t\tenum hipArray_Format Format = %d\n", args->pArrayDescriptor__ref.val.Format);
+				printf("\t\tunsigned int NumChannels = %u\n", args->pArrayDescriptor__ref.val.NumChannels);
+				printf("\t\tunsigned int Flags = %u\n", args->pArrayDescriptor__ref.val.Flags);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipArray_t array = %p", args->hipArray3DGetDescriptor.array);
+			printf("\thipArray_t array = %p", args->array);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipArray3DGetDescriptor.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___hipPopCallConfiguration
-		case HIP_API_ID___hipPopCallConfiguration :
+		case HIP_API_ID___hipPopCallConfiguration : {
 			//	dim3 * gridDim ({
 			//		uint32_t x (unsigned int);
 			//		uint32_t y (unsigned int);
@@ -4879,45 +5265,49 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t * sharedMem (unsigned long*);
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tdim3 * gridDim = %p", args->__hipPopCallConfiguration.gridDim);
-			if (args->__hipPopCallConfiguration.gridDim != NULL) {
+			args___hipPopCallConfiguration_t* args = (args___hipPopCallConfiguration_t*) func_args;
+			printf("\tdim3 * gridDim = %p", args->gridDim);
+			if (args->gridDim != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t x = %u\n", args->__hipPopCallConfiguration.gridDim__ref.val.x);
-				printf("\t\tuint32_t y = %u\n", args->__hipPopCallConfiguration.gridDim__ref.val.y);
-				printf("\t\tuint32_t z = %u\n", args->__hipPopCallConfiguration.gridDim__ref.val.z);
+				printf("\t\tuint32_t x = %u\n", args->gridDim__ref.val.x);
+				printf("\t\tuint32_t y = %u\n", args->gridDim__ref.val.y);
+				printf("\t\tuint32_t z = %u\n", args->gridDim__ref.val.z);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tdim3 * blockDim = %p", args->__hipPopCallConfiguration.blockDim);
-			if (args->__hipPopCallConfiguration.blockDim != NULL) {
+			printf("\tdim3 * blockDim = %p", args->blockDim);
+			if (args->blockDim != NULL) {
 				printf(" -> {\n");
-				printf("\t\tuint32_t x = %u\n", args->__hipPopCallConfiguration.blockDim__ref.val.x);
-				printf("\t\tuint32_t y = %u\n", args->__hipPopCallConfiguration.blockDim__ref.val.y);
-				printf("\t\tuint32_t z = %u\n", args->__hipPopCallConfiguration.blockDim__ref.val.z);
+				printf("\t\tuint32_t x = %u\n", args->blockDim__ref.val.x);
+				printf("\t\tuint32_t y = %u\n", args->blockDim__ref.val.y);
+				printf("\t\tuint32_t z = %u\n", args->blockDim__ref.val.z);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tsize_t * sharedMem = %p", args->__hipPopCallConfiguration.sharedMem);
-			if (args->__hipPopCallConfiguration.sharedMem != NULL) {
-				printf(" -> %lu\n", args->__hipPopCallConfiguration.sharedMem__ref.val);
+			printf("\tsize_t * sharedMem = %p", args->sharedMem);
+			if (args->sharedMem != NULL) {
+				printf(" -> %lu\n", args->sharedMem__ref.val);
 			} else { printf("\n"); };
-			printf("\thipStream_t * stream = %p", args->__hipPopCallConfiguration.stream);
-			if (args->__hipPopCallConfiguration.stream != NULL) {
-				printf(" -> %p\n", args->__hipPopCallConfiguration.stream__ref.val);
+			printf("\thipStream_t * stream = %p", args->stream);
+			if (args->stream != NULL) {
+				printf(" -> %p\n", args->stream__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->__hipPopCallConfiguration.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDevicePrimaryCtxRelease
-		case HIP_API_ID_hipDevicePrimaryCtxRelease :
+		case HIP_API_ID_hipDevicePrimaryCtxRelease : {
 			//	hipDevice_t dev (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDevice_t dev = %d\n", args->hipDevicePrimaryCtxRelease.dev);
-			printf("\thipError_t retval = %d\n", args->hipDevicePrimaryCtxRelease.retval);
+			args_hipDevicePrimaryCtxRelease_t* args = (args_hipDevicePrimaryCtxRelease_t*) func_args;
+			printf("\thipDevice_t dev = %d\n", args->dev);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchCooperativeKernelMultiDevice
-		case HIP_API_ID_hipLaunchCooperativeKernelMultiDevice :
+		case HIP_API_ID_hipLaunchCooperativeKernelMultiDevice : {
 			//	hipLaunchParams * launchParamsList ({
 			//		void * func (void *);
 			//		dim3 gridDim ({
@@ -4937,40 +5327,44 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	int numDevices (int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipLaunchParams * launchParamsList = %p", args->hipLaunchCooperativeKernelMultiDevice.launchParamsList);
-			if (args->hipLaunchCooperativeKernelMultiDevice.launchParamsList != NULL) {
+			args_hipLaunchCooperativeKernelMultiDevice_t* args = (args_hipLaunchCooperativeKernelMultiDevice_t*) func_args;
+			printf("\thipLaunchParams * launchParamsList = %p", args->launchParamsList);
+			if (args->launchParamsList != NULL) {
 				printf(" -> {\n");
 				printf("\t\tdim3 gridDim = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hipLaunchCooperativeKernelMultiDevice.launchParamsList__ref.val.gridDim.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hipLaunchCooperativeKernelMultiDevice.launchParamsList__ref.val.gridDim.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hipLaunchCooperativeKernelMultiDevice.launchParamsList__ref.val.gridDim.z);
+				printf("\t\t\tuint32_t x = %u\n", args->launchParamsList__ref.val.gridDim.x);
+				printf("\t\t\tuint32_t y = %u\n", args->launchParamsList__ref.val.gridDim.y);
+				printf("\t\t\tuint32_t z = %u\n", args->launchParamsList__ref.val.gridDim.z);
 				printf("\t\t}\n");
 				printf("\t\tdim3 blockDim = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hipLaunchCooperativeKernelMultiDevice.launchParamsList__ref.val.blockDim.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hipLaunchCooperativeKernelMultiDevice.launchParamsList__ref.val.blockDim.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hipLaunchCooperativeKernelMultiDevice.launchParamsList__ref.val.blockDim.z);
+				printf("\t\t\tuint32_t x = %u\n", args->launchParamsList__ref.val.blockDim.x);
+				printf("\t\t\tuint32_t y = %u\n", args->launchParamsList__ref.val.blockDim.y);
+				printf("\t\t\tuint32_t z = %u\n", args->launchParamsList__ref.val.blockDim.z);
 				printf("\t\t}\n");
-				printf("\t\tsize_t sharedMem = %lu\n", args->hipLaunchCooperativeKernelMultiDevice.launchParamsList__ref.val.sharedMem);
+				printf("\t\tsize_t sharedMem = %lu\n", args->launchParamsList__ref.val.sharedMem);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint numDevices = %d\n", args->hipLaunchCooperativeKernelMultiDevice.numDevices);
-			printf("\tunsigned int flags = %u\n", args->hipLaunchCooperativeKernelMultiDevice.flags);
-			printf("\thipError_t retval = %d\n", args->hipLaunchCooperativeKernelMultiDevice.retval);
+			printf("\tint numDevices = %d\n", args->numDevices);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFreeArray
-		case HIP_API_ID_hipFreeArray :
+		case HIP_API_ID_hipFreeArray : {
 			//	hipArray_t array (struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t array = %p", args->hipFreeArray.array);
+			args_hipFreeArray_t* args = (args_hipFreeArray_t*) func_args;
+			printf("\thipArray_t array = %p", args->array);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipFreeArray.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemsetNodeSetParams
-		case HIP_API_ID_hipGraphMemsetNodeSetParams :
+		case HIP_API_ID_hipGraphMemsetNodeSetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipMemsetParams * pNodeParams ({
 			//		void * dst (void *);
@@ -4981,24 +5375,26 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		size_t width (unsigned long);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphMemsetNodeSetParams.node);
+			args_hipGraphMemsetNodeSetParams_t* args = (args_hipGraphMemsetNodeSetParams_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\tconst hipMemsetParams * pNodeParams = %p", args->hipGraphMemsetNodeSetParams.pNodeParams);
-			if (args->hipGraphMemsetNodeSetParams.pNodeParams != NULL) {
+			printf("\tconst hipMemsetParams * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned int elementSize = %u\n", args->hipGraphMemsetNodeSetParams.pNodeParams__ref.val.elementSize);
-				printf("\t\tsize_t height = %lu\n", args->hipGraphMemsetNodeSetParams.pNodeParams__ref.val.height);
-				printf("\t\tsize_t pitch = %lu\n", args->hipGraphMemsetNodeSetParams.pNodeParams__ref.val.pitch);
-				printf("\t\tunsigned int value = %u\n", args->hipGraphMemsetNodeSetParams.pNodeParams__ref.val.value);
-				printf("\t\tsize_t width = %lu\n", args->hipGraphMemsetNodeSetParams.pNodeParams__ref.val.width);
+				printf("\t\tunsigned int elementSize = %u\n", args->pNodeParams__ref.val.elementSize);
+				printf("\t\tsize_t height = %lu\n", args->pNodeParams__ref.val.height);
+				printf("\t\tsize_t pitch = %lu\n", args->pNodeParams__ref.val.pitch);
+				printf("\t\tunsigned int value = %u\n", args->pNodeParams__ref.val.value);
+				printf("\t\tsize_t width = %lu\n", args->pNodeParams__ref.val.width);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphMemsetNodeSetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolSetAccess
-		case HIP_API_ID_hipMemPoolSetAccess :
+		case HIP_API_ID_hipMemPoolSetAccess : {
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	const hipMemAccessDesc * desc_list ({
 			//		hipMemLocation location ({
@@ -5009,54 +5405,60 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemPool_t mem_pool = %p", args->hipMemPoolSetAccess.mem_pool);
+			args_hipMemPoolSetAccess_t* args = (args_hipMemPoolSetAccess_t*) func_args;
+			printf("\thipMemPool_t mem_pool = %p", args->mem_pool);
 			printf("\n");
-			printf("\tconst hipMemAccessDesc * desc_list = %p", args->hipMemPoolSetAccess.desc_list);
-			if (args->hipMemPoolSetAccess.desc_list != NULL) {
+			printf("\tconst hipMemAccessDesc * desc_list = %p", args->desc_list);
+			if (args->desc_list != NULL) {
 				printf(" -> {\n");
 				printf("\t\thipMemLocation location = {\n");
-				printf("\t\t\thipMemLocationType type = %d\n", args->hipMemPoolSetAccess.desc_list__ref.val.location.type);
-				printf("\t\t\tint id = %d\n", args->hipMemPoolSetAccess.desc_list__ref.val.location.id);
+				printf("\t\t\thipMemLocationType type = %d\n", args->desc_list__ref.val.location.type);
+				printf("\t\t\tint id = %d\n", args->desc_list__ref.val.location.id);
 				printf("\t\t}\n");
-				printf("\t\thipMemAccessFlags flags = %d\n", args->hipMemPoolSetAccess.desc_list__ref.val.flags);
+				printf("\t\thipMemAccessFlags flags = %d\n", args->desc_list__ref.val.flags);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tsize_t count = %lu\n", args->hipMemPoolSetAccess.count);
-			printf("\thipError_t retval = %d\n", args->hipMemPoolSetAccess.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetStreamDeviceId
-		case HIP_API_ID_hipGetStreamDeviceId :
+		case HIP_API_ID_hipGetStreamDeviceId : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	int retval (int);
-			printf("\thipStream_t stream = %p", args->hipGetStreamDeviceId.stream);
+			args_hipGetStreamDeviceId_t* args = (args_hipGetStreamDeviceId_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\tint retval = %d\n", args->hipGetStreamDeviceId.retval);
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExtStreamCreateWithCUMask
-		case HIP_API_ID_hipExtStreamCreateWithCUMask :
+		case HIP_API_ID_hipExtStreamCreateWithCUMask : {
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	uint32_t cuMaskSize (unsigned int);
 			//	const uint32_t * cuMask (const unsigned int *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t * stream = %p", args->hipExtStreamCreateWithCUMask.stream);
-			if (args->hipExtStreamCreateWithCUMask.stream != NULL) {
-				printf(" -> %p\n", args->hipExtStreamCreateWithCUMask.stream__ref.val);
+			args_hipExtStreamCreateWithCUMask_t* args = (args_hipExtStreamCreateWithCUMask_t*) func_args;
+			printf("\thipStream_t * stream = %p", args->stream);
+			if (args->stream != NULL) {
+				printf(" -> %p\n", args->stream__ref.val);
 			} else { printf("\n"); };
-			printf("\tuint32_t cuMaskSize = %u\n", args->hipExtStreamCreateWithCUMask.cuMaskSize);
-			printf("\tconst uint32_t * cuMask = %p", args->hipExtStreamCreateWithCUMask.cuMask);
-			if (args->hipExtStreamCreateWithCUMask.cuMask != NULL) {
-				printf(" -> %u\n", args->hipExtStreamCreateWithCUMask.cuMask__ref.val);
+			printf("\tuint32_t cuMaskSize = %u\n", args->cuMaskSize);
+			printf("\tconst uint32_t * cuMask = %p", args->cuMask);
+			if (args->cuMask != NULL) {
+				printf(" -> %u\n", args->cuMask__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipExtStreamCreateWithCUMask.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetTextureObjectTextureDesc
-		case HIP_API_ID_hipGetTextureObjectTextureDesc :
+		case HIP_API_ID_hipGetTextureObjectTextureDesc : {
 			//	hipTextureDesc * pTexDesc ({
 			//		enum hipTextureAddressMode[3] addressMode (enum hipTextureAddressMode[3]);
 			//		enum hipTextureFilterMode filterMode (enum hipTextureFilterMode);
@@ -5072,43 +5474,47 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipTextureObject_t textureObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipTextureDesc * pTexDesc = %p", args->hipGetTextureObjectTextureDesc.pTexDesc);
-			if (args->hipGetTextureObjectTextureDesc.pTexDesc != NULL) {
+			args_hipGetTextureObjectTextureDesc_t* args = (args_hipGetTextureObjectTextureDesc_t*) func_args;
+			printf("\thipTextureDesc * pTexDesc = %p", args->pTexDesc);
+			if (args->pTexDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipGetTextureObjectTextureDesc.pTexDesc__ref.val.addressMode[0]);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipGetTextureObjectTextureDesc.pTexDesc__ref.val.filterMode);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipGetTextureObjectTextureDesc.pTexDesc__ref.val.readMode);
-				printf("\t\tint sRGB = %d\n", args->hipGetTextureObjectTextureDesc.pTexDesc__ref.val.sRGB);
-				printf("\t\tfloat[4] borderColor = %f\n", args->hipGetTextureObjectTextureDesc.pTexDesc__ref.val.borderColor[0]);
-				printf("\t\tint normalizedCoords = %d\n", args->hipGetTextureObjectTextureDesc.pTexDesc__ref.val.normalizedCoords);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipGetTextureObjectTextureDesc.pTexDesc__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipGetTextureObjectTextureDesc.pTexDesc__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipGetTextureObjectTextureDesc.pTexDesc__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipGetTextureObjectTextureDesc.pTexDesc__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipGetTextureObjectTextureDesc.pTexDesc__ref.val.maxMipmapLevelClamp);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->pTexDesc__ref.val.addressMode[0]);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->pTexDesc__ref.val.filterMode);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->pTexDesc__ref.val.readMode);
+				printf("\t\tint sRGB = %d\n", args->pTexDesc__ref.val.sRGB);
+				printf("\t\tfloat[4] borderColor = %f\n", args->pTexDesc__ref.val.borderColor[0]);
+				printf("\t\tint normalizedCoords = %d\n", args->pTexDesc__ref.val.normalizedCoords);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->pTexDesc__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->pTexDesc__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->pTexDesc__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->pTexDesc__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->pTexDesc__ref.val.maxMipmapLevelClamp);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipTextureObject_t textureObject = %p", args->hipGetTextureObjectTextureDesc.textureObject);
+			printf("\thipTextureObject_t textureObject = %p", args->textureObject);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGetTextureObjectTextureDesc.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventRecord_spt
-		case HIP_API_ID_hipEventRecord_spt :
+		case HIP_API_ID_hipEventRecord_spt : {
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipEvent_t event = %p", args->hipEventRecord_spt.event);
+			args_hipEventRecord_spt_t* args = (args_hipEventRecord_spt_t*) func_args;
+			printf("\thipEvent_t event = %p", args->event);
 			printf("\n");
-			printf("\thipStream_t stream = %p", args->hipEventRecord_spt.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipEventRecord_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipConfigureCall
-		case HIP_API_ID_hipConfigureCall :
+		case HIP_API_ID_hipConfigureCall : {
 			//	dim3 gridDim ({
 			//		uint32_t x (unsigned int);
 			//		uint32_t y (unsigned int);
@@ -5122,25 +5528,27 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t sharedMem (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipConfigureCall_t* args = (args_hipConfigureCall_t*) func_args;
 			printf("\tdim3 gridDim = {\n");
-			printf("\t\tuint32_t x = %u\n", args->hipConfigureCall.gridDim.x);
-			printf("\t\tuint32_t y = %u\n", args->hipConfigureCall.gridDim.y);
-			printf("\t\tuint32_t z = %u\n", args->hipConfigureCall.gridDim.z);
+			printf("\t\tuint32_t x = %u\n", args->gridDim.x);
+			printf("\t\tuint32_t y = %u\n", args->gridDim.y);
+			printf("\t\tuint32_t z = %u\n", args->gridDim.z);
 			printf("\t}\n");
 			printf("\tdim3 blockDim = {\n");
-			printf("\t\tuint32_t x = %u\n", args->hipConfigureCall.blockDim.x);
-			printf("\t\tuint32_t y = %u\n", args->hipConfigureCall.blockDim.y);
-			printf("\t\tuint32_t z = %u\n", args->hipConfigureCall.blockDim.z);
+			printf("\t\tuint32_t x = %u\n", args->blockDim.x);
+			printf("\t\tuint32_t y = %u\n", args->blockDim.y);
+			printf("\t\tuint32_t z = %u\n", args->blockDim.z);
 			printf("\t}\n");
-			printf("\tsize_t sharedMem = %lu\n", args->hipConfigureCall.sharedMem);
-			printf("\thipStream_t stream = %p", args->hipConfigureCall.stream);
+			printf("\tsize_t sharedMem = %lu\n", args->sharedMem);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipConfigureCall.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyFromArray_spt
-		case HIP_API_ID_hipMemcpyFromArray_spt :
+		case HIP_API_ID_hipMemcpyFromArray_spt : {
 			//	void * dst (void *);
 			//	hipArray_const_t src (const struct hipArray *);
 			//	size_t wOffsetSrc (unsigned long);
@@ -5148,66 +5556,74 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t count (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpyFromArray_spt.dst);
+			args_hipMemcpyFromArray_spt_t* args = (args_hipMemcpyFromArray_spt_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\thipArray_const_t src = %p", args->hipMemcpyFromArray_spt.src);
+			printf("\thipArray_const_t src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t wOffsetSrc = %lu\n", args->hipMemcpyFromArray_spt.wOffsetSrc);
-			printf("\tsize_t hOffset = %lu\n", args->hipMemcpyFromArray_spt.hOffset);
-			printf("\tsize_t count = %lu\n", args->hipMemcpyFromArray_spt.count);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpyFromArray_spt.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyFromArray_spt.retval);
+			printf("\tsize_t wOffsetSrc = %lu\n", args->wOffsetSrc);
+			printf("\tsize_t hOffset = %lu\n", args->hOffset);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleGetFunction
-		case HIP_API_ID_hipModuleGetFunction :
+		case HIP_API_ID_hipModuleGetFunction : {
 			//	hipFunction_t * function (struct ihipModuleSymbol_t **);
 			//	hipModule_t module (struct ihipModule_t *);
 			//	const char * kname (const char *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipFunction_t * function = %p", args->hipModuleGetFunction.function);
-			if (args->hipModuleGetFunction.function != NULL) {
-				printf(" -> %p\n", args->hipModuleGetFunction.function__ref.val);
+			args_hipModuleGetFunction_t* args = (args_hipModuleGetFunction_t*) func_args;
+			printf("\thipFunction_t * function = %p", args->function);
+			if (args->function != NULL) {
+				printf(" -> %p\n", args->function__ref.val);
 			} else { printf("\n"); };
-			printf("\thipModule_t module = %p", args->hipModuleGetFunction.module);
+			printf("\thipModule_t module = %p", args->module);
 			printf("\n");
-			printf("\tconst char * kname = %p", args->hipModuleGetFunction.kname);
-			if (args->hipModuleGetFunction.kname != NULL) {
-				printf(" -> %s\n", args->hipModuleGetFunction.kname__ref.val);
+			printf("\tconst char * kname = %p", args->kname);
+			if (args->kname != NULL) {
+				printf(" -> %s\n", args->kname__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipModuleGetFunction.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFuncSetCacheConfig
-		case HIP_API_ID_hipFuncSetCacheConfig :
+		case HIP_API_ID_hipFuncSetCacheConfig : {
 			//	const void * func (const void *);
 			//	hipFuncCache_t config (enum hipFuncCache_t);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * func = %p", args->hipFuncSetCacheConfig.func);
+			args_hipFuncSetCacheConfig_t* args = (args_hipFuncSetCacheConfig_t*) func_args;
+			printf("\tconst void * func = %p", args->func);
 			printf("\n");
-			printf("\thipFuncCache_t config = %d\n", args->hipFuncSetCacheConfig.config);
-			printf("\thipError_t retval = %d\n", args->hipFuncSetCacheConfig.retval);
+			printf("\thipFuncCache_t config = %d\n", args->config);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetLimit
-		case HIP_API_ID_hipDeviceGetLimit :
+		case HIP_API_ID_hipDeviceGetLimit : {
 			//	size_t * pValue (unsigned long*);
 			//	enum hipLimit_t limit (enum hipLimit_t);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tsize_t * pValue = %p", args->hipDeviceGetLimit.pValue);
-			if (args->hipDeviceGetLimit.pValue != NULL) {
-				printf(" -> %lu\n", args->hipDeviceGetLimit.pValue__ref.val);
+			args_hipDeviceGetLimit_t* args = (args_hipDeviceGetLimit_t*) func_args;
+			printf("\tsize_t * pValue = %p", args->pValue);
+			if (args->pValue != NULL) {
+				printf(" -> %lu\n", args->pValue__ref.val);
 			} else { printf("\n"); };
-			printf("\tenum hipLimit_t limit = %d\n", args->hipDeviceGetLimit.limit);
-			printf("\thipError_t retval = %d\n", args->hipDeviceGetLimit.retval);
+			printf("\tenum hipLimit_t limit = %d\n", args->limit);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetMaxAnisotropy
-		case HIP_API_ID_hipTexRefGetMaxAnisotropy :
+		case HIP_API_ID_hipTexRefGetMaxAnisotropy : {
 			//	int * pmaxAnsio (int *);
 			//	const textureReference * texRef ({
 			//		int normalized (int);
@@ -5232,40 +5648,42 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipArray_Format format (enum hipArray_Format);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * pmaxAnsio = %p", args->hipTexRefGetMaxAnisotropy.pmaxAnsio);
-			if (args->hipTexRefGetMaxAnisotropy.pmaxAnsio != NULL) {
-				printf(" -> %d\n", args->hipTexRefGetMaxAnisotropy.pmaxAnsio__ref.val);
+			args_hipTexRefGetMaxAnisotropy_t* args = (args_hipTexRefGetMaxAnisotropy_t*) func_args;
+			printf("\tint * pmaxAnsio = %p", args->pmaxAnsio);
+			if (args->pmaxAnsio != NULL) {
+				printf(" -> %d\n", args->pmaxAnsio__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst textureReference * texRef = %p", args->hipTexRefGetMaxAnisotropy.texRef);
-			if (args->hipTexRefGetMaxAnisotropy.texRef != NULL) {
+			printf("\tconst textureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefGetMaxAnisotropy.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipTexRefGetMaxAnisotropy.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchKernel_spt
-		case HIP_API_ID_hipLaunchKernel_spt :
+		case HIP_API_ID_hipLaunchKernel_spt : {
 			//	const void * function_address (const void *);
 			//	dim3 numBlocks ({
 			//		uint32_t x (unsigned int);
@@ -5281,32 +5699,34 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t sharedMemBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * function_address = %p", args->hipLaunchKernel_spt.function_address);
+			args_hipLaunchKernel_spt_t* args = (args_hipLaunchKernel_spt_t*) func_args;
+			printf("\tconst void * function_address = %p", args->function_address);
 			printf("\n");
 			printf("\tdim3 numBlocks = {\n");
-			printf("\t\tuint32_t x = %u\n", args->hipLaunchKernel_spt.numBlocks.x);
-			printf("\t\tuint32_t y = %u\n", args->hipLaunchKernel_spt.numBlocks.y);
-			printf("\t\tuint32_t z = %u\n", args->hipLaunchKernel_spt.numBlocks.z);
+			printf("\t\tuint32_t x = %u\n", args->numBlocks.x);
+			printf("\t\tuint32_t y = %u\n", args->numBlocks.y);
+			printf("\t\tuint32_t z = %u\n", args->numBlocks.z);
 			printf("\t}\n");
 			printf("\tdim3 dimBlocks = {\n");
-			printf("\t\tuint32_t x = %u\n", args->hipLaunchKernel_spt.dimBlocks.x);
-			printf("\t\tuint32_t y = %u\n", args->hipLaunchKernel_spt.dimBlocks.y);
-			printf("\t\tuint32_t z = %u\n", args->hipLaunchKernel_spt.dimBlocks.z);
+			printf("\t\tuint32_t x = %u\n", args->dimBlocks.x);
+			printf("\t\tuint32_t y = %u\n", args->dimBlocks.y);
+			printf("\t\tuint32_t z = %u\n", args->dimBlocks.z);
 			printf("\t}\n");
-			printf("\tvoid ** args = %p", args->hipLaunchKernel_spt.args);
-			if (args->hipLaunchKernel_spt.args != NULL) {
-				printf("-> %p", args->hipLaunchKernel_spt.args__ref.ptr1);
+			printf("\tvoid ** args = %p", args->args);
+			if (args->args != NULL) {
+				printf("-> %p", args->args__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t sharedMemBytes = %lu\n", args->hipLaunchKernel_spt.sharedMemBytes);
-			printf("\thipStream_t stream = %p", args->hipLaunchKernel_spt.stream);
+			printf("\tsize_t sharedMemBytes = %lu\n", args->sharedMemBytes);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipLaunchKernel_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamBeginCaptureToGraph
-		case HIP_API_ID_hipStreamBeginCaptureToGraph :
+		case HIP_API_ID_hipStreamBeginCaptureToGraph : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * dependencies (const struct hipGraphNode * *);
@@ -5319,31 +5739,33 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t numDependencies (unsigned long);
 			//	hipStreamCaptureMode mode (enum hipStreamCaptureMode);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamBeginCaptureToGraph.stream);
+			args_hipStreamBeginCaptureToGraph_t* args = (args_hipStreamBeginCaptureToGraph_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipGraph_t graph = %p", args->hipStreamBeginCaptureToGraph.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * dependencies = %p", args->hipStreamBeginCaptureToGraph.dependencies);
-			if (args->hipStreamBeginCaptureToGraph.dependencies != NULL) {
-				printf(" -> %p\n", args->hipStreamBeginCaptureToGraph.dependencies__ref.val);
+			printf("\tconst hipGraphNode_t * dependencies = %p", args->dependencies);
+			if (args->dependencies != NULL) {
+				printf(" -> %p\n", args->dependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst hipGraphEdgeData * dependencyData = %p", args->hipStreamBeginCaptureToGraph.dependencyData);
-			if (args->hipStreamBeginCaptureToGraph.dependencyData != NULL) {
+			printf("\tconst hipGraphEdgeData * dependencyData = %p", args->dependencyData);
+			if (args->dependencyData != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned char from_port = %hhu\n", args->hipStreamBeginCaptureToGraph.dependencyData__ref.val.from_port);
-				printf("\t\tunsigned char[5] reserved = %hhu\n", args->hipStreamBeginCaptureToGraph.dependencyData__ref.val.reserved[0]);
-				printf("\t\tunsigned char to_port = %hhu\n", args->hipStreamBeginCaptureToGraph.dependencyData__ref.val.to_port);
-				printf("\t\tunsigned char type = %hhu\n", args->hipStreamBeginCaptureToGraph.dependencyData__ref.val.type);
+				printf("\t\tunsigned char from_port = %hhu\n", args->dependencyData__ref.val.from_port);
+				printf("\t\tunsigned char[5] reserved = %hhu\n", args->dependencyData__ref.val.reserved[0]);
+				printf("\t\tunsigned char to_port = %hhu\n", args->dependencyData__ref.val.to_port);
+				printf("\t\tunsigned char type = %hhu\n", args->dependencyData__ref.val.type);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipStreamBeginCaptureToGraph.numDependencies);
-			printf("\thipStreamCaptureMode mode = %d\n", args->hipStreamBeginCaptureToGraph.mode);
-			printf("\thipError_t retval = %d\n", args->hipStreamBeginCaptureToGraph.retval);
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\thipStreamCaptureMode mode = %d\n", args->mode);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetFormat
-		case HIP_API_ID_hipTexRefGetFormat :
+		case HIP_API_ID_hipTexRefGetFormat : {
 			//	hipArray_Format * pFormat (enum hipArray_Format*);
 			//	int * pNumChannels (int *);
 			//	const textureReference * texRef ({
@@ -5369,130 +5791,142 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipArray_Format format (enum hipArray_Format);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_Format * pFormat = %p", args->hipTexRefGetFormat.pFormat);
-			if (args->hipTexRefGetFormat.pFormat != NULL) {
-				printf(" -> %d\n", args->hipTexRefGetFormat.pFormat__ref.val);
+			args_hipTexRefGetFormat_t* args = (args_hipTexRefGetFormat_t*) func_args;
+			printf("\thipArray_Format * pFormat = %p", args->pFormat);
+			if (args->pFormat != NULL) {
+				printf(" -> %d\n", args->pFormat__ref.val);
 			} else { printf("\n"); };
-			printf("\tint * pNumChannels = %p", args->hipTexRefGetFormat.pNumChannels);
-			if (args->hipTexRefGetFormat.pNumChannels != NULL) {
-				printf(" -> %d\n", args->hipTexRefGetFormat.pNumChannels__ref.val);
+			printf("\tint * pNumChannels = %p", args->pNumChannels);
+			if (args->pNumChannels != NULL) {
+				printf(" -> %d\n", args->pNumChannels__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst textureReference * texRef = %p", args->hipTexRefGetFormat.texRef);
-			if (args->hipTexRefGetFormat.texRef != NULL) {
+			printf("\tconst textureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefGetFormat.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefGetFormat.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefGetFormat.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefGetFormat.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefGetFormat.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefGetFormat.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefGetFormat.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefGetFormat.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefGetFormat.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefGetFormat.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefGetFormat.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefGetFormat.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefGetFormat.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefGetFormat.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefGetFormat.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefGetFormat.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefGetFormat.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipTexRefGetFormat.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamWaitValue64
-		case HIP_API_ID_hipStreamWaitValue64 :
+		case HIP_API_ID_hipStreamWaitValue64 : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
 			//	uint64_t value (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	uint64_t mask (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamWaitValue64.stream);
+			args_hipStreamWaitValue64_t* args = (args_hipStreamWaitValue64_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\tvoid * ptr = %p", args->hipStreamWaitValue64.ptr);
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tuint64_t value = %lu\n", args->hipStreamWaitValue64.value);
-			printf("\tunsigned int flags = %u\n", args->hipStreamWaitValue64.flags);
-			printf("\tuint64_t mask = %lu\n", args->hipStreamWaitValue64.mask);
-			printf("\thipError_t retval = %d\n", args->hipStreamWaitValue64.retval);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\tuint64_t mask = %lu\n", args->mask);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDevicePrimaryCtxRetain
-		case HIP_API_ID_hipDevicePrimaryCtxRetain :
+		case HIP_API_ID_hipDevicePrimaryCtxRetain : {
 			//	hipCtx_t * pctx (struct ihipCtx_t **);
 			//	hipDevice_t dev (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipCtx_t * pctx = %p", args->hipDevicePrimaryCtxRetain.pctx);
-			if (args->hipDevicePrimaryCtxRetain.pctx != NULL) {
-				printf(" -> %p\n", args->hipDevicePrimaryCtxRetain.pctx__ref.val);
+			args_hipDevicePrimaryCtxRetain_t* args = (args_hipDevicePrimaryCtxRetain_t*) func_args;
+			printf("\thipCtx_t * pctx = %p", args->pctx);
+			if (args->pctx != NULL) {
+				printf(" -> %p\n", args->pctx__ref.val);
 			} else { printf("\n"); };
-			printf("\thipDevice_t dev = %d\n", args->hipDevicePrimaryCtxRetain.dev);
-			printf("\thipError_t retval = %d\n", args->hipDevicePrimaryCtxRetain.retval);
+			printf("\thipDevice_t dev = %d\n", args->dev);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMallocManaged
-		case HIP_API_ID_hipMallocManaged :
+		case HIP_API_ID_hipMallocManaged : {
 			//	void ** dev_ptr (void **);
 			//	size_t size (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** dev_ptr = %p", args->hipMallocManaged.dev_ptr);
-			if (args->hipMallocManaged.dev_ptr != NULL) {
-				printf("-> %p", args->hipMallocManaged.dev_ptr__ref.ptr1);
+			args_hipMallocManaged_t* args = (args_hipMallocManaged_t*) func_args;
+			printf("\tvoid ** dev_ptr = %p", args->dev_ptr);
+			if (args->dev_ptr != NULL) {
+				printf("-> %p", args->dev_ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t size = %lu\n", args->hipMallocManaged.size);
-			printf("\tunsigned int flags = %u\n", args->hipMallocManaged.flags);
-			printf("\thipError_t retval = %d\n", args->hipMallocManaged.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamCreateWithPriority
-		case HIP_API_ID_hipStreamCreateWithPriority :
+		case HIP_API_ID_hipStreamCreateWithPriority : {
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	unsigned int flags (unsigned int);
 			//	int priority (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t * stream = %p", args->hipStreamCreateWithPriority.stream);
-			if (args->hipStreamCreateWithPriority.stream != NULL) {
-				printf(" -> %p\n", args->hipStreamCreateWithPriority.stream__ref.val);
+			args_hipStreamCreateWithPriority_t* args = (args_hipStreamCreateWithPriority_t*) func_args;
+			printf("\thipStream_t * stream = %p", args->stream);
+			if (args->stream != NULL) {
+				printf(" -> %p\n", args->stream__ref.val);
 			} else { printf("\n"); };
-			printf("\tunsigned int flags = %u\n", args->hipStreamCreateWithPriority.flags);
-			printf("\tint priority = %d\n", args->hipStreamCreateWithPriority.priority);
-			printf("\thipError_t retval = %d\n", args->hipStreamCreateWithPriority.retval);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\tint priority = %d\n", args->priority);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetCaptureInfo_spt
-		case HIP_API_ID_hipStreamGetCaptureInfo_spt :
+		case HIP_API_ID_hipStreamGetCaptureInfo_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
 			//	unsigned long long * pId (unsigned long long *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamGetCaptureInfo_spt.stream);
+			args_hipStreamGetCaptureInfo_spt_t* args = (args_hipStreamGetCaptureInfo_spt_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipStreamCaptureStatus * pCaptureStatus = %p", args->hipStreamGetCaptureInfo_spt.pCaptureStatus);
-			if (args->hipStreamGetCaptureInfo_spt.pCaptureStatus != NULL) {
-				printf(" -> %d\n", args->hipStreamGetCaptureInfo_spt.pCaptureStatus__ref.val);
+			printf("\thipStreamCaptureStatus * pCaptureStatus = %p", args->pCaptureStatus);
+			if (args->pCaptureStatus != NULL) {
+				printf(" -> %d\n", args->pCaptureStatus__ref.val);
 			} else { printf("\n"); };
-			printf("\tunsigned long long * pId = %p", args->hipStreamGetCaptureInfo_spt.pId);
-			if (args->hipStreamGetCaptureInfo_spt.pId != NULL) {
-				printf(" -> %llu\n", args->hipStreamGetCaptureInfo_spt.pId__ref.val);
+			printf("\tunsigned long long * pId = %p", args->pId);
+			if (args->pId != NULL) {
+				printf(" -> %llu\n", args->pId__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipStreamGetCaptureInfo_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddHostNode
-		case HIP_API_ID_hipGraphAddHostNode :
+		case HIP_API_ID_hipGraphAddHostNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
@@ -5502,29 +5936,31 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		void * userData (void *);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddHostNode.pGraphNode);
-			if (args->hipGraphAddHostNode.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddHostNode.pGraphNode__ref.val);
+			args_hipGraphAddHostNode_t* args = (args_hipGraphAddHostNode_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddHostNode.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddHostNode.pDependencies);
-			if (args->hipGraphAddHostNode.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddHostNode.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddHostNode.numDependencies);
-			printf("\tconst hipHostNodeParams * pNodeParams = %p", args->hipGraphAddHostNode.pNodeParams);
-			if (args->hipGraphAddHostNode.pNodeParams != NULL) {
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\tconst hipHostNodeParams * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\thipHostFn_t fn = %p\n", args->hipGraphAddHostNode.pNodeParams__ref.val.fn);
+				printf("\t\thipHostFn_t fn = %p\n", args->pNodeParams__ref.val.fn);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphAddHostNode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchCooperativeKernel
-		case HIP_API_ID_hipLaunchCooperativeKernel :
+		case HIP_API_ID_hipLaunchCooperativeKernel : {
 			//	const void * f (const void *);
 			//	dim3 gridDim ({
 			//		uint32_t x (unsigned int);
@@ -5540,77 +5976,85 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	unsigned int sharedMemBytes (unsigned int);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * f = %p", args->hipLaunchCooperativeKernel.f);
+			args_hipLaunchCooperativeKernel_t* args = (args_hipLaunchCooperativeKernel_t*) func_args;
+			printf("\tconst void * f = %p", args->f);
 			printf("\n");
 			printf("\tdim3 gridDim = {\n");
-			printf("\t\tuint32_t x = %u\n", args->hipLaunchCooperativeKernel.gridDim.x);
-			printf("\t\tuint32_t y = %u\n", args->hipLaunchCooperativeKernel.gridDim.y);
-			printf("\t\tuint32_t z = %u\n", args->hipLaunchCooperativeKernel.gridDim.z);
+			printf("\t\tuint32_t x = %u\n", args->gridDim.x);
+			printf("\t\tuint32_t y = %u\n", args->gridDim.y);
+			printf("\t\tuint32_t z = %u\n", args->gridDim.z);
 			printf("\t}\n");
 			printf("\tdim3 blockDimX = {\n");
-			printf("\t\tuint32_t x = %u\n", args->hipLaunchCooperativeKernel.blockDimX.x);
-			printf("\t\tuint32_t y = %u\n", args->hipLaunchCooperativeKernel.blockDimX.y);
-			printf("\t\tuint32_t z = %u\n", args->hipLaunchCooperativeKernel.blockDimX.z);
+			printf("\t\tuint32_t x = %u\n", args->blockDimX.x);
+			printf("\t\tuint32_t y = %u\n", args->blockDimX.y);
+			printf("\t\tuint32_t z = %u\n", args->blockDimX.z);
 			printf("\t}\n");
-			printf("\tvoid ** kernelParams = %p", args->hipLaunchCooperativeKernel.kernelParams);
-			if (args->hipLaunchCooperativeKernel.kernelParams != NULL) {
-				printf("-> %p", args->hipLaunchCooperativeKernel.kernelParams__ref.ptr1);
+			printf("\tvoid ** kernelParams = %p", args->kernelParams);
+			if (args->kernelParams != NULL) {
+				printf("-> %p", args->kernelParams__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tunsigned int sharedMemBytes = %u\n", args->hipLaunchCooperativeKernel.sharedMemBytes);
-			printf("\thipStream_t stream = %p", args->hipLaunchCooperativeKernel.stream);
+			printf("\tunsigned int sharedMemBytes = %u\n", args->sharedMemBytes);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipLaunchCooperativeKernel.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipHostRegister
-		case HIP_API_ID_hipHostRegister :
+		case HIP_API_ID_hipHostRegister : {
 			//	void * hostPtr (void *);
 			//	size_t sizeBytes (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * hostPtr = %p", args->hipHostRegister.hostPtr);
+			args_hipHostRegister_t* args = (args_hipHostRegister_t*) func_args;
+			printf("\tvoid * hostPtr = %p", args->hostPtr);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipHostRegister.sizeBytes);
-			printf("\tunsigned int flags = %u\n", args->hipHostRegister.flags);
-			printf("\thipError_t retval = %d\n", args->hipHostRegister.retval);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetErrorName
-		case HIP_API_ID_hipGetErrorName :
+		case HIP_API_ID_hipGetErrorName : {
 			//	hipError_t hip_error (enum hipError_t);
 			//	const char * retval (const char *);
-			printf("\thipError_t hip_error = %d\n", args->hipGetErrorName.hip_error);
-			printf("\tconst char * retval = %p", args->hipGetErrorName.retval);
-			if (args->hipGetErrorName.retval != NULL) {
-				printf(" -> %s\n", args->hipGetErrorName.retval__ref.val);
+			args_hipGetErrorName_t* args = (args_hipGetErrorName_t*) func_args;
+			printf("\thipError_t hip_error = %d\n", args->hip_error);
+			printf("\tconst char * retval = %p", args->retval);
+			if (args->retval != NULL) {
+				printf(" -> %s\n", args->retval__ref.val);
 			} else { printf("\n"); };
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyToSymbol_spt
-		case HIP_API_ID_hipMemcpyToSymbol_spt :
+		case HIP_API_ID_hipMemcpyToSymbol_spt : {
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * symbol = %p", args->hipMemcpyToSymbol_spt.symbol);
+			args_hipMemcpyToSymbol_spt_t* args = (args_hipMemcpyToSymbol_spt_t*) func_args;
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hipMemcpyToSymbol_spt.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyToSymbol_spt.sizeBytes);
-			printf("\tsize_t offset = %lu\n", args->hipMemcpyToSymbol_spt.offset);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpyToSymbol_spt.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyToSymbol_spt.retval);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemsetNodeGetParams
-		case HIP_API_ID_hipGraphMemsetNodeGetParams :
+		case HIP_API_ID_hipGraphMemsetNodeGetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipMemsetParams * pNodeParams ({
 			//		void * dst (void *);
@@ -5621,70 +6065,80 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		size_t width (unsigned long);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphMemsetNodeGetParams.node);
+			args_hipGraphMemsetNodeGetParams_t* args = (args_hipGraphMemsetNodeGetParams_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipMemsetParams * pNodeParams = %p", args->hipGraphMemsetNodeGetParams.pNodeParams);
-			if (args->hipGraphMemsetNodeGetParams.pNodeParams != NULL) {
+			printf("\thipMemsetParams * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned int elementSize = %u\n", args->hipGraphMemsetNodeGetParams.pNodeParams__ref.val.elementSize);
-				printf("\t\tsize_t height = %lu\n", args->hipGraphMemsetNodeGetParams.pNodeParams__ref.val.height);
-				printf("\t\tsize_t pitch = %lu\n", args->hipGraphMemsetNodeGetParams.pNodeParams__ref.val.pitch);
-				printf("\t\tunsigned int value = %u\n", args->hipGraphMemsetNodeGetParams.pNodeParams__ref.val.value);
-				printf("\t\tsize_t width = %lu\n", args->hipGraphMemsetNodeGetParams.pNodeParams__ref.val.width);
+				printf("\t\tunsigned int elementSize = %u\n", args->pNodeParams__ref.val.elementSize);
+				printf("\t\tsize_t height = %lu\n", args->pNodeParams__ref.val.height);
+				printf("\t\tsize_t pitch = %lu\n", args->pNodeParams__ref.val.pitch);
+				printf("\t\tunsigned int value = %u\n", args->pNodeParams__ref.val.value);
+				printf("\t\tsize_t width = %lu\n", args->pNodeParams__ref.val.width);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphMemsetNodeGetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamWriteValue32
-		case HIP_API_ID_hipStreamWriteValue32 :
+		case HIP_API_ID_hipStreamWriteValue32 : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
 			//	uint32_t value (unsigned int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamWriteValue32.stream);
+			args_hipStreamWriteValue32_t* args = (args_hipStreamWriteValue32_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\tvoid * ptr = %p", args->hipStreamWriteValue32.ptr);
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tuint32_t value = %u\n", args->hipStreamWriteValue32.value);
-			printf("\tunsigned int flags = %u\n", args->hipStreamWriteValue32.flags);
-			printf("\thipError_t retval = %d\n", args->hipStreamWriteValue32.retval);
+			printf("\tuint32_t value = %u\n", args->value);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamSynchronize_spt
-		case HIP_API_ID_hipStreamSynchronize_spt :
+		case HIP_API_ID_hipStreamSynchronize_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamSynchronize_spt.stream);
+			args_hipStreamSynchronize_spt_t* args = (args_hipStreamSynchronize_spt_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipStreamSynchronize_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGraphMemTrim
-		case HIP_API_ID_hipDeviceGraphMemTrim :
+		case HIP_API_ID_hipDeviceGraphMemTrim : {
 			//	int device (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint device = %d\n", args->hipDeviceGraphMemTrim.device);
-			printf("\thipError_t retval = %d\n", args->hipDeviceGraphMemTrim.retval);
+			args_hipDeviceGraphMemTrim_t* args = (args_hipDeviceGraphMemTrim_t*) func_args;
+			printf("\tint device = %d\n", args->device);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamDestroy
-		case HIP_API_ID_hipStreamDestroy :
+		case HIP_API_ID_hipStreamDestroy : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamDestroy.stream);
+			args_hipStreamDestroy_t* args = (args_hipStreamDestroy_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipStreamDestroy.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetArray
-		case HIP_API_ID_hipTexRefSetArray :
+		case HIP_API_ID_hipTexRefSetArray : {
 			//	textureReference * tex ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -5710,39 +6164,41 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipArray_const_t array (const struct hipArray *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\ttextureReference * tex = %p", args->hipTexRefSetArray.tex);
-			if (args->hipTexRefSetArray.tex != NULL) {
+			args_hipTexRefSetArray_t* args = (args_hipTexRefSetArray_t*) func_args;
+			printf("\ttextureReference * tex = %p", args->tex);
+			if (args->tex != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefSetArray.tex__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefSetArray.tex__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefSetArray.tex__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefSetArray.tex__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->tex__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->tex__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->tex__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->tex__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefSetArray.tex__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefSetArray.tex__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefSetArray.tex__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefSetArray.tex__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefSetArray.tex__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->tex__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->tex__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->tex__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->tex__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->tex__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefSetArray.tex__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefSetArray.tex__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefSetArray.tex__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefSetArray.tex__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefSetArray.tex__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefSetArray.tex__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefSetArray.tex__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefSetArray.tex__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->tex__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->tex__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->tex__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->tex__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->tex__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->tex__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->tex__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->tex__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipArray_const_t array = %p", args->hipTexRefSetArray.array);
+			printf("\thipArray_const_t array = %p", args->array);
 			printf("\n");
-			printf("\tunsigned int flags = %u\n", args->hipTexRefSetArray.flags);
-			printf("\thipError_t retval = %d\n", args->hipTexRefSetArray.retval);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyParam2DAsync
-		case HIP_API_ID_hipMemcpyParam2DAsync :
+		case HIP_API_ID_hipMemcpyParam2DAsync : {
 			//	const hip_Memcpy2D * pCopy ({
 			//		size_t srcXInBytes (unsigned long);
 			//		size_t srcY (unsigned long);
@@ -5763,81 +6219,91 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst hip_Memcpy2D * pCopy = %p", args->hipMemcpyParam2DAsync.pCopy);
-			if (args->hipMemcpyParam2DAsync.pCopy != NULL) {
+			args_hipMemcpyParam2DAsync_t* args = (args_hipMemcpyParam2DAsync_t*) func_args;
+			printf("\tconst hip_Memcpy2D * pCopy = %p", args->pCopy);
+			if (args->pCopy != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t srcXInBytes = %lu\n", args->hipMemcpyParam2DAsync.pCopy__ref.val.srcXInBytes);
-				printf("\t\tsize_t srcY = %lu\n", args->hipMemcpyParam2DAsync.pCopy__ref.val.srcY);
-				printf("\t\thipMemoryType srcMemoryType = %d\n", args->hipMemcpyParam2DAsync.pCopy__ref.val.srcMemoryType);
-				printf("\t\tsize_t srcPitch = %lu\n", args->hipMemcpyParam2DAsync.pCopy__ref.val.srcPitch);
-				printf("\t\tsize_t dstXInBytes = %lu\n", args->hipMemcpyParam2DAsync.pCopy__ref.val.dstXInBytes);
-				printf("\t\tsize_t dstY = %lu\n", args->hipMemcpyParam2DAsync.pCopy__ref.val.dstY);
-				printf("\t\thipMemoryType dstMemoryType = %d\n", args->hipMemcpyParam2DAsync.pCopy__ref.val.dstMemoryType);
-				printf("\t\tsize_t dstPitch = %lu\n", args->hipMemcpyParam2DAsync.pCopy__ref.val.dstPitch);
-				printf("\t\tsize_t WidthInBytes = %lu\n", args->hipMemcpyParam2DAsync.pCopy__ref.val.WidthInBytes);
-				printf("\t\tsize_t Height = %lu\n", args->hipMemcpyParam2DAsync.pCopy__ref.val.Height);
+				printf("\t\tsize_t srcXInBytes = %lu\n", args->pCopy__ref.val.srcXInBytes);
+				printf("\t\tsize_t srcY = %lu\n", args->pCopy__ref.val.srcY);
+				printf("\t\thipMemoryType srcMemoryType = %d\n", args->pCopy__ref.val.srcMemoryType);
+				printf("\t\tsize_t srcPitch = %lu\n", args->pCopy__ref.val.srcPitch);
+				printf("\t\tsize_t dstXInBytes = %lu\n", args->pCopy__ref.val.dstXInBytes);
+				printf("\t\tsize_t dstY = %lu\n", args->pCopy__ref.val.dstY);
+				printf("\t\thipMemoryType dstMemoryType = %d\n", args->pCopy__ref.val.dstMemoryType);
+				printf("\t\tsize_t dstPitch = %lu\n", args->pCopy__ref.val.dstPitch);
+				printf("\t\tsize_t WidthInBytes = %lu\n", args->pCopy__ref.val.WidthInBytes);
+				printf("\t\tsize_t Height = %lu\n", args->pCopy__ref.val.Height);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipStream_t stream = %p", args->hipMemcpyParam2DAsync.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpyParam2DAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolExportPointer
-		case HIP_API_ID_hipMemPoolExportPointer :
+		case HIP_API_ID_hipMemPoolExportPointer : {
 			//	hipMemPoolPtrExportData * export_data ({
 			//		unsigned char[64] reserved (unsigned char[64]);
 			//	});
 			//	void * dev_ptr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemPoolPtrExportData * export_data = %p", args->hipMemPoolExportPointer.export_data);
-			if (args->hipMemPoolExportPointer.export_data != NULL) {
+			args_hipMemPoolExportPointer_t* args = (args_hipMemPoolExportPointer_t*) func_args;
+			printf("\thipMemPoolPtrExportData * export_data = %p", args->export_data);
+			if (args->export_data != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned char[64] reserved = %hhu\n", args->hipMemPoolExportPointer.export_data__ref.val.reserved[0]);
+				printf("\t\tunsigned char[64] reserved = %hhu\n", args->export_data__ref.val.reserved[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tvoid * dev_ptr = %p", args->hipMemPoolExportPointer.dev_ptr);
+			printf("\tvoid * dev_ptr = %p", args->dev_ptr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemPoolExportPointer.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphEventRecordNodeSetEvent
-		case HIP_API_ID_hipGraphEventRecordNodeSetEvent :
+		case HIP_API_ID_hipGraphEventRecordNodeSetEvent : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphEventRecordNodeSetEvent.node);
+			args_hipGraphEventRecordNodeSetEvent_t* args = (args_hipGraphEventRecordNodeSetEvent_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipEvent_t event = %p", args->hipGraphEventRecordNodeSetEvent.event);
+			printf("\thipEvent_t event = %p", args->event);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphEventRecordNodeSetEvent.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxDestroy
-		case HIP_API_ID_hipCtxDestroy :
+		case HIP_API_ID_hipCtxDestroy : {
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipCtx_t ctx = %p", args->hipCtxDestroy.ctx);
+			args_hipCtxDestroy_t* args = (args_hipCtxDestroy_t*) func_args;
+			printf("\thipCtx_t ctx = %p", args->ctx);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipCtxDestroy.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipArrayDestroy
-		case HIP_API_ID_hipArrayDestroy :
+		case HIP_API_ID_hipArrayDestroy : {
 			//	hipArray_t array (struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t array = %p", args->hipArrayDestroy.array);
+			args_hipArrayDestroy_t* args = (args_hipArrayDestroy_t*) func_args;
+			printf("\thipArray_t array = %p", args->array);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipArrayDestroy.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemGetAllocationGranularity
-		case HIP_API_ID_hipMemGetAllocationGranularity :
+		case HIP_API_ID_hipMemGetAllocationGranularity : {
 			//	size_t * granularity (unsigned long*);
 			//	const hipMemAllocationProp * prop ({
 			//		hipMemAllocationType type (enum hipMemAllocationType);
@@ -5852,45 +6318,49 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipMemAllocationGranularity_flags option (enum hipMemAllocationGranularity_flags);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tsize_t * granularity = %p", args->hipMemGetAllocationGranularity.granularity);
-			if (args->hipMemGetAllocationGranularity.granularity != NULL) {
-				printf(" -> %lu\n", args->hipMemGetAllocationGranularity.granularity__ref.val);
+			args_hipMemGetAllocationGranularity_t* args = (args_hipMemGetAllocationGranularity_t*) func_args;
+			printf("\tsize_t * granularity = %p", args->granularity);
+			if (args->granularity != NULL) {
+				printf(" -> %lu\n", args->granularity__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst hipMemAllocationProp * prop = %p", args->hipMemGetAllocationGranularity.prop);
-			if (args->hipMemGetAllocationGranularity.prop != NULL) {
+			printf("\tconst hipMemAllocationProp * prop = %p", args->prop);
+			if (args->prop != NULL) {
 				printf(" -> {\n");
-				printf("\t\thipMemAllocationType type = %d\n", args->hipMemGetAllocationGranularity.prop__ref.val.type);
-				printf("\t\thipMemAllocationHandleType requestedHandleType = %d\n", args->hipMemGetAllocationGranularity.prop__ref.val.requestedHandleType);
+				printf("\t\thipMemAllocationType type = %d\n", args->prop__ref.val.type);
+				printf("\t\thipMemAllocationHandleType requestedHandleType = %d\n", args->prop__ref.val.requestedHandleType);
 				printf("\t\thipMemLocation location = {\n");
-				printf("\t\t\thipMemLocationType type = %d\n", args->hipMemGetAllocationGranularity.prop__ref.val.location.type);
-				printf("\t\t\tint id = %d\n", args->hipMemGetAllocationGranularity.prop__ref.val.location.id);
+				printf("\t\t\thipMemLocationType type = %d\n", args->prop__ref.val.location.type);
+				printf("\t\t\tint id = %d\n", args->prop__ref.val.location.id);
 				printf("\t\t}\n");
 				printf("\t\tstruct (unnamed struct at header/hip/hip.h:1616:2) allocFlags = {\n");
 				printf("\t\t}\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipMemAllocationGranularity_flags option = %d\n", args->hipMemGetAllocationGranularity.option);
-			printf("\thipError_t retval = %d\n", args->hipMemGetAllocationGranularity.retval);
+			printf("\thipMemAllocationGranularity_flags option = %d\n", args->option);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphClone
-		case HIP_API_ID_hipGraphClone :
+		case HIP_API_ID_hipGraphClone : {
 			//	hipGraph_t * pGraphClone (struct ihipGraph **);
 			//	hipGraph_t originalGraph (struct ihipGraph *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraph_t * pGraphClone = %p", args->hipGraphClone.pGraphClone);
-			if (args->hipGraphClone.pGraphClone != NULL) {
-				printf(" -> %p\n", args->hipGraphClone.pGraphClone__ref.val);
+			args_hipGraphClone_t* args = (args_hipGraphClone_t*) func_args;
+			printf("\thipGraph_t * pGraphClone = %p", args->pGraphClone);
+			if (args->pGraphClone != NULL) {
+				printf(" -> %p\n", args->pGraphClone__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t originalGraph = %p", args->hipGraphClone.originalGraph);
+			printf("\thipGraph_t originalGraph = %p", args->originalGraph);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphClone.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset2DAsync_spt
-		case HIP_API_ID_hipMemset2DAsync_spt :
+		case HIP_API_ID_hipMemset2DAsync_spt : {
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
 			//	int value (int);
@@ -5898,20 +6368,22 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemset2DAsync_spt.dst);
+			args_hipMemset2DAsync_spt_t* args = (args_hipMemset2DAsync_spt_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t pitch = %lu\n", args->hipMemset2DAsync_spt.pitch);
-			printf("\tint value = %d\n", args->hipMemset2DAsync_spt.value);
-			printf("\tsize_t width = %lu\n", args->hipMemset2DAsync_spt.width);
-			printf("\tsize_t height = %lu\n", args->hipMemset2DAsync_spt.height);
-			printf("\thipStream_t stream = %p", args->hipMemset2DAsync_spt.stream);
+			printf("\tsize_t pitch = %lu\n", args->pitch);
+			printf("\tint value = %d\n", args->value);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemset2DAsync_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipBindTexture2D
-		case HIP_API_ID_hipBindTexture2D :
+		case HIP_API_ID_hipBindTexture2D : {
 			//	size_t * offset (unsigned long*);
 			//	const textureReference * tex ({
 			//		int normalized (int);
@@ -5947,55 +6419,57 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	size_t pitch (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tsize_t * offset = %p", args->hipBindTexture2D.offset);
-			if (args->hipBindTexture2D.offset != NULL) {
-				printf(" -> %lu\n", args->hipBindTexture2D.offset__ref.val);
+			args_hipBindTexture2D_t* args = (args_hipBindTexture2D_t*) func_args;
+			printf("\tsize_t * offset = %p", args->offset);
+			if (args->offset != NULL) {
+				printf(" -> %lu\n", args->offset__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst textureReference * tex = %p", args->hipBindTexture2D.tex);
-			if (args->hipBindTexture2D.tex != NULL) {
+			printf("\tconst textureReference * tex = %p", args->tex);
+			if (args->tex != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipBindTexture2D.tex__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipBindTexture2D.tex__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipBindTexture2D.tex__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipBindTexture2D.tex__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->tex__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->tex__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->tex__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->tex__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipBindTexture2D.tex__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipBindTexture2D.tex__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipBindTexture2D.tex__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipBindTexture2D.tex__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipBindTexture2D.tex__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->tex__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->tex__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->tex__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->tex__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->tex__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipBindTexture2D.tex__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipBindTexture2D.tex__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipBindTexture2D.tex__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipBindTexture2D.tex__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipBindTexture2D.tex__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipBindTexture2D.tex__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipBindTexture2D.tex__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipBindTexture2D.tex__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->tex__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->tex__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->tex__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->tex__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->tex__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->tex__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->tex__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->tex__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst void * devPtr = %p", args->hipBindTexture2D.devPtr);
+			printf("\tconst void * devPtr = %p", args->devPtr);
 			printf("\n");
-			printf("\tconst hipChannelFormatDesc * desc = %p", args->hipBindTexture2D.desc);
-			if (args->hipBindTexture2D.desc != NULL) {
+			printf("\tconst hipChannelFormatDesc * desc = %p", args->desc);
+			if (args->desc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint x = %d\n", args->hipBindTexture2D.desc__ref.val.x);
-				printf("\t\tint y = %d\n", args->hipBindTexture2D.desc__ref.val.y);
-				printf("\t\tint z = %d\n", args->hipBindTexture2D.desc__ref.val.z);
-				printf("\t\tint w = %d\n", args->hipBindTexture2D.desc__ref.val.w);
-				printf("\t\tenum hipChannelFormatKind f = %d\n", args->hipBindTexture2D.desc__ref.val.f);
+				printf("\t\tint x = %d\n", args->desc__ref.val.x);
+				printf("\t\tint y = %d\n", args->desc__ref.val.y);
+				printf("\t\tint z = %d\n", args->desc__ref.val.z);
+				printf("\t\tint w = %d\n", args->desc__ref.val.w);
+				printf("\t\tenum hipChannelFormatKind f = %d\n", args->desc__ref.val.f);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tsize_t width = %lu\n", args->hipBindTexture2D.width);
-			printf("\tsize_t height = %lu\n", args->hipBindTexture2D.height);
-			printf("\tsize_t pitch = %lu\n", args->hipBindTexture2D.pitch);
-			printf("\thipError_t retval = %d\n", args->hipBindTexture2D.retval);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\tsize_t pitch = %lu\n", args->pitch);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipArrayGetInfo
-		case HIP_API_ID_hipArrayGetInfo :
+		case HIP_API_ID_hipArrayGetInfo : {
 			//	hipChannelFormatDesc * desc ({
 			//		int x (int);
 			//		int y (int);
@@ -6011,178 +6485,198 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	unsigned int * flags (unsigned int *);
 			//	hipArray_t array (struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipChannelFormatDesc * desc = %p", args->hipArrayGetInfo.desc);
-			if (args->hipArrayGetInfo.desc != NULL) {
+			args_hipArrayGetInfo_t* args = (args_hipArrayGetInfo_t*) func_args;
+			printf("\thipChannelFormatDesc * desc = %p", args->desc);
+			if (args->desc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint x = %d\n", args->hipArrayGetInfo.desc__ref.val.x);
-				printf("\t\tint y = %d\n", args->hipArrayGetInfo.desc__ref.val.y);
-				printf("\t\tint z = %d\n", args->hipArrayGetInfo.desc__ref.val.z);
-				printf("\t\tint w = %d\n", args->hipArrayGetInfo.desc__ref.val.w);
-				printf("\t\tenum hipChannelFormatKind f = %d\n", args->hipArrayGetInfo.desc__ref.val.f);
+				printf("\t\tint x = %d\n", args->desc__ref.val.x);
+				printf("\t\tint y = %d\n", args->desc__ref.val.y);
+				printf("\t\tint z = %d\n", args->desc__ref.val.z);
+				printf("\t\tint w = %d\n", args->desc__ref.val.w);
+				printf("\t\tenum hipChannelFormatKind f = %d\n", args->desc__ref.val.f);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipExtent * extent = %p", args->hipArrayGetInfo.extent);
-			if (args->hipArrayGetInfo.extent != NULL) {
+			printf("\thipExtent * extent = %p", args->extent);
+			if (args->extent != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t width = %lu\n", args->hipArrayGetInfo.extent__ref.val.width);
-				printf("\t\tsize_t height = %lu\n", args->hipArrayGetInfo.extent__ref.val.height);
-				printf("\t\tsize_t depth = %lu\n", args->hipArrayGetInfo.extent__ref.val.depth);
+				printf("\t\tsize_t width = %lu\n", args->extent__ref.val.width);
+				printf("\t\tsize_t height = %lu\n", args->extent__ref.val.height);
+				printf("\t\tsize_t depth = %lu\n", args->extent__ref.val.depth);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tunsigned int * flags = %p", args->hipArrayGetInfo.flags);
-			if (args->hipArrayGetInfo.flags != NULL) {
-				printf(" -> %u\n", args->hipArrayGetInfo.flags__ref.val);
+			printf("\tunsigned int * flags = %p", args->flags);
+			if (args->flags != NULL) {
+				printf(" -> %u\n", args->flags__ref.val);
 			} else { printf("\n"); };
-			printf("\thipArray_t array = %p", args->hipArrayGetInfo.array);
+			printf("\thipArray_t array = %p", args->array);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipArrayGetInfo.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExternalSemaphoresSignalNodeGetParams
-		case HIP_API_ID_hipGraphExternalSemaphoresSignalNodeGetParams :
+		case HIP_API_ID_hipGraphExternalSemaphoresSignalNodeGetParams : {
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipExternalSemaphoreSignalNodeParams * params_out ({
 			//		hipExternalSemaphore_t * extSemArray (void **);
 			//		unsigned int numExtSems (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t hNode = %p", args->hipGraphExternalSemaphoresSignalNodeGetParams.hNode);
+			args_hipGraphExternalSemaphoresSignalNodeGetParams_t* args = (args_hipGraphExternalSemaphoresSignalNodeGetParams_t*) func_args;
+			printf("\thipGraphNode_t hNode = %p", args->hNode);
 			printf("\n");
-			printf("\thipExternalSemaphoreSignalNodeParams * params_out = %p", args->hipGraphExternalSemaphoresSignalNodeGetParams.params_out);
-			if (args->hipGraphExternalSemaphoresSignalNodeGetParams.params_out != NULL) {
+			printf("\thipExternalSemaphoreSignalNodeParams * params_out = %p", args->params_out);
+			if (args->params_out != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned int numExtSems = %u\n", args->hipGraphExternalSemaphoresSignalNodeGetParams.params_out__ref.val.numExtSems);
+				printf("\t\tunsigned int numExtSems = %u\n", args->params_out__ref.val.numExtSems);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphExternalSemaphoresSignalNodeGetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetStreamPriorityRange
-		case HIP_API_ID_hipDeviceGetStreamPriorityRange :
+		case HIP_API_ID_hipDeviceGetStreamPriorityRange : {
 			//	int * leastPriority (int *);
 			//	int * greatestPriority (int *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * leastPriority = %p", args->hipDeviceGetStreamPriorityRange.leastPriority);
-			if (args->hipDeviceGetStreamPriorityRange.leastPriority != NULL) {
-				printf(" -> %d\n", args->hipDeviceGetStreamPriorityRange.leastPriority__ref.val);
+			args_hipDeviceGetStreamPriorityRange_t* args = (args_hipDeviceGetStreamPriorityRange_t*) func_args;
+			printf("\tint * leastPriority = %p", args->leastPriority);
+			if (args->leastPriority != NULL) {
+				printf(" -> %d\n", args->leastPriority__ref.val);
 			} else { printf("\n"); };
-			printf("\tint * greatestPriority = %p", args->hipDeviceGetStreamPriorityRange.greatestPriority);
-			if (args->hipDeviceGetStreamPriorityRange.greatestPriority != NULL) {
-				printf(" -> %d\n", args->hipDeviceGetStreamPriorityRange.greatestPriority__ref.val);
+			printf("\tint * greatestPriority = %p", args->greatestPriority);
+			if (args->greatestPriority != NULL) {
+				printf(" -> %d\n", args->greatestPriority__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipDeviceGetStreamPriorityRange.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecChildGraphNodeSetParams
-		case HIP_API_ID_hipGraphExecChildGraphNodeSetParams :
+		case HIP_API_ID_hipGraphExecChildGraphNodeSetParams : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraph_t childGraph (struct ihipGraph *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t hGraphExec = %p", args->hipGraphExecChildGraphNodeSetParams.hGraphExec);
+			args_hipGraphExecChildGraphNodeSetParams_t* args = (args_hipGraphExecChildGraphNodeSetParams_t*) func_args;
+			printf("\thipGraphExec_t hGraphExec = %p", args->hGraphExec);
 			printf("\n");
-			printf("\thipGraphNode_t node = %p", args->hipGraphExecChildGraphNodeSetParams.node);
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipGraph_t childGraph = %p", args->hipGraphExecChildGraphNodeSetParams.childGraph);
+			printf("\thipGraph_t childGraph = %p", args->childGraph);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphExecChildGraphNodeSetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset2D_spt
-		case HIP_API_ID_hipMemset2D_spt :
+		case HIP_API_ID_hipMemset2D_spt : {
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
 			//	int value (int);
 			//	size_t width (unsigned long);
 			//	size_t height (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemset2D_spt.dst);
+			args_hipMemset2D_spt_t* args = (args_hipMemset2D_spt_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t pitch = %lu\n", args->hipMemset2D_spt.pitch);
-			printf("\tint value = %d\n", args->hipMemset2D_spt.value);
-			printf("\tsize_t width = %lu\n", args->hipMemset2D_spt.width);
-			printf("\tsize_t height = %lu\n", args->hipMemset2D_spt.height);
-			printf("\thipError_t retval = %d\n", args->hipMemset2D_spt.retval);
+			printf("\tsize_t pitch = %lu\n", args->pitch);
+			printf("\tint value = %d\n", args->value);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetDefaultMemPool
-		case HIP_API_ID_hipDeviceGetDefaultMemPool :
+		case HIP_API_ID_hipDeviceGetDefaultMemPool : {
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	int device (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemPool_t * mem_pool = %p", args->hipDeviceGetDefaultMemPool.mem_pool);
-			if (args->hipDeviceGetDefaultMemPool.mem_pool != NULL) {
-				printf(" -> %p\n", args->hipDeviceGetDefaultMemPool.mem_pool__ref.val);
+			args_hipDeviceGetDefaultMemPool_t* args = (args_hipDeviceGetDefaultMemPool_t*) func_args;
+			printf("\thipMemPool_t * mem_pool = %p", args->mem_pool);
+			if (args->mem_pool != NULL) {
+				printf(" -> %p\n", args->mem_pool__ref.val);
 			} else { printf("\n"); };
-			printf("\tint device = %d\n", args->hipDeviceGetDefaultMemPool.device);
-			printf("\thipError_t retval = %d\n", args->hipDeviceGetDefaultMemPool.retval);
+			printf("\tint device = %d\n", args->device);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxCreate
-		case HIP_API_ID_hipCtxCreate :
+		case HIP_API_ID_hipCtxCreate : {
 			//	hipCtx_t * ctx (struct ihipCtx_t **);
 			//	unsigned int flags (unsigned int);
 			//	hipDevice_t device (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipCtx_t * ctx = %p", args->hipCtxCreate.ctx);
-			if (args->hipCtxCreate.ctx != NULL) {
-				printf(" -> %p\n", args->hipCtxCreate.ctx__ref.val);
+			args_hipCtxCreate_t* args = (args_hipCtxCreate_t*) func_args;
+			printf("\thipCtx_t * ctx = %p", args->ctx);
+			if (args->ctx != NULL) {
+				printf(" -> %p\n", args->ctx__ref.val);
 			} else { printf("\n"); };
-			printf("\tunsigned int flags = %u\n", args->hipCtxCreate.flags);
-			printf("\thipDevice_t device = %d\n", args->hipCtxCreate.device);
-			printf("\thipError_t retval = %d\n", args->hipCtxCreate.retval);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipDevice_t device = %d\n", args->device);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamIsCapturing
-		case HIP_API_ID_hipStreamIsCapturing :
+		case HIP_API_ID_hipStreamIsCapturing : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamIsCapturing.stream);
+			args_hipStreamIsCapturing_t* args = (args_hipStreamIsCapturing_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipStreamCaptureStatus * pCaptureStatus = %p", args->hipStreamIsCapturing.pCaptureStatus);
-			if (args->hipStreamIsCapturing.pCaptureStatus != NULL) {
-				printf(" -> %d\n", args->hipStreamIsCapturing.pCaptureStatus__ref.val);
+			printf("\thipStreamCaptureStatus * pCaptureStatus = %p", args->pCaptureStatus);
+			if (args->pCaptureStatus != NULL) {
+				printf(" -> %d\n", args->pCaptureStatus__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipStreamIsCapturing.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamUpdateCaptureDependencies
-		case HIP_API_ID_hipStreamUpdateCaptureDependencies :
+		case HIP_API_ID_hipStreamUpdateCaptureDependencies : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraphNode_t * dependencies (struct hipGraphNode **);
 			//	size_t numDependencies (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamUpdateCaptureDependencies.stream);
+			args_hipStreamUpdateCaptureDependencies_t* args = (args_hipStreamUpdateCaptureDependencies_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipGraphNode_t * dependencies = %p", args->hipStreamUpdateCaptureDependencies.dependencies);
-			if (args->hipStreamUpdateCaptureDependencies.dependencies != NULL) {
-				printf(" -> %p\n", args->hipStreamUpdateCaptureDependencies.dependencies__ref.val);
+			printf("\thipGraphNode_t * dependencies = %p", args->dependencies);
+			if (args->dependencies != NULL) {
+				printf(" -> %p\n", args->dependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipStreamUpdateCaptureDependencies.numDependencies);
-			printf("\tunsigned int flags = %u\n", args->hipStreamUpdateCaptureDependencies.flags);
-			printf("\thipError_t retval = %d\n", args->hipStreamUpdateCaptureDependencies.retval);
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceSynchronize
-		case HIP_API_ID_hipDeviceSynchronize :
+		case HIP_API_ID_hipDeviceSynchronize : {
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipError_t retval = %d\n", args->hipDeviceSynchronize.retval);
+			args_hipDeviceSynchronize_t* args = (args_hipDeviceSynchronize_t*) func_args;
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyFromSymbolAsync
-		case HIP_API_ID_hipMemcpyFromSymbolAsync :
+		case HIP_API_ID_hipMemcpyFromSymbolAsync : {
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
 			//	size_t sizeBytes (unsigned long);
@@ -6190,81 +6684,91 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpyFromSymbolAsync.dst);
+			args_hipMemcpyFromSymbolAsync_t* args = (args_hipMemcpyFromSymbolAsync_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * symbol = %p", args->hipMemcpyFromSymbolAsync.symbol);
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyFromSymbolAsync.sizeBytes);
-			printf("\tsize_t offset = %lu\n", args->hipMemcpyFromSymbolAsync.offset);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpyFromSymbolAsync.kind);
-			printf("\thipStream_t stream = %p", args->hipMemcpyFromSymbolAsync.stream);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpyFromSymbolAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphDestroyNode
-		case HIP_API_ID_hipGraphDestroyNode :
+		case HIP_API_ID_hipGraphDestroyNode : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphDestroyNode.node);
+			args_hipGraphDestroyNode_t* args = (args_hipGraphDestroyNode_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphDestroyNode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipUserObjectRetain
-		case HIP_API_ID_hipUserObjectRetain :
+		case HIP_API_ID_hipUserObjectRetain : {
 			//	hipUserObject_t object (struct hipUserObject *);
 			//	unsigned int count (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipUserObject_t object = %p", args->hipUserObjectRetain.object);
+			args_hipUserObjectRetain_t* args = (args_hipUserObjectRetain_t*) func_args;
+			printf("\thipUserObject_t object = %p", args->object);
 			printf("\n");
-			printf("\tunsigned int count = %u\n", args->hipUserObjectRetain.count);
-			printf("\thipError_t retval = %d\n", args->hipUserObjectRetain.retval);
+			printf("\tunsigned int count = %u\n", args->count);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecEventWaitNodeSetEvent
-		case HIP_API_ID_hipGraphExecEventWaitNodeSetEvent :
+		case HIP_API_ID_hipGraphExecEventWaitNodeSetEvent : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t hGraphExec = %p", args->hipGraphExecEventWaitNodeSetEvent.hGraphExec);
+			args_hipGraphExecEventWaitNodeSetEvent_t* args = (args_hipGraphExecEventWaitNodeSetEvent_t*) func_args;
+			printf("\thipGraphExec_t hGraphExec = %p", args->hGraphExec);
 			printf("\n");
-			printf("\thipGraphNode_t hNode = %p", args->hipGraphExecEventWaitNodeSetEvent.hNode);
+			printf("\thipGraphNode_t hNode = %p", args->hNode);
 			printf("\n");
-			printf("\thipEvent_t event = %p", args->hipGraphExecEventWaitNodeSetEvent.event);
+			printf("\thipEvent_t event = %p", args->event);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphExecEventWaitNodeSetEvent.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemAddressReserve
-		case HIP_API_ID_hipMemAddressReserve :
+		case HIP_API_ID_hipMemAddressReserve : {
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
 			//	size_t alignment (unsigned long);
 			//	void * addr (void *);
 			//	unsigned long long flags (unsigned long long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** ptr = %p", args->hipMemAddressReserve.ptr);
-			if (args->hipMemAddressReserve.ptr != NULL) {
-				printf("-> %p", args->hipMemAddressReserve.ptr__ref.ptr1);
+			args_hipMemAddressReserve_t* args = (args_hipMemAddressReserve_t*) func_args;
+			printf("\tvoid ** ptr = %p", args->ptr);
+			if (args->ptr != NULL) {
+				printf("-> %p", args->ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t size = %lu\n", args->hipMemAddressReserve.size);
-			printf("\tsize_t alignment = %lu\n", args->hipMemAddressReserve.alignment);
-			printf("\tvoid * addr = %p", args->hipMemAddressReserve.addr);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tsize_t alignment = %lu\n", args->alignment);
+			printf("\tvoid * addr = %p", args->addr);
 			printf("\n");
-			printf("\tunsigned long long flags = %llu\n", args->hipMemAddressReserve.flags);
-			printf("\thipError_t retval = %d\n", args->hipMemAddressReserve.retval);
+			printf("\tunsigned long long flags = %llu\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddMemsetNode
-		case HIP_API_ID_hipGraphAddMemsetNode :
+		case HIP_API_ID_hipGraphAddMemsetNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
@@ -6278,84 +6782,92 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		size_t width (unsigned long);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddMemsetNode.pGraphNode);
-			if (args->hipGraphAddMemsetNode.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddMemsetNode.pGraphNode__ref.val);
+			args_hipGraphAddMemsetNode_t* args = (args_hipGraphAddMemsetNode_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddMemsetNode.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddMemsetNode.pDependencies);
-			if (args->hipGraphAddMemsetNode.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddMemsetNode.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddMemsetNode.numDependencies);
-			printf("\tconst hipMemsetParams * pMemsetParams = %p", args->hipGraphAddMemsetNode.pMemsetParams);
-			if (args->hipGraphAddMemsetNode.pMemsetParams != NULL) {
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\tconst hipMemsetParams * pMemsetParams = %p", args->pMemsetParams);
+			if (args->pMemsetParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned int elementSize = %u\n", args->hipGraphAddMemsetNode.pMemsetParams__ref.val.elementSize);
-				printf("\t\tsize_t height = %lu\n", args->hipGraphAddMemsetNode.pMemsetParams__ref.val.height);
-				printf("\t\tsize_t pitch = %lu\n", args->hipGraphAddMemsetNode.pMemsetParams__ref.val.pitch);
-				printf("\t\tunsigned int value = %u\n", args->hipGraphAddMemsetNode.pMemsetParams__ref.val.value);
-				printf("\t\tsize_t width = %lu\n", args->hipGraphAddMemsetNode.pMemsetParams__ref.val.width);
+				printf("\t\tunsigned int elementSize = %u\n", args->pMemsetParams__ref.val.elementSize);
+				printf("\t\tsize_t height = %lu\n", args->pMemsetParams__ref.val.height);
+				printf("\t\tsize_t pitch = %lu\n", args->pMemsetParams__ref.val.pitch);
+				printf("\t\tunsigned int value = %u\n", args->pMemsetParams__ref.val.value);
+				printf("\t\tsize_t width = %lu\n", args->pMemsetParams__ref.val.width);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphAddMemsetNode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphicsResourceGetMappedPointer
-		case HIP_API_ID_hipGraphicsResourceGetMappedPointer :
+		case HIP_API_ID_hipGraphicsResourceGetMappedPointer : {
 			//	void ** devPtr (void **);
 			//	size_t * size (unsigned long*);
 			//	hipGraphicsResource_t resource (struct _hipGraphicsResource*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** devPtr = %p", args->hipGraphicsResourceGetMappedPointer.devPtr);
-			if (args->hipGraphicsResourceGetMappedPointer.devPtr != NULL) {
-				printf("-> %p", args->hipGraphicsResourceGetMappedPointer.devPtr__ref.ptr1);
+			args_hipGraphicsResourceGetMappedPointer_t* args = (args_hipGraphicsResourceGetMappedPointer_t*) func_args;
+			printf("\tvoid ** devPtr = %p", args->devPtr);
+			if (args->devPtr != NULL) {
+				printf("-> %p", args->devPtr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t * size = %p", args->hipGraphicsResourceGetMappedPointer.size);
-			if (args->hipGraphicsResourceGetMappedPointer.size != NULL) {
-				printf(" -> %lu\n", args->hipGraphicsResourceGetMappedPointer.size__ref.val);
+			printf("\tsize_t * size = %p", args->size);
+			if (args->size != NULL) {
+				printf(" -> %lu\n", args->size__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraphicsResource_t resource = %p", args->hipGraphicsResourceGetMappedPointer.resource);
+			printf("\thipGraphicsResource_t resource = %p", args->resource);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphicsResourceGetMappedPointer.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamBeginCapture_spt
-		case HIP_API_ID_hipStreamBeginCapture_spt :
+		case HIP_API_ID_hipStreamBeginCapture_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureMode mode (enum hipStreamCaptureMode);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamBeginCapture_spt.stream);
+			args_hipStreamBeginCapture_spt_t* args = (args_hipStreamBeginCapture_spt_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipStreamCaptureMode mode = %d\n", args->hipStreamBeginCapture_spt.mode);
-			printf("\thipError_t retval = %d\n", args->hipStreamBeginCapture_spt.retval);
+			printf("\thipStreamCaptureMode mode = %d\n", args->mode);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetUuid
-		case HIP_API_ID_hipDeviceGetUuid :
+		case HIP_API_ID_hipDeviceGetUuid : {
 			//	hipUUID * uuid ({
 			//		char[16] bytes (char[16]);
 			//	});
 			//	hipDevice_t device (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipUUID * uuid = %p", args->hipDeviceGetUuid.uuid);
-			if (args->hipDeviceGetUuid.uuid != NULL) {
+			args_hipDeviceGetUuid_t* args = (args_hipDeviceGetUuid_t*) func_args;
+			printf("\thipUUID * uuid = %p", args->uuid);
+			if (args->uuid != NULL) {
 				printf(" -> {\n");
-				printf("\t\tchar[16] bytes = %c\n", args->hipDeviceGetUuid.uuid__ref.val.bytes[0]);
+				printf("\t\tchar[16] bytes = %c\n", args->uuid__ref.val.bytes[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipDevice_t device = %d\n", args->hipDeviceGetUuid.device);
-			printf("\thipError_t retval = %d\n", args->hipDeviceGetUuid.retval);
+			printf("\thipDevice_t device = %d\n", args->device);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleLaunchKernel
-		case HIP_API_ID_hipModuleLaunchKernel :
+		case HIP_API_ID_hipModuleLaunchKernel : {
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
 			//	unsigned int gridDimX (unsigned int);
 			//	unsigned int gridDimY (unsigned int);
@@ -6368,116 +6880,128 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	void ** kernelParams (void **);
 			//	void ** extra (void **);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipFunction_t f = %p", args->hipModuleLaunchKernel.f);
+			args_hipModuleLaunchKernel_t* args = (args_hipModuleLaunchKernel_t*) func_args;
+			printf("\thipFunction_t f = %p", args->f);
 			printf("\n");
-			printf("\tunsigned int gridDimX = %u\n", args->hipModuleLaunchKernel.gridDimX);
-			printf("\tunsigned int gridDimY = %u\n", args->hipModuleLaunchKernel.gridDimY);
-			printf("\tunsigned int gridDimZ = %u\n", args->hipModuleLaunchKernel.gridDimZ);
-			printf("\tunsigned int blockDimX = %u\n", args->hipModuleLaunchKernel.blockDimX);
-			printf("\tunsigned int blockDimY = %u\n", args->hipModuleLaunchKernel.blockDimY);
-			printf("\tunsigned int blockDimZ = %u\n", args->hipModuleLaunchKernel.blockDimZ);
-			printf("\tunsigned int sharedMemBytes = %u\n", args->hipModuleLaunchKernel.sharedMemBytes);
-			printf("\thipStream_t stream = %p", args->hipModuleLaunchKernel.stream);
+			printf("\tunsigned int gridDimX = %u\n", args->gridDimX);
+			printf("\tunsigned int gridDimY = %u\n", args->gridDimY);
+			printf("\tunsigned int gridDimZ = %u\n", args->gridDimZ);
+			printf("\tunsigned int blockDimX = %u\n", args->blockDimX);
+			printf("\tunsigned int blockDimY = %u\n", args->blockDimY);
+			printf("\tunsigned int blockDimZ = %u\n", args->blockDimZ);
+			printf("\tunsigned int sharedMemBytes = %u\n", args->sharedMemBytes);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\tvoid ** kernelParams = %p", args->hipModuleLaunchKernel.kernelParams);
-			if (args->hipModuleLaunchKernel.kernelParams != NULL) {
-				printf("-> %p", args->hipModuleLaunchKernel.kernelParams__ref.ptr1);
+			printf("\tvoid ** kernelParams = %p", args->kernelParams);
+			if (args->kernelParams != NULL) {
+				printf("-> %p", args->kernelParams__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tvoid ** extra = %p", args->hipModuleLaunchKernel.extra);
-			if (args->hipModuleLaunchKernel.extra != NULL) {
-				printf("-> %p", args->hipModuleLaunchKernel.extra__ref.ptr1);
+			printf("\tvoid ** extra = %p", args->extra);
+			if (args->extra != NULL) {
+				printf("-> %p", args->extra__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipModuleLaunchKernel.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddEmptyNode
-		case HIP_API_ID_hipGraphAddEmptyNode :
+		case HIP_API_ID_hipGraphAddEmptyNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddEmptyNode.pGraphNode);
-			if (args->hipGraphAddEmptyNode.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddEmptyNode.pGraphNode__ref.val);
+			args_hipGraphAddEmptyNode_t* args = (args_hipGraphAddEmptyNode_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddEmptyNode.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddEmptyNode.pDependencies);
-			if (args->hipGraphAddEmptyNode.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddEmptyNode.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddEmptyNode.numDependencies);
-			printf("\thipError_t retval = %d\n", args->hipGraphAddEmptyNode.retval);
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemRangeGetAttribute
-		case HIP_API_ID_hipMemRangeGetAttribute :
+		case HIP_API_ID_hipMemRangeGetAttribute : {
 			//	void * data (void *);
 			//	size_t data_size (unsigned long);
 			//	hipMemRangeAttribute attribute (enum hipMemRangeAttribute);
 			//	const void * dev_ptr (const void *);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * data = %p", args->hipMemRangeGetAttribute.data);
+			args_hipMemRangeGetAttribute_t* args = (args_hipMemRangeGetAttribute_t*) func_args;
+			printf("\tvoid * data = %p", args->data);
 			printf("\n");
-			printf("\tsize_t data_size = %lu\n", args->hipMemRangeGetAttribute.data_size);
-			printf("\thipMemRangeAttribute attribute = %d\n", args->hipMemRangeGetAttribute.attribute);
-			printf("\tconst void * dev_ptr = %p", args->hipMemRangeGetAttribute.dev_ptr);
+			printf("\tsize_t data_size = %lu\n", args->data_size);
+			printf("\thipMemRangeAttribute attribute = %d\n", args->attribute);
+			printf("\tconst void * dev_ptr = %p", args->dev_ptr);
 			printf("\n");
-			printf("\tsize_t count = %lu\n", args->hipMemRangeGetAttribute.count);
-			printf("\thipError_t retval = %d\n", args->hipMemRangeGetAttribute.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphInstantiateWithFlags
-		case HIP_API_ID_hipGraphInstantiateWithFlags :
+		case HIP_API_ID_hipGraphInstantiateWithFlags : {
 			//	hipGraphExec_t * pGraphExec (struct hipGraphExec **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	unsigned long long flags (unsigned long long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t * pGraphExec = %p", args->hipGraphInstantiateWithFlags.pGraphExec);
-			if (args->hipGraphInstantiateWithFlags.pGraphExec != NULL) {
-				printf(" -> %p\n", args->hipGraphInstantiateWithFlags.pGraphExec__ref.val);
+			args_hipGraphInstantiateWithFlags_t* args = (args_hipGraphInstantiateWithFlags_t*) func_args;
+			printf("\thipGraphExec_t * pGraphExec = %p", args->pGraphExec);
+			if (args->pGraphExec != NULL) {
+				printf(" -> %p\n", args->pGraphExec__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphInstantiateWithFlags.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tunsigned long long flags = %llu\n", args->hipGraphInstantiateWithFlags.flags);
-			printf("\thipError_t retval = %d\n", args->hipGraphInstantiateWithFlags.retval);
+			printf("\tunsigned long long flags = %llu\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxPushCurrent
-		case HIP_API_ID_hipCtxPushCurrent :
+		case HIP_API_ID_hipCtxPushCurrent : {
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipCtx_t ctx = %p", args->hipCtxPushCurrent.ctx);
+			args_hipCtxPushCurrent_t* args = (args_hipCtxPushCurrent_t*) func_args;
+			printf("\thipCtx_t ctx = %p", args->ctx);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipCtxPushCurrent.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxGetApiVersion
-		case HIP_API_ID_hipCtxGetApiVersion :
+		case HIP_API_ID_hipCtxGetApiVersion : {
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	int * apiVersion (int *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipCtx_t ctx = %p", args->hipCtxGetApiVersion.ctx);
+			args_hipCtxGetApiVersion_t* args = (args_hipCtxGetApiVersion_t*) func_args;
+			printf("\thipCtx_t ctx = %p", args->ctx);
 			printf("\n");
-			printf("\tint * apiVersion = %p", args->hipCtxGetApiVersion.apiVersion);
-			if (args->hipCtxGetApiVersion.apiVersion != NULL) {
-				printf(" -> %d\n", args->hipCtxGetApiVersion.apiVersion__ref.val);
+			printf("\tint * apiVersion = %p", args->apiVersion);
+			if (args->apiVersion != NULL) {
+				printf(" -> %d\n", args->apiVersion__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipCtxGetApiVersion.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipBindTexture
-		case HIP_API_ID_hipBindTexture :
+		case HIP_API_ID_hipBindTexture : {
 			//	size_t * offset (unsigned long*);
 			//	const textureReference * tex ({
 			//		int normalized (int);
@@ -6511,102 +7035,112 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	size_t size (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tsize_t * offset = %p", args->hipBindTexture.offset);
-			if (args->hipBindTexture.offset != NULL) {
-				printf(" -> %lu\n", args->hipBindTexture.offset__ref.val);
+			args_hipBindTexture_t* args = (args_hipBindTexture_t*) func_args;
+			printf("\tsize_t * offset = %p", args->offset);
+			if (args->offset != NULL) {
+				printf(" -> %lu\n", args->offset__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst textureReference * tex = %p", args->hipBindTexture.tex);
-			if (args->hipBindTexture.tex != NULL) {
+			printf("\tconst textureReference * tex = %p", args->tex);
+			if (args->tex != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipBindTexture.tex__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipBindTexture.tex__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipBindTexture.tex__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipBindTexture.tex__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->tex__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->tex__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->tex__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->tex__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipBindTexture.tex__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipBindTexture.tex__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipBindTexture.tex__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipBindTexture.tex__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipBindTexture.tex__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->tex__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->tex__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->tex__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->tex__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->tex__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipBindTexture.tex__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipBindTexture.tex__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipBindTexture.tex__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipBindTexture.tex__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipBindTexture.tex__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipBindTexture.tex__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipBindTexture.tex__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipBindTexture.tex__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->tex__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->tex__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->tex__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->tex__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->tex__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->tex__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->tex__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->tex__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst void * devPtr = %p", args->hipBindTexture.devPtr);
+			printf("\tconst void * devPtr = %p", args->devPtr);
 			printf("\n");
-			printf("\tconst hipChannelFormatDesc * desc = %p", args->hipBindTexture.desc);
-			if (args->hipBindTexture.desc != NULL) {
+			printf("\tconst hipChannelFormatDesc * desc = %p", args->desc);
+			if (args->desc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint x = %d\n", args->hipBindTexture.desc__ref.val.x);
-				printf("\t\tint y = %d\n", args->hipBindTexture.desc__ref.val.y);
-				printf("\t\tint z = %d\n", args->hipBindTexture.desc__ref.val.z);
-				printf("\t\tint w = %d\n", args->hipBindTexture.desc__ref.val.w);
-				printf("\t\tenum hipChannelFormatKind f = %d\n", args->hipBindTexture.desc__ref.val.f);
+				printf("\t\tint x = %d\n", args->desc__ref.val.x);
+				printf("\t\tint y = %d\n", args->desc__ref.val.y);
+				printf("\t\tint z = %d\n", args->desc__ref.val.z);
+				printf("\t\tint w = %d\n", args->desc__ref.val.w);
+				printf("\t\tenum hipChannelFormatKind f = %d\n", args->desc__ref.val.f);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tsize_t size = %lu\n", args->hipBindTexture.size);
-			printf("\thipError_t retval = %d\n", args->hipBindTexture.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamBeginCapture
-		case HIP_API_ID_hipStreamBeginCapture :
+		case HIP_API_ID_hipStreamBeginCapture : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureMode mode (enum hipStreamCaptureMode);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamBeginCapture.stream);
+			args_hipStreamBeginCapture_t* args = (args_hipStreamBeginCapture_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipStreamCaptureMode mode = %d\n", args->hipStreamBeginCapture.mode);
-			printf("\thipError_t retval = %d\n", args->hipStreamBeginCapture.retval);
+			printf("\thipStreamCaptureMode mode = %d\n", args->mode);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipProfilerStart
-		case HIP_API_ID_hipProfilerStart :
+		case HIP_API_ID_hipProfilerStart : {
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipError_t retval = %d\n", args->hipProfilerStart.retval);
+			args_hipProfilerStart_t* args = (args_hipProfilerStart_t*) func_args;
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyHtoDAsync
-		case HIP_API_ID_hipMemcpyHtoDAsync :
+		case HIP_API_ID_hipMemcpyHtoDAsync : {
 			//	hipDeviceptr_t dst (void *);
 			//	void * src (void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceptr_t dst = %p", args->hipMemcpyHtoDAsync.dst);
+			args_hipMemcpyHtoDAsync_t* args = (args_hipMemcpyHtoDAsync_t*) func_args;
+			printf("\thipDeviceptr_t dst = %p", args->dst);
 			printf("\n");
-			printf("\tvoid * src = %p", args->hipMemcpyHtoDAsync.src);
+			printf("\tvoid * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyHtoDAsync.sizeBytes);
-			printf("\thipStream_t stream = %p", args->hipMemcpyHtoDAsync.stream);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpyHtoDAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetDeviceFlags
-		case HIP_API_ID_hipGetDeviceFlags :
+		case HIP_API_ID_hipGetDeviceFlags : {
 			//	unsigned int * flags (unsigned int *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tunsigned int * flags = %p", args->hipGetDeviceFlags.flags);
-			if (args->hipGetDeviceFlags.flags != NULL) {
-				printf(" -> %u\n", args->hipGetDeviceFlags.flags__ref.val);
+			args_hipGetDeviceFlags_t* args = (args_hipGetDeviceFlags_t*) func_args;
+			printf("\tunsigned int * flags = %p", args->flags);
+			if (args->flags != NULL) {
+				printf(" -> %u\n", args->flags__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGetDeviceFlags.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemRangeGetAttributes
-		case HIP_API_ID_hipMemRangeGetAttributes :
+		case HIP_API_ID_hipMemRangeGetAttributes : {
 			//	void ** data (void **);
 			//	size_t * data_sizes (unsigned long*);
 			//	hipMemRangeAttribute * attributes (enum hipMemRangeAttribute*);
@@ -6614,132 +7148,148 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	const void * dev_ptr (const void *);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** data = %p", args->hipMemRangeGetAttributes.data);
-			if (args->hipMemRangeGetAttributes.data != NULL) {
-				printf("-> %p", args->hipMemRangeGetAttributes.data__ref.ptr1);
+			args_hipMemRangeGetAttributes_t* args = (args_hipMemRangeGetAttributes_t*) func_args;
+			printf("\tvoid ** data = %p", args->data);
+			if (args->data != NULL) {
+				printf("-> %p", args->data__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t * data_sizes = %p", args->hipMemRangeGetAttributes.data_sizes);
-			if (args->hipMemRangeGetAttributes.data_sizes != NULL) {
-				printf(" -> %lu\n", args->hipMemRangeGetAttributes.data_sizes__ref.val);
+			printf("\tsize_t * data_sizes = %p", args->data_sizes);
+			if (args->data_sizes != NULL) {
+				printf(" -> %lu\n", args->data_sizes__ref.val);
 			} else { printf("\n"); };
-			printf("\thipMemRangeAttribute * attributes = %p", args->hipMemRangeGetAttributes.attributes);
-			if (args->hipMemRangeGetAttributes.attributes != NULL) {
-				printf(" -> %d\n", args->hipMemRangeGetAttributes.attributes__ref.val);
+			printf("\thipMemRangeAttribute * attributes = %p", args->attributes);
+			if (args->attributes != NULL) {
+				printf(" -> %d\n", args->attributes__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t num_attributes = %lu\n", args->hipMemRangeGetAttributes.num_attributes);
-			printf("\tconst void * dev_ptr = %p", args->hipMemRangeGetAttributes.dev_ptr);
+			printf("\tsize_t num_attributes = %lu\n", args->num_attributes);
+			printf("\tconst void * dev_ptr = %p", args->dev_ptr);
 			printf("\n");
-			printf("\tsize_t count = %lu\n", args->hipMemRangeGetAttributes.count);
-			printf("\thipError_t retval = %d\n", args->hipMemRangeGetAttributes.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDestroyExternalSemaphore
-		case HIP_API_ID_hipDestroyExternalSemaphore :
+		case HIP_API_ID_hipDestroyExternalSemaphore : {
 			//	hipExternalSemaphore_t extSem (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipExternalSemaphore_t extSem = %p", args->hipDestroyExternalSemaphore.extSem);
+			args_hipDestroyExternalSemaphore_t* args = (args_hipDestroyExternalSemaphore_t*) func_args;
+			printf("\thipExternalSemaphore_t extSem = %p", args->extSem);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipDestroyExternalSemaphore.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipIpcOpenEventHandle
-		case HIP_API_ID_hipIpcOpenEventHandle :
+		case HIP_API_ID_hipIpcOpenEventHandle : {
 			//	hipEvent_t * event (struct ihipEvent_t **);
 			//	hipIpcEventHandle_t handle ({
 			//		char[64] reserved (char[64]);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipEvent_t * event = %p", args->hipIpcOpenEventHandle.event);
-			if (args->hipIpcOpenEventHandle.event != NULL) {
-				printf(" -> %p\n", args->hipIpcOpenEventHandle.event__ref.val);
+			args_hipIpcOpenEventHandle_t* args = (args_hipIpcOpenEventHandle_t*) func_args;
+			printf("\thipEvent_t * event = %p", args->event);
+			if (args->event != NULL) {
+				printf(" -> %p\n", args->event__ref.val);
 			} else { printf("\n"); };
 			printf("\thipIpcEventHandle_t handle = {\n");
-			printf("\t\tchar[64] reserved = %c\n", args->hipIpcOpenEventHandle.handle.reserved[0]);
+			printf("\t\tchar[64] reserved = %c\n", args->handle.reserved[0]);
 			printf("\t}\n");
-			printf("\thipError_t retval = %d\n", args->hipIpcOpenEventHandle.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphUpload
-		case HIP_API_ID_hipGraphUpload :
+		case HIP_API_ID_hipGraphUpload : {
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t graphExec = %p", args->hipGraphUpload.graphExec);
+			args_hipGraphUpload_t* args = (args_hipGraphUpload_t*) func_args;
+			printf("\thipGraphExec_t graphExec = %p", args->graphExec);
 			printf("\n");
-			printf("\thipStream_t stream = %p", args->hipGraphUpload.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphUpload.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMallocAsync
-		case HIP_API_ID_hipMallocAsync :
+		case HIP_API_ID_hipMallocAsync : {
 			//	void ** dev_ptr (void **);
 			//	size_t size (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** dev_ptr = %p", args->hipMallocAsync.dev_ptr);
-			if (args->hipMallocAsync.dev_ptr != NULL) {
-				printf("-> %p", args->hipMallocAsync.dev_ptr__ref.ptr1);
+			args_hipMallocAsync_t* args = (args_hipMallocAsync_t*) func_args;
+			printf("\tvoid ** dev_ptr = %p", args->dev_ptr);
+			if (args->dev_ptr != NULL) {
+				printf("-> %p", args->dev_ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t size = %lu\n", args->hipMallocAsync.size);
-			printf("\thipStream_t stream = %p", args->hipMallocAsync.stream);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMallocAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipOccupancyMaxPotentialBlockSize
-		case HIP_API_ID_hipOccupancyMaxPotentialBlockSize :
+		case HIP_API_ID_hipOccupancyMaxPotentialBlockSize : {
 			//	int * gridSize (int *);
 			//	int * blockSize (int *);
 			//	const void * f (const void *);
 			//	size_t dynSharedMemPerBlk (unsigned long);
 			//	int blockSizeLimit (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * gridSize = %p", args->hipOccupancyMaxPotentialBlockSize.gridSize);
-			if (args->hipOccupancyMaxPotentialBlockSize.gridSize != NULL) {
-				printf(" -> %d\n", args->hipOccupancyMaxPotentialBlockSize.gridSize__ref.val);
+			args_hipOccupancyMaxPotentialBlockSize_t* args = (args_hipOccupancyMaxPotentialBlockSize_t*) func_args;
+			printf("\tint * gridSize = %p", args->gridSize);
+			if (args->gridSize != NULL) {
+				printf(" -> %d\n", args->gridSize__ref.val);
 			} else { printf("\n"); };
-			printf("\tint * blockSize = %p", args->hipOccupancyMaxPotentialBlockSize.blockSize);
-			if (args->hipOccupancyMaxPotentialBlockSize.blockSize != NULL) {
-				printf(" -> %d\n", args->hipOccupancyMaxPotentialBlockSize.blockSize__ref.val);
+			printf("\tint * blockSize = %p", args->blockSize);
+			if (args->blockSize != NULL) {
+				printf(" -> %d\n", args->blockSize__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst void * f = %p", args->hipOccupancyMaxPotentialBlockSize.f);
+			printf("\tconst void * f = %p", args->f);
 			printf("\n");
-			printf("\tsize_t dynSharedMemPerBlk = %lu\n", args->hipOccupancyMaxPotentialBlockSize.dynSharedMemPerBlk);
-			printf("\tint blockSizeLimit = %d\n", args->hipOccupancyMaxPotentialBlockSize.blockSizeLimit);
-			printf("\thipError_t retval = %d\n", args->hipOccupancyMaxPotentialBlockSize.retval);
+			printf("\tsize_t dynSharedMemPerBlk = %lu\n", args->dynSharedMemPerBlk);
+			printf("\tint blockSizeLimit = %d\n", args->blockSizeLimit);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDestroyExternalMemory
-		case HIP_API_ID_hipDestroyExternalMemory :
+		case HIP_API_ID_hipDestroyExternalMemory : {
 			//	hipExternalMemory_t extMem (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipExternalMemory_t extMem = %p", args->hipDestroyExternalMemory.extMem);
+			args_hipDestroyExternalMemory_t* args = (args_hipDestroyExternalMemory_t*) func_args;
+			printf("\thipExternalMemory_t extMem = %p", args->extMem);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipDestroyExternalMemory.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_amd_dbgapi_get_build_name
-		case HIP_API_ID_amd_dbgapi_get_build_name :
+		case HIP_API_ID_amd_dbgapi_get_build_name : {
 			//	const char * retval (const char *);
-			printf("\tconst char * retval = %p", args->amd_dbgapi_get_build_name.retval);
-			if (args->amd_dbgapi_get_build_name.retval != NULL) {
-				printf(" -> %s\n", args->amd_dbgapi_get_build_name.retval__ref.val);
+			args_amd_dbgapi_get_build_name_t* args = (args_amd_dbgapi_get_build_name_t*) func_args;
+			printf("\tconst char * retval = %p", args->retval);
+			if (args->retval != NULL) {
+				printf(" -> %s\n", args->retval__ref.val);
 			} else { printf("\n"); };
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddMemcpyNodeToSymbol
-		case HIP_API_ID_hipGraphAddMemcpyNodeToSymbol :
+		case HIP_API_ID_hipGraphAddMemcpyNodeToSymbol : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
@@ -6750,46 +7300,50 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddMemcpyNodeToSymbol.pGraphNode);
-			if (args->hipGraphAddMemcpyNodeToSymbol.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddMemcpyNodeToSymbol.pGraphNode__ref.val);
+			args_hipGraphAddMemcpyNodeToSymbol_t* args = (args_hipGraphAddMemcpyNodeToSymbol_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddMemcpyNodeToSymbol.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddMemcpyNodeToSymbol.pDependencies);
-			if (args->hipGraphAddMemcpyNodeToSymbol.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddMemcpyNodeToSymbol.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddMemcpyNodeToSymbol.numDependencies);
-			printf("\tconst void * symbol = %p", args->hipGraphAddMemcpyNodeToSymbol.symbol);
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hipGraphAddMemcpyNodeToSymbol.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t count = %lu\n", args->hipGraphAddMemcpyNodeToSymbol.count);
-			printf("\tsize_t offset = %lu\n", args->hipGraphAddMemcpyNodeToSymbol.offset);
-			printf("\thipMemcpyKind kind = %d\n", args->hipGraphAddMemcpyNodeToSymbol.kind);
-			printf("\thipError_t retval = %d\n", args->hipGraphAddMemcpyNodeToSymbol.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetPCIBusId
-		case HIP_API_ID_hipDeviceGetPCIBusId :
+		case HIP_API_ID_hipDeviceGetPCIBusId : {
 			//	char * pciBusId (char *);
 			//	int len (int);
 			//	int device (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tchar * pciBusId = %p", args->hipDeviceGetPCIBusId.pciBusId);
-			if (args->hipDeviceGetPCIBusId.pciBusId != NULL) {
-				printf(" -> %s\n", args->hipDeviceGetPCIBusId.pciBusId__ref.val);
+			args_hipDeviceGetPCIBusId_t* args = (args_hipDeviceGetPCIBusId_t*) func_args;
+			printf("\tchar * pciBusId = %p", args->pciBusId);
+			if (args->pciBusId != NULL) {
+				printf(" -> %s\n", args->pciBusId__ref.val);
 			} else { printf("\n"); };
-			printf("\tint len = %d\n", args->hipDeviceGetPCIBusId.len);
-			printf("\tint device = %d\n", args->hipDeviceGetPCIBusId.device);
-			printf("\thipError_t retval = %d\n", args->hipDeviceGetPCIBusId.retval);
+			printf("\tint len = %d\n", args->len);
+			printf("\tint device = %d\n", args->device);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetChannelDesc
-		case HIP_API_ID_hipGetChannelDesc :
+		case HIP_API_ID_hipGetChannelDesc : {
 			//	hipChannelFormatDesc * desc ({
 			//		int x (int);
 			//		int y (int);
@@ -6799,33 +7353,37 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipArray_const_t array (const struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipChannelFormatDesc * desc = %p", args->hipGetChannelDesc.desc);
-			if (args->hipGetChannelDesc.desc != NULL) {
+			args_hipGetChannelDesc_t* args = (args_hipGetChannelDesc_t*) func_args;
+			printf("\thipChannelFormatDesc * desc = %p", args->desc);
+			if (args->desc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint x = %d\n", args->hipGetChannelDesc.desc__ref.val.x);
-				printf("\t\tint y = %d\n", args->hipGetChannelDesc.desc__ref.val.y);
-				printf("\t\tint z = %d\n", args->hipGetChannelDesc.desc__ref.val.z);
-				printf("\t\tint w = %d\n", args->hipGetChannelDesc.desc__ref.val.w);
-				printf("\t\tenum hipChannelFormatKind f = %d\n", args->hipGetChannelDesc.desc__ref.val.f);
+				printf("\t\tint x = %d\n", args->desc__ref.val.x);
+				printf("\t\tint y = %d\n", args->desc__ref.val.y);
+				printf("\t\tint z = %d\n", args->desc__ref.val.z);
+				printf("\t\tint w = %d\n", args->desc__ref.val.w);
+				printf("\t\tenum hipChannelFormatKind f = %d\n", args->desc__ref.val.f);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipArray_const_t array = %p", args->hipGetChannelDesc.array);
+			printf("\thipArray_const_t array = %p", args->array);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGetChannelDesc.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDevicePrimaryCtxReset
-		case HIP_API_ID_hipDevicePrimaryCtxReset :
+		case HIP_API_ID_hipDevicePrimaryCtxReset : {
 			//	hipDevice_t dev (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDevice_t dev = %d\n", args->hipDevicePrimaryCtxReset.dev);
-			printf("\thipError_t retval = %d\n", args->hipDevicePrimaryCtxReset.retval);
+			args_hipDevicePrimaryCtxReset_t* args = (args_hipDevicePrimaryCtxReset_t*) func_args;
+			printf("\thipDevice_t dev = %d\n", args->dev);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipImportExternalMemory
-		case HIP_API_ID_hipImportExternalMemory :
+		case HIP_API_ID_hipImportExternalMemory : {
 			//	hipExternalMemory_t * extMem_out (void **);
 			//	const hipExternalMemoryHandleDesc * memHandleDesc ({
 			//		hipExternalMemoryHandleType type (enum hipExternalMemoryHandleType_enum);
@@ -6836,55 +7394,61 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int[16] reserved (unsigned int[16]);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipExternalMemory_t * extMem_out = %p", args->hipImportExternalMemory.extMem_out);
-			if (args->hipImportExternalMemory.extMem_out != NULL) {
-				printf("-> %p", args->hipImportExternalMemory.extMem_out__ref.ptr1);
+			args_hipImportExternalMemory_t* args = (args_hipImportExternalMemory_t*) func_args;
+			printf("\thipExternalMemory_t * extMem_out = %p", args->extMem_out);
+			if (args->extMem_out != NULL) {
+				printf("-> %p", args->extMem_out__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tconst hipExternalMemoryHandleDesc * memHandleDesc = %p", args->hipImportExternalMemory.memHandleDesc);
-			if (args->hipImportExternalMemory.memHandleDesc != NULL) {
+			printf("\tconst hipExternalMemoryHandleDesc * memHandleDesc = %p", args->memHandleDesc);
+			if (args->memHandleDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\thipExternalMemoryHandleType type = %d\n", args->hipImportExternalMemory.memHandleDesc__ref.val.type);
+				printf("\t\thipExternalMemoryHandleType type = %d\n", args->memHandleDesc__ref.val.type);
 				printf("\t\tunion (unnamed union at header/hip/hip.h:1445:2) handle = {\n");
 				printf("\t\t}\n");
-				printf("\t\tunsigned long long size = %llu\n", args->hipImportExternalMemory.memHandleDesc__ref.val.size);
-				printf("\t\tunsigned int flags = %u\n", args->hipImportExternalMemory.memHandleDesc__ref.val.flags);
-				printf("\t\tunsigned int[16] reserved = %u\n", args->hipImportExternalMemory.memHandleDesc__ref.val.reserved[0]);
+				printf("\t\tunsigned long long size = %llu\n", args->memHandleDesc__ref.val.size);
+				printf("\t\tunsigned int flags = %u\n", args->memHandleDesc__ref.val.flags);
+				printf("\t\tunsigned int[16] reserved = %u\n", args->memHandleDesc__ref.val.reserved[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipImportExternalMemory.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFuncSetSharedMemConfig
-		case HIP_API_ID_hipFuncSetSharedMemConfig :
+		case HIP_API_ID_hipFuncSetSharedMemConfig : {
 			//	const void * func (const void *);
 			//	hipSharedMemConfig config (enum hipSharedMemConfig);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * func = %p", args->hipFuncSetSharedMemConfig.func);
+			args_hipFuncSetSharedMemConfig_t* args = (args_hipFuncSetSharedMemConfig_t*) func_args;
+			printf("\tconst void * func = %p", args->func);
 			printf("\n");
-			printf("\thipSharedMemConfig config = %d\n", args->hipFuncSetSharedMemConfig.config);
-			printf("\thipError_t retval = %d\n", args->hipFuncSetSharedMemConfig.retval);
+			printf("\thipSharedMemConfig config = %d\n", args->config);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamWaitEvent
-		case HIP_API_ID_hipStreamWaitEvent :
+		case HIP_API_ID_hipStreamWaitEvent : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamWaitEvent.stream);
+			args_hipStreamWaitEvent_t* args = (args_hipStreamWaitEvent_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipEvent_t event = %p", args->hipStreamWaitEvent.event);
+			printf("\thipEvent_t event = %p", args->event);
 			printf("\n");
-			printf("\tunsigned int flags = %u\n", args->hipStreamWaitEvent.flags);
-			printf("\thipError_t retval = %d\n", args->hipStreamWaitEvent.retval);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetMipmapLevelBias
-		case HIP_API_ID_hipTexRefSetMipmapLevelBias :
+		case HIP_API_ID_hipTexRefSetMipmapLevelBias : {
 			//	textureReference * texRef ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -6909,73 +7473,79 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	float bias (float);
 			//	hipError_t retval (enum hipError_t);
-			printf("\ttextureReference * texRef = %p", args->hipTexRefSetMipmapLevelBias.texRef);
-			if (args->hipTexRefSetMipmapLevelBias.texRef != NULL) {
+			args_hipTexRefSetMipmapLevelBias_t* args = (args_hipTexRefSetMipmapLevelBias_t*) func_args;
+			printf("\ttextureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefSetMipmapLevelBias.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tfloat bias = %f\n", args->hipTexRefSetMipmapLevelBias.bias);
-			printf("\thipError_t retval = %d\n", args->hipTexRefSetMipmapLevelBias.retval);
+			printf("\tfloat bias = %f\n", args->bias);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolImportFromShareableHandle
-		case HIP_API_ID_hipMemPoolImportFromShareableHandle :
+		case HIP_API_ID_hipMemPoolImportFromShareableHandle : {
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	void * shared_handle (void *);
 			//	hipMemAllocationHandleType handle_type (enum hipMemAllocationHandleType);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemPool_t * mem_pool = %p", args->hipMemPoolImportFromShareableHandle.mem_pool);
-			if (args->hipMemPoolImportFromShareableHandle.mem_pool != NULL) {
-				printf(" -> %p\n", args->hipMemPoolImportFromShareableHandle.mem_pool__ref.val);
+			args_hipMemPoolImportFromShareableHandle_t* args = (args_hipMemPoolImportFromShareableHandle_t*) func_args;
+			printf("\thipMemPool_t * mem_pool = %p", args->mem_pool);
+			if (args->mem_pool != NULL) {
+				printf(" -> %p\n", args->mem_pool__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid * shared_handle = %p", args->hipMemPoolImportFromShareableHandle.shared_handle);
+			printf("\tvoid * shared_handle = %p", args->shared_handle);
 			printf("\n");
-			printf("\thipMemAllocationHandleType handle_type = %d\n", args->hipMemPoolImportFromShareableHandle.handle_type);
-			printf("\tunsigned int flags = %u\n", args->hipMemPoolImportFromShareableHandle.flags);
-			printf("\thipError_t retval = %d\n", args->hipMemPoolImportFromShareableHandle.retval);
+			printf("\thipMemAllocationHandleType handle_type = %d\n", args->handle_type);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolExportToShareableHandle
-		case HIP_API_ID_hipMemPoolExportToShareableHandle :
+		case HIP_API_ID_hipMemPoolExportToShareableHandle : {
 			//	void * shared_handle (void *);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipMemAllocationHandleType handle_type (enum hipMemAllocationHandleType);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * shared_handle = %p", args->hipMemPoolExportToShareableHandle.shared_handle);
+			args_hipMemPoolExportToShareableHandle_t* args = (args_hipMemPoolExportToShareableHandle_t*) func_args;
+			printf("\tvoid * shared_handle = %p", args->shared_handle);
 			printf("\n");
-			printf("\thipMemPool_t mem_pool = %p", args->hipMemPoolExportToShareableHandle.mem_pool);
+			printf("\thipMemPool_t mem_pool = %p", args->mem_pool);
 			printf("\n");
-			printf("\thipMemAllocationHandleType handle_type = %d\n", args->hipMemPoolExportToShareableHandle.handle_type);
-			printf("\tunsigned int flags = %u\n", args->hipMemPoolExportToShareableHandle.flags);
-			printf("\thipError_t retval = %d\n", args->hipMemPoolExportToShareableHandle.retval);
+			printf("\thipMemAllocationHandleType handle_type = %d\n", args->handle_type);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecMemcpyNodeSetParamsToSymbol
-		case HIP_API_ID_hipGraphExecMemcpyNodeSetParamsToSymbol :
+		case HIP_API_ID_hipGraphExecMemcpyNodeSetParamsToSymbol : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const void * symbol (const void *);
@@ -6984,23 +7554,25 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t hGraphExec = %p", args->hipGraphExecMemcpyNodeSetParamsToSymbol.hGraphExec);
+			args_hipGraphExecMemcpyNodeSetParamsToSymbol_t* args = (args_hipGraphExecMemcpyNodeSetParamsToSymbol_t*) func_args;
+			printf("\thipGraphExec_t hGraphExec = %p", args->hGraphExec);
 			printf("\n");
-			printf("\thipGraphNode_t node = %p", args->hipGraphExecMemcpyNodeSetParamsToSymbol.node);
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\tconst void * symbol = %p", args->hipGraphExecMemcpyNodeSetParamsToSymbol.symbol);
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hipGraphExecMemcpyNodeSetParamsToSymbol.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t count = %lu\n", args->hipGraphExecMemcpyNodeSetParamsToSymbol.count);
-			printf("\tsize_t offset = %lu\n", args->hipGraphExecMemcpyNodeSetParamsToSymbol.offset);
-			printf("\thipMemcpyKind kind = %d\n", args->hipGraphExecMemcpyNodeSetParamsToSymbol.kind);
-			printf("\thipError_t retval = %d\n", args->hipGraphExecMemcpyNodeSetParamsToSymbol.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetMipmapFilterMode
-		case HIP_API_ID_hipTexRefGetMipmapFilterMode :
+		case HIP_API_ID_hipTexRefGetMipmapFilterMode : {
 			//	enum hipTextureFilterMode * pfm (enum hipTextureFilterMode *);
 			//	const textureReference * texRef ({
 			//		int normalized (int);
@@ -7025,67 +7597,71 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipArray_Format format (enum hipArray_Format);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tenum hipTextureFilterMode * pfm = %p", args->hipTexRefGetMipmapFilterMode.pfm);
-			if (args->hipTexRefGetMipmapFilterMode.pfm != NULL) {
-				printf(" -> %d\n", args->hipTexRefGetMipmapFilterMode.pfm__ref.val);
+			args_hipTexRefGetMipmapFilterMode_t* args = (args_hipTexRefGetMipmapFilterMode_t*) func_args;
+			printf("\tenum hipTextureFilterMode * pfm = %p", args->pfm);
+			if (args->pfm != NULL) {
+				printf(" -> %d\n", args->pfm__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst textureReference * texRef = %p", args->hipTexRefGetMipmapFilterMode.texRef);
-			if (args->hipTexRefGetMipmapFilterMode.texRef != NULL) {
+			printf("\tconst textureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefGetMipmapFilterMode.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipTexRefGetMipmapFilterMode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetProcAddress
-		case HIP_API_ID_hipGetProcAddress :
+		case HIP_API_ID_hipGetProcAddress : {
 			//	const char * symbol (const char *);
 			//	void ** pfn (void **);
 			//	int hipVersion (int);
 			//	uint64_t flags (unsigned long);
 			//	hipDriverProcAddressQueryResult * symbolStatus (enum hipDriverProcAddressQueryResult*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst char * symbol = %p", args->hipGetProcAddress.symbol);
-			if (args->hipGetProcAddress.symbol != NULL) {
-				printf(" -> %s\n", args->hipGetProcAddress.symbol__ref.val);
+			args_hipGetProcAddress_t* args = (args_hipGetProcAddress_t*) func_args;
+			printf("\tconst char * symbol = %p", args->symbol);
+			if (args->symbol != NULL) {
+				printf(" -> %s\n", args->symbol__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid ** pfn = %p", args->hipGetProcAddress.pfn);
-			if (args->hipGetProcAddress.pfn != NULL) {
-				printf("-> %p", args->hipGetProcAddress.pfn__ref.ptr1);
+			printf("\tvoid ** pfn = %p", args->pfn);
+			if (args->pfn != NULL) {
+				printf("-> %p", args->pfn__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tint hipVersion = %d\n", args->hipGetProcAddress.hipVersion);
-			printf("\tuint64_t flags = %lu\n", args->hipGetProcAddress.flags);
-			printf("\thipDriverProcAddressQueryResult * symbolStatus = %p", args->hipGetProcAddress.symbolStatus);
-			if (args->hipGetProcAddress.symbolStatus != NULL) {
-				printf(" -> %d\n", args->hipGetProcAddress.symbolStatus__ref.val);
+			printf("\tint hipVersion = %d\n", args->hipVersion);
+			printf("\tuint64_t flags = %lu\n", args->flags);
+			printf("\thipDriverProcAddressQueryResult * symbolStatus = %p", args->symbolStatus);
+			if (args->symbolStatus != NULL) {
+				printf(" -> %d\n", args->symbolStatus__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGetProcAddress.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCreateTextureObject
-		case HIP_API_ID_hipCreateTextureObject :
+		case HIP_API_ID_hipCreateTextureObject : {
 			//	hipTextureObject_t * pTexObject (struct __hip_texture **);
 			//	const hipResourceDesc * pResDesc ({
 			//		enum hipResourceType resType (enum hipResourceType);
@@ -7116,66 +7692,70 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int lastLayer (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipTextureObject_t * pTexObject = %p", args->hipCreateTextureObject.pTexObject);
-			if (args->hipCreateTextureObject.pTexObject != NULL) {
-				printf(" -> %p\n", args->hipCreateTextureObject.pTexObject__ref.val);
+			args_hipCreateTextureObject_t* args = (args_hipCreateTextureObject_t*) func_args;
+			printf("\thipTextureObject_t * pTexObject = %p", args->pTexObject);
+			if (args->pTexObject != NULL) {
+				printf(" -> %p\n", args->pTexObject__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst hipResourceDesc * pResDesc = %p", args->hipCreateTextureObject.pResDesc);
-			if (args->hipCreateTextureObject.pResDesc != NULL) {
+			printf("\tconst hipResourceDesc * pResDesc = %p", args->pResDesc);
+			if (args->pResDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tenum hipResourceType resType = %d\n", args->hipCreateTextureObject.pResDesc__ref.val.resType);
+				printf("\t\tenum hipResourceType resType = %d\n", args->pResDesc__ref.val.resType);
 				printf("\t\tunion (unnamed union at header/hip/hip.h:612:2) res = {\n");
 				printf("\t\t}\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst hipTextureDesc * pTexDesc = %p", args->hipCreateTextureObject.pTexDesc);
-			if (args->hipCreateTextureObject.pTexDesc != NULL) {
+			printf("\tconst hipTextureDesc * pTexDesc = %p", args->pTexDesc);
+			if (args->pTexDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipCreateTextureObject.pTexDesc__ref.val.addressMode[0]);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipCreateTextureObject.pTexDesc__ref.val.filterMode);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipCreateTextureObject.pTexDesc__ref.val.readMode);
-				printf("\t\tint sRGB = %d\n", args->hipCreateTextureObject.pTexDesc__ref.val.sRGB);
-				printf("\t\tfloat[4] borderColor = %f\n", args->hipCreateTextureObject.pTexDesc__ref.val.borderColor[0]);
-				printf("\t\tint normalizedCoords = %d\n", args->hipCreateTextureObject.pTexDesc__ref.val.normalizedCoords);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipCreateTextureObject.pTexDesc__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipCreateTextureObject.pTexDesc__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipCreateTextureObject.pTexDesc__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipCreateTextureObject.pTexDesc__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipCreateTextureObject.pTexDesc__ref.val.maxMipmapLevelClamp);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->pTexDesc__ref.val.addressMode[0]);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->pTexDesc__ref.val.filterMode);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->pTexDesc__ref.val.readMode);
+				printf("\t\tint sRGB = %d\n", args->pTexDesc__ref.val.sRGB);
+				printf("\t\tfloat[4] borderColor = %f\n", args->pTexDesc__ref.val.borderColor[0]);
+				printf("\t\tint normalizedCoords = %d\n", args->pTexDesc__ref.val.normalizedCoords);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->pTexDesc__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->pTexDesc__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->pTexDesc__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->pTexDesc__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->pTexDesc__ref.val.maxMipmapLevelClamp);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst struct hipResourceViewDesc * pResViewDesc = %p", args->hipCreateTextureObject.pResViewDesc);
-			if (args->hipCreateTextureObject.pResViewDesc != NULL) {
+			printf("\tconst struct hipResourceViewDesc * pResViewDesc = %p", args->pResViewDesc);
+			if (args->pResViewDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tenum hipResourceViewFormat format = %d\n", args->hipCreateTextureObject.pResViewDesc__ref.val.format);
-				printf("\t\tsize_t width = %lu\n", args->hipCreateTextureObject.pResViewDesc__ref.val.width);
-				printf("\t\tsize_t height = %lu\n", args->hipCreateTextureObject.pResViewDesc__ref.val.height);
-				printf("\t\tsize_t depth = %lu\n", args->hipCreateTextureObject.pResViewDesc__ref.val.depth);
-				printf("\t\tunsigned int firstMipmapLevel = %u\n", args->hipCreateTextureObject.pResViewDesc__ref.val.firstMipmapLevel);
-				printf("\t\tunsigned int lastMipmapLevel = %u\n", args->hipCreateTextureObject.pResViewDesc__ref.val.lastMipmapLevel);
-				printf("\t\tunsigned int firstLayer = %u\n", args->hipCreateTextureObject.pResViewDesc__ref.val.firstLayer);
-				printf("\t\tunsigned int lastLayer = %u\n", args->hipCreateTextureObject.pResViewDesc__ref.val.lastLayer);
+				printf("\t\tenum hipResourceViewFormat format = %d\n", args->pResViewDesc__ref.val.format);
+				printf("\t\tsize_t width = %lu\n", args->pResViewDesc__ref.val.width);
+				printf("\t\tsize_t height = %lu\n", args->pResViewDesc__ref.val.height);
+				printf("\t\tsize_t depth = %lu\n", args->pResViewDesc__ref.val.depth);
+				printf("\t\tunsigned int firstMipmapLevel = %u\n", args->pResViewDesc__ref.val.firstMipmapLevel);
+				printf("\t\tunsigned int lastMipmapLevel = %u\n", args->pResViewDesc__ref.val.lastMipmapLevel);
+				printf("\t\tunsigned int firstLayer = %u\n", args->pResViewDesc__ref.val.firstLayer);
+				printf("\t\tunsigned int lastLayer = %u\n", args->pResViewDesc__ref.val.lastLayer);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipCreateTextureObject.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphKernelNodeCopyAttributes
-		case HIP_API_ID_hipGraphKernelNodeCopyAttributes :
+		case HIP_API_ID_hipGraphKernelNodeCopyAttributes : {
 			//	hipGraphNode_t hSrc (struct hipGraphNode *);
 			//	hipGraphNode_t hDst (struct hipGraphNode *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t hSrc = %p", args->hipGraphKernelNodeCopyAttributes.hSrc);
+			args_hipGraphKernelNodeCopyAttributes_t* args = (args_hipGraphKernelNodeCopyAttributes_t*) func_args;
+			printf("\thipGraphNode_t hSrc = %p", args->hSrc);
 			printf("\n");
-			printf("\thipGraphNode_t hDst = %p", args->hipGraphKernelNodeCopyAttributes.hDst);
+			printf("\thipGraphNode_t hDst = %p", args->hDst);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphKernelNodeCopyAttributes.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetFlags
-		case HIP_API_ID_hipTexRefGetFlags :
+		case HIP_API_ID_hipTexRefGetFlags : {
 			//	unsigned int * pFlags (unsigned int *);
 			//	const textureReference * texRef ({
 			//		int normalized (int);
@@ -7200,40 +7780,42 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipArray_Format format (enum hipArray_Format);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tunsigned int * pFlags = %p", args->hipTexRefGetFlags.pFlags);
-			if (args->hipTexRefGetFlags.pFlags != NULL) {
-				printf(" -> %u\n", args->hipTexRefGetFlags.pFlags__ref.val);
+			args_hipTexRefGetFlags_t* args = (args_hipTexRefGetFlags_t*) func_args;
+			printf("\tunsigned int * pFlags = %p", args->pFlags);
+			if (args->pFlags != NULL) {
+				printf(" -> %u\n", args->pFlags__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst textureReference * texRef = %p", args->hipTexRefGetFlags.texRef);
-			if (args->hipTexRefGetFlags.texRef != NULL) {
+			printf("\tconst textureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefGetFlags.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefGetFlags.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefGetFlags.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefGetFlags.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefGetFlags.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefGetFlags.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefGetFlags.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefGetFlags.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefGetFlags.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefGetFlags.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefGetFlags.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefGetFlags.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefGetFlags.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefGetFlags.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefGetFlags.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefGetFlags.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefGetFlags.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipTexRefGetFlags.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvGraphAddMemcpyNode
-		case HIP_API_ID_hipDrvGraphAddMemcpyNode :
+		case HIP_API_ID_hipDrvGraphAddMemcpyNode : {
 			//	hipGraphNode_t * phGraphNode (struct hipGraphNode **);
 			//	hipGraph_t hGraph (struct ihipGraph *);
 			//	const hipGraphNode_t * dependencies (const struct hipGraphNode * *);
@@ -7265,77 +7847,83 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * phGraphNode = %p", args->hipDrvGraphAddMemcpyNode.phGraphNode);
-			if (args->hipDrvGraphAddMemcpyNode.phGraphNode != NULL) {
-				printf(" -> %p\n", args->hipDrvGraphAddMemcpyNode.phGraphNode__ref.val);
+			args_hipDrvGraphAddMemcpyNode_t* args = (args_hipDrvGraphAddMemcpyNode_t*) func_args;
+			printf("\thipGraphNode_t * phGraphNode = %p", args->phGraphNode);
+			if (args->phGraphNode != NULL) {
+				printf(" -> %p\n", args->phGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t hGraph = %p", args->hipDrvGraphAddMemcpyNode.hGraph);
+			printf("\thipGraph_t hGraph = %p", args->hGraph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * dependencies = %p", args->hipDrvGraphAddMemcpyNode.dependencies);
-			if (args->hipDrvGraphAddMemcpyNode.dependencies != NULL) {
-				printf(" -> %p\n", args->hipDrvGraphAddMemcpyNode.dependencies__ref.val);
+			printf("\tconst hipGraphNode_t * dependencies = %p", args->dependencies);
+			if (args->dependencies != NULL) {
+				printf(" -> %p\n", args->dependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipDrvGraphAddMemcpyNode.numDependencies);
-			printf("\tconst HIP_MEMCPY3D * copyParams = %p", args->hipDrvGraphAddMemcpyNode.copyParams);
-			if (args->hipDrvGraphAddMemcpyNode.copyParams != NULL) {
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\tconst HIP_MEMCPY3D * copyParams = %p", args->copyParams);
+			if (args->copyParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t srcXInBytes = %lu\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.srcXInBytes);
-				printf("\t\tsize_t srcY = %lu\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.srcY);
-				printf("\t\tsize_t srcZ = %lu\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.srcZ);
-				printf("\t\tsize_t srcLOD = %lu\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.srcLOD);
-				printf("\t\thipMemoryType srcMemoryType = %d\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.srcMemoryType);
-				printf("\t\tsize_t srcPitch = %lu\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.srcPitch);
-				printf("\t\tsize_t srcHeight = %lu\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.srcHeight);
-				printf("\t\tsize_t dstXInBytes = %lu\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.dstXInBytes);
-				printf("\t\tsize_t dstY = %lu\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.dstY);
-				printf("\t\tsize_t dstZ = %lu\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.dstZ);
-				printf("\t\tsize_t dstLOD = %lu\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.dstLOD);
-				printf("\t\thipMemoryType dstMemoryType = %d\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.dstMemoryType);
-				printf("\t\tsize_t dstPitch = %lu\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.dstPitch);
-				printf("\t\tsize_t dstHeight = %lu\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.dstHeight);
-				printf("\t\tsize_t WidthInBytes = %lu\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.WidthInBytes);
-				printf("\t\tsize_t Height = %lu\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.Height);
-				printf("\t\tsize_t Depth = %lu\n", args->hipDrvGraphAddMemcpyNode.copyParams__ref.val.Depth);
+				printf("\t\tsize_t srcXInBytes = %lu\n", args->copyParams__ref.val.srcXInBytes);
+				printf("\t\tsize_t srcY = %lu\n", args->copyParams__ref.val.srcY);
+				printf("\t\tsize_t srcZ = %lu\n", args->copyParams__ref.val.srcZ);
+				printf("\t\tsize_t srcLOD = %lu\n", args->copyParams__ref.val.srcLOD);
+				printf("\t\thipMemoryType srcMemoryType = %d\n", args->copyParams__ref.val.srcMemoryType);
+				printf("\t\tsize_t srcPitch = %lu\n", args->copyParams__ref.val.srcPitch);
+				printf("\t\tsize_t srcHeight = %lu\n", args->copyParams__ref.val.srcHeight);
+				printf("\t\tsize_t dstXInBytes = %lu\n", args->copyParams__ref.val.dstXInBytes);
+				printf("\t\tsize_t dstY = %lu\n", args->copyParams__ref.val.dstY);
+				printf("\t\tsize_t dstZ = %lu\n", args->copyParams__ref.val.dstZ);
+				printf("\t\tsize_t dstLOD = %lu\n", args->copyParams__ref.val.dstLOD);
+				printf("\t\thipMemoryType dstMemoryType = %d\n", args->copyParams__ref.val.dstMemoryType);
+				printf("\t\tsize_t dstPitch = %lu\n", args->copyParams__ref.val.dstPitch);
+				printf("\t\tsize_t dstHeight = %lu\n", args->copyParams__ref.val.dstHeight);
+				printf("\t\tsize_t WidthInBytes = %lu\n", args->copyParams__ref.val.WidthInBytes);
+				printf("\t\tsize_t Height = %lu\n", args->copyParams__ref.val.Height);
+				printf("\t\tsize_t Depth = %lu\n", args->copyParams__ref.val.Depth);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipCtx_t ctx = %p", args->hipDrvGraphAddMemcpyNode.ctx);
+			printf("\thipCtx_t ctx = %p", args->ctx);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipDrvGraphAddMemcpyNode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemExportToShareableHandle
-		case HIP_API_ID_hipMemExportToShareableHandle :
+		case HIP_API_ID_hipMemExportToShareableHandle : {
 			//	void * shareableHandle (void *);
 			//	hipMemGenericAllocationHandle_t handle (struct ihipMemGenericAllocationHandle *);
 			//	hipMemAllocationHandleType handleType (enum hipMemAllocationHandleType);
 			//	unsigned long long flags (unsigned long long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * shareableHandle = %p", args->hipMemExportToShareableHandle.shareableHandle);
+			args_hipMemExportToShareableHandle_t* args = (args_hipMemExportToShareableHandle_t*) func_args;
+			printf("\tvoid * shareableHandle = %p", args->shareableHandle);
 			printf("\n");
-			printf("\thipMemGenericAllocationHandle_t handle = %p", args->hipMemExportToShareableHandle.handle);
+			printf("\thipMemGenericAllocationHandle_t handle = %p", args->handle);
 			printf("\n");
-			printf("\thipMemAllocationHandleType handleType = %d\n", args->hipMemExportToShareableHandle.handleType);
-			printf("\tunsigned long long flags = %llu\n", args->hipMemExportToShareableHandle.flags);
-			printf("\thipError_t retval = %d\n", args->hipMemExportToShareableHandle.retval);
+			printf("\thipMemAllocationHandleType handleType = %d\n", args->handleType);
+			printf("\tunsigned long long flags = %llu\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphLaunch_spt
-		case HIP_API_ID_hipGraphLaunch_spt :
+		case HIP_API_ID_hipGraphLaunch_spt : {
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t graphExec = %p", args->hipGraphLaunch_spt.graphExec);
+			args_hipGraphLaunch_spt_t* args = (args_hipGraphLaunch_spt_t*) func_args;
+			printf("\thipGraphExec_t graphExec = %p", args->graphExec);
 			printf("\n");
-			printf("\thipStream_t stream = %p", args->hipGraphLaunch_spt.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphLaunch_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemcpyNodeSetParamsFromSymbol
-		case HIP_API_ID_hipGraphMemcpyNodeSetParamsFromSymbol :
+		case HIP_API_ID_hipGraphMemcpyNodeSetParamsFromSymbol : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
@@ -7343,41 +7931,45 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphMemcpyNodeSetParamsFromSymbol.node);
+			args_hipGraphMemcpyNodeSetParamsFromSymbol_t* args = (args_hipGraphMemcpyNodeSetParamsFromSymbol_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\tvoid * dst = %p", args->hipGraphMemcpyNodeSetParamsFromSymbol.dst);
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * symbol = %p", args->hipGraphMemcpyNodeSetParamsFromSymbol.symbol);
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\tsize_t count = %lu\n", args->hipGraphMemcpyNodeSetParamsFromSymbol.count);
-			printf("\tsize_t offset = %lu\n", args->hipGraphMemcpyNodeSetParamsFromSymbol.offset);
-			printf("\thipMemcpyKind kind = %d\n", args->hipGraphMemcpyNodeSetParamsFromSymbol.kind);
-			printf("\thipError_t retval = %d\n", args->hipGraphMemcpyNodeSetParamsFromSymbol.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphNodeGetDependencies
-		case HIP_API_ID_hipGraphNodeGetDependencies :
+		case HIP_API_ID_hipGraphNodeGetDependencies : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraphNode_t * pDependencies (struct hipGraphNode **);
 			//	size_t * pNumDependencies (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphNodeGetDependencies.node);
+			args_hipGraphNodeGetDependencies_t* args = (args_hipGraphNodeGetDependencies_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipGraphNode_t * pDependencies = %p", args->hipGraphNodeGetDependencies.pDependencies);
-			if (args->hipGraphNodeGetDependencies.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphNodeGetDependencies.pDependencies__ref.val);
+			printf("\thipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t * pNumDependencies = %p", args->hipGraphNodeGetDependencies.pNumDependencies);
-			if (args->hipGraphNodeGetDependencies.pNumDependencies != NULL) {
-				printf(" -> %lu\n", args->hipGraphNodeGetDependencies.pNumDependencies__ref.val);
+			printf("\tsize_t * pNumDependencies = %p", args->pNumDependencies);
+			if (args->pNumDependencies != NULL) {
+				printf(" -> %lu\n", args->pNumDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphNodeGetDependencies.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy3D
-		case HIP_API_ID_hipMemcpy3D :
+		case HIP_API_ID_hipMemcpy3D : {
 			//	const struct hipMemcpy3DParms * p ({
 			//		hipArray_t srcArray (struct hipArray *);
 			//		struct hipPos srcPos ({
@@ -7411,43 +8003,45 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipMemcpyKind kind (enum hipMemcpyKind);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst struct hipMemcpy3DParms * p = %p", args->hipMemcpy3D.p);
-			if (args->hipMemcpy3D.p != NULL) {
+			args_hipMemcpy3D_t* args = (args_hipMemcpy3D_t*) func_args;
+			printf("\tconst struct hipMemcpy3DParms * p = %p", args->p);
+			if (args->p != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct hipPos srcPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipMemcpy3D.p__ref.val.srcPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipMemcpy3D.p__ref.val.srcPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipMemcpy3D.p__ref.val.srcPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->p__ref.val.srcPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->p__ref.val.srcPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->p__ref.val.srcPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr srcPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipMemcpy3D.p__ref.val.srcPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipMemcpy3D.p__ref.val.srcPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipMemcpy3D.p__ref.val.srcPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->p__ref.val.srcPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->p__ref.val.srcPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->p__ref.val.srcPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPos dstPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipMemcpy3D.p__ref.val.dstPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipMemcpy3D.p__ref.val.dstPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipMemcpy3D.p__ref.val.dstPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->p__ref.val.dstPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->p__ref.val.dstPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->p__ref.val.dstPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr dstPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipMemcpy3D.p__ref.val.dstPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipMemcpy3D.p__ref.val.dstPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipMemcpy3D.p__ref.val.dstPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->p__ref.val.dstPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->p__ref.val.dstPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->p__ref.val.dstPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipExtent extent = {\n");
-				printf("\t\t\tsize_t width = %lu\n", args->hipMemcpy3D.p__ref.val.extent.width);
-				printf("\t\t\tsize_t height = %lu\n", args->hipMemcpy3D.p__ref.val.extent.height);
-				printf("\t\t\tsize_t depth = %lu\n", args->hipMemcpy3D.p__ref.val.extent.depth);
+				printf("\t\t\tsize_t width = %lu\n", args->p__ref.val.extent.width);
+				printf("\t\t\tsize_t height = %lu\n", args->p__ref.val.extent.height);
+				printf("\t\t\tsize_t depth = %lu\n", args->p__ref.val.extent.depth);
 				printf("\t\t}\n");
-				printf("\t\tenum hipMemcpyKind kind = %d\n", args->hipMemcpy3D.p__ref.val.kind);
+				printf("\t\tenum hipMemcpyKind kind = %d\n", args->p__ref.val.kind);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipMemcpy3D.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddMemcpyNodeFromSymbol
-		case HIP_API_ID_hipGraphAddMemcpyNodeFromSymbol :
+		case HIP_API_ID_hipGraphAddMemcpyNodeFromSymbol : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
@@ -7458,69 +8052,77 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddMemcpyNodeFromSymbol.pGraphNode);
-			if (args->hipGraphAddMemcpyNodeFromSymbol.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddMemcpyNodeFromSymbol.pGraphNode__ref.val);
+			args_hipGraphAddMemcpyNodeFromSymbol_t* args = (args_hipGraphAddMemcpyNodeFromSymbol_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddMemcpyNodeFromSymbol.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddMemcpyNodeFromSymbol.pDependencies);
-			if (args->hipGraphAddMemcpyNodeFromSymbol.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddMemcpyNodeFromSymbol.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddMemcpyNodeFromSymbol.numDependencies);
-			printf("\tvoid * dst = %p", args->hipGraphAddMemcpyNodeFromSymbol.dst);
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * symbol = %p", args->hipGraphAddMemcpyNodeFromSymbol.symbol);
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\tsize_t count = %lu\n", args->hipGraphAddMemcpyNodeFromSymbol.count);
-			printf("\tsize_t offset = %lu\n", args->hipGraphAddMemcpyNodeFromSymbol.offset);
-			printf("\thipMemcpyKind kind = %d\n", args->hipGraphAddMemcpyNodeFromSymbol.kind);
-			printf("\thipError_t retval = %d\n", args->hipGraphAddMemcpyNodeFromSymbol.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetPriority_spt
-		case HIP_API_ID_hipStreamGetPriority_spt :
+		case HIP_API_ID_hipStreamGetPriority_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	int * priority (int *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamGetPriority_spt.stream);
+			args_hipStreamGetPriority_spt_t* args = (args_hipStreamGetPriority_spt_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\tint * priority = %p", args->hipStreamGetPriority_spt.priority);
-			if (args->hipStreamGetPriority_spt.priority != NULL) {
-				printf(" -> %d\n", args->hipStreamGetPriority_spt.priority__ref.val);
+			printf("\tint * priority = %p", args->priority);
+			if (args->priority != NULL) {
+				printf(" -> %d\n", args->priority__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipStreamGetPriority_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleLoadData
-		case HIP_API_ID_hipModuleLoadData :
+		case HIP_API_ID_hipModuleLoadData : {
 			//	hipModule_t * module (struct ihipModule_t **);
 			//	const void * image (const void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipModule_t * module = %p", args->hipModuleLoadData.module);
-			if (args->hipModuleLoadData.module != NULL) {
-				printf(" -> %p\n", args->hipModuleLoadData.module__ref.val);
+			args_hipModuleLoadData_t* args = (args_hipModuleLoadData_t*) func_args;
+			printf("\thipModule_t * module = %p", args->module);
+			if (args->module != NULL) {
+				printf(" -> %p\n", args->module__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst void * image = %p", args->hipModuleLoadData.image);
+			printf("\tconst void * image = %p", args->image);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipModuleLoadData.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipSetDeviceFlags
-		case HIP_API_ID_hipSetDeviceFlags :
+		case HIP_API_ID_hipSetDeviceFlags : {
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tunsigned int flags = %u\n", args->hipSetDeviceFlags.flags);
-			printf("\thipError_t retval = %d\n", args->hipSetDeviceFlags.retval);
+			args_hipSetDeviceFlags_t* args = (args_hipSetDeviceFlags_t*) func_args;
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExternalMemoryGetMappedBuffer
-		case HIP_API_ID_hipExternalMemoryGetMappedBuffer :
+		case HIP_API_ID_hipExternalMemoryGetMappedBuffer : {
 			//	void ** devPtr (void **);
 			//	hipExternalMemory_t extMem (void *);
 			//	const hipExternalMemoryBufferDesc * bufferDesc ({
@@ -7530,28 +8132,30 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int[16] reserved (unsigned int[16]);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** devPtr = %p", args->hipExternalMemoryGetMappedBuffer.devPtr);
-			if (args->hipExternalMemoryGetMappedBuffer.devPtr != NULL) {
-				printf("-> %p", args->hipExternalMemoryGetMappedBuffer.devPtr__ref.ptr1);
+			args_hipExternalMemoryGetMappedBuffer_t* args = (args_hipExternalMemoryGetMappedBuffer_t*) func_args;
+			printf("\tvoid ** devPtr = %p", args->devPtr);
+			if (args->devPtr != NULL) {
+				printf("-> %p", args->devPtr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\thipExternalMemory_t extMem = %p", args->hipExternalMemoryGetMappedBuffer.extMem);
+			printf("\thipExternalMemory_t extMem = %p", args->extMem);
 			printf("\n");
-			printf("\tconst hipExternalMemoryBufferDesc * bufferDesc = %p", args->hipExternalMemoryGetMappedBuffer.bufferDesc);
-			if (args->hipExternalMemoryGetMappedBuffer.bufferDesc != NULL) {
+			printf("\tconst hipExternalMemoryBufferDesc * bufferDesc = %p", args->bufferDesc);
+			if (args->bufferDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned long long offset = %llu\n", args->hipExternalMemoryGetMappedBuffer.bufferDesc__ref.val.offset);
-				printf("\t\tunsigned long long size = %llu\n", args->hipExternalMemoryGetMappedBuffer.bufferDesc__ref.val.size);
-				printf("\t\tunsigned int flags = %u\n", args->hipExternalMemoryGetMappedBuffer.bufferDesc__ref.val.flags);
-				printf("\t\tunsigned int[16] reserved = %u\n", args->hipExternalMemoryGetMappedBuffer.bufferDesc__ref.val.reserved[0]);
+				printf("\t\tunsigned long long offset = %llu\n", args->bufferDesc__ref.val.offset);
+				printf("\t\tunsigned long long size = %llu\n", args->bufferDesc__ref.val.size);
+				printf("\t\tunsigned int flags = %u\n", args->bufferDesc__ref.val.flags);
+				printf("\t\tunsigned int[16] reserved = %u\n", args->bufferDesc__ref.val.reserved[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipExternalMemoryGetMappedBuffer.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchCooperativeKernel_spt
-		case HIP_API_ID_hipLaunchCooperativeKernel_spt :
+		case HIP_API_ID_hipLaunchCooperativeKernel_spt : {
 			//	const void * f (const void *);
 			//	dim3 gridDim ({
 			//		uint32_t x (unsigned int);
@@ -7567,125 +8171,141 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	uint32_t sharedMemBytes (unsigned int);
 			//	hipStream_t hStream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * f = %p", args->hipLaunchCooperativeKernel_spt.f);
+			args_hipLaunchCooperativeKernel_spt_t* args = (args_hipLaunchCooperativeKernel_spt_t*) func_args;
+			printf("\tconst void * f = %p", args->f);
 			printf("\n");
 			printf("\tdim3 gridDim = {\n");
-			printf("\t\tuint32_t x = %u\n", args->hipLaunchCooperativeKernel_spt.gridDim.x);
-			printf("\t\tuint32_t y = %u\n", args->hipLaunchCooperativeKernel_spt.gridDim.y);
-			printf("\t\tuint32_t z = %u\n", args->hipLaunchCooperativeKernel_spt.gridDim.z);
+			printf("\t\tuint32_t x = %u\n", args->gridDim.x);
+			printf("\t\tuint32_t y = %u\n", args->gridDim.y);
+			printf("\t\tuint32_t z = %u\n", args->gridDim.z);
 			printf("\t}\n");
 			printf("\tdim3 blockDim = {\n");
-			printf("\t\tuint32_t x = %u\n", args->hipLaunchCooperativeKernel_spt.blockDim.x);
-			printf("\t\tuint32_t y = %u\n", args->hipLaunchCooperativeKernel_spt.blockDim.y);
-			printf("\t\tuint32_t z = %u\n", args->hipLaunchCooperativeKernel_spt.blockDim.z);
+			printf("\t\tuint32_t x = %u\n", args->blockDim.x);
+			printf("\t\tuint32_t y = %u\n", args->blockDim.y);
+			printf("\t\tuint32_t z = %u\n", args->blockDim.z);
 			printf("\t}\n");
-			printf("\tvoid ** kernelParams = %p", args->hipLaunchCooperativeKernel_spt.kernelParams);
-			if (args->hipLaunchCooperativeKernel_spt.kernelParams != NULL) {
-				printf("-> %p", args->hipLaunchCooperativeKernel_spt.kernelParams__ref.ptr1);
+			printf("\tvoid ** kernelParams = %p", args->kernelParams);
+			if (args->kernelParams != NULL) {
+				printf("-> %p", args->kernelParams__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tuint32_t sharedMemBytes = %u\n", args->hipLaunchCooperativeKernel_spt.sharedMemBytes);
-			printf("\thipStream_t hStream = %p", args->hipLaunchCooperativeKernel_spt.hStream);
+			printf("\tuint32_t sharedMemBytes = %u\n", args->sharedMemBytes);
+			printf("\thipStream_t hStream = %p", args->hStream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipLaunchCooperativeKernel_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchHostFunc
-		case HIP_API_ID_hipLaunchHostFunc :
+		case HIP_API_ID_hipLaunchHostFunc : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipHostFn_t fn (void (*)(void *));
 			//	void * userData (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipLaunchHostFunc.stream);
+			args_hipLaunchHostFunc_t* args = (args_hipLaunchHostFunc_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipHostFn_t fn = %p\n", args->hipLaunchHostFunc.fn);
-			printf("\tvoid * userData = %p", args->hipLaunchHostFunc.userData);
+			printf("\thipHostFn_t fn = %p\n", args->fn);
+			printf("\tvoid * userData = %p", args->userData);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipLaunchHostFunc.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyAsync_spt
-		case HIP_API_ID_hipMemcpyAsync_spt :
+		case HIP_API_ID_hipMemcpyAsync_spt : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpyAsync_spt.dst);
+			args_hipMemcpyAsync_spt_t* args = (args_hipMemcpyAsync_spt_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hipMemcpyAsync_spt.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyAsync_spt.sizeBytes);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpyAsync_spt.kind);
-			printf("\thipStream_t stream = %p", args->hipMemcpyAsync_spt.stream);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpyAsync_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyPeer
-		case HIP_API_ID_hipMemcpyPeer :
+		case HIP_API_ID_hipMemcpyPeer : {
 			//	void * dst (void *);
 			//	int dstDeviceId (int);
 			//	const void * src (const void *);
 			//	int srcDeviceId (int);
 			//	size_t sizeBytes (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpyPeer.dst);
+			args_hipMemcpyPeer_t* args = (args_hipMemcpyPeer_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tint dstDeviceId = %d\n", args->hipMemcpyPeer.dstDeviceId);
-			printf("\tconst void * src = %p", args->hipMemcpyPeer.src);
+			printf("\tint dstDeviceId = %d\n", args->dstDeviceId);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tint srcDeviceId = %d\n", args->hipMemcpyPeer.srcDeviceId);
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyPeer.sizeBytes);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyPeer.retval);
+			printf("\tint srcDeviceId = %d\n", args->srcDeviceId);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceReset
-		case HIP_API_ID_hipDeviceReset :
+		case HIP_API_ID_hipDeviceReset : {
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipError_t retval = %d\n", args->hipDeviceReset.retval);
+			args_hipDeviceReset_t* args = (args_hipDeviceReset_t*) func_args;
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemAddressFree
-		case HIP_API_ID_hipMemAddressFree :
+		case HIP_API_ID_hipMemAddressFree : {
 			//	void * devPtr (void *);
 			//	size_t size (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * devPtr = %p", args->hipMemAddressFree.devPtr);
+			args_hipMemAddressFree_t* args = (args_hipMemAddressFree_t*) func_args;
+			printf("\tvoid * devPtr = %p", args->devPtr);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->hipMemAddressFree.size);
-			printf("\thipError_t retval = %d\n", args->hipMemAddressFree.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipProfilerStop
-		case HIP_API_ID_hipProfilerStop :
+		case HIP_API_ID_hipProfilerStop : {
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipError_t retval = %d\n", args->hipProfilerStop.retval);
+			args_hipProfilerStop_t* args = (args_hipProfilerStop_t*) func_args;
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphEventWaitNodeSetEvent
-		case HIP_API_ID_hipGraphEventWaitNodeSetEvent :
+		case HIP_API_ID_hipGraphEventWaitNodeSetEvent : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphEventWaitNodeSetEvent.node);
+			args_hipGraphEventWaitNodeSetEvent_t* args = (args_hipGraphEventWaitNodeSetEvent_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipEvent_t event = %p", args->hipGraphEventWaitNodeSetEvent.event);
+			printf("\thipEvent_t event = %p", args->event);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphEventWaitNodeSetEvent.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleLaunchCooperativeKernel
-		case HIP_API_ID_hipModuleLaunchCooperativeKernel :
+		case HIP_API_ID_hipModuleLaunchCooperativeKernel : {
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
 			//	unsigned int gridDimX (unsigned int);
 			//	unsigned int gridDimY (unsigned int);
@@ -7697,59 +8317,65 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void ** kernelParams (void **);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipFunction_t f = %p", args->hipModuleLaunchCooperativeKernel.f);
+			args_hipModuleLaunchCooperativeKernel_t* args = (args_hipModuleLaunchCooperativeKernel_t*) func_args;
+			printf("\thipFunction_t f = %p", args->f);
 			printf("\n");
-			printf("\tunsigned int gridDimX = %u\n", args->hipModuleLaunchCooperativeKernel.gridDimX);
-			printf("\tunsigned int gridDimY = %u\n", args->hipModuleLaunchCooperativeKernel.gridDimY);
-			printf("\tunsigned int gridDimZ = %u\n", args->hipModuleLaunchCooperativeKernel.gridDimZ);
-			printf("\tunsigned int blockDimX = %u\n", args->hipModuleLaunchCooperativeKernel.blockDimX);
-			printf("\tunsigned int blockDimY = %u\n", args->hipModuleLaunchCooperativeKernel.blockDimY);
-			printf("\tunsigned int blockDimZ = %u\n", args->hipModuleLaunchCooperativeKernel.blockDimZ);
-			printf("\tunsigned int sharedMemBytes = %u\n", args->hipModuleLaunchCooperativeKernel.sharedMemBytes);
-			printf("\thipStream_t stream = %p", args->hipModuleLaunchCooperativeKernel.stream);
+			printf("\tunsigned int gridDimX = %u\n", args->gridDimX);
+			printf("\tunsigned int gridDimY = %u\n", args->gridDimY);
+			printf("\tunsigned int gridDimZ = %u\n", args->gridDimZ);
+			printf("\tunsigned int blockDimX = %u\n", args->blockDimX);
+			printf("\tunsigned int blockDimY = %u\n", args->blockDimY);
+			printf("\tunsigned int blockDimZ = %u\n", args->blockDimZ);
+			printf("\tunsigned int sharedMemBytes = %u\n", args->sharedMemBytes);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\tvoid ** kernelParams = %p", args->hipModuleLaunchCooperativeKernel.kernelParams);
-			if (args->hipModuleLaunchCooperativeKernel.kernelParams != NULL) {
-				printf("-> %p", args->hipModuleLaunchCooperativeKernel.kernelParams__ref.ptr1);
+			printf("\tvoid ** kernelParams = %p", args->kernelParams);
+			if (args->kernelParams != NULL) {
+				printf("-> %p", args->kernelParams__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipModuleLaunchCooperativeKernel.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetName
-		case HIP_API_ID_hipDeviceGetName :
+		case HIP_API_ID_hipDeviceGetName : {
 			//	char * name (char *);
 			//	int len (int);
 			//	hipDevice_t device (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tchar * name = %p", args->hipDeviceGetName.name);
-			if (args->hipDeviceGetName.name != NULL) {
-				printf(" -> %s\n", args->hipDeviceGetName.name__ref.val);
+			args_hipDeviceGetName_t* args = (args_hipDeviceGetName_t*) func_args;
+			printf("\tchar * name = %p", args->name);
+			if (args->name != NULL) {
+				printf(" -> %s\n", args->name__ref.val);
 			} else { printf("\n"); };
-			printf("\tint len = %d\n", args->hipDeviceGetName.len);
-			printf("\thipDevice_t device = %d\n", args->hipDeviceGetName.device);
-			printf("\thipError_t retval = %d\n", args->hipDeviceGetName.retval);
+			printf("\tint len = %d\n", args->len);
+			printf("\thipDevice_t device = %d\n", args->device);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphNodeSetEnabled
-		case HIP_API_ID_hipGraphNodeSetEnabled :
+		case HIP_API_ID_hipGraphNodeSetEnabled : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	unsigned int isEnabled (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t hGraphExec = %p", args->hipGraphNodeSetEnabled.hGraphExec);
+			args_hipGraphNodeSetEnabled_t* args = (args_hipGraphNodeSetEnabled_t*) func_args;
+			printf("\thipGraphExec_t hGraphExec = %p", args->hGraphExec);
 			printf("\n");
-			printf("\thipGraphNode_t hNode = %p", args->hipGraphNodeSetEnabled.hNode);
+			printf("\thipGraphNode_t hNode = %p", args->hNode);
 			printf("\n");
-			printf("\tunsigned int isEnabled = %u\n", args->hipGraphNodeSetEnabled.isEnabled);
-			printf("\thipError_t retval = %d\n", args->hipGraphNodeSetEnabled.retval);
+			printf("\tunsigned int isEnabled = %u\n", args->isEnabled);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetAddressMode
-		case HIP_API_ID_hipTexRefSetAddressMode :
+		case HIP_API_ID_hipTexRefSetAddressMode : {
 			//	textureReference * texRef ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -7775,68 +8401,74 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	int dim (int);
 			//	enum hipTextureAddressMode am (enum hipTextureAddressMode);
 			//	hipError_t retval (enum hipError_t);
-			printf("\ttextureReference * texRef = %p", args->hipTexRefSetAddressMode.texRef);
-			if (args->hipTexRefSetAddressMode.texRef != NULL) {
+			args_hipTexRefSetAddressMode_t* args = (args_hipTexRefSetAddressMode_t*) func_args;
+			printf("\ttextureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefSetAddressMode.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefSetAddressMode.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefSetAddressMode.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefSetAddressMode.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefSetAddressMode.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefSetAddressMode.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefSetAddressMode.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefSetAddressMode.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefSetAddressMode.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefSetAddressMode.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefSetAddressMode.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefSetAddressMode.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefSetAddressMode.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefSetAddressMode.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefSetAddressMode.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefSetAddressMode.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefSetAddressMode.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint dim = %d\n", args->hipTexRefSetAddressMode.dim);
-			printf("\tenum hipTextureAddressMode am = %d\n", args->hipTexRefSetAddressMode.am);
-			printf("\thipError_t retval = %d\n", args->hipTexRefSetAddressMode.retval);
+			printf("\tint dim = %d\n", args->dim);
+			printf("\tenum hipTextureAddressMode am = %d\n", args->am);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventSynchronize
-		case HIP_API_ID_hipEventSynchronize :
+		case HIP_API_ID_hipEventSynchronize : {
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipEvent_t event = %p", args->hipEventSynchronize.event);
+			args_hipEventSynchronize_t* args = (args_hipEventSynchronize_t*) func_args;
+			printf("\thipEvent_t event = %p", args->event);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipEventSynchronize.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphGetRootNodes
-		case HIP_API_ID_hipGraphGetRootNodes :
+		case HIP_API_ID_hipGraphGetRootNodes : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphNode_t * pRootNodes (struct hipGraphNode **);
 			//	size_t * pNumRootNodes (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraph_t graph = %p", args->hipGraphGetRootNodes.graph);
+			args_hipGraphGetRootNodes_t* args = (args_hipGraphGetRootNodes_t*) func_args;
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\thipGraphNode_t * pRootNodes = %p", args->hipGraphGetRootNodes.pRootNodes);
-			if (args->hipGraphGetRootNodes.pRootNodes != NULL) {
-				printf(" -> %p\n", args->hipGraphGetRootNodes.pRootNodes__ref.val);
+			printf("\thipGraphNode_t * pRootNodes = %p", args->pRootNodes);
+			if (args->pRootNodes != NULL) {
+				printf(" -> %p\n", args->pRootNodes__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t * pNumRootNodes = %p", args->hipGraphGetRootNodes.pNumRootNodes);
-			if (args->hipGraphGetRootNodes.pNumRootNodes != NULL) {
-				printf(" -> %lu\n", args->hipGraphGetRootNodes.pNumRootNodes__ref.val);
+			printf("\tsize_t * pNumRootNodes = %p", args->pNumRootNodes);
+			if (args->pNumRootNodes != NULL) {
+				printf(" -> %lu\n", args->pNumRootNodes__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphGetRootNodes.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DFromArray
-		case HIP_API_ID_hipMemcpy2DFromArray :
+		case HIP_API_ID_hipMemcpy2DFromArray : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	hipArray_const_t src (const struct hipArray *);
@@ -7846,59 +8478,65 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpy2DFromArray.dst);
+			args_hipMemcpy2DFromArray_t* args = (args_hipMemcpy2DFromArray_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t dpitch = %lu\n", args->hipMemcpy2DFromArray.dpitch);
-			printf("\thipArray_const_t src = %p", args->hipMemcpy2DFromArray.src);
+			printf("\tsize_t dpitch = %lu\n", args->dpitch);
+			printf("\thipArray_const_t src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t wOffset = %lu\n", args->hipMemcpy2DFromArray.wOffset);
-			printf("\tsize_t hOffset = %lu\n", args->hipMemcpy2DFromArray.hOffset);
-			printf("\tsize_t width = %lu\n", args->hipMemcpy2DFromArray.width);
-			printf("\tsize_t height = %lu\n", args->hipMemcpy2DFromArray.height);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpy2DFromArray.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpy2DFromArray.retval);
+			printf("\tsize_t wOffset = %lu\n", args->wOffset);
+			printf("\tsize_t hOffset = %lu\n", args->hOffset);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExternalSemaphoresWaitNodeSetParams
-		case HIP_API_ID_hipGraphExternalSemaphoresWaitNodeSetParams :
+		case HIP_API_ID_hipGraphExternalSemaphoresWaitNodeSetParams : {
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	const hipExternalSemaphoreWaitNodeParams * nodeParams ({
 			//		hipExternalSemaphore_t * extSemArray (void **);
 			//		unsigned int numExtSems (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t hNode = %p", args->hipGraphExternalSemaphoresWaitNodeSetParams.hNode);
+			args_hipGraphExternalSemaphoresWaitNodeSetParams_t* args = (args_hipGraphExternalSemaphoresWaitNodeSetParams_t*) func_args;
+			printf("\thipGraphNode_t hNode = %p", args->hNode);
 			printf("\n");
-			printf("\tconst hipExternalSemaphoreWaitNodeParams * nodeParams = %p", args->hipGraphExternalSemaphoresWaitNodeSetParams.nodeParams);
-			if (args->hipGraphExternalSemaphoresWaitNodeSetParams.nodeParams != NULL) {
+			printf("\tconst hipExternalSemaphoreWaitNodeParams * nodeParams = %p", args->nodeParams);
+			if (args->nodeParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned int numExtSems = %u\n", args->hipGraphExternalSemaphoresWaitNodeSetParams.nodeParams__ref.val.numExtSems);
+				printf("\t\tunsigned int numExtSems = %u\n", args->nodeParams__ref.val.numExtSems);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphExternalSemaphoresWaitNodeSetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyDtoA
-		case HIP_API_ID_hipMemcpyDtoA :
+		case HIP_API_ID_hipMemcpyDtoA : {
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
 			//	hipDeviceptr_t srcDevice (void *);
 			//	size_t ByteCount (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t dstArray = %p", args->hipMemcpyDtoA.dstArray);
+			args_hipMemcpyDtoA_t* args = (args_hipMemcpyDtoA_t*) func_args;
+			printf("\thipArray_t dstArray = %p", args->dstArray);
 			printf("\n");
-			printf("\tsize_t dstOffset = %lu\n", args->hipMemcpyDtoA.dstOffset);
-			printf("\thipDeviceptr_t srcDevice = %p", args->hipMemcpyDtoA.srcDevice);
+			printf("\tsize_t dstOffset = %lu\n", args->dstOffset);
+			printf("\thipDeviceptr_t srcDevice = %p", args->srcDevice);
 			printf("\n");
-			printf("\tsize_t ByteCount = %lu\n", args->hipMemcpyDtoA.ByteCount);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyDtoA.retval);
+			printf("\tsize_t ByteCount = %lu\n", args->ByteCount);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemcpyNodeGetParams
-		case HIP_API_ID_hipGraphMemcpyNodeGetParams :
+		case HIP_API_ID_hipGraphMemcpyNodeGetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipMemcpy3DParms * pNodeParams ({
 			//		hipArray_t srcArray (struct hipArray *);
@@ -7933,76 +8571,82 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipMemcpyKind kind (enum hipMemcpyKind);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphMemcpyNodeGetParams.node);
+			args_hipGraphMemcpyNodeGetParams_t* args = (args_hipGraphMemcpyNodeGetParams_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipMemcpy3DParms * pNodeParams = %p", args->hipGraphMemcpyNodeGetParams.pNodeParams);
-			if (args->hipGraphMemcpyNodeGetParams.pNodeParams != NULL) {
+			printf("\thipMemcpy3DParms * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct hipPos srcPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.srcPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.srcPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.srcPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->pNodeParams__ref.val.srcPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->pNodeParams__ref.val.srcPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->pNodeParams__ref.val.srcPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr srcPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.srcPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.srcPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.srcPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->pNodeParams__ref.val.srcPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->pNodeParams__ref.val.srcPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->pNodeParams__ref.val.srcPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPos dstPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.dstPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.dstPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.dstPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->pNodeParams__ref.val.dstPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->pNodeParams__ref.val.dstPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->pNodeParams__ref.val.dstPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr dstPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.dstPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.dstPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.dstPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->pNodeParams__ref.val.dstPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->pNodeParams__ref.val.dstPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->pNodeParams__ref.val.dstPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipExtent extent = {\n");
-				printf("\t\t\tsize_t width = %lu\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.extent.width);
-				printf("\t\t\tsize_t height = %lu\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.extent.height);
-				printf("\t\t\tsize_t depth = %lu\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.extent.depth);
+				printf("\t\t\tsize_t width = %lu\n", args->pNodeParams__ref.val.extent.width);
+				printf("\t\t\tsize_t height = %lu\n", args->pNodeParams__ref.val.extent.height);
+				printf("\t\t\tsize_t depth = %lu\n", args->pNodeParams__ref.val.extent.depth);
 				printf("\t\t}\n");
-				printf("\t\tenum hipMemcpyKind kind = %d\n", args->hipGraphMemcpyNodeGetParams.pNodeParams__ref.val.kind);
+				printf("\t\tenum hipMemcpyKind kind = %d\n", args->pNodeParams__ref.val.kind);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphMemcpyNodeGetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy
-		case HIP_API_ID_hipMemcpy :
+		case HIP_API_ID_hipMemcpy : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpy.dst);
+			args_hipMemcpy_t* args = (args_hipMemcpy_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hipMemcpy.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpy.sizeBytes);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpy.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpy.retval);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipSetValidDevices
-		case HIP_API_ID_hipSetValidDevices :
+		case HIP_API_ID_hipSetValidDevices : {
 			//	int * device_arr (int *);
 			//	int len (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * device_arr = %p", args->hipSetValidDevices.device_arr);
-			if (args->hipSetValidDevices.device_arr != NULL) {
-				printf(" -> %d\n", args->hipSetValidDevices.device_arr__ref.val);
+			args_hipSetValidDevices_t* args = (args_hipSetValidDevices_t*) func_args;
+			printf("\tint * device_arr = %p", args->device_arr);
+			if (args->device_arr != NULL) {
+				printf(" -> %d\n", args->device_arr__ref.val);
 			} else { printf("\n"); };
-			printf("\tint len = %d\n", args->hipSetValidDevices.len);
-			printf("\thipError_t retval = %d\n", args->hipSetValidDevices.retval);
+			printf("\tint len = %d\n", args->len);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DAsync
-		case HIP_API_ID_hipMemcpy2DAsync :
+		case HIP_API_ID_hipMemcpy2DAsync : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	const void * src (const void *);
@@ -8012,23 +8656,25 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpy2DAsync.dst);
+			args_hipMemcpy2DAsync_t* args = (args_hipMemcpy2DAsync_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t dpitch = %lu\n", args->hipMemcpy2DAsync.dpitch);
-			printf("\tconst void * src = %p", args->hipMemcpy2DAsync.src);
+			printf("\tsize_t dpitch = %lu\n", args->dpitch);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t spitch = %lu\n", args->hipMemcpy2DAsync.spitch);
-			printf("\tsize_t width = %lu\n", args->hipMemcpy2DAsync.width);
-			printf("\tsize_t height = %lu\n", args->hipMemcpy2DAsync.height);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpy2DAsync.kind);
-			printf("\thipStream_t stream = %p", args->hipMemcpy2DAsync.stream);
+			printf("\tsize_t spitch = %lu\n", args->spitch);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpy2DAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecExternalSemaphoresWaitNodeSetParams
-		case HIP_API_ID_hipGraphExecExternalSemaphoresWaitNodeSetParams :
+		case HIP_API_ID_hipGraphExecExternalSemaphoresWaitNodeSetParams : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	const hipExternalSemaphoreWaitNodeParams * nodeParams ({
@@ -8036,39 +8682,43 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int numExtSems (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t hGraphExec = %p", args->hipGraphExecExternalSemaphoresWaitNodeSetParams.hGraphExec);
+			args_hipGraphExecExternalSemaphoresWaitNodeSetParams_t* args = (args_hipGraphExecExternalSemaphoresWaitNodeSetParams_t*) func_args;
+			printf("\thipGraphExec_t hGraphExec = %p", args->hGraphExec);
 			printf("\n");
-			printf("\thipGraphNode_t hNode = %p", args->hipGraphExecExternalSemaphoresWaitNodeSetParams.hNode);
+			printf("\thipGraphNode_t hNode = %p", args->hNode);
 			printf("\n");
-			printf("\tconst hipExternalSemaphoreWaitNodeParams * nodeParams = %p", args->hipGraphExecExternalSemaphoresWaitNodeSetParams.nodeParams);
-			if (args->hipGraphExecExternalSemaphoresWaitNodeSetParams.nodeParams != NULL) {
+			printf("\tconst hipExternalSemaphoreWaitNodeParams * nodeParams = %p", args->nodeParams);
+			if (args->nodeParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned int numExtSems = %u\n", args->hipGraphExecExternalSemaphoresWaitNodeSetParams.nodeParams__ref.val.numExtSems);
+				printf("\t\tunsigned int numExtSems = %u\n", args->nodeParams__ref.val.numExtSems);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphExecExternalSemaphoresWaitNodeSetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamAttachMemAsync
-		case HIP_API_ID_hipStreamAttachMemAsync :
+		case HIP_API_ID_hipStreamAttachMemAsync : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * dev_ptr (void *);
 			//	size_t length (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamAttachMemAsync.stream);
+			args_hipStreamAttachMemAsync_t* args = (args_hipStreamAttachMemAsync_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\tvoid * dev_ptr = %p", args->hipStreamAttachMemAsync.dev_ptr);
+			printf("\tvoid * dev_ptr = %p", args->dev_ptr);
 			printf("\n");
-			printf("\tsize_t length = %lu\n", args->hipStreamAttachMemAsync.length);
-			printf("\tunsigned int flags = %u\n", args->hipStreamAttachMemAsync.flags);
-			printf("\thipError_t retval = %d\n", args->hipStreamAttachMemAsync.retval);
+			printf("\tsize_t length = %lu\n", args->length);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset2DAsync
-		case HIP_API_ID_hipMemset2DAsync :
+		case HIP_API_ID_hipMemset2DAsync : {
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
 			//	int value (int);
@@ -8076,20 +8726,22 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemset2DAsync.dst);
+			args_hipMemset2DAsync_t* args = (args_hipMemset2DAsync_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t pitch = %lu\n", args->hipMemset2DAsync.pitch);
-			printf("\tint value = %d\n", args->hipMemset2DAsync.value);
-			printf("\tsize_t width = %lu\n", args->hipMemset2DAsync.width);
-			printf("\tsize_t height = %lu\n", args->hipMemset2DAsync.height);
-			printf("\thipStream_t stream = %p", args->hipMemset2DAsync.stream);
+			printf("\tsize_t pitch = %lu\n", args->pitch);
+			printf("\tint value = %d\n", args->value);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemset2DAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexObjectGetResourceViewDesc
-		case HIP_API_ID_hipTexObjectGetResourceViewDesc :
+		case HIP_API_ID_hipTexObjectGetResourceViewDesc : {
 			//	HIP_RESOURCE_VIEW_DESC * pResViewDesc ({
 			//		HIPresourceViewFormat format (enum HIPresourceViewFormat_enum);
 			//		size_t width (unsigned long);
@@ -8103,42 +8755,46 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipTextureObject_t texObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tHIP_RESOURCE_VIEW_DESC * pResViewDesc = %p", args->hipTexObjectGetResourceViewDesc.pResViewDesc);
-			if (args->hipTexObjectGetResourceViewDesc.pResViewDesc != NULL) {
+			args_hipTexObjectGetResourceViewDesc_t* args = (args_hipTexObjectGetResourceViewDesc_t*) func_args;
+			printf("\tHIP_RESOURCE_VIEW_DESC * pResViewDesc = %p", args->pResViewDesc);
+			if (args->pResViewDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tHIPresourceViewFormat format = %d\n", args->hipTexObjectGetResourceViewDesc.pResViewDesc__ref.val.format);
-				printf("\t\tsize_t width = %lu\n", args->hipTexObjectGetResourceViewDesc.pResViewDesc__ref.val.width);
-				printf("\t\tsize_t height = %lu\n", args->hipTexObjectGetResourceViewDesc.pResViewDesc__ref.val.height);
-				printf("\t\tsize_t depth = %lu\n", args->hipTexObjectGetResourceViewDesc.pResViewDesc__ref.val.depth);
-				printf("\t\tunsigned int firstMipmapLevel = %u\n", args->hipTexObjectGetResourceViewDesc.pResViewDesc__ref.val.firstMipmapLevel);
-				printf("\t\tunsigned int lastMipmapLevel = %u\n", args->hipTexObjectGetResourceViewDesc.pResViewDesc__ref.val.lastMipmapLevel);
-				printf("\t\tunsigned int firstLayer = %u\n", args->hipTexObjectGetResourceViewDesc.pResViewDesc__ref.val.firstLayer);
-				printf("\t\tunsigned int lastLayer = %u\n", args->hipTexObjectGetResourceViewDesc.pResViewDesc__ref.val.lastLayer);
-				printf("\t\tunsigned int[16] reserved = %u\n", args->hipTexObjectGetResourceViewDesc.pResViewDesc__ref.val.reserved[0]);
+				printf("\t\tHIPresourceViewFormat format = %d\n", args->pResViewDesc__ref.val.format);
+				printf("\t\tsize_t width = %lu\n", args->pResViewDesc__ref.val.width);
+				printf("\t\tsize_t height = %lu\n", args->pResViewDesc__ref.val.height);
+				printf("\t\tsize_t depth = %lu\n", args->pResViewDesc__ref.val.depth);
+				printf("\t\tunsigned int firstMipmapLevel = %u\n", args->pResViewDesc__ref.val.firstMipmapLevel);
+				printf("\t\tunsigned int lastMipmapLevel = %u\n", args->pResViewDesc__ref.val.lastMipmapLevel);
+				printf("\t\tunsigned int firstLayer = %u\n", args->pResViewDesc__ref.val.firstLayer);
+				printf("\t\tunsigned int lastLayer = %u\n", args->pResViewDesc__ref.val.lastLayer);
+				printf("\t\tunsigned int[16] reserved = %u\n", args->pResViewDesc__ref.val.reserved[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipTextureObject_t texObject = %p", args->hipTexObjectGetResourceViewDesc.texObject);
+			printf("\thipTextureObject_t texObject = %p", args->texObject);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipTexObjectGetResourceViewDesc.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventCreateWithFlags
-		case HIP_API_ID_hipEventCreateWithFlags :
+		case HIP_API_ID_hipEventCreateWithFlags : {
 			//	hipEvent_t * event (struct ihipEvent_t **);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipEvent_t * event = %p", args->hipEventCreateWithFlags.event);
-			if (args->hipEventCreateWithFlags.event != NULL) {
-				printf(" -> %p\n", args->hipEventCreateWithFlags.event__ref.val);
+			args_hipEventCreateWithFlags_t* args = (args_hipEventCreateWithFlags_t*) func_args;
+			printf("\thipEvent_t * event = %p", args->event);
+			if (args->event != NULL) {
+				printf(" -> %p\n", args->event__ref.val);
 			} else { printf("\n"); };
-			printf("\tunsigned int flags = %u\n", args->hipEventCreateWithFlags.flags);
-			printf("\thipError_t retval = %d\n", args->hipEventCreateWithFlags.retval);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMipmappedArrayCreate
-		case HIP_API_ID_hipMipmappedArrayCreate :
+		case HIP_API_ID_hipMipmappedArrayCreate : {
 			//	hipMipmappedArray_t * pHandle ({
 			//		void * data (void *);
 			//		struct hipChannelFormatDesc desc ({
@@ -8168,48 +8824,50 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	unsigned int numMipmapLevels (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMipmappedArray_t * pHandle = %p", args->hipMipmappedArrayCreate.pHandle);
-			if (args->hipMipmappedArrayCreate.pHandle != NULL) {
-				printf("-> %p", args->hipMipmappedArrayCreate.pHandle__ref.ptr1);
-				if (args->hipMipmappedArrayCreate.pHandle__ref.ptr1 != NULL) {
+			args_hipMipmappedArrayCreate_t* args = (args_hipMipmappedArrayCreate_t*) func_args;
+			printf("\thipMipmappedArray_t * pHandle = %p", args->pHandle);
+			if (args->pHandle != NULL) {
+				printf("-> %p", args->pHandle__ref.ptr1);
+				if (args->pHandle__ref.ptr1 != NULL) {
 					printf(" -> {\n");
 					printf("\t\tstruct hipChannelFormatDesc desc = {\n");
-					printf("\t\t\tint x = %d\n", args->hipMipmappedArrayCreate.pHandle__ref.val.desc.x);
-					printf("\t\t\tint y = %d\n", args->hipMipmappedArrayCreate.pHandle__ref.val.desc.y);
-					printf("\t\t\tint z = %d\n", args->hipMipmappedArrayCreate.pHandle__ref.val.desc.z);
-					printf("\t\t\tint w = %d\n", args->hipMipmappedArrayCreate.pHandle__ref.val.desc.w);
-					printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipMipmappedArrayCreate.pHandle__ref.val.desc.f);
+					printf("\t\t\tint x = %d\n", args->pHandle__ref.val.desc.x);
+					printf("\t\t\tint y = %d\n", args->pHandle__ref.val.desc.y);
+					printf("\t\t\tint z = %d\n", args->pHandle__ref.val.desc.z);
+					printf("\t\t\tint w = %d\n", args->pHandle__ref.val.desc.w);
+					printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->pHandle__ref.val.desc.f);
 					printf("\t\t}\n");
-					printf("\t\tunsigned int type = %u\n", args->hipMipmappedArrayCreate.pHandle__ref.val.type);
-					printf("\t\tunsigned int width = %u\n", args->hipMipmappedArrayCreate.pHandle__ref.val.width);
-					printf("\t\tunsigned int height = %u\n", args->hipMipmappedArrayCreate.pHandle__ref.val.height);
-					printf("\t\tunsigned int depth = %u\n", args->hipMipmappedArrayCreate.pHandle__ref.val.depth);
-					printf("\t\tunsigned int min_mipmap_level = %u\n", args->hipMipmappedArrayCreate.pHandle__ref.val.min_mipmap_level);
-					printf("\t\tunsigned int max_mipmap_level = %u\n", args->hipMipmappedArrayCreate.pHandle__ref.val.max_mipmap_level);
-					printf("\t\tunsigned int flags = %u\n", args->hipMipmappedArrayCreate.pHandle__ref.val.flags);
-					printf("\t\tenum hipArray_Format format = %d\n", args->hipMipmappedArrayCreate.pHandle__ref.val.format);
-					printf("\t\tunsigned int num_channels = %u\n", args->hipMipmappedArrayCreate.pHandle__ref.val.num_channels);
+					printf("\t\tunsigned int type = %u\n", args->pHandle__ref.val.type);
+					printf("\t\tunsigned int width = %u\n", args->pHandle__ref.val.width);
+					printf("\t\tunsigned int height = %u\n", args->pHandle__ref.val.height);
+					printf("\t\tunsigned int depth = %u\n", args->pHandle__ref.val.depth);
+					printf("\t\tunsigned int min_mipmap_level = %u\n", args->pHandle__ref.val.min_mipmap_level);
+					printf("\t\tunsigned int max_mipmap_level = %u\n", args->pHandle__ref.val.max_mipmap_level);
+					printf("\t\tunsigned int flags = %u\n", args->pHandle__ref.val.flags);
+					printf("\t\tenum hipArray_Format format = %d\n", args->pHandle__ref.val.format);
+					printf("\t\tunsigned int num_channels = %u\n", args->pHandle__ref.val.num_channels);
 					printf("\t}\n");
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\tHIP_ARRAY3D_DESCRIPTOR * pMipmappedArrayDesc = %p", args->hipMipmappedArrayCreate.pMipmappedArrayDesc);
-			if (args->hipMipmappedArrayCreate.pMipmappedArrayDesc != NULL) {
+			printf("\tHIP_ARRAY3D_DESCRIPTOR * pMipmappedArrayDesc = %p", args->pMipmappedArrayDesc);
+			if (args->pMipmappedArrayDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t Width = %lu\n", args->hipMipmappedArrayCreate.pMipmappedArrayDesc__ref.val.Width);
-				printf("\t\tsize_t Height = %lu\n", args->hipMipmappedArrayCreate.pMipmappedArrayDesc__ref.val.Height);
-				printf("\t\tsize_t Depth = %lu\n", args->hipMipmappedArrayCreate.pMipmappedArrayDesc__ref.val.Depth);
-				printf("\t\tenum hipArray_Format Format = %d\n", args->hipMipmappedArrayCreate.pMipmappedArrayDesc__ref.val.Format);
-				printf("\t\tunsigned int NumChannels = %u\n", args->hipMipmappedArrayCreate.pMipmappedArrayDesc__ref.val.NumChannels);
-				printf("\t\tunsigned int Flags = %u\n", args->hipMipmappedArrayCreate.pMipmappedArrayDesc__ref.val.Flags);
+				printf("\t\tsize_t Width = %lu\n", args->pMipmappedArrayDesc__ref.val.Width);
+				printf("\t\tsize_t Height = %lu\n", args->pMipmappedArrayDesc__ref.val.Height);
+				printf("\t\tsize_t Depth = %lu\n", args->pMipmappedArrayDesc__ref.val.Depth);
+				printf("\t\tenum hipArray_Format Format = %d\n", args->pMipmappedArrayDesc__ref.val.Format);
+				printf("\t\tunsigned int NumChannels = %u\n", args->pMipmappedArrayDesc__ref.val.NumChannels);
+				printf("\t\tunsigned int Flags = %u\n", args->pMipmappedArrayDesc__ref.val.Flags);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tunsigned int numMipmapLevels = %u\n", args->hipMipmappedArrayCreate.numMipmapLevels);
-			printf("\thipError_t retval = %d\n", args->hipMipmappedArrayCreate.retval);
+			printf("\tunsigned int numMipmapLevels = %u\n", args->numMipmapLevels);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2D_spt
-		case HIP_API_ID_hipMemcpy2D_spt :
+		case HIP_API_ID_hipMemcpy2D_spt : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	const void * src (const void *);
@@ -8218,21 +8876,23 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpy2D_spt.dst);
+			args_hipMemcpy2D_spt_t* args = (args_hipMemcpy2D_spt_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t dpitch = %lu\n", args->hipMemcpy2D_spt.dpitch);
-			printf("\tconst void * src = %p", args->hipMemcpy2D_spt.src);
+			printf("\tsize_t dpitch = %lu\n", args->dpitch);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t spitch = %lu\n", args->hipMemcpy2D_spt.spitch);
-			printf("\tsize_t width = %lu\n", args->hipMemcpy2D_spt.width);
-			printf("\tsize_t height = %lu\n", args->hipMemcpy2D_spt.height);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpy2D_spt.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpy2D_spt.retval);
+			printf("\tsize_t spitch = %lu\n", args->spitch);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddMemcpyNode
-		case HIP_API_ID_hipGraphAddMemcpyNode :
+		case HIP_API_ID_hipGraphAddMemcpyNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
@@ -8270,54 +8930,56 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipMemcpyKind kind (enum hipMemcpyKind);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddMemcpyNode.pGraphNode);
-			if (args->hipGraphAddMemcpyNode.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddMemcpyNode.pGraphNode__ref.val);
+			args_hipGraphAddMemcpyNode_t* args = (args_hipGraphAddMemcpyNode_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddMemcpyNode.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddMemcpyNode.pDependencies);
-			if (args->hipGraphAddMemcpyNode.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddMemcpyNode.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddMemcpyNode.numDependencies);
-			printf("\tconst hipMemcpy3DParms * pCopyParams = %p", args->hipGraphAddMemcpyNode.pCopyParams);
-			if (args->hipGraphAddMemcpyNode.pCopyParams != NULL) {
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\tconst hipMemcpy3DParms * pCopyParams = %p", args->pCopyParams);
+			if (args->pCopyParams != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct hipPos srcPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.srcPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.srcPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.srcPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->pCopyParams__ref.val.srcPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->pCopyParams__ref.val.srcPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->pCopyParams__ref.val.srcPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr srcPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.srcPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.srcPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.srcPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->pCopyParams__ref.val.srcPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->pCopyParams__ref.val.srcPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->pCopyParams__ref.val.srcPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPos dstPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.dstPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.dstPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.dstPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->pCopyParams__ref.val.dstPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->pCopyParams__ref.val.dstPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->pCopyParams__ref.val.dstPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr dstPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.dstPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.dstPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.dstPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->pCopyParams__ref.val.dstPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->pCopyParams__ref.val.dstPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->pCopyParams__ref.val.dstPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipExtent extent = {\n");
-				printf("\t\t\tsize_t width = %lu\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.extent.width);
-				printf("\t\t\tsize_t height = %lu\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.extent.height);
-				printf("\t\t\tsize_t depth = %lu\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.extent.depth);
+				printf("\t\t\tsize_t width = %lu\n", args->pCopyParams__ref.val.extent.width);
+				printf("\t\t\tsize_t height = %lu\n", args->pCopyParams__ref.val.extent.height);
+				printf("\t\t\tsize_t depth = %lu\n", args->pCopyParams__ref.val.extent.depth);
 				printf("\t\t}\n");
-				printf("\t\tenum hipMemcpyKind kind = %d\n", args->hipGraphAddMemcpyNode.pCopyParams__ref.val.kind);
+				printf("\t\tenum hipMemcpyKind kind = %d\n", args->pCopyParams__ref.val.kind);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphAddMemcpyNode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyToSymbolAsync
-		case HIP_API_ID_hipMemcpyToSymbolAsync :
+		case HIP_API_ID_hipMemcpyToSymbolAsync : {
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
@@ -8325,136 +8987,152 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * symbol = %p", args->hipMemcpyToSymbolAsync.symbol);
+			args_hipMemcpyToSymbolAsync_t* args = (args_hipMemcpyToSymbolAsync_t*) func_args;
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hipMemcpyToSymbolAsync.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyToSymbolAsync.sizeBytes);
-			printf("\tsize_t offset = %lu\n", args->hipMemcpyToSymbolAsync.offset);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpyToSymbolAsync.kind);
-			printf("\thipStream_t stream = %p", args->hipMemcpyToSymbolAsync.stream);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpyToSymbolAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMallocFromPoolAsync
-		case HIP_API_ID_hipMallocFromPoolAsync :
+		case HIP_API_ID_hipMallocFromPoolAsync : {
 			//	void ** dev_ptr (void **);
 			//	size_t size (unsigned long);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** dev_ptr = %p", args->hipMallocFromPoolAsync.dev_ptr);
-			if (args->hipMallocFromPoolAsync.dev_ptr != NULL) {
-				printf("-> %p", args->hipMallocFromPoolAsync.dev_ptr__ref.ptr1);
+			args_hipMallocFromPoolAsync_t* args = (args_hipMallocFromPoolAsync_t*) func_args;
+			printf("\tvoid ** dev_ptr = %p", args->dev_ptr);
+			if (args->dev_ptr != NULL) {
+				printf("-> %p", args->dev_ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t size = %lu\n", args->hipMallocFromPoolAsync.size);
-			printf("\thipMemPool_t mem_pool = %p", args->hipMallocFromPoolAsync.mem_pool);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thipMemPool_t mem_pool = %p", args->mem_pool);
 			printf("\n");
-			printf("\thipStream_t stream = %p", args->hipMallocFromPoolAsync.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMallocFromPoolAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
-		case HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags :
+		case HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags : {
 			//	int * numBlocks (int *);
 			//	const void * f (const void *);
 			//	int blockSize (int);
 			//	size_t dynSharedMemPerBlk (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * numBlocks = %p", args->hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.numBlocks);
-			if (args->hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.numBlocks != NULL) {
-				printf(" -> %d\n", args->hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.numBlocks__ref.val);
+			args_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t* args = (args_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t*) func_args;
+			printf("\tint * numBlocks = %p", args->numBlocks);
+			if (args->numBlocks != NULL) {
+				printf(" -> %d\n", args->numBlocks__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst void * f = %p", args->hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.f);
+			printf("\tconst void * f = %p", args->f);
 			printf("\n");
-			printf("\tint blockSize = %d\n", args->hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.blockSize);
-			printf("\tsize_t dynSharedMemPerBlk = %lu\n", args->hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.dynSharedMemPerBlk);
-			printf("\tunsigned int flags = %u\n", args->hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.flags);
-			printf("\thipError_t retval = %d\n", args->hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.retval);
+			printf("\tint blockSize = %d\n", args->blockSize);
+			printf("\tsize_t dynSharedMemPerBlk = %lu\n", args->dynSharedMemPerBlk);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddMemFreeNode
-		case HIP_API_ID_hipGraphAddMemFreeNode :
+		case HIP_API_ID_hipGraphAddMemFreeNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	void * dev_ptr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddMemFreeNode.pGraphNode);
-			if (args->hipGraphAddMemFreeNode.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddMemFreeNode.pGraphNode__ref.val);
+			args_hipGraphAddMemFreeNode_t* args = (args_hipGraphAddMemFreeNode_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddMemFreeNode.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddMemFreeNode.pDependencies);
-			if (args->hipGraphAddMemFreeNode.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddMemFreeNode.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddMemFreeNode.numDependencies);
-			printf("\tvoid * dev_ptr = %p", args->hipGraphAddMemFreeNode.dev_ptr);
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\tvoid * dev_ptr = %p", args->dev_ptr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphAddMemFreeNode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor
-		case HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor :
+		case HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor : {
 			//	int * numBlocks (int *);
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
 			//	int blockSize (int);
 			//	size_t dynSharedMemPerBlk (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * numBlocks = %p", args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.numBlocks);
-			if (args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.numBlocks != NULL) {
-				printf(" -> %d\n", args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.numBlocks__ref.val);
+			args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor_t* args = (args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor_t*) func_args;
+			printf("\tint * numBlocks = %p", args->numBlocks);
+			if (args->numBlocks != NULL) {
+				printf(" -> %d\n", args->numBlocks__ref.val);
 			} else { printf("\n"); };
-			printf("\thipFunction_t f = %p", args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.f);
+			printf("\thipFunction_t f = %p", args->f);
 			printf("\n");
-			printf("\tint blockSize = %d\n", args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.blockSize);
-			printf("\tsize_t dynSharedMemPerBlk = %lu\n", args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.dynSharedMemPerBlk);
-			printf("\thipError_t retval = %d\n", args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.retval);
+			printf("\tint blockSize = %d\n", args->blockSize);
+			printf("\tsize_t dynSharedMemPerBlk = %lu\n", args->dynSharedMemPerBlk);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventDestroy
-		case HIP_API_ID_hipEventDestroy :
+		case HIP_API_ID_hipEventDestroy : {
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipEvent_t event = %p", args->hipEventDestroy.event);
+			args_hipEventDestroy_t* args = (args_hipEventDestroy_t*) func_args;
+			printf("\thipEvent_t event = %p", args->event);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipEventDestroy.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceSetCacheConfig
-		case HIP_API_ID_hipDeviceSetCacheConfig :
+		case HIP_API_ID_hipDeviceSetCacheConfig : {
 			//	hipFuncCache_t cacheConfig (enum hipFuncCache_t);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipFuncCache_t cacheConfig = %d\n", args->hipDeviceSetCacheConfig.cacheConfig);
-			printf("\thipError_t retval = %d\n", args->hipDeviceSetCacheConfig.retval);
+			args_hipDeviceSetCacheConfig_t* args = (args_hipDeviceSetCacheConfig_t*) func_args;
+			printf("\thipFuncCache_t cacheConfig = %d\n", args->cacheConfig);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFree
-		case HIP_API_ID_hipFree :
+		case HIP_API_ID_hipFree : {
 			//	void * ptr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * ptr = %p", args->hipFree.ptr);
+			args_hipFree_t* args = (args_hipFree_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipFree.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DToArrayAsync_spt
-		case HIP_API_ID_hipMemcpy2DToArrayAsync_spt :
+		case HIP_API_ID_hipMemcpy2DToArrayAsync_spt : {
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
 			//	size_t hOffset (unsigned long);
@@ -8465,52 +9143,58 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t dst = %p", args->hipMemcpy2DToArrayAsync_spt.dst);
+			args_hipMemcpy2DToArrayAsync_spt_t* args = (args_hipMemcpy2DToArrayAsync_spt_t*) func_args;
+			printf("\thipArray_t dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t wOffset = %lu\n", args->hipMemcpy2DToArrayAsync_spt.wOffset);
-			printf("\tsize_t hOffset = %lu\n", args->hipMemcpy2DToArrayAsync_spt.hOffset);
-			printf("\tconst void * src = %p", args->hipMemcpy2DToArrayAsync_spt.src);
+			printf("\tsize_t wOffset = %lu\n", args->wOffset);
+			printf("\tsize_t hOffset = %lu\n", args->hOffset);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t spitch = %lu\n", args->hipMemcpy2DToArrayAsync_spt.spitch);
-			printf("\tsize_t width = %lu\n", args->hipMemcpy2DToArrayAsync_spt.width);
-			printf("\tsize_t height = %lu\n", args->hipMemcpy2DToArrayAsync_spt.height);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpy2DToArrayAsync_spt.kind);
-			printf("\thipStream_t stream = %p", args->hipMemcpy2DToArrayAsync_spt.stream);
+			printf("\tsize_t spitch = %lu\n", args->spitch);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpy2DToArrayAsync_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxGetFlags
-		case HIP_API_ID_hipCtxGetFlags :
+		case HIP_API_ID_hipCtxGetFlags : {
 			//	unsigned int * flags (unsigned int *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tunsigned int * flags = %p", args->hipCtxGetFlags.flags);
-			if (args->hipCtxGetFlags.flags != NULL) {
-				printf(" -> %u\n", args->hipCtxGetFlags.flags__ref.val);
+			args_hipCtxGetFlags_t* args = (args_hipCtxGetFlags_t*) func_args;
+			printf("\tunsigned int * flags = %p", args->flags);
+			if (args->flags != NULL) {
+				printf(" -> %u\n", args->flags__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipCtxGetFlags.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetSymbolAddress
-		case HIP_API_ID_hipGetSymbolAddress :
+		case HIP_API_ID_hipGetSymbolAddress : {
 			//	void ** devPtr (void **);
 			//	const void * symbol (const void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** devPtr = %p", args->hipGetSymbolAddress.devPtr);
-			if (args->hipGetSymbolAddress.devPtr != NULL) {
-				printf("-> %p", args->hipGetSymbolAddress.devPtr__ref.ptr1);
+			args_hipGetSymbolAddress_t* args = (args_hipGetSymbolAddress_t*) func_args;
+			printf("\tvoid ** devPtr = %p", args->devPtr);
+			if (args->devPtr != NULL) {
+				printf("-> %p", args->devPtr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tconst void * symbol = %p", args->hipGetSymbolAddress.symbol);
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGetSymbolAddress.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetAddress
-		case HIP_API_ID_hipTexRefGetAddress :
+		case HIP_API_ID_hipTexRefGetAddress : {
 			//	hipDeviceptr_t * dev_ptr (void **);
 			//	const textureReference * texRef ({
 			//		int normalized (int);
@@ -8535,41 +9219,43 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipArray_Format format (enum hipArray_Format);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceptr_t * dev_ptr = %p", args->hipTexRefGetAddress.dev_ptr);
-			if (args->hipTexRefGetAddress.dev_ptr != NULL) {
-				printf("-> %p", args->hipTexRefGetAddress.dev_ptr__ref.ptr1);
+			args_hipTexRefGetAddress_t* args = (args_hipTexRefGetAddress_t*) func_args;
+			printf("\thipDeviceptr_t * dev_ptr = %p", args->dev_ptr);
+			if (args->dev_ptr != NULL) {
+				printf("-> %p", args->dev_ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tconst textureReference * texRef = %p", args->hipTexRefGetAddress.texRef);
-			if (args->hipTexRefGetAddress.texRef != NULL) {
+			printf("\tconst textureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefGetAddress.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefGetAddress.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefGetAddress.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefGetAddress.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefGetAddress.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefGetAddress.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefGetAddress.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefGetAddress.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefGetAddress.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefGetAddress.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefGetAddress.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefGetAddress.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefGetAddress.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefGetAddress.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefGetAddress.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefGetAddress.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefGetAddress.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipTexRefGetAddress.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexObjectCreate
-		case HIP_API_ID_hipTexObjectCreate :
+		case HIP_API_ID_hipTexObjectCreate : {
 			//	hipTextureObject_t * pTexObject (struct __hip_texture **);
 			//	const HIP_RESOURCE_DESC * pResDesc ({
 			//		HIPresourcetype resType (enum HIPresourcetype_enum);
@@ -8601,101 +9287,109 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int[16] reserved (unsigned int[16]);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipTextureObject_t * pTexObject = %p", args->hipTexObjectCreate.pTexObject);
-			if (args->hipTexObjectCreate.pTexObject != NULL) {
-				printf(" -> %p\n", args->hipTexObjectCreate.pTexObject__ref.val);
+			args_hipTexObjectCreate_t* args = (args_hipTexObjectCreate_t*) func_args;
+			printf("\thipTextureObject_t * pTexObject = %p", args->pTexObject);
+			if (args->pTexObject != NULL) {
+				printf(" -> %p\n", args->pTexObject__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst HIP_RESOURCE_DESC * pResDesc = %p", args->hipTexObjectCreate.pResDesc);
-			if (args->hipTexObjectCreate.pResDesc != NULL) {
+			printf("\tconst HIP_RESOURCE_DESC * pResDesc = %p", args->pResDesc);
+			if (args->pResDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tHIPresourcetype resType = %d\n", args->hipTexObjectCreate.pResDesc__ref.val.resType);
+				printf("\t\tHIPresourcetype resType = %d\n", args->pResDesc__ref.val.resType);
 				printf("\t\tunion (unnamed union at header/hip/hip.h:635:2) res = {\n");
 				printf("\t\t}\n");
-				printf("\t\tunsigned int flags = %u\n", args->hipTexObjectCreate.pResDesc__ref.val.flags);
+				printf("\t\tunsigned int flags = %u\n", args->pResDesc__ref.val.flags);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst HIP_TEXTURE_DESC * pTexDesc = %p", args->hipTexObjectCreate.pTexDesc);
-			if (args->hipTexObjectCreate.pTexDesc != NULL) {
+			printf("\tconst HIP_TEXTURE_DESC * pTexDesc = %p", args->pTexDesc);
+			if (args->pTexDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tHIPaddress_mode[3] addressMode = %d\n", args->hipTexObjectCreate.pTexDesc__ref.val.addressMode[0]);
-				printf("\t\tHIPfilter_mode filterMode = %d\n", args->hipTexObjectCreate.pTexDesc__ref.val.filterMode);
-				printf("\t\tunsigned int flags = %u\n", args->hipTexObjectCreate.pTexDesc__ref.val.flags);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexObjectCreate.pTexDesc__ref.val.maxAnisotropy);
-				printf("\t\tHIPfilter_mode mipmapFilterMode = %d\n", args->hipTexObjectCreate.pTexDesc__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexObjectCreate.pTexDesc__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexObjectCreate.pTexDesc__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexObjectCreate.pTexDesc__ref.val.maxMipmapLevelClamp);
-				printf("\t\tfloat[4] borderColor = %f\n", args->hipTexObjectCreate.pTexDesc__ref.val.borderColor[0]);
-				printf("\t\tint[12] reserved = %d\n", args->hipTexObjectCreate.pTexDesc__ref.val.reserved[0]);
+				printf("\t\tHIPaddress_mode[3] addressMode = %d\n", args->pTexDesc__ref.val.addressMode[0]);
+				printf("\t\tHIPfilter_mode filterMode = %d\n", args->pTexDesc__ref.val.filterMode);
+				printf("\t\tunsigned int flags = %u\n", args->pTexDesc__ref.val.flags);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->pTexDesc__ref.val.maxAnisotropy);
+				printf("\t\tHIPfilter_mode mipmapFilterMode = %d\n", args->pTexDesc__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->pTexDesc__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->pTexDesc__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->pTexDesc__ref.val.maxMipmapLevelClamp);
+				printf("\t\tfloat[4] borderColor = %f\n", args->pTexDesc__ref.val.borderColor[0]);
+				printf("\t\tint[12] reserved = %d\n", args->pTexDesc__ref.val.reserved[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst HIP_RESOURCE_VIEW_DESC * pResViewDesc = %p", args->hipTexObjectCreate.pResViewDesc);
-			if (args->hipTexObjectCreate.pResViewDesc != NULL) {
+			printf("\tconst HIP_RESOURCE_VIEW_DESC * pResViewDesc = %p", args->pResViewDesc);
+			if (args->pResViewDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tHIPresourceViewFormat format = %d\n", args->hipTexObjectCreate.pResViewDesc__ref.val.format);
-				printf("\t\tsize_t width = %lu\n", args->hipTexObjectCreate.pResViewDesc__ref.val.width);
-				printf("\t\tsize_t height = %lu\n", args->hipTexObjectCreate.pResViewDesc__ref.val.height);
-				printf("\t\tsize_t depth = %lu\n", args->hipTexObjectCreate.pResViewDesc__ref.val.depth);
-				printf("\t\tunsigned int firstMipmapLevel = %u\n", args->hipTexObjectCreate.pResViewDesc__ref.val.firstMipmapLevel);
-				printf("\t\tunsigned int lastMipmapLevel = %u\n", args->hipTexObjectCreate.pResViewDesc__ref.val.lastMipmapLevel);
-				printf("\t\tunsigned int firstLayer = %u\n", args->hipTexObjectCreate.pResViewDesc__ref.val.firstLayer);
-				printf("\t\tunsigned int lastLayer = %u\n", args->hipTexObjectCreate.pResViewDesc__ref.val.lastLayer);
-				printf("\t\tunsigned int[16] reserved = %u\n", args->hipTexObjectCreate.pResViewDesc__ref.val.reserved[0]);
+				printf("\t\tHIPresourceViewFormat format = %d\n", args->pResViewDesc__ref.val.format);
+				printf("\t\tsize_t width = %lu\n", args->pResViewDesc__ref.val.width);
+				printf("\t\tsize_t height = %lu\n", args->pResViewDesc__ref.val.height);
+				printf("\t\tsize_t depth = %lu\n", args->pResViewDesc__ref.val.depth);
+				printf("\t\tunsigned int firstMipmapLevel = %u\n", args->pResViewDesc__ref.val.firstMipmapLevel);
+				printf("\t\tunsigned int lastMipmapLevel = %u\n", args->pResViewDesc__ref.val.lastMipmapLevel);
+				printf("\t\tunsigned int firstLayer = %u\n", args->pResViewDesc__ref.val.firstLayer);
+				printf("\t\tunsigned int lastLayer = %u\n", args->pResViewDesc__ref.val.lastLayer);
+				printf("\t\tunsigned int[16] reserved = %u\n", args->pResViewDesc__ref.val.reserved[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipTexObjectCreate.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetSharedMemConfig
-		case HIP_API_ID_hipDeviceGetSharedMemConfig :
+		case HIP_API_ID_hipDeviceGetSharedMemConfig : {
 			//	hipSharedMemConfig * pConfig (enum hipSharedMemConfig*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipSharedMemConfig * pConfig = %p", args->hipDeviceGetSharedMemConfig.pConfig);
-			if (args->hipDeviceGetSharedMemConfig.pConfig != NULL) {
-				printf(" -> %d\n", args->hipDeviceGetSharedMemConfig.pConfig__ref.val);
+			args_hipDeviceGetSharedMemConfig_t* args = (args_hipDeviceGetSharedMemConfig_t*) func_args;
+			printf("\thipSharedMemConfig * pConfig = %p", args->pConfig);
+			if (args->pConfig != NULL) {
+				printf(" -> %d\n", args->pConfig__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipDeviceGetSharedMemConfig.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyHtoAAsync
-		case HIP_API_ID_hipMemcpyHtoAAsync :
+		case HIP_API_ID_hipMemcpyHtoAAsync : {
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
 			//	const void * srcHost (const void *);
 			//	size_t ByteCount (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t dstArray = %p", args->hipMemcpyHtoAAsync.dstArray);
+			args_hipMemcpyHtoAAsync_t* args = (args_hipMemcpyHtoAAsync_t*) func_args;
+			printf("\thipArray_t dstArray = %p", args->dstArray);
 			printf("\n");
-			printf("\tsize_t dstOffset = %lu\n", args->hipMemcpyHtoAAsync.dstOffset);
-			printf("\tconst void * srcHost = %p", args->hipMemcpyHtoAAsync.srcHost);
+			printf("\tsize_t dstOffset = %lu\n", args->dstOffset);
+			printf("\tconst void * srcHost = %p", args->srcHost);
 			printf("\n");
-			printf("\tsize_t ByteCount = %lu\n", args->hipMemcpyHtoAAsync.ByteCount);
-			printf("\thipStream_t stream = %p", args->hipMemcpyHtoAAsync.stream);
+			printf("\tsize_t ByteCount = %lu\n", args->ByteCount);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpyHtoAAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolGetAttribute
-		case HIP_API_ID_hipMemPoolGetAttribute :
+		case HIP_API_ID_hipMemPoolGetAttribute : {
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipMemPoolAttr attr (enum hipMemPoolAttr);
 			//	void * value (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemPool_t mem_pool = %p", args->hipMemPoolGetAttribute.mem_pool);
+			args_hipMemPoolGetAttribute_t* args = (args_hipMemPoolGetAttribute_t*) func_args;
+			printf("\thipMemPool_t mem_pool = %p", args->mem_pool);
 			printf("\n");
-			printf("\thipMemPoolAttr attr = %d\n", args->hipMemPoolGetAttribute.attr);
-			printf("\tvoid * value = %p", args->hipMemPoolGetAttribute.value);
+			printf("\thipMemPoolAttr attr = %d\n", args->attr);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemPoolGetAttribute.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddMemAllocNode
-		case HIP_API_ID_hipGraphAddMemAllocNode :
+		case HIP_API_ID_hipGraphAddMemAllocNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
@@ -8717,110 +9411,122 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		void * dptr (void *);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * pGraphNode = %p", args->hipGraphAddMemAllocNode.pGraphNode);
-			if (args->hipGraphAddMemAllocNode.pGraphNode != NULL) {
-				printf(" -> %p\n", args->hipGraphAddMemAllocNode.pGraphNode__ref.val);
+			args_hipGraphAddMemAllocNode_t* args = (args_hipGraphAddMemAllocNode_t*) func_args;
+			printf("\thipGraphNode_t * pGraphNode = %p", args->pGraphNode);
+			if (args->pGraphNode != NULL) {
+				printf(" -> %p\n", args->pGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t graph = %p", args->hipGraphAddMemAllocNode.graph);
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * pDependencies = %p", args->hipGraphAddMemAllocNode.pDependencies);
-			if (args->hipGraphAddMemAllocNode.pDependencies != NULL) {
-				printf(" -> %p\n", args->hipGraphAddMemAllocNode.pDependencies__ref.val);
+			printf("\tconst hipGraphNode_t * pDependencies = %p", args->pDependencies);
+			if (args->pDependencies != NULL) {
+				printf(" -> %p\n", args->pDependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddMemAllocNode.numDependencies);
-			printf("\thipMemAllocNodeParams * pNodeParams = %p", args->hipGraphAddMemAllocNode.pNodeParams);
-			if (args->hipGraphAddMemAllocNode.pNodeParams != NULL) {
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\thipMemAllocNodeParams * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
 				printf("\t\thipMemPoolProps poolProps = {\n");
-				printf("\t\t\thipMemAllocationType allocType = %d\n", args->hipGraphAddMemAllocNode.pNodeParams__ref.val.poolProps.allocType);
-				printf("\t\t\thipMemAllocationHandleType handleTypes = %d\n", args->hipGraphAddMemAllocNode.pNodeParams__ref.val.poolProps.handleTypes);
+				printf("\t\t\thipMemAllocationType allocType = %d\n", args->pNodeParams__ref.val.poolProps.allocType);
+				printf("\t\t\thipMemAllocationHandleType handleTypes = %d\n", args->pNodeParams__ref.val.poolProps.handleTypes);
 				printf("\t\t\thipMemLocation location = {\n");
-				printf("\t\t\t\thipMemLocationType type = %d\n", args->hipGraphAddMemAllocNode.pNodeParams__ref.val.poolProps.location.type);
-				printf("\t\t\t\tint id = %d\n", args->hipGraphAddMemAllocNode.pNodeParams__ref.val.poolProps.location.id);
+				printf("\t\t\t\thipMemLocationType type = %d\n", args->pNodeParams__ref.val.poolProps.location.type);
+				printf("\t\t\t\tint id = %d\n", args->pNodeParams__ref.val.poolProps.location.id);
 				printf("\t\t\t}\n");
-				printf("\t\t\tsize_t maxSize = %lu\n", args->hipGraphAddMemAllocNode.pNodeParams__ref.val.poolProps.maxSize);
-				printf("\t\t\tunsigned char[56] reserved = %hhu\n", args->hipGraphAddMemAllocNode.pNodeParams__ref.val.poolProps.reserved[0]);
+				printf("\t\t\tsize_t maxSize = %lu\n", args->pNodeParams__ref.val.poolProps.maxSize);
+				printf("\t\t\tunsigned char[56] reserved = %hhu\n", args->pNodeParams__ref.val.poolProps.reserved[0]);
 				printf("\t\t}\n");
-				printf("\t\tsize_t accessDescCount = %lu\n", args->hipGraphAddMemAllocNode.pNodeParams__ref.val.accessDescCount);
-				printf("\t\tsize_t bytesize = %lu\n", args->hipGraphAddMemAllocNode.pNodeParams__ref.val.bytesize);
+				printf("\t\tsize_t accessDescCount = %lu\n", args->pNodeParams__ref.val.accessDescCount);
+				printf("\t\tsize_t bytesize = %lu\n", args->pNodeParams__ref.val.bytesize);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphAddMemAllocNode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemRetainAllocationHandle
-		case HIP_API_ID_hipMemRetainAllocationHandle :
+		case HIP_API_ID_hipMemRetainAllocationHandle : {
 			//	hipMemGenericAllocationHandle_t * handle (struct ihipMemGenericAllocationHandle **);
 			//	void * addr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemGenericAllocationHandle_t * handle = %p", args->hipMemRetainAllocationHandle.handle);
-			if (args->hipMemRetainAllocationHandle.handle != NULL) {
-				printf(" -> %p\n", args->hipMemRetainAllocationHandle.handle__ref.val);
+			args_hipMemRetainAllocationHandle_t* args = (args_hipMemRetainAllocationHandle_t*) func_args;
+			printf("\thipMemGenericAllocationHandle_t * handle = %p", args->handle);
+			if (args->handle != NULL) {
+				printf(" -> %p\n", args->handle__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid * addr = %p", args->hipMemRetainAllocationHandle.addr);
+			printf("\tvoid * addr = %p", args->addr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemRetainAllocationHandle.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetFuncBySymbol
-		case HIP_API_ID_hipGetFuncBySymbol :
+		case HIP_API_ID_hipGetFuncBySymbol : {
 			//	hipFunction_t * functionPtr (struct ihipModuleSymbol_t **);
 			//	const void * symbolPtr (const void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipFunction_t * functionPtr = %p", args->hipGetFuncBySymbol.functionPtr);
-			if (args->hipGetFuncBySymbol.functionPtr != NULL) {
-				printf(" -> %p\n", args->hipGetFuncBySymbol.functionPtr__ref.val);
+			args_hipGetFuncBySymbol_t* args = (args_hipGetFuncBySymbol_t*) func_args;
+			printf("\thipFunction_t * functionPtr = %p", args->functionPtr);
+			if (args->functionPtr != NULL) {
+				printf(" -> %p\n", args->functionPtr__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst void * symbolPtr = %p", args->hipGetFuncBySymbol.symbolPtr);
+			printf("\tconst void * symbolPtr = %p", args->symbolPtr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGetFuncBySymbol.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceSetMemPool
-		case HIP_API_ID_hipDeviceSetMemPool :
+		case HIP_API_ID_hipDeviceSetMemPool : {
 			//	int device (int);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint device = %d\n", args->hipDeviceSetMemPool.device);
-			printf("\thipMemPool_t mem_pool = %p", args->hipDeviceSetMemPool.mem_pool);
+			args_hipDeviceSetMemPool_t* args = (args_hipDeviceSetMemPool_t*) func_args;
+			printf("\tint device = %d\n", args->device);
+			printf("\thipMemPool_t mem_pool = %p", args->mem_pool);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipDeviceSetMemPool.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceSetLimit
-		case HIP_API_ID_hipDeviceSetLimit :
+		case HIP_API_ID_hipDeviceSetLimit : {
 			//	enum hipLimit_t limit (enum hipLimit_t);
 			//	size_t value (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tenum hipLimit_t limit = %d\n", args->hipDeviceSetLimit.limit);
-			printf("\tsize_t value = %lu\n", args->hipDeviceSetLimit.value);
-			printf("\thipError_t retval = %d\n", args->hipDeviceSetLimit.retval);
+			args_hipDeviceSetLimit_t* args = (args_hipDeviceSetLimit_t*) func_args;
+			printf("\tenum hipLimit_t limit = %d\n", args->limit);
+			printf("\tsize_t value = %lu\n", args->value);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemGetInfo
-		case HIP_API_ID_hipMemGetInfo :
+		case HIP_API_ID_hipMemGetInfo : {
 			//	size_t * free (unsigned long*);
 			//	size_t * total (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tsize_t * free = %p", args->hipMemGetInfo.free);
-			if (args->hipMemGetInfo.free != NULL) {
-				printf(" -> %lu\n", args->hipMemGetInfo.free__ref.val);
+			args_hipMemGetInfo_t* args = (args_hipMemGetInfo_t*) func_args;
+			printf("\tsize_t * free = %p", args->free);
+			if (args->free != NULL) {
+				printf(" -> %lu\n", args->free__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t * total = %p", args->hipMemGetInfo.total);
-			if (args->hipMemGetInfo.total != NULL) {
-				printf(" -> %lu\n", args->hipMemGetInfo.total__ref.val);
+			printf("\tsize_t * total = %p", args->total);
+			if (args->total != NULL) {
+				printf(" -> %lu\n", args->total__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipMemGetInfo.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyParam2D
-		case HIP_API_ID_hipMemcpyParam2D :
+		case HIP_API_ID_hipMemcpyParam2D : {
 			//	const hip_Memcpy2D * pCopy ({
 			//		size_t srcXInBytes (unsigned long);
 			//		size_t srcY (unsigned long);
@@ -8840,110 +9546,124 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		size_t Height (unsigned long);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst hip_Memcpy2D * pCopy = %p", args->hipMemcpyParam2D.pCopy);
-			if (args->hipMemcpyParam2D.pCopy != NULL) {
+			args_hipMemcpyParam2D_t* args = (args_hipMemcpyParam2D_t*) func_args;
+			printf("\tconst hip_Memcpy2D * pCopy = %p", args->pCopy);
+			if (args->pCopy != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t srcXInBytes = %lu\n", args->hipMemcpyParam2D.pCopy__ref.val.srcXInBytes);
-				printf("\t\tsize_t srcY = %lu\n", args->hipMemcpyParam2D.pCopy__ref.val.srcY);
-				printf("\t\thipMemoryType srcMemoryType = %d\n", args->hipMemcpyParam2D.pCopy__ref.val.srcMemoryType);
-				printf("\t\tsize_t srcPitch = %lu\n", args->hipMemcpyParam2D.pCopy__ref.val.srcPitch);
-				printf("\t\tsize_t dstXInBytes = %lu\n", args->hipMemcpyParam2D.pCopy__ref.val.dstXInBytes);
-				printf("\t\tsize_t dstY = %lu\n", args->hipMemcpyParam2D.pCopy__ref.val.dstY);
-				printf("\t\thipMemoryType dstMemoryType = %d\n", args->hipMemcpyParam2D.pCopy__ref.val.dstMemoryType);
-				printf("\t\tsize_t dstPitch = %lu\n", args->hipMemcpyParam2D.pCopy__ref.val.dstPitch);
-				printf("\t\tsize_t WidthInBytes = %lu\n", args->hipMemcpyParam2D.pCopy__ref.val.WidthInBytes);
-				printf("\t\tsize_t Height = %lu\n", args->hipMemcpyParam2D.pCopy__ref.val.Height);
+				printf("\t\tsize_t srcXInBytes = %lu\n", args->pCopy__ref.val.srcXInBytes);
+				printf("\t\tsize_t srcY = %lu\n", args->pCopy__ref.val.srcY);
+				printf("\t\thipMemoryType srcMemoryType = %d\n", args->pCopy__ref.val.srcMemoryType);
+				printf("\t\tsize_t srcPitch = %lu\n", args->pCopy__ref.val.srcPitch);
+				printf("\t\tsize_t dstXInBytes = %lu\n", args->pCopy__ref.val.dstXInBytes);
+				printf("\t\tsize_t dstY = %lu\n", args->pCopy__ref.val.dstY);
+				printf("\t\thipMemoryType dstMemoryType = %d\n", args->pCopy__ref.val.dstMemoryType);
+				printf("\t\tsize_t dstPitch = %lu\n", args->pCopy__ref.val.dstPitch);
+				printf("\t\tsize_t WidthInBytes = %lu\n", args->pCopy__ref.val.WidthInBytes);
+				printf("\t\tsize_t Height = %lu\n", args->pCopy__ref.val.Height);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipMemcpyParam2D.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphDebugDotPrint
-		case HIP_API_ID_hipGraphDebugDotPrint :
+		case HIP_API_ID_hipGraphDebugDotPrint : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const char * path (const char *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraph_t graph = %p", args->hipGraphDebugDotPrint.graph);
+			args_hipGraphDebugDotPrint_t* args = (args_hipGraphDebugDotPrint_t*) func_args;
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst char * path = %p", args->hipGraphDebugDotPrint.path);
-			if (args->hipGraphDebugDotPrint.path != NULL) {
-				printf(" -> %s\n", args->hipGraphDebugDotPrint.path__ref.val);
+			printf("\tconst char * path = %p", args->path);
+			if (args->path != NULL) {
+				printf(" -> %s\n", args->path__ref.val);
 			} else { printf("\n"); };
-			printf("\tunsigned int flags = %u\n", args->hipGraphDebugDotPrint.flags);
-			printf("\thipError_t retval = %d\n", args->hipGraphDebugDotPrint.retval);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceSetGraphMemAttribute
-		case HIP_API_ID_hipDeviceSetGraphMemAttribute :
+		case HIP_API_ID_hipDeviceSetGraphMemAttribute : {
 			//	int device (int);
 			//	hipGraphMemAttributeType attr (enum hipGraphMemAttributeType);
 			//	void * value (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint device = %d\n", args->hipDeviceSetGraphMemAttribute.device);
-			printf("\thipGraphMemAttributeType attr = %d\n", args->hipDeviceSetGraphMemAttribute.attr);
-			printf("\tvoid * value = %p", args->hipDeviceSetGraphMemAttribute.value);
+			args_hipDeviceSetGraphMemAttribute_t* args = (args_hipDeviceSetGraphMemAttribute_t*) func_args;
+			printf("\tint device = %d\n", args->device);
+			printf("\thipGraphMemAttributeType attr = %d\n", args->attr);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipDeviceSetGraphMemAttribute.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvGetErrorString
-		case HIP_API_ID_hipDrvGetErrorString :
+		case HIP_API_ID_hipDrvGetErrorString : {
 			//	hipError_t hipError (enum hipError_t);
 			//	const char ** errorString (const char **);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipError_t hipError = %d\n", args->hipDrvGetErrorString.hipError);
-			printf("\tconst char ** errorString = %p", args->hipDrvGetErrorString.errorString);
-			if (args->hipDrvGetErrorString.errorString != NULL) {
-				printf("-> %p", args->hipDrvGetErrorString.errorString__ref.ptr1);
-				if (args->hipDrvGetErrorString.errorString__ref.ptr1 != NULL) {
-					printf(" -> %s\n", args->hipDrvGetErrorString.errorString__ref.val);
+			args_hipDrvGetErrorString_t* args = (args_hipDrvGetErrorString_t*) func_args;
+			printf("\thipError_t hipError = %d\n", args->hipError);
+			printf("\tconst char ** errorString = %p", args->errorString);
+			if (args->errorString != NULL) {
+				printf("-> %p", args->errorString__ref.ptr1);
+				if (args->errorString__ref.ptr1 != NULL) {
+					printf(" -> %s\n", args->errorString__ref.val);
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipDrvGetErrorString.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyDtoDAsync
-		case HIP_API_ID_hipMemcpyDtoDAsync :
+		case HIP_API_ID_hipMemcpyDtoDAsync : {
 			//	hipDeviceptr_t dst (void *);
 			//	hipDeviceptr_t src (void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceptr_t dst = %p", args->hipMemcpyDtoDAsync.dst);
+			args_hipMemcpyDtoDAsync_t* args = (args_hipMemcpyDtoDAsync_t*) func_args;
+			printf("\thipDeviceptr_t dst = %p", args->dst);
 			printf("\n");
-			printf("\thipDeviceptr_t src = %p", args->hipMemcpyDtoDAsync.src);
+			printf("\thipDeviceptr_t src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyDtoDAsync.sizeBytes);
-			printf("\thipStream_t stream = %p", args->hipMemcpyDtoDAsync.stream);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpyDtoDAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxSynchronize
-		case HIP_API_ID_hipCtxSynchronize :
+		case HIP_API_ID_hipCtxSynchronize : {
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipError_t retval = %d\n", args->hipCtxSynchronize.retval);
+			args_hipCtxSynchronize_t* args = (args_hipCtxSynchronize_t*) func_args;
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexObjectDestroy
-		case HIP_API_ID_hipTexObjectDestroy :
+		case HIP_API_ID_hipTexObjectDestroy : {
 			//	hipTextureObject_t texObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipTextureObject_t texObject = %p", args->hipTexObjectDestroy.texObject);
+			args_hipTexObjectDestroy_t* args = (args_hipTexObjectDestroy_t*) func_args;
+			printf("\thipTextureObject_t texObject = %p", args->texObject);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipTexObjectDestroy.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetAddressMode
-		case HIP_API_ID_hipTexRefGetAddressMode :
+		case HIP_API_ID_hipTexRefGetAddressMode : {
 			//	enum hipTextureAddressMode * pam (enum hipTextureAddressMode *);
 			//	const textureReference * texRef ({
 			//		int normalized (int);
@@ -8969,74 +9689,80 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	int dim (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tenum hipTextureAddressMode * pam = %p", args->hipTexRefGetAddressMode.pam);
-			if (args->hipTexRefGetAddressMode.pam != NULL) {
-				printf(" -> %d\n", args->hipTexRefGetAddressMode.pam__ref.val);
+			args_hipTexRefGetAddressMode_t* args = (args_hipTexRefGetAddressMode_t*) func_args;
+			printf("\tenum hipTextureAddressMode * pam = %p", args->pam);
+			if (args->pam != NULL) {
+				printf(" -> %d\n", args->pam__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst textureReference * texRef = %p", args->hipTexRefGetAddressMode.texRef);
-			if (args->hipTexRefGetAddressMode.texRef != NULL) {
+			printf("\tconst textureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefGetAddressMode.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefGetAddressMode.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefGetAddressMode.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefGetAddressMode.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefGetAddressMode.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefGetAddressMode.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefGetAddressMode.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefGetAddressMode.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefGetAddressMode.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefGetAddressMode.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefGetAddressMode.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefGetAddressMode.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefGetAddressMode.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefGetAddressMode.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefGetAddressMode.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefGetAddressMode.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefGetAddressMode.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tint dim = %d\n", args->hipTexRefGetAddressMode.dim);
-			printf("\thipError_t retval = %d\n", args->hipTexRefGetAddressMode.retval);
+			printf("\tint dim = %d\n", args->dim);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE___hipGetPCH
-		case HIP_API_ID___hipGetPCH :
+		case HIP_API_ID___hipGetPCH : {
 			//	const char ** pch (const char **);
 			//	unsigned int * size (unsigned int *);
-			printf("\tconst char ** pch = %p", args->__hipGetPCH.pch);
-			if (args->__hipGetPCH.pch != NULL) {
-				printf("-> %p", args->__hipGetPCH.pch__ref.ptr1);
-				if (args->__hipGetPCH.pch__ref.ptr1 != NULL) {
-					printf(" -> %s\n", args->__hipGetPCH.pch__ref.val);
+			args___hipGetPCH_t* args = (args___hipGetPCH_t*) func_args;
+			printf("\tconst char ** pch = %p", args->pch);
+			if (args->pch != NULL) {
+				printf("-> %p", args->pch__ref.ptr1);
+				if (args->pch__ref.ptr1 != NULL) {
+					printf(" -> %s\n", args->pch__ref.val);
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\tunsigned int * size = %p", args->__hipGetPCH.size);
-			if (args->__hipGetPCH.size != NULL) {
-				printf(" -> %u\n", args->__hipGetPCH.size__ref.val);
+			printf("\tunsigned int * size = %p", args->size);
+			if (args->size != NULL) {
+				printf(" -> %u\n", args->size__ref.val);
 			} else { printf("\n"); };
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetFlags
-		case HIP_API_ID_hipStreamGetFlags :
+		case HIP_API_ID_hipStreamGetFlags : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	unsigned int * flags (unsigned int *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamGetFlags.stream);
+			args_hipStreamGetFlags_t* args = (args_hipStreamGetFlags_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\tunsigned int * flags = %p", args->hipStreamGetFlags.flags);
-			if (args->hipStreamGetFlags.flags != NULL) {
-				printf(" -> %u\n", args->hipStreamGetFlags.flags__ref.val);
+			printf("\tunsigned int * flags = %p", args->flags);
+			if (args->flags != NULL) {
+				printf(" -> %u\n", args->flags__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipStreamGetFlags.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemGetAccess
-		case HIP_API_ID_hipMemGetAccess :
+		case HIP_API_ID_hipMemGetAccess : {
 			//	unsigned long long * flags (unsigned long long *);
 			//	const hipMemLocation * location ({
 			//		hipMemLocationType type (enum hipMemLocationType);
@@ -9044,98 +9770,110 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	void * ptr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tunsigned long long * flags = %p", args->hipMemGetAccess.flags);
-			if (args->hipMemGetAccess.flags != NULL) {
-				printf(" -> %llu\n", args->hipMemGetAccess.flags__ref.val);
+			args_hipMemGetAccess_t* args = (args_hipMemGetAccess_t*) func_args;
+			printf("\tunsigned long long * flags = %p", args->flags);
+			if (args->flags != NULL) {
+				printf(" -> %llu\n", args->flags__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst hipMemLocation * location = %p", args->hipMemGetAccess.location);
-			if (args->hipMemGetAccess.location != NULL) {
+			printf("\tconst hipMemLocation * location = %p", args->location);
+			if (args->location != NULL) {
 				printf(" -> {\n");
-				printf("\t\thipMemLocationType type = %d\n", args->hipMemGetAccess.location__ref.val.type);
-				printf("\t\tint id = %d\n", args->hipMemGetAccess.location__ref.val.id);
+				printf("\t\thipMemLocationType type = %d\n", args->location__ref.val.type);
+				printf("\t\tint id = %d\n", args->location__ref.val.id);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tvoid * ptr = %p", args->hipMemGetAccess.ptr);
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemGetAccess.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyAtoA
-		case HIP_API_ID_hipMemcpyAtoA :
+		case HIP_API_ID_hipMemcpyAtoA : {
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
 			//	hipArray_t srcArray (struct hipArray *);
 			//	size_t srcOffset (unsigned long);
 			//	size_t ByteCount (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t dstArray = %p", args->hipMemcpyAtoA.dstArray);
+			args_hipMemcpyAtoA_t* args = (args_hipMemcpyAtoA_t*) func_args;
+			printf("\thipArray_t dstArray = %p", args->dstArray);
 			printf("\n");
-			printf("\tsize_t dstOffset = %lu\n", args->hipMemcpyAtoA.dstOffset);
-			printf("\thipArray_t srcArray = %p", args->hipMemcpyAtoA.srcArray);
+			printf("\tsize_t dstOffset = %lu\n", args->dstOffset);
+			printf("\thipArray_t srcArray = %p", args->srcArray);
 			printf("\n");
-			printf("\tsize_t srcOffset = %lu\n", args->hipMemcpyAtoA.srcOffset);
-			printf("\tsize_t ByteCount = %lu\n", args->hipMemcpyAtoA.ByteCount);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyAtoA.retval);
+			printf("\tsize_t srcOffset = %lu\n", args->srcOffset);
+			printf("\tsize_t ByteCount = %lu\n", args->ByteCount);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyToSymbol
-		case HIP_API_ID_hipMemcpyToSymbol :
+		case HIP_API_ID_hipMemcpyToSymbol : {
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * symbol = %p", args->hipMemcpyToSymbol.symbol);
+			args_hipMemcpyToSymbol_t* args = (args_hipMemcpyToSymbol_t*) func_args;
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hipMemcpyToSymbol.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpyToSymbol.sizeBytes);
-			printf("\tsize_t offset = %lu\n", args->hipMemcpyToSymbol.offset);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpyToSymbol.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyToSymbol.retval);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxSetCurrent
-		case HIP_API_ID_hipCtxSetCurrent :
+		case HIP_API_ID_hipCtxSetCurrent : {
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipCtx_t ctx = %p", args->hipCtxSetCurrent.ctx);
+			args_hipCtxSetCurrent_t* args = (args_hipCtxSetCurrent_t*) func_args;
+			printf("\thipCtx_t ctx = %p", args->ctx);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipCtxSetCurrent.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamQuery_spt
-		case HIP_API_ID_hipStreamQuery_spt :
+		case HIP_API_ID_hipStreamQuery_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamQuery_spt.stream);
+			args_hipStreamQuery_spt_t* args = (args_hipStreamQuery_spt_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipStreamQuery_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetSymbolSize
-		case HIP_API_ID_hipGetSymbolSize :
+		case HIP_API_ID_hipGetSymbolSize : {
 			//	size_t * size (unsigned long*);
 			//	const void * symbol (const void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tsize_t * size = %p", args->hipGetSymbolSize.size);
-			if (args->hipGetSymbolSize.size != NULL) {
-				printf(" -> %lu\n", args->hipGetSymbolSize.size__ref.val);
+			args_hipGetSymbolSize_t* args = (args_hipGetSymbolSize_t*) func_args;
+			printf("\tsize_t * size = %p", args->size);
+			if (args->size != NULL) {
+				printf(" -> %lu\n", args->size__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst void * symbol = %p", args->hipGetSymbolSize.symbol);
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGetSymbolSize.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMipmappedArrayGetLevel
-		case HIP_API_ID_hipMipmappedArrayGetLevel :
+		case HIP_API_ID_hipMipmappedArrayGetLevel : {
 			//	hipArray_t * pLevelArray (struct hipArray **);
 			//	hipMipmappedArray_t hMipMappedArray ({
 			//		void * data (void *);
@@ -9158,38 +9896,40 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	unsigned int level (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t * pLevelArray = %p", args->hipMipmappedArrayGetLevel.pLevelArray);
-			if (args->hipMipmappedArrayGetLevel.pLevelArray != NULL) {
-				printf(" -> %p\n", args->hipMipmappedArrayGetLevel.pLevelArray__ref.val);
+			args_hipMipmappedArrayGetLevel_t* args = (args_hipMipmappedArrayGetLevel_t*) func_args;
+			printf("\thipArray_t * pLevelArray = %p", args->pLevelArray);
+			if (args->pLevelArray != NULL) {
+				printf(" -> %p\n", args->pLevelArray__ref.val);
 			} else { printf("\n"); };
-			printf("\thipMipmappedArray_t hMipMappedArray = %p", args->hipMipmappedArrayGetLevel.hMipMappedArray);
-			if (args->hipMipmappedArrayGetLevel.hMipMappedArray != NULL) {
+			printf("\thipMipmappedArray_t hMipMappedArray = %p", args->hMipMappedArray);
+			if (args->hMipMappedArray != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct hipChannelFormatDesc desc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val.desc.x);
-				printf("\t\t\tint y = %d\n", args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val.desc.y);
-				printf("\t\t\tint z = %d\n", args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val.desc.z);
-				printf("\t\t\tint w = %d\n", args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val.desc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val.desc.f);
+				printf("\t\t\tint x = %d\n", args->hMipMappedArray__ref.val.desc.x);
+				printf("\t\t\tint y = %d\n", args->hMipMappedArray__ref.val.desc.y);
+				printf("\t\t\tint z = %d\n", args->hMipMappedArray__ref.val.desc.z);
+				printf("\t\t\tint w = %d\n", args->hMipMappedArray__ref.val.desc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hMipMappedArray__ref.val.desc.f);
 				printf("\t\t}\n");
-				printf("\t\tunsigned int type = %u\n", args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val.type);
-				printf("\t\tunsigned int width = %u\n", args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val.width);
-				printf("\t\tunsigned int height = %u\n", args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val.height);
-				printf("\t\tunsigned int depth = %u\n", args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val.depth);
-				printf("\t\tunsigned int min_mipmap_level = %u\n", args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val.min_mipmap_level);
-				printf("\t\tunsigned int max_mipmap_level = %u\n", args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val.max_mipmap_level);
-				printf("\t\tunsigned int flags = %u\n", args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val.flags);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val.format);
-				printf("\t\tunsigned int num_channels = %u\n", args->hipMipmappedArrayGetLevel.hMipMappedArray__ref.val.num_channels);
+				printf("\t\tunsigned int type = %u\n", args->hMipMappedArray__ref.val.type);
+				printf("\t\tunsigned int width = %u\n", args->hMipMappedArray__ref.val.width);
+				printf("\t\tunsigned int height = %u\n", args->hMipMappedArray__ref.val.height);
+				printf("\t\tunsigned int depth = %u\n", args->hMipMappedArray__ref.val.depth);
+				printf("\t\tunsigned int min_mipmap_level = %u\n", args->hMipMappedArray__ref.val.min_mipmap_level);
+				printf("\t\tunsigned int max_mipmap_level = %u\n", args->hMipMappedArray__ref.val.max_mipmap_level);
+				printf("\t\tunsigned int flags = %u\n", args->hMipMappedArray__ref.val.flags);
+				printf("\t\tenum hipArray_Format format = %d\n", args->hMipMappedArray__ref.val.format);
+				printf("\t\tunsigned int num_channels = %u\n", args->hMipMappedArray__ref.val.num_channels);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tunsigned int level = %u\n", args->hipMipmappedArrayGetLevel.level);
-			printf("\thipError_t retval = %d\n", args->hipMipmappedArrayGetLevel.retval);
+			printf("\tunsigned int level = %u\n", args->level);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExternalMemoryGetMappedMipmappedArray
-		case HIP_API_ID_hipExternalMemoryGetMappedMipmappedArray :
+		case HIP_API_ID_hipExternalMemoryGetMappedMipmappedArray : {
 			//	hipMipmappedArray_t * mipmap ({
 			//		void * data (void *);
 			//		struct hipChannelFormatDesc desc ({
@@ -9228,58 +9968,60 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int numLevels (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMipmappedArray_t * mipmap = %p", args->hipExternalMemoryGetMappedMipmappedArray.mipmap);
-			if (args->hipExternalMemoryGetMappedMipmappedArray.mipmap != NULL) {
-				printf("-> %p", args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.ptr1);
-				if (args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.ptr1 != NULL) {
+			args_hipExternalMemoryGetMappedMipmappedArray_t* args = (args_hipExternalMemoryGetMappedMipmappedArray_t*) func_args;
+			printf("\thipMipmappedArray_t * mipmap = %p", args->mipmap);
+			if (args->mipmap != NULL) {
+				printf("-> %p", args->mipmap__ref.ptr1);
+				if (args->mipmap__ref.ptr1 != NULL) {
 					printf(" -> {\n");
 					printf("\t\tstruct hipChannelFormatDesc desc = {\n");
-					printf("\t\t\tint x = %d\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.val.desc.x);
-					printf("\t\t\tint y = %d\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.val.desc.y);
-					printf("\t\t\tint z = %d\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.val.desc.z);
-					printf("\t\t\tint w = %d\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.val.desc.w);
-					printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.val.desc.f);
+					printf("\t\t\tint x = %d\n", args->mipmap__ref.val.desc.x);
+					printf("\t\t\tint y = %d\n", args->mipmap__ref.val.desc.y);
+					printf("\t\t\tint z = %d\n", args->mipmap__ref.val.desc.z);
+					printf("\t\t\tint w = %d\n", args->mipmap__ref.val.desc.w);
+					printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->mipmap__ref.val.desc.f);
 					printf("\t\t}\n");
-					printf("\t\tunsigned int type = %u\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.val.type);
-					printf("\t\tunsigned int width = %u\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.val.width);
-					printf("\t\tunsigned int height = %u\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.val.height);
-					printf("\t\tunsigned int depth = %u\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.val.depth);
-					printf("\t\tunsigned int min_mipmap_level = %u\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.val.min_mipmap_level);
-					printf("\t\tunsigned int max_mipmap_level = %u\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.val.max_mipmap_level);
-					printf("\t\tunsigned int flags = %u\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.val.flags);
-					printf("\t\tenum hipArray_Format format = %d\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.val.format);
-					printf("\t\tunsigned int num_channels = %u\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmap__ref.val.num_channels);
+					printf("\t\tunsigned int type = %u\n", args->mipmap__ref.val.type);
+					printf("\t\tunsigned int width = %u\n", args->mipmap__ref.val.width);
+					printf("\t\tunsigned int height = %u\n", args->mipmap__ref.val.height);
+					printf("\t\tunsigned int depth = %u\n", args->mipmap__ref.val.depth);
+					printf("\t\tunsigned int min_mipmap_level = %u\n", args->mipmap__ref.val.min_mipmap_level);
+					printf("\t\tunsigned int max_mipmap_level = %u\n", args->mipmap__ref.val.max_mipmap_level);
+					printf("\t\tunsigned int flags = %u\n", args->mipmap__ref.val.flags);
+					printf("\t\tenum hipArray_Format format = %d\n", args->mipmap__ref.val.format);
+					printf("\t\tunsigned int num_channels = %u\n", args->mipmap__ref.val.num_channels);
 					printf("\t}\n");
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\thipExternalMemory_t extMem = %p", args->hipExternalMemoryGetMappedMipmappedArray.extMem);
+			printf("\thipExternalMemory_t extMem = %p", args->extMem);
 			printf("\n");
-			printf("\tconst hipExternalMemoryMipmappedArrayDesc * mipmapDesc = %p", args->hipExternalMemoryGetMappedMipmappedArray.mipmapDesc);
-			if (args->hipExternalMemoryGetMappedMipmappedArray.mipmapDesc != NULL) {
+			printf("\tconst hipExternalMemoryMipmappedArrayDesc * mipmapDesc = %p", args->mipmapDesc);
+			if (args->mipmapDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned long long offset = %llu\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmapDesc__ref.val.offset);
+				printf("\t\tunsigned long long offset = %llu\n", args->mipmapDesc__ref.val.offset);
 				printf("\t\thipChannelFormatDesc formatDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmapDesc__ref.val.formatDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmapDesc__ref.val.formatDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmapDesc__ref.val.formatDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmapDesc__ref.val.formatDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmapDesc__ref.val.formatDesc.f);
+				printf("\t\t\tint x = %d\n", args->mipmapDesc__ref.val.formatDesc.x);
+				printf("\t\t\tint y = %d\n", args->mipmapDesc__ref.val.formatDesc.y);
+				printf("\t\t\tint z = %d\n", args->mipmapDesc__ref.val.formatDesc.z);
+				printf("\t\t\tint w = %d\n", args->mipmapDesc__ref.val.formatDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->mipmapDesc__ref.val.formatDesc.f);
 				printf("\t\t}\n");
 				printf("\t\thipExtent extent = {\n");
-				printf("\t\t\tsize_t width = %lu\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmapDesc__ref.val.extent.width);
-				printf("\t\t\tsize_t height = %lu\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmapDesc__ref.val.extent.height);
-				printf("\t\t\tsize_t depth = %lu\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmapDesc__ref.val.extent.depth);
+				printf("\t\t\tsize_t width = %lu\n", args->mipmapDesc__ref.val.extent.width);
+				printf("\t\t\tsize_t height = %lu\n", args->mipmapDesc__ref.val.extent.height);
+				printf("\t\t\tsize_t depth = %lu\n", args->mipmapDesc__ref.val.extent.depth);
 				printf("\t\t}\n");
-				printf("\t\tunsigned int flags = %u\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmapDesc__ref.val.flags);
-				printf("\t\tunsigned int numLevels = %u\n", args->hipExternalMemoryGetMappedMipmappedArray.mipmapDesc__ref.val.numLevels);
+				printf("\t\tunsigned int flags = %u\n", args->mipmapDesc__ref.val.flags);
+				printf("\t\tunsigned int numLevels = %u\n", args->mipmapDesc__ref.val.numLevels);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipExternalMemoryGetMappedMipmappedArray.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecMemcpyNodeSetParams
-		case HIP_API_ID_hipGraphExecMemcpyNodeSetParams :
+		case HIP_API_ID_hipGraphExecMemcpyNodeSetParams : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipMemcpy3DParms * pNodeParams ({
@@ -9315,68 +10057,72 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipMemcpyKind kind (enum hipMemcpyKind);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t hGraphExec = %p", args->hipGraphExecMemcpyNodeSetParams.hGraphExec);
+			args_hipGraphExecMemcpyNodeSetParams_t* args = (args_hipGraphExecMemcpyNodeSetParams_t*) func_args;
+			printf("\thipGraphExec_t hGraphExec = %p", args->hGraphExec);
 			printf("\n");
-			printf("\thipGraphNode_t node = %p", args->hipGraphExecMemcpyNodeSetParams.node);
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipMemcpy3DParms * pNodeParams = %p", args->hipGraphExecMemcpyNodeSetParams.pNodeParams);
-			if (args->hipGraphExecMemcpyNodeSetParams.pNodeParams != NULL) {
+			printf("\thipMemcpy3DParms * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct hipPos srcPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.srcPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.srcPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.srcPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->pNodeParams__ref.val.srcPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->pNodeParams__ref.val.srcPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->pNodeParams__ref.val.srcPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr srcPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.srcPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.srcPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.srcPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->pNodeParams__ref.val.srcPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->pNodeParams__ref.val.srcPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->pNodeParams__ref.val.srcPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPos dstPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.dstPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.dstPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.dstPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->pNodeParams__ref.val.dstPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->pNodeParams__ref.val.dstPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->pNodeParams__ref.val.dstPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr dstPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.dstPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.dstPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.dstPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->pNodeParams__ref.val.dstPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->pNodeParams__ref.val.dstPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->pNodeParams__ref.val.dstPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipExtent extent = {\n");
-				printf("\t\t\tsize_t width = %lu\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.extent.width);
-				printf("\t\t\tsize_t height = %lu\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.extent.height);
-				printf("\t\t\tsize_t depth = %lu\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.extent.depth);
+				printf("\t\t\tsize_t width = %lu\n", args->pNodeParams__ref.val.extent.width);
+				printf("\t\t\tsize_t height = %lu\n", args->pNodeParams__ref.val.extent.height);
+				printf("\t\t\tsize_t depth = %lu\n", args->pNodeParams__ref.val.extent.depth);
 				printf("\t\t}\n");
-				printf("\t\tenum hipMemcpyKind kind = %d\n", args->hipGraphExecMemcpyNodeSetParams.pNodeParams__ref.val.kind);
+				printf("\t\tenum hipMemcpyKind kind = %d\n", args->pNodeParams__ref.val.kind);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphExecMemcpyNodeSetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipUserObjectCreate
-		case HIP_API_ID_hipUserObjectCreate :
+		case HIP_API_ID_hipUserObjectCreate : {
 			//	hipUserObject_t * object_out (struct hipUserObject **);
 			//	void * ptr (void *);
 			//	hipHostFn_t destroy (void (*)(void *));
 			//	unsigned int initialRefcount (unsigned int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipUserObject_t * object_out = %p", args->hipUserObjectCreate.object_out);
-			if (args->hipUserObjectCreate.object_out != NULL) {
-				printf(" -> %p\n", args->hipUserObjectCreate.object_out__ref.val);
+			args_hipUserObjectCreate_t* args = (args_hipUserObjectCreate_t*) func_args;
+			printf("\thipUserObject_t * object_out = %p", args->object_out);
+			if (args->object_out != NULL) {
+				printf(" -> %p\n", args->object_out__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid * ptr = %p", args->hipUserObjectCreate.ptr);
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thipHostFn_t destroy = %p\n", args->hipUserObjectCreate.destroy);
-			printf("\tunsigned int initialRefcount = %u\n", args->hipUserObjectCreate.initialRefcount);
-			printf("\tunsigned int flags = %u\n", args->hipUserObjectCreate.flags);
-			printf("\thipError_t retval = %d\n", args->hipUserObjectCreate.retval);
+			printf("\thipHostFn_t destroy = %p\n", args->destroy);
+			printf("\tunsigned int initialRefcount = %u\n", args->initialRefcount);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetCaptureInfo_v2
-		case HIP_API_ID_hipStreamGetCaptureInfo_v2 :
+		case HIP_API_ID_hipStreamGetCaptureInfo_v2 : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * captureStatus_out (enum hipStreamCaptureStatus*);
 			//	unsigned long long * id_out (unsigned long long *);
@@ -9384,37 +10130,39 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	const hipGraphNode_t ** dependencies_out (const struct hipGraphNode * **);
 			//	size_t * numDependencies_out (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamGetCaptureInfo_v2.stream);
+			args_hipStreamGetCaptureInfo_v2_t* args = (args_hipStreamGetCaptureInfo_v2_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipStreamCaptureStatus * captureStatus_out = %p", args->hipStreamGetCaptureInfo_v2.captureStatus_out);
-			if (args->hipStreamGetCaptureInfo_v2.captureStatus_out != NULL) {
-				printf(" -> %d\n", args->hipStreamGetCaptureInfo_v2.captureStatus_out__ref.val);
+			printf("\thipStreamCaptureStatus * captureStatus_out = %p", args->captureStatus_out);
+			if (args->captureStatus_out != NULL) {
+				printf(" -> %d\n", args->captureStatus_out__ref.val);
 			} else { printf("\n"); };
-			printf("\tunsigned long long * id_out = %p", args->hipStreamGetCaptureInfo_v2.id_out);
-			if (args->hipStreamGetCaptureInfo_v2.id_out != NULL) {
-				printf(" -> %llu\n", args->hipStreamGetCaptureInfo_v2.id_out__ref.val);
+			printf("\tunsigned long long * id_out = %p", args->id_out);
+			if (args->id_out != NULL) {
+				printf(" -> %llu\n", args->id_out__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t * graph_out = %p", args->hipStreamGetCaptureInfo_v2.graph_out);
-			if (args->hipStreamGetCaptureInfo_v2.graph_out != NULL) {
-				printf(" -> %p\n", args->hipStreamGetCaptureInfo_v2.graph_out__ref.val);
+			printf("\thipGraph_t * graph_out = %p", args->graph_out);
+			if (args->graph_out != NULL) {
+				printf(" -> %p\n", args->graph_out__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst hipGraphNode_t ** dependencies_out = %p", args->hipStreamGetCaptureInfo_v2.dependencies_out);
-			if (args->hipStreamGetCaptureInfo_v2.dependencies_out != NULL) {
-				printf("-> %p", args->hipStreamGetCaptureInfo_v2.dependencies_out__ref.ptr1);
-				if (args->hipStreamGetCaptureInfo_v2.dependencies_out__ref.ptr1 != NULL) {
-					printf(" -> %p\n", args->hipStreamGetCaptureInfo_v2.dependencies_out__ref.val);
+			printf("\tconst hipGraphNode_t ** dependencies_out = %p", args->dependencies_out);
+			if (args->dependencies_out != NULL) {
+				printf("-> %p", args->dependencies_out__ref.ptr1);
+				if (args->dependencies_out__ref.ptr1 != NULL) {
+					printf(" -> %p\n", args->dependencies_out__ref.val);
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\tsize_t * numDependencies_out = %p", args->hipStreamGetCaptureInfo_v2.numDependencies_out);
-			if (args->hipStreamGetCaptureInfo_v2.numDependencies_out != NULL) {
-				printf(" -> %lu\n", args->hipStreamGetCaptureInfo_v2.numDependencies_out__ref.val);
+			printf("\tsize_t * numDependencies_out = %p", args->numDependencies_out);
+			if (args->numDependencies_out != NULL) {
+				printf(" -> %lu\n", args->numDependencies_out__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipStreamGetCaptureInfo_v2.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetArray
-		case HIP_API_ID_hipTexRefGetArray :
+		case HIP_API_ID_hipTexRefGetArray : {
 			//	hipArray_t * pArray (struct hipArray **);
 			//	const textureReference * texRef ({
 			//		int normalized (int);
@@ -9439,40 +10187,42 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipArray_Format format (enum hipArray_Format);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t * pArray = %p", args->hipTexRefGetArray.pArray);
-			if (args->hipTexRefGetArray.pArray != NULL) {
-				printf(" -> %p\n", args->hipTexRefGetArray.pArray__ref.val);
+			args_hipTexRefGetArray_t* args = (args_hipTexRefGetArray_t*) func_args;
+			printf("\thipArray_t * pArray = %p", args->pArray);
+			if (args->pArray != NULL) {
+				printf(" -> %p\n", args->pArray__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst textureReference * texRef = %p", args->hipTexRefGetArray.texRef);
-			if (args->hipTexRefGetArray.texRef != NULL) {
+			printf("\tconst textureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefGetArray.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefGetArray.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefGetArray.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefGetArray.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefGetArray.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefGetArray.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefGetArray.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefGetArray.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefGetArray.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefGetArray.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefGetArray.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefGetArray.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefGetArray.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefGetArray.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefGetArray.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefGetArray.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefGetArray.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipTexRefGetArray.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipImportExternalSemaphore
-		case HIP_API_ID_hipImportExternalSemaphore :
+		case HIP_API_ID_hipImportExternalSemaphore : {
 			//	hipExternalSemaphore_t * extSem_out (void **);
 			//	const hipExternalSemaphoreHandleDesc * semHandleDesc ({
 			//		hipExternalSemaphoreHandleType type (enum hipExternalSemaphoreHandleType_enum);
@@ -9482,68 +10232,76 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int[16] reserved (unsigned int[16]);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipExternalSemaphore_t * extSem_out = %p", args->hipImportExternalSemaphore.extSem_out);
-			if (args->hipImportExternalSemaphore.extSem_out != NULL) {
-				printf("-> %p", args->hipImportExternalSemaphore.extSem_out__ref.ptr1);
+			args_hipImportExternalSemaphore_t* args = (args_hipImportExternalSemaphore_t*) func_args;
+			printf("\thipExternalSemaphore_t * extSem_out = %p", args->extSem_out);
+			if (args->extSem_out != NULL) {
+				printf("-> %p", args->extSem_out__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tconst hipExternalSemaphoreHandleDesc * semHandleDesc = %p", args->hipImportExternalSemaphore.semHandleDesc);
-			if (args->hipImportExternalSemaphore.semHandleDesc != NULL) {
+			printf("\tconst hipExternalSemaphoreHandleDesc * semHandleDesc = %p", args->semHandleDesc);
+			if (args->semHandleDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\thipExternalSemaphoreHandleType type = %d\n", args->hipImportExternalSemaphore.semHandleDesc__ref.val.type);
+				printf("\t\thipExternalSemaphoreHandleType type = %d\n", args->semHandleDesc__ref.val.type);
 				printf("\t\tunion (unnamed union at header/hip/hip.h:1475:2) handle = {\n");
 				printf("\t\t}\n");
-				printf("\t\tunsigned int flags = %u\n", args->hipImportExternalSemaphore.semHandleDesc__ref.val.flags);
-				printf("\t\tunsigned int[16] reserved = %u\n", args->hipImportExternalSemaphore.semHandleDesc__ref.val.reserved[0]);
+				printf("\t\tunsigned int flags = %u\n", args->semHandleDesc__ref.val.flags);
+				printf("\t\tunsigned int[16] reserved = %u\n", args->semHandleDesc__ref.val.reserved[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipImportExternalSemaphore.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetAttribute
-		case HIP_API_ID_hipDeviceGetAttribute :
+		case HIP_API_ID_hipDeviceGetAttribute : {
 			//	int * pi (int *);
 			//	hipDeviceAttribute_t attr (enum hipDeviceAttribute_t);
 			//	int deviceId (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * pi = %p", args->hipDeviceGetAttribute.pi);
-			if (args->hipDeviceGetAttribute.pi != NULL) {
-				printf(" -> %d\n", args->hipDeviceGetAttribute.pi__ref.val);
+			args_hipDeviceGetAttribute_t* args = (args_hipDeviceGetAttribute_t*) func_args;
+			printf("\tint * pi = %p", args->pi);
+			if (args->pi != NULL) {
+				printf(" -> %d\n", args->pi__ref.val);
 			} else { printf("\n"); };
-			printf("\thipDeviceAttribute_t attr = %d\n", args->hipDeviceGetAttribute.attr);
-			printf("\tint deviceId = %d\n", args->hipDeviceGetAttribute.deviceId);
-			printf("\thipError_t retval = %d\n", args->hipDeviceGetAttribute.retval);
+			printf("\thipDeviceAttribute_t attr = %d\n", args->attr);
+			printf("\tint deviceId = %d\n", args->deviceId);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemFreeNodeGetParams
-		case HIP_API_ID_hipGraphMemFreeNodeGetParams :
+		case HIP_API_ID_hipGraphMemFreeNodeGetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dev_ptr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphMemFreeNodeGetParams.node);
+			args_hipGraphMemFreeNodeGetParams_t* args = (args_hipGraphMemFreeNodeGetParams_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\tvoid * dev_ptr = %p", args->hipGraphMemFreeNodeGetParams.dev_ptr);
+			printf("\tvoid * dev_ptr = %p", args->dev_ptr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphMemFreeNodeGetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxGetSharedMemConfig
-		case HIP_API_ID_hipCtxGetSharedMemConfig :
+		case HIP_API_ID_hipCtxGetSharedMemConfig : {
 			//	hipSharedMemConfig * pConfig (enum hipSharedMemConfig*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipSharedMemConfig * pConfig = %p", args->hipCtxGetSharedMemConfig.pConfig);
-			if (args->hipCtxGetSharedMemConfig.pConfig != NULL) {
-				printf(" -> %d\n", args->hipCtxGetSharedMemConfig.pConfig__ref.val);
+			args_hipCtxGetSharedMemConfig_t* args = (args_hipCtxGetSharedMemConfig_t*) func_args;
+			printf("\thipSharedMemConfig * pConfig = %p", args->pConfig);
+			if (args->pConfig != NULL) {
+				printf(" -> %d\n", args->pConfig__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipCtxGetSharedMemConfig.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemcpyNodeSetParamsToSymbol
-		case HIP_API_ID_hipGraphMemcpyNodeSetParamsToSymbol :
+		case HIP_API_ID_hipGraphMemcpyNodeSetParamsToSymbol : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
@@ -9551,21 +10309,23 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphMemcpyNodeSetParamsToSymbol.node);
+			args_hipGraphMemcpyNodeSetParamsToSymbol_t* args = (args_hipGraphMemcpyNodeSetParamsToSymbol_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\tconst void * symbol = %p", args->hipGraphMemcpyNodeSetParamsToSymbol.symbol);
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hipGraphMemcpyNodeSetParamsToSymbol.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t count = %lu\n", args->hipGraphMemcpyNodeSetParamsToSymbol.count);
-			printf("\tsize_t offset = %lu\n", args->hipGraphMemcpyNodeSetParamsToSymbol.offset);
-			printf("\thipMemcpyKind kind = %d\n", args->hipGraphMemcpyNodeSetParamsToSymbol.kind);
-			printf("\thipError_t retval = %d\n", args->hipGraphMemcpyNodeSetParamsToSymbol.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\tsize_t offset = %lu\n", args->offset);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DToArray
-		case HIP_API_ID_hipMemcpy2DToArray :
+		case HIP_API_ID_hipMemcpy2DToArray : {
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
 			//	size_t hOffset (unsigned long);
@@ -9575,47 +10335,53 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t dst = %p", args->hipMemcpy2DToArray.dst);
+			args_hipMemcpy2DToArray_t* args = (args_hipMemcpy2DToArray_t*) func_args;
+			printf("\thipArray_t dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t wOffset = %lu\n", args->hipMemcpy2DToArray.wOffset);
-			printf("\tsize_t hOffset = %lu\n", args->hipMemcpy2DToArray.hOffset);
-			printf("\tconst void * src = %p", args->hipMemcpy2DToArray.src);
+			printf("\tsize_t wOffset = %lu\n", args->wOffset);
+			printf("\tsize_t hOffset = %lu\n", args->hOffset);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t spitch = %lu\n", args->hipMemcpy2DToArray.spitch);
-			printf("\tsize_t width = %lu\n", args->hipMemcpy2DToArray.width);
-			printf("\tsize_t height = %lu\n", args->hipMemcpy2DToArray.height);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpy2DToArray.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpy2DToArray.retval);
+			printf("\tsize_t spitch = %lu\n", args->spitch);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamIsCapturing_spt
-		case HIP_API_ID_hipStreamIsCapturing_spt :
+		case HIP_API_ID_hipStreamIsCapturing_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamIsCapturing_spt.stream);
+			args_hipStreamIsCapturing_spt_t* args = (args_hipStreamIsCapturing_spt_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipStreamCaptureStatus * pCaptureStatus = %p", args->hipStreamIsCapturing_spt.pCaptureStatus);
-			if (args->hipStreamIsCapturing_spt.pCaptureStatus != NULL) {
-				printf(" -> %d\n", args->hipStreamIsCapturing_spt.pCaptureStatus__ref.val);
+			printf("\thipStreamCaptureStatus * pCaptureStatus = %p", args->pCaptureStatus);
+			if (args->pCaptureStatus != NULL) {
+				printf(" -> %d\n", args->pCaptureStatus__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipStreamIsCapturing_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFreeHost
-		case HIP_API_ID_hipFreeHost :
+		case HIP_API_ID_hipFreeHost : {
 			//	void * ptr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * ptr = %p", args->hipFreeHost.ptr);
+			args_hipFreeHost_t* args = (args_hipFreeHost_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipFreeHost.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphKernelNodeSetParams
-		case HIP_API_ID_hipGraphKernelNodeSetParams :
+		case HIP_API_ID_hipGraphKernelNodeSetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipKernelNodeParams * pNodeParams ({
 			//		dim3 blockDim ({
@@ -9634,45 +10400,49 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int sharedMemBytes (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphKernelNodeSetParams.node);
+			args_hipGraphKernelNodeSetParams_t* args = (args_hipGraphKernelNodeSetParams_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\tconst hipKernelNodeParams * pNodeParams = %p", args->hipGraphKernelNodeSetParams.pNodeParams);
-			if (args->hipGraphKernelNodeSetParams.pNodeParams != NULL) {
+			printf("\tconst hipKernelNodeParams * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
 				printf("\t\tdim3 blockDim = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hipGraphKernelNodeSetParams.pNodeParams__ref.val.blockDim.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hipGraphKernelNodeSetParams.pNodeParams__ref.val.blockDim.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hipGraphKernelNodeSetParams.pNodeParams__ref.val.blockDim.z);
+				printf("\t\t\tuint32_t x = %u\n", args->pNodeParams__ref.val.blockDim.x);
+				printf("\t\t\tuint32_t y = %u\n", args->pNodeParams__ref.val.blockDim.y);
+				printf("\t\t\tuint32_t z = %u\n", args->pNodeParams__ref.val.blockDim.z);
 				printf("\t\t}\n");
 				printf("\t\tdim3 gridDim = {\n");
-				printf("\t\t\tuint32_t x = %u\n", args->hipGraphKernelNodeSetParams.pNodeParams__ref.val.gridDim.x);
-				printf("\t\t\tuint32_t y = %u\n", args->hipGraphKernelNodeSetParams.pNodeParams__ref.val.gridDim.y);
-				printf("\t\t\tuint32_t z = %u\n", args->hipGraphKernelNodeSetParams.pNodeParams__ref.val.gridDim.z);
+				printf("\t\t\tuint32_t x = %u\n", args->pNodeParams__ref.val.gridDim.x);
+				printf("\t\t\tuint32_t y = %u\n", args->pNodeParams__ref.val.gridDim.y);
+				printf("\t\t\tuint32_t z = %u\n", args->pNodeParams__ref.val.gridDim.z);
 				printf("\t\t}\n");
-				printf("\t\tunsigned int sharedMemBytes = %u\n", args->hipGraphKernelNodeSetParams.pNodeParams__ref.val.sharedMemBytes);
+				printf("\t\tunsigned int sharedMemBytes = %u\n", args->pNodeParams__ref.val.sharedMemBytes);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphKernelNodeSetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMallocHost
-		case HIP_API_ID_hipMallocHost :
+		case HIP_API_ID_hipMallocHost : {
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** ptr = %p", args->hipMallocHost.ptr);
-			if (args->hipMallocHost.ptr != NULL) {
-				printf("-> %p", args->hipMallocHost.ptr__ref.ptr1);
+			args_hipMallocHost_t* args = (args_hipMallocHost_t*) func_args;
+			printf("\tvoid ** ptr = %p", args->ptr);
+			if (args->ptr != NULL) {
+				printf("-> %p", args->ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t size = %lu\n", args->hipMallocHost.size);
-			printf("\thipError_t retval = %d\n", args->hipMallocHost.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset3D_spt
-		case HIP_API_ID_hipMemset3D_spt :
+		case HIP_API_ID_hipMemset3D_spt : {
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
 			//		size_t pitch (unsigned long);
@@ -9686,23 +10456,25 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		size_t depth (unsigned long);
 			//	});
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemset3D_spt_t* args = (args_hipMemset3D_spt_t*) func_args;
 			printf("\thipPitchedPtr pitchedDevPtr = {\n");
-			printf("\t\tsize_t pitch = %lu\n", args->hipMemset3D_spt.pitchedDevPtr.pitch);
-			printf("\t\tsize_t xsize = %lu\n", args->hipMemset3D_spt.pitchedDevPtr.xsize);
-			printf("\t\tsize_t ysize = %lu\n", args->hipMemset3D_spt.pitchedDevPtr.ysize);
+			printf("\t\tsize_t pitch = %lu\n", args->pitchedDevPtr.pitch);
+			printf("\t\tsize_t xsize = %lu\n", args->pitchedDevPtr.xsize);
+			printf("\t\tsize_t ysize = %lu\n", args->pitchedDevPtr.ysize);
 			printf("\t}\n");
-			printf("\tint value = %d\n", args->hipMemset3D_spt.value);
+			printf("\tint value = %d\n", args->value);
 			printf("\thipExtent extent = {\n");
-			printf("\t\tsize_t width = %lu\n", args->hipMemset3D_spt.extent.width);
-			printf("\t\tsize_t height = %lu\n", args->hipMemset3D_spt.extent.height);
-			printf("\t\tsize_t depth = %lu\n", args->hipMemset3D_spt.extent.depth);
+			printf("\t\tsize_t width = %lu\n", args->extent.width);
+			printf("\t\tsize_t height = %lu\n", args->extent.height);
+			printf("\t\tsize_t depth = %lu\n", args->extent.depth);
 			printf("\t}\n");
-			printf("\thipError_t retval = %d\n", args->hipMemset3D_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetCaptureInfo_v2_spt
-		case HIP_API_ID_hipStreamGetCaptureInfo_v2_spt :
+		case HIP_API_ID_hipStreamGetCaptureInfo_v2_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * captureStatus_out (enum hipStreamCaptureStatus*);
 			//	unsigned long long * id_out (unsigned long long *);
@@ -9710,37 +10482,39 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	const hipGraphNode_t ** dependencies_out (const struct hipGraphNode * **);
 			//	size_t * numDependencies_out (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamGetCaptureInfo_v2_spt.stream);
+			args_hipStreamGetCaptureInfo_v2_spt_t* args = (args_hipStreamGetCaptureInfo_v2_spt_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipStreamCaptureStatus * captureStatus_out = %p", args->hipStreamGetCaptureInfo_v2_spt.captureStatus_out);
-			if (args->hipStreamGetCaptureInfo_v2_spt.captureStatus_out != NULL) {
-				printf(" -> %d\n", args->hipStreamGetCaptureInfo_v2_spt.captureStatus_out__ref.val);
+			printf("\thipStreamCaptureStatus * captureStatus_out = %p", args->captureStatus_out);
+			if (args->captureStatus_out != NULL) {
+				printf(" -> %d\n", args->captureStatus_out__ref.val);
 			} else { printf("\n"); };
-			printf("\tunsigned long long * id_out = %p", args->hipStreamGetCaptureInfo_v2_spt.id_out);
-			if (args->hipStreamGetCaptureInfo_v2_spt.id_out != NULL) {
-				printf(" -> %llu\n", args->hipStreamGetCaptureInfo_v2_spt.id_out__ref.val);
+			printf("\tunsigned long long * id_out = %p", args->id_out);
+			if (args->id_out != NULL) {
+				printf(" -> %llu\n", args->id_out__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t * graph_out = %p", args->hipStreamGetCaptureInfo_v2_spt.graph_out);
-			if (args->hipStreamGetCaptureInfo_v2_spt.graph_out != NULL) {
-				printf(" -> %p\n", args->hipStreamGetCaptureInfo_v2_spt.graph_out__ref.val);
+			printf("\thipGraph_t * graph_out = %p", args->graph_out);
+			if (args->graph_out != NULL) {
+				printf(" -> %p\n", args->graph_out__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst hipGraphNode_t ** dependencies_out = %p", args->hipStreamGetCaptureInfo_v2_spt.dependencies_out);
-			if (args->hipStreamGetCaptureInfo_v2_spt.dependencies_out != NULL) {
-				printf("-> %p", args->hipStreamGetCaptureInfo_v2_spt.dependencies_out__ref.ptr1);
-				if (args->hipStreamGetCaptureInfo_v2_spt.dependencies_out__ref.ptr1 != NULL) {
-					printf(" -> %p\n", args->hipStreamGetCaptureInfo_v2_spt.dependencies_out__ref.val);
+			printf("\tconst hipGraphNode_t ** dependencies_out = %p", args->dependencies_out);
+			if (args->dependencies_out != NULL) {
+				printf("-> %p", args->dependencies_out__ref.ptr1);
+				if (args->dependencies_out__ref.ptr1 != NULL) {
+					printf(" -> %p\n", args->dependencies_out__ref.val);
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\tsize_t * numDependencies_out = %p", args->hipStreamGetCaptureInfo_v2_spt.numDependencies_out);
-			if (args->hipStreamGetCaptureInfo_v2_spt.numDependencies_out != NULL) {
-				printf(" -> %lu\n", args->hipStreamGetCaptureInfo_v2_spt.numDependencies_out__ref.val);
+			printf("\tsize_t * numDependencies_out = %p", args->numDependencies_out);
+			if (args->numDependencies_out != NULL) {
+				printf(" -> %lu\n", args->numDependencies_out__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipStreamGetCaptureInfo_v2_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetTextureReference
-		case HIP_API_ID_hipGetTextureReference :
+		case HIP_API_ID_hipGetTextureReference : {
 			//	const textureReference ** texref ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -9765,41 +10539,43 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	const void * symbol (const void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst textureReference ** texref = %p", args->hipGetTextureReference.texref);
-			if (args->hipGetTextureReference.texref != NULL) {
-				printf("-> %p", args->hipGetTextureReference.texref__ref.ptr1);
-				if (args->hipGetTextureReference.texref__ref.ptr1 != NULL) {
+			args_hipGetTextureReference_t* args = (args_hipGetTextureReference_t*) func_args;
+			printf("\tconst textureReference ** texref = %p", args->texref);
+			if (args->texref != NULL) {
+				printf("-> %p", args->texref__ref.ptr1);
+				if (args->texref__ref.ptr1 != NULL) {
 					printf(" -> {\n");
-					printf("\t\tint normalized = %d\n", args->hipGetTextureReference.texref__ref.val.normalized);
-					printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipGetTextureReference.texref__ref.val.readMode);
-					printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipGetTextureReference.texref__ref.val.filterMode);
-					printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipGetTextureReference.texref__ref.val.addressMode[0]);
+					printf("\t\tint normalized = %d\n", args->texref__ref.val.normalized);
+					printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texref__ref.val.readMode);
+					printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texref__ref.val.filterMode);
+					printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texref__ref.val.addressMode[0]);
 					printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-					printf("\t\t\tint x = %d\n", args->hipGetTextureReference.texref__ref.val.channelDesc.x);
-					printf("\t\t\tint y = %d\n", args->hipGetTextureReference.texref__ref.val.channelDesc.y);
-					printf("\t\t\tint z = %d\n", args->hipGetTextureReference.texref__ref.val.channelDesc.z);
-					printf("\t\t\tint w = %d\n", args->hipGetTextureReference.texref__ref.val.channelDesc.w);
-					printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipGetTextureReference.texref__ref.val.channelDesc.f);
+					printf("\t\t\tint x = %d\n", args->texref__ref.val.channelDesc.x);
+					printf("\t\t\tint y = %d\n", args->texref__ref.val.channelDesc.y);
+					printf("\t\t\tint z = %d\n", args->texref__ref.val.channelDesc.z);
+					printf("\t\t\tint w = %d\n", args->texref__ref.val.channelDesc.w);
+					printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texref__ref.val.channelDesc.f);
 					printf("\t\t}\n");
-					printf("\t\tint sRGB = %d\n", args->hipGetTextureReference.texref__ref.val.sRGB);
-					printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipGetTextureReference.texref__ref.val.maxAnisotropy);
-					printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipGetTextureReference.texref__ref.val.mipmapFilterMode);
-					printf("\t\tfloat mipmapLevelBias = %f\n", args->hipGetTextureReference.texref__ref.val.mipmapLevelBias);
-					printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipGetTextureReference.texref__ref.val.minMipmapLevelClamp);
-					printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipGetTextureReference.texref__ref.val.maxMipmapLevelClamp);
-					printf("\t\tint numChannels = %d\n", args->hipGetTextureReference.texref__ref.val.numChannels);
-					printf("\t\tenum hipArray_Format format = %d\n", args->hipGetTextureReference.texref__ref.val.format);
+					printf("\t\tint sRGB = %d\n", args->texref__ref.val.sRGB);
+					printf("\t\tunsigned int maxAnisotropy = %u\n", args->texref__ref.val.maxAnisotropy);
+					printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texref__ref.val.mipmapFilterMode);
+					printf("\t\tfloat mipmapLevelBias = %f\n", args->texref__ref.val.mipmapLevelBias);
+					printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texref__ref.val.minMipmapLevelClamp);
+					printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texref__ref.val.maxMipmapLevelClamp);
+					printf("\t\tint numChannels = %d\n", args->texref__ref.val.numChannels);
+					printf("\t\tenum hipArray_Format format = %d\n", args->texref__ref.val.format);
 					printf("\t}\n");
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\tconst void * symbol = %p", args->hipGetTextureReference.symbol);
+			printf("\tconst void * symbol = %p", args->symbol);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGetTextureReference.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecExternalSemaphoresSignalNodeSetParams
-		case HIP_API_ID_hipGraphExecExternalSemaphoresSignalNodeSetParams :
+		case HIP_API_ID_hipGraphExecExternalSemaphoresSignalNodeSetParams : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	const hipExternalSemaphoreSignalNodeParams * nodeParams ({
@@ -9807,59 +10583,65 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int numExtSems (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t hGraphExec = %p", args->hipGraphExecExternalSemaphoresSignalNodeSetParams.hGraphExec);
+			args_hipGraphExecExternalSemaphoresSignalNodeSetParams_t* args = (args_hipGraphExecExternalSemaphoresSignalNodeSetParams_t*) func_args;
+			printf("\thipGraphExec_t hGraphExec = %p", args->hGraphExec);
 			printf("\n");
-			printf("\thipGraphNode_t hNode = %p", args->hipGraphExecExternalSemaphoresSignalNodeSetParams.hNode);
+			printf("\thipGraphNode_t hNode = %p", args->hNode);
 			printf("\n");
-			printf("\tconst hipExternalSemaphoreSignalNodeParams * nodeParams = %p", args->hipGraphExecExternalSemaphoresSignalNodeSetParams.nodeParams);
-			if (args->hipGraphExecExternalSemaphoresSignalNodeSetParams.nodeParams != NULL) {
+			printf("\tconst hipExternalSemaphoreSignalNodeParams * nodeParams = %p", args->nodeParams);
+			if (args->nodeParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\tunsigned int numExtSems = %u\n", args->hipGraphExecExternalSemaphoresSignalNodeSetParams.nodeParams__ref.val.numExtSems);
+				printf("\t\tunsigned int numExtSems = %u\n", args->nodeParams__ref.val.numExtSems);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphExecExternalSemaphoresSignalNodeSetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddDependencies
-		case HIP_API_ID_hipGraphAddDependencies :
+		case HIP_API_ID_hipGraphAddDependencies : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * from (const struct hipGraphNode * *);
 			//	const hipGraphNode_t * to (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraph_t graph = %p", args->hipGraphAddDependencies.graph);
+			args_hipGraphAddDependencies_t* args = (args_hipGraphAddDependencies_t*) func_args;
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * from = %p", args->hipGraphAddDependencies.from);
-			if (args->hipGraphAddDependencies.from != NULL) {
-				printf(" -> %p\n", args->hipGraphAddDependencies.from__ref.val);
+			printf("\tconst hipGraphNode_t * from = %p", args->from);
+			if (args->from != NULL) {
+				printf(" -> %p\n", args->from__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst hipGraphNode_t * to = %p", args->hipGraphAddDependencies.to);
-			if (args->hipGraphAddDependencies.to != NULL) {
-				printf(" -> %p\n", args->hipGraphAddDependencies.to__ref.val);
+			printf("\tconst hipGraphNode_t * to = %p", args->to);
+			if (args->to != NULL) {
+				printf(" -> %p\n", args->to__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipGraphAddDependencies.numDependencies);
-			printf("\thipError_t retval = %d\n", args->hipGraphAddDependencies.retval);
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphNodeGetType
-		case HIP_API_ID_hipGraphNodeGetType :
+		case HIP_API_ID_hipGraphNodeGetType : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraphNodeType * pType (enum hipGraphNodeType*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphNodeGetType.node);
+			args_hipGraphNodeGetType_t* args = (args_hipGraphNodeGetType_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\thipGraphNodeType * pType = %p", args->hipGraphNodeGetType.pType);
-			if (args->hipGraphNodeGetType.pType != NULL) {
-				printf(" -> %d\n", args->hipGraphNodeGetType.pType__ref.val);
+			printf("\thipGraphNodeType * pType = %p", args->pType);
+			if (args->pType != NULL) {
+				printf(" -> %d\n", args->pType__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphNodeGetType.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetBorderColor
-		case HIP_API_ID_hipTexRefSetBorderColor :
+		case HIP_API_ID_hipTexRefSetBorderColor : {
 			//	textureReference * texRef ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -9884,69 +10666,75 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	float * pBorderColor (float *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\ttextureReference * texRef = %p", args->hipTexRefSetBorderColor.texRef);
-			if (args->hipTexRefSetBorderColor.texRef != NULL) {
+			args_hipTexRefSetBorderColor_t* args = (args_hipTexRefSetBorderColor_t*) func_args;
+			printf("\ttextureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefSetBorderColor.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefSetBorderColor.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefSetBorderColor.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefSetBorderColor.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefSetBorderColor.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefSetBorderColor.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefSetBorderColor.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefSetBorderColor.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefSetBorderColor.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefSetBorderColor.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefSetBorderColor.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefSetBorderColor.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefSetBorderColor.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefSetBorderColor.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefSetBorderColor.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefSetBorderColor.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefSetBorderColor.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tfloat * pBorderColor = %p", args->hipTexRefSetBorderColor.pBorderColor);
-			if (args->hipTexRefSetBorderColor.pBorderColor != NULL) {
-				printf(" -> %f\n", args->hipTexRefSetBorderColor.pBorderColor__ref.val);
+			printf("\tfloat * pBorderColor = %p", args->pBorderColor);
+			if (args->pBorderColor != NULL) {
+				printf(" -> %f\n", args->pBorderColor__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipTexRefSetBorderColor.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPrefetchAsync
-		case HIP_API_ID_hipMemPrefetchAsync :
+		case HIP_API_ID_hipMemPrefetchAsync : {
 			//	const void * dev_ptr (const void *);
 			//	size_t count (unsigned long);
 			//	int device (int);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * dev_ptr = %p", args->hipMemPrefetchAsync.dev_ptr);
+			args_hipMemPrefetchAsync_t* args = (args_hipMemPrefetchAsync_t*) func_args;
+			printf("\tconst void * dev_ptr = %p", args->dev_ptr);
 			printf("\n");
-			printf("\tsize_t count = %lu\n", args->hipMemPrefetchAsync.count);
-			printf("\tint device = %d\n", args->hipMemPrefetchAsync.device);
-			printf("\thipStream_t stream = %p", args->hipMemPrefetchAsync.stream);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\tint device = %d\n", args->device);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemPrefetchAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxGetDevice
-		case HIP_API_ID_hipCtxGetDevice :
+		case HIP_API_ID_hipCtxGetDevice : {
 			//	hipDevice_t * device (int*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDevice_t * device = %p", args->hipCtxGetDevice.device);
-			if (args->hipCtxGetDevice.device != NULL) {
-				printf(" -> %d\n", args->hipCtxGetDevice.device__ref.val);
+			args_hipCtxGetDevice_t* args = (args_hipCtxGetDevice_t*) func_args;
+			printf("\thipDevice_t * device = %p", args->device);
+			if (args->device != NULL) {
+				printf(" -> %d\n", args->device__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipCtxGetDevice.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DArrayToArray
-		case HIP_API_ID_hipMemcpy2DArrayToArray :
+		case HIP_API_ID_hipMemcpy2DArrayToArray : {
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffsetDst (unsigned long);
 			//	size_t hOffsetDst (unsigned long);
@@ -9957,50 +10745,56 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t dst = %p", args->hipMemcpy2DArrayToArray.dst);
+			args_hipMemcpy2DArrayToArray_t* args = (args_hipMemcpy2DArrayToArray_t*) func_args;
+			printf("\thipArray_t dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t wOffsetDst = %lu\n", args->hipMemcpy2DArrayToArray.wOffsetDst);
-			printf("\tsize_t hOffsetDst = %lu\n", args->hipMemcpy2DArrayToArray.hOffsetDst);
-			printf("\thipArray_const_t src = %p", args->hipMemcpy2DArrayToArray.src);
+			printf("\tsize_t wOffsetDst = %lu\n", args->wOffsetDst);
+			printf("\tsize_t hOffsetDst = %lu\n", args->hOffsetDst);
+			printf("\thipArray_const_t src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t wOffsetSrc = %lu\n", args->hipMemcpy2DArrayToArray.wOffsetSrc);
-			printf("\tsize_t hOffsetSrc = %lu\n", args->hipMemcpy2DArrayToArray.hOffsetSrc);
-			printf("\tsize_t width = %lu\n", args->hipMemcpy2DArrayToArray.width);
-			printf("\tsize_t height = %lu\n", args->hipMemcpy2DArrayToArray.height);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpy2DArrayToArray.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpy2DArrayToArray.retval);
+			printf("\tsize_t wOffsetSrc = %lu\n", args->wOffsetSrc);
+			printf("\tsize_t hOffsetSrc = %lu\n", args->hOffsetSrc);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipUserObjectRelease
-		case HIP_API_ID_hipUserObjectRelease :
+		case HIP_API_ID_hipUserObjectRelease : {
 			//	hipUserObject_t object (struct hipUserObject *);
 			//	unsigned int count (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipUserObject_t object = %p", args->hipUserObjectRelease.object);
+			args_hipUserObjectRelease_t* args = (args_hipUserObjectRelease_t*) func_args;
+			printf("\thipUserObject_t object = %p", args->object);
 			printf("\n");
-			printf("\tunsigned int count = %u\n", args->hipUserObjectRelease.count);
-			printf("\thipError_t retval = %d\n", args->hipUserObjectRelease.retval);
+			printf("\tunsigned int count = %u\n", args->count);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipHostGetFlags
-		case HIP_API_ID_hipHostGetFlags :
+		case HIP_API_ID_hipHostGetFlags : {
 			//	unsigned int * flagsPtr (unsigned int *);
 			//	void * hostPtr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tunsigned int * flagsPtr = %p", args->hipHostGetFlags.flagsPtr);
-			if (args->hipHostGetFlags.flagsPtr != NULL) {
-				printf(" -> %u\n", args->hipHostGetFlags.flagsPtr__ref.val);
+			args_hipHostGetFlags_t* args = (args_hipHostGetFlags_t*) func_args;
+			printf("\tunsigned int * flagsPtr = %p", args->flagsPtr);
+			if (args->flagsPtr != NULL) {
+				printf(" -> %u\n", args->flagsPtr__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid * hostPtr = %p", args->hipHostGetFlags.hostPtr);
+			printf("\tvoid * hostPtr = %p", args->hostPtr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipHostGetFlags.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvGraphAddMemsetNode
-		case HIP_API_ID_hipDrvGraphAddMemsetNode :
+		case HIP_API_ID_hipDrvGraphAddMemsetNode : {
 			//	hipGraphNode_t * phGraphNode (struct hipGraphNode **);
 			//	hipGraph_t hGraph (struct ihipGraph *);
 			//	const hipGraphNode_t * dependencies (const struct hipGraphNode * *);
@@ -10015,52 +10809,56 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t * phGraphNode = %p", args->hipDrvGraphAddMemsetNode.phGraphNode);
-			if (args->hipDrvGraphAddMemsetNode.phGraphNode != NULL) {
-				printf(" -> %p\n", args->hipDrvGraphAddMemsetNode.phGraphNode__ref.val);
+			args_hipDrvGraphAddMemsetNode_t* args = (args_hipDrvGraphAddMemsetNode_t*) func_args;
+			printf("\thipGraphNode_t * phGraphNode = %p", args->phGraphNode);
+			if (args->phGraphNode != NULL) {
+				printf(" -> %p\n", args->phGraphNode__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraph_t hGraph = %p", args->hipDrvGraphAddMemsetNode.hGraph);
+			printf("\thipGraph_t hGraph = %p", args->hGraph);
 			printf("\n");
-			printf("\tconst hipGraphNode_t * dependencies = %p", args->hipDrvGraphAddMemsetNode.dependencies);
-			if (args->hipDrvGraphAddMemsetNode.dependencies != NULL) {
-				printf(" -> %p\n", args->hipDrvGraphAddMemsetNode.dependencies__ref.val);
+			printf("\tconst hipGraphNode_t * dependencies = %p", args->dependencies);
+			if (args->dependencies != NULL) {
+				printf(" -> %p\n", args->dependencies__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t numDependencies = %lu\n", args->hipDrvGraphAddMemsetNode.numDependencies);
-			printf("\tconst HIP_MEMSET_NODE_PARAMS * memsetParams = %p", args->hipDrvGraphAddMemsetNode.memsetParams);
-			if (args->hipDrvGraphAddMemsetNode.memsetParams != NULL) {
+			printf("\tsize_t numDependencies = %lu\n", args->numDependencies);
+			printf("\tconst HIP_MEMSET_NODE_PARAMS * memsetParams = %p", args->memsetParams);
+			if (args->memsetParams != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t pitch = %lu\n", args->hipDrvGraphAddMemsetNode.memsetParams__ref.val.pitch);
-				printf("\t\tunsigned int value = %u\n", args->hipDrvGraphAddMemsetNode.memsetParams__ref.val.value);
-				printf("\t\tunsigned int elementSize = %u\n", args->hipDrvGraphAddMemsetNode.memsetParams__ref.val.elementSize);
-				printf("\t\tsize_t width = %lu\n", args->hipDrvGraphAddMemsetNode.memsetParams__ref.val.width);
-				printf("\t\tsize_t height = %lu\n", args->hipDrvGraphAddMemsetNode.memsetParams__ref.val.height);
+				printf("\t\tsize_t pitch = %lu\n", args->memsetParams__ref.val.pitch);
+				printf("\t\tunsigned int value = %u\n", args->memsetParams__ref.val.value);
+				printf("\t\tunsigned int elementSize = %u\n", args->memsetParams__ref.val.elementSize);
+				printf("\t\tsize_t width = %lu\n", args->memsetParams__ref.val.width);
+				printf("\t\tsize_t height = %lu\n", args->memsetParams__ref.val.height);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipCtx_t ctx = %p", args->hipDrvGraphAddMemsetNode.ctx);
+			printf("\thipCtx_t ctx = %p", args->ctx);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipDrvGraphAddMemsetNode.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyAtoD
-		case HIP_API_ID_hipMemcpyAtoD :
+		case HIP_API_ID_hipMemcpyAtoD : {
 			//	hipDeviceptr_t dstDevice (void *);
 			//	hipArray_t srcArray (struct hipArray *);
 			//	size_t srcOffset (unsigned long);
 			//	size_t ByteCount (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceptr_t dstDevice = %p", args->hipMemcpyAtoD.dstDevice);
+			args_hipMemcpyAtoD_t* args = (args_hipMemcpyAtoD_t*) func_args;
+			printf("\thipDeviceptr_t dstDevice = %p", args->dstDevice);
 			printf("\n");
-			printf("\thipArray_t srcArray = %p", args->hipMemcpyAtoD.srcArray);
+			printf("\thipArray_t srcArray = %p", args->srcArray);
 			printf("\n");
-			printf("\tsize_t srcOffset = %lu\n", args->hipMemcpyAtoD.srcOffset);
-			printf("\tsize_t ByteCount = %lu\n", args->hipMemcpyAtoD.ByteCount);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyAtoD.retval);
+			printf("\tsize_t srcOffset = %lu\n", args->srcOffset);
+			printf("\tsize_t ByteCount = %lu\n", args->ByteCount);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolCreate
-		case HIP_API_ID_hipMemPoolCreate :
+		case HIP_API_ID_hipMemPoolCreate : {
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	const hipMemPoolProps * pool_props ({
 			//		hipMemAllocationType allocType (enum hipMemAllocationType);
@@ -10074,42 +10872,46 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned char[56] reserved (unsigned char[56]);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemPool_t * mem_pool = %p", args->hipMemPoolCreate.mem_pool);
-			if (args->hipMemPoolCreate.mem_pool != NULL) {
-				printf(" -> %p\n", args->hipMemPoolCreate.mem_pool__ref.val);
+			args_hipMemPoolCreate_t* args = (args_hipMemPoolCreate_t*) func_args;
+			printf("\thipMemPool_t * mem_pool = %p", args->mem_pool);
+			if (args->mem_pool != NULL) {
+				printf(" -> %p\n", args->mem_pool__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst hipMemPoolProps * pool_props = %p", args->hipMemPoolCreate.pool_props);
-			if (args->hipMemPoolCreate.pool_props != NULL) {
+			printf("\tconst hipMemPoolProps * pool_props = %p", args->pool_props);
+			if (args->pool_props != NULL) {
 				printf(" -> {\n");
-				printf("\t\thipMemAllocationType allocType = %d\n", args->hipMemPoolCreate.pool_props__ref.val.allocType);
-				printf("\t\thipMemAllocationHandleType handleTypes = %d\n", args->hipMemPoolCreate.pool_props__ref.val.handleTypes);
+				printf("\t\thipMemAllocationType allocType = %d\n", args->pool_props__ref.val.allocType);
+				printf("\t\thipMemAllocationHandleType handleTypes = %d\n", args->pool_props__ref.val.handleTypes);
 				printf("\t\thipMemLocation location = {\n");
-				printf("\t\t\thipMemLocationType type = %d\n", args->hipMemPoolCreate.pool_props__ref.val.location.type);
-				printf("\t\t\tint id = %d\n", args->hipMemPoolCreate.pool_props__ref.val.location.id);
+				printf("\t\t\thipMemLocationType type = %d\n", args->pool_props__ref.val.location.type);
+				printf("\t\t\tint id = %d\n", args->pool_props__ref.val.location.id);
 				printf("\t\t}\n");
-				printf("\t\tsize_t maxSize = %lu\n", args->hipMemPoolCreate.pool_props__ref.val.maxSize);
-				printf("\t\tunsigned char[56] reserved = %hhu\n", args->hipMemPoolCreate.pool_props__ref.val.reserved[0]);
+				printf("\t\tsize_t maxSize = %lu\n", args->pool_props__ref.val.maxSize);
+				printf("\t\tunsigned char[56] reserved = %hhu\n", args->pool_props__ref.val.reserved[0]);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipMemPoolCreate.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipKernelNameRef
-		case HIP_API_ID_hipKernelNameRef :
+		case HIP_API_ID_hipKernelNameRef : {
 			//	const hipFunction_t f (const struct ihipModuleSymbol_t *);
 			//	const char * retval (const char *);
-			printf("\tconst hipFunction_t f = %p", args->hipKernelNameRef.f);
+			args_hipKernelNameRef_t* args = (args_hipKernelNameRef_t*) func_args;
+			printf("\tconst hipFunction_t f = %p", args->f);
 			printf("\n");
-			printf("\tconst char * retval = %p", args->hipKernelNameRef.retval);
-			if (args->hipKernelNameRef.retval != NULL) {
-				printf(" -> %s\n", args->hipKernelNameRef.retval__ref.val);
+			printf("\tconst char * retval = %p", args->retval);
+			if (args->retval != NULL) {
+				printf(" -> %s\n", args->retval__ref.val);
 			} else { printf("\n"); };
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset3DAsync
-		case HIP_API_ID_hipMemset3DAsync :
+		case HIP_API_ID_hipMemset3DAsync : {
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
 			//		size_t pitch (unsigned long);
@@ -10124,38 +10926,42 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemset3DAsync_t* args = (args_hipMemset3DAsync_t*) func_args;
 			printf("\thipPitchedPtr pitchedDevPtr = {\n");
-			printf("\t\tsize_t pitch = %lu\n", args->hipMemset3DAsync.pitchedDevPtr.pitch);
-			printf("\t\tsize_t xsize = %lu\n", args->hipMemset3DAsync.pitchedDevPtr.xsize);
-			printf("\t\tsize_t ysize = %lu\n", args->hipMemset3DAsync.pitchedDevPtr.ysize);
+			printf("\t\tsize_t pitch = %lu\n", args->pitchedDevPtr.pitch);
+			printf("\t\tsize_t xsize = %lu\n", args->pitchedDevPtr.xsize);
+			printf("\t\tsize_t ysize = %lu\n", args->pitchedDevPtr.ysize);
 			printf("\t}\n");
-			printf("\tint value = %d\n", args->hipMemset3DAsync.value);
+			printf("\tint value = %d\n", args->value);
 			printf("\thipExtent extent = {\n");
-			printf("\t\tsize_t width = %lu\n", args->hipMemset3DAsync.extent.width);
-			printf("\t\tsize_t height = %lu\n", args->hipMemset3DAsync.extent.height);
-			printf("\t\tsize_t depth = %lu\n", args->hipMemset3DAsync.extent.depth);
+			printf("\t\tsize_t width = %lu\n", args->extent.width);
+			printf("\t\tsize_t height = %lu\n", args->extent.height);
+			printf("\t\tsize_t depth = %lu\n", args->extent.depth);
 			printf("\t}\n");
-			printf("\thipStream_t stream = %p", args->hipMemset3DAsync.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemset3DAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventRecord
-		case HIP_API_ID_hipEventRecord :
+		case HIP_API_ID_hipEventRecord : {
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipEvent_t event = %p", args->hipEventRecord.event);
+			args_hipEventRecord_t* args = (args_hipEventRecord_t*) func_args;
+			printf("\thipEvent_t event = %p", args->event);
 			printf("\n");
-			printf("\thipStream_t stream = %p", args->hipEventRecord.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipEventRecord.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMipmappedArrayDestroy
-		case HIP_API_ID_hipMipmappedArrayDestroy :
+		case HIP_API_ID_hipMipmappedArrayDestroy : {
 			//	hipMipmappedArray_t hMipmappedArray ({
 			//		void * data (void *);
 			//		struct hipChannelFormatDesc desc ({
@@ -10176,125 +10982,141 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int num_channels (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMipmappedArray_t hMipmappedArray = %p", args->hipMipmappedArrayDestroy.hMipmappedArray);
-			if (args->hipMipmappedArrayDestroy.hMipmappedArray != NULL) {
+			args_hipMipmappedArrayDestroy_t* args = (args_hipMipmappedArrayDestroy_t*) func_args;
+			printf("\thipMipmappedArray_t hMipmappedArray = %p", args->hMipmappedArray);
+			if (args->hMipmappedArray != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct hipChannelFormatDesc desc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipMipmappedArrayDestroy.hMipmappedArray__ref.val.desc.x);
-				printf("\t\t\tint y = %d\n", args->hipMipmappedArrayDestroy.hMipmappedArray__ref.val.desc.y);
-				printf("\t\t\tint z = %d\n", args->hipMipmappedArrayDestroy.hMipmappedArray__ref.val.desc.z);
-				printf("\t\t\tint w = %d\n", args->hipMipmappedArrayDestroy.hMipmappedArray__ref.val.desc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipMipmappedArrayDestroy.hMipmappedArray__ref.val.desc.f);
+				printf("\t\t\tint x = %d\n", args->hMipmappedArray__ref.val.desc.x);
+				printf("\t\t\tint y = %d\n", args->hMipmappedArray__ref.val.desc.y);
+				printf("\t\t\tint z = %d\n", args->hMipmappedArray__ref.val.desc.z);
+				printf("\t\t\tint w = %d\n", args->hMipmappedArray__ref.val.desc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hMipmappedArray__ref.val.desc.f);
 				printf("\t\t}\n");
-				printf("\t\tunsigned int type = %u\n", args->hipMipmappedArrayDestroy.hMipmappedArray__ref.val.type);
-				printf("\t\tunsigned int width = %u\n", args->hipMipmappedArrayDestroy.hMipmappedArray__ref.val.width);
-				printf("\t\tunsigned int height = %u\n", args->hipMipmappedArrayDestroy.hMipmappedArray__ref.val.height);
-				printf("\t\tunsigned int depth = %u\n", args->hipMipmappedArrayDestroy.hMipmappedArray__ref.val.depth);
-				printf("\t\tunsigned int min_mipmap_level = %u\n", args->hipMipmappedArrayDestroy.hMipmappedArray__ref.val.min_mipmap_level);
-				printf("\t\tunsigned int max_mipmap_level = %u\n", args->hipMipmappedArrayDestroy.hMipmappedArray__ref.val.max_mipmap_level);
-				printf("\t\tunsigned int flags = %u\n", args->hipMipmappedArrayDestroy.hMipmappedArray__ref.val.flags);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipMipmappedArrayDestroy.hMipmappedArray__ref.val.format);
-				printf("\t\tunsigned int num_channels = %u\n", args->hipMipmappedArrayDestroy.hMipmappedArray__ref.val.num_channels);
+				printf("\t\tunsigned int type = %u\n", args->hMipmappedArray__ref.val.type);
+				printf("\t\tunsigned int width = %u\n", args->hMipmappedArray__ref.val.width);
+				printf("\t\tunsigned int height = %u\n", args->hMipmappedArray__ref.val.height);
+				printf("\t\tunsigned int depth = %u\n", args->hMipmappedArray__ref.val.depth);
+				printf("\t\tunsigned int min_mipmap_level = %u\n", args->hMipmappedArray__ref.val.min_mipmap_level);
+				printf("\t\tunsigned int max_mipmap_level = %u\n", args->hMipmappedArray__ref.val.max_mipmap_level);
+				printf("\t\tunsigned int flags = %u\n", args->hMipmappedArray__ref.val.flags);
+				printf("\t\tenum hipArray_Format format = %d\n", args->hMipmappedArray__ref.val.format);
+				printf("\t\tunsigned int num_channels = %u\n", args->hMipmappedArray__ref.val.num_channels);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipMipmappedArrayDestroy.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetAsync_spt
-		case HIP_API_ID_hipMemsetAsync_spt :
+		case HIP_API_ID_hipMemsetAsync_spt : {
 			//	void * dst (void *);
 			//	int value (int);
 			//	size_t sizeBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemsetAsync_spt.dst);
+			args_hipMemsetAsync_spt_t* args = (args_hipMemsetAsync_spt_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tint value = %d\n", args->hipMemsetAsync_spt.value);
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemsetAsync_spt.sizeBytes);
-			printf("\thipStream_t stream = %p", args->hipMemsetAsync_spt.stream);
+			printf("\tint value = %d\n", args->value);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemsetAsync_spt.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDevicePrimaryCtxSetFlags
-		case HIP_API_ID_hipDevicePrimaryCtxSetFlags :
+		case HIP_API_ID_hipDevicePrimaryCtxSetFlags : {
 			//	hipDevice_t dev (int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDevice_t dev = %d\n", args->hipDevicePrimaryCtxSetFlags.dev);
-			printf("\tunsigned int flags = %u\n", args->hipDevicePrimaryCtxSetFlags.flags);
-			printf("\thipError_t retval = %d\n", args->hipDevicePrimaryCtxSetFlags.retval);
+			args_hipDevicePrimaryCtxSetFlags_t* args = (args_hipDevicePrimaryCtxSetFlags_t*) func_args;
+			printf("\thipDevice_t dev = %d\n", args->dev);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipPeekAtLastError
-		case HIP_API_ID_hipPeekAtLastError :
+		case HIP_API_ID_hipPeekAtLastError : {
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipError_t retval = %d\n", args->hipPeekAtLastError.retval);
+			args_hipPeekAtLastError_t* args = (args_hipPeekAtLastError_t*) func_args;
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetGraphMemAttribute
-		case HIP_API_ID_hipDeviceGetGraphMemAttribute :
+		case HIP_API_ID_hipDeviceGetGraphMemAttribute : {
 			//	int device (int);
 			//	hipGraphMemAttributeType attr (enum hipGraphMemAttributeType);
 			//	void * value (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint device = %d\n", args->hipDeviceGetGraphMemAttribute.device);
-			printf("\thipGraphMemAttributeType attr = %d\n", args->hipDeviceGetGraphMemAttribute.attr);
-			printf("\tvoid * value = %p", args->hipDeviceGetGraphMemAttribute.value);
+			args_hipDeviceGetGraphMemAttribute_t* args = (args_hipDeviceGetGraphMemAttribute_t*) func_args;
+			printf("\tint device = %d\n", args->device);
+			printf("\thipGraphMemAttributeType attr = %d\n", args->attr);
+			printf("\tvoid * value = %p", args->value);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipDeviceGetGraphMemAttribute.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvGetErrorName
-		case HIP_API_ID_hipDrvGetErrorName :
+		case HIP_API_ID_hipDrvGetErrorName : {
 			//	hipError_t hipError (enum hipError_t);
 			//	const char ** errorString (const char **);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipError_t hipError = %d\n", args->hipDrvGetErrorName.hipError);
-			printf("\tconst char ** errorString = %p", args->hipDrvGetErrorName.errorString);
-			if (args->hipDrvGetErrorName.errorString != NULL) {
-				printf("-> %p", args->hipDrvGetErrorName.errorString__ref.ptr1);
-				if (args->hipDrvGetErrorName.errorString__ref.ptr1 != NULL) {
-					printf(" -> %s\n", args->hipDrvGetErrorName.errorString__ref.val);
+			args_hipDrvGetErrorName_t* args = (args_hipDrvGetErrorName_t*) func_args;
+			printf("\thipError_t hipError = %d\n", args->hipError);
+			printf("\tconst char ** errorString = %p", args->errorString);
+			if (args->errorString != NULL) {
+				printf("-> %p", args->errorString__ref.ptr1);
+				if (args->errorString__ref.ptr1 != NULL) {
+					printf(" -> %s\n", args->errorString__ref.val);
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipDrvGetErrorName.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy_spt
-		case HIP_API_ID_hipMemcpy_spt :
+		case HIP_API_ID_hipMemcpy_spt : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpy_spt.dst);
+			args_hipMemcpy_spt_t* args = (args_hipMemcpy_spt_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * src = %p", args->hipMemcpy_spt.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemcpy_spt.sizeBytes);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpy_spt.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpy_spt.retval);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxSetSharedMemConfig
-		case HIP_API_ID_hipCtxSetSharedMemConfig :
+		case HIP_API_ID_hipCtxSetSharedMemConfig : {
 			//	hipSharedMemConfig config (enum hipSharedMemConfig);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipSharedMemConfig config = %d\n", args->hipCtxSetSharedMemConfig.config);
-			printf("\thipError_t retval = %d\n", args->hipCtxSetSharedMemConfig.retval);
+			args_hipCtxSetSharedMemConfig_t* args = (args_hipCtxSetSharedMemConfig_t*) func_args;
+			printf("\thipSharedMemConfig config = %d\n", args->config);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCreateSurfaceObject
-		case HIP_API_ID_hipCreateSurfaceObject :
+		case HIP_API_ID_hipCreateSurfaceObject : {
 			//	hipSurfaceObject_t * pSurfObject (struct __hip_surface **);
 			//	const hipResourceDesc * pResDesc ({
 			//		enum hipResourceType resType (enum hipResourceType);
@@ -10302,24 +11124,26 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		});
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipSurfaceObject_t * pSurfObject = %p", args->hipCreateSurfaceObject.pSurfObject);
-			if (args->hipCreateSurfaceObject.pSurfObject != NULL) {
-				printf(" -> %p\n", args->hipCreateSurfaceObject.pSurfObject__ref.val);
+			args_hipCreateSurfaceObject_t* args = (args_hipCreateSurfaceObject_t*) func_args;
+			printf("\thipSurfaceObject_t * pSurfObject = %p", args->pSurfObject);
+			if (args->pSurfObject != NULL) {
+				printf(" -> %p\n", args->pSurfObject__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst hipResourceDesc * pResDesc = %p", args->hipCreateSurfaceObject.pResDesc);
-			if (args->hipCreateSurfaceObject.pResDesc != NULL) {
+			printf("\tconst hipResourceDesc * pResDesc = %p", args->pResDesc);
+			if (args->pResDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tenum hipResourceType resType = %d\n", args->hipCreateSurfaceObject.pResDesc__ref.val.resType);
+				printf("\t\tenum hipResourceType resType = %d\n", args->pResDesc__ref.val.resType);
 				printf("\t\tunion (unnamed union at header/hip/hip.h:612:2) res = {\n");
 				printf("\t\t}\n");
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipCreateSurfaceObject.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetMipmappedArrayLevel
-		case HIP_API_ID_hipGetMipmappedArrayLevel :
+		case HIP_API_ID_hipGetMipmappedArrayLevel : {
 			//	hipArray_t * levelArray (struct hipArray **);
 			//	hipMipmappedArray_const_t mipmappedArray ({
 			//		void * data (void *);
@@ -10342,76 +11166,84 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	unsigned int level (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t * levelArray = %p", args->hipGetMipmappedArrayLevel.levelArray);
-			if (args->hipGetMipmappedArrayLevel.levelArray != NULL) {
-				printf(" -> %p\n", args->hipGetMipmappedArrayLevel.levelArray__ref.val);
+			args_hipGetMipmappedArrayLevel_t* args = (args_hipGetMipmappedArrayLevel_t*) func_args;
+			printf("\thipArray_t * levelArray = %p", args->levelArray);
+			if (args->levelArray != NULL) {
+				printf(" -> %p\n", args->levelArray__ref.val);
 			} else { printf("\n"); };
-			printf("\thipMipmappedArray_const_t mipmappedArray = %p", args->hipGetMipmappedArrayLevel.mipmappedArray);
-			if (args->hipGetMipmappedArrayLevel.mipmappedArray != NULL) {
+			printf("\thipMipmappedArray_const_t mipmappedArray = %p", args->mipmappedArray);
+			if (args->mipmappedArray != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct hipChannelFormatDesc desc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val.desc.x);
-				printf("\t\t\tint y = %d\n", args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val.desc.y);
-				printf("\t\t\tint z = %d\n", args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val.desc.z);
-				printf("\t\t\tint w = %d\n", args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val.desc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val.desc.f);
+				printf("\t\t\tint x = %d\n", args->mipmappedArray__ref.val.desc.x);
+				printf("\t\t\tint y = %d\n", args->mipmappedArray__ref.val.desc.y);
+				printf("\t\t\tint z = %d\n", args->mipmappedArray__ref.val.desc.z);
+				printf("\t\t\tint w = %d\n", args->mipmappedArray__ref.val.desc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->mipmappedArray__ref.val.desc.f);
 				printf("\t\t}\n");
-				printf("\t\tunsigned int type = %u\n", args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val.type);
-				printf("\t\tunsigned int width = %u\n", args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val.width);
-				printf("\t\tunsigned int height = %u\n", args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val.height);
-				printf("\t\tunsigned int depth = %u\n", args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val.depth);
-				printf("\t\tunsigned int min_mipmap_level = %u\n", args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val.min_mipmap_level);
-				printf("\t\tunsigned int max_mipmap_level = %u\n", args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val.max_mipmap_level);
-				printf("\t\tunsigned int flags = %u\n", args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val.flags);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val.format);
-				printf("\t\tunsigned int num_channels = %u\n", args->hipGetMipmappedArrayLevel.mipmappedArray__ref.val.num_channels);
+				printf("\t\tunsigned int type = %u\n", args->mipmappedArray__ref.val.type);
+				printf("\t\tunsigned int width = %u\n", args->mipmappedArray__ref.val.width);
+				printf("\t\tunsigned int height = %u\n", args->mipmappedArray__ref.val.height);
+				printf("\t\tunsigned int depth = %u\n", args->mipmappedArray__ref.val.depth);
+				printf("\t\tunsigned int min_mipmap_level = %u\n", args->mipmappedArray__ref.val.min_mipmap_level);
+				printf("\t\tunsigned int max_mipmap_level = %u\n", args->mipmappedArray__ref.val.max_mipmap_level);
+				printf("\t\tunsigned int flags = %u\n", args->mipmappedArray__ref.val.flags);
+				printf("\t\tenum hipArray_Format format = %d\n", args->mipmappedArray__ref.val.format);
+				printf("\t\tunsigned int num_channels = %u\n", args->mipmappedArray__ref.val.num_channels);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tunsigned int level = %u\n", args->hipGetMipmappedArrayLevel.level);
-			printf("\thipError_t retval = %d\n", args->hipGetMipmappedArrayLevel.retval);
+			printf("\tunsigned int level = %u\n", args->level);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecDestroy
-		case HIP_API_ID_hipGraphExecDestroy :
+		case HIP_API_ID_hipGraphExecDestroy : {
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphExec_t graphExec = %p", args->hipGraphExecDestroy.graphExec);
+			args_hipGraphExecDestroy_t* args = (args_hipGraphExecDestroy_t*) func_args;
+			printf("\thipGraphExec_t graphExec = %p", args->graphExec);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphExecDestroy.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetD32Async
-		case HIP_API_ID_hipMemsetD32Async :
+		case HIP_API_ID_hipMemsetD32Async : {
 			//	hipDeviceptr_t dst (void *);
 			//	int value (int);
 			//	size_t count (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceptr_t dst = %p", args->hipMemsetD32Async.dst);
+			args_hipMemsetD32Async_t* args = (args_hipMemsetD32Async_t*) func_args;
+			printf("\thipDeviceptr_t dst = %p", args->dst);
 			printf("\n");
-			printf("\tint value = %d\n", args->hipMemsetD32Async.value);
-			printf("\tsize_t count = %lu\n", args->hipMemsetD32Async.count);
-			printf("\thipStream_t stream = %p", args->hipMemsetD32Async.stream);
+			printf("\tint value = %d\n", args->value);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemsetD32Async.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceEnablePeerAccess
-		case HIP_API_ID_hipDeviceEnablePeerAccess :
+		case HIP_API_ID_hipDeviceEnablePeerAccess : {
 			//	int peerDeviceId (int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint peerDeviceId = %d\n", args->hipDeviceEnablePeerAccess.peerDeviceId);
-			printf("\tunsigned int flags = %u\n", args->hipDeviceEnablePeerAccess.flags);
-			printf("\thipError_t retval = %d\n", args->hipDeviceEnablePeerAccess.retval);
+			args_hipDeviceEnablePeerAccess_t* args = (args_hipDeviceEnablePeerAccess_t*) func_args;
+			printf("\tint peerDeviceId = %d\n", args->peerDeviceId);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipArray3DCreate
-		case HIP_API_ID_hipArray3DCreate :
+		case HIP_API_ID_hipArray3DCreate : {
 			//	hipArray_t * array (struct hipArray **);
 			//	const HIP_ARRAY3D_DESCRIPTOR * pAllocateArray ({
 			//		size_t Width (unsigned long);
@@ -10422,60 +11254,66 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int Flags (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t * array = %p", args->hipArray3DCreate.array);
-			if (args->hipArray3DCreate.array != NULL) {
-				printf(" -> %p\n", args->hipArray3DCreate.array__ref.val);
+			args_hipArray3DCreate_t* args = (args_hipArray3DCreate_t*) func_args;
+			printf("\thipArray_t * array = %p", args->array);
+			if (args->array != NULL) {
+				printf(" -> %p\n", args->array__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst HIP_ARRAY3D_DESCRIPTOR * pAllocateArray = %p", args->hipArray3DCreate.pAllocateArray);
-			if (args->hipArray3DCreate.pAllocateArray != NULL) {
+			printf("\tconst HIP_ARRAY3D_DESCRIPTOR * pAllocateArray = %p", args->pAllocateArray);
+			if (args->pAllocateArray != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t Width = %lu\n", args->hipArray3DCreate.pAllocateArray__ref.val.Width);
-				printf("\t\tsize_t Height = %lu\n", args->hipArray3DCreate.pAllocateArray__ref.val.Height);
-				printf("\t\tsize_t Depth = %lu\n", args->hipArray3DCreate.pAllocateArray__ref.val.Depth);
-				printf("\t\tenum hipArray_Format Format = %d\n", args->hipArray3DCreate.pAllocateArray__ref.val.Format);
-				printf("\t\tunsigned int NumChannels = %u\n", args->hipArray3DCreate.pAllocateArray__ref.val.NumChannels);
-				printf("\t\tunsigned int Flags = %u\n", args->hipArray3DCreate.pAllocateArray__ref.val.Flags);
+				printf("\t\tsize_t Width = %lu\n", args->pAllocateArray__ref.val.Width);
+				printf("\t\tsize_t Height = %lu\n", args->pAllocateArray__ref.val.Height);
+				printf("\t\tsize_t Depth = %lu\n", args->pAllocateArray__ref.val.Depth);
+				printf("\t\tenum hipArray_Format Format = %d\n", args->pAllocateArray__ref.val.Format);
+				printf("\t\tunsigned int NumChannels = %u\n", args->pAllocateArray__ref.val.NumChannels);
+				printf("\t\tunsigned int Flags = %u\n", args->pAllocateArray__ref.val.Flags);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipArray3DCreate.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipIpcOpenMemHandle
-		case HIP_API_ID_hipIpcOpenMemHandle :
+		case HIP_API_ID_hipIpcOpenMemHandle : {
 			//	void ** devPtr (void **);
 			//	hipIpcMemHandle_t handle ({
 			//		char[64] reserved (char[64]);
 			//	});
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** devPtr = %p", args->hipIpcOpenMemHandle.devPtr);
-			if (args->hipIpcOpenMemHandle.devPtr != NULL) {
-				printf("-> %p", args->hipIpcOpenMemHandle.devPtr__ref.ptr1);
+			args_hipIpcOpenMemHandle_t* args = (args_hipIpcOpenMemHandle_t*) func_args;
+			printf("\tvoid ** devPtr = %p", args->devPtr);
+			if (args->devPtr != NULL) {
+				printf("-> %p", args->devPtr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
 			printf("\thipIpcMemHandle_t handle = {\n");
-			printf("\t\tchar[64] reserved = %c\n", args->hipIpcOpenMemHandle.handle.reserved[0]);
+			printf("\t\tchar[64] reserved = %c\n", args->handle.reserved[0]);
 			printf("\t}\n");
-			printf("\tunsigned int flags = %u\n", args->hipIpcOpenMemHandle.flags);
-			printf("\thipError_t retval = %d\n", args->hipIpcOpenMemHandle.retval);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolTrimTo
-		case HIP_API_ID_hipMemPoolTrimTo :
+		case HIP_API_ID_hipMemPoolTrimTo : {
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	size_t min_bytes_to_hold (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemPool_t mem_pool = %p", args->hipMemPoolTrimTo.mem_pool);
+			args_hipMemPoolTrimTo_t* args = (args_hipMemPoolTrimTo_t*) func_args;
+			printf("\thipMemPool_t mem_pool = %p", args->mem_pool);
 			printf("\n");
-			printf("\tsize_t min_bytes_to_hold = %lu\n", args->hipMemPoolTrimTo.min_bytes_to_hold);
-			printf("\thipError_t retval = %d\n", args->hipMemPoolTrimTo.retval);
+			printf("\tsize_t min_bytes_to_hold = %lu\n", args->min_bytes_to_hold);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2D
-		case HIP_API_ID_hipMemcpy2D :
+		case HIP_API_ID_hipMemcpy2D : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	const void * src (const void *);
@@ -10484,38 +11322,42 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemcpy2D.dst);
+			args_hipMemcpy2D_t* args = (args_hipMemcpy2D_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t dpitch = %lu\n", args->hipMemcpy2D.dpitch);
-			printf("\tconst void * src = %p", args->hipMemcpy2D.src);
+			printf("\tsize_t dpitch = %lu\n", args->dpitch);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t spitch = %lu\n", args->hipMemcpy2D.spitch);
-			printf("\tsize_t width = %lu\n", args->hipMemcpy2D.width);
-			printf("\tsize_t height = %lu\n", args->hipMemcpy2D.height);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpy2D.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpy2D.retval);
+			printf("\tsize_t spitch = %lu\n", args->spitch);
+			printf("\tsize_t width = %lu\n", args->width);
+			printf("\tsize_t height = %lu\n", args->height);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFuncGetAttribute
-		case HIP_API_ID_hipFuncGetAttribute :
+		case HIP_API_ID_hipFuncGetAttribute : {
 			//	int * value (int *);
 			//	hipFunction_attribute attrib (enum hipFunction_attribute);
 			//	hipFunction_t hfunc (struct ihipModuleSymbol_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * value = %p", args->hipFuncGetAttribute.value);
-			if (args->hipFuncGetAttribute.value != NULL) {
-				printf(" -> %d\n", args->hipFuncGetAttribute.value__ref.val);
+			args_hipFuncGetAttribute_t* args = (args_hipFuncGetAttribute_t*) func_args;
+			printf("\tint * value = %p", args->value);
+			if (args->value != NULL) {
+				printf(" -> %d\n", args->value__ref.val);
 			} else { printf("\n"); };
-			printf("\thipFunction_attribute attrib = %d\n", args->hipFuncGetAttribute.attrib);
-			printf("\thipFunction_t hfunc = %p", args->hipFuncGetAttribute.hfunc);
+			printf("\thipFunction_attribute attrib = %d\n", args->attrib);
+			printf("\thipFunction_t hfunc = %p", args->hfunc);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipFuncGetAttribute.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipBindTextureToMipmappedArray
-		case HIP_API_ID_hipBindTextureToMipmappedArray :
+		case HIP_API_ID_hipBindTextureToMipmappedArray : {
 			//	const textureReference * tex ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -10565,84 +11407,88 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipChannelFormatKind f (enum hipChannelFormatKind);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst textureReference * tex = %p", args->hipBindTextureToMipmappedArray.tex);
-			if (args->hipBindTextureToMipmappedArray.tex != NULL) {
+			args_hipBindTextureToMipmappedArray_t* args = (args_hipBindTextureToMipmappedArray_t*) func_args;
+			printf("\tconst textureReference * tex = %p", args->tex);
+			if (args->tex != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipBindTextureToMipmappedArray.tex__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipBindTextureToMipmappedArray.tex__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipBindTextureToMipmappedArray.tex__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipBindTextureToMipmappedArray.tex__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->tex__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->tex__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->tex__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->tex__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipBindTextureToMipmappedArray.tex__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipBindTextureToMipmappedArray.tex__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipBindTextureToMipmappedArray.tex__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipBindTextureToMipmappedArray.tex__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipBindTextureToMipmappedArray.tex__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->tex__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->tex__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->tex__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->tex__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->tex__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipBindTextureToMipmappedArray.tex__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipBindTextureToMipmappedArray.tex__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipBindTextureToMipmappedArray.tex__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipBindTextureToMipmappedArray.tex__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipBindTextureToMipmappedArray.tex__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipBindTextureToMipmappedArray.tex__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipBindTextureToMipmappedArray.tex__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipBindTextureToMipmappedArray.tex__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->tex__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->tex__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->tex__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->tex__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->tex__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->tex__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->tex__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->tex__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipMipmappedArray_const_t mipmappedArray = %p", args->hipBindTextureToMipmappedArray.mipmappedArray);
-			if (args->hipBindTextureToMipmappedArray.mipmappedArray != NULL) {
+			printf("\thipMipmappedArray_const_t mipmappedArray = %p", args->mipmappedArray);
+			if (args->mipmappedArray != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct hipChannelFormatDesc desc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipBindTextureToMipmappedArray.mipmappedArray__ref.val.desc.x);
-				printf("\t\t\tint y = %d\n", args->hipBindTextureToMipmappedArray.mipmappedArray__ref.val.desc.y);
-				printf("\t\t\tint z = %d\n", args->hipBindTextureToMipmappedArray.mipmappedArray__ref.val.desc.z);
-				printf("\t\t\tint w = %d\n", args->hipBindTextureToMipmappedArray.mipmappedArray__ref.val.desc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipBindTextureToMipmappedArray.mipmappedArray__ref.val.desc.f);
+				printf("\t\t\tint x = %d\n", args->mipmappedArray__ref.val.desc.x);
+				printf("\t\t\tint y = %d\n", args->mipmappedArray__ref.val.desc.y);
+				printf("\t\t\tint z = %d\n", args->mipmappedArray__ref.val.desc.z);
+				printf("\t\t\tint w = %d\n", args->mipmappedArray__ref.val.desc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->mipmappedArray__ref.val.desc.f);
 				printf("\t\t}\n");
-				printf("\t\tunsigned int type = %u\n", args->hipBindTextureToMipmappedArray.mipmappedArray__ref.val.type);
-				printf("\t\tunsigned int width = %u\n", args->hipBindTextureToMipmappedArray.mipmappedArray__ref.val.width);
-				printf("\t\tunsigned int height = %u\n", args->hipBindTextureToMipmappedArray.mipmappedArray__ref.val.height);
-				printf("\t\tunsigned int depth = %u\n", args->hipBindTextureToMipmappedArray.mipmappedArray__ref.val.depth);
-				printf("\t\tunsigned int min_mipmap_level = %u\n", args->hipBindTextureToMipmappedArray.mipmappedArray__ref.val.min_mipmap_level);
-				printf("\t\tunsigned int max_mipmap_level = %u\n", args->hipBindTextureToMipmappedArray.mipmappedArray__ref.val.max_mipmap_level);
-				printf("\t\tunsigned int flags = %u\n", args->hipBindTextureToMipmappedArray.mipmappedArray__ref.val.flags);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipBindTextureToMipmappedArray.mipmappedArray__ref.val.format);
-				printf("\t\tunsigned int num_channels = %u\n", args->hipBindTextureToMipmappedArray.mipmappedArray__ref.val.num_channels);
+				printf("\t\tunsigned int type = %u\n", args->mipmappedArray__ref.val.type);
+				printf("\t\tunsigned int width = %u\n", args->mipmappedArray__ref.val.width);
+				printf("\t\tunsigned int height = %u\n", args->mipmappedArray__ref.val.height);
+				printf("\t\tunsigned int depth = %u\n", args->mipmappedArray__ref.val.depth);
+				printf("\t\tunsigned int min_mipmap_level = %u\n", args->mipmappedArray__ref.val.min_mipmap_level);
+				printf("\t\tunsigned int max_mipmap_level = %u\n", args->mipmappedArray__ref.val.max_mipmap_level);
+				printf("\t\tunsigned int flags = %u\n", args->mipmappedArray__ref.val.flags);
+				printf("\t\tenum hipArray_Format format = %d\n", args->mipmappedArray__ref.val.format);
+				printf("\t\tunsigned int num_channels = %u\n", args->mipmappedArray__ref.val.num_channels);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tconst hipChannelFormatDesc * desc = %p", args->hipBindTextureToMipmappedArray.desc);
-			if (args->hipBindTextureToMipmappedArray.desc != NULL) {
+			printf("\tconst hipChannelFormatDesc * desc = %p", args->desc);
+			if (args->desc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint x = %d\n", args->hipBindTextureToMipmappedArray.desc__ref.val.x);
-				printf("\t\tint y = %d\n", args->hipBindTextureToMipmappedArray.desc__ref.val.y);
-				printf("\t\tint z = %d\n", args->hipBindTextureToMipmappedArray.desc__ref.val.z);
-				printf("\t\tint w = %d\n", args->hipBindTextureToMipmappedArray.desc__ref.val.w);
-				printf("\t\tenum hipChannelFormatKind f = %d\n", args->hipBindTextureToMipmappedArray.desc__ref.val.f);
+				printf("\t\tint x = %d\n", args->desc__ref.val.x);
+				printf("\t\tint y = %d\n", args->desc__ref.val.y);
+				printf("\t\tint z = %d\n", args->desc__ref.val.z);
+				printf("\t\tint w = %d\n", args->desc__ref.val.w);
+				printf("\t\tenum hipChannelFormatKind f = %d\n", args->desc__ref.val.f);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipBindTextureToMipmappedArray.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphicsMapResources
-		case HIP_API_ID_hipGraphicsMapResources :
+		case HIP_API_ID_hipGraphicsMapResources : {
 			//	int count (int);
 			//	hipGraphicsResource_t * resources (struct _hipGraphicsResource**);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint count = %d\n", args->hipGraphicsMapResources.count);
-			printf("\thipGraphicsResource_t * resources = %p", args->hipGraphicsMapResources.resources);
-			if (args->hipGraphicsMapResources.resources != NULL) {
-				printf(" -> %p\n", args->hipGraphicsMapResources.resources__ref.val);
+			args_hipGraphicsMapResources_t* args = (args_hipGraphicsMapResources_t*) func_args;
+			printf("\tint count = %d\n", args->count);
+			printf("\thipGraphicsResource_t * resources = %p", args->resources);
+			if (args->resources != NULL) {
+				printf(" -> %p\n", args->resources__ref.val);
 			} else { printf("\n"); };
-			printf("\thipStream_t stream = %p", args->hipGraphicsMapResources.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGraphicsMapResources.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipArrayCreate
-		case HIP_API_ID_hipArrayCreate :
+		case HIP_API_ID_hipArrayCreate : {
 			//	hipArray_t * pHandle (struct hipArray **);
 			//	const HIP_ARRAY_DESCRIPTOR * pAllocateArray ({
 			//		size_t Width (unsigned long);
@@ -10651,25 +11497,27 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		unsigned int NumChannels (unsigned int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t * pHandle = %p", args->hipArrayCreate.pHandle);
-			if (args->hipArrayCreate.pHandle != NULL) {
-				printf(" -> %p\n", args->hipArrayCreate.pHandle__ref.val);
+			args_hipArrayCreate_t* args = (args_hipArrayCreate_t*) func_args;
+			printf("\thipArray_t * pHandle = %p", args->pHandle);
+			if (args->pHandle != NULL) {
+				printf(" -> %p\n", args->pHandle__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst HIP_ARRAY_DESCRIPTOR * pAllocateArray = %p", args->hipArrayCreate.pAllocateArray);
-			if (args->hipArrayCreate.pAllocateArray != NULL) {
+			printf("\tconst HIP_ARRAY_DESCRIPTOR * pAllocateArray = %p", args->pAllocateArray);
+			if (args->pAllocateArray != NULL) {
 				printf(" -> {\n");
-				printf("\t\tsize_t Width = %lu\n", args->hipArrayCreate.pAllocateArray__ref.val.Width);
-				printf("\t\tsize_t Height = %lu\n", args->hipArrayCreate.pAllocateArray__ref.val.Height);
-				printf("\t\tenum hipArray_Format Format = %d\n", args->hipArrayCreate.pAllocateArray__ref.val.Format);
-				printf("\t\tunsigned int NumChannels = %u\n", args->hipArrayCreate.pAllocateArray__ref.val.NumChannels);
+				printf("\t\tsize_t Width = %lu\n", args->pAllocateArray__ref.val.Width);
+				printf("\t\tsize_t Height = %lu\n", args->pAllocateArray__ref.val.Height);
+				printf("\t\tenum hipArray_Format Format = %d\n", args->pAllocateArray__ref.val.Format);
+				printf("\t\tunsigned int NumChannels = %u\n", args->pAllocateArray__ref.val.NumChannels);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipArrayCreate.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetMaxAnisotropy
-		case HIP_API_ID_hipTexRefSetMaxAnisotropy :
+		case HIP_API_ID_hipTexRefSetMaxAnisotropy : {
 			//	textureReference * texRef ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -10694,37 +11542,39 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	unsigned int maxAniso (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\ttextureReference * texRef = %p", args->hipTexRefSetMaxAnisotropy.texRef);
-			if (args->hipTexRefSetMaxAnisotropy.texRef != NULL) {
+			args_hipTexRefSetMaxAnisotropy_t* args = (args_hipTexRefSetMaxAnisotropy_t*) func_args;
+			printf("\ttextureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefSetMaxAnisotropy.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tunsigned int maxAniso = %u\n", args->hipTexRefSetMaxAnisotropy.maxAniso);
-			printf("\thipError_t retval = %d\n", args->hipTexRefSetMaxAnisotropy.retval);
+			printf("\tunsigned int maxAniso = %u\n", args->maxAniso);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphKernelNodeGetAttribute
-		case HIP_API_ID_hipGraphKernelNodeGetAttribute :
+		case HIP_API_ID_hipGraphKernelNodeGetAttribute : {
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipLaunchAttributeID attr (enum hipLaunchAttributeID);
 			//	hipLaunchAttributeValue * value ({
@@ -10739,28 +11589,30 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		int priority (int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t hNode = %p", args->hipGraphKernelNodeGetAttribute.hNode);
+			args_hipGraphKernelNodeGetAttribute_t* args = (args_hipGraphKernelNodeGetAttribute_t*) func_args;
+			printf("\thipGraphNode_t hNode = %p", args->hNode);
 			printf("\n");
-			printf("\thipLaunchAttributeID attr = %d\n", args->hipGraphKernelNodeGetAttribute.attr);
-			printf("\thipLaunchAttributeValue * value = %p", args->hipGraphKernelNodeGetAttribute.value);
-			if (args->hipGraphKernelNodeGetAttribute.value != NULL) {
+			printf("\thipLaunchAttributeID attr = %d\n", args->attr);
+			printf("\thipLaunchAttributeValue * value = %p", args->value);
+			if (args->value != NULL) {
 				printf(" -> {\n");
 				printf("\t\thipAccessPolicyWindow accessPolicyWindow = {\n");
-				printf("\t\t\thipAccessProperty hitProp = %d\n", args->hipGraphKernelNodeGetAttribute.value__ref.val.accessPolicyWindow.hitProp);
-				printf("\t\t\tfloat hitRatio = %f\n", args->hipGraphKernelNodeGetAttribute.value__ref.val.accessPolicyWindow.hitRatio);
-				printf("\t\t\thipAccessProperty missProp = %d\n", args->hipGraphKernelNodeGetAttribute.value__ref.val.accessPolicyWindow.missProp);
-				printf("\t\t\tsize_t num_bytes = %lu\n", args->hipGraphKernelNodeGetAttribute.value__ref.val.accessPolicyWindow.num_bytes);
+				printf("\t\t\thipAccessProperty hitProp = %d\n", args->value__ref.val.accessPolicyWindow.hitProp);
+				printf("\t\t\tfloat hitRatio = %f\n", args->value__ref.val.accessPolicyWindow.hitRatio);
+				printf("\t\t\thipAccessProperty missProp = %d\n", args->value__ref.val.accessPolicyWindow.missProp);
+				printf("\t\t\tsize_t num_bytes = %lu\n", args->value__ref.val.accessPolicyWindow.num_bytes);
 				printf("\t\t}\n");
-				printf("\t\tint cooperative = %d\n", args->hipGraphKernelNodeGetAttribute.value__ref.val.cooperative);
-				printf("\t\tint priority = %d\n", args->hipGraphKernelNodeGetAttribute.value__ref.val.priority);
+				printf("\t\tint cooperative = %d\n", args->value__ref.val.cooperative);
+				printf("\t\tint priority = %d\n", args->value__ref.val.priority);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphKernelNodeGetAttribute.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExtLaunchKernel
-		case HIP_API_ID_hipExtLaunchKernel :
+		case HIP_API_ID_hipExtLaunchKernel : {
 			//	const void * function_address (const void *);
 			//	dim3 numBlocks ({
 			//		uint32_t x (unsigned int);
@@ -10779,37 +11631,39 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipEvent_t stopEvent (struct ihipEvent_t *);
 			//	int flags (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * function_address = %p", args->hipExtLaunchKernel.function_address);
+			args_hipExtLaunchKernel_t* args = (args_hipExtLaunchKernel_t*) func_args;
+			printf("\tconst void * function_address = %p", args->function_address);
 			printf("\n");
 			printf("\tdim3 numBlocks = {\n");
-			printf("\t\tuint32_t x = %u\n", args->hipExtLaunchKernel.numBlocks.x);
-			printf("\t\tuint32_t y = %u\n", args->hipExtLaunchKernel.numBlocks.y);
-			printf("\t\tuint32_t z = %u\n", args->hipExtLaunchKernel.numBlocks.z);
+			printf("\t\tuint32_t x = %u\n", args->numBlocks.x);
+			printf("\t\tuint32_t y = %u\n", args->numBlocks.y);
+			printf("\t\tuint32_t z = %u\n", args->numBlocks.z);
 			printf("\t}\n");
 			printf("\tdim3 dimBlocks = {\n");
-			printf("\t\tuint32_t x = %u\n", args->hipExtLaunchKernel.dimBlocks.x);
-			printf("\t\tuint32_t y = %u\n", args->hipExtLaunchKernel.dimBlocks.y);
-			printf("\t\tuint32_t z = %u\n", args->hipExtLaunchKernel.dimBlocks.z);
+			printf("\t\tuint32_t x = %u\n", args->dimBlocks.x);
+			printf("\t\tuint32_t y = %u\n", args->dimBlocks.y);
+			printf("\t\tuint32_t z = %u\n", args->dimBlocks.z);
 			printf("\t}\n");
-			printf("\tvoid ** args = %p", args->hipExtLaunchKernel.args);
-			if (args->hipExtLaunchKernel.args != NULL) {
-				printf("-> %p", args->hipExtLaunchKernel.args__ref.ptr1);
+			printf("\tvoid ** args = %p", args->args);
+			if (args->args != NULL) {
+				printf("-> %p", args->args__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t sharedMemBytes = %lu\n", args->hipExtLaunchKernel.sharedMemBytes);
-			printf("\thipStream_t stream = %p", args->hipExtLaunchKernel.stream);
+			printf("\tsize_t sharedMemBytes = %lu\n", args->sharedMemBytes);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipEvent_t startEvent = %p", args->hipExtLaunchKernel.startEvent);
+			printf("\thipEvent_t startEvent = %p", args->startEvent);
 			printf("\n");
-			printf("\thipEvent_t stopEvent = %p", args->hipExtLaunchKernel.stopEvent);
+			printf("\thipEvent_t stopEvent = %p", args->stopEvent);
 			printf("\n");
-			printf("\tint flags = %d\n", args->hipExtLaunchKernel.flags);
-			printf("\thipError_t retval = %d\n", args->hipExtLaunchKernel.retval);
+			printf("\tint flags = %d\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetMipmapFilterMode
-		case HIP_API_ID_hipTexRefSetMipmapFilterMode :
+		case HIP_API_ID_hipTexRefSetMipmapFilterMode : {
 			//	textureReference * texRef ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -10834,54 +11688,58 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	enum hipTextureFilterMode fm (enum hipTextureFilterMode);
 			//	hipError_t retval (enum hipError_t);
-			printf("\ttextureReference * texRef = %p", args->hipTexRefSetMipmapFilterMode.texRef);
-			if (args->hipTexRefSetMipmapFilterMode.texRef != NULL) {
+			args_hipTexRefSetMipmapFilterMode_t* args = (args_hipTexRefSetMipmapFilterMode_t*) func_args;
+			printf("\ttextureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefSetMipmapFilterMode.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tenum hipTextureFilterMode fm = %d\n", args->hipTexRefSetMipmapFilterMode.fm);
-			printf("\thipError_t retval = %d\n", args->hipTexRefSetMipmapFilterMode.retval);
+			printf("\tenum hipTextureFilterMode fm = %d\n", args->fm);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemImportFromShareableHandle
-		case HIP_API_ID_hipMemImportFromShareableHandle :
+		case HIP_API_ID_hipMemImportFromShareableHandle : {
 			//	hipMemGenericAllocationHandle_t * handle (struct ihipMemGenericAllocationHandle **);
 			//	void * osHandle (void *);
 			//	hipMemAllocationHandleType shHandleType (enum hipMemAllocationHandleType);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMemGenericAllocationHandle_t * handle = %p", args->hipMemImportFromShareableHandle.handle);
-			if (args->hipMemImportFromShareableHandle.handle != NULL) {
-				printf(" -> %p\n", args->hipMemImportFromShareableHandle.handle__ref.val);
+			args_hipMemImportFromShareableHandle_t* args = (args_hipMemImportFromShareableHandle_t*) func_args;
+			printf("\thipMemGenericAllocationHandle_t * handle = %p", args->handle);
+			if (args->handle != NULL) {
+				printf(" -> %p\n", args->handle__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid * osHandle = %p", args->hipMemImportFromShareableHandle.osHandle);
+			printf("\tvoid * osHandle = %p", args->osHandle);
 			printf("\n");
-			printf("\thipMemAllocationHandleType shHandleType = %d\n", args->hipMemImportFromShareableHandle.shHandleType);
-			printf("\thipError_t retval = %d\n", args->hipMemImportFromShareableHandle.retval);
+			printf("\thipMemAllocationHandleType shHandleType = %d\n", args->shHandleType);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetFormat
-		case HIP_API_ID_hipTexRefSetFormat :
+		case HIP_API_ID_hipTexRefSetFormat : {
 			//	textureReference * texRef ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -10907,65 +11765,73 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipArray_Format fmt (enum hipArray_Format);
 			//	int NumPackedComponents (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\ttextureReference * texRef = %p", args->hipTexRefSetFormat.texRef);
-			if (args->hipTexRefSetFormat.texRef != NULL) {
+			args_hipTexRefSetFormat_t* args = (args_hipTexRefSetFormat_t*) func_args;
+			printf("\ttextureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefSetFormat.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefSetFormat.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefSetFormat.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefSetFormat.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefSetFormat.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefSetFormat.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefSetFormat.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefSetFormat.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefSetFormat.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefSetFormat.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefSetFormat.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefSetFormat.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefSetFormat.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefSetFormat.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefSetFormat.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefSetFormat.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefSetFormat.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipArray_Format fmt = %d\n", args->hipTexRefSetFormat.fmt);
-			printf("\tint NumPackedComponents = %d\n", args->hipTexRefSetFormat.NumPackedComponents);
-			printf("\thipError_t retval = %d\n", args->hipTexRefSetFormat.retval);
+			printf("\thipArray_Format fmt = %d\n", args->fmt);
+			printf("\tint NumPackedComponents = %d\n", args->NumPackedComponents);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_amd_dbgapi_get_git_hash
-		case HIP_API_ID_amd_dbgapi_get_git_hash :
+		case HIP_API_ID_amd_dbgapi_get_git_hash : {
 			//	const char * retval (const char *);
-			printf("\tconst char * retval = %p", args->amd_dbgapi_get_git_hash.retval);
-			if (args->amd_dbgapi_get_git_hash.retval != NULL) {
-				printf(" -> %s\n", args->amd_dbgapi_get_git_hash.retval__ref.val);
+			args_amd_dbgapi_get_git_hash_t* args = (args_amd_dbgapi_get_git_hash_t*) func_args;
+			printf("\tconst char * retval = %p", args->retval);
+			if (args->retval != NULL) {
+				printf(" -> %s\n", args->retval__ref.val);
 			} else { printf("\n"); };
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchByPtr
-		case HIP_API_ID_hipLaunchByPtr :
+		case HIP_API_ID_hipLaunchByPtr : {
 			//	const void * func (const void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * func = %p", args->hipLaunchByPtr.func);
+			args_hipLaunchByPtr_t* args = (args_hipLaunchByPtr_t*) func_args;
+			printf("\tconst void * func = %p", args->func);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipLaunchByPtr.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_amd_dbgapi_get_build_id
-		case HIP_API_ID_amd_dbgapi_get_build_id :
+		case HIP_API_ID_amd_dbgapi_get_build_id : {
 			//	size_t retval (unsigned long);
-			printf("\tsize_t retval = %lu\n", args->amd_dbgapi_get_build_id.retval);
+			args_amd_dbgapi_get_build_id_t* args = (args_amd_dbgapi_get_build_id_t*) func_args;
+			printf("\tsize_t retval = %lu\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy3DAsync
-		case HIP_API_ID_hipMemcpy3DAsync :
+		case HIP_API_ID_hipMemcpy3DAsync : {
 			//	const struct hipMemcpy3DParms * p ({
 			//		hipArray_t srcArray (struct hipArray *);
 			//		struct hipPos srcPos ({
@@ -11000,45 +11866,47 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst struct hipMemcpy3DParms * p = %p", args->hipMemcpy3DAsync.p);
-			if (args->hipMemcpy3DAsync.p != NULL) {
+			args_hipMemcpy3DAsync_t* args = (args_hipMemcpy3DAsync_t*) func_args;
+			printf("\tconst struct hipMemcpy3DParms * p = %p", args->p);
+			if (args->p != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct hipPos srcPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipMemcpy3DAsync.p__ref.val.srcPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipMemcpy3DAsync.p__ref.val.srcPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipMemcpy3DAsync.p__ref.val.srcPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->p__ref.val.srcPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->p__ref.val.srcPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->p__ref.val.srcPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr srcPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipMemcpy3DAsync.p__ref.val.srcPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipMemcpy3DAsync.p__ref.val.srcPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipMemcpy3DAsync.p__ref.val.srcPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->p__ref.val.srcPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->p__ref.val.srcPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->p__ref.val.srcPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPos dstPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipMemcpy3DAsync.p__ref.val.dstPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipMemcpy3DAsync.p__ref.val.dstPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipMemcpy3DAsync.p__ref.val.dstPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->p__ref.val.dstPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->p__ref.val.dstPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->p__ref.val.dstPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr dstPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipMemcpy3DAsync.p__ref.val.dstPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipMemcpy3DAsync.p__ref.val.dstPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipMemcpy3DAsync.p__ref.val.dstPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->p__ref.val.dstPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->p__ref.val.dstPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->p__ref.val.dstPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipExtent extent = {\n");
-				printf("\t\t\tsize_t width = %lu\n", args->hipMemcpy3DAsync.p__ref.val.extent.width);
-				printf("\t\t\tsize_t height = %lu\n", args->hipMemcpy3DAsync.p__ref.val.extent.height);
-				printf("\t\t\tsize_t depth = %lu\n", args->hipMemcpy3DAsync.p__ref.val.extent.depth);
+				printf("\t\t\tsize_t width = %lu\n", args->p__ref.val.extent.width);
+				printf("\t\t\tsize_t height = %lu\n", args->p__ref.val.extent.height);
+				printf("\t\t\tsize_t depth = %lu\n", args->p__ref.val.extent.depth);
 				printf("\t\t}\n");
-				printf("\t\tenum hipMemcpyKind kind = %d\n", args->hipMemcpy3DAsync.p__ref.val.kind);
+				printf("\t\tenum hipMemcpyKind kind = %d\n", args->p__ref.val.kind);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipStream_t stream = %p", args->hipMemcpy3DAsync.stream);
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemcpy3DAsync.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetTextureObjectResourceViewDesc
-		case HIP_API_ID_hipGetTextureObjectResourceViewDesc :
+		case HIP_API_ID_hipGetTextureObjectResourceViewDesc : {
 			//	struct hipResourceViewDesc * pResViewDesc ({
 			//		enum hipResourceViewFormat format (enum hipResourceViewFormat);
 			//		size_t width (unsigned long);
@@ -11051,27 +11919,29 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipTextureObject_t textureObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tstruct hipResourceViewDesc * pResViewDesc = %p", args->hipGetTextureObjectResourceViewDesc.pResViewDesc);
-			if (args->hipGetTextureObjectResourceViewDesc.pResViewDesc != NULL) {
+			args_hipGetTextureObjectResourceViewDesc_t* args = (args_hipGetTextureObjectResourceViewDesc_t*) func_args;
+			printf("\tstruct hipResourceViewDesc * pResViewDesc = %p", args->pResViewDesc);
+			if (args->pResViewDesc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tenum hipResourceViewFormat format = %d\n", args->hipGetTextureObjectResourceViewDesc.pResViewDesc__ref.val.format);
-				printf("\t\tsize_t width = %lu\n", args->hipGetTextureObjectResourceViewDesc.pResViewDesc__ref.val.width);
-				printf("\t\tsize_t height = %lu\n", args->hipGetTextureObjectResourceViewDesc.pResViewDesc__ref.val.height);
-				printf("\t\tsize_t depth = %lu\n", args->hipGetTextureObjectResourceViewDesc.pResViewDesc__ref.val.depth);
-				printf("\t\tunsigned int firstMipmapLevel = %u\n", args->hipGetTextureObjectResourceViewDesc.pResViewDesc__ref.val.firstMipmapLevel);
-				printf("\t\tunsigned int lastMipmapLevel = %u\n", args->hipGetTextureObjectResourceViewDesc.pResViewDesc__ref.val.lastMipmapLevel);
-				printf("\t\tunsigned int firstLayer = %u\n", args->hipGetTextureObjectResourceViewDesc.pResViewDesc__ref.val.firstLayer);
-				printf("\t\tunsigned int lastLayer = %u\n", args->hipGetTextureObjectResourceViewDesc.pResViewDesc__ref.val.lastLayer);
+				printf("\t\tenum hipResourceViewFormat format = %d\n", args->pResViewDesc__ref.val.format);
+				printf("\t\tsize_t width = %lu\n", args->pResViewDesc__ref.val.width);
+				printf("\t\tsize_t height = %lu\n", args->pResViewDesc__ref.val.height);
+				printf("\t\tsize_t depth = %lu\n", args->pResViewDesc__ref.val.depth);
+				printf("\t\tunsigned int firstMipmapLevel = %u\n", args->pResViewDesc__ref.val.firstMipmapLevel);
+				printf("\t\tunsigned int lastMipmapLevel = %u\n", args->pResViewDesc__ref.val.lastMipmapLevel);
+				printf("\t\tunsigned int firstLayer = %u\n", args->pResViewDesc__ref.val.firstLayer);
+				printf("\t\tunsigned int lastLayer = %u\n", args->pResViewDesc__ref.val.lastLayer);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipTextureObject_t textureObject = %p", args->hipGetTextureObjectResourceViewDesc.textureObject);
+			printf("\thipTextureObject_t textureObject = %p", args->textureObject);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipGetTextureObjectResourceViewDesc.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetFilterMode
-		case HIP_API_ID_hipTexRefSetFilterMode :
+		case HIP_API_ID_hipTexRefSetFilterMode : {
 			//	textureReference * texRef ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -11096,66 +11966,72 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	enum hipTextureFilterMode fm (enum hipTextureFilterMode);
 			//	hipError_t retval (enum hipError_t);
-			printf("\ttextureReference * texRef = %p", args->hipTexRefSetFilterMode.texRef);
-			if (args->hipTexRefSetFilterMode.texRef != NULL) {
+			args_hipTexRefSetFilterMode_t* args = (args_hipTexRefSetFilterMode_t*) func_args;
+			printf("\ttextureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefSetFilterMode.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefSetFilterMode.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefSetFilterMode.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefSetFilterMode.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefSetFilterMode.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefSetFilterMode.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefSetFilterMode.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefSetFilterMode.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefSetFilterMode.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefSetFilterMode.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefSetFilterMode.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefSetFilterMode.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefSetFilterMode.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefSetFilterMode.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefSetFilterMode.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefSetFilterMode.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefSetFilterMode.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tenum hipTextureFilterMode fm = %d\n", args->hipTexRefSetFilterMode.fm);
-			printf("\thipError_t retval = %d\n", args->hipTexRefSetFilterMode.retval);
+			printf("\tenum hipTextureFilterMode fm = %d\n", args->fm);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDriverGetVersion
-		case HIP_API_ID_hipDriverGetVersion :
+		case HIP_API_ID_hipDriverGetVersion : {
 			//	int * driverVersion (int *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * driverVersion = %p", args->hipDriverGetVersion.driverVersion);
-			if (args->hipDriverGetVersion.driverVersion != NULL) {
-				printf(" -> %d\n", args->hipDriverGetVersion.driverVersion__ref.val);
+			args_hipDriverGetVersion_t* args = (args_hipDriverGetVersion_t*) func_args;
+			printf("\tint * driverVersion = %p", args->driverVersion);
+			if (args->driverVersion != NULL) {
+				printf(" -> %d\n", args->driverVersion__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipDriverGetVersion.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamWriteValue64
-		case HIP_API_ID_hipStreamWriteValue64 :
+		case HIP_API_ID_hipStreamWriteValue64 : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
 			//	uint64_t value (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipStream_t stream = %p", args->hipStreamWriteValue64.stream);
+			args_hipStreamWriteValue64_t* args = (args_hipStreamWriteValue64_t*) func_args;
+			printf("\thipStream_t stream = %p", args->stream);
 			printf("\n");
-			printf("\tvoid * ptr = %p", args->hipStreamWriteValue64.ptr);
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tuint64_t value = %lu\n", args->hipStreamWriteValue64.value);
-			printf("\tunsigned int flags = %u\n", args->hipStreamWriteValue64.flags);
-			printf("\thipError_t retval = %d\n", args->hipStreamWriteValue64.retval);
+			printf("\tuint64_t value = %lu\n", args->value);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMallocMipmappedArray
-		case HIP_API_ID_hipMallocMipmappedArray :
+		case HIP_API_ID_hipMallocMipmappedArray : {
 			//	hipMipmappedArray_t * mipmappedArray ({
 			//		void * data (void *);
 			//		struct hipChannelFormatDesc desc ({
@@ -11190,67 +12066,71 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	unsigned int numLevels (unsigned int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipMipmappedArray_t * mipmappedArray = %p", args->hipMallocMipmappedArray.mipmappedArray);
-			if (args->hipMallocMipmappedArray.mipmappedArray != NULL) {
-				printf("-> %p", args->hipMallocMipmappedArray.mipmappedArray__ref.ptr1);
-				if (args->hipMallocMipmappedArray.mipmappedArray__ref.ptr1 != NULL) {
+			args_hipMallocMipmappedArray_t* args = (args_hipMallocMipmappedArray_t*) func_args;
+			printf("\thipMipmappedArray_t * mipmappedArray = %p", args->mipmappedArray);
+			if (args->mipmappedArray != NULL) {
+				printf("-> %p", args->mipmappedArray__ref.ptr1);
+				if (args->mipmappedArray__ref.ptr1 != NULL) {
 					printf(" -> {\n");
 					printf("\t\tstruct hipChannelFormatDesc desc = {\n");
-					printf("\t\t\tint x = %d\n", args->hipMallocMipmappedArray.mipmappedArray__ref.val.desc.x);
-					printf("\t\t\tint y = %d\n", args->hipMallocMipmappedArray.mipmappedArray__ref.val.desc.y);
-					printf("\t\t\tint z = %d\n", args->hipMallocMipmappedArray.mipmappedArray__ref.val.desc.z);
-					printf("\t\t\tint w = %d\n", args->hipMallocMipmappedArray.mipmappedArray__ref.val.desc.w);
-					printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipMallocMipmappedArray.mipmappedArray__ref.val.desc.f);
+					printf("\t\t\tint x = %d\n", args->mipmappedArray__ref.val.desc.x);
+					printf("\t\t\tint y = %d\n", args->mipmappedArray__ref.val.desc.y);
+					printf("\t\t\tint z = %d\n", args->mipmappedArray__ref.val.desc.z);
+					printf("\t\t\tint w = %d\n", args->mipmappedArray__ref.val.desc.w);
+					printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->mipmappedArray__ref.val.desc.f);
 					printf("\t\t}\n");
-					printf("\t\tunsigned int type = %u\n", args->hipMallocMipmappedArray.mipmappedArray__ref.val.type);
-					printf("\t\tunsigned int width = %u\n", args->hipMallocMipmappedArray.mipmappedArray__ref.val.width);
-					printf("\t\tunsigned int height = %u\n", args->hipMallocMipmappedArray.mipmappedArray__ref.val.height);
-					printf("\t\tunsigned int depth = %u\n", args->hipMallocMipmappedArray.mipmappedArray__ref.val.depth);
-					printf("\t\tunsigned int min_mipmap_level = %u\n", args->hipMallocMipmappedArray.mipmappedArray__ref.val.min_mipmap_level);
-					printf("\t\tunsigned int max_mipmap_level = %u\n", args->hipMallocMipmappedArray.mipmappedArray__ref.val.max_mipmap_level);
-					printf("\t\tunsigned int flags = %u\n", args->hipMallocMipmappedArray.mipmappedArray__ref.val.flags);
-					printf("\t\tenum hipArray_Format format = %d\n", args->hipMallocMipmappedArray.mipmappedArray__ref.val.format);
-					printf("\t\tunsigned int num_channels = %u\n", args->hipMallocMipmappedArray.mipmappedArray__ref.val.num_channels);
+					printf("\t\tunsigned int type = %u\n", args->mipmappedArray__ref.val.type);
+					printf("\t\tunsigned int width = %u\n", args->mipmappedArray__ref.val.width);
+					printf("\t\tunsigned int height = %u\n", args->mipmappedArray__ref.val.height);
+					printf("\t\tunsigned int depth = %u\n", args->mipmappedArray__ref.val.depth);
+					printf("\t\tunsigned int min_mipmap_level = %u\n", args->mipmappedArray__ref.val.min_mipmap_level);
+					printf("\t\tunsigned int max_mipmap_level = %u\n", args->mipmappedArray__ref.val.max_mipmap_level);
+					printf("\t\tunsigned int flags = %u\n", args->mipmappedArray__ref.val.flags);
+					printf("\t\tenum hipArray_Format format = %d\n", args->mipmappedArray__ref.val.format);
+					printf("\t\tunsigned int num_channels = %u\n", args->mipmappedArray__ref.val.num_channels);
 					printf("\t}\n");
 				} else { printf("\n"); };
 			} else { printf("\n"); };
-			printf("\tconst struct hipChannelFormatDesc * desc = %p", args->hipMallocMipmappedArray.desc);
-			if (args->hipMallocMipmappedArray.desc != NULL) {
+			printf("\tconst struct hipChannelFormatDesc * desc = %p", args->desc);
+			if (args->desc != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint x = %d\n", args->hipMallocMipmappedArray.desc__ref.val.x);
-				printf("\t\tint y = %d\n", args->hipMallocMipmappedArray.desc__ref.val.y);
-				printf("\t\tint z = %d\n", args->hipMallocMipmappedArray.desc__ref.val.z);
-				printf("\t\tint w = %d\n", args->hipMallocMipmappedArray.desc__ref.val.w);
-				printf("\t\tenum hipChannelFormatKind f = %d\n", args->hipMallocMipmappedArray.desc__ref.val.f);
+				printf("\t\tint x = %d\n", args->desc__ref.val.x);
+				printf("\t\tint y = %d\n", args->desc__ref.val.y);
+				printf("\t\tint z = %d\n", args->desc__ref.val.z);
+				printf("\t\tint w = %d\n", args->desc__ref.val.w);
+				printf("\t\tenum hipChannelFormatKind f = %d\n", args->desc__ref.val.f);
 				printf("\t}\n");
 			} else { printf("\n"); };
 			printf("\tstruct hipExtent extent = {\n");
-			printf("\t\tsize_t width = %lu\n", args->hipMallocMipmappedArray.extent.width);
-			printf("\t\tsize_t height = %lu\n", args->hipMallocMipmappedArray.extent.height);
-			printf("\t\tsize_t depth = %lu\n", args->hipMallocMipmappedArray.extent.depth);
+			printf("\t\tsize_t width = %lu\n", args->extent.width);
+			printf("\t\tsize_t height = %lu\n", args->extent.height);
+			printf("\t\tsize_t depth = %lu\n", args->extent.depth);
 			printf("\t}\n");
-			printf("\tunsigned int numLevels = %u\n", args->hipMallocMipmappedArray.numLevels);
-			printf("\tunsigned int flags = %u\n", args->hipMallocMipmappedArray.flags);
-			printf("\thipError_t retval = %d\n", args->hipMallocMipmappedArray.retval);
+			printf("\tunsigned int numLevels = %u\n", args->numLevels);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset_spt
-		case HIP_API_ID_hipMemset_spt :
+		case HIP_API_ID_hipMemset_spt : {
 			//	void * dst (void *);
 			//	int value (int);
 			//	size_t sizeBytes (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemset_spt.dst);
+			args_hipMemset_spt_t* args = (args_hipMemset_spt_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tint value = %d\n", args->hipMemset_spt.value);
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemset_spt.sizeBytes);
-			printf("\thipError_t retval = %d\n", args->hipMemset_spt.retval);
+			printf("\tint value = %d\n", args->value);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetFlags
-		case HIP_API_ID_hipTexRefSetFlags :
+		case HIP_API_ID_hipTexRefSetFlags : {
 			//	textureReference * texRef ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -11275,58 +12155,62 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	unsigned int Flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\ttextureReference * texRef = %p", args->hipTexRefSetFlags.texRef);
-			if (args->hipTexRefSetFlags.texRef != NULL) {
+			args_hipTexRefSetFlags_t* args = (args_hipTexRefSetFlags_t*) func_args;
+			printf("\ttextureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefSetFlags.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefSetFlags.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefSetFlags.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefSetFlags.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefSetFlags.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefSetFlags.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefSetFlags.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefSetFlags.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefSetFlags.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefSetFlags.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefSetFlags.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefSetFlags.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefSetFlags.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefSetFlags.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefSetFlags.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefSetFlags.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefSetFlags.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tunsigned int Flags = %u\n", args->hipTexRefSetFlags.Flags);
-			printf("\thipError_t retval = %d\n", args->hipTexRefSetFlags.retval);
+			printf("\tunsigned int Flags = %u\n", args->Flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemGetAddressRange
-		case HIP_API_ID_hipMemGetAddressRange :
+		case HIP_API_ID_hipMemGetAddressRange : {
 			//	hipDeviceptr_t * pbase (void **);
 			//	size_t * psize (unsigned long*);
 			//	hipDeviceptr_t dptr (void *);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipDeviceptr_t * pbase = %p", args->hipMemGetAddressRange.pbase);
-			if (args->hipMemGetAddressRange.pbase != NULL) {
-				printf("-> %p", args->hipMemGetAddressRange.pbase__ref.ptr1);
+			args_hipMemGetAddressRange_t* args = (args_hipMemGetAddressRange_t*) func_args;
+			printf("\thipDeviceptr_t * pbase = %p", args->pbase);
+			if (args->pbase != NULL) {
+				printf("-> %p", args->pbase__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t * psize = %p", args->hipMemGetAddressRange.psize);
-			if (args->hipMemGetAddressRange.psize != NULL) {
-				printf(" -> %lu\n", args->hipMemGetAddressRange.psize__ref.val);
+			printf("\tsize_t * psize = %p", args->psize);
+			if (args->psize != NULL) {
+				printf(" -> %lu\n", args->psize__ref.val);
 			} else { printf("\n"); };
-			printf("\thipDeviceptr_t dptr = %p", args->hipMemGetAddressRange.dptr);
+			printf("\thipDeviceptr_t dptr = %p", args->dptr);
 			printf("\n");
-			printf("\thipError_t retval = %d\n", args->hipMemGetAddressRange.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetMipmapLevelClamp
-		case HIP_API_ID_hipTexRefSetMipmapLevelClamp :
+		case HIP_API_ID_hipTexRefSetMipmapLevelClamp : {
 			//	textureReference * texRef ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -11352,38 +12236,40 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	float minMipMapLevelClamp (float);
 			//	float maxMipMapLevelClamp (float);
 			//	hipError_t retval (enum hipError_t);
-			printf("\ttextureReference * texRef = %p", args->hipTexRefSetMipmapLevelClamp.texRef);
-			if (args->hipTexRefSetMipmapLevelClamp.texRef != NULL) {
+			args_hipTexRefSetMipmapLevelClamp_t* args = (args_hipTexRefSetMipmapLevelClamp_t*) func_args;
+			printf("\ttextureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefSetMipmapLevelClamp.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tfloat minMipMapLevelClamp = %f\n", args->hipTexRefSetMipmapLevelClamp.minMipMapLevelClamp);
-			printf("\tfloat maxMipMapLevelClamp = %f\n", args->hipTexRefSetMipmapLevelClamp.maxMipMapLevelClamp);
-			printf("\thipError_t retval = %d\n", args->hipTexRefSetMipmapLevelClamp.retval);
+			printf("\tfloat minMipMapLevelClamp = %f\n", args->minMipMapLevelClamp);
+			printf("\tfloat maxMipMapLevelClamp = %f\n", args->maxMipMapLevelClamp);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemcpyNodeSetParams
-		case HIP_API_ID_hipGraphMemcpyNodeSetParams :
+		case HIP_API_ID_hipGraphMemcpyNodeSetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipMemcpy3DParms * pNodeParams ({
 			//		hipArray_t srcArray (struct hipArray *);
@@ -11418,70 +12304,74 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipMemcpyKind kind (enum hipMemcpyKind);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraphNode_t node = %p", args->hipGraphMemcpyNodeSetParams.node);
+			args_hipGraphMemcpyNodeSetParams_t* args = (args_hipGraphMemcpyNodeSetParams_t*) func_args;
+			printf("\thipGraphNode_t node = %p", args->node);
 			printf("\n");
-			printf("\tconst hipMemcpy3DParms * pNodeParams = %p", args->hipGraphMemcpyNodeSetParams.pNodeParams);
-			if (args->hipGraphMemcpyNodeSetParams.pNodeParams != NULL) {
+			printf("\tconst hipMemcpy3DParms * pNodeParams = %p", args->pNodeParams);
+			if (args->pNodeParams != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct hipPos srcPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.srcPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.srcPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.srcPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->pNodeParams__ref.val.srcPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->pNodeParams__ref.val.srcPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->pNodeParams__ref.val.srcPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr srcPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.srcPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.srcPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.srcPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->pNodeParams__ref.val.srcPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->pNodeParams__ref.val.srcPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->pNodeParams__ref.val.srcPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPos dstPos = {\n");
-				printf("\t\t\tsize_t x = %lu\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.dstPos.x);
-				printf("\t\t\tsize_t y = %lu\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.dstPos.y);
-				printf("\t\t\tsize_t z = %lu\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.dstPos.z);
+				printf("\t\t\tsize_t x = %lu\n", args->pNodeParams__ref.val.dstPos.x);
+				printf("\t\t\tsize_t y = %lu\n", args->pNodeParams__ref.val.dstPos.y);
+				printf("\t\t\tsize_t z = %lu\n", args->pNodeParams__ref.val.dstPos.z);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipPitchedPtr dstPtr = {\n");
-				printf("\t\t\tsize_t pitch = %lu\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.dstPtr.pitch);
-				printf("\t\t\tsize_t xsize = %lu\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.dstPtr.xsize);
-				printf("\t\t\tsize_t ysize = %lu\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.dstPtr.ysize);
+				printf("\t\t\tsize_t pitch = %lu\n", args->pNodeParams__ref.val.dstPtr.pitch);
+				printf("\t\t\tsize_t xsize = %lu\n", args->pNodeParams__ref.val.dstPtr.xsize);
+				printf("\t\t\tsize_t ysize = %lu\n", args->pNodeParams__ref.val.dstPtr.ysize);
 				printf("\t\t}\n");
 				printf("\t\tstruct hipExtent extent = {\n");
-				printf("\t\t\tsize_t width = %lu\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.extent.width);
-				printf("\t\t\tsize_t height = %lu\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.extent.height);
-				printf("\t\t\tsize_t depth = %lu\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.extent.depth);
+				printf("\t\t\tsize_t width = %lu\n", args->pNodeParams__ref.val.extent.width);
+				printf("\t\t\tsize_t height = %lu\n", args->pNodeParams__ref.val.extent.height);
+				printf("\t\t\tsize_t depth = %lu\n", args->pNodeParams__ref.val.extent.depth);
 				printf("\t\t}\n");
-				printf("\t\tenum hipMemcpyKind kind = %d\n", args->hipGraphMemcpyNodeSetParams.pNodeParams__ref.val.kind);
+				printf("\t\tenum hipMemcpyKind kind = %d\n", args->pNodeParams__ref.val.kind);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphMemcpyNodeSetParams.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphGetEdges
-		case HIP_API_ID_hipGraphGetEdges :
+		case HIP_API_ID_hipGraphGetEdges : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphNode_t * from (struct hipGraphNode **);
 			//	hipGraphNode_t * to (struct hipGraphNode **);
 			//	size_t * numEdges (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipGraph_t graph = %p", args->hipGraphGetEdges.graph);
+			args_hipGraphGetEdges_t* args = (args_hipGraphGetEdges_t*) func_args;
+			printf("\thipGraph_t graph = %p", args->graph);
 			printf("\n");
-			printf("\thipGraphNode_t * from = %p", args->hipGraphGetEdges.from);
-			if (args->hipGraphGetEdges.from != NULL) {
-				printf(" -> %p\n", args->hipGraphGetEdges.from__ref.val);
+			printf("\thipGraphNode_t * from = %p", args->from);
+			if (args->from != NULL) {
+				printf(" -> %p\n", args->from__ref.val);
 			} else { printf("\n"); };
-			printf("\thipGraphNode_t * to = %p", args->hipGraphGetEdges.to);
-			if (args->hipGraphGetEdges.to != NULL) {
-				printf(" -> %p\n", args->hipGraphGetEdges.to__ref.val);
+			printf("\thipGraphNode_t * to = %p", args->to);
+			if (args->to != NULL) {
+				printf(" -> %p\n", args->to__ref.val);
 			} else { printf("\n"); };
-			printf("\tsize_t * numEdges = %p", args->hipGraphGetEdges.numEdges);
-			if (args->hipGraphGetEdges.numEdges != NULL) {
-				printf(" -> %lu\n", args->hipGraphGetEdges.numEdges__ref.val);
+			printf("\tsize_t * numEdges = %p", args->numEdges);
+			if (args->numEdges != NULL) {
+				printf(" -> %lu\n", args->numEdges__ref.val);
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipGraphGetEdges.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyToArray
-		case HIP_API_ID_hipMemcpyToArray :
+		case HIP_API_ID_hipMemcpyToArray : {
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
 			//	size_t hOffset (unsigned long);
@@ -11489,51 +12379,57 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t count (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
-			printf("\thipArray_t dst = %p", args->hipMemcpyToArray.dst);
+			args_hipMemcpyToArray_t* args = (args_hipMemcpyToArray_t*) func_args;
+			printf("\thipArray_t dst = %p", args->dst);
 			printf("\n");
-			printf("\tsize_t wOffset = %lu\n", args->hipMemcpyToArray.wOffset);
-			printf("\tsize_t hOffset = %lu\n", args->hipMemcpyToArray.hOffset);
-			printf("\tconst void * src = %p", args->hipMemcpyToArray.src);
+			printf("\tsize_t wOffset = %lu\n", args->wOffset);
+			printf("\tsize_t hOffset = %lu\n", args->hOffset);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t count = %lu\n", args->hipMemcpyToArray.count);
-			printf("\thipMemcpyKind kind = %d\n", args->hipMemcpyToArray.kind);
-			printf("\thipError_t retval = %d\n", args->hipMemcpyToArray.retval);
+			printf("\tsize_t count = %lu\n", args->count);
+			printf("\thipMemcpyKind kind = %d\n", args->kind);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExtMallocWithFlags
-		case HIP_API_ID_hipExtMallocWithFlags :
+		case HIP_API_ID_hipExtMallocWithFlags : {
 			//	void ** ptr (void **);
 			//	size_t sizeBytes (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid ** ptr = %p", args->hipExtMallocWithFlags.ptr);
-			if (args->hipExtMallocWithFlags.ptr != NULL) {
-				printf("-> %p", args->hipExtMallocWithFlags.ptr__ref.ptr1);
+			args_hipExtMallocWithFlags_t* args = (args_hipExtMallocWithFlags_t*) func_args;
+			printf("\tvoid ** ptr = %p", args->ptr);
+			if (args->ptr != NULL) {
+				printf("-> %p", args->ptr__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tsize_t sizeBytes = %lu\n", args->hipExtMallocWithFlags.sizeBytes);
-			printf("\tunsigned int flags = %u\n", args->hipExtMallocWithFlags.flags);
-			printf("\thipError_t retval = %d\n", args->hipExtMallocWithFlags.retval);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\tunsigned int flags = %u\n", args->flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFuncSetAttribute
-		case HIP_API_ID_hipFuncSetAttribute :
+		case HIP_API_ID_hipFuncSetAttribute : {
 			//	const void * func (const void *);
 			//	hipFuncAttribute attr (enum hipFuncAttribute);
 			//	int value (int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tconst void * func = %p", args->hipFuncSetAttribute.func);
+			args_hipFuncSetAttribute_t* args = (args_hipFuncSetAttribute_t*) func_args;
+			printf("\tconst void * func = %p", args->func);
 			printf("\n");
-			printf("\thipFuncAttribute attr = %d\n", args->hipFuncSetAttribute.attr);
-			printf("\tint value = %d\n", args->hipFuncSetAttribute.value);
-			printf("\thipError_t retval = %d\n", args->hipFuncSetAttribute.retval);
+			printf("\thipFuncAttribute attr = %d\n", args->attr);
+			printf("\tint value = %d\n", args->value);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipChooseDeviceR0600
-		case HIP_API_ID_hipChooseDeviceR0600 :
+		case HIP_API_ID_hipChooseDeviceR0600 : {
 			//	int * device (int *);
 			//	const hipDeviceProp_tR0600 * prop ({
 			//		char[256] name (char[256]);
@@ -11663,146 +12559,148 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		int asicRevision (int);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tint * device = %p", args->hipChooseDeviceR0600.device);
-			if (args->hipChooseDeviceR0600.device != NULL) {
-				printf(" -> %d\n", args->hipChooseDeviceR0600.device__ref.val);
+			args_hipChooseDeviceR0600_t* args = (args_hipChooseDeviceR0600_t*) func_args;
+			printf("\tint * device = %p", args->device);
+			if (args->device != NULL) {
+				printf(" -> %d\n", args->device__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst hipDeviceProp_tR0600 * prop = %p", args->hipChooseDeviceR0600.prop);
-			if (args->hipChooseDeviceR0600.prop != NULL) {
+			printf("\tconst hipDeviceProp_tR0600 * prop = %p", args->prop);
+			if (args->prop != NULL) {
 				printf(" -> {\n");
-				printf("\t\tchar[256] name = %c\n", args->hipChooseDeviceR0600.prop__ref.val.name[0]);
+				printf("\t\tchar[256] name = %c\n", args->prop__ref.val.name[0]);
 				printf("\t\thipUUID uuid = {\n");
-				printf("\t\t\tchar[16] bytes = %c\n", args->hipChooseDeviceR0600.prop__ref.val.uuid.bytes[0]);
+				printf("\t\t\tchar[16] bytes = %c\n", args->prop__ref.val.uuid.bytes[0]);
 				printf("\t\t}\n");
-				printf("\t\tchar[8] luid = %c\n", args->hipChooseDeviceR0600.prop__ref.val.luid[0]);
-				printf("\t\tunsigned int luidDeviceNodeMask = %u\n", args->hipChooseDeviceR0600.prop__ref.val.luidDeviceNodeMask);
-				printf("\t\tsize_t totalGlobalMem = %lu\n", args->hipChooseDeviceR0600.prop__ref.val.totalGlobalMem);
-				printf("\t\tsize_t sharedMemPerBlock = %lu\n", args->hipChooseDeviceR0600.prop__ref.val.sharedMemPerBlock);
-				printf("\t\tint regsPerBlock = %d\n", args->hipChooseDeviceR0600.prop__ref.val.regsPerBlock);
-				printf("\t\tint warpSize = %d\n", args->hipChooseDeviceR0600.prop__ref.val.warpSize);
-				printf("\t\tsize_t memPitch = %lu\n", args->hipChooseDeviceR0600.prop__ref.val.memPitch);
-				printf("\t\tint maxThreadsPerBlock = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxThreadsPerBlock);
-				printf("\t\tint[3] maxThreadsDim = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxThreadsDim[0]);
-				printf("\t\tint[3] maxGridSize = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxGridSize[0]);
-				printf("\t\tint clockRate = %d\n", args->hipChooseDeviceR0600.prop__ref.val.clockRate);
-				printf("\t\tsize_t totalConstMem = %lu\n", args->hipChooseDeviceR0600.prop__ref.val.totalConstMem);
-				printf("\t\tint major = %d\n", args->hipChooseDeviceR0600.prop__ref.val.major);
-				printf("\t\tint minor = %d\n", args->hipChooseDeviceR0600.prop__ref.val.minor);
-				printf("\t\tsize_t textureAlignment = %lu\n", args->hipChooseDeviceR0600.prop__ref.val.textureAlignment);
-				printf("\t\tsize_t texturePitchAlignment = %lu\n", args->hipChooseDeviceR0600.prop__ref.val.texturePitchAlignment);
-				printf("\t\tint deviceOverlap = %d\n", args->hipChooseDeviceR0600.prop__ref.val.deviceOverlap);
-				printf("\t\tint multiProcessorCount = %d\n", args->hipChooseDeviceR0600.prop__ref.val.multiProcessorCount);
-				printf("\t\tint kernelExecTimeoutEnabled = %d\n", args->hipChooseDeviceR0600.prop__ref.val.kernelExecTimeoutEnabled);
-				printf("\t\tint integrated = %d\n", args->hipChooseDeviceR0600.prop__ref.val.integrated);
-				printf("\t\tint canMapHostMemory = %d\n", args->hipChooseDeviceR0600.prop__ref.val.canMapHostMemory);
-				printf("\t\tint computeMode = %d\n", args->hipChooseDeviceR0600.prop__ref.val.computeMode);
-				printf("\t\tint maxTexture1D = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxTexture1D);
-				printf("\t\tint maxTexture1DMipmap = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxTexture1DMipmap);
-				printf("\t\tint maxTexture1DLinear = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxTexture1DLinear);
-				printf("\t\tint[2] maxTexture2D = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxTexture2D[0]);
-				printf("\t\tint[2] maxTexture2DMipmap = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxTexture2DMipmap[0]);
-				printf("\t\tint[3] maxTexture2DLinear = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxTexture2DLinear[0]);
-				printf("\t\tint[2] maxTexture2DGather = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxTexture2DGather[0]);
-				printf("\t\tint[3] maxTexture3D = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxTexture3D[0]);
-				printf("\t\tint[3] maxTexture3DAlt = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxTexture3DAlt[0]);
-				printf("\t\tint maxTextureCubemap = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxTextureCubemap);
-				printf("\t\tint[2] maxTexture1DLayered = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxTexture1DLayered[0]);
-				printf("\t\tint[3] maxTexture2DLayered = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxTexture2DLayered[0]);
-				printf("\t\tint[2] maxTextureCubemapLayered = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxTextureCubemapLayered[0]);
-				printf("\t\tint maxSurface1D = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxSurface1D);
-				printf("\t\tint[2] maxSurface2D = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxSurface2D[0]);
-				printf("\t\tint[3] maxSurface3D = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxSurface3D[0]);
-				printf("\t\tint[2] maxSurface1DLayered = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxSurface1DLayered[0]);
-				printf("\t\tint[3] maxSurface2DLayered = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxSurface2DLayered[0]);
-				printf("\t\tint maxSurfaceCubemap = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxSurfaceCubemap);
-				printf("\t\tint[2] maxSurfaceCubemapLayered = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxSurfaceCubemapLayered[0]);
-				printf("\t\tsize_t surfaceAlignment = %lu\n", args->hipChooseDeviceR0600.prop__ref.val.surfaceAlignment);
-				printf("\t\tint concurrentKernels = %d\n", args->hipChooseDeviceR0600.prop__ref.val.concurrentKernels);
-				printf("\t\tint ECCEnabled = %d\n", args->hipChooseDeviceR0600.prop__ref.val.ECCEnabled);
-				printf("\t\tint pciBusID = %d\n", args->hipChooseDeviceR0600.prop__ref.val.pciBusID);
-				printf("\t\tint pciDeviceID = %d\n", args->hipChooseDeviceR0600.prop__ref.val.pciDeviceID);
-				printf("\t\tint pciDomainID = %d\n", args->hipChooseDeviceR0600.prop__ref.val.pciDomainID);
-				printf("\t\tint tccDriver = %d\n", args->hipChooseDeviceR0600.prop__ref.val.tccDriver);
-				printf("\t\tint asyncEngineCount = %d\n", args->hipChooseDeviceR0600.prop__ref.val.asyncEngineCount);
-				printf("\t\tint unifiedAddressing = %d\n", args->hipChooseDeviceR0600.prop__ref.val.unifiedAddressing);
-				printf("\t\tint memoryClockRate = %d\n", args->hipChooseDeviceR0600.prop__ref.val.memoryClockRate);
-				printf("\t\tint memoryBusWidth = %d\n", args->hipChooseDeviceR0600.prop__ref.val.memoryBusWidth);
-				printf("\t\tint l2CacheSize = %d\n", args->hipChooseDeviceR0600.prop__ref.val.l2CacheSize);
-				printf("\t\tint persistingL2CacheMaxSize = %d\n", args->hipChooseDeviceR0600.prop__ref.val.persistingL2CacheMaxSize);
-				printf("\t\tint maxThreadsPerMultiProcessor = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxThreadsPerMultiProcessor);
-				printf("\t\tint streamPrioritiesSupported = %d\n", args->hipChooseDeviceR0600.prop__ref.val.streamPrioritiesSupported);
-				printf("\t\tint globalL1CacheSupported = %d\n", args->hipChooseDeviceR0600.prop__ref.val.globalL1CacheSupported);
-				printf("\t\tint localL1CacheSupported = %d\n", args->hipChooseDeviceR0600.prop__ref.val.localL1CacheSupported);
-				printf("\t\tsize_t sharedMemPerMultiprocessor = %lu\n", args->hipChooseDeviceR0600.prop__ref.val.sharedMemPerMultiprocessor);
-				printf("\t\tint regsPerMultiprocessor = %d\n", args->hipChooseDeviceR0600.prop__ref.val.regsPerMultiprocessor);
-				printf("\t\tint managedMemory = %d\n", args->hipChooseDeviceR0600.prop__ref.val.managedMemory);
-				printf("\t\tint isMultiGpuBoard = %d\n", args->hipChooseDeviceR0600.prop__ref.val.isMultiGpuBoard);
-				printf("\t\tint multiGpuBoardGroupID = %d\n", args->hipChooseDeviceR0600.prop__ref.val.multiGpuBoardGroupID);
-				printf("\t\tint hostNativeAtomicSupported = %d\n", args->hipChooseDeviceR0600.prop__ref.val.hostNativeAtomicSupported);
-				printf("\t\tint singleToDoublePrecisionPerfRatio = %d\n", args->hipChooseDeviceR0600.prop__ref.val.singleToDoublePrecisionPerfRatio);
-				printf("\t\tint pageableMemoryAccess = %d\n", args->hipChooseDeviceR0600.prop__ref.val.pageableMemoryAccess);
-				printf("\t\tint concurrentManagedAccess = %d\n", args->hipChooseDeviceR0600.prop__ref.val.concurrentManagedAccess);
-				printf("\t\tint computePreemptionSupported = %d\n", args->hipChooseDeviceR0600.prop__ref.val.computePreemptionSupported);
-				printf("\t\tint canUseHostPointerForRegisteredMem = %d\n", args->hipChooseDeviceR0600.prop__ref.val.canUseHostPointerForRegisteredMem);
-				printf("\t\tint cooperativeLaunch = %d\n", args->hipChooseDeviceR0600.prop__ref.val.cooperativeLaunch);
-				printf("\t\tint cooperativeMultiDeviceLaunch = %d\n", args->hipChooseDeviceR0600.prop__ref.val.cooperativeMultiDeviceLaunch);
-				printf("\t\tsize_t sharedMemPerBlockOptin = %lu\n", args->hipChooseDeviceR0600.prop__ref.val.sharedMemPerBlockOptin);
-				printf("\t\tint pageableMemoryAccessUsesHostPageTables = %d\n", args->hipChooseDeviceR0600.prop__ref.val.pageableMemoryAccessUsesHostPageTables);
-				printf("\t\tint directManagedMemAccessFromHost = %d\n", args->hipChooseDeviceR0600.prop__ref.val.directManagedMemAccessFromHost);
-				printf("\t\tint maxBlocksPerMultiProcessor = %d\n", args->hipChooseDeviceR0600.prop__ref.val.maxBlocksPerMultiProcessor);
-				printf("\t\tint accessPolicyMaxWindowSize = %d\n", args->hipChooseDeviceR0600.prop__ref.val.accessPolicyMaxWindowSize);
-				printf("\t\tsize_t reservedSharedMemPerBlock = %lu\n", args->hipChooseDeviceR0600.prop__ref.val.reservedSharedMemPerBlock);
-				printf("\t\tint hostRegisterSupported = %d\n", args->hipChooseDeviceR0600.prop__ref.val.hostRegisterSupported);
-				printf("\t\tint sparseHipArraySupported = %d\n", args->hipChooseDeviceR0600.prop__ref.val.sparseHipArraySupported);
-				printf("\t\tint hostRegisterReadOnlySupported = %d\n", args->hipChooseDeviceR0600.prop__ref.val.hostRegisterReadOnlySupported);
-				printf("\t\tint timelineSemaphoreInteropSupported = %d\n", args->hipChooseDeviceR0600.prop__ref.val.timelineSemaphoreInteropSupported);
-				printf("\t\tint memoryPoolsSupported = %d\n", args->hipChooseDeviceR0600.prop__ref.val.memoryPoolsSupported);
-				printf("\t\tint gpuDirectRDMASupported = %d\n", args->hipChooseDeviceR0600.prop__ref.val.gpuDirectRDMASupported);
-				printf("\t\tunsigned int gpuDirectRDMAFlushWritesOptions = %u\n", args->hipChooseDeviceR0600.prop__ref.val.gpuDirectRDMAFlushWritesOptions);
-				printf("\t\tint gpuDirectRDMAWritesOrdering = %d\n", args->hipChooseDeviceR0600.prop__ref.val.gpuDirectRDMAWritesOrdering);
-				printf("\t\tunsigned int memoryPoolSupportedHandleTypes = %u\n", args->hipChooseDeviceR0600.prop__ref.val.memoryPoolSupportedHandleTypes);
-				printf("\t\tint deferredMappingHipArraySupported = %d\n", args->hipChooseDeviceR0600.prop__ref.val.deferredMappingHipArraySupported);
-				printf("\t\tint ipcEventSupported = %d\n", args->hipChooseDeviceR0600.prop__ref.val.ipcEventSupported);
-				printf("\t\tint clusterLaunch = %d\n", args->hipChooseDeviceR0600.prop__ref.val.clusterLaunch);
-				printf("\t\tint unifiedFunctionPointers = %d\n", args->hipChooseDeviceR0600.prop__ref.val.unifiedFunctionPointers);
-				printf("\t\tint[63] reserved = %d\n", args->hipChooseDeviceR0600.prop__ref.val.reserved[0]);
-				printf("\t\tint[32] hipReserved = %d\n", args->hipChooseDeviceR0600.prop__ref.val.hipReserved[0]);
-				printf("\t\tchar[256] gcnArchName = %c\n", args->hipChooseDeviceR0600.prop__ref.val.gcnArchName[0]);
-				printf("\t\tsize_t maxSharedMemoryPerMultiProcessor = %lu\n", args->hipChooseDeviceR0600.prop__ref.val.maxSharedMemoryPerMultiProcessor);
-				printf("\t\tint clockInstructionRate = %d\n", args->hipChooseDeviceR0600.prop__ref.val.clockInstructionRate);
+				printf("\t\tchar[8] luid = %c\n", args->prop__ref.val.luid[0]);
+				printf("\t\tunsigned int luidDeviceNodeMask = %u\n", args->prop__ref.val.luidDeviceNodeMask);
+				printf("\t\tsize_t totalGlobalMem = %lu\n", args->prop__ref.val.totalGlobalMem);
+				printf("\t\tsize_t sharedMemPerBlock = %lu\n", args->prop__ref.val.sharedMemPerBlock);
+				printf("\t\tint regsPerBlock = %d\n", args->prop__ref.val.regsPerBlock);
+				printf("\t\tint warpSize = %d\n", args->prop__ref.val.warpSize);
+				printf("\t\tsize_t memPitch = %lu\n", args->prop__ref.val.memPitch);
+				printf("\t\tint maxThreadsPerBlock = %d\n", args->prop__ref.val.maxThreadsPerBlock);
+				printf("\t\tint[3] maxThreadsDim = %d\n", args->prop__ref.val.maxThreadsDim[0]);
+				printf("\t\tint[3] maxGridSize = %d\n", args->prop__ref.val.maxGridSize[0]);
+				printf("\t\tint clockRate = %d\n", args->prop__ref.val.clockRate);
+				printf("\t\tsize_t totalConstMem = %lu\n", args->prop__ref.val.totalConstMem);
+				printf("\t\tint major = %d\n", args->prop__ref.val.major);
+				printf("\t\tint minor = %d\n", args->prop__ref.val.minor);
+				printf("\t\tsize_t textureAlignment = %lu\n", args->prop__ref.val.textureAlignment);
+				printf("\t\tsize_t texturePitchAlignment = %lu\n", args->prop__ref.val.texturePitchAlignment);
+				printf("\t\tint deviceOverlap = %d\n", args->prop__ref.val.deviceOverlap);
+				printf("\t\tint multiProcessorCount = %d\n", args->prop__ref.val.multiProcessorCount);
+				printf("\t\tint kernelExecTimeoutEnabled = %d\n", args->prop__ref.val.kernelExecTimeoutEnabled);
+				printf("\t\tint integrated = %d\n", args->prop__ref.val.integrated);
+				printf("\t\tint canMapHostMemory = %d\n", args->prop__ref.val.canMapHostMemory);
+				printf("\t\tint computeMode = %d\n", args->prop__ref.val.computeMode);
+				printf("\t\tint maxTexture1D = %d\n", args->prop__ref.val.maxTexture1D);
+				printf("\t\tint maxTexture1DMipmap = %d\n", args->prop__ref.val.maxTexture1DMipmap);
+				printf("\t\tint maxTexture1DLinear = %d\n", args->prop__ref.val.maxTexture1DLinear);
+				printf("\t\tint[2] maxTexture2D = %d\n", args->prop__ref.val.maxTexture2D[0]);
+				printf("\t\tint[2] maxTexture2DMipmap = %d\n", args->prop__ref.val.maxTexture2DMipmap[0]);
+				printf("\t\tint[3] maxTexture2DLinear = %d\n", args->prop__ref.val.maxTexture2DLinear[0]);
+				printf("\t\tint[2] maxTexture2DGather = %d\n", args->prop__ref.val.maxTexture2DGather[0]);
+				printf("\t\tint[3] maxTexture3D = %d\n", args->prop__ref.val.maxTexture3D[0]);
+				printf("\t\tint[3] maxTexture3DAlt = %d\n", args->prop__ref.val.maxTexture3DAlt[0]);
+				printf("\t\tint maxTextureCubemap = %d\n", args->prop__ref.val.maxTextureCubemap);
+				printf("\t\tint[2] maxTexture1DLayered = %d\n", args->prop__ref.val.maxTexture1DLayered[0]);
+				printf("\t\tint[3] maxTexture2DLayered = %d\n", args->prop__ref.val.maxTexture2DLayered[0]);
+				printf("\t\tint[2] maxTextureCubemapLayered = %d\n", args->prop__ref.val.maxTextureCubemapLayered[0]);
+				printf("\t\tint maxSurface1D = %d\n", args->prop__ref.val.maxSurface1D);
+				printf("\t\tint[2] maxSurface2D = %d\n", args->prop__ref.val.maxSurface2D[0]);
+				printf("\t\tint[3] maxSurface3D = %d\n", args->prop__ref.val.maxSurface3D[0]);
+				printf("\t\tint[2] maxSurface1DLayered = %d\n", args->prop__ref.val.maxSurface1DLayered[0]);
+				printf("\t\tint[3] maxSurface2DLayered = %d\n", args->prop__ref.val.maxSurface2DLayered[0]);
+				printf("\t\tint maxSurfaceCubemap = %d\n", args->prop__ref.val.maxSurfaceCubemap);
+				printf("\t\tint[2] maxSurfaceCubemapLayered = %d\n", args->prop__ref.val.maxSurfaceCubemapLayered[0]);
+				printf("\t\tsize_t surfaceAlignment = %lu\n", args->prop__ref.val.surfaceAlignment);
+				printf("\t\tint concurrentKernels = %d\n", args->prop__ref.val.concurrentKernels);
+				printf("\t\tint ECCEnabled = %d\n", args->prop__ref.val.ECCEnabled);
+				printf("\t\tint pciBusID = %d\n", args->prop__ref.val.pciBusID);
+				printf("\t\tint pciDeviceID = %d\n", args->prop__ref.val.pciDeviceID);
+				printf("\t\tint pciDomainID = %d\n", args->prop__ref.val.pciDomainID);
+				printf("\t\tint tccDriver = %d\n", args->prop__ref.val.tccDriver);
+				printf("\t\tint asyncEngineCount = %d\n", args->prop__ref.val.asyncEngineCount);
+				printf("\t\tint unifiedAddressing = %d\n", args->prop__ref.val.unifiedAddressing);
+				printf("\t\tint memoryClockRate = %d\n", args->prop__ref.val.memoryClockRate);
+				printf("\t\tint memoryBusWidth = %d\n", args->prop__ref.val.memoryBusWidth);
+				printf("\t\tint l2CacheSize = %d\n", args->prop__ref.val.l2CacheSize);
+				printf("\t\tint persistingL2CacheMaxSize = %d\n", args->prop__ref.val.persistingL2CacheMaxSize);
+				printf("\t\tint maxThreadsPerMultiProcessor = %d\n", args->prop__ref.val.maxThreadsPerMultiProcessor);
+				printf("\t\tint streamPrioritiesSupported = %d\n", args->prop__ref.val.streamPrioritiesSupported);
+				printf("\t\tint globalL1CacheSupported = %d\n", args->prop__ref.val.globalL1CacheSupported);
+				printf("\t\tint localL1CacheSupported = %d\n", args->prop__ref.val.localL1CacheSupported);
+				printf("\t\tsize_t sharedMemPerMultiprocessor = %lu\n", args->prop__ref.val.sharedMemPerMultiprocessor);
+				printf("\t\tint regsPerMultiprocessor = %d\n", args->prop__ref.val.regsPerMultiprocessor);
+				printf("\t\tint managedMemory = %d\n", args->prop__ref.val.managedMemory);
+				printf("\t\tint isMultiGpuBoard = %d\n", args->prop__ref.val.isMultiGpuBoard);
+				printf("\t\tint multiGpuBoardGroupID = %d\n", args->prop__ref.val.multiGpuBoardGroupID);
+				printf("\t\tint hostNativeAtomicSupported = %d\n", args->prop__ref.val.hostNativeAtomicSupported);
+				printf("\t\tint singleToDoublePrecisionPerfRatio = %d\n", args->prop__ref.val.singleToDoublePrecisionPerfRatio);
+				printf("\t\tint pageableMemoryAccess = %d\n", args->prop__ref.val.pageableMemoryAccess);
+				printf("\t\tint concurrentManagedAccess = %d\n", args->prop__ref.val.concurrentManagedAccess);
+				printf("\t\tint computePreemptionSupported = %d\n", args->prop__ref.val.computePreemptionSupported);
+				printf("\t\tint canUseHostPointerForRegisteredMem = %d\n", args->prop__ref.val.canUseHostPointerForRegisteredMem);
+				printf("\t\tint cooperativeLaunch = %d\n", args->prop__ref.val.cooperativeLaunch);
+				printf("\t\tint cooperativeMultiDeviceLaunch = %d\n", args->prop__ref.val.cooperativeMultiDeviceLaunch);
+				printf("\t\tsize_t sharedMemPerBlockOptin = %lu\n", args->prop__ref.val.sharedMemPerBlockOptin);
+				printf("\t\tint pageableMemoryAccessUsesHostPageTables = %d\n", args->prop__ref.val.pageableMemoryAccessUsesHostPageTables);
+				printf("\t\tint directManagedMemAccessFromHost = %d\n", args->prop__ref.val.directManagedMemAccessFromHost);
+				printf("\t\tint maxBlocksPerMultiProcessor = %d\n", args->prop__ref.val.maxBlocksPerMultiProcessor);
+				printf("\t\tint accessPolicyMaxWindowSize = %d\n", args->prop__ref.val.accessPolicyMaxWindowSize);
+				printf("\t\tsize_t reservedSharedMemPerBlock = %lu\n", args->prop__ref.val.reservedSharedMemPerBlock);
+				printf("\t\tint hostRegisterSupported = %d\n", args->prop__ref.val.hostRegisterSupported);
+				printf("\t\tint sparseHipArraySupported = %d\n", args->prop__ref.val.sparseHipArraySupported);
+				printf("\t\tint hostRegisterReadOnlySupported = %d\n", args->prop__ref.val.hostRegisterReadOnlySupported);
+				printf("\t\tint timelineSemaphoreInteropSupported = %d\n", args->prop__ref.val.timelineSemaphoreInteropSupported);
+				printf("\t\tint memoryPoolsSupported = %d\n", args->prop__ref.val.memoryPoolsSupported);
+				printf("\t\tint gpuDirectRDMASupported = %d\n", args->prop__ref.val.gpuDirectRDMASupported);
+				printf("\t\tunsigned int gpuDirectRDMAFlushWritesOptions = %u\n", args->prop__ref.val.gpuDirectRDMAFlushWritesOptions);
+				printf("\t\tint gpuDirectRDMAWritesOrdering = %d\n", args->prop__ref.val.gpuDirectRDMAWritesOrdering);
+				printf("\t\tunsigned int memoryPoolSupportedHandleTypes = %u\n", args->prop__ref.val.memoryPoolSupportedHandleTypes);
+				printf("\t\tint deferredMappingHipArraySupported = %d\n", args->prop__ref.val.deferredMappingHipArraySupported);
+				printf("\t\tint ipcEventSupported = %d\n", args->prop__ref.val.ipcEventSupported);
+				printf("\t\tint clusterLaunch = %d\n", args->prop__ref.val.clusterLaunch);
+				printf("\t\tint unifiedFunctionPointers = %d\n", args->prop__ref.val.unifiedFunctionPointers);
+				printf("\t\tint[63] reserved = %d\n", args->prop__ref.val.reserved[0]);
+				printf("\t\tint[32] hipReserved = %d\n", args->prop__ref.val.hipReserved[0]);
+				printf("\t\tchar[256] gcnArchName = %c\n", args->prop__ref.val.gcnArchName[0]);
+				printf("\t\tsize_t maxSharedMemoryPerMultiProcessor = %lu\n", args->prop__ref.val.maxSharedMemoryPerMultiProcessor);
+				printf("\t\tint clockInstructionRate = %d\n", args->prop__ref.val.clockInstructionRate);
 				printf("\t\thipDeviceArch_t arch = {\n");
-				printf("\t\t\tunsigned int hasGlobalInt32Atomics = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasGlobalInt32Atomics);
-				printf("\t\t\tunsigned int hasGlobalFloatAtomicExch = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasGlobalFloatAtomicExch);
-				printf("\t\t\tunsigned int hasSharedInt32Atomics = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasSharedInt32Atomics);
-				printf("\t\t\tunsigned int hasSharedFloatAtomicExch = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasSharedFloatAtomicExch);
-				printf("\t\t\tunsigned int hasFloatAtomicAdd = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasFloatAtomicAdd);
-				printf("\t\t\tunsigned int hasGlobalInt64Atomics = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasGlobalInt64Atomics);
-				printf("\t\t\tunsigned int hasSharedInt64Atomics = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasSharedInt64Atomics);
-				printf("\t\t\tunsigned int hasDoubles = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasDoubles);
-				printf("\t\t\tunsigned int hasWarpVote = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasWarpVote);
-				printf("\t\t\tunsigned int hasWarpBallot = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasWarpBallot);
-				printf("\t\t\tunsigned int hasWarpShuffle = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasWarpShuffle);
-				printf("\t\t\tunsigned int hasFunnelShift = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasFunnelShift);
-				printf("\t\t\tunsigned int hasThreadFenceSystem = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasThreadFenceSystem);
-				printf("\t\t\tunsigned int hasSyncThreadsExt = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasSyncThreadsExt);
-				printf("\t\t\tunsigned int hasSurfaceFuncs = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasSurfaceFuncs);
-				printf("\t\t\tunsigned int has3dGrid = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.has3dGrid);
-				printf("\t\t\tunsigned int hasDynamicParallelism = %u\n", args->hipChooseDeviceR0600.prop__ref.val.arch.hasDynamicParallelism);
+				printf("\t\t\tunsigned int hasGlobalInt32Atomics = %u\n", args->prop__ref.val.arch.hasGlobalInt32Atomics);
+				printf("\t\t\tunsigned int hasGlobalFloatAtomicExch = %u\n", args->prop__ref.val.arch.hasGlobalFloatAtomicExch);
+				printf("\t\t\tunsigned int hasSharedInt32Atomics = %u\n", args->prop__ref.val.arch.hasSharedInt32Atomics);
+				printf("\t\t\tunsigned int hasSharedFloatAtomicExch = %u\n", args->prop__ref.val.arch.hasSharedFloatAtomicExch);
+				printf("\t\t\tunsigned int hasFloatAtomicAdd = %u\n", args->prop__ref.val.arch.hasFloatAtomicAdd);
+				printf("\t\t\tunsigned int hasGlobalInt64Atomics = %u\n", args->prop__ref.val.arch.hasGlobalInt64Atomics);
+				printf("\t\t\tunsigned int hasSharedInt64Atomics = %u\n", args->prop__ref.val.arch.hasSharedInt64Atomics);
+				printf("\t\t\tunsigned int hasDoubles = %u\n", args->prop__ref.val.arch.hasDoubles);
+				printf("\t\t\tunsigned int hasWarpVote = %u\n", args->prop__ref.val.arch.hasWarpVote);
+				printf("\t\t\tunsigned int hasWarpBallot = %u\n", args->prop__ref.val.arch.hasWarpBallot);
+				printf("\t\t\tunsigned int hasWarpShuffle = %u\n", args->prop__ref.val.arch.hasWarpShuffle);
+				printf("\t\t\tunsigned int hasFunnelShift = %u\n", args->prop__ref.val.arch.hasFunnelShift);
+				printf("\t\t\tunsigned int hasThreadFenceSystem = %u\n", args->prop__ref.val.arch.hasThreadFenceSystem);
+				printf("\t\t\tunsigned int hasSyncThreadsExt = %u\n", args->prop__ref.val.arch.hasSyncThreadsExt);
+				printf("\t\t\tunsigned int hasSurfaceFuncs = %u\n", args->prop__ref.val.arch.hasSurfaceFuncs);
+				printf("\t\t\tunsigned int has3dGrid = %u\n", args->prop__ref.val.arch.has3dGrid);
+				printf("\t\t\tunsigned int hasDynamicParallelism = %u\n", args->prop__ref.val.arch.hasDynamicParallelism);
 				printf("\t\t}\n");
-				printf("\t\tint cooperativeMultiDeviceUnmatchedFunc = %d\n", args->hipChooseDeviceR0600.prop__ref.val.cooperativeMultiDeviceUnmatchedFunc);
-				printf("\t\tint cooperativeMultiDeviceUnmatchedGridDim = %d\n", args->hipChooseDeviceR0600.prop__ref.val.cooperativeMultiDeviceUnmatchedGridDim);
-				printf("\t\tint cooperativeMultiDeviceUnmatchedBlockDim = %d\n", args->hipChooseDeviceR0600.prop__ref.val.cooperativeMultiDeviceUnmatchedBlockDim);
-				printf("\t\tint cooperativeMultiDeviceUnmatchedSharedMem = %d\n", args->hipChooseDeviceR0600.prop__ref.val.cooperativeMultiDeviceUnmatchedSharedMem);
-				printf("\t\tint isLargeBar = %d\n", args->hipChooseDeviceR0600.prop__ref.val.isLargeBar);
-				printf("\t\tint asicRevision = %d\n", args->hipChooseDeviceR0600.prop__ref.val.asicRevision);
+				printf("\t\tint cooperativeMultiDeviceUnmatchedFunc = %d\n", args->prop__ref.val.cooperativeMultiDeviceUnmatchedFunc);
+				printf("\t\tint cooperativeMultiDeviceUnmatchedGridDim = %d\n", args->prop__ref.val.cooperativeMultiDeviceUnmatchedGridDim);
+				printf("\t\tint cooperativeMultiDeviceUnmatchedBlockDim = %d\n", args->prop__ref.val.cooperativeMultiDeviceUnmatchedBlockDim);
+				printf("\t\tint cooperativeMultiDeviceUnmatchedSharedMem = %d\n", args->prop__ref.val.cooperativeMultiDeviceUnmatchedSharedMem);
+				printf("\t\tint isLargeBar = %d\n", args->prop__ref.val.isLargeBar);
+				printf("\t\tint asicRevision = %d\n", args->prop__ref.val.asicRevision);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipChooseDeviceR0600.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetMipmappedArray
-		case HIP_API_ID_hipTexRefSetMipmappedArray :
+		case HIP_API_ID_hipTexRefSetMipmappedArray : {
 			//	textureReference * texRef ({
 			//		int normalized (int);
 			//		enum hipTextureReadMode readMode (enum hipTextureReadMode);
@@ -11846,72 +12744,76 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	unsigned int Flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
-			printf("\ttextureReference * texRef = %p", args->hipTexRefSetMipmappedArray.texRef);
-			if (args->hipTexRefSetMipmappedArray.texRef != NULL) {
+			args_hipTexRefSetMipmappedArray_t* args = (args_hipTexRefSetMipmappedArray_t*) func_args;
+			printf("\ttextureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefSetMipmappedArray.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tstruct hipMipmappedArray * mipmappedArray = %p", args->hipTexRefSetMipmappedArray.mipmappedArray);
-			if (args->hipTexRefSetMipmappedArray.mipmappedArray != NULL) {
+			printf("\tstruct hipMipmappedArray * mipmappedArray = %p", args->mipmappedArray);
+			if (args->mipmappedArray != NULL) {
 				printf(" -> {\n");
 				printf("\t\tstruct hipChannelFormatDesc desc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefSetMipmappedArray.mipmappedArray__ref.val.desc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefSetMipmappedArray.mipmappedArray__ref.val.desc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefSetMipmappedArray.mipmappedArray__ref.val.desc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefSetMipmappedArray.mipmappedArray__ref.val.desc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefSetMipmappedArray.mipmappedArray__ref.val.desc.f);
+				printf("\t\t\tint x = %d\n", args->mipmappedArray__ref.val.desc.x);
+				printf("\t\t\tint y = %d\n", args->mipmappedArray__ref.val.desc.y);
+				printf("\t\t\tint z = %d\n", args->mipmappedArray__ref.val.desc.z);
+				printf("\t\t\tint w = %d\n", args->mipmappedArray__ref.val.desc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->mipmappedArray__ref.val.desc.f);
 				printf("\t\t}\n");
-				printf("\t\tunsigned int type = %u\n", args->hipTexRefSetMipmappedArray.mipmappedArray__ref.val.type);
-				printf("\t\tunsigned int width = %u\n", args->hipTexRefSetMipmappedArray.mipmappedArray__ref.val.width);
-				printf("\t\tunsigned int height = %u\n", args->hipTexRefSetMipmappedArray.mipmappedArray__ref.val.height);
-				printf("\t\tunsigned int depth = %u\n", args->hipTexRefSetMipmappedArray.mipmappedArray__ref.val.depth);
-				printf("\t\tunsigned int min_mipmap_level = %u\n", args->hipTexRefSetMipmappedArray.mipmappedArray__ref.val.min_mipmap_level);
-				printf("\t\tunsigned int max_mipmap_level = %u\n", args->hipTexRefSetMipmappedArray.mipmappedArray__ref.val.max_mipmap_level);
-				printf("\t\tunsigned int flags = %u\n", args->hipTexRefSetMipmappedArray.mipmappedArray__ref.val.flags);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefSetMipmappedArray.mipmappedArray__ref.val.format);
-				printf("\t\tunsigned int num_channels = %u\n", args->hipTexRefSetMipmappedArray.mipmappedArray__ref.val.num_channels);
+				printf("\t\tunsigned int type = %u\n", args->mipmappedArray__ref.val.type);
+				printf("\t\tunsigned int width = %u\n", args->mipmappedArray__ref.val.width);
+				printf("\t\tunsigned int height = %u\n", args->mipmappedArray__ref.val.height);
+				printf("\t\tunsigned int depth = %u\n", args->mipmappedArray__ref.val.depth);
+				printf("\t\tunsigned int min_mipmap_level = %u\n", args->mipmappedArray__ref.val.min_mipmap_level);
+				printf("\t\tunsigned int max_mipmap_level = %u\n", args->mipmappedArray__ref.val.max_mipmap_level);
+				printf("\t\tunsigned int flags = %u\n", args->mipmappedArray__ref.val.flags);
+				printf("\t\tenum hipArray_Format format = %d\n", args->mipmappedArray__ref.val.format);
+				printf("\t\tunsigned int num_channels = %u\n", args->mipmappedArray__ref.val.num_channels);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\tunsigned int Flags = %u\n", args->hipTexRefSetMipmappedArray.Flags);
-			printf("\thipError_t retval = %d\n", args->hipTexRefSetMipmappedArray.retval);
+			printf("\tunsigned int Flags = %u\n", args->Flags);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset
-		case HIP_API_ID_hipMemset :
+		case HIP_API_ID_hipMemset : {
 			//	void * dst (void *);
 			//	int value (int);
 			//	size_t sizeBytes (unsigned long);
 			//	hipError_t retval (enum hipError_t);
-			printf("\tvoid * dst = %p", args->hipMemset.dst);
+			args_hipMemset_t* args = (args_hipMemset_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tint value = %d\n", args->hipMemset.value);
-			printf("\tsize_t sizeBytes = %lu\n", args->hipMemset.sizeBytes);
-			printf("\thipError_t retval = %d\n", args->hipMemset.retval);
+			printf("\tint value = %d\n", args->value);
+			printf("\tsize_t sizeBytes = %lu\n", args->sizeBytes);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetMipmapLevelClamp
-		case HIP_API_ID_hipTexRefGetMipmapLevelClamp :
+		case HIP_API_ID_hipTexRefGetMipmapLevelClamp : {
 			//	float * pminMipmapLevelClamp (float *);
 			//	float * pmaxMipmapLevelClamp (float *);
 			//	const textureReference * texRef ({
@@ -11937,41 +12839,43 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		enum hipArray_Format format (enum hipArray_Format);
 			//	});
 			//	hipError_t retval (enum hipError_t);
-			printf("\tfloat * pminMipmapLevelClamp = %p", args->hipTexRefGetMipmapLevelClamp.pminMipmapLevelClamp);
-			if (args->hipTexRefGetMipmapLevelClamp.pminMipmapLevelClamp != NULL) {
-				printf(" -> %f\n", args->hipTexRefGetMipmapLevelClamp.pminMipmapLevelClamp__ref.val);
+			args_hipTexRefGetMipmapLevelClamp_t* args = (args_hipTexRefGetMipmapLevelClamp_t*) func_args;
+			printf("\tfloat * pminMipmapLevelClamp = %p", args->pminMipmapLevelClamp);
+			if (args->pminMipmapLevelClamp != NULL) {
+				printf(" -> %f\n", args->pminMipmapLevelClamp__ref.val);
 			} else { printf("\n"); };
-			printf("\tfloat * pmaxMipmapLevelClamp = %p", args->hipTexRefGetMipmapLevelClamp.pmaxMipmapLevelClamp);
-			if (args->hipTexRefGetMipmapLevelClamp.pmaxMipmapLevelClamp != NULL) {
-				printf(" -> %f\n", args->hipTexRefGetMipmapLevelClamp.pmaxMipmapLevelClamp__ref.val);
+			printf("\tfloat * pmaxMipmapLevelClamp = %p", args->pmaxMipmapLevelClamp);
+			if (args->pmaxMipmapLevelClamp != NULL) {
+				printf(" -> %f\n", args->pmaxMipmapLevelClamp__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst textureReference * texRef = %p", args->hipTexRefGetMipmapLevelClamp.texRef);
-			if (args->hipTexRefGetMipmapLevelClamp.texRef != NULL) {
+			printf("\tconst textureReference * texRef = %p", args->texRef);
+			if (args->texRef != NULL) {
 				printf(" -> {\n");
-				printf("\t\tint normalized = %d\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.normalized);
-				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.readMode);
-				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.filterMode);
-				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.addressMode[0]);
+				printf("\t\tint normalized = %d\n", args->texRef__ref.val.normalized);
+				printf("\t\tenum hipTextureReadMode readMode = %d\n", args->texRef__ref.val.readMode);
+				printf("\t\tenum hipTextureFilterMode filterMode = %d\n", args->texRef__ref.val.filterMode);
+				printf("\t\tenum hipTextureAddressMode[3] addressMode = %d\n", args->texRef__ref.val.addressMode[0]);
 				printf("\t\tstruct hipChannelFormatDesc channelDesc = {\n");
-				printf("\t\t\tint x = %d\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.channelDesc.x);
-				printf("\t\t\tint y = %d\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.channelDesc.y);
-				printf("\t\t\tint z = %d\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.channelDesc.z);
-				printf("\t\t\tint w = %d\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.channelDesc.w);
-				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.channelDesc.f);
+				printf("\t\t\tint x = %d\n", args->texRef__ref.val.channelDesc.x);
+				printf("\t\t\tint y = %d\n", args->texRef__ref.val.channelDesc.y);
+				printf("\t\t\tint z = %d\n", args->texRef__ref.val.channelDesc.z);
+				printf("\t\t\tint w = %d\n", args->texRef__ref.val.channelDesc.w);
+				printf("\t\t\tenum hipChannelFormatKind f = %d\n", args->texRef__ref.val.channelDesc.f);
 				printf("\t\t}\n");
-				printf("\t\tint sRGB = %d\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.sRGB);
-				printf("\t\tunsigned int maxAnisotropy = %u\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.maxAnisotropy);
-				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.mipmapFilterMode);
-				printf("\t\tfloat mipmapLevelBias = %f\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.mipmapLevelBias);
-				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.minMipmapLevelClamp);
-				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.maxMipmapLevelClamp);
-				printf("\t\tint numChannels = %d\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.numChannels);
-				printf("\t\tenum hipArray_Format format = %d\n", args->hipTexRefGetMipmapLevelClamp.texRef__ref.val.format);
+				printf("\t\tint sRGB = %d\n", args->texRef__ref.val.sRGB);
+				printf("\t\tunsigned int maxAnisotropy = %u\n", args->texRef__ref.val.maxAnisotropy);
+				printf("\t\tenum hipTextureFilterMode mipmapFilterMode = %d\n", args->texRef__ref.val.mipmapFilterMode);
+				printf("\t\tfloat mipmapLevelBias = %f\n", args->texRef__ref.val.mipmapLevelBias);
+				printf("\t\tfloat minMipmapLevelClamp = %f\n", args->texRef__ref.val.minMipmapLevelClamp);
+				printf("\t\tfloat maxMipmapLevelClamp = %f\n", args->texRef__ref.val.maxMipmapLevelClamp);
+				printf("\t\tint numChannels = %d\n", args->texRef__ref.val.numChannels);
+				printf("\t\tenum hipArray_Format format = %d\n", args->texRef__ref.val.format);
 				printf("\t}\n");
 			} else { printf("\n"); };
-			printf("\thipError_t retval = %d\n", args->hipTexRefGetMipmapLevelClamp.retval);
+			printf("\thipError_t retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
         default : break;
     }

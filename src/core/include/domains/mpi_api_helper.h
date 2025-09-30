@@ -543,7 +543,7 @@ static inline mpi_api_id_t get_mpi_funid_by_name(const char* name)
  *	)
  */
 #if HAVE_MPI_Init
-struct args_MPI_Init_t {
+typedef struct {
 	int * argc;
 	struct {
 		int val;
@@ -555,23 +555,25 @@ struct args_MPI_Init_t {
 		char val[MPI_STRING_SIZE_MAX];
 	} argv__ref;
 	int retval;
-};
+} args_MPI_Init_t;
 
 #define GET_ARGS_VALUE_MPI_Init(activity) { \
-	activity->mpi_args.MPI_Init.argc = (int *) argc; \
-	activity->mpi_args.MPI_Init.argv = (char ***) argv; \
+	args_MPI_Init_t* args = (args_MPI_Init_t*) activity->args; \
+	args->argc = (int *) argc; \
+	args->argv = (char ***) argv; \
 };
 
 #define GET_PTRS_VALUE_MPI_Init(args) { \
-	if (args->MPI_Init.argc != NULL) { \
-		args->MPI_Init.argc__ref.val = *args->MPI_Init.argc; \
+	args_MPI_Init_t* pargs = (args_MPI_Init_t*) args; \
+	if (pargs->argc != NULL) { \
+		pargs->argc__ref.val = *pargs->argc; \
 	} \
-	if (args->MPI_Init.argv != NULL) { \
-		args->MPI_Init.argv__ref.ptr1 = *args->MPI_Init.argv; \
-		if (args->MPI_Init.argv__ref.ptr1 != NULL) { \
-			args->MPI_Init.argv__ref.ptr2 = **args->MPI_Init.argv; \
-			if (args->MPI_Init.argv__ref.ptr2 != NULL) { \
-				strncpy(args->MPI_Init.argv__ref.val, args->MPI_Init.argv__ref.ptr2, MPI_STRING_SIZE_MAX-1); \
+	if (pargs->argv != NULL) { \
+		pargs->argv__ref.ptr1 = *pargs->argv; \
+		if (pargs->argv__ref.ptr1 != NULL) { \
+			pargs->argv__ref.ptr2 = **pargs->argv; \
+			if (pargs->argv__ref.ptr2 != NULL) { \
+				strncpy(pargs->argv__ref.val, pargs->argv__ref.ptr2, MPI_STRING_SIZE_MAX-1); \
 			} \
 		} \
 	} \
@@ -597,7 +599,7 @@ struct args_MPI_Init_t {
  *	)
  */
 #if HAVE_MPI_Init_thread
-struct args_MPI_Init_thread_t {
+typedef struct {
 	int * argc;
 	struct {
 		int val;
@@ -614,30 +616,32 @@ struct args_MPI_Init_thread_t {
 		int val;
 	} provided__ref;
 	int retval;
-};
+} args_MPI_Init_thread_t;
 
 #define GET_ARGS_VALUE_MPI_Init_thread(activity) { \
-	activity->mpi_args.MPI_Init_thread.argc = (int *) argc; \
-	activity->mpi_args.MPI_Init_thread.argv = (char ***) argv; \
-	activity->mpi_args.MPI_Init_thread.required = (int) required; \
-	activity->mpi_args.MPI_Init_thread.provided = (int *) provided; \
+	args_MPI_Init_thread_t* args = (args_MPI_Init_thread_t*) activity->args; \
+	args->argc = (int *) argc; \
+	args->argv = (char ***) argv; \
+	args->required = (int) required; \
+	args->provided = (int *) provided; \
 };
 
 #define GET_PTRS_VALUE_MPI_Init_thread(args) { \
-	if (args->MPI_Init_thread.argc != NULL) { \
-		args->MPI_Init_thread.argc__ref.val = *args->MPI_Init_thread.argc; \
+	args_MPI_Init_thread_t* pargs = (args_MPI_Init_thread_t*) args; \
+	if (pargs->argc != NULL) { \
+		pargs->argc__ref.val = *pargs->argc; \
 	} \
-	if (args->MPI_Init_thread.argv != NULL) { \
-		args->MPI_Init_thread.argv__ref.ptr1 = *args->MPI_Init_thread.argv; \
-		if (args->MPI_Init_thread.argv__ref.ptr1 != NULL) { \
-			args->MPI_Init_thread.argv__ref.ptr2 = **args->MPI_Init_thread.argv; \
-			if (args->MPI_Init_thread.argv__ref.ptr2 != NULL) { \
-				strncpy(args->MPI_Init_thread.argv__ref.val, args->MPI_Init_thread.argv__ref.ptr2, MPI_STRING_SIZE_MAX-1); \
+	if (pargs->argv != NULL) { \
+		pargs->argv__ref.ptr1 = *pargs->argv; \
+		if (pargs->argv__ref.ptr1 != NULL) { \
+			pargs->argv__ref.ptr2 = **pargs->argv; \
+			if (pargs->argv__ref.ptr2 != NULL) { \
+				strncpy(pargs->argv__ref.val, pargs->argv__ref.ptr2, MPI_STRING_SIZE_MAX-1); \
 			} \
 		} \
 	} \
-	if (args->MPI_Init_thread.provided != NULL) { \
-		args->MPI_Init_thread.provided__ref.val = *args->MPI_Init_thread.provided; \
+	if (pargs->provided != NULL) { \
+		pargs->provided__ref.val = *pargs->provided; \
 	} \
 };
 
@@ -657,9 +661,9 @@ struct args_MPI_Init_thread_t {
  *	)
  */
 #if HAVE_MPI_Finalize
-struct args_MPI_Finalize_t {
+typedef struct {
 	int retval;
-};
+} args_MPI_Finalize_t;
 
 #endif
 
@@ -678,21 +682,23 @@ struct args_MPI_Finalize_t {
  *	)
  */
 #if HAVE_MPI_Initialized
-struct args_MPI_Initialized_t {
+typedef struct {
 	int * flag;
 	struct {
 		int val;
 	} flag__ref;
 	int retval;
-};
+} args_MPI_Initialized_t;
 
 #define GET_ARGS_VALUE_MPI_Initialized(activity) { \
-	activity->mpi_args.MPI_Initialized.flag = (int *) flag; \
+	args_MPI_Initialized_t* args = (args_MPI_Initialized_t*) activity->args; \
+	args->flag = (int *) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_Initialized(args) { \
-	if (args->MPI_Initialized.flag != NULL) { \
-		args->MPI_Initialized.flag__ref.val = *args->MPI_Initialized.flag; \
+	args_MPI_Initialized_t* pargs = (args_MPI_Initialized_t*) args; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
 };
 
@@ -713,21 +719,23 @@ struct args_MPI_Initialized_t {
  *	)
  */
 #if HAVE_MPI_Query_thread
-struct args_MPI_Query_thread_t {
+typedef struct {
 	int * provided;
 	struct {
 		int val;
 	} provided__ref;
 	int retval;
-};
+} args_MPI_Query_thread_t;
 
 #define GET_ARGS_VALUE_MPI_Query_thread(activity) { \
-	activity->mpi_args.MPI_Query_thread.provided = (int *) provided; \
+	args_MPI_Query_thread_t* args = (args_MPI_Query_thread_t*) activity->args; \
+	args->provided = (int *) provided; \
 };
 
 #define GET_PTRS_VALUE_MPI_Query_thread(args) { \
-	if (args->MPI_Query_thread.provided != NULL) { \
-		args->MPI_Query_thread.provided__ref.val = *args->MPI_Query_thread.provided; \
+	args_MPI_Query_thread_t* pargs = (args_MPI_Query_thread_t*) args; \
+	if (pargs->provided != NULL) { \
+		pargs->provided__ref.val = *pargs->provided; \
 	} \
 };
 
@@ -749,15 +757,16 @@ struct args_MPI_Query_thread_t {
  *	)
  */
 #if HAVE_MPI_Abort
-struct args_MPI_Abort_t {
+typedef struct {
 	MPI_Comm comm;
 	int errorcode;
 	int retval;
-};
+} args_MPI_Abort_t;
 
 #define GET_ARGS_VALUE_MPI_Abort(activity) { \
-	activity->mpi_args.MPI_Abort.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Abort.errorcode = (int) errorcode; \
+	args_MPI_Abort_t* args = (args_MPI_Abort_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->errorcode = (int) errorcode; \
 };
 
 #endif
@@ -782,7 +791,7 @@ struct args_MPI_Abort_t {
  *	)
  */
 #if HAVE_MPI_Send
-struct args_MPI_Send_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -790,15 +799,16 @@ struct args_MPI_Send_t {
 	int tag;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Send_t;
 
 #define GET_ARGS_VALUE_MPI_Send(activity) { \
-	activity->mpi_args.MPI_Send.buf = (void *) buf; \
-	activity->mpi_args.MPI_Send.count = (int) count; \
-	activity->mpi_args.MPI_Send.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Send.dest = (int) dest; \
-	activity->mpi_args.MPI_Send.tag = (int) tag; \
-	activity->mpi_args.MPI_Send.comm = (MPI_Comm) comm; \
+	args_MPI_Send_t* args = (args_MPI_Send_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->dest = (int) dest; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -824,7 +834,7 @@ struct args_MPI_Send_t {
  *	)
  */
 #if HAVE_MPI_Recv
-struct args_MPI_Recv_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -836,21 +846,23 @@ struct args_MPI_Recv_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_Recv_t;
 
 #define GET_ARGS_VALUE_MPI_Recv(activity) { \
-	activity->mpi_args.MPI_Recv.buf = (void *) buf; \
-	activity->mpi_args.MPI_Recv.count = (int) count; \
-	activity->mpi_args.MPI_Recv.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Recv.source = (int) source; \
-	activity->mpi_args.MPI_Recv.tag = (int) tag; \
-	activity->mpi_args.MPI_Recv.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Recv.status = (MPI_Status *) status; \
+	args_MPI_Recv_t* args = (args_MPI_Recv_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->source = (int) source; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Recv(args) { \
-	if (args->MPI_Recv.status != NULL) { \
-		args->MPI_Recv.status__ref.val = *args->MPI_Recv.status; \
+	args_MPI_Recv_t* pargs = (args_MPI_Recv_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -882,7 +894,7 @@ struct args_MPI_Recv_t {
  *	)
  */
 #if HAVE_MPI_Sendrecv
-struct args_MPI_Sendrecv_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -899,26 +911,28 @@ struct args_MPI_Sendrecv_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_Sendrecv_t;
 
 #define GET_ARGS_VALUE_MPI_Sendrecv(activity) { \
-	activity->mpi_args.MPI_Sendrecv.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Sendrecv.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Sendrecv.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Sendrecv.dest = (int) dest; \
-	activity->mpi_args.MPI_Sendrecv.sendtag = (int) sendtag; \
-	activity->mpi_args.MPI_Sendrecv.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Sendrecv.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Sendrecv.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Sendrecv.source = (int) source; \
-	activity->mpi_args.MPI_Sendrecv.recvtag = (int) recvtag; \
-	activity->mpi_args.MPI_Sendrecv.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Sendrecv.status = (MPI_Status *) status; \
+	args_MPI_Sendrecv_t* args = (args_MPI_Sendrecv_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->dest = (int) dest; \
+	args->sendtag = (int) sendtag; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->source = (int) source; \
+	args->recvtag = (int) recvtag; \
+	args->comm = (MPI_Comm) comm; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Sendrecv(args) { \
-	if (args->MPI_Sendrecv.status != NULL) { \
-		args->MPI_Sendrecv.status__ref.val = *args->MPI_Sendrecv.status; \
+	args_MPI_Sendrecv_t* pargs = (args_MPI_Sendrecv_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -947,7 +961,7 @@ struct args_MPI_Sendrecv_t {
  *	)
  */
 #if HAVE_MPI_Sendrecv_replace
-struct args_MPI_Sendrecv_replace_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -961,23 +975,25 @@ struct args_MPI_Sendrecv_replace_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_Sendrecv_replace_t;
 
 #define GET_ARGS_VALUE_MPI_Sendrecv_replace(activity) { \
-	activity->mpi_args.MPI_Sendrecv_replace.buf = (void *) buf; \
-	activity->mpi_args.MPI_Sendrecv_replace.count = (int) count; \
-	activity->mpi_args.MPI_Sendrecv_replace.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Sendrecv_replace.dest = (int) dest; \
-	activity->mpi_args.MPI_Sendrecv_replace.sendtag = (int) sendtag; \
-	activity->mpi_args.MPI_Sendrecv_replace.source = (int) source; \
-	activity->mpi_args.MPI_Sendrecv_replace.recvtag = (int) recvtag; \
-	activity->mpi_args.MPI_Sendrecv_replace.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Sendrecv_replace.status = (MPI_Status *) status; \
+	args_MPI_Sendrecv_replace_t* args = (args_MPI_Sendrecv_replace_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->dest = (int) dest; \
+	args->sendtag = (int) sendtag; \
+	args->source = (int) source; \
+	args->recvtag = (int) recvtag; \
+	args->comm = (MPI_Comm) comm; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Sendrecv_replace(args) { \
-	if (args->MPI_Sendrecv_replace.status != NULL) { \
-		args->MPI_Sendrecv_replace.status__ref.val = *args->MPI_Sendrecv_replace.status; \
+	args_MPI_Sendrecv_replace_t* pargs = (args_MPI_Sendrecv_replace_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -1004,7 +1020,7 @@ struct args_MPI_Sendrecv_replace_t {
  *	)
  */
 #if HAVE_MPI_Isend
-struct args_MPI_Isend_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -1016,21 +1032,23 @@ struct args_MPI_Isend_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Isend_t;
 
 #define GET_ARGS_VALUE_MPI_Isend(activity) { \
-	activity->mpi_args.MPI_Isend.buf = (void *) buf; \
-	activity->mpi_args.MPI_Isend.count = (int) count; \
-	activity->mpi_args.MPI_Isend.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Isend.dest = (int) dest; \
-	activity->mpi_args.MPI_Isend.tag = (int) tag; \
-	activity->mpi_args.MPI_Isend.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Isend.request = (MPI_Request *) request; \
+	args_MPI_Isend_t* args = (args_MPI_Isend_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->dest = (int) dest; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Isend(args) { \
-	if (args->MPI_Isend.request != NULL) { \
-		args->MPI_Isend.request__ref.val = *args->MPI_Isend.request; \
+	args_MPI_Isend_t* pargs = (args_MPI_Isend_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -1057,7 +1075,7 @@ struct args_MPI_Isend_t {
  *	)
  */
 #if HAVE_MPI_Irecv
-struct args_MPI_Irecv_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -1069,21 +1087,23 @@ struct args_MPI_Irecv_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Irecv_t;
 
 #define GET_ARGS_VALUE_MPI_Irecv(activity) { \
-	activity->mpi_args.MPI_Irecv.buf = (void *) buf; \
-	activity->mpi_args.MPI_Irecv.count = (int) count; \
-	activity->mpi_args.MPI_Irecv.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Irecv.source = (int) source; \
-	activity->mpi_args.MPI_Irecv.tag = (int) tag; \
-	activity->mpi_args.MPI_Irecv.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Irecv.request = (MPI_Request *) request; \
+	args_MPI_Irecv_t* args = (args_MPI_Irecv_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->source = (int) source; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Irecv(args) { \
-	if (args->MPI_Irecv.request != NULL) { \
-		args->MPI_Irecv.request__ref.val = *args->MPI_Irecv.request; \
+	args_MPI_Irecv_t* pargs = (args_MPI_Irecv_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -1105,7 +1125,7 @@ struct args_MPI_Irecv_t {
  *	)
  */
 #if HAVE_MPI_Wait
-struct args_MPI_Wait_t {
+typedef struct {
 	MPI_Request * request;
 	struct {
 		MPI_Request val;
@@ -1115,19 +1135,21 @@ struct args_MPI_Wait_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_Wait_t;
 
 #define GET_ARGS_VALUE_MPI_Wait(activity) { \
-	activity->mpi_args.MPI_Wait.request = (MPI_Request *) request; \
-	activity->mpi_args.MPI_Wait.status = (MPI_Status *) status; \
+	args_MPI_Wait_t* args = (args_MPI_Wait_t*) activity->args; \
+	args->request = (MPI_Request *) request; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Wait(args) { \
-	if (args->MPI_Wait.request != NULL) { \
-		args->MPI_Wait.request__ref.val = *args->MPI_Wait.request; \
+	args_MPI_Wait_t* pargs = (args_MPI_Wait_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
-	if (args->MPI_Wait.status != NULL) { \
-		args->MPI_Wait.status__ref.val = *args->MPI_Wait.status; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -1150,7 +1172,7 @@ struct args_MPI_Wait_t {
  *	)
  */
 #if HAVE_MPI_Waitall
-struct args_MPI_Waitall_t {
+typedef struct {
 	int count;
 	MPI_Request(* array_of_requests);
 	struct {
@@ -1161,20 +1183,22 @@ struct args_MPI_Waitall_t {
 		MPI_Status val;
 	} array_of_statuses__ref;
 	int retval;
-};
+} args_MPI_Waitall_t;
 
 #define GET_ARGS_VALUE_MPI_Waitall(activity) { \
-	activity->mpi_args.MPI_Waitall.count = (int) count; \
-	activity->mpi_args.MPI_Waitall.array_of_requests = (MPI_Request(*)) array_of_requests; \
-	activity->mpi_args.MPI_Waitall.array_of_statuses = (MPI_Status *) array_of_statuses; \
+	args_MPI_Waitall_t* args = (args_MPI_Waitall_t*) activity->args; \
+	args->count = (int) count; \
+	args->array_of_requests = (MPI_Request(*)) array_of_requests; \
+	args->array_of_statuses = (MPI_Status *) array_of_statuses; \
 };
 
 #define GET_PTRS_VALUE_MPI_Waitall(args) { \
-	if (args->MPI_Waitall.array_of_requests != NULL) { \
-		args->MPI_Waitall.array_of_requests__ref.val = *args->MPI_Waitall.array_of_requests; \
+	args_MPI_Waitall_t* pargs = (args_MPI_Waitall_t*) args; \
+	if (pargs->array_of_requests != NULL) { \
+		pargs->array_of_requests__ref.val = *pargs->array_of_requests; \
 	} \
-	if (args->MPI_Waitall.array_of_statuses != NULL) { \
-		args->MPI_Waitall.array_of_statuses__ref.val = *args->MPI_Waitall.array_of_statuses; \
+	if (pargs->array_of_statuses != NULL) { \
+		pargs->array_of_statuses__ref.val = *pargs->array_of_statuses; \
 	} \
 };
 
@@ -1198,7 +1222,7 @@ struct args_MPI_Waitall_t {
  *	)
  */
 #if HAVE_MPI_Waitany
-struct args_MPI_Waitany_t {
+typedef struct {
 	int count;
 	MPI_Request(* array_of_requests);
 	struct {
@@ -1213,24 +1237,26 @@ struct args_MPI_Waitany_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_Waitany_t;
 
 #define GET_ARGS_VALUE_MPI_Waitany(activity) { \
-	activity->mpi_args.MPI_Waitany.count = (int) count; \
-	activity->mpi_args.MPI_Waitany.array_of_requests = (MPI_Request(*)) array_of_requests; \
-	activity->mpi_args.MPI_Waitany.index = (int *) index; \
-	activity->mpi_args.MPI_Waitany.status = (MPI_Status *) status; \
+	args_MPI_Waitany_t* args = (args_MPI_Waitany_t*) activity->args; \
+	args->count = (int) count; \
+	args->array_of_requests = (MPI_Request(*)) array_of_requests; \
+	args->index = (int *) index; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Waitany(args) { \
-	if (args->MPI_Waitany.array_of_requests != NULL) { \
-		args->MPI_Waitany.array_of_requests__ref.val = *args->MPI_Waitany.array_of_requests; \
+	args_MPI_Waitany_t* pargs = (args_MPI_Waitany_t*) args; \
+	if (pargs->array_of_requests != NULL) { \
+		pargs->array_of_requests__ref.val = *pargs->array_of_requests; \
 	} \
-	if (args->MPI_Waitany.index != NULL) { \
-		args->MPI_Waitany.index__ref.val = *args->MPI_Waitany.index; \
+	if (pargs->index != NULL) { \
+		pargs->index__ref.val = *pargs->index; \
 	} \
-	if (args->MPI_Waitany.status != NULL) { \
-		args->MPI_Waitany.status__ref.val = *args->MPI_Waitany.status; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -1255,7 +1281,7 @@ struct args_MPI_Waitany_t {
  *	)
  */
 #if HAVE_MPI_Waitsome
-struct args_MPI_Waitsome_t {
+typedef struct {
 	int incount;
 	MPI_Request(* array_of_requests);
 	struct {
@@ -1274,28 +1300,30 @@ struct args_MPI_Waitsome_t {
 		MPI_Status val;
 	} array_of_statuses__ref;
 	int retval;
-};
+} args_MPI_Waitsome_t;
 
 #define GET_ARGS_VALUE_MPI_Waitsome(activity) { \
-	activity->mpi_args.MPI_Waitsome.incount = (int) incount; \
-	activity->mpi_args.MPI_Waitsome.array_of_requests = (MPI_Request(*)) array_of_requests; \
-	activity->mpi_args.MPI_Waitsome.outcount = (int *) outcount; \
-	activity->mpi_args.MPI_Waitsome.array_of_indices = (int(*)) array_of_indices; \
-	activity->mpi_args.MPI_Waitsome.array_of_statuses = (MPI_Status(*)) array_of_statuses; \
+	args_MPI_Waitsome_t* args = (args_MPI_Waitsome_t*) activity->args; \
+	args->incount = (int) incount; \
+	args->array_of_requests = (MPI_Request(*)) array_of_requests; \
+	args->outcount = (int *) outcount; \
+	args->array_of_indices = (int(*)) array_of_indices; \
+	args->array_of_statuses = (MPI_Status(*)) array_of_statuses; \
 };
 
 #define GET_PTRS_VALUE_MPI_Waitsome(args) { \
-	if (args->MPI_Waitsome.array_of_requests != NULL) { \
-		args->MPI_Waitsome.array_of_requests__ref.val = *args->MPI_Waitsome.array_of_requests; \
+	args_MPI_Waitsome_t* pargs = (args_MPI_Waitsome_t*) args; \
+	if (pargs->array_of_requests != NULL) { \
+		pargs->array_of_requests__ref.val = *pargs->array_of_requests; \
 	} \
-	if (args->MPI_Waitsome.outcount != NULL) { \
-		args->MPI_Waitsome.outcount__ref.val = *args->MPI_Waitsome.outcount; \
+	if (pargs->outcount != NULL) { \
+		pargs->outcount__ref.val = *pargs->outcount; \
 	} \
-	if (args->MPI_Waitsome.array_of_indices != NULL) { \
-		args->MPI_Waitsome.array_of_indices__ref.val = *args->MPI_Waitsome.array_of_indices; \
+	if (pargs->array_of_indices != NULL) { \
+		pargs->array_of_indices__ref.val = *pargs->array_of_indices; \
 	} \
-	if (args->MPI_Waitsome.array_of_statuses != NULL) { \
-		args->MPI_Waitsome.array_of_statuses__ref.val = *args->MPI_Waitsome.array_of_statuses; \
+	if (pargs->array_of_statuses != NULL) { \
+		pargs->array_of_statuses__ref.val = *pargs->array_of_statuses; \
 	} \
 };
 
@@ -1318,7 +1346,7 @@ struct args_MPI_Waitsome_t {
  *	)
  */
 #if HAVE_MPI_Test
-struct args_MPI_Test_t {
+typedef struct {
 	MPI_Request * request;
 	struct {
 		MPI_Request val;
@@ -1332,23 +1360,25 @@ struct args_MPI_Test_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_Test_t;
 
 #define GET_ARGS_VALUE_MPI_Test(activity) { \
-	activity->mpi_args.MPI_Test.request = (MPI_Request *) request; \
-	activity->mpi_args.MPI_Test.flag = (int *) flag; \
-	activity->mpi_args.MPI_Test.status = (MPI_Status *) status; \
+	args_MPI_Test_t* args = (args_MPI_Test_t*) activity->args; \
+	args->request = (MPI_Request *) request; \
+	args->flag = (int *) flag; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Test(args) { \
-	if (args->MPI_Test.request != NULL) { \
-		args->MPI_Test.request__ref.val = *args->MPI_Test.request; \
+	args_MPI_Test_t* pargs = (args_MPI_Test_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
-	if (args->MPI_Test.flag != NULL) { \
-		args->MPI_Test.flag__ref.val = *args->MPI_Test.flag; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
-	if (args->MPI_Test.status != NULL) { \
-		args->MPI_Test.status__ref.val = *args->MPI_Test.status; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -1372,7 +1402,7 @@ struct args_MPI_Test_t {
  *	)
  */
 #if HAVE_MPI_Testall
-struct args_MPI_Testall_t {
+typedef struct {
 	int count;
 	MPI_Request(* array_of_requests);
 	struct {
@@ -1387,24 +1417,26 @@ struct args_MPI_Testall_t {
 		MPI_Status val;
 	} array_of_statuses__ref;
 	int retval;
-};
+} args_MPI_Testall_t;
 
 #define GET_ARGS_VALUE_MPI_Testall(activity) { \
-	activity->mpi_args.MPI_Testall.count = (int) count; \
-	activity->mpi_args.MPI_Testall.array_of_requests = (MPI_Request(*)) array_of_requests; \
-	activity->mpi_args.MPI_Testall.flag = (int *) flag; \
-	activity->mpi_args.MPI_Testall.array_of_statuses = (MPI_Status(*)) array_of_statuses; \
+	args_MPI_Testall_t* args = (args_MPI_Testall_t*) activity->args; \
+	args->count = (int) count; \
+	args->array_of_requests = (MPI_Request(*)) array_of_requests; \
+	args->flag = (int *) flag; \
+	args->array_of_statuses = (MPI_Status(*)) array_of_statuses; \
 };
 
 #define GET_PTRS_VALUE_MPI_Testall(args) { \
-	if (args->MPI_Testall.array_of_requests != NULL) { \
-		args->MPI_Testall.array_of_requests__ref.val = *args->MPI_Testall.array_of_requests; \
+	args_MPI_Testall_t* pargs = (args_MPI_Testall_t*) args; \
+	if (pargs->array_of_requests != NULL) { \
+		pargs->array_of_requests__ref.val = *pargs->array_of_requests; \
 	} \
-	if (args->MPI_Testall.flag != NULL) { \
-		args->MPI_Testall.flag__ref.val = *args->MPI_Testall.flag; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
-	if (args->MPI_Testall.array_of_statuses != NULL) { \
-		args->MPI_Testall.array_of_statuses__ref.val = *args->MPI_Testall.array_of_statuses; \
+	if (pargs->array_of_statuses != NULL) { \
+		pargs->array_of_statuses__ref.val = *pargs->array_of_statuses; \
 	} \
 };
 
@@ -1429,7 +1461,7 @@ struct args_MPI_Testall_t {
  *	)
  */
 #if HAVE_MPI_Testany
-struct args_MPI_Testany_t {
+typedef struct {
 	int count;
 	MPI_Request(* array_of_requests);
 	struct {
@@ -1448,28 +1480,30 @@ struct args_MPI_Testany_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_Testany_t;
 
 #define GET_ARGS_VALUE_MPI_Testany(activity) { \
-	activity->mpi_args.MPI_Testany.count = (int) count; \
-	activity->mpi_args.MPI_Testany.array_of_requests = (MPI_Request(*)) array_of_requests; \
-	activity->mpi_args.MPI_Testany.index = (int *) index; \
-	activity->mpi_args.MPI_Testany.flag = (int *) flag; \
-	activity->mpi_args.MPI_Testany.status = (MPI_Status *) status; \
+	args_MPI_Testany_t* args = (args_MPI_Testany_t*) activity->args; \
+	args->count = (int) count; \
+	args->array_of_requests = (MPI_Request(*)) array_of_requests; \
+	args->index = (int *) index; \
+	args->flag = (int *) flag; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Testany(args) { \
-	if (args->MPI_Testany.array_of_requests != NULL) { \
-		args->MPI_Testany.array_of_requests__ref.val = *args->MPI_Testany.array_of_requests; \
+	args_MPI_Testany_t* pargs = (args_MPI_Testany_t*) args; \
+	if (pargs->array_of_requests != NULL) { \
+		pargs->array_of_requests__ref.val = *pargs->array_of_requests; \
 	} \
-	if (args->MPI_Testany.index != NULL) { \
-		args->MPI_Testany.index__ref.val = *args->MPI_Testany.index; \
+	if (pargs->index != NULL) { \
+		pargs->index__ref.val = *pargs->index; \
 	} \
-	if (args->MPI_Testany.flag != NULL) { \
-		args->MPI_Testany.flag__ref.val = *args->MPI_Testany.flag; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
-	if (args->MPI_Testany.status != NULL) { \
-		args->MPI_Testany.status__ref.val = *args->MPI_Testany.status; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -1494,7 +1528,7 @@ struct args_MPI_Testany_t {
  *	)
  */
 #if HAVE_MPI_Testsome
-struct args_MPI_Testsome_t {
+typedef struct {
 	int incount;
 	MPI_Request(* array_of_requests);
 	struct {
@@ -1513,28 +1547,30 @@ struct args_MPI_Testsome_t {
 		MPI_Status val;
 	} array_of_statuses__ref;
 	int retval;
-};
+} args_MPI_Testsome_t;
 
 #define GET_ARGS_VALUE_MPI_Testsome(activity) { \
-	activity->mpi_args.MPI_Testsome.incount = (int) incount; \
-	activity->mpi_args.MPI_Testsome.array_of_requests = (MPI_Request(*)) array_of_requests; \
-	activity->mpi_args.MPI_Testsome.outcount = (int *) outcount; \
-	activity->mpi_args.MPI_Testsome.array_of_indices = (int(*)) array_of_indices; \
-	activity->mpi_args.MPI_Testsome.array_of_statuses = (MPI_Status(*)) array_of_statuses; \
+	args_MPI_Testsome_t* args = (args_MPI_Testsome_t*) activity->args; \
+	args->incount = (int) incount; \
+	args->array_of_requests = (MPI_Request(*)) array_of_requests; \
+	args->outcount = (int *) outcount; \
+	args->array_of_indices = (int(*)) array_of_indices; \
+	args->array_of_statuses = (MPI_Status(*)) array_of_statuses; \
 };
 
 #define GET_PTRS_VALUE_MPI_Testsome(args) { \
-	if (args->MPI_Testsome.array_of_requests != NULL) { \
-		args->MPI_Testsome.array_of_requests__ref.val = *args->MPI_Testsome.array_of_requests; \
+	args_MPI_Testsome_t* pargs = (args_MPI_Testsome_t*) args; \
+	if (pargs->array_of_requests != NULL) { \
+		pargs->array_of_requests__ref.val = *pargs->array_of_requests; \
 	} \
-	if (args->MPI_Testsome.outcount != NULL) { \
-		args->MPI_Testsome.outcount__ref.val = *args->MPI_Testsome.outcount; \
+	if (pargs->outcount != NULL) { \
+		pargs->outcount__ref.val = *pargs->outcount; \
 	} \
-	if (args->MPI_Testsome.array_of_indices != NULL) { \
-		args->MPI_Testsome.array_of_indices__ref.val = *args->MPI_Testsome.array_of_indices; \
+	if (pargs->array_of_indices != NULL) { \
+		pargs->array_of_indices__ref.val = *pargs->array_of_indices; \
 	} \
-	if (args->MPI_Testsome.array_of_statuses != NULL) { \
-		args->MPI_Testsome.array_of_statuses__ref.val = *args->MPI_Testsome.array_of_statuses; \
+	if (pargs->array_of_statuses != NULL) { \
+		pargs->array_of_statuses__ref.val = *pargs->array_of_statuses; \
 	} \
 };
 
@@ -1555,21 +1591,23 @@ struct args_MPI_Testsome_t {
  *	)
  */
 #if HAVE_MPI_Request_free
-struct args_MPI_Request_free_t {
+typedef struct {
 	MPI_Request * request;
 	struct {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Request_free_t;
 
 #define GET_ARGS_VALUE_MPI_Request_free(activity) { \
-	activity->mpi_args.MPI_Request_free.request = (MPI_Request *) request; \
+	args_MPI_Request_free_t* args = (args_MPI_Request_free_t*) activity->args; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Request_free(args) { \
-	if (args->MPI_Request_free.request != NULL) { \
-		args->MPI_Request_free.request__ref.val = *args->MPI_Request_free.request; \
+	args_MPI_Request_free_t* pargs = (args_MPI_Request_free_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -1590,21 +1628,23 @@ struct args_MPI_Request_free_t {
  *	)
  */
 #if HAVE_MPI_Cancel
-struct args_MPI_Cancel_t {
+typedef struct {
 	MPI_Request * request;
 	struct {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Cancel_t;
 
 #define GET_ARGS_VALUE_MPI_Cancel(activity) { \
-	activity->mpi_args.MPI_Cancel.request = (MPI_Request *) request; \
+	args_MPI_Cancel_t* args = (args_MPI_Cancel_t*) activity->args; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Cancel(args) { \
-	if (args->MPI_Cancel.request != NULL) { \
-		args->MPI_Cancel.request__ref.val = *args->MPI_Cancel.request; \
+	args_MPI_Cancel_t* pargs = (args_MPI_Cancel_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -1627,7 +1667,7 @@ struct args_MPI_Cancel_t {
  *	)
  */
 #if HAVE_MPI_Type_contiguous
-struct args_MPI_Type_contiguous_t {
+typedef struct {
 	int count;
 	MPI_Datatype oldtype;
 	MPI_Datatype * newtype;
@@ -1635,17 +1675,19 @@ struct args_MPI_Type_contiguous_t {
 		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
-};
+} args_MPI_Type_contiguous_t;
 
 #define GET_ARGS_VALUE_MPI_Type_contiguous(activity) { \
-	activity->mpi_args.MPI_Type_contiguous.count = (int) count; \
-	activity->mpi_args.MPI_Type_contiguous.oldtype = (MPI_Datatype) oldtype; \
-	activity->mpi_args.MPI_Type_contiguous.newtype = (MPI_Datatype *) newtype; \
+	args_MPI_Type_contiguous_t* args = (args_MPI_Type_contiguous_t*) activity->args; \
+	args->count = (int) count; \
+	args->oldtype = (MPI_Datatype) oldtype; \
+	args->newtype = (MPI_Datatype *) newtype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_contiguous(args) { \
-	if (args->MPI_Type_contiguous.newtype != NULL) { \
-		args->MPI_Type_contiguous.newtype__ref.val = *args->MPI_Type_contiguous.newtype; \
+	args_MPI_Type_contiguous_t* pargs = (args_MPI_Type_contiguous_t*) args; \
+	if (pargs->newtype != NULL) { \
+		pargs->newtype__ref.val = *pargs->newtype; \
 	} \
 };
 
@@ -1670,7 +1712,7 @@ struct args_MPI_Type_contiguous_t {
  *	)
  */
 #if HAVE_MPI_Type_vector
-struct args_MPI_Type_vector_t {
+typedef struct {
 	int count;
 	int blocklength;
 	int stride;
@@ -1680,19 +1722,21 @@ struct args_MPI_Type_vector_t {
 		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
-};
+} args_MPI_Type_vector_t;
 
 #define GET_ARGS_VALUE_MPI_Type_vector(activity) { \
-	activity->mpi_args.MPI_Type_vector.count = (int) count; \
-	activity->mpi_args.MPI_Type_vector.blocklength = (int) blocklength; \
-	activity->mpi_args.MPI_Type_vector.stride = (int) stride; \
-	activity->mpi_args.MPI_Type_vector.oldtype = (MPI_Datatype) oldtype; \
-	activity->mpi_args.MPI_Type_vector.newtype = (MPI_Datatype *) newtype; \
+	args_MPI_Type_vector_t* args = (args_MPI_Type_vector_t*) activity->args; \
+	args->count = (int) count; \
+	args->blocklength = (int) blocklength; \
+	args->stride = (int) stride; \
+	args->oldtype = (MPI_Datatype) oldtype; \
+	args->newtype = (MPI_Datatype *) newtype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_vector(args) { \
-	if (args->MPI_Type_vector.newtype != NULL) { \
-		args->MPI_Type_vector.newtype__ref.val = *args->MPI_Type_vector.newtype; \
+	args_MPI_Type_vector_t* pargs = (args_MPI_Type_vector_t*) args; \
+	if (pargs->newtype != NULL) { \
+		pargs->newtype__ref.val = *pargs->newtype; \
 	} \
 };
 
@@ -1717,7 +1761,7 @@ struct args_MPI_Type_vector_t {
  *	)
  */
 #if HAVE_MPI_Type_indexed
-struct args_MPI_Type_indexed_t {
+typedef struct {
 	int count;
 	int(* array_of_blocklengths);
 	struct {
@@ -1733,25 +1777,27 @@ struct args_MPI_Type_indexed_t {
 		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
-};
+} args_MPI_Type_indexed_t;
 
 #define GET_ARGS_VALUE_MPI_Type_indexed(activity) { \
-	activity->mpi_args.MPI_Type_indexed.count = (int) count; \
-	activity->mpi_args.MPI_Type_indexed.array_of_blocklengths = (int(*)) array_of_blocklengths; \
-	activity->mpi_args.MPI_Type_indexed.array_of_displacements = (int(*)) array_of_displacements; \
-	activity->mpi_args.MPI_Type_indexed.oldtype = (MPI_Datatype) oldtype; \
-	activity->mpi_args.MPI_Type_indexed.newtype = (MPI_Datatype *) newtype; \
+	args_MPI_Type_indexed_t* args = (args_MPI_Type_indexed_t*) activity->args; \
+	args->count = (int) count; \
+	args->array_of_blocklengths = (int(*)) array_of_blocklengths; \
+	args->array_of_displacements = (int(*)) array_of_displacements; \
+	args->oldtype = (MPI_Datatype) oldtype; \
+	args->newtype = (MPI_Datatype *) newtype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_indexed(args) { \
-	if (args->MPI_Type_indexed.array_of_blocklengths != NULL) { \
-		args->MPI_Type_indexed.array_of_blocklengths__ref.val = *args->MPI_Type_indexed.array_of_blocklengths; \
+	args_MPI_Type_indexed_t* pargs = (args_MPI_Type_indexed_t*) args; \
+	if (pargs->array_of_blocklengths != NULL) { \
+		pargs->array_of_blocklengths__ref.val = *pargs->array_of_blocklengths; \
 	} \
-	if (args->MPI_Type_indexed.array_of_displacements != NULL) { \
-		args->MPI_Type_indexed.array_of_displacements__ref.val = *args->MPI_Type_indexed.array_of_displacements; \
+	if (pargs->array_of_displacements != NULL) { \
+		pargs->array_of_displacements__ref.val = *pargs->array_of_displacements; \
 	} \
-	if (args->MPI_Type_indexed.newtype != NULL) { \
-		args->MPI_Type_indexed.newtype__ref.val = *args->MPI_Type_indexed.newtype; \
+	if (pargs->newtype != NULL) { \
+		pargs->newtype__ref.val = *pargs->newtype; \
 	} \
 };
 
@@ -1776,7 +1822,7 @@ struct args_MPI_Type_indexed_t {
  *	)
  */
 #if HAVE_MPI_Type_create_indexed_block
-struct args_MPI_Type_create_indexed_block_t {
+typedef struct {
 	int count;
 	int blocklength;
 	int(* array_of_displacements);
@@ -1789,22 +1835,24 @@ struct args_MPI_Type_create_indexed_block_t {
 		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
-};
+} args_MPI_Type_create_indexed_block_t;
 
 #define GET_ARGS_VALUE_MPI_Type_create_indexed_block(activity) { \
-	activity->mpi_args.MPI_Type_create_indexed_block.count = (int) count; \
-	activity->mpi_args.MPI_Type_create_indexed_block.blocklength = (int) blocklength; \
-	activity->mpi_args.MPI_Type_create_indexed_block.array_of_displacements = (int(*)) array_of_displacements; \
-	activity->mpi_args.MPI_Type_create_indexed_block.oldtype = (MPI_Datatype) oldtype; \
-	activity->mpi_args.MPI_Type_create_indexed_block.newtype = (MPI_Datatype *) newtype; \
+	args_MPI_Type_create_indexed_block_t* args = (args_MPI_Type_create_indexed_block_t*) activity->args; \
+	args->count = (int) count; \
+	args->blocklength = (int) blocklength; \
+	args->array_of_displacements = (int(*)) array_of_displacements; \
+	args->oldtype = (MPI_Datatype) oldtype; \
+	args->newtype = (MPI_Datatype *) newtype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_create_indexed_block(args) { \
-	if (args->MPI_Type_create_indexed_block.array_of_displacements != NULL) { \
-		args->MPI_Type_create_indexed_block.array_of_displacements__ref.val = *args->MPI_Type_create_indexed_block.array_of_displacements; \
+	args_MPI_Type_create_indexed_block_t* pargs = (args_MPI_Type_create_indexed_block_t*) args; \
+	if (pargs->array_of_displacements != NULL) { \
+		pargs->array_of_displacements__ref.val = *pargs->array_of_displacements; \
 	} \
-	if (args->MPI_Type_create_indexed_block.newtype != NULL) { \
-		args->MPI_Type_create_indexed_block.newtype__ref.val = *args->MPI_Type_create_indexed_block.newtype; \
+	if (pargs->newtype != NULL) { \
+		pargs->newtype__ref.val = *pargs->newtype; \
 	} \
 };
 
@@ -1829,7 +1877,7 @@ struct args_MPI_Type_create_indexed_block_t {
  *	)
  */
 #if HAVE_MPI_Type_create_struct
-struct args_MPI_Type_create_struct_t {
+typedef struct {
 	int count;
 	int(* array_of_block_lengths);
 	struct {
@@ -1848,28 +1896,30 @@ struct args_MPI_Type_create_struct_t {
 		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
-};
+} args_MPI_Type_create_struct_t;
 
 #define GET_ARGS_VALUE_MPI_Type_create_struct(activity) { \
-	activity->mpi_args.MPI_Type_create_struct.count = (int) count; \
-	activity->mpi_args.MPI_Type_create_struct.array_of_block_lengths = (int(*)) array_of_block_lengths; \
-	activity->mpi_args.MPI_Type_create_struct.array_of_displacements = (MPI_Aint(*)) array_of_displacements; \
-	activity->mpi_args.MPI_Type_create_struct.array_of_types = (MPI_Datatype(*)) array_of_types; \
-	activity->mpi_args.MPI_Type_create_struct.newtype = (MPI_Datatype *) newtype; \
+	args_MPI_Type_create_struct_t* args = (args_MPI_Type_create_struct_t*) activity->args; \
+	args->count = (int) count; \
+	args->array_of_block_lengths = (int(*)) array_of_block_lengths; \
+	args->array_of_displacements = (MPI_Aint(*)) array_of_displacements; \
+	args->array_of_types = (MPI_Datatype(*)) array_of_types; \
+	args->newtype = (MPI_Datatype *) newtype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_create_struct(args) { \
-	if (args->MPI_Type_create_struct.array_of_block_lengths != NULL) { \
-		args->MPI_Type_create_struct.array_of_block_lengths__ref.val = *args->MPI_Type_create_struct.array_of_block_lengths; \
+	args_MPI_Type_create_struct_t* pargs = (args_MPI_Type_create_struct_t*) args; \
+	if (pargs->array_of_block_lengths != NULL) { \
+		pargs->array_of_block_lengths__ref.val = *pargs->array_of_block_lengths; \
 	} \
-	if (args->MPI_Type_create_struct.array_of_displacements != NULL) { \
-		args->MPI_Type_create_struct.array_of_displacements__ref.val = *args->MPI_Type_create_struct.array_of_displacements; \
+	if (pargs->array_of_displacements != NULL) { \
+		pargs->array_of_displacements__ref.val = *pargs->array_of_displacements; \
 	} \
-	if (args->MPI_Type_create_struct.array_of_types != NULL) { \
-		args->MPI_Type_create_struct.array_of_types__ref.val = *args->MPI_Type_create_struct.array_of_types; \
+	if (pargs->array_of_types != NULL) { \
+		pargs->array_of_types__ref.val = *pargs->array_of_types; \
 	} \
-	if (args->MPI_Type_create_struct.newtype != NULL) { \
-		args->MPI_Type_create_struct.newtype__ref.val = *args->MPI_Type_create_struct.newtype; \
+	if (pargs->newtype != NULL) { \
+		pargs->newtype__ref.val = *pargs->newtype; \
 	} \
 };
 
@@ -1893,7 +1943,7 @@ struct args_MPI_Type_create_struct_t {
  *	)
  */
 #if HAVE_MPI_Type_create_resized
-struct args_MPI_Type_create_resized_t {
+typedef struct {
 	MPI_Datatype oldtype;
 	MPI_Aint lb;
 	MPI_Aint extent;
@@ -1902,18 +1952,20 @@ struct args_MPI_Type_create_resized_t {
 		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
-};
+} args_MPI_Type_create_resized_t;
 
 #define GET_ARGS_VALUE_MPI_Type_create_resized(activity) { \
-	activity->mpi_args.MPI_Type_create_resized.oldtype = (MPI_Datatype) oldtype; \
-	activity->mpi_args.MPI_Type_create_resized.lb = (MPI_Aint) lb; \
-	activity->mpi_args.MPI_Type_create_resized.extent = (MPI_Aint) extent; \
-	activity->mpi_args.MPI_Type_create_resized.newtype = (MPI_Datatype *) newtype; \
+	args_MPI_Type_create_resized_t* args = (args_MPI_Type_create_resized_t*) activity->args; \
+	args->oldtype = (MPI_Datatype) oldtype; \
+	args->lb = (MPI_Aint) lb; \
+	args->extent = (MPI_Aint) extent; \
+	args->newtype = (MPI_Datatype *) newtype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_create_resized(args) { \
-	if (args->MPI_Type_create_resized.newtype != NULL) { \
-		args->MPI_Type_create_resized.newtype__ref.val = *args->MPI_Type_create_resized.newtype; \
+	args_MPI_Type_create_resized_t* pargs = (args_MPI_Type_create_resized_t*) args; \
+	if (pargs->newtype != NULL) { \
+		pargs->newtype__ref.val = *pargs->newtype; \
 	} \
 };
 
@@ -1934,21 +1986,23 @@ struct args_MPI_Type_create_resized_t {
  *	)
  */
 #if HAVE_MPI_Type_commit
-struct args_MPI_Type_commit_t {
+typedef struct {
 	MPI_Datatype * type;
 	struct {
 		MPI_Datatype val;
 	} type__ref;
 	int retval;
-};
+} args_MPI_Type_commit_t;
 
 #define GET_ARGS_VALUE_MPI_Type_commit(activity) { \
-	activity->mpi_args.MPI_Type_commit.type = (MPI_Datatype *) type; \
+	args_MPI_Type_commit_t* args = (args_MPI_Type_commit_t*) activity->args; \
+	args->type = (MPI_Datatype *) type; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_commit(args) { \
-	if (args->MPI_Type_commit.type != NULL) { \
-		args->MPI_Type_commit.type__ref.val = *args->MPI_Type_commit.type; \
+	args_MPI_Type_commit_t* pargs = (args_MPI_Type_commit_t*) args; \
+	if (pargs->type != NULL) { \
+		pargs->type__ref.val = *pargs->type; \
 	} \
 };
 
@@ -1969,21 +2023,23 @@ struct args_MPI_Type_commit_t {
  *	)
  */
 #if HAVE_MPI_Type_free
-struct args_MPI_Type_free_t {
+typedef struct {
 	MPI_Datatype * type;
 	struct {
 		MPI_Datatype val;
 	} type__ref;
 	int retval;
-};
+} args_MPI_Type_free_t;
 
 #define GET_ARGS_VALUE_MPI_Type_free(activity) { \
-	activity->mpi_args.MPI_Type_free.type = (MPI_Datatype *) type; \
+	args_MPI_Type_free_t* args = (args_MPI_Type_free_t*) activity->args; \
+	args->type = (MPI_Datatype *) type; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_free(args) { \
-	if (args->MPI_Type_free.type != NULL) { \
-		args->MPI_Type_free.type__ref.val = *args->MPI_Type_free.type; \
+	args_MPI_Type_free_t* pargs = (args_MPI_Type_free_t*) args; \
+	if (pargs->type != NULL) { \
+		pargs->type__ref.val = *pargs->type; \
 	} \
 };
 
@@ -2006,7 +2062,7 @@ struct args_MPI_Type_free_t {
  *	)
  */
 #if HAVE_MPI_Get_count
-struct args_MPI_Get_count_t {
+typedef struct {
 	MPI_Status * status;
 	struct {
 		MPI_Status val;
@@ -2017,20 +2073,22 @@ struct args_MPI_Get_count_t {
 		int val;
 	} count__ref;
 	int retval;
-};
+} args_MPI_Get_count_t;
 
 #define GET_ARGS_VALUE_MPI_Get_count(activity) { \
-	activity->mpi_args.MPI_Get_count.status = (MPI_Status *) status; \
-	activity->mpi_args.MPI_Get_count.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Get_count.count = (int *) count; \
+	args_MPI_Get_count_t* args = (args_MPI_Get_count_t*) activity->args; \
+	args->status = (MPI_Status *) status; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->count = (int *) count; \
 };
 
 #define GET_PTRS_VALUE_MPI_Get_count(args) { \
-	if (args->MPI_Get_count.status != NULL) { \
-		args->MPI_Get_count.status__ref.val = *args->MPI_Get_count.status; \
+	args_MPI_Get_count_t* pargs = (args_MPI_Get_count_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
-	if (args->MPI_Get_count.count != NULL) { \
-		args->MPI_Get_count.count__ref.val = *args->MPI_Get_count.count; \
+	if (pargs->count != NULL) { \
+		pargs->count__ref.val = *pargs->count; \
 	} \
 };
 
@@ -2053,7 +2111,7 @@ struct args_MPI_Get_count_t {
  *	)
  */
 #if HAVE_MPI_Get_elements
-struct args_MPI_Get_elements_t {
+typedef struct {
 	MPI_Status * status;
 	struct {
 		MPI_Status val;
@@ -2064,20 +2122,22 @@ struct args_MPI_Get_elements_t {
 		int val;
 	} count__ref;
 	int retval;
-};
+} args_MPI_Get_elements_t;
 
 #define GET_ARGS_VALUE_MPI_Get_elements(activity) { \
-	activity->mpi_args.MPI_Get_elements.status = (MPI_Status *) status; \
-	activity->mpi_args.MPI_Get_elements.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Get_elements.count = (int *) count; \
+	args_MPI_Get_elements_t* args = (args_MPI_Get_elements_t*) activity->args; \
+	args->status = (MPI_Status *) status; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->count = (int *) count; \
 };
 
 #define GET_PTRS_VALUE_MPI_Get_elements(args) { \
-	if (args->MPI_Get_elements.status != NULL) { \
-		args->MPI_Get_elements.status__ref.val = *args->MPI_Get_elements.status; \
+	args_MPI_Get_elements_t* pargs = (args_MPI_Get_elements_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
-	if (args->MPI_Get_elements.count != NULL) { \
-		args->MPI_Get_elements.count__ref.val = *args->MPI_Get_elements.count; \
+	if (pargs->count != NULL) { \
+		pargs->count__ref.val = *pargs->count; \
 	} \
 };
 
@@ -2104,7 +2164,7 @@ struct args_MPI_Get_elements_t {
  *	)
  */
 #if HAVE_MPI_Pack
-struct args_MPI_Pack_t {
+typedef struct {
 	void * inbuf;
 	int incount;
 	MPI_Datatype datatype;
@@ -2116,21 +2176,23 @@ struct args_MPI_Pack_t {
 	} position__ref;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Pack_t;
 
 #define GET_ARGS_VALUE_MPI_Pack(activity) { \
-	activity->mpi_args.MPI_Pack.inbuf = (void *) inbuf; \
-	activity->mpi_args.MPI_Pack.incount = (int) incount; \
-	activity->mpi_args.MPI_Pack.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Pack.outbuf = (void *) outbuf; \
-	activity->mpi_args.MPI_Pack.outsize = (int) outsize; \
-	activity->mpi_args.MPI_Pack.position = (int *) position; \
-	activity->mpi_args.MPI_Pack.comm = (MPI_Comm) comm; \
+	args_MPI_Pack_t* args = (args_MPI_Pack_t*) activity->args; \
+	args->inbuf = (void *) inbuf; \
+	args->incount = (int) incount; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->outbuf = (void *) outbuf; \
+	args->outsize = (int) outsize; \
+	args->position = (int *) position; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Pack(args) { \
-	if (args->MPI_Pack.position != NULL) { \
-		args->MPI_Pack.position__ref.val = *args->MPI_Pack.position; \
+	args_MPI_Pack_t* pargs = (args_MPI_Pack_t*) args; \
+	if (pargs->position != NULL) { \
+		pargs->position__ref.val = *pargs->position; \
 	} \
 };
 
@@ -2157,7 +2219,7 @@ struct args_MPI_Pack_t {
  *	)
  */
 #if HAVE_MPI_Unpack
-struct args_MPI_Unpack_t {
+typedef struct {
 	void * inbuf;
 	int insize;
 	int * position;
@@ -2169,21 +2231,23 @@ struct args_MPI_Unpack_t {
 	MPI_Datatype datatype;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Unpack_t;
 
 #define GET_ARGS_VALUE_MPI_Unpack(activity) { \
-	activity->mpi_args.MPI_Unpack.inbuf = (void *) inbuf; \
-	activity->mpi_args.MPI_Unpack.insize = (int) insize; \
-	activity->mpi_args.MPI_Unpack.position = (int *) position; \
-	activity->mpi_args.MPI_Unpack.outbuf = (void *) outbuf; \
-	activity->mpi_args.MPI_Unpack.outcount = (int) outcount; \
-	activity->mpi_args.MPI_Unpack.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Unpack.comm = (MPI_Comm) comm; \
+	args_MPI_Unpack_t* args = (args_MPI_Unpack_t*) activity->args; \
+	args->inbuf = (void *) inbuf; \
+	args->insize = (int) insize; \
+	args->position = (int *) position; \
+	args->outbuf = (void *) outbuf; \
+	args->outcount = (int) outcount; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Unpack(args) { \
-	if (args->MPI_Unpack.position != NULL) { \
-		args->MPI_Unpack.position__ref.val = *args->MPI_Unpack.position; \
+	args_MPI_Unpack_t* pargs = (args_MPI_Unpack_t*) args; \
+	if (pargs->position != NULL) { \
+		pargs->position__ref.val = *pargs->position; \
 	} \
 };
 
@@ -2207,7 +2271,7 @@ struct args_MPI_Unpack_t {
  *	)
  */
 #if HAVE_MPI_Pack_size
-struct args_MPI_Pack_size_t {
+typedef struct {
 	int incount;
 	MPI_Datatype datatype;
 	MPI_Comm comm;
@@ -2216,18 +2280,20 @@ struct args_MPI_Pack_size_t {
 		int val;
 	} size__ref;
 	int retval;
-};
+} args_MPI_Pack_size_t;
 
 #define GET_ARGS_VALUE_MPI_Pack_size(activity) { \
-	activity->mpi_args.MPI_Pack_size.incount = (int) incount; \
-	activity->mpi_args.MPI_Pack_size.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Pack_size.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Pack_size.size = (int *) size; \
+	args_MPI_Pack_size_t* args = (args_MPI_Pack_size_t*) activity->args; \
+	args->incount = (int) incount; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->comm = (MPI_Comm) comm; \
+	args->size = (int *) size; \
 };
 
 #define GET_PTRS_VALUE_MPI_Pack_size(args) { \
-	if (args->MPI_Pack_size.size != NULL) { \
-		args->MPI_Pack_size.size__ref.val = *args->MPI_Pack_size.size; \
+	args_MPI_Pack_size_t* pargs = (args_MPI_Pack_size_t*) args; \
+	if (pargs->size != NULL) { \
+		pargs->size__ref.val = *pargs->size; \
 	} \
 };
 
@@ -2248,13 +2314,14 @@ struct args_MPI_Pack_size_t {
  *	)
  */
 #if HAVE_MPI_Barrier
-struct args_MPI_Barrier_t {
+typedef struct {
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Barrier_t;
 
 #define GET_ARGS_VALUE_MPI_Barrier(activity) { \
-	activity->mpi_args.MPI_Barrier.comm = (MPI_Comm) comm; \
+	args_MPI_Barrier_t* args = (args_MPI_Barrier_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -2278,21 +2345,22 @@ struct args_MPI_Barrier_t {
  *	)
  */
 #if HAVE_MPI_Bcast
-struct args_MPI_Bcast_t {
+typedef struct {
 	void * buffer;
 	int count;
 	MPI_Datatype datatype;
 	int root;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Bcast_t;
 
 #define GET_ARGS_VALUE_MPI_Bcast(activity) { \
-	activity->mpi_args.MPI_Bcast.buffer = (void *) buffer; \
-	activity->mpi_args.MPI_Bcast.count = (int) count; \
-	activity->mpi_args.MPI_Bcast.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Bcast.root = (int) root; \
-	activity->mpi_args.MPI_Bcast.comm = (MPI_Comm) comm; \
+	args_MPI_Bcast_t* args = (args_MPI_Bcast_t*) activity->args; \
+	args->buffer = (void *) buffer; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -2319,7 +2387,7 @@ struct args_MPI_Bcast_t {
  *	)
  */
 #if HAVE_MPI_Gather
-struct args_MPI_Gather_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -2329,17 +2397,18 @@ struct args_MPI_Gather_t {
 	int root;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Gather_t;
 
 #define GET_ARGS_VALUE_MPI_Gather(activity) { \
-	activity->mpi_args.MPI_Gather.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Gather.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Gather.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Gather.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Gather.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Gather.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Gather.root = (int) root; \
-	activity->mpi_args.MPI_Gather.comm = (MPI_Comm) comm; \
+	args_MPI_Gather_t* args = (args_MPI_Gather_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -2367,7 +2436,7 @@ struct args_MPI_Gather_t {
  *	)
  */
 #if HAVE_MPI_Gatherv
-struct args_MPI_Gatherv_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -2384,26 +2453,28 @@ struct args_MPI_Gatherv_t {
 	int root;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Gatherv_t;
 
 #define GET_ARGS_VALUE_MPI_Gatherv(activity) { \
-	activity->mpi_args.MPI_Gatherv.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Gatherv.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Gatherv.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Gatherv.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Gatherv.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Gatherv.displs = (int(*)) displs; \
-	activity->mpi_args.MPI_Gatherv.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Gatherv.root = (int) root; \
-	activity->mpi_args.MPI_Gatherv.comm = (MPI_Comm) comm; \
+	args_MPI_Gatherv_t* args = (args_MPI_Gatherv_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->displs = (int(*)) displs; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Gatherv(args) { \
-	if (args->MPI_Gatherv.recvcounts != NULL) { \
-		args->MPI_Gatherv.recvcounts__ref.val = *args->MPI_Gatherv.recvcounts; \
+	args_MPI_Gatherv_t* pargs = (args_MPI_Gatherv_t*) args; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Gatherv.displs != NULL) { \
-		args->MPI_Gatherv.displs__ref.val = *args->MPI_Gatherv.displs; \
+	if (pargs->displs != NULL) { \
+		pargs->displs__ref.val = *pargs->displs; \
 	} \
 };
 
@@ -2431,7 +2502,7 @@ struct args_MPI_Gatherv_t {
  *	)
  */
 #if HAVE_MPI_Scatter
-struct args_MPI_Scatter_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -2441,17 +2512,18 @@ struct args_MPI_Scatter_t {
 	int root;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Scatter_t;
 
 #define GET_ARGS_VALUE_MPI_Scatter(activity) { \
-	activity->mpi_args.MPI_Scatter.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Scatter.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Scatter.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Scatter.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Scatter.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Scatter.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Scatter.root = (int) root; \
-	activity->mpi_args.MPI_Scatter.comm = (MPI_Comm) comm; \
+	args_MPI_Scatter_t* args = (args_MPI_Scatter_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -2479,7 +2551,7 @@ struct args_MPI_Scatter_t {
  *	)
  */
 #if HAVE_MPI_Scatterv
-struct args_MPI_Scatterv_t {
+typedef struct {
 	void * sendbuf;
 	int(* sendcounts);
 	struct {
@@ -2496,26 +2568,28 @@ struct args_MPI_Scatterv_t {
 	int root;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Scatterv_t;
 
 #define GET_ARGS_VALUE_MPI_Scatterv(activity) { \
-	activity->mpi_args.MPI_Scatterv.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Scatterv.sendcounts = (int(*)) sendcounts; \
-	activity->mpi_args.MPI_Scatterv.displs = (int(*)) displs; \
-	activity->mpi_args.MPI_Scatterv.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Scatterv.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Scatterv.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Scatterv.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Scatterv.root = (int) root; \
-	activity->mpi_args.MPI_Scatterv.comm = (MPI_Comm) comm; \
+	args_MPI_Scatterv_t* args = (args_MPI_Scatterv_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcounts = (int(*)) sendcounts; \
+	args->displs = (int(*)) displs; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Scatterv(args) { \
-	if (args->MPI_Scatterv.sendcounts != NULL) { \
-		args->MPI_Scatterv.sendcounts__ref.val = *args->MPI_Scatterv.sendcounts; \
+	args_MPI_Scatterv_t* pargs = (args_MPI_Scatterv_t*) args; \
+	if (pargs->sendcounts != NULL) { \
+		pargs->sendcounts__ref.val = *pargs->sendcounts; \
 	} \
-	if (args->MPI_Scatterv.displs != NULL) { \
-		args->MPI_Scatterv.displs__ref.val = *args->MPI_Scatterv.displs; \
+	if (pargs->displs != NULL) { \
+		pargs->displs__ref.val = *pargs->displs; \
 	} \
 };
 
@@ -2542,7 +2616,7 @@ struct args_MPI_Scatterv_t {
  *	)
  */
 #if HAVE_MPI_Allgather
-struct args_MPI_Allgather_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -2551,16 +2625,17 @@ struct args_MPI_Allgather_t {
 	MPI_Datatype recvtype;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Allgather_t;
 
 #define GET_ARGS_VALUE_MPI_Allgather(activity) { \
-	activity->mpi_args.MPI_Allgather.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Allgather.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Allgather.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Allgather.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Allgather.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Allgather.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Allgather.comm = (MPI_Comm) comm; \
+	args_MPI_Allgather_t* args = (args_MPI_Allgather_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -2587,7 +2662,7 @@ struct args_MPI_Allgather_t {
  *	)
  */
 #if HAVE_MPI_Allgatherv
-struct args_MPI_Allgatherv_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -2603,25 +2678,27 @@ struct args_MPI_Allgatherv_t {
 	MPI_Datatype recvtype;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Allgatherv_t;
 
 #define GET_ARGS_VALUE_MPI_Allgatherv(activity) { \
-	activity->mpi_args.MPI_Allgatherv.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Allgatherv.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Allgatherv.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Allgatherv.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Allgatherv.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Allgatherv.displs = (int(*)) displs; \
-	activity->mpi_args.MPI_Allgatherv.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Allgatherv.comm = (MPI_Comm) comm; \
+	args_MPI_Allgatherv_t* args = (args_MPI_Allgatherv_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->displs = (int(*)) displs; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Allgatherv(args) { \
-	if (args->MPI_Allgatherv.recvcounts != NULL) { \
-		args->MPI_Allgatherv.recvcounts__ref.val = *args->MPI_Allgatherv.recvcounts; \
+	args_MPI_Allgatherv_t* pargs = (args_MPI_Allgatherv_t*) args; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Allgatherv.displs != NULL) { \
-		args->MPI_Allgatherv.displs__ref.val = *args->MPI_Allgatherv.displs; \
+	if (pargs->displs != NULL) { \
+		pargs->displs__ref.val = *pargs->displs; \
 	} \
 };
 
@@ -2648,7 +2725,7 @@ struct args_MPI_Allgatherv_t {
  *	)
  */
 #if HAVE_MPI_Alltoall
-struct args_MPI_Alltoall_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -2657,16 +2734,17 @@ struct args_MPI_Alltoall_t {
 	MPI_Datatype recvtype;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Alltoall_t;
 
 #define GET_ARGS_VALUE_MPI_Alltoall(activity) { \
-	activity->mpi_args.MPI_Alltoall.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Alltoall.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Alltoall.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Alltoall.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Alltoall.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Alltoall.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Alltoall.comm = (MPI_Comm) comm; \
+	args_MPI_Alltoall_t* args = (args_MPI_Alltoall_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -2694,7 +2772,7 @@ struct args_MPI_Alltoall_t {
  *	)
  */
 #if HAVE_MPI_Alltoallv
-struct args_MPI_Alltoallv_t {
+typedef struct {
 	void * sendbuf;
 	int(* sendcounts);
 	struct {
@@ -2717,32 +2795,34 @@ struct args_MPI_Alltoallv_t {
 	MPI_Datatype recvtype;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Alltoallv_t;
 
 #define GET_ARGS_VALUE_MPI_Alltoallv(activity) { \
-	activity->mpi_args.MPI_Alltoallv.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Alltoallv.sendcounts = (int(*)) sendcounts; \
-	activity->mpi_args.MPI_Alltoallv.sdispls = (int(*)) sdispls; \
-	activity->mpi_args.MPI_Alltoallv.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Alltoallv.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Alltoallv.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Alltoallv.rdispls = (int(*)) rdispls; \
-	activity->mpi_args.MPI_Alltoallv.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Alltoallv.comm = (MPI_Comm) comm; \
+	args_MPI_Alltoallv_t* args = (args_MPI_Alltoallv_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcounts = (int(*)) sendcounts; \
+	args->sdispls = (int(*)) sdispls; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->rdispls = (int(*)) rdispls; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Alltoallv(args) { \
-	if (args->MPI_Alltoallv.sendcounts != NULL) { \
-		args->MPI_Alltoallv.sendcounts__ref.val = *args->MPI_Alltoallv.sendcounts; \
+	args_MPI_Alltoallv_t* pargs = (args_MPI_Alltoallv_t*) args; \
+	if (pargs->sendcounts != NULL) { \
+		pargs->sendcounts__ref.val = *pargs->sendcounts; \
 	} \
-	if (args->MPI_Alltoallv.sdispls != NULL) { \
-		args->MPI_Alltoallv.sdispls__ref.val = *args->MPI_Alltoallv.sdispls; \
+	if (pargs->sdispls != NULL) { \
+		pargs->sdispls__ref.val = *pargs->sdispls; \
 	} \
-	if (args->MPI_Alltoallv.recvcounts != NULL) { \
-		args->MPI_Alltoallv.recvcounts__ref.val = *args->MPI_Alltoallv.recvcounts; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Alltoallv.rdispls != NULL) { \
-		args->MPI_Alltoallv.rdispls__ref.val = *args->MPI_Alltoallv.rdispls; \
+	if (pargs->rdispls != NULL) { \
+		pargs->rdispls__ref.val = *pargs->rdispls; \
 	} \
 };
 
@@ -2769,7 +2849,7 @@ struct args_MPI_Alltoallv_t {
  *	)
  */
 #if HAVE_MPI_Reduce
-struct args_MPI_Reduce_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int count;
@@ -2778,16 +2858,17 @@ struct args_MPI_Reduce_t {
 	int root;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Reduce_t;
 
 #define GET_ARGS_VALUE_MPI_Reduce(activity) { \
-	activity->mpi_args.MPI_Reduce.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Reduce.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Reduce.count = (int) count; \
-	activity->mpi_args.MPI_Reduce.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Reduce.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Reduce.root = (int) root; \
-	activity->mpi_args.MPI_Reduce.comm = (MPI_Comm) comm; \
+	args_MPI_Reduce_t* args = (args_MPI_Reduce_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -2812,7 +2893,7 @@ struct args_MPI_Reduce_t {
  *	)
  */
 #if HAVE_MPI_Allreduce
-struct args_MPI_Allreduce_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int count;
@@ -2820,15 +2901,16 @@ struct args_MPI_Allreduce_t {
 	MPI_Op op;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Allreduce_t;
 
 #define GET_ARGS_VALUE_MPI_Allreduce(activity) { \
-	activity->mpi_args.MPI_Allreduce.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Allreduce.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Allreduce.count = (int) count; \
-	activity->mpi_args.MPI_Allreduce.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Allreduce.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Allreduce.comm = (MPI_Comm) comm; \
+	args_MPI_Allreduce_t* args = (args_MPI_Allreduce_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -2853,7 +2935,7 @@ struct args_MPI_Allreduce_t {
  *	)
  */
 #if HAVE_MPI_Reduce_scatter
-struct args_MPI_Reduce_scatter_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int(* recvcounts);
@@ -2864,20 +2946,22 @@ struct args_MPI_Reduce_scatter_t {
 	MPI_Op op;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Reduce_scatter_t;
 
 #define GET_ARGS_VALUE_MPI_Reduce_scatter(activity) { \
-	activity->mpi_args.MPI_Reduce_scatter.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Reduce_scatter.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Reduce_scatter.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Reduce_scatter.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Reduce_scatter.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Reduce_scatter.comm = (MPI_Comm) comm; \
+	args_MPI_Reduce_scatter_t* args = (args_MPI_Reduce_scatter_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Reduce_scatter(args) { \
-	if (args->MPI_Reduce_scatter.recvcounts != NULL) { \
-		args->MPI_Reduce_scatter.recvcounts__ref.val = *args->MPI_Reduce_scatter.recvcounts; \
+	args_MPI_Reduce_scatter_t* pargs = (args_MPI_Reduce_scatter_t*) args; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
 };
 
@@ -2903,7 +2987,7 @@ struct args_MPI_Reduce_scatter_t {
  *	)
  */
 #if HAVE_MPI_Reduce_scatter_block
-struct args_MPI_Reduce_scatter_block_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int recvcount;
@@ -2911,15 +2995,16 @@ struct args_MPI_Reduce_scatter_block_t {
 	MPI_Op op;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Reduce_scatter_block_t;
 
 #define GET_ARGS_VALUE_MPI_Reduce_scatter_block(activity) { \
-	activity->mpi_args.MPI_Reduce_scatter_block.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Reduce_scatter_block.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Reduce_scatter_block.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Reduce_scatter_block.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Reduce_scatter_block.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Reduce_scatter_block.comm = (MPI_Comm) comm; \
+	args_MPI_Reduce_scatter_block_t* args = (args_MPI_Reduce_scatter_block_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -2944,7 +3029,7 @@ struct args_MPI_Reduce_scatter_block_t {
  *	)
  */
 #if HAVE_MPI_Scan
-struct args_MPI_Scan_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int count;
@@ -2952,15 +3037,16 @@ struct args_MPI_Scan_t {
 	MPI_Op op;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Scan_t;
 
 #define GET_ARGS_VALUE_MPI_Scan(activity) { \
-	activity->mpi_args.MPI_Scan.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Scan.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Scan.count = (int) count; \
-	activity->mpi_args.MPI_Scan.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Scan.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Scan.comm = (MPI_Comm) comm; \
+	args_MPI_Scan_t* args = (args_MPI_Scan_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -2985,7 +3071,7 @@ struct args_MPI_Scan_t {
  *	)
  */
 #if HAVE_MPI_Exscan
-struct args_MPI_Exscan_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int count;
@@ -2993,15 +3079,16 @@ struct args_MPI_Exscan_t {
 	MPI_Op op;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Exscan_t;
 
 #define GET_ARGS_VALUE_MPI_Exscan(activity) { \
-	activity->mpi_args.MPI_Exscan.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Exscan.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Exscan.count = (int) count; \
-	activity->mpi_args.MPI_Exscan.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Exscan.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Exscan.comm = (MPI_Comm) comm; \
+	args_MPI_Exscan_t* args = (args_MPI_Exscan_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -3022,23 +3109,25 @@ struct args_MPI_Exscan_t {
  *	)
  */
 #if HAVE_MPI_Comm_size
-struct args_MPI_Comm_size_t {
+typedef struct {
 	MPI_Comm comm;
 	int * size;
 	struct {
 		int val;
 	} size__ref;
 	int retval;
-};
+} args_MPI_Comm_size_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_size(activity) { \
-	activity->mpi_args.MPI_Comm_size.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_size.size = (int *) size; \
+	args_MPI_Comm_size_t* args = (args_MPI_Comm_size_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->size = (int *) size; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_size(args) { \
-	if (args->MPI_Comm_size.size != NULL) { \
-		args->MPI_Comm_size.size__ref.val = *args->MPI_Comm_size.size; \
+	args_MPI_Comm_size_t* pargs = (args_MPI_Comm_size_t*) args; \
+	if (pargs->size != NULL) { \
+		pargs->size__ref.val = *pargs->size; \
 	} \
 };
 
@@ -3060,23 +3149,25 @@ struct args_MPI_Comm_size_t {
  *	)
  */
 #if HAVE_MPI_Comm_rank
-struct args_MPI_Comm_rank_t {
+typedef struct {
 	MPI_Comm comm;
 	int * rank;
 	struct {
 		int val;
 	} rank__ref;
 	int retval;
-};
+} args_MPI_Comm_rank_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_rank(activity) { \
-	activity->mpi_args.MPI_Comm_rank.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_rank.rank = (int *) rank; \
+	args_MPI_Comm_rank_t* args = (args_MPI_Comm_rank_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->rank = (int *) rank; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_rank(args) { \
-	if (args->MPI_Comm_rank.rank != NULL) { \
-		args->MPI_Comm_rank.rank__ref.val = *args->MPI_Comm_rank.rank; \
+	args_MPI_Comm_rank_t* pargs = (args_MPI_Comm_rank_t*) args; \
+	if (pargs->rank != NULL) { \
+		pargs->rank__ref.val = *pargs->rank; \
 	} \
 };
 
@@ -3098,23 +3189,25 @@ struct args_MPI_Comm_rank_t {
  *	)
  */
 #if HAVE_MPI_Comm_group
-struct args_MPI_Comm_group_t {
+typedef struct {
 	MPI_Comm comm;
 	MPI_Group * group;
 	struct {
 		MPI_Group val;
 	} group__ref;
 	int retval;
-};
+} args_MPI_Comm_group_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_group(activity) { \
-	activity->mpi_args.MPI_Comm_group.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_group.group = (MPI_Group *) group; \
+	args_MPI_Comm_group_t* args = (args_MPI_Comm_group_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->group = (MPI_Group *) group; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_group(args) { \
-	if (args->MPI_Comm_group.group != NULL) { \
-		args->MPI_Comm_group.group__ref.val = *args->MPI_Comm_group.group; \
+	args_MPI_Comm_group_t* pargs = (args_MPI_Comm_group_t*) args; \
+	if (pargs->group != NULL) { \
+		pargs->group__ref.val = *pargs->group; \
 	} \
 };
 
@@ -3136,23 +3229,25 @@ struct args_MPI_Comm_group_t {
  *	)
  */
 #if HAVE_MPI_Comm_dup
-struct args_MPI_Comm_dup_t {
+typedef struct {
 	MPI_Comm comm;
 	MPI_Comm * newcomm;
 	struct {
 		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
-};
+} args_MPI_Comm_dup_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_dup(activity) { \
-	activity->mpi_args.MPI_Comm_dup.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_dup.newcomm = (MPI_Comm *) newcomm; \
+	args_MPI_Comm_dup_t* args = (args_MPI_Comm_dup_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->newcomm = (MPI_Comm *) newcomm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_dup(args) { \
-	if (args->MPI_Comm_dup.newcomm != NULL) { \
-		args->MPI_Comm_dup.newcomm__ref.val = *args->MPI_Comm_dup.newcomm; \
+	args_MPI_Comm_dup_t* pargs = (args_MPI_Comm_dup_t*) args; \
+	if (pargs->newcomm != NULL) { \
+		pargs->newcomm__ref.val = *pargs->newcomm; \
 	} \
 };
 
@@ -3175,7 +3270,7 @@ struct args_MPI_Comm_dup_t {
  *	)
  */
 #if HAVE_MPI_Comm_create
-struct args_MPI_Comm_create_t {
+typedef struct {
 	MPI_Comm comm;
 	MPI_Group group;
 	MPI_Comm * newcomm;
@@ -3183,17 +3278,19 @@ struct args_MPI_Comm_create_t {
 		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
-};
+} args_MPI_Comm_create_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_create(activity) { \
-	activity->mpi_args.MPI_Comm_create.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_create.group = (MPI_Group) group; \
-	activity->mpi_args.MPI_Comm_create.newcomm = (MPI_Comm *) newcomm; \
+	args_MPI_Comm_create_t* args = (args_MPI_Comm_create_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->group = (MPI_Group) group; \
+	args->newcomm = (MPI_Comm *) newcomm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_create(args) { \
-	if (args->MPI_Comm_create.newcomm != NULL) { \
-		args->MPI_Comm_create.newcomm__ref.val = *args->MPI_Comm_create.newcomm; \
+	args_MPI_Comm_create_t* pargs = (args_MPI_Comm_create_t*) args; \
+	if (pargs->newcomm != NULL) { \
+		pargs->newcomm__ref.val = *pargs->newcomm; \
 	} \
 };
 
@@ -3217,7 +3314,7 @@ struct args_MPI_Comm_create_t {
  *	)
  */
 #if HAVE_MPI_Comm_split
-struct args_MPI_Comm_split_t {
+typedef struct {
 	MPI_Comm comm;
 	int color;
 	int key;
@@ -3226,18 +3323,20 @@ struct args_MPI_Comm_split_t {
 		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
-};
+} args_MPI_Comm_split_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_split(activity) { \
-	activity->mpi_args.MPI_Comm_split.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_split.color = (int) color; \
-	activity->mpi_args.MPI_Comm_split.key = (int) key; \
-	activity->mpi_args.MPI_Comm_split.newcomm = (MPI_Comm *) newcomm; \
+	args_MPI_Comm_split_t* args = (args_MPI_Comm_split_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->color = (int) color; \
+	args->key = (int) key; \
+	args->newcomm = (MPI_Comm *) newcomm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_split(args) { \
-	if (args->MPI_Comm_split.newcomm != NULL) { \
-		args->MPI_Comm_split.newcomm__ref.val = *args->MPI_Comm_split.newcomm; \
+	args_MPI_Comm_split_t* pargs = (args_MPI_Comm_split_t*) args; \
+	if (pargs->newcomm != NULL) { \
+		pargs->newcomm__ref.val = *pargs->newcomm; \
 	} \
 };
 
@@ -3258,21 +3357,23 @@ struct args_MPI_Comm_split_t {
  *	)
  */
 #if HAVE_MPI_Comm_free
-struct args_MPI_Comm_free_t {
+typedef struct {
 	MPI_Comm * comm;
 	struct {
 		MPI_Comm val;
 	} comm__ref;
 	int retval;
-};
+} args_MPI_Comm_free_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_free(activity) { \
-	activity->mpi_args.MPI_Comm_free.comm = (MPI_Comm *) comm; \
+	args_MPI_Comm_free_t* args = (args_MPI_Comm_free_t*) activity->args; \
+	args->comm = (MPI_Comm *) comm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_free(args) { \
-	if (args->MPI_Comm_free.comm != NULL) { \
-		args->MPI_Comm_free.comm__ref.val = *args->MPI_Comm_free.comm; \
+	args_MPI_Comm_free_t* pargs = (args_MPI_Comm_free_t*) args; \
+	if (pargs->comm != NULL) { \
+		pargs->comm__ref.val = *pargs->comm; \
 	} \
 };
 
@@ -3294,23 +3395,25 @@ struct args_MPI_Comm_free_t {
  *	)
  */
 #if HAVE_MPI_Comm_test_inter
-struct args_MPI_Comm_test_inter_t {
+typedef struct {
 	MPI_Comm comm;
 	int * flag;
 	struct {
 		int val;
 	} flag__ref;
 	int retval;
-};
+} args_MPI_Comm_test_inter_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_test_inter(activity) { \
-	activity->mpi_args.MPI_Comm_test_inter.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_test_inter.flag = (int *) flag; \
+	args_MPI_Comm_test_inter_t* args = (args_MPI_Comm_test_inter_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->flag = (int *) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_test_inter(args) { \
-	if (args->MPI_Comm_test_inter.flag != NULL) { \
-		args->MPI_Comm_test_inter.flag__ref.val = *args->MPI_Comm_test_inter.flag; \
+	args_MPI_Comm_test_inter_t* pargs = (args_MPI_Comm_test_inter_t*) args; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
 };
 
@@ -3332,23 +3435,25 @@ struct args_MPI_Comm_test_inter_t {
  *	)
  */
 #if HAVE_MPI_Comm_remote_size
-struct args_MPI_Comm_remote_size_t {
+typedef struct {
 	MPI_Comm comm;
 	int * size;
 	struct {
 		int val;
 	} size__ref;
 	int retval;
-};
+} args_MPI_Comm_remote_size_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_remote_size(activity) { \
-	activity->mpi_args.MPI_Comm_remote_size.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_remote_size.size = (int *) size; \
+	args_MPI_Comm_remote_size_t* args = (args_MPI_Comm_remote_size_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->size = (int *) size; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_remote_size(args) { \
-	if (args->MPI_Comm_remote_size.size != NULL) { \
-		args->MPI_Comm_remote_size.size__ref.val = *args->MPI_Comm_remote_size.size; \
+	args_MPI_Comm_remote_size_t* pargs = (args_MPI_Comm_remote_size_t*) args; \
+	if (pargs->size != NULL) { \
+		pargs->size__ref.val = *pargs->size; \
 	} \
 };
 
@@ -3370,23 +3475,25 @@ struct args_MPI_Comm_remote_size_t {
  *	)
  */
 #if HAVE_MPI_Comm_remote_group
-struct args_MPI_Comm_remote_group_t {
+typedef struct {
 	MPI_Comm comm;
 	MPI_Group * group;
 	struct {
 		MPI_Group val;
 	} group__ref;
 	int retval;
-};
+} args_MPI_Comm_remote_group_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_remote_group(activity) { \
-	activity->mpi_args.MPI_Comm_remote_group.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_remote_group.group = (MPI_Group *) group; \
+	args_MPI_Comm_remote_group_t* args = (args_MPI_Comm_remote_group_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->group = (MPI_Group *) group; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_remote_group(args) { \
-	if (args->MPI_Comm_remote_group.group != NULL) { \
-		args->MPI_Comm_remote_group.group__ref.val = *args->MPI_Comm_remote_group.group; \
+	args_MPI_Comm_remote_group_t* pargs = (args_MPI_Comm_remote_group_t*) args; \
+	if (pargs->group != NULL) { \
+		pargs->group__ref.val = *pargs->group; \
 	} \
 };
 
@@ -3409,7 +3516,7 @@ struct args_MPI_Comm_remote_group_t {
  *	)
  */
 #if HAVE_MPI_Comm_compare
-struct args_MPI_Comm_compare_t {
+typedef struct {
 	MPI_Comm comm1;
 	MPI_Comm comm2;
 	int * result;
@@ -3417,17 +3524,19 @@ struct args_MPI_Comm_compare_t {
 		int val;
 	} result__ref;
 	int retval;
-};
+} args_MPI_Comm_compare_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_compare(activity) { \
-	activity->mpi_args.MPI_Comm_compare.comm1 = (MPI_Comm) comm1; \
-	activity->mpi_args.MPI_Comm_compare.comm2 = (MPI_Comm) comm2; \
-	activity->mpi_args.MPI_Comm_compare.result = (int *) result; \
+	args_MPI_Comm_compare_t* args = (args_MPI_Comm_compare_t*) activity->args; \
+	args->comm1 = (MPI_Comm) comm1; \
+	args->comm2 = (MPI_Comm) comm2; \
+	args->result = (int *) result; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_compare(args) { \
-	if (args->MPI_Comm_compare.result != NULL) { \
-		args->MPI_Comm_compare.result__ref.val = *args->MPI_Comm_compare.result; \
+	args_MPI_Comm_compare_t* pargs = (args_MPI_Comm_compare_t*) args; \
+	if (pargs->result != NULL) { \
+		pargs->result__ref.val = *pargs->result; \
 	} \
 };
 
@@ -3451,7 +3560,7 @@ struct args_MPI_Comm_compare_t {
  *	)
  */
 #if HAVE_MPI_Comm_create_keyval
-struct args_MPI_Comm_create_keyval_t {
+typedef struct {
 	MPI_Comm_copy_attr_function * comm_copy_attr_fn;
 	MPI_Comm_delete_attr_function * comm_delete_attr_fn;
 	int * comm_keyval;
@@ -3460,18 +3569,20 @@ struct args_MPI_Comm_create_keyval_t {
 	} comm_keyval__ref;
 	void * extra_state;
 	int retval;
-};
+} args_MPI_Comm_create_keyval_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_create_keyval(activity) { \
-	activity->mpi_args.MPI_Comm_create_keyval.comm_copy_attr_fn = (MPI_Comm_copy_attr_function *) comm_copy_attr_fn; \
-	activity->mpi_args.MPI_Comm_create_keyval.comm_delete_attr_fn = (MPI_Comm_delete_attr_function *) comm_delete_attr_fn; \
-	activity->mpi_args.MPI_Comm_create_keyval.comm_keyval = (int *) comm_keyval; \
-	activity->mpi_args.MPI_Comm_create_keyval.extra_state = (void *) extra_state; \
+	args_MPI_Comm_create_keyval_t* args = (args_MPI_Comm_create_keyval_t*) activity->args; \
+	args->comm_copy_attr_fn = (MPI_Comm_copy_attr_function *) comm_copy_attr_fn; \
+	args->comm_delete_attr_fn = (MPI_Comm_delete_attr_function *) comm_delete_attr_fn; \
+	args->comm_keyval = (int *) comm_keyval; \
+	args->extra_state = (void *) extra_state; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_create_keyval(args) { \
-	if (args->MPI_Comm_create_keyval.comm_keyval != NULL) { \
-		args->MPI_Comm_create_keyval.comm_keyval__ref.val = *args->MPI_Comm_create_keyval.comm_keyval; \
+	args_MPI_Comm_create_keyval_t* pargs = (args_MPI_Comm_create_keyval_t*) args; \
+	if (pargs->comm_keyval != NULL) { \
+		pargs->comm_keyval__ref.val = *pargs->comm_keyval; \
 	} \
 };
 
@@ -3494,17 +3605,18 @@ struct args_MPI_Comm_create_keyval_t {
  *	)
  */
 #if HAVE_MPI_Comm_set_attr
-struct args_MPI_Comm_set_attr_t {
+typedef struct {
 	MPI_Comm comm;
 	int comm_keyval;
 	void * attribute_val;
 	int retval;
-};
+} args_MPI_Comm_set_attr_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_set_attr(activity) { \
-	activity->mpi_args.MPI_Comm_set_attr.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_set_attr.comm_keyval = (int) comm_keyval; \
-	activity->mpi_args.MPI_Comm_set_attr.attribute_val = (void *) attribute_val; \
+	args_MPI_Comm_set_attr_t* args = (args_MPI_Comm_set_attr_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->comm_keyval = (int) comm_keyval; \
+	args->attribute_val = (void *) attribute_val; \
 };
 
 #endif
@@ -3527,7 +3639,7 @@ struct args_MPI_Comm_set_attr_t {
  *	)
  */
 #if HAVE_MPI_Comm_get_attr
-struct args_MPI_Comm_get_attr_t {
+typedef struct {
 	MPI_Comm comm;
 	int comm_keyval;
 	void * attribute_val;
@@ -3536,18 +3648,20 @@ struct args_MPI_Comm_get_attr_t {
 		int val;
 	} flag__ref;
 	int retval;
-};
+} args_MPI_Comm_get_attr_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_get_attr(activity) { \
-	activity->mpi_args.MPI_Comm_get_attr.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_get_attr.comm_keyval = (int) comm_keyval; \
-	activity->mpi_args.MPI_Comm_get_attr.attribute_val = (void *) attribute_val; \
-	activity->mpi_args.MPI_Comm_get_attr.flag = (int *) flag; \
+	args_MPI_Comm_get_attr_t* args = (args_MPI_Comm_get_attr_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->comm_keyval = (int) comm_keyval; \
+	args->attribute_val = (void *) attribute_val; \
+	args->flag = (int *) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_get_attr(args) { \
-	if (args->MPI_Comm_get_attr.flag != NULL) { \
-		args->MPI_Comm_get_attr.flag__ref.val = *args->MPI_Comm_get_attr.flag; \
+	args_MPI_Comm_get_attr_t* pargs = (args_MPI_Comm_get_attr_t*) args; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
 };
 
@@ -3569,15 +3683,16 @@ struct args_MPI_Comm_get_attr_t {
  *	)
  */
 #if HAVE_MPI_Comm_delete_attr
-struct args_MPI_Comm_delete_attr_t {
+typedef struct {
 	MPI_Comm comm;
 	int comm_keyval;
 	int retval;
-};
+} args_MPI_Comm_delete_attr_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_delete_attr(activity) { \
-	activity->mpi_args.MPI_Comm_delete_attr.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_delete_attr.comm_keyval = (int) comm_keyval; \
+	args_MPI_Comm_delete_attr_t* args = (args_MPI_Comm_delete_attr_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->comm_keyval = (int) comm_keyval; \
 };
 
 #endif
@@ -3599,7 +3714,7 @@ struct args_MPI_Comm_delete_attr_t {
  *	)
  */
 #if HAVE_MPI_Comm_get_name
-struct args_MPI_Comm_get_name_t {
+typedef struct {
 	MPI_Comm comm;
 	char * comm_name;
 	struct {
@@ -3610,20 +3725,22 @@ struct args_MPI_Comm_get_name_t {
 		int val;
 	} resultlen__ref;
 	int retval;
-};
+} args_MPI_Comm_get_name_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_get_name(activity) { \
-	activity->mpi_args.MPI_Comm_get_name.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_get_name.comm_name = (char *) comm_name; \
-	activity->mpi_args.MPI_Comm_get_name.resultlen = (int *) resultlen; \
+	args_MPI_Comm_get_name_t* args = (args_MPI_Comm_get_name_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->comm_name = (char *) comm_name; \
+	args->resultlen = (int *) resultlen; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_get_name(args) { \
-	if (args->MPI_Comm_get_name.comm_name != NULL) { \
-		strncpy(args->MPI_Comm_get_name.comm_name__ref.val, args->MPI_Comm_get_name.comm_name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Comm_get_name_t* pargs = (args_MPI_Comm_get_name_t*) args; \
+	if (pargs->comm_name != NULL) { \
+		strncpy(pargs->comm_name__ref.val, pargs->comm_name, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Comm_get_name.resultlen != NULL) { \
-		args->MPI_Comm_get_name.resultlen__ref.val = *args->MPI_Comm_get_name.resultlen; \
+	if (pargs->resultlen != NULL) { \
+		pargs->resultlen__ref.val = *pargs->resultlen; \
 	} \
 };
 
@@ -3645,23 +3762,25 @@ struct args_MPI_Comm_get_name_t {
  *	)
  */
 #if HAVE_MPI_Comm_set_name
-struct args_MPI_Comm_set_name_t {
+typedef struct {
 	MPI_Comm comm;
 	char * comm_name;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
 	} comm_name__ref;
 	int retval;
-};
+} args_MPI_Comm_set_name_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_set_name(activity) { \
-	activity->mpi_args.MPI_Comm_set_name.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_set_name.comm_name = (char *) comm_name; \
+	args_MPI_Comm_set_name_t* args = (args_MPI_Comm_set_name_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->comm_name = (char *) comm_name; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_set_name(args) { \
-	if (args->MPI_Comm_set_name.comm_name != NULL) { \
-		strncpy(args->MPI_Comm_set_name.comm_name__ref.val, args->MPI_Comm_set_name.comm_name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Comm_set_name_t* pargs = (args_MPI_Comm_set_name_t*) args; \
+	if (pargs->comm_name != NULL) { \
+		strncpy(pargs->comm_name__ref.val, pargs->comm_name, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -3683,23 +3802,25 @@ struct args_MPI_Comm_set_name_t {
  *	)
  */
 #if HAVE_MPI_Group_size
-struct args_MPI_Group_size_t {
+typedef struct {
 	MPI_Group group;
 	int * size;
 	struct {
 		int val;
 	} size__ref;
 	int retval;
-};
+} args_MPI_Group_size_t;
 
 #define GET_ARGS_VALUE_MPI_Group_size(activity) { \
-	activity->mpi_args.MPI_Group_size.group = (MPI_Group) group; \
-	activity->mpi_args.MPI_Group_size.size = (int *) size; \
+	args_MPI_Group_size_t* args = (args_MPI_Group_size_t*) activity->args; \
+	args->group = (MPI_Group) group; \
+	args->size = (int *) size; \
 };
 
 #define GET_PTRS_VALUE_MPI_Group_size(args) { \
-	if (args->MPI_Group_size.size != NULL) { \
-		args->MPI_Group_size.size__ref.val = *args->MPI_Group_size.size; \
+	args_MPI_Group_size_t* pargs = (args_MPI_Group_size_t*) args; \
+	if (pargs->size != NULL) { \
+		pargs->size__ref.val = *pargs->size; \
 	} \
 };
 
@@ -3721,23 +3842,25 @@ struct args_MPI_Group_size_t {
  *	)
  */
 #if HAVE_MPI_Group_rank
-struct args_MPI_Group_rank_t {
+typedef struct {
 	MPI_Group group;
 	int * rank;
 	struct {
 		int val;
 	} rank__ref;
 	int retval;
-};
+} args_MPI_Group_rank_t;
 
 #define GET_ARGS_VALUE_MPI_Group_rank(activity) { \
-	activity->mpi_args.MPI_Group_rank.group = (MPI_Group) group; \
-	activity->mpi_args.MPI_Group_rank.rank = (int *) rank; \
+	args_MPI_Group_rank_t* args = (args_MPI_Group_rank_t*) activity->args; \
+	args->group = (MPI_Group) group; \
+	args->rank = (int *) rank; \
 };
 
 #define GET_PTRS_VALUE_MPI_Group_rank(args) { \
-	if (args->MPI_Group_rank.rank != NULL) { \
-		args->MPI_Group_rank.rank__ref.val = *args->MPI_Group_rank.rank; \
+	args_MPI_Group_rank_t* pargs = (args_MPI_Group_rank_t*) args; \
+	if (pargs->rank != NULL) { \
+		pargs->rank__ref.val = *pargs->rank; \
 	} \
 };
 
@@ -3762,7 +3885,7 @@ struct args_MPI_Group_rank_t {
  *	)
  */
 #if HAVE_MPI_Group_translate_ranks
-struct args_MPI_Group_translate_ranks_t {
+typedef struct {
 	MPI_Group group1;
 	int n;
 	int(* ranks1);
@@ -3775,22 +3898,24 @@ struct args_MPI_Group_translate_ranks_t {
 		int val;
 	} ranks2__ref;
 	int retval;
-};
+} args_MPI_Group_translate_ranks_t;
 
 #define GET_ARGS_VALUE_MPI_Group_translate_ranks(activity) { \
-	activity->mpi_args.MPI_Group_translate_ranks.group1 = (MPI_Group) group1; \
-	activity->mpi_args.MPI_Group_translate_ranks.n = (int) n; \
-	activity->mpi_args.MPI_Group_translate_ranks.ranks1 = (int(*)) ranks1; \
-	activity->mpi_args.MPI_Group_translate_ranks.group2 = (MPI_Group) group2; \
-	activity->mpi_args.MPI_Group_translate_ranks.ranks2 = (int(*)) ranks2; \
+	args_MPI_Group_translate_ranks_t* args = (args_MPI_Group_translate_ranks_t*) activity->args; \
+	args->group1 = (MPI_Group) group1; \
+	args->n = (int) n; \
+	args->ranks1 = (int(*)) ranks1; \
+	args->group2 = (MPI_Group) group2; \
+	args->ranks2 = (int(*)) ranks2; \
 };
 
 #define GET_PTRS_VALUE_MPI_Group_translate_ranks(args) { \
-	if (args->MPI_Group_translate_ranks.ranks1 != NULL) { \
-		args->MPI_Group_translate_ranks.ranks1__ref.val = *args->MPI_Group_translate_ranks.ranks1; \
+	args_MPI_Group_translate_ranks_t* pargs = (args_MPI_Group_translate_ranks_t*) args; \
+	if (pargs->ranks1 != NULL) { \
+		pargs->ranks1__ref.val = *pargs->ranks1; \
 	} \
-	if (args->MPI_Group_translate_ranks.ranks2 != NULL) { \
-		args->MPI_Group_translate_ranks.ranks2__ref.val = *args->MPI_Group_translate_ranks.ranks2; \
+	if (pargs->ranks2 != NULL) { \
+		pargs->ranks2__ref.val = *pargs->ranks2; \
 	} \
 };
 
@@ -3813,7 +3938,7 @@ struct args_MPI_Group_translate_ranks_t {
  *	)
  */
 #if HAVE_MPI_Group_compare
-struct args_MPI_Group_compare_t {
+typedef struct {
 	MPI_Group group1;
 	MPI_Group group2;
 	int * result;
@@ -3821,17 +3946,19 @@ struct args_MPI_Group_compare_t {
 		int val;
 	} result__ref;
 	int retval;
-};
+} args_MPI_Group_compare_t;
 
 #define GET_ARGS_VALUE_MPI_Group_compare(activity) { \
-	activity->mpi_args.MPI_Group_compare.group1 = (MPI_Group) group1; \
-	activity->mpi_args.MPI_Group_compare.group2 = (MPI_Group) group2; \
-	activity->mpi_args.MPI_Group_compare.result = (int *) result; \
+	args_MPI_Group_compare_t* args = (args_MPI_Group_compare_t*) activity->args; \
+	args->group1 = (MPI_Group) group1; \
+	args->group2 = (MPI_Group) group2; \
+	args->result = (int *) result; \
 };
 
 #define GET_PTRS_VALUE_MPI_Group_compare(args) { \
-	if (args->MPI_Group_compare.result != NULL) { \
-		args->MPI_Group_compare.result__ref.val = *args->MPI_Group_compare.result; \
+	args_MPI_Group_compare_t* pargs = (args_MPI_Group_compare_t*) args; \
+	if (pargs->result != NULL) { \
+		pargs->result__ref.val = *pargs->result; \
 	} \
 };
 
@@ -3854,7 +3981,7 @@ struct args_MPI_Group_compare_t {
  *	)
  */
 #if HAVE_MPI_Group_union
-struct args_MPI_Group_union_t {
+typedef struct {
 	MPI_Group group1;
 	MPI_Group group2;
 	MPI_Group * newgroup;
@@ -3862,17 +3989,19 @@ struct args_MPI_Group_union_t {
 		MPI_Group val;
 	} newgroup__ref;
 	int retval;
-};
+} args_MPI_Group_union_t;
 
 #define GET_ARGS_VALUE_MPI_Group_union(activity) { \
-	activity->mpi_args.MPI_Group_union.group1 = (MPI_Group) group1; \
-	activity->mpi_args.MPI_Group_union.group2 = (MPI_Group) group2; \
-	activity->mpi_args.MPI_Group_union.newgroup = (MPI_Group *) newgroup; \
+	args_MPI_Group_union_t* args = (args_MPI_Group_union_t*) activity->args; \
+	args->group1 = (MPI_Group) group1; \
+	args->group2 = (MPI_Group) group2; \
+	args->newgroup = (MPI_Group *) newgroup; \
 };
 
 #define GET_PTRS_VALUE_MPI_Group_union(args) { \
-	if (args->MPI_Group_union.newgroup != NULL) { \
-		args->MPI_Group_union.newgroup__ref.val = *args->MPI_Group_union.newgroup; \
+	args_MPI_Group_union_t* pargs = (args_MPI_Group_union_t*) args; \
+	if (pargs->newgroup != NULL) { \
+		pargs->newgroup__ref.val = *pargs->newgroup; \
 	} \
 };
 
@@ -3895,7 +4024,7 @@ struct args_MPI_Group_union_t {
  *	)
  */
 #if HAVE_MPI_Group_intersection
-struct args_MPI_Group_intersection_t {
+typedef struct {
 	MPI_Group group1;
 	MPI_Group group2;
 	MPI_Group * newgroup;
@@ -3903,17 +4032,19 @@ struct args_MPI_Group_intersection_t {
 		MPI_Group val;
 	} newgroup__ref;
 	int retval;
-};
+} args_MPI_Group_intersection_t;
 
 #define GET_ARGS_VALUE_MPI_Group_intersection(activity) { \
-	activity->mpi_args.MPI_Group_intersection.group1 = (MPI_Group) group1; \
-	activity->mpi_args.MPI_Group_intersection.group2 = (MPI_Group) group2; \
-	activity->mpi_args.MPI_Group_intersection.newgroup = (MPI_Group *) newgroup; \
+	args_MPI_Group_intersection_t* args = (args_MPI_Group_intersection_t*) activity->args; \
+	args->group1 = (MPI_Group) group1; \
+	args->group2 = (MPI_Group) group2; \
+	args->newgroup = (MPI_Group *) newgroup; \
 };
 
 #define GET_PTRS_VALUE_MPI_Group_intersection(args) { \
-	if (args->MPI_Group_intersection.newgroup != NULL) { \
-		args->MPI_Group_intersection.newgroup__ref.val = *args->MPI_Group_intersection.newgroup; \
+	args_MPI_Group_intersection_t* pargs = (args_MPI_Group_intersection_t*) args; \
+	if (pargs->newgroup != NULL) { \
+		pargs->newgroup__ref.val = *pargs->newgroup; \
 	} \
 };
 
@@ -3936,7 +4067,7 @@ struct args_MPI_Group_intersection_t {
  *	)
  */
 #if HAVE_MPI_Group_difference
-struct args_MPI_Group_difference_t {
+typedef struct {
 	MPI_Group group1;
 	MPI_Group group2;
 	MPI_Group * newgroup;
@@ -3944,17 +4075,19 @@ struct args_MPI_Group_difference_t {
 		MPI_Group val;
 	} newgroup__ref;
 	int retval;
-};
+} args_MPI_Group_difference_t;
 
 #define GET_ARGS_VALUE_MPI_Group_difference(activity) { \
-	activity->mpi_args.MPI_Group_difference.group1 = (MPI_Group) group1; \
-	activity->mpi_args.MPI_Group_difference.group2 = (MPI_Group) group2; \
-	activity->mpi_args.MPI_Group_difference.newgroup = (MPI_Group *) newgroup; \
+	args_MPI_Group_difference_t* args = (args_MPI_Group_difference_t*) activity->args; \
+	args->group1 = (MPI_Group) group1; \
+	args->group2 = (MPI_Group) group2; \
+	args->newgroup = (MPI_Group *) newgroup; \
 };
 
 #define GET_PTRS_VALUE_MPI_Group_difference(args) { \
-	if (args->MPI_Group_difference.newgroup != NULL) { \
-		args->MPI_Group_difference.newgroup__ref.val = *args->MPI_Group_difference.newgroup; \
+	args_MPI_Group_difference_t* pargs = (args_MPI_Group_difference_t*) args; \
+	if (pargs->newgroup != NULL) { \
+		pargs->newgroup__ref.val = *pargs->newgroup; \
 	} \
 };
 
@@ -3978,7 +4111,7 @@ struct args_MPI_Group_difference_t {
  *	)
  */
 #if HAVE_MPI_Group_incl
-struct args_MPI_Group_incl_t {
+typedef struct {
 	MPI_Group group;
 	int n;
 	int(* ranks);
@@ -3990,21 +4123,23 @@ struct args_MPI_Group_incl_t {
 		MPI_Group val;
 	} newgroup__ref;
 	int retval;
-};
+} args_MPI_Group_incl_t;
 
 #define GET_ARGS_VALUE_MPI_Group_incl(activity) { \
-	activity->mpi_args.MPI_Group_incl.group = (MPI_Group) group; \
-	activity->mpi_args.MPI_Group_incl.n = (int) n; \
-	activity->mpi_args.MPI_Group_incl.ranks = (int(*)) ranks; \
-	activity->mpi_args.MPI_Group_incl.newgroup = (MPI_Group *) newgroup; \
+	args_MPI_Group_incl_t* args = (args_MPI_Group_incl_t*) activity->args; \
+	args->group = (MPI_Group) group; \
+	args->n = (int) n; \
+	args->ranks = (int(*)) ranks; \
+	args->newgroup = (MPI_Group *) newgroup; \
 };
 
 #define GET_PTRS_VALUE_MPI_Group_incl(args) { \
-	if (args->MPI_Group_incl.ranks != NULL) { \
-		args->MPI_Group_incl.ranks__ref.val = *args->MPI_Group_incl.ranks; \
+	args_MPI_Group_incl_t* pargs = (args_MPI_Group_incl_t*) args; \
+	if (pargs->ranks != NULL) { \
+		pargs->ranks__ref.val = *pargs->ranks; \
 	} \
-	if (args->MPI_Group_incl.newgroup != NULL) { \
-		args->MPI_Group_incl.newgroup__ref.val = *args->MPI_Group_incl.newgroup; \
+	if (pargs->newgroup != NULL) { \
+		pargs->newgroup__ref.val = *pargs->newgroup; \
 	} \
 };
 
@@ -4028,7 +4163,7 @@ struct args_MPI_Group_incl_t {
  *	)
  */
 #if HAVE_MPI_Group_excl
-struct args_MPI_Group_excl_t {
+typedef struct {
 	MPI_Group group;
 	int n;
 	int(* ranks);
@@ -4040,21 +4175,23 @@ struct args_MPI_Group_excl_t {
 		MPI_Group val;
 	} newgroup__ref;
 	int retval;
-};
+} args_MPI_Group_excl_t;
 
 #define GET_ARGS_VALUE_MPI_Group_excl(activity) { \
-	activity->mpi_args.MPI_Group_excl.group = (MPI_Group) group; \
-	activity->mpi_args.MPI_Group_excl.n = (int) n; \
-	activity->mpi_args.MPI_Group_excl.ranks = (int(*)) ranks; \
-	activity->mpi_args.MPI_Group_excl.newgroup = (MPI_Group *) newgroup; \
+	args_MPI_Group_excl_t* args = (args_MPI_Group_excl_t*) activity->args; \
+	args->group = (MPI_Group) group; \
+	args->n = (int) n; \
+	args->ranks = (int(*)) ranks; \
+	args->newgroup = (MPI_Group *) newgroup; \
 };
 
 #define GET_PTRS_VALUE_MPI_Group_excl(args) { \
-	if (args->MPI_Group_excl.ranks != NULL) { \
-		args->MPI_Group_excl.ranks__ref.val = *args->MPI_Group_excl.ranks; \
+	args_MPI_Group_excl_t* pargs = (args_MPI_Group_excl_t*) args; \
+	if (pargs->ranks != NULL) { \
+		pargs->ranks__ref.val = *pargs->ranks; \
 	} \
-	if (args->MPI_Group_excl.newgroup != NULL) { \
-		args->MPI_Group_excl.newgroup__ref.val = *args->MPI_Group_excl.newgroup; \
+	if (pargs->newgroup != NULL) { \
+		pargs->newgroup__ref.val = *pargs->newgroup; \
 	} \
 };
 
@@ -4078,7 +4215,7 @@ struct args_MPI_Group_excl_t {
  *	)
  */
 #if HAVE_MPI_Group_range_incl
-struct args_MPI_Group_range_incl_t {
+typedef struct {
 	MPI_Group group;
 	int n;
 	int(* ranges)[3];
@@ -4090,21 +4227,23 @@ struct args_MPI_Group_range_incl_t {
 		MPI_Group val;
 	} newgroup__ref;
 	int retval;
-};
+} args_MPI_Group_range_incl_t;
 
 #define GET_ARGS_VALUE_MPI_Group_range_incl(activity) { \
-	activity->mpi_args.MPI_Group_range_incl.group = (MPI_Group) group; \
-	activity->mpi_args.MPI_Group_range_incl.n = (int) n; \
-	activity->mpi_args.MPI_Group_range_incl.ranges = (int(*)[3]) ranges; \
-	activity->mpi_args.MPI_Group_range_incl.newgroup = (MPI_Group *) newgroup; \
+	args_MPI_Group_range_incl_t* args = (args_MPI_Group_range_incl_t*) activity->args; \
+	args->group = (MPI_Group) group; \
+	args->n = (int) n; \
+	args->ranges = (int(*)[3]) ranges; \
+	args->newgroup = (MPI_Group *) newgroup; \
 };
 
 #define GET_PTRS_VALUE_MPI_Group_range_incl(args) { \
-	if (args->MPI_Group_range_incl.ranges != NULL) { \
-		memcpy(args->MPI_Group_range_incl.ranges__ref.val, args->MPI_Group_range_incl.ranges, sizeof(args->MPI_Group_range_incl.ranges__ref.val)); \
+	args_MPI_Group_range_incl_t* pargs = (args_MPI_Group_range_incl_t*) args; \
+	if (pargs->ranges != NULL) { \
+		memcpy(pargs->ranges__ref.val, pargs->ranges, sizeof(pargs->ranges__ref.val)); \
 	} \
-	if (args->MPI_Group_range_incl.newgroup != NULL) { \
-		args->MPI_Group_range_incl.newgroup__ref.val = *args->MPI_Group_range_incl.newgroup; \
+	if (pargs->newgroup != NULL) { \
+		pargs->newgroup__ref.val = *pargs->newgroup; \
 	} \
 };
 
@@ -4128,7 +4267,7 @@ struct args_MPI_Group_range_incl_t {
  *	)
  */
 #if HAVE_MPI_Group_range_excl
-struct args_MPI_Group_range_excl_t {
+typedef struct {
 	MPI_Group group;
 	int n;
 	int(* ranges)[3];
@@ -4140,21 +4279,23 @@ struct args_MPI_Group_range_excl_t {
 		MPI_Group val;
 	} newgroup__ref;
 	int retval;
-};
+} args_MPI_Group_range_excl_t;
 
 #define GET_ARGS_VALUE_MPI_Group_range_excl(activity) { \
-	activity->mpi_args.MPI_Group_range_excl.group = (MPI_Group) group; \
-	activity->mpi_args.MPI_Group_range_excl.n = (int) n; \
-	activity->mpi_args.MPI_Group_range_excl.ranges = (int(*)[3]) ranges; \
-	activity->mpi_args.MPI_Group_range_excl.newgroup = (MPI_Group *) newgroup; \
+	args_MPI_Group_range_excl_t* args = (args_MPI_Group_range_excl_t*) activity->args; \
+	args->group = (MPI_Group) group; \
+	args->n = (int) n; \
+	args->ranges = (int(*)[3]) ranges; \
+	args->newgroup = (MPI_Group *) newgroup; \
 };
 
 #define GET_PTRS_VALUE_MPI_Group_range_excl(args) { \
-	if (args->MPI_Group_range_excl.ranges != NULL) { \
-		memcpy(args->MPI_Group_range_excl.ranges__ref.val, args->MPI_Group_range_excl.ranges, sizeof(args->MPI_Group_range_excl.ranges__ref.val)); \
+	args_MPI_Group_range_excl_t* pargs = (args_MPI_Group_range_excl_t*) args; \
+	if (pargs->ranges != NULL) { \
+		memcpy(pargs->ranges__ref.val, pargs->ranges, sizeof(pargs->ranges__ref.val)); \
 	} \
-	if (args->MPI_Group_range_excl.newgroup != NULL) { \
-		args->MPI_Group_range_excl.newgroup__ref.val = *args->MPI_Group_range_excl.newgroup; \
+	if (pargs->newgroup != NULL) { \
+		pargs->newgroup__ref.val = *pargs->newgroup; \
 	} \
 };
 
@@ -4175,21 +4316,23 @@ struct args_MPI_Group_range_excl_t {
  *	)
  */
 #if HAVE_MPI_Group_free
-struct args_MPI_Group_free_t {
+typedef struct {
 	MPI_Group * group;
 	struct {
 		MPI_Group val;
 	} group__ref;
 	int retval;
-};
+} args_MPI_Group_free_t;
 
 #define GET_ARGS_VALUE_MPI_Group_free(activity) { \
-	activity->mpi_args.MPI_Group_free.group = (MPI_Group *) group; \
+	args_MPI_Group_free_t* args = (args_MPI_Group_free_t*) activity->args; \
+	args->group = (MPI_Group *) group; \
 };
 
 #define GET_PTRS_VALUE_MPI_Group_free(args) { \
-	if (args->MPI_Group_free.group != NULL) { \
-		args->MPI_Group_free.group__ref.val = *args->MPI_Group_free.group; \
+	args_MPI_Group_free_t* pargs = (args_MPI_Group_free_t*) args; \
+	if (pargs->group != NULL) { \
+		pargs->group__ref.val = *pargs->group; \
 	} \
 };
 
@@ -4212,7 +4355,7 @@ struct args_MPI_Group_free_t {
  *	)
  */
 #if HAVE_MPI_Op_create
-struct args_MPI_Op_create_t {
+typedef struct {
 	MPI_User_function * function;
 	int commute;
 	MPI_Op * op;
@@ -4220,17 +4363,19 @@ struct args_MPI_Op_create_t {
 		MPI_Op val;
 	} op__ref;
 	int retval;
-};
+} args_MPI_Op_create_t;
 
 #define GET_ARGS_VALUE_MPI_Op_create(activity) { \
-	activity->mpi_args.MPI_Op_create.function = (MPI_User_function *) function; \
-	activity->mpi_args.MPI_Op_create.commute = (int) commute; \
-	activity->mpi_args.MPI_Op_create.op = (MPI_Op *) op; \
+	args_MPI_Op_create_t* args = (args_MPI_Op_create_t*) activity->args; \
+	args->function = (MPI_User_function *) function; \
+	args->commute = (int) commute; \
+	args->op = (MPI_Op *) op; \
 };
 
 #define GET_PTRS_VALUE_MPI_Op_create(args) { \
-	if (args->MPI_Op_create.op != NULL) { \
-		args->MPI_Op_create.op__ref.val = *args->MPI_Op_create.op; \
+	args_MPI_Op_create_t* pargs = (args_MPI_Op_create_t*) args; \
+	if (pargs->op != NULL) { \
+		pargs->op__ref.val = *pargs->op; \
 	} \
 };
 
@@ -4251,21 +4396,23 @@ struct args_MPI_Op_create_t {
  *	)
  */
 #if HAVE_MPI_Op_free
-struct args_MPI_Op_free_t {
+typedef struct {
 	MPI_Op * op;
 	struct {
 		MPI_Op val;
 	} op__ref;
 	int retval;
-};
+} args_MPI_Op_free_t;
 
 #define GET_ARGS_VALUE_MPI_Op_free(activity) { \
-	activity->mpi_args.MPI_Op_free.op = (MPI_Op *) op; \
+	args_MPI_Op_free_t* args = (args_MPI_Op_free_t*) activity->args; \
+	args->op = (MPI_Op *) op; \
 };
 
 #define GET_PTRS_VALUE_MPI_Op_free(args) { \
-	if (args->MPI_Op_free.op != NULL) { \
-		args->MPI_Op_free.op__ref.val = *args->MPI_Op_free.op; \
+	args_MPI_Op_free_t* pargs = (args_MPI_Op_free_t*) args; \
+	if (pargs->op != NULL) { \
+		pargs->op__ref.val = *pargs->op; \
 	} \
 };
 
@@ -4285,9 +4432,9 @@ struct args_MPI_Op_free_t {
  *	)
  */
 #if HAVE_MPI_Wtime
-struct args_MPI_Wtime_t {
+typedef struct {
 	double retval;
-};
+} args_MPI_Wtime_t;
 
 #endif
 
@@ -4305,9 +4452,9 @@ struct args_MPI_Wtime_t {
  *	)
  */
 #if HAVE_MPI_Wtick
-struct args_MPI_Wtick_t {
+typedef struct {
 	double retval;
-};
+} args_MPI_Wtick_t;
 
 #endif
 
@@ -4327,23 +4474,25 @@ struct args_MPI_Wtick_t {
  *	)
  */
 #if HAVE_MPI_Get_address
-struct args_MPI_Get_address_t {
+typedef struct {
 	void * location;
 	MPI_Aint * address;
 	struct {
 		MPI_Aint val;
 	} address__ref;
 	int retval;
-};
+} args_MPI_Get_address_t;
 
 #define GET_ARGS_VALUE_MPI_Get_address(activity) { \
-	activity->mpi_args.MPI_Get_address.location = (void *) location; \
-	activity->mpi_args.MPI_Get_address.address = (MPI_Aint *) address; \
+	args_MPI_Get_address_t* args = (args_MPI_Get_address_t*) activity->args; \
+	args->location = (void *) location; \
+	args->address = (MPI_Aint *) address; \
 };
 
 #define GET_PTRS_VALUE_MPI_Get_address(args) { \
-	if (args->MPI_Get_address.address != NULL) { \
-		args->MPI_Get_address.address__ref.val = *args->MPI_Get_address.address; \
+	args_MPI_Get_address_t* pargs = (args_MPI_Get_address_t*) args; \
+	if (pargs->address != NULL) { \
+		pargs->address__ref.val = *pargs->address; \
 	} \
 };
 
@@ -4366,7 +4515,7 @@ struct args_MPI_Get_address_t {
  *	)
  */
 #if HAVE_MPI_Get_elements_x
-struct args_MPI_Get_elements_x_t {
+typedef struct {
 	MPI_Status * status;
 	struct {
 		MPI_Status val;
@@ -4377,20 +4526,22 @@ struct args_MPI_Get_elements_x_t {
 		MPI_Count val;
 	} count__ref;
 	int retval;
-};
+} args_MPI_Get_elements_x_t;
 
 #define GET_ARGS_VALUE_MPI_Get_elements_x(activity) { \
-	activity->mpi_args.MPI_Get_elements_x.status = (MPI_Status *) status; \
-	activity->mpi_args.MPI_Get_elements_x.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Get_elements_x.count = (MPI_Count *) count; \
+	args_MPI_Get_elements_x_t* args = (args_MPI_Get_elements_x_t*) activity->args; \
+	args->status = (MPI_Status *) status; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->count = (MPI_Count *) count; \
 };
 
 #define GET_PTRS_VALUE_MPI_Get_elements_x(args) { \
-	if (args->MPI_Get_elements_x.status != NULL) { \
-		args->MPI_Get_elements_x.status__ref.val = *args->MPI_Get_elements_x.status; \
+	args_MPI_Get_elements_x_t* pargs = (args_MPI_Get_elements_x_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
-	if (args->MPI_Get_elements_x.count != NULL) { \
-		args->MPI_Get_elements_x.count__ref.val = *args->MPI_Get_elements_x.count; \
+	if (pargs->count != NULL) { \
+		pargs->count__ref.val = *pargs->count; \
 	} \
 };
 
@@ -4415,7 +4566,7 @@ struct args_MPI_Get_elements_x_t {
  *	)
  */
 #if HAVE_MPI_Cart_shift
-struct args_MPI_Cart_shift_t {
+typedef struct {
 	MPI_Comm comm;
 	int direction;
 	int disp;
@@ -4428,22 +4579,24 @@ struct args_MPI_Cart_shift_t {
 		int val;
 	} rank_dest__ref;
 	int retval;
-};
+} args_MPI_Cart_shift_t;
 
 #define GET_ARGS_VALUE_MPI_Cart_shift(activity) { \
-	activity->mpi_args.MPI_Cart_shift.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Cart_shift.direction = (int) direction; \
-	activity->mpi_args.MPI_Cart_shift.disp = (int) disp; \
-	activity->mpi_args.MPI_Cart_shift.rank_source = (int *) rank_source; \
-	activity->mpi_args.MPI_Cart_shift.rank_dest = (int *) rank_dest; \
+	args_MPI_Cart_shift_t* args = (args_MPI_Cart_shift_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->direction = (int) direction; \
+	args->disp = (int) disp; \
+	args->rank_source = (int *) rank_source; \
+	args->rank_dest = (int *) rank_dest; \
 };
 
 #define GET_PTRS_VALUE_MPI_Cart_shift(args) { \
-	if (args->MPI_Cart_shift.rank_source != NULL) { \
-		args->MPI_Cart_shift.rank_source__ref.val = *args->MPI_Cart_shift.rank_source; \
+	args_MPI_Cart_shift_t* pargs = (args_MPI_Cart_shift_t*) args; \
+	if (pargs->rank_source != NULL) { \
+		pargs->rank_source__ref.val = *pargs->rank_source; \
 	} \
-	if (args->MPI_Cart_shift.rank_dest != NULL) { \
-		args->MPI_Cart_shift.rank_dest__ref.val = *args->MPI_Cart_shift.rank_dest; \
+	if (pargs->rank_dest != NULL) { \
+		pargs->rank_dest__ref.val = *pargs->rank_dest; \
 	} \
 };
 
@@ -4464,13 +4617,14 @@ struct args_MPI_Cart_shift_t {
  *	)
  */
 #if HAVE_MPI_Win_flush_local_all
-struct args_MPI_Win_flush_local_all_t {
+typedef struct {
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Win_flush_local_all_t;
 
 #define GET_ARGS_VALUE_MPI_Win_flush_local_all(activity) { \
-	activity->mpi_args.MPI_Win_flush_local_all.win = (MPI_Win) win; \
+	args_MPI_Win_flush_local_all_t* args = (args_MPI_Win_flush_local_all_t*) activity->args; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -4492,7 +4646,7 @@ struct args_MPI_Win_flush_local_all_t {
  *	)
  */
 #if HAVE_MPI_File_get_byte_offset
-struct args_MPI_File_get_byte_offset_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset offset;
 	MPI_Offset * disp;
@@ -4500,17 +4654,19 @@ struct args_MPI_File_get_byte_offset_t {
 		MPI_Offset val;
 	} disp__ref;
 	int retval;
-};
+} args_MPI_File_get_byte_offset_t;
 
 #define GET_ARGS_VALUE_MPI_File_get_byte_offset(activity) { \
-	activity->mpi_args.MPI_File_get_byte_offset.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_get_byte_offset.offset = (MPI_Offset) offset; \
-	activity->mpi_args.MPI_File_get_byte_offset.disp = (MPI_Offset *) disp; \
+	args_MPI_File_get_byte_offset_t* args = (args_MPI_File_get_byte_offset_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->offset = (MPI_Offset) offset; \
+	args->disp = (MPI_Offset *) disp; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_get_byte_offset(args) { \
-	if (args->MPI_File_get_byte_offset.disp != NULL) { \
-		args->MPI_File_get_byte_offset.disp__ref.val = *args->MPI_File_get_byte_offset.disp; \
+	args_MPI_File_get_byte_offset_t* pargs = (args_MPI_File_get_byte_offset_t*) args; \
+	if (pargs->disp != NULL) { \
+		pargs->disp__ref.val = *pargs->disp; \
 	} \
 };
 
@@ -4532,23 +4688,25 @@ struct args_MPI_File_get_byte_offset_t {
  *	)
  */
 #if HAVE_MPI_Win_get_info
-struct args_MPI_Win_get_info_t {
+typedef struct {
 	MPI_Win win;
 	MPI_Info * info_used;
 	struct {
 		MPI_Info val;
 	} info_used__ref;
 	int retval;
-};
+} args_MPI_Win_get_info_t;
 
 #define GET_ARGS_VALUE_MPI_Win_get_info(activity) { \
-	activity->mpi_args.MPI_Win_get_info.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Win_get_info.info_used = (MPI_Info *) info_used; \
+	args_MPI_Win_get_info_t* args = (args_MPI_Win_get_info_t*) activity->args; \
+	args->win = (MPI_Win) win; \
+	args->info_used = (MPI_Info *) info_used; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_get_info(args) { \
-	if (args->MPI_Win_get_info.info_used != NULL) { \
-		args->MPI_Win_get_info.info_used__ref.val = *args->MPI_Win_get_info.info_used; \
+	args_MPI_Win_get_info_t* pargs = (args_MPI_Win_get_info_t*) args; \
+	if (pargs->info_used != NULL) { \
+		pargs->info_used__ref.val = *pargs->info_used; \
 	} \
 };
 
@@ -4577,7 +4735,7 @@ struct args_MPI_Win_get_info_t {
  *	)
  */
 #if HAVE_MPI_Rput
-struct args_MPI_Rput_t {
+typedef struct {
 	void * origin_addr;
 	int origin_count;
 	MPI_Datatype origin_datatype;
@@ -4591,23 +4749,25 @@ struct args_MPI_Rput_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Rput_t;
 
 #define GET_ARGS_VALUE_MPI_Rput(activity) { \
-	activity->mpi_args.MPI_Rput.origin_addr = (void *) origin_addr; \
-	activity->mpi_args.MPI_Rput.origin_count = (int) origin_count; \
-	activity->mpi_args.MPI_Rput.origin_datatype = (MPI_Datatype) origin_datatype; \
-	activity->mpi_args.MPI_Rput.target_rank = (int) target_rank; \
-	activity->mpi_args.MPI_Rput.target_disp = (MPI_Aint) target_disp; \
-	activity->mpi_args.MPI_Rput.target_cout = (int) target_cout; \
-	activity->mpi_args.MPI_Rput.target_datatype = (MPI_Datatype) target_datatype; \
-	activity->mpi_args.MPI_Rput.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Rput.request = (MPI_Request *) request; \
+	args_MPI_Rput_t* args = (args_MPI_Rput_t*) activity->args; \
+	args->origin_addr = (void *) origin_addr; \
+	args->origin_count = (int) origin_count; \
+	args->origin_datatype = (MPI_Datatype) origin_datatype; \
+	args->target_rank = (int) target_rank; \
+	args->target_disp = (MPI_Aint) target_disp; \
+	args->target_cout = (int) target_cout; \
+	args->target_datatype = (MPI_Datatype) target_datatype; \
+	args->win = (MPI_Win) win; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Rput(args) { \
-	if (args->MPI_Rput.request != NULL) { \
-		args->MPI_Rput.request__ref.val = *args->MPI_Rput.request; \
+	args_MPI_Rput_t* pargs = (args_MPI_Rput_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -4631,7 +4791,7 @@ struct args_MPI_Rput_t {
  *	)
  */
 #if HAVE_MPI_Dist_graph_neighbors_count
-struct args_MPI_Dist_graph_neighbors_count_t {
+typedef struct {
 	MPI_Comm comm;
 	int * inneighbors;
 	struct {
@@ -4646,24 +4806,26 @@ struct args_MPI_Dist_graph_neighbors_count_t {
 		int val;
 	} weighted__ref;
 	int retval;
-};
+} args_MPI_Dist_graph_neighbors_count_t;
 
 #define GET_ARGS_VALUE_MPI_Dist_graph_neighbors_count(activity) { \
-	activity->mpi_args.MPI_Dist_graph_neighbors_count.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Dist_graph_neighbors_count.inneighbors = (int *) inneighbors; \
-	activity->mpi_args.MPI_Dist_graph_neighbors_count.outneighbors = (int *) outneighbors; \
-	activity->mpi_args.MPI_Dist_graph_neighbors_count.weighted = (int *) weighted; \
+	args_MPI_Dist_graph_neighbors_count_t* args = (args_MPI_Dist_graph_neighbors_count_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->inneighbors = (int *) inneighbors; \
+	args->outneighbors = (int *) outneighbors; \
+	args->weighted = (int *) weighted; \
 };
 
 #define GET_PTRS_VALUE_MPI_Dist_graph_neighbors_count(args) { \
-	if (args->MPI_Dist_graph_neighbors_count.inneighbors != NULL) { \
-		args->MPI_Dist_graph_neighbors_count.inneighbors__ref.val = *args->MPI_Dist_graph_neighbors_count.inneighbors; \
+	args_MPI_Dist_graph_neighbors_count_t* pargs = (args_MPI_Dist_graph_neighbors_count_t*) args; \
+	if (pargs->inneighbors != NULL) { \
+		pargs->inneighbors__ref.val = *pargs->inneighbors; \
 	} \
-	if (args->MPI_Dist_graph_neighbors_count.outneighbors != NULL) { \
-		args->MPI_Dist_graph_neighbors_count.outneighbors__ref.val = *args->MPI_Dist_graph_neighbors_count.outneighbors; \
+	if (pargs->outneighbors != NULL) { \
+		pargs->outneighbors__ref.val = *pargs->outneighbors; \
 	} \
-	if (args->MPI_Dist_graph_neighbors_count.weighted != NULL) { \
-		args->MPI_Dist_graph_neighbors_count.weighted__ref.val = *args->MPI_Dist_graph_neighbors_count.weighted; \
+	if (pargs->weighted != NULL) { \
+		pargs->weighted__ref.val = *pargs->weighted; \
 	} \
 };
 
@@ -4691,7 +4853,7 @@ struct args_MPI_Dist_graph_neighbors_count_t {
  *	)
  */
 #if HAVE_MPI_Ireduce
-struct args_MPI_Ireduce_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int count;
@@ -4704,22 +4866,24 @@ struct args_MPI_Ireduce_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Ireduce_t;
 
 #define GET_ARGS_VALUE_MPI_Ireduce(activity) { \
-	activity->mpi_args.MPI_Ireduce.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Ireduce.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Ireduce.count = (int) count; \
-	activity->mpi_args.MPI_Ireduce.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Ireduce.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Ireduce.root = (int) root; \
-	activity->mpi_args.MPI_Ireduce.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Ireduce.request = (MPI_Request *) request; \
+	args_MPI_Ireduce_t* args = (args_MPI_Ireduce_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Ireduce(args) { \
-	if (args->MPI_Ireduce.request != NULL) { \
-		args->MPI_Ireduce.request__ref.val = *args->MPI_Ireduce.request; \
+	args_MPI_Ireduce_t* pargs = (args_MPI_Ireduce_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -4748,7 +4912,7 @@ struct args_MPI_Ireduce_t {
  *	)
  */
 #if HAVE_MPI_Psend_init
-struct args_MPI_Psend_init_t {
+typedef struct {
 	void * buf;
 	int partitions;
 	MPI_Count count;
@@ -4762,23 +4926,25 @@ struct args_MPI_Psend_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Psend_init_t;
 
 #define GET_ARGS_VALUE_MPI_Psend_init(activity) { \
-	activity->mpi_args.MPI_Psend_init.buf = (void *) buf; \
-	activity->mpi_args.MPI_Psend_init.partitions = (int) partitions; \
-	activity->mpi_args.MPI_Psend_init.count = (MPI_Count) count; \
-	activity->mpi_args.MPI_Psend_init.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Psend_init.dest = (int) dest; \
-	activity->mpi_args.MPI_Psend_init.tag = (int) tag; \
-	activity->mpi_args.MPI_Psend_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Psend_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Psend_init.request = (MPI_Request *) request; \
+	args_MPI_Psend_init_t* args = (args_MPI_Psend_init_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->partitions = (int) partitions; \
+	args->count = (MPI_Count) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->dest = (int) dest; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Psend_init(args) { \
-	if (args->MPI_Psend_init.request != NULL) { \
-		args->MPI_Psend_init.request__ref.val = *args->MPI_Psend_init.request; \
+	args_MPI_Psend_init_t* pargs = (args_MPI_Psend_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -4807,7 +4973,7 @@ struct args_MPI_Psend_init_t {
  *	)
  */
 #if HAVE_MPI_Reduce_init
-struct args_MPI_Reduce_init_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int count;
@@ -4821,23 +4987,25 @@ struct args_MPI_Reduce_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Reduce_init_t;
 
 #define GET_ARGS_VALUE_MPI_Reduce_init(activity) { \
-	activity->mpi_args.MPI_Reduce_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Reduce_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Reduce_init.count = (int) count; \
-	activity->mpi_args.MPI_Reduce_init.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Reduce_init.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Reduce_init.root = (int) root; \
-	activity->mpi_args.MPI_Reduce_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Reduce_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Reduce_init.request = (MPI_Request *) request; \
+	args_MPI_Reduce_init_t* args = (args_MPI_Reduce_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Reduce_init(args) { \
-	if (args->MPI_Reduce_init.request != NULL) { \
-		args->MPI_Reduce_init.request__ref.val = *args->MPI_Reduce_init.request; \
+	args_MPI_Reduce_init_t* pargs = (args_MPI_Reduce_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -4858,13 +5026,14 @@ struct args_MPI_Reduce_init_t {
  *	)
  */
 #if HAVE_MPI_Win_wait
-struct args_MPI_Win_wait_t {
+typedef struct {
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Win_wait_t;
 
 #define GET_ARGS_VALUE_MPI_Win_wait(activity) { \
-	activity->mpi_args.MPI_Win_wait.win = (MPI_Win) win; \
+	args_MPI_Win_wait_t* args = (args_MPI_Win_wait_t*) activity->args; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -4890,7 +5059,7 @@ struct args_MPI_Win_wait_t {
  *	)
  */
 #if HAVE_MPI_Rsend_init
-struct args_MPI_Rsend_init_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -4902,21 +5071,23 @@ struct args_MPI_Rsend_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Rsend_init_t;
 
 #define GET_ARGS_VALUE_MPI_Rsend_init(activity) { \
-	activity->mpi_args.MPI_Rsend_init.buf = (void *) buf; \
-	activity->mpi_args.MPI_Rsend_init.count = (int) count; \
-	activity->mpi_args.MPI_Rsend_init.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Rsend_init.dest = (int) dest; \
-	activity->mpi_args.MPI_Rsend_init.tag = (int) tag; \
-	activity->mpi_args.MPI_Rsend_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Rsend_init.request = (MPI_Request *) request; \
+	args_MPI_Rsend_init_t* args = (args_MPI_Rsend_init_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->dest = (int) dest; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Rsend_init(args) { \
-	if (args->MPI_Rsend_init.request != NULL) { \
-		args->MPI_Rsend_init.request__ref.val = *args->MPI_Rsend_init.request; \
+	args_MPI_Rsend_init_t* pargs = (args_MPI_Rsend_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -4942,7 +5113,7 @@ struct args_MPI_Rsend_init_t {
  *	)
  */
 #if HAVE_MPI_File_write_at_all
-struct args_MPI_File_write_at_all_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset offset;
 	void * buf;
@@ -4953,20 +5124,22 @@ struct args_MPI_File_write_at_all_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_write_at_all_t;
 
 #define GET_ARGS_VALUE_MPI_File_write_at_all(activity) { \
-	activity->mpi_args.MPI_File_write_at_all.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_write_at_all.offset = (MPI_Offset) offset; \
-	activity->mpi_args.MPI_File_write_at_all.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_write_at_all.count = (int) count; \
-	activity->mpi_args.MPI_File_write_at_all.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_write_at_all.status = (MPI_Status *) status; \
+	args_MPI_File_write_at_all_t* args = (args_MPI_File_write_at_all_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->offset = (MPI_Offset) offset; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_write_at_all(args) { \
-	if (args->MPI_File_write_at_all.status != NULL) { \
-		args->MPI_File_write_at_all.status__ref.val = *args->MPI_File_write_at_all.status; \
+	args_MPI_File_write_at_all_t* pargs = (args_MPI_File_write_at_all_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -4989,7 +5162,7 @@ struct args_MPI_File_write_at_all_t {
  *	)
  */
 #if HAVE_MPI_File_write_ordered_end
-struct args_MPI_File_write_ordered_end_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	MPI_Status * status;
@@ -4997,17 +5170,19 @@ struct args_MPI_File_write_ordered_end_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_write_ordered_end_t;
 
 #define GET_ARGS_VALUE_MPI_File_write_ordered_end(activity) { \
-	activity->mpi_args.MPI_File_write_ordered_end.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_write_ordered_end.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_write_ordered_end.status = (MPI_Status *) status; \
+	args_MPI_File_write_ordered_end_t* args = (args_MPI_File_write_ordered_end_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_write_ordered_end(args) { \
-	if (args->MPI_File_write_ordered_end.status != NULL) { \
-		args->MPI_File_write_ordered_end.status__ref.val = *args->MPI_File_write_ordered_end.status; \
+	args_MPI_File_write_ordered_end_t* pargs = (args_MPI_File_write_ordered_end_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -5028,21 +5203,23 @@ struct args_MPI_File_write_ordered_end_t {
  *	)
  */
 #if HAVE_MPI_Errhandler_free
-struct args_MPI_Errhandler_free_t {
+typedef struct {
 	MPI_Errhandler * errhandler;
 	struct {
 		MPI_Errhandler val;
 	} errhandler__ref;
 	int retval;
-};
+} args_MPI_Errhandler_free_t;
 
 #define GET_ARGS_VALUE_MPI_Errhandler_free(activity) { \
-	activity->mpi_args.MPI_Errhandler_free.errhandler = (MPI_Errhandler *) errhandler; \
+	args_MPI_Errhandler_free_t* args = (args_MPI_Errhandler_free_t*) activity->args; \
+	args->errhandler = (MPI_Errhandler *) errhandler; \
 };
 
 #define GET_PTRS_VALUE_MPI_Errhandler_free(args) { \
-	if (args->MPI_Errhandler_free.errhandler != NULL) { \
-		args->MPI_Errhandler_free.errhandler__ref.val = *args->MPI_Errhandler_free.errhandler; \
+	args_MPI_Errhandler_free_t* pargs = (args_MPI_Errhandler_free_t*) args; \
+	if (pargs->errhandler != NULL) { \
+		pargs->errhandler__ref.val = *pargs->errhandler; \
 	} \
 };
 
@@ -5067,7 +5244,7 @@ struct args_MPI_Errhandler_free_t {
  *	)
  */
 #if HAVE_MPI_Win_shared_query
-struct args_MPI_Win_shared_query_t {
+typedef struct {
 	MPI_Win win;
 	int rank;
 	MPI_Aint * size;
@@ -5080,22 +5257,24 @@ struct args_MPI_Win_shared_query_t {
 	} disp_unit__ref;
 	void * baseptr;
 	int retval;
-};
+} args_MPI_Win_shared_query_t;
 
 #define GET_ARGS_VALUE_MPI_Win_shared_query(activity) { \
-	activity->mpi_args.MPI_Win_shared_query.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Win_shared_query.rank = (int) rank; \
-	activity->mpi_args.MPI_Win_shared_query.size = (MPI_Aint *) size; \
-	activity->mpi_args.MPI_Win_shared_query.disp_unit = (int *) disp_unit; \
-	activity->mpi_args.MPI_Win_shared_query.baseptr = (void *) baseptr; \
+	args_MPI_Win_shared_query_t* args = (args_MPI_Win_shared_query_t*) activity->args; \
+	args->win = (MPI_Win) win; \
+	args->rank = (int) rank; \
+	args->size = (MPI_Aint *) size; \
+	args->disp_unit = (int *) disp_unit; \
+	args->baseptr = (void *) baseptr; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_shared_query(args) { \
-	if (args->MPI_Win_shared_query.size != NULL) { \
-		args->MPI_Win_shared_query.size__ref.val = *args->MPI_Win_shared_query.size; \
+	args_MPI_Win_shared_query_t* pargs = (args_MPI_Win_shared_query_t*) args; \
+	if (pargs->size != NULL) { \
+		pargs->size__ref.val = *pargs->size; \
 	} \
-	if (args->MPI_Win_shared_query.disp_unit != NULL) { \
-		args->MPI_Win_shared_query.disp_unit__ref.val = *args->MPI_Win_shared_query.disp_unit; \
+	if (pargs->disp_unit != NULL) { \
+		pargs->disp_unit__ref.val = *pargs->disp_unit; \
 	} \
 };
 
@@ -5119,19 +5298,20 @@ struct args_MPI_Win_shared_query_t {
  *	)
  */
 #if HAVE_MPI_Win_lock
-struct args_MPI_Win_lock_t {
+typedef struct {
 	int lock_type;
 	int rank;
 	int mpi_assert;
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Win_lock_t;
 
 #define GET_ARGS_VALUE_MPI_Win_lock(activity) { \
-	activity->mpi_args.MPI_Win_lock.lock_type = (int) lock_type; \
-	activity->mpi_args.MPI_Win_lock.rank = (int) rank; \
-	activity->mpi_args.MPI_Win_lock.mpi_assert = (int) mpi_assert; \
-	activity->mpi_args.MPI_Win_lock.win = (MPI_Win) win; \
+	args_MPI_Win_lock_t* args = (args_MPI_Win_lock_t*) activity->args; \
+	args->lock_type = (int) lock_type; \
+	args->rank = (int) rank; \
+	args->mpi_assert = (int) mpi_assert; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -5162,7 +5342,7 @@ struct args_MPI_Win_lock_t {
  *	)
  */
 #if HAVE_MPI_Get_accumulate
-struct args_MPI_Get_accumulate_t {
+typedef struct {
 	void * origin_addr;
 	int origin_count;
 	MPI_Datatype origin_datatype;
@@ -5176,21 +5356,22 @@ struct args_MPI_Get_accumulate_t {
 	MPI_Op op;
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Get_accumulate_t;
 
 #define GET_ARGS_VALUE_MPI_Get_accumulate(activity) { \
-	activity->mpi_args.MPI_Get_accumulate.origin_addr = (void *) origin_addr; \
-	activity->mpi_args.MPI_Get_accumulate.origin_count = (int) origin_count; \
-	activity->mpi_args.MPI_Get_accumulate.origin_datatype = (MPI_Datatype) origin_datatype; \
-	activity->mpi_args.MPI_Get_accumulate.result_addr = (void *) result_addr; \
-	activity->mpi_args.MPI_Get_accumulate.result_count = (int) result_count; \
-	activity->mpi_args.MPI_Get_accumulate.result_datatype = (MPI_Datatype) result_datatype; \
-	activity->mpi_args.MPI_Get_accumulate.target_rank = (int) target_rank; \
-	activity->mpi_args.MPI_Get_accumulate.target_disp = (MPI_Aint) target_disp; \
-	activity->mpi_args.MPI_Get_accumulate.target_count = (int) target_count; \
-	activity->mpi_args.MPI_Get_accumulate.target_datatype = (MPI_Datatype) target_datatype; \
-	activity->mpi_args.MPI_Get_accumulate.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Get_accumulate.win = (MPI_Win) win; \
+	args_MPI_Get_accumulate_t* args = (args_MPI_Get_accumulate_t*) activity->args; \
+	args->origin_addr = (void *) origin_addr; \
+	args->origin_count = (int) origin_count; \
+	args->origin_datatype = (MPI_Datatype) origin_datatype; \
+	args->result_addr = (void *) result_addr; \
+	args->result_count = (int) result_count; \
+	args->result_datatype = (MPI_Datatype) result_datatype; \
+	args->target_rank = (int) target_rank; \
+	args->target_disp = (MPI_Aint) target_disp; \
+	args->target_count = (int) target_count; \
+	args->target_datatype = (MPI_Datatype) target_datatype; \
+	args->op = (MPI_Op) op; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -5212,7 +5393,7 @@ struct args_MPI_Get_accumulate_t {
  *	)
  */
 #if HAVE_MPI_Type_get_name
-struct args_MPI_Type_get_name_t {
+typedef struct {
 	MPI_Datatype type;
 	char * type_name;
 	struct {
@@ -5223,20 +5404,22 @@ struct args_MPI_Type_get_name_t {
 		int val;
 	} resultlen__ref;
 	int retval;
-};
+} args_MPI_Type_get_name_t;
 
 #define GET_ARGS_VALUE_MPI_Type_get_name(activity) { \
-	activity->mpi_args.MPI_Type_get_name.type = (MPI_Datatype) type; \
-	activity->mpi_args.MPI_Type_get_name.type_name = (char *) type_name; \
-	activity->mpi_args.MPI_Type_get_name.resultlen = (int *) resultlen; \
+	args_MPI_Type_get_name_t* args = (args_MPI_Type_get_name_t*) activity->args; \
+	args->type = (MPI_Datatype) type; \
+	args->type_name = (char *) type_name; \
+	args->resultlen = (int *) resultlen; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_get_name(args) { \
-	if (args->MPI_Type_get_name.type_name != NULL) { \
-		strncpy(args->MPI_Type_get_name.type_name__ref.val, args->MPI_Type_get_name.type_name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Type_get_name_t* pargs = (args_MPI_Type_get_name_t*) args; \
+	if (pargs->type_name != NULL) { \
+		strncpy(pargs->type_name__ref.val, pargs->type_name, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Type_get_name.resultlen != NULL) { \
-		args->MPI_Type_get_name.resultlen__ref.val = *args->MPI_Type_get_name.resultlen; \
+	if (pargs->resultlen != NULL) { \
+		pargs->resultlen__ref.val = *pargs->resultlen; \
 	} \
 };
 
@@ -5258,23 +5441,25 @@ struct args_MPI_Type_get_name_t {
  *	)
  */
 #if HAVE_MPI_File_get_atomicity
-struct args_MPI_File_get_atomicity_t {
+typedef struct {
 	MPI_File fh;
 	int * flag;
 	struct {
 		int val;
 	} flag__ref;
 	int retval;
-};
+} args_MPI_File_get_atomicity_t;
 
 #define GET_ARGS_VALUE_MPI_File_get_atomicity(activity) { \
-	activity->mpi_args.MPI_File_get_atomicity.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_get_atomicity.flag = (int *) flag; \
+	args_MPI_File_get_atomicity_t* args = (args_MPI_File_get_atomicity_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->flag = (int *) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_get_atomicity(args) { \
-	if (args->MPI_File_get_atomicity.flag != NULL) { \
-		args->MPI_File_get_atomicity.flag__ref.val = *args->MPI_File_get_atomicity.flag; \
+	args_MPI_File_get_atomicity_t* pargs = (args_MPI_File_get_atomicity_t*) args; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
 };
 
@@ -5296,15 +5481,16 @@ struct args_MPI_File_get_atomicity_t {
  *	)
  */
 #if HAVE_MPI_Session_set_info
-struct args_MPI_Session_set_info_t {
+typedef struct {
 	MPI_Session session;
 	MPI_Info info;
 	int retval;
-};
+} args_MPI_Session_set_info_t;
 
 #define GET_ARGS_VALUE_MPI_Session_set_info(activity) { \
-	activity->mpi_args.MPI_Session_set_info.session = (MPI_Session) session; \
-	activity->mpi_args.MPI_Session_set_info.info = (MPI_Info) info; \
+	args_MPI_Session_set_info_t* args = (args_MPI_Session_set_info_t*) activity->args; \
+	args->session = (MPI_Session) session; \
+	args->info = (MPI_Info) info; \
 };
 
 #endif
@@ -5326,7 +5512,7 @@ struct args_MPI_Session_set_info_t {
  *	)
  */
 #if HAVE_MPI_Group_from_session_pset
-struct args_MPI_Group_from_session_pset_t {
+typedef struct {
 	MPI_Session session;
 	char * pset_name;
 	struct {
@@ -5337,20 +5523,22 @@ struct args_MPI_Group_from_session_pset_t {
 		MPI_Group val;
 	} newgroup__ref;
 	int retval;
-};
+} args_MPI_Group_from_session_pset_t;
 
 #define GET_ARGS_VALUE_MPI_Group_from_session_pset(activity) { \
-	activity->mpi_args.MPI_Group_from_session_pset.session = (MPI_Session) session; \
-	activity->mpi_args.MPI_Group_from_session_pset.pset_name = (char *) pset_name; \
-	activity->mpi_args.MPI_Group_from_session_pset.newgroup = (MPI_Group *) newgroup; \
+	args_MPI_Group_from_session_pset_t* args = (args_MPI_Group_from_session_pset_t*) activity->args; \
+	args->session = (MPI_Session) session; \
+	args->pset_name = (char *) pset_name; \
+	args->newgroup = (MPI_Group *) newgroup; \
 };
 
 #define GET_PTRS_VALUE_MPI_Group_from_session_pset(args) { \
-	if (args->MPI_Group_from_session_pset.pset_name != NULL) { \
-		strncpy(args->MPI_Group_from_session_pset.pset_name__ref.val, args->MPI_Group_from_session_pset.pset_name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Group_from_session_pset_t* pargs = (args_MPI_Group_from_session_pset_t*) args; \
+	if (pargs->pset_name != NULL) { \
+		strncpy(pargs->pset_name__ref.val, pargs->pset_name, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Group_from_session_pset.newgroup != NULL) { \
-		args->MPI_Group_from_session_pset.newgroup__ref.val = *args->MPI_Group_from_session_pset.newgroup; \
+	if (pargs->newgroup != NULL) { \
+		pargs->newgroup__ref.val = *pargs->newgroup; \
 	} \
 };
 
@@ -5373,7 +5561,7 @@ struct args_MPI_Group_from_session_pset_t {
  *	)
  */
 #if HAVE_MPI_Comm_idup
-struct args_MPI_Comm_idup_t {
+typedef struct {
 	MPI_Comm comm;
 	MPI_Comm * newcomm;
 	struct {
@@ -5384,20 +5572,22 @@ struct args_MPI_Comm_idup_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Comm_idup_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_idup(activity) { \
-	activity->mpi_args.MPI_Comm_idup.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_idup.newcomm = (MPI_Comm *) newcomm; \
-	activity->mpi_args.MPI_Comm_idup.request = (MPI_Request *) request; \
+	args_MPI_Comm_idup_t* args = (args_MPI_Comm_idup_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->newcomm = (MPI_Comm *) newcomm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_idup(args) { \
-	if (args->MPI_Comm_idup.newcomm != NULL) { \
-		args->MPI_Comm_idup.newcomm__ref.val = *args->MPI_Comm_idup.newcomm; \
+	args_MPI_Comm_idup_t* pargs = (args_MPI_Comm_idup_t*) args; \
+	if (pargs->newcomm != NULL) { \
+		pargs->newcomm__ref.val = *pargs->newcomm; \
 	} \
-	if (args->MPI_Comm_idup.request != NULL) { \
-		args->MPI_Comm_idup.request__ref.val = *args->MPI_Comm_idup.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -5420,7 +5610,7 @@ struct args_MPI_Comm_idup_t {
  *	)
  */
 #if HAVE_MPI_Win_get_name
-struct args_MPI_Win_get_name_t {
+typedef struct {
 	MPI_Win win;
 	char * win_name;
 	struct {
@@ -5431,20 +5621,22 @@ struct args_MPI_Win_get_name_t {
 		int val;
 	} resultlen__ref;
 	int retval;
-};
+} args_MPI_Win_get_name_t;
 
 #define GET_ARGS_VALUE_MPI_Win_get_name(activity) { \
-	activity->mpi_args.MPI_Win_get_name.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Win_get_name.win_name = (char *) win_name; \
-	activity->mpi_args.MPI_Win_get_name.resultlen = (int *) resultlen; \
+	args_MPI_Win_get_name_t* args = (args_MPI_Win_get_name_t*) activity->args; \
+	args->win = (MPI_Win) win; \
+	args->win_name = (char *) win_name; \
+	args->resultlen = (int *) resultlen; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_get_name(args) { \
-	if (args->MPI_Win_get_name.win_name != NULL) { \
-		strncpy(args->MPI_Win_get_name.win_name__ref.val, args->MPI_Win_get_name.win_name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Win_get_name_t* pargs = (args_MPI_Win_get_name_t*) args; \
+	if (pargs->win_name != NULL) { \
+		strncpy(pargs->win_name__ref.val, pargs->win_name, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Win_get_name.resultlen != NULL) { \
-		args->MPI_Win_get_name.resultlen__ref.val = *args->MPI_Win_get_name.resultlen; \
+	if (pargs->resultlen != NULL) { \
+		pargs->resultlen__ref.val = *pargs->resultlen; \
 	} \
 };
 
@@ -5474,7 +5666,7 @@ struct args_MPI_Win_get_name_t {
  *	)
  */
 #if HAVE_MPI_Allgatherv_init
-struct args_MPI_Allgatherv_init_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -5495,30 +5687,32 @@ struct args_MPI_Allgatherv_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Allgatherv_init_t;
 
 #define GET_ARGS_VALUE_MPI_Allgatherv_init(activity) { \
-	activity->mpi_args.MPI_Allgatherv_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Allgatherv_init.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Allgatherv_init.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Allgatherv_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Allgatherv_init.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Allgatherv_init.displs = (int(*)) displs; \
-	activity->mpi_args.MPI_Allgatherv_init.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Allgatherv_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Allgatherv_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Allgatherv_init.request = (MPI_Request *) request; \
+	args_MPI_Allgatherv_init_t* args = (args_MPI_Allgatherv_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->displs = (int(*)) displs; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Allgatherv_init(args) { \
-	if (args->MPI_Allgatherv_init.recvcounts != NULL) { \
-		args->MPI_Allgatherv_init.recvcounts__ref.val = *args->MPI_Allgatherv_init.recvcounts; \
+	args_MPI_Allgatherv_init_t* pargs = (args_MPI_Allgatherv_init_t*) args; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Allgatherv_init.displs != NULL) { \
-		args->MPI_Allgatherv_init.displs__ref.val = *args->MPI_Allgatherv_init.displs; \
+	if (pargs->displs != NULL) { \
+		pargs->displs__ref.val = *pargs->displs; \
 	} \
-	if (args->MPI_Allgatherv_init.request != NULL) { \
-		args->MPI_Allgatherv_init.request__ref.val = *args->MPI_Allgatherv_init.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -5541,7 +5735,7 @@ struct args_MPI_Allgatherv_init_t {
  *	)
  */
 #if HAVE_MPI_Comm_dup_with_info
-struct args_MPI_Comm_dup_with_info_t {
+typedef struct {
 	MPI_Comm comm;
 	MPI_Info info;
 	MPI_Comm * newcomm;
@@ -5549,17 +5743,19 @@ struct args_MPI_Comm_dup_with_info_t {
 		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
-};
+} args_MPI_Comm_dup_with_info_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_dup_with_info(activity) { \
-	activity->mpi_args.MPI_Comm_dup_with_info.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_dup_with_info.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Comm_dup_with_info.newcomm = (MPI_Comm *) newcomm; \
+	args_MPI_Comm_dup_with_info_t* args = (args_MPI_Comm_dup_with_info_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->newcomm = (MPI_Comm *) newcomm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_dup_with_info(args) { \
-	if (args->MPI_Comm_dup_with_info.newcomm != NULL) { \
-		args->MPI_Comm_dup_with_info.newcomm__ref.val = *args->MPI_Comm_dup_with_info.newcomm; \
+	args_MPI_Comm_dup_with_info_t* pargs = (args_MPI_Comm_dup_with_info_t*) args; \
+	if (pargs->newcomm != NULL) { \
+		pargs->newcomm__ref.val = *pargs->newcomm; \
 	} \
 };
 
@@ -5582,7 +5778,7 @@ struct args_MPI_Comm_dup_with_info_t {
  *	)
  */
 #if HAVE_MPI_Session_get_num_psets
-struct args_MPI_Session_get_num_psets_t {
+typedef struct {
 	MPI_Session session;
 	MPI_Info info;
 	int * npset_names;
@@ -5590,17 +5786,19 @@ struct args_MPI_Session_get_num_psets_t {
 		int val;
 	} npset_names__ref;
 	int retval;
-};
+} args_MPI_Session_get_num_psets_t;
 
 #define GET_ARGS_VALUE_MPI_Session_get_num_psets(activity) { \
-	activity->mpi_args.MPI_Session_get_num_psets.session = (MPI_Session) session; \
-	activity->mpi_args.MPI_Session_get_num_psets.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Session_get_num_psets.npset_names = (int *) npset_names; \
+	args_MPI_Session_get_num_psets_t* args = (args_MPI_Session_get_num_psets_t*) activity->args; \
+	args->session = (MPI_Session) session; \
+	args->info = (MPI_Info) info; \
+	args->npset_names = (int *) npset_names; \
 };
 
 #define GET_PTRS_VALUE_MPI_Session_get_num_psets(args) { \
-	if (args->MPI_Session_get_num_psets.npset_names != NULL) { \
-		args->MPI_Session_get_num_psets.npset_names__ref.val = *args->MPI_Session_get_num_psets.npset_names; \
+	args_MPI_Session_get_num_psets_t* pargs = (args_MPI_Session_get_num_psets_t*) args; \
+	if (pargs->npset_names != NULL) { \
+		pargs->npset_names__ref.val = *pargs->npset_names; \
 	} \
 };
 
@@ -5629,7 +5827,7 @@ struct args_MPI_Session_get_num_psets_t {
  *	)
  */
 #if HAVE_MPI_Igather
-struct args_MPI_Igather_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -5643,23 +5841,25 @@ struct args_MPI_Igather_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Igather_t;
 
 #define GET_ARGS_VALUE_MPI_Igather(activity) { \
-	activity->mpi_args.MPI_Igather.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Igather.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Igather.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Igather.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Igather.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Igather.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Igather.root = (int) root; \
-	activity->mpi_args.MPI_Igather.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Igather.request = (MPI_Request *) request; \
+	args_MPI_Igather_t* args = (args_MPI_Igather_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Igather(args) { \
-	if (args->MPI_Igather.request != NULL) { \
-		args->MPI_Igather.request__ref.val = *args->MPI_Igather.request; \
+	args_MPI_Igather_t* pargs = (args_MPI_Igather_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -5685,7 +5885,7 @@ struct args_MPI_Igather_t {
  *	)
  */
 #if HAVE_MPI_File_read_at
-struct args_MPI_File_read_at_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset offset;
 	void * buf;
@@ -5696,20 +5896,22 @@ struct args_MPI_File_read_at_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_read_at_t;
 
 #define GET_ARGS_VALUE_MPI_File_read_at(activity) { \
-	activity->mpi_args.MPI_File_read_at.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_read_at.offset = (MPI_Offset) offset; \
-	activity->mpi_args.MPI_File_read_at.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_read_at.count = (int) count; \
-	activity->mpi_args.MPI_File_read_at.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_read_at.status = (MPI_Status *) status; \
+	args_MPI_File_read_at_t* args = (args_MPI_File_read_at_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->offset = (MPI_Offset) offset; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_read_at(args) { \
-	if (args->MPI_File_read_at.status != NULL) { \
-		args->MPI_File_read_at.status__ref.val = *args->MPI_File_read_at.status; \
+	args_MPI_File_read_at_t* pargs = (args_MPI_File_read_at_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -5734,7 +5936,7 @@ struct args_MPI_File_read_at_t {
  *	)
  */
 #if HAVE_MPI_Type_create_hvector
-struct args_MPI_Type_create_hvector_t {
+typedef struct {
 	int count;
 	int blocklength;
 	MPI_Aint stride;
@@ -5744,19 +5946,21 @@ struct args_MPI_Type_create_hvector_t {
 		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
-};
+} args_MPI_Type_create_hvector_t;
 
 #define GET_ARGS_VALUE_MPI_Type_create_hvector(activity) { \
-	activity->mpi_args.MPI_Type_create_hvector.count = (int) count; \
-	activity->mpi_args.MPI_Type_create_hvector.blocklength = (int) blocklength; \
-	activity->mpi_args.MPI_Type_create_hvector.stride = (MPI_Aint) stride; \
-	activity->mpi_args.MPI_Type_create_hvector.oldtype = (MPI_Datatype) oldtype; \
-	activity->mpi_args.MPI_Type_create_hvector.newtype = (MPI_Datatype *) newtype; \
+	args_MPI_Type_create_hvector_t* args = (args_MPI_Type_create_hvector_t*) activity->args; \
+	args->count = (int) count; \
+	args->blocklength = (int) blocklength; \
+	args->stride = (MPI_Aint) stride; \
+	args->oldtype = (MPI_Datatype) oldtype; \
+	args->newtype = (MPI_Datatype *) newtype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_create_hvector(args) { \
-	if (args->MPI_Type_create_hvector.newtype != NULL) { \
-		args->MPI_Type_create_hvector.newtype__ref.val = *args->MPI_Type_create_hvector.newtype; \
+	args_MPI_Type_create_hvector_t* pargs = (args_MPI_Type_create_hvector_t*) args; \
+	if (pargs->newtype != NULL) { \
+		pargs->newtype__ref.val = *pargs->newtype; \
 	} \
 };
 
@@ -5781,21 +5985,22 @@ struct args_MPI_Type_create_hvector_t {
  *	)
  */
 #if HAVE_MPI_File_write_at_all_begin
-struct args_MPI_File_write_at_all_begin_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset offset;
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
 	int retval;
-};
+} args_MPI_File_write_at_all_begin_t;
 
 #define GET_ARGS_VALUE_MPI_File_write_at_all_begin(activity) { \
-	activity->mpi_args.MPI_File_write_at_all_begin.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_write_at_all_begin.offset = (MPI_Offset) offset; \
-	activity->mpi_args.MPI_File_write_at_all_begin.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_write_at_all_begin.count = (int) count; \
-	activity->mpi_args.MPI_File_write_at_all_begin.datatype = (MPI_Datatype) datatype; \
+	args_MPI_File_write_at_all_begin_t* args = (args_MPI_File_write_at_all_begin_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->offset = (MPI_Offset) offset; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
 };
 
 #endif
@@ -5819,7 +6024,7 @@ struct args_MPI_File_write_at_all_begin_t {
  *	)
  */
 #if HAVE_MPI_Grequest_start
-struct args_MPI_Grequest_start_t {
+typedef struct {
 	MPI_Grequest_query_function * query_fn;
 	MPI_Grequest_free_function * free_fn;
 	MPI_Grequest_cancel_function * cancel_fn;
@@ -5829,19 +6034,21 @@ struct args_MPI_Grequest_start_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Grequest_start_t;
 
 #define GET_ARGS_VALUE_MPI_Grequest_start(activity) { \
-	activity->mpi_args.MPI_Grequest_start.query_fn = (MPI_Grequest_query_function *) query_fn; \
-	activity->mpi_args.MPI_Grequest_start.free_fn = (MPI_Grequest_free_function *) free_fn; \
-	activity->mpi_args.MPI_Grequest_start.cancel_fn = (MPI_Grequest_cancel_function *) cancel_fn; \
-	activity->mpi_args.MPI_Grequest_start.extra_state = (void *) extra_state; \
-	activity->mpi_args.MPI_Grequest_start.request = (MPI_Request *) request; \
+	args_MPI_Grequest_start_t* args = (args_MPI_Grequest_start_t*) activity->args; \
+	args->query_fn = (MPI_Grequest_query_function *) query_fn; \
+	args->free_fn = (MPI_Grequest_free_function *) free_fn; \
+	args->cancel_fn = (MPI_Grequest_cancel_function *) cancel_fn; \
+	args->extra_state = (void *) extra_state; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Grequest_start(args) { \
-	if (args->MPI_Grequest_start.request != NULL) { \
-		args->MPI_Grequest_start.request__ref.val = *args->MPI_Grequest_start.request; \
+	args_MPI_Grequest_start_t* pargs = (args_MPI_Grequest_start_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -5868,7 +6075,7 @@ struct args_MPI_Grequest_start_t {
  *	)
  */
 #if HAVE_MPI_Bsend_init
-struct args_MPI_Bsend_init_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -5880,21 +6087,23 @@ struct args_MPI_Bsend_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Bsend_init_t;
 
 #define GET_ARGS_VALUE_MPI_Bsend_init(activity) { \
-	activity->mpi_args.MPI_Bsend_init.buf = (void *) buf; \
-	activity->mpi_args.MPI_Bsend_init.count = (int) count; \
-	activity->mpi_args.MPI_Bsend_init.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Bsend_init.dest = (int) dest; \
-	activity->mpi_args.MPI_Bsend_init.tag = (int) tag; \
-	activity->mpi_args.MPI_Bsend_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Bsend_init.request = (MPI_Request *) request; \
+	args_MPI_Bsend_init_t* args = (args_MPI_Bsend_init_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->dest = (int) dest; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Bsend_init(args) { \
-	if (args->MPI_Bsend_init.request != NULL) { \
-		args->MPI_Bsend_init.request__ref.val = *args->MPI_Bsend_init.request; \
+	args_MPI_Bsend_init_t* pargs = (args_MPI_Bsend_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -5916,15 +6125,16 @@ struct args_MPI_Bsend_init_t {
  *	)
  */
 #if HAVE_MPI_File_set_size
-struct args_MPI_File_set_size_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset size;
 	int retval;
-};
+} args_MPI_File_set_size_t;
 
 #define GET_ARGS_VALUE_MPI_File_set_size(activity) { \
-	activity->mpi_args.MPI_File_set_size.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_set_size.size = (MPI_Offset) size; \
+	args_MPI_File_set_size_t* args = (args_MPI_File_set_size_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->size = (MPI_Offset) size; \
 };
 
 #endif
@@ -5945,23 +6155,25 @@ struct args_MPI_File_set_size_t {
  *	)
  */
 #if HAVE_MPI_Type_set_name
-struct args_MPI_Type_set_name_t {
+typedef struct {
 	MPI_Datatype type;
 	char * type_name;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
 	} type_name__ref;
 	int retval;
-};
+} args_MPI_Type_set_name_t;
 
 #define GET_ARGS_VALUE_MPI_Type_set_name(activity) { \
-	activity->mpi_args.MPI_Type_set_name.type = (MPI_Datatype) type; \
-	activity->mpi_args.MPI_Type_set_name.type_name = (char *) type_name; \
+	args_MPI_Type_set_name_t* args = (args_MPI_Type_set_name_t*) activity->args; \
+	args->type = (MPI_Datatype) type; \
+	args->type_name = (char *) type_name; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_set_name(args) { \
-	if (args->MPI_Type_set_name.type_name != NULL) { \
-		strncpy(args->MPI_Type_set_name.type_name__ref.val, args->MPI_Type_set_name.type_name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Type_set_name_t* pargs = (args_MPI_Type_set_name_t*) args; \
+	if (pargs->type_name != NULL) { \
+		strncpy(pargs->type_name__ref.val, pargs->type_name, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -5986,7 +6198,7 @@ struct args_MPI_Type_set_name_t {
  *	)
  */
 #if HAVE_MPI_Comm_split_type
-struct args_MPI_Comm_split_type_t {
+typedef struct {
 	MPI_Comm comm;
 	int split_type;
 	int key;
@@ -5996,19 +6208,21 @@ struct args_MPI_Comm_split_type_t {
 		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
-};
+} args_MPI_Comm_split_type_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_split_type(activity) { \
-	activity->mpi_args.MPI_Comm_split_type.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_split_type.split_type = (int) split_type; \
-	activity->mpi_args.MPI_Comm_split_type.key = (int) key; \
-	activity->mpi_args.MPI_Comm_split_type.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Comm_split_type.newcomm = (MPI_Comm *) newcomm; \
+	args_MPI_Comm_split_type_t* args = (args_MPI_Comm_split_type_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->split_type = (int) split_type; \
+	args->key = (int) key; \
+	args->info = (MPI_Info) info; \
+	args->newcomm = (MPI_Comm *) newcomm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_split_type(args) { \
-	if (args->MPI_Comm_split_type.newcomm != NULL) { \
-		args->MPI_Comm_split_type.newcomm__ref.val = *args->MPI_Comm_split_type.newcomm; \
+	args_MPI_Comm_split_type_t* pargs = (args_MPI_Comm_split_type_t*) args; \
+	if (pargs->newcomm != NULL) { \
+		pargs->newcomm__ref.val = *pargs->newcomm; \
 	} \
 };
 
@@ -6031,7 +6245,7 @@ struct args_MPI_Comm_split_type_t {
  *	)
  */
 #if HAVE_MPI_File_read_at_all_end
-struct args_MPI_File_read_at_all_end_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	MPI_Status * status;
@@ -6039,17 +6253,19 @@ struct args_MPI_File_read_at_all_end_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_read_at_all_end_t;
 
 #define GET_ARGS_VALUE_MPI_File_read_at_all_end(activity) { \
-	activity->mpi_args.MPI_File_read_at_all_end.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_read_at_all_end.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_read_at_all_end.status = (MPI_Status *) status; \
+	args_MPI_File_read_at_all_end_t* args = (args_MPI_File_read_at_all_end_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_read_at_all_end(args) { \
-	if (args->MPI_File_read_at_all_end.status != NULL) { \
-		args->MPI_File_read_at_all_end.status__ref.val = *args->MPI_File_read_at_all_end.status; \
+	args_MPI_File_read_at_all_end_t* pargs = (args_MPI_File_read_at_all_end_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -6074,7 +6290,7 @@ struct args_MPI_File_read_at_all_end_t {
  *	)
  */
 #if HAVE_MPI_File_write_all
-struct args_MPI_File_write_all_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
@@ -6084,19 +6300,21 @@ struct args_MPI_File_write_all_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_write_all_t;
 
 #define GET_ARGS_VALUE_MPI_File_write_all(activity) { \
-	activity->mpi_args.MPI_File_write_all.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_write_all.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_write_all.count = (int) count; \
-	activity->mpi_args.MPI_File_write_all.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_write_all.status = (MPI_Status *) status; \
+	args_MPI_File_write_all_t* args = (args_MPI_File_write_all_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_write_all(args) { \
-	if (args->MPI_File_write_all.status != NULL) { \
-		args->MPI_File_write_all.status__ref.val = *args->MPI_File_write_all.status; \
+	args_MPI_File_write_all_t* pargs = (args_MPI_File_write_all_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -6122,7 +6340,7 @@ struct args_MPI_File_write_all_t {
  *	)
  */
 #if HAVE_MPI_Improbe
-struct args_MPI_Improbe_t {
+typedef struct {
 	int source;
 	int tag;
 	MPI_Comm comm;
@@ -6139,26 +6357,28 @@ struct args_MPI_Improbe_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_Improbe_t;
 
 #define GET_ARGS_VALUE_MPI_Improbe(activity) { \
-	activity->mpi_args.MPI_Improbe.source = (int) source; \
-	activity->mpi_args.MPI_Improbe.tag = (int) tag; \
-	activity->mpi_args.MPI_Improbe.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Improbe.flag = (int *) flag; \
-	activity->mpi_args.MPI_Improbe.message = (MPI_Message *) message; \
-	activity->mpi_args.MPI_Improbe.status = (MPI_Status *) status; \
+	args_MPI_Improbe_t* args = (args_MPI_Improbe_t*) activity->args; \
+	args->source = (int) source; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->flag = (int *) flag; \
+	args->message = (MPI_Message *) message; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Improbe(args) { \
-	if (args->MPI_Improbe.flag != NULL) { \
-		args->MPI_Improbe.flag__ref.val = *args->MPI_Improbe.flag; \
+	args_MPI_Improbe_t* pargs = (args_MPI_Improbe_t*) args; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
-	if (args->MPI_Improbe.message != NULL) { \
-		args->MPI_Improbe.message__ref.val = *args->MPI_Improbe.message; \
+	if (pargs->message != NULL) { \
+		pargs->message__ref.val = *pargs->message; \
 	} \
-	if (args->MPI_Improbe.status != NULL) { \
-		args->MPI_Improbe.status__ref.val = *args->MPI_Improbe.status; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -6180,23 +6400,25 @@ struct args_MPI_Improbe_t {
  *	)
  */
 #if HAVE_MPI_Comm_get_info
-struct args_MPI_Comm_get_info_t {
+typedef struct {
 	MPI_Comm comm;
 	MPI_Info * info_used;
 	struct {
 		MPI_Info val;
 	} info_used__ref;
 	int retval;
-};
+} args_MPI_Comm_get_info_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_get_info(activity) { \
-	activity->mpi_args.MPI_Comm_get_info.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_get_info.info_used = (MPI_Info *) info_used; \
+	args_MPI_Comm_get_info_t* args = (args_MPI_Comm_get_info_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->info_used = (MPI_Info *) info_used; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_get_info(args) { \
-	if (args->MPI_Comm_get_info.info_used != NULL) { \
-		args->MPI_Comm_get_info.info_used__ref.val = *args->MPI_Comm_get_info.info_used; \
+	args_MPI_Comm_get_info_t* pargs = (args_MPI_Comm_get_info_t*) args; \
+	if (pargs->info_used != NULL) { \
+		pargs->info_used__ref.val = *pargs->info_used; \
 	} \
 };
 
@@ -6219,7 +6441,7 @@ struct args_MPI_Comm_get_info_t {
  *	)
  */
 #if HAVE_MPI_File_read_all_end
-struct args_MPI_File_read_all_end_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	MPI_Status * status;
@@ -6227,17 +6449,19 @@ struct args_MPI_File_read_all_end_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_read_all_end_t;
 
 #define GET_ARGS_VALUE_MPI_File_read_all_end(activity) { \
-	activity->mpi_args.MPI_File_read_all_end.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_read_all_end.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_read_all_end.status = (MPI_Status *) status; \
+	args_MPI_File_read_all_end_t* args = (args_MPI_File_read_all_end_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_read_all_end(args) { \
-	if (args->MPI_File_read_all_end.status != NULL) { \
-		args->MPI_File_read_all_end.status__ref.val = *args->MPI_File_read_all_end.status; \
+	args_MPI_File_read_all_end_t* pargs = (args_MPI_File_read_all_end_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -6258,13 +6482,14 @@ struct args_MPI_File_read_all_end_t {
  *	)
  */
 #if HAVE_MPI_Win_unlock_all
-struct args_MPI_Win_unlock_all_t {
+typedef struct {
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Win_unlock_all_t;
 
 #define GET_ARGS_VALUE_MPI_Win_unlock_all(activity) { \
-	activity->mpi_args.MPI_Win_unlock_all.win = (MPI_Win) win; \
+	args_MPI_Win_unlock_all_t* args = (args_MPI_Win_unlock_all_t*) activity->args; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -6285,23 +6510,25 @@ struct args_MPI_Win_unlock_all_t {
  *	)
  */
 #if HAVE_MPI_Type_create_f90_integer
-struct args_MPI_Type_create_f90_integer_t {
+typedef struct {
 	int r;
 	MPI_Datatype * newtype;
 	struct {
 		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
-};
+} args_MPI_Type_create_f90_integer_t;
 
 #define GET_ARGS_VALUE_MPI_Type_create_f90_integer(activity) { \
-	activity->mpi_args.MPI_Type_create_f90_integer.r = (int) r; \
-	activity->mpi_args.MPI_Type_create_f90_integer.newtype = (MPI_Datatype *) newtype; \
+	args_MPI_Type_create_f90_integer_t* args = (args_MPI_Type_create_f90_integer_t*) activity->args; \
+	args->r = (int) r; \
+	args->newtype = (MPI_Datatype *) newtype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_create_f90_integer(args) { \
-	if (args->MPI_Type_create_f90_integer.newtype != NULL) { \
-		args->MPI_Type_create_f90_integer.newtype__ref.val = *args->MPI_Type_create_f90_integer.newtype; \
+	args_MPI_Type_create_f90_integer_t* pargs = (args_MPI_Type_create_f90_integer_t*) args; \
+	if (pargs->newtype != NULL) { \
+		pargs->newtype__ref.val = *pargs->newtype; \
 	} \
 };
 
@@ -6329,7 +6556,7 @@ struct args_MPI_Type_create_f90_integer_t {
  *	)
  */
 #if HAVE_MPI_Exscan_init
-struct args_MPI_Exscan_init_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int count;
@@ -6342,22 +6569,24 @@ struct args_MPI_Exscan_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Exscan_init_t;
 
 #define GET_ARGS_VALUE_MPI_Exscan_init(activity) { \
-	activity->mpi_args.MPI_Exscan_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Exscan_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Exscan_init.count = (int) count; \
-	activity->mpi_args.MPI_Exscan_init.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Exscan_init.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Exscan_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Exscan_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Exscan_init.request = (MPI_Request *) request; \
+	args_MPI_Exscan_init_t* args = (args_MPI_Exscan_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Exscan_init(args) { \
-	if (args->MPI_Exscan_init.request != NULL) { \
-		args->MPI_Exscan_init.request__ref.val = *args->MPI_Exscan_init.request; \
+	args_MPI_Exscan_init_t* pargs = (args_MPI_Exscan_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -6384,7 +6613,7 @@ struct args_MPI_Exscan_init_t {
  *	)
  */
 #if HAVE_MPI_Ibsend
-struct args_MPI_Ibsend_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -6396,21 +6625,23 @@ struct args_MPI_Ibsend_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Ibsend_t;
 
 #define GET_ARGS_VALUE_MPI_Ibsend(activity) { \
-	activity->mpi_args.MPI_Ibsend.buf = (void *) buf; \
-	activity->mpi_args.MPI_Ibsend.count = (int) count; \
-	activity->mpi_args.MPI_Ibsend.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Ibsend.dest = (int) dest; \
-	activity->mpi_args.MPI_Ibsend.tag = (int) tag; \
-	activity->mpi_args.MPI_Ibsend.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Ibsend.request = (MPI_Request *) request; \
+	args_MPI_Ibsend_t* args = (args_MPI_Ibsend_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->dest = (int) dest; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Ibsend(args) { \
-	if (args->MPI_Ibsend.request != NULL) { \
-		args->MPI_Ibsend.request__ref.val = *args->MPI_Ibsend.request; \
+	args_MPI_Ibsend_t* pargs = (args_MPI_Ibsend_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -6432,15 +6663,16 @@ struct args_MPI_Ibsend_t {
  *	)
  */
 #if HAVE_MPI_Win_flush_local
-struct args_MPI_Win_flush_local_t {
+typedef struct {
 	int rank;
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Win_flush_local_t;
 
 #define GET_ARGS_VALUE_MPI_Win_flush_local(activity) { \
-	activity->mpi_args.MPI_Win_flush_local.rank = (int) rank; \
-	activity->mpi_args.MPI_Win_flush_local.win = (MPI_Win) win; \
+	args_MPI_Win_flush_local_t* args = (args_MPI_Win_flush_local_t*) activity->args; \
+	args->rank = (int) rank; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -6469,7 +6701,7 @@ struct args_MPI_Win_flush_local_t {
  *	)
  */
 #if HAVE_MPI_Ialltoallw
-struct args_MPI_Ialltoallw_t {
+typedef struct {
 	void * sendbuf;
 	int(* sendcounts);
 	struct {
@@ -6502,42 +6734,44 @@ struct args_MPI_Ialltoallw_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Ialltoallw_t;
 
 #define GET_ARGS_VALUE_MPI_Ialltoallw(activity) { \
-	activity->mpi_args.MPI_Ialltoallw.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Ialltoallw.sendcounts = (int(*)) sendcounts; \
-	activity->mpi_args.MPI_Ialltoallw.sdispls = (int(*)) sdispls; \
-	activity->mpi_args.MPI_Ialltoallw.sendtypes = (MPI_Datatype(*)) sendtypes; \
-	activity->mpi_args.MPI_Ialltoallw.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Ialltoallw.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Ialltoallw.rdispls = (int(*)) rdispls; \
-	activity->mpi_args.MPI_Ialltoallw.recvtypes = (MPI_Datatype(*)) recvtypes; \
-	activity->mpi_args.MPI_Ialltoallw.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Ialltoallw.request = (MPI_Request *) request; \
+	args_MPI_Ialltoallw_t* args = (args_MPI_Ialltoallw_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcounts = (int(*)) sendcounts; \
+	args->sdispls = (int(*)) sdispls; \
+	args->sendtypes = (MPI_Datatype(*)) sendtypes; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->rdispls = (int(*)) rdispls; \
+	args->recvtypes = (MPI_Datatype(*)) recvtypes; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Ialltoallw(args) { \
-	if (args->MPI_Ialltoallw.sendcounts != NULL) { \
-		args->MPI_Ialltoallw.sendcounts__ref.val = *args->MPI_Ialltoallw.sendcounts; \
+	args_MPI_Ialltoallw_t* pargs = (args_MPI_Ialltoallw_t*) args; \
+	if (pargs->sendcounts != NULL) { \
+		pargs->sendcounts__ref.val = *pargs->sendcounts; \
 	} \
-	if (args->MPI_Ialltoallw.sdispls != NULL) { \
-		args->MPI_Ialltoallw.sdispls__ref.val = *args->MPI_Ialltoallw.sdispls; \
+	if (pargs->sdispls != NULL) { \
+		pargs->sdispls__ref.val = *pargs->sdispls; \
 	} \
-	if (args->MPI_Ialltoallw.sendtypes != NULL) { \
-		args->MPI_Ialltoallw.sendtypes__ref.val = *args->MPI_Ialltoallw.sendtypes; \
+	if (pargs->sendtypes != NULL) { \
+		pargs->sendtypes__ref.val = *pargs->sendtypes; \
 	} \
-	if (args->MPI_Ialltoallw.recvcounts != NULL) { \
-		args->MPI_Ialltoallw.recvcounts__ref.val = *args->MPI_Ialltoallw.recvcounts; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Ialltoallw.rdispls != NULL) { \
-		args->MPI_Ialltoallw.rdispls__ref.val = *args->MPI_Ialltoallw.rdispls; \
+	if (pargs->rdispls != NULL) { \
+		pargs->rdispls__ref.val = *pargs->rdispls; \
 	} \
-	if (args->MPI_Ialltoallw.recvtypes != NULL) { \
-		args->MPI_Ialltoallw.recvtypes__ref.val = *args->MPI_Ialltoallw.recvtypes; \
+	if (pargs->recvtypes != NULL) { \
+		pargs->recvtypes__ref.val = *pargs->recvtypes; \
 	} \
-	if (args->MPI_Ialltoallw.request != NULL) { \
-		args->MPI_Ialltoallw.request__ref.val = *args->MPI_Ialltoallw.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -6562,7 +6796,7 @@ struct args_MPI_Ialltoallw_t {
  *	)
  */
 #if HAVE_MPI_Comm_create_from_group
-struct args_MPI_Comm_create_from_group_t {
+typedef struct {
 	MPI_Group group;
 	char * tag;
 	struct {
@@ -6575,22 +6809,24 @@ struct args_MPI_Comm_create_from_group_t {
 		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
-};
+} args_MPI_Comm_create_from_group_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_create_from_group(activity) { \
-	activity->mpi_args.MPI_Comm_create_from_group.group = (MPI_Group) group; \
-	activity->mpi_args.MPI_Comm_create_from_group.tag = (char *) tag; \
-	activity->mpi_args.MPI_Comm_create_from_group.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Comm_create_from_group.errhandler = (MPI_Errhandler) errhandler; \
-	activity->mpi_args.MPI_Comm_create_from_group.newcomm = (MPI_Comm *) newcomm; \
+	args_MPI_Comm_create_from_group_t* args = (args_MPI_Comm_create_from_group_t*) activity->args; \
+	args->group = (MPI_Group) group; \
+	args->tag = (char *) tag; \
+	args->info = (MPI_Info) info; \
+	args->errhandler = (MPI_Errhandler) errhandler; \
+	args->newcomm = (MPI_Comm *) newcomm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_create_from_group(args) { \
-	if (args->MPI_Comm_create_from_group.tag != NULL) { \
-		strncpy(args->MPI_Comm_create_from_group.tag__ref.val, args->MPI_Comm_create_from_group.tag, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Comm_create_from_group_t* pargs = (args_MPI_Comm_create_from_group_t*) args; \
+	if (pargs->tag != NULL) { \
+		strncpy(pargs->tag__ref.val, pargs->tag, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Comm_create_from_group.newcomm != NULL) { \
-		args->MPI_Comm_create_from_group.newcomm__ref.val = *args->MPI_Comm_create_from_group.newcomm; \
+	if (pargs->newcomm != NULL) { \
+		pargs->newcomm__ref.val = *pargs->newcomm; \
 	} \
 };
 
@@ -6617,7 +6853,7 @@ struct args_MPI_Comm_create_from_group_t {
  *	)
  */
 #if HAVE_MPI_Type_get_contents
-struct args_MPI_Type_get_contents_t {
+typedef struct {
 	MPI_Datatype mtype;
 	int max_integers;
 	int max_addresses;
@@ -6635,27 +6871,29 @@ struct args_MPI_Type_get_contents_t {
 		MPI_Datatype val;
 	} array_of_datatypes__ref;
 	int retval;
-};
+} args_MPI_Type_get_contents_t;
 
 #define GET_ARGS_VALUE_MPI_Type_get_contents(activity) { \
-	activity->mpi_args.MPI_Type_get_contents.mtype = (MPI_Datatype) mtype; \
-	activity->mpi_args.MPI_Type_get_contents.max_integers = (int) max_integers; \
-	activity->mpi_args.MPI_Type_get_contents.max_addresses = (int) max_addresses; \
-	activity->mpi_args.MPI_Type_get_contents.max_datatypes = (int) max_datatypes; \
-	activity->mpi_args.MPI_Type_get_contents.array_of_integers = (int(*)) array_of_integers; \
-	activity->mpi_args.MPI_Type_get_contents.array_of_addresses = (MPI_Aint(*)) array_of_addresses; \
-	activity->mpi_args.MPI_Type_get_contents.array_of_datatypes = (MPI_Datatype(*)) array_of_datatypes; \
+	args_MPI_Type_get_contents_t* args = (args_MPI_Type_get_contents_t*) activity->args; \
+	args->mtype = (MPI_Datatype) mtype; \
+	args->max_integers = (int) max_integers; \
+	args->max_addresses = (int) max_addresses; \
+	args->max_datatypes = (int) max_datatypes; \
+	args->array_of_integers = (int(*)) array_of_integers; \
+	args->array_of_addresses = (MPI_Aint(*)) array_of_addresses; \
+	args->array_of_datatypes = (MPI_Datatype(*)) array_of_datatypes; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_get_contents(args) { \
-	if (args->MPI_Type_get_contents.array_of_integers != NULL) { \
-		args->MPI_Type_get_contents.array_of_integers__ref.val = *args->MPI_Type_get_contents.array_of_integers; \
+	args_MPI_Type_get_contents_t* pargs = (args_MPI_Type_get_contents_t*) args; \
+	if (pargs->array_of_integers != NULL) { \
+		pargs->array_of_integers__ref.val = *pargs->array_of_integers; \
 	} \
-	if (args->MPI_Type_get_contents.array_of_addresses != NULL) { \
-		args->MPI_Type_get_contents.array_of_addresses__ref.val = *args->MPI_Type_get_contents.array_of_addresses; \
+	if (pargs->array_of_addresses != NULL) { \
+		pargs->array_of_addresses__ref.val = *pargs->array_of_addresses; \
 	} \
-	if (args->MPI_Type_get_contents.array_of_datatypes != NULL) { \
-		args->MPI_Type_get_contents.array_of_datatypes__ref.val = *args->MPI_Type_get_contents.array_of_datatypes; \
+	if (pargs->array_of_datatypes != NULL) { \
+		pargs->array_of_datatypes__ref.val = *pargs->array_of_datatypes; \
 	} \
 };
 
@@ -6681,7 +6919,7 @@ struct args_MPI_Type_get_contents_t {
  *	)
  */
 #if HAVE_MPI_File_iwrite_at
-struct args_MPI_File_iwrite_at_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset offset;
 	void * buf;
@@ -6692,20 +6930,22 @@ struct args_MPI_File_iwrite_at_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_File_iwrite_at_t;
 
 #define GET_ARGS_VALUE_MPI_File_iwrite_at(activity) { \
-	activity->mpi_args.MPI_File_iwrite_at.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_iwrite_at.offset = (MPI_Offset) offset; \
-	activity->mpi_args.MPI_File_iwrite_at.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_iwrite_at.count = (int) count; \
-	activity->mpi_args.MPI_File_iwrite_at.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_iwrite_at.request = (MPI_Request *) request; \
+	args_MPI_File_iwrite_at_t* args = (args_MPI_File_iwrite_at_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->offset = (MPI_Offset) offset; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_iwrite_at(args) { \
-	if (args->MPI_File_iwrite_at.request != NULL) { \
-		args->MPI_File_iwrite_at.request__ref.val = *args->MPI_File_iwrite_at.request; \
+	args_MPI_File_iwrite_at_t* pargs = (args_MPI_File_iwrite_at_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -6728,7 +6968,7 @@ struct args_MPI_File_iwrite_at_t {
  *	)
  */
 #if HAVE_MPI_Status_set_elements
-struct args_MPI_Status_set_elements_t {
+typedef struct {
 	MPI_Status * status;
 	struct {
 		MPI_Status val;
@@ -6736,17 +6976,19 @@ struct args_MPI_Status_set_elements_t {
 	MPI_Datatype datatype;
 	int count;
 	int retval;
-};
+} args_MPI_Status_set_elements_t;
 
 #define GET_ARGS_VALUE_MPI_Status_set_elements(activity) { \
-	activity->mpi_args.MPI_Status_set_elements.status = (MPI_Status *) status; \
-	activity->mpi_args.MPI_Status_set_elements.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Status_set_elements.count = (int) count; \
+	args_MPI_Status_set_elements_t* args = (args_MPI_Status_set_elements_t*) activity->args; \
+	args->status = (MPI_Status *) status; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->count = (int) count; \
 };
 
 #define GET_PTRS_VALUE_MPI_Status_set_elements(args) { \
-	if (args->MPI_Status_set_elements.status != NULL) { \
-		args->MPI_Status_set_elements.status__ref.val = *args->MPI_Status_set_elements.status; \
+	args_MPI_Status_set_elements_t* pargs = (args_MPI_Status_set_elements_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -6771,7 +7013,7 @@ struct args_MPI_Status_set_elements_t {
  *	)
  */
 #if HAVE_MPI_File_read_ordered
-struct args_MPI_File_read_ordered_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
@@ -6781,19 +7023,21 @@ struct args_MPI_File_read_ordered_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_read_ordered_t;
 
 #define GET_ARGS_VALUE_MPI_File_read_ordered(activity) { \
-	activity->mpi_args.MPI_File_read_ordered.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_read_ordered.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_read_ordered.count = (int) count; \
-	activity->mpi_args.MPI_File_read_ordered.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_read_ordered.status = (MPI_Status *) status; \
+	args_MPI_File_read_ordered_t* args = (args_MPI_File_read_ordered_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_read_ordered(args) { \
-	if (args->MPI_File_read_ordered.status != NULL) { \
-		args->MPI_File_read_ordered.status__ref.val = *args->MPI_File_read_ordered.status; \
+	args_MPI_File_read_ordered_t* pargs = (args_MPI_File_read_ordered_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -6814,21 +7058,23 @@ struct args_MPI_File_read_ordered_t {
  *	)
  */
 #if HAVE_MPI_Is_thread_main
-struct args_MPI_Is_thread_main_t {
+typedef struct {
 	int * flag;
 	struct {
 		int val;
 	} flag__ref;
 	int retval;
-};
+} args_MPI_Is_thread_main_t;
 
 #define GET_ARGS_VALUE_MPI_Is_thread_main(activity) { \
-	activity->mpi_args.MPI_Is_thread_main.flag = (int *) flag; \
+	args_MPI_Is_thread_main_t* args = (args_MPI_Is_thread_main_t*) activity->args; \
+	args->flag = (int *) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_Is_thread_main(args) { \
-	if (args->MPI_Is_thread_main.flag != NULL) { \
-		args->MPI_Is_thread_main.flag__ref.val = *args->MPI_Is_thread_main.flag; \
+	args_MPI_Is_thread_main_t* pargs = (args_MPI_Is_thread_main_t*) args; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
 };
 
@@ -6856,7 +7102,7 @@ struct args_MPI_Is_thread_main_t {
  *	)
  */
 #if HAVE_MPI_Allreduce_init
-struct args_MPI_Allreduce_init_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int count;
@@ -6869,22 +7115,24 @@ struct args_MPI_Allreduce_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Allreduce_init_t;
 
 #define GET_ARGS_VALUE_MPI_Allreduce_init(activity) { \
-	activity->mpi_args.MPI_Allreduce_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Allreduce_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Allreduce_init.count = (int) count; \
-	activity->mpi_args.MPI_Allreduce_init.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Allreduce_init.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Allreduce_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Allreduce_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Allreduce_init.request = (MPI_Request *) request; \
+	args_MPI_Allreduce_init_t* args = (args_MPI_Allreduce_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Allreduce_init(args) { \
-	if (args->MPI_Allreduce_init.request != NULL) { \
-		args->MPI_Allreduce_init.request__ref.val = *args->MPI_Allreduce_init.request; \
+	args_MPI_Allreduce_init_t* pargs = (args_MPI_Allreduce_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -6908,7 +7156,7 @@ struct args_MPI_Allreduce_init_t {
  *	)
  */
 #if HAVE_MPI_Info_get_valuelen
-struct args_MPI_Info_get_valuelen_t {
+typedef struct {
 	MPI_Info info;
 	char * key;
 	struct {
@@ -6923,24 +7171,26 @@ struct args_MPI_Info_get_valuelen_t {
 		int val;
 	} flag__ref;
 	int retval;
-};
+} args_MPI_Info_get_valuelen_t;
 
 #define GET_ARGS_VALUE_MPI_Info_get_valuelen(activity) { \
-	activity->mpi_args.MPI_Info_get_valuelen.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Info_get_valuelen.key = (char *) key; \
-	activity->mpi_args.MPI_Info_get_valuelen.valuelen = (int *) valuelen; \
-	activity->mpi_args.MPI_Info_get_valuelen.flag = (int *) flag; \
+	args_MPI_Info_get_valuelen_t* args = (args_MPI_Info_get_valuelen_t*) activity->args; \
+	args->info = (MPI_Info) info; \
+	args->key = (char *) key; \
+	args->valuelen = (int *) valuelen; \
+	args->flag = (int *) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_Info_get_valuelen(args) { \
-	if (args->MPI_Info_get_valuelen.key != NULL) { \
-		strncpy(args->MPI_Info_get_valuelen.key__ref.val, args->MPI_Info_get_valuelen.key, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Info_get_valuelen_t* pargs = (args_MPI_Info_get_valuelen_t*) args; \
+	if (pargs->key != NULL) { \
+		strncpy(pargs->key__ref.val, pargs->key, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Info_get_valuelen.valuelen != NULL) { \
-		args->MPI_Info_get_valuelen.valuelen__ref.val = *args->MPI_Info_get_valuelen.valuelen; \
+	if (pargs->valuelen != NULL) { \
+		pargs->valuelen__ref.val = *pargs->valuelen; \
 	} \
-	if (args->MPI_Info_get_valuelen.flag != NULL) { \
-		args->MPI_Info_get_valuelen.flag__ref.val = *args->MPI_Info_get_valuelen.flag; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
 };
 
@@ -6962,23 +7212,25 @@ struct args_MPI_Info_get_valuelen_t {
  *	)
  */
 #if HAVE_MPI_Comm_create_errhandler
-struct args_MPI_Comm_create_errhandler_t {
+typedef struct {
 	MPI_Comm_errhandler_function * function;
 	MPI_Errhandler * errhandler;
 	struct {
 		MPI_Errhandler val;
 	} errhandler__ref;
 	int retval;
-};
+} args_MPI_Comm_create_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_create_errhandler(activity) { \
-	activity->mpi_args.MPI_Comm_create_errhandler.function = (MPI_Comm_errhandler_function *) function; \
-	activity->mpi_args.MPI_Comm_create_errhandler.errhandler = (MPI_Errhandler *) errhandler; \
+	args_MPI_Comm_create_errhandler_t* args = (args_MPI_Comm_create_errhandler_t*) activity->args; \
+	args->function = (MPI_Comm_errhandler_function *) function; \
+	args->errhandler = (MPI_Errhandler *) errhandler; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_create_errhandler(args) { \
-	if (args->MPI_Comm_create_errhandler.errhandler != NULL) { \
-		args->MPI_Comm_create_errhandler.errhandler__ref.val = *args->MPI_Comm_create_errhandler.errhandler; \
+	args_MPI_Comm_create_errhandler_t* pargs = (args_MPI_Comm_create_errhandler_t*) args; \
+	if (pargs->errhandler != NULL) { \
+		pargs->errhandler__ref.val = *pargs->errhandler; \
 	} \
 };
 
@@ -6999,21 +7251,23 @@ struct args_MPI_Comm_create_errhandler_t {
  *	)
  */
 #if HAVE_MPI_Info_free
-struct args_MPI_Info_free_t {
+typedef struct {
 	MPI_Info * info;
 	struct {
 		MPI_Info val;
 	} info__ref;
 	int retval;
-};
+} args_MPI_Info_free_t;
 
 #define GET_ARGS_VALUE_MPI_Info_free(activity) { \
-	activity->mpi_args.MPI_Info_free.info = (MPI_Info *) info; \
+	args_MPI_Info_free_t* args = (args_MPI_Info_free_t*) activity->args; \
+	args->info = (MPI_Info *) info; \
 };
 
 #define GET_PTRS_VALUE_MPI_Info_free(args) { \
-	if (args->MPI_Info_free.info != NULL) { \
-		args->MPI_Info_free.info__ref.val = *args->MPI_Info_free.info; \
+	args_MPI_Info_free_t* pargs = (args_MPI_Info_free_t*) args; \
+	if (pargs->info != NULL) { \
+		pargs->info__ref.val = *pargs->info; \
 	} \
 };
 
@@ -7036,7 +7290,7 @@ struct args_MPI_Info_free_t {
  *	)
  */
 #if HAVE_MPI_Info_get_nthkey
-struct args_MPI_Info_get_nthkey_t {
+typedef struct {
 	MPI_Info info;
 	int n;
 	char * key;
@@ -7044,17 +7298,19 @@ struct args_MPI_Info_get_nthkey_t {
 		char val[MPI_STRING_SIZE_MAX];
 	} key__ref;
 	int retval;
-};
+} args_MPI_Info_get_nthkey_t;
 
 #define GET_ARGS_VALUE_MPI_Info_get_nthkey(activity) { \
-	activity->mpi_args.MPI_Info_get_nthkey.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Info_get_nthkey.n = (int) n; \
-	activity->mpi_args.MPI_Info_get_nthkey.key = (char *) key; \
+	args_MPI_Info_get_nthkey_t* args = (args_MPI_Info_get_nthkey_t*) activity->args; \
+	args->info = (MPI_Info) info; \
+	args->n = (int) n; \
+	args->key = (char *) key; \
 };
 
 #define GET_PTRS_VALUE_MPI_Info_get_nthkey(args) { \
-	if (args->MPI_Info_get_nthkey.key != NULL) { \
-		strncpy(args->MPI_Info_get_nthkey.key__ref.val, args->MPI_Info_get_nthkey.key, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Info_get_nthkey_t* pargs = (args_MPI_Info_get_nthkey_t*) args; \
+	if (pargs->key != NULL) { \
+		strncpy(pargs->key__ref.val, pargs->key, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -7081,7 +7337,7 @@ struct args_MPI_Info_get_nthkey_t {
  *	)
  */
 #if HAVE_MPI_Ssend_init
-struct args_MPI_Ssend_init_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -7093,21 +7349,23 @@ struct args_MPI_Ssend_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Ssend_init_t;
 
 #define GET_ARGS_VALUE_MPI_Ssend_init(activity) { \
-	activity->mpi_args.MPI_Ssend_init.buf = (void *) buf; \
-	activity->mpi_args.MPI_Ssend_init.count = (int) count; \
-	activity->mpi_args.MPI_Ssend_init.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Ssend_init.dest = (int) dest; \
-	activity->mpi_args.MPI_Ssend_init.tag = (int) tag; \
-	activity->mpi_args.MPI_Ssend_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Ssend_init.request = (MPI_Request *) request; \
+	args_MPI_Ssend_init_t* args = (args_MPI_Ssend_init_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->dest = (int) dest; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Ssend_init(args) { \
-	if (args->MPI_Ssend_init.request != NULL) { \
-		args->MPI_Ssend_init.request__ref.val = *args->MPI_Ssend_init.request; \
+	args_MPI_Ssend_init_t* pargs = (args_MPI_Ssend_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -7129,15 +7387,16 @@ struct args_MPI_Ssend_init_t {
  *	)
  */
 #if HAVE_MPI_Comm_set_info
-struct args_MPI_Comm_set_info_t {
+typedef struct {
 	MPI_Comm comm;
 	MPI_Info info;
 	int retval;
-};
+} args_MPI_Comm_set_info_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_set_info(activity) { \
-	activity->mpi_args.MPI_Comm_set_info.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_set_info.info = (MPI_Info) info; \
+	args_MPI_Comm_set_info_t* args = (args_MPI_Comm_set_info_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
 };
 
 #endif
@@ -7162,7 +7421,7 @@ struct args_MPI_Comm_set_info_t {
  *	)
  */
 #if HAVE_MPI_Cart_create
-struct args_MPI_Cart_create_t {
+typedef struct {
 	MPI_Comm old_comm;
 	int ndims;
 	int(* dims);
@@ -7179,26 +7438,28 @@ struct args_MPI_Cart_create_t {
 		MPI_Comm val;
 	} comm_cart__ref;
 	int retval;
-};
+} args_MPI_Cart_create_t;
 
 #define GET_ARGS_VALUE_MPI_Cart_create(activity) { \
-	activity->mpi_args.MPI_Cart_create.old_comm = (MPI_Comm) old_comm; \
-	activity->mpi_args.MPI_Cart_create.ndims = (int) ndims; \
-	activity->mpi_args.MPI_Cart_create.dims = (int(*)) dims; \
-	activity->mpi_args.MPI_Cart_create.periods = (int(*)) periods; \
-	activity->mpi_args.MPI_Cart_create.reorder = (int) reorder; \
-	activity->mpi_args.MPI_Cart_create.comm_cart = (MPI_Comm *) comm_cart; \
+	args_MPI_Cart_create_t* args = (args_MPI_Cart_create_t*) activity->args; \
+	args->old_comm = (MPI_Comm) old_comm; \
+	args->ndims = (int) ndims; \
+	args->dims = (int(*)) dims; \
+	args->periods = (int(*)) periods; \
+	args->reorder = (int) reorder; \
+	args->comm_cart = (MPI_Comm *) comm_cart; \
 };
 
 #define GET_PTRS_VALUE_MPI_Cart_create(args) { \
-	if (args->MPI_Cart_create.dims != NULL) { \
-		args->MPI_Cart_create.dims__ref.val = *args->MPI_Cart_create.dims; \
+	args_MPI_Cart_create_t* pargs = (args_MPI_Cart_create_t*) args; \
+	if (pargs->dims != NULL) { \
+		pargs->dims__ref.val = *pargs->dims; \
 	} \
-	if (args->MPI_Cart_create.periods != NULL) { \
-		args->MPI_Cart_create.periods__ref.val = *args->MPI_Cart_create.periods; \
+	if (pargs->periods != NULL) { \
+		pargs->periods__ref.val = *pargs->periods; \
 	} \
-	if (args->MPI_Cart_create.comm_cart != NULL) { \
-		args->MPI_Cart_create.comm_cart__ref.val = *args->MPI_Cart_create.comm_cart; \
+	if (pargs->comm_cart != NULL) { \
+		pargs->comm_cart__ref.val = *pargs->comm_cart; \
 	} \
 };
 
@@ -7222,19 +7483,20 @@ struct args_MPI_Cart_create_t {
  *	)
  */
 #if HAVE_MPI_File_write_all_begin
-struct args_MPI_File_write_all_begin_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
 	int retval;
-};
+} args_MPI_File_write_all_begin_t;
 
 #define GET_ARGS_VALUE_MPI_File_write_all_begin(activity) { \
-	activity->mpi_args.MPI_File_write_all_begin.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_write_all_begin.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_write_all_begin.count = (int) count; \
-	activity->mpi_args.MPI_File_write_all_begin.datatype = (MPI_Datatype) datatype; \
+	args_MPI_File_write_all_begin_t* args = (args_MPI_File_write_all_begin_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
 };
 
 #endif
@@ -7261,7 +7523,7 @@ struct args_MPI_File_write_all_begin_t {
  *	)
  */
 #if HAVE_MPI_Scan_init
-struct args_MPI_Scan_init_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int count;
@@ -7274,22 +7536,24 @@ struct args_MPI_Scan_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Scan_init_t;
 
 #define GET_ARGS_VALUE_MPI_Scan_init(activity) { \
-	activity->mpi_args.MPI_Scan_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Scan_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Scan_init.count = (int) count; \
-	activity->mpi_args.MPI_Scan_init.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Scan_init.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Scan_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Scan_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Scan_init.request = (MPI_Request *) request; \
+	args_MPI_Scan_init_t* args = (args_MPI_Scan_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Scan_init(args) { \
-	if (args->MPI_Scan_init.request != NULL) { \
-		args->MPI_Scan_init.request__ref.val = *args->MPI_Scan_init.request; \
+	args_MPI_Scan_init_t* pargs = (args_MPI_Scan_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -7316,7 +7580,7 @@ struct args_MPI_Scan_init_t {
  *	)
  */
 #if HAVE_MPI_Irsend
-struct args_MPI_Irsend_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -7328,21 +7592,23 @@ struct args_MPI_Irsend_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Irsend_t;
 
 #define GET_ARGS_VALUE_MPI_Irsend(activity) { \
-	activity->mpi_args.MPI_Irsend.buf = (void *) buf; \
-	activity->mpi_args.MPI_Irsend.count = (int) count; \
-	activity->mpi_args.MPI_Irsend.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Irsend.dest = (int) dest; \
-	activity->mpi_args.MPI_Irsend.tag = (int) tag; \
-	activity->mpi_args.MPI_Irsend.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Irsend.request = (MPI_Request *) request; \
+	args_MPI_Irsend_t* args = (args_MPI_Irsend_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->dest = (int) dest; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Irsend(args) { \
-	if (args->MPI_Irsend.request != NULL) { \
-		args->MPI_Irsend.request__ref.val = *args->MPI_Irsend.request; \
+	args_MPI_Irsend_t* pargs = (args_MPI_Irsend_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -7371,7 +7637,7 @@ struct args_MPI_Irsend_t {
  *	)
  */
 #if HAVE_MPI_Neighbor_alltoallv
-struct args_MPI_Neighbor_alltoallv_t {
+typedef struct {
 	void * sendbuf;
 	int(* sendcounts);
 	struct {
@@ -7394,32 +7660,34 @@ struct args_MPI_Neighbor_alltoallv_t {
 	MPI_Datatype recvtype;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Neighbor_alltoallv_t;
 
 #define GET_ARGS_VALUE_MPI_Neighbor_alltoallv(activity) { \
-	activity->mpi_args.MPI_Neighbor_alltoallv.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Neighbor_alltoallv.sendcounts = (int(*)) sendcounts; \
-	activity->mpi_args.MPI_Neighbor_alltoallv.sdispls = (int(*)) sdispls; \
-	activity->mpi_args.MPI_Neighbor_alltoallv.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Neighbor_alltoallv.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Neighbor_alltoallv.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Neighbor_alltoallv.rdispls = (int(*)) rdispls; \
-	activity->mpi_args.MPI_Neighbor_alltoallv.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Neighbor_alltoallv.comm = (MPI_Comm) comm; \
+	args_MPI_Neighbor_alltoallv_t* args = (args_MPI_Neighbor_alltoallv_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcounts = (int(*)) sendcounts; \
+	args->sdispls = (int(*)) sdispls; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->rdispls = (int(*)) rdispls; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Neighbor_alltoallv(args) { \
-	if (args->MPI_Neighbor_alltoallv.sendcounts != NULL) { \
-		args->MPI_Neighbor_alltoallv.sendcounts__ref.val = *args->MPI_Neighbor_alltoallv.sendcounts; \
+	args_MPI_Neighbor_alltoallv_t* pargs = (args_MPI_Neighbor_alltoallv_t*) args; \
+	if (pargs->sendcounts != NULL) { \
+		pargs->sendcounts__ref.val = *pargs->sendcounts; \
 	} \
-	if (args->MPI_Neighbor_alltoallv.sdispls != NULL) { \
-		args->MPI_Neighbor_alltoallv.sdispls__ref.val = *args->MPI_Neighbor_alltoallv.sdispls; \
+	if (pargs->sdispls != NULL) { \
+		pargs->sdispls__ref.val = *pargs->sdispls; \
 	} \
-	if (args->MPI_Neighbor_alltoallv.recvcounts != NULL) { \
-		args->MPI_Neighbor_alltoallv.recvcounts__ref.val = *args->MPI_Neighbor_alltoallv.recvcounts; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Neighbor_alltoallv.rdispls != NULL) { \
-		args->MPI_Neighbor_alltoallv.rdispls__ref.val = *args->MPI_Neighbor_alltoallv.rdispls; \
+	if (pargs->rdispls != NULL) { \
+		pargs->rdispls__ref.val = *pargs->rdispls; \
 	} \
 };
 
@@ -7442,7 +7710,7 @@ struct args_MPI_Neighbor_alltoallv_t {
  *	)
  */
 #if HAVE_MPI_Pready_list
-struct args_MPI_Pready_list_t {
+typedef struct {
 	int length;
 	int(* partition_list);
 	struct {
@@ -7450,17 +7718,19 @@ struct args_MPI_Pready_list_t {
 	} partition_list__ref;
 	MPI_Request request;
 	int retval;
-};
+} args_MPI_Pready_list_t;
 
 #define GET_ARGS_VALUE_MPI_Pready_list(activity) { \
-	activity->mpi_args.MPI_Pready_list.length = (int) length; \
-	activity->mpi_args.MPI_Pready_list.partition_list = (int(*)) partition_list; \
-	activity->mpi_args.MPI_Pready_list.request = (MPI_Request) request; \
+	args_MPI_Pready_list_t* args = (args_MPI_Pready_list_t*) activity->args; \
+	args->length = (int) length; \
+	args->partition_list = (int(*)) partition_list; \
+	args->request = (MPI_Request) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Pready_list(args) { \
-	if (args->MPI_Pready_list.partition_list != NULL) { \
-		args->MPI_Pready_list.partition_list__ref.val = *args->MPI_Pready_list.partition_list; \
+	args_MPI_Pready_list_t* pargs = (args_MPI_Pready_list_t*) args; \
+	if (pargs->partition_list != NULL) { \
+		pargs->partition_list__ref.val = *pargs->partition_list; \
 	} \
 };
 
@@ -7491,7 +7761,7 @@ struct args_MPI_Pready_list_t {
  *	)
  */
 #if HAVE_MPI_Alltoallw_init
-struct args_MPI_Alltoallw_init_t {
+typedef struct {
 	void * sendbuf;
 	int(* sendcounts);
 	struct {
@@ -7525,43 +7795,45 @@ struct args_MPI_Alltoallw_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Alltoallw_init_t;
 
 #define GET_ARGS_VALUE_MPI_Alltoallw_init(activity) { \
-	activity->mpi_args.MPI_Alltoallw_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Alltoallw_init.sendcounts = (int(*)) sendcounts; \
-	activity->mpi_args.MPI_Alltoallw_init.sdispls = (int(*)) sdispls; \
-	activity->mpi_args.MPI_Alltoallw_init.sendtypes = (MPI_Datatype(*)) sendtypes; \
-	activity->mpi_args.MPI_Alltoallw_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Alltoallw_init.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Alltoallw_init.rdispls = (int(*)) rdispls; \
-	activity->mpi_args.MPI_Alltoallw_init.recvtypes = (MPI_Datatype(*)) recvtypes; \
-	activity->mpi_args.MPI_Alltoallw_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Alltoallw_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Alltoallw_init.request = (MPI_Request *) request; \
+	args_MPI_Alltoallw_init_t* args = (args_MPI_Alltoallw_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcounts = (int(*)) sendcounts; \
+	args->sdispls = (int(*)) sdispls; \
+	args->sendtypes = (MPI_Datatype(*)) sendtypes; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->rdispls = (int(*)) rdispls; \
+	args->recvtypes = (MPI_Datatype(*)) recvtypes; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Alltoallw_init(args) { \
-	if (args->MPI_Alltoallw_init.sendcounts != NULL) { \
-		args->MPI_Alltoallw_init.sendcounts__ref.val = *args->MPI_Alltoallw_init.sendcounts; \
+	args_MPI_Alltoallw_init_t* pargs = (args_MPI_Alltoallw_init_t*) args; \
+	if (pargs->sendcounts != NULL) { \
+		pargs->sendcounts__ref.val = *pargs->sendcounts; \
 	} \
-	if (args->MPI_Alltoallw_init.sdispls != NULL) { \
-		args->MPI_Alltoallw_init.sdispls__ref.val = *args->MPI_Alltoallw_init.sdispls; \
+	if (pargs->sdispls != NULL) { \
+		pargs->sdispls__ref.val = *pargs->sdispls; \
 	} \
-	if (args->MPI_Alltoallw_init.sendtypes != NULL) { \
-		args->MPI_Alltoallw_init.sendtypes__ref.val = *args->MPI_Alltoallw_init.sendtypes; \
+	if (pargs->sendtypes != NULL) { \
+		pargs->sendtypes__ref.val = *pargs->sendtypes; \
 	} \
-	if (args->MPI_Alltoallw_init.recvcounts != NULL) { \
-		args->MPI_Alltoallw_init.recvcounts__ref.val = *args->MPI_Alltoallw_init.recvcounts; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Alltoallw_init.rdispls != NULL) { \
-		args->MPI_Alltoallw_init.rdispls__ref.val = *args->MPI_Alltoallw_init.rdispls; \
+	if (pargs->rdispls != NULL) { \
+		pargs->rdispls__ref.val = *pargs->rdispls; \
 	} \
-	if (args->MPI_Alltoallw_init.recvtypes != NULL) { \
-		args->MPI_Alltoallw_init.recvtypes__ref.val = *args->MPI_Alltoallw_init.recvtypes; \
+	if (pargs->recvtypes != NULL) { \
+		pargs->recvtypes__ref.val = *pargs->recvtypes; \
 	} \
-	if (args->MPI_Alltoallw_init.request != NULL) { \
-		args->MPI_Alltoallw_init.request__ref.val = *args->MPI_Alltoallw_init.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -7585,19 +7857,20 @@ struct args_MPI_Alltoallw_init_t {
  *	)
  */
 #if HAVE_MPI_File_read_ordered_begin
-struct args_MPI_File_read_ordered_begin_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
 	int retval;
-};
+} args_MPI_File_read_ordered_begin_t;
 
 #define GET_ARGS_VALUE_MPI_File_read_ordered_begin(activity) { \
-	activity->mpi_args.MPI_File_read_ordered_begin.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_read_ordered_begin.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_read_ordered_begin.count = (int) count; \
-	activity->mpi_args.MPI_File_read_ordered_begin.datatype = (MPI_Datatype) datatype; \
+	args_MPI_File_read_ordered_begin_t* args = (args_MPI_File_read_ordered_begin_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
 };
 
 #endif
@@ -7626,7 +7899,7 @@ struct args_MPI_File_read_ordered_begin_t {
  *	)
  */
 #if HAVE_MPI_Dist_graph_create_adjacent
-struct args_MPI_Dist_graph_create_adjacent_t {
+typedef struct {
 	MPI_Comm comm_old;
 	int indegree;
 	int(* sources);
@@ -7653,36 +7926,38 @@ struct args_MPI_Dist_graph_create_adjacent_t {
 		MPI_Comm val;
 	} comm_dist_graph__ref;
 	int retval;
-};
+} args_MPI_Dist_graph_create_adjacent_t;
 
 #define GET_ARGS_VALUE_MPI_Dist_graph_create_adjacent(activity) { \
-	activity->mpi_args.MPI_Dist_graph_create_adjacent.comm_old = (MPI_Comm) comm_old; \
-	activity->mpi_args.MPI_Dist_graph_create_adjacent.indegree = (int) indegree; \
-	activity->mpi_args.MPI_Dist_graph_create_adjacent.sources = (int(*)) sources; \
-	activity->mpi_args.MPI_Dist_graph_create_adjacent.sourceweights = (int(*)) sourceweights; \
-	activity->mpi_args.MPI_Dist_graph_create_adjacent.outdegree = (int) outdegree; \
-	activity->mpi_args.MPI_Dist_graph_create_adjacent.destinations = (int(*)) destinations; \
-	activity->mpi_args.MPI_Dist_graph_create_adjacent.destweights = (int(*)) destweights; \
-	activity->mpi_args.MPI_Dist_graph_create_adjacent.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Dist_graph_create_adjacent.reorder = (int) reorder; \
-	activity->mpi_args.MPI_Dist_graph_create_adjacent.comm_dist_graph = (MPI_Comm *) comm_dist_graph; \
+	args_MPI_Dist_graph_create_adjacent_t* args = (args_MPI_Dist_graph_create_adjacent_t*) activity->args; \
+	args->comm_old = (MPI_Comm) comm_old; \
+	args->indegree = (int) indegree; \
+	args->sources = (int(*)) sources; \
+	args->sourceweights = (int(*)) sourceweights; \
+	args->outdegree = (int) outdegree; \
+	args->destinations = (int(*)) destinations; \
+	args->destweights = (int(*)) destweights; \
+	args->info = (MPI_Info) info; \
+	args->reorder = (int) reorder; \
+	args->comm_dist_graph = (MPI_Comm *) comm_dist_graph; \
 };
 
 #define GET_PTRS_VALUE_MPI_Dist_graph_create_adjacent(args) { \
-	if (args->MPI_Dist_graph_create_adjacent.sources != NULL) { \
-		args->MPI_Dist_graph_create_adjacent.sources__ref.val = *args->MPI_Dist_graph_create_adjacent.sources; \
+	args_MPI_Dist_graph_create_adjacent_t* pargs = (args_MPI_Dist_graph_create_adjacent_t*) args; \
+	if (pargs->sources != NULL) { \
+		pargs->sources__ref.val = *pargs->sources; \
 	} \
-	if (args->MPI_Dist_graph_create_adjacent.sourceweights != NULL) { \
-		args->MPI_Dist_graph_create_adjacent.sourceweights__ref.val = *args->MPI_Dist_graph_create_adjacent.sourceweights; \
+	if (pargs->sourceweights != NULL) { \
+		pargs->sourceweights__ref.val = *pargs->sourceweights; \
 	} \
-	if (args->MPI_Dist_graph_create_adjacent.destinations != NULL) { \
-		args->MPI_Dist_graph_create_adjacent.destinations__ref.val = *args->MPI_Dist_graph_create_adjacent.destinations; \
+	if (pargs->destinations != NULL) { \
+		pargs->destinations__ref.val = *pargs->destinations; \
 	} \
-	if (args->MPI_Dist_graph_create_adjacent.destweights != NULL) { \
-		args->MPI_Dist_graph_create_adjacent.destweights__ref.val = *args->MPI_Dist_graph_create_adjacent.destweights; \
+	if (pargs->destweights != NULL) { \
+		pargs->destweights__ref.val = *pargs->destweights; \
 	} \
-	if (args->MPI_Dist_graph_create_adjacent.comm_dist_graph != NULL) { \
-		args->MPI_Dist_graph_create_adjacent.comm_dist_graph__ref.val = *args->MPI_Dist_graph_create_adjacent.comm_dist_graph; \
+	if (pargs->comm_dist_graph != NULL) { \
+		pargs->comm_dist_graph__ref.val = *pargs->comm_dist_graph; \
 	} \
 };
 
@@ -7710,7 +7985,7 @@ struct args_MPI_Dist_graph_create_adjacent_t {
  *	)
  */
 #if HAVE_MPI_Reduce_scatter_init
-struct args_MPI_Reduce_scatter_init_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int(* recvcounts);
@@ -7726,25 +8001,27 @@ struct args_MPI_Reduce_scatter_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Reduce_scatter_init_t;
 
 #define GET_ARGS_VALUE_MPI_Reduce_scatter_init(activity) { \
-	activity->mpi_args.MPI_Reduce_scatter_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Reduce_scatter_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Reduce_scatter_init.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Reduce_scatter_init.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Reduce_scatter_init.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Reduce_scatter_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Reduce_scatter_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Reduce_scatter_init.request = (MPI_Request *) request; \
+	args_MPI_Reduce_scatter_init_t* args = (args_MPI_Reduce_scatter_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Reduce_scatter_init(args) { \
-	if (args->MPI_Reduce_scatter_init.recvcounts != NULL) { \
-		args->MPI_Reduce_scatter_init.recvcounts__ref.val = *args->MPI_Reduce_scatter_init.recvcounts; \
+	args_MPI_Reduce_scatter_init_t* pargs = (args_MPI_Reduce_scatter_init_t*) args; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Reduce_scatter_init.request != NULL) { \
-		args->MPI_Reduce_scatter_init.request__ref.val = *args->MPI_Reduce_scatter_init.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -7765,21 +8042,23 @@ struct args_MPI_Reduce_scatter_init_t {
  *	)
  */
 #if HAVE_MPI_Comm_get_parent
-struct args_MPI_Comm_get_parent_t {
+typedef struct {
 	MPI_Comm * parent;
 	struct {
 		MPI_Comm val;
 	} parent__ref;
 	int retval;
-};
+} args_MPI_Comm_get_parent_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_get_parent(activity) { \
-	activity->mpi_args.MPI_Comm_get_parent.parent = (MPI_Comm *) parent; \
+	args_MPI_Comm_get_parent_t* args = (args_MPI_Comm_get_parent_t*) activity->args; \
+	args->parent = (MPI_Comm *) parent; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_get_parent(args) { \
-	if (args->MPI_Comm_get_parent.parent != NULL) { \
-		args->MPI_Comm_get_parent.parent__ref.val = *args->MPI_Comm_get_parent.parent; \
+	args_MPI_Comm_get_parent_t* pargs = (args_MPI_Comm_get_parent_t*) args; \
+	if (pargs->parent != NULL) { \
+		pargs->parent__ref.val = *pargs->parent; \
 	} \
 };
 
@@ -7800,21 +8079,23 @@ struct args_MPI_Comm_get_parent_t {
  *	)
  */
 #if HAVE_MPI_Keyval_free
-struct args_MPI_Keyval_free_t {
+typedef struct {
 	int * keyval;
 	struct {
 		int val;
 	} keyval__ref;
 	int retval;
-};
+} args_MPI_Keyval_free_t;
 
 #define GET_ARGS_VALUE_MPI_Keyval_free(activity) { \
-	activity->mpi_args.MPI_Keyval_free.keyval = (int *) keyval; \
+	args_MPI_Keyval_free_t* args = (args_MPI_Keyval_free_t*) activity->args; \
+	args->keyval = (int *) keyval; \
 };
 
 #define GET_PTRS_VALUE_MPI_Keyval_free(args) { \
-	if (args->MPI_Keyval_free.keyval != NULL) { \
-		args->MPI_Keyval_free.keyval__ref.val = *args->MPI_Keyval_free.keyval; \
+	args_MPI_Keyval_free_t* pargs = (args_MPI_Keyval_free_t*) args; \
+	if (pargs->keyval != NULL) { \
+		pargs->keyval__ref.val = *pargs->keyval; \
 	} \
 };
 
@@ -7837,7 +8118,7 @@ struct args_MPI_Keyval_free_t {
  *	)
  */
 #if HAVE_MPI_Info_set
-struct args_MPI_Info_set_t {
+typedef struct {
 	MPI_Info info;
 	char * key;
 	struct {
@@ -7848,20 +8129,22 @@ struct args_MPI_Info_set_t {
 		char val[MPI_STRING_SIZE_MAX];
 	} value__ref;
 	int retval;
-};
+} args_MPI_Info_set_t;
 
 #define GET_ARGS_VALUE_MPI_Info_set(activity) { \
-	activity->mpi_args.MPI_Info_set.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Info_set.key = (char *) key; \
-	activity->mpi_args.MPI_Info_set.value = (char *) value; \
+	args_MPI_Info_set_t* args = (args_MPI_Info_set_t*) activity->args; \
+	args->info = (MPI_Info) info; \
+	args->key = (char *) key; \
+	args->value = (char *) value; \
 };
 
 #define GET_PTRS_VALUE_MPI_Info_set(args) { \
-	if (args->MPI_Info_set.key != NULL) { \
-		strncpy(args->MPI_Info_set.key__ref.val, args->MPI_Info_set.key, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Info_set_t* pargs = (args_MPI_Info_set_t*) args; \
+	if (pargs->key != NULL) { \
+		strncpy(pargs->key__ref.val, pargs->key, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Info_set.value != NULL) { \
-		strncpy(args->MPI_Info_set.value__ref.val, args->MPI_Info_set.value, MPI_STRING_SIZE_MAX-1); \
+	if (pargs->value != NULL) { \
+		strncpy(pargs->value__ref.val, pargs->value, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -7885,7 +8168,7 @@ struct args_MPI_Info_set_t {
  *	)
  */
 #if HAVE_MPI_Keyval_create
-struct args_MPI_Keyval_create_t {
+typedef struct {
 	MPI_Copy_function * copy_fn;
 	MPI_Delete_function * delete_fn;
 	int * keyval;
@@ -7894,18 +8177,20 @@ struct args_MPI_Keyval_create_t {
 	} keyval__ref;
 	void * extra_state;
 	int retval;
-};
+} args_MPI_Keyval_create_t;
 
 #define GET_ARGS_VALUE_MPI_Keyval_create(activity) { \
-	activity->mpi_args.MPI_Keyval_create.copy_fn = (MPI_Copy_function *) copy_fn; \
-	activity->mpi_args.MPI_Keyval_create.delete_fn = (MPI_Delete_function *) delete_fn; \
-	activity->mpi_args.MPI_Keyval_create.keyval = (int *) keyval; \
-	activity->mpi_args.MPI_Keyval_create.extra_state = (void *) extra_state; \
+	args_MPI_Keyval_create_t* args = (args_MPI_Keyval_create_t*) activity->args; \
+	args->copy_fn = (MPI_Copy_function *) copy_fn; \
+	args->delete_fn = (MPI_Delete_function *) delete_fn; \
+	args->keyval = (int *) keyval; \
+	args->extra_state = (void *) extra_state; \
 };
 
 #define GET_PTRS_VALUE_MPI_Keyval_create(args) { \
-	if (args->MPI_Keyval_create.keyval != NULL) { \
-		args->MPI_Keyval_create.keyval__ref.val = *args->MPI_Keyval_create.keyval; \
+	args_MPI_Keyval_create_t* pargs = (args_MPI_Keyval_create_t*) args; \
+	if (pargs->keyval != NULL) { \
+		pargs->keyval__ref.val = *pargs->keyval; \
 	} \
 };
 
@@ -7930,7 +8215,7 @@ struct args_MPI_Keyval_create_t {
  *	)
  */
 #if HAVE_MPI_Comm_connect
-struct args_MPI_Comm_connect_t {
+typedef struct {
 	char * port_name;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
@@ -7943,22 +8228,24 @@ struct args_MPI_Comm_connect_t {
 		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
-};
+} args_MPI_Comm_connect_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_connect(activity) { \
-	activity->mpi_args.MPI_Comm_connect.port_name = (char *) port_name; \
-	activity->mpi_args.MPI_Comm_connect.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Comm_connect.root = (int) root; \
-	activity->mpi_args.MPI_Comm_connect.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_connect.newcomm = (MPI_Comm *) newcomm; \
+	args_MPI_Comm_connect_t* args = (args_MPI_Comm_connect_t*) activity->args; \
+	args->port_name = (char *) port_name; \
+	args->info = (MPI_Info) info; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->newcomm = (MPI_Comm *) newcomm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_connect(args) { \
-	if (args->MPI_Comm_connect.port_name != NULL) { \
-		strncpy(args->MPI_Comm_connect.port_name__ref.val, args->MPI_Comm_connect.port_name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Comm_connect_t* pargs = (args_MPI_Comm_connect_t*) args; \
+	if (pargs->port_name != NULL) { \
+		strncpy(pargs->port_name__ref.val, pargs->port_name, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Comm_connect.newcomm != NULL) { \
-		args->MPI_Comm_connect.newcomm__ref.val = *args->MPI_Comm_connect.newcomm; \
+	if (pargs->newcomm != NULL) { \
+		pargs->newcomm__ref.val = *pargs->newcomm; \
 	} \
 };
 
@@ -7984,7 +8271,7 @@ struct args_MPI_Comm_connect_t {
  *	)
  */
 #if HAVE_MPI_Ssend
-struct args_MPI_Ssend_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -7992,15 +8279,16 @@ struct args_MPI_Ssend_t {
 	int tag;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Ssend_t;
 
 #define GET_ARGS_VALUE_MPI_Ssend(activity) { \
-	activity->mpi_args.MPI_Ssend.buf = (void *) buf; \
-	activity->mpi_args.MPI_Ssend.count = (int) count; \
-	activity->mpi_args.MPI_Ssend.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Ssend.dest = (int) dest; \
-	activity->mpi_args.MPI_Ssend.tag = (int) tag; \
-	activity->mpi_args.MPI_Ssend.comm = (MPI_Comm) comm; \
+	args_MPI_Ssend_t* args = (args_MPI_Ssend_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->dest = (int) dest; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -8030,7 +8318,7 @@ struct args_MPI_Ssend_t {
  *	)
  */
 #if HAVE_MPI_Scatterv_init
-struct args_MPI_Scatterv_init_t {
+typedef struct {
 	void * sendbuf;
 	int(* sendcounts);
 	struct {
@@ -8052,31 +8340,33 @@ struct args_MPI_Scatterv_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Scatterv_init_t;
 
 #define GET_ARGS_VALUE_MPI_Scatterv_init(activity) { \
-	activity->mpi_args.MPI_Scatterv_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Scatterv_init.sendcounts = (int(*)) sendcounts; \
-	activity->mpi_args.MPI_Scatterv_init.displs = (int(*)) displs; \
-	activity->mpi_args.MPI_Scatterv_init.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Scatterv_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Scatterv_init.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Scatterv_init.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Scatterv_init.root = (int) root; \
-	activity->mpi_args.MPI_Scatterv_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Scatterv_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Scatterv_init.request = (MPI_Request *) request; \
+	args_MPI_Scatterv_init_t* args = (args_MPI_Scatterv_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcounts = (int(*)) sendcounts; \
+	args->displs = (int(*)) displs; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Scatterv_init(args) { \
-	if (args->MPI_Scatterv_init.sendcounts != NULL) { \
-		args->MPI_Scatterv_init.sendcounts__ref.val = *args->MPI_Scatterv_init.sendcounts; \
+	args_MPI_Scatterv_init_t* pargs = (args_MPI_Scatterv_init_t*) args; \
+	if (pargs->sendcounts != NULL) { \
+		pargs->sendcounts__ref.val = *pargs->sendcounts; \
 	} \
-	if (args->MPI_Scatterv_init.displs != NULL) { \
-		args->MPI_Scatterv_init.displs__ref.val = *args->MPI_Scatterv_init.displs; \
+	if (pargs->displs != NULL) { \
+		pargs->displs__ref.val = *pargs->displs; \
 	} \
-	if (args->MPI_Scatterv_init.request != NULL) { \
-		args->MPI_Scatterv_init.request__ref.val = *args->MPI_Scatterv_init.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -8099,7 +8389,7 @@ struct args_MPI_Scatterv_init_t {
  *	)
  */
 #if HAVE_MPI_File_write_at_all_end
-struct args_MPI_File_write_at_all_end_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	MPI_Status * status;
@@ -8107,17 +8397,19 @@ struct args_MPI_File_write_at_all_end_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_write_at_all_end_t;
 
 #define GET_ARGS_VALUE_MPI_File_write_at_all_end(activity) { \
-	activity->mpi_args.MPI_File_write_at_all_end.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_write_at_all_end.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_write_at_all_end.status = (MPI_Status *) status; \
+	args_MPI_File_write_at_all_end_t* args = (args_MPI_File_write_at_all_end_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_write_at_all_end(args) { \
-	if (args->MPI_File_write_at_all_end.status != NULL) { \
-		args->MPI_File_write_at_all_end.status__ref.val = *args->MPI_File_write_at_all_end.status; \
+	args_MPI_File_write_at_all_end_t* pargs = (args_MPI_File_write_at_all_end_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -8140,7 +8432,7 @@ struct args_MPI_File_write_at_all_end_t {
  *	)
  */
 #if HAVE_MPI_File_write_all_end
-struct args_MPI_File_write_all_end_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	MPI_Status * status;
@@ -8148,17 +8440,19 @@ struct args_MPI_File_write_all_end_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_write_all_end_t;
 
 #define GET_ARGS_VALUE_MPI_File_write_all_end(activity) { \
-	activity->mpi_args.MPI_File_write_all_end.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_write_all_end.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_write_all_end.status = (MPI_Status *) status; \
+	args_MPI_File_write_all_end_t* args = (args_MPI_File_write_all_end_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_write_all_end(args) { \
-	if (args->MPI_File_write_all_end.status != NULL) { \
-		args->MPI_File_write_all_end.status__ref.val = *args->MPI_File_write_all_end.status; \
+	args_MPI_File_write_all_end_t* pargs = (args_MPI_File_write_all_end_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -8180,23 +8474,25 @@ struct args_MPI_File_write_all_end_t {
  *	)
  */
 #if HAVE_MPI_Buffer_detach
-struct args_MPI_Buffer_detach_t {
+typedef struct {
 	void * buffer;
 	int * size;
 	struct {
 		int val;
 	} size__ref;
 	int retval;
-};
+} args_MPI_Buffer_detach_t;
 
 #define GET_ARGS_VALUE_MPI_Buffer_detach(activity) { \
-	activity->mpi_args.MPI_Buffer_detach.buffer = (void *) buffer; \
-	activity->mpi_args.MPI_Buffer_detach.size = (int *) size; \
+	args_MPI_Buffer_detach_t* args = (args_MPI_Buffer_detach_t*) activity->args; \
+	args->buffer = (void *) buffer; \
+	args->size = (int *) size; \
 };
 
 #define GET_PTRS_VALUE_MPI_Buffer_detach(args) { \
-	if (args->MPI_Buffer_detach.size != NULL) { \
-		args->MPI_Buffer_detach.size__ref.val = *args->MPI_Buffer_detach.size; \
+	args_MPI_Buffer_detach_t* pargs = (args_MPI_Buffer_detach_t*) args; \
+	if (pargs->size != NULL) { \
+		pargs->size__ref.val = *pargs->size; \
 	} \
 };
 
@@ -8218,23 +8514,25 @@ struct args_MPI_Buffer_detach_t {
  *	)
  */
 #if HAVE_MPI_Startall
-struct args_MPI_Startall_t {
+typedef struct {
 	int count;
 	MPI_Request(* array_of_requests);
 	struct {
 		MPI_Request val;
 	} array_of_requests__ref;
 	int retval;
-};
+} args_MPI_Startall_t;
 
 #define GET_ARGS_VALUE_MPI_Startall(activity) { \
-	activity->mpi_args.MPI_Startall.count = (int) count; \
-	activity->mpi_args.MPI_Startall.array_of_requests = (MPI_Request(*)) array_of_requests; \
+	args_MPI_Startall_t* args = (args_MPI_Startall_t*) activity->args; \
+	args->count = (int) count; \
+	args->array_of_requests = (MPI_Request(*)) array_of_requests; \
 };
 
 #define GET_PTRS_VALUE_MPI_Startall(args) { \
-	if (args->MPI_Startall.array_of_requests != NULL) { \
-		args->MPI_Startall.array_of_requests__ref.val = *args->MPI_Startall.array_of_requests; \
+	args_MPI_Startall_t* pargs = (args_MPI_Startall_t*) args; \
+	if (pargs->array_of_requests != NULL) { \
+		pargs->array_of_requests__ref.val = *pargs->array_of_requests; \
 	} \
 };
 
@@ -8261,7 +8559,7 @@ struct args_MPI_Startall_t {
  *	)
  */
 #if HAVE_MPI_Neighbor_alltoall
-struct args_MPI_Neighbor_alltoall_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -8270,16 +8568,17 @@ struct args_MPI_Neighbor_alltoall_t {
 	MPI_Datatype recvtype;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Neighbor_alltoall_t;
 
 #define GET_ARGS_VALUE_MPI_Neighbor_alltoall(activity) { \
-	activity->mpi_args.MPI_Neighbor_alltoall.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Neighbor_alltoall.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Neighbor_alltoall.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Neighbor_alltoall.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Neighbor_alltoall.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Neighbor_alltoall.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Neighbor_alltoall.comm = (MPI_Comm) comm; \
+	args_MPI_Neighbor_alltoall_t* args = (args_MPI_Neighbor_alltoall_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -8306,7 +8605,7 @@ struct args_MPI_Neighbor_alltoall_t {
  *	)
  */
 #if HAVE_MPI_Put
-struct args_MPI_Put_t {
+typedef struct {
 	void * origin_addr;
 	int origin_count;
 	MPI_Datatype origin_datatype;
@@ -8316,17 +8615,18 @@ struct args_MPI_Put_t {
 	MPI_Datatype target_datatype;
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Put_t;
 
 #define GET_ARGS_VALUE_MPI_Put(activity) { \
-	activity->mpi_args.MPI_Put.origin_addr = (void *) origin_addr; \
-	activity->mpi_args.MPI_Put.origin_count = (int) origin_count; \
-	activity->mpi_args.MPI_Put.origin_datatype = (MPI_Datatype) origin_datatype; \
-	activity->mpi_args.MPI_Put.target_rank = (int) target_rank; \
-	activity->mpi_args.MPI_Put.target_disp = (MPI_Aint) target_disp; \
-	activity->mpi_args.MPI_Put.target_count = (int) target_count; \
-	activity->mpi_args.MPI_Put.target_datatype = (MPI_Datatype) target_datatype; \
-	activity->mpi_args.MPI_Put.win = (MPI_Win) win; \
+	args_MPI_Put_t* args = (args_MPI_Put_t*) activity->args; \
+	args->origin_addr = (void *) origin_addr; \
+	args->origin_count = (int) origin_count; \
+	args->origin_datatype = (MPI_Datatype) origin_datatype; \
+	args->target_rank = (int) target_rank; \
+	args->target_disp = (MPI_Aint) target_disp; \
+	args->target_count = (int) target_count; \
+	args->target_datatype = (MPI_Datatype) target_datatype; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -8348,7 +8648,7 @@ struct args_MPI_Put_t {
  *	)
  */
 #if HAVE_MPI_File_read_ordered_end
-struct args_MPI_File_read_ordered_end_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	MPI_Status * status;
@@ -8356,17 +8656,19 @@ struct args_MPI_File_read_ordered_end_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_read_ordered_end_t;
 
 #define GET_ARGS_VALUE_MPI_File_read_ordered_end(activity) { \
-	activity->mpi_args.MPI_File_read_ordered_end.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_read_ordered_end.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_read_ordered_end.status = (MPI_Status *) status; \
+	args_MPI_File_read_ordered_end_t* args = (args_MPI_File_read_ordered_end_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_read_ordered_end(args) { \
-	if (args->MPI_File_read_ordered_end.status != NULL) { \
-		args->MPI_File_read_ordered_end.status__ref.val = *args->MPI_File_read_ordered_end.status; \
+	args_MPI_File_read_ordered_end_t* pargs = (args_MPI_File_read_ordered_end_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -8388,15 +8690,16 @@ struct args_MPI_File_read_ordered_end_t {
  *	)
  */
 #if HAVE_MPI_Win_call_errhandler
-struct args_MPI_Win_call_errhandler_t {
+typedef struct {
 	MPI_Win win;
 	int errorcode;
 	int retval;
-};
+} args_MPI_Win_call_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_Win_call_errhandler(activity) { \
-	activity->mpi_args.MPI_Win_call_errhandler.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Win_call_errhandler.errorcode = (int) errorcode; \
+	args_MPI_Win_call_errhandler_t* args = (args_MPI_Win_call_errhandler_t*) activity->args; \
+	args->win = (MPI_Win) win; \
+	args->errorcode = (int) errorcode; \
 };
 
 #endif
@@ -8421,7 +8724,7 @@ struct args_MPI_Win_call_errhandler_t {
  *	)
  */
 #if HAVE_MPI_File_write_at
-struct args_MPI_File_write_at_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset offset;
 	void * buf;
@@ -8432,20 +8735,22 @@ struct args_MPI_File_write_at_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_write_at_t;
 
 #define GET_ARGS_VALUE_MPI_File_write_at(activity) { \
-	activity->mpi_args.MPI_File_write_at.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_write_at.offset = (MPI_Offset) offset; \
-	activity->mpi_args.MPI_File_write_at.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_write_at.count = (int) count; \
-	activity->mpi_args.MPI_File_write_at.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_write_at.status = (MPI_Status *) status; \
+	args_MPI_File_write_at_t* args = (args_MPI_File_write_at_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->offset = (MPI_Offset) offset; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_write_at(args) { \
-	if (args->MPI_File_write_at.status != NULL) { \
-		args->MPI_File_write_at.status__ref.val = *args->MPI_File_write_at.status; \
+	args_MPI_File_write_at_t* pargs = (args_MPI_File_write_at_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -8468,7 +8773,7 @@ struct args_MPI_File_write_at_t {
  *	)
  */
 #if HAVE_MPI_Session_get_pset_info
-struct args_MPI_Session_get_pset_info_t {
+typedef struct {
 	MPI_Session session;
 	char * pset_name;
 	struct {
@@ -8479,20 +8784,22 @@ struct args_MPI_Session_get_pset_info_t {
 		MPI_Info val;
 	} info_used__ref;
 	int retval;
-};
+} args_MPI_Session_get_pset_info_t;
 
 #define GET_ARGS_VALUE_MPI_Session_get_pset_info(activity) { \
-	activity->mpi_args.MPI_Session_get_pset_info.session = (MPI_Session) session; \
-	activity->mpi_args.MPI_Session_get_pset_info.pset_name = (char *) pset_name; \
-	activity->mpi_args.MPI_Session_get_pset_info.info_used = (MPI_Info *) info_used; \
+	args_MPI_Session_get_pset_info_t* args = (args_MPI_Session_get_pset_info_t*) activity->args; \
+	args->session = (MPI_Session) session; \
+	args->pset_name = (char *) pset_name; \
+	args->info_used = (MPI_Info *) info_used; \
 };
 
 #define GET_PTRS_VALUE_MPI_Session_get_pset_info(args) { \
-	if (args->MPI_Session_get_pset_info.pset_name != NULL) { \
-		strncpy(args->MPI_Session_get_pset_info.pset_name__ref.val, args->MPI_Session_get_pset_info.pset_name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Session_get_pset_info_t* pargs = (args_MPI_Session_get_pset_info_t*) args; \
+	if (pargs->pset_name != NULL) { \
+		strncpy(pargs->pset_name__ref.val, pargs->pset_name, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Session_get_pset_info.info_used != NULL) { \
-		args->MPI_Session_get_pset_info.info_used__ref.val = *args->MPI_Session_get_pset_info.info_used; \
+	if (pargs->info_used != NULL) { \
+		pargs->info_used__ref.val = *pargs->info_used; \
 	} \
 };
 
@@ -8514,23 +8821,25 @@ struct args_MPI_Session_get_pset_info_t {
  *	)
  */
 #if HAVE_MPI_Topo_test
-struct args_MPI_Topo_test_t {
+typedef struct {
 	MPI_Comm comm;
 	int * status;
 	struct {
 		int val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_Topo_test_t;
 
 #define GET_ARGS_VALUE_MPI_Topo_test(activity) { \
-	activity->mpi_args.MPI_Topo_test.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Topo_test.status = (int *) status; \
+	args_MPI_Topo_test_t* args = (args_MPI_Topo_test_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->status = (int *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Topo_test(args) { \
-	if (args->MPI_Topo_test.status != NULL) { \
-		args->MPI_Topo_test.status__ref.val = *args->MPI_Topo_test.status; \
+	args_MPI_Topo_test_t* pargs = (args_MPI_Topo_test_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -8551,21 +8860,23 @@ struct args_MPI_Topo_test_t {
  *	)
  */
 #if HAVE_MPI_Comm_disconnect
-struct args_MPI_Comm_disconnect_t {
+typedef struct {
 	MPI_Comm * comm;
 	struct {
 		MPI_Comm val;
 	} comm__ref;
 	int retval;
-};
+} args_MPI_Comm_disconnect_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_disconnect(activity) { \
-	activity->mpi_args.MPI_Comm_disconnect.comm = (MPI_Comm *) comm; \
+	args_MPI_Comm_disconnect_t* args = (args_MPI_Comm_disconnect_t*) activity->args; \
+	args->comm = (MPI_Comm *) comm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_disconnect(args) { \
-	if (args->MPI_Comm_disconnect.comm != NULL) { \
-		args->MPI_Comm_disconnect.comm__ref.val = *args->MPI_Comm_disconnect.comm; \
+	args_MPI_Comm_disconnect_t* pargs = (args_MPI_Comm_disconnect_t*) args; \
+	if (pargs->comm != NULL) { \
+		pargs->comm__ref.val = *pargs->comm; \
 	} \
 };
 
@@ -8586,21 +8897,23 @@ struct args_MPI_Comm_disconnect_t {
  *	)
  */
 #if HAVE_MPI_Add_error_class
-struct args_MPI_Add_error_class_t {
+typedef struct {
 	int * errorclass;
 	struct {
 		int val;
 	} errorclass__ref;
 	int retval;
-};
+} args_MPI_Add_error_class_t;
 
 #define GET_ARGS_VALUE_MPI_Add_error_class(activity) { \
-	activity->mpi_args.MPI_Add_error_class.errorclass = (int *) errorclass; \
+	args_MPI_Add_error_class_t* args = (args_MPI_Add_error_class_t*) activity->args; \
+	args->errorclass = (int *) errorclass; \
 };
 
 #define GET_PTRS_VALUE_MPI_Add_error_class(args) { \
-	if (args->MPI_Add_error_class.errorclass != NULL) { \
-		args->MPI_Add_error_class.errorclass__ref.val = *args->MPI_Add_error_class.errorclass; \
+	args_MPI_Add_error_class_t* pargs = (args_MPI_Add_error_class_t*) args; \
+	if (pargs->errorclass != NULL) { \
+		pargs->errorclass__ref.val = *pargs->errorclass; \
 	} \
 };
 
@@ -8627,7 +8940,7 @@ struct args_MPI_Add_error_class_t {
  *	)
  */
 #if HAVE_MPI_Ireduce_scatter
-struct args_MPI_Ireduce_scatter_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int(* recvcounts);
@@ -8642,24 +8955,26 @@ struct args_MPI_Ireduce_scatter_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Ireduce_scatter_t;
 
 #define GET_ARGS_VALUE_MPI_Ireduce_scatter(activity) { \
-	activity->mpi_args.MPI_Ireduce_scatter.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Ireduce_scatter.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Ireduce_scatter.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Ireduce_scatter.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Ireduce_scatter.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Ireduce_scatter.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Ireduce_scatter.request = (MPI_Request *) request; \
+	args_MPI_Ireduce_scatter_t* args = (args_MPI_Ireduce_scatter_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Ireduce_scatter(args) { \
-	if (args->MPI_Ireduce_scatter.recvcounts != NULL) { \
-		args->MPI_Ireduce_scatter.recvcounts__ref.val = *args->MPI_Ireduce_scatter.recvcounts; \
+	args_MPI_Ireduce_scatter_t* pargs = (args_MPI_Ireduce_scatter_t*) args; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Ireduce_scatter.request != NULL) { \
-		args->MPI_Ireduce_scatter.request__ref.val = *args->MPI_Ireduce_scatter.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -8684,7 +8999,7 @@ struct args_MPI_Ireduce_scatter_t {
  *	)
  */
 #if HAVE_MPI_Cart_map
-struct args_MPI_Cart_map_t {
+typedef struct {
 	MPI_Comm comm;
 	int ndims;
 	int(* dims);
@@ -8700,25 +9015,27 @@ struct args_MPI_Cart_map_t {
 		int val;
 	} newrank__ref;
 	int retval;
-};
+} args_MPI_Cart_map_t;
 
 #define GET_ARGS_VALUE_MPI_Cart_map(activity) { \
-	activity->mpi_args.MPI_Cart_map.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Cart_map.ndims = (int) ndims; \
-	activity->mpi_args.MPI_Cart_map.dims = (int(*)) dims; \
-	activity->mpi_args.MPI_Cart_map.periods = (int(*)) periods; \
-	activity->mpi_args.MPI_Cart_map.newrank = (int *) newrank; \
+	args_MPI_Cart_map_t* args = (args_MPI_Cart_map_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->ndims = (int) ndims; \
+	args->dims = (int(*)) dims; \
+	args->periods = (int(*)) periods; \
+	args->newrank = (int *) newrank; \
 };
 
 #define GET_PTRS_VALUE_MPI_Cart_map(args) { \
-	if (args->MPI_Cart_map.dims != NULL) { \
-		args->MPI_Cart_map.dims__ref.val = *args->MPI_Cart_map.dims; \
+	args_MPI_Cart_map_t* pargs = (args_MPI_Cart_map_t*) args; \
+	if (pargs->dims != NULL) { \
+		pargs->dims__ref.val = *pargs->dims; \
 	} \
-	if (args->MPI_Cart_map.periods != NULL) { \
-		args->MPI_Cart_map.periods__ref.val = *args->MPI_Cart_map.periods; \
+	if (pargs->periods != NULL) { \
+		pargs->periods__ref.val = *pargs->periods; \
 	} \
-	if (args->MPI_Cart_map.newrank != NULL) { \
-		args->MPI_Cart_map.newrank__ref.val = *args->MPI_Cart_map.newrank; \
+	if (pargs->newrank != NULL) { \
+		pargs->newrank__ref.val = *pargs->newrank; \
 	} \
 };
 
@@ -8741,7 +9058,7 @@ struct args_MPI_Cart_map_t {
  *	)
  */
 #if HAVE_MPI_Intercomm_merge
-struct args_MPI_Intercomm_merge_t {
+typedef struct {
 	MPI_Comm intercomm;
 	int high;
 	MPI_Comm * newintracomm;
@@ -8749,17 +9066,19 @@ struct args_MPI_Intercomm_merge_t {
 		MPI_Comm val;
 	} newintracomm__ref;
 	int retval;
-};
+} args_MPI_Intercomm_merge_t;
 
 #define GET_ARGS_VALUE_MPI_Intercomm_merge(activity) { \
-	activity->mpi_args.MPI_Intercomm_merge.intercomm = (MPI_Comm) intercomm; \
-	activity->mpi_args.MPI_Intercomm_merge.high = (int) high; \
-	activity->mpi_args.MPI_Intercomm_merge.newintracomm = (MPI_Comm *) newintracomm; \
+	args_MPI_Intercomm_merge_t* args = (args_MPI_Intercomm_merge_t*) activity->args; \
+	args->intercomm = (MPI_Comm) intercomm; \
+	args->high = (int) high; \
+	args->newintracomm = (MPI_Comm *) newintracomm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Intercomm_merge(args) { \
-	if (args->MPI_Intercomm_merge.newintracomm != NULL) { \
-		args->MPI_Intercomm_merge.newintracomm__ref.val = *args->MPI_Intercomm_merge.newintracomm; \
+	args_MPI_Intercomm_merge_t* pargs = (args_MPI_Intercomm_merge_t*) args; \
+	if (pargs->newintracomm != NULL) { \
+		pargs->newintracomm__ref.val = *pargs->newintracomm; \
 	} \
 };
 
@@ -8784,7 +9103,7 @@ struct args_MPI_Intercomm_merge_t {
  *	)
  */
 #if HAVE_MPI_Type_create_hindexed
-struct args_MPI_Type_create_hindexed_t {
+typedef struct {
 	int count;
 	int(* array_of_blocklengths);
 	struct {
@@ -8800,25 +9119,27 @@ struct args_MPI_Type_create_hindexed_t {
 		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
-};
+} args_MPI_Type_create_hindexed_t;
 
 #define GET_ARGS_VALUE_MPI_Type_create_hindexed(activity) { \
-	activity->mpi_args.MPI_Type_create_hindexed.count = (int) count; \
-	activity->mpi_args.MPI_Type_create_hindexed.array_of_blocklengths = (int(*)) array_of_blocklengths; \
-	activity->mpi_args.MPI_Type_create_hindexed.array_of_displacements = (MPI_Aint(*)) array_of_displacements; \
-	activity->mpi_args.MPI_Type_create_hindexed.oldtype = (MPI_Datatype) oldtype; \
-	activity->mpi_args.MPI_Type_create_hindexed.newtype = (MPI_Datatype *) newtype; \
+	args_MPI_Type_create_hindexed_t* args = (args_MPI_Type_create_hindexed_t*) activity->args; \
+	args->count = (int) count; \
+	args->array_of_blocklengths = (int(*)) array_of_blocklengths; \
+	args->array_of_displacements = (MPI_Aint(*)) array_of_displacements; \
+	args->oldtype = (MPI_Datatype) oldtype; \
+	args->newtype = (MPI_Datatype *) newtype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_create_hindexed(args) { \
-	if (args->MPI_Type_create_hindexed.array_of_blocklengths != NULL) { \
-		args->MPI_Type_create_hindexed.array_of_blocklengths__ref.val = *args->MPI_Type_create_hindexed.array_of_blocklengths; \
+	args_MPI_Type_create_hindexed_t* pargs = (args_MPI_Type_create_hindexed_t*) args; \
+	if (pargs->array_of_blocklengths != NULL) { \
+		pargs->array_of_blocklengths__ref.val = *pargs->array_of_blocklengths; \
 	} \
-	if (args->MPI_Type_create_hindexed.array_of_displacements != NULL) { \
-		args->MPI_Type_create_hindexed.array_of_displacements__ref.val = *args->MPI_Type_create_hindexed.array_of_displacements; \
+	if (pargs->array_of_displacements != NULL) { \
+		pargs->array_of_displacements__ref.val = *pargs->array_of_displacements; \
 	} \
-	if (args->MPI_Type_create_hindexed.newtype != NULL) { \
-		args->MPI_Type_create_hindexed.newtype__ref.val = *args->MPI_Type_create_hindexed.newtype; \
+	if (pargs->newtype != NULL) { \
+		pargs->newtype__ref.val = *pargs->newtype; \
 	} \
 };
 
@@ -8840,23 +9161,25 @@ struct args_MPI_Type_create_hindexed_t {
  *	)
  */
 #if HAVE_MPI_Info_get_nkeys
-struct args_MPI_Info_get_nkeys_t {
+typedef struct {
 	MPI_Info info;
 	int * nkeys;
 	struct {
 		int val;
 	} nkeys__ref;
 	int retval;
-};
+} args_MPI_Info_get_nkeys_t;
 
 #define GET_ARGS_VALUE_MPI_Info_get_nkeys(activity) { \
-	activity->mpi_args.MPI_Info_get_nkeys.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Info_get_nkeys.nkeys = (int *) nkeys; \
+	args_MPI_Info_get_nkeys_t* args = (args_MPI_Info_get_nkeys_t*) activity->args; \
+	args->info = (MPI_Info) info; \
+	args->nkeys = (int *) nkeys; \
 };
 
 #define GET_PTRS_VALUE_MPI_Info_get_nkeys(args) { \
-	if (args->MPI_Info_get_nkeys.nkeys != NULL) { \
-		args->MPI_Info_get_nkeys.nkeys__ref.val = *args->MPI_Info_get_nkeys.nkeys; \
+	args_MPI_Info_get_nkeys_t* pargs = (args_MPI_Info_get_nkeys_t*) args; \
+	if (pargs->nkeys != NULL) { \
+		pargs->nkeys__ref.val = *pargs->nkeys; \
 	} \
 };
 
@@ -8881,7 +9204,7 @@ struct args_MPI_Info_get_nkeys_t {
  *	)
  */
 #if HAVE_MPI_File_read
-struct args_MPI_File_read_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
@@ -8891,19 +9214,21 @@ struct args_MPI_File_read_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_read_t;
 
 #define GET_ARGS_VALUE_MPI_File_read(activity) { \
-	activity->mpi_args.MPI_File_read.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_read.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_read.count = (int) count; \
-	activity->mpi_args.MPI_File_read.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_read.status = (MPI_Status *) status; \
+	args_MPI_File_read_t* args = (args_MPI_File_read_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_read(args) { \
-	if (args->MPI_File_read.status != NULL) { \
-		args->MPI_File_read.status__ref.val = *args->MPI_File_read.status; \
+	args_MPI_File_read_t* pargs = (args_MPI_File_read_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -8932,7 +9257,7 @@ struct args_MPI_File_read_t {
  *	)
  */
 #if HAVE_MPI_Ineighbor_allgatherv
-struct args_MPI_Ineighbor_allgatherv_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -8952,29 +9277,31 @@ struct args_MPI_Ineighbor_allgatherv_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Ineighbor_allgatherv_t;
 
 #define GET_ARGS_VALUE_MPI_Ineighbor_allgatherv(activity) { \
-	activity->mpi_args.MPI_Ineighbor_allgatherv.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Ineighbor_allgatherv.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Ineighbor_allgatherv.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Ineighbor_allgatherv.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Ineighbor_allgatherv.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Ineighbor_allgatherv.displs = (int(*)) displs; \
-	activity->mpi_args.MPI_Ineighbor_allgatherv.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Ineighbor_allgatherv.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Ineighbor_allgatherv.request = (MPI_Request *) request; \
+	args_MPI_Ineighbor_allgatherv_t* args = (args_MPI_Ineighbor_allgatherv_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->displs = (int(*)) displs; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Ineighbor_allgatherv(args) { \
-	if (args->MPI_Ineighbor_allgatherv.recvcounts != NULL) { \
-		args->MPI_Ineighbor_allgatherv.recvcounts__ref.val = *args->MPI_Ineighbor_allgatherv.recvcounts; \
+	args_MPI_Ineighbor_allgatherv_t* pargs = (args_MPI_Ineighbor_allgatherv_t*) args; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Ineighbor_allgatherv.displs != NULL) { \
-		args->MPI_Ineighbor_allgatherv.displs__ref.val = *args->MPI_Ineighbor_allgatherv.displs; \
+	if (pargs->displs != NULL) { \
+		pargs->displs__ref.val = *pargs->displs; \
 	} \
-	if (args->MPI_Ineighbor_allgatherv.request != NULL) { \
-		args->MPI_Ineighbor_allgatherv.request__ref.val = *args->MPI_Ineighbor_allgatherv.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -8997,17 +9324,18 @@ struct args_MPI_Ineighbor_allgatherv_t {
  *	)
  */
 #if HAVE_MPI_Attr_put
-struct args_MPI_Attr_put_t {
+typedef struct {
 	MPI_Comm comm;
 	int keyval;
 	void * attribute_val;
 	int retval;
-};
+} args_MPI_Attr_put_t;
 
 #define GET_ARGS_VALUE_MPI_Attr_put(activity) { \
-	activity->mpi_args.MPI_Attr_put.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Attr_put.keyval = (int) keyval; \
-	activity->mpi_args.MPI_Attr_put.attribute_val = (void *) attribute_val; \
+	args_MPI_Attr_put_t* args = (args_MPI_Attr_put_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->keyval = (int) keyval; \
+	args->attribute_val = (void *) attribute_val; \
 };
 
 #endif
@@ -9030,19 +9358,20 @@ struct args_MPI_Attr_put_t {
  *	)
  */
 #if HAVE_MPI_File_write_ordered_begin
-struct args_MPI_File_write_ordered_begin_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
 	int retval;
-};
+} args_MPI_File_write_ordered_begin_t;
 
 #define GET_ARGS_VALUE_MPI_File_write_ordered_begin(activity) { \
-	activity->mpi_args.MPI_File_write_ordered_begin.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_write_ordered_begin.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_write_ordered_begin.count = (int) count; \
-	activity->mpi_args.MPI_File_write_ordered_begin.datatype = (MPI_Datatype) datatype; \
+	args_MPI_File_write_ordered_begin_t* args = (args_MPI_File_write_ordered_begin_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
 };
 
 #endif
@@ -9064,7 +9393,7 @@ struct args_MPI_File_write_ordered_begin_t {
  *	)
  */
 #if HAVE_MPI_Status_set_elements_x
-struct args_MPI_Status_set_elements_x_t {
+typedef struct {
 	MPI_Status * status;
 	struct {
 		MPI_Status val;
@@ -9072,17 +9401,19 @@ struct args_MPI_Status_set_elements_x_t {
 	MPI_Datatype datatype;
 	MPI_Count count;
 	int retval;
-};
+} args_MPI_Status_set_elements_x_t;
 
 #define GET_ARGS_VALUE_MPI_Status_set_elements_x(activity) { \
-	activity->mpi_args.MPI_Status_set_elements_x.status = (MPI_Status *) status; \
-	activity->mpi_args.MPI_Status_set_elements_x.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Status_set_elements_x.count = (MPI_Count) count; \
+	args_MPI_Status_set_elements_x_t* args = (args_MPI_Status_set_elements_x_t*) activity->args; \
+	args->status = (MPI_Status *) status; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->count = (MPI_Count) count; \
 };
 
 #define GET_PTRS_VALUE_MPI_Status_set_elements_x(args) { \
-	if (args->MPI_Status_set_elements_x.status != NULL) { \
-		args->MPI_Status_set_elements_x.status__ref.val = *args->MPI_Status_set_elements_x.status; \
+	args_MPI_Status_set_elements_x_t* pargs = (args_MPI_Status_set_elements_x_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -9109,7 +9440,7 @@ struct args_MPI_Status_set_elements_x_t {
  *	)
  */
 #if HAVE_MPI_Compare_and_swap
-struct args_MPI_Compare_and_swap_t {
+typedef struct {
 	void * origin_addr;
 	void * compare_addr;
 	void * result_addr;
@@ -9118,16 +9449,17 @@ struct args_MPI_Compare_and_swap_t {
 	MPI_Aint target_disp;
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Compare_and_swap_t;
 
 #define GET_ARGS_VALUE_MPI_Compare_and_swap(activity) { \
-	activity->mpi_args.MPI_Compare_and_swap.origin_addr = (void *) origin_addr; \
-	activity->mpi_args.MPI_Compare_and_swap.compare_addr = (void *) compare_addr; \
-	activity->mpi_args.MPI_Compare_and_swap.result_addr = (void *) result_addr; \
-	activity->mpi_args.MPI_Compare_and_swap.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Compare_and_swap.target_rank = (int) target_rank; \
-	activity->mpi_args.MPI_Compare_and_swap.target_disp = (MPI_Aint) target_disp; \
-	activity->mpi_args.MPI_Compare_and_swap.win = (MPI_Win) win; \
+	args_MPI_Compare_and_swap_t* args = (args_MPI_Compare_and_swap_t*) activity->args; \
+	args->origin_addr = (void *) origin_addr; \
+	args->compare_addr = (void *) compare_addr; \
+	args->result_addr = (void *) result_addr; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->target_rank = (int) target_rank; \
+	args->target_disp = (MPI_Aint) target_disp; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -9149,7 +9481,7 @@ struct args_MPI_Compare_and_swap_t {
  *	)
  */
 #if HAVE_MPI_Type_create_f90_real
-struct args_MPI_Type_create_f90_real_t {
+typedef struct {
 	int p;
 	int r;
 	MPI_Datatype * newtype;
@@ -9157,17 +9489,19 @@ struct args_MPI_Type_create_f90_real_t {
 		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
-};
+} args_MPI_Type_create_f90_real_t;
 
 #define GET_ARGS_VALUE_MPI_Type_create_f90_real(activity) { \
-	activity->mpi_args.MPI_Type_create_f90_real.p = (int) p; \
-	activity->mpi_args.MPI_Type_create_f90_real.r = (int) r; \
-	activity->mpi_args.MPI_Type_create_f90_real.newtype = (MPI_Datatype *) newtype; \
+	args_MPI_Type_create_f90_real_t* args = (args_MPI_Type_create_f90_real_t*) activity->args; \
+	args->p = (int) p; \
+	args->r = (int) r; \
+	args->newtype = (MPI_Datatype *) newtype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_create_f90_real(args) { \
-	if (args->MPI_Type_create_f90_real.newtype != NULL) { \
-		args->MPI_Type_create_f90_real.newtype__ref.val = *args->MPI_Type_create_f90_real.newtype; \
+	args_MPI_Type_create_f90_real_t* pargs = (args_MPI_Type_create_f90_real_t*) args; \
+	if (pargs->newtype != NULL) { \
+		pargs->newtype__ref.val = *pargs->newtype; \
 	} \
 };
 
@@ -9189,15 +9523,16 @@ struct args_MPI_Type_create_f90_real_t {
  *	)
  */
 #if HAVE_MPI_Type_delete_attr
-struct args_MPI_Type_delete_attr_t {
+typedef struct {
 	MPI_Datatype type;
 	int type_keyval;
 	int retval;
-};
+} args_MPI_Type_delete_attr_t;
 
 #define GET_ARGS_VALUE_MPI_Type_delete_attr(activity) { \
-	activity->mpi_args.MPI_Type_delete_attr.type = (MPI_Datatype) type; \
-	activity->mpi_args.MPI_Type_delete_attr.type_keyval = (int) type_keyval; \
+	args_MPI_Type_delete_attr_t* args = (args_MPI_Type_delete_attr_t*) activity->args; \
+	args->type = (MPI_Datatype) type; \
+	args->type_keyval = (int) type_keyval; \
 };
 
 #endif
@@ -9220,7 +9555,7 @@ struct args_MPI_Type_delete_attr_t {
  *	)
  */
 #if HAVE_MPI_Probe
-struct args_MPI_Probe_t {
+typedef struct {
 	int source;
 	int tag;
 	MPI_Comm comm;
@@ -9229,18 +9564,20 @@ struct args_MPI_Probe_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_Probe_t;
 
 #define GET_ARGS_VALUE_MPI_Probe(activity) { \
-	activity->mpi_args.MPI_Probe.source = (int) source; \
-	activity->mpi_args.MPI_Probe.tag = (int) tag; \
-	activity->mpi_args.MPI_Probe.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Probe.status = (MPI_Status *) status; \
+	args_MPI_Probe_t* args = (args_MPI_Probe_t*) activity->args; \
+	args->source = (int) source; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Probe(args) { \
-	if (args->MPI_Probe.status != NULL) { \
-		args->MPI_Probe.status__ref.val = *args->MPI_Probe.status; \
+	args_MPI_Probe_t* pargs = (args_MPI_Probe_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -9261,21 +9598,23 @@ struct args_MPI_Probe_t {
  *	)
  */
 #if HAVE_MPI_File_close
-struct args_MPI_File_close_t {
+typedef struct {
 	MPI_File * fh;
 	struct {
 		MPI_File val;
 	} fh__ref;
 	int retval;
-};
+} args_MPI_File_close_t;
 
 #define GET_ARGS_VALUE_MPI_File_close(activity) { \
-	activity->mpi_args.MPI_File_close.fh = (MPI_File *) fh; \
+	args_MPI_File_close_t* args = (args_MPI_File_close_t*) activity->args; \
+	args->fh = (MPI_File *) fh; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_close(args) { \
-	if (args->MPI_File_close.fh != NULL) { \
-		args->MPI_File_close.fh__ref.val = *args->MPI_File_close.fh; \
+	args_MPI_File_close_t* pargs = (args_MPI_File_close_t*) args; \
+	if (pargs->fh != NULL) { \
+		pargs->fh__ref.val = *pargs->fh; \
 	} \
 };
 
@@ -9298,7 +9637,7 @@ struct args_MPI_File_close_t {
  *	)
  */
 #if HAVE_MPI_Request_get_status
-struct args_MPI_Request_get_status_t {
+typedef struct {
 	MPI_Request request;
 	int * flag;
 	struct {
@@ -9309,20 +9648,22 @@ struct args_MPI_Request_get_status_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_Request_get_status_t;
 
 #define GET_ARGS_VALUE_MPI_Request_get_status(activity) { \
-	activity->mpi_args.MPI_Request_get_status.request = (MPI_Request) request; \
-	activity->mpi_args.MPI_Request_get_status.flag = (int *) flag; \
-	activity->mpi_args.MPI_Request_get_status.status = (MPI_Status *) status; \
+	args_MPI_Request_get_status_t* args = (args_MPI_Request_get_status_t*) activity->args; \
+	args->request = (MPI_Request) request; \
+	args->flag = (int *) flag; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Request_get_status(args) { \
-	if (args->MPI_Request_get_status.flag != NULL) { \
-		args->MPI_Request_get_status.flag__ref.val = *args->MPI_Request_get_status.flag; \
+	args_MPI_Request_get_status_t* pargs = (args_MPI_Request_get_status_t*) args; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
-	if (args->MPI_Request_get_status.status != NULL) { \
-		args->MPI_Request_get_status.status__ref.val = *args->MPI_Request_get_status.status; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -9344,15 +9685,16 @@ struct args_MPI_Request_get_status_t {
  *	)
  */
 #if HAVE_MPI_Session_call_errhandler
-struct args_MPI_Session_call_errhandler_t {
+typedef struct {
 	MPI_Session session;
 	int errorcode;
 	int retval;
-};
+} args_MPI_Session_call_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_Session_call_errhandler(activity) { \
-	activity->mpi_args.MPI_Session_call_errhandler.session = (MPI_Session) session; \
-	activity->mpi_args.MPI_Session_call_errhandler.errorcode = (int) errorcode; \
+	args_MPI_Session_call_errhandler_t* args = (args_MPI_Session_call_errhandler_t*) activity->args; \
+	args->session = (MPI_Session) session; \
+	args->errorcode = (int) errorcode; \
 };
 
 #endif
@@ -9384,7 +9726,7 @@ struct args_MPI_Session_call_errhandler_t {
  *	)
  */
 #if HAVE_MPI_Rget_accumulate
-struct args_MPI_Rget_accumulate_t {
+typedef struct {
 	void * origin_addr;
 	int origin_count;
 	MPI_Datatype origin_datatype;
@@ -9402,27 +9744,29 @@ struct args_MPI_Rget_accumulate_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Rget_accumulate_t;
 
 #define GET_ARGS_VALUE_MPI_Rget_accumulate(activity) { \
-	activity->mpi_args.MPI_Rget_accumulate.origin_addr = (void *) origin_addr; \
-	activity->mpi_args.MPI_Rget_accumulate.origin_count = (int) origin_count; \
-	activity->mpi_args.MPI_Rget_accumulate.origin_datatype = (MPI_Datatype) origin_datatype; \
-	activity->mpi_args.MPI_Rget_accumulate.result_addr = (void *) result_addr; \
-	activity->mpi_args.MPI_Rget_accumulate.result_count = (int) result_count; \
-	activity->mpi_args.MPI_Rget_accumulate.result_datatype = (MPI_Datatype) result_datatype; \
-	activity->mpi_args.MPI_Rget_accumulate.target_rank = (int) target_rank; \
-	activity->mpi_args.MPI_Rget_accumulate.target_disp = (MPI_Aint) target_disp; \
-	activity->mpi_args.MPI_Rget_accumulate.target_count = (int) target_count; \
-	activity->mpi_args.MPI_Rget_accumulate.target_datatype = (MPI_Datatype) target_datatype; \
-	activity->mpi_args.MPI_Rget_accumulate.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Rget_accumulate.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Rget_accumulate.request = (MPI_Request *) request; \
+	args_MPI_Rget_accumulate_t* args = (args_MPI_Rget_accumulate_t*) activity->args; \
+	args->origin_addr = (void *) origin_addr; \
+	args->origin_count = (int) origin_count; \
+	args->origin_datatype = (MPI_Datatype) origin_datatype; \
+	args->result_addr = (void *) result_addr; \
+	args->result_count = (int) result_count; \
+	args->result_datatype = (MPI_Datatype) result_datatype; \
+	args->target_rank = (int) target_rank; \
+	args->target_disp = (MPI_Aint) target_disp; \
+	args->target_count = (int) target_count; \
+	args->target_datatype = (MPI_Datatype) target_datatype; \
+	args->op = (MPI_Op) op; \
+	args->win = (MPI_Win) win; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Rget_accumulate(args) { \
-	if (args->MPI_Rget_accumulate.request != NULL) { \
-		args->MPI_Rget_accumulate.request__ref.val = *args->MPI_Rget_accumulate.request; \
+	args_MPI_Rget_accumulate_t* pargs = (args_MPI_Rget_accumulate_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -9447,7 +9791,7 @@ struct args_MPI_Rget_accumulate_t {
  *	)
  */
 #if HAVE_MPI_File_iread_all
-struct args_MPI_File_iread_all_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
@@ -9457,19 +9801,21 @@ struct args_MPI_File_iread_all_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_File_iread_all_t;
 
 #define GET_ARGS_VALUE_MPI_File_iread_all(activity) { \
-	activity->mpi_args.MPI_File_iread_all.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_iread_all.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_iread_all.count = (int) count; \
-	activity->mpi_args.MPI_File_iread_all.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_iread_all.request = (MPI_Request *) request; \
+	args_MPI_File_iread_all_t* args = (args_MPI_File_iread_all_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_iread_all(args) { \
-	if (args->MPI_File_iread_all.request != NULL) { \
-		args->MPI_File_iread_all.request__ref.val = *args->MPI_File_iread_all.request; \
+	args_MPI_File_iread_all_t* pargs = (args_MPI_File_iread_all_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -9501,7 +9847,7 @@ struct args_MPI_File_iread_all_t {
  *	)
  */
 #if HAVE_MPI_Isendrecv
-struct args_MPI_Isendrecv_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -9518,26 +9864,28 @@ struct args_MPI_Isendrecv_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Isendrecv_t;
 
 #define GET_ARGS_VALUE_MPI_Isendrecv(activity) { \
-	activity->mpi_args.MPI_Isendrecv.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Isendrecv.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Isendrecv.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Isendrecv.dest = (int) dest; \
-	activity->mpi_args.MPI_Isendrecv.sendtag = (int) sendtag; \
-	activity->mpi_args.MPI_Isendrecv.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Isendrecv.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Isendrecv.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Isendrecv.source = (int) source; \
-	activity->mpi_args.MPI_Isendrecv.recvtag = (int) recvtag; \
-	activity->mpi_args.MPI_Isendrecv.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Isendrecv.request = (MPI_Request *) request; \
+	args_MPI_Isendrecv_t* args = (args_MPI_Isendrecv_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->dest = (int) dest; \
+	args->sendtag = (int) sendtag; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->source = (int) source; \
+	args->recvtag = (int) recvtag; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Isendrecv(args) { \
-	if (args->MPI_Isendrecv.request != NULL) { \
-		args->MPI_Isendrecv.request__ref.val = *args->MPI_Isendrecv.request; \
+	args_MPI_Isendrecv_t* pargs = (args_MPI_Isendrecv_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -9564,7 +9912,7 @@ struct args_MPI_Isendrecv_t {
  *	)
  */
 #if HAVE_MPI_Pack_external
-struct args_MPI_Pack_external_t {
+typedef struct {
 	char(* datarep);
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
@@ -9579,24 +9927,26 @@ struct args_MPI_Pack_external_t {
 		MPI_Aint val;
 	} position__ref;
 	int retval;
-};
+} args_MPI_Pack_external_t;
 
 #define GET_ARGS_VALUE_MPI_Pack_external(activity) { \
-	activity->mpi_args.MPI_Pack_external.datarep = (char(*)) datarep; \
-	activity->mpi_args.MPI_Pack_external.inbuf = (void *) inbuf; \
-	activity->mpi_args.MPI_Pack_external.incount = (int) incount; \
-	activity->mpi_args.MPI_Pack_external.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Pack_external.outbuf = (void *) outbuf; \
-	activity->mpi_args.MPI_Pack_external.outsize = (MPI_Aint) outsize; \
-	activity->mpi_args.MPI_Pack_external.position = (MPI_Aint *) position; \
+	args_MPI_Pack_external_t* args = (args_MPI_Pack_external_t*) activity->args; \
+	args->datarep = (char(*)) datarep; \
+	args->inbuf = (void *) inbuf; \
+	args->incount = (int) incount; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->outbuf = (void *) outbuf; \
+	args->outsize = (MPI_Aint) outsize; \
+	args->position = (MPI_Aint *) position; \
 };
 
 #define GET_PTRS_VALUE_MPI_Pack_external(args) { \
-	if (args->MPI_Pack_external.datarep != NULL) { \
-		strncpy(args->MPI_Pack_external.datarep__ref.val, args->MPI_Pack_external.datarep, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Pack_external_t* pargs = (args_MPI_Pack_external_t*) args; \
+	if (pargs->datarep != NULL) { \
+		strncpy(pargs->datarep__ref.val, pargs->datarep, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Pack_external.position != NULL) { \
-		args->MPI_Pack_external.position__ref.val = *args->MPI_Pack_external.position; \
+	if (pargs->position != NULL) { \
+		pargs->position__ref.val = *pargs->position; \
 	} \
 };
 
@@ -9619,17 +9969,18 @@ struct args_MPI_Pack_external_t {
  *	)
  */
 #if HAVE_MPI_Pready_range
-struct args_MPI_Pready_range_t {
+typedef struct {
 	int partition_low;
 	int partition_high;
 	MPI_Request request;
 	int retval;
-};
+} args_MPI_Pready_range_t;
 
 #define GET_ARGS_VALUE_MPI_Pready_range(activity) { \
-	activity->mpi_args.MPI_Pready_range.partition_low = (int) partition_low; \
-	activity->mpi_args.MPI_Pready_range.partition_high = (int) partition_high; \
-	activity->mpi_args.MPI_Pready_range.request = (MPI_Request) request; \
+	args_MPI_Pready_range_t* args = (args_MPI_Pready_range_t*) activity->args; \
+	args->partition_low = (int) partition_low; \
+	args->partition_high = (int) partition_high; \
+	args->request = (MPI_Request) request; \
 };
 
 #endif
@@ -9653,7 +10004,7 @@ struct args_MPI_Pready_range_t {
  *	)
  */
 #if HAVE_MPI_Type_get_envelope
-struct args_MPI_Type_get_envelope_t {
+typedef struct {
 	MPI_Datatype type;
 	int * num_integers;
 	struct {
@@ -9672,28 +10023,30 @@ struct args_MPI_Type_get_envelope_t {
 		int val;
 	} combiner__ref;
 	int retval;
-};
+} args_MPI_Type_get_envelope_t;
 
 #define GET_ARGS_VALUE_MPI_Type_get_envelope(activity) { \
-	activity->mpi_args.MPI_Type_get_envelope.type = (MPI_Datatype) type; \
-	activity->mpi_args.MPI_Type_get_envelope.num_integers = (int *) num_integers; \
-	activity->mpi_args.MPI_Type_get_envelope.num_addresses = (int *) num_addresses; \
-	activity->mpi_args.MPI_Type_get_envelope.num_datatypes = (int *) num_datatypes; \
-	activity->mpi_args.MPI_Type_get_envelope.combiner = (int *) combiner; \
+	args_MPI_Type_get_envelope_t* args = (args_MPI_Type_get_envelope_t*) activity->args; \
+	args->type = (MPI_Datatype) type; \
+	args->num_integers = (int *) num_integers; \
+	args->num_addresses = (int *) num_addresses; \
+	args->num_datatypes = (int *) num_datatypes; \
+	args->combiner = (int *) combiner; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_get_envelope(args) { \
-	if (args->MPI_Type_get_envelope.num_integers != NULL) { \
-		args->MPI_Type_get_envelope.num_integers__ref.val = *args->MPI_Type_get_envelope.num_integers; \
+	args_MPI_Type_get_envelope_t* pargs = (args_MPI_Type_get_envelope_t*) args; \
+	if (pargs->num_integers != NULL) { \
+		pargs->num_integers__ref.val = *pargs->num_integers; \
 	} \
-	if (args->MPI_Type_get_envelope.num_addresses != NULL) { \
-		args->MPI_Type_get_envelope.num_addresses__ref.val = *args->MPI_Type_get_envelope.num_addresses; \
+	if (pargs->num_addresses != NULL) { \
+		pargs->num_addresses__ref.val = *pargs->num_addresses; \
 	} \
-	if (args->MPI_Type_get_envelope.num_datatypes != NULL) { \
-		args->MPI_Type_get_envelope.num_datatypes__ref.val = *args->MPI_Type_get_envelope.num_datatypes; \
+	if (pargs->num_datatypes != NULL) { \
+		pargs->num_datatypes__ref.val = *pargs->num_datatypes; \
 	} \
-	if (args->MPI_Type_get_envelope.combiner != NULL) { \
-		args->MPI_Type_get_envelope.combiner__ref.val = *args->MPI_Type_get_envelope.combiner; \
+	if (pargs->combiner != NULL) { \
+		pargs->combiner__ref.val = *pargs->combiner; \
 	} \
 };
 
@@ -9719,7 +10072,7 @@ struct args_MPI_Type_get_envelope_t {
  *	)
  */
 #if HAVE_MPI_Win_create
-struct args_MPI_Win_create_t {
+typedef struct {
 	void * base;
 	MPI_Aint size;
 	int disp_unit;
@@ -9730,20 +10083,22 @@ struct args_MPI_Win_create_t {
 		MPI_Win val;
 	} win__ref;
 	int retval;
-};
+} args_MPI_Win_create_t;
 
 #define GET_ARGS_VALUE_MPI_Win_create(activity) { \
-	activity->mpi_args.MPI_Win_create.base = (void *) base; \
-	activity->mpi_args.MPI_Win_create.size = (MPI_Aint) size; \
-	activity->mpi_args.MPI_Win_create.disp_unit = (int) disp_unit; \
-	activity->mpi_args.MPI_Win_create.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Win_create.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Win_create.win = (MPI_Win *) win; \
+	args_MPI_Win_create_t* args = (args_MPI_Win_create_t*) activity->args; \
+	args->base = (void *) base; \
+	args->size = (MPI_Aint) size; \
+	args->disp_unit = (int) disp_unit; \
+	args->info = (MPI_Info) info; \
+	args->comm = (MPI_Comm) comm; \
+	args->win = (MPI_Win *) win; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_create(args) { \
-	if (args->MPI_Win_create.win != NULL) { \
-		args->MPI_Win_create.win__ref.val = *args->MPI_Win_create.win; \
+	args_MPI_Win_create_t* pargs = (args_MPI_Win_create_t*) args; \
+	if (pargs->win != NULL) { \
+		pargs->win__ref.val = *pargs->win; \
 	} \
 };
 
@@ -9772,7 +10127,7 @@ struct args_MPI_Win_create_t {
  *	)
  */
 #if HAVE_MPI_Isendrecv_replace
-struct args_MPI_Isendrecv_replace_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -9786,23 +10141,25 @@ struct args_MPI_Isendrecv_replace_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Isendrecv_replace_t;
 
 #define GET_ARGS_VALUE_MPI_Isendrecv_replace(activity) { \
-	activity->mpi_args.MPI_Isendrecv_replace.buf = (void *) buf; \
-	activity->mpi_args.MPI_Isendrecv_replace.count = (int) count; \
-	activity->mpi_args.MPI_Isendrecv_replace.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Isendrecv_replace.dest = (int) dest; \
-	activity->mpi_args.MPI_Isendrecv_replace.sendtag = (int) sendtag; \
-	activity->mpi_args.MPI_Isendrecv_replace.source = (int) source; \
-	activity->mpi_args.MPI_Isendrecv_replace.recvtag = (int) recvtag; \
-	activity->mpi_args.MPI_Isendrecv_replace.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Isendrecv_replace.request = (MPI_Request *) request; \
+	args_MPI_Isendrecv_replace_t* args = (args_MPI_Isendrecv_replace_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->dest = (int) dest; \
+	args->sendtag = (int) sendtag; \
+	args->source = (int) source; \
+	args->recvtag = (int) recvtag; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Isendrecv_replace(args) { \
-	if (args->MPI_Isendrecv_replace.request != NULL) { \
-		args->MPI_Isendrecv_replace.request__ref.val = *args->MPI_Isendrecv_replace.request; \
+	args_MPI_Isendrecv_replace_t* pargs = (args_MPI_Isendrecv_replace_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -9824,15 +10181,16 @@ struct args_MPI_Isendrecv_replace_t {
  *	)
  */
 #if HAVE_MPI_Win_set_errhandler
-struct args_MPI_Win_set_errhandler_t {
+typedef struct {
 	MPI_Win win;
 	MPI_Errhandler errhandler;
 	int retval;
-};
+} args_MPI_Win_set_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_Win_set_errhandler(activity) { \
-	activity->mpi_args.MPI_Win_set_errhandler.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Win_set_errhandler.errhandler = (MPI_Errhandler) errhandler; \
+	args_MPI_Win_set_errhandler_t* args = (args_MPI_Win_set_errhandler_t*) activity->args; \
+	args->win = (MPI_Win) win; \
+	args->errhandler = (MPI_Errhandler) errhandler; \
 };
 
 #endif
@@ -9858,7 +10216,7 @@ struct args_MPI_Win_set_errhandler_t {
  *	)
  */
 #if HAVE_MPI_Fetch_and_op
-struct args_MPI_Fetch_and_op_t {
+typedef struct {
 	void * origin_addr;
 	void * result_addr;
 	MPI_Datatype datatype;
@@ -9867,16 +10225,17 @@ struct args_MPI_Fetch_and_op_t {
 	MPI_Op op;
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Fetch_and_op_t;
 
 #define GET_ARGS_VALUE_MPI_Fetch_and_op(activity) { \
-	activity->mpi_args.MPI_Fetch_and_op.origin_addr = (void *) origin_addr; \
-	activity->mpi_args.MPI_Fetch_and_op.result_addr = (void *) result_addr; \
-	activity->mpi_args.MPI_Fetch_and_op.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Fetch_and_op.target_rank = (int) target_rank; \
-	activity->mpi_args.MPI_Fetch_and_op.target_disp = (MPI_Aint) target_disp; \
-	activity->mpi_args.MPI_Fetch_and_op.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Fetch_and_op.win = (MPI_Win) win; \
+	args_MPI_Fetch_and_op_t* args = (args_MPI_Fetch_and_op_t*) activity->args; \
+	args->origin_addr = (void *) origin_addr; \
+	args->result_addr = (void *) result_addr; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->target_rank = (int) target_rank; \
+	args->target_disp = (MPI_Aint) target_disp; \
+	args->op = (MPI_Op) op; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -9897,23 +10256,25 @@ struct args_MPI_Fetch_and_op_t {
  *	)
  */
 #if HAVE_MPI_Cartdim_get
-struct args_MPI_Cartdim_get_t {
+typedef struct {
 	MPI_Comm comm;
 	int * ndims;
 	struct {
 		int val;
 	} ndims__ref;
 	int retval;
-};
+} args_MPI_Cartdim_get_t;
 
 #define GET_ARGS_VALUE_MPI_Cartdim_get(activity) { \
-	activity->mpi_args.MPI_Cartdim_get.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Cartdim_get.ndims = (int *) ndims; \
+	args_MPI_Cartdim_get_t* args = (args_MPI_Cartdim_get_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->ndims = (int *) ndims; \
 };
 
 #define GET_PTRS_VALUE_MPI_Cartdim_get(args) { \
-	if (args->MPI_Cartdim_get.ndims != NULL) { \
-		args->MPI_Cartdim_get.ndims__ref.val = *args->MPI_Cartdim_get.ndims; \
+	args_MPI_Cartdim_get_t* pargs = (args_MPI_Cartdim_get_t*) args; \
+	if (pargs->ndims != NULL) { \
+		pargs->ndims__ref.val = *pargs->ndims; \
 	} \
 };
 
@@ -9940,7 +10301,7 @@ struct args_MPI_Cartdim_get_t {
  *	)
  */
 #if HAVE_MPI_Dist_graph_neighbors
-struct args_MPI_Dist_graph_neighbors_t {
+typedef struct {
 	MPI_Comm comm;
 	int maxindegree;
 	int(* sources);
@@ -9961,30 +10322,32 @@ struct args_MPI_Dist_graph_neighbors_t {
 		int val;
 	} destweights__ref;
 	int retval;
-};
+} args_MPI_Dist_graph_neighbors_t;
 
 #define GET_ARGS_VALUE_MPI_Dist_graph_neighbors(activity) { \
-	activity->mpi_args.MPI_Dist_graph_neighbors.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Dist_graph_neighbors.maxindegree = (int) maxindegree; \
-	activity->mpi_args.MPI_Dist_graph_neighbors.sources = (int(*)) sources; \
-	activity->mpi_args.MPI_Dist_graph_neighbors.sourceweights = (int(*)) sourceweights; \
-	activity->mpi_args.MPI_Dist_graph_neighbors.maxoutdegree = (int) maxoutdegree; \
-	activity->mpi_args.MPI_Dist_graph_neighbors.destinations = (int(*)) destinations; \
-	activity->mpi_args.MPI_Dist_graph_neighbors.destweights = (int(*)) destweights; \
+	args_MPI_Dist_graph_neighbors_t* args = (args_MPI_Dist_graph_neighbors_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->maxindegree = (int) maxindegree; \
+	args->sources = (int(*)) sources; \
+	args->sourceweights = (int(*)) sourceweights; \
+	args->maxoutdegree = (int) maxoutdegree; \
+	args->destinations = (int(*)) destinations; \
+	args->destweights = (int(*)) destweights; \
 };
 
 #define GET_PTRS_VALUE_MPI_Dist_graph_neighbors(args) { \
-	if (args->MPI_Dist_graph_neighbors.sources != NULL) { \
-		args->MPI_Dist_graph_neighbors.sources__ref.val = *args->MPI_Dist_graph_neighbors.sources; \
+	args_MPI_Dist_graph_neighbors_t* pargs = (args_MPI_Dist_graph_neighbors_t*) args; \
+	if (pargs->sources != NULL) { \
+		pargs->sources__ref.val = *pargs->sources; \
 	} \
-	if (args->MPI_Dist_graph_neighbors.sourceweights != NULL) { \
-		args->MPI_Dist_graph_neighbors.sourceweights__ref.val = *args->MPI_Dist_graph_neighbors.sourceweights; \
+	if (pargs->sourceweights != NULL) { \
+		pargs->sourceweights__ref.val = *pargs->sourceweights; \
 	} \
-	if (args->MPI_Dist_graph_neighbors.destinations != NULL) { \
-		args->MPI_Dist_graph_neighbors.destinations__ref.val = *args->MPI_Dist_graph_neighbors.destinations; \
+	if (pargs->destinations != NULL) { \
+		pargs->destinations__ref.val = *pargs->destinations; \
 	} \
-	if (args->MPI_Dist_graph_neighbors.destweights != NULL) { \
-		args->MPI_Dist_graph_neighbors.destweights__ref.val = *args->MPI_Dist_graph_neighbors.destweights; \
+	if (pargs->destweights != NULL) { \
+		pargs->destweights__ref.val = *pargs->destweights; \
 	} \
 };
 
@@ -10007,17 +10370,18 @@ struct args_MPI_Dist_graph_neighbors_t {
  *	)
  */
 #if HAVE_MPI_File_seek
-struct args_MPI_File_seek_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset offset;
 	int whence;
 	int retval;
-};
+} args_MPI_File_seek_t;
 
 #define GET_ARGS_VALUE_MPI_File_seek(activity) { \
-	activity->mpi_args.MPI_File_seek.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_seek.offset = (MPI_Offset) offset; \
-	activity->mpi_args.MPI_File_seek.whence = (int) whence; \
+	args_MPI_File_seek_t* args = (args_MPI_File_seek_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->offset = (MPI_Offset) offset; \
+	args->whence = (int) whence; \
 };
 
 #endif
@@ -10044,7 +10408,7 @@ struct args_MPI_File_seek_t {
  *	)
  */
 #if HAVE_MPI_Get
-struct args_MPI_Get_t {
+typedef struct {
 	void * origin_addr;
 	int origin_count;
 	MPI_Datatype origin_datatype;
@@ -10054,17 +10418,18 @@ struct args_MPI_Get_t {
 	MPI_Datatype target_datatype;
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Get_t;
 
 #define GET_ARGS_VALUE_MPI_Get(activity) { \
-	activity->mpi_args.MPI_Get.origin_addr = (void *) origin_addr; \
-	activity->mpi_args.MPI_Get.origin_count = (int) origin_count; \
-	activity->mpi_args.MPI_Get.origin_datatype = (MPI_Datatype) origin_datatype; \
-	activity->mpi_args.MPI_Get.target_rank = (int) target_rank; \
-	activity->mpi_args.MPI_Get.target_disp = (MPI_Aint) target_disp; \
-	activity->mpi_args.MPI_Get.target_count = (int) target_count; \
-	activity->mpi_args.MPI_Get.target_datatype = (MPI_Datatype) target_datatype; \
-	activity->mpi_args.MPI_Get.win = (MPI_Win) win; \
+	args_MPI_Get_t* args = (args_MPI_Get_t*) activity->args; \
+	args->origin_addr = (void *) origin_addr; \
+	args->origin_count = (int) origin_count; \
+	args->origin_datatype = (MPI_Datatype) origin_datatype; \
+	args->target_rank = (int) target_rank; \
+	args->target_disp = (MPI_Aint) target_disp; \
+	args->target_count = (int) target_count; \
+	args->target_datatype = (MPI_Datatype) target_datatype; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -10087,7 +10452,7 @@ struct args_MPI_Get_t {
  *	)
  */
 #if HAVE_MPI_Pack_external_size
-struct args_MPI_Pack_external_size_t {
+typedef struct {
 	char(* datarep);
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
@@ -10099,21 +10464,23 @@ struct args_MPI_Pack_external_size_t {
 		MPI_Aint val;
 	} size__ref;
 	int retval;
-};
+} args_MPI_Pack_external_size_t;
 
 #define GET_ARGS_VALUE_MPI_Pack_external_size(activity) { \
-	activity->mpi_args.MPI_Pack_external_size.datarep = (char(*)) datarep; \
-	activity->mpi_args.MPI_Pack_external_size.incount = (int) incount; \
-	activity->mpi_args.MPI_Pack_external_size.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Pack_external_size.size = (MPI_Aint *) size; \
+	args_MPI_Pack_external_size_t* args = (args_MPI_Pack_external_size_t*) activity->args; \
+	args->datarep = (char(*)) datarep; \
+	args->incount = (int) incount; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->size = (MPI_Aint *) size; \
 };
 
 #define GET_PTRS_VALUE_MPI_Pack_external_size(args) { \
-	if (args->MPI_Pack_external_size.datarep != NULL) { \
-		strncpy(args->MPI_Pack_external_size.datarep__ref.val, args->MPI_Pack_external_size.datarep, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Pack_external_size_t* pargs = (args_MPI_Pack_external_size_t*) args; \
+	if (pargs->datarep != NULL) { \
+		strncpy(pargs->datarep__ref.val, pargs->datarep, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Pack_external_size.size != NULL) { \
-		args->MPI_Pack_external_size.size__ref.val = *args->MPI_Pack_external_size.size; \
+	if (pargs->size != NULL) { \
+		pargs->size__ref.val = *pargs->size; \
 	} \
 };
 
@@ -10134,13 +10501,14 @@ struct args_MPI_Pack_external_size_t {
  *	)
  */
 #if HAVE_MPI_Win_flush_all
-struct args_MPI_Win_flush_all_t {
+typedef struct {
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Win_flush_all_t;
 
 #define GET_ARGS_VALUE_MPI_Win_flush_all(activity) { \
-	activity->mpi_args.MPI_Win_flush_all.win = (MPI_Win) win; \
+	args_MPI_Win_flush_all_t* args = (args_MPI_Win_flush_all_t*) activity->args; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -10165,7 +10533,7 @@ struct args_MPI_Win_flush_all_t {
  *	)
  */
 #if HAVE_MPI_Rsend
-struct args_MPI_Rsend_t {
+typedef struct {
 	void * ibuf;
 	int count;
 	MPI_Datatype datatype;
@@ -10173,15 +10541,16 @@ struct args_MPI_Rsend_t {
 	int tag;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Rsend_t;
 
 #define GET_ARGS_VALUE_MPI_Rsend(activity) { \
-	activity->mpi_args.MPI_Rsend.ibuf = (void *) ibuf; \
-	activity->mpi_args.MPI_Rsend.count = (int) count; \
-	activity->mpi_args.MPI_Rsend.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Rsend.dest = (int) dest; \
-	activity->mpi_args.MPI_Rsend.tag = (int) tag; \
-	activity->mpi_args.MPI_Rsend.comm = (MPI_Comm) comm; \
+	args_MPI_Rsend_t* args = (args_MPI_Rsend_t*) activity->args; \
+	args->ibuf = (void *) ibuf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->dest = (int) dest; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -10201,21 +10570,23 @@ struct args_MPI_Rsend_t {
  *	)
  */
 #if HAVE_MPI_Win_free
-struct args_MPI_Win_free_t {
+typedef struct {
 	MPI_Win * win;
 	struct {
 		MPI_Win val;
 	} win__ref;
 	int retval;
-};
+} args_MPI_Win_free_t;
 
 #define GET_ARGS_VALUE_MPI_Win_free(activity) { \
-	activity->mpi_args.MPI_Win_free.win = (MPI_Win *) win; \
+	args_MPI_Win_free_t* args = (args_MPI_Win_free_t*) activity->args; \
+	args->win = (MPI_Win *) win; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_free(args) { \
-	if (args->MPI_Win_free.win != NULL) { \
-		args->MPI_Win_free.win__ref.val = *args->MPI_Win_free.win; \
+	args_MPI_Win_free_t* pargs = (args_MPI_Win_free_t*) args; \
+	if (pargs->win != NULL) { \
+		pargs->win__ref.val = *pargs->win; \
 	} \
 };
 
@@ -10238,7 +10609,7 @@ struct args_MPI_Win_free_t {
  *	)
  */
 #if HAVE_MPI_Type_create_f90_complex
-struct args_MPI_Type_create_f90_complex_t {
+typedef struct {
 	int p;
 	int r;
 	MPI_Datatype * newtype;
@@ -10246,17 +10617,19 @@ struct args_MPI_Type_create_f90_complex_t {
 		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
-};
+} args_MPI_Type_create_f90_complex_t;
 
 #define GET_ARGS_VALUE_MPI_Type_create_f90_complex(activity) { \
-	activity->mpi_args.MPI_Type_create_f90_complex.p = (int) p; \
-	activity->mpi_args.MPI_Type_create_f90_complex.r = (int) r; \
-	activity->mpi_args.MPI_Type_create_f90_complex.newtype = (MPI_Datatype *) newtype; \
+	args_MPI_Type_create_f90_complex_t* args = (args_MPI_Type_create_f90_complex_t*) activity->args; \
+	args->p = (int) p; \
+	args->r = (int) r; \
+	args->newtype = (MPI_Datatype *) newtype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_create_f90_complex(args) { \
-	if (args->MPI_Type_create_f90_complex.newtype != NULL) { \
-		args->MPI_Type_create_f90_complex.newtype__ref.val = *args->MPI_Type_create_f90_complex.newtype; \
+	args_MPI_Type_create_f90_complex_t* pargs = (args_MPI_Type_create_f90_complex_t*) args; \
+	if (pargs->newtype != NULL) { \
+		pargs->newtype__ref.val = *pargs->newtype; \
 	} \
 };
 
@@ -10287,7 +10660,7 @@ struct args_MPI_Type_create_f90_complex_t {
  *	)
  */
 #if HAVE_MPI_Neighbor_alltoallw_init
-struct args_MPI_Neighbor_alltoallw_init_t {
+typedef struct {
 	void * sendbuf;
 	int(* sendcounts);
 	struct {
@@ -10321,43 +10694,45 @@ struct args_MPI_Neighbor_alltoallw_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Neighbor_alltoallw_init_t;
 
 #define GET_ARGS_VALUE_MPI_Neighbor_alltoallw_init(activity) { \
-	activity->mpi_args.MPI_Neighbor_alltoallw_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Neighbor_alltoallw_init.sendcounts = (int(*)) sendcounts; \
-	activity->mpi_args.MPI_Neighbor_alltoallw_init.sdispls = (MPI_Aint(*)) sdispls; \
-	activity->mpi_args.MPI_Neighbor_alltoallw_init.sendtypes = (MPI_Datatype(*)) sendtypes; \
-	activity->mpi_args.MPI_Neighbor_alltoallw_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Neighbor_alltoallw_init.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Neighbor_alltoallw_init.rdispls = (MPI_Aint(*)) rdispls; \
-	activity->mpi_args.MPI_Neighbor_alltoallw_init.recvtypes = (MPI_Datatype(*)) recvtypes; \
-	activity->mpi_args.MPI_Neighbor_alltoallw_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Neighbor_alltoallw_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Neighbor_alltoallw_init.request = (MPI_Request *) request; \
+	args_MPI_Neighbor_alltoallw_init_t* args = (args_MPI_Neighbor_alltoallw_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcounts = (int(*)) sendcounts; \
+	args->sdispls = (MPI_Aint(*)) sdispls; \
+	args->sendtypes = (MPI_Datatype(*)) sendtypes; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->rdispls = (MPI_Aint(*)) rdispls; \
+	args->recvtypes = (MPI_Datatype(*)) recvtypes; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Neighbor_alltoallw_init(args) { \
-	if (args->MPI_Neighbor_alltoallw_init.sendcounts != NULL) { \
-		args->MPI_Neighbor_alltoallw_init.sendcounts__ref.val = *args->MPI_Neighbor_alltoallw_init.sendcounts; \
+	args_MPI_Neighbor_alltoallw_init_t* pargs = (args_MPI_Neighbor_alltoallw_init_t*) args; \
+	if (pargs->sendcounts != NULL) { \
+		pargs->sendcounts__ref.val = *pargs->sendcounts; \
 	} \
-	if (args->MPI_Neighbor_alltoallw_init.sdispls != NULL) { \
-		args->MPI_Neighbor_alltoallw_init.sdispls__ref.val = *args->MPI_Neighbor_alltoallw_init.sdispls; \
+	if (pargs->sdispls != NULL) { \
+		pargs->sdispls__ref.val = *pargs->sdispls; \
 	} \
-	if (args->MPI_Neighbor_alltoallw_init.sendtypes != NULL) { \
-		args->MPI_Neighbor_alltoallw_init.sendtypes__ref.val = *args->MPI_Neighbor_alltoallw_init.sendtypes; \
+	if (pargs->sendtypes != NULL) { \
+		pargs->sendtypes__ref.val = *pargs->sendtypes; \
 	} \
-	if (args->MPI_Neighbor_alltoallw_init.recvcounts != NULL) { \
-		args->MPI_Neighbor_alltoallw_init.recvcounts__ref.val = *args->MPI_Neighbor_alltoallw_init.recvcounts; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Neighbor_alltoallw_init.rdispls != NULL) { \
-		args->MPI_Neighbor_alltoallw_init.rdispls__ref.val = *args->MPI_Neighbor_alltoallw_init.rdispls; \
+	if (pargs->rdispls != NULL) { \
+		pargs->rdispls__ref.val = *pargs->rdispls; \
 	} \
-	if (args->MPI_Neighbor_alltoallw_init.recvtypes != NULL) { \
-		args->MPI_Neighbor_alltoallw_init.recvtypes__ref.val = *args->MPI_Neighbor_alltoallw_init.recvtypes; \
+	if (pargs->recvtypes != NULL) { \
+		pargs->recvtypes__ref.val = *pargs->recvtypes; \
 	} \
-	if (args->MPI_Neighbor_alltoallw_init.request != NULL) { \
-		args->MPI_Neighbor_alltoallw_init.request__ref.val = *args->MPI_Neighbor_alltoallw_init.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -10386,7 +10761,7 @@ struct args_MPI_Neighbor_alltoallw_init_t {
  *	)
  */
 #if HAVE_MPI_Rget
-struct args_MPI_Rget_t {
+typedef struct {
 	void * origin_addr;
 	int origin_count;
 	MPI_Datatype origin_datatype;
@@ -10400,23 +10775,25 @@ struct args_MPI_Rget_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Rget_t;
 
 #define GET_ARGS_VALUE_MPI_Rget(activity) { \
-	activity->mpi_args.MPI_Rget.origin_addr = (void *) origin_addr; \
-	activity->mpi_args.MPI_Rget.origin_count = (int) origin_count; \
-	activity->mpi_args.MPI_Rget.origin_datatype = (MPI_Datatype) origin_datatype; \
-	activity->mpi_args.MPI_Rget.target_rank = (int) target_rank; \
-	activity->mpi_args.MPI_Rget.target_disp = (MPI_Aint) target_disp; \
-	activity->mpi_args.MPI_Rget.target_count = (int) target_count; \
-	activity->mpi_args.MPI_Rget.target_datatype = (MPI_Datatype) target_datatype; \
-	activity->mpi_args.MPI_Rget.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Rget.request = (MPI_Request *) request; \
+	args_MPI_Rget_t* args = (args_MPI_Rget_t*) activity->args; \
+	args->origin_addr = (void *) origin_addr; \
+	args->origin_count = (int) origin_count; \
+	args->origin_datatype = (MPI_Datatype) origin_datatype; \
+	args->target_rank = (int) target_rank; \
+	args->target_disp = (MPI_Aint) target_disp; \
+	args->target_count = (int) target_count; \
+	args->target_datatype = (MPI_Datatype) target_datatype; \
+	args->win = (MPI_Win) win; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Rget(args) { \
-	if (args->MPI_Rget.request != NULL) { \
-		args->MPI_Rget.request__ref.val = *args->MPI_Rget.request; \
+	args_MPI_Rget_t* pargs = (args_MPI_Rget_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -10440,7 +10817,7 @@ struct args_MPI_Rget_t {
  *	)
  */
 #if HAVE_MPI_Win_create_keyval
-struct args_MPI_Win_create_keyval_t {
+typedef struct {
 	MPI_Win_copy_attr_function * win_copy_attr_fn;
 	MPI_Win_delete_attr_function * win_delete_attr_fn;
 	int * win_keyval;
@@ -10449,18 +10826,20 @@ struct args_MPI_Win_create_keyval_t {
 	} win_keyval__ref;
 	void * extra_state;
 	int retval;
-};
+} args_MPI_Win_create_keyval_t;
 
 #define GET_ARGS_VALUE_MPI_Win_create_keyval(activity) { \
-	activity->mpi_args.MPI_Win_create_keyval.win_copy_attr_fn = (MPI_Win_copy_attr_function *) win_copy_attr_fn; \
-	activity->mpi_args.MPI_Win_create_keyval.win_delete_attr_fn = (MPI_Win_delete_attr_function *) win_delete_attr_fn; \
-	activity->mpi_args.MPI_Win_create_keyval.win_keyval = (int *) win_keyval; \
-	activity->mpi_args.MPI_Win_create_keyval.extra_state = (void *) extra_state; \
+	args_MPI_Win_create_keyval_t* args = (args_MPI_Win_create_keyval_t*) activity->args; \
+	args->win_copy_attr_fn = (MPI_Win_copy_attr_function *) win_copy_attr_fn; \
+	args->win_delete_attr_fn = (MPI_Win_delete_attr_function *) win_delete_attr_fn; \
+	args->win_keyval = (int *) win_keyval; \
+	args->extra_state = (void *) extra_state; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_create_keyval(args) { \
-	if (args->MPI_Win_create_keyval.win_keyval != NULL) { \
-		args->MPI_Win_create_keyval.win_keyval__ref.val = *args->MPI_Win_create_keyval.win_keyval; \
+	args_MPI_Win_create_keyval_t* pargs = (args_MPI_Win_create_keyval_t*) args; \
+	if (pargs->win_keyval != NULL) { \
+		pargs->win_keyval__ref.val = *pargs->win_keyval; \
 	} \
 };
 
@@ -10482,23 +10861,25 @@ struct args_MPI_Win_create_keyval_t {
  *	)
  */
 #if HAVE_MPI_Op_commutative
-struct args_MPI_Op_commutative_t {
+typedef struct {
 	MPI_Op op;
 	int * commute;
 	struct {
 		int val;
 	} commute__ref;
 	int retval;
-};
+} args_MPI_Op_commutative_t;
 
 #define GET_ARGS_VALUE_MPI_Op_commutative(activity) { \
-	activity->mpi_args.MPI_Op_commutative.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Op_commutative.commute = (int *) commute; \
+	args_MPI_Op_commutative_t* args = (args_MPI_Op_commutative_t*) activity->args; \
+	args->op = (MPI_Op) op; \
+	args->commute = (int *) commute; \
 };
 
 #define GET_PTRS_VALUE_MPI_Op_commutative(args) { \
-	if (args->MPI_Op_commutative.commute != NULL) { \
-		args->MPI_Op_commutative.commute__ref.val = *args->MPI_Op_commutative.commute; \
+	args_MPI_Op_commutative_t* pargs = (args_MPI_Op_commutative_t*) args; \
+	if (pargs->commute != NULL) { \
+		pargs->commute__ref.val = *pargs->commute; \
 	} \
 };
 
@@ -10525,7 +10906,7 @@ struct args_MPI_Op_commutative_t {
  *	)
  */
 #if HAVE_MPI_Neighbor_allgather
-struct args_MPI_Neighbor_allgather_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -10534,16 +10915,17 @@ struct args_MPI_Neighbor_allgather_t {
 	MPI_Datatype recvtype;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Neighbor_allgather_t;
 
 #define GET_ARGS_VALUE_MPI_Neighbor_allgather(activity) { \
-	activity->mpi_args.MPI_Neighbor_allgather.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Neighbor_allgather.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Neighbor_allgather.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Neighbor_allgather.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Neighbor_allgather.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Neighbor_allgather.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Neighbor_allgather.comm = (MPI_Comm) comm; \
+	args_MPI_Neighbor_allgather_t* args = (args_MPI_Neighbor_allgather_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -10564,15 +10946,16 @@ struct args_MPI_Neighbor_allgather_t {
  *	)
  */
 #if HAVE_MPI_Comm_call_errhandler
-struct args_MPI_Comm_call_errhandler_t {
+typedef struct {
 	MPI_Comm comm;
 	int errorcode;
 	int retval;
-};
+} args_MPI_Comm_call_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_call_errhandler(activity) { \
-	activity->mpi_args.MPI_Comm_call_errhandler.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_call_errhandler.errorcode = (int) errorcode; \
+	args_MPI_Comm_call_errhandler_t* args = (args_MPI_Comm_call_errhandler_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->errorcode = (int) errorcode; \
 };
 
 #endif
@@ -10601,7 +10984,7 @@ struct args_MPI_Comm_call_errhandler_t {
  *	)
  */
 #if HAVE_MPI_Scatter_init
-struct args_MPI_Scatter_init_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -10616,24 +10999,26 @@ struct args_MPI_Scatter_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Scatter_init_t;
 
 #define GET_ARGS_VALUE_MPI_Scatter_init(activity) { \
-	activity->mpi_args.MPI_Scatter_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Scatter_init.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Scatter_init.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Scatter_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Scatter_init.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Scatter_init.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Scatter_init.root = (int) root; \
-	activity->mpi_args.MPI_Scatter_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Scatter_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Scatter_init.request = (MPI_Request *) request; \
+	args_MPI_Scatter_init_t* args = (args_MPI_Scatter_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Scatter_init(args) { \
-	if (args->MPI_Scatter_init.request != NULL) { \
-		args->MPI_Scatter_init.request__ref.val = *args->MPI_Scatter_init.request; \
+	args_MPI_Scatter_init_t* pargs = (args_MPI_Scatter_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -10658,7 +11043,7 @@ struct args_MPI_Scatter_init_t {
  *	)
  */
 #if HAVE_MPI_Info_get_string
-struct args_MPI_Info_get_string_t {
+typedef struct {
 	MPI_Info info;
 	char * key;
 	struct {
@@ -10677,28 +11062,30 @@ struct args_MPI_Info_get_string_t {
 		int val;
 	} flag__ref;
 	int retval;
-};
+} args_MPI_Info_get_string_t;
 
 #define GET_ARGS_VALUE_MPI_Info_get_string(activity) { \
-	activity->mpi_args.MPI_Info_get_string.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Info_get_string.key = (char *) key; \
-	activity->mpi_args.MPI_Info_get_string.buflen = (int *) buflen; \
-	activity->mpi_args.MPI_Info_get_string.value = (char *) value; \
-	activity->mpi_args.MPI_Info_get_string.flag = (int *) flag; \
+	args_MPI_Info_get_string_t* args = (args_MPI_Info_get_string_t*) activity->args; \
+	args->info = (MPI_Info) info; \
+	args->key = (char *) key; \
+	args->buflen = (int *) buflen; \
+	args->value = (char *) value; \
+	args->flag = (int *) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_Info_get_string(args) { \
-	if (args->MPI_Info_get_string.key != NULL) { \
-		strncpy(args->MPI_Info_get_string.key__ref.val, args->MPI_Info_get_string.key, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Info_get_string_t* pargs = (args_MPI_Info_get_string_t*) args; \
+	if (pargs->key != NULL) { \
+		strncpy(pargs->key__ref.val, pargs->key, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Info_get_string.buflen != NULL) { \
-		args->MPI_Info_get_string.buflen__ref.val = *args->MPI_Info_get_string.buflen; \
+	if (pargs->buflen != NULL) { \
+		pargs->buflen__ref.val = *pargs->buflen; \
 	} \
-	if (args->MPI_Info_get_string.value != NULL) { \
-		strncpy(args->MPI_Info_get_string.value__ref.val, args->MPI_Info_get_string.value, MPI_STRING_SIZE_MAX-1); \
+	if (pargs->value != NULL) { \
+		strncpy(pargs->value__ref.val, pargs->value, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Info_get_string.flag != NULL) { \
-		args->MPI_Info_get_string.flag__ref.val = *args->MPI_Info_get_string.flag; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
 };
 
@@ -10723,7 +11110,7 @@ struct args_MPI_Info_get_string_t {
  *	)
  */
 #if HAVE_MPI_Mrecv
-struct args_MPI_Mrecv_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype type;
@@ -10736,22 +11123,24 @@ struct args_MPI_Mrecv_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_Mrecv_t;
 
 #define GET_ARGS_VALUE_MPI_Mrecv(activity) { \
-	activity->mpi_args.MPI_Mrecv.buf = (void *) buf; \
-	activity->mpi_args.MPI_Mrecv.count = (int) count; \
-	activity->mpi_args.MPI_Mrecv.type = (MPI_Datatype) type; \
-	activity->mpi_args.MPI_Mrecv.message = (MPI_Message *) message; \
-	activity->mpi_args.MPI_Mrecv.status = (MPI_Status *) status; \
+	args_MPI_Mrecv_t* args = (args_MPI_Mrecv_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->type = (MPI_Datatype) type; \
+	args->message = (MPI_Message *) message; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Mrecv(args) { \
-	if (args->MPI_Mrecv.message != NULL) { \
-		args->MPI_Mrecv.message__ref.val = *args->MPI_Mrecv.message; \
+	args_MPI_Mrecv_t* pargs = (args_MPI_Mrecv_t*) args; \
+	if (pargs->message != NULL) { \
+		pargs->message__ref.val = *pargs->message; \
 	} \
-	if (args->MPI_Mrecv.status != NULL) { \
-		args->MPI_Mrecv.status__ref.val = *args->MPI_Mrecv.status; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -10773,23 +11162,25 @@ struct args_MPI_Mrecv_t {
  *	)
  */
 #if HAVE_MPI_Open_port
-struct args_MPI_Open_port_t {
+typedef struct {
 	MPI_Info info;
 	char * port_name;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
 	} port_name__ref;
 	int retval;
-};
+} args_MPI_Open_port_t;
 
 #define GET_ARGS_VALUE_MPI_Open_port(activity) { \
-	activity->mpi_args.MPI_Open_port.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Open_port.port_name = (char *) port_name; \
+	args_MPI_Open_port_t* args = (args_MPI_Open_port_t*) activity->args; \
+	args->info = (MPI_Info) info; \
+	args->port_name = (char *) port_name; \
 };
 
 #define GET_PTRS_VALUE_MPI_Open_port(args) { \
-	if (args->MPI_Open_port.port_name != NULL) { \
-		strncpy(args->MPI_Open_port.port_name__ref.val, args->MPI_Open_port.port_name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Open_port_t* pargs = (args_MPI_Open_port_t*) args; \
+	if (pargs->port_name != NULL) { \
+		strncpy(pargs->port_name__ref.val, pargs->port_name, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -10814,7 +11205,7 @@ struct args_MPI_Open_port_t {
  *	)
  */
 #if HAVE_MPI_Cart_get
-struct args_MPI_Cart_get_t {
+typedef struct {
 	MPI_Comm comm;
 	int maxdims;
 	int(* dims);
@@ -10830,25 +11221,27 @@ struct args_MPI_Cart_get_t {
 		int val;
 	} coords__ref;
 	int retval;
-};
+} args_MPI_Cart_get_t;
 
 #define GET_ARGS_VALUE_MPI_Cart_get(activity) { \
-	activity->mpi_args.MPI_Cart_get.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Cart_get.maxdims = (int) maxdims; \
-	activity->mpi_args.MPI_Cart_get.dims = (int(*)) dims; \
-	activity->mpi_args.MPI_Cart_get.periods = (int(*)) periods; \
-	activity->mpi_args.MPI_Cart_get.coords = (int(*)) coords; \
+	args_MPI_Cart_get_t* args = (args_MPI_Cart_get_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->maxdims = (int) maxdims; \
+	args->dims = (int(*)) dims; \
+	args->periods = (int(*)) periods; \
+	args->coords = (int(*)) coords; \
 };
 
 #define GET_PTRS_VALUE_MPI_Cart_get(args) { \
-	if (args->MPI_Cart_get.dims != NULL) { \
-		args->MPI_Cart_get.dims__ref.val = *args->MPI_Cart_get.dims; \
+	args_MPI_Cart_get_t* pargs = (args_MPI_Cart_get_t*) args; \
+	if (pargs->dims != NULL) { \
+		pargs->dims__ref.val = *pargs->dims; \
 	} \
-	if (args->MPI_Cart_get.periods != NULL) { \
-		args->MPI_Cart_get.periods__ref.val = *args->MPI_Cart_get.periods; \
+	if (pargs->periods != NULL) { \
+		pargs->periods__ref.val = *pargs->periods; \
 	} \
-	if (args->MPI_Cart_get.coords != NULL) { \
-		args->MPI_Cart_get.coords__ref.val = *args->MPI_Cart_get.coords; \
+	if (pargs->coords != NULL) { \
+		pargs->coords__ref.val = *pargs->coords; \
 	} \
 };
 
@@ -10871,7 +11264,7 @@ struct args_MPI_Cart_get_t {
  *	)
  */
 #if HAVE_MPI_Lookup_name
-struct args_MPI_Lookup_name_t {
+typedef struct {
 	char * service_name;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
@@ -10882,20 +11275,22 @@ struct args_MPI_Lookup_name_t {
 		char val[MPI_STRING_SIZE_MAX];
 	} port_name__ref;
 	int retval;
-};
+} args_MPI_Lookup_name_t;
 
 #define GET_ARGS_VALUE_MPI_Lookup_name(activity) { \
-	activity->mpi_args.MPI_Lookup_name.service_name = (char *) service_name; \
-	activity->mpi_args.MPI_Lookup_name.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Lookup_name.port_name = (char *) port_name; \
+	args_MPI_Lookup_name_t* args = (args_MPI_Lookup_name_t*) activity->args; \
+	args->service_name = (char *) service_name; \
+	args->info = (MPI_Info) info; \
+	args->port_name = (char *) port_name; \
 };
 
 #define GET_PTRS_VALUE_MPI_Lookup_name(args) { \
-	if (args->MPI_Lookup_name.service_name != NULL) { \
-		strncpy(args->MPI_Lookup_name.service_name__ref.val, args->MPI_Lookup_name.service_name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Lookup_name_t* pargs = (args_MPI_Lookup_name_t*) args; \
+	if (pargs->service_name != NULL) { \
+		strncpy(pargs->service_name__ref.val, pargs->service_name, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Lookup_name.port_name != NULL) { \
-		strncpy(args->MPI_Lookup_name.port_name__ref.val, args->MPI_Lookup_name.port_name, MPI_STRING_SIZE_MAX-1); \
+	if (pargs->port_name != NULL) { \
+		strncpy(pargs->port_name__ref.val, pargs->port_name, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -10918,7 +11313,7 @@ struct args_MPI_Lookup_name_t {
  *	)
  */
 #if HAVE_MPI_Type_get_extent
-struct args_MPI_Type_get_extent_t {
+typedef struct {
 	MPI_Datatype type;
 	MPI_Aint * lb;
 	struct {
@@ -10929,20 +11324,22 @@ struct args_MPI_Type_get_extent_t {
 		MPI_Aint val;
 	} extent__ref;
 	int retval;
-};
+} args_MPI_Type_get_extent_t;
 
 #define GET_ARGS_VALUE_MPI_Type_get_extent(activity) { \
-	activity->mpi_args.MPI_Type_get_extent.type = (MPI_Datatype) type; \
-	activity->mpi_args.MPI_Type_get_extent.lb = (MPI_Aint *) lb; \
-	activity->mpi_args.MPI_Type_get_extent.extent = (MPI_Aint *) extent; \
+	args_MPI_Type_get_extent_t* args = (args_MPI_Type_get_extent_t*) activity->args; \
+	args->type = (MPI_Datatype) type; \
+	args->lb = (MPI_Aint *) lb; \
+	args->extent = (MPI_Aint *) extent; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_get_extent(args) { \
-	if (args->MPI_Type_get_extent.lb != NULL) { \
-		args->MPI_Type_get_extent.lb__ref.val = *args->MPI_Type_get_extent.lb; \
+	args_MPI_Type_get_extent_t* pargs = (args_MPI_Type_get_extent_t*) args; \
+	if (pargs->lb != NULL) { \
+		pargs->lb__ref.val = *pargs->lb; \
 	} \
-	if (args->MPI_Type_get_extent.extent != NULL) { \
-		args->MPI_Type_get_extent.extent__ref.val = *args->MPI_Type_get_extent.extent; \
+	if (pargs->extent != NULL) { \
+		pargs->extent__ref.val = *pargs->extent; \
 	} \
 };
 
@@ -10970,7 +11367,7 @@ struct args_MPI_Type_get_extent_t {
  *	)
  */
 #if HAVE_MPI_Comm_spawn
-struct args_MPI_Comm_spawn_t {
+typedef struct {
 	char * command;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
@@ -10993,34 +11390,36 @@ struct args_MPI_Comm_spawn_t {
 		int val;
 	} array_of_errcodes__ref;
 	int retval;
-};
+} args_MPI_Comm_spawn_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_spawn(activity) { \
-	activity->mpi_args.MPI_Comm_spawn.command = (char *) command; \
-	activity->mpi_args.MPI_Comm_spawn.argv = (char *(*)) argv; \
-	activity->mpi_args.MPI_Comm_spawn.maxprocs = (int) maxprocs; \
-	activity->mpi_args.MPI_Comm_spawn.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Comm_spawn.root = (int) root; \
-	activity->mpi_args.MPI_Comm_spawn.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_spawn.intercomm = (MPI_Comm *) intercomm; \
-	activity->mpi_args.MPI_Comm_spawn.array_of_errcodes = (int(*)) array_of_errcodes; \
+	args_MPI_Comm_spawn_t* args = (args_MPI_Comm_spawn_t*) activity->args; \
+	args->command = (char *) command; \
+	args->argv = (char *(*)) argv; \
+	args->maxprocs = (int) maxprocs; \
+	args->info = (MPI_Info) info; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->intercomm = (MPI_Comm *) intercomm; \
+	args->array_of_errcodes = (int(*)) array_of_errcodes; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_spawn(args) { \
-	if (args->MPI_Comm_spawn.command != NULL) { \
-		strncpy(args->MPI_Comm_spawn.command__ref.val, args->MPI_Comm_spawn.command, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Comm_spawn_t* pargs = (args_MPI_Comm_spawn_t*) args; \
+	if (pargs->command != NULL) { \
+		strncpy(pargs->command__ref.val, pargs->command, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Comm_spawn.argv != NULL) { \
-		args->MPI_Comm_spawn.argv__ref.ptr1 = *args->MPI_Comm_spawn.argv; \
-		if (args->MPI_Comm_spawn.argv__ref.ptr1 != NULL) { \
-			strncpy(args->MPI_Comm_spawn.argv__ref.val, args->MPI_Comm_spawn.argv__ref.ptr1, MPI_STRING_SIZE_MAX-1); \
+	if (pargs->argv != NULL) { \
+		pargs->argv__ref.ptr1 = *pargs->argv; \
+		if (pargs->argv__ref.ptr1 != NULL) { \
+			strncpy(pargs->argv__ref.val, pargs->argv__ref.ptr1, MPI_STRING_SIZE_MAX-1); \
 		} \
 	} \
-	if (args->MPI_Comm_spawn.intercomm != NULL) { \
-		args->MPI_Comm_spawn.intercomm__ref.val = *args->MPI_Comm_spawn.intercomm; \
+	if (pargs->intercomm != NULL) { \
+		pargs->intercomm__ref.val = *pargs->intercomm; \
 	} \
-	if (args->MPI_Comm_spawn.array_of_errcodes != NULL) { \
-		args->MPI_Comm_spawn.array_of_errcodes__ref.val = *args->MPI_Comm_spawn.array_of_errcodes; \
+	if (pargs->array_of_errcodes != NULL) { \
+		pargs->array_of_errcodes__ref.val = *pargs->array_of_errcodes; \
 	} \
 };
 
@@ -11043,7 +11442,7 @@ struct args_MPI_Comm_spawn_t {
  *	)
  */
 #if HAVE_MPI_Unpublish_name
-struct args_MPI_Unpublish_name_t {
+typedef struct {
 	char * service_name;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
@@ -11054,20 +11453,22 @@ struct args_MPI_Unpublish_name_t {
 		char val[MPI_STRING_SIZE_MAX];
 	} port_name__ref;
 	int retval;
-};
+} args_MPI_Unpublish_name_t;
 
 #define GET_ARGS_VALUE_MPI_Unpublish_name(activity) { \
-	activity->mpi_args.MPI_Unpublish_name.service_name = (char *) service_name; \
-	activity->mpi_args.MPI_Unpublish_name.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Unpublish_name.port_name = (char *) port_name; \
+	args_MPI_Unpublish_name_t* args = (args_MPI_Unpublish_name_t*) activity->args; \
+	args->service_name = (char *) service_name; \
+	args->info = (MPI_Info) info; \
+	args->port_name = (char *) port_name; \
 };
 
 #define GET_PTRS_VALUE_MPI_Unpublish_name(args) { \
-	if (args->MPI_Unpublish_name.service_name != NULL) { \
-		strncpy(args->MPI_Unpublish_name.service_name__ref.val, args->MPI_Unpublish_name.service_name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Unpublish_name_t* pargs = (args_MPI_Unpublish_name_t*) args; \
+	if (pargs->service_name != NULL) { \
+		strncpy(pargs->service_name__ref.val, pargs->service_name, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Unpublish_name.port_name != NULL) { \
-		strncpy(args->MPI_Unpublish_name.port_name__ref.val, args->MPI_Unpublish_name.port_name, MPI_STRING_SIZE_MAX-1); \
+	if (pargs->port_name != NULL) { \
+		strncpy(pargs->port_name__ref.val, pargs->port_name, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -11088,13 +11489,14 @@ struct args_MPI_Unpublish_name_t {
  *	)
  */
 #if HAVE_MPI_Grequest_complete
-struct args_MPI_Grequest_complete_t {
+typedef struct {
 	MPI_Request request;
 	int retval;
-};
+} args_MPI_Grequest_complete_t;
 
 #define GET_ARGS_VALUE_MPI_Grequest_complete(activity) { \
-	activity->mpi_args.MPI_Grequest_complete.request = (MPI_Request) request; \
+	args_MPI_Grequest_complete_t* args = (args_MPI_Grequest_complete_t*) activity->args; \
+	args->request = (MPI_Request) request; \
 };
 
 #endif
@@ -11115,23 +11517,25 @@ struct args_MPI_Grequest_complete_t {
  *	)
  */
 #if HAVE_MPI_File_get_group
-struct args_MPI_File_get_group_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Group * group;
 	struct {
 		MPI_Group val;
 	} group__ref;
 	int retval;
-};
+} args_MPI_File_get_group_t;
 
 #define GET_ARGS_VALUE_MPI_File_get_group(activity) { \
-	activity->mpi_args.MPI_File_get_group.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_get_group.group = (MPI_Group *) group; \
+	args_MPI_File_get_group_t* args = (args_MPI_File_get_group_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->group = (MPI_Group *) group; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_get_group(args) { \
-	if (args->MPI_File_get_group.group != NULL) { \
-		args->MPI_File_get_group.group__ref.val = *args->MPI_File_get_group.group; \
+	args_MPI_File_get_group_t* pargs = (args_MPI_File_get_group_t*) args; \
+	if (pargs->group != NULL) { \
+		pargs->group__ref.val = *pargs->group; \
 	} \
 };
 
@@ -11157,7 +11561,7 @@ struct args_MPI_File_get_group_t {
  *	)
  */
 #if HAVE_MPI_File_iread_at_all
-struct args_MPI_File_iread_at_all_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset offset;
 	void * buf;
@@ -11168,20 +11572,22 @@ struct args_MPI_File_iread_at_all_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_File_iread_at_all_t;
 
 #define GET_ARGS_VALUE_MPI_File_iread_at_all(activity) { \
-	activity->mpi_args.MPI_File_iread_at_all.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_iread_at_all.offset = (MPI_Offset) offset; \
-	activity->mpi_args.MPI_File_iread_at_all.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_iread_at_all.count = (int) count; \
-	activity->mpi_args.MPI_File_iread_at_all.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_iread_at_all.request = (MPI_Request *) request; \
+	args_MPI_File_iread_at_all_t* args = (args_MPI_File_iread_at_all_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->offset = (MPI_Offset) offset; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_iread_at_all(args) { \
-	if (args->MPI_File_iread_at_all.request != NULL) { \
-		args->MPI_File_iread_at_all.request__ref.val = *args->MPI_File_iread_at_all.request; \
+	args_MPI_File_iread_at_all_t* pargs = (args_MPI_File_iread_at_all_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -11204,7 +11610,7 @@ struct args_MPI_File_iread_at_all_t {
  *	)
  */
 #if HAVE_MPI_Graphdims_get
-struct args_MPI_Graphdims_get_t {
+typedef struct {
 	MPI_Comm comm;
 	int * nnodes;
 	struct {
@@ -11215,20 +11621,22 @@ struct args_MPI_Graphdims_get_t {
 		int val;
 	} nedges__ref;
 	int retval;
-};
+} args_MPI_Graphdims_get_t;
 
 #define GET_ARGS_VALUE_MPI_Graphdims_get(activity) { \
-	activity->mpi_args.MPI_Graphdims_get.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Graphdims_get.nnodes = (int *) nnodes; \
-	activity->mpi_args.MPI_Graphdims_get.nedges = (int *) nedges; \
+	args_MPI_Graphdims_get_t* args = (args_MPI_Graphdims_get_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->nnodes = (int *) nnodes; \
+	args->nedges = (int *) nedges; \
 };
 
 #define GET_PTRS_VALUE_MPI_Graphdims_get(args) { \
-	if (args->MPI_Graphdims_get.nnodes != NULL) { \
-		args->MPI_Graphdims_get.nnodes__ref.val = *args->MPI_Graphdims_get.nnodes; \
+	args_MPI_Graphdims_get_t* pargs = (args_MPI_Graphdims_get_t*) args; \
+	if (pargs->nnodes != NULL) { \
+		pargs->nnodes__ref.val = *pargs->nnodes; \
 	} \
-	if (args->MPI_Graphdims_get.nedges != NULL) { \
-		args->MPI_Graphdims_get.nedges__ref.val = *args->MPI_Graphdims_get.nedges; \
+	if (pargs->nedges != NULL) { \
+		pargs->nedges__ref.val = *pargs->nedges; \
 	} \
 };
 
@@ -11253,7 +11661,7 @@ struct args_MPI_Graphdims_get_t {
  *	)
  */
 #if HAVE_MPI_File_iread_shared
-struct args_MPI_File_iread_shared_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
@@ -11263,19 +11671,21 @@ struct args_MPI_File_iread_shared_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_File_iread_shared_t;
 
 #define GET_ARGS_VALUE_MPI_File_iread_shared(activity) { \
-	activity->mpi_args.MPI_File_iread_shared.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_iread_shared.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_iread_shared.count = (int) count; \
-	activity->mpi_args.MPI_File_iread_shared.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_iread_shared.request = (MPI_Request *) request; \
+	args_MPI_File_iread_shared_t* args = (args_MPI_File_iread_shared_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_iread_shared(args) { \
-	if (args->MPI_File_iread_shared.request != NULL) { \
-		args->MPI_File_iread_shared.request__ref.val = *args->MPI_File_iread_shared.request; \
+	args_MPI_File_iread_shared_t* pargs = (args_MPI_File_iread_shared_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -11299,7 +11709,7 @@ struct args_MPI_File_iread_shared_t {
  *	)
  */
 #if HAVE_MPI_Comm_idup_with_info
-struct args_MPI_Comm_idup_with_info_t {
+typedef struct {
 	MPI_Comm comm;
 	MPI_Info info;
 	MPI_Comm * newcomm;
@@ -11311,21 +11721,23 @@ struct args_MPI_Comm_idup_with_info_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Comm_idup_with_info_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_idup_with_info(activity) { \
-	activity->mpi_args.MPI_Comm_idup_with_info.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_idup_with_info.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Comm_idup_with_info.newcomm = (MPI_Comm *) newcomm; \
-	activity->mpi_args.MPI_Comm_idup_with_info.request = (MPI_Request *) request; \
+	args_MPI_Comm_idup_with_info_t* args = (args_MPI_Comm_idup_with_info_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->newcomm = (MPI_Comm *) newcomm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_idup_with_info(args) { \
-	if (args->MPI_Comm_idup_with_info.newcomm != NULL) { \
-		args->MPI_Comm_idup_with_info.newcomm__ref.val = *args->MPI_Comm_idup_with_info.newcomm; \
+	args_MPI_Comm_idup_with_info_t* pargs = (args_MPI_Comm_idup_with_info_t*) args; \
+	if (pargs->newcomm != NULL) { \
+		pargs->newcomm__ref.val = *pargs->newcomm; \
 	} \
-	if (args->MPI_Comm_idup_with_info.request != NULL) { \
-		args->MPI_Comm_idup_with_info.request__ref.val = *args->MPI_Comm_idup_with_info.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -11347,7 +11759,7 @@ struct args_MPI_Comm_idup_with_info_t {
  *	)
  */
 #if HAVE_MPI_Get_version
-struct args_MPI_Get_version_t {
+typedef struct {
 	int * version;
 	struct {
 		int val;
@@ -11357,19 +11769,21 @@ struct args_MPI_Get_version_t {
 		int val;
 	} subversion__ref;
 	int retval;
-};
+} args_MPI_Get_version_t;
 
 #define GET_ARGS_VALUE_MPI_Get_version(activity) { \
-	activity->mpi_args.MPI_Get_version.version = (int *) version; \
-	activity->mpi_args.MPI_Get_version.subversion = (int *) subversion; \
+	args_MPI_Get_version_t* args = (args_MPI_Get_version_t*) activity->args; \
+	args->version = (int *) version; \
+	args->subversion = (int *) subversion; \
 };
 
 #define GET_PTRS_VALUE_MPI_Get_version(args) { \
-	if (args->MPI_Get_version.version != NULL) { \
-		args->MPI_Get_version.version__ref.val = *args->MPI_Get_version.version; \
+	args_MPI_Get_version_t* pargs = (args_MPI_Get_version_t*) args; \
+	if (pargs->version != NULL) { \
+		pargs->version__ref.val = *pargs->version; \
 	} \
-	if (args->MPI_Get_version.subversion != NULL) { \
-		args->MPI_Get_version.subversion__ref.val = *args->MPI_Get_version.subversion; \
+	if (pargs->subversion != NULL) { \
+		pargs->subversion__ref.val = *pargs->subversion; \
 	} \
 };
 
@@ -11391,15 +11805,16 @@ struct args_MPI_Get_version_t {
  *	)
  */
 #if HAVE_MPI_Win_lock_all
-struct args_MPI_Win_lock_all_t {
+typedef struct {
 	int mpi_assert;
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Win_lock_all_t;
 
 #define GET_ARGS_VALUE_MPI_Win_lock_all(activity) { \
-	activity->mpi_args.MPI_Win_lock_all.mpi_assert = (int) mpi_assert; \
-	activity->mpi_args.MPI_Win_lock_all.win = (MPI_Win) win; \
+	args_MPI_Win_lock_all_t* args = (args_MPI_Win_lock_all_t*) activity->args; \
+	args->mpi_assert = (int) mpi_assert; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -11426,7 +11841,7 @@ struct args_MPI_Win_lock_all_t {
  *	)
  */
 #if HAVE_MPI_Intercomm_create_from_groups
-struct args_MPI_Intercomm_create_from_groups_t {
+typedef struct {
 	MPI_Group local_group;
 	int local_leader;
 	MPI_Group remote_group;
@@ -11442,25 +11857,27 @@ struct args_MPI_Intercomm_create_from_groups_t {
 		MPI_Comm val;
 	} newintercomm__ref;
 	int retval;
-};
+} args_MPI_Intercomm_create_from_groups_t;
 
 #define GET_ARGS_VALUE_MPI_Intercomm_create_from_groups(activity) { \
-	activity->mpi_args.MPI_Intercomm_create_from_groups.local_group = (MPI_Group) local_group; \
-	activity->mpi_args.MPI_Intercomm_create_from_groups.local_leader = (int) local_leader; \
-	activity->mpi_args.MPI_Intercomm_create_from_groups.remote_group = (MPI_Group) remote_group; \
-	activity->mpi_args.MPI_Intercomm_create_from_groups.remote_leader = (int) remote_leader; \
-	activity->mpi_args.MPI_Intercomm_create_from_groups.tag = (char *) tag; \
-	activity->mpi_args.MPI_Intercomm_create_from_groups.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Intercomm_create_from_groups.errhandler = (MPI_Errhandler) errhandler; \
-	activity->mpi_args.MPI_Intercomm_create_from_groups.newintercomm = (MPI_Comm *) newintercomm; \
+	args_MPI_Intercomm_create_from_groups_t* args = (args_MPI_Intercomm_create_from_groups_t*) activity->args; \
+	args->local_group = (MPI_Group) local_group; \
+	args->local_leader = (int) local_leader; \
+	args->remote_group = (MPI_Group) remote_group; \
+	args->remote_leader = (int) remote_leader; \
+	args->tag = (char *) tag; \
+	args->info = (MPI_Info) info; \
+	args->errhandler = (MPI_Errhandler) errhandler; \
+	args->newintercomm = (MPI_Comm *) newintercomm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Intercomm_create_from_groups(args) { \
-	if (args->MPI_Intercomm_create_from_groups.tag != NULL) { \
-		strncpy(args->MPI_Intercomm_create_from_groups.tag__ref.val, args->MPI_Intercomm_create_from_groups.tag, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Intercomm_create_from_groups_t* pargs = (args_MPI_Intercomm_create_from_groups_t*) args; \
+	if (pargs->tag != NULL) { \
+		strncpy(pargs->tag__ref.val, pargs->tag, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Intercomm_create_from_groups.newintercomm != NULL) { \
-		args->MPI_Intercomm_create_from_groups.newintercomm__ref.val = *args->MPI_Intercomm_create_from_groups.newintercomm; \
+	if (pargs->newintercomm != NULL) { \
+		pargs->newintercomm__ref.val = *pargs->newintercomm; \
 	} \
 };
 
@@ -11491,7 +11908,7 @@ struct args_MPI_Intercomm_create_from_groups_t {
  *	)
  */
 #if HAVE_MPI_Neighbor_alltoallv_init
-struct args_MPI_Neighbor_alltoallv_init_t {
+typedef struct {
 	void * sendbuf;
 	int(* sendcounts);
 	struct {
@@ -11519,37 +11936,39 @@ struct args_MPI_Neighbor_alltoallv_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Neighbor_alltoallv_init_t;
 
 #define GET_ARGS_VALUE_MPI_Neighbor_alltoallv_init(activity) { \
-	activity->mpi_args.MPI_Neighbor_alltoallv_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Neighbor_alltoallv_init.sendcounts = (int(*)) sendcounts; \
-	activity->mpi_args.MPI_Neighbor_alltoallv_init.sdispls = (int(*)) sdispls; \
-	activity->mpi_args.MPI_Neighbor_alltoallv_init.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Neighbor_alltoallv_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Neighbor_alltoallv_init.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Neighbor_alltoallv_init.rdispls = (int(*)) rdispls; \
-	activity->mpi_args.MPI_Neighbor_alltoallv_init.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Neighbor_alltoallv_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Neighbor_alltoallv_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Neighbor_alltoallv_init.request = (MPI_Request *) request; \
+	args_MPI_Neighbor_alltoallv_init_t* args = (args_MPI_Neighbor_alltoallv_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcounts = (int(*)) sendcounts; \
+	args->sdispls = (int(*)) sdispls; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->rdispls = (int(*)) rdispls; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Neighbor_alltoallv_init(args) { \
-	if (args->MPI_Neighbor_alltoallv_init.sendcounts != NULL) { \
-		args->MPI_Neighbor_alltoallv_init.sendcounts__ref.val = *args->MPI_Neighbor_alltoallv_init.sendcounts; \
+	args_MPI_Neighbor_alltoallv_init_t* pargs = (args_MPI_Neighbor_alltoallv_init_t*) args; \
+	if (pargs->sendcounts != NULL) { \
+		pargs->sendcounts__ref.val = *pargs->sendcounts; \
 	} \
-	if (args->MPI_Neighbor_alltoallv_init.sdispls != NULL) { \
-		args->MPI_Neighbor_alltoallv_init.sdispls__ref.val = *args->MPI_Neighbor_alltoallv_init.sdispls; \
+	if (pargs->sdispls != NULL) { \
+		pargs->sdispls__ref.val = *pargs->sdispls; \
 	} \
-	if (args->MPI_Neighbor_alltoallv_init.recvcounts != NULL) { \
-		args->MPI_Neighbor_alltoallv_init.recvcounts__ref.val = *args->MPI_Neighbor_alltoallv_init.recvcounts; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Neighbor_alltoallv_init.rdispls != NULL) { \
-		args->MPI_Neighbor_alltoallv_init.rdispls__ref.val = *args->MPI_Neighbor_alltoallv_init.rdispls; \
+	if (pargs->rdispls != NULL) { \
+		pargs->rdispls__ref.val = *pargs->rdispls; \
 	} \
-	if (args->MPI_Neighbor_alltoallv_init.request != NULL) { \
-		args->MPI_Neighbor_alltoallv_init.request__ref.val = *args->MPI_Neighbor_alltoallv_init.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -11579,7 +11998,7 @@ struct args_MPI_Neighbor_alltoallv_init_t {
  *	)
  */
 #if HAVE_MPI_Type_create_darray
-struct args_MPI_Type_create_darray_t {
+typedef struct {
 	int size;
 	int rank;
 	int ndims;
@@ -11606,36 +12025,38 @@ struct args_MPI_Type_create_darray_t {
 		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
-};
+} args_MPI_Type_create_darray_t;
 
 #define GET_ARGS_VALUE_MPI_Type_create_darray(activity) { \
-	activity->mpi_args.MPI_Type_create_darray.size = (int) size; \
-	activity->mpi_args.MPI_Type_create_darray.rank = (int) rank; \
-	activity->mpi_args.MPI_Type_create_darray.ndims = (int) ndims; \
-	activity->mpi_args.MPI_Type_create_darray.gsize_array = (int(*)) gsize_array; \
-	activity->mpi_args.MPI_Type_create_darray.distrib_array = (int(*)) distrib_array; \
-	activity->mpi_args.MPI_Type_create_darray.darg_array = (int(*)) darg_array; \
-	activity->mpi_args.MPI_Type_create_darray.psize_array = (int(*)) psize_array; \
-	activity->mpi_args.MPI_Type_create_darray.order = (int) order; \
-	activity->mpi_args.MPI_Type_create_darray.oldtype = (MPI_Datatype) oldtype; \
-	activity->mpi_args.MPI_Type_create_darray.newtype = (MPI_Datatype *) newtype; \
+	args_MPI_Type_create_darray_t* args = (args_MPI_Type_create_darray_t*) activity->args; \
+	args->size = (int) size; \
+	args->rank = (int) rank; \
+	args->ndims = (int) ndims; \
+	args->gsize_array = (int(*)) gsize_array; \
+	args->distrib_array = (int(*)) distrib_array; \
+	args->darg_array = (int(*)) darg_array; \
+	args->psize_array = (int(*)) psize_array; \
+	args->order = (int) order; \
+	args->oldtype = (MPI_Datatype) oldtype; \
+	args->newtype = (MPI_Datatype *) newtype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_create_darray(args) { \
-	if (args->MPI_Type_create_darray.gsize_array != NULL) { \
-		args->MPI_Type_create_darray.gsize_array__ref.val = *args->MPI_Type_create_darray.gsize_array; \
+	args_MPI_Type_create_darray_t* pargs = (args_MPI_Type_create_darray_t*) args; \
+	if (pargs->gsize_array != NULL) { \
+		pargs->gsize_array__ref.val = *pargs->gsize_array; \
 	} \
-	if (args->MPI_Type_create_darray.distrib_array != NULL) { \
-		args->MPI_Type_create_darray.distrib_array__ref.val = *args->MPI_Type_create_darray.distrib_array; \
+	if (pargs->distrib_array != NULL) { \
+		pargs->distrib_array__ref.val = *pargs->distrib_array; \
 	} \
-	if (args->MPI_Type_create_darray.darg_array != NULL) { \
-		args->MPI_Type_create_darray.darg_array__ref.val = *args->MPI_Type_create_darray.darg_array; \
+	if (pargs->darg_array != NULL) { \
+		pargs->darg_array__ref.val = *pargs->darg_array; \
 	} \
-	if (args->MPI_Type_create_darray.psize_array != NULL) { \
-		args->MPI_Type_create_darray.psize_array__ref.val = *args->MPI_Type_create_darray.psize_array; \
+	if (pargs->psize_array != NULL) { \
+		pargs->psize_array__ref.val = *pargs->psize_array; \
 	} \
-	if (args->MPI_Type_create_darray.newtype != NULL) { \
-		args->MPI_Type_create_darray.newtype__ref.val = *args->MPI_Type_create_darray.newtype; \
+	if (pargs->newtype != NULL) { \
+		pargs->newtype__ref.val = *pargs->newtype; \
 	} \
 };
 
@@ -11657,23 +12078,25 @@ struct args_MPI_Type_create_darray_t {
  *	)
  */
 #if HAVE_MPI_File_get_position_shared
-struct args_MPI_File_get_position_shared_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset * offset;
 	struct {
 		MPI_Offset val;
 	} offset__ref;
 	int retval;
-};
+} args_MPI_File_get_position_shared_t;
 
 #define GET_ARGS_VALUE_MPI_File_get_position_shared(activity) { \
-	activity->mpi_args.MPI_File_get_position_shared.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_get_position_shared.offset = (MPI_Offset *) offset; \
+	args_MPI_File_get_position_shared_t* args = (args_MPI_File_get_position_shared_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->offset = (MPI_Offset *) offset; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_get_position_shared(args) { \
-	if (args->MPI_File_get_position_shared.offset != NULL) { \
-		args->MPI_File_get_position_shared.offset__ref.val = *args->MPI_File_get_position_shared.offset; \
+	args_MPI_File_get_position_shared_t* pargs = (args_MPI_File_get_position_shared_t*) args; \
+	if (pargs->offset != NULL) { \
+		pargs->offset__ref.val = *pargs->offset; \
 	} \
 };
 
@@ -11695,23 +12118,25 @@ struct args_MPI_File_get_position_shared_t {
  *	)
  */
 #if HAVE_MPI_Win_get_group
-struct args_MPI_Win_get_group_t {
+typedef struct {
 	MPI_Win win;
 	MPI_Group * group;
 	struct {
 		MPI_Group val;
 	} group__ref;
 	int retval;
-};
+} args_MPI_Win_get_group_t;
 
 #define GET_ARGS_VALUE_MPI_Win_get_group(activity) { \
-	activity->mpi_args.MPI_Win_get_group.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Win_get_group.group = (MPI_Group *) group; \
+	args_MPI_Win_get_group_t* args = (args_MPI_Win_get_group_t*) activity->args; \
+	args->win = (MPI_Win) win; \
+	args->group = (MPI_Group *) group; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_get_group(args) { \
-	if (args->MPI_Win_get_group.group != NULL) { \
-		args->MPI_Win_get_group.group__ref.val = *args->MPI_Win_get_group.group; \
+	args_MPI_Win_get_group_t* pargs = (args_MPI_Win_get_group_t*) args; \
+	if (pargs->group != NULL) { \
+		pargs->group__ref.val = *pargs->group; \
 	} \
 };
 
@@ -11733,23 +12158,25 @@ struct args_MPI_Win_get_group_t {
  *	)
  */
 #if HAVE_MPI_Error_class
-struct args_MPI_Error_class_t {
+typedef struct {
 	int errorcode;
 	int * errorclass;
 	struct {
 		int val;
 	} errorclass__ref;
 	int retval;
-};
+} args_MPI_Error_class_t;
 
 #define GET_ARGS_VALUE_MPI_Error_class(activity) { \
-	activity->mpi_args.MPI_Error_class.errorcode = (int) errorcode; \
-	activity->mpi_args.MPI_Error_class.errorclass = (int *) errorclass; \
+	args_MPI_Error_class_t* args = (args_MPI_Error_class_t*) activity->args; \
+	args->errorcode = (int) errorcode; \
+	args->errorclass = (int *) errorclass; \
 };
 
 #define GET_PTRS_VALUE_MPI_Error_class(args) { \
-	if (args->MPI_Error_class.errorclass != NULL) { \
-		args->MPI_Error_class.errorclass__ref.val = *args->MPI_Error_class.errorclass; \
+	args_MPI_Error_class_t* pargs = (args_MPI_Error_class_t*) args; \
+	if (pargs->errorclass != NULL) { \
+		pargs->errorclass__ref.val = *pargs->errorclass; \
 	} \
 };
 
@@ -11773,7 +12200,7 @@ struct args_MPI_Error_class_t {
  *	)
  */
 #if HAVE_MPI_Win_get_attr
-struct args_MPI_Win_get_attr_t {
+typedef struct {
 	MPI_Win win;
 	int win_keyval;
 	void * attribute_val;
@@ -11782,18 +12209,20 @@ struct args_MPI_Win_get_attr_t {
 		int val;
 	} flag__ref;
 	int retval;
-};
+} args_MPI_Win_get_attr_t;
 
 #define GET_ARGS_VALUE_MPI_Win_get_attr(activity) { \
-	activity->mpi_args.MPI_Win_get_attr.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Win_get_attr.win_keyval = (int) win_keyval; \
-	activity->mpi_args.MPI_Win_get_attr.attribute_val = (void *) attribute_val; \
-	activity->mpi_args.MPI_Win_get_attr.flag = (int *) flag; \
+	args_MPI_Win_get_attr_t* args = (args_MPI_Win_get_attr_t*) activity->args; \
+	args->win = (MPI_Win) win; \
+	args->win_keyval = (int) win_keyval; \
+	args->attribute_val = (void *) attribute_val; \
+	args->flag = (int *) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_get_attr(args) { \
-	if (args->MPI_Win_get_attr.flag != NULL) { \
-		args->MPI_Win_get_attr.flag__ref.val = *args->MPI_Win_get_attr.flag; \
+	args_MPI_Win_get_attr_t* pargs = (args_MPI_Win_get_attr_t*) args; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
 };
 
@@ -11818,21 +12247,22 @@ struct args_MPI_Win_get_attr_t {
  *	)
  */
 #if HAVE_MPI_Reduce_local
-struct args_MPI_Reduce_local_t {
+typedef struct {
 	void * inbuf;
 	void * inoutbuf;
 	int count;
 	MPI_Datatype datatype;
 	MPI_Op op;
 	int retval;
-};
+} args_MPI_Reduce_local_t;
 
 #define GET_ARGS_VALUE_MPI_Reduce_local(activity) { \
-	activity->mpi_args.MPI_Reduce_local.inbuf = (void *) inbuf; \
-	activity->mpi_args.MPI_Reduce_local.inoutbuf = (void *) inoutbuf; \
-	activity->mpi_args.MPI_Reduce_local.count = (int) count; \
-	activity->mpi_args.MPI_Reduce_local.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Reduce_local.op = (MPI_Op) op; \
+	args_MPI_Reduce_local_t* args = (args_MPI_Reduce_local_t*) activity->args; \
+	args->inbuf = (void *) inbuf; \
+	args->inoutbuf = (void *) inoutbuf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
 };
 
 #endif
@@ -11858,7 +12288,7 @@ struct args_MPI_Reduce_local_t {
  *	)
  */
 #if HAVE_MPI_Ireduce_scatter_block
-struct args_MPI_Ireduce_scatter_block_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int recvcount;
@@ -11870,21 +12300,23 @@ struct args_MPI_Ireduce_scatter_block_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Ireduce_scatter_block_t;
 
 #define GET_ARGS_VALUE_MPI_Ireduce_scatter_block(activity) { \
-	activity->mpi_args.MPI_Ireduce_scatter_block.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Ireduce_scatter_block.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Ireduce_scatter_block.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Ireduce_scatter_block.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Ireduce_scatter_block.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Ireduce_scatter_block.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Ireduce_scatter_block.request = (MPI_Request *) request; \
+	args_MPI_Ireduce_scatter_block_t* args = (args_MPI_Ireduce_scatter_block_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Ireduce_scatter_block(args) { \
-	if (args->MPI_Ireduce_scatter_block.request != NULL) { \
-		args->MPI_Ireduce_scatter_block.request__ref.val = *args->MPI_Ireduce_scatter_block.request; \
+	args_MPI_Ireduce_scatter_block_t* pargs = (args_MPI_Ireduce_scatter_block_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -11906,23 +12338,25 @@ struct args_MPI_Ireduce_scatter_block_t {
  *	)
  */
 #if HAVE_MPI_Status_set_cancelled
-struct args_MPI_Status_set_cancelled_t {
+typedef struct {
 	MPI_Status * status;
 	struct {
 		MPI_Status val;
 	} status__ref;
 	int flag;
 	int retval;
-};
+} args_MPI_Status_set_cancelled_t;
 
 #define GET_ARGS_VALUE_MPI_Status_set_cancelled(activity) { \
-	activity->mpi_args.MPI_Status_set_cancelled.status = (MPI_Status *) status; \
-	activity->mpi_args.MPI_Status_set_cancelled.flag = (int) flag; \
+	args_MPI_Status_set_cancelled_t* args = (args_MPI_Status_set_cancelled_t*) activity->args; \
+	args->status = (MPI_Status *) status; \
+	args->flag = (int) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_Status_set_cancelled(args) { \
-	if (args->MPI_Status_set_cancelled.status != NULL) { \
-		args->MPI_Status_set_cancelled.status__ref.val = *args->MPI_Status_set_cancelled.status; \
+	args_MPI_Status_set_cancelled_t* pargs = (args_MPI_Status_set_cancelled_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -11944,23 +12378,25 @@ struct args_MPI_Status_set_cancelled_t {
  *	)
  */
 #if HAVE_MPI_Win_test
-struct args_MPI_Win_test_t {
+typedef struct {
 	MPI_Win win;
 	int * flag;
 	struct {
 		int val;
 	} flag__ref;
 	int retval;
-};
+} args_MPI_Win_test_t;
 
 #define GET_ARGS_VALUE_MPI_Win_test(activity) { \
-	activity->mpi_args.MPI_Win_test.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Win_test.flag = (int *) flag; \
+	args_MPI_Win_test_t* args = (args_MPI_Win_test_t*) activity->args; \
+	args->win = (MPI_Win) win; \
+	args->flag = (int *) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_test(args) { \
-	if (args->MPI_Win_test.flag != NULL) { \
-		args->MPI_Win_test.flag__ref.val = *args->MPI_Win_test.flag; \
+	args_MPI_Win_test_t* pargs = (args_MPI_Win_test_t*) args; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
 };
 
@@ -11982,7 +12418,7 @@ struct args_MPI_Win_test_t {
  *	)
  */
 #if HAVE_MPI_Test_cancelled
-struct args_MPI_Test_cancelled_t {
+typedef struct {
 	MPI_Status * status;
 	struct {
 		MPI_Status val;
@@ -11992,19 +12428,21 @@ struct args_MPI_Test_cancelled_t {
 		int val;
 	} flag__ref;
 	int retval;
-};
+} args_MPI_Test_cancelled_t;
 
 #define GET_ARGS_VALUE_MPI_Test_cancelled(activity) { \
-	activity->mpi_args.MPI_Test_cancelled.status = (MPI_Status *) status; \
-	activity->mpi_args.MPI_Test_cancelled.flag = (int *) flag; \
+	args_MPI_Test_cancelled_t* args = (args_MPI_Test_cancelled_t*) activity->args; \
+	args->status = (MPI_Status *) status; \
+	args->flag = (int *) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_Test_cancelled(args) { \
-	if (args->MPI_Test_cancelled.status != NULL) { \
-		args->MPI_Test_cancelled.status__ref.val = *args->MPI_Test_cancelled.status; \
+	args_MPI_Test_cancelled_t* pargs = (args_MPI_Test_cancelled_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
-	if (args->MPI_Test_cancelled.flag != NULL) { \
-		args->MPI_Test_cancelled.flag__ref.val = *args->MPI_Test_cancelled.flag; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
 };
 
@@ -12027,17 +12465,18 @@ struct args_MPI_Test_cancelled_t {
  *	)
  */
 #if HAVE_MPI_File_seek_shared
-struct args_MPI_File_seek_shared_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset offset;
 	int whence;
 	int retval;
-};
+} args_MPI_File_seek_shared_t;
 
 #define GET_ARGS_VALUE_MPI_File_seek_shared(activity) { \
-	activity->mpi_args.MPI_File_seek_shared.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_seek_shared.offset = (MPI_Offset) offset; \
-	activity->mpi_args.MPI_File_seek_shared.whence = (int) whence; \
+	args_MPI_File_seek_shared_t* args = (args_MPI_File_seek_shared_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->offset = (MPI_Offset) offset; \
+	args->whence = (int) whence; \
 };
 
 #endif
@@ -12059,7 +12498,7 @@ struct args_MPI_File_seek_shared_t {
  *	)
  */
 #if HAVE_MPI_Error_string
-struct args_MPI_Error_string_t {
+typedef struct {
 	int errorcode;
 	char * string;
 	struct {
@@ -12070,20 +12509,22 @@ struct args_MPI_Error_string_t {
 		int val;
 	} resultlen__ref;
 	int retval;
-};
+} args_MPI_Error_string_t;
 
 #define GET_ARGS_VALUE_MPI_Error_string(activity) { \
-	activity->mpi_args.MPI_Error_string.errorcode = (int) errorcode; \
-	activity->mpi_args.MPI_Error_string.string = (char *) string; \
-	activity->mpi_args.MPI_Error_string.resultlen = (int *) resultlen; \
+	args_MPI_Error_string_t* args = (args_MPI_Error_string_t*) activity->args; \
+	args->errorcode = (int) errorcode; \
+	args->string = (char *) string; \
+	args->resultlen = (int *) resultlen; \
 };
 
 #define GET_PTRS_VALUE_MPI_Error_string(args) { \
-	if (args->MPI_Error_string.string != NULL) { \
-		strncpy(args->MPI_Error_string.string__ref.val, args->MPI_Error_string.string, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Error_string_t* pargs = (args_MPI_Error_string_t*) args; \
+	if (pargs->string != NULL) { \
+		strncpy(pargs->string__ref.val, pargs->string, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Error_string.resultlen != NULL) { \
-		args->MPI_Error_string.resultlen__ref.val = *args->MPI_Error_string.resultlen; \
+	if (pargs->resultlen != NULL) { \
+		pargs->resultlen__ref.val = *pargs->resultlen; \
 	} \
 };
 
@@ -12106,7 +12547,7 @@ struct args_MPI_Error_string_t {
  *	)
  */
 #if HAVE_MPI_Graph_neighbors_count
-struct args_MPI_Graph_neighbors_count_t {
+typedef struct {
 	MPI_Comm comm;
 	int rank;
 	int * nneighbors;
@@ -12114,17 +12555,19 @@ struct args_MPI_Graph_neighbors_count_t {
 		int val;
 	} nneighbors__ref;
 	int retval;
-};
+} args_MPI_Graph_neighbors_count_t;
 
 #define GET_ARGS_VALUE_MPI_Graph_neighbors_count(activity) { \
-	activity->mpi_args.MPI_Graph_neighbors_count.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Graph_neighbors_count.rank = (int) rank; \
-	activity->mpi_args.MPI_Graph_neighbors_count.nneighbors = (int *) nneighbors; \
+	args_MPI_Graph_neighbors_count_t* args = (args_MPI_Graph_neighbors_count_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->rank = (int) rank; \
+	args->nneighbors = (int *) nneighbors; \
 };
 
 #define GET_PTRS_VALUE_MPI_Graph_neighbors_count(args) { \
-	if (args->MPI_Graph_neighbors_count.nneighbors != NULL) { \
-		args->MPI_Graph_neighbors_count.nneighbors__ref.val = *args->MPI_Graph_neighbors_count.nneighbors; \
+	args_MPI_Graph_neighbors_count_t* pargs = (args_MPI_Graph_neighbors_count_t*) args; \
+	if (pargs->nneighbors != NULL) { \
+		pargs->nneighbors__ref.val = *pargs->nneighbors; \
 	} \
 };
 
@@ -12146,23 +12589,25 @@ struct args_MPI_Graph_neighbors_count_t {
  *	)
  */
 #if HAVE_MPI_Session_create_errhandler
-struct args_MPI_Session_create_errhandler_t {
+typedef struct {
 	MPI_Session_errhandler_function * session_errhandler_fn;
 	MPI_Errhandler * errhandler;
 	struct {
 		MPI_Errhandler val;
 	} errhandler__ref;
 	int retval;
-};
+} args_MPI_Session_create_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_Session_create_errhandler(activity) { \
-	activity->mpi_args.MPI_Session_create_errhandler.session_errhandler_fn = (MPI_Session_errhandler_function *) session_errhandler_fn; \
-	activity->mpi_args.MPI_Session_create_errhandler.errhandler = (MPI_Errhandler *) errhandler; \
+	args_MPI_Session_create_errhandler_t* args = (args_MPI_Session_create_errhandler_t*) activity->args; \
+	args->session_errhandler_fn = (MPI_Session_errhandler_function *) session_errhandler_fn; \
+	args->errhandler = (MPI_Errhandler *) errhandler; \
 };
 
 #define GET_PTRS_VALUE_MPI_Session_create_errhandler(args) { \
-	if (args->MPI_Session_create_errhandler.errhandler != NULL) { \
-		args->MPI_Session_create_errhandler.errhandler__ref.val = *args->MPI_Session_create_errhandler.errhandler; \
+	args_MPI_Session_create_errhandler_t* pargs = (args_MPI_Session_create_errhandler_t*) args; \
+	if (pargs->errhandler != NULL) { \
+		pargs->errhandler__ref.val = *pargs->errhandler; \
 	} \
 };
 
@@ -12184,15 +12629,16 @@ struct args_MPI_Session_create_errhandler_t {
  *	)
  */
 #if HAVE_MPI_Win_unlock
-struct args_MPI_Win_unlock_t {
+typedef struct {
 	int rank;
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Win_unlock_t;
 
 #define GET_ARGS_VALUE_MPI_Win_unlock(activity) { \
-	activity->mpi_args.MPI_Win_unlock.rank = (int) rank; \
-	activity->mpi_args.MPI_Win_unlock.win = (MPI_Win) win; \
+	args_MPI_Win_unlock_t* args = (args_MPI_Win_unlock_t*) activity->args; \
+	args->rank = (int) rank; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -12220,7 +12666,7 @@ struct args_MPI_Win_unlock_t {
  *	)
  */
 #if HAVE_MPI_Iscatter
-struct args_MPI_Iscatter_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -12234,23 +12680,25 @@ struct args_MPI_Iscatter_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Iscatter_t;
 
 #define GET_ARGS_VALUE_MPI_Iscatter(activity) { \
-	activity->mpi_args.MPI_Iscatter.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Iscatter.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Iscatter.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Iscatter.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Iscatter.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Iscatter.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Iscatter.root = (int) root; \
-	activity->mpi_args.MPI_Iscatter.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Iscatter.request = (MPI_Request *) request; \
+	args_MPI_Iscatter_t* args = (args_MPI_Iscatter_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Iscatter(args) { \
-	if (args->MPI_Iscatter.request != NULL) { \
-		args->MPI_Iscatter.request__ref.val = *args->MPI_Iscatter.request; \
+	args_MPI_Iscatter_t* pargs = (args_MPI_Iscatter_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -12275,7 +12723,7 @@ struct args_MPI_Iscatter_t {
  *	)
  */
 #if HAVE_MPI_File_read_all
-struct args_MPI_File_read_all_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
@@ -12285,19 +12733,21 @@ struct args_MPI_File_read_all_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_read_all_t;
 
 #define GET_ARGS_VALUE_MPI_File_read_all(activity) { \
-	activity->mpi_args.MPI_File_read_all.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_read_all.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_read_all.count = (int) count; \
-	activity->mpi_args.MPI_File_read_all.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_read_all.status = (MPI_Status *) status; \
+	args_MPI_File_read_all_t* args = (args_MPI_File_read_all_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_read_all(args) { \
-	if (args->MPI_File_read_all.status != NULL) { \
-		args->MPI_File_read_all.status__ref.val = *args->MPI_File_read_all.status; \
+	args_MPI_File_read_all_t* pargs = (args_MPI_File_read_all_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -12319,15 +12769,16 @@ struct args_MPI_File_read_all_t {
  *	)
  */
 #if HAVE_MPI_File_set_errhandler
-struct args_MPI_File_set_errhandler_t {
+typedef struct {
 	MPI_File file;
 	MPI_Errhandler errhandler;
 	int retval;
-};
+} args_MPI_File_set_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_File_set_errhandler(activity) { \
-	activity->mpi_args.MPI_File_set_errhandler.file = (MPI_File) file; \
-	activity->mpi_args.MPI_File_set_errhandler.errhandler = (MPI_Errhandler) errhandler; \
+	args_MPI_File_set_errhandler_t* args = (args_MPI_File_set_errhandler_t*) activity->args; \
+	args->file = (MPI_File) file; \
+	args->errhandler = (MPI_Errhandler) errhandler; \
 };
 
 #endif
@@ -12349,17 +12800,18 @@ struct args_MPI_File_set_errhandler_t {
  *	)
  */
 #if HAVE_MPI_Type_set_attr
-struct args_MPI_Type_set_attr_t {
+typedef struct {
 	MPI_Datatype type;
 	int type_keyval;
 	void * attr_val;
 	int retval;
-};
+} args_MPI_Type_set_attr_t;
 
 #define GET_ARGS_VALUE_MPI_Type_set_attr(activity) { \
-	activity->mpi_args.MPI_Type_set_attr.type = (MPI_Datatype) type; \
-	activity->mpi_args.MPI_Type_set_attr.type_keyval = (int) type_keyval; \
-	activity->mpi_args.MPI_Type_set_attr.attr_val = (void *) attr_val; \
+	args_MPI_Type_set_attr_t* args = (args_MPI_Type_set_attr_t*) activity->args; \
+	args->type = (MPI_Datatype) type; \
+	args->type_keyval = (int) type_keyval; \
+	args->attr_val = (void *) attr_val; \
 };
 
 #endif
@@ -12380,23 +12832,25 @@ struct args_MPI_Type_set_attr_t {
  *	)
  */
 #if HAVE_MPI_File_get_errhandler
-struct args_MPI_File_get_errhandler_t {
+typedef struct {
 	MPI_File file;
 	MPI_Errhandler * errhandler;
 	struct {
 		MPI_Errhandler val;
 	} errhandler__ref;
 	int retval;
-};
+} args_MPI_File_get_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_File_get_errhandler(activity) { \
-	activity->mpi_args.MPI_File_get_errhandler.file = (MPI_File) file; \
-	activity->mpi_args.MPI_File_get_errhandler.errhandler = (MPI_Errhandler *) errhandler; \
+	args_MPI_File_get_errhandler_t* args = (args_MPI_File_get_errhandler_t*) activity->args; \
+	args->file = (MPI_File) file; \
+	args->errhandler = (MPI_Errhandler *) errhandler; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_get_errhandler(args) { \
-	if (args->MPI_File_get_errhandler.errhandler != NULL) { \
-		args->MPI_File_get_errhandler.errhandler__ref.val = *args->MPI_File_get_errhandler.errhandler; \
+	args_MPI_File_get_errhandler_t* pargs = (args_MPI_File_get_errhandler_t*) args; \
+	if (pargs->errhandler != NULL) { \
+		pargs->errhandler__ref.val = *pargs->errhandler; \
 	} \
 };
 
@@ -12417,21 +12871,23 @@ struct args_MPI_File_get_errhandler_t {
  *	)
  */
 #if HAVE_MPI_Session_finalize
-struct args_MPI_Session_finalize_t {
+typedef struct {
 	MPI_Session * session;
 	struct {
 		MPI_Session val;
 	} session__ref;
 	int retval;
-};
+} args_MPI_Session_finalize_t;
 
 #define GET_ARGS_VALUE_MPI_Session_finalize(activity) { \
-	activity->mpi_args.MPI_Session_finalize.session = (MPI_Session *) session; \
+	args_MPI_Session_finalize_t* args = (args_MPI_Session_finalize_t*) activity->args; \
+	args->session = (MPI_Session *) session; \
 };
 
 #define GET_PTRS_VALUE_MPI_Session_finalize(args) { \
-	if (args->MPI_Session_finalize.session != NULL) { \
-		args->MPI_Session_finalize.session__ref.val = *args->MPI_Session_finalize.session; \
+	args_MPI_Session_finalize_t* pargs = (args_MPI_Session_finalize_t*) args; \
+	if (pargs->session != NULL) { \
+		pargs->session__ref.val = *pargs->session; \
 	} \
 };
 
@@ -12452,21 +12908,23 @@ struct args_MPI_Session_finalize_t {
  *	)
  */
 #if HAVE_MPI_Comm_free_keyval
-struct args_MPI_Comm_free_keyval_t {
+typedef struct {
 	int * comm_keyval;
 	struct {
 		int val;
 	} comm_keyval__ref;
 	int retval;
-};
+} args_MPI_Comm_free_keyval_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_free_keyval(activity) { \
-	activity->mpi_args.MPI_Comm_free_keyval.comm_keyval = (int *) comm_keyval; \
+	args_MPI_Comm_free_keyval_t* args = (args_MPI_Comm_free_keyval_t*) activity->args; \
+	args->comm_keyval = (int *) comm_keyval; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_free_keyval(args) { \
-	if (args->MPI_Comm_free_keyval.comm_keyval != NULL) { \
-		args->MPI_Comm_free_keyval.comm_keyval__ref.val = *args->MPI_Comm_free_keyval.comm_keyval; \
+	args_MPI_Comm_free_keyval_t* pargs = (args_MPI_Comm_free_keyval_t*) args; \
+	if (pargs->comm_keyval != NULL) { \
+		pargs->comm_keyval__ref.val = *pargs->comm_keyval; \
 	} \
 };
 
@@ -12491,7 +12949,7 @@ struct args_MPI_Comm_free_keyval_t {
  *	)
  */
 #if HAVE_MPI_File_iwrite_all
-struct args_MPI_File_iwrite_all_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
@@ -12501,19 +12959,21 @@ struct args_MPI_File_iwrite_all_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_File_iwrite_all_t;
 
 #define GET_ARGS_VALUE_MPI_File_iwrite_all(activity) { \
-	activity->mpi_args.MPI_File_iwrite_all.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_iwrite_all.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_iwrite_all.count = (int) count; \
-	activity->mpi_args.MPI_File_iwrite_all.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_iwrite_all.request = (MPI_Request *) request; \
+	args_MPI_File_iwrite_all_t* args = (args_MPI_File_iwrite_all_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_iwrite_all(args) { \
-	if (args->MPI_File_iwrite_all.request != NULL) { \
-		args->MPI_File_iwrite_all.request__ref.val = *args->MPI_File_iwrite_all.request; \
+	args_MPI_File_iwrite_all_t* pargs = (args_MPI_File_iwrite_all_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -12534,13 +12994,14 @@ struct args_MPI_File_iwrite_all_t {
  *	)
  */
 #if HAVE_MPI_Free_mem
-struct args_MPI_Free_mem_t {
+typedef struct {
 	void * base;
 	int retval;
-};
+} args_MPI_Free_mem_t;
 
 #define GET_ARGS_VALUE_MPI_Free_mem(activity) { \
-	activity->mpi_args.MPI_Free_mem.base = (void *) base; \
+	args_MPI_Free_mem_t* args = (args_MPI_Free_mem_t*) activity->args; \
+	args->base = (void *) base; \
 };
 
 #endif
@@ -12561,15 +13022,16 @@ struct args_MPI_Free_mem_t {
  *	)
  */
 #if HAVE_MPI_Win_set_info
-struct args_MPI_Win_set_info_t {
+typedef struct {
 	MPI_Win win;
 	MPI_Info info;
 	int retval;
-};
+} args_MPI_Win_set_info_t;
 
 #define GET_ARGS_VALUE_MPI_Win_set_info(activity) { \
-	activity->mpi_args.MPI_Win_set_info.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Win_set_info.info = (MPI_Info) info; \
+	args_MPI_Win_set_info_t* args = (args_MPI_Win_set_info_t*) activity->args; \
+	args->win = (MPI_Win) win; \
+	args->info = (MPI_Info) info; \
 };
 
 #endif
@@ -12599,7 +13061,7 @@ struct args_MPI_Win_set_info_t {
  *	)
  */
 #if HAVE_MPI_Alltoallv_init
-struct args_MPI_Alltoallv_init_t {
+typedef struct {
 	void * sendbuf;
 	int(* sendcounts);
 	struct {
@@ -12627,37 +13089,39 @@ struct args_MPI_Alltoallv_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Alltoallv_init_t;
 
 #define GET_ARGS_VALUE_MPI_Alltoallv_init(activity) { \
-	activity->mpi_args.MPI_Alltoallv_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Alltoallv_init.sendcounts = (int(*)) sendcounts; \
-	activity->mpi_args.MPI_Alltoallv_init.sdispls = (int(*)) sdispls; \
-	activity->mpi_args.MPI_Alltoallv_init.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Alltoallv_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Alltoallv_init.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Alltoallv_init.rdispls = (int(*)) rdispls; \
-	activity->mpi_args.MPI_Alltoallv_init.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Alltoallv_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Alltoallv_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Alltoallv_init.request = (MPI_Request *) request; \
+	args_MPI_Alltoallv_init_t* args = (args_MPI_Alltoallv_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcounts = (int(*)) sendcounts; \
+	args->sdispls = (int(*)) sdispls; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->rdispls = (int(*)) rdispls; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Alltoallv_init(args) { \
-	if (args->MPI_Alltoallv_init.sendcounts != NULL) { \
-		args->MPI_Alltoallv_init.sendcounts__ref.val = *args->MPI_Alltoallv_init.sendcounts; \
+	args_MPI_Alltoallv_init_t* pargs = (args_MPI_Alltoallv_init_t*) args; \
+	if (pargs->sendcounts != NULL) { \
+		pargs->sendcounts__ref.val = *pargs->sendcounts; \
 	} \
-	if (args->MPI_Alltoallv_init.sdispls != NULL) { \
-		args->MPI_Alltoallv_init.sdispls__ref.val = *args->MPI_Alltoallv_init.sdispls; \
+	if (pargs->sdispls != NULL) { \
+		pargs->sdispls__ref.val = *pargs->sdispls; \
 	} \
-	if (args->MPI_Alltoallv_init.recvcounts != NULL) { \
-		args->MPI_Alltoallv_init.recvcounts__ref.val = *args->MPI_Alltoallv_init.recvcounts; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Alltoallv_init.rdispls != NULL) { \
-		args->MPI_Alltoallv_init.rdispls__ref.val = *args->MPI_Alltoallv_init.rdispls; \
+	if (pargs->rdispls != NULL) { \
+		pargs->rdispls__ref.val = *pargs->rdispls; \
 	} \
-	if (args->MPI_Alltoallv_init.request != NULL) { \
-		args->MPI_Alltoallv_init.request__ref.val = *args->MPI_Alltoallv_init.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -12680,17 +13144,18 @@ struct args_MPI_Alltoallv_init_t {
  *	)
  */
 #if HAVE_MPI_Win_attach
-struct args_MPI_Win_attach_t {
+typedef struct {
 	MPI_Win win;
 	void * base;
 	MPI_Aint size;
 	int retval;
-};
+} args_MPI_Win_attach_t;
 
 #define GET_ARGS_VALUE_MPI_Win_attach(activity) { \
-	activity->mpi_args.MPI_Win_attach.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Win_attach.base = (void *) base; \
-	activity->mpi_args.MPI_Win_attach.size = (MPI_Aint) size; \
+	args_MPI_Win_attach_t* args = (args_MPI_Win_attach_t*) activity->args; \
+	args->win = (MPI_Win) win; \
+	args->base = (void *) base; \
+	args->size = (MPI_Aint) size; \
 };
 
 #endif
@@ -12711,23 +13176,25 @@ struct args_MPI_Win_attach_t {
  *	)
  */
 #if HAVE_MPI_File_get_position
-struct args_MPI_File_get_position_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset * offset;
 	struct {
 		MPI_Offset val;
 	} offset__ref;
 	int retval;
-};
+} args_MPI_File_get_position_t;
 
 #define GET_ARGS_VALUE_MPI_File_get_position(activity) { \
-	activity->mpi_args.MPI_File_get_position.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_get_position.offset = (MPI_Offset *) offset; \
+	args_MPI_File_get_position_t* args = (args_MPI_File_get_position_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->offset = (MPI_Offset *) offset; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_get_position(args) { \
-	if (args->MPI_File_get_position.offset != NULL) { \
-		args->MPI_File_get_position.offset__ref.val = *args->MPI_File_get_position.offset; \
+	args_MPI_File_get_position_t* pargs = (args_MPI_File_get_position_t*) args; \
+	if (pargs->offset != NULL) { \
+		pargs->offset__ref.val = *pargs->offset; \
 	} \
 };
 
@@ -12756,7 +13223,7 @@ struct args_MPI_File_get_position_t {
  *	)
  */
 #if HAVE_MPI_Accumulate
-struct args_MPI_Accumulate_t {
+typedef struct {
 	void * origin_addr;
 	int origin_count;
 	MPI_Datatype origin_datatype;
@@ -12767,18 +13234,19 @@ struct args_MPI_Accumulate_t {
 	MPI_Op op;
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Accumulate_t;
 
 #define GET_ARGS_VALUE_MPI_Accumulate(activity) { \
-	activity->mpi_args.MPI_Accumulate.origin_addr = (void *) origin_addr; \
-	activity->mpi_args.MPI_Accumulate.origin_count = (int) origin_count; \
-	activity->mpi_args.MPI_Accumulate.origin_datatype = (MPI_Datatype) origin_datatype; \
-	activity->mpi_args.MPI_Accumulate.target_rank = (int) target_rank; \
-	activity->mpi_args.MPI_Accumulate.target_disp = (MPI_Aint) target_disp; \
-	activity->mpi_args.MPI_Accumulate.target_count = (int) target_count; \
-	activity->mpi_args.MPI_Accumulate.target_datatype = (MPI_Datatype) target_datatype; \
-	activity->mpi_args.MPI_Accumulate.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Accumulate.win = (MPI_Win) win; \
+	args_MPI_Accumulate_t* args = (args_MPI_Accumulate_t*) activity->args; \
+	args->origin_addr = (void *) origin_addr; \
+	args->origin_count = (int) origin_count; \
+	args->origin_datatype = (MPI_Datatype) origin_datatype; \
+	args->target_rank = (int) target_rank; \
+	args->target_disp = (MPI_Aint) target_disp; \
+	args->target_count = (int) target_count; \
+	args->target_datatype = (MPI_Datatype) target_datatype; \
+	args->op = (MPI_Op) op; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -12802,7 +13270,7 @@ struct args_MPI_Accumulate_t {
  *	)
  */
 #if HAVE_MPI_File_write_shared
-struct args_MPI_File_write_shared_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
@@ -12812,19 +13280,21 @@ struct args_MPI_File_write_shared_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_write_shared_t;
 
 #define GET_ARGS_VALUE_MPI_File_write_shared(activity) { \
-	activity->mpi_args.MPI_File_write_shared.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_write_shared.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_write_shared.count = (int) count; \
-	activity->mpi_args.MPI_File_write_shared.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_write_shared.status = (MPI_Status *) status; \
+	args_MPI_File_write_shared_t* args = (args_MPI_File_write_shared_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_write_shared(args) { \
-	if (args->MPI_File_write_shared.status != NULL) { \
-		args->MPI_File_write_shared.status__ref.val = *args->MPI_File_write_shared.status; \
+	args_MPI_File_write_shared_t* pargs = (args_MPI_File_write_shared_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -12847,7 +13317,7 @@ struct args_MPI_File_write_shared_t {
  *	)
  */
 #if HAVE_MPI_Win_create_dynamic
-struct args_MPI_Win_create_dynamic_t {
+typedef struct {
 	MPI_Info info;
 	MPI_Comm comm;
 	MPI_Win * win;
@@ -12855,17 +13325,19 @@ struct args_MPI_Win_create_dynamic_t {
 		MPI_Win val;
 	} win__ref;
 	int retval;
-};
+} args_MPI_Win_create_dynamic_t;
 
 #define GET_ARGS_VALUE_MPI_Win_create_dynamic(activity) { \
-	activity->mpi_args.MPI_Win_create_dynamic.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Win_create_dynamic.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Win_create_dynamic.win = (MPI_Win *) win; \
+	args_MPI_Win_create_dynamic_t* args = (args_MPI_Win_create_dynamic_t*) activity->args; \
+	args->info = (MPI_Info) info; \
+	args->comm = (MPI_Comm) comm; \
+	args->win = (MPI_Win *) win; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_create_dynamic(args) { \
-	if (args->MPI_Win_create_dynamic.win != NULL) { \
-		args->MPI_Win_create_dynamic.win__ref.val = *args->MPI_Win_create_dynamic.win; \
+	args_MPI_Win_create_dynamic_t* pargs = (args_MPI_Win_create_dynamic_t*) args; \
+	if (pargs->win != NULL) { \
+		pargs->win__ref.val = *pargs->win; \
 	} \
 };
 
@@ -12894,7 +13366,7 @@ struct args_MPI_Win_create_dynamic_t {
  *	)
  */
 #if HAVE_MPI_Neighbor_alltoallw
-struct args_MPI_Neighbor_alltoallw_t {
+typedef struct {
 	void * sendbuf;
 	int(* sendcounts);
 	struct {
@@ -12923,38 +13395,40 @@ struct args_MPI_Neighbor_alltoallw_t {
 	} recvtypes__ref;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Neighbor_alltoallw_t;
 
 #define GET_ARGS_VALUE_MPI_Neighbor_alltoallw(activity) { \
-	activity->mpi_args.MPI_Neighbor_alltoallw.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Neighbor_alltoallw.sendcounts = (int(*)) sendcounts; \
-	activity->mpi_args.MPI_Neighbor_alltoallw.sdispls = (MPI_Aint(*)) sdispls; \
-	activity->mpi_args.MPI_Neighbor_alltoallw.sendtypes = (MPI_Datatype(*)) sendtypes; \
-	activity->mpi_args.MPI_Neighbor_alltoallw.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Neighbor_alltoallw.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Neighbor_alltoallw.rdispls = (MPI_Aint(*)) rdispls; \
-	activity->mpi_args.MPI_Neighbor_alltoallw.recvtypes = (MPI_Datatype(*)) recvtypes; \
-	activity->mpi_args.MPI_Neighbor_alltoallw.comm = (MPI_Comm) comm; \
+	args_MPI_Neighbor_alltoallw_t* args = (args_MPI_Neighbor_alltoallw_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcounts = (int(*)) sendcounts; \
+	args->sdispls = (MPI_Aint(*)) sdispls; \
+	args->sendtypes = (MPI_Datatype(*)) sendtypes; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->rdispls = (MPI_Aint(*)) rdispls; \
+	args->recvtypes = (MPI_Datatype(*)) recvtypes; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Neighbor_alltoallw(args) { \
-	if (args->MPI_Neighbor_alltoallw.sendcounts != NULL) { \
-		args->MPI_Neighbor_alltoallw.sendcounts__ref.val = *args->MPI_Neighbor_alltoallw.sendcounts; \
+	args_MPI_Neighbor_alltoallw_t* pargs = (args_MPI_Neighbor_alltoallw_t*) args; \
+	if (pargs->sendcounts != NULL) { \
+		pargs->sendcounts__ref.val = *pargs->sendcounts; \
 	} \
-	if (args->MPI_Neighbor_alltoallw.sdispls != NULL) { \
-		args->MPI_Neighbor_alltoallw.sdispls__ref.val = *args->MPI_Neighbor_alltoallw.sdispls; \
+	if (pargs->sdispls != NULL) { \
+		pargs->sdispls__ref.val = *pargs->sdispls; \
 	} \
-	if (args->MPI_Neighbor_alltoallw.sendtypes != NULL) { \
-		args->MPI_Neighbor_alltoallw.sendtypes__ref.val = *args->MPI_Neighbor_alltoallw.sendtypes; \
+	if (pargs->sendtypes != NULL) { \
+		pargs->sendtypes__ref.val = *pargs->sendtypes; \
 	} \
-	if (args->MPI_Neighbor_alltoallw.recvcounts != NULL) { \
-		args->MPI_Neighbor_alltoallw.recvcounts__ref.val = *args->MPI_Neighbor_alltoallw.recvcounts; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Neighbor_alltoallw.rdispls != NULL) { \
-		args->MPI_Neighbor_alltoallw.rdispls__ref.val = *args->MPI_Neighbor_alltoallw.rdispls; \
+	if (pargs->rdispls != NULL) { \
+		pargs->rdispls__ref.val = *pargs->rdispls; \
 	} \
-	if (args->MPI_Neighbor_alltoallw.recvtypes != NULL) { \
-		args->MPI_Neighbor_alltoallw.recvtypes__ref.val = *args->MPI_Neighbor_alltoallw.recvtypes; \
+	if (pargs->recvtypes != NULL) { \
+		pargs->recvtypes__ref.val = *pargs->recvtypes; \
 	} \
 };
 
@@ -12981,7 +13455,7 @@ struct args_MPI_Neighbor_alltoallw_t {
  *	)
  */
 #if HAVE_MPI_Iexscan
-struct args_MPI_Iexscan_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int count;
@@ -12993,21 +13467,23 @@ struct args_MPI_Iexscan_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Iexscan_t;
 
 #define GET_ARGS_VALUE_MPI_Iexscan(activity) { \
-	activity->mpi_args.MPI_Iexscan.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Iexscan.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Iexscan.count = (int) count; \
-	activity->mpi_args.MPI_Iexscan.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Iexscan.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Iexscan.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Iexscan.request = (MPI_Request *) request; \
+	args_MPI_Iexscan_t* args = (args_MPI_Iexscan_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Iexscan(args) { \
-	if (args->MPI_Iexscan.request != NULL) { \
-		args->MPI_Iexscan.request__ref.val = *args->MPI_Iexscan.request; \
+	args_MPI_Iexscan_t* pargs = (args_MPI_Iexscan_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -13032,7 +13508,7 @@ struct args_MPI_Iexscan_t {
  *	)
  */
 #if HAVE_MPI_Graph_map
-struct args_MPI_Graph_map_t {
+typedef struct {
 	MPI_Comm comm;
 	int nnodes;
 	int(* index);
@@ -13048,25 +13524,27 @@ struct args_MPI_Graph_map_t {
 		int val;
 	} newrank__ref;
 	int retval;
-};
+} args_MPI_Graph_map_t;
 
 #define GET_ARGS_VALUE_MPI_Graph_map(activity) { \
-	activity->mpi_args.MPI_Graph_map.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Graph_map.nnodes = (int) nnodes; \
-	activity->mpi_args.MPI_Graph_map.index = (int(*)) index; \
-	activity->mpi_args.MPI_Graph_map.edges = (int(*)) edges; \
-	activity->mpi_args.MPI_Graph_map.newrank = (int *) newrank; \
+	args_MPI_Graph_map_t* args = (args_MPI_Graph_map_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->nnodes = (int) nnodes; \
+	args->index = (int(*)) index; \
+	args->edges = (int(*)) edges; \
+	args->newrank = (int *) newrank; \
 };
 
 #define GET_PTRS_VALUE_MPI_Graph_map(args) { \
-	if (args->MPI_Graph_map.index != NULL) { \
-		args->MPI_Graph_map.index__ref.val = *args->MPI_Graph_map.index; \
+	args_MPI_Graph_map_t* pargs = (args_MPI_Graph_map_t*) args; \
+	if (pargs->index != NULL) { \
+		pargs->index__ref.val = *pargs->index; \
 	} \
-	if (args->MPI_Graph_map.edges != NULL) { \
-		args->MPI_Graph_map.edges__ref.val = *args->MPI_Graph_map.edges; \
+	if (pargs->edges != NULL) { \
+		pargs->edges__ref.val = *pargs->edges; \
 	} \
-	if (args->MPI_Graph_map.newrank != NULL) { \
-		args->MPI_Graph_map.newrank__ref.val = *args->MPI_Graph_map.newrank; \
+	if (pargs->newrank != NULL) { \
+		pargs->newrank__ref.val = *pargs->newrank; \
 	} \
 };
 
@@ -13093,7 +13571,7 @@ struct args_MPI_Graph_map_t {
  *	)
  */
 #if HAVE_MPI_Recv_init
-struct args_MPI_Recv_init_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -13105,21 +13583,23 @@ struct args_MPI_Recv_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Recv_init_t;
 
 #define GET_ARGS_VALUE_MPI_Recv_init(activity) { \
-	activity->mpi_args.MPI_Recv_init.buf = (void *) buf; \
-	activity->mpi_args.MPI_Recv_init.count = (int) count; \
-	activity->mpi_args.MPI_Recv_init.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Recv_init.source = (int) source; \
-	activity->mpi_args.MPI_Recv_init.tag = (int) tag; \
-	activity->mpi_args.MPI_Recv_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Recv_init.request = (MPI_Request *) request; \
+	args_MPI_Recv_init_t* args = (args_MPI_Recv_init_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->source = (int) source; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Recv_init(args) { \
-	if (args->MPI_Recv_init.request != NULL) { \
-		args->MPI_Recv_init.request__ref.val = *args->MPI_Recv_init.request; \
+	args_MPI_Recv_init_t* pargs = (args_MPI_Recv_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -13146,7 +13626,7 @@ struct args_MPI_Recv_init_t {
  *	)
  */
 #if HAVE_MPI_Type_create_subarray
-struct args_MPI_Type_create_subarray_t {
+typedef struct {
 	int ndims;
 	int(* size_array);
 	struct {
@@ -13167,30 +13647,32 @@ struct args_MPI_Type_create_subarray_t {
 		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
-};
+} args_MPI_Type_create_subarray_t;
 
 #define GET_ARGS_VALUE_MPI_Type_create_subarray(activity) { \
-	activity->mpi_args.MPI_Type_create_subarray.ndims = (int) ndims; \
-	activity->mpi_args.MPI_Type_create_subarray.size_array = (int(*)) size_array; \
-	activity->mpi_args.MPI_Type_create_subarray.subsize_array = (int(*)) subsize_array; \
-	activity->mpi_args.MPI_Type_create_subarray.start_array = (int(*)) start_array; \
-	activity->mpi_args.MPI_Type_create_subarray.order = (int) order; \
-	activity->mpi_args.MPI_Type_create_subarray.oldtype = (MPI_Datatype) oldtype; \
-	activity->mpi_args.MPI_Type_create_subarray.newtype = (MPI_Datatype *) newtype; \
+	args_MPI_Type_create_subarray_t* args = (args_MPI_Type_create_subarray_t*) activity->args; \
+	args->ndims = (int) ndims; \
+	args->size_array = (int(*)) size_array; \
+	args->subsize_array = (int(*)) subsize_array; \
+	args->start_array = (int(*)) start_array; \
+	args->order = (int) order; \
+	args->oldtype = (MPI_Datatype) oldtype; \
+	args->newtype = (MPI_Datatype *) newtype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_create_subarray(args) { \
-	if (args->MPI_Type_create_subarray.size_array != NULL) { \
-		args->MPI_Type_create_subarray.size_array__ref.val = *args->MPI_Type_create_subarray.size_array; \
+	args_MPI_Type_create_subarray_t* pargs = (args_MPI_Type_create_subarray_t*) args; \
+	if (pargs->size_array != NULL) { \
+		pargs->size_array__ref.val = *pargs->size_array; \
 	} \
-	if (args->MPI_Type_create_subarray.subsize_array != NULL) { \
-		args->MPI_Type_create_subarray.subsize_array__ref.val = *args->MPI_Type_create_subarray.subsize_array; \
+	if (pargs->subsize_array != NULL) { \
+		pargs->subsize_array__ref.val = *pargs->subsize_array; \
 	} \
-	if (args->MPI_Type_create_subarray.start_array != NULL) { \
-		args->MPI_Type_create_subarray.start_array__ref.val = *args->MPI_Type_create_subarray.start_array; \
+	if (pargs->start_array != NULL) { \
+		pargs->start_array__ref.val = *pargs->start_array; \
 	} \
-	if (args->MPI_Type_create_subarray.newtype != NULL) { \
-		args->MPI_Type_create_subarray.newtype__ref.val = *args->MPI_Type_create_subarray.newtype; \
+	if (pargs->newtype != NULL) { \
+		pargs->newtype__ref.val = *pargs->newtype; \
 	} \
 };
 
@@ -13214,7 +13696,7 @@ struct args_MPI_Type_create_subarray_t {
  *	)
  */
 #if HAVE_MPI_Comm_create_group
-struct args_MPI_Comm_create_group_t {
+typedef struct {
 	MPI_Comm comm;
 	MPI_Group group;
 	int tag;
@@ -13223,18 +13705,20 @@ struct args_MPI_Comm_create_group_t {
 		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
-};
+} args_MPI_Comm_create_group_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_create_group(activity) { \
-	activity->mpi_args.MPI_Comm_create_group.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_create_group.group = (MPI_Group) group; \
-	activity->mpi_args.MPI_Comm_create_group.tag = (int) tag; \
-	activity->mpi_args.MPI_Comm_create_group.newcomm = (MPI_Comm *) newcomm; \
+	args_MPI_Comm_create_group_t* args = (args_MPI_Comm_create_group_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->group = (MPI_Group) group; \
+	args->tag = (int) tag; \
+	args->newcomm = (MPI_Comm *) newcomm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_create_group(args) { \
-	if (args->MPI_Comm_create_group.newcomm != NULL) { \
-		args->MPI_Comm_create_group.newcomm__ref.val = *args->MPI_Comm_create_group.newcomm; \
+	args_MPI_Comm_create_group_t* pargs = (args_MPI_Comm_create_group_t*) args; \
+	if (pargs->newcomm != NULL) { \
+		pargs->newcomm__ref.val = *pargs->newcomm; \
 	} \
 };
 
@@ -13263,7 +13747,7 @@ struct args_MPI_Comm_create_group_t {
  *	)
  */
 #if HAVE_MPI_Allgather_init
-struct args_MPI_Allgather_init_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -13277,23 +13761,25 @@ struct args_MPI_Allgather_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Allgather_init_t;
 
 #define GET_ARGS_VALUE_MPI_Allgather_init(activity) { \
-	activity->mpi_args.MPI_Allgather_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Allgather_init.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Allgather_init.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Allgather_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Allgather_init.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Allgather_init.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Allgather_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Allgather_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Allgather_init.request = (MPI_Request *) request; \
+	args_MPI_Allgather_init_t* args = (args_MPI_Allgather_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Allgather_init(args) { \
-	if (args->MPI_Allgather_init.request != NULL) { \
-		args->MPI_Allgather_init.request__ref.val = *args->MPI_Allgather_init.request; \
+	args_MPI_Allgather_init_t* pargs = (args_MPI_Allgather_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -13321,7 +13807,7 @@ struct args_MPI_Allgather_init_t {
  *	)
  */
 #if HAVE_MPI_Reduce_scatter_block_init
-struct args_MPI_Reduce_scatter_block_init_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int recvcount;
@@ -13334,22 +13820,24 @@ struct args_MPI_Reduce_scatter_block_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Reduce_scatter_block_init_t;
 
 #define GET_ARGS_VALUE_MPI_Reduce_scatter_block_init(activity) { \
-	activity->mpi_args.MPI_Reduce_scatter_block_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Reduce_scatter_block_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Reduce_scatter_block_init.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Reduce_scatter_block_init.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Reduce_scatter_block_init.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Reduce_scatter_block_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Reduce_scatter_block_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Reduce_scatter_block_init.request = (MPI_Request *) request; \
+	args_MPI_Reduce_scatter_block_init_t* args = (args_MPI_Reduce_scatter_block_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Reduce_scatter_block_init(args) { \
-	if (args->MPI_Reduce_scatter_block_init.request != NULL) { \
-		args->MPI_Reduce_scatter_block_init.request__ref.val = *args->MPI_Reduce_scatter_block_init.request; \
+	args_MPI_Reduce_scatter_block_init_t* pargs = (args_MPI_Reduce_scatter_block_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -13372,7 +13860,7 @@ struct args_MPI_Reduce_scatter_block_init_t {
  *	)
  */
 #if HAVE_MPI_Type_match_size
-struct args_MPI_Type_match_size_t {
+typedef struct {
 	int typeclass;
 	int size;
 	MPI_Datatype * type;
@@ -13380,17 +13868,19 @@ struct args_MPI_Type_match_size_t {
 		MPI_Datatype val;
 	} type__ref;
 	int retval;
-};
+} args_MPI_Type_match_size_t;
 
 #define GET_ARGS_VALUE_MPI_Type_match_size(activity) { \
-	activity->mpi_args.MPI_Type_match_size.typeclass = (int) typeclass; \
-	activity->mpi_args.MPI_Type_match_size.size = (int) size; \
-	activity->mpi_args.MPI_Type_match_size.type = (MPI_Datatype *) type; \
+	args_MPI_Type_match_size_t* args = (args_MPI_Type_match_size_t*) activity->args; \
+	args->typeclass = (int) typeclass; \
+	args->size = (int) size; \
+	args->type = (MPI_Datatype *) type; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_match_size(args) { \
-	if (args->MPI_Type_match_size.type != NULL) { \
-		args->MPI_Type_match_size.type__ref.val = *args->MPI_Type_match_size.type; \
+	args_MPI_Type_match_size_t* pargs = (args_MPI_Type_match_size_t*) args; \
+	if (pargs->type != NULL) { \
+		pargs->type__ref.val = *pargs->type; \
 	} \
 };
 
@@ -13413,7 +13903,7 @@ struct args_MPI_Type_match_size_t {
  *	)
  */
 #if HAVE_MPI_Type_get_true_extent
-struct args_MPI_Type_get_true_extent_t {
+typedef struct {
 	MPI_Datatype datatype;
 	MPI_Aint * true_lb;
 	struct {
@@ -13424,20 +13914,22 @@ struct args_MPI_Type_get_true_extent_t {
 		MPI_Aint val;
 	} true_extent__ref;
 	int retval;
-};
+} args_MPI_Type_get_true_extent_t;
 
 #define GET_ARGS_VALUE_MPI_Type_get_true_extent(activity) { \
-	activity->mpi_args.MPI_Type_get_true_extent.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Type_get_true_extent.true_lb = (MPI_Aint *) true_lb; \
-	activity->mpi_args.MPI_Type_get_true_extent.true_extent = (MPI_Aint *) true_extent; \
+	args_MPI_Type_get_true_extent_t* args = (args_MPI_Type_get_true_extent_t*) activity->args; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->true_lb = (MPI_Aint *) true_lb; \
+	args->true_extent = (MPI_Aint *) true_extent; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_get_true_extent(args) { \
-	if (args->MPI_Type_get_true_extent.true_lb != NULL) { \
-		args->MPI_Type_get_true_extent.true_lb__ref.val = *args->MPI_Type_get_true_extent.true_lb; \
+	args_MPI_Type_get_true_extent_t* pargs = (args_MPI_Type_get_true_extent_t*) args; \
+	if (pargs->true_lb != NULL) { \
+		pargs->true_lb__ref.val = *pargs->true_lb; \
 	} \
-	if (args->MPI_Type_get_true_extent.true_extent != NULL) { \
-		args->MPI_Type_get_true_extent.true_extent__ref.val = *args->MPI_Type_get_true_extent.true_extent; \
+	if (pargs->true_extent != NULL) { \
+		pargs->true_extent__ref.val = *pargs->true_extent; \
 	} \
 };
 
@@ -13466,7 +13958,7 @@ struct args_MPI_Type_get_true_extent_t {
  *	)
  */
 #if HAVE_MPI_Alltoall_init
-struct args_MPI_Alltoall_init_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -13480,23 +13972,25 @@ struct args_MPI_Alltoall_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Alltoall_init_t;
 
 #define GET_ARGS_VALUE_MPI_Alltoall_init(activity) { \
-	activity->mpi_args.MPI_Alltoall_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Alltoall_init.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Alltoall_init.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Alltoall_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Alltoall_init.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Alltoall_init.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Alltoall_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Alltoall_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Alltoall_init.request = (MPI_Request *) request; \
+	args_MPI_Alltoall_init_t* args = (args_MPI_Alltoall_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Alltoall_init(args) { \
-	if (args->MPI_Alltoall_init.request != NULL) { \
-		args->MPI_Alltoall_init.request__ref.val = *args->MPI_Alltoall_init.request; \
+	args_MPI_Alltoall_init_t* pargs = (args_MPI_Alltoall_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -13523,7 +14017,7 @@ struct args_MPI_Alltoall_init_t {
  *	)
  */
 #if HAVE_MPI_Send_init
-struct args_MPI_Send_init_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -13535,21 +14029,23 @@ struct args_MPI_Send_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Send_init_t;
 
 #define GET_ARGS_VALUE_MPI_Send_init(activity) { \
-	activity->mpi_args.MPI_Send_init.buf = (void *) buf; \
-	activity->mpi_args.MPI_Send_init.count = (int) count; \
-	activity->mpi_args.MPI_Send_init.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Send_init.dest = (int) dest; \
-	activity->mpi_args.MPI_Send_init.tag = (int) tag; \
-	activity->mpi_args.MPI_Send_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Send_init.request = (MPI_Request *) request; \
+	args_MPI_Send_init_t* args = (args_MPI_Send_init_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->dest = (int) dest; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Send_init(args) { \
-	if (args->MPI_Send_init.request != NULL) { \
-		args->MPI_Send_init.request__ref.val = *args->MPI_Send_init.request; \
+	args_MPI_Send_init_t* pargs = (args_MPI_Send_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -13578,7 +14074,7 @@ struct args_MPI_Send_init_t {
  *	)
  */
 #if HAVE_MPI_Neighbor_allgather_init
-struct args_MPI_Neighbor_allgather_init_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -13592,23 +14088,25 @@ struct args_MPI_Neighbor_allgather_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Neighbor_allgather_init_t;
 
 #define GET_ARGS_VALUE_MPI_Neighbor_allgather_init(activity) { \
-	activity->mpi_args.MPI_Neighbor_allgather_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Neighbor_allgather_init.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Neighbor_allgather_init.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Neighbor_allgather_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Neighbor_allgather_init.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Neighbor_allgather_init.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Neighbor_allgather_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Neighbor_allgather_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Neighbor_allgather_init.request = (MPI_Request *) request; \
+	args_MPI_Neighbor_allgather_init_t* args = (args_MPI_Neighbor_allgather_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Neighbor_allgather_init(args) { \
-	if (args->MPI_Neighbor_allgather_init.request != NULL) { \
-		args->MPI_Neighbor_allgather_init.request__ref.val = *args->MPI_Neighbor_allgather_init.request; \
+	args_MPI_Neighbor_allgather_init_t* pargs = (args_MPI_Neighbor_allgather_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -13634,7 +14132,7 @@ struct args_MPI_Neighbor_allgather_init_t {
  *	)
  */
 #if HAVE_MPI_Ibcast
-struct args_MPI_Ibcast_t {
+typedef struct {
 	void * buffer;
 	int count;
 	MPI_Datatype datatype;
@@ -13645,20 +14143,22 @@ struct args_MPI_Ibcast_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Ibcast_t;
 
 #define GET_ARGS_VALUE_MPI_Ibcast(activity) { \
-	activity->mpi_args.MPI_Ibcast.buffer = (void *) buffer; \
-	activity->mpi_args.MPI_Ibcast.count = (int) count; \
-	activity->mpi_args.MPI_Ibcast.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Ibcast.root = (int) root; \
-	activity->mpi_args.MPI_Ibcast.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Ibcast.request = (MPI_Request *) request; \
+	args_MPI_Ibcast_t* args = (args_MPI_Ibcast_t*) activity->args; \
+	args->buffer = (void *) buffer; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Ibcast(args) { \
-	if (args->MPI_Ibcast.request != NULL) { \
-		args->MPI_Ibcast.request__ref.val = *args->MPI_Ibcast.request; \
+	args_MPI_Ibcast_t* pargs = (args_MPI_Ibcast_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -13683,7 +14183,7 @@ struct args_MPI_Ibcast_t {
  *	)
  */
 #if HAVE_MPI_File_iread
-struct args_MPI_File_iread_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
@@ -13693,19 +14193,21 @@ struct args_MPI_File_iread_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_File_iread_t;
 
 #define GET_ARGS_VALUE_MPI_File_iread(activity) { \
-	activity->mpi_args.MPI_File_iread.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_iread.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_iread.count = (int) count; \
-	activity->mpi_args.MPI_File_iread.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_iread.request = (MPI_Request *) request; \
+	args_MPI_File_iread_t* args = (args_MPI_File_iread_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_iread(args) { \
-	if (args->MPI_File_iread.request != NULL) { \
-		args->MPI_File_iread.request__ref.val = *args->MPI_File_iread.request; \
+	args_MPI_File_iread_t* pargs = (args_MPI_File_iread_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -13734,7 +14236,7 @@ struct args_MPI_File_iread_t {
  *	)
  */
 #if HAVE_MPI_Neighbor_alltoall_init
-struct args_MPI_Neighbor_alltoall_init_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -13748,23 +14250,25 @@ struct args_MPI_Neighbor_alltoall_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Neighbor_alltoall_init_t;
 
 #define GET_ARGS_VALUE_MPI_Neighbor_alltoall_init(activity) { \
-	activity->mpi_args.MPI_Neighbor_alltoall_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Neighbor_alltoall_init.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Neighbor_alltoall_init.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Neighbor_alltoall_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Neighbor_alltoall_init.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Neighbor_alltoall_init.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Neighbor_alltoall_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Neighbor_alltoall_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Neighbor_alltoall_init.request = (MPI_Request *) request; \
+	args_MPI_Neighbor_alltoall_init_t* args = (args_MPI_Neighbor_alltoall_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Neighbor_alltoall_init(args) { \
-	if (args->MPI_Neighbor_alltoall_init.request != NULL) { \
-		args->MPI_Neighbor_alltoall_init.request__ref.val = *args->MPI_Neighbor_alltoall_init.request; \
+	args_MPI_Neighbor_alltoall_init_t* pargs = (args_MPI_Neighbor_alltoall_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -13787,7 +14291,7 @@ struct args_MPI_Neighbor_alltoall_init_t {
  *	)
  */
 #if HAVE_MPI_Cart_rank
-struct args_MPI_Cart_rank_t {
+typedef struct {
 	MPI_Comm comm;
 	int(* coords);
 	struct {
@@ -13798,20 +14302,22 @@ struct args_MPI_Cart_rank_t {
 		int val;
 	} rank__ref;
 	int retval;
-};
+} args_MPI_Cart_rank_t;
 
 #define GET_ARGS_VALUE_MPI_Cart_rank(activity) { \
-	activity->mpi_args.MPI_Cart_rank.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Cart_rank.coords = (int(*)) coords; \
-	activity->mpi_args.MPI_Cart_rank.rank = (int *) rank; \
+	args_MPI_Cart_rank_t* args = (args_MPI_Cart_rank_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->coords = (int(*)) coords; \
+	args->rank = (int *) rank; \
 };
 
 #define GET_PTRS_VALUE_MPI_Cart_rank(args) { \
-	if (args->MPI_Cart_rank.coords != NULL) { \
-		args->MPI_Cart_rank.coords__ref.val = *args->MPI_Cart_rank.coords; \
+	args_MPI_Cart_rank_t* pargs = (args_MPI_Cart_rank_t*) args; \
+	if (pargs->coords != NULL) { \
+		pargs->coords__ref.val = *pargs->coords; \
 	} \
-	if (args->MPI_Cart_rank.rank != NULL) { \
-		args->MPI_Cart_rank.rank__ref.val = *args->MPI_Cart_rank.rank; \
+	if (pargs->rank != NULL) { \
+		pargs->rank__ref.val = *pargs->rank; \
 	} \
 };
 
@@ -13834,7 +14340,7 @@ struct args_MPI_Cart_rank_t {
  *	)
  */
 #if HAVE_MPI_Publish_name
-struct args_MPI_Publish_name_t {
+typedef struct {
 	char * service_name;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
@@ -13845,20 +14351,22 @@ struct args_MPI_Publish_name_t {
 		char val[MPI_STRING_SIZE_MAX];
 	} port_name__ref;
 	int retval;
-};
+} args_MPI_Publish_name_t;
 
 #define GET_ARGS_VALUE_MPI_Publish_name(activity) { \
-	activity->mpi_args.MPI_Publish_name.service_name = (char *) service_name; \
-	activity->mpi_args.MPI_Publish_name.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Publish_name.port_name = (char *) port_name; \
+	args_MPI_Publish_name_t* args = (args_MPI_Publish_name_t*) activity->args; \
+	args->service_name = (char *) service_name; \
+	args->info = (MPI_Info) info; \
+	args->port_name = (char *) port_name; \
 };
 
 #define GET_PTRS_VALUE_MPI_Publish_name(args) { \
-	if (args->MPI_Publish_name.service_name != NULL) { \
-		strncpy(args->MPI_Publish_name.service_name__ref.val, args->MPI_Publish_name.service_name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Publish_name_t* pargs = (args_MPI_Publish_name_t*) args; \
+	if (pargs->service_name != NULL) { \
+		strncpy(pargs->service_name__ref.val, pargs->service_name, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Publish_name.port_name != NULL) { \
-		strncpy(args->MPI_Publish_name.port_name__ref.val, args->MPI_Publish_name.port_name, MPI_STRING_SIZE_MAX-1); \
+	if (pargs->port_name != NULL) { \
+		strncpy(pargs->port_name__ref.val, pargs->port_name, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -13881,17 +14389,18 @@ struct args_MPI_Publish_name_t {
  *	)
  */
 #if HAVE_MPI_Win_set_attr
-struct args_MPI_Win_set_attr_t {
+typedef struct {
 	MPI_Win win;
 	int win_keyval;
 	void * attribute_val;
 	int retval;
-};
+} args_MPI_Win_set_attr_t;
 
 #define GET_ARGS_VALUE_MPI_Win_set_attr(activity) { \
-	activity->mpi_args.MPI_Win_set_attr.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Win_set_attr.win_keyval = (int) win_keyval; \
-	activity->mpi_args.MPI_Win_set_attr.attribute_val = (void *) attribute_val; \
+	args_MPI_Win_set_attr_t* args = (args_MPI_Win_set_attr_t*) activity->args; \
+	args->win = (MPI_Win) win; \
+	args->win_keyval = (int) win_keyval; \
+	args->attribute_val = (void *) attribute_val; \
 };
 
 #endif
@@ -13911,13 +14420,14 @@ struct args_MPI_Win_set_attr_t {
  *	)
  */
 #if HAVE_MPI_Win_sync
-struct args_MPI_Win_sync_t {
+typedef struct {
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Win_sync_t;
 
 #define GET_ARGS_VALUE_MPI_Win_sync(activity) { \
-	activity->mpi_args.MPI_Win_sync.win = (MPI_Win) win; \
+	args_MPI_Win_sync_t* args = (args_MPI_Win_sync_t*) activity->args; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -13937,21 +14447,23 @@ struct args_MPI_Win_sync_t {
  *	)
  */
 #if HAVE_MPI_Type_free_keyval
-struct args_MPI_Type_free_keyval_t {
+typedef struct {
 	int * type_keyval;
 	struct {
 		int val;
 	} type_keyval__ref;
 	int retval;
-};
+} args_MPI_Type_free_keyval_t;
 
 #define GET_ARGS_VALUE_MPI_Type_free_keyval(activity) { \
-	activity->mpi_args.MPI_Type_free_keyval.type_keyval = (int *) type_keyval; \
+	args_MPI_Type_free_keyval_t* args = (args_MPI_Type_free_keyval_t*) activity->args; \
+	args->type_keyval = (int *) type_keyval; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_free_keyval(args) { \
-	if (args->MPI_Type_free_keyval.type_keyval != NULL) { \
-		args->MPI_Type_free_keyval.type_keyval__ref.val = *args->MPI_Type_free_keyval.type_keyval; \
+	args_MPI_Type_free_keyval_t* pargs = (args_MPI_Type_free_keyval_t*) args; \
+	if (pargs->type_keyval != NULL) { \
+		pargs->type_keyval__ref.val = *pargs->type_keyval; \
 	} \
 };
 
@@ -13976,7 +14488,7 @@ struct args_MPI_Type_free_keyval_t {
  *	)
  */
 #if HAVE_MPI_File_write
-struct args_MPI_File_write_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
@@ -13986,19 +14498,21 @@ struct args_MPI_File_write_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_write_t;
 
 #define GET_ARGS_VALUE_MPI_File_write(activity) { \
-	activity->mpi_args.MPI_File_write.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_write.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_write.count = (int) count; \
-	activity->mpi_args.MPI_File_write.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_write.status = (MPI_Status *) status; \
+	args_MPI_File_write_t* args = (args_MPI_File_write_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_write(args) { \
-	if (args->MPI_File_write.status != NULL) { \
-		args->MPI_File_write.status__ref.val = *args->MPI_File_write.status; \
+	args_MPI_File_write_t* pargs = (args_MPI_File_write_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -14023,7 +14537,7 @@ struct args_MPI_File_write_t {
  *	)
  */
 #if HAVE_MPI_Register_datarep
-struct args_MPI_Register_datarep_t {
+typedef struct {
 	char * datarep;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
@@ -14033,19 +14547,21 @@ struct args_MPI_Register_datarep_t {
 	MPI_Datarep_extent_function * dtype_file_extent_fn;
 	void * extra_state;
 	int retval;
-};
+} args_MPI_Register_datarep_t;
 
 #define GET_ARGS_VALUE_MPI_Register_datarep(activity) { \
-	activity->mpi_args.MPI_Register_datarep.datarep = (char *) datarep; \
-	activity->mpi_args.MPI_Register_datarep.read_conversion_fn = (MPI_Datarep_conversion_function *) read_conversion_fn; \
-	activity->mpi_args.MPI_Register_datarep.write_conversion_fn = (MPI_Datarep_conversion_function *) write_conversion_fn; \
-	activity->mpi_args.MPI_Register_datarep.dtype_file_extent_fn = (MPI_Datarep_extent_function *) dtype_file_extent_fn; \
-	activity->mpi_args.MPI_Register_datarep.extra_state = (void *) extra_state; \
+	args_MPI_Register_datarep_t* args = (args_MPI_Register_datarep_t*) activity->args; \
+	args->datarep = (char *) datarep; \
+	args->read_conversion_fn = (MPI_Datarep_conversion_function *) read_conversion_fn; \
+	args->write_conversion_fn = (MPI_Datarep_conversion_function *) write_conversion_fn; \
+	args->dtype_file_extent_fn = (MPI_Datarep_extent_function *) dtype_file_extent_fn; \
+	args->extra_state = (void *) extra_state; \
 };
 
 #define GET_PTRS_VALUE_MPI_Register_datarep(args) { \
-	if (args->MPI_Register_datarep.datarep != NULL) { \
-		strncpy(args->MPI_Register_datarep.datarep__ref.val, args->MPI_Register_datarep.datarep, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Register_datarep_t* pargs = (args_MPI_Register_datarep_t*) args; \
+	if (pargs->datarep != NULL) { \
+		strncpy(pargs->datarep__ref.val, pargs->datarep, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -14073,7 +14589,7 @@ struct args_MPI_Register_datarep_t {
  *	)
  */
 #if HAVE_MPI_Ineighbor_alltoall
-struct args_MPI_Ineighbor_alltoall_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -14086,22 +14602,24 @@ struct args_MPI_Ineighbor_alltoall_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Ineighbor_alltoall_t;
 
 #define GET_ARGS_VALUE_MPI_Ineighbor_alltoall(activity) { \
-	activity->mpi_args.MPI_Ineighbor_alltoall.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Ineighbor_alltoall.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Ineighbor_alltoall.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Ineighbor_alltoall.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Ineighbor_alltoall.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Ineighbor_alltoall.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Ineighbor_alltoall.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Ineighbor_alltoall.request = (MPI_Request *) request; \
+	args_MPI_Ineighbor_alltoall_t* args = (args_MPI_Ineighbor_alltoall_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Ineighbor_alltoall(args) { \
-	if (args->MPI_Ineighbor_alltoall.request != NULL) { \
-		args->MPI_Ineighbor_alltoall.request__ref.val = *args->MPI_Ineighbor_alltoall.request; \
+	args_MPI_Ineighbor_alltoall_t* pargs = (args_MPI_Ineighbor_alltoall_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -14123,15 +14641,16 @@ struct args_MPI_Ineighbor_alltoall_t {
  *	)
  */
 #if HAVE_MPI_File_preallocate
-struct args_MPI_File_preallocate_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset size;
 	int retval;
-};
+} args_MPI_File_preallocate_t;
 
 #define GET_ARGS_VALUE_MPI_File_preallocate(activity) { \
-	activity->mpi_args.MPI_File_preallocate.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_preallocate.size = (MPI_Offset) size; \
+	args_MPI_File_preallocate_t* args = (args_MPI_File_preallocate_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->size = (MPI_Offset) size; \
 };
 
 #endif
@@ -14159,7 +14678,7 @@ struct args_MPI_File_preallocate_t {
  *	)
  */
 #if HAVE_MPI_Iallgatherv
-struct args_MPI_Iallgatherv_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -14179,29 +14698,31 @@ struct args_MPI_Iallgatherv_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Iallgatherv_t;
 
 #define GET_ARGS_VALUE_MPI_Iallgatherv(activity) { \
-	activity->mpi_args.MPI_Iallgatherv.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Iallgatherv.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Iallgatherv.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Iallgatherv.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Iallgatherv.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Iallgatherv.displs = (int(*)) displs; \
-	activity->mpi_args.MPI_Iallgatherv.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Iallgatherv.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Iallgatherv.request = (MPI_Request *) request; \
+	args_MPI_Iallgatherv_t* args = (args_MPI_Iallgatherv_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->displs = (int(*)) displs; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Iallgatherv(args) { \
-	if (args->MPI_Iallgatherv.recvcounts != NULL) { \
-		args->MPI_Iallgatherv.recvcounts__ref.val = *args->MPI_Iallgatherv.recvcounts; \
+	args_MPI_Iallgatherv_t* pargs = (args_MPI_Iallgatherv_t*) args; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Iallgatherv.displs != NULL) { \
-		args->MPI_Iallgatherv.displs__ref.val = *args->MPI_Iallgatherv.displs; \
+	if (pargs->displs != NULL) { \
+		pargs->displs__ref.val = *pargs->displs; \
 	} \
-	if (args->MPI_Iallgatherv.request != NULL) { \
-		args->MPI_Iallgatherv.request__ref.val = *args->MPI_Iallgatherv.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -14231,7 +14752,7 @@ struct args_MPI_Iallgatherv_t {
  *	)
  */
 #if HAVE_MPI_Neighbor_allgatherv_init
-struct args_MPI_Neighbor_allgatherv_init_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -14252,30 +14773,32 @@ struct args_MPI_Neighbor_allgatherv_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Neighbor_allgatherv_init_t;
 
 #define GET_ARGS_VALUE_MPI_Neighbor_allgatherv_init(activity) { \
-	activity->mpi_args.MPI_Neighbor_allgatherv_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Neighbor_allgatherv_init.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Neighbor_allgatherv_init.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Neighbor_allgatherv_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Neighbor_allgatherv_init.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Neighbor_allgatherv_init.displs = (int(*)) displs; \
-	activity->mpi_args.MPI_Neighbor_allgatherv_init.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Neighbor_allgatherv_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Neighbor_allgatherv_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Neighbor_allgatherv_init.request = (MPI_Request *) request; \
+	args_MPI_Neighbor_allgatherv_init_t* args = (args_MPI_Neighbor_allgatherv_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->displs = (int(*)) displs; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Neighbor_allgatherv_init(args) { \
-	if (args->MPI_Neighbor_allgatherv_init.recvcounts != NULL) { \
-		args->MPI_Neighbor_allgatherv_init.recvcounts__ref.val = *args->MPI_Neighbor_allgatherv_init.recvcounts; \
+	args_MPI_Neighbor_allgatherv_init_t* pargs = (args_MPI_Neighbor_allgatherv_init_t*) args; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Neighbor_allgatherv_init.displs != NULL) { \
-		args->MPI_Neighbor_allgatherv_init.displs__ref.val = *args->MPI_Neighbor_allgatherv_init.displs; \
+	if (pargs->displs != NULL) { \
+		pargs->displs__ref.val = *pargs->displs; \
 	} \
-	if (args->MPI_Neighbor_allgatherv_init.request != NULL) { \
-		args->MPI_Neighbor_allgatherv_init.request__ref.val = *args->MPI_Neighbor_allgatherv_init.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -14300,7 +14823,7 @@ struct args_MPI_Neighbor_allgatherv_init_t {
  *	)
  */
 #if HAVE_MPI_Iprobe
-struct args_MPI_Iprobe_t {
+typedef struct {
 	int source;
 	int tag;
 	MPI_Comm comm;
@@ -14313,22 +14836,24 @@ struct args_MPI_Iprobe_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_Iprobe_t;
 
 #define GET_ARGS_VALUE_MPI_Iprobe(activity) { \
-	activity->mpi_args.MPI_Iprobe.source = (int) source; \
-	activity->mpi_args.MPI_Iprobe.tag = (int) tag; \
-	activity->mpi_args.MPI_Iprobe.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Iprobe.flag = (int *) flag; \
-	activity->mpi_args.MPI_Iprobe.status = (MPI_Status *) status; \
+	args_MPI_Iprobe_t* args = (args_MPI_Iprobe_t*) activity->args; \
+	args->source = (int) source; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->flag = (int *) flag; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Iprobe(args) { \
-	if (args->MPI_Iprobe.flag != NULL) { \
-		args->MPI_Iprobe.flag__ref.val = *args->MPI_Iprobe.flag; \
+	args_MPI_Iprobe_t* pargs = (args_MPI_Iprobe_t*) args; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
-	if (args->MPI_Iprobe.status != NULL) { \
-		args->MPI_Iprobe.status__ref.val = *args->MPI_Iprobe.status; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -14351,7 +14876,7 @@ struct args_MPI_Iprobe_t {
  *	)
  */
 #if HAVE_MPI_Type_get_true_extent_x
-struct args_MPI_Type_get_true_extent_x_t {
+typedef struct {
 	MPI_Datatype datatype;
 	MPI_Count * true_lb;
 	struct {
@@ -14362,20 +14887,22 @@ struct args_MPI_Type_get_true_extent_x_t {
 		MPI_Count val;
 	} true_extent__ref;
 	int retval;
-};
+} args_MPI_Type_get_true_extent_x_t;
 
 #define GET_ARGS_VALUE_MPI_Type_get_true_extent_x(activity) { \
-	activity->mpi_args.MPI_Type_get_true_extent_x.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Type_get_true_extent_x.true_lb = (MPI_Count *) true_lb; \
-	activity->mpi_args.MPI_Type_get_true_extent_x.true_extent = (MPI_Count *) true_extent; \
+	args_MPI_Type_get_true_extent_x_t* args = (args_MPI_Type_get_true_extent_x_t*) activity->args; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->true_lb = (MPI_Count *) true_lb; \
+	args->true_extent = (MPI_Count *) true_extent; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_get_true_extent_x(args) { \
-	if (args->MPI_Type_get_true_extent_x.true_lb != NULL) { \
-		args->MPI_Type_get_true_extent_x.true_lb__ref.val = *args->MPI_Type_get_true_extent_x.true_lb; \
+	args_MPI_Type_get_true_extent_x_t* pargs = (args_MPI_Type_get_true_extent_x_t*) args; \
+	if (pargs->true_lb != NULL) { \
+		pargs->true_lb__ref.val = *pargs->true_lb; \
 	} \
-	if (args->MPI_Type_get_true_extent_x.true_extent != NULL) { \
-		args->MPI_Type_get_true_extent_x.true_extent__ref.val = *args->MPI_Type_get_true_extent_x.true_extent; \
+	if (pargs->true_extent != NULL) { \
+		pargs->true_extent__ref.val = *pargs->true_extent; \
 	} \
 };
 
@@ -14396,13 +14923,14 @@ struct args_MPI_Type_get_true_extent_x_t {
  *	)
  */
 #if HAVE_MPI_Win_complete
-struct args_MPI_Win_complete_t {
+typedef struct {
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Win_complete_t;
 
 #define GET_ARGS_VALUE_MPI_Win_complete(activity) { \
-	activity->mpi_args.MPI_Win_complete.win = (MPI_Win) win; \
+	args_MPI_Win_complete_t* args = (args_MPI_Win_complete_t*) activity->args; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -14423,15 +14951,16 @@ struct args_MPI_Win_complete_t {
  *	)
  */
 #if HAVE_MPI_File_set_atomicity
-struct args_MPI_File_set_atomicity_t {
+typedef struct {
 	MPI_File fh;
 	int flag;
 	int retval;
-};
+} args_MPI_File_set_atomicity_t;
 
 #define GET_ARGS_VALUE_MPI_File_set_atomicity(activity) { \
-	activity->mpi_args.MPI_File_set_atomicity.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_set_atomicity.flag = (int) flag; \
+	args_MPI_File_set_atomicity_t* args = (args_MPI_File_set_atomicity_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->flag = (int) flag; \
 };
 
 #endif
@@ -14457,7 +14986,7 @@ struct args_MPI_File_set_atomicity_t {
  *	)
  */
 #if HAVE_MPI_Unpack_external
-struct args_MPI_Unpack_external_t {
+typedef struct {
 	char(* datarep);
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
@@ -14472,24 +15001,26 @@ struct args_MPI_Unpack_external_t {
 	int outcount;
 	MPI_Datatype datatype;
 	int retval;
-};
+} args_MPI_Unpack_external_t;
 
 #define GET_ARGS_VALUE_MPI_Unpack_external(activity) { \
-	activity->mpi_args.MPI_Unpack_external.datarep = (char(*)) datarep; \
-	activity->mpi_args.MPI_Unpack_external.inbuf = (void *) inbuf; \
-	activity->mpi_args.MPI_Unpack_external.insize = (MPI_Aint) insize; \
-	activity->mpi_args.MPI_Unpack_external.position = (MPI_Aint *) position; \
-	activity->mpi_args.MPI_Unpack_external.outbuf = (void *) outbuf; \
-	activity->mpi_args.MPI_Unpack_external.outcount = (int) outcount; \
-	activity->mpi_args.MPI_Unpack_external.datatype = (MPI_Datatype) datatype; \
+	args_MPI_Unpack_external_t* args = (args_MPI_Unpack_external_t*) activity->args; \
+	args->datarep = (char(*)) datarep; \
+	args->inbuf = (void *) inbuf; \
+	args->insize = (MPI_Aint) insize; \
+	args->position = (MPI_Aint *) position; \
+	args->outbuf = (void *) outbuf; \
+	args->outcount = (int) outcount; \
+	args->datatype = (MPI_Datatype) datatype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Unpack_external(args) { \
-	if (args->MPI_Unpack_external.datarep != NULL) { \
-		strncpy(args->MPI_Unpack_external.datarep__ref.val, args->MPI_Unpack_external.datarep, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Unpack_external_t* pargs = (args_MPI_Unpack_external_t*) args; \
+	if (pargs->datarep != NULL) { \
+		strncpy(pargs->datarep__ref.val, pargs->datarep, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Unpack_external.position != NULL) { \
-		args->MPI_Unpack_external.position__ref.val = *args->MPI_Unpack_external.position; \
+	if (pargs->position != NULL) { \
+		pargs->position__ref.val = *pargs->position; \
 	} \
 };
 
@@ -14514,7 +15045,7 @@ struct args_MPI_Unpack_external_t {
  *	)
  */
 #if HAVE_MPI_Mprobe
-struct args_MPI_Mprobe_t {
+typedef struct {
 	int source;
 	int tag;
 	MPI_Comm comm;
@@ -14527,22 +15058,24 @@ struct args_MPI_Mprobe_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_Mprobe_t;
 
 #define GET_ARGS_VALUE_MPI_Mprobe(activity) { \
-	activity->mpi_args.MPI_Mprobe.source = (int) source; \
-	activity->mpi_args.MPI_Mprobe.tag = (int) tag; \
-	activity->mpi_args.MPI_Mprobe.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Mprobe.message = (MPI_Message *) message; \
-	activity->mpi_args.MPI_Mprobe.status = (MPI_Status *) status; \
+	args_MPI_Mprobe_t* args = (args_MPI_Mprobe_t*) activity->args; \
+	args->source = (int) source; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->message = (MPI_Message *) message; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Mprobe(args) { \
-	if (args->MPI_Mprobe.message != NULL) { \
-		args->MPI_Mprobe.message__ref.val = *args->MPI_Mprobe.message; \
+	args_MPI_Mprobe_t* pargs = (args_MPI_Mprobe_t*) args; \
+	if (pargs->message != NULL) { \
+		pargs->message__ref.val = *pargs->message; \
 	} \
-	if (args->MPI_Mprobe.status != NULL) { \
-		args->MPI_Mprobe.status__ref.val = *args->MPI_Mprobe.status; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -14564,23 +15097,25 @@ struct args_MPI_Mprobe_t {
  *	)
  */
 #if HAVE_MPI_Add_error_code
-struct args_MPI_Add_error_code_t {
+typedef struct {
 	int errorclass;
 	int * errorcode;
 	struct {
 		int val;
 	} errorcode__ref;
 	int retval;
-};
+} args_MPI_Add_error_code_t;
 
 #define GET_ARGS_VALUE_MPI_Add_error_code(activity) { \
-	activity->mpi_args.MPI_Add_error_code.errorclass = (int) errorclass; \
-	activity->mpi_args.MPI_Add_error_code.errorcode = (int *) errorcode; \
+	args_MPI_Add_error_code_t* args = (args_MPI_Add_error_code_t*) activity->args; \
+	args->errorclass = (int) errorclass; \
+	args->errorcode = (int *) errorcode; \
 };
 
 #define GET_PTRS_VALUE_MPI_Add_error_code(args) { \
-	if (args->MPI_Add_error_code.errorcode != NULL) { \
-		args->MPI_Add_error_code.errorcode__ref.val = *args->MPI_Add_error_code.errorcode; \
+	args_MPI_Add_error_code_t* pargs = (args_MPI_Add_error_code_t*) args; \
+	if (pargs->errorcode != NULL) { \
+		pargs->errorcode__ref.val = *pargs->errorcode; \
 	} \
 };
 
@@ -14602,15 +15137,16 @@ struct args_MPI_Add_error_code_t {
  *	)
  */
 #if HAVE_MPI_Win_delete_attr
-struct args_MPI_Win_delete_attr_t {
+typedef struct {
 	MPI_Win win;
 	int win_keyval;
 	int retval;
-};
+} args_MPI_Win_delete_attr_t;
 
 #define GET_ARGS_VALUE_MPI_Win_delete_attr(activity) { \
-	activity->mpi_args.MPI_Win_delete_attr.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Win_delete_attr.win_keyval = (int) win_keyval; \
+	args_MPI_Win_delete_attr_t* args = (args_MPI_Win_delete_attr_t*) activity->args; \
+	args->win = (MPI_Win) win; \
+	args->win_keyval = (int) win_keyval; \
 };
 
 #endif
@@ -14635,7 +15171,7 @@ struct args_MPI_Win_delete_attr_t {
  *	)
  */
 #if HAVE_MPI_File_read_at_all
-struct args_MPI_File_read_at_all_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset offset;
 	void * buf;
@@ -14646,20 +15182,22 @@ struct args_MPI_File_read_at_all_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_read_at_all_t;
 
 #define GET_ARGS_VALUE_MPI_File_read_at_all(activity) { \
-	activity->mpi_args.MPI_File_read_at_all.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_read_at_all.offset = (MPI_Offset) offset; \
-	activity->mpi_args.MPI_File_read_at_all.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_read_at_all.count = (int) count; \
-	activity->mpi_args.MPI_File_read_at_all.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_read_at_all.status = (MPI_Status *) status; \
+	args_MPI_File_read_at_all_t* args = (args_MPI_File_read_at_all_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->offset = (MPI_Offset) offset; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_read_at_all(args) { \
-	if (args->MPI_File_read_at_all.status != NULL) { \
-		args->MPI_File_read_at_all.status__ref.val = *args->MPI_File_read_at_all.status; \
+	args_MPI_File_read_at_all_t* pargs = (args_MPI_File_read_at_all_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -14681,15 +15219,16 @@ struct args_MPI_File_read_at_all_t {
  *	)
  */
 #if HAVE_MPI_Pready
-struct args_MPI_Pready_t {
+typedef struct {
 	int partitions;
 	MPI_Request request;
 	int retval;
-};
+} args_MPI_Pready_t;
 
 #define GET_ARGS_VALUE_MPI_Pready(activity) { \
-	activity->mpi_args.MPI_Pready.partitions = (int) partitions; \
-	activity->mpi_args.MPI_Pready.request = (MPI_Request) request; \
+	args_MPI_Pready_t* args = (args_MPI_Pready_t*) activity->args; \
+	args->partitions = (int) partitions; \
+	args->request = (MPI_Request) request; \
 };
 
 #endif
@@ -14718,7 +15257,7 @@ struct args_MPI_Pready_t {
  *	)
  */
 #if HAVE_MPI_Iscatterv
-struct args_MPI_Iscatterv_t {
+typedef struct {
 	void * sendbuf;
 	int(* sendcounts);
 	struct {
@@ -14739,30 +15278,32 @@ struct args_MPI_Iscatterv_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Iscatterv_t;
 
 #define GET_ARGS_VALUE_MPI_Iscatterv(activity) { \
-	activity->mpi_args.MPI_Iscatterv.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Iscatterv.sendcounts = (int(*)) sendcounts; \
-	activity->mpi_args.MPI_Iscatterv.displs = (int(*)) displs; \
-	activity->mpi_args.MPI_Iscatterv.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Iscatterv.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Iscatterv.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Iscatterv.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Iscatterv.root = (int) root; \
-	activity->mpi_args.MPI_Iscatterv.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Iscatterv.request = (MPI_Request *) request; \
+	args_MPI_Iscatterv_t* args = (args_MPI_Iscatterv_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcounts = (int(*)) sendcounts; \
+	args->displs = (int(*)) displs; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Iscatterv(args) { \
-	if (args->MPI_Iscatterv.sendcounts != NULL) { \
-		args->MPI_Iscatterv.sendcounts__ref.val = *args->MPI_Iscatterv.sendcounts; \
+	args_MPI_Iscatterv_t* pargs = (args_MPI_Iscatterv_t*) args; \
+	if (pargs->sendcounts != NULL) { \
+		pargs->sendcounts__ref.val = *pargs->sendcounts; \
 	} \
-	if (args->MPI_Iscatterv.displs != NULL) { \
-		args->MPI_Iscatterv.displs__ref.val = *args->MPI_Iscatterv.displs; \
+	if (pargs->displs != NULL) { \
+		pargs->displs__ref.val = *pargs->displs; \
 	} \
-	if (args->MPI_Iscatterv.request != NULL) { \
-		args->MPI_Iscatterv.request__ref.val = *args->MPI_Iscatterv.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -14784,15 +15325,16 @@ struct args_MPI_Iscatterv_t {
  *	)
  */
 #if HAVE_MPI_Win_detach
-struct args_MPI_Win_detach_t {
+typedef struct {
 	MPI_Win win;
 	void * base;
 	int retval;
-};
+} args_MPI_Win_detach_t;
 
 #define GET_ARGS_VALUE_MPI_Win_detach(activity) { \
-	activity->mpi_args.MPI_Win_detach.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Win_detach.base = (void *) base; \
+	args_MPI_Win_detach_t* args = (args_MPI_Win_detach_t*) activity->args; \
+	args->win = (MPI_Win) win; \
+	args->base = (void *) base; \
 };
 
 #endif
@@ -14813,15 +15355,16 @@ struct args_MPI_Win_detach_t {
  *	)
  */
 #if HAVE_MPI_File_call_errhandler
-struct args_MPI_File_call_errhandler_t {
+typedef struct {
 	MPI_File fh;
 	int errorcode;
 	int retval;
-};
+} args_MPI_File_call_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_File_call_errhandler(activity) { \
-	activity->mpi_args.MPI_File_call_errhandler.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_call_errhandler.errorcode = (int) errorcode; \
+	args_MPI_File_call_errhandler_t* args = (args_MPI_File_call_errhandler_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->errorcode = (int) errorcode; \
 };
 
 #endif
@@ -14847,7 +15390,7 @@ struct args_MPI_File_call_errhandler_t {
  *	)
  */
 #if HAVE_MPI_Iallreduce
-struct args_MPI_Iallreduce_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int count;
@@ -14859,21 +15402,23 @@ struct args_MPI_Iallreduce_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Iallreduce_t;
 
 #define GET_ARGS_VALUE_MPI_Iallreduce(activity) { \
-	activity->mpi_args.MPI_Iallreduce.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Iallreduce.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Iallreduce.count = (int) count; \
-	activity->mpi_args.MPI_Iallreduce.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Iallreduce.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Iallreduce.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Iallreduce.request = (MPI_Request *) request; \
+	args_MPI_Iallreduce_t* args = (args_MPI_Iallreduce_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Iallreduce(args) { \
-	if (args->MPI_Iallreduce.request != NULL) { \
-		args->MPI_Iallreduce.request__ref.val = *args->MPI_Iallreduce.request; \
+	args_MPI_Iallreduce_t* pargs = (args_MPI_Iallreduce_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -14895,7 +15440,7 @@ struct args_MPI_Iallreduce_t {
  *	)
  */
 #if HAVE_MPI_Get_processor_name
-struct args_MPI_Get_processor_name_t {
+typedef struct {
 	char * name;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
@@ -14905,19 +15450,21 @@ struct args_MPI_Get_processor_name_t {
 		int val;
 	} resultlen__ref;
 	int retval;
-};
+} args_MPI_Get_processor_name_t;
 
 #define GET_ARGS_VALUE_MPI_Get_processor_name(activity) { \
-	activity->mpi_args.MPI_Get_processor_name.name = (char *) name; \
-	activity->mpi_args.MPI_Get_processor_name.resultlen = (int *) resultlen; \
+	args_MPI_Get_processor_name_t* args = (args_MPI_Get_processor_name_t*) activity->args; \
+	args->name = (char *) name; \
+	args->resultlen = (int *) resultlen; \
 };
 
 #define GET_PTRS_VALUE_MPI_Get_processor_name(args) { \
-	if (args->MPI_Get_processor_name.name != NULL) { \
-		strncpy(args->MPI_Get_processor_name.name__ref.val, args->MPI_Get_processor_name.name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Get_processor_name_t* pargs = (args_MPI_Get_processor_name_t*) args; \
+	if (pargs->name != NULL) { \
+		strncpy(pargs->name__ref.val, pargs->name, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Get_processor_name.resultlen != NULL) { \
-		args->MPI_Get_processor_name.resultlen__ref.val = *args->MPI_Get_processor_name.resultlen; \
+	if (pargs->resultlen != NULL) { \
+		pargs->resultlen__ref.val = *pargs->resultlen; \
 	} \
 };
 
@@ -14938,21 +15485,23 @@ struct args_MPI_Get_processor_name_t {
  *	)
  */
 #if HAVE_MPI_Start
-struct args_MPI_Start_t {
+typedef struct {
 	MPI_Request * request;
 	struct {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Start_t;
 
 #define GET_ARGS_VALUE_MPI_Start(activity) { \
-	activity->mpi_args.MPI_Start.request = (MPI_Request *) request; \
+	args_MPI_Start_t* args = (args_MPI_Start_t*) activity->args; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Start(args) { \
-	if (args->MPI_Start.request != NULL) { \
-		args->MPI_Start.request__ref.val = *args->MPI_Start.request; \
+	args_MPI_Start_t* pargs = (args_MPI_Start_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -14975,7 +15524,7 @@ struct args_MPI_Start_t {
  *	)
  */
 #if HAVE_MPI_File_get_type_extent
-struct args_MPI_File_get_type_extent_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Datatype datatype;
 	MPI_Aint * extent;
@@ -14983,17 +15532,19 @@ struct args_MPI_File_get_type_extent_t {
 		MPI_Aint val;
 	} extent__ref;
 	int retval;
-};
+} args_MPI_File_get_type_extent_t;
 
 #define GET_ARGS_VALUE_MPI_File_get_type_extent(activity) { \
-	activity->mpi_args.MPI_File_get_type_extent.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_get_type_extent.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_get_type_extent.extent = (MPI_Aint *) extent; \
+	args_MPI_File_get_type_extent_t* args = (args_MPI_File_get_type_extent_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->extent = (MPI_Aint *) extent; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_get_type_extent(args) { \
-	if (args->MPI_File_get_type_extent.extent != NULL) { \
-		args->MPI_File_get_type_extent.extent__ref.val = *args->MPI_File_get_type_extent.extent; \
+	args_MPI_File_get_type_extent_t* pargs = (args_MPI_File_get_type_extent_t*) args; \
+	if (pargs->extent != NULL) { \
+		pargs->extent__ref.val = *pargs->extent; \
 	} \
 };
 
@@ -15018,7 +15569,7 @@ struct args_MPI_File_get_type_extent_t {
  *	)
  */
 #if HAVE_MPI_File_read_shared
-struct args_MPI_File_read_shared_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
@@ -15028,19 +15579,21 @@ struct args_MPI_File_read_shared_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_read_shared_t;
 
 #define GET_ARGS_VALUE_MPI_File_read_shared(activity) { \
-	activity->mpi_args.MPI_File_read_shared.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_read_shared.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_read_shared.count = (int) count; \
-	activity->mpi_args.MPI_File_read_shared.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_read_shared.status = (MPI_Status *) status; \
+	args_MPI_File_read_shared_t* args = (args_MPI_File_read_shared_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_read_shared(args) { \
-	if (args->MPI_File_read_shared.status != NULL) { \
-		args->MPI_File_read_shared.status__ref.val = *args->MPI_File_read_shared.status; \
+	args_MPI_File_read_shared_t* pargs = (args_MPI_File_read_shared_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -15065,7 +15618,7 @@ struct args_MPI_File_read_shared_t {
  *	)
  */
 #if HAVE_MPI_File_open
-struct args_MPI_File_open_t {
+typedef struct {
 	MPI_Comm comm;
 	char * filename;
 	struct {
@@ -15078,22 +15631,24 @@ struct args_MPI_File_open_t {
 		MPI_File val;
 	} fh__ref;
 	int retval;
-};
+} args_MPI_File_open_t;
 
 #define GET_ARGS_VALUE_MPI_File_open(activity) { \
-	activity->mpi_args.MPI_File_open.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_File_open.filename = (char *) filename; \
-	activity->mpi_args.MPI_File_open.amode = (int) amode; \
-	activity->mpi_args.MPI_File_open.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_File_open.fh = (MPI_File *) fh; \
+	args_MPI_File_open_t* args = (args_MPI_File_open_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->filename = (char *) filename; \
+	args->amode = (int) amode; \
+	args->info = (MPI_Info) info; \
+	args->fh = (MPI_File *) fh; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_open(args) { \
-	if (args->MPI_File_open.filename != NULL) { \
-		strncpy(args->MPI_File_open.filename__ref.val, args->MPI_File_open.filename, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_File_open_t* pargs = (args_MPI_File_open_t*) args; \
+	if (pargs->filename != NULL) { \
+		strncpy(pargs->filename__ref.val, pargs->filename, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_File_open.fh != NULL) { \
-		args->MPI_File_open.fh__ref.val = *args->MPI_File_open.fh; \
+	if (pargs->fh != NULL) { \
+		pargs->fh__ref.val = *pargs->fh; \
 	} \
 };
 
@@ -15115,23 +15670,25 @@ struct args_MPI_File_open_t {
  *	)
  */
 #if HAVE_MPI_File_get_amode
-struct args_MPI_File_get_amode_t {
+typedef struct {
 	MPI_File fh;
 	int * amode;
 	struct {
 		int val;
 	} amode__ref;
 	int retval;
-};
+} args_MPI_File_get_amode_t;
 
 #define GET_ARGS_VALUE_MPI_File_get_amode(activity) { \
-	activity->mpi_args.MPI_File_get_amode.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_get_amode.amode = (int *) amode; \
+	args_MPI_File_get_amode_t* args = (args_MPI_File_get_amode_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->amode = (int *) amode; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_get_amode(args) { \
-	if (args->MPI_File_get_amode.amode != NULL) { \
-		args->MPI_File_get_amode.amode__ref.val = *args->MPI_File_get_amode.amode; \
+	args_MPI_File_get_amode_t* pargs = (args_MPI_File_get_amode_t*) args; \
+	if (pargs->amode != NULL) { \
+		pargs->amode__ref.val = *pargs->amode; \
 	} \
 };
 
@@ -15156,7 +15713,7 @@ struct args_MPI_File_get_amode_t {
  *	)
  */
 #if HAVE_MPI_Type_create_hindexed_block
-struct args_MPI_Type_create_hindexed_block_t {
+typedef struct {
 	int count;
 	int blocklength;
 	MPI_Aint(* array_of_displacements);
@@ -15169,22 +15726,24 @@ struct args_MPI_Type_create_hindexed_block_t {
 		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
-};
+} args_MPI_Type_create_hindexed_block_t;
 
 #define GET_ARGS_VALUE_MPI_Type_create_hindexed_block(activity) { \
-	activity->mpi_args.MPI_Type_create_hindexed_block.count = (int) count; \
-	activity->mpi_args.MPI_Type_create_hindexed_block.blocklength = (int) blocklength; \
-	activity->mpi_args.MPI_Type_create_hindexed_block.array_of_displacements = (MPI_Aint(*)) array_of_displacements; \
-	activity->mpi_args.MPI_Type_create_hindexed_block.oldtype = (MPI_Datatype) oldtype; \
-	activity->mpi_args.MPI_Type_create_hindexed_block.newtype = (MPI_Datatype *) newtype; \
+	args_MPI_Type_create_hindexed_block_t* args = (args_MPI_Type_create_hindexed_block_t*) activity->args; \
+	args->count = (int) count; \
+	args->blocklength = (int) blocklength; \
+	args->array_of_displacements = (MPI_Aint(*)) array_of_displacements; \
+	args->oldtype = (MPI_Datatype) oldtype; \
+	args->newtype = (MPI_Datatype *) newtype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_create_hindexed_block(args) { \
-	if (args->MPI_Type_create_hindexed_block.array_of_displacements != NULL) { \
-		args->MPI_Type_create_hindexed_block.array_of_displacements__ref.val = *args->MPI_Type_create_hindexed_block.array_of_displacements; \
+	args_MPI_Type_create_hindexed_block_t* pargs = (args_MPI_Type_create_hindexed_block_t*) args; \
+	if (pargs->array_of_displacements != NULL) { \
+		pargs->array_of_displacements__ref.val = *pargs->array_of_displacements; \
 	} \
-	if (args->MPI_Type_create_hindexed_block.newtype != NULL) { \
-		args->MPI_Type_create_hindexed_block.newtype__ref.val = *args->MPI_Type_create_hindexed_block.newtype; \
+	if (pargs->newtype != NULL) { \
+		pargs->newtype__ref.val = *pargs->newtype; \
 	} \
 };
 
@@ -15208,7 +15767,7 @@ struct args_MPI_Type_create_hindexed_block_t {
  *	)
  */
 #if HAVE_MPI_Cart_coords
-struct args_MPI_Cart_coords_t {
+typedef struct {
 	MPI_Comm comm;
 	int rank;
 	int maxdims;
@@ -15217,18 +15776,20 @@ struct args_MPI_Cart_coords_t {
 		int val;
 	} coords__ref;
 	int retval;
-};
+} args_MPI_Cart_coords_t;
 
 #define GET_ARGS_VALUE_MPI_Cart_coords(activity) { \
-	activity->mpi_args.MPI_Cart_coords.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Cart_coords.rank = (int) rank; \
-	activity->mpi_args.MPI_Cart_coords.maxdims = (int) maxdims; \
-	activity->mpi_args.MPI_Cart_coords.coords = (int(*)) coords; \
+	args_MPI_Cart_coords_t* args = (args_MPI_Cart_coords_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->rank = (int) rank; \
+	args->maxdims = (int) maxdims; \
+	args->coords = (int(*)) coords; \
 };
 
 #define GET_PTRS_VALUE_MPI_Cart_coords(args) { \
-	if (args->MPI_Cart_coords.coords != NULL) { \
-		args->MPI_Cart_coords.coords__ref.val = *args->MPI_Cart_coords.coords; \
+	args_MPI_Cart_coords_t* pargs = (args_MPI_Cart_coords_t*) args; \
+	if (pargs->coords != NULL) { \
+		pargs->coords__ref.val = *pargs->coords; \
 	} \
 };
 
@@ -15255,7 +15816,7 @@ struct args_MPI_Cart_coords_t {
  *	)
  */
 #if HAVE_MPI_Issend
-struct args_MPI_Issend_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -15267,21 +15828,23 @@ struct args_MPI_Issend_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Issend_t;
 
 #define GET_ARGS_VALUE_MPI_Issend(activity) { \
-	activity->mpi_args.MPI_Issend.buf = (void *) buf; \
-	activity->mpi_args.MPI_Issend.count = (int) count; \
-	activity->mpi_args.MPI_Issend.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Issend.dest = (int) dest; \
-	activity->mpi_args.MPI_Issend.tag = (int) tag; \
-	activity->mpi_args.MPI_Issend.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Issend.request = (MPI_Request *) request; \
+	args_MPI_Issend_t* args = (args_MPI_Issend_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->dest = (int) dest; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Issend(args) { \
-	if (args->MPI_Issend.request != NULL) { \
-		args->MPI_Issend.request__ref.val = *args->MPI_Issend.request; \
+	args_MPI_Issend_t* pargs = (args_MPI_Issend_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -15306,7 +15869,7 @@ struct args_MPI_Issend_t {
  *	)
  */
 #if HAVE_MPI_Graph_get
-struct args_MPI_Graph_get_t {
+typedef struct {
 	MPI_Comm comm;
 	int maxindex;
 	int maxedges;
@@ -15319,22 +15882,24 @@ struct args_MPI_Graph_get_t {
 		int val;
 	} edges__ref;
 	int retval;
-};
+} args_MPI_Graph_get_t;
 
 #define GET_ARGS_VALUE_MPI_Graph_get(activity) { \
-	activity->mpi_args.MPI_Graph_get.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Graph_get.maxindex = (int) maxindex; \
-	activity->mpi_args.MPI_Graph_get.maxedges = (int) maxedges; \
-	activity->mpi_args.MPI_Graph_get.index = (int(*)) index; \
-	activity->mpi_args.MPI_Graph_get.edges = (int(*)) edges; \
+	args_MPI_Graph_get_t* args = (args_MPI_Graph_get_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->maxindex = (int) maxindex; \
+	args->maxedges = (int) maxedges; \
+	args->index = (int(*)) index; \
+	args->edges = (int(*)) edges; \
 };
 
 #define GET_PTRS_VALUE_MPI_Graph_get(args) { \
-	if (args->MPI_Graph_get.index != NULL) { \
-		args->MPI_Graph_get.index__ref.val = *args->MPI_Graph_get.index; \
+	args_MPI_Graph_get_t* pargs = (args_MPI_Graph_get_t*) args; \
+	if (pargs->index != NULL) { \
+		pargs->index__ref.val = *pargs->index; \
 	} \
-	if (args->MPI_Graph_get.edges != NULL) { \
-		args->MPI_Graph_get.edges__ref.val = *args->MPI_Graph_get.edges; \
+	if (pargs->edges != NULL) { \
+		pargs->edges__ref.val = *pargs->edges; \
 	} \
 };
 
@@ -15355,21 +15920,23 @@ struct args_MPI_Graph_get_t {
  *	)
  */
 #if HAVE_MPI_Win_free_keyval
-struct args_MPI_Win_free_keyval_t {
+typedef struct {
 	int * win_keyval;
 	struct {
 		int val;
 	} win_keyval__ref;
 	int retval;
-};
+} args_MPI_Win_free_keyval_t;
 
 #define GET_ARGS_VALUE_MPI_Win_free_keyval(activity) { \
-	activity->mpi_args.MPI_Win_free_keyval.win_keyval = (int *) win_keyval; \
+	args_MPI_Win_free_keyval_t* args = (args_MPI_Win_free_keyval_t*) activity->args; \
+	args->win_keyval = (int *) win_keyval; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_free_keyval(args) { \
-	if (args->MPI_Win_free_keyval.win_keyval != NULL) { \
-		args->MPI_Win_free_keyval.win_keyval__ref.val = *args->MPI_Win_free_keyval.win_keyval; \
+	args_MPI_Win_free_keyval_t* pargs = (args_MPI_Win_free_keyval_t*) args; \
+	if (pargs->win_keyval != NULL) { \
+		pargs->win_keyval__ref.val = *pargs->win_keyval; \
 	} \
 };
 
@@ -15399,7 +15966,7 @@ struct args_MPI_Win_free_keyval_t {
  *	)
  */
 #if HAVE_MPI_Ineighbor_alltoallw
-struct args_MPI_Ineighbor_alltoallw_t {
+typedef struct {
 	void * sendbuf;
 	int(* sendcounts);
 	struct {
@@ -15432,42 +15999,44 @@ struct args_MPI_Ineighbor_alltoallw_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Ineighbor_alltoallw_t;
 
 #define GET_ARGS_VALUE_MPI_Ineighbor_alltoallw(activity) { \
-	activity->mpi_args.MPI_Ineighbor_alltoallw.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Ineighbor_alltoallw.sendcounts = (int(*)) sendcounts; \
-	activity->mpi_args.MPI_Ineighbor_alltoallw.sdispls = (MPI_Aint(*)) sdispls; \
-	activity->mpi_args.MPI_Ineighbor_alltoallw.sendtypes = (MPI_Datatype(*)) sendtypes; \
-	activity->mpi_args.MPI_Ineighbor_alltoallw.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Ineighbor_alltoallw.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Ineighbor_alltoallw.rdispls = (MPI_Aint(*)) rdispls; \
-	activity->mpi_args.MPI_Ineighbor_alltoallw.recvtypes = (MPI_Datatype(*)) recvtypes; \
-	activity->mpi_args.MPI_Ineighbor_alltoallw.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Ineighbor_alltoallw.request = (MPI_Request *) request; \
+	args_MPI_Ineighbor_alltoallw_t* args = (args_MPI_Ineighbor_alltoallw_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcounts = (int(*)) sendcounts; \
+	args->sdispls = (MPI_Aint(*)) sdispls; \
+	args->sendtypes = (MPI_Datatype(*)) sendtypes; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->rdispls = (MPI_Aint(*)) rdispls; \
+	args->recvtypes = (MPI_Datatype(*)) recvtypes; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Ineighbor_alltoallw(args) { \
-	if (args->MPI_Ineighbor_alltoallw.sendcounts != NULL) { \
-		args->MPI_Ineighbor_alltoallw.sendcounts__ref.val = *args->MPI_Ineighbor_alltoallw.sendcounts; \
+	args_MPI_Ineighbor_alltoallw_t* pargs = (args_MPI_Ineighbor_alltoallw_t*) args; \
+	if (pargs->sendcounts != NULL) { \
+		pargs->sendcounts__ref.val = *pargs->sendcounts; \
 	} \
-	if (args->MPI_Ineighbor_alltoallw.sdispls != NULL) { \
-		args->MPI_Ineighbor_alltoallw.sdispls__ref.val = *args->MPI_Ineighbor_alltoallw.sdispls; \
+	if (pargs->sdispls != NULL) { \
+		pargs->sdispls__ref.val = *pargs->sdispls; \
 	} \
-	if (args->MPI_Ineighbor_alltoallw.sendtypes != NULL) { \
-		args->MPI_Ineighbor_alltoallw.sendtypes__ref.val = *args->MPI_Ineighbor_alltoallw.sendtypes; \
+	if (pargs->sendtypes != NULL) { \
+		pargs->sendtypes__ref.val = *pargs->sendtypes; \
 	} \
-	if (args->MPI_Ineighbor_alltoallw.recvcounts != NULL) { \
-		args->MPI_Ineighbor_alltoallw.recvcounts__ref.val = *args->MPI_Ineighbor_alltoallw.recvcounts; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Ineighbor_alltoallw.rdispls != NULL) { \
-		args->MPI_Ineighbor_alltoallw.rdispls__ref.val = *args->MPI_Ineighbor_alltoallw.rdispls; \
+	if (pargs->rdispls != NULL) { \
+		pargs->rdispls__ref.val = *pargs->rdispls; \
 	} \
-	if (args->MPI_Ineighbor_alltoallw.recvtypes != NULL) { \
-		args->MPI_Ineighbor_alltoallw.recvtypes__ref.val = *args->MPI_Ineighbor_alltoallw.recvtypes; \
+	if (pargs->recvtypes != NULL) { \
+		pargs->recvtypes__ref.val = *pargs->recvtypes; \
 	} \
-	if (args->MPI_Ineighbor_alltoallw.request != NULL) { \
-		args->MPI_Ineighbor_alltoallw.request__ref.val = *args->MPI_Ineighbor_alltoallw.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -15489,15 +16058,16 @@ struct args_MPI_Ineighbor_alltoallw_t {
  *	)
  */
 #if HAVE_MPI_File_set_info
-struct args_MPI_File_set_info_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Info info;
 	int retval;
-};
+} args_MPI_File_set_info_t;
 
 #define GET_ARGS_VALUE_MPI_File_set_info(activity) { \
-	activity->mpi_args.MPI_File_set_info.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_set_info.info = (MPI_Info) info; \
+	args_MPI_File_set_info_t* args = (args_MPI_File_set_info_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->info = (MPI_Info) info; \
 };
 
 #endif
@@ -15522,7 +16092,7 @@ struct args_MPI_File_set_info_t {
  *	)
  */
 #if HAVE_MPI_File_iread_at
-struct args_MPI_File_iread_at_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset offset;
 	void * buf;
@@ -15533,20 +16103,22 @@ struct args_MPI_File_iread_at_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_File_iread_at_t;
 
 #define GET_ARGS_VALUE_MPI_File_iread_at(activity) { \
-	activity->mpi_args.MPI_File_iread_at.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_iread_at.offset = (MPI_Offset) offset; \
-	activity->mpi_args.MPI_File_iread_at.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_iread_at.count = (int) count; \
-	activity->mpi_args.MPI_File_iread_at.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_iread_at.request = (MPI_Request *) request; \
+	args_MPI_File_iread_at_t* args = (args_MPI_File_iread_at_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->offset = (MPI_Offset) offset; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_iread_at(args) { \
-	if (args->MPI_File_iread_at.request != NULL) { \
-		args->MPI_File_iread_at.request__ref.val = *args->MPI_File_iread_at.request; \
+	args_MPI_File_iread_at_t* pargs = (args_MPI_File_iread_at_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -15568,15 +16140,16 @@ struct args_MPI_File_iread_at_t {
  *	)
  */
 #if HAVE_MPI_Attr_delete
-struct args_MPI_Attr_delete_t {
+typedef struct {
 	MPI_Comm comm;
 	int keyval;
 	int retval;
-};
+} args_MPI_Attr_delete_t;
 
 #define GET_ARGS_VALUE_MPI_Attr_delete(activity) { \
-	activity->mpi_args.MPI_Attr_delete.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Attr_delete.keyval = (int) keyval; \
+	args_MPI_Attr_delete_t* args = (args_MPI_Attr_delete_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->keyval = (int) keyval; \
 };
 
 #endif
@@ -15597,23 +16170,25 @@ struct args_MPI_Attr_delete_t {
  *	)
  */
 #if HAVE_MPI_Session_get_info
-struct args_MPI_Session_get_info_t {
+typedef struct {
 	MPI_Session session;
 	MPI_Info * info_used;
 	struct {
 		MPI_Info val;
 	} info_used__ref;
 	int retval;
-};
+} args_MPI_Session_get_info_t;
 
 #define GET_ARGS_VALUE_MPI_Session_get_info(activity) { \
-	activity->mpi_args.MPI_Session_get_info.session = (MPI_Session) session; \
-	activity->mpi_args.MPI_Session_get_info.info_used = (MPI_Info *) info_used; \
+	args_MPI_Session_get_info_t* args = (args_MPI_Session_get_info_t*) activity->args; \
+	args->session = (MPI_Session) session; \
+	args->info_used = (MPI_Info *) info_used; \
 };
 
 #define GET_PTRS_VALUE_MPI_Session_get_info(args) { \
-	if (args->MPI_Session_get_info.info_used != NULL) { \
-		args->MPI_Session_get_info.info_used__ref.val = *args->MPI_Session_get_info.info_used; \
+	args_MPI_Session_get_info_t* pargs = (args_MPI_Session_get_info_t*) args; \
+	if (pargs->info_used != NULL) { \
+		pargs->info_used__ref.val = *pargs->info_used; \
 	} \
 };
 
@@ -15638,7 +16213,7 @@ struct args_MPI_Session_get_info_t {
  *	)
  */
 #if HAVE_MPI_Session_get_nth_pset
-struct args_MPI_Session_get_nth_pset_t {
+typedef struct {
 	MPI_Session session;
 	MPI_Info info;
 	int n;
@@ -15651,22 +16226,24 @@ struct args_MPI_Session_get_nth_pset_t {
 		char val[MPI_STRING_SIZE_MAX];
 	} pset_name__ref;
 	int retval;
-};
+} args_MPI_Session_get_nth_pset_t;
 
 #define GET_ARGS_VALUE_MPI_Session_get_nth_pset(activity) { \
-	activity->mpi_args.MPI_Session_get_nth_pset.session = (MPI_Session) session; \
-	activity->mpi_args.MPI_Session_get_nth_pset.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Session_get_nth_pset.n = (int) n; \
-	activity->mpi_args.MPI_Session_get_nth_pset.len = (int *) len; \
-	activity->mpi_args.MPI_Session_get_nth_pset.pset_name = (char *) pset_name; \
+	args_MPI_Session_get_nth_pset_t* args = (args_MPI_Session_get_nth_pset_t*) activity->args; \
+	args->session = (MPI_Session) session; \
+	args->info = (MPI_Info) info; \
+	args->n = (int) n; \
+	args->len = (int *) len; \
+	args->pset_name = (char *) pset_name; \
 };
 
 #define GET_PTRS_VALUE_MPI_Session_get_nth_pset(args) { \
-	if (args->MPI_Session_get_nth_pset.len != NULL) { \
-		args->MPI_Session_get_nth_pset.len__ref.val = *args->MPI_Session_get_nth_pset.len; \
+	args_MPI_Session_get_nth_pset_t* pargs = (args_MPI_Session_get_nth_pset_t*) args; \
+	if (pargs->len != NULL) { \
+		pargs->len__ref.val = *pargs->len; \
 	} \
-	if (args->MPI_Session_get_nth_pset.pset_name != NULL) { \
-		strncpy(args->MPI_Session_get_nth_pset.pset_name__ref.val, args->MPI_Session_get_nth_pset.pset_name, MPI_STRING_SIZE_MAX-1); \
+	if (pargs->pset_name != NULL) { \
+		strncpy(pargs->pset_name__ref.val, pargs->pset_name, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -15690,7 +16267,7 @@ struct args_MPI_Session_get_nth_pset_t {
  *	)
  */
 #if HAVE_MPI_Type_create_keyval
-struct args_MPI_Type_create_keyval_t {
+typedef struct {
 	MPI_Type_copy_attr_function * type_copy_attr_fn;
 	MPI_Type_delete_attr_function * type_delete_attr_fn;
 	int * type_keyval;
@@ -15699,18 +16276,20 @@ struct args_MPI_Type_create_keyval_t {
 	} type_keyval__ref;
 	void * extra_state;
 	int retval;
-};
+} args_MPI_Type_create_keyval_t;
 
 #define GET_ARGS_VALUE_MPI_Type_create_keyval(activity) { \
-	activity->mpi_args.MPI_Type_create_keyval.type_copy_attr_fn = (MPI_Type_copy_attr_function *) type_copy_attr_fn; \
-	activity->mpi_args.MPI_Type_create_keyval.type_delete_attr_fn = (MPI_Type_delete_attr_function *) type_delete_attr_fn; \
-	activity->mpi_args.MPI_Type_create_keyval.type_keyval = (int *) type_keyval; \
-	activity->mpi_args.MPI_Type_create_keyval.extra_state = (void *) extra_state; \
+	args_MPI_Type_create_keyval_t* args = (args_MPI_Type_create_keyval_t*) activity->args; \
+	args->type_copy_attr_fn = (MPI_Type_copy_attr_function *) type_copy_attr_fn; \
+	args->type_delete_attr_fn = (MPI_Type_delete_attr_function *) type_delete_attr_fn; \
+	args->type_keyval = (int *) type_keyval; \
+	args->extra_state = (void *) extra_state; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_create_keyval(args) { \
-	if (args->MPI_Type_create_keyval.type_keyval != NULL) { \
-		args->MPI_Type_create_keyval.type_keyval__ref.val = *args->MPI_Type_create_keyval.type_keyval; \
+	args_MPI_Type_create_keyval_t* pargs = (args_MPI_Type_create_keyval_t*) args; \
+	if (pargs->type_keyval != NULL) { \
+		pargs->type_keyval__ref.val = *pargs->type_keyval; \
 	} \
 };
 
@@ -15734,7 +16313,7 @@ struct args_MPI_Type_create_keyval_t {
  *	)
  */
 #if HAVE_MPI_Attr_get
-struct args_MPI_Attr_get_t {
+typedef struct {
 	MPI_Comm comm;
 	int keyval;
 	void * attribute_val;
@@ -15743,18 +16322,20 @@ struct args_MPI_Attr_get_t {
 		int val;
 	} flag__ref;
 	int retval;
-};
+} args_MPI_Attr_get_t;
 
 #define GET_ARGS_VALUE_MPI_Attr_get(activity) { \
-	activity->mpi_args.MPI_Attr_get.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Attr_get.keyval = (int) keyval; \
-	activity->mpi_args.MPI_Attr_get.attribute_val = (void *) attribute_val; \
-	activity->mpi_args.MPI_Attr_get.flag = (int *) flag; \
+	args_MPI_Attr_get_t* args = (args_MPI_Attr_get_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->keyval = (int) keyval; \
+	args->attribute_val = (void *) attribute_val; \
+	args->flag = (int *) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_Attr_get(args) { \
-	if (args->MPI_Attr_get.flag != NULL) { \
-		args->MPI_Attr_get.flag__ref.val = *args->MPI_Attr_get.flag; \
+	args_MPI_Attr_get_t* pargs = (args_MPI_Attr_get_t*) args; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
 };
 
@@ -15776,23 +16357,25 @@ struct args_MPI_Attr_get_t {
  *	)
  */
 #if HAVE_MPI_Add_error_string
-struct args_MPI_Add_error_string_t {
+typedef struct {
 	int errorcode;
 	char * string;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
 	} string__ref;
 	int retval;
-};
+} args_MPI_Add_error_string_t;
 
 #define GET_ARGS_VALUE_MPI_Add_error_string(activity) { \
-	activity->mpi_args.MPI_Add_error_string.errorcode = (int) errorcode; \
-	activity->mpi_args.MPI_Add_error_string.string = (char *) string; \
+	args_MPI_Add_error_string_t* args = (args_MPI_Add_error_string_t*) activity->args; \
+	args->errorcode = (int) errorcode; \
+	args->string = (char *) string; \
 };
 
 #define GET_PTRS_VALUE_MPI_Add_error_string(args) { \
-	if (args->MPI_Add_error_string.string != NULL) { \
-		strncpy(args->MPI_Add_error_string.string__ref.val, args->MPI_Add_error_string.string, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Add_error_string_t* pargs = (args_MPI_Add_error_string_t*) args; \
+	if (pargs->string != NULL) { \
+		strncpy(pargs->string__ref.val, pargs->string, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -15822,7 +16405,7 @@ struct args_MPI_Add_error_string_t {
  *	)
  */
 #if HAVE_MPI_Ineighbor_alltoallv
-struct args_MPI_Ineighbor_alltoallv_t {
+typedef struct {
 	void * sendbuf;
 	int(* sendcounts);
 	struct {
@@ -15849,36 +16432,38 @@ struct args_MPI_Ineighbor_alltoallv_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Ineighbor_alltoallv_t;
 
 #define GET_ARGS_VALUE_MPI_Ineighbor_alltoallv(activity) { \
-	activity->mpi_args.MPI_Ineighbor_alltoallv.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Ineighbor_alltoallv.sendcounts = (int(*)) sendcounts; \
-	activity->mpi_args.MPI_Ineighbor_alltoallv.sdispls = (int(*)) sdispls; \
-	activity->mpi_args.MPI_Ineighbor_alltoallv.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Ineighbor_alltoallv.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Ineighbor_alltoallv.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Ineighbor_alltoallv.rdispls = (int(*)) rdispls; \
-	activity->mpi_args.MPI_Ineighbor_alltoallv.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Ineighbor_alltoallv.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Ineighbor_alltoallv.request = (MPI_Request *) request; \
+	args_MPI_Ineighbor_alltoallv_t* args = (args_MPI_Ineighbor_alltoallv_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcounts = (int(*)) sendcounts; \
+	args->sdispls = (int(*)) sdispls; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->rdispls = (int(*)) rdispls; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Ineighbor_alltoallv(args) { \
-	if (args->MPI_Ineighbor_alltoallv.sendcounts != NULL) { \
-		args->MPI_Ineighbor_alltoallv.sendcounts__ref.val = *args->MPI_Ineighbor_alltoallv.sendcounts; \
+	args_MPI_Ineighbor_alltoallv_t* pargs = (args_MPI_Ineighbor_alltoallv_t*) args; \
+	if (pargs->sendcounts != NULL) { \
+		pargs->sendcounts__ref.val = *pargs->sendcounts; \
 	} \
-	if (args->MPI_Ineighbor_alltoallv.sdispls != NULL) { \
-		args->MPI_Ineighbor_alltoallv.sdispls__ref.val = *args->MPI_Ineighbor_alltoallv.sdispls; \
+	if (pargs->sdispls != NULL) { \
+		pargs->sdispls__ref.val = *pargs->sdispls; \
 	} \
-	if (args->MPI_Ineighbor_alltoallv.recvcounts != NULL) { \
-		args->MPI_Ineighbor_alltoallv.recvcounts__ref.val = *args->MPI_Ineighbor_alltoallv.recvcounts; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Ineighbor_alltoallv.rdispls != NULL) { \
-		args->MPI_Ineighbor_alltoallv.rdispls__ref.val = *args->MPI_Ineighbor_alltoallv.rdispls; \
+	if (pargs->rdispls != NULL) { \
+		pargs->rdispls__ref.val = *pargs->rdispls; \
 	} \
-	if (args->MPI_Ineighbor_alltoallv.request != NULL) { \
-		args->MPI_Ineighbor_alltoallv.request__ref.val = *args->MPI_Ineighbor_alltoallv.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -15903,7 +16488,7 @@ struct args_MPI_Ineighbor_alltoallv_t {
  *	)
  */
 #if HAVE_MPI_Imrecv
-struct args_MPI_Imrecv_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype type;
@@ -15916,22 +16501,24 @@ struct args_MPI_Imrecv_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Imrecv_t;
 
 #define GET_ARGS_VALUE_MPI_Imrecv(activity) { \
-	activity->mpi_args.MPI_Imrecv.buf = (void *) buf; \
-	activity->mpi_args.MPI_Imrecv.count = (int) count; \
-	activity->mpi_args.MPI_Imrecv.type = (MPI_Datatype) type; \
-	activity->mpi_args.MPI_Imrecv.message = (MPI_Message *) message; \
-	activity->mpi_args.MPI_Imrecv.request = (MPI_Request *) request; \
+	args_MPI_Imrecv_t* args = (args_MPI_Imrecv_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->type = (MPI_Datatype) type; \
+	args->message = (MPI_Message *) message; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Imrecv(args) { \
-	if (args->MPI_Imrecv.message != NULL) { \
-		args->MPI_Imrecv.message__ref.val = *args->MPI_Imrecv.message; \
+	args_MPI_Imrecv_t* pargs = (args_MPI_Imrecv_t*) args; \
+	if (pargs->message != NULL) { \
+		pargs->message__ref.val = *pargs->message; \
 	} \
-	if (args->MPI_Imrecv.request != NULL) { \
-		args->MPI_Imrecv.request__ref.val = *args->MPI_Imrecv.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -15960,7 +16547,7 @@ struct args_MPI_Imrecv_t {
  *	)
  */
 #if HAVE_MPI_Alltoallw
-struct args_MPI_Alltoallw_t {
+typedef struct {
 	void * sendbuf;
 	int(* sendcounts);
 	struct {
@@ -15989,38 +16576,40 @@ struct args_MPI_Alltoallw_t {
 	} recvtypes__ref;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Alltoallw_t;
 
 #define GET_ARGS_VALUE_MPI_Alltoallw(activity) { \
-	activity->mpi_args.MPI_Alltoallw.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Alltoallw.sendcounts = (int(*)) sendcounts; \
-	activity->mpi_args.MPI_Alltoallw.sdispls = (int(*)) sdispls; \
-	activity->mpi_args.MPI_Alltoallw.sendtypes = (MPI_Datatype(*)) sendtypes; \
-	activity->mpi_args.MPI_Alltoallw.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Alltoallw.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Alltoallw.rdispls = (int(*)) rdispls; \
-	activity->mpi_args.MPI_Alltoallw.recvtypes = (MPI_Datatype(*)) recvtypes; \
-	activity->mpi_args.MPI_Alltoallw.comm = (MPI_Comm) comm; \
+	args_MPI_Alltoallw_t* args = (args_MPI_Alltoallw_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcounts = (int(*)) sendcounts; \
+	args->sdispls = (int(*)) sdispls; \
+	args->sendtypes = (MPI_Datatype(*)) sendtypes; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->rdispls = (int(*)) rdispls; \
+	args->recvtypes = (MPI_Datatype(*)) recvtypes; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Alltoallw(args) { \
-	if (args->MPI_Alltoallw.sendcounts != NULL) { \
-		args->MPI_Alltoallw.sendcounts__ref.val = *args->MPI_Alltoallw.sendcounts; \
+	args_MPI_Alltoallw_t* pargs = (args_MPI_Alltoallw_t*) args; \
+	if (pargs->sendcounts != NULL) { \
+		pargs->sendcounts__ref.val = *pargs->sendcounts; \
 	} \
-	if (args->MPI_Alltoallw.sdispls != NULL) { \
-		args->MPI_Alltoallw.sdispls__ref.val = *args->MPI_Alltoallw.sdispls; \
+	if (pargs->sdispls != NULL) { \
+		pargs->sdispls__ref.val = *pargs->sdispls; \
 	} \
-	if (args->MPI_Alltoallw.sendtypes != NULL) { \
-		args->MPI_Alltoallw.sendtypes__ref.val = *args->MPI_Alltoallw.sendtypes; \
+	if (pargs->sendtypes != NULL) { \
+		pargs->sendtypes__ref.val = *pargs->sendtypes; \
 	} \
-	if (args->MPI_Alltoallw.recvcounts != NULL) { \
-		args->MPI_Alltoallw.recvcounts__ref.val = *args->MPI_Alltoallw.recvcounts; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Alltoallw.rdispls != NULL) { \
-		args->MPI_Alltoallw.rdispls__ref.val = *args->MPI_Alltoallw.rdispls; \
+	if (pargs->rdispls != NULL) { \
+		pargs->rdispls__ref.val = *pargs->rdispls; \
 	} \
-	if (args->MPI_Alltoallw.recvtypes != NULL) { \
-		args->MPI_Alltoallw.recvtypes__ref.val = *args->MPI_Alltoallw.recvtypes; \
+	if (pargs->recvtypes != NULL) { \
+		pargs->recvtypes__ref.val = *pargs->recvtypes; \
 	} \
 };
 
@@ -16047,7 +16636,7 @@ struct args_MPI_Alltoallw_t {
  *	)
  */
 #if HAVE_MPI_Bcast_init
-struct args_MPI_Bcast_init_t {
+typedef struct {
 	void * buffer;
 	int count;
 	MPI_Datatype datatype;
@@ -16059,21 +16648,23 @@ struct args_MPI_Bcast_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Bcast_init_t;
 
 #define GET_ARGS_VALUE_MPI_Bcast_init(activity) { \
-	activity->mpi_args.MPI_Bcast_init.buffer = (void *) buffer; \
-	activity->mpi_args.MPI_Bcast_init.count = (int) count; \
-	activity->mpi_args.MPI_Bcast_init.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Bcast_init.root = (int) root; \
-	activity->mpi_args.MPI_Bcast_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Bcast_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Bcast_init.request = (MPI_Request *) request; \
+	args_MPI_Bcast_init_t* args = (args_MPI_Bcast_init_t*) activity->args; \
+	args->buffer = (void *) buffer; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Bcast_init(args) { \
-	if (args->MPI_Bcast_init.request != NULL) { \
-		args->MPI_Bcast_init.request__ref.val = *args->MPI_Bcast_init.request; \
+	args_MPI_Bcast_init_t* pargs = (args_MPI_Bcast_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -16095,23 +16686,25 @@ struct args_MPI_Bcast_init_t {
  *	)
  */
 #if HAVE_MPI_Ibarrier
-struct args_MPI_Ibarrier_t {
+typedef struct {
 	MPI_Comm comm;
 	MPI_Request * request;
 	struct {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Ibarrier_t;
 
 #define GET_ARGS_VALUE_MPI_Ibarrier(activity) { \
-	activity->mpi_args.MPI_Ibarrier.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Ibarrier.request = (MPI_Request *) request; \
+	args_MPI_Ibarrier_t* args = (args_MPI_Ibarrier_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Ibarrier(args) { \
-	if (args->MPI_Ibarrier.request != NULL) { \
-		args->MPI_Ibarrier.request__ref.val = *args->MPI_Ibarrier.request; \
+	args_MPI_Ibarrier_t* pargs = (args_MPI_Ibarrier_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -16137,7 +16730,7 @@ struct args_MPI_Ibarrier_t {
  *	)
  */
 #if HAVE_MPI_File_iwrite_at_all
-struct args_MPI_File_iwrite_at_all_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset offset;
 	void * buf;
@@ -16148,20 +16741,22 @@ struct args_MPI_File_iwrite_at_all_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_File_iwrite_at_all_t;
 
 #define GET_ARGS_VALUE_MPI_File_iwrite_at_all(activity) { \
-	activity->mpi_args.MPI_File_iwrite_at_all.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_iwrite_at_all.offset = (MPI_Offset) offset; \
-	activity->mpi_args.MPI_File_iwrite_at_all.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_iwrite_at_all.count = (int) count; \
-	activity->mpi_args.MPI_File_iwrite_at_all.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_iwrite_at_all.request = (MPI_Request *) request; \
+	args_MPI_File_iwrite_at_all_t* args = (args_MPI_File_iwrite_at_all_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->offset = (MPI_Offset) offset; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_iwrite_at_all(args) { \
-	if (args->MPI_File_iwrite_at_all.request != NULL) { \
-		args->MPI_File_iwrite_at_all.request__ref.val = *args->MPI_File_iwrite_at_all.request; \
+	args_MPI_File_iwrite_at_all_t* pargs = (args_MPI_File_iwrite_at_all_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -16183,23 +16778,25 @@ struct args_MPI_File_iwrite_at_all_t {
  *	)
  */
 #if HAVE_MPI_File_get_size
-struct args_MPI_File_get_size_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset * size;
 	struct {
 		MPI_Offset val;
 	} size__ref;
 	int retval;
-};
+} args_MPI_File_get_size_t;
 
 #define GET_ARGS_VALUE_MPI_File_get_size(activity) { \
-	activity->mpi_args.MPI_File_get_size.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_get_size.size = (MPI_Offset *) size; \
+	args_MPI_File_get_size_t* args = (args_MPI_File_get_size_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->size = (MPI_Offset *) size; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_get_size(args) { \
-	if (args->MPI_File_get_size.size != NULL) { \
-		args->MPI_File_get_size.size__ref.val = *args->MPI_File_get_size.size; \
+	args_MPI_File_get_size_t* pargs = (args_MPI_File_get_size_t*) args; \
+	if (pargs->size != NULL) { \
+		pargs->size__ref.val = *pargs->size; \
 	} \
 };
 
@@ -16222,7 +16819,7 @@ struct args_MPI_File_get_size_t {
  *	)
  */
 #if HAVE_MPI_Barrier_init
-struct args_MPI_Barrier_init_t {
+typedef struct {
 	MPI_Comm comm;
 	MPI_Info info;
 	MPI_Request * request;
@@ -16230,17 +16827,19 @@ struct args_MPI_Barrier_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Barrier_init_t;
 
 #define GET_ARGS_VALUE_MPI_Barrier_init(activity) { \
-	activity->mpi_args.MPI_Barrier_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Barrier_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Barrier_init.request = (MPI_Request *) request; \
+	args_MPI_Barrier_init_t* args = (args_MPI_Barrier_init_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Barrier_init(args) { \
-	if (args->MPI_Barrier_init.request != NULL) { \
-		args->MPI_Barrier_init.request__ref.val = *args->MPI_Barrier_init.request; \
+	args_MPI_Barrier_init_t* pargs = (args_MPI_Barrier_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -16265,7 +16864,7 @@ struct args_MPI_Barrier_init_t {
  *	)
  */
 #if HAVE_MPI_File_get_view
-struct args_MPI_File_get_view_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset * disp;
 	struct {
@@ -16284,28 +16883,30 @@ struct args_MPI_File_get_view_t {
 		char val[MPI_STRING_SIZE_MAX];
 	} datarep__ref;
 	int retval;
-};
+} args_MPI_File_get_view_t;
 
 #define GET_ARGS_VALUE_MPI_File_get_view(activity) { \
-	activity->mpi_args.MPI_File_get_view.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_get_view.disp = (MPI_Offset *) disp; \
-	activity->mpi_args.MPI_File_get_view.etype = (MPI_Datatype *) etype; \
-	activity->mpi_args.MPI_File_get_view.filetype = (MPI_Datatype *) filetype; \
-	activity->mpi_args.MPI_File_get_view.datarep = (char *) datarep; \
+	args_MPI_File_get_view_t* args = (args_MPI_File_get_view_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->disp = (MPI_Offset *) disp; \
+	args->etype = (MPI_Datatype *) etype; \
+	args->filetype = (MPI_Datatype *) filetype; \
+	args->datarep = (char *) datarep; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_get_view(args) { \
-	if (args->MPI_File_get_view.disp != NULL) { \
-		args->MPI_File_get_view.disp__ref.val = *args->MPI_File_get_view.disp; \
+	args_MPI_File_get_view_t* pargs = (args_MPI_File_get_view_t*) args; \
+	if (pargs->disp != NULL) { \
+		pargs->disp__ref.val = *pargs->disp; \
 	} \
-	if (args->MPI_File_get_view.etype != NULL) { \
-		args->MPI_File_get_view.etype__ref.val = *args->MPI_File_get_view.etype; \
+	if (pargs->etype != NULL) { \
+		pargs->etype__ref.val = *pargs->etype; \
 	} \
-	if (args->MPI_File_get_view.filetype != NULL) { \
-		args->MPI_File_get_view.filetype__ref.val = *args->MPI_File_get_view.filetype; \
+	if (pargs->filetype != NULL) { \
+		pargs->filetype__ref.val = *pargs->filetype; \
 	} \
-	if (args->MPI_File_get_view.datarep != NULL) { \
-		strncpy(args->MPI_File_get_view.datarep__ref.val, args->MPI_File_get_view.datarep, MPI_STRING_SIZE_MAX-1); \
+	if (pargs->datarep != NULL) { \
+		strncpy(pargs->datarep__ref.val, pargs->datarep, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -16331,7 +16932,7 @@ struct args_MPI_File_get_view_t {
  *	)
  */
 #if HAVE_MPI_Win_allocate_shared
-struct args_MPI_Win_allocate_shared_t {
+typedef struct {
 	MPI_Aint size;
 	int disp_unit;
 	MPI_Info info;
@@ -16342,20 +16943,22 @@ struct args_MPI_Win_allocate_shared_t {
 		MPI_Win val;
 	} win__ref;
 	int retval;
-};
+} args_MPI_Win_allocate_shared_t;
 
 #define GET_ARGS_VALUE_MPI_Win_allocate_shared(activity) { \
-	activity->mpi_args.MPI_Win_allocate_shared.size = (MPI_Aint) size; \
-	activity->mpi_args.MPI_Win_allocate_shared.disp_unit = (int) disp_unit; \
-	activity->mpi_args.MPI_Win_allocate_shared.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Win_allocate_shared.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Win_allocate_shared.baseptr = (void *) baseptr; \
-	activity->mpi_args.MPI_Win_allocate_shared.win = (MPI_Win *) win; \
+	args_MPI_Win_allocate_shared_t* args = (args_MPI_Win_allocate_shared_t*) activity->args; \
+	args->size = (MPI_Aint) size; \
+	args->disp_unit = (int) disp_unit; \
+	args->info = (MPI_Info) info; \
+	args->comm = (MPI_Comm) comm; \
+	args->baseptr = (void *) baseptr; \
+	args->win = (MPI_Win *) win; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_allocate_shared(args) { \
-	if (args->MPI_Win_allocate_shared.win != NULL) { \
-		args->MPI_Win_allocate_shared.win__ref.val = *args->MPI_Win_allocate_shared.win; \
+	args_MPI_Win_allocate_shared_t* pargs = (args_MPI_Win_allocate_shared_t*) args; \
+	if (pargs->win != NULL) { \
+		pargs->win__ref.val = *pargs->win; \
 	} \
 };
 
@@ -16376,21 +16979,23 @@ struct args_MPI_Win_allocate_shared_t {
  *	)
  */
 #if HAVE_MPI_Close_port
-struct args_MPI_Close_port_t {
+typedef struct {
 	char * port_name;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
 	} port_name__ref;
 	int retval;
-};
+} args_MPI_Close_port_t;
 
 #define GET_ARGS_VALUE_MPI_Close_port(activity) { \
-	activity->mpi_args.MPI_Close_port.port_name = (char *) port_name; \
+	args_MPI_Close_port_t* args = (args_MPI_Close_port_t*) activity->args; \
+	args->port_name = (char *) port_name; \
 };
 
 #define GET_PTRS_VALUE_MPI_Close_port(args) { \
-	if (args->MPI_Close_port.port_name != NULL) { \
-		strncpy(args->MPI_Close_port.port_name__ref.val, args->MPI_Close_port.port_name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Close_port_t* pargs = (args_MPI_Close_port_t*) args; \
+	if (pargs->port_name != NULL) { \
+		strncpy(pargs->port_name__ref.val, pargs->port_name, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -16411,21 +17016,23 @@ struct args_MPI_Close_port_t {
  *	)
  */
 #if HAVE_MPI_Finalized
-struct args_MPI_Finalized_t {
+typedef struct {
 	int * flag;
 	struct {
 		int val;
 	} flag__ref;
 	int retval;
-};
+} args_MPI_Finalized_t;
 
 #define GET_ARGS_VALUE_MPI_Finalized(activity) { \
-	activity->mpi_args.MPI_Finalized.flag = (int *) flag; \
+	args_MPI_Finalized_t* args = (args_MPI_Finalized_t*) activity->args; \
+	args->flag = (int *) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_Finalized(args) { \
-	if (args->MPI_Finalized.flag != NULL) { \
-		args->MPI_Finalized.flag__ref.val = *args->MPI_Finalized.flag; \
+	args_MPI_Finalized_t* pargs = (args_MPI_Finalized_t*) args; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
 };
 
@@ -16447,23 +17054,25 @@ struct args_MPI_Finalized_t {
  *	)
  */
 #if HAVE_MPI_Info_dup
-struct args_MPI_Info_dup_t {
+typedef struct {
 	MPI_Info info;
 	MPI_Info * newinfo;
 	struct {
 		MPI_Info val;
 	} newinfo__ref;
 	int retval;
-};
+} args_MPI_Info_dup_t;
 
 #define GET_ARGS_VALUE_MPI_Info_dup(activity) { \
-	activity->mpi_args.MPI_Info_dup.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Info_dup.newinfo = (MPI_Info *) newinfo; \
+	args_MPI_Info_dup_t* args = (args_MPI_Info_dup_t*) activity->args; \
+	args->info = (MPI_Info) info; \
+	args->newinfo = (MPI_Info *) newinfo; \
 };
 
 #define GET_PTRS_VALUE_MPI_Info_dup(args) { \
-	if (args->MPI_Info_dup.newinfo != NULL) { \
-		args->MPI_Info_dup.newinfo__ref.val = *args->MPI_Info_dup.newinfo; \
+	args_MPI_Info_dup_t* pargs = (args_MPI_Info_dup_t*) args; \
+	if (pargs->newinfo != NULL) { \
+		pargs->newinfo__ref.val = *pargs->newinfo; \
 	} \
 };
 
@@ -16488,7 +17097,7 @@ struct args_MPI_Info_dup_t {
  *	)
  */
 #if HAVE_MPI_Info_get
-struct args_MPI_Info_get_t {
+typedef struct {
 	MPI_Info info;
 	char * key;
 	struct {
@@ -16504,25 +17113,27 @@ struct args_MPI_Info_get_t {
 		int val;
 	} flag__ref;
 	int retval;
-};
+} args_MPI_Info_get_t;
 
 #define GET_ARGS_VALUE_MPI_Info_get(activity) { \
-	activity->mpi_args.MPI_Info_get.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Info_get.key = (char *) key; \
-	activity->mpi_args.MPI_Info_get.valuelen = (int) valuelen; \
-	activity->mpi_args.MPI_Info_get.value = (char *) value; \
-	activity->mpi_args.MPI_Info_get.flag = (int *) flag; \
+	args_MPI_Info_get_t* args = (args_MPI_Info_get_t*) activity->args; \
+	args->info = (MPI_Info) info; \
+	args->key = (char *) key; \
+	args->valuelen = (int) valuelen; \
+	args->value = (char *) value; \
+	args->flag = (int *) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_Info_get(args) { \
-	if (args->MPI_Info_get.key != NULL) { \
-		strncpy(args->MPI_Info_get.key__ref.val, args->MPI_Info_get.key, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Info_get_t* pargs = (args_MPI_Info_get_t*) args; \
+	if (pargs->key != NULL) { \
+		strncpy(pargs->key__ref.val, pargs->key, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Info_get.value != NULL) { \
-		strncpy(args->MPI_Info_get.value__ref.val, args->MPI_Info_get.value, MPI_STRING_SIZE_MAX-1); \
+	if (pargs->value != NULL) { \
+		strncpy(pargs->value__ref.val, pargs->value, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Info_get.flag != NULL) { \
-		args->MPI_Info_get.flag__ref.val = *args->MPI_Info_get.flag; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
 };
 
@@ -16544,7 +17155,7 @@ struct args_MPI_Info_get_t {
  *	)
  */
 #if HAVE_MPI_Get_library_version
-struct args_MPI_Get_library_version_t {
+typedef struct {
 	char * version;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
@@ -16554,19 +17165,21 @@ struct args_MPI_Get_library_version_t {
 		int val;
 	} resultlen__ref;
 	int retval;
-};
+} args_MPI_Get_library_version_t;
 
 #define GET_ARGS_VALUE_MPI_Get_library_version(activity) { \
-	activity->mpi_args.MPI_Get_library_version.version = (char *) version; \
-	activity->mpi_args.MPI_Get_library_version.resultlen = (int *) resultlen; \
+	args_MPI_Get_library_version_t* args = (args_MPI_Get_library_version_t*) activity->args; \
+	args->version = (char *) version; \
+	args->resultlen = (int *) resultlen; \
 };
 
 #define GET_PTRS_VALUE_MPI_Get_library_version(args) { \
-	if (args->MPI_Get_library_version.version != NULL) { \
-		strncpy(args->MPI_Get_library_version.version__ref.val, args->MPI_Get_library_version.version, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Get_library_version_t* pargs = (args_MPI_Get_library_version_t*) args; \
+	if (pargs->version != NULL) { \
+		strncpy(pargs->version__ref.val, pargs->version, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Get_library_version.resultlen != NULL) { \
-		args->MPI_Get_library_version.resultlen__ref.val = *args->MPI_Get_library_version.resultlen; \
+	if (pargs->resultlen != NULL) { \
+		pargs->resultlen__ref.val = *pargs->resultlen; \
 	} \
 };
 
@@ -16587,21 +17200,23 @@ struct args_MPI_Get_library_version_t {
  *	)
  */
 #if HAVE_MPI_Info_create
-struct args_MPI_Info_create_t {
+typedef struct {
 	MPI_Info * info;
 	struct {
 		MPI_Info val;
 	} info__ref;
 	int retval;
-};
+} args_MPI_Info_create_t;
 
 #define GET_ARGS_VALUE_MPI_Info_create(activity) { \
-	activity->mpi_args.MPI_Info_create.info = (MPI_Info *) info; \
+	args_MPI_Info_create_t* args = (args_MPI_Info_create_t*) activity->args; \
+	args->info = (MPI_Info *) info; \
 };
 
 #define GET_PTRS_VALUE_MPI_Info_create(args) { \
-	if (args->MPI_Info_create.info != NULL) { \
-		args->MPI_Info_create.info__ref.val = *args->MPI_Info_create.info; \
+	args_MPI_Info_create_t* pargs = (args_MPI_Info_create_t*) args; \
+	if (pargs->info != NULL) { \
+		pargs->info__ref.val = *pargs->info; \
 	} \
 };
 
@@ -16623,15 +17238,16 @@ struct args_MPI_Info_create_t {
  *	)
  */
 #if HAVE_MPI_Win_fence
-struct args_MPI_Win_fence_t {
+typedef struct {
 	int mpi_assert;
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Win_fence_t;
 
 #define GET_ARGS_VALUE_MPI_Win_fence(activity) { \
-	activity->mpi_args.MPI_Win_fence.mpi_assert = (int) mpi_assert; \
-	activity->mpi_args.MPI_Win_fence.win = (MPI_Win) win; \
+	args_MPI_Win_fence_t* args = (args_MPI_Win_fence_t*) activity->args; \
+	args->mpi_assert = (int) mpi_assert; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -16658,7 +17274,7 @@ struct args_MPI_Win_fence_t {
  *	)
  */
 #if HAVE_MPI_Iallgather
-struct args_MPI_Iallgather_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -16671,22 +17287,24 @@ struct args_MPI_Iallgather_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Iallgather_t;
 
 #define GET_ARGS_VALUE_MPI_Iallgather(activity) { \
-	activity->mpi_args.MPI_Iallgather.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Iallgather.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Iallgather.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Iallgather.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Iallgather.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Iallgather.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Iallgather.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Iallgather.request = (MPI_Request *) request; \
+	args_MPI_Iallgather_t* args = (args_MPI_Iallgather_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Iallgather(args) { \
-	if (args->MPI_Iallgather.request != NULL) { \
-		args->MPI_Iallgather.request__ref.val = *args->MPI_Iallgather.request; \
+	args_MPI_Iallgather_t* pargs = (args_MPI_Iallgather_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -16715,7 +17333,7 @@ struct args_MPI_Iallgather_t {
  *	)
  */
 #if HAVE_MPI_Comm_spawn_multiple
-struct args_MPI_Comm_spawn_multiple_t {
+typedef struct {
 	int count;
 	char *(* array_of_commands);
 	struct {
@@ -16747,47 +17365,49 @@ struct args_MPI_Comm_spawn_multiple_t {
 		int val;
 	} array_of_errcodes__ref;
 	int retval;
-};
+} args_MPI_Comm_spawn_multiple_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_spawn_multiple(activity) { \
-	activity->mpi_args.MPI_Comm_spawn_multiple.count = (int) count; \
-	activity->mpi_args.MPI_Comm_spawn_multiple.array_of_commands = (char *(*)) array_of_commands; \
-	activity->mpi_args.MPI_Comm_spawn_multiple.array_of_argv = (char **(*)) array_of_argv; \
-	activity->mpi_args.MPI_Comm_spawn_multiple.array_of_maxprocs = (int(*)) array_of_maxprocs; \
-	activity->mpi_args.MPI_Comm_spawn_multiple.array_of_info = (MPI_Info(*)) array_of_info; \
-	activity->mpi_args.MPI_Comm_spawn_multiple.root = (int) root; \
-	activity->mpi_args.MPI_Comm_spawn_multiple.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_spawn_multiple.intercomm = (MPI_Comm *) intercomm; \
-	activity->mpi_args.MPI_Comm_spawn_multiple.array_of_errcodes = (int(*)) array_of_errcodes; \
+	args_MPI_Comm_spawn_multiple_t* args = (args_MPI_Comm_spawn_multiple_t*) activity->args; \
+	args->count = (int) count; \
+	args->array_of_commands = (char *(*)) array_of_commands; \
+	args->array_of_argv = (char **(*)) array_of_argv; \
+	args->array_of_maxprocs = (int(*)) array_of_maxprocs; \
+	args->array_of_info = (MPI_Info(*)) array_of_info; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->intercomm = (MPI_Comm *) intercomm; \
+	args->array_of_errcodes = (int(*)) array_of_errcodes; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_spawn_multiple(args) { \
-	if (args->MPI_Comm_spawn_multiple.array_of_commands != NULL) { \
-		args->MPI_Comm_spawn_multiple.array_of_commands__ref.ptr1 = *args->MPI_Comm_spawn_multiple.array_of_commands; \
-		if (args->MPI_Comm_spawn_multiple.array_of_commands__ref.ptr1 != NULL) { \
-			strncpy(args->MPI_Comm_spawn_multiple.array_of_commands__ref.val, args->MPI_Comm_spawn_multiple.array_of_commands__ref.ptr1, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Comm_spawn_multiple_t* pargs = (args_MPI_Comm_spawn_multiple_t*) args; \
+	if (pargs->array_of_commands != NULL) { \
+		pargs->array_of_commands__ref.ptr1 = *pargs->array_of_commands; \
+		if (pargs->array_of_commands__ref.ptr1 != NULL) { \
+			strncpy(pargs->array_of_commands__ref.val, pargs->array_of_commands__ref.ptr1, MPI_STRING_SIZE_MAX-1); \
 		} \
 	} \
-	if (args->MPI_Comm_spawn_multiple.array_of_argv != NULL) { \
-		args->MPI_Comm_spawn_multiple.array_of_argv__ref.ptr1 = *args->MPI_Comm_spawn_multiple.array_of_argv; \
-		if (args->MPI_Comm_spawn_multiple.array_of_argv__ref.ptr1 != NULL) { \
-			args->MPI_Comm_spawn_multiple.array_of_argv__ref.ptr2 = **args->MPI_Comm_spawn_multiple.array_of_argv; \
-			if (args->MPI_Comm_spawn_multiple.array_of_argv__ref.ptr2 != NULL) { \
-				strncpy(args->MPI_Comm_spawn_multiple.array_of_argv__ref.val, args->MPI_Comm_spawn_multiple.array_of_argv__ref.ptr2, MPI_STRING_SIZE_MAX-1); \
+	if (pargs->array_of_argv != NULL) { \
+		pargs->array_of_argv__ref.ptr1 = *pargs->array_of_argv; \
+		if (pargs->array_of_argv__ref.ptr1 != NULL) { \
+			pargs->array_of_argv__ref.ptr2 = **pargs->array_of_argv; \
+			if (pargs->array_of_argv__ref.ptr2 != NULL) { \
+				strncpy(pargs->array_of_argv__ref.val, pargs->array_of_argv__ref.ptr2, MPI_STRING_SIZE_MAX-1); \
 			} \
 		} \
 	} \
-	if (args->MPI_Comm_spawn_multiple.array_of_maxprocs != NULL) { \
-		args->MPI_Comm_spawn_multiple.array_of_maxprocs__ref.val = *args->MPI_Comm_spawn_multiple.array_of_maxprocs; \
+	if (pargs->array_of_maxprocs != NULL) { \
+		pargs->array_of_maxprocs__ref.val = *pargs->array_of_maxprocs; \
 	} \
-	if (args->MPI_Comm_spawn_multiple.array_of_info != NULL) { \
-		args->MPI_Comm_spawn_multiple.array_of_info__ref.val = *args->MPI_Comm_spawn_multiple.array_of_info; \
+	if (pargs->array_of_info != NULL) { \
+		pargs->array_of_info__ref.val = *pargs->array_of_info; \
 	} \
-	if (args->MPI_Comm_spawn_multiple.intercomm != NULL) { \
-		args->MPI_Comm_spawn_multiple.intercomm__ref.val = *args->MPI_Comm_spawn_multiple.intercomm; \
+	if (pargs->intercomm != NULL) { \
+		pargs->intercomm__ref.val = *pargs->intercomm; \
 	} \
-	if (args->MPI_Comm_spawn_multiple.array_of_errcodes != NULL) { \
-		args->MPI_Comm_spawn_multiple.array_of_errcodes__ref.val = *args->MPI_Comm_spawn_multiple.array_of_errcodes; \
+	if (pargs->array_of_errcodes != NULL) { \
+		pargs->array_of_errcodes__ref.val = *pargs->array_of_errcodes; \
 	} \
 };
 
@@ -16816,7 +17436,7 @@ struct args_MPI_Comm_spawn_multiple_t {
  *	)
  */
 #if HAVE_MPI_Precv_init
-struct args_MPI_Precv_init_t {
+typedef struct {
 	void * buf;
 	int partitions;
 	MPI_Count count;
@@ -16830,23 +17450,25 @@ struct args_MPI_Precv_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Precv_init_t;
 
 #define GET_ARGS_VALUE_MPI_Precv_init(activity) { \
-	activity->mpi_args.MPI_Precv_init.buf = (void *) buf; \
-	activity->mpi_args.MPI_Precv_init.partitions = (int) partitions; \
-	activity->mpi_args.MPI_Precv_init.count = (MPI_Count) count; \
-	activity->mpi_args.MPI_Precv_init.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Precv_init.source = (int) source; \
-	activity->mpi_args.MPI_Precv_init.tag = (int) tag; \
-	activity->mpi_args.MPI_Precv_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Precv_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Precv_init.request = (MPI_Request *) request; \
+	args_MPI_Precv_init_t* args = (args_MPI_Precv_init_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->partitions = (int) partitions; \
+	args->count = (MPI_Count) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->source = (int) source; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Precv_init(args) { \
-	if (args->MPI_Precv_init.request != NULL) { \
-		args->MPI_Precv_init.request__ref.val = *args->MPI_Precv_init.request; \
+	args_MPI_Precv_init_t* pargs = (args_MPI_Precv_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -16868,15 +17490,16 @@ struct args_MPI_Precv_init_t {
  *	)
  */
 #if HAVE_MPI_Comm_set_errhandler
-struct args_MPI_Comm_set_errhandler_t {
+typedef struct {
 	MPI_Comm comm;
 	MPI_Errhandler errhandler;
 	int retval;
-};
+} args_MPI_Comm_set_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_set_errhandler(activity) { \
-	activity->mpi_args.MPI_Comm_set_errhandler.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_set_errhandler.errhandler = (MPI_Errhandler) errhandler; \
+	args_MPI_Comm_set_errhandler_t* args = (args_MPI_Comm_set_errhandler_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->errhandler = (MPI_Errhandler) errhandler; \
 };
 
 #endif
@@ -16901,7 +17524,7 @@ struct args_MPI_Comm_set_errhandler_t {
  *	)
  */
 #if HAVE_MPI_File_set_view
-struct args_MPI_File_set_view_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset disp;
 	MPI_Datatype etype;
@@ -16912,20 +17535,22 @@ struct args_MPI_File_set_view_t {
 	} datarep__ref;
 	MPI_Info info;
 	int retval;
-};
+} args_MPI_File_set_view_t;
 
 #define GET_ARGS_VALUE_MPI_File_set_view(activity) { \
-	activity->mpi_args.MPI_File_set_view.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_set_view.disp = (MPI_Offset) disp; \
-	activity->mpi_args.MPI_File_set_view.etype = (MPI_Datatype) etype; \
-	activity->mpi_args.MPI_File_set_view.filetype = (MPI_Datatype) filetype; \
-	activity->mpi_args.MPI_File_set_view.datarep = (char *) datarep; \
-	activity->mpi_args.MPI_File_set_view.info = (MPI_Info) info; \
+	args_MPI_File_set_view_t* args = (args_MPI_File_set_view_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->disp = (MPI_Offset) disp; \
+	args->etype = (MPI_Datatype) etype; \
+	args->filetype = (MPI_Datatype) filetype; \
+	args->datarep = (char *) datarep; \
+	args->info = (MPI_Info) info; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_set_view(args) { \
-	if (args->MPI_File_set_view.datarep != NULL) { \
-		strncpy(args->MPI_File_set_view.datarep__ref.val, args->MPI_File_set_view.datarep, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_File_set_view_t* pargs = (args_MPI_File_set_view_t*) args; \
+	if (pargs->datarep != NULL) { \
+		strncpy(pargs->datarep__ref.val, pargs->datarep, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -16951,7 +17576,7 @@ struct args_MPI_File_set_view_t {
  *	)
  */
 #if HAVE_MPI_Bsend
-struct args_MPI_Bsend_t {
+typedef struct {
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
@@ -16959,15 +17584,16 @@ struct args_MPI_Bsend_t {
 	int tag;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Bsend_t;
 
 #define GET_ARGS_VALUE_MPI_Bsend(activity) { \
-	activity->mpi_args.MPI_Bsend.buf = (void *) buf; \
-	activity->mpi_args.MPI_Bsend.count = (int) count; \
-	activity->mpi_args.MPI_Bsend.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Bsend.dest = (int) dest; \
-	activity->mpi_args.MPI_Bsend.tag = (int) tag; \
-	activity->mpi_args.MPI_Bsend.comm = (MPI_Comm) comm; \
+	args_MPI_Bsend_t* args = (args_MPI_Bsend_t*) activity->args; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->dest = (int) dest; \
+	args->tag = (int) tag; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -16988,23 +17614,25 @@ struct args_MPI_Bsend_t {
  *	)
  */
 #if HAVE_MPI_Type_size
-struct args_MPI_Type_size_t {
+typedef struct {
 	MPI_Datatype type;
 	int * size;
 	struct {
 		int val;
 	} size__ref;
 	int retval;
-};
+} args_MPI_Type_size_t;
 
 #define GET_ARGS_VALUE_MPI_Type_size(activity) { \
-	activity->mpi_args.MPI_Type_size.type = (MPI_Datatype) type; \
-	activity->mpi_args.MPI_Type_size.size = (int *) size; \
+	args_MPI_Type_size_t* args = (args_MPI_Type_size_t*) activity->args; \
+	args->type = (MPI_Datatype) type; \
+	args->size = (int *) size; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_size(args) { \
-	if (args->MPI_Type_size.size != NULL) { \
-		args->MPI_Type_size.size__ref.val = *args->MPI_Type_size.size; \
+	args_MPI_Type_size_t* pargs = (args_MPI_Type_size_t*) args; \
+	if (pargs->size != NULL) { \
+		pargs->size__ref.val = *pargs->size; \
 	} \
 };
 
@@ -17028,7 +17656,7 @@ struct args_MPI_Type_size_t {
  *	)
  */
 #if HAVE_MPI_Type_get_attr
-struct args_MPI_Type_get_attr_t {
+typedef struct {
 	MPI_Datatype type;
 	int type_keyval;
 	void * attribute_val;
@@ -17037,18 +17665,20 @@ struct args_MPI_Type_get_attr_t {
 		int val;
 	} flag__ref;
 	int retval;
-};
+} args_MPI_Type_get_attr_t;
 
 #define GET_ARGS_VALUE_MPI_Type_get_attr(activity) { \
-	activity->mpi_args.MPI_Type_get_attr.type = (MPI_Datatype) type; \
-	activity->mpi_args.MPI_Type_get_attr.type_keyval = (int) type_keyval; \
-	activity->mpi_args.MPI_Type_get_attr.attribute_val = (void *) attribute_val; \
-	activity->mpi_args.MPI_Type_get_attr.flag = (int *) flag; \
+	args_MPI_Type_get_attr_t* args = (args_MPI_Type_get_attr_t*) activity->args; \
+	args->type = (MPI_Datatype) type; \
+	args->type_keyval = (int) type_keyval; \
+	args->attribute_val = (void *) attribute_val; \
+	args->flag = (int *) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_get_attr(args) { \
-	if (args->MPI_Type_get_attr.flag != NULL) { \
-		args->MPI_Type_get_attr.flag__ref.val = *args->MPI_Type_get_attr.flag; \
+	args_MPI_Type_get_attr_t* pargs = (args_MPI_Type_get_attr_t*) args; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
 };
 
@@ -17073,7 +17703,7 @@ struct args_MPI_Type_get_attr_t {
  *	)
  */
 #if HAVE_MPI_File_write_ordered
-struct args_MPI_File_write_ordered_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
@@ -17083,19 +17713,21 @@ struct args_MPI_File_write_ordered_t {
 		MPI_Status val;
 	} status__ref;
 	int retval;
-};
+} args_MPI_File_write_ordered_t;
 
 #define GET_ARGS_VALUE_MPI_File_write_ordered(activity) { \
-	activity->mpi_args.MPI_File_write_ordered.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_write_ordered.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_write_ordered.count = (int) count; \
-	activity->mpi_args.MPI_File_write_ordered.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_write_ordered.status = (MPI_Status *) status; \
+	args_MPI_File_write_ordered_t* args = (args_MPI_File_write_ordered_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->status = (MPI_Status *) status; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_write_ordered(args) { \
-	if (args->MPI_File_write_ordered.status != NULL) { \
-		args->MPI_File_write_ordered.status__ref.val = *args->MPI_File_write_ordered.status; \
+	args_MPI_File_write_ordered_t* pargs = (args_MPI_File_write_ordered_t*) args; \
+	if (pargs->status != NULL) { \
+		pargs->status__ref.val = *pargs->status; \
 	} \
 };
 
@@ -17117,23 +17749,25 @@ struct args_MPI_File_write_ordered_t {
  *	)
  */
 #if HAVE_MPI_File_get_info
-struct args_MPI_File_get_info_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Info * info_used;
 	struct {
 		MPI_Info val;
 	} info_used__ref;
 	int retval;
-};
+} args_MPI_File_get_info_t;
 
 #define GET_ARGS_VALUE_MPI_File_get_info(activity) { \
-	activity->mpi_args.MPI_File_get_info.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_get_info.info_used = (MPI_Info *) info_used; \
+	args_MPI_File_get_info_t* args = (args_MPI_File_get_info_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->info_used = (MPI_Info *) info_used; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_get_info(args) { \
-	if (args->MPI_File_get_info.info_used != NULL) { \
-		args->MPI_File_get_info.info_used__ref.val = *args->MPI_File_get_info.info_used; \
+	args_MPI_File_get_info_t* pargs = (args_MPI_File_get_info_t*) args; \
+	if (pargs->info_used != NULL) { \
+		pargs->info_used__ref.val = *pargs->info_used; \
 	} \
 };
 
@@ -17157,7 +17791,7 @@ struct args_MPI_File_get_info_t {
  *	)
  */
 #if HAVE_MPI_Graph_neighbors
-struct args_MPI_Graph_neighbors_t {
+typedef struct {
 	MPI_Comm comm;
 	int rank;
 	int maxneighbors;
@@ -17166,18 +17800,20 @@ struct args_MPI_Graph_neighbors_t {
 		int val;
 	} neighbors__ref;
 	int retval;
-};
+} args_MPI_Graph_neighbors_t;
 
 #define GET_ARGS_VALUE_MPI_Graph_neighbors(activity) { \
-	activity->mpi_args.MPI_Graph_neighbors.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Graph_neighbors.rank = (int) rank; \
-	activity->mpi_args.MPI_Graph_neighbors.maxneighbors = (int) maxneighbors; \
-	activity->mpi_args.MPI_Graph_neighbors.neighbors = (int(*)) neighbors; \
+	args_MPI_Graph_neighbors_t* args = (args_MPI_Graph_neighbors_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->rank = (int) rank; \
+	args->maxneighbors = (int) maxneighbors; \
+	args->neighbors = (int(*)) neighbors; \
 };
 
 #define GET_PTRS_VALUE_MPI_Graph_neighbors(args) { \
-	if (args->MPI_Graph_neighbors.neighbors != NULL) { \
-		args->MPI_Graph_neighbors.neighbors__ref.val = *args->MPI_Graph_neighbors.neighbors; \
+	args_MPI_Graph_neighbors_t* pargs = (args_MPI_Graph_neighbors_t*) args; \
+	if (pargs->neighbors != NULL) { \
+		pargs->neighbors__ref.val = *pargs->neighbors; \
 	} \
 };
 
@@ -17207,7 +17843,7 @@ struct args_MPI_Graph_neighbors_t {
  *	)
  */
 #if HAVE_MPI_Igatherv
-struct args_MPI_Igatherv_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -17228,30 +17864,32 @@ struct args_MPI_Igatherv_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Igatherv_t;
 
 #define GET_ARGS_VALUE_MPI_Igatherv(activity) { \
-	activity->mpi_args.MPI_Igatherv.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Igatherv.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Igatherv.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Igatherv.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Igatherv.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Igatherv.displs = (int(*)) displs; \
-	activity->mpi_args.MPI_Igatherv.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Igatherv.root = (int) root; \
-	activity->mpi_args.MPI_Igatherv.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Igatherv.request = (MPI_Request *) request; \
+	args_MPI_Igatherv_t* args = (args_MPI_Igatherv_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->displs = (int(*)) displs; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Igatherv(args) { \
-	if (args->MPI_Igatherv.recvcounts != NULL) { \
-		args->MPI_Igatherv.recvcounts__ref.val = *args->MPI_Igatherv.recvcounts; \
+	args_MPI_Igatherv_t* pargs = (args_MPI_Igatherv_t*) args; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Igatherv.displs != NULL) { \
-		args->MPI_Igatherv.displs__ref.val = *args->MPI_Igatherv.displs; \
+	if (pargs->displs != NULL) { \
+		pargs->displs__ref.val = *pargs->displs; \
 	} \
-	if (args->MPI_Igatherv.request != NULL) { \
-		args->MPI_Igatherv.request__ref.val = *args->MPI_Igatherv.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -17273,23 +17911,25 @@ struct args_MPI_Igatherv_t {
  *	)
  */
 #if HAVE_MPI_Info_delete
-struct args_MPI_Info_delete_t {
+typedef struct {
 	MPI_Info info;
 	char * key;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
 	} key__ref;
 	int retval;
-};
+} args_MPI_Info_delete_t;
 
 #define GET_ARGS_VALUE_MPI_Info_delete(activity) { \
-	activity->mpi_args.MPI_Info_delete.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Info_delete.key = (char *) key; \
+	args_MPI_Info_delete_t* args = (args_MPI_Info_delete_t*) activity->args; \
+	args->info = (MPI_Info) info; \
+	args->key = (char *) key; \
 };
 
 #define GET_PTRS_VALUE_MPI_Info_delete(args) { \
-	if (args->MPI_Info_delete.key != NULL) { \
-		strncpy(args->MPI_Info_delete.key__ref.val, args->MPI_Info_delete.key, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Info_delete_t* pargs = (args_MPI_Info_delete_t*) args; \
+	if (pargs->key != NULL) { \
+		strncpy(pargs->key__ref.val, pargs->key, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -17312,17 +17952,18 @@ struct args_MPI_Info_delete_t {
  *	)
  */
 #if HAVE_MPI_Alloc_mem
-struct args_MPI_Alloc_mem_t {
+typedef struct {
 	MPI_Aint size;
 	MPI_Info info;
 	void * baseptr;
 	int retval;
-};
+} args_MPI_Alloc_mem_t;
 
 #define GET_ARGS_VALUE_MPI_Alloc_mem(activity) { \
-	activity->mpi_args.MPI_Alloc_mem.size = (MPI_Aint) size; \
-	activity->mpi_args.MPI_Alloc_mem.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Alloc_mem.baseptr = (void *) baseptr; \
+	args_MPI_Alloc_mem_t* args = (args_MPI_Alloc_mem_t*) activity->args; \
+	args->size = (MPI_Aint) size; \
+	args->info = (MPI_Info) info; \
+	args->baseptr = (void *) baseptr; \
 };
 
 #endif
@@ -17343,23 +17984,25 @@ struct args_MPI_Alloc_mem_t {
  *	)
  */
 #if HAVE_MPI_Comm_get_errhandler
-struct args_MPI_Comm_get_errhandler_t {
+typedef struct {
 	MPI_Comm comm;
 	MPI_Errhandler * erhandler;
 	struct {
 		MPI_Errhandler val;
 	} erhandler__ref;
 	int retval;
-};
+} args_MPI_Comm_get_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_get_errhandler(activity) { \
-	activity->mpi_args.MPI_Comm_get_errhandler.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_get_errhandler.erhandler = (MPI_Errhandler *) erhandler; \
+	args_MPI_Comm_get_errhandler_t* args = (args_MPI_Comm_get_errhandler_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->erhandler = (MPI_Errhandler *) erhandler; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_get_errhandler(args) { \
-	if (args->MPI_Comm_get_errhandler.erhandler != NULL) { \
-		args->MPI_Comm_get_errhandler.erhandler__ref.val = *args->MPI_Comm_get_errhandler.erhandler; \
+	args_MPI_Comm_get_errhandler_t* pargs = (args_MPI_Comm_get_errhandler_t*) args; \
+	if (pargs->erhandler != NULL) { \
+		pargs->erhandler__ref.val = *pargs->erhandler; \
 	} \
 };
 
@@ -17382,7 +18025,7 @@ struct args_MPI_Comm_get_errhandler_t {
  *	)
  */
 #if HAVE_MPI_Session_init
-struct args_MPI_Session_init_t {
+typedef struct {
 	MPI_Info info;
 	MPI_Errhandler errhandler;
 	MPI_Session * session;
@@ -17390,17 +18033,19 @@ struct args_MPI_Session_init_t {
 		MPI_Session val;
 	} session__ref;
 	int retval;
-};
+} args_MPI_Session_init_t;
 
 #define GET_ARGS_VALUE_MPI_Session_init(activity) { \
-	activity->mpi_args.MPI_Session_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Session_init.errhandler = (MPI_Errhandler) errhandler; \
-	activity->mpi_args.MPI_Session_init.session = (MPI_Session *) session; \
+	args_MPI_Session_init_t* args = (args_MPI_Session_init_t*) activity->args; \
+	args->info = (MPI_Info) info; \
+	args->errhandler = (MPI_Errhandler) errhandler; \
+	args->session = (MPI_Session *) session; \
 };
 
 #define GET_PTRS_VALUE_MPI_Session_init(args) { \
-	if (args->MPI_Session_init.session != NULL) { \
-		args->MPI_Session_init.session__ref.val = *args->MPI_Session_init.session; \
+	args_MPI_Session_init_t* pargs = (args_MPI_Session_init_t*) args; \
+	if (pargs->session != NULL) { \
+		pargs->session__ref.val = *pargs->session; \
 	} \
 };
 
@@ -17423,17 +18068,18 @@ struct args_MPI_Session_init_t {
  *	)
  */
 #if HAVE_MPI_Win_post
-struct args_MPI_Win_post_t {
+typedef struct {
 	MPI_Group group;
 	int mpi_assert;
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Win_post_t;
 
 #define GET_ARGS_VALUE_MPI_Win_post(activity) { \
-	activity->mpi_args.MPI_Win_post.group = (MPI_Group) group; \
-	activity->mpi_args.MPI_Win_post.mpi_assert = (int) mpi_assert; \
-	activity->mpi_args.MPI_Win_post.win = (MPI_Win) win; \
+	args_MPI_Win_post_t* args = (args_MPI_Win_post_t*) activity->args; \
+	args->group = (MPI_Group) group; \
+	args->mpi_assert = (int) mpi_assert; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -17458,7 +18104,7 @@ struct args_MPI_Win_post_t {
  *	)
  */
 #if HAVE_MPI_Intercomm_create
-struct args_MPI_Intercomm_create_t {
+typedef struct {
 	MPI_Comm local_comm;
 	int local_leader;
 	MPI_Comm bridge_comm;
@@ -17469,20 +18115,22 @@ struct args_MPI_Intercomm_create_t {
 		MPI_Comm val;
 	} newintercomm__ref;
 	int retval;
-};
+} args_MPI_Intercomm_create_t;
 
 #define GET_ARGS_VALUE_MPI_Intercomm_create(activity) { \
-	activity->mpi_args.MPI_Intercomm_create.local_comm = (MPI_Comm) local_comm; \
-	activity->mpi_args.MPI_Intercomm_create.local_leader = (int) local_leader; \
-	activity->mpi_args.MPI_Intercomm_create.bridge_comm = (MPI_Comm) bridge_comm; \
-	activity->mpi_args.MPI_Intercomm_create.remote_leader = (int) remote_leader; \
-	activity->mpi_args.MPI_Intercomm_create.tag = (int) tag; \
-	activity->mpi_args.MPI_Intercomm_create.newintercomm = (MPI_Comm *) newintercomm; \
+	args_MPI_Intercomm_create_t* args = (args_MPI_Intercomm_create_t*) activity->args; \
+	args->local_comm = (MPI_Comm) local_comm; \
+	args->local_leader = (int) local_leader; \
+	args->bridge_comm = (MPI_Comm) bridge_comm; \
+	args->remote_leader = (int) remote_leader; \
+	args->tag = (int) tag; \
+	args->newintercomm = (MPI_Comm *) newintercomm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Intercomm_create(args) { \
-	if (args->MPI_Intercomm_create.newintercomm != NULL) { \
-		args->MPI_Intercomm_create.newintercomm__ref.val = *args->MPI_Intercomm_create.newintercomm; \
+	args_MPI_Intercomm_create_t* pargs = (args_MPI_Intercomm_create_t*) args; \
+	if (pargs->newintercomm != NULL) { \
+		pargs->newintercomm__ref.val = *pargs->newintercomm; \
 	} \
 };
 
@@ -17506,19 +18154,20 @@ struct args_MPI_Intercomm_create_t {
  *	)
  */
 #if HAVE_MPI_File_read_all_begin
-struct args_MPI_File_read_all_begin_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
 	int retval;
-};
+} args_MPI_File_read_all_begin_t;
 
 #define GET_ARGS_VALUE_MPI_File_read_all_begin(activity) { \
-	activity->mpi_args.MPI_File_read_all_begin.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_read_all_begin.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_read_all_begin.count = (int) count; \
-	activity->mpi_args.MPI_File_read_all_begin.datatype = (MPI_Datatype) datatype; \
+	args_MPI_File_read_all_begin_t* args = (args_MPI_File_read_all_begin_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
 };
 
 #endif
@@ -17547,7 +18196,7 @@ struct args_MPI_File_read_all_begin_t {
  *	)
  */
 #if HAVE_MPI_Ialltoallv
-struct args_MPI_Ialltoallv_t {
+typedef struct {
 	void * sendbuf;
 	int(* sendcounts);
 	struct {
@@ -17574,36 +18223,38 @@ struct args_MPI_Ialltoallv_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Ialltoallv_t;
 
 #define GET_ARGS_VALUE_MPI_Ialltoallv(activity) { \
-	activity->mpi_args.MPI_Ialltoallv.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Ialltoallv.sendcounts = (int(*)) sendcounts; \
-	activity->mpi_args.MPI_Ialltoallv.sdispls = (int(*)) sdispls; \
-	activity->mpi_args.MPI_Ialltoallv.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Ialltoallv.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Ialltoallv.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Ialltoallv.rdispls = (int(*)) rdispls; \
-	activity->mpi_args.MPI_Ialltoallv.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Ialltoallv.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Ialltoallv.request = (MPI_Request *) request; \
+	args_MPI_Ialltoallv_t* args = (args_MPI_Ialltoallv_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcounts = (int(*)) sendcounts; \
+	args->sdispls = (int(*)) sdispls; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->rdispls = (int(*)) rdispls; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Ialltoallv(args) { \
-	if (args->MPI_Ialltoallv.sendcounts != NULL) { \
-		args->MPI_Ialltoallv.sendcounts__ref.val = *args->MPI_Ialltoallv.sendcounts; \
+	args_MPI_Ialltoallv_t* pargs = (args_MPI_Ialltoallv_t*) args; \
+	if (pargs->sendcounts != NULL) { \
+		pargs->sendcounts__ref.val = *pargs->sendcounts; \
 	} \
-	if (args->MPI_Ialltoallv.sdispls != NULL) { \
-		args->MPI_Ialltoallv.sdispls__ref.val = *args->MPI_Ialltoallv.sdispls; \
+	if (pargs->sdispls != NULL) { \
+		pargs->sdispls__ref.val = *pargs->sdispls; \
 	} \
-	if (args->MPI_Ialltoallv.recvcounts != NULL) { \
-		args->MPI_Ialltoallv.recvcounts__ref.val = *args->MPI_Ialltoallv.recvcounts; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Ialltoallv.rdispls != NULL) { \
-		args->MPI_Ialltoallv.rdispls__ref.val = *args->MPI_Ialltoallv.rdispls; \
+	if (pargs->rdispls != NULL) { \
+		pargs->rdispls__ref.val = *pargs->rdispls; \
 	} \
-	if (args->MPI_Ialltoallv.request != NULL) { \
-		args->MPI_Ialltoallv.request__ref.val = *args->MPI_Ialltoallv.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -17625,23 +18276,25 @@ struct args_MPI_Ialltoallv_t {
  *	)
  */
 #if HAVE_MPI_File_delete
-struct args_MPI_File_delete_t {
+typedef struct {
 	char * filename;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
 	} filename__ref;
 	MPI_Info info;
 	int retval;
-};
+} args_MPI_File_delete_t;
 
 #define GET_ARGS_VALUE_MPI_File_delete(activity) { \
-	activity->mpi_args.MPI_File_delete.filename = (char *) filename; \
-	activity->mpi_args.MPI_File_delete.info = (MPI_Info) info; \
+	args_MPI_File_delete_t* args = (args_MPI_File_delete_t*) activity->args; \
+	args->filename = (char *) filename; \
+	args->info = (MPI_Info) info; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_delete(args) { \
-	if (args->MPI_File_delete.filename != NULL) { \
-		strncpy(args->MPI_File_delete.filename__ref.val, args->MPI_File_delete.filename, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_File_delete_t* pargs = (args_MPI_File_delete_t*) args; \
+	if (pargs->filename != NULL) { \
+		strncpy(pargs->filename__ref.val, pargs->filename, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -17664,7 +18317,7 @@ struct args_MPI_File_delete_t {
  *	)
  */
 #if HAVE_MPI_Dims_create
-struct args_MPI_Dims_create_t {
+typedef struct {
 	int nnodes;
 	int ndims;
 	int(* dims);
@@ -17672,17 +18325,19 @@ struct args_MPI_Dims_create_t {
 		int val;
 	} dims__ref;
 	int retval;
-};
+} args_MPI_Dims_create_t;
 
 #define GET_ARGS_VALUE_MPI_Dims_create(activity) { \
-	activity->mpi_args.MPI_Dims_create.nnodes = (int) nnodes; \
-	activity->mpi_args.MPI_Dims_create.ndims = (int) ndims; \
-	activity->mpi_args.MPI_Dims_create.dims = (int(*)) dims; \
+	args_MPI_Dims_create_t* args = (args_MPI_Dims_create_t*) activity->args; \
+	args->nnodes = (int) nnodes; \
+	args->ndims = (int) ndims; \
+	args->dims = (int(*)) dims; \
 };
 
 #define GET_PTRS_VALUE_MPI_Dims_create(args) { \
-	if (args->MPI_Dims_create.dims != NULL) { \
-		args->MPI_Dims_create.dims__ref.val = *args->MPI_Dims_create.dims; \
+	args_MPI_Dims_create_t* pargs = (args_MPI_Dims_create_t*) args; \
+	if (pargs->dims != NULL) { \
+		pargs->dims__ref.val = *pargs->dims; \
 	} \
 };
 
@@ -17705,7 +18360,7 @@ struct args_MPI_Dims_create_t {
  *	)
  */
 #if HAVE_MPI_Cart_sub
-struct args_MPI_Cart_sub_t {
+typedef struct {
 	MPI_Comm comm;
 	int(* remain_dims);
 	struct {
@@ -17716,20 +18371,22 @@ struct args_MPI_Cart_sub_t {
 		MPI_Comm val;
 	} new_comm__ref;
 	int retval;
-};
+} args_MPI_Cart_sub_t;
 
 #define GET_ARGS_VALUE_MPI_Cart_sub(activity) { \
-	activity->mpi_args.MPI_Cart_sub.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Cart_sub.remain_dims = (int(*)) remain_dims; \
-	activity->mpi_args.MPI_Cart_sub.new_comm = (MPI_Comm *) new_comm; \
+	args_MPI_Cart_sub_t* args = (args_MPI_Cart_sub_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
+	args->remain_dims = (int(*)) remain_dims; \
+	args->new_comm = (MPI_Comm *) new_comm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Cart_sub(args) { \
-	if (args->MPI_Cart_sub.remain_dims != NULL) { \
-		args->MPI_Cart_sub.remain_dims__ref.val = *args->MPI_Cart_sub.remain_dims; \
+	args_MPI_Cart_sub_t* pargs = (args_MPI_Cart_sub_t*) args; \
+	if (pargs->remain_dims != NULL) { \
+		pargs->remain_dims__ref.val = *pargs->remain_dims; \
 	} \
-	if (args->MPI_Cart_sub.new_comm != NULL) { \
-		args->MPI_Cart_sub.new_comm__ref.val = *args->MPI_Cart_sub.new_comm; \
+	if (pargs->new_comm != NULL) { \
+		pargs->new_comm__ref.val = *pargs->new_comm; \
 	} \
 };
 
@@ -17755,7 +18412,7 @@ struct args_MPI_Cart_sub_t {
  *	)
  */
 #if HAVE_MPI_Win_allocate
-struct args_MPI_Win_allocate_t {
+typedef struct {
 	MPI_Aint size;
 	int disp_unit;
 	MPI_Info info;
@@ -17766,20 +18423,22 @@ struct args_MPI_Win_allocate_t {
 		MPI_Win val;
 	} win__ref;
 	int retval;
-};
+} args_MPI_Win_allocate_t;
 
 #define GET_ARGS_VALUE_MPI_Win_allocate(activity) { \
-	activity->mpi_args.MPI_Win_allocate.size = (MPI_Aint) size; \
-	activity->mpi_args.MPI_Win_allocate.disp_unit = (int) disp_unit; \
-	activity->mpi_args.MPI_Win_allocate.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Win_allocate.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Win_allocate.baseptr = (void *) baseptr; \
-	activity->mpi_args.MPI_Win_allocate.win = (MPI_Win *) win; \
+	args_MPI_Win_allocate_t* args = (args_MPI_Win_allocate_t*) activity->args; \
+	args->size = (MPI_Aint) size; \
+	args->disp_unit = (int) disp_unit; \
+	args->info = (MPI_Info) info; \
+	args->comm = (MPI_Comm) comm; \
+	args->baseptr = (void *) baseptr; \
+	args->win = (MPI_Win *) win; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_allocate(args) { \
-	if (args->MPI_Win_allocate.win != NULL) { \
-		args->MPI_Win_allocate.win__ref.val = *args->MPI_Win_allocate.win; \
+	args_MPI_Win_allocate_t* pargs = (args_MPI_Win_allocate_t*) args; \
+	if (pargs->win != NULL) { \
+		pargs->win__ref.val = *pargs->win; \
 	} \
 };
 
@@ -17801,23 +18460,25 @@ struct args_MPI_Win_allocate_t {
  *	)
  */
 #if HAVE_MPI_Session_get_errhandler
-struct args_MPI_Session_get_errhandler_t {
+typedef struct {
 	MPI_Session session;
 	MPI_Errhandler * erhandler;
 	struct {
 		MPI_Errhandler val;
 	} erhandler__ref;
 	int retval;
-};
+} args_MPI_Session_get_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_Session_get_errhandler(activity) { \
-	activity->mpi_args.MPI_Session_get_errhandler.session = (MPI_Session) session; \
-	activity->mpi_args.MPI_Session_get_errhandler.erhandler = (MPI_Errhandler *) erhandler; \
+	args_MPI_Session_get_errhandler_t* args = (args_MPI_Session_get_errhandler_t*) activity->args; \
+	args->session = (MPI_Session) session; \
+	args->erhandler = (MPI_Errhandler *) erhandler; \
 };
 
 #define GET_PTRS_VALUE_MPI_Session_get_errhandler(args) { \
-	if (args->MPI_Session_get_errhandler.erhandler != NULL) { \
-		args->MPI_Session_get_errhandler.erhandler__ref.val = *args->MPI_Session_get_errhandler.erhandler; \
+	args_MPI_Session_get_errhandler_t* pargs = (args_MPI_Session_get_errhandler_t*) args; \
+	if (pargs->erhandler != NULL) { \
+		pargs->erhandler__ref.val = *pargs->erhandler; \
 	} \
 };
 
@@ -17840,7 +18501,7 @@ struct args_MPI_Session_get_errhandler_t {
  *	)
  */
 #if HAVE_MPI_Parrived
-struct args_MPI_Parrived_t {
+typedef struct {
 	MPI_Request request;
 	int partition;
 	int * flag;
@@ -17848,17 +18509,19 @@ struct args_MPI_Parrived_t {
 		int val;
 	} flag__ref;
 	int retval;
-};
+} args_MPI_Parrived_t;
 
 #define GET_ARGS_VALUE_MPI_Parrived(activity) { \
-	activity->mpi_args.MPI_Parrived.request = (MPI_Request) request; \
-	activity->mpi_args.MPI_Parrived.partition = (int) partition; \
-	activity->mpi_args.MPI_Parrived.flag = (int *) flag; \
+	args_MPI_Parrived_t* args = (args_MPI_Parrived_t*) activity->args; \
+	args->request = (MPI_Request) request; \
+	args->partition = (int) partition; \
+	args->flag = (int *) flag; \
 };
 
 #define GET_PTRS_VALUE_MPI_Parrived(args) { \
-	if (args->MPI_Parrived.flag != NULL) { \
-		args->MPI_Parrived.flag__ref.val = *args->MPI_Parrived.flag; \
+	args_MPI_Parrived_t* pargs = (args_MPI_Parrived_t*) args; \
+	if (pargs->flag != NULL) { \
+		pargs->flag__ref.val = *pargs->flag; \
 	} \
 };
 
@@ -17881,7 +18544,7 @@ struct args_MPI_Parrived_t {
  *	)
  */
 #if HAVE_MPI_Info_create_env
-struct args_MPI_Info_create_env_t {
+typedef struct {
 	int argc;
 	char *(* argv);
 	struct {
@@ -17893,23 +18556,25 @@ struct args_MPI_Info_create_env_t {
 		MPI_Info val;
 	} info__ref;
 	int retval;
-};
+} args_MPI_Info_create_env_t;
 
 #define GET_ARGS_VALUE_MPI_Info_create_env(activity) { \
-	activity->mpi_args.MPI_Info_create_env.argc = (int) argc; \
-	activity->mpi_args.MPI_Info_create_env.argv = (char *(*)) argv; \
-	activity->mpi_args.MPI_Info_create_env.info = (MPI_Info *) info; \
+	args_MPI_Info_create_env_t* args = (args_MPI_Info_create_env_t*) activity->args; \
+	args->argc = (int) argc; \
+	args->argv = (char *(*)) argv; \
+	args->info = (MPI_Info *) info; \
 };
 
 #define GET_PTRS_VALUE_MPI_Info_create_env(args) { \
-	if (args->MPI_Info_create_env.argv != NULL) { \
-		args->MPI_Info_create_env.argv__ref.ptr1 = *args->MPI_Info_create_env.argv; \
-		if (args->MPI_Info_create_env.argv__ref.ptr1 != NULL) { \
-			strncpy(args->MPI_Info_create_env.argv__ref.val, args->MPI_Info_create_env.argv__ref.ptr1, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Info_create_env_t* pargs = (args_MPI_Info_create_env_t*) args; \
+	if (pargs->argv != NULL) { \
+		pargs->argv__ref.ptr1 = *pargs->argv; \
+		if (pargs->argv__ref.ptr1 != NULL) { \
+			strncpy(pargs->argv__ref.val, pargs->argv__ref.ptr1, MPI_STRING_SIZE_MAX-1); \
 		} \
 	} \
-	if (args->MPI_Info_create_env.info != NULL) { \
-		args->MPI_Info_create_env.info__ref.val = *args->MPI_Info_create_env.info; \
+	if (pargs->info != NULL) { \
+		pargs->info__ref.val = *pargs->info; \
 	} \
 };
 
@@ -17931,23 +18596,25 @@ struct args_MPI_Info_create_env_t {
  *	)
  */
 #if HAVE_MPI_File_create_errhandler
-struct args_MPI_File_create_errhandler_t {
+typedef struct {
 	MPI_File_errhandler_function * function;
 	MPI_Errhandler * errhandler;
 	struct {
 		MPI_Errhandler val;
 	} errhandler__ref;
 	int retval;
-};
+} args_MPI_File_create_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_File_create_errhandler(activity) { \
-	activity->mpi_args.MPI_File_create_errhandler.function = (MPI_File_errhandler_function *) function; \
-	activity->mpi_args.MPI_File_create_errhandler.errhandler = (MPI_Errhandler *) errhandler; \
+	args_MPI_File_create_errhandler_t* args = (args_MPI_File_create_errhandler_t*) activity->args; \
+	args->function = (MPI_File_errhandler_function *) function; \
+	args->errhandler = (MPI_Errhandler *) errhandler; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_create_errhandler(args) { \
-	if (args->MPI_File_create_errhandler.errhandler != NULL) { \
-		args->MPI_File_create_errhandler.errhandler__ref.val = *args->MPI_File_create_errhandler.errhandler; \
+	args_MPI_File_create_errhandler_t* pargs = (args_MPI_File_create_errhandler_t*) args; \
+	if (pargs->errhandler != NULL) { \
+		pargs->errhandler__ref.val = *pargs->errhandler; \
 	} \
 };
 
@@ -17975,7 +18642,7 @@ struct args_MPI_File_create_errhandler_t {
  *	)
  */
 #if HAVE_MPI_Ialltoall
-struct args_MPI_Ialltoall_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -17988,22 +18655,24 @@ struct args_MPI_Ialltoall_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Ialltoall_t;
 
 #define GET_ARGS_VALUE_MPI_Ialltoall(activity) { \
-	activity->mpi_args.MPI_Ialltoall.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Ialltoall.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Ialltoall.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Ialltoall.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Ialltoall.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Ialltoall.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Ialltoall.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Ialltoall.request = (MPI_Request *) request; \
+	args_MPI_Ialltoall_t* args = (args_MPI_Ialltoall_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Ialltoall(args) { \
-	if (args->MPI_Ialltoall.request != NULL) { \
-		args->MPI_Ialltoall.request__ref.val = *args->MPI_Ialltoall.request; \
+	args_MPI_Ialltoall_t* pargs = (args_MPI_Ialltoall_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -18033,7 +18702,7 @@ struct args_MPI_Ialltoall_t {
  *	)
  */
 #if HAVE_MPI_Raccumulate
-struct args_MPI_Raccumulate_t {
+typedef struct {
 	void * origin_addr;
 	int origin_count;
 	MPI_Datatype origin_datatype;
@@ -18048,24 +18717,26 @@ struct args_MPI_Raccumulate_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Raccumulate_t;
 
 #define GET_ARGS_VALUE_MPI_Raccumulate(activity) { \
-	activity->mpi_args.MPI_Raccumulate.origin_addr = (void *) origin_addr; \
-	activity->mpi_args.MPI_Raccumulate.origin_count = (int) origin_count; \
-	activity->mpi_args.MPI_Raccumulate.origin_datatype = (MPI_Datatype) origin_datatype; \
-	activity->mpi_args.MPI_Raccumulate.target_rank = (int) target_rank; \
-	activity->mpi_args.MPI_Raccumulate.target_disp = (MPI_Aint) target_disp; \
-	activity->mpi_args.MPI_Raccumulate.target_count = (int) target_count; \
-	activity->mpi_args.MPI_Raccumulate.target_datatype = (MPI_Datatype) target_datatype; \
-	activity->mpi_args.MPI_Raccumulate.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Raccumulate.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Raccumulate.request = (MPI_Request *) request; \
+	args_MPI_Raccumulate_t* args = (args_MPI_Raccumulate_t*) activity->args; \
+	args->origin_addr = (void *) origin_addr; \
+	args->origin_count = (int) origin_count; \
+	args->origin_datatype = (MPI_Datatype) origin_datatype; \
+	args->target_rank = (int) target_rank; \
+	args->target_disp = (MPI_Aint) target_disp; \
+	args->target_count = (int) target_count; \
+	args->target_datatype = (MPI_Datatype) target_datatype; \
+	args->op = (MPI_Op) op; \
+	args->win = (MPI_Win) win; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Raccumulate(args) { \
-	if (args->MPI_Raccumulate.request != NULL) { \
-		args->MPI_Raccumulate.request__ref.val = *args->MPI_Raccumulate.request; \
+	args_MPI_Raccumulate_t* pargs = (args_MPI_Raccumulate_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -18087,23 +18758,25 @@ struct args_MPI_Raccumulate_t {
  *	)
  */
 #if HAVE_MPI_Type_size_x
-struct args_MPI_Type_size_x_t {
+typedef struct {
 	MPI_Datatype type;
 	MPI_Count * size;
 	struct {
 		MPI_Count val;
 	} size__ref;
 	int retval;
-};
+} args_MPI_Type_size_x_t;
 
 #define GET_ARGS_VALUE_MPI_Type_size_x(activity) { \
-	activity->mpi_args.MPI_Type_size_x.type = (MPI_Datatype) type; \
-	activity->mpi_args.MPI_Type_size_x.size = (MPI_Count *) size; \
+	args_MPI_Type_size_x_t* args = (args_MPI_Type_size_x_t*) activity->args; \
+	args->type = (MPI_Datatype) type; \
+	args->size = (MPI_Count *) size; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_size_x(args) { \
-	if (args->MPI_Type_size_x.size != NULL) { \
-		args->MPI_Type_size_x.size__ref.val = *args->MPI_Type_size_x.size; \
+	args_MPI_Type_size_x_t* pargs = (args_MPI_Type_size_x_t*) args; \
+	if (pargs->size != NULL) { \
+		pargs->size__ref.val = *pargs->size; \
 	} \
 };
 
@@ -18126,7 +18799,7 @@ struct args_MPI_Type_size_x_t {
  *	)
  */
 #if HAVE_MPI_Type_get_extent_x
-struct args_MPI_Type_get_extent_x_t {
+typedef struct {
 	MPI_Datatype type;
 	MPI_Count * lb;
 	struct {
@@ -18137,20 +18810,22 @@ struct args_MPI_Type_get_extent_x_t {
 		MPI_Count val;
 	} extent__ref;
 	int retval;
-};
+} args_MPI_Type_get_extent_x_t;
 
 #define GET_ARGS_VALUE_MPI_Type_get_extent_x(activity) { \
-	activity->mpi_args.MPI_Type_get_extent_x.type = (MPI_Datatype) type; \
-	activity->mpi_args.MPI_Type_get_extent_x.lb = (MPI_Count *) lb; \
-	activity->mpi_args.MPI_Type_get_extent_x.extent = (MPI_Count *) extent; \
+	args_MPI_Type_get_extent_x_t* args = (args_MPI_Type_get_extent_x_t*) activity->args; \
+	args->type = (MPI_Datatype) type; \
+	args->lb = (MPI_Count *) lb; \
+	args->extent = (MPI_Count *) extent; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_get_extent_x(args) { \
-	if (args->MPI_Type_get_extent_x.lb != NULL) { \
-		args->MPI_Type_get_extent_x.lb__ref.val = *args->MPI_Type_get_extent_x.lb; \
+	args_MPI_Type_get_extent_x_t* pargs = (args_MPI_Type_get_extent_x_t*) args; \
+	if (pargs->lb != NULL) { \
+		pargs->lb__ref.val = *pargs->lb; \
 	} \
-	if (args->MPI_Type_get_extent_x.extent != NULL) { \
-		args->MPI_Type_get_extent_x.extent__ref.val = *args->MPI_Type_get_extent_x.extent; \
+	if (pargs->extent != NULL) { \
+		pargs->extent__ref.val = *pargs->extent; \
 	} \
 };
 
@@ -18175,21 +18850,22 @@ struct args_MPI_Type_get_extent_x_t {
  *	)
  */
 #if HAVE_MPI_File_read_at_all_begin
-struct args_MPI_File_read_at_all_begin_t {
+typedef struct {
 	MPI_File fh;
 	MPI_Offset offset;
 	void * buf;
 	int count;
 	MPI_Datatype datatype;
 	int retval;
-};
+} args_MPI_File_read_at_all_begin_t;
 
 #define GET_ARGS_VALUE_MPI_File_read_at_all_begin(activity) { \
-	activity->mpi_args.MPI_File_read_at_all_begin.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_read_at_all_begin.offset = (MPI_Offset) offset; \
-	activity->mpi_args.MPI_File_read_at_all_begin.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_read_at_all_begin.count = (int) count; \
-	activity->mpi_args.MPI_File_read_at_all_begin.datatype = (MPI_Datatype) datatype; \
+	args_MPI_File_read_at_all_begin_t* args = (args_MPI_File_read_at_all_begin_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->offset = (MPI_Offset) offset; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
 };
 
 #endif
@@ -18217,7 +18893,7 @@ struct args_MPI_File_read_at_all_begin_t {
  *	)
  */
 #if HAVE_MPI_Dist_graph_create
-struct args_MPI_Dist_graph_create_t {
+typedef struct {
 	MPI_Comm comm_old;
 	int n;
 	int(* nodes);
@@ -18243,35 +18919,37 @@ struct args_MPI_Dist_graph_create_t {
 		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
-};
+} args_MPI_Dist_graph_create_t;
 
 #define GET_ARGS_VALUE_MPI_Dist_graph_create(activity) { \
-	activity->mpi_args.MPI_Dist_graph_create.comm_old = (MPI_Comm) comm_old; \
-	activity->mpi_args.MPI_Dist_graph_create.n = (int) n; \
-	activity->mpi_args.MPI_Dist_graph_create.nodes = (int(*)) nodes; \
-	activity->mpi_args.MPI_Dist_graph_create.degrees = (int(*)) degrees; \
-	activity->mpi_args.MPI_Dist_graph_create.targets = (int(*)) targets; \
-	activity->mpi_args.MPI_Dist_graph_create.weights = (int(*)) weights; \
-	activity->mpi_args.MPI_Dist_graph_create.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Dist_graph_create.reorder = (int) reorder; \
-	activity->mpi_args.MPI_Dist_graph_create.newcomm = (MPI_Comm *) newcomm; \
+	args_MPI_Dist_graph_create_t* args = (args_MPI_Dist_graph_create_t*) activity->args; \
+	args->comm_old = (MPI_Comm) comm_old; \
+	args->n = (int) n; \
+	args->nodes = (int(*)) nodes; \
+	args->degrees = (int(*)) degrees; \
+	args->targets = (int(*)) targets; \
+	args->weights = (int(*)) weights; \
+	args->info = (MPI_Info) info; \
+	args->reorder = (int) reorder; \
+	args->newcomm = (MPI_Comm *) newcomm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Dist_graph_create(args) { \
-	if (args->MPI_Dist_graph_create.nodes != NULL) { \
-		args->MPI_Dist_graph_create.nodes__ref.val = *args->MPI_Dist_graph_create.nodes; \
+	args_MPI_Dist_graph_create_t* pargs = (args_MPI_Dist_graph_create_t*) args; \
+	if (pargs->nodes != NULL) { \
+		pargs->nodes__ref.val = *pargs->nodes; \
 	} \
-	if (args->MPI_Dist_graph_create.degrees != NULL) { \
-		args->MPI_Dist_graph_create.degrees__ref.val = *args->MPI_Dist_graph_create.degrees; \
+	if (pargs->degrees != NULL) { \
+		pargs->degrees__ref.val = *pargs->degrees; \
 	} \
-	if (args->MPI_Dist_graph_create.targets != NULL) { \
-		args->MPI_Dist_graph_create.targets__ref.val = *args->MPI_Dist_graph_create.targets; \
+	if (pargs->targets != NULL) { \
+		pargs->targets__ref.val = *pargs->targets; \
 	} \
-	if (args->MPI_Dist_graph_create.weights != NULL) { \
-		args->MPI_Dist_graph_create.weights__ref.val = *args->MPI_Dist_graph_create.weights; \
+	if (pargs->weights != NULL) { \
+		pargs->weights__ref.val = *pargs->weights; \
 	} \
-	if (args->MPI_Dist_graph_create.newcomm != NULL) { \
-		args->MPI_Dist_graph_create.newcomm__ref.val = *args->MPI_Dist_graph_create.newcomm; \
+	if (pargs->newcomm != NULL) { \
+		pargs->newcomm__ref.val = *pargs->newcomm; \
 	} \
 };
 
@@ -18293,23 +18971,25 @@ struct args_MPI_Dist_graph_create_t {
  *	)
  */
 #if HAVE_MPI_Comm_join
-struct args_MPI_Comm_join_t {
+typedef struct {
 	int fd;
 	MPI_Comm * intercomm;
 	struct {
 		MPI_Comm val;
 	} intercomm__ref;
 	int retval;
-};
+} args_MPI_Comm_join_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_join(activity) { \
-	activity->mpi_args.MPI_Comm_join.fd = (int) fd; \
-	activity->mpi_args.MPI_Comm_join.intercomm = (MPI_Comm *) intercomm; \
+	args_MPI_Comm_join_t* args = (args_MPI_Comm_join_t*) activity->args; \
+	args->fd = (int) fd; \
+	args->intercomm = (MPI_Comm *) intercomm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_join(args) { \
-	if (args->MPI_Comm_join.intercomm != NULL) { \
-		args->MPI_Comm_join.intercomm__ref.val = *args->MPI_Comm_join.intercomm; \
+	args_MPI_Comm_join_t* pargs = (args_MPI_Comm_join_t*) args; \
+	if (pargs->intercomm != NULL) { \
+		pargs->intercomm__ref.val = *pargs->intercomm; \
 	} \
 };
 
@@ -18340,7 +19020,7 @@ struct args_MPI_Comm_join_t {
  *	)
  */
 #if HAVE_MPI_Gatherv_init
-struct args_MPI_Gatherv_init_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -18362,31 +19042,33 @@ struct args_MPI_Gatherv_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Gatherv_init_t;
 
 #define GET_ARGS_VALUE_MPI_Gatherv_init(activity) { \
-	activity->mpi_args.MPI_Gatherv_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Gatherv_init.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Gatherv_init.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Gatherv_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Gatherv_init.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Gatherv_init.displs = (int(*)) displs; \
-	activity->mpi_args.MPI_Gatherv_init.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Gatherv_init.root = (int) root; \
-	activity->mpi_args.MPI_Gatherv_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Gatherv_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Gatherv_init.request = (MPI_Request *) request; \
+	args_MPI_Gatherv_init_t* args = (args_MPI_Gatherv_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->displs = (int(*)) displs; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Gatherv_init(args) { \
-	if (args->MPI_Gatherv_init.recvcounts != NULL) { \
-		args->MPI_Gatherv_init.recvcounts__ref.val = *args->MPI_Gatherv_init.recvcounts; \
+	args_MPI_Gatherv_init_t* pargs = (args_MPI_Gatherv_init_t*) args; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Gatherv_init.displs != NULL) { \
-		args->MPI_Gatherv_init.displs__ref.val = *args->MPI_Gatherv_init.displs; \
+	if (pargs->displs != NULL) { \
+		pargs->displs__ref.val = *pargs->displs; \
 	} \
-	if (args->MPI_Gatherv_init.request != NULL) { \
-		args->MPI_Gatherv_init.request__ref.val = *args->MPI_Gatherv_init.request; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -18407,13 +19089,14 @@ struct args_MPI_Gatherv_init_t {
  *	)
  */
 #if HAVE_MPI_File_sync
-struct args_MPI_File_sync_t {
+typedef struct {
 	MPI_File fh;
 	int retval;
-};
+} args_MPI_File_sync_t;
 
 #define GET_ARGS_VALUE_MPI_File_sync(activity) { \
-	activity->mpi_args.MPI_File_sync.fh = (MPI_File) fh; \
+	args_MPI_File_sync_t* args = (args_MPI_File_sync_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
 };
 
 #endif
@@ -18437,7 +19120,7 @@ struct args_MPI_File_sync_t {
  *	)
  */
 #if HAVE_MPI_Comm_accept
-struct args_MPI_Comm_accept_t {
+typedef struct {
 	char * port_name;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
@@ -18450,22 +19133,24 @@ struct args_MPI_Comm_accept_t {
 		MPI_Comm val;
 	} newcomm__ref;
 	int retval;
-};
+} args_MPI_Comm_accept_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_accept(activity) { \
-	activity->mpi_args.MPI_Comm_accept.port_name = (char *) port_name; \
-	activity->mpi_args.MPI_Comm_accept.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Comm_accept.root = (int) root; \
-	activity->mpi_args.MPI_Comm_accept.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Comm_accept.newcomm = (MPI_Comm *) newcomm; \
+	args_MPI_Comm_accept_t* args = (args_MPI_Comm_accept_t*) activity->args; \
+	args->port_name = (char *) port_name; \
+	args->info = (MPI_Info) info; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->newcomm = (MPI_Comm *) newcomm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Comm_accept(args) { \
-	if (args->MPI_Comm_accept.port_name != NULL) { \
-		strncpy(args->MPI_Comm_accept.port_name__ref.val, args->MPI_Comm_accept.port_name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Comm_accept_t* pargs = (args_MPI_Comm_accept_t*) args; \
+	if (pargs->port_name != NULL) { \
+		strncpy(pargs->port_name__ref.val, pargs->port_name, MPI_STRING_SIZE_MAX-1); \
 	} \
-	if (args->MPI_Comm_accept.newcomm != NULL) { \
-		args->MPI_Comm_accept.newcomm__ref.val = *args->MPI_Comm_accept.newcomm; \
+	if (pargs->newcomm != NULL) { \
+		pargs->newcomm__ref.val = *pargs->newcomm; \
 	} \
 };
 
@@ -18493,7 +19178,7 @@ struct args_MPI_Comm_accept_t {
  *	)
  */
 #if HAVE_MPI_Ineighbor_allgather
-struct args_MPI_Ineighbor_allgather_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -18506,22 +19191,24 @@ struct args_MPI_Ineighbor_allgather_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Ineighbor_allgather_t;
 
 #define GET_ARGS_VALUE_MPI_Ineighbor_allgather(activity) { \
-	activity->mpi_args.MPI_Ineighbor_allgather.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Ineighbor_allgather.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Ineighbor_allgather.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Ineighbor_allgather.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Ineighbor_allgather.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Ineighbor_allgather.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Ineighbor_allgather.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Ineighbor_allgather.request = (MPI_Request *) request; \
+	args_MPI_Ineighbor_allgather_t* args = (args_MPI_Ineighbor_allgather_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Ineighbor_allgather(args) { \
-	if (args->MPI_Ineighbor_allgather.request != NULL) { \
-		args->MPI_Ineighbor_allgather.request__ref.val = *args->MPI_Ineighbor_allgather.request; \
+	args_MPI_Ineighbor_allgather_t* pargs = (args_MPI_Ineighbor_allgather_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -18543,23 +19230,25 @@ struct args_MPI_Ineighbor_allgather_t {
  *	)
  */
 #if HAVE_MPI_Type_dup
-struct args_MPI_Type_dup_t {
+typedef struct {
 	MPI_Datatype type;
 	MPI_Datatype * newtype;
 	struct {
 		MPI_Datatype val;
 	} newtype__ref;
 	int retval;
-};
+} args_MPI_Type_dup_t;
 
 #define GET_ARGS_VALUE_MPI_Type_dup(activity) { \
-	activity->mpi_args.MPI_Type_dup.type = (MPI_Datatype) type; \
-	activity->mpi_args.MPI_Type_dup.newtype = (MPI_Datatype *) newtype; \
+	args_MPI_Type_dup_t* args = (args_MPI_Type_dup_t*) activity->args; \
+	args->type = (MPI_Datatype) type; \
+	args->newtype = (MPI_Datatype *) newtype; \
 };
 
 #define GET_PTRS_VALUE_MPI_Type_dup(args) { \
-	if (args->MPI_Type_dup.newtype != NULL) { \
-		args->MPI_Type_dup.newtype__ref.val = *args->MPI_Type_dup.newtype; \
+	args_MPI_Type_dup_t* pargs = (args_MPI_Type_dup_t*) args; \
+	if (pargs->newtype != NULL) { \
+		pargs->newtype__ref.val = *pargs->newtype; \
 	} \
 };
 
@@ -18584,7 +19273,7 @@ struct args_MPI_Type_dup_t {
  *	)
  */
 #if HAVE_MPI_File_iwrite_shared
-struct args_MPI_File_iwrite_shared_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
@@ -18594,19 +19283,21 @@ struct args_MPI_File_iwrite_shared_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_File_iwrite_shared_t;
 
 #define GET_ARGS_VALUE_MPI_File_iwrite_shared(activity) { \
-	activity->mpi_args.MPI_File_iwrite_shared.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_iwrite_shared.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_iwrite_shared.count = (int) count; \
-	activity->mpi_args.MPI_File_iwrite_shared.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_iwrite_shared.request = (MPI_Request *) request; \
+	args_MPI_File_iwrite_shared_t* args = (args_MPI_File_iwrite_shared_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_iwrite_shared(args) { \
-	if (args->MPI_File_iwrite_shared.request != NULL) { \
-		args->MPI_File_iwrite_shared.request__ref.val = *args->MPI_File_iwrite_shared.request; \
+	args_MPI_File_iwrite_shared_t* pargs = (args_MPI_File_iwrite_shared_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -18628,23 +19319,25 @@ struct args_MPI_File_iwrite_shared_t {
  *	)
  */
 #if HAVE_MPI_Win_get_errhandler
-struct args_MPI_Win_get_errhandler_t {
+typedef struct {
 	MPI_Win win;
 	MPI_Errhandler * errhandler;
 	struct {
 		MPI_Errhandler val;
 	} errhandler__ref;
 	int retval;
-};
+} args_MPI_Win_get_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_Win_get_errhandler(activity) { \
-	activity->mpi_args.MPI_Win_get_errhandler.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Win_get_errhandler.errhandler = (MPI_Errhandler *) errhandler; \
+	args_MPI_Win_get_errhandler_t* args = (args_MPI_Win_get_errhandler_t*) activity->args; \
+	args->win = (MPI_Win) win; \
+	args->errhandler = (MPI_Errhandler *) errhandler; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_get_errhandler(args) { \
-	if (args->MPI_Win_get_errhandler.errhandler != NULL) { \
-		args->MPI_Win_get_errhandler.errhandler__ref.val = *args->MPI_Win_get_errhandler.errhandler; \
+	args_MPI_Win_get_errhandler_t* pargs = (args_MPI_Win_get_errhandler_t*) args; \
+	if (pargs->errhandler != NULL) { \
+		pargs->errhandler__ref.val = *pargs->errhandler; \
 	} \
 };
 
@@ -18671,7 +19364,7 @@ struct args_MPI_Win_get_errhandler_t {
  *	)
  */
 #if HAVE_MPI_Iscan
-struct args_MPI_Iscan_t {
+typedef struct {
 	void * sendbuf;
 	void * recvbuf;
 	int count;
@@ -18683,21 +19376,23 @@ struct args_MPI_Iscan_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Iscan_t;
 
 #define GET_ARGS_VALUE_MPI_Iscan(activity) { \
-	activity->mpi_args.MPI_Iscan.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Iscan.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Iscan.count = (int) count; \
-	activity->mpi_args.MPI_Iscan.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_Iscan.op = (MPI_Op) op; \
-	activity->mpi_args.MPI_Iscan.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Iscan.request = (MPI_Request *) request; \
+	args_MPI_Iscan_t* args = (args_MPI_Iscan_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->recvbuf = (void *) recvbuf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->op = (MPI_Op) op; \
+	args->comm = (MPI_Comm) comm; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Iscan(args) { \
-	if (args->MPI_Iscan.request != NULL) { \
-		args->MPI_Iscan.request__ref.val = *args->MPI_Iscan.request; \
+	args_MPI_Iscan_t* pargs = (args_MPI_Iscan_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -18719,15 +19414,16 @@ struct args_MPI_Iscan_t {
  *	)
  */
 #if HAVE_MPI_Win_flush
-struct args_MPI_Win_flush_t {
+typedef struct {
 	int rank;
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Win_flush_t;
 
 #define GET_ARGS_VALUE_MPI_Win_flush(activity) { \
-	activity->mpi_args.MPI_Win_flush.rank = (int) rank; \
-	activity->mpi_args.MPI_Win_flush.win = (MPI_Win) win; \
+	args_MPI_Win_flush_t* args = (args_MPI_Win_flush_t*) activity->args; \
+	args->rank = (int) rank; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -18752,7 +19448,7 @@ struct args_MPI_Win_flush_t {
  *	)
  */
 #if HAVE_MPI_Graph_create
-struct args_MPI_Graph_create_t {
+typedef struct {
 	MPI_Comm comm_old;
 	int nnodes;
 	int(* index);
@@ -18769,26 +19465,28 @@ struct args_MPI_Graph_create_t {
 		MPI_Comm val;
 	} comm_graph__ref;
 	int retval;
-};
+} args_MPI_Graph_create_t;
 
 #define GET_ARGS_VALUE_MPI_Graph_create(activity) { \
-	activity->mpi_args.MPI_Graph_create.comm_old = (MPI_Comm) comm_old; \
-	activity->mpi_args.MPI_Graph_create.nnodes = (int) nnodes; \
-	activity->mpi_args.MPI_Graph_create.index = (int(*)) index; \
-	activity->mpi_args.MPI_Graph_create.edges = (int(*)) edges; \
-	activity->mpi_args.MPI_Graph_create.reorder = (int) reorder; \
-	activity->mpi_args.MPI_Graph_create.comm_graph = (MPI_Comm *) comm_graph; \
+	args_MPI_Graph_create_t* args = (args_MPI_Graph_create_t*) activity->args; \
+	args->comm_old = (MPI_Comm) comm_old; \
+	args->nnodes = (int) nnodes; \
+	args->index = (int(*)) index; \
+	args->edges = (int(*)) edges; \
+	args->reorder = (int) reorder; \
+	args->comm_graph = (MPI_Comm *) comm_graph; \
 };
 
 #define GET_PTRS_VALUE_MPI_Graph_create(args) { \
-	if (args->MPI_Graph_create.index != NULL) { \
-		args->MPI_Graph_create.index__ref.val = *args->MPI_Graph_create.index; \
+	args_MPI_Graph_create_t* pargs = (args_MPI_Graph_create_t*) args; \
+	if (pargs->index != NULL) { \
+		pargs->index__ref.val = *pargs->index; \
 	} \
-	if (args->MPI_Graph_create.edges != NULL) { \
-		args->MPI_Graph_create.edges__ref.val = *args->MPI_Graph_create.edges; \
+	if (pargs->edges != NULL) { \
+		pargs->edges__ref.val = *pargs->edges; \
 	} \
-	if (args->MPI_Graph_create.comm_graph != NULL) { \
-		args->MPI_Graph_create.comm_graph__ref.val = *args->MPI_Graph_create.comm_graph; \
+	if (pargs->comm_graph != NULL) { \
+		pargs->comm_graph__ref.val = *pargs->comm_graph; \
 	} \
 };
 
@@ -18810,23 +19508,25 @@ struct args_MPI_Graph_create_t {
  *	)
  */
 #if HAVE_MPI_Win_set_name
-struct args_MPI_Win_set_name_t {
+typedef struct {
 	MPI_Win win;
 	char * win_name;
 	struct {
 		char val[MPI_STRING_SIZE_MAX];
 	} win_name__ref;
 	int retval;
-};
+} args_MPI_Win_set_name_t;
 
 #define GET_ARGS_VALUE_MPI_Win_set_name(activity) { \
-	activity->mpi_args.MPI_Win_set_name.win = (MPI_Win) win; \
-	activity->mpi_args.MPI_Win_set_name.win_name = (char *) win_name; \
+	args_MPI_Win_set_name_t* args = (args_MPI_Win_set_name_t*) activity->args; \
+	args->win = (MPI_Win) win; \
+	args->win_name = (char *) win_name; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_set_name(args) { \
-	if (args->MPI_Win_set_name.win_name != NULL) { \
-		strncpy(args->MPI_Win_set_name.win_name__ref.val, args->MPI_Win_set_name.win_name, MPI_STRING_SIZE_MAX-1); \
+	args_MPI_Win_set_name_t* pargs = (args_MPI_Win_set_name_t*) args; \
+	if (pargs->win_name != NULL) { \
+		strncpy(pargs->win_name__ref.val, pargs->win_name, MPI_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -18848,23 +19548,25 @@ struct args_MPI_Win_set_name_t {
  *	)
  */
 #if HAVE_MPI_Win_create_errhandler
-struct args_MPI_Win_create_errhandler_t {
+typedef struct {
 	MPI_Win_errhandler_function * function;
 	MPI_Errhandler * errhandler;
 	struct {
 		MPI_Errhandler val;
 	} errhandler__ref;
 	int retval;
-};
+} args_MPI_Win_create_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_Win_create_errhandler(activity) { \
-	activity->mpi_args.MPI_Win_create_errhandler.function = (MPI_Win_errhandler_function *) function; \
-	activity->mpi_args.MPI_Win_create_errhandler.errhandler = (MPI_Errhandler *) errhandler; \
+	args_MPI_Win_create_errhandler_t* args = (args_MPI_Win_create_errhandler_t*) activity->args; \
+	args->function = (MPI_Win_errhandler_function *) function; \
+	args->errhandler = (MPI_Errhandler *) errhandler; \
 };
 
 #define GET_PTRS_VALUE_MPI_Win_create_errhandler(args) { \
-	if (args->MPI_Win_create_errhandler.errhandler != NULL) { \
-		args->MPI_Win_create_errhandler.errhandler__ref.val = *args->MPI_Win_create_errhandler.errhandler; \
+	args_MPI_Win_create_errhandler_t* pargs = (args_MPI_Win_create_errhandler_t*) args; \
+	if (pargs->errhandler != NULL) { \
+		pargs->errhandler__ref.val = *pargs->errhandler; \
 	} \
 };
 
@@ -18894,7 +19596,7 @@ struct args_MPI_Win_create_errhandler_t {
  *	)
  */
 #if HAVE_MPI_Gather_init
-struct args_MPI_Gather_init_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -18909,24 +19611,26 @@ struct args_MPI_Gather_init_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_Gather_init_t;
 
 #define GET_ARGS_VALUE_MPI_Gather_init(activity) { \
-	activity->mpi_args.MPI_Gather_init.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Gather_init.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Gather_init.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Gather_init.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Gather_init.recvcount = (int) recvcount; \
-	activity->mpi_args.MPI_Gather_init.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Gather_init.root = (int) root; \
-	activity->mpi_args.MPI_Gather_init.comm = (MPI_Comm) comm; \
-	activity->mpi_args.MPI_Gather_init.info = (MPI_Info) info; \
-	activity->mpi_args.MPI_Gather_init.request = (MPI_Request *) request; \
+	args_MPI_Gather_init_t* args = (args_MPI_Gather_init_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcount = (int) recvcount; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->root = (int) root; \
+	args->comm = (MPI_Comm) comm; \
+	args->info = (MPI_Info) info; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_Gather_init(args) { \
-	if (args->MPI_Gather_init.request != NULL) { \
-		args->MPI_Gather_init.request__ref.val = *args->MPI_Gather_init.request; \
+	args_MPI_Gather_init_t* pargs = (args_MPI_Gather_init_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -18954,7 +19658,7 @@ struct args_MPI_Gather_init_t {
  *	)
  */
 #if HAVE_MPI_Neighbor_allgatherv
-struct args_MPI_Neighbor_allgatherv_t {
+typedef struct {
 	void * sendbuf;
 	int sendcount;
 	MPI_Datatype sendtype;
@@ -18970,25 +19674,27 @@ struct args_MPI_Neighbor_allgatherv_t {
 	MPI_Datatype recvtype;
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Neighbor_allgatherv_t;
 
 #define GET_ARGS_VALUE_MPI_Neighbor_allgatherv(activity) { \
-	activity->mpi_args.MPI_Neighbor_allgatherv.sendbuf = (void *) sendbuf; \
-	activity->mpi_args.MPI_Neighbor_allgatherv.sendcount = (int) sendcount; \
-	activity->mpi_args.MPI_Neighbor_allgatherv.sendtype = (MPI_Datatype) sendtype; \
-	activity->mpi_args.MPI_Neighbor_allgatherv.recvbuf = (void *) recvbuf; \
-	activity->mpi_args.MPI_Neighbor_allgatherv.recvcounts = (int(*)) recvcounts; \
-	activity->mpi_args.MPI_Neighbor_allgatherv.displs = (int(*)) displs; \
-	activity->mpi_args.MPI_Neighbor_allgatherv.recvtype = (MPI_Datatype) recvtype; \
-	activity->mpi_args.MPI_Neighbor_allgatherv.comm = (MPI_Comm) comm; \
+	args_MPI_Neighbor_allgatherv_t* args = (args_MPI_Neighbor_allgatherv_t*) activity->args; \
+	args->sendbuf = (void *) sendbuf; \
+	args->sendcount = (int) sendcount; \
+	args->sendtype = (MPI_Datatype) sendtype; \
+	args->recvbuf = (void *) recvbuf; \
+	args->recvcounts = (int(*)) recvcounts; \
+	args->displs = (int(*)) displs; \
+	args->recvtype = (MPI_Datatype) recvtype; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #define GET_PTRS_VALUE_MPI_Neighbor_allgatherv(args) { \
-	if (args->MPI_Neighbor_allgatherv.recvcounts != NULL) { \
-		args->MPI_Neighbor_allgatherv.recvcounts__ref.val = *args->MPI_Neighbor_allgatherv.recvcounts; \
+	args_MPI_Neighbor_allgatherv_t* pargs = (args_MPI_Neighbor_allgatherv_t*) args; \
+	if (pargs->recvcounts != NULL) { \
+		pargs->recvcounts__ref.val = *pargs->recvcounts; \
 	} \
-	if (args->MPI_Neighbor_allgatherv.displs != NULL) { \
-		args->MPI_Neighbor_allgatherv.displs__ref.val = *args->MPI_Neighbor_allgatherv.displs; \
+	if (pargs->displs != NULL) { \
+		pargs->displs__ref.val = *pargs->displs; \
 	} \
 };
 
@@ -19013,7 +19719,7 @@ struct args_MPI_Neighbor_allgatherv_t {
  *	)
  */
 #if HAVE_MPI_File_iwrite
-struct args_MPI_File_iwrite_t {
+typedef struct {
 	MPI_File fh;
 	void * buf;
 	int count;
@@ -19023,19 +19729,21 @@ struct args_MPI_File_iwrite_t {
 		MPI_Request val;
 	} request__ref;
 	int retval;
-};
+} args_MPI_File_iwrite_t;
 
 #define GET_ARGS_VALUE_MPI_File_iwrite(activity) { \
-	activity->mpi_args.MPI_File_iwrite.fh = (MPI_File) fh; \
-	activity->mpi_args.MPI_File_iwrite.buf = (void *) buf; \
-	activity->mpi_args.MPI_File_iwrite.count = (int) count; \
-	activity->mpi_args.MPI_File_iwrite.datatype = (MPI_Datatype) datatype; \
-	activity->mpi_args.MPI_File_iwrite.request = (MPI_Request *) request; \
+	args_MPI_File_iwrite_t* args = (args_MPI_File_iwrite_t*) activity->args; \
+	args->fh = (MPI_File) fh; \
+	args->buf = (void *) buf; \
+	args->count = (int) count; \
+	args->datatype = (MPI_Datatype) datatype; \
+	args->request = (MPI_Request *) request; \
 };
 
 #define GET_PTRS_VALUE_MPI_File_iwrite(args) { \
-	if (args->MPI_File_iwrite.request != NULL) { \
-		args->MPI_File_iwrite.request__ref.val = *args->MPI_File_iwrite.request; \
+	args_MPI_File_iwrite_t* pargs = (args_MPI_File_iwrite_t*) args; \
+	if (pargs->request != NULL) { \
+		pargs->request__ref.val = *pargs->request; \
 	} \
 };
 
@@ -19057,15 +19765,16 @@ struct args_MPI_File_iwrite_t {
  *	)
  */
 #if HAVE_MPI_Buffer_attach
-struct args_MPI_Buffer_attach_t {
+typedef struct {
 	void * buffer;
 	int size;
 	int retval;
-};
+} args_MPI_Buffer_attach_t;
 
 #define GET_ARGS_VALUE_MPI_Buffer_attach(activity) { \
-	activity->mpi_args.MPI_Buffer_attach.buffer = (void *) buffer; \
-	activity->mpi_args.MPI_Buffer_attach.size = (int) size; \
+	args_MPI_Buffer_attach_t* args = (args_MPI_Buffer_attach_t*) activity->args; \
+	args->buffer = (void *) buffer; \
+	args->size = (int) size; \
 };
 
 #endif
@@ -19086,15 +19795,16 @@ struct args_MPI_Buffer_attach_t {
  *	)
  */
 #if HAVE_MPI_Session_set_errhandler
-struct args_MPI_Session_set_errhandler_t {
+typedef struct {
 	MPI_Session session;
 	MPI_Errhandler errhandler;
 	int retval;
-};
+} args_MPI_Session_set_errhandler_t;
 
 #define GET_ARGS_VALUE_MPI_Session_set_errhandler(activity) { \
-	activity->mpi_args.MPI_Session_set_errhandler.session = (MPI_Session) session; \
-	activity->mpi_args.MPI_Session_set_errhandler.errhandler = (MPI_Errhandler) errhandler; \
+	args_MPI_Session_set_errhandler_t* args = (args_MPI_Session_set_errhandler_t*) activity->args; \
+	args->session = (MPI_Session) session; \
+	args->errhandler = (MPI_Errhandler) errhandler; \
 };
 
 #endif
@@ -19116,17 +19826,18 @@ struct args_MPI_Session_set_errhandler_t {
  *	)
  */
 #if HAVE_MPI_Win_start
-struct args_MPI_Win_start_t {
+typedef struct {
 	MPI_Group group;
 	int mpi_assert;
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Win_start_t;
 
 #define GET_ARGS_VALUE_MPI_Win_start(activity) { \
-	activity->mpi_args.MPI_Win_start.group = (MPI_Group) group; \
-	activity->mpi_args.MPI_Win_start.mpi_assert = (int) mpi_assert; \
-	activity->mpi_args.MPI_Win_start.win = (MPI_Win) win; \
+	args_MPI_Win_start_t* args = (args_MPI_Win_start_t*) activity->args; \
+	args->group = (MPI_Group) group; \
+	args->mpi_assert = (int) mpi_assert; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -19146,13 +19857,14 @@ struct args_MPI_Win_start_t {
  *	)
  */
 #if HAVE_MPI_Info_f2c
-struct args_MPI_Info_f2c_t {
+typedef struct {
 	int info;
 	MPI_Info retval;
-};
+} args_MPI_Info_f2c_t;
 
 #define GET_ARGS_VALUE_MPI_Info_f2c(activity) { \
-	activity->mpi_args.MPI_Info_f2c.info = (int) info; \
+	args_MPI_Info_f2c_t* args = (args_MPI_Info_f2c_t*) activity->args; \
+	args->info = (int) info; \
 };
 
 #endif
@@ -19172,13 +19884,14 @@ struct args_MPI_Info_f2c_t {
  *	)
  */
 #if HAVE_MPI_Info_c2f
-struct args_MPI_Info_c2f_t {
+typedef struct {
 	MPI_Info info;
 	int retval;
-};
+} args_MPI_Info_c2f_t;
 
 #define GET_ARGS_VALUE_MPI_Info_c2f(activity) { \
-	activity->mpi_args.MPI_Info_c2f.info = (MPI_Info) info; \
+	args_MPI_Info_c2f_t* args = (args_MPI_Info_c2f_t*) activity->args; \
+	args->info = (MPI_Info) info; \
 };
 
 #endif
@@ -19198,13 +19911,14 @@ struct args_MPI_Info_c2f_t {
  *	)
  */
 #if HAVE_MPI_Op_c2f
-struct args_MPI_Op_c2f_t {
+typedef struct {
 	MPI_Op op;
 	int retval;
-};
+} args_MPI_Op_c2f_t;
 
 #define GET_ARGS_VALUE_MPI_Op_c2f(activity) { \
-	activity->mpi_args.MPI_Op_c2f.op = (MPI_Op) op; \
+	args_MPI_Op_c2f_t* args = (args_MPI_Op_c2f_t*) activity->args; \
+	args->op = (MPI_Op) op; \
 };
 
 #endif
@@ -19224,13 +19938,14 @@ struct args_MPI_Op_c2f_t {
  *	)
  */
 #if HAVE_MPI_Win_c2f
-struct args_MPI_Win_c2f_t {
+typedef struct {
 	MPI_Win win;
 	int retval;
-};
+} args_MPI_Win_c2f_t;
 
 #define GET_ARGS_VALUE_MPI_Win_c2f(activity) { \
-	activity->mpi_args.MPI_Win_c2f.win = (MPI_Win) win; \
+	args_MPI_Win_c2f_t* args = (args_MPI_Win_c2f_t*) activity->args; \
+	args->win = (MPI_Win) win; \
 };
 
 #endif
@@ -19250,13 +19965,14 @@ struct args_MPI_Win_c2f_t {
  *	)
  */
 #if HAVE_MPI_Group_f2c
-struct args_MPI_Group_f2c_t {
+typedef struct {
 	int group;
 	MPI_Group retval;
-};
+} args_MPI_Group_f2c_t;
 
 #define GET_ARGS_VALUE_MPI_Group_f2c(activity) { \
-	activity->mpi_args.MPI_Group_f2c.group = (int) group; \
+	args_MPI_Group_f2c_t* args = (args_MPI_Group_f2c_t*) activity->args; \
+	args->group = (int) group; \
 };
 
 #endif
@@ -19276,13 +19992,14 @@ struct args_MPI_Group_f2c_t {
  *	)
  */
 #if HAVE_MPI_File_c2f
-struct args_MPI_File_c2f_t {
+typedef struct {
 	MPI_File file;
 	int retval;
-};
+} args_MPI_File_c2f_t;
 
 #define GET_ARGS_VALUE_MPI_File_c2f(activity) { \
-	activity->mpi_args.MPI_File_c2f.file = (MPI_File) file; \
+	args_MPI_File_c2f_t* args = (args_MPI_File_c2f_t*) activity->args; \
+	args->file = (MPI_File) file; \
 };
 
 #endif
@@ -19302,13 +20019,14 @@ struct args_MPI_File_c2f_t {
  *	)
  */
 #if HAVE_MPI_Request_c2f
-struct args_MPI_Request_c2f_t {
+typedef struct {
 	MPI_Request request;
 	int retval;
-};
+} args_MPI_Request_c2f_t;
 
 #define GET_ARGS_VALUE_MPI_Request_c2f(activity) { \
-	activity->mpi_args.MPI_Request_c2f.request = (MPI_Request) request; \
+	args_MPI_Request_c2f_t* args = (args_MPI_Request_c2f_t*) activity->args; \
+	args->request = (MPI_Request) request; \
 };
 
 #endif
@@ -19328,13 +20046,14 @@ struct args_MPI_Request_c2f_t {
  *	)
  */
 #if HAVE_MPI_File_f2c
-struct args_MPI_File_f2c_t {
+typedef struct {
 	int file;
 	MPI_File retval;
-};
+} args_MPI_File_f2c_t;
 
 #define GET_ARGS_VALUE_MPI_File_f2c(activity) { \
-	activity->mpi_args.MPI_File_f2c.file = (int) file; \
+	args_MPI_File_f2c_t* args = (args_MPI_File_f2c_t*) activity->args; \
+	args->file = (int) file; \
 };
 
 #endif
@@ -19354,13 +20073,14 @@ struct args_MPI_File_f2c_t {
  *	)
  */
 #if HAVE_MPI_Session_f2c
-struct args_MPI_Session_f2c_t {
+typedef struct {
 	int session;
 	MPI_Session retval;
-};
+} args_MPI_Session_f2c_t;
 
 #define GET_ARGS_VALUE_MPI_Session_f2c(activity) { \
-	activity->mpi_args.MPI_Session_f2c.session = (int) session; \
+	args_MPI_Session_f2c_t* args = (args_MPI_Session_f2c_t*) activity->args; \
+	args->session = (int) session; \
 };
 
 #endif
@@ -19381,7 +20101,7 @@ struct args_MPI_Session_f2c_t {
  *	)
  */
 #if HAVE_MPI_Status_f082f
-struct args_MPI_Status_f082f_t {
+typedef struct {
 	MPI_F08_status * f08_status;
 	struct {
 		MPI_F08_status val;
@@ -19391,19 +20111,21 @@ struct args_MPI_Status_f082f_t {
 		int val;
 	} f_status__ref;
 	int retval;
-};
+} args_MPI_Status_f082f_t;
 
 #define GET_ARGS_VALUE_MPI_Status_f082f(activity) { \
-	activity->mpi_args.MPI_Status_f082f.f08_status = (MPI_F08_status *) f08_status; \
-	activity->mpi_args.MPI_Status_f082f.f_status = (int *) f_status; \
+	args_MPI_Status_f082f_t* args = (args_MPI_Status_f082f_t*) activity->args; \
+	args->f08_status = (MPI_F08_status *) f08_status; \
+	args->f_status = (int *) f_status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Status_f082f(args) { \
-	if (args->MPI_Status_f082f.f08_status != NULL) { \
-		args->MPI_Status_f082f.f08_status__ref.val = *args->MPI_Status_f082f.f08_status; \
+	args_MPI_Status_f082f_t* pargs = (args_MPI_Status_f082f_t*) args; \
+	if (pargs->f08_status != NULL) { \
+		pargs->f08_status__ref.val = *pargs->f08_status; \
 	} \
-	if (args->MPI_Status_f082f.f_status != NULL) { \
-		args->MPI_Status_f082f.f_status__ref.val = *args->MPI_Status_f082f.f_status; \
+	if (pargs->f_status != NULL) { \
+		pargs->f_status__ref.val = *pargs->f_status; \
 	} \
 };
 
@@ -19425,7 +20147,7 @@ struct args_MPI_Status_f082f_t {
  *	)
  */
 #if HAVE_MPI_Status_c2f08
-struct args_MPI_Status_c2f08_t {
+typedef struct {
 	MPI_Status * c_status;
 	struct {
 		MPI_Status val;
@@ -19435,19 +20157,21 @@ struct args_MPI_Status_c2f08_t {
 		MPI_F08_status val;
 	} f08_status__ref;
 	int retval;
-};
+} args_MPI_Status_c2f08_t;
 
 #define GET_ARGS_VALUE_MPI_Status_c2f08(activity) { \
-	activity->mpi_args.MPI_Status_c2f08.c_status = (MPI_Status *) c_status; \
-	activity->mpi_args.MPI_Status_c2f08.f08_status = (MPI_F08_status *) f08_status; \
+	args_MPI_Status_c2f08_t* args = (args_MPI_Status_c2f08_t*) activity->args; \
+	args->c_status = (MPI_Status *) c_status; \
+	args->f08_status = (MPI_F08_status *) f08_status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Status_c2f08(args) { \
-	if (args->MPI_Status_c2f08.c_status != NULL) { \
-		args->MPI_Status_c2f08.c_status__ref.val = *args->MPI_Status_c2f08.c_status; \
+	args_MPI_Status_c2f08_t* pargs = (args_MPI_Status_c2f08_t*) args; \
+	if (pargs->c_status != NULL) { \
+		pargs->c_status__ref.val = *pargs->c_status; \
 	} \
-	if (args->MPI_Status_c2f08.f08_status != NULL) { \
-		args->MPI_Status_c2f08.f08_status__ref.val = *args->MPI_Status_c2f08.f08_status; \
+	if (pargs->f08_status != NULL) { \
+		pargs->f08_status__ref.val = *pargs->f08_status; \
 	} \
 };
 
@@ -19468,13 +20192,14 @@ struct args_MPI_Status_c2f08_t {
  *	)
  */
 #if HAVE_MPI_Type_f2c
-struct args_MPI_Type_f2c_t {
+typedef struct {
 	int datatype;
 	MPI_Datatype retval;
-};
+} args_MPI_Type_f2c_t;
 
 #define GET_ARGS_VALUE_MPI_Type_f2c(activity) { \
-	activity->mpi_args.MPI_Type_f2c.datatype = (int) datatype; \
+	args_MPI_Type_f2c_t* args = (args_MPI_Type_f2c_t*) activity->args; \
+	args->datatype = (int) datatype; \
 };
 
 #endif
@@ -19494,13 +20219,14 @@ struct args_MPI_Type_f2c_t {
  *	)
  */
 #if HAVE_MPI_Message_c2f
-struct args_MPI_Message_c2f_t {
+typedef struct {
 	MPI_Message message;
 	int retval;
-};
+} args_MPI_Message_c2f_t;
 
 #define GET_ARGS_VALUE_MPI_Message_c2f(activity) { \
-	activity->mpi_args.MPI_Message_c2f.message = (MPI_Message) message; \
+	args_MPI_Message_c2f_t* args = (args_MPI_Message_c2f_t*) activity->args; \
+	args->message = (MPI_Message) message; \
 };
 
 #endif
@@ -19520,13 +20246,14 @@ struct args_MPI_Message_c2f_t {
  *	)
  */
 #if HAVE_MPI_Session_c2f
-struct args_MPI_Session_c2f_t {
+typedef struct {
 	MPI_Session session;
 	int retval;
-};
+} args_MPI_Session_c2f_t;
 
 #define GET_ARGS_VALUE_MPI_Session_c2f(activity) { \
-	activity->mpi_args.MPI_Session_c2f.session = (MPI_Session) session; \
+	args_MPI_Session_c2f_t* args = (args_MPI_Session_c2f_t*) activity->args; \
+	args->session = (MPI_Session) session; \
 };
 
 #endif
@@ -19546,13 +20273,14 @@ struct args_MPI_Session_c2f_t {
  *	)
  */
 #if HAVE_MPI_Message_f2c
-struct args_MPI_Message_f2c_t {
+typedef struct {
 	int message;
 	MPI_Message retval;
-};
+} args_MPI_Message_f2c_t;
 
 #define GET_ARGS_VALUE_MPI_Message_f2c(activity) { \
-	activity->mpi_args.MPI_Message_f2c.message = (int) message; \
+	args_MPI_Message_f2c_t* args = (args_MPI_Message_f2c_t*) activity->args; \
+	args->message = (int) message; \
 };
 
 #endif
@@ -19572,13 +20300,14 @@ struct args_MPI_Message_f2c_t {
  *	)
  */
 #if HAVE_MPI_Errhandler_f2c
-struct args_MPI_Errhandler_f2c_t {
+typedef struct {
 	int errhandler;
 	MPI_Errhandler retval;
-};
+} args_MPI_Errhandler_f2c_t;
 
 #define GET_ARGS_VALUE_MPI_Errhandler_f2c(activity) { \
-	activity->mpi_args.MPI_Errhandler_f2c.errhandler = (int) errhandler; \
+	args_MPI_Errhandler_f2c_t* args = (args_MPI_Errhandler_f2c_t*) activity->args; \
+	args->errhandler = (int) errhandler; \
 };
 
 #endif
@@ -19598,13 +20327,14 @@ struct args_MPI_Errhandler_f2c_t {
  *	)
  */
 #if HAVE_MPI_Request_f2c
-struct args_MPI_Request_f2c_t {
+typedef struct {
 	int request;
 	MPI_Request retval;
-};
+} args_MPI_Request_f2c_t;
 
 #define GET_ARGS_VALUE_MPI_Request_f2c(activity) { \
-	activity->mpi_args.MPI_Request_f2c.request = (int) request; \
+	args_MPI_Request_f2c_t* args = (args_MPI_Request_f2c_t*) activity->args; \
+	args->request = (int) request; \
 };
 
 #endif
@@ -19625,7 +20355,7 @@ struct args_MPI_Request_f2c_t {
  *	)
  */
 #if HAVE_MPI_Status_c2f
-struct args_MPI_Status_c2f_t {
+typedef struct {
 	MPI_Status * c_status;
 	struct {
 		MPI_Status val;
@@ -19635,19 +20365,21 @@ struct args_MPI_Status_c2f_t {
 		int val;
 	} f_status__ref;
 	int retval;
-};
+} args_MPI_Status_c2f_t;
 
 #define GET_ARGS_VALUE_MPI_Status_c2f(activity) { \
-	activity->mpi_args.MPI_Status_c2f.c_status = (MPI_Status *) c_status; \
-	activity->mpi_args.MPI_Status_c2f.f_status = (int *) f_status; \
+	args_MPI_Status_c2f_t* args = (args_MPI_Status_c2f_t*) activity->args; \
+	args->c_status = (MPI_Status *) c_status; \
+	args->f_status = (int *) f_status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Status_c2f(args) { \
-	if (args->MPI_Status_c2f.c_status != NULL) { \
-		args->MPI_Status_c2f.c_status__ref.val = *args->MPI_Status_c2f.c_status; \
+	args_MPI_Status_c2f_t* pargs = (args_MPI_Status_c2f_t*) args; \
+	if (pargs->c_status != NULL) { \
+		pargs->c_status__ref.val = *pargs->c_status; \
 	} \
-	if (args->MPI_Status_c2f.f_status != NULL) { \
-		args->MPI_Status_c2f.f_status__ref.val = *args->MPI_Status_c2f.f_status; \
+	if (pargs->f_status != NULL) { \
+		pargs->f_status__ref.val = *pargs->f_status; \
 	} \
 };
 
@@ -19668,13 +20400,14 @@ struct args_MPI_Status_c2f_t {
  *	)
  */
 #if HAVE_MPI_Comm_f2c
-struct args_MPI_Comm_f2c_t {
+typedef struct {
 	int comm;
 	MPI_Comm retval;
-};
+} args_MPI_Comm_f2c_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_f2c(activity) { \
-	activity->mpi_args.MPI_Comm_f2c.comm = (int) comm; \
+	args_MPI_Comm_f2c_t* args = (args_MPI_Comm_f2c_t*) activity->args; \
+	args->comm = (int) comm; \
 };
 
 #endif
@@ -19694,13 +20427,14 @@ struct args_MPI_Comm_f2c_t {
  *	)
  */
 #if HAVE_MPI_Comm_c2f
-struct args_MPI_Comm_c2f_t {
+typedef struct {
 	MPI_Comm comm;
 	int retval;
-};
+} args_MPI_Comm_c2f_t;
 
 #define GET_ARGS_VALUE_MPI_Comm_c2f(activity) { \
-	activity->mpi_args.MPI_Comm_c2f.comm = (MPI_Comm) comm; \
+	args_MPI_Comm_c2f_t* args = (args_MPI_Comm_c2f_t*) activity->args; \
+	args->comm = (MPI_Comm) comm; \
 };
 
 #endif
@@ -19720,13 +20454,14 @@ struct args_MPI_Comm_c2f_t {
  *	)
  */
 #if HAVE_MPI_Group_c2f
-struct args_MPI_Group_c2f_t {
+typedef struct {
 	MPI_Group group;
 	int retval;
-};
+} args_MPI_Group_c2f_t;
 
 #define GET_ARGS_VALUE_MPI_Group_c2f(activity) { \
-	activity->mpi_args.MPI_Group_c2f.group = (MPI_Group) group; \
+	args_MPI_Group_c2f_t* args = (args_MPI_Group_c2f_t*) activity->args; \
+	args->group = (MPI_Group) group; \
 };
 
 #endif
@@ -19746,13 +20481,14 @@ struct args_MPI_Group_c2f_t {
  *	)
  */
 #if HAVE_MPI_Win_f2c
-struct args_MPI_Win_f2c_t {
+typedef struct {
 	int win;
 	MPI_Win retval;
-};
+} args_MPI_Win_f2c_t;
 
 #define GET_ARGS_VALUE_MPI_Win_f2c(activity) { \
-	activity->mpi_args.MPI_Win_f2c.win = (int) win; \
+	args_MPI_Win_f2c_t* args = (args_MPI_Win_f2c_t*) activity->args; \
+	args->win = (int) win; \
 };
 
 #endif
@@ -19773,7 +20509,7 @@ struct args_MPI_Win_f2c_t {
  *	)
  */
 #if HAVE_MPI_Status_f082c
-struct args_MPI_Status_f082c_t {
+typedef struct {
 	MPI_F08_status * f08_status;
 	struct {
 		MPI_F08_status val;
@@ -19783,19 +20519,21 @@ struct args_MPI_Status_f082c_t {
 		MPI_Status val;
 	} c_status__ref;
 	int retval;
-};
+} args_MPI_Status_f082c_t;
 
 #define GET_ARGS_VALUE_MPI_Status_f082c(activity) { \
-	activity->mpi_args.MPI_Status_f082c.f08_status = (MPI_F08_status *) f08_status; \
-	activity->mpi_args.MPI_Status_f082c.c_status = (MPI_Status *) c_status; \
+	args_MPI_Status_f082c_t* args = (args_MPI_Status_f082c_t*) activity->args; \
+	args->f08_status = (MPI_F08_status *) f08_status; \
+	args->c_status = (MPI_Status *) c_status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Status_f082c(args) { \
-	if (args->MPI_Status_f082c.f08_status != NULL) { \
-		args->MPI_Status_f082c.f08_status__ref.val = *args->MPI_Status_f082c.f08_status; \
+	args_MPI_Status_f082c_t* pargs = (args_MPI_Status_f082c_t*) args; \
+	if (pargs->f08_status != NULL) { \
+		pargs->f08_status__ref.val = *pargs->f08_status; \
 	} \
-	if (args->MPI_Status_f082c.c_status != NULL) { \
-		args->MPI_Status_f082c.c_status__ref.val = *args->MPI_Status_f082c.c_status; \
+	if (pargs->c_status != NULL) { \
+		pargs->c_status__ref.val = *pargs->c_status; \
 	} \
 };
 
@@ -19816,13 +20554,14 @@ struct args_MPI_Status_f082c_t {
  *	)
  */
 #if HAVE_MPI_Errhandler_c2f
-struct args_MPI_Errhandler_c2f_t {
+typedef struct {
 	MPI_Errhandler errhandler;
 	int retval;
-};
+} args_MPI_Errhandler_c2f_t;
 
 #define GET_ARGS_VALUE_MPI_Errhandler_c2f(activity) { \
-	activity->mpi_args.MPI_Errhandler_c2f.errhandler = (MPI_Errhandler) errhandler; \
+	args_MPI_Errhandler_c2f_t* args = (args_MPI_Errhandler_c2f_t*) activity->args; \
+	args->errhandler = (MPI_Errhandler) errhandler; \
 };
 
 #endif
@@ -19843,7 +20582,7 @@ struct args_MPI_Errhandler_c2f_t {
  *	)
  */
 #if HAVE_MPI_Status_f2f08
-struct args_MPI_Status_f2f08_t {
+typedef struct {
 	int * f_status;
 	struct {
 		int val;
@@ -19853,19 +20592,21 @@ struct args_MPI_Status_f2f08_t {
 		MPI_F08_status val;
 	} f08_status__ref;
 	int retval;
-};
+} args_MPI_Status_f2f08_t;
 
 #define GET_ARGS_VALUE_MPI_Status_f2f08(activity) { \
-	activity->mpi_args.MPI_Status_f2f08.f_status = (int *) f_status; \
-	activity->mpi_args.MPI_Status_f2f08.f08_status = (MPI_F08_status *) f08_status; \
+	args_MPI_Status_f2f08_t* args = (args_MPI_Status_f2f08_t*) activity->args; \
+	args->f_status = (int *) f_status; \
+	args->f08_status = (MPI_F08_status *) f08_status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Status_f2f08(args) { \
-	if (args->MPI_Status_f2f08.f_status != NULL) { \
-		args->MPI_Status_f2f08.f_status__ref.val = *args->MPI_Status_f2f08.f_status; \
+	args_MPI_Status_f2f08_t* pargs = (args_MPI_Status_f2f08_t*) args; \
+	if (pargs->f_status != NULL) { \
+		pargs->f_status__ref.val = *pargs->f_status; \
 	} \
-	if (args->MPI_Status_f2f08.f08_status != NULL) { \
-		args->MPI_Status_f2f08.f08_status__ref.val = *args->MPI_Status_f2f08.f08_status; \
+	if (pargs->f08_status != NULL) { \
+		pargs->f08_status__ref.val = *pargs->f08_status; \
 	} \
 };
 
@@ -19886,13 +20627,14 @@ struct args_MPI_Status_f2f08_t {
  *	)
  */
 #if HAVE_MPI_Type_c2f
-struct args_MPI_Type_c2f_t {
+typedef struct {
 	MPI_Datatype datatype;
 	int retval;
-};
+} args_MPI_Type_c2f_t;
 
 #define GET_ARGS_VALUE_MPI_Type_c2f(activity) { \
-	activity->mpi_args.MPI_Type_c2f.datatype = (MPI_Datatype) datatype; \
+	args_MPI_Type_c2f_t* args = (args_MPI_Type_c2f_t*) activity->args; \
+	args->datatype = (MPI_Datatype) datatype; \
 };
 
 #endif
@@ -19913,7 +20655,7 @@ struct args_MPI_Type_c2f_t {
  *	)
  */
 #if HAVE_MPI_Status_f2c
-struct args_MPI_Status_f2c_t {
+typedef struct {
 	int * f_status;
 	struct {
 		int val;
@@ -19923,19 +20665,21 @@ struct args_MPI_Status_f2c_t {
 		MPI_Status val;
 	} c_status__ref;
 	int retval;
-};
+} args_MPI_Status_f2c_t;
 
 #define GET_ARGS_VALUE_MPI_Status_f2c(activity) { \
-	activity->mpi_args.MPI_Status_f2c.f_status = (int *) f_status; \
-	activity->mpi_args.MPI_Status_f2c.c_status = (MPI_Status *) c_status; \
+	args_MPI_Status_f2c_t* args = (args_MPI_Status_f2c_t*) activity->args; \
+	args->f_status = (int *) f_status; \
+	args->c_status = (MPI_Status *) c_status; \
 };
 
 #define GET_PTRS_VALUE_MPI_Status_f2c(args) { \
-	if (args->MPI_Status_f2c.f_status != NULL) { \
-		args->MPI_Status_f2c.f_status__ref.val = *args->MPI_Status_f2c.f_status; \
+	args_MPI_Status_f2c_t* pargs = (args_MPI_Status_f2c_t*) args; \
+	if (pargs->f_status != NULL) { \
+		pargs->f_status__ref.val = *pargs->f_status; \
 	} \
-	if (args->MPI_Status_f2c.c_status != NULL) { \
-		args->MPI_Status_f2c.c_status__ref.val = *args->MPI_Status_f2c.c_status; \
+	if (pargs->c_status != NULL) { \
+		pargs->c_status__ref.val = *pargs->c_status; \
 	} \
 };
 
@@ -19956,13 +20700,14 @@ struct args_MPI_Status_f2c_t {
  *	)
  */
 #if HAVE_MPI_Op_f2c
-struct args_MPI_Op_f2c_t {
+typedef struct {
 	int op;
 	MPI_Op retval;
-};
+} args_MPI_Op_f2c_t;
 
 #define GET_ARGS_VALUE_MPI_Op_f2c(activity) { \
-	activity->mpi_args.MPI_Op_f2c.op = (int) op; \
+	args_MPI_Op_f2c_t* args = (args_MPI_Op_f2c_t*) activity->args; \
+	args->op = (int) op; \
 };
 
 #endif
@@ -19970,1646 +20715,1953 @@ struct args_MPI_Op_f2c_t {
 
 
 /**
- * @brief Union representing argument structures for different MPI API calls.
- *
- * This union allows storing parameters for various MPI API functions,
- * ensuring type safety and efficient memory usage.
- *
- * @union mpi_api_args_u 
- * @typedef mpi_api_args_t 
- */
-typedef union mpi_api_args_u {
-    FOR_EACH_MPI_FUNC(GET_ARGS_STRUCT_OF)
-} mpi_api_args_t;
-
-
-/**
  * @brief Retrieves pointer-based argument values for MPI API calls.
  *
- * This function extracts pointer-based arguments from the provided `mpi_api_args_t`
- * structure based on the given MPI API ID.
+ * This function extracts pointer-based arguments based on the given MPI API ID.
  *
  * @param[in] id The MPI API function identifier.
  * @param[in,out] args Pointer to the MPI API arguments structure.
  * @param[in] is_enter Boolean flag indicating whether this function is handling an "enter" or "exit" event.
  */
-static inline void get_mpi_pointed_args_for(mpi_api_id_t id, mpi_api_args_t* args, bool is_enter) 
+static inline void get_mpi_pointed_args_for(mpi_api_id_t id, void* args, bool is_enter) 
 {
     if (!is_enter) {
         switch(id) {
 			#if HAVE_MPI_Init
-			case MPI_API_ID_MPI_Init : 
+			case MPI_API_ID_MPI_Init : {
 				GET_PTRS_VALUE_MPI_Init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Init_thread
-			case MPI_API_ID_MPI_Init_thread : 
+			case MPI_API_ID_MPI_Init_thread : {
 				GET_PTRS_VALUE_MPI_Init_thread(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Initialized
-			case MPI_API_ID_MPI_Initialized : 
+			case MPI_API_ID_MPI_Initialized : {
 				GET_PTRS_VALUE_MPI_Initialized(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Query_thread
-			case MPI_API_ID_MPI_Query_thread : 
+			case MPI_API_ID_MPI_Query_thread : {
 				GET_PTRS_VALUE_MPI_Query_thread(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Recv
-			case MPI_API_ID_MPI_Recv : 
+			case MPI_API_ID_MPI_Recv : {
 				GET_PTRS_VALUE_MPI_Recv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Sendrecv
-			case MPI_API_ID_MPI_Sendrecv : 
+			case MPI_API_ID_MPI_Sendrecv : {
 				GET_PTRS_VALUE_MPI_Sendrecv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Sendrecv_replace
-			case MPI_API_ID_MPI_Sendrecv_replace : 
+			case MPI_API_ID_MPI_Sendrecv_replace : {
 				GET_PTRS_VALUE_MPI_Sendrecv_replace(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Isend
-			case MPI_API_ID_MPI_Isend : 
+			case MPI_API_ID_MPI_Isend : {
 				GET_PTRS_VALUE_MPI_Isend(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Irecv
-			case MPI_API_ID_MPI_Irecv : 
+			case MPI_API_ID_MPI_Irecv : {
 				GET_PTRS_VALUE_MPI_Irecv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Wait
-			case MPI_API_ID_MPI_Wait : 
+			case MPI_API_ID_MPI_Wait : {
 				GET_PTRS_VALUE_MPI_Wait(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Waitall
-			case MPI_API_ID_MPI_Waitall : 
+			case MPI_API_ID_MPI_Waitall : {
 				GET_PTRS_VALUE_MPI_Waitall(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Waitany
-			case MPI_API_ID_MPI_Waitany : 
+			case MPI_API_ID_MPI_Waitany : {
 				GET_PTRS_VALUE_MPI_Waitany(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Waitsome
-			case MPI_API_ID_MPI_Waitsome : 
+			case MPI_API_ID_MPI_Waitsome : {
 				GET_PTRS_VALUE_MPI_Waitsome(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Test
-			case MPI_API_ID_MPI_Test : 
+			case MPI_API_ID_MPI_Test : {
 				GET_PTRS_VALUE_MPI_Test(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Testall
-			case MPI_API_ID_MPI_Testall : 
+			case MPI_API_ID_MPI_Testall : {
 				GET_PTRS_VALUE_MPI_Testall(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Testany
-			case MPI_API_ID_MPI_Testany : 
+			case MPI_API_ID_MPI_Testany : {
 				GET_PTRS_VALUE_MPI_Testany(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Testsome
-			case MPI_API_ID_MPI_Testsome : 
+			case MPI_API_ID_MPI_Testsome : {
 				GET_PTRS_VALUE_MPI_Testsome(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Cancel
-			case MPI_API_ID_MPI_Cancel : 
+			case MPI_API_ID_MPI_Cancel : {
 				GET_PTRS_VALUE_MPI_Cancel(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_contiguous
-			case MPI_API_ID_MPI_Type_contiguous : 
+			case MPI_API_ID_MPI_Type_contiguous : {
 				GET_PTRS_VALUE_MPI_Type_contiguous(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_vector
-			case MPI_API_ID_MPI_Type_vector : 
+			case MPI_API_ID_MPI_Type_vector : {
 				GET_PTRS_VALUE_MPI_Type_vector(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_indexed
-			case MPI_API_ID_MPI_Type_indexed : 
+			case MPI_API_ID_MPI_Type_indexed : {
 				GET_PTRS_VALUE_MPI_Type_indexed(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_create_indexed_block
-			case MPI_API_ID_MPI_Type_create_indexed_block : 
+			case MPI_API_ID_MPI_Type_create_indexed_block : {
 				GET_PTRS_VALUE_MPI_Type_create_indexed_block(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_create_struct
-			case MPI_API_ID_MPI_Type_create_struct : 
+			case MPI_API_ID_MPI_Type_create_struct : {
 				GET_PTRS_VALUE_MPI_Type_create_struct(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_create_resized
-			case MPI_API_ID_MPI_Type_create_resized : 
+			case MPI_API_ID_MPI_Type_create_resized : {
 				GET_PTRS_VALUE_MPI_Type_create_resized(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_commit
-			case MPI_API_ID_MPI_Type_commit : 
+			case MPI_API_ID_MPI_Type_commit : {
 				GET_PTRS_VALUE_MPI_Type_commit(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Get_count
-			case MPI_API_ID_MPI_Get_count : 
+			case MPI_API_ID_MPI_Get_count : {
 				GET_PTRS_VALUE_MPI_Get_count(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Get_elements
-			case MPI_API_ID_MPI_Get_elements : 
+			case MPI_API_ID_MPI_Get_elements : {
 				GET_PTRS_VALUE_MPI_Get_elements(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Pack
-			case MPI_API_ID_MPI_Pack : 
+			case MPI_API_ID_MPI_Pack : {
 				GET_PTRS_VALUE_MPI_Pack(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Unpack
-			case MPI_API_ID_MPI_Unpack : 
+			case MPI_API_ID_MPI_Unpack : {
 				GET_PTRS_VALUE_MPI_Unpack(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Pack_size
-			case MPI_API_ID_MPI_Pack_size : 
+			case MPI_API_ID_MPI_Pack_size : {
 				GET_PTRS_VALUE_MPI_Pack_size(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Gatherv
-			case MPI_API_ID_MPI_Gatherv : 
+			case MPI_API_ID_MPI_Gatherv : {
 				GET_PTRS_VALUE_MPI_Gatherv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Scatterv
-			case MPI_API_ID_MPI_Scatterv : 
+			case MPI_API_ID_MPI_Scatterv : {
 				GET_PTRS_VALUE_MPI_Scatterv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Allgatherv
-			case MPI_API_ID_MPI_Allgatherv : 
+			case MPI_API_ID_MPI_Allgatherv : {
 				GET_PTRS_VALUE_MPI_Allgatherv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Alltoallv
-			case MPI_API_ID_MPI_Alltoallv : 
+			case MPI_API_ID_MPI_Alltoallv : {
 				GET_PTRS_VALUE_MPI_Alltoallv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Reduce_scatter
-			case MPI_API_ID_MPI_Reduce_scatter : 
+			case MPI_API_ID_MPI_Reduce_scatter : {
 				GET_PTRS_VALUE_MPI_Reduce_scatter(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_size
-			case MPI_API_ID_MPI_Comm_size : 
+			case MPI_API_ID_MPI_Comm_size : {
 				GET_PTRS_VALUE_MPI_Comm_size(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_rank
-			case MPI_API_ID_MPI_Comm_rank : 
+			case MPI_API_ID_MPI_Comm_rank : {
 				GET_PTRS_VALUE_MPI_Comm_rank(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_group
-			case MPI_API_ID_MPI_Comm_group : 
+			case MPI_API_ID_MPI_Comm_group : {
 				GET_PTRS_VALUE_MPI_Comm_group(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_dup
-			case MPI_API_ID_MPI_Comm_dup : 
+			case MPI_API_ID_MPI_Comm_dup : {
 				GET_PTRS_VALUE_MPI_Comm_dup(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_create
-			case MPI_API_ID_MPI_Comm_create : 
+			case MPI_API_ID_MPI_Comm_create : {
 				GET_PTRS_VALUE_MPI_Comm_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_split
-			case MPI_API_ID_MPI_Comm_split : 
+			case MPI_API_ID_MPI_Comm_split : {
 				GET_PTRS_VALUE_MPI_Comm_split(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_test_inter
-			case MPI_API_ID_MPI_Comm_test_inter : 
+			case MPI_API_ID_MPI_Comm_test_inter : {
 				GET_PTRS_VALUE_MPI_Comm_test_inter(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_remote_size
-			case MPI_API_ID_MPI_Comm_remote_size : 
+			case MPI_API_ID_MPI_Comm_remote_size : {
 				GET_PTRS_VALUE_MPI_Comm_remote_size(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_remote_group
-			case MPI_API_ID_MPI_Comm_remote_group : 
+			case MPI_API_ID_MPI_Comm_remote_group : {
 				GET_PTRS_VALUE_MPI_Comm_remote_group(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_compare
-			case MPI_API_ID_MPI_Comm_compare : 
+			case MPI_API_ID_MPI_Comm_compare : {
 				GET_PTRS_VALUE_MPI_Comm_compare(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_create_keyval
-			case MPI_API_ID_MPI_Comm_create_keyval : 
+			case MPI_API_ID_MPI_Comm_create_keyval : {
 				GET_PTRS_VALUE_MPI_Comm_create_keyval(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_get_attr
-			case MPI_API_ID_MPI_Comm_get_attr : 
+			case MPI_API_ID_MPI_Comm_get_attr : {
 				GET_PTRS_VALUE_MPI_Comm_get_attr(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_get_name
-			case MPI_API_ID_MPI_Comm_get_name : 
+			case MPI_API_ID_MPI_Comm_get_name : {
 				GET_PTRS_VALUE_MPI_Comm_get_name(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_set_name
-			case MPI_API_ID_MPI_Comm_set_name : 
+			case MPI_API_ID_MPI_Comm_set_name : {
 				GET_PTRS_VALUE_MPI_Comm_set_name(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Group_size
-			case MPI_API_ID_MPI_Group_size : 
+			case MPI_API_ID_MPI_Group_size : {
 				GET_PTRS_VALUE_MPI_Group_size(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Group_rank
-			case MPI_API_ID_MPI_Group_rank : 
+			case MPI_API_ID_MPI_Group_rank : {
 				GET_PTRS_VALUE_MPI_Group_rank(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Group_translate_ranks
-			case MPI_API_ID_MPI_Group_translate_ranks : 
+			case MPI_API_ID_MPI_Group_translate_ranks : {
 				GET_PTRS_VALUE_MPI_Group_translate_ranks(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Group_compare
-			case MPI_API_ID_MPI_Group_compare : 
+			case MPI_API_ID_MPI_Group_compare : {
 				GET_PTRS_VALUE_MPI_Group_compare(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Group_union
-			case MPI_API_ID_MPI_Group_union : 
+			case MPI_API_ID_MPI_Group_union : {
 				GET_PTRS_VALUE_MPI_Group_union(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Group_intersection
-			case MPI_API_ID_MPI_Group_intersection : 
+			case MPI_API_ID_MPI_Group_intersection : {
 				GET_PTRS_VALUE_MPI_Group_intersection(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Group_difference
-			case MPI_API_ID_MPI_Group_difference : 
+			case MPI_API_ID_MPI_Group_difference : {
 				GET_PTRS_VALUE_MPI_Group_difference(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Group_incl
-			case MPI_API_ID_MPI_Group_incl : 
+			case MPI_API_ID_MPI_Group_incl : {
 				GET_PTRS_VALUE_MPI_Group_incl(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Group_excl
-			case MPI_API_ID_MPI_Group_excl : 
+			case MPI_API_ID_MPI_Group_excl : {
 				GET_PTRS_VALUE_MPI_Group_excl(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Group_range_incl
-			case MPI_API_ID_MPI_Group_range_incl : 
+			case MPI_API_ID_MPI_Group_range_incl : {
 				GET_PTRS_VALUE_MPI_Group_range_incl(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Group_range_excl
-			case MPI_API_ID_MPI_Group_range_excl : 
+			case MPI_API_ID_MPI_Group_range_excl : {
 				GET_PTRS_VALUE_MPI_Group_range_excl(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Op_create
-			case MPI_API_ID_MPI_Op_create : 
+			case MPI_API_ID_MPI_Op_create : {
 				GET_PTRS_VALUE_MPI_Op_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Get_address
-			case MPI_API_ID_MPI_Get_address : 
+			case MPI_API_ID_MPI_Get_address : {
 				GET_PTRS_VALUE_MPI_Get_address(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Get_elements_x
-			case MPI_API_ID_MPI_Get_elements_x : 
+			case MPI_API_ID_MPI_Get_elements_x : {
 				GET_PTRS_VALUE_MPI_Get_elements_x(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Cart_shift
-			case MPI_API_ID_MPI_Cart_shift : 
+			case MPI_API_ID_MPI_Cart_shift : {
 				GET_PTRS_VALUE_MPI_Cart_shift(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_get_byte_offset
-			case MPI_API_ID_MPI_File_get_byte_offset : 
+			case MPI_API_ID_MPI_File_get_byte_offset : {
 				GET_PTRS_VALUE_MPI_File_get_byte_offset(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_get_info
-			case MPI_API_ID_MPI_Win_get_info : 
+			case MPI_API_ID_MPI_Win_get_info : {
 				GET_PTRS_VALUE_MPI_Win_get_info(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Rput
-			case MPI_API_ID_MPI_Rput : 
+			case MPI_API_ID_MPI_Rput : {
 				GET_PTRS_VALUE_MPI_Rput(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Dist_graph_neighbors_count
-			case MPI_API_ID_MPI_Dist_graph_neighbors_count : 
+			case MPI_API_ID_MPI_Dist_graph_neighbors_count : {
 				GET_PTRS_VALUE_MPI_Dist_graph_neighbors_count(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Ireduce
-			case MPI_API_ID_MPI_Ireduce : 
+			case MPI_API_ID_MPI_Ireduce : {
 				GET_PTRS_VALUE_MPI_Ireduce(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Psend_init
-			case MPI_API_ID_MPI_Psend_init : 
+			case MPI_API_ID_MPI_Psend_init : {
 				GET_PTRS_VALUE_MPI_Psend_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Reduce_init
-			case MPI_API_ID_MPI_Reduce_init : 
+			case MPI_API_ID_MPI_Reduce_init : {
 				GET_PTRS_VALUE_MPI_Reduce_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Rsend_init
-			case MPI_API_ID_MPI_Rsend_init : 
+			case MPI_API_ID_MPI_Rsend_init : {
 				GET_PTRS_VALUE_MPI_Rsend_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_write_at_all
-			case MPI_API_ID_MPI_File_write_at_all : 
+			case MPI_API_ID_MPI_File_write_at_all : {
 				GET_PTRS_VALUE_MPI_File_write_at_all(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_write_ordered_end
-			case MPI_API_ID_MPI_File_write_ordered_end : 
+			case MPI_API_ID_MPI_File_write_ordered_end : {
 				GET_PTRS_VALUE_MPI_File_write_ordered_end(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_shared_query
-			case MPI_API_ID_MPI_Win_shared_query : 
+			case MPI_API_ID_MPI_Win_shared_query : {
 				GET_PTRS_VALUE_MPI_Win_shared_query(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_get_name
-			case MPI_API_ID_MPI_Type_get_name : 
+			case MPI_API_ID_MPI_Type_get_name : {
 				GET_PTRS_VALUE_MPI_Type_get_name(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_get_atomicity
-			case MPI_API_ID_MPI_File_get_atomicity : 
+			case MPI_API_ID_MPI_File_get_atomicity : {
 				GET_PTRS_VALUE_MPI_File_get_atomicity(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Group_from_session_pset
-			case MPI_API_ID_MPI_Group_from_session_pset : 
+			case MPI_API_ID_MPI_Group_from_session_pset : {
 				GET_PTRS_VALUE_MPI_Group_from_session_pset(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_idup
-			case MPI_API_ID_MPI_Comm_idup : 
+			case MPI_API_ID_MPI_Comm_idup : {
 				GET_PTRS_VALUE_MPI_Comm_idup(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_get_name
-			case MPI_API_ID_MPI_Win_get_name : 
+			case MPI_API_ID_MPI_Win_get_name : {
 				GET_PTRS_VALUE_MPI_Win_get_name(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Allgatherv_init
-			case MPI_API_ID_MPI_Allgatherv_init : 
+			case MPI_API_ID_MPI_Allgatherv_init : {
 				GET_PTRS_VALUE_MPI_Allgatherv_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_dup_with_info
-			case MPI_API_ID_MPI_Comm_dup_with_info : 
+			case MPI_API_ID_MPI_Comm_dup_with_info : {
 				GET_PTRS_VALUE_MPI_Comm_dup_with_info(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Session_get_num_psets
-			case MPI_API_ID_MPI_Session_get_num_psets : 
+			case MPI_API_ID_MPI_Session_get_num_psets : {
 				GET_PTRS_VALUE_MPI_Session_get_num_psets(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Igather
-			case MPI_API_ID_MPI_Igather : 
+			case MPI_API_ID_MPI_Igather : {
 				GET_PTRS_VALUE_MPI_Igather(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_read_at
-			case MPI_API_ID_MPI_File_read_at : 
+			case MPI_API_ID_MPI_File_read_at : {
 				GET_PTRS_VALUE_MPI_File_read_at(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_create_hvector
-			case MPI_API_ID_MPI_Type_create_hvector : 
+			case MPI_API_ID_MPI_Type_create_hvector : {
 				GET_PTRS_VALUE_MPI_Type_create_hvector(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Grequest_start
-			case MPI_API_ID_MPI_Grequest_start : 
+			case MPI_API_ID_MPI_Grequest_start : {
 				GET_PTRS_VALUE_MPI_Grequest_start(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Bsend_init
-			case MPI_API_ID_MPI_Bsend_init : 
+			case MPI_API_ID_MPI_Bsend_init : {
 				GET_PTRS_VALUE_MPI_Bsend_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_set_name
-			case MPI_API_ID_MPI_Type_set_name : 
+			case MPI_API_ID_MPI_Type_set_name : {
 				GET_PTRS_VALUE_MPI_Type_set_name(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_split_type
-			case MPI_API_ID_MPI_Comm_split_type : 
+			case MPI_API_ID_MPI_Comm_split_type : {
 				GET_PTRS_VALUE_MPI_Comm_split_type(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_read_at_all_end
-			case MPI_API_ID_MPI_File_read_at_all_end : 
+			case MPI_API_ID_MPI_File_read_at_all_end : {
 				GET_PTRS_VALUE_MPI_File_read_at_all_end(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_write_all
-			case MPI_API_ID_MPI_File_write_all : 
+			case MPI_API_ID_MPI_File_write_all : {
 				GET_PTRS_VALUE_MPI_File_write_all(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Improbe
-			case MPI_API_ID_MPI_Improbe : 
+			case MPI_API_ID_MPI_Improbe : {
 				GET_PTRS_VALUE_MPI_Improbe(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_get_info
-			case MPI_API_ID_MPI_Comm_get_info : 
+			case MPI_API_ID_MPI_Comm_get_info : {
 				GET_PTRS_VALUE_MPI_Comm_get_info(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_read_all_end
-			case MPI_API_ID_MPI_File_read_all_end : 
+			case MPI_API_ID_MPI_File_read_all_end : {
 				GET_PTRS_VALUE_MPI_File_read_all_end(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_create_f90_integer
-			case MPI_API_ID_MPI_Type_create_f90_integer : 
+			case MPI_API_ID_MPI_Type_create_f90_integer : {
 				GET_PTRS_VALUE_MPI_Type_create_f90_integer(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Exscan_init
-			case MPI_API_ID_MPI_Exscan_init : 
+			case MPI_API_ID_MPI_Exscan_init : {
 				GET_PTRS_VALUE_MPI_Exscan_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Ibsend
-			case MPI_API_ID_MPI_Ibsend : 
+			case MPI_API_ID_MPI_Ibsend : {
 				GET_PTRS_VALUE_MPI_Ibsend(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Ialltoallw
-			case MPI_API_ID_MPI_Ialltoallw : 
+			case MPI_API_ID_MPI_Ialltoallw : {
 				GET_PTRS_VALUE_MPI_Ialltoallw(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_create_from_group
-			case MPI_API_ID_MPI_Comm_create_from_group : 
+			case MPI_API_ID_MPI_Comm_create_from_group : {
 				GET_PTRS_VALUE_MPI_Comm_create_from_group(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_get_contents
-			case MPI_API_ID_MPI_Type_get_contents : 
+			case MPI_API_ID_MPI_Type_get_contents : {
 				GET_PTRS_VALUE_MPI_Type_get_contents(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_iwrite_at
-			case MPI_API_ID_MPI_File_iwrite_at : 
+			case MPI_API_ID_MPI_File_iwrite_at : {
 				GET_PTRS_VALUE_MPI_File_iwrite_at(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Status_set_elements
-			case MPI_API_ID_MPI_Status_set_elements : 
+			case MPI_API_ID_MPI_Status_set_elements : {
 				GET_PTRS_VALUE_MPI_Status_set_elements(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_read_ordered
-			case MPI_API_ID_MPI_File_read_ordered : 
+			case MPI_API_ID_MPI_File_read_ordered : {
 				GET_PTRS_VALUE_MPI_File_read_ordered(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Is_thread_main
-			case MPI_API_ID_MPI_Is_thread_main : 
+			case MPI_API_ID_MPI_Is_thread_main : {
 				GET_PTRS_VALUE_MPI_Is_thread_main(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Allreduce_init
-			case MPI_API_ID_MPI_Allreduce_init : 
+			case MPI_API_ID_MPI_Allreduce_init : {
 				GET_PTRS_VALUE_MPI_Allreduce_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Info_get_valuelen
-			case MPI_API_ID_MPI_Info_get_valuelen : 
+			case MPI_API_ID_MPI_Info_get_valuelen : {
 				GET_PTRS_VALUE_MPI_Info_get_valuelen(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_create_errhandler
-			case MPI_API_ID_MPI_Comm_create_errhandler : 
+			case MPI_API_ID_MPI_Comm_create_errhandler : {
 				GET_PTRS_VALUE_MPI_Comm_create_errhandler(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Info_get_nthkey
-			case MPI_API_ID_MPI_Info_get_nthkey : 
+			case MPI_API_ID_MPI_Info_get_nthkey : {
 				GET_PTRS_VALUE_MPI_Info_get_nthkey(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Ssend_init
-			case MPI_API_ID_MPI_Ssend_init : 
+			case MPI_API_ID_MPI_Ssend_init : {
 				GET_PTRS_VALUE_MPI_Ssend_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Cart_create
-			case MPI_API_ID_MPI_Cart_create : 
+			case MPI_API_ID_MPI_Cart_create : {
 				GET_PTRS_VALUE_MPI_Cart_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Scan_init
-			case MPI_API_ID_MPI_Scan_init : 
+			case MPI_API_ID_MPI_Scan_init : {
 				GET_PTRS_VALUE_MPI_Scan_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Irsend
-			case MPI_API_ID_MPI_Irsend : 
+			case MPI_API_ID_MPI_Irsend : {
 				GET_PTRS_VALUE_MPI_Irsend(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Neighbor_alltoallv
-			case MPI_API_ID_MPI_Neighbor_alltoallv : 
+			case MPI_API_ID_MPI_Neighbor_alltoallv : {
 				GET_PTRS_VALUE_MPI_Neighbor_alltoallv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Pready_list
-			case MPI_API_ID_MPI_Pready_list : 
+			case MPI_API_ID_MPI_Pready_list : {
 				GET_PTRS_VALUE_MPI_Pready_list(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Alltoallw_init
-			case MPI_API_ID_MPI_Alltoallw_init : 
+			case MPI_API_ID_MPI_Alltoallw_init : {
 				GET_PTRS_VALUE_MPI_Alltoallw_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Dist_graph_create_adjacent
-			case MPI_API_ID_MPI_Dist_graph_create_adjacent : 
+			case MPI_API_ID_MPI_Dist_graph_create_adjacent : {
 				GET_PTRS_VALUE_MPI_Dist_graph_create_adjacent(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Reduce_scatter_init
-			case MPI_API_ID_MPI_Reduce_scatter_init : 
+			case MPI_API_ID_MPI_Reduce_scatter_init : {
 				GET_PTRS_VALUE_MPI_Reduce_scatter_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_get_parent
-			case MPI_API_ID_MPI_Comm_get_parent : 
+			case MPI_API_ID_MPI_Comm_get_parent : {
 				GET_PTRS_VALUE_MPI_Comm_get_parent(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Info_set
-			case MPI_API_ID_MPI_Info_set : 
+			case MPI_API_ID_MPI_Info_set : {
 				GET_PTRS_VALUE_MPI_Info_set(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Keyval_create
-			case MPI_API_ID_MPI_Keyval_create : 
+			case MPI_API_ID_MPI_Keyval_create : {
 				GET_PTRS_VALUE_MPI_Keyval_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_connect
-			case MPI_API_ID_MPI_Comm_connect : 
+			case MPI_API_ID_MPI_Comm_connect : {
 				GET_PTRS_VALUE_MPI_Comm_connect(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Scatterv_init
-			case MPI_API_ID_MPI_Scatterv_init : 
+			case MPI_API_ID_MPI_Scatterv_init : {
 				GET_PTRS_VALUE_MPI_Scatterv_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_write_at_all_end
-			case MPI_API_ID_MPI_File_write_at_all_end : 
+			case MPI_API_ID_MPI_File_write_at_all_end : {
 				GET_PTRS_VALUE_MPI_File_write_at_all_end(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_write_all_end
-			case MPI_API_ID_MPI_File_write_all_end : 
+			case MPI_API_ID_MPI_File_write_all_end : {
 				GET_PTRS_VALUE_MPI_File_write_all_end(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Buffer_detach
-			case MPI_API_ID_MPI_Buffer_detach : 
+			case MPI_API_ID_MPI_Buffer_detach : {
 				GET_PTRS_VALUE_MPI_Buffer_detach(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Startall
-			case MPI_API_ID_MPI_Startall : 
+			case MPI_API_ID_MPI_Startall : {
 				GET_PTRS_VALUE_MPI_Startall(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_read_ordered_end
-			case MPI_API_ID_MPI_File_read_ordered_end : 
+			case MPI_API_ID_MPI_File_read_ordered_end : {
 				GET_PTRS_VALUE_MPI_File_read_ordered_end(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_write_at
-			case MPI_API_ID_MPI_File_write_at : 
+			case MPI_API_ID_MPI_File_write_at : {
 				GET_PTRS_VALUE_MPI_File_write_at(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Session_get_pset_info
-			case MPI_API_ID_MPI_Session_get_pset_info : 
+			case MPI_API_ID_MPI_Session_get_pset_info : {
 				GET_PTRS_VALUE_MPI_Session_get_pset_info(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Topo_test
-			case MPI_API_ID_MPI_Topo_test : 
+			case MPI_API_ID_MPI_Topo_test : {
 				GET_PTRS_VALUE_MPI_Topo_test(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_disconnect
-			case MPI_API_ID_MPI_Comm_disconnect : 
+			case MPI_API_ID_MPI_Comm_disconnect : {
 				GET_PTRS_VALUE_MPI_Comm_disconnect(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Add_error_class
-			case MPI_API_ID_MPI_Add_error_class : 
+			case MPI_API_ID_MPI_Add_error_class : {
 				GET_PTRS_VALUE_MPI_Add_error_class(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Ireduce_scatter
-			case MPI_API_ID_MPI_Ireduce_scatter : 
+			case MPI_API_ID_MPI_Ireduce_scatter : {
 				GET_PTRS_VALUE_MPI_Ireduce_scatter(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Cart_map
-			case MPI_API_ID_MPI_Cart_map : 
+			case MPI_API_ID_MPI_Cart_map : {
 				GET_PTRS_VALUE_MPI_Cart_map(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Intercomm_merge
-			case MPI_API_ID_MPI_Intercomm_merge : 
+			case MPI_API_ID_MPI_Intercomm_merge : {
 				GET_PTRS_VALUE_MPI_Intercomm_merge(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_create_hindexed
-			case MPI_API_ID_MPI_Type_create_hindexed : 
+			case MPI_API_ID_MPI_Type_create_hindexed : {
 				GET_PTRS_VALUE_MPI_Type_create_hindexed(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Info_get_nkeys
-			case MPI_API_ID_MPI_Info_get_nkeys : 
+			case MPI_API_ID_MPI_Info_get_nkeys : {
 				GET_PTRS_VALUE_MPI_Info_get_nkeys(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_read
-			case MPI_API_ID_MPI_File_read : 
+			case MPI_API_ID_MPI_File_read : {
 				GET_PTRS_VALUE_MPI_File_read(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Ineighbor_allgatherv
-			case MPI_API_ID_MPI_Ineighbor_allgatherv : 
+			case MPI_API_ID_MPI_Ineighbor_allgatherv : {
 				GET_PTRS_VALUE_MPI_Ineighbor_allgatherv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Status_set_elements_x
-			case MPI_API_ID_MPI_Status_set_elements_x : 
+			case MPI_API_ID_MPI_Status_set_elements_x : {
 				GET_PTRS_VALUE_MPI_Status_set_elements_x(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_create_f90_real
-			case MPI_API_ID_MPI_Type_create_f90_real : 
+			case MPI_API_ID_MPI_Type_create_f90_real : {
 				GET_PTRS_VALUE_MPI_Type_create_f90_real(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Probe
-			case MPI_API_ID_MPI_Probe : 
+			case MPI_API_ID_MPI_Probe : {
 				GET_PTRS_VALUE_MPI_Probe(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_close
-			case MPI_API_ID_MPI_File_close : 
+			case MPI_API_ID_MPI_File_close : {
 				GET_PTRS_VALUE_MPI_File_close(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Request_get_status
-			case MPI_API_ID_MPI_Request_get_status : 
+			case MPI_API_ID_MPI_Request_get_status : {
 				GET_PTRS_VALUE_MPI_Request_get_status(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Rget_accumulate
-			case MPI_API_ID_MPI_Rget_accumulate : 
+			case MPI_API_ID_MPI_Rget_accumulate : {
 				GET_PTRS_VALUE_MPI_Rget_accumulate(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_iread_all
-			case MPI_API_ID_MPI_File_iread_all : 
+			case MPI_API_ID_MPI_File_iread_all : {
 				GET_PTRS_VALUE_MPI_File_iread_all(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Isendrecv
-			case MPI_API_ID_MPI_Isendrecv : 
+			case MPI_API_ID_MPI_Isendrecv : {
 				GET_PTRS_VALUE_MPI_Isendrecv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Pack_external
-			case MPI_API_ID_MPI_Pack_external : 
+			case MPI_API_ID_MPI_Pack_external : {
 				GET_PTRS_VALUE_MPI_Pack_external(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_get_envelope
-			case MPI_API_ID_MPI_Type_get_envelope : 
+			case MPI_API_ID_MPI_Type_get_envelope : {
 				GET_PTRS_VALUE_MPI_Type_get_envelope(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_create
-			case MPI_API_ID_MPI_Win_create : 
+			case MPI_API_ID_MPI_Win_create : {
 				GET_PTRS_VALUE_MPI_Win_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Isendrecv_replace
-			case MPI_API_ID_MPI_Isendrecv_replace : 
+			case MPI_API_ID_MPI_Isendrecv_replace : {
 				GET_PTRS_VALUE_MPI_Isendrecv_replace(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Cartdim_get
-			case MPI_API_ID_MPI_Cartdim_get : 
+			case MPI_API_ID_MPI_Cartdim_get : {
 				GET_PTRS_VALUE_MPI_Cartdim_get(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Dist_graph_neighbors
-			case MPI_API_ID_MPI_Dist_graph_neighbors : 
+			case MPI_API_ID_MPI_Dist_graph_neighbors : {
 				GET_PTRS_VALUE_MPI_Dist_graph_neighbors(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Pack_external_size
-			case MPI_API_ID_MPI_Pack_external_size : 
+			case MPI_API_ID_MPI_Pack_external_size : {
 				GET_PTRS_VALUE_MPI_Pack_external_size(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_create_f90_complex
-			case MPI_API_ID_MPI_Type_create_f90_complex : 
+			case MPI_API_ID_MPI_Type_create_f90_complex : {
 				GET_PTRS_VALUE_MPI_Type_create_f90_complex(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Neighbor_alltoallw_init
-			case MPI_API_ID_MPI_Neighbor_alltoallw_init : 
+			case MPI_API_ID_MPI_Neighbor_alltoallw_init : {
 				GET_PTRS_VALUE_MPI_Neighbor_alltoallw_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Rget
-			case MPI_API_ID_MPI_Rget : 
+			case MPI_API_ID_MPI_Rget : {
 				GET_PTRS_VALUE_MPI_Rget(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_create_keyval
-			case MPI_API_ID_MPI_Win_create_keyval : 
+			case MPI_API_ID_MPI_Win_create_keyval : {
 				GET_PTRS_VALUE_MPI_Win_create_keyval(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Op_commutative
-			case MPI_API_ID_MPI_Op_commutative : 
+			case MPI_API_ID_MPI_Op_commutative : {
 				GET_PTRS_VALUE_MPI_Op_commutative(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Scatter_init
-			case MPI_API_ID_MPI_Scatter_init : 
+			case MPI_API_ID_MPI_Scatter_init : {
 				GET_PTRS_VALUE_MPI_Scatter_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Info_get_string
-			case MPI_API_ID_MPI_Info_get_string : 
+			case MPI_API_ID_MPI_Info_get_string : {
 				GET_PTRS_VALUE_MPI_Info_get_string(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Mrecv
-			case MPI_API_ID_MPI_Mrecv : 
+			case MPI_API_ID_MPI_Mrecv : {
 				GET_PTRS_VALUE_MPI_Mrecv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Open_port
-			case MPI_API_ID_MPI_Open_port : 
+			case MPI_API_ID_MPI_Open_port : {
 				GET_PTRS_VALUE_MPI_Open_port(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Cart_get
-			case MPI_API_ID_MPI_Cart_get : 
+			case MPI_API_ID_MPI_Cart_get : {
 				GET_PTRS_VALUE_MPI_Cart_get(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Lookup_name
-			case MPI_API_ID_MPI_Lookup_name : 
+			case MPI_API_ID_MPI_Lookup_name : {
 				GET_PTRS_VALUE_MPI_Lookup_name(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_get_extent
-			case MPI_API_ID_MPI_Type_get_extent : 
+			case MPI_API_ID_MPI_Type_get_extent : {
 				GET_PTRS_VALUE_MPI_Type_get_extent(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_spawn
-			case MPI_API_ID_MPI_Comm_spawn : 
+			case MPI_API_ID_MPI_Comm_spawn : {
 				GET_PTRS_VALUE_MPI_Comm_spawn(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Unpublish_name
-			case MPI_API_ID_MPI_Unpublish_name : 
+			case MPI_API_ID_MPI_Unpublish_name : {
 				GET_PTRS_VALUE_MPI_Unpublish_name(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_get_group
-			case MPI_API_ID_MPI_File_get_group : 
+			case MPI_API_ID_MPI_File_get_group : {
 				GET_PTRS_VALUE_MPI_File_get_group(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_iread_at_all
-			case MPI_API_ID_MPI_File_iread_at_all : 
+			case MPI_API_ID_MPI_File_iread_at_all : {
 				GET_PTRS_VALUE_MPI_File_iread_at_all(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Graphdims_get
-			case MPI_API_ID_MPI_Graphdims_get : 
+			case MPI_API_ID_MPI_Graphdims_get : {
 				GET_PTRS_VALUE_MPI_Graphdims_get(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_iread_shared
-			case MPI_API_ID_MPI_File_iread_shared : 
+			case MPI_API_ID_MPI_File_iread_shared : {
 				GET_PTRS_VALUE_MPI_File_iread_shared(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_idup_with_info
-			case MPI_API_ID_MPI_Comm_idup_with_info : 
+			case MPI_API_ID_MPI_Comm_idup_with_info : {
 				GET_PTRS_VALUE_MPI_Comm_idup_with_info(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Get_version
-			case MPI_API_ID_MPI_Get_version : 
+			case MPI_API_ID_MPI_Get_version : {
 				GET_PTRS_VALUE_MPI_Get_version(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Intercomm_create_from_groups
-			case MPI_API_ID_MPI_Intercomm_create_from_groups : 
+			case MPI_API_ID_MPI_Intercomm_create_from_groups : {
 				GET_PTRS_VALUE_MPI_Intercomm_create_from_groups(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Neighbor_alltoallv_init
-			case MPI_API_ID_MPI_Neighbor_alltoallv_init : 
+			case MPI_API_ID_MPI_Neighbor_alltoallv_init : {
 				GET_PTRS_VALUE_MPI_Neighbor_alltoallv_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_create_darray
-			case MPI_API_ID_MPI_Type_create_darray : 
+			case MPI_API_ID_MPI_Type_create_darray : {
 				GET_PTRS_VALUE_MPI_Type_create_darray(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_get_position_shared
-			case MPI_API_ID_MPI_File_get_position_shared : 
+			case MPI_API_ID_MPI_File_get_position_shared : {
 				GET_PTRS_VALUE_MPI_File_get_position_shared(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_get_group
-			case MPI_API_ID_MPI_Win_get_group : 
+			case MPI_API_ID_MPI_Win_get_group : {
 				GET_PTRS_VALUE_MPI_Win_get_group(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Error_class
-			case MPI_API_ID_MPI_Error_class : 
+			case MPI_API_ID_MPI_Error_class : {
 				GET_PTRS_VALUE_MPI_Error_class(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_get_attr
-			case MPI_API_ID_MPI_Win_get_attr : 
+			case MPI_API_ID_MPI_Win_get_attr : {
 				GET_PTRS_VALUE_MPI_Win_get_attr(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Ireduce_scatter_block
-			case MPI_API_ID_MPI_Ireduce_scatter_block : 
+			case MPI_API_ID_MPI_Ireduce_scatter_block : {
 				GET_PTRS_VALUE_MPI_Ireduce_scatter_block(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Status_set_cancelled
-			case MPI_API_ID_MPI_Status_set_cancelled : 
+			case MPI_API_ID_MPI_Status_set_cancelled : {
 				GET_PTRS_VALUE_MPI_Status_set_cancelled(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_test
-			case MPI_API_ID_MPI_Win_test : 
+			case MPI_API_ID_MPI_Win_test : {
 				GET_PTRS_VALUE_MPI_Win_test(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Test_cancelled
-			case MPI_API_ID_MPI_Test_cancelled : 
+			case MPI_API_ID_MPI_Test_cancelled : {
 				GET_PTRS_VALUE_MPI_Test_cancelled(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Error_string
-			case MPI_API_ID_MPI_Error_string : 
+			case MPI_API_ID_MPI_Error_string : {
 				GET_PTRS_VALUE_MPI_Error_string(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Graph_neighbors_count
-			case MPI_API_ID_MPI_Graph_neighbors_count : 
+			case MPI_API_ID_MPI_Graph_neighbors_count : {
 				GET_PTRS_VALUE_MPI_Graph_neighbors_count(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Session_create_errhandler
-			case MPI_API_ID_MPI_Session_create_errhandler : 
+			case MPI_API_ID_MPI_Session_create_errhandler : {
 				GET_PTRS_VALUE_MPI_Session_create_errhandler(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Iscatter
-			case MPI_API_ID_MPI_Iscatter : 
+			case MPI_API_ID_MPI_Iscatter : {
 				GET_PTRS_VALUE_MPI_Iscatter(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_read_all
-			case MPI_API_ID_MPI_File_read_all : 
+			case MPI_API_ID_MPI_File_read_all : {
 				GET_PTRS_VALUE_MPI_File_read_all(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_get_errhandler
-			case MPI_API_ID_MPI_File_get_errhandler : 
+			case MPI_API_ID_MPI_File_get_errhandler : {
 				GET_PTRS_VALUE_MPI_File_get_errhandler(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Session_finalize
-			case MPI_API_ID_MPI_Session_finalize : 
+			case MPI_API_ID_MPI_Session_finalize : {
 				GET_PTRS_VALUE_MPI_Session_finalize(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_iwrite_all
-			case MPI_API_ID_MPI_File_iwrite_all : 
+			case MPI_API_ID_MPI_File_iwrite_all : {
 				GET_PTRS_VALUE_MPI_File_iwrite_all(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Alltoallv_init
-			case MPI_API_ID_MPI_Alltoallv_init : 
+			case MPI_API_ID_MPI_Alltoallv_init : {
 				GET_PTRS_VALUE_MPI_Alltoallv_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_get_position
-			case MPI_API_ID_MPI_File_get_position : 
+			case MPI_API_ID_MPI_File_get_position : {
 				GET_PTRS_VALUE_MPI_File_get_position(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_write_shared
-			case MPI_API_ID_MPI_File_write_shared : 
+			case MPI_API_ID_MPI_File_write_shared : {
 				GET_PTRS_VALUE_MPI_File_write_shared(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_create_dynamic
-			case MPI_API_ID_MPI_Win_create_dynamic : 
+			case MPI_API_ID_MPI_Win_create_dynamic : {
 				GET_PTRS_VALUE_MPI_Win_create_dynamic(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Neighbor_alltoallw
-			case MPI_API_ID_MPI_Neighbor_alltoallw : 
+			case MPI_API_ID_MPI_Neighbor_alltoallw : {
 				GET_PTRS_VALUE_MPI_Neighbor_alltoallw(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Iexscan
-			case MPI_API_ID_MPI_Iexscan : 
+			case MPI_API_ID_MPI_Iexscan : {
 				GET_PTRS_VALUE_MPI_Iexscan(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Graph_map
-			case MPI_API_ID_MPI_Graph_map : 
+			case MPI_API_ID_MPI_Graph_map : {
 				GET_PTRS_VALUE_MPI_Graph_map(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Recv_init
-			case MPI_API_ID_MPI_Recv_init : 
+			case MPI_API_ID_MPI_Recv_init : {
 				GET_PTRS_VALUE_MPI_Recv_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_create_subarray
-			case MPI_API_ID_MPI_Type_create_subarray : 
+			case MPI_API_ID_MPI_Type_create_subarray : {
 				GET_PTRS_VALUE_MPI_Type_create_subarray(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_create_group
-			case MPI_API_ID_MPI_Comm_create_group : 
+			case MPI_API_ID_MPI_Comm_create_group : {
 				GET_PTRS_VALUE_MPI_Comm_create_group(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Allgather_init
-			case MPI_API_ID_MPI_Allgather_init : 
+			case MPI_API_ID_MPI_Allgather_init : {
 				GET_PTRS_VALUE_MPI_Allgather_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Reduce_scatter_block_init
-			case MPI_API_ID_MPI_Reduce_scatter_block_init : 
+			case MPI_API_ID_MPI_Reduce_scatter_block_init : {
 				GET_PTRS_VALUE_MPI_Reduce_scatter_block_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_match_size
-			case MPI_API_ID_MPI_Type_match_size : 
+			case MPI_API_ID_MPI_Type_match_size : {
 				GET_PTRS_VALUE_MPI_Type_match_size(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_get_true_extent
-			case MPI_API_ID_MPI_Type_get_true_extent : 
+			case MPI_API_ID_MPI_Type_get_true_extent : {
 				GET_PTRS_VALUE_MPI_Type_get_true_extent(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Alltoall_init
-			case MPI_API_ID_MPI_Alltoall_init : 
+			case MPI_API_ID_MPI_Alltoall_init : {
 				GET_PTRS_VALUE_MPI_Alltoall_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Send_init
-			case MPI_API_ID_MPI_Send_init : 
+			case MPI_API_ID_MPI_Send_init : {
 				GET_PTRS_VALUE_MPI_Send_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Neighbor_allgather_init
-			case MPI_API_ID_MPI_Neighbor_allgather_init : 
+			case MPI_API_ID_MPI_Neighbor_allgather_init : {
 				GET_PTRS_VALUE_MPI_Neighbor_allgather_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Ibcast
-			case MPI_API_ID_MPI_Ibcast : 
+			case MPI_API_ID_MPI_Ibcast : {
 				GET_PTRS_VALUE_MPI_Ibcast(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_iread
-			case MPI_API_ID_MPI_File_iread : 
+			case MPI_API_ID_MPI_File_iread : {
 				GET_PTRS_VALUE_MPI_File_iread(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Neighbor_alltoall_init
-			case MPI_API_ID_MPI_Neighbor_alltoall_init : 
+			case MPI_API_ID_MPI_Neighbor_alltoall_init : {
 				GET_PTRS_VALUE_MPI_Neighbor_alltoall_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Cart_rank
-			case MPI_API_ID_MPI_Cart_rank : 
+			case MPI_API_ID_MPI_Cart_rank : {
 				GET_PTRS_VALUE_MPI_Cart_rank(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Publish_name
-			case MPI_API_ID_MPI_Publish_name : 
+			case MPI_API_ID_MPI_Publish_name : {
 				GET_PTRS_VALUE_MPI_Publish_name(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_write
-			case MPI_API_ID_MPI_File_write : 
+			case MPI_API_ID_MPI_File_write : {
 				GET_PTRS_VALUE_MPI_File_write(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Register_datarep
-			case MPI_API_ID_MPI_Register_datarep : 
+			case MPI_API_ID_MPI_Register_datarep : {
 				GET_PTRS_VALUE_MPI_Register_datarep(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Ineighbor_alltoall
-			case MPI_API_ID_MPI_Ineighbor_alltoall : 
+			case MPI_API_ID_MPI_Ineighbor_alltoall : {
 				GET_PTRS_VALUE_MPI_Ineighbor_alltoall(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Iallgatherv
-			case MPI_API_ID_MPI_Iallgatherv : 
+			case MPI_API_ID_MPI_Iallgatherv : {
 				GET_PTRS_VALUE_MPI_Iallgatherv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Neighbor_allgatherv_init
-			case MPI_API_ID_MPI_Neighbor_allgatherv_init : 
+			case MPI_API_ID_MPI_Neighbor_allgatherv_init : {
 				GET_PTRS_VALUE_MPI_Neighbor_allgatherv_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Iprobe
-			case MPI_API_ID_MPI_Iprobe : 
+			case MPI_API_ID_MPI_Iprobe : {
 				GET_PTRS_VALUE_MPI_Iprobe(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_get_true_extent_x
-			case MPI_API_ID_MPI_Type_get_true_extent_x : 
+			case MPI_API_ID_MPI_Type_get_true_extent_x : {
 				GET_PTRS_VALUE_MPI_Type_get_true_extent_x(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Unpack_external
-			case MPI_API_ID_MPI_Unpack_external : 
+			case MPI_API_ID_MPI_Unpack_external : {
 				GET_PTRS_VALUE_MPI_Unpack_external(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Mprobe
-			case MPI_API_ID_MPI_Mprobe : 
+			case MPI_API_ID_MPI_Mprobe : {
 				GET_PTRS_VALUE_MPI_Mprobe(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Add_error_code
-			case MPI_API_ID_MPI_Add_error_code : 
+			case MPI_API_ID_MPI_Add_error_code : {
 				GET_PTRS_VALUE_MPI_Add_error_code(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_read_at_all
-			case MPI_API_ID_MPI_File_read_at_all : 
+			case MPI_API_ID_MPI_File_read_at_all : {
 				GET_PTRS_VALUE_MPI_File_read_at_all(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Iscatterv
-			case MPI_API_ID_MPI_Iscatterv : 
+			case MPI_API_ID_MPI_Iscatterv : {
 				GET_PTRS_VALUE_MPI_Iscatterv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Iallreduce
-			case MPI_API_ID_MPI_Iallreduce : 
+			case MPI_API_ID_MPI_Iallreduce : {
 				GET_PTRS_VALUE_MPI_Iallreduce(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Get_processor_name
-			case MPI_API_ID_MPI_Get_processor_name : 
+			case MPI_API_ID_MPI_Get_processor_name : {
 				GET_PTRS_VALUE_MPI_Get_processor_name(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Start
-			case MPI_API_ID_MPI_Start : 
+			case MPI_API_ID_MPI_Start : {
 				GET_PTRS_VALUE_MPI_Start(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_get_type_extent
-			case MPI_API_ID_MPI_File_get_type_extent : 
+			case MPI_API_ID_MPI_File_get_type_extent : {
 				GET_PTRS_VALUE_MPI_File_get_type_extent(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_read_shared
-			case MPI_API_ID_MPI_File_read_shared : 
+			case MPI_API_ID_MPI_File_read_shared : {
 				GET_PTRS_VALUE_MPI_File_read_shared(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_open
-			case MPI_API_ID_MPI_File_open : 
+			case MPI_API_ID_MPI_File_open : {
 				GET_PTRS_VALUE_MPI_File_open(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_get_amode
-			case MPI_API_ID_MPI_File_get_amode : 
+			case MPI_API_ID_MPI_File_get_amode : {
 				GET_PTRS_VALUE_MPI_File_get_amode(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_create_hindexed_block
-			case MPI_API_ID_MPI_Type_create_hindexed_block : 
+			case MPI_API_ID_MPI_Type_create_hindexed_block : {
 				GET_PTRS_VALUE_MPI_Type_create_hindexed_block(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Cart_coords
-			case MPI_API_ID_MPI_Cart_coords : 
+			case MPI_API_ID_MPI_Cart_coords : {
 				GET_PTRS_VALUE_MPI_Cart_coords(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Issend
-			case MPI_API_ID_MPI_Issend : 
+			case MPI_API_ID_MPI_Issend : {
 				GET_PTRS_VALUE_MPI_Issend(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Graph_get
-			case MPI_API_ID_MPI_Graph_get : 
+			case MPI_API_ID_MPI_Graph_get : {
 				GET_PTRS_VALUE_MPI_Graph_get(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Ineighbor_alltoallw
-			case MPI_API_ID_MPI_Ineighbor_alltoallw : 
+			case MPI_API_ID_MPI_Ineighbor_alltoallw : {
 				GET_PTRS_VALUE_MPI_Ineighbor_alltoallw(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_iread_at
-			case MPI_API_ID_MPI_File_iread_at : 
+			case MPI_API_ID_MPI_File_iread_at : {
 				GET_PTRS_VALUE_MPI_File_iread_at(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Session_get_info
-			case MPI_API_ID_MPI_Session_get_info : 
+			case MPI_API_ID_MPI_Session_get_info : {
 				GET_PTRS_VALUE_MPI_Session_get_info(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Session_get_nth_pset
-			case MPI_API_ID_MPI_Session_get_nth_pset : 
+			case MPI_API_ID_MPI_Session_get_nth_pset : {
 				GET_PTRS_VALUE_MPI_Session_get_nth_pset(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_create_keyval
-			case MPI_API_ID_MPI_Type_create_keyval : 
+			case MPI_API_ID_MPI_Type_create_keyval : {
 				GET_PTRS_VALUE_MPI_Type_create_keyval(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Attr_get
-			case MPI_API_ID_MPI_Attr_get : 
+			case MPI_API_ID_MPI_Attr_get : {
 				GET_PTRS_VALUE_MPI_Attr_get(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Add_error_string
-			case MPI_API_ID_MPI_Add_error_string : 
+			case MPI_API_ID_MPI_Add_error_string : {
 				GET_PTRS_VALUE_MPI_Add_error_string(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Ineighbor_alltoallv
-			case MPI_API_ID_MPI_Ineighbor_alltoallv : 
+			case MPI_API_ID_MPI_Ineighbor_alltoallv : {
 				GET_PTRS_VALUE_MPI_Ineighbor_alltoallv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Imrecv
-			case MPI_API_ID_MPI_Imrecv : 
+			case MPI_API_ID_MPI_Imrecv : {
 				GET_PTRS_VALUE_MPI_Imrecv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Alltoallw
-			case MPI_API_ID_MPI_Alltoallw : 
+			case MPI_API_ID_MPI_Alltoallw : {
 				GET_PTRS_VALUE_MPI_Alltoallw(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Bcast_init
-			case MPI_API_ID_MPI_Bcast_init : 
+			case MPI_API_ID_MPI_Bcast_init : {
 				GET_PTRS_VALUE_MPI_Bcast_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Ibarrier
-			case MPI_API_ID_MPI_Ibarrier : 
+			case MPI_API_ID_MPI_Ibarrier : {
 				GET_PTRS_VALUE_MPI_Ibarrier(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_iwrite_at_all
-			case MPI_API_ID_MPI_File_iwrite_at_all : 
+			case MPI_API_ID_MPI_File_iwrite_at_all : {
 				GET_PTRS_VALUE_MPI_File_iwrite_at_all(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_get_size
-			case MPI_API_ID_MPI_File_get_size : 
+			case MPI_API_ID_MPI_File_get_size : {
 				GET_PTRS_VALUE_MPI_File_get_size(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Barrier_init
-			case MPI_API_ID_MPI_Barrier_init : 
+			case MPI_API_ID_MPI_Barrier_init : {
 				GET_PTRS_VALUE_MPI_Barrier_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_get_view
-			case MPI_API_ID_MPI_File_get_view : 
+			case MPI_API_ID_MPI_File_get_view : {
 				GET_PTRS_VALUE_MPI_File_get_view(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_allocate_shared
-			case MPI_API_ID_MPI_Win_allocate_shared : 
+			case MPI_API_ID_MPI_Win_allocate_shared : {
 				GET_PTRS_VALUE_MPI_Win_allocate_shared(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Close_port
-			case MPI_API_ID_MPI_Close_port : 
+			case MPI_API_ID_MPI_Close_port : {
 				GET_PTRS_VALUE_MPI_Close_port(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Finalized
-			case MPI_API_ID_MPI_Finalized : 
+			case MPI_API_ID_MPI_Finalized : {
 				GET_PTRS_VALUE_MPI_Finalized(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Info_dup
-			case MPI_API_ID_MPI_Info_dup : 
+			case MPI_API_ID_MPI_Info_dup : {
 				GET_PTRS_VALUE_MPI_Info_dup(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Info_get
-			case MPI_API_ID_MPI_Info_get : 
+			case MPI_API_ID_MPI_Info_get : {
 				GET_PTRS_VALUE_MPI_Info_get(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Get_library_version
-			case MPI_API_ID_MPI_Get_library_version : 
+			case MPI_API_ID_MPI_Get_library_version : {
 				GET_PTRS_VALUE_MPI_Get_library_version(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Info_create
-			case MPI_API_ID_MPI_Info_create : 
+			case MPI_API_ID_MPI_Info_create : {
 				GET_PTRS_VALUE_MPI_Info_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Iallgather
-			case MPI_API_ID_MPI_Iallgather : 
+			case MPI_API_ID_MPI_Iallgather : {
 				GET_PTRS_VALUE_MPI_Iallgather(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_spawn_multiple
-			case MPI_API_ID_MPI_Comm_spawn_multiple : 
+			case MPI_API_ID_MPI_Comm_spawn_multiple : {
 				GET_PTRS_VALUE_MPI_Comm_spawn_multiple(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Precv_init
-			case MPI_API_ID_MPI_Precv_init : 
+			case MPI_API_ID_MPI_Precv_init : {
 				GET_PTRS_VALUE_MPI_Precv_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_set_view
-			case MPI_API_ID_MPI_File_set_view : 
+			case MPI_API_ID_MPI_File_set_view : {
 				GET_PTRS_VALUE_MPI_File_set_view(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_size
-			case MPI_API_ID_MPI_Type_size : 
+			case MPI_API_ID_MPI_Type_size : {
 				GET_PTRS_VALUE_MPI_Type_size(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_get_attr
-			case MPI_API_ID_MPI_Type_get_attr : 
+			case MPI_API_ID_MPI_Type_get_attr : {
 				GET_PTRS_VALUE_MPI_Type_get_attr(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_write_ordered
-			case MPI_API_ID_MPI_File_write_ordered : 
+			case MPI_API_ID_MPI_File_write_ordered : {
 				GET_PTRS_VALUE_MPI_File_write_ordered(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_get_info
-			case MPI_API_ID_MPI_File_get_info : 
+			case MPI_API_ID_MPI_File_get_info : {
 				GET_PTRS_VALUE_MPI_File_get_info(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Graph_neighbors
-			case MPI_API_ID_MPI_Graph_neighbors : 
+			case MPI_API_ID_MPI_Graph_neighbors : {
 				GET_PTRS_VALUE_MPI_Graph_neighbors(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Igatherv
-			case MPI_API_ID_MPI_Igatherv : 
+			case MPI_API_ID_MPI_Igatherv : {
 				GET_PTRS_VALUE_MPI_Igatherv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Info_delete
-			case MPI_API_ID_MPI_Info_delete : 
+			case MPI_API_ID_MPI_Info_delete : {
 				GET_PTRS_VALUE_MPI_Info_delete(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_get_errhandler
-			case MPI_API_ID_MPI_Comm_get_errhandler : 
+			case MPI_API_ID_MPI_Comm_get_errhandler : {
 				GET_PTRS_VALUE_MPI_Comm_get_errhandler(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Session_init
-			case MPI_API_ID_MPI_Session_init : 
+			case MPI_API_ID_MPI_Session_init : {
 				GET_PTRS_VALUE_MPI_Session_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Intercomm_create
-			case MPI_API_ID_MPI_Intercomm_create : 
+			case MPI_API_ID_MPI_Intercomm_create : {
 				GET_PTRS_VALUE_MPI_Intercomm_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Ialltoallv
-			case MPI_API_ID_MPI_Ialltoallv : 
+			case MPI_API_ID_MPI_Ialltoallv : {
 				GET_PTRS_VALUE_MPI_Ialltoallv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_delete
-			case MPI_API_ID_MPI_File_delete : 
+			case MPI_API_ID_MPI_File_delete : {
 				GET_PTRS_VALUE_MPI_File_delete(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Dims_create
-			case MPI_API_ID_MPI_Dims_create : 
+			case MPI_API_ID_MPI_Dims_create : {
 				GET_PTRS_VALUE_MPI_Dims_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Cart_sub
-			case MPI_API_ID_MPI_Cart_sub : 
+			case MPI_API_ID_MPI_Cart_sub : {
 				GET_PTRS_VALUE_MPI_Cart_sub(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_allocate
-			case MPI_API_ID_MPI_Win_allocate : 
+			case MPI_API_ID_MPI_Win_allocate : {
 				GET_PTRS_VALUE_MPI_Win_allocate(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Session_get_errhandler
-			case MPI_API_ID_MPI_Session_get_errhandler : 
+			case MPI_API_ID_MPI_Session_get_errhandler : {
 				GET_PTRS_VALUE_MPI_Session_get_errhandler(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Parrived
-			case MPI_API_ID_MPI_Parrived : 
+			case MPI_API_ID_MPI_Parrived : {
 				GET_PTRS_VALUE_MPI_Parrived(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Info_create_env
-			case MPI_API_ID_MPI_Info_create_env : 
+			case MPI_API_ID_MPI_Info_create_env : {
 				GET_PTRS_VALUE_MPI_Info_create_env(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_create_errhandler
-			case MPI_API_ID_MPI_File_create_errhandler : 
+			case MPI_API_ID_MPI_File_create_errhandler : {
 				GET_PTRS_VALUE_MPI_File_create_errhandler(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Ialltoall
-			case MPI_API_ID_MPI_Ialltoall : 
+			case MPI_API_ID_MPI_Ialltoall : {
 				GET_PTRS_VALUE_MPI_Ialltoall(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Raccumulate
-			case MPI_API_ID_MPI_Raccumulate : 
+			case MPI_API_ID_MPI_Raccumulate : {
 				GET_PTRS_VALUE_MPI_Raccumulate(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_size_x
-			case MPI_API_ID_MPI_Type_size_x : 
+			case MPI_API_ID_MPI_Type_size_x : {
 				GET_PTRS_VALUE_MPI_Type_size_x(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_get_extent_x
-			case MPI_API_ID_MPI_Type_get_extent_x : 
+			case MPI_API_ID_MPI_Type_get_extent_x : {
 				GET_PTRS_VALUE_MPI_Type_get_extent_x(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Dist_graph_create
-			case MPI_API_ID_MPI_Dist_graph_create : 
+			case MPI_API_ID_MPI_Dist_graph_create : {
 				GET_PTRS_VALUE_MPI_Dist_graph_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_join
-			case MPI_API_ID_MPI_Comm_join : 
+			case MPI_API_ID_MPI_Comm_join : {
 				GET_PTRS_VALUE_MPI_Comm_join(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Gatherv_init
-			case MPI_API_ID_MPI_Gatherv_init : 
+			case MPI_API_ID_MPI_Gatherv_init : {
 				GET_PTRS_VALUE_MPI_Gatherv_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_accept
-			case MPI_API_ID_MPI_Comm_accept : 
+			case MPI_API_ID_MPI_Comm_accept : {
 				GET_PTRS_VALUE_MPI_Comm_accept(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Ineighbor_allgather
-			case MPI_API_ID_MPI_Ineighbor_allgather : 
+			case MPI_API_ID_MPI_Ineighbor_allgather : {
 				GET_PTRS_VALUE_MPI_Ineighbor_allgather(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_dup
-			case MPI_API_ID_MPI_Type_dup : 
+			case MPI_API_ID_MPI_Type_dup : {
 				GET_PTRS_VALUE_MPI_Type_dup(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_iwrite_shared
-			case MPI_API_ID_MPI_File_iwrite_shared : 
+			case MPI_API_ID_MPI_File_iwrite_shared : {
 				GET_PTRS_VALUE_MPI_File_iwrite_shared(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_get_errhandler
-			case MPI_API_ID_MPI_Win_get_errhandler : 
+			case MPI_API_ID_MPI_Win_get_errhandler : {
 				GET_PTRS_VALUE_MPI_Win_get_errhandler(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Iscan
-			case MPI_API_ID_MPI_Iscan : 
+			case MPI_API_ID_MPI_Iscan : {
 				GET_PTRS_VALUE_MPI_Iscan(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Graph_create
-			case MPI_API_ID_MPI_Graph_create : 
+			case MPI_API_ID_MPI_Graph_create : {
 				GET_PTRS_VALUE_MPI_Graph_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_set_name
-			case MPI_API_ID_MPI_Win_set_name : 
+			case MPI_API_ID_MPI_Win_set_name : {
 				GET_PTRS_VALUE_MPI_Win_set_name(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_create_errhandler
-			case MPI_API_ID_MPI_Win_create_errhandler : 
+			case MPI_API_ID_MPI_Win_create_errhandler : {
 				GET_PTRS_VALUE_MPI_Win_create_errhandler(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Gather_init
-			case MPI_API_ID_MPI_Gather_init : 
+			case MPI_API_ID_MPI_Gather_init : {
 				GET_PTRS_VALUE_MPI_Gather_init(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Neighbor_allgatherv
-			case MPI_API_ID_MPI_Neighbor_allgatherv : 
+			case MPI_API_ID_MPI_Neighbor_allgatherv : {
 				GET_PTRS_VALUE_MPI_Neighbor_allgatherv(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_File_iwrite
-			case MPI_API_ID_MPI_File_iwrite : 
+			case MPI_API_ID_MPI_File_iwrite : {
 				GET_PTRS_VALUE_MPI_File_iwrite(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Status_f082f
-			case MPI_API_ID_MPI_Status_f082f : 
+			case MPI_API_ID_MPI_Status_f082f : {
 				GET_PTRS_VALUE_MPI_Status_f082f(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Status_c2f08
-			case MPI_API_ID_MPI_Status_c2f08 : 
+			case MPI_API_ID_MPI_Status_c2f08 : {
 				GET_PTRS_VALUE_MPI_Status_c2f08(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Status_c2f
-			case MPI_API_ID_MPI_Status_c2f : 
+			case MPI_API_ID_MPI_Status_c2f : {
 				GET_PTRS_VALUE_MPI_Status_c2f(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Status_f082c
-			case MPI_API_ID_MPI_Status_f082c : 
+			case MPI_API_ID_MPI_Status_f082c : {
 				GET_PTRS_VALUE_MPI_Status_f082c(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Status_f2f08
-			case MPI_API_ID_MPI_Status_f2f08 : 
+			case MPI_API_ID_MPI_Status_f2f08 : {
 				GET_PTRS_VALUE_MPI_Status_f2f08(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Status_f2c
-			case MPI_API_ID_MPI_Status_f2c : 
+			case MPI_API_ID_MPI_Status_f2c : {
 				GET_PTRS_VALUE_MPI_Status_f2c(args);
 				return;
+			}
 			#endif
             default : break;
         }
     } else {
         switch(id) {
 			#if HAVE_MPI_Request_free
-			case MPI_API_ID_MPI_Request_free : 
+			case MPI_API_ID_MPI_Request_free : {
 				GET_PTRS_VALUE_MPI_Request_free(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_free
-			case MPI_API_ID_MPI_Type_free : 
+			case MPI_API_ID_MPI_Type_free : {
 				GET_PTRS_VALUE_MPI_Type_free(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_free
-			case MPI_API_ID_MPI_Comm_free : 
+			case MPI_API_ID_MPI_Comm_free : {
 				GET_PTRS_VALUE_MPI_Comm_free(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Group_free
-			case MPI_API_ID_MPI_Group_free : 
+			case MPI_API_ID_MPI_Group_free : {
 				GET_PTRS_VALUE_MPI_Group_free(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Op_free
-			case MPI_API_ID_MPI_Op_free : 
+			case MPI_API_ID_MPI_Op_free : {
 				GET_PTRS_VALUE_MPI_Op_free(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Errhandler_free
-			case MPI_API_ID_MPI_Errhandler_free : 
+			case MPI_API_ID_MPI_Errhandler_free : {
 				GET_PTRS_VALUE_MPI_Errhandler_free(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Info_free
-			case MPI_API_ID_MPI_Info_free : 
+			case MPI_API_ID_MPI_Info_free : {
 				GET_PTRS_VALUE_MPI_Info_free(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Keyval_free
-			case MPI_API_ID_MPI_Keyval_free : 
+			case MPI_API_ID_MPI_Keyval_free : {
 				GET_PTRS_VALUE_MPI_Keyval_free(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_free
-			case MPI_API_ID_MPI_Win_free : 
+			case MPI_API_ID_MPI_Win_free : {
 				GET_PTRS_VALUE_MPI_Win_free(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Comm_free_keyval
-			case MPI_API_ID_MPI_Comm_free_keyval : 
+			case MPI_API_ID_MPI_Comm_free_keyval : {
 				GET_PTRS_VALUE_MPI_Comm_free_keyval(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Type_free_keyval
-			case MPI_API_ID_MPI_Type_free_keyval : 
+			case MPI_API_ID_MPI_Type_free_keyval : {
 				GET_PTRS_VALUE_MPI_Type_free_keyval(args);
 				return;
+			}
 			#endif
 			#if HAVE_MPI_Win_free_keyval
-			case MPI_API_ID_MPI_Win_free_keyval : 
+			case MPI_API_ID_MPI_Win_free_keyval : {
 				GET_PTRS_VALUE_MPI_Win_free_keyval(args);
 				return;
+			}
 			#endif
             default : break;
         }

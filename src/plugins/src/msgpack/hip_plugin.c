@@ -29,42 +29,44 @@ void on_exit_hip_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void
     pop_id();
 }
 
-void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* user_args)
+void process_hip_args_for(hip_api_id_t funid, const void* func_args, void* user_args)
 {
     msgpack_buffer_t* buf = (msgpack_buffer_t*)user_args;
     switch(funid) {
 		#if HAVE_hipMemPtrGetInfo
-		case HIP_API_ID_hipMemPtrGetInfo :
+		case HIP_API_ID_hipMemPtrGetInfo : {
 			//	void * ptr (void *);
 			//	size_t * size (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemPtrGetInfo_t* args = (args_hipMemPtrGetInfo_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPtrGetInfo.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPtrGetInfo.size);
+			msgpack_encode_uint(buf, (uintptr_t)args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPtrGetInfo.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecMemcpyNodeSetParams1D
-		case HIP_API_ID_hipGraphExecMemcpyNodeSetParams1D :
+		case HIP_API_ID_hipGraphExecMemcpyNodeSetParams1D : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dst (void *);
@@ -72,295 +74,311 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t count (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExecMemcpyNodeSetParams1D_t* args = (args_hipGraphExecMemcpyNodeSetParams1D_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "hGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemcpyNodeSetParams1D.hGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraphExec);
 
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemcpyNodeSetParams1D.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemcpyNodeSetParams1D.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemcpyNodeSetParams1D.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecMemcpyNodeSetParams1D.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecMemcpyNodeSetParams1D.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecMemcpyNodeSetParams1D.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxEnablePeerAccess
-		case HIP_API_ID_hipCtxEnablePeerAccess :
+		case HIP_API_ID_hipCtxEnablePeerAccess : {
 			//	hipCtx_t peerCtx (struct ihipCtx_t *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxEnablePeerAccess_t* args = (args_hipCtxEnablePeerAccess_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "peerCtx");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipCtx_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCtxEnablePeerAccess.peerCtx);
+			msgpack_encode_uint(buf, (uintptr_t)args->peerCtx);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxEnablePeerAccess.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxEnablePeerAccess.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipHostUnregister
-		case HIP_API_ID_hipHostUnregister :
+		case HIP_API_ID_hipHostUnregister : {
 			//	void * hostPtr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipHostUnregister_t* args = (args_hipHostUnregister_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "hostPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipHostUnregister.hostPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->hostPtr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipHostUnregister.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDevicePrimaryCtxGetState
-		case HIP_API_ID_hipDevicePrimaryCtxGetState :
+		case HIP_API_ID_hipDevicePrimaryCtxGetState : {
 			//	hipDevice_t dev (int);
 			//	unsigned int * flags (unsigned int *);
 			//	int * active (int *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDevicePrimaryCtxGetState_t* args = (args_hipDevicePrimaryCtxGetState_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "dev");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDevice_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDevicePrimaryCtxGetState.dev);
+			msgpack_encode_int(buf, args->dev);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDevicePrimaryCtxGetState.flags);
+			msgpack_encode_uint(buf, (uintptr_t)args->flags);
 
 			msgpack_encode_string_ext(buf, "active");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDevicePrimaryCtxGetState.active);
+			msgpack_encode_uint(buf, (uintptr_t)args->active);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDevicePrimaryCtxGetState.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipPointerGetAttribute
-		case HIP_API_ID_hipPointerGetAttribute :
+		case HIP_API_ID_hipPointerGetAttribute : {
 			//	void * data (void *);
 			//	hipPointer_attribute attribute (enum hipPointer_attribute);
 			//	hipDeviceptr_t ptr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipPointerGetAttribute_t* args = (args_hipPointerGetAttribute_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipPointerGetAttribute.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipPointer_attribute");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipPointerGetAttribute.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipPointerGetAttribute.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipPointerGetAttribute.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolGetAccess
-		case HIP_API_ID_hipMemPoolGetAccess :
+		case HIP_API_ID_hipMemPoolGetAccess : {
 			//	hipMemAccessFlags * flags (enum hipMemAccessFlags*);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipMemLocation * location (struct hipMemLocation*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemPoolGetAccess_t* args = (args_hipMemPoolGetAccess_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemAccessFlags *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolGetAccess.flags);
+			msgpack_encode_uint(buf, (uintptr_t)args->flags);
 
 			msgpack_encode_string_ext(buf, "mem_pool");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPool_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolGetAccess.mem_pool);
+			msgpack_encode_uint(buf, (uintptr_t)args->mem_pool);
 
 			msgpack_encode_string_ext(buf, "location");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemLocation *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolGetAccess.location);
+			msgpack_encode_uint(buf, (uintptr_t)args->location);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolGetAccess.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetD32
-		case HIP_API_ID_hipMemsetD32 :
+		case HIP_API_ID_hipMemsetD32 : {
 			//	hipDeviceptr_t dest (void *);
 			//	int value (int);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemsetD32_t* args = (args_hipMemsetD32_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemsetD32.dest);
+			msgpack_encode_uint(buf, (uintptr_t)args->dest);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD32.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD32.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD32.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetMipMappedArray
-		case HIP_API_ID_hipTexRefGetMipMappedArray :
+		case HIP_API_ID_hipTexRefGetMipMappedArray : {
 			//	hipMipmappedArray_t * pArray (struct hipMipmappedArray **);
 			//	const textureReference * texRef (const struct textureReference *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefGetMipMappedArray_t* args = (args_hipTexRefGetMipMappedArray_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMipmappedArray_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetMipMappedArray.pArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->pArray);
 
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetMipMappedArray.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefGetMipMappedArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMalloc3D
-		case HIP_API_ID_hipMalloc3D :
+		case HIP_API_ID_hipMalloc3D : {
 			//	hipPitchedPtr * pitchedDevPtr (struct hipPitchedPtr*);
 			//	hipExtent extent ({
 			//		size_t width (unsigned long);
@@ -368,13 +386,14 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		size_t depth (unsigned long);
 			//	});
 			//	hipError_t retval (enum hipError_t);
+			args_hipMalloc3D_t* args = (args_hipMalloc3D_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pitchedDevPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipPitchedPtr *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMalloc3D.pitchedDevPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->pitchedDevPtr);
 
 			msgpack_encode_string_ext(buf, "extent");
 			msgpack_encode_map(buf, 2);
@@ -388,580 +407,611 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMalloc3D.extent.width);
+			msgpack_encode_int(buf, args->extent.width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMalloc3D.extent.height);
+			msgpack_encode_int(buf, args->extent.height);
 
 			msgpack_encode_string_ext(buf, "depth");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMalloc3D.extent.depth);
+			msgpack_encode_int(buf, args->extent.depth);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMalloc3D.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetD8
-		case HIP_API_ID_hipMemsetD8 :
+		case HIP_API_ID_hipMemsetD8 : {
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned char value (unsigned char);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemsetD8_t* args = (args_hipMemsetD8_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemsetD8.dest);
+			msgpack_encode_uint(buf, (uintptr_t)args->dest);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned char");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD8.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD8.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD8.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMallocArray
-		case HIP_API_ID_hipMallocArray :
+		case HIP_API_ID_hipMallocArray : {
 			//	hipArray_t * array (struct hipArray **);
 			//	const hipChannelFormatDesc * desc (const struct hipChannelFormatDesc *);
 			//	size_t width (unsigned long);
 			//	size_t height (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMallocArray_t* args = (args_hipMallocArray_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMallocArray.array);
+			msgpack_encode_uint(buf, (uintptr_t)args->array);
 
 			msgpack_encode_string_ext(buf, "desc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipChannelFormatDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMallocArray.desc);
+			msgpack_encode_uint(buf, (uintptr_t)args->desc);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocArray.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocArray.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocArray.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphEventWaitNodeGetEvent
-		case HIP_API_ID_hipGraphEventWaitNodeGetEvent :
+		case HIP_API_ID_hipGraphEventWaitNodeGetEvent : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t * event_out (struct ihipEvent_t **);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphEventWaitNodeGetEvent_t* args = (args_hipGraphEventWaitNodeGetEvent_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphEventWaitNodeGetEvent.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "event_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphEventWaitNodeGetEvent.event_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->event_out);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphEventWaitNodeGetEvent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvMemcpy3D
-		case HIP_API_ID_hipDrvMemcpy3D :
+		case HIP_API_ID_hipDrvMemcpy3D : {
 			//	const HIP_MEMCPY3D * pCopy (const struct HIP_MEMCPY3D *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDrvMemcpy3D_t* args = (args_hipDrvMemcpy3D_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "pCopy");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const HIP_MEMCPY3D *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvMemcpy3D.pCopy);
+			msgpack_encode_uint(buf, (uintptr_t)args->pCopy);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDrvMemcpy3D.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
-		case HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags :
+		case HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags : {
 			//	int * numBlocks (int *);
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
 			//	int blockSize (int);
 			//	size_t dynSharedMemPerBlk (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t* args = (args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "numBlocks");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.numBlocks);
+			msgpack_encode_uint(buf, (uintptr_t)args->numBlocks);
 
 			msgpack_encode_string_ext(buf, "f");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFunction_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.f);
+			msgpack_encode_uint(buf, (uintptr_t)args->f);
 
 			msgpack_encode_string_ext(buf, "blockSize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.blockSize);
+			msgpack_encode_int(buf, args->blockSize);
 
 			msgpack_encode_string_ext(buf, "dynSharedMemPerBlk");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.dynSharedMemPerBlk);
+			msgpack_encode_int(buf, args->dynSharedMemPerBlk);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipHostMalloc
-		case HIP_API_ID_hipHostMalloc :
+		case HIP_API_ID_hipHostMalloc : {
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipHostMalloc_t* args = (args_hipHostMalloc_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipHostMalloc.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipHostMalloc.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipHostMalloc.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipHostMalloc.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleGetTexRef
-		case HIP_API_ID_hipModuleGetTexRef :
+		case HIP_API_ID_hipModuleGetTexRef : {
 			//	textureReference ** texRef (struct textureReference**);
 			//	hipModule_t hmod (struct ihipModule_t *);
 			//	const char * name (const char *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipModuleGetTexRef_t* args = (args_hipModuleGetTexRef_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "textureReference **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleGetTexRef.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "hmod");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipModule_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleGetTexRef.hmod);
+			msgpack_encode_uint(buf, (uintptr_t)args->hmod);
 
 			msgpack_encode_string_ext(buf, "name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleGetTexRef.name);
+			msgpack_encode_uint(buf, (uintptr_t)args->name);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleGetTexRef.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipIpcGetMemHandle
-		case HIP_API_ID_hipIpcGetMemHandle :
+		case HIP_API_ID_hipIpcGetMemHandle : {
 			//	hipIpcMemHandle_t * handle (struct hipIpcMemHandle_st*);
 			//	void * devPtr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipIpcGetMemHandle_t* args = (args_hipIpcGetMemHandle_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipIpcMemHandle_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipIpcGetMemHandle.handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->handle);
 
 			msgpack_encode_string_ext(buf, "devPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipIpcGetMemHandle.devPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->devPtr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipIpcGetMemHandle.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyDtoHAsync
-		case HIP_API_ID_hipMemcpyDtoHAsync :
+		case HIP_API_ID_hipMemcpyDtoHAsync : {
 			//	void * dst (void *);
 			//	hipDeviceptr_t src (void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyDtoHAsync_t* args = (args_hipMemcpyDtoHAsync_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyDtoHAsync.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyDtoHAsync.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyDtoHAsync.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyDtoHAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyDtoHAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleLoad
-		case HIP_API_ID_hipModuleLoad :
+		case HIP_API_ID_hipModuleLoad : {
 			//	hipModule_t * module (struct ihipModule_t **);
 			//	const char * fname (const char *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipModuleLoad_t* args = (args_hipModuleLoad_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "module");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipModule_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLoad.module);
+			msgpack_encode_uint(buf, (uintptr_t)args->module);
 
 			msgpack_encode_string_ext(buf, "fname");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLoad.fname);
+			msgpack_encode_uint(buf, (uintptr_t)args->fname);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLoad.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipWaitExternalSemaphoresAsync
-		case HIP_API_ID_hipWaitExternalSemaphoresAsync :
+		case HIP_API_ID_hipWaitExternalSemaphoresAsync : {
 			//	const hipExternalSemaphore_t * extSemArray (const void * *);
 			//	const hipExternalSemaphoreWaitParams * paramsArray (const struct hipExternalSemaphoreWaitParams_st *);
 			//	unsigned int numExtSems (unsigned int);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipWaitExternalSemaphoresAsync_t* args = (args_hipWaitExternalSemaphoresAsync_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "extSemArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipExternalSemaphore_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipWaitExternalSemaphoresAsync.extSemArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->extSemArray);
 
 			msgpack_encode_string_ext(buf, "paramsArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipExternalSemaphoreWaitParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipWaitExternalSemaphoresAsync.paramsArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->paramsArray);
 
 			msgpack_encode_string_ext(buf, "numExtSems");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipWaitExternalSemaphoresAsync.numExtSems);
+			msgpack_encode_int(buf, args->numExtSems);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipWaitExternalSemaphoresAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipWaitExternalSemaphoresAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphKernelNodeGetParams
-		case HIP_API_ID_hipGraphKernelNodeGetParams :
+		case HIP_API_ID_hipGraphKernelNodeGetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipKernelNodeParams * pNodeParams (struct hipKernelNodeParams*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphKernelNodeGetParams_t* args = (args_hipGraphKernelNodeGetParams_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphKernelNodeGetParams.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipKernelNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphKernelNodeGetParams.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphKernelNodeGetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphLaunch
-		case HIP_API_ID_hipGraphLaunch :
+		case HIP_API_ID_hipGraphLaunch : {
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphLaunch_t* args = (args_hipGraphLaunch_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "graphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphLaunch.graphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->graphExec);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphLaunch.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphLaunch.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipHostAlloc
-		case HIP_API_ID_hipHostAlloc :
+		case HIP_API_ID_hipHostAlloc : {
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipHostAlloc_t* args = (args_hipHostAlloc_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipHostAlloc.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipHostAlloc.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipHostAlloc.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipHostAlloc.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipSetDevice
-		case HIP_API_ID_hipSetDevice :
+		case HIP_API_ID_hipSetDevice : {
 			//	int deviceId (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipSetDevice_t* args = (args_hipSetDevice_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "deviceId");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipSetDevice.deviceId);
+			msgpack_encode_int(buf, args->deviceId);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipSetDevice.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleOccupancyMaxPotentialBlockSizeWithFlags
-		case HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSizeWithFlags :
+		case HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSizeWithFlags : {
 			//	int * gridSize (int *);
 			//	int * blockSize (int *);
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
@@ -969,175 +1019,183 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	int blockSizeLimit (int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipModuleOccupancyMaxPotentialBlockSizeWithFlags_t* args = (args_hipModuleOccupancyMaxPotentialBlockSizeWithFlags_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "gridSize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.gridSize);
+			msgpack_encode_uint(buf, (uintptr_t)args->gridSize);
 
 			msgpack_encode_string_ext(buf, "blockSize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.blockSize);
+			msgpack_encode_uint(buf, (uintptr_t)args->blockSize);
 
 			msgpack_encode_string_ext(buf, "f");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFunction_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.f);
+			msgpack_encode_uint(buf, (uintptr_t)args->f);
 
 			msgpack_encode_string_ext(buf, "dynSharedMemPerBlk");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.dynSharedMemPerBlk);
+			msgpack_encode_int(buf, args->dynSharedMemPerBlk);
 
 			msgpack_encode_string_ext(buf, "blockSizeLimit");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.blockSizeLimit);
+			msgpack_encode_int(buf, args->blockSizeLimit);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleOccupancyMaxPotentialBlockSizeWithFlags.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphNodeGetDependentNodes
-		case HIP_API_ID_hipGraphNodeGetDependentNodes :
+		case HIP_API_ID_hipGraphNodeGetDependentNodes : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraphNode_t * pDependentNodes (struct hipGraphNode **);
 			//	size_t * pNumDependentNodes (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphNodeGetDependentNodes_t* args = (args_hipGraphNodeGetDependentNodes_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeGetDependentNodes.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pDependentNodes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeGetDependentNodes.pDependentNodes);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependentNodes);
 
 			msgpack_encode_string_ext(buf, "pNumDependentNodes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeGetDependentNodes.pNumDependentNodes);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNumDependentNodes);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphNodeGetDependentNodes.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExtStreamGetCUMask
-		case HIP_API_ID_hipExtStreamGetCUMask :
+		case HIP_API_ID_hipExtStreamGetCUMask : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	uint32_t cuMaskSize (unsigned int);
 			//	uint32_t * cuMask (unsigned int*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipExtStreamGetCUMask_t* args = (args_hipExtStreamGetCUMask_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExtStreamGetCUMask.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "cuMaskSize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtStreamGetCUMask.cuMaskSize);
+			msgpack_encode_int(buf, args->cuMaskSize);
 
 			msgpack_encode_string_ext(buf, "cuMask");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExtStreamGetCUMask.cuMask);
+			msgpack_encode_uint(buf, (uintptr_t)args->cuMask);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtStreamGetCUMask.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetD16
-		case HIP_API_ID_hipMemsetD16 :
+		case HIP_API_ID_hipMemsetD16 : {
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned short value (unsigned short);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemsetD16_t* args = (args_hipMemsetD16_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemsetD16.dest);
+			msgpack_encode_uint(buf, (uintptr_t)args->dest);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned short");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD16.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD16.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD16.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchKernel
-		case HIP_API_ID_hipLaunchKernel :
+		case HIP_API_ID_hipLaunchKernel : {
 			//	const void * function_address (const void *);
 			//	dim3 numBlocks ({
 			//		uint32_t x (unsigned int);
@@ -1153,13 +1211,14 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t sharedMemBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipLaunchKernel_t* args = (args_hipLaunchKernel_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "function_address");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchKernel.function_address);
+			msgpack_encode_uint(buf, (uintptr_t)args->function_address);
 
 			msgpack_encode_string_ext(buf, "numBlocks");
 			msgpack_encode_map(buf, 2);
@@ -1173,21 +1232,21 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel.numBlocks.x);
+			msgpack_encode_int(buf, args->numBlocks.x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel.numBlocks.y);
+			msgpack_encode_int(buf, args->numBlocks.y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel.numBlocks.z);
+			msgpack_encode_int(buf, args->numBlocks.z);
 
 			msgpack_encode_string_ext(buf, "dimBlocks");
 			msgpack_encode_map(buf, 2);
@@ -1201,313 +1260,328 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel.dimBlocks.x);
+			msgpack_encode_int(buf, args->dimBlocks.x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel.dimBlocks.y);
+			msgpack_encode_int(buf, args->dimBlocks.y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel.dimBlocks.z);
+			msgpack_encode_int(buf, args->dimBlocks.z);
 
 			msgpack_encode_string_ext(buf, "args");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchKernel.args);
+			msgpack_encode_uint(buf, (uintptr_t)args->args);
 
 			msgpack_encode_string_ext(buf, "sharedMemBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel.sharedMemBytes);
+			msgpack_encode_int(buf, args->sharedMemBytes);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchKernel.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetErrorString
-		case HIP_API_ID_hipGetErrorString :
+		case HIP_API_ID_hipGetErrorString : {
 			//	hipError_t hipError (enum hipError_t);
 			//	const char * retval (const char *);
+			args_hipGetErrorString_t* args = (args_hipGetErrorString_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "hipError");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetErrorString.hipError);
+			msgpack_encode_int(buf, args->hipError);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetErrorString.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleLoadDataEx
-		case HIP_API_ID_hipModuleLoadDataEx :
+		case HIP_API_ID_hipModuleLoadDataEx : {
 			//	hipModule_t * module (struct ihipModule_t **);
 			//	const void * image (const void *);
 			//	unsigned int numOptions (unsigned int);
 			//	hipJitOption * options (enum hipJitOption*);
 			//	void ** optionValues (void **);
 			//	hipError_t retval (enum hipError_t);
+			args_hipModuleLoadDataEx_t* args = (args_hipModuleLoadDataEx_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "module");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipModule_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLoadDataEx.module);
+			msgpack_encode_uint(buf, (uintptr_t)args->module);
 
 			msgpack_encode_string_ext(buf, "image");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLoadDataEx.image);
+			msgpack_encode_uint(buf, (uintptr_t)args->image);
 
 			msgpack_encode_string_ext(buf, "numOptions");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLoadDataEx.numOptions);
+			msgpack_encode_int(buf, args->numOptions);
 
 			msgpack_encode_string_ext(buf, "options");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipJitOption *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLoadDataEx.options);
+			msgpack_encode_uint(buf, (uintptr_t)args->options);
 
 			msgpack_encode_string_ext(buf, "optionValues");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLoadDataEx.optionValues);
+			msgpack_encode_uint(buf, (uintptr_t)args->optionValues);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLoadDataEx.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetFilterMode
-		case HIP_API_ID_hipTexRefGetFilterMode :
+		case HIP_API_ID_hipTexRefGetFilterMode : {
 			//	enum hipTextureFilterMode * pfm (enum hipTextureFilterMode *);
 			//	const textureReference * texRef (const struct textureReference *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefGetFilterMode_t* args = (args_hipTexRefGetFilterMode_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pfm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "enum hipTextureFilterMode *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetFilterMode.pfm);
+			msgpack_encode_uint(buf, (uintptr_t)args->pfm);
 
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetFilterMode.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefGetFilterMode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphInstantiateWithParams
-		case HIP_API_ID_hipGraphInstantiateWithParams :
+		case HIP_API_ID_hipGraphInstantiateWithParams : {
 			//	hipGraphExec_t * pGraphExec (struct hipGraphExec **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphInstantiateParams * instantiateParams (struct hipGraphInstantiateParams*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphInstantiateWithParams_t* args = (args_hipGraphInstantiateWithParams_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "pGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphInstantiateWithParams.pGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphExec);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphInstantiateWithParams.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "instantiateParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphInstantiateParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphInstantiateWithParams.instantiateParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->instantiateParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphInstantiateWithParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemcpyNodeSetParams1D
-		case HIP_API_ID_hipGraphMemcpyNodeSetParams1D :
+		case HIP_API_ID_hipGraphMemcpyNodeSetParams1D : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t count (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphMemcpyNodeSetParams1D_t* args = (args_hipGraphMemcpyNodeSetParams1D_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemcpyNodeSetParams1D.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemcpyNodeSetParams1D.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemcpyNodeSetParams1D.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemcpyNodeSetParams1D.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemcpyNodeSetParams1D.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemcpyNodeSetParams1D.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamSynchronize
-		case HIP_API_ID_hipStreamSynchronize :
+		case HIP_API_ID_hipStreamSynchronize : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamSynchronize_t* args = (args_hipStreamSynchronize_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamSynchronize.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamSynchronize.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphicsUnmapResources
-		case HIP_API_ID_hipGraphicsUnmapResources :
+		case HIP_API_ID_hipGraphicsUnmapResources : {
 			//	int count (int);
 			//	hipGraphicsResource_t * resources (struct _hipGraphicsResource**);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphicsUnmapResources_t* args = (args_hipGraphicsUnmapResources_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphicsUnmapResources.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "resources");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphicsResource_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphicsUnmapResources.resources);
+			msgpack_encode_uint(buf, (uintptr_t)args->resources);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphicsUnmapResources.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphicsUnmapResources.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DFromArray_spt
-		case HIP_API_ID_hipMemcpy2DFromArray_spt :
+		case HIP_API_ID_hipMemcpy2DFromArray_spt : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	hipArray_const_t src (const struct hipArray *);
@@ -1517,75 +1591,77 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy2DFromArray_spt_t* args = (args_hipMemcpy2DFromArray_spt_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DFromArray_spt.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "dpitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArray_spt.dpitch);
+			msgpack_encode_int(buf, args->dpitch);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_const_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DFromArray_spt.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "wOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArray_spt.wOffset);
+			msgpack_encode_int(buf, args->wOffset);
 
 			msgpack_encode_string_ext(buf, "hOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArray_spt.hOffset);
+			msgpack_encode_int(buf, args->hOffset);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArray_spt.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArray_spt.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArray_spt.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArray_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecMemcpyNodeSetParamsFromSymbol
-		case HIP_API_ID_hipGraphExecMemcpyNodeSetParamsFromSymbol :
+		case HIP_API_ID_hipGraphExecMemcpyNodeSetParamsFromSymbol : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dst (void *);
@@ -1594,762 +1670,806 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExecMemcpyNodeSetParamsFromSymbol_t* args = (args_hipGraphExecMemcpyNodeSetParamsFromSymbol_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "hGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemcpyNodeSetParamsFromSymbol.hGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraphExec);
 
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemcpyNodeSetParamsFromSymbol.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemcpyNodeSetParamsFromSymbol.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemcpyNodeSetParamsFromSymbol.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecMemcpyNodeSetParamsFromSymbol.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecMemcpyNodeSetParamsFromSymbol.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecMemcpyNodeSetParamsFromSymbol.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecMemcpyNodeSetParamsFromSymbol.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetMipmapLevelBias
-		case HIP_API_ID_hipTexRefGetMipmapLevelBias :
+		case HIP_API_ID_hipTexRefGetMipmapLevelBias : {
 			//	float * pbias (float *);
 			//	const textureReference * texRef (const struct textureReference *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefGetMipmapLevelBias_t* args = (args_hipTexRefGetMipmapLevelBias_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pbias");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "float *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetMipmapLevelBias.pbias);
+			msgpack_encode_uint(buf, (uintptr_t)args->pbias);
 
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetMipmapLevelBias.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefGetMipmapLevelBias.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddExternalSemaphoresSignalNode
-		case HIP_API_ID_hipGraphAddExternalSemaphoresSignalNode :
+		case HIP_API_ID_hipGraphAddExternalSemaphoresSignalNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	const hipExternalSemaphoreSignalNodeParams * nodeParams (const struct hipExternalSemaphoreSignalNodeParams *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddExternalSemaphoresSignalNode_t* args = (args_hipGraphAddExternalSemaphoresSignalNode_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddExternalSemaphoresSignalNode.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddExternalSemaphoresSignalNode.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddExternalSemaphoresSignalNode.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddExternalSemaphoresSignalNode.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "nodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipExternalSemaphoreSignalNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddExternalSemaphoresSignalNode.nodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->nodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddExternalSemaphoresSignalNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExtGetLastError
-		case HIP_API_ID_hipExtGetLastError :
+		case HIP_API_ID_hipExtGetLastError : {
 			//	hipError_t retval (enum hipError_t);
+			args_hipExtGetLastError_t* args = (args_hipExtGetLastError_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtGetLastError.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemMapArrayAsync
-		case HIP_API_ID_hipMemMapArrayAsync :
+		case HIP_API_ID_hipMemMapArrayAsync : {
 			//	hipArrayMapInfo * mapInfoList (struct hipArrayMapInfo*);
 			//	unsigned int count (unsigned int);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemMapArrayAsync_t* args = (args_hipMemMapArrayAsync_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "mapInfoList");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArrayMapInfo *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemMapArrayAsync.mapInfoList);
+			msgpack_encode_uint(buf, (uintptr_t)args->mapInfoList);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemMapArrayAsync.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemMapArrayAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemMapArrayAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyAsync
-		case HIP_API_ID_hipMemcpyAsync :
+		case HIP_API_ID_hipMemcpyAsync : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyAsync_t* args = (args_hipMemcpyAsync_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyAsync.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyAsync.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAsync.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAsync.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphKernelNodeSetAttribute
-		case HIP_API_ID_hipGraphKernelNodeSetAttribute :
+		case HIP_API_ID_hipGraphKernelNodeSetAttribute : {
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipLaunchAttributeID attr (enum hipLaunchAttributeID);
 			//	const hipLaunchAttributeValue * value (const union hipLaunchAttributeValue *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphKernelNodeSetAttribute_t* args = (args_hipGraphKernelNodeSetAttribute_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "hNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphKernelNodeSetAttribute.hNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->hNode);
 
 			msgpack_encode_string_ext(buf, "attr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipLaunchAttributeID");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphKernelNodeSetAttribute.attr);
+			msgpack_encode_int(buf, args->attr);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipLaunchAttributeValue *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphKernelNodeSetAttribute.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphKernelNodeSetAttribute.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvMemcpy2DUnaligned
-		case HIP_API_ID_hipDrvMemcpy2DUnaligned :
+		case HIP_API_ID_hipDrvMemcpy2DUnaligned : {
 			//	const hip_Memcpy2D * pCopy (const struct hip_Memcpy2D *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDrvMemcpy2DUnaligned_t* args = (args_hipDrvMemcpy2DUnaligned_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "pCopy");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hip_Memcpy2D *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvMemcpy2DUnaligned.pCopy);
+			msgpack_encode_uint(buf, (uintptr_t)args->pCopy);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDrvMemcpy2DUnaligned.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolDestroy
-		case HIP_API_ID_hipMemPoolDestroy :
+		case HIP_API_ID_hipMemPoolDestroy : {
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemPoolDestroy_t* args = (args_hipMemPoolDestroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "mem_pool");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPool_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolDestroy.mem_pool);
+			msgpack_encode_uint(buf, (uintptr_t)args->mem_pool);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolDestroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphRemoveDependencies
-		case HIP_API_ID_hipGraphRemoveDependencies :
+		case HIP_API_ID_hipGraphRemoveDependencies : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * from (const struct hipGraphNode * *);
 			//	const hipGraphNode_t * to (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphRemoveDependencies_t* args = (args_hipGraphRemoveDependencies_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphRemoveDependencies.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "from");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphRemoveDependencies.from);
+			msgpack_encode_uint(buf, (uintptr_t)args->from);
 
 			msgpack_encode_string_ext(buf, "to");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphRemoveDependencies.to);
+			msgpack_encode_uint(buf, (uintptr_t)args->to);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphRemoveDependencies.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphRemoveDependencies.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphCreate
-		case HIP_API_ID_hipGraphCreate :
+		case HIP_API_ID_hipGraphCreate : {
 			//	hipGraph_t * pGraph (struct ihipGraph **);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphCreate_t* args = (args_hipGraphCreate_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pGraph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphCreate.pGraph);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraph);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphCreate.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphCreate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExtLaunchMultiKernelMultiDevice
-		case HIP_API_ID_hipExtLaunchMultiKernelMultiDevice :
+		case HIP_API_ID_hipExtLaunchMultiKernelMultiDevice : {
 			//	hipLaunchParams * launchParamsList (struct hipLaunchParams_t*);
 			//	int numDevices (int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipExtLaunchMultiKernelMultiDevice_t* args = (args_hipExtLaunchMultiKernelMultiDevice_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "launchParamsList");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipLaunchParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExtLaunchMultiKernelMultiDevice.launchParamsList);
+			msgpack_encode_uint(buf, (uintptr_t)args->launchParamsList);
 
 			msgpack_encode_string_ext(buf, "numDevices");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtLaunchMultiKernelMultiDevice.numDevices);
+			msgpack_encode_int(buf, args->numDevices);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtLaunchMultiKernelMultiDevice.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtLaunchMultiKernelMultiDevice.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetDeviceCount
-		case HIP_API_ID_hipGetDeviceCount :
+		case HIP_API_ID_hipGetDeviceCount : {
 			//	int * count (int *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetDeviceCount_t* args = (args_hipGetDeviceCount_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetDeviceCount.count);
+			msgpack_encode_uint(buf, (uintptr_t)args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetDeviceCount.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemUnmap
-		case HIP_API_ID_hipMemUnmap :
+		case HIP_API_ID_hipMemUnmap : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemUnmap_t* args = (args_hipMemUnmap_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemUnmap.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemUnmap.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemUnmap.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexObjectGetResourceDesc
-		case HIP_API_ID_hipTexObjectGetResourceDesc :
+		case HIP_API_ID_hipTexObjectGetResourceDesc : {
 			//	HIP_RESOURCE_DESC * pResDesc (struct HIP_RESOURCE_DESC_st*);
 			//	hipTextureObject_t texObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexObjectGetResourceDesc_t* args = (args_hipTexObjectGetResourceDesc_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pResDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "HIP_RESOURCE_DESC *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexObjectGetResourceDesc.pResDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->pResDesc);
 
 			msgpack_encode_string_ext(buf, "texObject");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipTextureObject_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexObjectGetResourceDesc.texObject);
+			msgpack_encode_uint(buf, (uintptr_t)args->texObject);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexObjectGetResourceDesc.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecEventRecordNodeSetEvent
-		case HIP_API_ID_hipGraphExecEventRecordNodeSetEvent :
+		case HIP_API_ID_hipGraphExecEventRecordNodeSetEvent : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExecEventRecordNodeSetEvent_t* args = (args_hipGraphExecEventRecordNodeSetEvent_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "hGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecEventRecordNodeSetEvent.hGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraphExec);
 
 			msgpack_encode_string_ext(buf, "hNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecEventRecordNodeSetEvent.hNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->hNode);
 
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecEventRecordNodeSetEvent.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecEventRecordNodeSetEvent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipInit
-		case HIP_API_ID_hipInit :
+		case HIP_API_ID_hipInit : {
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipInit_t* args = (args_hipInit_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipInit.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipInit.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipThreadExchangeStreamCaptureMode
-		case HIP_API_ID_hipThreadExchangeStreamCaptureMode :
+		case HIP_API_ID_hipThreadExchangeStreamCaptureMode : {
 			//	hipStreamCaptureMode * mode (enum hipStreamCaptureMode*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipThreadExchangeStreamCaptureMode_t* args = (args_hipThreadExchangeStreamCaptureMode_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "mode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStreamCaptureMode *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipThreadExchangeStreamCaptureMode.mode);
+			msgpack_encode_uint(buf, (uintptr_t)args->mode);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipThreadExchangeStreamCaptureMode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetP2PAttribute
-		case HIP_API_ID_hipDeviceGetP2PAttribute :
+		case HIP_API_ID_hipDeviceGetP2PAttribute : {
 			//	int * value (int *);
 			//	hipDeviceP2PAttr attr (enum hipDeviceP2PAttr);
 			//	int srcDevice (int);
 			//	int dstDevice (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceGetP2PAttribute_t* args = (args_hipDeviceGetP2PAttribute_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGetP2PAttribute.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "attr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceP2PAttr");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetP2PAttribute.attr);
+			msgpack_encode_int(buf, args->attr);
 
 			msgpack_encode_string_ext(buf, "srcDevice");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetP2PAttribute.srcDevice);
+			msgpack_encode_int(buf, args->srcDevice);
 
 			msgpack_encode_string_ext(buf, "dstDevice");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetP2PAttribute.dstDevice);
+			msgpack_encode_int(buf, args->dstDevice);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetP2PAttribute.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetByPCIBusId
-		case HIP_API_ID_hipDeviceGetByPCIBusId :
+		case HIP_API_ID_hipDeviceGetByPCIBusId : {
 			//	int * device (int *);
 			//	const char * pciBusId (const char *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceGetByPCIBusId_t* args = (args_hipDeviceGetByPCIBusId_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGetByPCIBusId.device);
+			msgpack_encode_uint(buf, (uintptr_t)args->device);
 
 			msgpack_encode_string_ext(buf, "pciBusId");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGetByPCIBusId.pciBusId);
+			msgpack_encode_uint(buf, (uintptr_t)args->pciBusId);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetByPCIBusId.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipHostFree
-		case HIP_API_ID_hipHostFree :
+		case HIP_API_ID_hipHostFree : {
 			//	void * ptr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipHostFree_t* args = (args_hipHostFree_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipHostFree.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipHostFree.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExtGetLinkTypeAndHopCount
-		case HIP_API_ID_hipExtGetLinkTypeAndHopCount :
+		case HIP_API_ID_hipExtGetLinkTypeAndHopCount : {
 			//	int device1 (int);
 			//	int device2 (int);
 			//	uint32_t * linktype (unsigned int*);
 			//	uint32_t * hopcount (unsigned int*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipExtGetLinkTypeAndHopCount_t* args = (args_hipExtGetLinkTypeAndHopCount_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "device1");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtGetLinkTypeAndHopCount.device1);
+			msgpack_encode_int(buf, args->device1);
 
 			msgpack_encode_string_ext(buf, "device2");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtGetLinkTypeAndHopCount.device2);
+			msgpack_encode_int(buf, args->device2);
 
 			msgpack_encode_string_ext(buf, "linktype");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExtGetLinkTypeAndHopCount.linktype);
+			msgpack_encode_uint(buf, (uintptr_t)args->linktype);
 
 			msgpack_encode_string_ext(buf, "hopcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExtGetLinkTypeAndHopCount.hopcount);
+			msgpack_encode_uint(buf, (uintptr_t)args->hopcount);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtGetLinkTypeAndHopCount.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyToSymbolAsync_spt
-		case HIP_API_ID_hipMemcpyToSymbolAsync_spt :
+		case HIP_API_ID_hipMemcpyToSymbolAsync_spt : {
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
@@ -2357,453 +2477,479 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyToSymbolAsync_spt_t* args = (args_hipMemcpyToSymbolAsync_spt_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyToSymbolAsync_spt.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyToSymbolAsync_spt.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbolAsync_spt.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbolAsync_spt.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbolAsync_spt.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyToSymbolAsync_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbolAsync_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxDisablePeerAccess
-		case HIP_API_ID_hipCtxDisablePeerAccess :
+		case HIP_API_ID_hipCtxDisablePeerAccess : {
 			//	hipCtx_t peerCtx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxDisablePeerAccess_t* args = (args_hipCtxDisablePeerAccess_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "peerCtx");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipCtx_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCtxDisablePeerAccess.peerCtx);
+			msgpack_encode_uint(buf, (uintptr_t)args->peerCtx);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxDisablePeerAccess.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipSetupArgument
-		case HIP_API_ID_hipSetupArgument :
+		case HIP_API_ID_hipSetupArgument : {
 			//	const void * arg (const void *);
 			//	size_t size (unsigned long);
 			//	size_t offset (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipSetupArgument_t* args = (args_hipSetupArgument_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "arg");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipSetupArgument.arg);
+			msgpack_encode_uint(buf, (uintptr_t)args->arg);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipSetupArgument.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipSetupArgument.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipSetupArgument.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyAtoHAsync
-		case HIP_API_ID_hipMemcpyAtoHAsync :
+		case HIP_API_ID_hipMemcpyAtoHAsync : {
 			//	void * dstHost (void *);
 			//	hipArray_t srcArray (struct hipArray *);
 			//	size_t srcOffset (unsigned long);
 			//	size_t ByteCount (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyAtoHAsync_t* args = (args_hipMemcpyAtoHAsync_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "dstHost");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyAtoHAsync.dstHost);
+			msgpack_encode_uint(buf, (uintptr_t)args->dstHost);
 
 			msgpack_encode_string_ext(buf, "srcArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyAtoHAsync.srcArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->srcArray);
 
 			msgpack_encode_string_ext(buf, "srcOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAtoHAsync.srcOffset);
+			msgpack_encode_int(buf, args->srcOffset);
 
 			msgpack_encode_string_ext(buf, "ByteCount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAtoHAsync.ByteCount);
+			msgpack_encode_int(buf, args->ByteCount);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyAtoHAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAtoHAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxSetCacheConfig
-		case HIP_API_ID_hipCtxSetCacheConfig :
+		case HIP_API_ID_hipCtxSetCacheConfig : {
 			//	hipFuncCache_t cacheConfig (enum hipFuncCache_t);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxSetCacheConfig_t* args = (args_hipCtxSetCacheConfig_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "cacheConfig");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFuncCache_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxSetCacheConfig.cacheConfig);
+			msgpack_encode_int(buf, args->cacheConfig);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxSetCacheConfig.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemRelease
-		case HIP_API_ID_hipMemRelease :
+		case HIP_API_ID_hipMemRelease : {
 			//	hipMemGenericAllocationHandle_t handle (struct ihipMemGenericAllocationHandle *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemRelease_t* args = (args_hipMemRelease_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemGenericAllocationHandle_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemRelease.handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemRelease.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipUnbindTexture
-		case HIP_API_ID_hipUnbindTexture :
+		case HIP_API_ID_hipUnbindTexture : {
 			//	const textureReference * tex (const struct textureReference *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipUnbindTexture_t* args = (args_hipUnbindTexture_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "tex");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipUnbindTexture.tex);
+			msgpack_encode_uint(buf, (uintptr_t)args->tex);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipUnbindTexture.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvMemcpy3DAsync
-		case HIP_API_ID_hipDrvMemcpy3DAsync :
+		case HIP_API_ID_hipDrvMemcpy3DAsync : {
 			//	const HIP_MEMCPY3D * pCopy (const struct HIP_MEMCPY3D *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDrvMemcpy3DAsync_t* args = (args_hipDrvMemcpy3DAsync_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pCopy");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const HIP_MEMCPY3D *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvMemcpy3DAsync.pCopy);
+			msgpack_encode_uint(buf, (uintptr_t)args->pCopy);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvMemcpy3DAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDrvMemcpy3DAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipIpcGetEventHandle
-		case HIP_API_ID_hipIpcGetEventHandle :
+		case HIP_API_ID_hipIpcGetEventHandle : {
 			//	hipIpcEventHandle_t * handle (struct hipIpcEventHandle_st*);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipIpcGetEventHandle_t* args = (args_hipIpcGetEventHandle_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipIpcEventHandle_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipIpcGetEventHandle.handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->handle);
 
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipIpcGetEventHandle.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipIpcGetEventHandle.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphReleaseUserObject
-		case HIP_API_ID_hipGraphReleaseUserObject :
+		case HIP_API_ID_hipGraphReleaseUserObject : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipUserObject_t object (struct hipUserObject *);
 			//	unsigned int count (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphReleaseUserObject_t* args = (args_hipGraphReleaseUserObject_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphReleaseUserObject.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "object");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipUserObject_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphReleaseUserObject.object);
+			msgpack_encode_uint(buf, (uintptr_t)args->object);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphReleaseUserObject.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphReleaseUserObject.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetMemPool
-		case HIP_API_ID_hipDeviceGetMemPool :
+		case HIP_API_ID_hipDeviceGetMemPool : {
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	int device (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceGetMemPool_t* args = (args_hipDeviceGetMemPool_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "mem_pool");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPool_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGetMemPool.mem_pool);
+			msgpack_encode_uint(buf, (uintptr_t)args->mem_pool);
 
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetMemPool.device);
+			msgpack_encode_int(buf, args->device);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetMemPool.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphHostNodeSetParams
-		case HIP_API_ID_hipGraphHostNodeSetParams :
+		case HIP_API_ID_hipGraphHostNodeSetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipHostNodeParams * pNodeParams (const struct hipHostNodeParams *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphHostNodeSetParams_t* args = (args_hipGraphHostNodeSetParams_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphHostNodeSetParams.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipHostNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphHostNodeSetParams.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphHostNodeSetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddEventWaitNode
-		case HIP_API_ID_hipGraphAddEventWaitNode :
+		case HIP_API_ID_hipGraphAddEventWaitNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddEventWaitNode_t* args = (args_hipGraphAddEventWaitNode_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddEventWaitNode.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddEventWaitNode.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddEventWaitNode.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddEventWaitNode.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddEventWaitNode.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddEventWaitNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DFromArrayAsync_spt
-		case HIP_API_ID_hipMemcpy2DFromArrayAsync_spt :
+		case HIP_API_ID_hipMemcpy2DFromArrayAsync_spt : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	hipArray_const_t src (const struct hipArray *);
@@ -2814,598 +2960,628 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy2DFromArrayAsync_spt_t* args = (args_hipMemcpy2DFromArrayAsync_spt_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DFromArrayAsync_spt.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "dpitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArrayAsync_spt.dpitch);
+			msgpack_encode_int(buf, args->dpitch);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_const_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DFromArrayAsync_spt.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "wOffsetSrc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArrayAsync_spt.wOffsetSrc);
+			msgpack_encode_int(buf, args->wOffsetSrc);
 
 			msgpack_encode_string_ext(buf, "hOffsetSrc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArrayAsync_spt.hOffsetSrc);
+			msgpack_encode_int(buf, args->hOffsetSrc);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArrayAsync_spt.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArrayAsync_spt.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArrayAsync_spt.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DFromArrayAsync_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArrayAsync_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchHostFunc_spt
-		case HIP_API_ID_hipLaunchHostFunc_spt :
+		case HIP_API_ID_hipLaunchHostFunc_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipHostFn_t fn (void (*)(void *));
 			//	void * userData (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipLaunchHostFunc_spt_t* args = (args_hipLaunchHostFunc_spt_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchHostFunc_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipHostFn_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchHostFunc_spt.fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->fn);
 
 			msgpack_encode_string_ext(buf, "userData");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchHostFunc_spt.userData);
+			msgpack_encode_uint(buf, (uintptr_t)args->userData);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchHostFunc_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamWaitEvent_spt
-		case HIP_API_ID_hipStreamWaitEvent_spt :
+		case HIP_API_ID_hipStreamWaitEvent_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamWaitEvent_spt_t* args = (args_hipStreamWaitEvent_spt_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamWaitEvent_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamWaitEvent_spt.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWaitEvent_spt.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWaitEvent_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipArrayGetDescriptor
-		case HIP_API_ID_hipArrayGetDescriptor :
+		case HIP_API_ID_hipArrayGetDescriptor : {
 			//	HIP_ARRAY_DESCRIPTOR * pArrayDescriptor (struct HIP_ARRAY_DESCRIPTOR*);
 			//	hipArray_t array (struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipArrayGetDescriptor_t* args = (args_hipArrayGetDescriptor_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pArrayDescriptor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "HIP_ARRAY_DESCRIPTOR *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipArrayGetDescriptor.pArrayDescriptor);
+			msgpack_encode_uint(buf, (uintptr_t)args->pArrayDescriptor);
 
 			msgpack_encode_string_ext(buf, "array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipArrayGetDescriptor.array);
+			msgpack_encode_uint(buf, (uintptr_t)args->array);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipArrayGetDescriptor.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecUpdate
-		case HIP_API_ID_hipGraphExecUpdate :
+		case HIP_API_ID_hipGraphExecUpdate : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraph_t hGraph (struct ihipGraph *);
 			//	hipGraphNode_t * hErrorNode_out (struct hipGraphNode **);
 			//	hipGraphExecUpdateResult * updateResult_out (enum hipGraphExecUpdateResult*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExecUpdate_t* args = (args_hipGraphExecUpdate_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "hGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecUpdate.hGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraphExec);
 
 			msgpack_encode_string_ext(buf, "hGraph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecUpdate.hGraph);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraph);
 
 			msgpack_encode_string_ext(buf, "hErrorNode_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecUpdate.hErrorNode_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->hErrorNode_out);
 
 			msgpack_encode_string_ext(buf, "updateResult_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExecUpdateResult *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecUpdate.updateResult_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->updateResult_out);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecUpdate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemGetAllocationPropertiesFromHandle
-		case HIP_API_ID_hipMemGetAllocationPropertiesFromHandle :
+		case HIP_API_ID_hipMemGetAllocationPropertiesFromHandle : {
 			//	hipMemAllocationProp * prop (struct hipMemAllocationProp*);
 			//	hipMemGenericAllocationHandle_t handle (struct ihipMemGenericAllocationHandle *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemGetAllocationPropertiesFromHandle_t* args = (args_hipMemGetAllocationPropertiesFromHandle_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "prop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemAllocationProp *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemGetAllocationPropertiesFromHandle.prop);
+			msgpack_encode_uint(buf, (uintptr_t)args->prop);
 
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemGenericAllocationHandle_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemGetAllocationPropertiesFromHandle.handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->handle);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemGetAllocationPropertiesFromHandle.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyWithStream
-		case HIP_API_ID_hipMemcpyWithStream :
+		case HIP_API_ID_hipMemcpyWithStream : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyWithStream_t* args = (args_hipMemcpyWithStream_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyWithStream.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyWithStream.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyWithStream.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyWithStream.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyWithStream.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyWithStream.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddExternalSemaphoresWaitNode
-		case HIP_API_ID_hipGraphAddExternalSemaphoresWaitNode :
+		case HIP_API_ID_hipGraphAddExternalSemaphoresWaitNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	const hipExternalSemaphoreWaitNodeParams * nodeParams (const struct hipExternalSemaphoreWaitNodeParams *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddExternalSemaphoresWaitNode_t* args = (args_hipGraphAddExternalSemaphoresWaitNode_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddExternalSemaphoresWaitNode.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddExternalSemaphoresWaitNode.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddExternalSemaphoresWaitNode.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddExternalSemaphoresWaitNode.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "nodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipExternalSemaphoreWaitNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddExternalSemaphoresWaitNode.nodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->nodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddExternalSemaphoresWaitNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyAtoH
-		case HIP_API_ID_hipMemcpyAtoH :
+		case HIP_API_ID_hipMemcpyAtoH : {
 			//	void * dst (void *);
 			//	hipArray_t srcArray (struct hipArray *);
 			//	size_t srcOffset (unsigned long);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyAtoH_t* args = (args_hipMemcpyAtoH_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyAtoH.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "srcArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyAtoH.srcArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->srcArray);
 
 			msgpack_encode_string_ext(buf, "srcOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAtoH.srcOffset);
+			msgpack_encode_int(buf, args->srcOffset);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAtoH.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAtoH.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamQuery
-		case HIP_API_ID_hipStreamQuery :
+		case HIP_API_ID_hipStreamQuery : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamQuery_t* args = (args_hipStreamQuery_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamQuery.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamQuery.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipIpcCloseMemHandle
-		case HIP_API_ID_hipIpcCloseMemHandle :
+		case HIP_API_ID_hipIpcCloseMemHandle : {
 			//	void * devPtr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipIpcCloseMemHandle_t* args = (args_hipIpcCloseMemHandle_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "devPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipIpcCloseMemHandle.devPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->devPtr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipIpcCloseMemHandle.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetAsync
-		case HIP_API_ID_hipMemsetAsync :
+		case HIP_API_ID_hipMemsetAsync : {
 			//	void * dst (void *);
 			//	int value (int);
 			//	size_t sizeBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemsetAsync_t* args = (args_hipMemsetAsync_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemsetAsync.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetAsync.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetAsync.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemsetAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyDtoD
-		case HIP_API_ID_hipMemcpyDtoD :
+		case HIP_API_ID_hipMemcpyDtoD : {
 			//	hipDeviceptr_t dst (void *);
 			//	hipDeviceptr_t src (void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyDtoD_t* args = (args_hipMemcpyDtoD_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyDtoD.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyDtoD.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyDtoD.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyDtoD.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleUnload
-		case HIP_API_ID_hipModuleUnload :
+		case HIP_API_ID_hipModuleUnload : {
 			//	hipModule_t module (struct ihipModule_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipModuleUnload_t* args = (args_hipModuleUnload_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "module");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipModule_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleUnload.module);
+			msgpack_encode_uint(buf, (uintptr_t)args->module);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleUnload.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetDevicePropertiesR0600
-		case HIP_API_ID_hipGetDevicePropertiesR0600 :
+		case HIP_API_ID_hipGetDevicePropertiesR0600 : {
 			//	hipDeviceProp_tR0600 * prop (struct hipDeviceProp_tR0600*);
 			//	int deviceId (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetDevicePropertiesR0600_t* args = (args_hipGetDevicePropertiesR0600_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "prop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceProp_tR0600 *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetDevicePropertiesR0600.prop);
+			msgpack_encode_uint(buf, (uintptr_t)args->prop);
 
 			msgpack_encode_string_ext(buf, "deviceId");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetDevicePropertiesR0600.deviceId);
+			msgpack_encode_int(buf, args->deviceId);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetDevicePropertiesR0600.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyFromArray
-		case HIP_API_ID_hipMemcpyFromArray :
+		case HIP_API_ID_hipMemcpyFromArray : {
 			//	void * dst (void *);
 			//	hipArray_const_t srcArray (const struct hipArray *);
 			//	size_t wOffset (unsigned long);
@@ -3413,267 +3589,279 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t count (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyFromArray_t* args = (args_hipMemcpyFromArray_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyFromArray.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "srcArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_const_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyFromArray.srcArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->srcArray);
 
 			msgpack_encode_string_ext(buf, "wOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromArray.wOffset);
+			msgpack_encode_int(buf, args->wOffset);
 
 			msgpack_encode_string_ext(buf, "hOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromArray.hOffset);
+			msgpack_encode_int(buf, args->hOffset);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromArray.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromArray.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceCanAccessPeer
-		case HIP_API_ID_hipDeviceCanAccessPeer :
+		case HIP_API_ID_hipDeviceCanAccessPeer : {
 			//	int * canAccessPeer (int *);
 			//	int deviceId (int);
 			//	int peerDeviceId (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceCanAccessPeer_t* args = (args_hipDeviceCanAccessPeer_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "canAccessPeer");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceCanAccessPeer.canAccessPeer);
+			msgpack_encode_uint(buf, (uintptr_t)args->canAccessPeer);
 
 			msgpack_encode_string_ext(buf, "deviceId");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceCanAccessPeer.deviceId);
+			msgpack_encode_int(buf, args->deviceId);
 
 			msgpack_encode_string_ext(buf, "peerDeviceId");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceCanAccessPeer.peerDeviceId);
+			msgpack_encode_int(buf, args->peerDeviceId);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceCanAccessPeer.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemSetAccess
-		case HIP_API_ID_hipMemSetAccess :
+		case HIP_API_ID_hipMemSetAccess : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	const hipMemAccessDesc * desc (const struct hipMemAccessDesc *);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemSetAccess_t* args = (args_hipMemSetAccess_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemSetAccess.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemSetAccess.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "desc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipMemAccessDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemSetAccess.desc);
+			msgpack_encode_uint(buf, (uintptr_t)args->desc);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemSetAccess.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemSetAccess.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamWaitValue32
-		case HIP_API_ID_hipStreamWaitValue32 :
+		case HIP_API_ID_hipStreamWaitValue32 : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
 			//	uint32_t value (unsigned int);
 			//	unsigned int flags (unsigned int);
 			//	uint32_t mask (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamWaitValue32_t* args = (args_hipStreamWaitValue32_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamWaitValue32.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamWaitValue32.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWaitValue32.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWaitValue32.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "mask");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWaitValue32.mask);
+			msgpack_encode_int(buf, args->mask);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWaitValue32.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipApiName
-		case HIP_API_ID_hipApiName :
+		case HIP_API_ID_hipApiName : {
 			//	uint32_t id (unsigned int);
 			//	const char * retval (const char *);
+			args_hipApiName_t* args = (args_hipApiName_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "id");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipApiName.id);
+			msgpack_encode_int(buf, args->id);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipApiName.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphicsSubResourceGetMappedArray
-		case HIP_API_ID_hipGraphicsSubResourceGetMappedArray :
+		case HIP_API_ID_hipGraphicsSubResourceGetMappedArray : {
 			//	hipArray_t * array (struct hipArray **);
 			//	hipGraphicsResource_t resource (struct _hipGraphicsResource*);
 			//	unsigned int arrayIndex (unsigned int);
 			//	unsigned int mipLevel (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphicsSubResourceGetMappedArray_t* args = (args_hipGraphicsSubResourceGetMappedArray_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphicsSubResourceGetMappedArray.array);
+			msgpack_encode_uint(buf, (uintptr_t)args->array);
 
 			msgpack_encode_string_ext(buf, "resource");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphicsResource_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphicsSubResourceGetMappedArray.resource);
+			msgpack_encode_uint(buf, (uintptr_t)args->resource);
 
 			msgpack_encode_string_ext(buf, "arrayIndex");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphicsSubResourceGetMappedArray.arrayIndex);
+			msgpack_encode_int(buf, args->arrayIndex);
 
 			msgpack_encode_string_ext(buf, "mipLevel");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphicsSubResourceGetMappedArray.mipLevel);
+			msgpack_encode_int(buf, args->mipLevel);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphicsSubResourceGetMappedArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DToArrayAsync
-		case HIP_API_ID_hipMemcpy2DToArrayAsync :
+		case HIP_API_ID_hipMemcpy2DToArrayAsync : {
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
 			//	size_t hOffset (unsigned long);
@@ -3684,134 +3872,140 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy2DToArrayAsync_t* args = (args_hipMemcpy2DToArrayAsync_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DToArrayAsync.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "wOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArrayAsync.wOffset);
+			msgpack_encode_int(buf, args->wOffset);
 
 			msgpack_encode_string_ext(buf, "hOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArrayAsync.hOffset);
+			msgpack_encode_int(buf, args->hOffset);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DToArrayAsync.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "spitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArrayAsync.spitch);
+			msgpack_encode_int(buf, args->spitch);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArrayAsync.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArrayAsync.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArrayAsync.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DToArrayAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArrayAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphDestroy
-		case HIP_API_ID_hipGraphDestroy :
+		case HIP_API_ID_hipGraphDestroy : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphDestroy_t* args = (args_hipGraphDestroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphDestroy.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphDestroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetBorderColor
-		case HIP_API_ID_hipTexRefGetBorderColor :
+		case HIP_API_ID_hipTexRefGetBorderColor : {
 			//	float * pBorderColor (float *);
 			//	const textureReference * texRef (const struct textureReference *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefGetBorderColor_t* args = (args_hipTexRefGetBorderColor_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pBorderColor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "float *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetBorderColor.pBorderColor);
+			msgpack_encode_uint(buf, (uintptr_t)args->pBorderColor);
 
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetBorderColor.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefGetBorderColor.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddMemcpyNode1D
-		case HIP_API_ID_hipGraphAddMemcpyNode1D :
+		case HIP_API_ID_hipGraphAddMemcpyNode1D : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
@@ -3821,333 +4015,349 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t count (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddMemcpyNode1D_t* args = (args_hipGraphAddMemcpyNode1D_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNode1D.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNode1D.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNode1D.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNode1D.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNode1D.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNode1D.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNode1D.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNode1D.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNode1D.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphGetNodes
-		case HIP_API_ID_hipGraphGetNodes :
+		case HIP_API_ID_hipGraphGetNodes : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphNode_t * nodes (struct hipGraphNode **);
 			//	size_t * numNodes (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphGetNodes_t* args = (args_hipGraphGetNodes_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphGetNodes.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "nodes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphGetNodes.nodes);
+			msgpack_encode_uint(buf, (uintptr_t)args->nodes);
 
 			msgpack_encode_string_ext(buf, "numNodes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphGetNodes.numNodes);
+			msgpack_encode_uint(buf, (uintptr_t)args->numNodes);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphGetNodes.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetFlags_spt
-		case HIP_API_ID_hipStreamGetFlags_spt :
+		case HIP_API_ID_hipStreamGetFlags_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	unsigned int * flags (unsigned int *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamGetFlags_spt_t* args = (args_hipStreamGetFlags_spt_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetFlags_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetFlags_spt.flags);
+			msgpack_encode_uint(buf, (uintptr_t)args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamGetFlags_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetAddress2D
-		case HIP_API_ID_hipTexRefSetAddress2D :
+		case HIP_API_ID_hipTexRefSetAddress2D : {
 			//	textureReference * texRef (struct textureReference*);
 			//	const HIP_ARRAY_DESCRIPTOR * desc (const struct HIP_ARRAY_DESCRIPTOR *);
 			//	hipDeviceptr_t dptr (void *);
 			//	size_t Pitch (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefSetAddress2D_t* args = (args_hipTexRefSetAddress2D_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetAddress2D.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "desc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const HIP_ARRAY_DESCRIPTOR *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetAddress2D.desc);
+			msgpack_encode_uint(buf, (uintptr_t)args->desc);
 
 			msgpack_encode_string_ext(buf, "dptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetAddress2D.dptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dptr);
 
 			msgpack_encode_string_ext(buf, "Pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetAddress2D.Pitch);
+			msgpack_encode_int(buf, args->Pitch);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetAddress2D.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetPriority
-		case HIP_API_ID_hipStreamGetPriority :
+		case HIP_API_ID_hipStreamGetPriority : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	int * priority (int *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamGetPriority_t* args = (args_hipStreamGetPriority_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetPriority.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "priority");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetPriority.priority);
+			msgpack_encode_uint(buf, (uintptr_t)args->priority);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamGetPriority.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamCreate
-		case HIP_API_ID_hipStreamCreate :
+		case HIP_API_ID_hipStreamCreate : {
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamCreate_t* args = (args_hipStreamCreate_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamCreate.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamCreate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyFromSymbol
-		case HIP_API_ID_hipMemcpyFromSymbol :
+		case HIP_API_ID_hipMemcpyFromSymbol : {
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyFromSymbol_t* args = (args_hipMemcpyFromSymbol_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyFromSymbol.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyFromSymbol.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbol.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbol.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbol.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbol.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphNodeGetEnabled
-		case HIP_API_ID_hipGraphNodeGetEnabled :
+		case HIP_API_ID_hipGraphNodeGetEnabled : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	unsigned int * isEnabled (unsigned int *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphNodeGetEnabled_t* args = (args_hipGraphNodeGetEnabled_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "hGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeGetEnabled.hGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraphExec);
 
 			msgpack_encode_string_ext(buf, "hNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeGetEnabled.hNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->hNode);
 
 			msgpack_encode_string_ext(buf, "isEnabled");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeGetEnabled.isEnabled);
+			msgpack_encode_uint(buf, (uintptr_t)args->isEnabled);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphNodeGetEnabled.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCreateChannelDesc
-		case HIP_API_ID_hipCreateChannelDesc :
+		case HIP_API_ID_hipCreateChannelDesc : {
 			//	int x (int);
 			//	int y (int);
 			//	int z (int);
@@ -4160,41 +4370,42 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		int w (int);
 			//		enum hipChannelFormatKind f (enum hipChannelFormatKind);
 			//	});
+			args_hipCreateChannelDesc_t* args = (args_hipCreateChannelDesc_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "x");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCreateChannelDesc.x);
+			msgpack_encode_int(buf, args->x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCreateChannelDesc.y);
+			msgpack_encode_int(buf, args->y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCreateChannelDesc.z);
+			msgpack_encode_int(buf, args->z);
 
 			msgpack_encode_string_ext(buf, "w");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCreateChannelDesc.w);
+			msgpack_encode_int(buf, args->w);
 
 			msgpack_encode_string_ext(buf, "f");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "enum hipChannelFormatKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCreateChannelDesc.f);
+			msgpack_encode_int(buf, args->f);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
@@ -4208,239 +4419,250 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCreateChannelDesc.retval.x);
+			msgpack_encode_int(buf, args->retval.x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCreateChannelDesc.retval.y);
+			msgpack_encode_int(buf, args->retval.y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCreateChannelDesc.retval.z);
+			msgpack_encode_int(buf, args->retval.z);
 
 			msgpack_encode_string_ext(buf, "w");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCreateChannelDesc.retval.w);
+			msgpack_encode_int(buf, args->retval.w);
 
 			msgpack_encode_string_ext(buf, "f");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "enum hipChannelFormatKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCreateChannelDesc.retval.f);
+			msgpack_encode_int(buf, args->retval.f);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFreeMipmappedArray
-		case HIP_API_ID_hipFreeMipmappedArray :
+		case HIP_API_ID_hipFreeMipmappedArray : {
 			//	hipMipmappedArray_t mipmappedArray (struct hipMipmappedArray *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipFreeMipmappedArray_t* args = (args_hipFreeMipmappedArray_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "mipmappedArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMipmappedArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipFreeMipmappedArray.mipmappedArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->mipmappedArray);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipFreeMipmappedArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetTextureAlignmentOffset
-		case HIP_API_ID_hipGetTextureAlignmentOffset :
+		case HIP_API_ID_hipGetTextureAlignmentOffset : {
 			//	size_t * offset (unsigned long*);
 			//	const textureReference * texref (const struct textureReference *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetTextureAlignmentOffset_t* args = (args_hipGetTextureAlignmentOffset_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetTextureAlignmentOffset.offset);
+			msgpack_encode_uint(buf, (uintptr_t)args->offset);
 
 			msgpack_encode_string_ext(buf, "texref");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetTextureAlignmentOffset.texref);
+			msgpack_encode_uint(buf, (uintptr_t)args->texref);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetTextureAlignmentOffset.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddEventRecordNode
-		case HIP_API_ID_hipGraphAddEventRecordNode :
+		case HIP_API_ID_hipGraphAddEventRecordNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddEventRecordNode_t* args = (args_hipGraphAddEventRecordNode_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddEventRecordNode.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddEventRecordNode.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddEventRecordNode.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddEventRecordNode.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddEventRecordNode.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddEventRecordNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphNodeFindInClone
-		case HIP_API_ID_hipGraphNodeFindInClone :
+		case HIP_API_ID_hipGraphNodeFindInClone : {
 			//	hipGraphNode_t * pNode (struct hipGraphNode **);
 			//	hipGraphNode_t originalNode (struct hipGraphNode *);
 			//	hipGraph_t clonedGraph (struct ihipGraph *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphNodeFindInClone_t* args = (args_hipGraphNodeFindInClone_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "pNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeFindInClone.pNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNode);
 
 			msgpack_encode_string_ext(buf, "originalNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeFindInClone.originalNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->originalNode);
 
 			msgpack_encode_string_ext(buf, "clonedGraph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeFindInClone.clonedGraph);
+			msgpack_encode_uint(buf, (uintptr_t)args->clonedGraph);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphNodeFindInClone.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyFromSymbol_spt
-		case HIP_API_ID_hipMemcpyFromSymbol_spt :
+		case HIP_API_ID_hipMemcpyFromSymbol_spt : {
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyFromSymbol_spt_t* args = (args_hipMemcpyFromSymbol_spt_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyFromSymbol_spt.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyFromSymbol_spt.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbol_spt.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbol_spt.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbol_spt.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbol_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset3DAsync_spt
-		case HIP_API_ID_hipMemset3DAsync_spt :
+		case HIP_API_ID_hipMemset3DAsync_spt : {
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
 			//		size_t pitch (unsigned long);
@@ -4455,6 +4677,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemset3DAsync_spt_t* args = (args_hipMemset3DAsync_spt_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "pitchedDevPtr");
 			msgpack_encode_map(buf, 2);
@@ -4468,28 +4691,28 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync_spt.pitchedDevPtr.pitch);
+			msgpack_encode_int(buf, args->pitchedDevPtr.pitch);
 
 			msgpack_encode_string_ext(buf, "xsize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync_spt.pitchedDevPtr.xsize);
+			msgpack_encode_int(buf, args->pitchedDevPtr.xsize);
 
 			msgpack_encode_string_ext(buf, "ysize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync_spt.pitchedDevPtr.ysize);
+			msgpack_encode_int(buf, args->pitchedDevPtr.ysize);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync_spt.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "extent");
 			msgpack_encode_map(buf, 2);
@@ -4503,215 +4726,226 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync_spt.extent.width);
+			msgpack_encode_int(buf, args->extent.width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync_spt.extent.height);
+			msgpack_encode_int(buf, args->extent.height);
 
 			msgpack_encode_string_ext(buf, "depth");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync_spt.extent.depth);
+			msgpack_encode_int(buf, args->extent.depth);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemset3DAsync_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetD16Async
-		case HIP_API_ID_hipMemsetD16Async :
+		case HIP_API_ID_hipMemsetD16Async : {
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned short value (unsigned short);
 			//	size_t count (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemsetD16Async_t* args = (args_hipMemsetD16Async_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemsetD16Async.dest);
+			msgpack_encode_uint(buf, (uintptr_t)args->dest);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned short");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD16Async.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD16Async.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemsetD16Async.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD16Async.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetCacheConfig
-		case HIP_API_ID_hipDeviceGetCacheConfig :
+		case HIP_API_ID_hipDeviceGetCacheConfig : {
 			//	hipFuncCache_t * cacheConfig (enum hipFuncCache_t*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceGetCacheConfig_t* args = (args_hipDeviceGetCacheConfig_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "cacheConfig");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFuncCache_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGetCacheConfig.cacheConfig);
+			msgpack_encode_uint(buf, (uintptr_t)args->cacheConfig);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetCacheConfig.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemCreate
-		case HIP_API_ID_hipMemCreate :
+		case HIP_API_ID_hipMemCreate : {
 			//	hipMemGenericAllocationHandle_t * handle (struct ihipMemGenericAllocationHandle **);
 			//	size_t size (unsigned long);
 			//	const hipMemAllocationProp * prop (const struct hipMemAllocationProp *);
 			//	unsigned long long flags (unsigned long long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemCreate_t* args = (args_hipMemCreate_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemGenericAllocationHandle_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemCreate.handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->handle);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemCreate.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "prop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipMemAllocationProp *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemCreate.prop);
+			msgpack_encode_uint(buf, (uintptr_t)args->prop);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned long long");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemCreate.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemCreate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExternalSemaphoresWaitNodeGetParams
-		case HIP_API_ID_hipGraphExternalSemaphoresWaitNodeGetParams :
+		case HIP_API_ID_hipGraphExternalSemaphoresWaitNodeGetParams : {
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipExternalSemaphoreWaitNodeParams * params_out (struct hipExternalSemaphoreWaitNodeParams*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExternalSemaphoresWaitNodeGetParams_t* args = (args_hipGraphExternalSemaphoresWaitNodeGetParams_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "hNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExternalSemaphoresWaitNodeGetParams.hNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->hNode);
 
 			msgpack_encode_string_ext(buf, "params_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipExternalSemaphoreWaitNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExternalSemaphoresWaitNodeGetParams.params_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->params_out);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExternalSemaphoresWaitNodeGetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamEndCapture
-		case HIP_API_ID_hipStreamEndCapture :
+		case HIP_API_ID_hipStreamEndCapture : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraph_t * pGraph (struct ihipGraph **);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamEndCapture_t* args = (args_hipStreamEndCapture_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamEndCapture.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "pGraph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamEndCapture.pGraph);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraph);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamEndCapture.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyFromSymbolAsync_spt
-		case HIP_API_ID_hipMemcpyFromSymbolAsync_spt :
+		case HIP_API_ID_hipMemcpyFromSymbolAsync_spt : {
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
 			//	size_t sizeBytes (unsigned long);
@@ -4719,175 +4953,183 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyFromSymbolAsync_spt_t* args = (args_hipMemcpyFromSymbolAsync_spt_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyFromSymbolAsync_spt.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyFromSymbolAsync_spt.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbolAsync_spt.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbolAsync_spt.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbolAsync_spt.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyFromSymbolAsync_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbolAsync_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyHtoA
-		case HIP_API_ID_hipMemcpyHtoA :
+		case HIP_API_ID_hipMemcpyHtoA : {
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
 			//	const void * srcHost (const void *);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyHtoA_t* args = (args_hipMemcpyHtoA_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dstArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyHtoA.dstArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->dstArray);
 
 			msgpack_encode_string_ext(buf, "dstOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyHtoA.dstOffset);
+			msgpack_encode_int(buf, args->dstOffset);
 
 			msgpack_encode_string_ext(buf, "srcHost");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyHtoA.srcHost);
+			msgpack_encode_uint(buf, (uintptr_t)args->srcHost);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyHtoA.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyHtoA.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecHostNodeSetParams
-		case HIP_API_ID_hipGraphExecHostNodeSetParams :
+		case HIP_API_ID_hipGraphExecHostNodeSetParams : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipHostNodeParams * pNodeParams (const struct hipHostNodeParams *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExecHostNodeSetParams_t* args = (args_hipGraphExecHostNodeSetParams_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "hGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecHostNodeSetParams.hGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraphExec);
 
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecHostNodeSetParams.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipHostNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecHostNodeSetParams.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecHostNodeSetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMalloc
-		case HIP_API_ID_hipMalloc :
+		case HIP_API_ID_hipMalloc : {
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMalloc_t* args = (args_hipMalloc_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMalloc.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMalloc.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMalloc.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMalloc3DArray
-		case HIP_API_ID_hipMalloc3DArray :
+		case HIP_API_ID_hipMalloc3DArray : {
 			//	hipArray_t * array (struct hipArray **);
 			//	const struct hipChannelFormatDesc * desc (const struct hipChannelFormatDesc *);
 			//	struct hipExtent extent ({
@@ -4897,20 +5139,21 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMalloc3DArray_t* args = (args_hipMalloc3DArray_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMalloc3DArray.array);
+			msgpack_encode_uint(buf, (uintptr_t)args->array);
 
 			msgpack_encode_string_ext(buf, "desc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const struct hipChannelFormatDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMalloc3DArray.desc);
+			msgpack_encode_uint(buf, (uintptr_t)args->desc);
 
 			msgpack_encode_string_ext(buf, "extent");
 			msgpack_encode_map(buf, 2);
@@ -4924,109 +5167,114 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMalloc3DArray.extent.width);
+			msgpack_encode_int(buf, args->extent.width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMalloc3DArray.extent.height);
+			msgpack_encode_int(buf, args->extent.height);
 
 			msgpack_encode_string_ext(buf, "depth");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMalloc3DArray.extent.depth);
+			msgpack_encode_int(buf, args->extent.depth);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMalloc3DArray.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMalloc3DArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecKernelNodeSetParams
-		case HIP_API_ID_hipGraphExecKernelNodeSetParams :
+		case HIP_API_ID_hipGraphExecKernelNodeSetParams : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipKernelNodeParams * pNodeParams (const struct hipKernelNodeParams *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExecKernelNodeSetParams_t* args = (args_hipGraphExecKernelNodeSetParams_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "hGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecKernelNodeSetParams.hGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraphExec);
 
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecKernelNodeSetParams.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipKernelNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecKernelNodeSetParams.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecKernelNodeSetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetTextureObjectResourceDesc
-		case HIP_API_ID_hipGetTextureObjectResourceDesc :
+		case HIP_API_ID_hipGetTextureObjectResourceDesc : {
 			//	hipResourceDesc * pResDesc (struct hipResourceDesc*);
 			//	hipTextureObject_t textureObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetTextureObjectResourceDesc_t* args = (args_hipGetTextureObjectResourceDesc_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pResDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipResourceDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetTextureObjectResourceDesc.pResDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->pResDesc);
 
 			msgpack_encode_string_ext(buf, "textureObject");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipTextureObject_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetTextureObjectResourceDesc.textureObject);
+			msgpack_encode_uint(buf, (uintptr_t)args->textureObject);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetTextureObjectResourceDesc.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE___hipPushCallConfiguration
-		case HIP_API_ID___hipPushCallConfiguration :
+		case HIP_API_ID___hipPushCallConfiguration : {
 			//	dim3 gridDim ({
 			//		uint32_t x (unsigned int);
 			//		uint32_t y (unsigned int);
@@ -5040,6 +5288,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t sharedMem (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args___hipPushCallConfiguration_t* args = (args___hipPushCallConfiguration_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "gridDim");
 			msgpack_encode_map(buf, 2);
@@ -5053,21 +5302,21 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->__hipPushCallConfiguration.gridDim.x);
+			msgpack_encode_int(buf, args->gridDim.x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->__hipPushCallConfiguration.gridDim.y);
+			msgpack_encode_int(buf, args->gridDim.y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->__hipPushCallConfiguration.gridDim.z);
+			msgpack_encode_int(buf, args->gridDim.z);
 
 			msgpack_encode_string_ext(buf, "blockDim");
 			msgpack_encode_map(buf, 2);
@@ -5081,396 +5330,417 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->__hipPushCallConfiguration.blockDim.x);
+			msgpack_encode_int(buf, args->blockDim.x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->__hipPushCallConfiguration.blockDim.y);
+			msgpack_encode_int(buf, args->blockDim.y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->__hipPushCallConfiguration.blockDim.z);
+			msgpack_encode_int(buf, args->blockDim.z);
 
 			msgpack_encode_string_ext(buf, "sharedMem");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->__hipPushCallConfiguration.sharedMem);
+			msgpack_encode_int(buf, args->sharedMem);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->__hipPushCallConfiguration.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->__hipPushCallConfiguration.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy3DAsync_spt
-		case HIP_API_ID_hipMemcpy3DAsync_spt :
+		case HIP_API_ID_hipMemcpy3DAsync_spt : {
 			//	const hipMemcpy3DParms * p (const struct hipMemcpy3DParms *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy3DAsync_spt_t* args = (args_hipMemcpy3DAsync_spt_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "p");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipMemcpy3DParms *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy3DAsync_spt.p);
+			msgpack_encode_uint(buf, (uintptr_t)args->p);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy3DAsync_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy3DAsync_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetD8Async
-		case HIP_API_ID_hipMemsetD8Async :
+		case HIP_API_ID_hipMemsetD8Async : {
 			//	hipDeviceptr_t dest (void *);
 			//	unsigned char value (unsigned char);
 			//	size_t count (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemsetD8Async_t* args = (args_hipMemsetD8Async_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dest");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemsetD8Async.dest);
+			msgpack_encode_uint(buf, (uintptr_t)args->dest);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned char");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD8Async.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD8Async.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemsetD8Async.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD8Async.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamAddCallback
-		case HIP_API_ID_hipStreamAddCallback :
+		case HIP_API_ID_hipStreamAddCallback : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCallback_t callback (void (*)(struct ihipStream_t *, enum hipError_t, void *));
 			//	void * userData (void *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamAddCallback_t* args = (args_hipStreamAddCallback_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamAddCallback.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStreamCallback_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamAddCallback.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "userData");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamAddCallback.userData);
+			msgpack_encode_uint(buf, (uintptr_t)args->userData);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamAddCallback.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamAddCallback.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolImportPointer
-		case HIP_API_ID_hipMemPoolImportPointer :
+		case HIP_API_ID_hipMemPoolImportPointer : {
 			//	void ** dev_ptr (void **);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipMemPoolPtrExportData * export_data (struct hipMemPoolPtrExportData*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemPoolImportPointer_t* args = (args_hipMemPoolImportPointer_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "dev_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolImportPointer.dev_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dev_ptr);
 
 			msgpack_encode_string_ext(buf, "mem_pool");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPool_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolImportPointer.mem_pool);
+			msgpack_encode_uint(buf, (uintptr_t)args->mem_pool);
 
 			msgpack_encode_string_ext(buf, "export_data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPoolPtrExportData *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolImportPointer.export_data);
+			msgpack_encode_uint(buf, (uintptr_t)args->export_data);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolImportPointer.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFuncGetAttributes
-		case HIP_API_ID_hipFuncGetAttributes :
+		case HIP_API_ID_hipFuncGetAttributes : {
 			//	struct hipFuncAttributes * attr (struct hipFuncAttributes *);
 			//	const void * func (const void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipFuncGetAttributes_t* args = (args_hipFuncGetAttributes_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "attr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "struct hipFuncAttributes *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipFuncGetAttributes.attr);
+			msgpack_encode_uint(buf, (uintptr_t)args->attr);
 
 			msgpack_encode_string_ext(buf, "func");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipFuncGetAttributes.func);
+			msgpack_encode_uint(buf, (uintptr_t)args->func);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipFuncGetAttributes.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxGetCurrent
-		case HIP_API_ID_hipCtxGetCurrent :
+		case HIP_API_ID_hipCtxGetCurrent : {
 			//	hipCtx_t * ctx (struct ihipCtx_t **);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxGetCurrent_t* args = (args_hipCtxGetCurrent_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "ctx");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipCtx_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCtxGetCurrent.ctx);
+			msgpack_encode_uint(buf, (uintptr_t)args->ctx);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxGetCurrent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddChildGraphNode
-		case HIP_API_ID_hipGraphAddChildGraphNode :
+		case HIP_API_ID_hipGraphAddChildGraphNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	hipGraph_t childGraph (struct ihipGraph *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddChildGraphNode_t* args = (args_hipGraphAddChildGraphNode_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddChildGraphNode.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddChildGraphNode.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddChildGraphNode.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddChildGraphNode.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "childGraph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddChildGraphNode.childGraph);
+			msgpack_encode_uint(buf, (uintptr_t)args->childGraph);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddChildGraphNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventCreate
-		case HIP_API_ID_hipEventCreate :
+		case HIP_API_ID_hipEventCreate : {
 			//	hipEvent_t * event (struct ihipEvent_t **);
 			//	hipError_t retval (enum hipError_t);
+			args_hipEventCreate_t* args = (args_hipEventCreate_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipEventCreate.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipEventCreate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipHostGetDevicePointer
-		case HIP_API_ID_hipHostGetDevicePointer :
+		case HIP_API_ID_hipHostGetDevicePointer : {
 			//	void ** devPtr (void **);
 			//	void * hstPtr (void *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipHostGetDevicePointer_t* args = (args_hipHostGetDevicePointer_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "devPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipHostGetDevicePointer.devPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->devPtr);
 
 			msgpack_encode_string_ext(buf, "hstPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipHostGetDevicePointer.hstPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->hstPtr);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipHostGetDevicePointer.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipHostGetDevicePointer.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventQuery
-		case HIP_API_ID_hipEventQuery :
+		case HIP_API_ID_hipEventQuery : {
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipEventQuery_t* args = (args_hipEventQuery_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipEventQuery.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipEventQuery.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyPeerAsync
-		case HIP_API_ID_hipMemcpyPeerAsync :
+		case HIP_API_ID_hipMemcpyPeerAsync : {
 			//	void * dst (void *);
 			//	int dstDeviceId (int);
 			//	const void * src (const void *);
@@ -5478,153 +5748,159 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t sizeBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyPeerAsync_t* args = (args_hipMemcpyPeerAsync_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyPeerAsync.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "dstDeviceId");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyPeerAsync.dstDeviceId);
+			msgpack_encode_int(buf, args->dstDeviceId);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyPeerAsync.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "srcDevice");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyPeerAsync.srcDevice);
+			msgpack_encode_int(buf, args->srcDevice);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyPeerAsync.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyPeerAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyPeerAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemMap
-		case HIP_API_ID_hipMemMap :
+		case HIP_API_ID_hipMemMap : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	size_t offset (unsigned long);
 			//	hipMemGenericAllocationHandle_t handle (struct ihipMemGenericAllocationHandle *);
 			//	unsigned long long flags (unsigned long long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemMap_t* args = (args_hipMemMap_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemMap.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemMap.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemMap.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemGenericAllocationHandle_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemMap.handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->handle);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned long long");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemMap.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemMap.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipBindTextureToArray
-		case HIP_API_ID_hipBindTextureToArray :
+		case HIP_API_ID_hipBindTextureToArray : {
 			//	const textureReference * tex (const struct textureReference *);
 			//	hipArray_const_t array (const struct hipArray *);
 			//	const hipChannelFormatDesc * desc (const struct hipChannelFormatDesc *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipBindTextureToArray_t* args = (args_hipBindTextureToArray_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "tex");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipBindTextureToArray.tex);
+			msgpack_encode_uint(buf, (uintptr_t)args->tex);
 
 			msgpack_encode_string_ext(buf, "array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_const_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipBindTextureToArray.array);
+			msgpack_encode_uint(buf, (uintptr_t)args->array);
 
 			msgpack_encode_string_ext(buf, "desc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipChannelFormatDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipBindTextureToArray.desc);
+			msgpack_encode_uint(buf, (uintptr_t)args->desc);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipBindTextureToArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DAsync_spt
-		case HIP_API_ID_hipMemcpy2DAsync_spt :
+		case HIP_API_ID_hipMemcpy2DAsync_spt : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	const void * src (const void *);
@@ -5634,1035 +5910,1093 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy2DAsync_spt_t* args = (args_hipMemcpy2DAsync_spt_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DAsync_spt.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "dpitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DAsync_spt.dpitch);
+			msgpack_encode_int(buf, args->dpitch);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DAsync_spt.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "spitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DAsync_spt.spitch);
+			msgpack_encode_int(buf, args->spitch);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DAsync_spt.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DAsync_spt.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DAsync_spt.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DAsync_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DAsync_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolSetAttribute
-		case HIP_API_ID_hipMemPoolSetAttribute :
+		case HIP_API_ID_hipMemPoolSetAttribute : {
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipMemPoolAttr attr (enum hipMemPoolAttr);
 			//	void * value (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemPoolSetAttribute_t* args = (args_hipMemPoolSetAttribute_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "mem_pool");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPool_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolSetAttribute.mem_pool);
+			msgpack_encode_uint(buf, (uintptr_t)args->mem_pool);
 
 			msgpack_encode_string_ext(buf, "attr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPoolAttr");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolSetAttribute.attr);
+			msgpack_encode_int(buf, args->attr);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolSetAttribute.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolSetAttribute.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetLastError
-		case HIP_API_ID_hipGetLastError :
+		case HIP_API_ID_hipGetLastError : {
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetLastError_t* args = (args_hipGetLastError_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetLastError.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamEndCapture_spt
-		case HIP_API_ID_hipStreamEndCapture_spt :
+		case HIP_API_ID_hipStreamEndCapture_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraph_t * pGraph (struct ihipGraph **);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamEndCapture_spt_t* args = (args_hipStreamEndCapture_spt_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamEndCapture_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "pGraph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamEndCapture_spt.pGraph);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraph);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamEndCapture_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleOccupancyMaxPotentialBlockSize
-		case HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSize :
+		case HIP_API_ID_hipModuleOccupancyMaxPotentialBlockSize : {
 			//	int * gridSize (int *);
 			//	int * blockSize (int *);
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
 			//	size_t dynSharedMemPerBlk (unsigned long);
 			//	int blockSizeLimit (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipModuleOccupancyMaxPotentialBlockSize_t* args = (args_hipModuleOccupancyMaxPotentialBlockSize_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "gridSize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleOccupancyMaxPotentialBlockSize.gridSize);
+			msgpack_encode_uint(buf, (uintptr_t)args->gridSize);
 
 			msgpack_encode_string_ext(buf, "blockSize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleOccupancyMaxPotentialBlockSize.blockSize);
+			msgpack_encode_uint(buf, (uintptr_t)args->blockSize);
 
 			msgpack_encode_string_ext(buf, "f");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFunction_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleOccupancyMaxPotentialBlockSize.f);
+			msgpack_encode_uint(buf, (uintptr_t)args->f);
 
 			msgpack_encode_string_ext(buf, "dynSharedMemPerBlk");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleOccupancyMaxPotentialBlockSize.dynSharedMemPerBlk);
+			msgpack_encode_int(buf, args->dynSharedMemPerBlk);
 
 			msgpack_encode_string_ext(buf, "blockSizeLimit");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleOccupancyMaxPotentialBlockSize.blockSizeLimit);
+			msgpack_encode_int(buf, args->blockSizeLimit);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleOccupancyMaxPotentialBlockSize.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipKernelNameRefByPtr
-		case HIP_API_ID_hipKernelNameRefByPtr :
+		case HIP_API_ID_hipKernelNameRefByPtr : {
 			//	const void * hostFunction (const void *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	const char * retval (const char *);
+			args_hipKernelNameRefByPtr_t* args = (args_hipKernelNameRefByPtr_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "hostFunction");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipKernelNameRefByPtr.hostFunction);
+			msgpack_encode_uint(buf, (uintptr_t)args->hostFunction);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipKernelNameRefByPtr.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipKernelNameRefByPtr.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetDevice
-		case HIP_API_ID_hipGetDevice :
+		case HIP_API_ID_hipGetDevice : {
 			//	int * deviceId (int *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetDevice_t* args = (args_hipGetDevice_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "deviceId");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetDevice.deviceId);
+			msgpack_encode_uint(buf, (uintptr_t)args->deviceId);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetDevice.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy3D_spt
-		case HIP_API_ID_hipMemcpy3D_spt :
+		case HIP_API_ID_hipMemcpy3D_spt : {
 			//	const struct hipMemcpy3DParms * p (const struct hipMemcpy3DParms *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy3D_spt_t* args = (args_hipMemcpy3D_spt_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "p");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const struct hipMemcpy3DParms *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy3D_spt.p);
+			msgpack_encode_uint(buf, (uintptr_t)args->p);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy3D_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexObjectGetTextureDesc
-		case HIP_API_ID_hipTexObjectGetTextureDesc :
+		case HIP_API_ID_hipTexObjectGetTextureDesc : {
 			//	HIP_TEXTURE_DESC * pTexDesc (struct HIP_TEXTURE_DESC_st*);
 			//	hipTextureObject_t texObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexObjectGetTextureDesc_t* args = (args_hipTexObjectGetTextureDesc_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pTexDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "HIP_TEXTURE_DESC *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexObjectGetTextureDesc.pTexDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->pTexDesc);
 
 			msgpack_encode_string_ext(buf, "texObject");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipTextureObject_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexObjectGetTextureDesc.texObject);
+			msgpack_encode_uint(buf, (uintptr_t)args->texObject);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexObjectGetTextureDesc.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGet
-		case HIP_API_ID_hipDeviceGet :
+		case HIP_API_ID_hipDeviceGet : {
 			//	hipDevice_t * device (int*);
 			//	int ordinal (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceGet_t* args = (args_hipDeviceGet_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDevice_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGet.device);
+			msgpack_encode_uint(buf, (uintptr_t)args->device);
 
 			msgpack_encode_string_ext(buf, "ordinal");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGet.ordinal);
+			msgpack_encode_int(buf, args->ordinal);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGet.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExternalSemaphoresSignalNodeSetParams
-		case HIP_API_ID_hipGraphExternalSemaphoresSignalNodeSetParams :
+		case HIP_API_ID_hipGraphExternalSemaphoresSignalNodeSetParams : {
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	const hipExternalSemaphoreSignalNodeParams * nodeParams (const struct hipExternalSemaphoreSignalNodeParams *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExternalSemaphoresSignalNodeSetParams_t* args = (args_hipGraphExternalSemaphoresSignalNodeSetParams_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "hNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExternalSemaphoresSignalNodeSetParams.hNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->hNode);
 
 			msgpack_encode_string_ext(buf, "nodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipExternalSemaphoreSignalNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExternalSemaphoresSignalNodeSetParams.nodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->nodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExternalSemaphoresSignalNodeSetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDestroySurfaceObject
-		case HIP_API_ID_hipDestroySurfaceObject :
+		case HIP_API_ID_hipDestroySurfaceObject : {
 			//	hipSurfaceObject_t surfaceObject (struct __hip_surface *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDestroySurfaceObject_t* args = (args_hipDestroySurfaceObject_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "surfaceObject");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipSurfaceObject_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDestroySurfaceObject.surfaceObject);
+			msgpack_encode_uint(buf, (uintptr_t)args->surfaceObject);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDestroySurfaceObject.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetDevice
-		case HIP_API_ID_hipStreamGetDevice :
+		case HIP_API_ID_hipStreamGetDevice : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipDevice_t * device (int*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamGetDevice_t* args = (args_hipStreamGetDevice_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetDevice.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDevice_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetDevice.device);
+			msgpack_encode_uint(buf, (uintptr_t)args->device);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamGetDevice.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemAllocPitch
-		case HIP_API_ID_hipMemAllocPitch :
+		case HIP_API_ID_hipMemAllocPitch : {
 			//	hipDeviceptr_t * dptr (void **);
 			//	size_t * pitch (unsigned long*);
 			//	size_t widthInBytes (unsigned long);
 			//	size_t height (unsigned long);
 			//	unsigned int elementSizeBytes (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemAllocPitch_t* args = (args_hipMemAllocPitch_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "dptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemAllocPitch.dptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dptr);
 
 			msgpack_encode_string_ext(buf, "pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemAllocPitch.pitch);
+			msgpack_encode_uint(buf, (uintptr_t)args->pitch);
 
 			msgpack_encode_string_ext(buf, "widthInBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAllocPitch.widthInBytes);
+			msgpack_encode_int(buf, args->widthInBytes);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAllocPitch.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "elementSizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAllocPitch.elementSizeBytes);
+			msgpack_encode_int(buf, args->elementSizeBytes);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAllocPitch.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddNode
-		case HIP_API_ID_hipGraphAddNode :
+		case HIP_API_ID_hipGraphAddNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	hipGraphNodeParams * nodeParams (struct hipGraphNodeParams*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddNode_t* args = (args_hipGraphAddNode_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddNode.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddNode.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddNode.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddNode.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "nodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddNode.nodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->nodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceSetSharedMemConfig
-		case HIP_API_ID_hipDeviceSetSharedMemConfig :
+		case HIP_API_ID_hipDeviceSetSharedMemConfig : {
 			//	hipSharedMemConfig config (enum hipSharedMemConfig);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceSetSharedMemConfig_t* args = (args_hipDeviceSetSharedMemConfig_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "config");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipSharedMemConfig");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceSetSharedMemConfig.config);
+			msgpack_encode_int(buf, args->config);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceSetSharedMemConfig.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipRuntimeGetVersion
-		case HIP_API_ID_hipRuntimeGetVersion :
+		case HIP_API_ID_hipRuntimeGetVersion : {
 			//	int * runtimeVersion (int *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipRuntimeGetVersion_t* args = (args_hipRuntimeGetVersion_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "runtimeVersion");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipRuntimeGetVersion.runtimeVersion);
+			msgpack_encode_uint(buf, (uintptr_t)args->runtimeVersion);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipRuntimeGetVersion.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphChildGraphNodeGetGraph
-		case HIP_API_ID_hipGraphChildGraphNodeGetGraph :
+		case HIP_API_ID_hipGraphChildGraphNodeGetGraph : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraph_t * pGraph (struct ihipGraph **);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphChildGraphNodeGetGraph_t* args = (args_hipGraphChildGraphNodeGetGraph_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphChildGraphNodeGetGraph.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pGraph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphChildGraphNodeGetGraph.pGraph);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraph);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphChildGraphNodeGetGraph.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecMemsetNodeSetParams
-		case HIP_API_ID_hipGraphExecMemsetNodeSetParams :
+		case HIP_API_ID_hipGraphExecMemsetNodeSetParams : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipMemsetParams * pNodeParams (const struct hipMemsetParams *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExecMemsetNodeSetParams_t* args = (args_hipGraphExecMemsetNodeSetParams_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "hGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemsetNodeSetParams.hGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraphExec);
 
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemsetNodeSetParams.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipMemsetParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemsetNodeSetParams.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecMemsetNodeSetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphicsUnregisterResource
-		case HIP_API_ID_hipGraphicsUnregisterResource :
+		case HIP_API_ID_hipGraphicsUnregisterResource : {
 			//	hipGraphicsResource_t resource (struct _hipGraphicsResource*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphicsUnregisterResource_t* args = (args_hipGraphicsUnregisterResource_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "resource");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphicsResource_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphicsUnregisterResource.resource);
+			msgpack_encode_uint(buf, (uintptr_t)args->resource);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphicsUnregisterResource.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventElapsedTime
-		case HIP_API_ID_hipEventElapsedTime :
+		case HIP_API_ID_hipEventElapsedTime : {
 			//	float * ms (float *);
 			//	hipEvent_t start (struct ihipEvent_t *);
 			//	hipEvent_t stop (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipEventElapsedTime_t* args = (args_hipEventElapsedTime_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "ms");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "float *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipEventElapsedTime.ms);
+			msgpack_encode_uint(buf, (uintptr_t)args->ms);
 
 			msgpack_encode_string_ext(buf, "start");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipEventElapsedTime.start);
+			msgpack_encode_uint(buf, (uintptr_t)args->start);
 
 			msgpack_encode_string_ext(buf, "stop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipEventElapsedTime.stop);
+			msgpack_encode_uint(buf, (uintptr_t)args->stop);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipEventElapsedTime.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFreeAsync
-		case HIP_API_ID_hipFreeAsync :
+		case HIP_API_ID_hipFreeAsync : {
 			//	void * dev_ptr (void *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipFreeAsync_t* args = (args_hipFreeAsync_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "dev_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipFreeAsync.dev_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dev_ptr);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipFreeAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipFreeAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamCreateWithFlags
-		case HIP_API_ID_hipStreamCreateWithFlags :
+		case HIP_API_ID_hipStreamCreateWithFlags : {
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamCreateWithFlags_t* args = (args_hipStreamCreateWithFlags_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamCreateWithFlags.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamCreateWithFlags.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamCreateWithFlags.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetAddress
-		case HIP_API_ID_hipTexRefSetAddress :
+		case HIP_API_ID_hipTexRefSetAddress : {
 			//	size_t * ByteOffset (unsigned long*);
 			//	textureReference * texRef (struct textureReference*);
 			//	hipDeviceptr_t dptr (void *);
 			//	size_t bytes (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefSetAddress_t* args = (args_hipTexRefSetAddress_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "ByteOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetAddress.ByteOffset);
+			msgpack_encode_uint(buf, (uintptr_t)args->ByteOffset);
 
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetAddress.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "dptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetAddress.dptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dptr);
 
 			msgpack_encode_string_ext(buf, "bytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetAddress.bytes);
+			msgpack_encode_int(buf, args->bytes);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetAddress.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamAddCallback_spt
-		case HIP_API_ID_hipStreamAddCallback_spt :
+		case HIP_API_ID_hipStreamAddCallback_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCallback_t callback (void (*)(struct ihipStream_t *, enum hipError_t, void *));
 			//	void * userData (void *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamAddCallback_spt_t* args = (args_hipStreamAddCallback_spt_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamAddCallback_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "callback");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStreamCallback_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamAddCallback_spt.callback);
+			msgpack_encode_uint(buf, (uintptr_t)args->callback);
 
 			msgpack_encode_string_ext(buf, "userData");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamAddCallback_spt.userData);
+			msgpack_encode_uint(buf, (uintptr_t)args->userData);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamAddCallback_spt.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamAddCallback_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddKernelNode
-		case HIP_API_ID_hipGraphAddKernelNode :
+		case HIP_API_ID_hipGraphAddKernelNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	const hipKernelNodeParams * pNodeParams (const struct hipKernelNodeParams *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddKernelNode_t* args = (args_hipGraphAddKernelNode_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddKernelNode.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddKernelNode.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddKernelNode.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddKernelNode.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipKernelNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddKernelNode.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddKernelNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyDtoH
-		case HIP_API_ID_hipMemcpyDtoH :
+		case HIP_API_ID_hipMemcpyDtoH : {
 			//	void * dst (void *);
 			//	hipDeviceptr_t src (void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyDtoH_t* args = (args_hipMemcpyDtoH_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyDtoH.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyDtoH.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyDtoH.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyDtoH.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceTotalMem
-		case HIP_API_ID_hipDeviceTotalMem :
+		case HIP_API_ID_hipDeviceTotalMem : {
 			//	size_t * bytes (unsigned long*);
 			//	hipDevice_t device (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceTotalMem_t* args = (args_hipDeviceTotalMem_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "bytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceTotalMem.bytes);
+			msgpack_encode_uint(buf, (uintptr_t)args->bytes);
 
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDevice_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceTotalMem.device);
+			msgpack_encode_int(buf, args->device);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceTotalMem.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset2D
-		case HIP_API_ID_hipMemset2D :
+		case HIP_API_ID_hipMemset2D : {
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
 			//	int value (int);
 			//	size_t width (unsigned long);
 			//	size_t height (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemset2D_t* args = (args_hipMemset2D_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemset2D.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2D.pitch);
+			msgpack_encode_int(buf, args->pitch);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2D.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2D.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2D.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2D.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DToArray_spt
-		case HIP_API_ID_hipMemcpy2DToArray_spt :
+		case HIP_API_ID_hipMemcpy2DToArray_spt : {
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
 			//	size_t hOffset (unsigned long);
@@ -6672,173 +7006,181 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy2DToArray_spt_t* args = (args_hipMemcpy2DToArray_spt_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DToArray_spt.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "wOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArray_spt.wOffset);
+			msgpack_encode_int(buf, args->wOffset);
 
 			msgpack_encode_string_ext(buf, "hOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArray_spt.hOffset);
+			msgpack_encode_int(buf, args->hOffset);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DToArray_spt.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "spitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArray_spt.spitch);
+			msgpack_encode_int(buf, args->spitch);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArray_spt.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArray_spt.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArray_spt.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArray_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemAllocHost
-		case HIP_API_ID_hipMemAllocHost :
+		case HIP_API_ID_hipMemAllocHost : {
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemAllocHost_t* args = (args_hipMemAllocHost_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemAllocHost.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAllocHost.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAllocHost.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipPointerSetAttribute
-		case HIP_API_ID_hipPointerSetAttribute :
+		case HIP_API_ID_hipPointerSetAttribute : {
 			//	const void * value (const void *);
 			//	hipPointer_attribute attribute (enum hipPointer_attribute);
 			//	hipDeviceptr_t ptr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipPointerSetAttribute_t* args = (args_hipPointerSetAttribute_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipPointerSetAttribute.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipPointer_attribute");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipPointerSetAttribute.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipPointerSetAttribute.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipPointerSetAttribute.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphHostNodeGetParams
-		case HIP_API_ID_hipGraphHostNodeGetParams :
+		case HIP_API_ID_hipGraphHostNodeGetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipHostNodeParams * pNodeParams (struct hipHostNodeParams*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphHostNodeGetParams_t* args = (args_hipGraphHostNodeGetParams_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphHostNodeGetParams.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipHostNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphHostNodeGetParams.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphHostNodeGetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset3D
-		case HIP_API_ID_hipMemset3D :
+		case HIP_API_ID_hipMemset3D : {
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
 			//		size_t pitch (unsigned long);
@@ -6852,6 +7194,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		size_t depth (unsigned long);
 			//	});
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemset3D_t* args = (args_hipMemset3D_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "pitchedDevPtr");
 			msgpack_encode_map(buf, 2);
@@ -6865,28 +7208,28 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D.pitchedDevPtr.pitch);
+			msgpack_encode_int(buf, args->pitchedDevPtr.pitch);
 
 			msgpack_encode_string_ext(buf, "xsize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D.pitchedDevPtr.xsize);
+			msgpack_encode_int(buf, args->pitchedDevPtr.xsize);
 
 			msgpack_encode_string_ext(buf, "ysize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D.pitchedDevPtr.ysize);
+			msgpack_encode_int(buf, args->pitchedDevPtr.ysize);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "extent");
 			msgpack_encode_map(buf, 2);
@@ -6900,572 +7243,603 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D.extent.width);
+			msgpack_encode_int(buf, args->extent.width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D.extent.height);
+			msgpack_encode_int(buf, args->extent.height);
 
 			msgpack_encode_string_ext(buf, "depth");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D.extent.depth);
+			msgpack_encode_int(buf, args->extent.depth);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDestroyTextureObject
-		case HIP_API_ID_hipDestroyTextureObject :
+		case HIP_API_ID_hipDestroyTextureObject : {
 			//	hipTextureObject_t textureObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDestroyTextureObject_t* args = (args_hipDestroyTextureObject_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "textureObject");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipTextureObject_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDestroyTextureObject.textureObject);
+			msgpack_encode_uint(buf, (uintptr_t)args->textureObject);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDestroyTextureObject.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemAdvise
-		case HIP_API_ID_hipMemAdvise :
+		case HIP_API_ID_hipMemAdvise : {
 			//	const void * dev_ptr (const void *);
 			//	size_t count (unsigned long);
 			//	hipMemoryAdvise advice (enum hipMemoryAdvise);
 			//	int device (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemAdvise_t* args = (args_hipMemAdvise_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dev_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemAdvise.dev_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dev_ptr);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAdvise.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "advice");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemoryAdvise");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAdvise.advice);
+			msgpack_encode_int(buf, args->advice);
 
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAdvise.device);
+			msgpack_encode_int(buf, args->device);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAdvise.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxGetCacheConfig
-		case HIP_API_ID_hipCtxGetCacheConfig :
+		case HIP_API_ID_hipCtxGetCacheConfig : {
 			//	hipFuncCache_t * cacheConfig (enum hipFuncCache_t*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxGetCacheConfig_t* args = (args_hipCtxGetCacheConfig_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "cacheConfig");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFuncCache_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCtxGetCacheConfig.cacheConfig);
+			msgpack_encode_uint(buf, (uintptr_t)args->cacheConfig);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxGetCacheConfig.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvPointerGetAttributes
-		case HIP_API_ID_hipDrvPointerGetAttributes :
+		case HIP_API_ID_hipDrvPointerGetAttributes : {
 			//	unsigned int numAttributes (unsigned int);
 			//	hipPointer_attribute * attributes (enum hipPointer_attribute*);
 			//	void ** data (void **);
 			//	hipDeviceptr_t ptr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDrvPointerGetAttributes_t* args = (args_hipDrvPointerGetAttributes_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "numAttributes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDrvPointerGetAttributes.numAttributes);
+			msgpack_encode_int(buf, args->numAttributes);
 
 			msgpack_encode_string_ext(buf, "attributes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipPointer_attribute *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvPointerGetAttributes.attributes);
+			msgpack_encode_uint(buf, (uintptr_t)args->attributes);
 
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvPointerGetAttributes.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvPointerGetAttributes.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDrvPointerGetAttributes.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleLaunchCooperativeKernelMultiDevice
-		case HIP_API_ID_hipModuleLaunchCooperativeKernelMultiDevice :
+		case HIP_API_ID_hipModuleLaunchCooperativeKernelMultiDevice : {
 			//	hipFunctionLaunchParams * launchParamsList (struct hipFunctionLaunchParams_t*);
 			//	unsigned int numDevices (unsigned int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipModuleLaunchCooperativeKernelMultiDevice_t* args = (args_hipModuleLaunchCooperativeKernelMultiDevice_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "launchParamsList");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFunctionLaunchParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLaunchCooperativeKernelMultiDevice.launchParamsList);
+			msgpack_encode_uint(buf, (uintptr_t)args->launchParamsList);
 
 			msgpack_encode_string_ext(buf, "numDevices");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchCooperativeKernelMultiDevice.numDevices);
+			msgpack_encode_int(buf, args->numDevices);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchCooperativeKernelMultiDevice.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchCooperativeKernelMultiDevice.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleGetGlobal
-		case HIP_API_ID_hipModuleGetGlobal :
+		case HIP_API_ID_hipModuleGetGlobal : {
 			//	hipDeviceptr_t * dptr (void **);
 			//	size_t * bytes (unsigned long*);
 			//	hipModule_t hmod (struct ihipModule_t *);
 			//	const char * name (const char *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipModuleGetGlobal_t* args = (args_hipModuleGetGlobal_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleGetGlobal.dptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dptr);
 
 			msgpack_encode_string_ext(buf, "bytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleGetGlobal.bytes);
+			msgpack_encode_uint(buf, (uintptr_t)args->bytes);
 
 			msgpack_encode_string_ext(buf, "hmod");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipModule_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleGetGlobal.hmod);
+			msgpack_encode_uint(buf, (uintptr_t)args->hmod);
 
 			msgpack_encode_string_ext(buf, "name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleGetGlobal.name);
+			msgpack_encode_uint(buf, (uintptr_t)args->name);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleGetGlobal.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphEventRecordNodeGetEvent
-		case HIP_API_ID_hipGraphEventRecordNodeGetEvent :
+		case HIP_API_ID_hipGraphEventRecordNodeGetEvent : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t * event_out (struct ihipEvent_t **);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphEventRecordNodeGetEvent_t* args = (args_hipGraphEventRecordNodeGetEvent_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphEventRecordNodeGetEvent.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "event_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphEventRecordNodeGetEvent.event_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->event_out);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphEventRecordNodeGetEvent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphInstantiate
-		case HIP_API_ID_hipGraphInstantiate :
+		case HIP_API_ID_hipGraphInstantiate : {
 			//	hipGraphExec_t * pGraphExec (struct hipGraphExec **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphNode_t * pErrorNode (struct hipGraphNode **);
 			//	char * pLogBuffer (char *);
 			//	size_t bufferSize (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphInstantiate_t* args = (args_hipGraphInstantiate_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "pGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphInstantiate.pGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphExec);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphInstantiate.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pErrorNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphInstantiate.pErrorNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pErrorNode);
 
 			msgpack_encode_string_ext(buf, "pLogBuffer");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphInstantiate.pLogBuffer);
+			msgpack_encode_uint(buf, (uintptr_t)args->pLogBuffer);
 
 			msgpack_encode_string_ext(buf, "bufferSize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphInstantiate.bufferSize);
+			msgpack_encode_int(buf, args->bufferSize);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphInstantiate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphRetainUserObject
-		case HIP_API_ID_hipGraphRetainUserObject :
+		case HIP_API_ID_hipGraphRetainUserObject : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipUserObject_t object (struct hipUserObject *);
 			//	unsigned int count (unsigned int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphRetainUserObject_t* args = (args_hipGraphRetainUserObject_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphRetainUserObject.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "object");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipUserObject_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphRetainUserObject.object);
+			msgpack_encode_uint(buf, (uintptr_t)args->object);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphRetainUserObject.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphRetainUserObject.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphRetainUserObject.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemAllocNodeGetParams
-		case HIP_API_ID_hipGraphMemAllocNodeGetParams :
+		case HIP_API_ID_hipGraphMemAllocNodeGetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipMemAllocNodeParams * pNodeParams (struct hipMemAllocNodeParams*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphMemAllocNodeGetParams_t* args = (args_hipGraphMemAllocNodeGetParams_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemAllocNodeGetParams.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemAllocNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemAllocNodeGetParams.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemAllocNodeGetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetCaptureInfo
-		case HIP_API_ID_hipStreamGetCaptureInfo :
+		case HIP_API_ID_hipStreamGetCaptureInfo : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
 			//	unsigned long long * pId (unsigned long long *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamGetCaptureInfo_t* args = (args_hipStreamGetCaptureInfo_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "pCaptureStatus");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStreamCaptureStatus *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo.pCaptureStatus);
+			msgpack_encode_uint(buf, (uintptr_t)args->pCaptureStatus);
 
 			msgpack_encode_string_ext(buf, "pId");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned long long *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo.pId);
+			msgpack_encode_uint(buf, (uintptr_t)args->pId);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamGetCaptureInfo.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxPopCurrent
-		case HIP_API_ID_hipCtxPopCurrent :
+		case HIP_API_ID_hipCtxPopCurrent : {
 			//	hipCtx_t * ctx (struct ihipCtx_t **);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxPopCurrent_t* args = (args_hipCtxPopCurrent_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "ctx");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipCtx_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCtxPopCurrent.ctx);
+			msgpack_encode_uint(buf, (uintptr_t)args->ctx);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxPopCurrent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipPointerGetAttributes
-		case HIP_API_ID_hipPointerGetAttributes :
+		case HIP_API_ID_hipPointerGetAttributes : {
 			//	hipPointerAttribute_t * attributes (struct hipPointerAttribute_t*);
 			//	const void * ptr (const void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipPointerGetAttributes_t* args = (args_hipPointerGetAttributes_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "attributes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipPointerAttribute_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipPointerGetAttributes.attributes);
+			msgpack_encode_uint(buf, (uintptr_t)args->attributes);
 
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipPointerGetAttributes.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipPointerGetAttributes.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceDisablePeerAccess
-		case HIP_API_ID_hipDeviceDisablePeerAccess :
+		case HIP_API_ID_hipDeviceDisablePeerAccess : {
 			//	int peerDeviceId (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceDisablePeerAccess_t* args = (args_hipDeviceDisablePeerAccess_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "peerDeviceId");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceDisablePeerAccess.peerDeviceId);
+			msgpack_encode_int(buf, args->peerDeviceId);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceDisablePeerAccess.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMallocPitch
-		case HIP_API_ID_hipMallocPitch :
+		case HIP_API_ID_hipMallocPitch : {
 			//	void ** ptr (void **);
 			//	size_t * pitch (unsigned long*);
 			//	size_t width (unsigned long);
 			//	size_t height (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMallocPitch_t* args = (args_hipMallocPitch_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMallocPitch.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMallocPitch.pitch);
+			msgpack_encode_uint(buf, (uintptr_t)args->pitch);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocPitch.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocPitch.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocPitch.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DFromArrayAsync
-		case HIP_API_ID_hipMemcpy2DFromArrayAsync :
+		case HIP_API_ID_hipMemcpy2DFromArrayAsync : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	hipArray_const_t src (const struct hipArray *);
@@ -7476,596 +7850,628 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy2DFromArrayAsync_t* args = (args_hipMemcpy2DFromArrayAsync_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DFromArrayAsync.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "dpitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArrayAsync.dpitch);
+			msgpack_encode_int(buf, args->dpitch);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_const_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DFromArrayAsync.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "wOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArrayAsync.wOffset);
+			msgpack_encode_int(buf, args->wOffset);
 
 			msgpack_encode_string_ext(buf, "hOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArrayAsync.hOffset);
+			msgpack_encode_int(buf, args->hOffset);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArrayAsync.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArrayAsync.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArrayAsync.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DFromArrayAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArrayAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceComputeCapability
-		case HIP_API_ID_hipDeviceComputeCapability :
+		case HIP_API_ID_hipDeviceComputeCapability : {
 			//	int * major (int *);
 			//	int * minor (int *);
 			//	hipDevice_t device (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceComputeCapability_t* args = (args_hipDeviceComputeCapability_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "major");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceComputeCapability.major);
+			msgpack_encode_uint(buf, (uintptr_t)args->major);
 
 			msgpack_encode_string_ext(buf, "minor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceComputeCapability.minor);
+			msgpack_encode_uint(buf, (uintptr_t)args->minor);
 
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDevice_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceComputeCapability.device);
+			msgpack_encode_int(buf, args->device);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceComputeCapability.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyHtoD
-		case HIP_API_ID_hipMemcpyHtoD :
+		case HIP_API_ID_hipMemcpyHtoD : {
 			//	hipDeviceptr_t dst (void *);
 			//	void * src (void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyHtoD_t* args = (args_hipMemcpyHtoD_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyHtoD.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyHtoD.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyHtoD.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyHtoD.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipOccupancyMaxActiveBlocksPerMultiprocessor
-		case HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessor :
+		case HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessor : {
 			//	int * numBlocks (int *);
 			//	const void * f (const void *);
 			//	int blockSize (int);
 			//	size_t dynSharedMemPerBlk (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipOccupancyMaxActiveBlocksPerMultiprocessor_t* args = (args_hipOccupancyMaxActiveBlocksPerMultiprocessor_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "numBlocks");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipOccupancyMaxActiveBlocksPerMultiprocessor.numBlocks);
+			msgpack_encode_uint(buf, (uintptr_t)args->numBlocks);
 
 			msgpack_encode_string_ext(buf, "f");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipOccupancyMaxActiveBlocksPerMultiprocessor.f);
+			msgpack_encode_uint(buf, (uintptr_t)args->f);
 
 			msgpack_encode_string_ext(buf, "blockSize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipOccupancyMaxActiveBlocksPerMultiprocessor.blockSize);
+			msgpack_encode_int(buf, args->blockSize);
 
 			msgpack_encode_string_ext(buf, "dynSharedMemPerBlk");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipOccupancyMaxActiveBlocksPerMultiprocessor.dynSharedMemPerBlk);
+			msgpack_encode_int(buf, args->dynSharedMemPerBlk);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipOccupancyMaxActiveBlocksPerMultiprocessor.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipSignalExternalSemaphoresAsync
-		case HIP_API_ID_hipSignalExternalSemaphoresAsync :
+		case HIP_API_ID_hipSignalExternalSemaphoresAsync : {
 			//	const hipExternalSemaphore_t * extSemArray (const void * *);
 			//	const hipExternalSemaphoreSignalParams * paramsArray (const struct hipExternalSemaphoreSignalParams_st *);
 			//	unsigned int numExtSems (unsigned int);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipSignalExternalSemaphoresAsync_t* args = (args_hipSignalExternalSemaphoresAsync_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "extSemArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipExternalSemaphore_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipSignalExternalSemaphoresAsync.extSemArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->extSemArray);
 
 			msgpack_encode_string_ext(buf, "paramsArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipExternalSemaphoreSignalParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipSignalExternalSemaphoresAsync.paramsArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->paramsArray);
 
 			msgpack_encode_string_ext(buf, "numExtSems");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipSignalExternalSemaphoresAsync.numExtSems);
+			msgpack_encode_int(buf, args->numExtSems);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipSignalExternalSemaphoresAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipSignalExternalSemaphoresAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipArray3DGetDescriptor
-		case HIP_API_ID_hipArray3DGetDescriptor :
+		case HIP_API_ID_hipArray3DGetDescriptor : {
 			//	HIP_ARRAY3D_DESCRIPTOR * pArrayDescriptor (struct HIP_ARRAY3D_DESCRIPTOR*);
 			//	hipArray_t array (struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipArray3DGetDescriptor_t* args = (args_hipArray3DGetDescriptor_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pArrayDescriptor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "HIP_ARRAY3D_DESCRIPTOR *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipArray3DGetDescriptor.pArrayDescriptor);
+			msgpack_encode_uint(buf, (uintptr_t)args->pArrayDescriptor);
 
 			msgpack_encode_string_ext(buf, "array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipArray3DGetDescriptor.array);
+			msgpack_encode_uint(buf, (uintptr_t)args->array);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipArray3DGetDescriptor.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE___hipPopCallConfiguration
-		case HIP_API_ID___hipPopCallConfiguration :
+		case HIP_API_ID___hipPopCallConfiguration : {
 			//	dim3 * gridDim (struct dim3*);
 			//	dim3 * blockDim (struct dim3*);
 			//	size_t * sharedMem (unsigned long*);
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	hipError_t retval (enum hipError_t);
+			args___hipPopCallConfiguration_t* args = (args___hipPopCallConfiguration_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "gridDim");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "dim3 *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->__hipPopCallConfiguration.gridDim);
+			msgpack_encode_uint(buf, (uintptr_t)args->gridDim);
 
 			msgpack_encode_string_ext(buf, "blockDim");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "dim3 *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->__hipPopCallConfiguration.blockDim);
+			msgpack_encode_uint(buf, (uintptr_t)args->blockDim);
 
 			msgpack_encode_string_ext(buf, "sharedMem");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->__hipPopCallConfiguration.sharedMem);
+			msgpack_encode_uint(buf, (uintptr_t)args->sharedMem);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->__hipPopCallConfiguration.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->__hipPopCallConfiguration.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDevicePrimaryCtxRelease
-		case HIP_API_ID_hipDevicePrimaryCtxRelease :
+		case HIP_API_ID_hipDevicePrimaryCtxRelease : {
 			//	hipDevice_t dev (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDevicePrimaryCtxRelease_t* args = (args_hipDevicePrimaryCtxRelease_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "dev");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDevice_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDevicePrimaryCtxRelease.dev);
+			msgpack_encode_int(buf, args->dev);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDevicePrimaryCtxRelease.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchCooperativeKernelMultiDevice
-		case HIP_API_ID_hipLaunchCooperativeKernelMultiDevice :
+		case HIP_API_ID_hipLaunchCooperativeKernelMultiDevice : {
 			//	hipLaunchParams * launchParamsList (struct hipLaunchParams_t*);
 			//	int numDevices (int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipLaunchCooperativeKernelMultiDevice_t* args = (args_hipLaunchCooperativeKernelMultiDevice_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "launchParamsList");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipLaunchParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchCooperativeKernelMultiDevice.launchParamsList);
+			msgpack_encode_uint(buf, (uintptr_t)args->launchParamsList);
 
 			msgpack_encode_string_ext(buf, "numDevices");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernelMultiDevice.numDevices);
+			msgpack_encode_int(buf, args->numDevices);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernelMultiDevice.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernelMultiDevice.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFreeArray
-		case HIP_API_ID_hipFreeArray :
+		case HIP_API_ID_hipFreeArray : {
 			//	hipArray_t array (struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipFreeArray_t* args = (args_hipFreeArray_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipFreeArray.array);
+			msgpack_encode_uint(buf, (uintptr_t)args->array);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipFreeArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemsetNodeSetParams
-		case HIP_API_ID_hipGraphMemsetNodeSetParams :
+		case HIP_API_ID_hipGraphMemsetNodeSetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipMemsetParams * pNodeParams (const struct hipMemsetParams *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphMemsetNodeSetParams_t* args = (args_hipGraphMemsetNodeSetParams_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemsetNodeSetParams.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipMemsetParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemsetNodeSetParams.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemsetNodeSetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolSetAccess
-		case HIP_API_ID_hipMemPoolSetAccess :
+		case HIP_API_ID_hipMemPoolSetAccess : {
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	const hipMemAccessDesc * desc_list (const struct hipMemAccessDesc *);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemPoolSetAccess_t* args = (args_hipMemPoolSetAccess_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "mem_pool");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPool_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolSetAccess.mem_pool);
+			msgpack_encode_uint(buf, (uintptr_t)args->mem_pool);
 
 			msgpack_encode_string_ext(buf, "desc_list");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipMemAccessDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolSetAccess.desc_list);
+			msgpack_encode_uint(buf, (uintptr_t)args->desc_list);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolSetAccess.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolSetAccess.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetStreamDeviceId
-		case HIP_API_ID_hipGetStreamDeviceId :
+		case HIP_API_ID_hipGetStreamDeviceId : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	int retval (int);
+			args_hipGetStreamDeviceId_t* args = (args_hipGetStreamDeviceId_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetStreamDeviceId.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetStreamDeviceId.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExtStreamCreateWithCUMask
-		case HIP_API_ID_hipExtStreamCreateWithCUMask :
+		case HIP_API_ID_hipExtStreamCreateWithCUMask : {
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	uint32_t cuMaskSize (unsigned int);
 			//	const uint32_t * cuMask (const unsigned int *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipExtStreamCreateWithCUMask_t* args = (args_hipExtStreamCreateWithCUMask_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExtStreamCreateWithCUMask.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "cuMaskSize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtStreamCreateWithCUMask.cuMaskSize);
+			msgpack_encode_int(buf, args->cuMaskSize);
 
 			msgpack_encode_string_ext(buf, "cuMask");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const uint32_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExtStreamCreateWithCUMask.cuMask);
+			msgpack_encode_uint(buf, (uintptr_t)args->cuMask);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtStreamCreateWithCUMask.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetTextureObjectTextureDesc
-		case HIP_API_ID_hipGetTextureObjectTextureDesc :
+		case HIP_API_ID_hipGetTextureObjectTextureDesc : {
 			//	hipTextureDesc * pTexDesc (struct hipTextureDesc*);
 			//	hipTextureObject_t textureObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetTextureObjectTextureDesc_t* args = (args_hipGetTextureObjectTextureDesc_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pTexDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipTextureDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetTextureObjectTextureDesc.pTexDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->pTexDesc);
 
 			msgpack_encode_string_ext(buf, "textureObject");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipTextureObject_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetTextureObjectTextureDesc.textureObject);
+			msgpack_encode_uint(buf, (uintptr_t)args->textureObject);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetTextureObjectTextureDesc.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventRecord_spt
-		case HIP_API_ID_hipEventRecord_spt :
+		case HIP_API_ID_hipEventRecord_spt : {
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipEventRecord_spt_t* args = (args_hipEventRecord_spt_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipEventRecord_spt.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipEventRecord_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipEventRecord_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipConfigureCall
-		case HIP_API_ID_hipConfigureCall :
+		case HIP_API_ID_hipConfigureCall : {
 			//	dim3 gridDim ({
 			//		uint32_t x (unsigned int);
 			//		uint32_t y (unsigned int);
@@ -8079,6 +8485,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t sharedMem (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipConfigureCall_t* args = (args_hipConfigureCall_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "gridDim");
 			msgpack_encode_map(buf, 2);
@@ -8092,21 +8499,21 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipConfigureCall.gridDim.x);
+			msgpack_encode_int(buf, args->gridDim.x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipConfigureCall.gridDim.y);
+			msgpack_encode_int(buf, args->gridDim.y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipConfigureCall.gridDim.z);
+			msgpack_encode_int(buf, args->gridDim.z);
 
 			msgpack_encode_string_ext(buf, "blockDim");
 			msgpack_encode_map(buf, 2);
@@ -8120,48 +8527,49 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipConfigureCall.blockDim.x);
+			msgpack_encode_int(buf, args->blockDim.x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipConfigureCall.blockDim.y);
+			msgpack_encode_int(buf, args->blockDim.y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipConfigureCall.blockDim.z);
+			msgpack_encode_int(buf, args->blockDim.z);
 
 			msgpack_encode_string_ext(buf, "sharedMem");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipConfigureCall.sharedMem);
+			msgpack_encode_int(buf, args->sharedMem);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipConfigureCall.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipConfigureCall.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyFromArray_spt
-		case HIP_API_ID_hipMemcpyFromArray_spt :
+		case HIP_API_ID_hipMemcpyFromArray_spt : {
 			//	void * dst (void *);
 			//	hipArray_const_t src (const struct hipArray *);
 			//	size_t wOffsetSrc (unsigned long);
@@ -8169,189 +8577,199 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t count (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyFromArray_spt_t* args = (args_hipMemcpyFromArray_spt_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyFromArray_spt.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_const_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyFromArray_spt.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "wOffsetSrc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromArray_spt.wOffsetSrc);
+			msgpack_encode_int(buf, args->wOffsetSrc);
 
 			msgpack_encode_string_ext(buf, "hOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromArray_spt.hOffset);
+			msgpack_encode_int(buf, args->hOffset);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromArray_spt.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromArray_spt.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromArray_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleGetFunction
-		case HIP_API_ID_hipModuleGetFunction :
+		case HIP_API_ID_hipModuleGetFunction : {
 			//	hipFunction_t * function (struct ihipModuleSymbol_t **);
 			//	hipModule_t module (struct ihipModule_t *);
 			//	const char * kname (const char *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipModuleGetFunction_t* args = (args_hipModuleGetFunction_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "function");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFunction_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleGetFunction.function);
+			msgpack_encode_uint(buf, (uintptr_t)args->function);
 
 			msgpack_encode_string_ext(buf, "module");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipModule_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleGetFunction.module);
+			msgpack_encode_uint(buf, (uintptr_t)args->module);
 
 			msgpack_encode_string_ext(buf, "kname");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleGetFunction.kname);
+			msgpack_encode_uint(buf, (uintptr_t)args->kname);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleGetFunction.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFuncSetCacheConfig
-		case HIP_API_ID_hipFuncSetCacheConfig :
+		case HIP_API_ID_hipFuncSetCacheConfig : {
 			//	const void * func (const void *);
 			//	hipFuncCache_t config (enum hipFuncCache_t);
 			//	hipError_t retval (enum hipError_t);
+			args_hipFuncSetCacheConfig_t* args = (args_hipFuncSetCacheConfig_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "func");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipFuncSetCacheConfig.func);
+			msgpack_encode_uint(buf, (uintptr_t)args->func);
 
 			msgpack_encode_string_ext(buf, "config");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFuncCache_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipFuncSetCacheConfig.config);
+			msgpack_encode_int(buf, args->config);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipFuncSetCacheConfig.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetLimit
-		case HIP_API_ID_hipDeviceGetLimit :
+		case HIP_API_ID_hipDeviceGetLimit : {
 			//	size_t * pValue (unsigned long*);
 			//	enum hipLimit_t limit (enum hipLimit_t);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceGetLimit_t* args = (args_hipDeviceGetLimit_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pValue");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGetLimit.pValue);
+			msgpack_encode_uint(buf, (uintptr_t)args->pValue);
 
 			msgpack_encode_string_ext(buf, "limit");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "enum hipLimit_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetLimit.limit);
+			msgpack_encode_int(buf, args->limit);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetLimit.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetMaxAnisotropy
-		case HIP_API_ID_hipTexRefGetMaxAnisotropy :
+		case HIP_API_ID_hipTexRefGetMaxAnisotropy : {
 			//	int * pmaxAnsio (int *);
 			//	const textureReference * texRef (const struct textureReference *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefGetMaxAnisotropy_t* args = (args_hipTexRefGetMaxAnisotropy_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pmaxAnsio");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetMaxAnisotropy.pmaxAnsio);
+			msgpack_encode_uint(buf, (uintptr_t)args->pmaxAnsio);
 
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetMaxAnisotropy.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefGetMaxAnisotropy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchKernel_spt
-		case HIP_API_ID_hipLaunchKernel_spt :
+		case HIP_API_ID_hipLaunchKernel_spt : {
 			//	const void * function_address (const void *);
 			//	dim3 numBlocks ({
 			//		uint32_t x (unsigned int);
@@ -8367,13 +8785,14 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t sharedMemBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipLaunchKernel_spt_t* args = (args_hipLaunchKernel_spt_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "function_address");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchKernel_spt.function_address);
+			msgpack_encode_uint(buf, (uintptr_t)args->function_address);
 
 			msgpack_encode_string_ext(buf, "numBlocks");
 			msgpack_encode_map(buf, 2);
@@ -8387,21 +8806,21 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel_spt.numBlocks.x);
+			msgpack_encode_int(buf, args->numBlocks.x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel_spt.numBlocks.y);
+			msgpack_encode_int(buf, args->numBlocks.y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel_spt.numBlocks.z);
+			msgpack_encode_int(buf, args->numBlocks.z);
 
 			msgpack_encode_string_ext(buf, "dimBlocks");
 			msgpack_encode_map(buf, 2);
@@ -8415,55 +8834,56 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel_spt.dimBlocks.x);
+			msgpack_encode_int(buf, args->dimBlocks.x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel_spt.dimBlocks.y);
+			msgpack_encode_int(buf, args->dimBlocks.y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel_spt.dimBlocks.z);
+			msgpack_encode_int(buf, args->dimBlocks.z);
 
 			msgpack_encode_string_ext(buf, "args");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchKernel_spt.args);
+			msgpack_encode_uint(buf, (uintptr_t)args->args);
 
 			msgpack_encode_string_ext(buf, "sharedMemBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel_spt.sharedMemBytes);
+			msgpack_encode_int(buf, args->sharedMemBytes);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchKernel_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchKernel_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamBeginCaptureToGraph
-		case HIP_API_ID_hipStreamBeginCaptureToGraph :
+		case HIP_API_ID_hipStreamBeginCaptureToGraph : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * dependencies (const struct hipGraphNode * *);
@@ -8471,351 +8891,367 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t numDependencies (unsigned long);
 			//	hipStreamCaptureMode mode (enum hipStreamCaptureMode);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamBeginCaptureToGraph_t* args = (args_hipStreamBeginCaptureToGraph_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamBeginCaptureToGraph.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamBeginCaptureToGraph.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "dependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamBeginCaptureToGraph.dependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->dependencies);
 
 			msgpack_encode_string_ext(buf, "dependencyData");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphEdgeData *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamBeginCaptureToGraph.dependencyData);
+			msgpack_encode_uint(buf, (uintptr_t)args->dependencyData);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamBeginCaptureToGraph.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "mode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStreamCaptureMode");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamBeginCaptureToGraph.mode);
+			msgpack_encode_int(buf, args->mode);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamBeginCaptureToGraph.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetFormat
-		case HIP_API_ID_hipTexRefGetFormat :
+		case HIP_API_ID_hipTexRefGetFormat : {
 			//	hipArray_Format * pFormat (enum hipArray_Format*);
 			//	int * pNumChannels (int *);
 			//	const textureReference * texRef (const struct textureReference *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefGetFormat_t* args = (args_hipTexRefGetFormat_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "pFormat");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_Format *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetFormat.pFormat);
+			msgpack_encode_uint(buf, (uintptr_t)args->pFormat);
 
 			msgpack_encode_string_ext(buf, "pNumChannels");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetFormat.pNumChannels);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNumChannels);
 
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetFormat.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefGetFormat.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamWaitValue64
-		case HIP_API_ID_hipStreamWaitValue64 :
+		case HIP_API_ID_hipStreamWaitValue64 : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
 			//	uint64_t value (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	uint64_t mask (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamWaitValue64_t* args = (args_hipStreamWaitValue64_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamWaitValue64.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamWaitValue64.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWaitValue64.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWaitValue64.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "mask");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWaitValue64.mask);
+			msgpack_encode_int(buf, args->mask);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWaitValue64.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDevicePrimaryCtxRetain
-		case HIP_API_ID_hipDevicePrimaryCtxRetain :
+		case HIP_API_ID_hipDevicePrimaryCtxRetain : {
 			//	hipCtx_t * pctx (struct ihipCtx_t **);
 			//	hipDevice_t dev (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDevicePrimaryCtxRetain_t* args = (args_hipDevicePrimaryCtxRetain_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pctx");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipCtx_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDevicePrimaryCtxRetain.pctx);
+			msgpack_encode_uint(buf, (uintptr_t)args->pctx);
 
 			msgpack_encode_string_ext(buf, "dev");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDevice_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDevicePrimaryCtxRetain.dev);
+			msgpack_encode_int(buf, args->dev);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDevicePrimaryCtxRetain.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMallocManaged
-		case HIP_API_ID_hipMallocManaged :
+		case HIP_API_ID_hipMallocManaged : {
 			//	void ** dev_ptr (void **);
 			//	size_t size (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMallocManaged_t* args = (args_hipMallocManaged_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "dev_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMallocManaged.dev_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dev_ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocManaged.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocManaged.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocManaged.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamCreateWithPriority
-		case HIP_API_ID_hipStreamCreateWithPriority :
+		case HIP_API_ID_hipStreamCreateWithPriority : {
 			//	hipStream_t * stream (struct ihipStream_t **);
 			//	unsigned int flags (unsigned int);
 			//	int priority (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamCreateWithPriority_t* args = (args_hipStreamCreateWithPriority_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamCreateWithPriority.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamCreateWithPriority.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "priority");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamCreateWithPriority.priority);
+			msgpack_encode_int(buf, args->priority);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamCreateWithPriority.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetCaptureInfo_spt
-		case HIP_API_ID_hipStreamGetCaptureInfo_spt :
+		case HIP_API_ID_hipStreamGetCaptureInfo_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
 			//	unsigned long long * pId (unsigned long long *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamGetCaptureInfo_spt_t* args = (args_hipStreamGetCaptureInfo_spt_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "pCaptureStatus");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStreamCaptureStatus *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo_spt.pCaptureStatus);
+			msgpack_encode_uint(buf, (uintptr_t)args->pCaptureStatus);
 
 			msgpack_encode_string_ext(buf, "pId");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned long long *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo_spt.pId);
+			msgpack_encode_uint(buf, (uintptr_t)args->pId);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamGetCaptureInfo_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddHostNode
-		case HIP_API_ID_hipGraphAddHostNode :
+		case HIP_API_ID_hipGraphAddHostNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	const hipHostNodeParams * pNodeParams (const struct hipHostNodeParams *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddHostNode_t* args = (args_hipGraphAddHostNode_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddHostNode.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddHostNode.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddHostNode.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddHostNode.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipHostNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddHostNode.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddHostNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchCooperativeKernel
-		case HIP_API_ID_hipLaunchCooperativeKernel :
+		case HIP_API_ID_hipLaunchCooperativeKernel : {
 			//	const void * f (const void *);
 			//	dim3 gridDim ({
 			//		uint32_t x (unsigned int);
@@ -8831,13 +9267,14 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	unsigned int sharedMemBytes (unsigned int);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipLaunchCooperativeKernel_t* args = (args_hipLaunchCooperativeKernel_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "f");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchCooperativeKernel.f);
+			msgpack_encode_uint(buf, (uintptr_t)args->f);
 
 			msgpack_encode_string_ext(buf, "gridDim");
 			msgpack_encode_map(buf, 2);
@@ -8851,21 +9288,21 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel.gridDim.x);
+			msgpack_encode_int(buf, args->gridDim.x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel.gridDim.y);
+			msgpack_encode_int(buf, args->gridDim.y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel.gridDim.z);
+			msgpack_encode_int(buf, args->gridDim.z);
 
 			msgpack_encode_string_ext(buf, "blockDimX");
 			msgpack_encode_map(buf, 2);
@@ -8879,551 +9316,584 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel.blockDimX.x);
+			msgpack_encode_int(buf, args->blockDimX.x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel.blockDimX.y);
+			msgpack_encode_int(buf, args->blockDimX.y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel.blockDimX.z);
+			msgpack_encode_int(buf, args->blockDimX.z);
 
 			msgpack_encode_string_ext(buf, "kernelParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchCooperativeKernel.kernelParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->kernelParams);
 
 			msgpack_encode_string_ext(buf, "sharedMemBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel.sharedMemBytes);
+			msgpack_encode_int(buf, args->sharedMemBytes);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchCooperativeKernel.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipHostRegister
-		case HIP_API_ID_hipHostRegister :
+		case HIP_API_ID_hipHostRegister : {
 			//	void * hostPtr (void *);
 			//	size_t sizeBytes (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipHostRegister_t* args = (args_hipHostRegister_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "hostPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipHostRegister.hostPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->hostPtr);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipHostRegister.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipHostRegister.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipHostRegister.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetErrorName
-		case HIP_API_ID_hipGetErrorName :
+		case HIP_API_ID_hipGetErrorName : {
 			//	hipError_t hip_error (enum hipError_t);
 			//	const char * retval (const char *);
+			args_hipGetErrorName_t* args = (args_hipGetErrorName_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "hip_error");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetErrorName.hip_error);
+			msgpack_encode_int(buf, args->hip_error);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetErrorName.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyToSymbol_spt
-		case HIP_API_ID_hipMemcpyToSymbol_spt :
+		case HIP_API_ID_hipMemcpyToSymbol_spt : {
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyToSymbol_spt_t* args = (args_hipMemcpyToSymbol_spt_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyToSymbol_spt.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyToSymbol_spt.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbol_spt.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbol_spt.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbol_spt.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbol_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemsetNodeGetParams
-		case HIP_API_ID_hipGraphMemsetNodeGetParams :
+		case HIP_API_ID_hipGraphMemsetNodeGetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipMemsetParams * pNodeParams (struct hipMemsetParams*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphMemsetNodeGetParams_t* args = (args_hipGraphMemsetNodeGetParams_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemsetNodeGetParams.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemsetParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemsetNodeGetParams.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemsetNodeGetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamWriteValue32
-		case HIP_API_ID_hipStreamWriteValue32 :
+		case HIP_API_ID_hipStreamWriteValue32 : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
 			//	uint32_t value (unsigned int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamWriteValue32_t* args = (args_hipStreamWriteValue32_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamWriteValue32.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamWriteValue32.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWriteValue32.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWriteValue32.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWriteValue32.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamSynchronize_spt
-		case HIP_API_ID_hipStreamSynchronize_spt :
+		case HIP_API_ID_hipStreamSynchronize_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamSynchronize_spt_t* args = (args_hipStreamSynchronize_spt_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamSynchronize_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamSynchronize_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGraphMemTrim
-		case HIP_API_ID_hipDeviceGraphMemTrim :
+		case HIP_API_ID_hipDeviceGraphMemTrim : {
 			//	int device (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceGraphMemTrim_t* args = (args_hipDeviceGraphMemTrim_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGraphMemTrim.device);
+			msgpack_encode_int(buf, args->device);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGraphMemTrim.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamDestroy
-		case HIP_API_ID_hipStreamDestroy :
+		case HIP_API_ID_hipStreamDestroy : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamDestroy_t* args = (args_hipStreamDestroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamDestroy.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamDestroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetArray
-		case HIP_API_ID_hipTexRefSetArray :
+		case HIP_API_ID_hipTexRefSetArray : {
 			//	textureReference * tex (struct textureReference*);
 			//	hipArray_const_t array (const struct hipArray *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefSetArray_t* args = (args_hipTexRefSetArray_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "tex");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetArray.tex);
+			msgpack_encode_uint(buf, (uintptr_t)args->tex);
 
 			msgpack_encode_string_ext(buf, "array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_const_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetArray.array);
+			msgpack_encode_uint(buf, (uintptr_t)args->array);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetArray.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyParam2DAsync
-		case HIP_API_ID_hipMemcpyParam2DAsync :
+		case HIP_API_ID_hipMemcpyParam2DAsync : {
 			//	const hip_Memcpy2D * pCopy (const struct hip_Memcpy2D *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyParam2DAsync_t* args = (args_hipMemcpyParam2DAsync_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pCopy");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hip_Memcpy2D *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyParam2DAsync.pCopy);
+			msgpack_encode_uint(buf, (uintptr_t)args->pCopy);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyParam2DAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyParam2DAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolExportPointer
-		case HIP_API_ID_hipMemPoolExportPointer :
+		case HIP_API_ID_hipMemPoolExportPointer : {
 			//	hipMemPoolPtrExportData * export_data (struct hipMemPoolPtrExportData*);
 			//	void * dev_ptr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemPoolExportPointer_t* args = (args_hipMemPoolExportPointer_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "export_data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPoolPtrExportData *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolExportPointer.export_data);
+			msgpack_encode_uint(buf, (uintptr_t)args->export_data);
 
 			msgpack_encode_string_ext(buf, "dev_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolExportPointer.dev_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dev_ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolExportPointer.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphEventRecordNodeSetEvent
-		case HIP_API_ID_hipGraphEventRecordNodeSetEvent :
+		case HIP_API_ID_hipGraphEventRecordNodeSetEvent : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphEventRecordNodeSetEvent_t* args = (args_hipGraphEventRecordNodeSetEvent_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphEventRecordNodeSetEvent.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphEventRecordNodeSetEvent.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphEventRecordNodeSetEvent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxDestroy
-		case HIP_API_ID_hipCtxDestroy :
+		case HIP_API_ID_hipCtxDestroy : {
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxDestroy_t* args = (args_hipCtxDestroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "ctx");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipCtx_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCtxDestroy.ctx);
+			msgpack_encode_uint(buf, (uintptr_t)args->ctx);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxDestroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipArrayDestroy
-		case HIP_API_ID_hipArrayDestroy :
+		case HIP_API_ID_hipArrayDestroy : {
 			//	hipArray_t array (struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipArrayDestroy_t* args = (args_hipArrayDestroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipArrayDestroy.array);
+			msgpack_encode_uint(buf, (uintptr_t)args->array);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipArrayDestroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemGetAllocationGranularity
-		case HIP_API_ID_hipMemGetAllocationGranularity :
+		case HIP_API_ID_hipMemGetAllocationGranularity : {
 			//	size_t * granularity (unsigned long*);
 			//	const hipMemAllocationProp * prop (const struct hipMemAllocationProp *);
 			//	hipMemAllocationGranularity_flags option (enum hipMemAllocationGranularity_flags);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemGetAllocationGranularity_t* args = (args_hipMemGetAllocationGranularity_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "granularity");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemGetAllocationGranularity.granularity);
+			msgpack_encode_uint(buf, (uintptr_t)args->granularity);
 
 			msgpack_encode_string_ext(buf, "prop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipMemAllocationProp *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemGetAllocationGranularity.prop);
+			msgpack_encode_uint(buf, (uintptr_t)args->prop);
 
 			msgpack_encode_string_ext(buf, "option");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemAllocationGranularity_flags");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemGetAllocationGranularity.option);
+			msgpack_encode_int(buf, args->option);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemGetAllocationGranularity.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphClone
-		case HIP_API_ID_hipGraphClone :
+		case HIP_API_ID_hipGraphClone : {
 			//	hipGraph_t * pGraphClone (struct ihipGraph **);
 			//	hipGraph_t originalGraph (struct ihipGraph *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphClone_t* args = (args_hipGraphClone_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pGraphClone");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphClone.pGraphClone);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphClone);
 
 			msgpack_encode_string_ext(buf, "originalGraph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphClone.originalGraph);
+			msgpack_encode_uint(buf, (uintptr_t)args->originalGraph);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphClone.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset2DAsync_spt
-		case HIP_API_ID_hipMemset2DAsync_spt :
+		case HIP_API_ID_hipMemset2DAsync_spt : {
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
 			//	int value (int);
@@ -9431,61 +9901,63 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemset2DAsync_spt_t* args = (args_hipMemset2DAsync_spt_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemset2DAsync_spt.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2DAsync_spt.pitch);
+			msgpack_encode_int(buf, args->pitch);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2DAsync_spt.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2DAsync_spt.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2DAsync_spt.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemset2DAsync_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2DAsync_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipBindTexture2D
-		case HIP_API_ID_hipBindTexture2D :
+		case HIP_API_ID_hipBindTexture2D : {
 			//	size_t * offset (unsigned long*);
 			//	const textureReference * tex (const struct textureReference *);
 			//	const void * devPtr (const void *);
@@ -9494,424 +9966,446 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	size_t pitch (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipBindTexture2D_t* args = (args_hipBindTexture2D_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipBindTexture2D.offset);
+			msgpack_encode_uint(buf, (uintptr_t)args->offset);
 
 			msgpack_encode_string_ext(buf, "tex");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipBindTexture2D.tex);
+			msgpack_encode_uint(buf, (uintptr_t)args->tex);
 
 			msgpack_encode_string_ext(buf, "devPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipBindTexture2D.devPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->devPtr);
 
 			msgpack_encode_string_ext(buf, "desc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipChannelFormatDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipBindTexture2D.desc);
+			msgpack_encode_uint(buf, (uintptr_t)args->desc);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipBindTexture2D.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipBindTexture2D.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipBindTexture2D.pitch);
+			msgpack_encode_int(buf, args->pitch);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipBindTexture2D.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipArrayGetInfo
-		case HIP_API_ID_hipArrayGetInfo :
+		case HIP_API_ID_hipArrayGetInfo : {
 			//	hipChannelFormatDesc * desc (struct hipChannelFormatDesc*);
 			//	hipExtent * extent (struct hipExtent*);
 			//	unsigned int * flags (unsigned int *);
 			//	hipArray_t array (struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipArrayGetInfo_t* args = (args_hipArrayGetInfo_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "desc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipChannelFormatDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipArrayGetInfo.desc);
+			msgpack_encode_uint(buf, (uintptr_t)args->desc);
 
 			msgpack_encode_string_ext(buf, "extent");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipExtent *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipArrayGetInfo.extent);
+			msgpack_encode_uint(buf, (uintptr_t)args->extent);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipArrayGetInfo.flags);
+			msgpack_encode_uint(buf, (uintptr_t)args->flags);
 
 			msgpack_encode_string_ext(buf, "array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipArrayGetInfo.array);
+			msgpack_encode_uint(buf, (uintptr_t)args->array);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipArrayGetInfo.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExternalSemaphoresSignalNodeGetParams
-		case HIP_API_ID_hipGraphExternalSemaphoresSignalNodeGetParams :
+		case HIP_API_ID_hipGraphExternalSemaphoresSignalNodeGetParams : {
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipExternalSemaphoreSignalNodeParams * params_out (struct hipExternalSemaphoreSignalNodeParams*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExternalSemaphoresSignalNodeGetParams_t* args = (args_hipGraphExternalSemaphoresSignalNodeGetParams_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "hNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExternalSemaphoresSignalNodeGetParams.hNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->hNode);
 
 			msgpack_encode_string_ext(buf, "params_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipExternalSemaphoreSignalNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExternalSemaphoresSignalNodeGetParams.params_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->params_out);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExternalSemaphoresSignalNodeGetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetStreamPriorityRange
-		case HIP_API_ID_hipDeviceGetStreamPriorityRange :
+		case HIP_API_ID_hipDeviceGetStreamPriorityRange : {
 			//	int * leastPriority (int *);
 			//	int * greatestPriority (int *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceGetStreamPriorityRange_t* args = (args_hipDeviceGetStreamPriorityRange_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "leastPriority");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGetStreamPriorityRange.leastPriority);
+			msgpack_encode_uint(buf, (uintptr_t)args->leastPriority);
 
 			msgpack_encode_string_ext(buf, "greatestPriority");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGetStreamPriorityRange.greatestPriority);
+			msgpack_encode_uint(buf, (uintptr_t)args->greatestPriority);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetStreamPriorityRange.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecChildGraphNodeSetParams
-		case HIP_API_ID_hipGraphExecChildGraphNodeSetParams :
+		case HIP_API_ID_hipGraphExecChildGraphNodeSetParams : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraph_t childGraph (struct ihipGraph *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExecChildGraphNodeSetParams_t* args = (args_hipGraphExecChildGraphNodeSetParams_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "hGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecChildGraphNodeSetParams.hGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraphExec);
 
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecChildGraphNodeSetParams.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "childGraph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecChildGraphNodeSetParams.childGraph);
+			msgpack_encode_uint(buf, (uintptr_t)args->childGraph);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecChildGraphNodeSetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset2D_spt
-		case HIP_API_ID_hipMemset2D_spt :
+		case HIP_API_ID_hipMemset2D_spt : {
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
 			//	int value (int);
 			//	size_t width (unsigned long);
 			//	size_t height (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemset2D_spt_t* args = (args_hipMemset2D_spt_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemset2D_spt.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2D_spt.pitch);
+			msgpack_encode_int(buf, args->pitch);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2D_spt.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2D_spt.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2D_spt.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2D_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetDefaultMemPool
-		case HIP_API_ID_hipDeviceGetDefaultMemPool :
+		case HIP_API_ID_hipDeviceGetDefaultMemPool : {
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	int device (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceGetDefaultMemPool_t* args = (args_hipDeviceGetDefaultMemPool_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "mem_pool");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPool_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGetDefaultMemPool.mem_pool);
+			msgpack_encode_uint(buf, (uintptr_t)args->mem_pool);
 
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetDefaultMemPool.device);
+			msgpack_encode_int(buf, args->device);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetDefaultMemPool.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxCreate
-		case HIP_API_ID_hipCtxCreate :
+		case HIP_API_ID_hipCtxCreate : {
 			//	hipCtx_t * ctx (struct ihipCtx_t **);
 			//	unsigned int flags (unsigned int);
 			//	hipDevice_t device (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxCreate_t* args = (args_hipCtxCreate_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "ctx");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipCtx_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCtxCreate.ctx);
+			msgpack_encode_uint(buf, (uintptr_t)args->ctx);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxCreate.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDevice_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxCreate.device);
+			msgpack_encode_int(buf, args->device);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxCreate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamIsCapturing
-		case HIP_API_ID_hipStreamIsCapturing :
+		case HIP_API_ID_hipStreamIsCapturing : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamIsCapturing_t* args = (args_hipStreamIsCapturing_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamIsCapturing.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "pCaptureStatus");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStreamCaptureStatus *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamIsCapturing.pCaptureStatus);
+			msgpack_encode_uint(buf, (uintptr_t)args->pCaptureStatus);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamIsCapturing.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamUpdateCaptureDependencies
-		case HIP_API_ID_hipStreamUpdateCaptureDependencies :
+		case HIP_API_ID_hipStreamUpdateCaptureDependencies : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipGraphNode_t * dependencies (struct hipGraphNode **);
 			//	size_t numDependencies (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamUpdateCaptureDependencies_t* args = (args_hipStreamUpdateCaptureDependencies_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamUpdateCaptureDependencies.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "dependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamUpdateCaptureDependencies.dependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->dependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamUpdateCaptureDependencies.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamUpdateCaptureDependencies.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamUpdateCaptureDependencies.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceSynchronize
-		case HIP_API_ID_hipDeviceSynchronize :
+		case HIP_API_ID_hipDeviceSynchronize : {
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceSynchronize_t* args = (args_hipDeviceSynchronize_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceSynchronize.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyFromSymbolAsync
-		case HIP_API_ID_hipMemcpyFromSymbolAsync :
+		case HIP_API_ID_hipMemcpyFromSymbolAsync : {
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
 			//	size_t sizeBytes (unsigned long);
@@ -9919,357 +10413,375 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyFromSymbolAsync_t* args = (args_hipMemcpyFromSymbolAsync_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyFromSymbolAsync.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyFromSymbolAsync.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbolAsync.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbolAsync.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbolAsync.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyFromSymbolAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyFromSymbolAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphDestroyNode
-		case HIP_API_ID_hipGraphDestroyNode :
+		case HIP_API_ID_hipGraphDestroyNode : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphDestroyNode_t* args = (args_hipGraphDestroyNode_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphDestroyNode.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphDestroyNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipUserObjectRetain
-		case HIP_API_ID_hipUserObjectRetain :
+		case HIP_API_ID_hipUserObjectRetain : {
 			//	hipUserObject_t object (struct hipUserObject *);
 			//	unsigned int count (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipUserObjectRetain_t* args = (args_hipUserObjectRetain_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "object");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipUserObject_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipUserObjectRetain.object);
+			msgpack_encode_uint(buf, (uintptr_t)args->object);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipUserObjectRetain.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipUserObjectRetain.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecEventWaitNodeSetEvent
-		case HIP_API_ID_hipGraphExecEventWaitNodeSetEvent :
+		case HIP_API_ID_hipGraphExecEventWaitNodeSetEvent : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExecEventWaitNodeSetEvent_t* args = (args_hipGraphExecEventWaitNodeSetEvent_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "hGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecEventWaitNodeSetEvent.hGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraphExec);
 
 			msgpack_encode_string_ext(buf, "hNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecEventWaitNodeSetEvent.hNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->hNode);
 
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecEventWaitNodeSetEvent.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecEventWaitNodeSetEvent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemAddressReserve
-		case HIP_API_ID_hipMemAddressReserve :
+		case HIP_API_ID_hipMemAddressReserve : {
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
 			//	size_t alignment (unsigned long);
 			//	void * addr (void *);
 			//	unsigned long long flags (unsigned long long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemAddressReserve_t* args = (args_hipMemAddressReserve_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemAddressReserve.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAddressReserve.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "alignment");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAddressReserve.alignment);
+			msgpack_encode_int(buf, args->alignment);
 
 			msgpack_encode_string_ext(buf, "addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemAddressReserve.addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->addr);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned long long");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAddressReserve.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAddressReserve.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddMemsetNode
-		case HIP_API_ID_hipGraphAddMemsetNode :
+		case HIP_API_ID_hipGraphAddMemsetNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	const hipMemsetParams * pMemsetParams (const struct hipMemsetParams *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddMemsetNode_t* args = (args_hipGraphAddMemsetNode_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemsetNode.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemsetNode.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemsetNode.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemsetNode.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "pMemsetParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipMemsetParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemsetNode.pMemsetParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pMemsetParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemsetNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphicsResourceGetMappedPointer
-		case HIP_API_ID_hipGraphicsResourceGetMappedPointer :
+		case HIP_API_ID_hipGraphicsResourceGetMappedPointer : {
 			//	void ** devPtr (void **);
 			//	size_t * size (unsigned long*);
 			//	hipGraphicsResource_t resource (struct _hipGraphicsResource*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphicsResourceGetMappedPointer_t* args = (args_hipGraphicsResourceGetMappedPointer_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "devPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphicsResourceGetMappedPointer.devPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->devPtr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphicsResourceGetMappedPointer.size);
+			msgpack_encode_uint(buf, (uintptr_t)args->size);
 
 			msgpack_encode_string_ext(buf, "resource");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphicsResource_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphicsResourceGetMappedPointer.resource);
+			msgpack_encode_uint(buf, (uintptr_t)args->resource);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphicsResourceGetMappedPointer.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamBeginCapture_spt
-		case HIP_API_ID_hipStreamBeginCapture_spt :
+		case HIP_API_ID_hipStreamBeginCapture_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureMode mode (enum hipStreamCaptureMode);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamBeginCapture_spt_t* args = (args_hipStreamBeginCapture_spt_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamBeginCapture_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "mode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStreamCaptureMode");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamBeginCapture_spt.mode);
+			msgpack_encode_int(buf, args->mode);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamBeginCapture_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetUuid
-		case HIP_API_ID_hipDeviceGetUuid :
+		case HIP_API_ID_hipDeviceGetUuid : {
 			//	hipUUID * uuid (struct hipUUID_t*);
 			//	hipDevice_t device (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceGetUuid_t* args = (args_hipDeviceGetUuid_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "uuid");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipUUID *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGetUuid.uuid);
+			msgpack_encode_uint(buf, (uintptr_t)args->uuid);
 
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDevice_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetUuid.device);
+			msgpack_encode_int(buf, args->device);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetUuid.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleLaunchKernel
-		case HIP_API_ID_hipModuleLaunchKernel :
+		case HIP_API_ID_hipModuleLaunchKernel : {
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
 			//	unsigned int gridDimX (unsigned int);
 			//	unsigned int gridDimY (unsigned int);
@@ -10282,452 +10794,474 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	void ** kernelParams (void **);
 			//	void ** extra (void **);
 			//	hipError_t retval (enum hipError_t);
+			args_hipModuleLaunchKernel_t* args = (args_hipModuleLaunchKernel_t*) func_args;
 			msgpack_encode_map(buf, 12);
 			msgpack_encode_string_ext(buf, "f");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFunction_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLaunchKernel.f);
+			msgpack_encode_uint(buf, (uintptr_t)args->f);
 
 			msgpack_encode_string_ext(buf, "gridDimX");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchKernel.gridDimX);
+			msgpack_encode_int(buf, args->gridDimX);
 
 			msgpack_encode_string_ext(buf, "gridDimY");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchKernel.gridDimY);
+			msgpack_encode_int(buf, args->gridDimY);
 
 			msgpack_encode_string_ext(buf, "gridDimZ");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchKernel.gridDimZ);
+			msgpack_encode_int(buf, args->gridDimZ);
 
 			msgpack_encode_string_ext(buf, "blockDimX");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchKernel.blockDimX);
+			msgpack_encode_int(buf, args->blockDimX);
 
 			msgpack_encode_string_ext(buf, "blockDimY");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchKernel.blockDimY);
+			msgpack_encode_int(buf, args->blockDimY);
 
 			msgpack_encode_string_ext(buf, "blockDimZ");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchKernel.blockDimZ);
+			msgpack_encode_int(buf, args->blockDimZ);
 
 			msgpack_encode_string_ext(buf, "sharedMemBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchKernel.sharedMemBytes);
+			msgpack_encode_int(buf, args->sharedMemBytes);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLaunchKernel.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "kernelParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLaunchKernel.kernelParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->kernelParams);
 
 			msgpack_encode_string_ext(buf, "extra");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLaunchKernel.extra);
+			msgpack_encode_uint(buf, (uintptr_t)args->extra);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchKernel.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddEmptyNode
-		case HIP_API_ID_hipGraphAddEmptyNode :
+		case HIP_API_ID_hipGraphAddEmptyNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddEmptyNode_t* args = (args_hipGraphAddEmptyNode_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddEmptyNode.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddEmptyNode.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddEmptyNode.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddEmptyNode.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddEmptyNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemRangeGetAttribute
-		case HIP_API_ID_hipMemRangeGetAttribute :
+		case HIP_API_ID_hipMemRangeGetAttribute : {
 			//	void * data (void *);
 			//	size_t data_size (unsigned long);
 			//	hipMemRangeAttribute attribute (enum hipMemRangeAttribute);
 			//	const void * dev_ptr (const void *);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemRangeGetAttribute_t* args = (args_hipMemRangeGetAttribute_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemRangeGetAttribute.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "data_size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemRangeGetAttribute.data_size);
+			msgpack_encode_int(buf, args->data_size);
 
 			msgpack_encode_string_ext(buf, "attribute");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemRangeAttribute");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemRangeGetAttribute.attribute);
+			msgpack_encode_int(buf, args->attribute);
 
 			msgpack_encode_string_ext(buf, "dev_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemRangeGetAttribute.dev_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dev_ptr);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemRangeGetAttribute.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemRangeGetAttribute.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphInstantiateWithFlags
-		case HIP_API_ID_hipGraphInstantiateWithFlags :
+		case HIP_API_ID_hipGraphInstantiateWithFlags : {
 			//	hipGraphExec_t * pGraphExec (struct hipGraphExec **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	unsigned long long flags (unsigned long long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphInstantiateWithFlags_t* args = (args_hipGraphInstantiateWithFlags_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "pGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphInstantiateWithFlags.pGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphExec);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphInstantiateWithFlags.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned long long");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphInstantiateWithFlags.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphInstantiateWithFlags.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxPushCurrent
-		case HIP_API_ID_hipCtxPushCurrent :
+		case HIP_API_ID_hipCtxPushCurrent : {
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxPushCurrent_t* args = (args_hipCtxPushCurrent_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "ctx");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipCtx_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCtxPushCurrent.ctx);
+			msgpack_encode_uint(buf, (uintptr_t)args->ctx);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxPushCurrent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxGetApiVersion
-		case HIP_API_ID_hipCtxGetApiVersion :
+		case HIP_API_ID_hipCtxGetApiVersion : {
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	int * apiVersion (int *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxGetApiVersion_t* args = (args_hipCtxGetApiVersion_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "ctx");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipCtx_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCtxGetApiVersion.ctx);
+			msgpack_encode_uint(buf, (uintptr_t)args->ctx);
 
 			msgpack_encode_string_ext(buf, "apiVersion");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCtxGetApiVersion.apiVersion);
+			msgpack_encode_uint(buf, (uintptr_t)args->apiVersion);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxGetApiVersion.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipBindTexture
-		case HIP_API_ID_hipBindTexture :
+		case HIP_API_ID_hipBindTexture : {
 			//	size_t * offset (unsigned long*);
 			//	const textureReference * tex (const struct textureReference *);
 			//	const void * devPtr (const void *);
 			//	const hipChannelFormatDesc * desc (const struct hipChannelFormatDesc *);
 			//	size_t size (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipBindTexture_t* args = (args_hipBindTexture_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipBindTexture.offset);
+			msgpack_encode_uint(buf, (uintptr_t)args->offset);
 
 			msgpack_encode_string_ext(buf, "tex");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipBindTexture.tex);
+			msgpack_encode_uint(buf, (uintptr_t)args->tex);
 
 			msgpack_encode_string_ext(buf, "devPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipBindTexture.devPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->devPtr);
 
 			msgpack_encode_string_ext(buf, "desc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipChannelFormatDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipBindTexture.desc);
+			msgpack_encode_uint(buf, (uintptr_t)args->desc);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipBindTexture.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipBindTexture.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamBeginCapture
-		case HIP_API_ID_hipStreamBeginCapture :
+		case HIP_API_ID_hipStreamBeginCapture : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureMode mode (enum hipStreamCaptureMode);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamBeginCapture_t* args = (args_hipStreamBeginCapture_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamBeginCapture.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "mode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStreamCaptureMode");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamBeginCapture.mode);
+			msgpack_encode_int(buf, args->mode);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamBeginCapture.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipProfilerStart
-		case HIP_API_ID_hipProfilerStart :
+		case HIP_API_ID_hipProfilerStart : {
 			//	hipError_t retval (enum hipError_t);
+			args_hipProfilerStart_t* args = (args_hipProfilerStart_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipProfilerStart.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyHtoDAsync
-		case HIP_API_ID_hipMemcpyHtoDAsync :
+		case HIP_API_ID_hipMemcpyHtoDAsync : {
 			//	hipDeviceptr_t dst (void *);
 			//	void * src (void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyHtoDAsync_t* args = (args_hipMemcpyHtoDAsync_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyHtoDAsync.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyHtoDAsync.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyHtoDAsync.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyHtoDAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyHtoDAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetDeviceFlags
-		case HIP_API_ID_hipGetDeviceFlags :
+		case HIP_API_ID_hipGetDeviceFlags : {
 			//	unsigned int * flags (unsigned int *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetDeviceFlags_t* args = (args_hipGetDeviceFlags_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetDeviceFlags.flags);
+			msgpack_encode_uint(buf, (uintptr_t)args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetDeviceFlags.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemRangeGetAttributes
-		case HIP_API_ID_hipMemRangeGetAttributes :
+		case HIP_API_ID_hipMemRangeGetAttributes : {
 			//	void ** data (void **);
 			//	size_t * data_sizes (unsigned long*);
 			//	hipMemRangeAttribute * attributes (enum hipMemRangeAttribute*);
@@ -10735,95 +11269,100 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	const void * dev_ptr (const void *);
 			//	size_t count (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemRangeGetAttributes_t* args = (args_hipMemRangeGetAttributes_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "data");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemRangeGetAttributes.data);
+			msgpack_encode_uint(buf, (uintptr_t)args->data);
 
 			msgpack_encode_string_ext(buf, "data_sizes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemRangeGetAttributes.data_sizes);
+			msgpack_encode_uint(buf, (uintptr_t)args->data_sizes);
 
 			msgpack_encode_string_ext(buf, "attributes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemRangeAttribute *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemRangeGetAttributes.attributes);
+			msgpack_encode_uint(buf, (uintptr_t)args->attributes);
 
 			msgpack_encode_string_ext(buf, "num_attributes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemRangeGetAttributes.num_attributes);
+			msgpack_encode_int(buf, args->num_attributes);
 
 			msgpack_encode_string_ext(buf, "dev_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemRangeGetAttributes.dev_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dev_ptr);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemRangeGetAttributes.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemRangeGetAttributes.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDestroyExternalSemaphore
-		case HIP_API_ID_hipDestroyExternalSemaphore :
+		case HIP_API_ID_hipDestroyExternalSemaphore : {
 			//	hipExternalSemaphore_t extSem (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDestroyExternalSemaphore_t* args = (args_hipDestroyExternalSemaphore_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "extSem");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipExternalSemaphore_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDestroyExternalSemaphore.extSem);
+			msgpack_encode_uint(buf, (uintptr_t)args->extSem);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDestroyExternalSemaphore.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipIpcOpenEventHandle
-		case HIP_API_ID_hipIpcOpenEventHandle :
+		case HIP_API_ID_hipIpcOpenEventHandle : {
 			//	hipEvent_t * event (struct ihipEvent_t **);
 			//	hipIpcEventHandle_t handle ({
 			//		char[64] reserved (char[64]);
 			//	});
 			//	hipError_t retval (enum hipError_t);
+			args_hipIpcOpenEventHandle_t* args = (args_hipIpcOpenEventHandle_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipIpcOpenEventHandle.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
@@ -10837,178 +11376,189 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char[64]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipIpcOpenEventHandle.handle.reserved[0]);
+			msgpack_encode_int(buf, args->handle.reserved[0]);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipIpcOpenEventHandle.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphUpload
-		case HIP_API_ID_hipGraphUpload :
+		case HIP_API_ID_hipGraphUpload : {
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphUpload_t* args = (args_hipGraphUpload_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "graphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphUpload.graphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->graphExec);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphUpload.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphUpload.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMallocAsync
-		case HIP_API_ID_hipMallocAsync :
+		case HIP_API_ID_hipMallocAsync : {
 			//	void ** dev_ptr (void **);
 			//	size_t size (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMallocAsync_t* args = (args_hipMallocAsync_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "dev_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMallocAsync.dev_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dev_ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocAsync.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMallocAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipOccupancyMaxPotentialBlockSize
-		case HIP_API_ID_hipOccupancyMaxPotentialBlockSize :
+		case HIP_API_ID_hipOccupancyMaxPotentialBlockSize : {
 			//	int * gridSize (int *);
 			//	int * blockSize (int *);
 			//	const void * f (const void *);
 			//	size_t dynSharedMemPerBlk (unsigned long);
 			//	int blockSizeLimit (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipOccupancyMaxPotentialBlockSize_t* args = (args_hipOccupancyMaxPotentialBlockSize_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "gridSize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipOccupancyMaxPotentialBlockSize.gridSize);
+			msgpack_encode_uint(buf, (uintptr_t)args->gridSize);
 
 			msgpack_encode_string_ext(buf, "blockSize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipOccupancyMaxPotentialBlockSize.blockSize);
+			msgpack_encode_uint(buf, (uintptr_t)args->blockSize);
 
 			msgpack_encode_string_ext(buf, "f");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipOccupancyMaxPotentialBlockSize.f);
+			msgpack_encode_uint(buf, (uintptr_t)args->f);
 
 			msgpack_encode_string_ext(buf, "dynSharedMemPerBlk");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipOccupancyMaxPotentialBlockSize.dynSharedMemPerBlk);
+			msgpack_encode_int(buf, args->dynSharedMemPerBlk);
 
 			msgpack_encode_string_ext(buf, "blockSizeLimit");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipOccupancyMaxPotentialBlockSize.blockSizeLimit);
+			msgpack_encode_int(buf, args->blockSizeLimit);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipOccupancyMaxPotentialBlockSize.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDestroyExternalMemory
-		case HIP_API_ID_hipDestroyExternalMemory :
+		case HIP_API_ID_hipDestroyExternalMemory : {
 			//	hipExternalMemory_t extMem (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDestroyExternalMemory_t* args = (args_hipDestroyExternalMemory_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "extMem");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipExternalMemory_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDestroyExternalMemory.extMem);
+			msgpack_encode_uint(buf, (uintptr_t)args->extMem);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDestroyExternalMemory.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_amd_dbgapi_get_build_name
-		case HIP_API_ID_amd_dbgapi_get_build_name :
+		case HIP_API_ID_amd_dbgapi_get_build_name : {
 			//	const char * retval (const char *);
+			args_amd_dbgapi_get_build_name_t* args = (args_amd_dbgapi_get_build_name_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->amd_dbgapi_get_build_name.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddMemcpyNodeToSymbol
-		case HIP_API_ID_hipGraphAddMemcpyNodeToSymbol :
+		case HIP_API_ID_hipGraphAddMemcpyNodeToSymbol : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
@@ -11019,392 +11569,412 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddMemcpyNodeToSymbol_t* args = (args_hipGraphAddMemcpyNodeToSymbol_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNodeToSymbol.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNodeToSymbol.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNodeToSymbol.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNodeToSymbol.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNodeToSymbol.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNodeToSymbol.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNodeToSymbol.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNodeToSymbol.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNodeToSymbol.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNodeToSymbol.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetPCIBusId
-		case HIP_API_ID_hipDeviceGetPCIBusId :
+		case HIP_API_ID_hipDeviceGetPCIBusId : {
 			//	char * pciBusId (char *);
 			//	int len (int);
 			//	int device (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceGetPCIBusId_t* args = (args_hipDeviceGetPCIBusId_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "pciBusId");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGetPCIBusId.pciBusId);
+			msgpack_encode_uint(buf, (uintptr_t)args->pciBusId);
 
 			msgpack_encode_string_ext(buf, "len");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetPCIBusId.len);
+			msgpack_encode_int(buf, args->len);
 
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetPCIBusId.device);
+			msgpack_encode_int(buf, args->device);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetPCIBusId.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetChannelDesc
-		case HIP_API_ID_hipGetChannelDesc :
+		case HIP_API_ID_hipGetChannelDesc : {
 			//	hipChannelFormatDesc * desc (struct hipChannelFormatDesc*);
 			//	hipArray_const_t array (const struct hipArray *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetChannelDesc_t* args = (args_hipGetChannelDesc_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "desc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipChannelFormatDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetChannelDesc.desc);
+			msgpack_encode_uint(buf, (uintptr_t)args->desc);
 
 			msgpack_encode_string_ext(buf, "array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_const_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetChannelDesc.array);
+			msgpack_encode_uint(buf, (uintptr_t)args->array);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetChannelDesc.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDevicePrimaryCtxReset
-		case HIP_API_ID_hipDevicePrimaryCtxReset :
+		case HIP_API_ID_hipDevicePrimaryCtxReset : {
 			//	hipDevice_t dev (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDevicePrimaryCtxReset_t* args = (args_hipDevicePrimaryCtxReset_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "dev");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDevice_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDevicePrimaryCtxReset.dev);
+			msgpack_encode_int(buf, args->dev);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDevicePrimaryCtxReset.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipImportExternalMemory
-		case HIP_API_ID_hipImportExternalMemory :
+		case HIP_API_ID_hipImportExternalMemory : {
 			//	hipExternalMemory_t * extMem_out (void **);
 			//	const hipExternalMemoryHandleDesc * memHandleDesc (const struct hipExternalMemoryHandleDesc_st *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipImportExternalMemory_t* args = (args_hipImportExternalMemory_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "extMem_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipExternalMemory_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipImportExternalMemory.extMem_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->extMem_out);
 
 			msgpack_encode_string_ext(buf, "memHandleDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipExternalMemoryHandleDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipImportExternalMemory.memHandleDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->memHandleDesc);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipImportExternalMemory.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFuncSetSharedMemConfig
-		case HIP_API_ID_hipFuncSetSharedMemConfig :
+		case HIP_API_ID_hipFuncSetSharedMemConfig : {
 			//	const void * func (const void *);
 			//	hipSharedMemConfig config (enum hipSharedMemConfig);
 			//	hipError_t retval (enum hipError_t);
+			args_hipFuncSetSharedMemConfig_t* args = (args_hipFuncSetSharedMemConfig_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "func");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipFuncSetSharedMemConfig.func);
+			msgpack_encode_uint(buf, (uintptr_t)args->func);
 
 			msgpack_encode_string_ext(buf, "config");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipSharedMemConfig");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipFuncSetSharedMemConfig.config);
+			msgpack_encode_int(buf, args->config);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipFuncSetSharedMemConfig.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamWaitEvent
-		case HIP_API_ID_hipStreamWaitEvent :
+		case HIP_API_ID_hipStreamWaitEvent : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamWaitEvent_t* args = (args_hipStreamWaitEvent_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamWaitEvent.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamWaitEvent.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWaitEvent.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWaitEvent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetMipmapLevelBias
-		case HIP_API_ID_hipTexRefSetMipmapLevelBias :
+		case HIP_API_ID_hipTexRefSetMipmapLevelBias : {
 			//	textureReference * texRef (struct textureReference*);
 			//	float bias (float);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefSetMipmapLevelBias_t* args = (args_hipTexRefSetMipmapLevelBias_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetMipmapLevelBias.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "bias");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "float");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_float(buf, args->hipTexRefSetMipmapLevelBias.bias);
+			msgpack_encode_float(buf, args->bias);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetMipmapLevelBias.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolImportFromShareableHandle
-		case HIP_API_ID_hipMemPoolImportFromShareableHandle :
+		case HIP_API_ID_hipMemPoolImportFromShareableHandle : {
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	void * shared_handle (void *);
 			//	hipMemAllocationHandleType handle_type (enum hipMemAllocationHandleType);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemPoolImportFromShareableHandle_t* args = (args_hipMemPoolImportFromShareableHandle_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "mem_pool");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPool_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolImportFromShareableHandle.mem_pool);
+			msgpack_encode_uint(buf, (uintptr_t)args->mem_pool);
 
 			msgpack_encode_string_ext(buf, "shared_handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolImportFromShareableHandle.shared_handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->shared_handle);
 
 			msgpack_encode_string_ext(buf, "handle_type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemAllocationHandleType");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolImportFromShareableHandle.handle_type);
+			msgpack_encode_int(buf, args->handle_type);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolImportFromShareableHandle.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolImportFromShareableHandle.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolExportToShareableHandle
-		case HIP_API_ID_hipMemPoolExportToShareableHandle :
+		case HIP_API_ID_hipMemPoolExportToShareableHandle : {
 			//	void * shared_handle (void *);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipMemAllocationHandleType handle_type (enum hipMemAllocationHandleType);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemPoolExportToShareableHandle_t* args = (args_hipMemPoolExportToShareableHandle_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "shared_handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolExportToShareableHandle.shared_handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->shared_handle);
 
 			msgpack_encode_string_ext(buf, "mem_pool");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPool_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolExportToShareableHandle.mem_pool);
+			msgpack_encode_uint(buf, (uintptr_t)args->mem_pool);
 
 			msgpack_encode_string_ext(buf, "handle_type");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemAllocationHandleType");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolExportToShareableHandle.handle_type);
+			msgpack_encode_int(buf, args->handle_type);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolExportToShareableHandle.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolExportToShareableHandle.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecMemcpyNodeSetParamsToSymbol
-		case HIP_API_ID_hipGraphExecMemcpyNodeSetParamsToSymbol :
+		case HIP_API_ID_hipGraphExecMemcpyNodeSetParamsToSymbol : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const void * symbol (const void *);
@@ -11413,258 +11983,270 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExecMemcpyNodeSetParamsToSymbol_t* args = (args_hipGraphExecMemcpyNodeSetParamsToSymbol_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "hGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemcpyNodeSetParamsToSymbol.hGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraphExec);
 
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemcpyNodeSetParamsToSymbol.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemcpyNodeSetParamsToSymbol.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemcpyNodeSetParamsToSymbol.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecMemcpyNodeSetParamsToSymbol.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecMemcpyNodeSetParamsToSymbol.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecMemcpyNodeSetParamsToSymbol.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecMemcpyNodeSetParamsToSymbol.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetMipmapFilterMode
-		case HIP_API_ID_hipTexRefGetMipmapFilterMode :
+		case HIP_API_ID_hipTexRefGetMipmapFilterMode : {
 			//	enum hipTextureFilterMode * pfm (enum hipTextureFilterMode *);
 			//	const textureReference * texRef (const struct textureReference *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefGetMipmapFilterMode_t* args = (args_hipTexRefGetMipmapFilterMode_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pfm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "enum hipTextureFilterMode *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetMipmapFilterMode.pfm);
+			msgpack_encode_uint(buf, (uintptr_t)args->pfm);
 
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetMipmapFilterMode.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefGetMipmapFilterMode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetProcAddress
-		case HIP_API_ID_hipGetProcAddress :
+		case HIP_API_ID_hipGetProcAddress : {
 			//	const char * symbol (const char *);
 			//	void ** pfn (void **);
 			//	int hipVersion (int);
 			//	uint64_t flags (unsigned long);
 			//	hipDriverProcAddressQueryResult * symbolStatus (enum hipDriverProcAddressQueryResult*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetProcAddress_t* args = (args_hipGetProcAddress_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetProcAddress.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "pfn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetProcAddress.pfn);
+			msgpack_encode_uint(buf, (uintptr_t)args->pfn);
 
 			msgpack_encode_string_ext(buf, "hipVersion");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetProcAddress.hipVersion);
+			msgpack_encode_int(buf, args->hipVersion);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetProcAddress.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "symbolStatus");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDriverProcAddressQueryResult *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetProcAddress.symbolStatus);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbolStatus);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetProcAddress.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCreateTextureObject
-		case HIP_API_ID_hipCreateTextureObject :
+		case HIP_API_ID_hipCreateTextureObject : {
 			//	hipTextureObject_t * pTexObject (struct __hip_texture **);
 			//	const hipResourceDesc * pResDesc (const struct hipResourceDesc *);
 			//	const hipTextureDesc * pTexDesc (const struct hipTextureDesc *);
 			//	const struct hipResourceViewDesc * pResViewDesc (const struct hipResourceViewDesc *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCreateTextureObject_t* args = (args_hipCreateTextureObject_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "pTexObject");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipTextureObject_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCreateTextureObject.pTexObject);
+			msgpack_encode_uint(buf, (uintptr_t)args->pTexObject);
 
 			msgpack_encode_string_ext(buf, "pResDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipResourceDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCreateTextureObject.pResDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->pResDesc);
 
 			msgpack_encode_string_ext(buf, "pTexDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipTextureDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCreateTextureObject.pTexDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->pTexDesc);
 
 			msgpack_encode_string_ext(buf, "pResViewDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const struct hipResourceViewDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCreateTextureObject.pResViewDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->pResViewDesc);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCreateTextureObject.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphKernelNodeCopyAttributes
-		case HIP_API_ID_hipGraphKernelNodeCopyAttributes :
+		case HIP_API_ID_hipGraphKernelNodeCopyAttributes : {
 			//	hipGraphNode_t hSrc (struct hipGraphNode *);
 			//	hipGraphNode_t hDst (struct hipGraphNode *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphKernelNodeCopyAttributes_t* args = (args_hipGraphKernelNodeCopyAttributes_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "hSrc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphKernelNodeCopyAttributes.hSrc);
+			msgpack_encode_uint(buf, (uintptr_t)args->hSrc);
 
 			msgpack_encode_string_ext(buf, "hDst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphKernelNodeCopyAttributes.hDst);
+			msgpack_encode_uint(buf, (uintptr_t)args->hDst);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphKernelNodeCopyAttributes.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetFlags
-		case HIP_API_ID_hipTexRefGetFlags :
+		case HIP_API_ID_hipTexRefGetFlags : {
 			//	unsigned int * pFlags (unsigned int *);
 			//	const textureReference * texRef (const struct textureReference *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefGetFlags_t* args = (args_hipTexRefGetFlags_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pFlags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetFlags.pFlags);
+			msgpack_encode_uint(buf, (uintptr_t)args->pFlags);
 
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetFlags.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefGetFlags.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvGraphAddMemcpyNode
-		case HIP_API_ID_hipDrvGraphAddMemcpyNode :
+		case HIP_API_ID_hipDrvGraphAddMemcpyNode : {
 			//	hipGraphNode_t * phGraphNode (struct hipGraphNode **);
 			//	hipGraph_t hGraph (struct ihipGraph *);
 			//	const hipGraphNode_t * dependencies (const struct hipGraphNode * *);
@@ -11672,137 +12254,143 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	const HIP_MEMCPY3D * copyParams (const struct HIP_MEMCPY3D *);
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDrvGraphAddMemcpyNode_t* args = (args_hipDrvGraphAddMemcpyNode_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "phGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvGraphAddMemcpyNode.phGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->phGraphNode);
 
 			msgpack_encode_string_ext(buf, "hGraph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvGraphAddMemcpyNode.hGraph);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraph);
 
 			msgpack_encode_string_ext(buf, "dependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvGraphAddMemcpyNode.dependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->dependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDrvGraphAddMemcpyNode.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "copyParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const HIP_MEMCPY3D *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvGraphAddMemcpyNode.copyParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->copyParams);
 
 			msgpack_encode_string_ext(buf, "ctx");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipCtx_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvGraphAddMemcpyNode.ctx);
+			msgpack_encode_uint(buf, (uintptr_t)args->ctx);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDrvGraphAddMemcpyNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemExportToShareableHandle
-		case HIP_API_ID_hipMemExportToShareableHandle :
+		case HIP_API_ID_hipMemExportToShareableHandle : {
 			//	void * shareableHandle (void *);
 			//	hipMemGenericAllocationHandle_t handle (struct ihipMemGenericAllocationHandle *);
 			//	hipMemAllocationHandleType handleType (enum hipMemAllocationHandleType);
 			//	unsigned long long flags (unsigned long long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemExportToShareableHandle_t* args = (args_hipMemExportToShareableHandle_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "shareableHandle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemExportToShareableHandle.shareableHandle);
+			msgpack_encode_uint(buf, (uintptr_t)args->shareableHandle);
 
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemGenericAllocationHandle_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemExportToShareableHandle.handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->handle);
 
 			msgpack_encode_string_ext(buf, "handleType");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemAllocationHandleType");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemExportToShareableHandle.handleType);
+			msgpack_encode_int(buf, args->handleType);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned long long");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemExportToShareableHandle.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemExportToShareableHandle.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphLaunch_spt
-		case HIP_API_ID_hipGraphLaunch_spt :
+		case HIP_API_ID_hipGraphLaunch_spt : {
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphLaunch_spt_t* args = (args_hipGraphLaunch_spt_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "graphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphLaunch_spt.graphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->graphExec);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphLaunch_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphLaunch_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemcpyNodeSetParamsFromSymbol
-		case HIP_API_ID_hipGraphMemcpyNodeSetParamsFromSymbol :
+		case HIP_API_ID_hipGraphMemcpyNodeSetParamsFromSymbol : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dst (void *);
 			//	const void * symbol (const void *);
@@ -11810,121 +12398,127 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphMemcpyNodeSetParamsFromSymbol_t* args = (args_hipGraphMemcpyNodeSetParamsFromSymbol_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemcpyNodeSetParamsFromSymbol.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemcpyNodeSetParamsFromSymbol.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemcpyNodeSetParamsFromSymbol.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemcpyNodeSetParamsFromSymbol.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemcpyNodeSetParamsFromSymbol.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemcpyNodeSetParamsFromSymbol.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemcpyNodeSetParamsFromSymbol.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphNodeGetDependencies
-		case HIP_API_ID_hipGraphNodeGetDependencies :
+		case HIP_API_ID_hipGraphNodeGetDependencies : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraphNode_t * pDependencies (struct hipGraphNode **);
 			//	size_t * pNumDependencies (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphNodeGetDependencies_t* args = (args_hipGraphNodeGetDependencies_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeGetDependencies.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeGetDependencies.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "pNumDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeGetDependencies.pNumDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNumDependencies);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphNodeGetDependencies.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy3D
-		case HIP_API_ID_hipMemcpy3D :
+		case HIP_API_ID_hipMemcpy3D : {
 			//	const struct hipMemcpy3DParms * p (const struct hipMemcpy3DParms *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy3D_t* args = (args_hipMemcpy3D_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "p");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const struct hipMemcpy3DParms *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy3D.p);
+			msgpack_encode_uint(buf, (uintptr_t)args->p);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy3D.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddMemcpyNodeFromSymbol
-		case HIP_API_ID_hipGraphAddMemcpyNodeFromSymbol :
+		case HIP_API_ID_hipGraphAddMemcpyNodeFromSymbol : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
@@ -11935,202 +12529,212 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddMemcpyNodeFromSymbol_t* args = (args_hipGraphAddMemcpyNodeFromSymbol_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNodeFromSymbol.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNodeFromSymbol.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNodeFromSymbol.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNodeFromSymbol.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNodeFromSymbol.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNodeFromSymbol.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNodeFromSymbol.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNodeFromSymbol.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNodeFromSymbol.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNodeFromSymbol.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetPriority_spt
-		case HIP_API_ID_hipStreamGetPriority_spt :
+		case HIP_API_ID_hipStreamGetPriority_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	int * priority (int *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamGetPriority_spt_t* args = (args_hipStreamGetPriority_spt_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetPriority_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "priority");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetPriority_spt.priority);
+			msgpack_encode_uint(buf, (uintptr_t)args->priority);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamGetPriority_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleLoadData
-		case HIP_API_ID_hipModuleLoadData :
+		case HIP_API_ID_hipModuleLoadData : {
 			//	hipModule_t * module (struct ihipModule_t **);
 			//	const void * image (const void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipModuleLoadData_t* args = (args_hipModuleLoadData_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "module");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipModule_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLoadData.module);
+			msgpack_encode_uint(buf, (uintptr_t)args->module);
 
 			msgpack_encode_string_ext(buf, "image");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLoadData.image);
+			msgpack_encode_uint(buf, (uintptr_t)args->image);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLoadData.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipSetDeviceFlags
-		case HIP_API_ID_hipSetDeviceFlags :
+		case HIP_API_ID_hipSetDeviceFlags : {
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipSetDeviceFlags_t* args = (args_hipSetDeviceFlags_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipSetDeviceFlags.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipSetDeviceFlags.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExternalMemoryGetMappedBuffer
-		case HIP_API_ID_hipExternalMemoryGetMappedBuffer :
+		case HIP_API_ID_hipExternalMemoryGetMappedBuffer : {
 			//	void ** devPtr (void **);
 			//	hipExternalMemory_t extMem (void *);
 			//	const hipExternalMemoryBufferDesc * bufferDesc (const struct hipExternalMemoryBufferDesc_st *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipExternalMemoryGetMappedBuffer_t* args = (args_hipExternalMemoryGetMappedBuffer_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "devPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExternalMemoryGetMappedBuffer.devPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->devPtr);
 
 			msgpack_encode_string_ext(buf, "extMem");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipExternalMemory_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExternalMemoryGetMappedBuffer.extMem);
+			msgpack_encode_uint(buf, (uintptr_t)args->extMem);
 
 			msgpack_encode_string_ext(buf, "bufferDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipExternalMemoryBufferDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExternalMemoryGetMappedBuffer.bufferDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->bufferDesc);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExternalMemoryGetMappedBuffer.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchCooperativeKernel_spt
-		case HIP_API_ID_hipLaunchCooperativeKernel_spt :
+		case HIP_API_ID_hipLaunchCooperativeKernel_spt : {
 			//	const void * f (const void *);
 			//	dim3 gridDim ({
 			//		uint32_t x (unsigned int);
@@ -12146,13 +12750,14 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	uint32_t sharedMemBytes (unsigned int);
 			//	hipStream_t hStream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipLaunchCooperativeKernel_spt_t* args = (args_hipLaunchCooperativeKernel_spt_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "f");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchCooperativeKernel_spt.f);
+			msgpack_encode_uint(buf, (uintptr_t)args->f);
 
 			msgpack_encode_string_ext(buf, "gridDim");
 			msgpack_encode_map(buf, 2);
@@ -12166,21 +12771,21 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel_spt.gridDim.x);
+			msgpack_encode_int(buf, args->gridDim.x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel_spt.gridDim.y);
+			msgpack_encode_int(buf, args->gridDim.y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel_spt.gridDim.z);
+			msgpack_encode_int(buf, args->gridDim.z);
 
 			msgpack_encode_string_ext(buf, "blockDim");
 			msgpack_encode_map(buf, 2);
@@ -12194,289 +12799,304 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel_spt.blockDim.x);
+			msgpack_encode_int(buf, args->blockDim.x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel_spt.blockDim.y);
+			msgpack_encode_int(buf, args->blockDim.y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel_spt.blockDim.z);
+			msgpack_encode_int(buf, args->blockDim.z);
 
 			msgpack_encode_string_ext(buf, "kernelParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchCooperativeKernel_spt.kernelParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->kernelParams);
 
 			msgpack_encode_string_ext(buf, "sharedMemBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel_spt.sharedMemBytes);
+			msgpack_encode_int(buf, args->sharedMemBytes);
 
 			msgpack_encode_string_ext(buf, "hStream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchCooperativeKernel_spt.hStream);
+			msgpack_encode_uint(buf, (uintptr_t)args->hStream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchCooperativeKernel_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchHostFunc
-		case HIP_API_ID_hipLaunchHostFunc :
+		case HIP_API_ID_hipLaunchHostFunc : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipHostFn_t fn (void (*)(void *));
 			//	void * userData (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipLaunchHostFunc_t* args = (args_hipLaunchHostFunc_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchHostFunc.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "fn");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipHostFn_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchHostFunc.fn);
+			msgpack_encode_uint(buf, (uintptr_t)args->fn);
 
 			msgpack_encode_string_ext(buf, "userData");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchHostFunc.userData);
+			msgpack_encode_uint(buf, (uintptr_t)args->userData);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchHostFunc.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyAsync_spt
-		case HIP_API_ID_hipMemcpyAsync_spt :
+		case HIP_API_ID_hipMemcpyAsync_spt : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyAsync_spt_t* args = (args_hipMemcpyAsync_spt_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyAsync_spt.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyAsync_spt.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAsync_spt.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAsync_spt.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyAsync_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAsync_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyPeer
-		case HIP_API_ID_hipMemcpyPeer :
+		case HIP_API_ID_hipMemcpyPeer : {
 			//	void * dst (void *);
 			//	int dstDeviceId (int);
 			//	const void * src (const void *);
 			//	int srcDeviceId (int);
 			//	size_t sizeBytes (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyPeer_t* args = (args_hipMemcpyPeer_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyPeer.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "dstDeviceId");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyPeer.dstDeviceId);
+			msgpack_encode_int(buf, args->dstDeviceId);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyPeer.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "srcDeviceId");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyPeer.srcDeviceId);
+			msgpack_encode_int(buf, args->srcDeviceId);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyPeer.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyPeer.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceReset
-		case HIP_API_ID_hipDeviceReset :
+		case HIP_API_ID_hipDeviceReset : {
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceReset_t* args = (args_hipDeviceReset_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceReset.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemAddressFree
-		case HIP_API_ID_hipMemAddressFree :
+		case HIP_API_ID_hipMemAddressFree : {
 			//	void * devPtr (void *);
 			//	size_t size (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemAddressFree_t* args = (args_hipMemAddressFree_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "devPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemAddressFree.devPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->devPtr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAddressFree.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemAddressFree.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipProfilerStop
-		case HIP_API_ID_hipProfilerStop :
+		case HIP_API_ID_hipProfilerStop : {
 			//	hipError_t retval (enum hipError_t);
+			args_hipProfilerStop_t* args = (args_hipProfilerStop_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipProfilerStop.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphEventWaitNodeSetEvent
-		case HIP_API_ID_hipGraphEventWaitNodeSetEvent :
+		case HIP_API_ID_hipGraphEventWaitNodeSetEvent : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphEventWaitNodeSetEvent_t* args = (args_hipGraphEventWaitNodeSetEvent_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphEventWaitNodeSetEvent.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphEventWaitNodeSetEvent.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphEventWaitNodeSetEvent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleLaunchCooperativeKernel
-		case HIP_API_ID_hipModuleLaunchCooperativeKernel :
+		case HIP_API_ID_hipModuleLaunchCooperativeKernel : {
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
 			//	unsigned int gridDimX (unsigned int);
 			//	unsigned int gridDimY (unsigned int);
@@ -12488,263 +13108,275 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void ** kernelParams (void **);
 			//	hipError_t retval (enum hipError_t);
+			args_hipModuleLaunchCooperativeKernel_t* args = (args_hipModuleLaunchCooperativeKernel_t*) func_args;
 			msgpack_encode_map(buf, 11);
 			msgpack_encode_string_ext(buf, "f");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFunction_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLaunchCooperativeKernel.f);
+			msgpack_encode_uint(buf, (uintptr_t)args->f);
 
 			msgpack_encode_string_ext(buf, "gridDimX");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchCooperativeKernel.gridDimX);
+			msgpack_encode_int(buf, args->gridDimX);
 
 			msgpack_encode_string_ext(buf, "gridDimY");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchCooperativeKernel.gridDimY);
+			msgpack_encode_int(buf, args->gridDimY);
 
 			msgpack_encode_string_ext(buf, "gridDimZ");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchCooperativeKernel.gridDimZ);
+			msgpack_encode_int(buf, args->gridDimZ);
 
 			msgpack_encode_string_ext(buf, "blockDimX");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchCooperativeKernel.blockDimX);
+			msgpack_encode_int(buf, args->blockDimX);
 
 			msgpack_encode_string_ext(buf, "blockDimY");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchCooperativeKernel.blockDimY);
+			msgpack_encode_int(buf, args->blockDimY);
 
 			msgpack_encode_string_ext(buf, "blockDimZ");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchCooperativeKernel.blockDimZ);
+			msgpack_encode_int(buf, args->blockDimZ);
 
 			msgpack_encode_string_ext(buf, "sharedMemBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchCooperativeKernel.sharedMemBytes);
+			msgpack_encode_int(buf, args->sharedMemBytes);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLaunchCooperativeKernel.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "kernelParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleLaunchCooperativeKernel.kernelParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->kernelParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleLaunchCooperativeKernel.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetName
-		case HIP_API_ID_hipDeviceGetName :
+		case HIP_API_ID_hipDeviceGetName : {
 			//	char * name (char *);
 			//	int len (int);
 			//	hipDevice_t device (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceGetName_t* args = (args_hipDeviceGetName_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "name");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGetName.name);
+			msgpack_encode_uint(buf, (uintptr_t)args->name);
 
 			msgpack_encode_string_ext(buf, "len");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetName.len);
+			msgpack_encode_int(buf, args->len);
 
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDevice_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetName.device);
+			msgpack_encode_int(buf, args->device);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetName.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphNodeSetEnabled
-		case HIP_API_ID_hipGraphNodeSetEnabled :
+		case HIP_API_ID_hipGraphNodeSetEnabled : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	unsigned int isEnabled (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphNodeSetEnabled_t* args = (args_hipGraphNodeSetEnabled_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "hGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeSetEnabled.hGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraphExec);
 
 			msgpack_encode_string_ext(buf, "hNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeSetEnabled.hNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->hNode);
 
 			msgpack_encode_string_ext(buf, "isEnabled");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphNodeSetEnabled.isEnabled);
+			msgpack_encode_int(buf, args->isEnabled);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphNodeSetEnabled.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetAddressMode
-		case HIP_API_ID_hipTexRefSetAddressMode :
+		case HIP_API_ID_hipTexRefSetAddressMode : {
 			//	textureReference * texRef (struct textureReference*);
 			//	int dim (int);
 			//	enum hipTextureAddressMode am (enum hipTextureAddressMode);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefSetAddressMode_t* args = (args_hipTexRefSetAddressMode_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetAddressMode.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "dim");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetAddressMode.dim);
+			msgpack_encode_int(buf, args->dim);
 
 			msgpack_encode_string_ext(buf, "am");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "enum hipTextureAddressMode");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetAddressMode.am);
+			msgpack_encode_int(buf, args->am);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetAddressMode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventSynchronize
-		case HIP_API_ID_hipEventSynchronize :
+		case HIP_API_ID_hipEventSynchronize : {
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipEventSynchronize_t* args = (args_hipEventSynchronize_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipEventSynchronize.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipEventSynchronize.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphGetRootNodes
-		case HIP_API_ID_hipGraphGetRootNodes :
+		case HIP_API_ID_hipGraphGetRootNodes : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphNode_t * pRootNodes (struct hipGraphNode **);
 			//	size_t * pNumRootNodes (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphGetRootNodes_t* args = (args_hipGraphGetRootNodes_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphGetRootNodes.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pRootNodes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphGetRootNodes.pRootNodes);
+			msgpack_encode_uint(buf, (uintptr_t)args->pRootNodes);
 
 			msgpack_encode_string_ext(buf, "pNumRootNodes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphGetRootNodes.pNumRootNodes);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNumRootNodes);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphGetRootNodes.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DFromArray
-		case HIP_API_ID_hipMemcpy2DFromArray :
+		case HIP_API_ID_hipMemcpy2DFromArray : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	hipArray_const_t src (const struct hipArray *);
@@ -12754,257 +13386,269 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy2DFromArray_t* args = (args_hipMemcpy2DFromArray_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DFromArray.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "dpitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArray.dpitch);
+			msgpack_encode_int(buf, args->dpitch);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_const_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DFromArray.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "wOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArray.wOffset);
+			msgpack_encode_int(buf, args->wOffset);
 
 			msgpack_encode_string_ext(buf, "hOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArray.hOffset);
+			msgpack_encode_int(buf, args->hOffset);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArray.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArray.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArray.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DFromArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExternalSemaphoresWaitNodeSetParams
-		case HIP_API_ID_hipGraphExternalSemaphoresWaitNodeSetParams :
+		case HIP_API_ID_hipGraphExternalSemaphoresWaitNodeSetParams : {
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	const hipExternalSemaphoreWaitNodeParams * nodeParams (const struct hipExternalSemaphoreWaitNodeParams *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExternalSemaphoresWaitNodeSetParams_t* args = (args_hipGraphExternalSemaphoresWaitNodeSetParams_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "hNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExternalSemaphoresWaitNodeSetParams.hNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->hNode);
 
 			msgpack_encode_string_ext(buf, "nodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipExternalSemaphoreWaitNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExternalSemaphoresWaitNodeSetParams.nodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->nodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExternalSemaphoresWaitNodeSetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyDtoA
-		case HIP_API_ID_hipMemcpyDtoA :
+		case HIP_API_ID_hipMemcpyDtoA : {
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
 			//	hipDeviceptr_t srcDevice (void *);
 			//	size_t ByteCount (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyDtoA_t* args = (args_hipMemcpyDtoA_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dstArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyDtoA.dstArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->dstArray);
 
 			msgpack_encode_string_ext(buf, "dstOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyDtoA.dstOffset);
+			msgpack_encode_int(buf, args->dstOffset);
 
 			msgpack_encode_string_ext(buf, "srcDevice");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyDtoA.srcDevice);
+			msgpack_encode_uint(buf, (uintptr_t)args->srcDevice);
 
 			msgpack_encode_string_ext(buf, "ByteCount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyDtoA.ByteCount);
+			msgpack_encode_int(buf, args->ByteCount);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyDtoA.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemcpyNodeGetParams
-		case HIP_API_ID_hipGraphMemcpyNodeGetParams :
+		case HIP_API_ID_hipGraphMemcpyNodeGetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipMemcpy3DParms * pNodeParams (struct hipMemcpy3DParms*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphMemcpyNodeGetParams_t* args = (args_hipGraphMemcpyNodeGetParams_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemcpyNodeGetParams.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpy3DParms *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemcpyNodeGetParams.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemcpyNodeGetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy
-		case HIP_API_ID_hipMemcpy :
+		case HIP_API_ID_hipMemcpy : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy_t* args = (args_hipMemcpy_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipSetValidDevices
-		case HIP_API_ID_hipSetValidDevices :
+		case HIP_API_ID_hipSetValidDevices : {
 			//	int * device_arr (int *);
 			//	int len (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipSetValidDevices_t* args = (args_hipSetValidDevices_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "device_arr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipSetValidDevices.device_arr);
+			msgpack_encode_uint(buf, (uintptr_t)args->device_arr);
 
 			msgpack_encode_string_ext(buf, "len");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipSetValidDevices.len);
+			msgpack_encode_int(buf, args->len);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipSetValidDevices.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DAsync
-		case HIP_API_ID_hipMemcpy2DAsync :
+		case HIP_API_ID_hipMemcpy2DAsync : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	const void * src (const void *);
@@ -13014,159 +13658,165 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy2DAsync_t* args = (args_hipMemcpy2DAsync_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DAsync.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "dpitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DAsync.dpitch);
+			msgpack_encode_int(buf, args->dpitch);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DAsync.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "spitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DAsync.spitch);
+			msgpack_encode_int(buf, args->spitch);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DAsync.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DAsync.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DAsync.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecExternalSemaphoresWaitNodeSetParams
-		case HIP_API_ID_hipGraphExecExternalSemaphoresWaitNodeSetParams :
+		case HIP_API_ID_hipGraphExecExternalSemaphoresWaitNodeSetParams : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	const hipExternalSemaphoreWaitNodeParams * nodeParams (const struct hipExternalSemaphoreWaitNodeParams *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExecExternalSemaphoresWaitNodeSetParams_t* args = (args_hipGraphExecExternalSemaphoresWaitNodeSetParams_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "hGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecExternalSemaphoresWaitNodeSetParams.hGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraphExec);
 
 			msgpack_encode_string_ext(buf, "hNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecExternalSemaphoresWaitNodeSetParams.hNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->hNode);
 
 			msgpack_encode_string_ext(buf, "nodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipExternalSemaphoreWaitNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecExternalSemaphoresWaitNodeSetParams.nodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->nodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecExternalSemaphoresWaitNodeSetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamAttachMemAsync
-		case HIP_API_ID_hipStreamAttachMemAsync :
+		case HIP_API_ID_hipStreamAttachMemAsync : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * dev_ptr (void *);
 			//	size_t length (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamAttachMemAsync_t* args = (args_hipStreamAttachMemAsync_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamAttachMemAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "dev_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamAttachMemAsync.dev_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dev_ptr);
 
 			msgpack_encode_string_ext(buf, "length");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamAttachMemAsync.length);
+			msgpack_encode_int(buf, args->length);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamAttachMemAsync.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamAttachMemAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset2DAsync
-		case HIP_API_ID_hipMemset2DAsync :
+		case HIP_API_ID_hipMemset2DAsync : {
 			//	void * dst (void *);
 			//	size_t pitch (unsigned long);
 			//	int value (int);
@@ -13174,159 +13824,167 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemset2DAsync_t* args = (args_hipMemset2DAsync_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemset2DAsync.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "pitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2DAsync.pitch);
+			msgpack_encode_int(buf, args->pitch);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2DAsync.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2DAsync.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2DAsync.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemset2DAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset2DAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexObjectGetResourceViewDesc
-		case HIP_API_ID_hipTexObjectGetResourceViewDesc :
+		case HIP_API_ID_hipTexObjectGetResourceViewDesc : {
 			//	HIP_RESOURCE_VIEW_DESC * pResViewDesc (struct HIP_RESOURCE_VIEW_DESC_st*);
 			//	hipTextureObject_t texObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexObjectGetResourceViewDesc_t* args = (args_hipTexObjectGetResourceViewDesc_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pResViewDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "HIP_RESOURCE_VIEW_DESC *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexObjectGetResourceViewDesc.pResViewDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->pResViewDesc);
 
 			msgpack_encode_string_ext(buf, "texObject");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipTextureObject_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexObjectGetResourceViewDesc.texObject);
+			msgpack_encode_uint(buf, (uintptr_t)args->texObject);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexObjectGetResourceViewDesc.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventCreateWithFlags
-		case HIP_API_ID_hipEventCreateWithFlags :
+		case HIP_API_ID_hipEventCreateWithFlags : {
 			//	hipEvent_t * event (struct ihipEvent_t **);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipEventCreateWithFlags_t* args = (args_hipEventCreateWithFlags_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipEventCreateWithFlags.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipEventCreateWithFlags.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipEventCreateWithFlags.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMipmappedArrayCreate
-		case HIP_API_ID_hipMipmappedArrayCreate :
+		case HIP_API_ID_hipMipmappedArrayCreate : {
 			//	hipMipmappedArray_t * pHandle (struct hipMipmappedArray **);
 			//	HIP_ARRAY3D_DESCRIPTOR * pMipmappedArrayDesc (struct HIP_ARRAY3D_DESCRIPTOR*);
 			//	unsigned int numMipmapLevels (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMipmappedArrayCreate_t* args = (args_hipMipmappedArrayCreate_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "pHandle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMipmappedArray_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMipmappedArrayCreate.pHandle);
+			msgpack_encode_uint(buf, (uintptr_t)args->pHandle);
 
 			msgpack_encode_string_ext(buf, "pMipmappedArrayDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "HIP_ARRAY3D_DESCRIPTOR *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMipmappedArrayCreate.pMipmappedArrayDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->pMipmappedArrayDesc);
 
 			msgpack_encode_string_ext(buf, "numMipmapLevels");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMipmappedArrayCreate.numMipmapLevels);
+			msgpack_encode_int(buf, args->numMipmapLevels);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMipmappedArrayCreate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2D_spt
-		case HIP_API_ID_hipMemcpy2D_spt :
+		case HIP_API_ID_hipMemcpy2D_spt : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	const void * src (const void *);
@@ -13335,122 +13993,126 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy2D_spt_t* args = (args_hipMemcpy2D_spt_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2D_spt.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "dpitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2D_spt.dpitch);
+			msgpack_encode_int(buf, args->dpitch);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2D_spt.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "spitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2D_spt.spitch);
+			msgpack_encode_int(buf, args->spitch);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2D_spt.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2D_spt.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2D_spt.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2D_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddMemcpyNode
-		case HIP_API_ID_hipGraphAddMemcpyNode :
+		case HIP_API_ID_hipGraphAddMemcpyNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	const hipMemcpy3DParms * pCopyParams (const struct hipMemcpy3DParms *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddMemcpyNode_t* args = (args_hipGraphAddMemcpyNode_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNode.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNode.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNode.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNode.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "pCopyParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipMemcpy3DParms *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemcpyNode.pCopyParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pCopyParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemcpyNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyToSymbolAsync
-		case HIP_API_ID_hipMemcpyToSymbolAsync :
+		case HIP_API_ID_hipMemcpyToSymbolAsync : {
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
@@ -13458,327 +14120,343 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyToSymbolAsync_t* args = (args_hipMemcpyToSymbolAsync_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyToSymbolAsync.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyToSymbolAsync.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbolAsync.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbolAsync.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbolAsync.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyToSymbolAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbolAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMallocFromPoolAsync
-		case HIP_API_ID_hipMallocFromPoolAsync :
+		case HIP_API_ID_hipMallocFromPoolAsync : {
 			//	void ** dev_ptr (void **);
 			//	size_t size (unsigned long);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMallocFromPoolAsync_t* args = (args_hipMallocFromPoolAsync_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dev_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMallocFromPoolAsync.dev_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dev_ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocFromPoolAsync.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "mem_pool");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPool_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMallocFromPoolAsync.mem_pool);
+			msgpack_encode_uint(buf, (uintptr_t)args->mem_pool);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMallocFromPoolAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocFromPoolAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
-		case HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags :
+		case HIP_API_ID_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags : {
 			//	int * numBlocks (int *);
 			//	const void * f (const void *);
 			//	int blockSize (int);
 			//	size_t dynSharedMemPerBlk (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t* args = (args_hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "numBlocks");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.numBlocks);
+			msgpack_encode_uint(buf, (uintptr_t)args->numBlocks);
 
 			msgpack_encode_string_ext(buf, "f");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.f);
+			msgpack_encode_uint(buf, (uintptr_t)args->f);
 
 			msgpack_encode_string_ext(buf, "blockSize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.blockSize);
+			msgpack_encode_int(buf, args->blockSize);
 
 			msgpack_encode_string_ext(buf, "dynSharedMemPerBlk");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.dynSharedMemPerBlk);
+			msgpack_encode_int(buf, args->dynSharedMemPerBlk);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddMemFreeNode
-		case HIP_API_ID_hipGraphAddMemFreeNode :
+		case HIP_API_ID_hipGraphAddMemFreeNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	void * dev_ptr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddMemFreeNode_t* args = (args_hipGraphAddMemFreeNode_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemFreeNode.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemFreeNode.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemFreeNode.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemFreeNode.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "dev_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemFreeNode.dev_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dev_ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemFreeNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor
-		case HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor :
+		case HIP_API_ID_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor : {
 			//	int * numBlocks (int *);
 			//	hipFunction_t f (struct ihipModuleSymbol_t *);
 			//	int blockSize (int);
 			//	size_t dynSharedMemPerBlk (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor_t* args = (args_hipModuleOccupancyMaxActiveBlocksPerMultiprocessor_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "numBlocks");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.numBlocks);
+			msgpack_encode_uint(buf, (uintptr_t)args->numBlocks);
 
 			msgpack_encode_string_ext(buf, "f");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFunction_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.f);
+			msgpack_encode_uint(buf, (uintptr_t)args->f);
 
 			msgpack_encode_string_ext(buf, "blockSize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.blockSize);
+			msgpack_encode_int(buf, args->blockSize);
 
 			msgpack_encode_string_ext(buf, "dynSharedMemPerBlk");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.dynSharedMemPerBlk);
+			msgpack_encode_int(buf, args->dynSharedMemPerBlk);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipModuleOccupancyMaxActiveBlocksPerMultiprocessor.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventDestroy
-		case HIP_API_ID_hipEventDestroy :
+		case HIP_API_ID_hipEventDestroy : {
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipEventDestroy_t* args = (args_hipEventDestroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipEventDestroy.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipEventDestroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceSetCacheConfig
-		case HIP_API_ID_hipDeviceSetCacheConfig :
+		case HIP_API_ID_hipDeviceSetCacheConfig : {
 			//	hipFuncCache_t cacheConfig (enum hipFuncCache_t);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceSetCacheConfig_t* args = (args_hipDeviceSetCacheConfig_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "cacheConfig");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFuncCache_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceSetCacheConfig.cacheConfig);
+			msgpack_encode_int(buf, args->cacheConfig);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceSetCacheConfig.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFree
-		case HIP_API_ID_hipFree :
+		case HIP_API_ID_hipFree : {
 			//	void * ptr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipFree_t* args = (args_hipFree_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipFree.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipFree.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DToArrayAsync_spt
-		case HIP_API_ID_hipMemcpy2DToArrayAsync_spt :
+		case HIP_API_ID_hipMemcpy2DToArrayAsync_spt : {
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
 			//	size_t hOffset (unsigned long);
@@ -13789,1216 +14467,1284 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy2DToArrayAsync_spt_t* args = (args_hipMemcpy2DToArrayAsync_spt_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DToArrayAsync_spt.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "wOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArrayAsync_spt.wOffset);
+			msgpack_encode_int(buf, args->wOffset);
 
 			msgpack_encode_string_ext(buf, "hOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArrayAsync_spt.hOffset);
+			msgpack_encode_int(buf, args->hOffset);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DToArrayAsync_spt.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "spitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArrayAsync_spt.spitch);
+			msgpack_encode_int(buf, args->spitch);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArrayAsync_spt.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArrayAsync_spt.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArrayAsync_spt.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DToArrayAsync_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArrayAsync_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxGetFlags
-		case HIP_API_ID_hipCtxGetFlags :
+		case HIP_API_ID_hipCtxGetFlags : {
 			//	unsigned int * flags (unsigned int *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxGetFlags_t* args = (args_hipCtxGetFlags_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCtxGetFlags.flags);
+			msgpack_encode_uint(buf, (uintptr_t)args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxGetFlags.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetSymbolAddress
-		case HIP_API_ID_hipGetSymbolAddress :
+		case HIP_API_ID_hipGetSymbolAddress : {
 			//	void ** devPtr (void **);
 			//	const void * symbol (const void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetSymbolAddress_t* args = (args_hipGetSymbolAddress_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "devPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetSymbolAddress.devPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->devPtr);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetSymbolAddress.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetSymbolAddress.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetAddress
-		case HIP_API_ID_hipTexRefGetAddress :
+		case HIP_API_ID_hipTexRefGetAddress : {
 			//	hipDeviceptr_t * dev_ptr (void **);
 			//	const textureReference * texRef (const struct textureReference *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefGetAddress_t* args = (args_hipTexRefGetAddress_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "dev_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetAddress.dev_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dev_ptr);
 
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetAddress.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefGetAddress.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexObjectCreate
-		case HIP_API_ID_hipTexObjectCreate :
+		case HIP_API_ID_hipTexObjectCreate : {
 			//	hipTextureObject_t * pTexObject (struct __hip_texture **);
 			//	const HIP_RESOURCE_DESC * pResDesc (const struct HIP_RESOURCE_DESC_st *);
 			//	const HIP_TEXTURE_DESC * pTexDesc (const struct HIP_TEXTURE_DESC_st *);
 			//	const HIP_RESOURCE_VIEW_DESC * pResViewDesc (const struct HIP_RESOURCE_VIEW_DESC_st *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexObjectCreate_t* args = (args_hipTexObjectCreate_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "pTexObject");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipTextureObject_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexObjectCreate.pTexObject);
+			msgpack_encode_uint(buf, (uintptr_t)args->pTexObject);
 
 			msgpack_encode_string_ext(buf, "pResDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const HIP_RESOURCE_DESC *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexObjectCreate.pResDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->pResDesc);
 
 			msgpack_encode_string_ext(buf, "pTexDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const HIP_TEXTURE_DESC *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexObjectCreate.pTexDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->pTexDesc);
 
 			msgpack_encode_string_ext(buf, "pResViewDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const HIP_RESOURCE_VIEW_DESC *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexObjectCreate.pResViewDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->pResViewDesc);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexObjectCreate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetSharedMemConfig
-		case HIP_API_ID_hipDeviceGetSharedMemConfig :
+		case HIP_API_ID_hipDeviceGetSharedMemConfig : {
 			//	hipSharedMemConfig * pConfig (enum hipSharedMemConfig*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceGetSharedMemConfig_t* args = (args_hipDeviceGetSharedMemConfig_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "pConfig");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipSharedMemConfig *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGetSharedMemConfig.pConfig);
+			msgpack_encode_uint(buf, (uintptr_t)args->pConfig);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetSharedMemConfig.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyHtoAAsync
-		case HIP_API_ID_hipMemcpyHtoAAsync :
+		case HIP_API_ID_hipMemcpyHtoAAsync : {
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
 			//	const void * srcHost (const void *);
 			//	size_t ByteCount (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyHtoAAsync_t* args = (args_hipMemcpyHtoAAsync_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "dstArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyHtoAAsync.dstArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->dstArray);
 
 			msgpack_encode_string_ext(buf, "dstOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyHtoAAsync.dstOffset);
+			msgpack_encode_int(buf, args->dstOffset);
 
 			msgpack_encode_string_ext(buf, "srcHost");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyHtoAAsync.srcHost);
+			msgpack_encode_uint(buf, (uintptr_t)args->srcHost);
 
 			msgpack_encode_string_ext(buf, "ByteCount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyHtoAAsync.ByteCount);
+			msgpack_encode_int(buf, args->ByteCount);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyHtoAAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyHtoAAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolGetAttribute
-		case HIP_API_ID_hipMemPoolGetAttribute :
+		case HIP_API_ID_hipMemPoolGetAttribute : {
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipMemPoolAttr attr (enum hipMemPoolAttr);
 			//	void * value (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemPoolGetAttribute_t* args = (args_hipMemPoolGetAttribute_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "mem_pool");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPool_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolGetAttribute.mem_pool);
+			msgpack_encode_uint(buf, (uintptr_t)args->mem_pool);
 
 			msgpack_encode_string_ext(buf, "attr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPoolAttr");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolGetAttribute.attr);
+			msgpack_encode_int(buf, args->attr);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolGetAttribute.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolGetAttribute.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddMemAllocNode
-		case HIP_API_ID_hipGraphAddMemAllocNode :
+		case HIP_API_ID_hipGraphAddMemAllocNode : {
 			//	hipGraphNode_t * pGraphNode (struct hipGraphNode **);
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * pDependencies (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	hipMemAllocNodeParams * pNodeParams (struct hipMemAllocNodeParams*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddMemAllocNode_t* args = (args_hipGraphAddMemAllocNode_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "pGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemAllocNode.pGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->pGraphNode);
 
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemAllocNode.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "pDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemAllocNode.pDependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->pDependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemAllocNode.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemAllocNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddMemAllocNode.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddMemAllocNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemRetainAllocationHandle
-		case HIP_API_ID_hipMemRetainAllocationHandle :
+		case HIP_API_ID_hipMemRetainAllocationHandle : {
 			//	hipMemGenericAllocationHandle_t * handle (struct ihipMemGenericAllocationHandle **);
 			//	void * addr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemRetainAllocationHandle_t* args = (args_hipMemRetainAllocationHandle_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemGenericAllocationHandle_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemRetainAllocationHandle.handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->handle);
 
 			msgpack_encode_string_ext(buf, "addr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemRetainAllocationHandle.addr);
+			msgpack_encode_uint(buf, (uintptr_t)args->addr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemRetainAllocationHandle.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetFuncBySymbol
-		case HIP_API_ID_hipGetFuncBySymbol :
+		case HIP_API_ID_hipGetFuncBySymbol : {
 			//	hipFunction_t * functionPtr (struct ihipModuleSymbol_t **);
 			//	const void * symbolPtr (const void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetFuncBySymbol_t* args = (args_hipGetFuncBySymbol_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "functionPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFunction_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetFuncBySymbol.functionPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->functionPtr);
 
 			msgpack_encode_string_ext(buf, "symbolPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetFuncBySymbol.symbolPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbolPtr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetFuncBySymbol.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceSetMemPool
-		case HIP_API_ID_hipDeviceSetMemPool :
+		case HIP_API_ID_hipDeviceSetMemPool : {
 			//	int device (int);
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceSetMemPool_t* args = (args_hipDeviceSetMemPool_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceSetMemPool.device);
+			msgpack_encode_int(buf, args->device);
 
 			msgpack_encode_string_ext(buf, "mem_pool");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPool_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceSetMemPool.mem_pool);
+			msgpack_encode_uint(buf, (uintptr_t)args->mem_pool);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceSetMemPool.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceSetLimit
-		case HIP_API_ID_hipDeviceSetLimit :
+		case HIP_API_ID_hipDeviceSetLimit : {
 			//	enum hipLimit_t limit (enum hipLimit_t);
 			//	size_t value (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceSetLimit_t* args = (args_hipDeviceSetLimit_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "limit");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "enum hipLimit_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceSetLimit.limit);
+			msgpack_encode_int(buf, args->limit);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceSetLimit.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceSetLimit.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemGetInfo
-		case HIP_API_ID_hipMemGetInfo :
+		case HIP_API_ID_hipMemGetInfo : {
 			//	size_t * free (unsigned long*);
 			//	size_t * total (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemGetInfo_t* args = (args_hipMemGetInfo_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "free");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemGetInfo.free);
+			msgpack_encode_uint(buf, (uintptr_t)args->free);
 
 			msgpack_encode_string_ext(buf, "total");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemGetInfo.total);
+			msgpack_encode_uint(buf, (uintptr_t)args->total);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemGetInfo.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyParam2D
-		case HIP_API_ID_hipMemcpyParam2D :
+		case HIP_API_ID_hipMemcpyParam2D : {
 			//	const hip_Memcpy2D * pCopy (const struct hip_Memcpy2D *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyParam2D_t* args = (args_hipMemcpyParam2D_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "pCopy");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hip_Memcpy2D *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyParam2D.pCopy);
+			msgpack_encode_uint(buf, (uintptr_t)args->pCopy);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyParam2D.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphDebugDotPrint
-		case HIP_API_ID_hipGraphDebugDotPrint :
+		case HIP_API_ID_hipGraphDebugDotPrint : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const char * path (const char *);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphDebugDotPrint_t* args = (args_hipGraphDebugDotPrint_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphDebugDotPrint.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "path");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphDebugDotPrint.path);
+			msgpack_encode_uint(buf, (uintptr_t)args->path);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphDebugDotPrint.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphDebugDotPrint.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceSetGraphMemAttribute
-		case HIP_API_ID_hipDeviceSetGraphMemAttribute :
+		case HIP_API_ID_hipDeviceSetGraphMemAttribute : {
 			//	int device (int);
 			//	hipGraphMemAttributeType attr (enum hipGraphMemAttributeType);
 			//	void * value (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceSetGraphMemAttribute_t* args = (args_hipDeviceSetGraphMemAttribute_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceSetGraphMemAttribute.device);
+			msgpack_encode_int(buf, args->device);
 
 			msgpack_encode_string_ext(buf, "attr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphMemAttributeType");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceSetGraphMemAttribute.attr);
+			msgpack_encode_int(buf, args->attr);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceSetGraphMemAttribute.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceSetGraphMemAttribute.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvGetErrorString
-		case HIP_API_ID_hipDrvGetErrorString :
+		case HIP_API_ID_hipDrvGetErrorString : {
 			//	hipError_t hipError (enum hipError_t);
 			//	const char ** errorString (const char **);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDrvGetErrorString_t* args = (args_hipDrvGetErrorString_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "hipError");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDrvGetErrorString.hipError);
+			msgpack_encode_int(buf, args->hipError);
 
 			msgpack_encode_string_ext(buf, "errorString");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvGetErrorString.errorString);
+			msgpack_encode_uint(buf, (uintptr_t)args->errorString);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDrvGetErrorString.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyDtoDAsync
-		case HIP_API_ID_hipMemcpyDtoDAsync :
+		case HIP_API_ID_hipMemcpyDtoDAsync : {
 			//	hipDeviceptr_t dst (void *);
 			//	hipDeviceptr_t src (void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyDtoDAsync_t* args = (args_hipMemcpyDtoDAsync_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyDtoDAsync.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyDtoDAsync.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyDtoDAsync.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyDtoDAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyDtoDAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxSynchronize
-		case HIP_API_ID_hipCtxSynchronize :
+		case HIP_API_ID_hipCtxSynchronize : {
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxSynchronize_t* args = (args_hipCtxSynchronize_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxSynchronize.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexObjectDestroy
-		case HIP_API_ID_hipTexObjectDestroy :
+		case HIP_API_ID_hipTexObjectDestroy : {
 			//	hipTextureObject_t texObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexObjectDestroy_t* args = (args_hipTexObjectDestroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "texObject");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipTextureObject_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexObjectDestroy.texObject);
+			msgpack_encode_uint(buf, (uintptr_t)args->texObject);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexObjectDestroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetAddressMode
-		case HIP_API_ID_hipTexRefGetAddressMode :
+		case HIP_API_ID_hipTexRefGetAddressMode : {
 			//	enum hipTextureAddressMode * pam (enum hipTextureAddressMode *);
 			//	const textureReference * texRef (const struct textureReference *);
 			//	int dim (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefGetAddressMode_t* args = (args_hipTexRefGetAddressMode_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "pam");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "enum hipTextureAddressMode *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetAddressMode.pam);
+			msgpack_encode_uint(buf, (uintptr_t)args->pam);
 
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetAddressMode.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "dim");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefGetAddressMode.dim);
+			msgpack_encode_int(buf, args->dim);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefGetAddressMode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE___hipGetPCH
-		case HIP_API_ID___hipGetPCH :
+		case HIP_API_ID___hipGetPCH : {
 			//	const char ** pch (const char **);
 			//	unsigned int * size (unsigned int *);
+			args___hipGetPCH_t* args = (args___hipGetPCH_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "pch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->__hipGetPCH.pch);
+			msgpack_encode_uint(buf, (uintptr_t)args->pch);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->__hipGetPCH.size);
+			msgpack_encode_uint(buf, (uintptr_t)args->size);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetFlags
-		case HIP_API_ID_hipStreamGetFlags :
+		case HIP_API_ID_hipStreamGetFlags : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	unsigned int * flags (unsigned int *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamGetFlags_t* args = (args_hipStreamGetFlags_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetFlags.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetFlags.flags);
+			msgpack_encode_uint(buf, (uintptr_t)args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamGetFlags.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemGetAccess
-		case HIP_API_ID_hipMemGetAccess :
+		case HIP_API_ID_hipMemGetAccess : {
 			//	unsigned long long * flags (unsigned long long *);
 			//	const hipMemLocation * location (const struct hipMemLocation *);
 			//	void * ptr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemGetAccess_t* args = (args_hipMemGetAccess_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned long long *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemGetAccess.flags);
+			msgpack_encode_uint(buf, (uintptr_t)args->flags);
 
 			msgpack_encode_string_ext(buf, "location");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipMemLocation *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemGetAccess.location);
+			msgpack_encode_uint(buf, (uintptr_t)args->location);
 
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemGetAccess.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemGetAccess.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyAtoA
-		case HIP_API_ID_hipMemcpyAtoA :
+		case HIP_API_ID_hipMemcpyAtoA : {
 			//	hipArray_t dstArray (struct hipArray *);
 			//	size_t dstOffset (unsigned long);
 			//	hipArray_t srcArray (struct hipArray *);
 			//	size_t srcOffset (unsigned long);
 			//	size_t ByteCount (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyAtoA_t* args = (args_hipMemcpyAtoA_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "dstArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyAtoA.dstArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->dstArray);
 
 			msgpack_encode_string_ext(buf, "dstOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAtoA.dstOffset);
+			msgpack_encode_int(buf, args->dstOffset);
 
 			msgpack_encode_string_ext(buf, "srcArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyAtoA.srcArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->srcArray);
 
 			msgpack_encode_string_ext(buf, "srcOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAtoA.srcOffset);
+			msgpack_encode_int(buf, args->srcOffset);
 
 			msgpack_encode_string_ext(buf, "ByteCount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAtoA.ByteCount);
+			msgpack_encode_int(buf, args->ByteCount);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAtoA.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyToSymbol
-		case HIP_API_ID_hipMemcpyToSymbol :
+		case HIP_API_ID_hipMemcpyToSymbol : {
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyToSymbol_t* args = (args_hipMemcpyToSymbol_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyToSymbol.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyToSymbol.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbol.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbol.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbol.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToSymbol.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxSetCurrent
-		case HIP_API_ID_hipCtxSetCurrent :
+		case HIP_API_ID_hipCtxSetCurrent : {
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxSetCurrent_t* args = (args_hipCtxSetCurrent_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "ctx");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipCtx_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCtxSetCurrent.ctx);
+			msgpack_encode_uint(buf, (uintptr_t)args->ctx);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxSetCurrent.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamQuery_spt
-		case HIP_API_ID_hipStreamQuery_spt :
+		case HIP_API_ID_hipStreamQuery_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamQuery_spt_t* args = (args_hipStreamQuery_spt_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamQuery_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamQuery_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetSymbolSize
-		case HIP_API_ID_hipGetSymbolSize :
+		case HIP_API_ID_hipGetSymbolSize : {
 			//	size_t * size (unsigned long*);
 			//	const void * symbol (const void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetSymbolSize_t* args = (args_hipGetSymbolSize_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetSymbolSize.size);
+			msgpack_encode_uint(buf, (uintptr_t)args->size);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetSymbolSize.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetSymbolSize.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMipmappedArrayGetLevel
-		case HIP_API_ID_hipMipmappedArrayGetLevel :
+		case HIP_API_ID_hipMipmappedArrayGetLevel : {
 			//	hipArray_t * pLevelArray (struct hipArray **);
 			//	hipMipmappedArray_t hMipMappedArray (struct hipMipmappedArray *);
 			//	unsigned int level (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMipmappedArrayGetLevel_t* args = (args_hipMipmappedArrayGetLevel_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "pLevelArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMipmappedArrayGetLevel.pLevelArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->pLevelArray);
 
 			msgpack_encode_string_ext(buf, "hMipMappedArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMipmappedArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMipmappedArrayGetLevel.hMipMappedArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->hMipMappedArray);
 
 			msgpack_encode_string_ext(buf, "level");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMipmappedArrayGetLevel.level);
+			msgpack_encode_int(buf, args->level);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMipmappedArrayGetLevel.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExternalMemoryGetMappedMipmappedArray
-		case HIP_API_ID_hipExternalMemoryGetMappedMipmappedArray :
+		case HIP_API_ID_hipExternalMemoryGetMappedMipmappedArray : {
 			//	hipMipmappedArray_t * mipmap (struct hipMipmappedArray **);
 			//	hipExternalMemory_t extMem (void *);
 			//	const hipExternalMemoryMipmappedArrayDesc * mipmapDesc (const struct hipExternalMemoryMipmappedArrayDesc_st *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipExternalMemoryGetMappedMipmappedArray_t* args = (args_hipExternalMemoryGetMappedMipmappedArray_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "mipmap");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMipmappedArray_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExternalMemoryGetMappedMipmappedArray.mipmap);
+			msgpack_encode_uint(buf, (uintptr_t)args->mipmap);
 
 			msgpack_encode_string_ext(buf, "extMem");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipExternalMemory_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExternalMemoryGetMappedMipmappedArray.extMem);
+			msgpack_encode_uint(buf, (uintptr_t)args->extMem);
 
 			msgpack_encode_string_ext(buf, "mipmapDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipExternalMemoryMipmappedArrayDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExternalMemoryGetMappedMipmappedArray.mipmapDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->mipmapDesc);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExternalMemoryGetMappedMipmappedArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecMemcpyNodeSetParams
-		case HIP_API_ID_hipGraphExecMemcpyNodeSetParams :
+		case HIP_API_ID_hipGraphExecMemcpyNodeSetParams : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipMemcpy3DParms * pNodeParams (struct hipMemcpy3DParms*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExecMemcpyNodeSetParams_t* args = (args_hipGraphExecMemcpyNodeSetParams_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "hGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemcpyNodeSetParams.hGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraphExec);
 
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemcpyNodeSetParams.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpy3DParms *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecMemcpyNodeSetParams.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecMemcpyNodeSetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipUserObjectCreate
-		case HIP_API_ID_hipUserObjectCreate :
+		case HIP_API_ID_hipUserObjectCreate : {
 			//	hipUserObject_t * object_out (struct hipUserObject **);
 			//	void * ptr (void *);
 			//	hipHostFn_t destroy (void (*)(void *));
 			//	unsigned int initialRefcount (unsigned int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipUserObjectCreate_t* args = (args_hipUserObjectCreate_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "object_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipUserObject_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipUserObjectCreate.object_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->object_out);
 
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipUserObjectCreate.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "destroy");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipHostFn_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipUserObjectCreate.destroy);
+			msgpack_encode_uint(buf, (uintptr_t)args->destroy);
 
 			msgpack_encode_string_ext(buf, "initialRefcount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipUserObjectCreate.initialRefcount);
+			msgpack_encode_int(buf, args->initialRefcount);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipUserObjectCreate.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipUserObjectCreate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetCaptureInfo_v2
-		case HIP_API_ID_hipStreamGetCaptureInfo_v2 :
+		case HIP_API_ID_hipStreamGetCaptureInfo_v2 : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * captureStatus_out (enum hipStreamCaptureStatus*);
 			//	unsigned long long * id_out (unsigned long long *);
@@ -15006,211 +15752,223 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	const hipGraphNode_t ** dependencies_out (const struct hipGraphNode * **);
 			//	size_t * numDependencies_out (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamGetCaptureInfo_v2_t* args = (args_hipStreamGetCaptureInfo_v2_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo_v2.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "captureStatus_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStreamCaptureStatus *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo_v2.captureStatus_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->captureStatus_out);
 
 			msgpack_encode_string_ext(buf, "id_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned long long *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo_v2.id_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->id_out);
 
 			msgpack_encode_string_ext(buf, "graph_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo_v2.graph_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph_out);
 
 			msgpack_encode_string_ext(buf, "dependencies_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo_v2.dependencies_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->dependencies_out);
 
 			msgpack_encode_string_ext(buf, "numDependencies_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo_v2.numDependencies_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->numDependencies_out);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamGetCaptureInfo_v2.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetArray
-		case HIP_API_ID_hipTexRefGetArray :
+		case HIP_API_ID_hipTexRefGetArray : {
 			//	hipArray_t * pArray (struct hipArray **);
 			//	const textureReference * texRef (const struct textureReference *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefGetArray_t* args = (args_hipTexRefGetArray_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetArray.pArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->pArray);
 
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetArray.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefGetArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipImportExternalSemaphore
-		case HIP_API_ID_hipImportExternalSemaphore :
+		case HIP_API_ID_hipImportExternalSemaphore : {
 			//	hipExternalSemaphore_t * extSem_out (void **);
 			//	const hipExternalSemaphoreHandleDesc * semHandleDesc (const struct hipExternalSemaphoreHandleDesc_st *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipImportExternalSemaphore_t* args = (args_hipImportExternalSemaphore_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "extSem_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipExternalSemaphore_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipImportExternalSemaphore.extSem_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->extSem_out);
 
 			msgpack_encode_string_ext(buf, "semHandleDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipExternalSemaphoreHandleDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipImportExternalSemaphore.semHandleDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->semHandleDesc);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipImportExternalSemaphore.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetAttribute
-		case HIP_API_ID_hipDeviceGetAttribute :
+		case HIP_API_ID_hipDeviceGetAttribute : {
 			//	int * pi (int *);
 			//	hipDeviceAttribute_t attr (enum hipDeviceAttribute_t);
 			//	int deviceId (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceGetAttribute_t* args = (args_hipDeviceGetAttribute_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "pi");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGetAttribute.pi);
+			msgpack_encode_uint(buf, (uintptr_t)args->pi);
 
 			msgpack_encode_string_ext(buf, "attr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceAttribute_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetAttribute.attr);
+			msgpack_encode_int(buf, args->attr);
 
 			msgpack_encode_string_ext(buf, "deviceId");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetAttribute.deviceId);
+			msgpack_encode_int(buf, args->deviceId);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetAttribute.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemFreeNodeGetParams
-		case HIP_API_ID_hipGraphMemFreeNodeGetParams :
+		case HIP_API_ID_hipGraphMemFreeNodeGetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	void * dev_ptr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphMemFreeNodeGetParams_t* args = (args_hipGraphMemFreeNodeGetParams_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemFreeNodeGetParams.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "dev_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemFreeNodeGetParams.dev_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dev_ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemFreeNodeGetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxGetSharedMemConfig
-		case HIP_API_ID_hipCtxGetSharedMemConfig :
+		case HIP_API_ID_hipCtxGetSharedMemConfig : {
 			//	hipSharedMemConfig * pConfig (enum hipSharedMemConfig*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxGetSharedMemConfig_t* args = (args_hipCtxGetSharedMemConfig_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "pConfig");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipSharedMemConfig *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCtxGetSharedMemConfig.pConfig);
+			msgpack_encode_uint(buf, (uintptr_t)args->pConfig);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxGetSharedMemConfig.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemcpyNodeSetParamsToSymbol
-		case HIP_API_ID_hipGraphMemcpyNodeSetParamsToSymbol :
+		case HIP_API_ID_hipGraphMemcpyNodeSetParamsToSymbol : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const void * symbol (const void *);
 			//	const void * src (const void *);
@@ -15218,61 +15976,63 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t offset (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphMemcpyNodeSetParamsToSymbol_t* args = (args_hipGraphMemcpyNodeSetParamsToSymbol_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemcpyNodeSetParamsToSymbol.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemcpyNodeSetParamsToSymbol.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemcpyNodeSetParamsToSymbol.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemcpyNodeSetParamsToSymbol.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "offset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemcpyNodeSetParamsToSymbol.offset);
+			msgpack_encode_int(buf, args->offset);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemcpyNodeSetParamsToSymbol.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemcpyNodeSetParamsToSymbol.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DToArray
-		case HIP_API_ID_hipMemcpy2DToArray :
+		case HIP_API_ID_hipMemcpy2DToArray : {
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
 			//	size_t hOffset (unsigned long);
@@ -15282,187 +16042,197 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy2DToArray_t* args = (args_hipMemcpy2DToArray_t*) func_args;
 			msgpack_encode_map(buf, 9);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DToArray.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "wOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArray.wOffset);
+			msgpack_encode_int(buf, args->wOffset);
 
 			msgpack_encode_string_ext(buf, "hOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArray.hOffset);
+			msgpack_encode_int(buf, args->hOffset);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DToArray.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "spitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArray.spitch);
+			msgpack_encode_int(buf, args->spitch);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArray.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArray.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArray.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DToArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamIsCapturing_spt
-		case HIP_API_ID_hipStreamIsCapturing_spt :
+		case HIP_API_ID_hipStreamIsCapturing_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * pCaptureStatus (enum hipStreamCaptureStatus*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamIsCapturing_spt_t* args = (args_hipStreamIsCapturing_spt_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamIsCapturing_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "pCaptureStatus");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStreamCaptureStatus *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamIsCapturing_spt.pCaptureStatus);
+			msgpack_encode_uint(buf, (uintptr_t)args->pCaptureStatus);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamIsCapturing_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFreeHost
-		case HIP_API_ID_hipFreeHost :
+		case HIP_API_ID_hipFreeHost : {
 			//	void * ptr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipFreeHost_t* args = (args_hipFreeHost_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipFreeHost.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipFreeHost.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphKernelNodeSetParams
-		case HIP_API_ID_hipGraphKernelNodeSetParams :
+		case HIP_API_ID_hipGraphKernelNodeSetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipKernelNodeParams * pNodeParams (const struct hipKernelNodeParams *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphKernelNodeSetParams_t* args = (args_hipGraphKernelNodeSetParams_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphKernelNodeSetParams.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipKernelNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphKernelNodeSetParams.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphKernelNodeSetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMallocHost
-		case HIP_API_ID_hipMallocHost :
+		case HIP_API_ID_hipMallocHost : {
 			//	void ** ptr (void **);
 			//	size_t size (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMallocHost_t* args = (args_hipMallocHost_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMallocHost.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "size");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocHost.size);
+			msgpack_encode_int(buf, args->size);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocHost.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset3D_spt
-		case HIP_API_ID_hipMemset3D_spt :
+		case HIP_API_ID_hipMemset3D_spt : {
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
 			//		size_t pitch (unsigned long);
@@ -15476,6 +16246,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//		size_t depth (unsigned long);
 			//	});
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemset3D_spt_t* args = (args_hipMemset3D_spt_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "pitchedDevPtr");
 			msgpack_encode_map(buf, 2);
@@ -15489,28 +16260,28 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D_spt.pitchedDevPtr.pitch);
+			msgpack_encode_int(buf, args->pitchedDevPtr.pitch);
 
 			msgpack_encode_string_ext(buf, "xsize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D_spt.pitchedDevPtr.xsize);
+			msgpack_encode_int(buf, args->pitchedDevPtr.xsize);
 
 			msgpack_encode_string_ext(buf, "ysize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D_spt.pitchedDevPtr.ysize);
+			msgpack_encode_int(buf, args->pitchedDevPtr.ysize);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D_spt.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "extent");
 			msgpack_encode_map(buf, 2);
@@ -15524,34 +16295,35 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D_spt.extent.width);
+			msgpack_encode_int(buf, args->extent.width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D_spt.extent.height);
+			msgpack_encode_int(buf, args->extent.height);
 
 			msgpack_encode_string_ext(buf, "depth");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D_spt.extent.depth);
+			msgpack_encode_int(buf, args->extent.depth);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3D_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamGetCaptureInfo_v2_spt
-		case HIP_API_ID_hipStreamGetCaptureInfo_v2_spt :
+		case HIP_API_ID_hipStreamGetCaptureInfo_v2_spt : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipStreamCaptureStatus * captureStatus_out (enum hipStreamCaptureStatus*);
 			//	unsigned long long * id_out (unsigned long long *);
@@ -15559,303 +16331,319 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	const hipGraphNode_t ** dependencies_out (const struct hipGraphNode * **);
 			//	size_t * numDependencies_out (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamGetCaptureInfo_v2_spt_t* args = (args_hipStreamGetCaptureInfo_v2_spt_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo_v2_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "captureStatus_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStreamCaptureStatus *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo_v2_spt.captureStatus_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->captureStatus_out);
 
 			msgpack_encode_string_ext(buf, "id_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned long long *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo_v2_spt.id_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->id_out);
 
 			msgpack_encode_string_ext(buf, "graph_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo_v2_spt.graph_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph_out);
 
 			msgpack_encode_string_ext(buf, "dependencies_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo_v2_spt.dependencies_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->dependencies_out);
 
 			msgpack_encode_string_ext(buf, "numDependencies_out");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamGetCaptureInfo_v2_spt.numDependencies_out);
+			msgpack_encode_uint(buf, (uintptr_t)args->numDependencies_out);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamGetCaptureInfo_v2_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetTextureReference
-		case HIP_API_ID_hipGetTextureReference :
+		case HIP_API_ID_hipGetTextureReference : {
 			//	const textureReference ** texref (const struct textureReference **);
 			//	const void * symbol (const void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetTextureReference_t* args = (args_hipGetTextureReference_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "texref");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetTextureReference.texref);
+			msgpack_encode_uint(buf, (uintptr_t)args->texref);
 
 			msgpack_encode_string_ext(buf, "symbol");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetTextureReference.symbol);
+			msgpack_encode_uint(buf, (uintptr_t)args->symbol);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetTextureReference.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecExternalSemaphoresSignalNodeSetParams
-		case HIP_API_ID_hipGraphExecExternalSemaphoresSignalNodeSetParams :
+		case HIP_API_ID_hipGraphExecExternalSemaphoresSignalNodeSetParams : {
 			//	hipGraphExec_t hGraphExec (struct hipGraphExec *);
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	const hipExternalSemaphoreSignalNodeParams * nodeParams (const struct hipExternalSemaphoreSignalNodeParams *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExecExternalSemaphoresSignalNodeSetParams_t* args = (args_hipGraphExecExternalSemaphoresSignalNodeSetParams_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "hGraphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecExternalSemaphoresSignalNodeSetParams.hGraphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraphExec);
 
 			msgpack_encode_string_ext(buf, "hNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecExternalSemaphoresSignalNodeSetParams.hNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->hNode);
 
 			msgpack_encode_string_ext(buf, "nodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipExternalSemaphoreSignalNodeParams *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecExternalSemaphoresSignalNodeSetParams.nodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->nodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecExternalSemaphoresSignalNodeSetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphAddDependencies
-		case HIP_API_ID_hipGraphAddDependencies :
+		case HIP_API_ID_hipGraphAddDependencies : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	const hipGraphNode_t * from (const struct hipGraphNode * *);
 			//	const hipGraphNode_t * to (const struct hipGraphNode * *);
 			//	size_t numDependencies (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphAddDependencies_t* args = (args_hipGraphAddDependencies_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddDependencies.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "from");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddDependencies.from);
+			msgpack_encode_uint(buf, (uintptr_t)args->from);
 
 			msgpack_encode_string_ext(buf, "to");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphAddDependencies.to);
+			msgpack_encode_uint(buf, (uintptr_t)args->to);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddDependencies.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphAddDependencies.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphNodeGetType
-		case HIP_API_ID_hipGraphNodeGetType :
+		case HIP_API_ID_hipGraphNodeGetType : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	hipGraphNodeType * pType (enum hipGraphNodeType*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphNodeGetType_t* args = (args_hipGraphNodeGetType_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeGetType.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pType");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNodeType *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphNodeGetType.pType);
+			msgpack_encode_uint(buf, (uintptr_t)args->pType);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphNodeGetType.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetBorderColor
-		case HIP_API_ID_hipTexRefSetBorderColor :
+		case HIP_API_ID_hipTexRefSetBorderColor : {
 			//	textureReference * texRef (struct textureReference*);
 			//	float * pBorderColor (float *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefSetBorderColor_t* args = (args_hipTexRefSetBorderColor_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetBorderColor.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "pBorderColor");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "float *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetBorderColor.pBorderColor);
+			msgpack_encode_uint(buf, (uintptr_t)args->pBorderColor);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetBorderColor.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPrefetchAsync
-		case HIP_API_ID_hipMemPrefetchAsync :
+		case HIP_API_ID_hipMemPrefetchAsync : {
 			//	const void * dev_ptr (const void *);
 			//	size_t count (unsigned long);
 			//	int device (int);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemPrefetchAsync_t* args = (args_hipMemPrefetchAsync_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dev_ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPrefetchAsync.dev_ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dev_ptr);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPrefetchAsync.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPrefetchAsync.device);
+			msgpack_encode_int(buf, args->device);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPrefetchAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPrefetchAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxGetDevice
-		case HIP_API_ID_hipCtxGetDevice :
+		case HIP_API_ID_hipCtxGetDevice : {
 			//	hipDevice_t * device (int*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxGetDevice_t* args = (args_hipCtxGetDevice_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDevice_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCtxGetDevice.device);
+			msgpack_encode_uint(buf, (uintptr_t)args->device);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxGetDevice.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2DArrayToArray
-		case HIP_API_ID_hipMemcpy2DArrayToArray :
+		case HIP_API_ID_hipMemcpy2DArrayToArray : {
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffsetDst (unsigned long);
 			//	size_t hOffsetDst (unsigned long);
@@ -15866,142 +16654,148 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy2DArrayToArray_t* args = (args_hipMemcpy2DArrayToArray_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DArrayToArray.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "wOffsetDst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DArrayToArray.wOffsetDst);
+			msgpack_encode_int(buf, args->wOffsetDst);
 
 			msgpack_encode_string_ext(buf, "hOffsetDst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DArrayToArray.hOffsetDst);
+			msgpack_encode_int(buf, args->hOffsetDst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_const_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2DArrayToArray.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "wOffsetSrc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DArrayToArray.wOffsetSrc);
+			msgpack_encode_int(buf, args->wOffsetSrc);
 
 			msgpack_encode_string_ext(buf, "hOffsetSrc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DArrayToArray.hOffsetSrc);
+			msgpack_encode_int(buf, args->hOffsetSrc);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DArrayToArray.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DArrayToArray.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DArrayToArray.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2DArrayToArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipUserObjectRelease
-		case HIP_API_ID_hipUserObjectRelease :
+		case HIP_API_ID_hipUserObjectRelease : {
 			//	hipUserObject_t object (struct hipUserObject *);
 			//	unsigned int count (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipUserObjectRelease_t* args = (args_hipUserObjectRelease_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "object");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipUserObject_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipUserObjectRelease.object);
+			msgpack_encode_uint(buf, (uintptr_t)args->object);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipUserObjectRelease.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipUserObjectRelease.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipHostGetFlags
-		case HIP_API_ID_hipHostGetFlags :
+		case HIP_API_ID_hipHostGetFlags : {
 			//	unsigned int * flagsPtr (unsigned int *);
 			//	void * hostPtr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipHostGetFlags_t* args = (args_hipHostGetFlags_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "flagsPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipHostGetFlags.flagsPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->flagsPtr);
 
 			msgpack_encode_string_ext(buf, "hostPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipHostGetFlags.hostPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->hostPtr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipHostGetFlags.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvGraphAddMemsetNode
-		case HIP_API_ID_hipDrvGraphAddMemsetNode :
+		case HIP_API_ID_hipDrvGraphAddMemsetNode : {
 			//	hipGraphNode_t * phGraphNode (struct hipGraphNode **);
 			//	hipGraph_t hGraph (struct ihipGraph *);
 			//	const hipGraphNode_t * dependencies (const struct hipGraphNode * *);
@@ -16009,159 +16803,167 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	const HIP_MEMSET_NODE_PARAMS * memsetParams (const struct HIP_MEMSET_NODE_PARAMS *);
 			//	hipCtx_t ctx (struct ihipCtx_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDrvGraphAddMemsetNode_t* args = (args_hipDrvGraphAddMemsetNode_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "phGraphNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvGraphAddMemsetNode.phGraphNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->phGraphNode);
 
 			msgpack_encode_string_ext(buf, "hGraph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvGraphAddMemsetNode.hGraph);
+			msgpack_encode_uint(buf, (uintptr_t)args->hGraph);
 
 			msgpack_encode_string_ext(buf, "dependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvGraphAddMemsetNode.dependencies);
+			msgpack_encode_uint(buf, (uintptr_t)args->dependencies);
 
 			msgpack_encode_string_ext(buf, "numDependencies");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDrvGraphAddMemsetNode.numDependencies);
+			msgpack_encode_int(buf, args->numDependencies);
 
 			msgpack_encode_string_ext(buf, "memsetParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const HIP_MEMSET_NODE_PARAMS *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvGraphAddMemsetNode.memsetParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->memsetParams);
 
 			msgpack_encode_string_ext(buf, "ctx");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipCtx_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvGraphAddMemsetNode.ctx);
+			msgpack_encode_uint(buf, (uintptr_t)args->ctx);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDrvGraphAddMemsetNode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyAtoD
-		case HIP_API_ID_hipMemcpyAtoD :
+		case HIP_API_ID_hipMemcpyAtoD : {
 			//	hipDeviceptr_t dstDevice (void *);
 			//	hipArray_t srcArray (struct hipArray *);
 			//	size_t srcOffset (unsigned long);
 			//	size_t ByteCount (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyAtoD_t* args = (args_hipMemcpyAtoD_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dstDevice");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyAtoD.dstDevice);
+			msgpack_encode_uint(buf, (uintptr_t)args->dstDevice);
 
 			msgpack_encode_string_ext(buf, "srcArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyAtoD.srcArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->srcArray);
 
 			msgpack_encode_string_ext(buf, "srcOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAtoD.srcOffset);
+			msgpack_encode_int(buf, args->srcOffset);
 
 			msgpack_encode_string_ext(buf, "ByteCount");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAtoD.ByteCount);
+			msgpack_encode_int(buf, args->ByteCount);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyAtoD.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolCreate
-		case HIP_API_ID_hipMemPoolCreate :
+		case HIP_API_ID_hipMemPoolCreate : {
 			//	hipMemPool_t * mem_pool (struct ihipMemPoolHandle_t **);
 			//	const hipMemPoolProps * pool_props (const struct hipMemPoolProps *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemPoolCreate_t* args = (args_hipMemPoolCreate_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "mem_pool");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPool_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolCreate.mem_pool);
+			msgpack_encode_uint(buf, (uintptr_t)args->mem_pool);
 
 			msgpack_encode_string_ext(buf, "pool_props");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipMemPoolProps *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolCreate.pool_props);
+			msgpack_encode_uint(buf, (uintptr_t)args->pool_props);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolCreate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipKernelNameRef
-		case HIP_API_ID_hipKernelNameRef :
+		case HIP_API_ID_hipKernelNameRef : {
 			//	const hipFunction_t f (const struct ihipModuleSymbol_t *);
 			//	const char * retval (const char *);
+			args_hipKernelNameRef_t* args = (args_hipKernelNameRef_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "f");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipFunction_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipKernelNameRef.f);
+			msgpack_encode_uint(buf, (uintptr_t)args->f);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipKernelNameRef.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset3DAsync
-		case HIP_API_ID_hipMemset3DAsync :
+		case HIP_API_ID_hipMemset3DAsync : {
 			//	hipPitchedPtr pitchedDevPtr ({
 			//		void * ptr (void *);
 			//		size_t pitch (unsigned long);
@@ -16176,6 +16978,7 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	});
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemset3DAsync_t* args = (args_hipMemset3DAsync_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "pitchedDevPtr");
 			msgpack_encode_map(buf, 2);
@@ -16189,28 +16992,28 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync.pitchedDevPtr.pitch);
+			msgpack_encode_int(buf, args->pitchedDevPtr.pitch);
 
 			msgpack_encode_string_ext(buf, "xsize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync.pitchedDevPtr.xsize);
+			msgpack_encode_int(buf, args->pitchedDevPtr.xsize);
 
 			msgpack_encode_string_ext(buf, "ysize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync.pitchedDevPtr.ysize);
+			msgpack_encode_int(buf, args->pitchedDevPtr.ysize);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "extent");
 			msgpack_encode_map(buf, 2);
@@ -16224,528 +17027,560 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync.extent.width);
+			msgpack_encode_int(buf, args->extent.width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync.extent.height);
+			msgpack_encode_int(buf, args->extent.height);
 
 			msgpack_encode_string_ext(buf, "depth");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync.extent.depth);
+			msgpack_encode_int(buf, args->extent.depth);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemset3DAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset3DAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipEventRecord
-		case HIP_API_ID_hipEventRecord :
+		case HIP_API_ID_hipEventRecord : {
 			//	hipEvent_t event (struct ihipEvent_t *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipEventRecord_t* args = (args_hipEventRecord_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "event");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipEventRecord.event);
+			msgpack_encode_uint(buf, (uintptr_t)args->event);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipEventRecord.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipEventRecord.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMipmappedArrayDestroy
-		case HIP_API_ID_hipMipmappedArrayDestroy :
+		case HIP_API_ID_hipMipmappedArrayDestroy : {
 			//	hipMipmappedArray_t hMipmappedArray (struct hipMipmappedArray *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMipmappedArrayDestroy_t* args = (args_hipMipmappedArrayDestroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "hMipmappedArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMipmappedArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMipmappedArrayDestroy.hMipmappedArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->hMipmappedArray);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMipmappedArrayDestroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetAsync_spt
-		case HIP_API_ID_hipMemsetAsync_spt :
+		case HIP_API_ID_hipMemsetAsync_spt : {
 			//	void * dst (void *);
 			//	int value (int);
 			//	size_t sizeBytes (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemsetAsync_spt_t* args = (args_hipMemsetAsync_spt_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemsetAsync_spt.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetAsync_spt.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetAsync_spt.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemsetAsync_spt.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetAsync_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDevicePrimaryCtxSetFlags
-		case HIP_API_ID_hipDevicePrimaryCtxSetFlags :
+		case HIP_API_ID_hipDevicePrimaryCtxSetFlags : {
 			//	hipDevice_t dev (int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDevicePrimaryCtxSetFlags_t* args = (args_hipDevicePrimaryCtxSetFlags_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "dev");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDevice_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDevicePrimaryCtxSetFlags.dev);
+			msgpack_encode_int(buf, args->dev);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDevicePrimaryCtxSetFlags.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDevicePrimaryCtxSetFlags.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipPeekAtLastError
-		case HIP_API_ID_hipPeekAtLastError :
+		case HIP_API_ID_hipPeekAtLastError : {
 			//	hipError_t retval (enum hipError_t);
+			args_hipPeekAtLastError_t* args = (args_hipPeekAtLastError_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipPeekAtLastError.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceGetGraphMemAttribute
-		case HIP_API_ID_hipDeviceGetGraphMemAttribute :
+		case HIP_API_ID_hipDeviceGetGraphMemAttribute : {
 			//	int device (int);
 			//	hipGraphMemAttributeType attr (enum hipGraphMemAttributeType);
 			//	void * value (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceGetGraphMemAttribute_t* args = (args_hipDeviceGetGraphMemAttribute_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetGraphMemAttribute.device);
+			msgpack_encode_int(buf, args->device);
 
 			msgpack_encode_string_ext(buf, "attr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphMemAttributeType");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetGraphMemAttribute.attr);
+			msgpack_encode_int(buf, args->attr);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDeviceGetGraphMemAttribute.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceGetGraphMemAttribute.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDrvGetErrorName
-		case HIP_API_ID_hipDrvGetErrorName :
+		case HIP_API_ID_hipDrvGetErrorName : {
 			//	hipError_t hipError (enum hipError_t);
 			//	const char ** errorString (const char **);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDrvGetErrorName_t* args = (args_hipDrvGetErrorName_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "hipError");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDrvGetErrorName.hipError);
+			msgpack_encode_int(buf, args->hipError);
 
 			msgpack_encode_string_ext(buf, "errorString");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDrvGetErrorName.errorString);
+			msgpack_encode_uint(buf, (uintptr_t)args->errorString);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDrvGetErrorName.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy_spt
-		case HIP_API_ID_hipMemcpy_spt :
+		case HIP_API_ID_hipMemcpy_spt : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t sizeBytes (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy_spt_t* args = (args_hipMemcpy_spt_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy_spt.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy_spt.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy_spt.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy_spt.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCtxSetSharedMemConfig
-		case HIP_API_ID_hipCtxSetSharedMemConfig :
+		case HIP_API_ID_hipCtxSetSharedMemConfig : {
 			//	hipSharedMemConfig config (enum hipSharedMemConfig);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCtxSetSharedMemConfig_t* args = (args_hipCtxSetSharedMemConfig_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "config");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipSharedMemConfig");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxSetSharedMemConfig.config);
+			msgpack_encode_int(buf, args->config);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCtxSetSharedMemConfig.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipCreateSurfaceObject
-		case HIP_API_ID_hipCreateSurfaceObject :
+		case HIP_API_ID_hipCreateSurfaceObject : {
 			//	hipSurfaceObject_t * pSurfObject (struct __hip_surface **);
 			//	const hipResourceDesc * pResDesc (const struct hipResourceDesc *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipCreateSurfaceObject_t* args = (args_hipCreateSurfaceObject_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pSurfObject");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipSurfaceObject_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCreateSurfaceObject.pSurfObject);
+			msgpack_encode_uint(buf, (uintptr_t)args->pSurfObject);
 
 			msgpack_encode_string_ext(buf, "pResDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipResourceDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipCreateSurfaceObject.pResDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->pResDesc);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipCreateSurfaceObject.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetMipmappedArrayLevel
-		case HIP_API_ID_hipGetMipmappedArrayLevel :
+		case HIP_API_ID_hipGetMipmappedArrayLevel : {
 			//	hipArray_t * levelArray (struct hipArray **);
 			//	hipMipmappedArray_const_t mipmappedArray (const struct hipMipmappedArray *);
 			//	unsigned int level (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetMipmappedArrayLevel_t* args = (args_hipGetMipmappedArrayLevel_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "levelArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetMipmappedArrayLevel.levelArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->levelArray);
 
 			msgpack_encode_string_ext(buf, "mipmappedArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMipmappedArray_const_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetMipmappedArrayLevel.mipmappedArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->mipmappedArray);
 
 			msgpack_encode_string_ext(buf, "level");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetMipmappedArrayLevel.level);
+			msgpack_encode_int(buf, args->level);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetMipmappedArrayLevel.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphExecDestroy
-		case HIP_API_ID_hipGraphExecDestroy :
+		case HIP_API_ID_hipGraphExecDestroy : {
 			//	hipGraphExec_t graphExec (struct hipGraphExec *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphExecDestroy_t* args = (args_hipGraphExecDestroy_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "graphExec");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphExec_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphExecDestroy.graphExec);
+			msgpack_encode_uint(buf, (uintptr_t)args->graphExec);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphExecDestroy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemsetD32Async
-		case HIP_API_ID_hipMemsetD32Async :
+		case HIP_API_ID_hipMemsetD32Async : {
 			//	hipDeviceptr_t dst (void *);
 			//	int value (int);
 			//	size_t count (unsigned long);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemsetD32Async_t* args = (args_hipMemsetD32Async_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemsetD32Async.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD32Async.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD32Async.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemsetD32Async.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemsetD32Async.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDeviceEnablePeerAccess
-		case HIP_API_ID_hipDeviceEnablePeerAccess :
+		case HIP_API_ID_hipDeviceEnablePeerAccess : {
 			//	int peerDeviceId (int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDeviceEnablePeerAccess_t* args = (args_hipDeviceEnablePeerAccess_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "peerDeviceId");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceEnablePeerAccess.peerDeviceId);
+			msgpack_encode_int(buf, args->peerDeviceId);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceEnablePeerAccess.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDeviceEnablePeerAccess.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipArray3DCreate
-		case HIP_API_ID_hipArray3DCreate :
+		case HIP_API_ID_hipArray3DCreate : {
 			//	hipArray_t * array (struct hipArray **);
 			//	const HIP_ARRAY3D_DESCRIPTOR * pAllocateArray (const struct HIP_ARRAY3D_DESCRIPTOR *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipArray3DCreate_t* args = (args_hipArray3DCreate_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "array");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipArray3DCreate.array);
+			msgpack_encode_uint(buf, (uintptr_t)args->array);
 
 			msgpack_encode_string_ext(buf, "pAllocateArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const HIP_ARRAY3D_DESCRIPTOR *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipArray3DCreate.pAllocateArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->pAllocateArray);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipArray3DCreate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipIpcOpenMemHandle
-		case HIP_API_ID_hipIpcOpenMemHandle :
+		case HIP_API_ID_hipIpcOpenMemHandle : {
 			//	void ** devPtr (void **);
 			//	hipIpcMemHandle_t handle ({
 			//		char[64] reserved (char[64]);
 			//	});
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipIpcOpenMemHandle_t* args = (args_hipIpcOpenMemHandle_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "devPtr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipIpcOpenMemHandle.devPtr);
+			msgpack_encode_uint(buf, (uintptr_t)args->devPtr);
 
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
@@ -16759,57 +17594,60 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "char[64]");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipIpcOpenMemHandle.handle.reserved[0]);
+			msgpack_encode_int(buf, args->handle.reserved[0]);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipIpcOpenMemHandle.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipIpcOpenMemHandle.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemPoolTrimTo
-		case HIP_API_ID_hipMemPoolTrimTo :
+		case HIP_API_ID_hipMemPoolTrimTo : {
 			//	hipMemPool_t mem_pool (struct ihipMemPoolHandle_t *);
 			//	size_t min_bytes_to_hold (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemPoolTrimTo_t* args = (args_hipMemPoolTrimTo_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "mem_pool");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemPool_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemPoolTrimTo.mem_pool);
+			msgpack_encode_uint(buf, (uintptr_t)args->mem_pool);
 
 			msgpack_encode_string_ext(buf, "min_bytes_to_hold");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolTrimTo.min_bytes_to_hold);
+			msgpack_encode_int(buf, args->min_bytes_to_hold);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemPoolTrimTo.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy2D
-		case HIP_API_ID_hipMemcpy2D :
+		case HIP_API_ID_hipMemcpy2D : {
 			//	void * dst (void *);
 			//	size_t dpitch (unsigned long);
 			//	const void * src (const void *);
@@ -16818,280 +17656,294 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t height (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy2D_t* args = (args_hipMemcpy2D_t*) func_args;
 			msgpack_encode_map(buf, 8);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2D.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "dpitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2D.dpitch);
+			msgpack_encode_int(buf, args->dpitch);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy2D.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "spitch");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2D.spitch);
+			msgpack_encode_int(buf, args->spitch);
 
 			msgpack_encode_string_ext(buf, "width");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2D.width);
+			msgpack_encode_int(buf, args->width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2D.height);
+			msgpack_encode_int(buf, args->height);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2D.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy2D.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFuncGetAttribute
-		case HIP_API_ID_hipFuncGetAttribute :
+		case HIP_API_ID_hipFuncGetAttribute : {
 			//	int * value (int *);
 			//	hipFunction_attribute attrib (enum hipFunction_attribute);
 			//	hipFunction_t hfunc (struct ihipModuleSymbol_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipFuncGetAttribute_t* args = (args_hipFuncGetAttribute_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipFuncGetAttribute.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "attrib");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFunction_attribute");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipFuncGetAttribute.attrib);
+			msgpack_encode_int(buf, args->attrib);
 
 			msgpack_encode_string_ext(buf, "hfunc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFunction_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipFuncGetAttribute.hfunc);
+			msgpack_encode_uint(buf, (uintptr_t)args->hfunc);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipFuncGetAttribute.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipBindTextureToMipmappedArray
-		case HIP_API_ID_hipBindTextureToMipmappedArray :
+		case HIP_API_ID_hipBindTextureToMipmappedArray : {
 			//	const textureReference * tex (const struct textureReference *);
 			//	hipMipmappedArray_const_t mipmappedArray (const struct hipMipmappedArray *);
 			//	const hipChannelFormatDesc * desc (const struct hipChannelFormatDesc *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipBindTextureToMipmappedArray_t* args = (args_hipBindTextureToMipmappedArray_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "tex");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipBindTextureToMipmappedArray.tex);
+			msgpack_encode_uint(buf, (uintptr_t)args->tex);
 
 			msgpack_encode_string_ext(buf, "mipmappedArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMipmappedArray_const_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipBindTextureToMipmappedArray.mipmappedArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->mipmappedArray);
 
 			msgpack_encode_string_ext(buf, "desc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipChannelFormatDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipBindTextureToMipmappedArray.desc);
+			msgpack_encode_uint(buf, (uintptr_t)args->desc);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipBindTextureToMipmappedArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphicsMapResources
-		case HIP_API_ID_hipGraphicsMapResources :
+		case HIP_API_ID_hipGraphicsMapResources : {
 			//	int count (int);
 			//	hipGraphicsResource_t * resources (struct _hipGraphicsResource**);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphicsMapResources_t* args = (args_hipGraphicsMapResources_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphicsMapResources.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "resources");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphicsResource_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphicsMapResources.resources);
+			msgpack_encode_uint(buf, (uintptr_t)args->resources);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphicsMapResources.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphicsMapResources.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipArrayCreate
-		case HIP_API_ID_hipArrayCreate :
+		case HIP_API_ID_hipArrayCreate : {
 			//	hipArray_t * pHandle (struct hipArray **);
 			//	const HIP_ARRAY_DESCRIPTOR * pAllocateArray (const struct HIP_ARRAY_DESCRIPTOR *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipArrayCreate_t* args = (args_hipArrayCreate_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pHandle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipArrayCreate.pHandle);
+			msgpack_encode_uint(buf, (uintptr_t)args->pHandle);
 
 			msgpack_encode_string_ext(buf, "pAllocateArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const HIP_ARRAY_DESCRIPTOR *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipArrayCreate.pAllocateArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->pAllocateArray);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipArrayCreate.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetMaxAnisotropy
-		case HIP_API_ID_hipTexRefSetMaxAnisotropy :
+		case HIP_API_ID_hipTexRefSetMaxAnisotropy : {
 			//	textureReference * texRef (struct textureReference*);
 			//	unsigned int maxAniso (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefSetMaxAnisotropy_t* args = (args_hipTexRefSetMaxAnisotropy_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetMaxAnisotropy.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "maxAniso");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetMaxAnisotropy.maxAniso);
+			msgpack_encode_int(buf, args->maxAniso);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetMaxAnisotropy.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphKernelNodeGetAttribute
-		case HIP_API_ID_hipGraphKernelNodeGetAttribute :
+		case HIP_API_ID_hipGraphKernelNodeGetAttribute : {
 			//	hipGraphNode_t hNode (struct hipGraphNode *);
 			//	hipLaunchAttributeID attr (enum hipLaunchAttributeID);
 			//	hipLaunchAttributeValue * value (union hipLaunchAttributeValue*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphKernelNodeGetAttribute_t* args = (args_hipGraphKernelNodeGetAttribute_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "hNode");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphKernelNodeGetAttribute.hNode);
+			msgpack_encode_uint(buf, (uintptr_t)args->hNode);
 
 			msgpack_encode_string_ext(buf, "attr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipLaunchAttributeID");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphKernelNodeGetAttribute.attr);
+			msgpack_encode_int(buf, args->attr);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipLaunchAttributeValue *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphKernelNodeGetAttribute.value);
+			msgpack_encode_uint(buf, (uintptr_t)args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphKernelNodeGetAttribute.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExtLaunchKernel
-		case HIP_API_ID_hipExtLaunchKernel :
+		case HIP_API_ID_hipExtLaunchKernel : {
 			//	const void * function_address (const void *);
 			//	dim3 numBlocks ({
 			//		uint32_t x (unsigned int);
@@ -17110,13 +17962,14 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	hipEvent_t stopEvent (struct ihipEvent_t *);
 			//	int flags (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipExtLaunchKernel_t* args = (args_hipExtLaunchKernel_t*) func_args;
 			msgpack_encode_map(buf, 10);
 			msgpack_encode_string_ext(buf, "function_address");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExtLaunchKernel.function_address);
+			msgpack_encode_uint(buf, (uintptr_t)args->function_address);
 
 			msgpack_encode_string_ext(buf, "numBlocks");
 			msgpack_encode_map(buf, 2);
@@ -17130,21 +17983,21 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtLaunchKernel.numBlocks.x);
+			msgpack_encode_int(buf, args->numBlocks.x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtLaunchKernel.numBlocks.y);
+			msgpack_encode_int(buf, args->numBlocks.y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtLaunchKernel.numBlocks.z);
+			msgpack_encode_int(buf, args->numBlocks.z);
 
 			msgpack_encode_string_ext(buf, "dimBlocks");
 			msgpack_encode_map(buf, 2);
@@ -17158,390 +18011,413 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtLaunchKernel.dimBlocks.x);
+			msgpack_encode_int(buf, args->dimBlocks.x);
 
 			msgpack_encode_string_ext(buf, "y");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtLaunchKernel.dimBlocks.y);
+			msgpack_encode_int(buf, args->dimBlocks.y);
 
 			msgpack_encode_string_ext(buf, "z");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint32_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtLaunchKernel.dimBlocks.z);
+			msgpack_encode_int(buf, args->dimBlocks.z);
 
 			msgpack_encode_string_ext(buf, "args");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExtLaunchKernel.args);
+			msgpack_encode_uint(buf, (uintptr_t)args->args);
 
 			msgpack_encode_string_ext(buf, "sharedMemBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtLaunchKernel.sharedMemBytes);
+			msgpack_encode_int(buf, args->sharedMemBytes);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExtLaunchKernel.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "startEvent");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExtLaunchKernel.startEvent);
+			msgpack_encode_uint(buf, (uintptr_t)args->startEvent);
 
 			msgpack_encode_string_ext(buf, "stopEvent");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipEvent_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExtLaunchKernel.stopEvent);
+			msgpack_encode_uint(buf, (uintptr_t)args->stopEvent);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtLaunchKernel.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtLaunchKernel.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetMipmapFilterMode
-		case HIP_API_ID_hipTexRefSetMipmapFilterMode :
+		case HIP_API_ID_hipTexRefSetMipmapFilterMode : {
 			//	textureReference * texRef (struct textureReference*);
 			//	enum hipTextureFilterMode fm (enum hipTextureFilterMode);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefSetMipmapFilterMode_t* args = (args_hipTexRefSetMipmapFilterMode_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetMipmapFilterMode.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "fm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "enum hipTextureFilterMode");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetMipmapFilterMode.fm);
+			msgpack_encode_int(buf, args->fm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetMipmapFilterMode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemImportFromShareableHandle
-		case HIP_API_ID_hipMemImportFromShareableHandle :
+		case HIP_API_ID_hipMemImportFromShareableHandle : {
 			//	hipMemGenericAllocationHandle_t * handle (struct ihipMemGenericAllocationHandle **);
 			//	void * osHandle (void *);
 			//	hipMemAllocationHandleType shHandleType (enum hipMemAllocationHandleType);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemImportFromShareableHandle_t* args = (args_hipMemImportFromShareableHandle_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "handle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemGenericAllocationHandle_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemImportFromShareableHandle.handle);
+			msgpack_encode_uint(buf, (uintptr_t)args->handle);
 
 			msgpack_encode_string_ext(buf, "osHandle");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemImportFromShareableHandle.osHandle);
+			msgpack_encode_uint(buf, (uintptr_t)args->osHandle);
 
 			msgpack_encode_string_ext(buf, "shHandleType");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemAllocationHandleType");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemImportFromShareableHandle.shHandleType);
+			msgpack_encode_int(buf, args->shHandleType);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemImportFromShareableHandle.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetFormat
-		case HIP_API_ID_hipTexRefSetFormat :
+		case HIP_API_ID_hipTexRefSetFormat : {
 			//	textureReference * texRef (struct textureReference*);
 			//	hipArray_Format fmt (enum hipArray_Format);
 			//	int NumPackedComponents (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefSetFormat_t* args = (args_hipTexRefSetFormat_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetFormat.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "fmt");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_Format");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetFormat.fmt);
+			msgpack_encode_int(buf, args->fmt);
 
 			msgpack_encode_string_ext(buf, "NumPackedComponents");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetFormat.NumPackedComponents);
+			msgpack_encode_int(buf, args->NumPackedComponents);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetFormat.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_amd_dbgapi_get_git_hash
-		case HIP_API_ID_amd_dbgapi_get_git_hash :
+		case HIP_API_ID_amd_dbgapi_get_git_hash : {
 			//	const char * retval (const char *);
+			args_amd_dbgapi_get_git_hash_t* args = (args_amd_dbgapi_get_git_hash_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const char *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->amd_dbgapi_get_git_hash.retval);
+			msgpack_encode_uint(buf, (uintptr_t)args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipLaunchByPtr
-		case HIP_API_ID_hipLaunchByPtr :
+		case HIP_API_ID_hipLaunchByPtr : {
 			//	const void * func (const void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipLaunchByPtr_t* args = (args_hipLaunchByPtr_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "func");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipLaunchByPtr.func);
+			msgpack_encode_uint(buf, (uintptr_t)args->func);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipLaunchByPtr.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_amd_dbgapi_get_build_id
-		case HIP_API_ID_amd_dbgapi_get_build_id :
+		case HIP_API_ID_amd_dbgapi_get_build_id : {
 			//	size_t retval (unsigned long);
+			args_amd_dbgapi_get_build_id_t* args = (args_amd_dbgapi_get_build_id_t*) func_args;
 			msgpack_encode_map(buf, 1);
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->amd_dbgapi_get_build_id.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpy3DAsync
-		case HIP_API_ID_hipMemcpy3DAsync :
+		case HIP_API_ID_hipMemcpy3DAsync : {
 			//	const struct hipMemcpy3DParms * p (const struct hipMemcpy3DParms *);
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpy3DAsync_t* args = (args_hipMemcpy3DAsync_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "p");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const struct hipMemcpy3DParms *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy3DAsync.p);
+			msgpack_encode_uint(buf, (uintptr_t)args->p);
 
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpy3DAsync.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpy3DAsync.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGetTextureObjectResourceViewDesc
-		case HIP_API_ID_hipGetTextureObjectResourceViewDesc :
+		case HIP_API_ID_hipGetTextureObjectResourceViewDesc : {
 			//	struct hipResourceViewDesc * pResViewDesc (struct hipResourceViewDesc *);
 			//	hipTextureObject_t textureObject (struct __hip_texture *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGetTextureObjectResourceViewDesc_t* args = (args_hipGetTextureObjectResourceViewDesc_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "pResViewDesc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "struct hipResourceViewDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetTextureObjectResourceViewDesc.pResViewDesc);
+			msgpack_encode_uint(buf, (uintptr_t)args->pResViewDesc);
 
 			msgpack_encode_string_ext(buf, "textureObject");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipTextureObject_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGetTextureObjectResourceViewDesc.textureObject);
+			msgpack_encode_uint(buf, (uintptr_t)args->textureObject);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGetTextureObjectResourceViewDesc.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetFilterMode
-		case HIP_API_ID_hipTexRefSetFilterMode :
+		case HIP_API_ID_hipTexRefSetFilterMode : {
 			//	textureReference * texRef (struct textureReference*);
 			//	enum hipTextureFilterMode fm (enum hipTextureFilterMode);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefSetFilterMode_t* args = (args_hipTexRefSetFilterMode_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetFilterMode.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "fm");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "enum hipTextureFilterMode");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetFilterMode.fm);
+			msgpack_encode_int(buf, args->fm);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetFilterMode.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipDriverGetVersion
-		case HIP_API_ID_hipDriverGetVersion :
+		case HIP_API_ID_hipDriverGetVersion : {
 			//	int * driverVersion (int *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipDriverGetVersion_t* args = (args_hipDriverGetVersion_t*) func_args;
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "driverVersion");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipDriverGetVersion.driverVersion);
+			msgpack_encode_uint(buf, (uintptr_t)args->driverVersion);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipDriverGetVersion.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipStreamWriteValue64
-		case HIP_API_ID_hipStreamWriteValue64 :
+		case HIP_API_ID_hipStreamWriteValue64 : {
 			//	hipStream_t stream (struct ihipStream_t *);
 			//	void * ptr (void *);
 			//	uint64_t value (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipStreamWriteValue64_t* args = (args_hipStreamWriteValue64_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "stream");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipStream_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamWriteValue64.stream);
+			msgpack_encode_uint(buf, (uintptr_t)args->stream);
 
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipStreamWriteValue64.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "uint64_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWriteValue64.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWriteValue64.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipStreamWriteValue64.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMallocMipmappedArray
-		case HIP_API_ID_hipMallocMipmappedArray :
+		case HIP_API_ID_hipMallocMipmappedArray : {
 			//	hipMipmappedArray_t * mipmappedArray (struct hipMipmappedArray **);
 			//	const struct hipChannelFormatDesc * desc (const struct hipChannelFormatDesc *);
 			//	struct hipExtent extent ({
@@ -17552,20 +18428,21 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	unsigned int numLevels (unsigned int);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMallocMipmappedArray_t* args = (args_hipMallocMipmappedArray_t*) func_args;
 			msgpack_encode_map(buf, 6);
 			msgpack_encode_string_ext(buf, "mipmappedArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMipmappedArray_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMallocMipmappedArray.mipmappedArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->mipmappedArray);
 
 			msgpack_encode_string_ext(buf, "desc");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const struct hipChannelFormatDesc *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMallocMipmappedArray.desc);
+			msgpack_encode_uint(buf, (uintptr_t)args->desc);
 
 			msgpack_encode_string_ext(buf, "extent");
 			msgpack_encode_map(buf, 2);
@@ -17579,268 +18456,281 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocMipmappedArray.extent.width);
+			msgpack_encode_int(buf, args->extent.width);
 
 			msgpack_encode_string_ext(buf, "height");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocMipmappedArray.extent.height);
+			msgpack_encode_int(buf, args->extent.height);
 
 			msgpack_encode_string_ext(buf, "depth");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocMipmappedArray.extent.depth);
+			msgpack_encode_int(buf, args->extent.depth);
 
 			msgpack_encode_string_ext(buf, "numLevels");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocMipmappedArray.numLevels);
+			msgpack_encode_int(buf, args->numLevels);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocMipmappedArray.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMallocMipmappedArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset_spt
-		case HIP_API_ID_hipMemset_spt :
+		case HIP_API_ID_hipMemset_spt : {
 			//	void * dst (void *);
 			//	int value (int);
 			//	size_t sizeBytes (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemset_spt_t* args = (args_hipMemset_spt_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemset_spt.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset_spt.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset_spt.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset_spt.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetFlags
-		case HIP_API_ID_hipTexRefSetFlags :
+		case HIP_API_ID_hipTexRefSetFlags : {
 			//	textureReference * texRef (struct textureReference*);
 			//	unsigned int Flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefSetFlags_t* args = (args_hipTexRefSetFlags_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetFlags.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "Flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetFlags.Flags);
+			msgpack_encode_int(buf, args->Flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetFlags.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemGetAddressRange
-		case HIP_API_ID_hipMemGetAddressRange :
+		case HIP_API_ID_hipMemGetAddressRange : {
 			//	hipDeviceptr_t * pbase (void **);
 			//	size_t * psize (unsigned long*);
 			//	hipDeviceptr_t dptr (void *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemGetAddressRange_t* args = (args_hipMemGetAddressRange_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "pbase");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemGetAddressRange.pbase);
+			msgpack_encode_uint(buf, (uintptr_t)args->pbase);
 
 			msgpack_encode_string_ext(buf, "psize");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemGetAddressRange.psize);
+			msgpack_encode_uint(buf, (uintptr_t)args->psize);
 
 			msgpack_encode_string_ext(buf, "dptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipDeviceptr_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemGetAddressRange.dptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->dptr);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemGetAddressRange.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetMipmapLevelClamp
-		case HIP_API_ID_hipTexRefSetMipmapLevelClamp :
+		case HIP_API_ID_hipTexRefSetMipmapLevelClamp : {
 			//	textureReference * texRef (struct textureReference*);
 			//	float minMipMapLevelClamp (float);
 			//	float maxMipMapLevelClamp (float);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefSetMipmapLevelClamp_t* args = (args_hipTexRefSetMipmapLevelClamp_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetMipmapLevelClamp.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "minMipMapLevelClamp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "float");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_float(buf, args->hipTexRefSetMipmapLevelClamp.minMipMapLevelClamp);
+			msgpack_encode_float(buf, args->minMipMapLevelClamp);
 
 			msgpack_encode_string_ext(buf, "maxMipMapLevelClamp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "float");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_float(buf, args->hipTexRefSetMipmapLevelClamp.maxMipMapLevelClamp);
+			msgpack_encode_float(buf, args->maxMipMapLevelClamp);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetMipmapLevelClamp.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphMemcpyNodeSetParams
-		case HIP_API_ID_hipGraphMemcpyNodeSetParams :
+		case HIP_API_ID_hipGraphMemcpyNodeSetParams : {
 			//	hipGraphNode_t node (struct hipGraphNode *);
 			//	const hipMemcpy3DParms * pNodeParams (const struct hipMemcpy3DParms *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphMemcpyNodeSetParams_t* args = (args_hipGraphMemcpyNodeSetParams_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "node");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemcpyNodeSetParams.node);
+			msgpack_encode_uint(buf, (uintptr_t)args->node);
 
 			msgpack_encode_string_ext(buf, "pNodeParams");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipMemcpy3DParms *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphMemcpyNodeSetParams.pNodeParams);
+			msgpack_encode_uint(buf, (uintptr_t)args->pNodeParams);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphMemcpyNodeSetParams.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipGraphGetEdges
-		case HIP_API_ID_hipGraphGetEdges :
+		case HIP_API_ID_hipGraphGetEdges : {
 			//	hipGraph_t graph (struct ihipGraph *);
 			//	hipGraphNode_t * from (struct hipGraphNode **);
 			//	hipGraphNode_t * to (struct hipGraphNode **);
 			//	size_t * numEdges (unsigned long*);
 			//	hipError_t retval (enum hipError_t);
+			args_hipGraphGetEdges_t* args = (args_hipGraphGetEdges_t*) func_args;
 			msgpack_encode_map(buf, 5);
 			msgpack_encode_string_ext(buf, "graph");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraph_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphGetEdges.graph);
+			msgpack_encode_uint(buf, (uintptr_t)args->graph);
 
 			msgpack_encode_string_ext(buf, "from");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphGetEdges.from);
+			msgpack_encode_uint(buf, (uintptr_t)args->from);
 
 			msgpack_encode_string_ext(buf, "to");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipGraphNode_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphGetEdges.to);
+			msgpack_encode_uint(buf, (uintptr_t)args->to);
 
 			msgpack_encode_string_ext(buf, "numEdges");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipGraphGetEdges.numEdges);
+			msgpack_encode_uint(buf, (uintptr_t)args->numEdges);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipGraphGetEdges.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemcpyToArray
-		case HIP_API_ID_hipMemcpyToArray :
+		case HIP_API_ID_hipMemcpyToArray : {
 			//	hipArray_t dst (struct hipArray *);
 			//	size_t wOffset (unsigned long);
 			//	size_t hOffset (unsigned long);
@@ -17848,278 +18738,292 @@ void process_hip_args_for(hip_api_id_t funid, const hip_api_args_t* args, void* 
 			//	size_t count (unsigned long);
 			//	hipMemcpyKind kind (enum hipMemcpyKind);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemcpyToArray_t* args = (args_hipMemcpyToArray_t*) func_args;
 			msgpack_encode_map(buf, 7);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipArray_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyToArray.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "wOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToArray.wOffset);
+			msgpack_encode_int(buf, args->wOffset);
 
 			msgpack_encode_string_ext(buf, "hOffset");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToArray.hOffset);
+			msgpack_encode_int(buf, args->hOffset);
 
 			msgpack_encode_string_ext(buf, "src");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemcpyToArray.src);
+			msgpack_encode_uint(buf, (uintptr_t)args->src);
 
 			msgpack_encode_string_ext(buf, "count");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToArray.count);
+			msgpack_encode_int(buf, args->count);
 
 			msgpack_encode_string_ext(buf, "kind");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipMemcpyKind");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToArray.kind);
+			msgpack_encode_int(buf, args->kind);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemcpyToArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipExtMallocWithFlags
-		case HIP_API_ID_hipExtMallocWithFlags :
+		case HIP_API_ID_hipExtMallocWithFlags : {
 			//	void ** ptr (void **);
 			//	size_t sizeBytes (unsigned long);
 			//	unsigned int flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipExtMallocWithFlags_t* args = (args_hipExtMallocWithFlags_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "ptr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void **");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipExtMallocWithFlags.ptr);
+			msgpack_encode_uint(buf, (uintptr_t)args->ptr);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtMallocWithFlags.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtMallocWithFlags.flags);
+			msgpack_encode_int(buf, args->flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipExtMallocWithFlags.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipFuncSetAttribute
-		case HIP_API_ID_hipFuncSetAttribute :
+		case HIP_API_ID_hipFuncSetAttribute : {
 			//	const void * func (const void *);
 			//	hipFuncAttribute attr (enum hipFuncAttribute);
 			//	int value (int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipFuncSetAttribute_t* args = (args_hipFuncSetAttribute_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "func");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipFuncSetAttribute.func);
+			msgpack_encode_uint(buf, (uintptr_t)args->func);
 
 			msgpack_encode_string_ext(buf, "attr");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipFuncAttribute");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipFuncSetAttribute.attr);
+			msgpack_encode_int(buf, args->attr);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipFuncSetAttribute.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipFuncSetAttribute.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipChooseDeviceR0600
-		case HIP_API_ID_hipChooseDeviceR0600 :
+		case HIP_API_ID_hipChooseDeviceR0600 : {
 			//	int * device (int *);
 			//	const hipDeviceProp_tR0600 * prop (const struct hipDeviceProp_tR0600 *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipChooseDeviceR0600_t* args = (args_hipChooseDeviceR0600_t*) func_args;
 			msgpack_encode_map(buf, 3);
 			msgpack_encode_string_ext(buf, "device");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipChooseDeviceR0600.device);
+			msgpack_encode_uint(buf, (uintptr_t)args->device);
 
 			msgpack_encode_string_ext(buf, "prop");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const hipDeviceProp_tR0600 *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipChooseDeviceR0600.prop);
+			msgpack_encode_uint(buf, (uintptr_t)args->prop);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipChooseDeviceR0600.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefSetMipmappedArray
-		case HIP_API_ID_hipTexRefSetMipmappedArray :
+		case HIP_API_ID_hipTexRefSetMipmappedArray : {
 			//	textureReference * texRef (struct textureReference*);
 			//	struct hipMipmappedArray * mipmappedArray (struct hipMipmappedArray *);
 			//	unsigned int Flags (unsigned int);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefSetMipmappedArray_t* args = (args_hipTexRefSetMipmappedArray_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetMipmappedArray.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "mipmappedArray");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "struct hipMipmappedArray *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefSetMipmappedArray.mipmappedArray);
+			msgpack_encode_uint(buf, (uintptr_t)args->mipmappedArray);
 
 			msgpack_encode_string_ext(buf, "Flags");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "unsigned int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetMipmappedArray.Flags);
+			msgpack_encode_int(buf, args->Flags);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefSetMipmappedArray.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipMemset
-		case HIP_API_ID_hipMemset :
+		case HIP_API_ID_hipMemset : {
 			//	void * dst (void *);
 			//	int value (int);
 			//	size_t sizeBytes (unsigned long);
 			//	hipError_t retval (enum hipError_t);
+			args_hipMemset_t* args = (args_hipMemset_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "dst");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "void *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipMemset.dst);
+			msgpack_encode_uint(buf, (uintptr_t)args->dst);
 
 			msgpack_encode_string_ext(buf, "value");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "int");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset.value);
+			msgpack_encode_int(buf, args->value);
 
 			msgpack_encode_string_ext(buf, "sizeBytes");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "size_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset.sizeBytes);
+			msgpack_encode_int(buf, args->sizeBytes);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipMemset.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
 		#if HAVE_hipTexRefGetMipmapLevelClamp
-		case HIP_API_ID_hipTexRefGetMipmapLevelClamp :
+		case HIP_API_ID_hipTexRefGetMipmapLevelClamp : {
 			//	float * pminMipmapLevelClamp (float *);
 			//	float * pmaxMipmapLevelClamp (float *);
 			//	const textureReference * texRef (const struct textureReference *);
 			//	hipError_t retval (enum hipError_t);
+			args_hipTexRefGetMipmapLevelClamp_t* args = (args_hipTexRefGetMipmapLevelClamp_t*) func_args;
 			msgpack_encode_map(buf, 4);
 			msgpack_encode_string_ext(buf, "pminMipmapLevelClamp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "float *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetMipmapLevelClamp.pminMipmapLevelClamp);
+			msgpack_encode_uint(buf, (uintptr_t)args->pminMipmapLevelClamp);
 
 			msgpack_encode_string_ext(buf, "pmaxMipmapLevelClamp");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "float *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetMipmapLevelClamp.pmaxMipmapLevelClamp);
+			msgpack_encode_uint(buf, (uintptr_t)args->pmaxMipmapLevelClamp);
 
 			msgpack_encode_string_ext(buf, "texRef");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "const textureReference *");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_uint(buf, (uintptr_t)args->hipTexRefGetMipmapLevelClamp.texRef);
+			msgpack_encode_uint(buf, (uintptr_t)args->texRef);
 
 			msgpack_encode_string_ext(buf, "retval");
 			msgpack_encode_map(buf, 2);
 			msgpack_encode_string_ext(buf, "type");
 			msgpack_encode_string_ext(buf, "hipError_t");
 			msgpack_encode_string_ext(buf, "value");
-			msgpack_encode_int(buf, args->hipTexRefGetMipmapLevelClamp.retval);
+			msgpack_encode_int(buf, args->retval);
 
 			break;
 
+		}
 		#endif
         default : break;
     }

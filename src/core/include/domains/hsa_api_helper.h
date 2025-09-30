@@ -371,7 +371,7 @@ static inline hsa_api_id_t get_hsa_funid_by_name(const char* name)
  *	)
  */
 #if HAVE_hsa_amd_interop_map_buffer
-struct args_hsa_amd_interop_map_buffer_t {
+typedef struct {
 	uint32_t num_agents;
 	hsa_agent_t * agents;
 	struct {
@@ -396,34 +396,36 @@ struct args_hsa_amd_interop_map_buffer_t {
 		void* ptr1;
 	} metadata__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_interop_map_buffer_t;
 
 #define GET_ARGS_VALUE_hsa_amd_interop_map_buffer(activity) { \
-	activity->hsa_args.hsa_amd_interop_map_buffer.num_agents = (uint32_t) num_agents; \
-	activity->hsa_args.hsa_amd_interop_map_buffer.agents = (hsa_agent_t *) agents; \
-	activity->hsa_args.hsa_amd_interop_map_buffer.interop_handle = (int) interop_handle; \
-	activity->hsa_args.hsa_amd_interop_map_buffer.flags = (uint32_t) flags; \
-	activity->hsa_args.hsa_amd_interop_map_buffer.size = (size_t *) size; \
-	activity->hsa_args.hsa_amd_interop_map_buffer.ptr = (void **) ptr; \
-	activity->hsa_args.hsa_amd_interop_map_buffer.metadata_size = (size_t *) metadata_size; \
-	activity->hsa_args.hsa_amd_interop_map_buffer.metadata = (void **) metadata; \
+	args_hsa_amd_interop_map_buffer_t* args = (args_hsa_amd_interop_map_buffer_t*) activity->args; \
+	args->num_agents = (uint32_t) num_agents; \
+	args->agents = (hsa_agent_t *) agents; \
+	args->interop_handle = (int) interop_handle; \
+	args->flags = (uint32_t) flags; \
+	args->size = (size_t *) size; \
+	args->ptr = (void **) ptr; \
+	args->metadata_size = (size_t *) metadata_size; \
+	args->metadata = (void **) metadata; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_interop_map_buffer(args) { \
-	if (args->hsa_amd_interop_map_buffer.agents != NULL) { \
-		args->hsa_amd_interop_map_buffer.agents__ref.val = *args->hsa_amd_interop_map_buffer.agents; \
+	args_hsa_amd_interop_map_buffer_t* pargs = (args_hsa_amd_interop_map_buffer_t*) args; \
+	if (pargs->agents != NULL) { \
+		pargs->agents__ref.val = *pargs->agents; \
 	} \
-	if (args->hsa_amd_interop_map_buffer.size != NULL) { \
-		args->hsa_amd_interop_map_buffer.size__ref.val = *args->hsa_amd_interop_map_buffer.size; \
+	if (pargs->size != NULL) { \
+		pargs->size__ref.val = *pargs->size; \
 	} \
-	if (args->hsa_amd_interop_map_buffer.ptr != NULL) { \
-		args->hsa_amd_interop_map_buffer.ptr__ref.ptr1 = *args->hsa_amd_interop_map_buffer.ptr; \
+	if (pargs->ptr != NULL) { \
+		pargs->ptr__ref.ptr1 = *pargs->ptr; \
 	} \
-	if (args->hsa_amd_interop_map_buffer.metadata_size != NULL) { \
-		args->hsa_amd_interop_map_buffer.metadata_size__ref.val = *args->hsa_amd_interop_map_buffer.metadata_size; \
+	if (pargs->metadata_size != NULL) { \
+		pargs->metadata_size__ref.val = *pargs->metadata_size; \
 	} \
-	if (args->hsa_amd_interop_map_buffer.metadata != NULL) { \
-		args->hsa_amd_interop_map_buffer.metadata__ref.ptr1 = *args->hsa_amd_interop_map_buffer.metadata; \
+	if (pargs->metadata != NULL) { \
+		pargs->metadata__ref.ptr1 = *pargs->metadata; \
 	} \
 };
 
@@ -446,7 +448,7 @@ struct args_hsa_amd_interop_map_buffer_t {
  *	)
  */
 #if HAVE_hsa_amd_queue_get_info
-struct args_hsa_amd_queue_get_info_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
@@ -454,17 +456,19 @@ struct args_hsa_amd_queue_get_info_t {
 	hsa_queue_info_attribute_t attribute;
 	void * value;
 	hsa_status_t retval;
-};
+} args_hsa_amd_queue_get_info_t;
 
 #define GET_ARGS_VALUE_hsa_amd_queue_get_info(activity) { \
-	activity->hsa_args.hsa_amd_queue_get_info.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_amd_queue_get_info.attribute = (hsa_queue_info_attribute_t) attribute; \
-	activity->hsa_args.hsa_amd_queue_get_info.value = (void *) value; \
+	args_hsa_amd_queue_get_info_t* args = (args_hsa_amd_queue_get_info_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->attribute = (hsa_queue_info_attribute_t) attribute; \
+	args->value = (void *) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_queue_get_info(args) { \
-	if (args->hsa_amd_queue_get_info.queue != NULL) { \
-		args->hsa_amd_queue_get_info.queue__ref.val = *args->hsa_amd_queue_get_info.queue; \
+	args_hsa_amd_queue_get_info_t* pargs = (args_hsa_amd_queue_get_info_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -485,13 +489,14 @@ struct args_hsa_amd_queue_get_info_t {
  *	)
  */
 #if HAVE_hsa_amd_profiling_async_copy_enable
-struct args_hsa_amd_profiling_async_copy_enable_t {
+typedef struct {
 	_Bool enable;
 	hsa_status_t retval;
-};
+} args_hsa_amd_profiling_async_copy_enable_t;
 
 #define GET_ARGS_VALUE_hsa_amd_profiling_async_copy_enable(activity) { \
-	activity->hsa_args.hsa_amd_profiling_async_copy_enable.enable = (_Bool) enable; \
+	args_hsa_amd_profiling_async_copy_enable_t* args = (args_hsa_amd_profiling_async_copy_enable_t*) activity->args; \
+	args->enable = (_Bool) enable; \
 };
 
 #endif
@@ -513,17 +518,18 @@ struct args_hsa_amd_profiling_async_copy_enable_t {
  *	)
  */
 #if HAVE_hsa_executable_symbol_get_info
-struct args_hsa_executable_symbol_get_info_t {
+typedef struct {
 	hsa_executable_symbol_t executable_symbol;
 	hsa_executable_symbol_info_t attribute;
 	void * value;
 	hsa_status_t retval;
-};
+} args_hsa_executable_symbol_get_info_t;
 
 #define GET_ARGS_VALUE_hsa_executable_symbol_get_info(activity) { \
-	activity->hsa_args.hsa_executable_symbol_get_info.executable_symbol = (hsa_executable_symbol_t) executable_symbol; \
-	activity->hsa_args.hsa_executable_symbol_get_info.attribute = (hsa_executable_symbol_info_t) attribute; \
-	activity->hsa_args.hsa_executable_symbol_get_info.value = (void *) value; \
+	args_hsa_executable_symbol_get_info_t* args = (args_hsa_executable_symbol_get_info_t*) activity->args; \
+	args->executable_symbol = (hsa_executable_symbol_t) executable_symbol; \
+	args->attribute = (hsa_executable_symbol_info_t) attribute; \
+	args->value = (void *) value; \
 };
 
 #endif
@@ -545,17 +551,18 @@ struct args_hsa_executable_symbol_get_info_t {
  *	)
  */
 #if HAVE_hsa_signal_cas_scacquire
-struct args_hsa_signal_cas_scacquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t expected;
 	hsa_signal_value_t value;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_cas_scacquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_cas_scacquire(activity) { \
-	activity->hsa_args.hsa_signal_cas_scacquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_cas_scacquire.expected = (hsa_signal_value_t) expected; \
-	activity->hsa_args.hsa_signal_cas_scacquire.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_cas_scacquire_t* args = (args_hsa_signal_cas_scacquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->expected = (hsa_signal_value_t) expected; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -576,15 +583,16 @@ struct args_hsa_signal_cas_scacquire_t {
  *	)
  */
 #if HAVE_hsa_system_get_info
-struct args_hsa_system_get_info_t {
+typedef struct {
 	hsa_system_info_t attribute;
 	void * value;
 	hsa_status_t retval;
-};
+} args_hsa_system_get_info_t;
 
 #define GET_ARGS_VALUE_hsa_system_get_info(activity) { \
-	activity->hsa_args.hsa_system_get_info.attribute = (hsa_system_info_t) attribute; \
-	activity->hsa_args.hsa_system_get_info.value = (void *) value; \
+	args_hsa_system_get_info_t* args = (args_hsa_system_get_info_t*) activity->args; \
+	args->attribute = (hsa_system_info_t) attribute; \
+	args->value = (void *) value; \
 };
 
 #endif
@@ -606,7 +614,7 @@ struct args_hsa_system_get_info_t {
  *	)
  */
 #if HAVE_hsa_queue_cas_write_index_scacq_screl
-struct args_hsa_queue_cas_write_index_scacq_screl_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
@@ -614,17 +622,19 @@ struct args_hsa_queue_cas_write_index_scacq_screl_t {
 	uint64_t expected;
 	uint64_t value;
 	uint64_t retval;
-};
+} args_hsa_queue_cas_write_index_scacq_screl_t;
 
 #define GET_ARGS_VALUE_hsa_queue_cas_write_index_scacq_screl(activity) { \
-	activity->hsa_args.hsa_queue_cas_write_index_scacq_screl.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_cas_write_index_scacq_screl.expected = (uint64_t) expected; \
-	activity->hsa_args.hsa_queue_cas_write_index_scacq_screl.value = (uint64_t) value; \
+	args_hsa_queue_cas_write_index_scacq_screl_t* args = (args_hsa_queue_cas_write_index_scacq_screl_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->expected = (uint64_t) expected; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_cas_write_index_scacq_screl(args) { \
-	if (args->hsa_queue_cas_write_index_scacq_screl.queue != NULL) { \
-		args->hsa_queue_cas_write_index_scacq_screl.queue__ref.val = *args->hsa_queue_cas_write_index_scacq_screl.queue; \
+	args_hsa_queue_cas_write_index_scacq_screl_t* pargs = (args_hsa_queue_cas_write_index_scacq_screl_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -648,7 +658,7 @@ struct args_hsa_queue_cas_write_index_scacq_screl_t {
  *	)
  */
 #if HAVE_hsa_ext_image_get_capability
-struct args_hsa_ext_image_get_capability_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_ext_image_geometry_t geometry;
 	hsa_ext_image_format_t * image_format;
@@ -660,21 +670,23 @@ struct args_hsa_ext_image_get_capability_t {
 		uint32_t val;
 	} capability_mask__ref;
 	hsa_status_t retval;
-};
+} args_hsa_ext_image_get_capability_t;
 
 #define GET_ARGS_VALUE_hsa_ext_image_get_capability(activity) { \
-	activity->hsa_args.hsa_ext_image_get_capability.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ext_image_get_capability.geometry = (hsa_ext_image_geometry_t) geometry; \
-	activity->hsa_args.hsa_ext_image_get_capability.image_format = (hsa_ext_image_format_t *) image_format; \
-	activity->hsa_args.hsa_ext_image_get_capability.capability_mask = (uint32_t *) capability_mask; \
+	args_hsa_ext_image_get_capability_t* args = (args_hsa_ext_image_get_capability_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->geometry = (hsa_ext_image_geometry_t) geometry; \
+	args->image_format = (hsa_ext_image_format_t *) image_format; \
+	args->capability_mask = (uint32_t *) capability_mask; \
 };
 
 #define GET_PTRS_VALUE_hsa_ext_image_get_capability(args) { \
-	if (args->hsa_ext_image_get_capability.image_format != NULL) { \
-		args->hsa_ext_image_get_capability.image_format__ref.val = *args->hsa_ext_image_get_capability.image_format; \
+	args_hsa_ext_image_get_capability_t* pargs = (args_hsa_ext_image_get_capability_t*) args; \
+	if (pargs->image_format != NULL) { \
+		pargs->image_format__ref.val = *pargs->image_format; \
 	} \
-	if (args->hsa_ext_image_get_capability.capability_mask != NULL) { \
-		args->hsa_ext_image_get_capability.capability_mask__ref.val = *args->hsa_ext_image_get_capability.capability_mask; \
+	if (pargs->capability_mask != NULL) { \
+		pargs->capability_mask__ref.val = *pargs->capability_mask; \
 	} \
 };
 
@@ -698,7 +710,7 @@ struct args_hsa_ext_image_get_capability_t {
  *	)
  */
 #if HAVE_hsa_executable_load_program_code_object
-struct args_hsa_executable_load_program_code_object_t {
+typedef struct {
 	hsa_executable_t executable;
 	hsa_code_object_reader_t code_object_reader;
 	char * options;
@@ -710,21 +722,23 @@ struct args_hsa_executable_load_program_code_object_t {
 		hsa_loaded_code_object_t val;
 	} loaded_code_object__ref;
 	hsa_status_t retval;
-};
+} args_hsa_executable_load_program_code_object_t;
 
 #define GET_ARGS_VALUE_hsa_executable_load_program_code_object(activity) { \
-	activity->hsa_args.hsa_executable_load_program_code_object.executable = (hsa_executable_t) executable; \
-	activity->hsa_args.hsa_executable_load_program_code_object.code_object_reader = (hsa_code_object_reader_t) code_object_reader; \
-	activity->hsa_args.hsa_executable_load_program_code_object.options = (char *) options; \
-	activity->hsa_args.hsa_executable_load_program_code_object.loaded_code_object = (hsa_loaded_code_object_t *) loaded_code_object; \
+	args_hsa_executable_load_program_code_object_t* args = (args_hsa_executable_load_program_code_object_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
+	args->code_object_reader = (hsa_code_object_reader_t) code_object_reader; \
+	args->options = (char *) options; \
+	args->loaded_code_object = (hsa_loaded_code_object_t *) loaded_code_object; \
 };
 
 #define GET_PTRS_VALUE_hsa_executable_load_program_code_object(args) { \
-	if (args->hsa_executable_load_program_code_object.options != NULL) { \
-		strncpy(args->hsa_executable_load_program_code_object.options__ref.val, args->hsa_executable_load_program_code_object.options, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_executable_load_program_code_object_t* pargs = (args_hsa_executable_load_program_code_object_t*) args; \
+	if (pargs->options != NULL) { \
+		strncpy(pargs->options__ref.val, pargs->options, HSA_STRING_SIZE_MAX-1); \
 	} \
-	if (args->hsa_executable_load_program_code_object.loaded_code_object != NULL) { \
-		args->hsa_executable_load_program_code_object.loaded_code_object__ref.val = *args->hsa_executable_load_program_code_object.loaded_code_object; \
+	if (pargs->loaded_code_object != NULL) { \
+		pargs->loaded_code_object__ref.val = *pargs->loaded_code_object; \
 	} \
 };
 
@@ -747,7 +761,7 @@ struct args_hsa_executable_load_program_code_object_t {
  *	)
  */
 #if HAVE_hsa_queue_cas_write_index_release
-struct args_hsa_queue_cas_write_index_release_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
@@ -755,17 +769,19 @@ struct args_hsa_queue_cas_write_index_release_t {
 	uint64_t expected;
 	uint64_t value;
 	uint64_t retval;
-};
+} args_hsa_queue_cas_write_index_release_t;
 
 #define GET_ARGS_VALUE_hsa_queue_cas_write_index_release(activity) { \
-	activity->hsa_args.hsa_queue_cas_write_index_release.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_cas_write_index_release.expected = (uint64_t) expected; \
-	activity->hsa_args.hsa_queue_cas_write_index_release.value = (uint64_t) value; \
+	args_hsa_queue_cas_write_index_release_t* args = (args_hsa_queue_cas_write_index_release_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->expected = (uint64_t) expected; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_cas_write_index_release(args) { \
-	if (args->hsa_queue_cas_write_index_release.queue != NULL) { \
-		args->hsa_queue_cas_write_index_release.queue__ref.val = *args->hsa_queue_cas_write_index_release.queue; \
+	args_hsa_queue_cas_write_index_release_t* pargs = (args_hsa_queue_cas_write_index_release_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -787,14 +803,15 @@ struct args_hsa_queue_cas_write_index_release_t {
  *	)
  */
 #if HAVE_hsa_signal_subtract_scacquire
-struct args_hsa_signal_subtract_scacquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_subtract_scacquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_subtract_scacquire(activity) { \
-	activity->hsa_args.hsa_signal_subtract_scacquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_subtract_scacquire.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_subtract_scacquire_t* args = (args_hsa_signal_subtract_scacquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -816,17 +833,18 @@ struct args_hsa_signal_subtract_scacquire_t {
  *	)
  */
 #if HAVE_hsa_signal_cas_release
-struct args_hsa_signal_cas_release_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t expected;
 	hsa_signal_value_t value;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_cas_release_t;
 
 #define GET_ARGS_VALUE_hsa_signal_cas_release(activity) { \
-	activity->hsa_args.hsa_signal_cas_release.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_cas_release.expected = (hsa_signal_value_t) expected; \
-	activity->hsa_args.hsa_signal_cas_release.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_cas_release_t* args = (args_hsa_signal_cas_release_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->expected = (hsa_signal_value_t) expected; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -847,14 +865,15 @@ struct args_hsa_signal_cas_release_t {
  *	)
  */
 #if HAVE_hsa_signal_add_scacq_screl
-struct args_hsa_signal_add_scacq_screl_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_add_scacq_screl_t;
 
 #define GET_ARGS_VALUE_hsa_signal_add_scacq_screl(activity) { \
-	activity->hsa_args.hsa_signal_add_scacq_screl.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_add_scacq_screl.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_add_scacq_screl_t* args = (args_hsa_signal_add_scacq_screl_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -879,7 +898,7 @@ struct args_hsa_signal_add_scacq_screl_t {
  *	)
  */
 #if HAVE_hsa_signal_group_wait_any_relaxed
-struct args_hsa_signal_group_wait_any_relaxed_t {
+typedef struct {
 	hsa_signal_group_t signal_group;
 	hsa_signal_condition_t * conditions;
 	struct {
@@ -899,29 +918,31 @@ struct args_hsa_signal_group_wait_any_relaxed_t {
 		hsa_signal_value_t val;
 	} value__ref;
 	hsa_status_t retval;
-};
+} args_hsa_signal_group_wait_any_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_signal_group_wait_any_relaxed(activity) { \
-	activity->hsa_args.hsa_signal_group_wait_any_relaxed.signal_group = (hsa_signal_group_t) signal_group; \
-	activity->hsa_args.hsa_signal_group_wait_any_relaxed.conditions = (hsa_signal_condition_t *) conditions; \
-	activity->hsa_args.hsa_signal_group_wait_any_relaxed.compare_values = (hsa_signal_value_t *) compare_values; \
-	activity->hsa_args.hsa_signal_group_wait_any_relaxed.wait_state_hint = (hsa_wait_state_t) wait_state_hint; \
-	activity->hsa_args.hsa_signal_group_wait_any_relaxed.signal = (hsa_signal_t *) signal; \
-	activity->hsa_args.hsa_signal_group_wait_any_relaxed.value = (hsa_signal_value_t *) value; \
+	args_hsa_signal_group_wait_any_relaxed_t* args = (args_hsa_signal_group_wait_any_relaxed_t*) activity->args; \
+	args->signal_group = (hsa_signal_group_t) signal_group; \
+	args->conditions = (hsa_signal_condition_t *) conditions; \
+	args->compare_values = (hsa_signal_value_t *) compare_values; \
+	args->wait_state_hint = (hsa_wait_state_t) wait_state_hint; \
+	args->signal = (hsa_signal_t *) signal; \
+	args->value = (hsa_signal_value_t *) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_signal_group_wait_any_relaxed(args) { \
-	if (args->hsa_signal_group_wait_any_relaxed.conditions != NULL) { \
-		args->hsa_signal_group_wait_any_relaxed.conditions__ref.val = *args->hsa_signal_group_wait_any_relaxed.conditions; \
+	args_hsa_signal_group_wait_any_relaxed_t* pargs = (args_hsa_signal_group_wait_any_relaxed_t*) args; \
+	if (pargs->conditions != NULL) { \
+		pargs->conditions__ref.val = *pargs->conditions; \
 	} \
-	if (args->hsa_signal_group_wait_any_relaxed.compare_values != NULL) { \
-		args->hsa_signal_group_wait_any_relaxed.compare_values__ref.val = *args->hsa_signal_group_wait_any_relaxed.compare_values; \
+	if (pargs->compare_values != NULL) { \
+		pargs->compare_values__ref.val = *pargs->compare_values; \
 	} \
-	if (args->hsa_signal_group_wait_any_relaxed.signal != NULL) { \
-		args->hsa_signal_group_wait_any_relaxed.signal__ref.val = *args->hsa_signal_group_wait_any_relaxed.signal; \
+	if (pargs->signal != NULL) { \
+		pargs->signal__ref.val = *pargs->signal; \
 	} \
-	if (args->hsa_signal_group_wait_any_relaxed.value != NULL) { \
-		args->hsa_signal_group_wait_any_relaxed.value__ref.val = *args->hsa_signal_group_wait_any_relaxed.value; \
+	if (pargs->value != NULL) { \
+		pargs->value__ref.val = *pargs->value; \
 	} \
 };
 
@@ -943,14 +964,15 @@ struct args_hsa_signal_group_wait_any_relaxed_t {
  *	)
  */
 #if HAVE_hsa_signal_and_relaxed
-struct args_hsa_signal_and_relaxed_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_and_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_signal_and_relaxed(activity) { \
-	activity->hsa_args.hsa_signal_and_relaxed.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_and_relaxed.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_and_relaxed_t* args = (args_hsa_signal_and_relaxed_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -973,7 +995,7 @@ struct args_hsa_signal_and_relaxed_t {
  *	)
  */
 #if HAVE_hsa_ext_image_clear
-struct args_hsa_ext_image_clear_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_ext_image_t image;
 	void * data;
@@ -982,18 +1004,20 @@ struct args_hsa_ext_image_clear_t {
 		hsa_ext_image_region_t val;
 	} image_region__ref;
 	hsa_status_t retval;
-};
+} args_hsa_ext_image_clear_t;
 
 #define GET_ARGS_VALUE_hsa_ext_image_clear(activity) { \
-	activity->hsa_args.hsa_ext_image_clear.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ext_image_clear.image = (hsa_ext_image_t) image; \
-	activity->hsa_args.hsa_ext_image_clear.data = (void *) data; \
-	activity->hsa_args.hsa_ext_image_clear.image_region = (hsa_ext_image_region_t *) image_region; \
+	args_hsa_ext_image_clear_t* args = (args_hsa_ext_image_clear_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->image = (hsa_ext_image_t) image; \
+	args->data = (void *) data; \
+	args->image_region = (hsa_ext_image_region_t *) image_region; \
 };
 
 #define GET_PTRS_VALUE_hsa_ext_image_clear(args) { \
-	if (args->hsa_ext_image_clear.image_region != NULL) { \
-		args->hsa_ext_image_clear.image_region__ref.val = *args->hsa_ext_image_clear.image_region; \
+	args_hsa_ext_image_clear_t* pargs = (args_hsa_ext_image_clear_t*) args; \
+	if (pargs->image_region != NULL) { \
+		pargs->image_region__ref.val = *pargs->image_region; \
 	} \
 };
 
@@ -1017,7 +1041,7 @@ struct args_hsa_ext_image_clear_t {
  *	)
  */
 #if HAVE_hsa_executable_load_code_object
-struct args_hsa_executable_load_code_object_t {
+typedef struct {
 	hsa_executable_t executable;
 	hsa_agent_t agent;
 	hsa_code_object_t code_object;
@@ -1026,18 +1050,20 @@ struct args_hsa_executable_load_code_object_t {
 		char val[HSA_STRING_SIZE_MAX];
 	} options__ref;
 	hsa_status_t retval;
-};
+} args_hsa_executable_load_code_object_t;
 
 #define GET_ARGS_VALUE_hsa_executable_load_code_object(activity) { \
-	activity->hsa_args.hsa_executable_load_code_object.executable = (hsa_executable_t) executable; \
-	activity->hsa_args.hsa_executable_load_code_object.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_executable_load_code_object.code_object = (hsa_code_object_t) code_object; \
-	activity->hsa_args.hsa_executable_load_code_object.options = (char *) options; \
+	args_hsa_executable_load_code_object_t* args = (args_hsa_executable_load_code_object_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
+	args->agent = (hsa_agent_t) agent; \
+	args->code_object = (hsa_code_object_t) code_object; \
+	args->options = (char *) options; \
 };
 
 #define GET_PTRS_VALUE_hsa_executable_load_code_object(args) { \
-	if (args->hsa_executable_load_code_object.options != NULL) { \
-		strncpy(args->hsa_executable_load_code_object.options__ref.val, args->hsa_executable_load_code_object.options, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_executable_load_code_object_t* pargs = (args_hsa_executable_load_code_object_t*) args; \
+	if (pargs->options != NULL) { \
+		strncpy(pargs->options__ref.val, pargs->options, HSA_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -1059,15 +1085,16 @@ struct args_hsa_executable_load_code_object_t {
  *	)
  */
 #if HAVE_hsa_signal_exchange_acquire
-struct args_hsa_signal_exchange_acquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_exchange_acquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_exchange_acquire(activity) { \
-	activity->hsa_args.hsa_signal_exchange_acquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_exchange_acquire.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_exchange_acquire_t* args = (args_hsa_signal_exchange_acquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -1093,7 +1120,7 @@ struct args_hsa_signal_exchange_acquire_t {
  *	)
  */
 #if HAVE_hsa_ext_image_data_get_info_with_layout
-struct args_hsa_ext_image_data_get_info_with_layout_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_ext_image_descriptor_t * image_descriptor;
 	struct {
@@ -1108,24 +1135,26 @@ struct args_hsa_ext_image_data_get_info_with_layout_t {
 		hsa_ext_image_data_info_t val;
 	} image_data_info__ref;
 	hsa_status_t retval;
-};
+} args_hsa_ext_image_data_get_info_with_layout_t;
 
 #define GET_ARGS_VALUE_hsa_ext_image_data_get_info_with_layout(activity) { \
-	activity->hsa_args.hsa_ext_image_data_get_info_with_layout.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ext_image_data_get_info_with_layout.image_descriptor = (hsa_ext_image_descriptor_t *) image_descriptor; \
-	activity->hsa_args.hsa_ext_image_data_get_info_with_layout.access_permission = (hsa_access_permission_t) access_permission; \
-	activity->hsa_args.hsa_ext_image_data_get_info_with_layout.image_data_layout = (hsa_ext_image_data_layout_t) image_data_layout; \
-	activity->hsa_args.hsa_ext_image_data_get_info_with_layout.image_data_row_pitch = (size_t) image_data_row_pitch; \
-	activity->hsa_args.hsa_ext_image_data_get_info_with_layout.image_data_slice_pitch = (size_t) image_data_slice_pitch; \
-	activity->hsa_args.hsa_ext_image_data_get_info_with_layout.image_data_info = (hsa_ext_image_data_info_t *) image_data_info; \
+	args_hsa_ext_image_data_get_info_with_layout_t* args = (args_hsa_ext_image_data_get_info_with_layout_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->image_descriptor = (hsa_ext_image_descriptor_t *) image_descriptor; \
+	args->access_permission = (hsa_access_permission_t) access_permission; \
+	args->image_data_layout = (hsa_ext_image_data_layout_t) image_data_layout; \
+	args->image_data_row_pitch = (size_t) image_data_row_pitch; \
+	args->image_data_slice_pitch = (size_t) image_data_slice_pitch; \
+	args->image_data_info = (hsa_ext_image_data_info_t *) image_data_info; \
 };
 
 #define GET_PTRS_VALUE_hsa_ext_image_data_get_info_with_layout(args) { \
-	if (args->hsa_ext_image_data_get_info_with_layout.image_descriptor != NULL) { \
-		args->hsa_ext_image_data_get_info_with_layout.image_descriptor__ref.val = *args->hsa_ext_image_data_get_info_with_layout.image_descriptor; \
+	args_hsa_ext_image_data_get_info_with_layout_t* pargs = (args_hsa_ext_image_data_get_info_with_layout_t*) args; \
+	if (pargs->image_descriptor != NULL) { \
+		pargs->image_descriptor__ref.val = *pargs->image_descriptor; \
 	} \
-	if (args->hsa_ext_image_data_get_info_with_layout.image_data_info != NULL) { \
-		args->hsa_ext_image_data_get_info_with_layout.image_data_info__ref.val = *args->hsa_ext_image_data_get_info_with_layout.image_data_info; \
+	if (pargs->image_data_info != NULL) { \
+		pargs->image_data_info__ref.val = *pargs->image_data_info; \
 	} \
 };
 
@@ -1149,7 +1178,7 @@ struct args_hsa_ext_image_data_get_info_with_layout_t {
  *	)
  */
 #if HAVE_hsa_amd_svm_attributes_get
-struct args_hsa_amd_svm_attributes_get_t {
+typedef struct {
 	void * ptr;
 	size_t size;
 	hsa_amd_svm_attribute_pair_t * attribute_list;
@@ -1158,18 +1187,20 @@ struct args_hsa_amd_svm_attributes_get_t {
 	} attribute_list__ref;
 	size_t attribute_count;
 	hsa_status_t retval;
-};
+} args_hsa_amd_svm_attributes_get_t;
 
 #define GET_ARGS_VALUE_hsa_amd_svm_attributes_get(activity) { \
-	activity->hsa_args.hsa_amd_svm_attributes_get.ptr = (void *) ptr; \
-	activity->hsa_args.hsa_amd_svm_attributes_get.size = (size_t) size; \
-	activity->hsa_args.hsa_amd_svm_attributes_get.attribute_list = (hsa_amd_svm_attribute_pair_t *) attribute_list; \
-	activity->hsa_args.hsa_amd_svm_attributes_get.attribute_count = (size_t) attribute_count; \
+	args_hsa_amd_svm_attributes_get_t* args = (args_hsa_amd_svm_attributes_get_t*) activity->args; \
+	args->ptr = (void *) ptr; \
+	args->size = (size_t) size; \
+	args->attribute_list = (hsa_amd_svm_attribute_pair_t *) attribute_list; \
+	args->attribute_count = (size_t) attribute_count; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_svm_attributes_get(args) { \
-	if (args->hsa_amd_svm_attributes_get.attribute_list != NULL) { \
-		args->hsa_amd_svm_attributes_get.attribute_list__ref.val = *args->hsa_amd_svm_attributes_get.attribute_list; \
+	args_hsa_amd_svm_attributes_get_t* pargs = (args_hsa_amd_svm_attributes_get_t*) args; \
+	if (pargs->attribute_list != NULL) { \
+		pargs->attribute_list__ref.val = *pargs->attribute_list; \
 	} \
 };
 
@@ -1195,7 +1226,7 @@ struct args_hsa_amd_svm_attributes_get_t {
  *	)
  */
 #if HAVE_hsa_ext_image_export
-struct args_hsa_ext_image_export_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_ext_image_t src_image;
 	void * dst_memory;
@@ -1206,20 +1237,22 @@ struct args_hsa_ext_image_export_t {
 		hsa_ext_image_region_t val;
 	} image_region__ref;
 	hsa_status_t retval;
-};
+} args_hsa_ext_image_export_t;
 
 #define GET_ARGS_VALUE_hsa_ext_image_export(activity) { \
-	activity->hsa_args.hsa_ext_image_export.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ext_image_export.src_image = (hsa_ext_image_t) src_image; \
-	activity->hsa_args.hsa_ext_image_export.dst_memory = (void *) dst_memory; \
-	activity->hsa_args.hsa_ext_image_export.dst_row_pitch = (size_t) dst_row_pitch; \
-	activity->hsa_args.hsa_ext_image_export.dst_slice_pitch = (size_t) dst_slice_pitch; \
-	activity->hsa_args.hsa_ext_image_export.image_region = (hsa_ext_image_region_t *) image_region; \
+	args_hsa_ext_image_export_t* args = (args_hsa_ext_image_export_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->src_image = (hsa_ext_image_t) src_image; \
+	args->dst_memory = (void *) dst_memory; \
+	args->dst_row_pitch = (size_t) dst_row_pitch; \
+	args->dst_slice_pitch = (size_t) dst_slice_pitch; \
+	args->image_region = (hsa_ext_image_region_t *) image_region; \
 };
 
 #define GET_PTRS_VALUE_hsa_ext_image_export(args) { \
-	if (args->hsa_ext_image_export.image_region != NULL) { \
-		args->hsa_ext_image_export.image_region__ref.val = *args->hsa_ext_image_export.image_region; \
+	args_hsa_ext_image_export_t* pargs = (args_hsa_ext_image_export_t*) args; \
+	if (pargs->image_region != NULL) { \
+		pargs->image_region__ref.val = *pargs->image_region; \
 	} \
 };
 
@@ -1241,15 +1274,16 @@ struct args_hsa_ext_image_export_t {
  *	)
  */
 #if HAVE_hsa_memory_register
-struct args_hsa_memory_register_t {
+typedef struct {
 	void * ptr;
 	size_t size;
 	hsa_status_t retval;
-};
+} args_hsa_memory_register_t;
 
 #define GET_ARGS_VALUE_hsa_memory_register(activity) { \
-	activity->hsa_args.hsa_memory_register.ptr = (void *) ptr; \
-	activity->hsa_args.hsa_memory_register.size = (size_t) size; \
+	args_hsa_memory_register_t* args = (args_hsa_memory_register_t*) activity->args; \
+	args->ptr = (void *) ptr; \
+	args->size = (size_t) size; \
 };
 
 #endif
@@ -1270,14 +1304,15 @@ struct args_hsa_memory_register_t {
  *	)
  */
 #if HAVE_hsa_signal_and_scacquire
-struct args_hsa_signal_and_scacquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_and_scacquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_and_scacquire(activity) { \
-	activity->hsa_args.hsa_signal_and_scacquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_and_scacquire.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_and_scacquire_t* args = (args_hsa_signal_and_scacquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -1298,14 +1333,15 @@ struct args_hsa_signal_and_scacquire_t {
  *	)
  */
 #if HAVE_hsa_signal_add_acq_rel
-struct args_hsa_signal_add_acq_rel_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_add_acq_rel_t;
 
 #define GET_ARGS_VALUE_hsa_signal_add_acq_rel(activity) { \
-	activity->hsa_args.hsa_signal_add_acq_rel.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_add_acq_rel.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_add_acq_rel_t* args = (args_hsa_signal_add_acq_rel_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -1328,7 +1364,7 @@ struct args_hsa_signal_add_acq_rel_t {
  *	)
  */
 #if HAVE_hsa_amd_portable_export_dmabuf
-struct args_hsa_amd_portable_export_dmabuf_t {
+typedef struct {
 	void * ptr;
 	size_t size;
 	int * dmabuf;
@@ -1340,21 +1376,23 @@ struct args_hsa_amd_portable_export_dmabuf_t {
 		uint64_t val;
 	} offset__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_portable_export_dmabuf_t;
 
 #define GET_ARGS_VALUE_hsa_amd_portable_export_dmabuf(activity) { \
-	activity->hsa_args.hsa_amd_portable_export_dmabuf.ptr = (void *) ptr; \
-	activity->hsa_args.hsa_amd_portable_export_dmabuf.size = (size_t) size; \
-	activity->hsa_args.hsa_amd_portable_export_dmabuf.dmabuf = (int *) dmabuf; \
-	activity->hsa_args.hsa_amd_portable_export_dmabuf.offset = (uint64_t *) offset; \
+	args_hsa_amd_portable_export_dmabuf_t* args = (args_hsa_amd_portable_export_dmabuf_t*) activity->args; \
+	args->ptr = (void *) ptr; \
+	args->size = (size_t) size; \
+	args->dmabuf = (int *) dmabuf; \
+	args->offset = (uint64_t *) offset; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_portable_export_dmabuf(args) { \
-	if (args->hsa_amd_portable_export_dmabuf.dmabuf != NULL) { \
-		args->hsa_amd_portable_export_dmabuf.dmabuf__ref.val = *args->hsa_amd_portable_export_dmabuf.dmabuf; \
+	args_hsa_amd_portable_export_dmabuf_t* pargs = (args_hsa_amd_portable_export_dmabuf_t*) args; \
+	if (pargs->dmabuf != NULL) { \
+		pargs->dmabuf__ref.val = *pargs->dmabuf; \
 	} \
-	if (args->hsa_amd_portable_export_dmabuf.offset != NULL) { \
-		args->hsa_amd_portable_export_dmabuf.offset__ref.val = *args->hsa_amd_portable_export_dmabuf.offset; \
+	if (pargs->offset != NULL) { \
+		pargs->offset__ref.val = *pargs->offset; \
 	} \
 };
 
@@ -1380,7 +1418,7 @@ struct args_hsa_amd_portable_export_dmabuf_t {
  *	)
  */
 #if HAVE_hsa_code_object_serialize
-struct args_hsa_code_object_serialize_t {
+typedef struct {
 	hsa_code_object_t code_object;
 	hsa_status_t (* alloc_callback)(size_t, hsa_callback_data_t, void **);
 	hsa_callback_data_t callback_data;
@@ -1397,26 +1435,28 @@ struct args_hsa_code_object_serialize_t {
 		size_t val;
 	} serialized_code_object_size__ref;
 	hsa_status_t retval;
-};
+} args_hsa_code_object_serialize_t;
 
 #define GET_ARGS_VALUE_hsa_code_object_serialize(activity) { \
-	activity->hsa_args.hsa_code_object_serialize.code_object = (hsa_code_object_t) code_object; \
-	activity->hsa_args.hsa_code_object_serialize.alloc_callback = (hsa_status_t (*)(size_t, hsa_callback_data_t, void **)) alloc_callback; \
-	activity->hsa_args.hsa_code_object_serialize.callback_data = (hsa_callback_data_t) callback_data; \
-	activity->hsa_args.hsa_code_object_serialize.options = (char *) options; \
-	activity->hsa_args.hsa_code_object_serialize.serialized_code_object = (void **) serialized_code_object; \
-	activity->hsa_args.hsa_code_object_serialize.serialized_code_object_size = (size_t *) serialized_code_object_size; \
+	args_hsa_code_object_serialize_t* args = (args_hsa_code_object_serialize_t*) activity->args; \
+	args->code_object = (hsa_code_object_t) code_object; \
+	args->alloc_callback = (hsa_status_t (*)(size_t, hsa_callback_data_t, void **)) alloc_callback; \
+	args->callback_data = (hsa_callback_data_t) callback_data; \
+	args->options = (char *) options; \
+	args->serialized_code_object = (void **) serialized_code_object; \
+	args->serialized_code_object_size = (size_t *) serialized_code_object_size; \
 };
 
 #define GET_PTRS_VALUE_hsa_code_object_serialize(args) { \
-	if (args->hsa_code_object_serialize.options != NULL) { \
-		strncpy(args->hsa_code_object_serialize.options__ref.val, args->hsa_code_object_serialize.options, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_code_object_serialize_t* pargs = (args_hsa_code_object_serialize_t*) args; \
+	if (pargs->options != NULL) { \
+		strncpy(pargs->options__ref.val, pargs->options, HSA_STRING_SIZE_MAX-1); \
 	} \
-	if (args->hsa_code_object_serialize.serialized_code_object != NULL) { \
-		args->hsa_code_object_serialize.serialized_code_object__ref.ptr1 = *args->hsa_code_object_serialize.serialized_code_object; \
+	if (pargs->serialized_code_object != NULL) { \
+		pargs->serialized_code_object__ref.ptr1 = *pargs->serialized_code_object; \
 	} \
-	if (args->hsa_code_object_serialize.serialized_code_object_size != NULL) { \
-		args->hsa_code_object_serialize.serialized_code_object_size__ref.val = *args->hsa_code_object_serialize.serialized_code_object_size; \
+	if (pargs->serialized_code_object_size != NULL) { \
+		pargs->serialized_code_object_size__ref.val = *pargs->serialized_code_object_size; \
 	} \
 };
 
@@ -1441,7 +1481,7 @@ struct args_hsa_code_object_serialize_t {
  *	)
  */
 #if HAVE_hsa_amd_memory_lock
-struct args_hsa_amd_memory_lock_t {
+typedef struct {
 	void * host_ptr;
 	size_t size;
 	hsa_agent_t * agents;
@@ -1454,22 +1494,24 @@ struct args_hsa_amd_memory_lock_t {
 		void* ptr1;
 	} agent_ptr__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_memory_lock_t;
 
 #define GET_ARGS_VALUE_hsa_amd_memory_lock(activity) { \
-	activity->hsa_args.hsa_amd_memory_lock.host_ptr = (void *) host_ptr; \
-	activity->hsa_args.hsa_amd_memory_lock.size = (size_t) size; \
-	activity->hsa_args.hsa_amd_memory_lock.agents = (hsa_agent_t *) agents; \
-	activity->hsa_args.hsa_amd_memory_lock.num_agent = (int) num_agent; \
-	activity->hsa_args.hsa_amd_memory_lock.agent_ptr = (void **) agent_ptr; \
+	args_hsa_amd_memory_lock_t* args = (args_hsa_amd_memory_lock_t*) activity->args; \
+	args->host_ptr = (void *) host_ptr; \
+	args->size = (size_t) size; \
+	args->agents = (hsa_agent_t *) agents; \
+	args->num_agent = (int) num_agent; \
+	args->agent_ptr = (void **) agent_ptr; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_memory_lock(args) { \
-	if (args->hsa_amd_memory_lock.agents != NULL) { \
-		args->hsa_amd_memory_lock.agents__ref.val = *args->hsa_amd_memory_lock.agents; \
+	args_hsa_amd_memory_lock_t* pargs = (args_hsa_amd_memory_lock_t*) args; \
+	if (pargs->agents != NULL) { \
+		pargs->agents__ref.val = *pargs->agents; \
 	} \
-	if (args->hsa_amd_memory_lock.agent_ptr != NULL) { \
-		args->hsa_amd_memory_lock.agent_ptr__ref.ptr1 = *args->hsa_amd_memory_lock.agent_ptr; \
+	if (pargs->agent_ptr != NULL) { \
+		pargs->agent_ptr__ref.ptr1 = *pargs->agent_ptr; \
 	} \
 };
 
@@ -1493,19 +1535,20 @@ struct args_hsa_amd_memory_lock_t {
  *	)
  */
 #if HAVE_hsa_executable_iterate_agent_symbols
-struct args_hsa_executable_iterate_agent_symbols_t {
+typedef struct {
 	hsa_executable_t executable;
 	hsa_agent_t agent;
 	hsa_status_t (* callback)(hsa_executable_t, hsa_agent_t, hsa_executable_symbol_t, void *);
 	void * data;
 	hsa_status_t retval;
-};
+} args_hsa_executable_iterate_agent_symbols_t;
 
 #define GET_ARGS_VALUE_hsa_executable_iterate_agent_symbols(activity) { \
-	activity->hsa_args.hsa_executable_iterate_agent_symbols.executable = (hsa_executable_t) executable; \
-	activity->hsa_args.hsa_executable_iterate_agent_symbols.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_executable_iterate_agent_symbols.callback = (hsa_status_t (*)(hsa_executable_t, hsa_agent_t, hsa_executable_symbol_t, void *)) callback; \
-	activity->hsa_args.hsa_executable_iterate_agent_symbols.data = (void *) data; \
+	args_hsa_executable_iterate_agent_symbols_t* args = (args_hsa_executable_iterate_agent_symbols_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
+	args->agent = (hsa_agent_t) agent; \
+	args->callback = (hsa_status_t (*)(hsa_executable_t, hsa_agent_t, hsa_executable_symbol_t, void *)) callback; \
+	args->data = (void *) data; \
 };
 
 #endif
@@ -1527,17 +1570,18 @@ struct args_hsa_executable_iterate_agent_symbols_t {
  *	)
  */
 #if HAVE_hsa_code_symbol_get_info
-struct args_hsa_code_symbol_get_info_t {
+typedef struct {
 	hsa_code_symbol_t code_symbol;
 	hsa_code_symbol_info_t attribute;
 	void * value;
 	hsa_status_t retval;
-};
+} args_hsa_code_symbol_get_info_t;
 
 #define GET_ARGS_VALUE_hsa_code_symbol_get_info(activity) { \
-	activity->hsa_args.hsa_code_symbol_get_info.code_symbol = (hsa_code_symbol_t) code_symbol; \
-	activity->hsa_args.hsa_code_symbol_get_info.attribute = (hsa_code_symbol_info_t) attribute; \
-	activity->hsa_args.hsa_code_symbol_get_info.value = (void *) value; \
+	args_hsa_code_symbol_get_info_t* args = (args_hsa_code_symbol_get_info_t*) activity->args; \
+	args->code_symbol = (hsa_code_symbol_t) code_symbol; \
+	args->attribute = (hsa_code_symbol_info_t) attribute; \
+	args->value = (void *) value; \
 };
 
 #endif
@@ -1558,14 +1602,15 @@ struct args_hsa_code_symbol_get_info_t {
  *	)
  */
 #if HAVE_hsa_signal_xor_acquire
-struct args_hsa_signal_xor_acquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_xor_acquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_xor_acquire(activity) { \
-	activity->hsa_args.hsa_signal_xor_acquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_xor_acquire.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_xor_acquire_t* args = (args_hsa_signal_xor_acquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -1587,17 +1632,18 @@ struct args_hsa_signal_xor_acquire_t {
  *	)
  */
 #if HAVE_hsa_amd_image_get_info_max_dim
-struct args_hsa_amd_image_get_info_max_dim_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_agent_info_t attribute;
 	void * value;
 	hsa_status_t retval;
-};
+} args_hsa_amd_image_get_info_max_dim_t;
 
 #define GET_ARGS_VALUE_hsa_amd_image_get_info_max_dim(activity) { \
-	activity->hsa_args.hsa_amd_image_get_info_max_dim.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_amd_image_get_info_max_dim.attribute = (hsa_agent_info_t) attribute; \
-	activity->hsa_args.hsa_amd_image_get_info_max_dim.value = (void *) value; \
+	args_hsa_amd_image_get_info_max_dim_t* args = (args_hsa_amd_image_get_info_max_dim_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->attribute = (hsa_agent_info_t) attribute; \
+	args->value = (void *) value; \
 };
 
 #endif
@@ -1618,14 +1664,15 @@ struct args_hsa_amd_image_get_info_max_dim_t {
  *	)
  */
 #if HAVE_hsa_signal_subtract_acq_rel
-struct args_hsa_signal_subtract_acq_rel_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_subtract_acq_rel_t;
 
 #define GET_ARGS_VALUE_hsa_signal_subtract_acq_rel(activity) { \
-	activity->hsa_args.hsa_signal_subtract_acq_rel.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_subtract_acq_rel.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_subtract_acq_rel_t* args = (args_hsa_signal_subtract_acq_rel_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -1647,7 +1694,7 @@ struct args_hsa_signal_subtract_acq_rel_t {
  *	)
  */
 #if HAVE_hsa_isa_get_exception_policies
-struct args_hsa_isa_get_exception_policies_t {
+typedef struct {
 	hsa_isa_t isa;
 	hsa_profile_t profile;
 	uint16_t * mask;
@@ -1655,17 +1702,19 @@ struct args_hsa_isa_get_exception_policies_t {
 		uint16_t val;
 	} mask__ref;
 	hsa_status_t retval;
-};
+} args_hsa_isa_get_exception_policies_t;
 
 #define GET_ARGS_VALUE_hsa_isa_get_exception_policies(activity) { \
-	activity->hsa_args.hsa_isa_get_exception_policies.isa = (hsa_isa_t) isa; \
-	activity->hsa_args.hsa_isa_get_exception_policies.profile = (hsa_profile_t) profile; \
-	activity->hsa_args.hsa_isa_get_exception_policies.mask = (uint16_t *) mask; \
+	args_hsa_isa_get_exception_policies_t* args = (args_hsa_isa_get_exception_policies_t*) activity->args; \
+	args->isa = (hsa_isa_t) isa; \
+	args->profile = (hsa_profile_t) profile; \
+	args->mask = (uint16_t *) mask; \
 };
 
 #define GET_PTRS_VALUE_hsa_isa_get_exception_policies(args) { \
-	if (args->hsa_isa_get_exception_policies.mask != NULL) { \
-		args->hsa_isa_get_exception_policies.mask__ref.val = *args->hsa_isa_get_exception_policies.mask; \
+	args_hsa_isa_get_exception_policies_t* pargs = (args_hsa_isa_get_exception_policies_t*) args; \
+	if (pargs->mask != NULL) { \
+		pargs->mask__ref.val = *pargs->mask; \
 	} \
 };
 
@@ -1688,17 +1737,18 @@ struct args_hsa_isa_get_exception_policies_t {
  *	)
  */
 #if HAVE_hsa_agent_iterate_regions
-struct args_hsa_agent_iterate_regions_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_status_t (* callback)(hsa_region_t, void *);
 	void * data;
 	hsa_status_t retval;
-};
+} args_hsa_agent_iterate_regions_t;
 
 #define GET_ARGS_VALUE_hsa_agent_iterate_regions(activity) { \
-	activity->hsa_args.hsa_agent_iterate_regions.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_agent_iterate_regions.callback = (hsa_status_t (*)(hsa_region_t, void *)) callback; \
-	activity->hsa_args.hsa_agent_iterate_regions.data = (void *) data; \
+	args_hsa_agent_iterate_regions_t* args = (args_hsa_agent_iterate_regions_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->callback = (hsa_status_t (*)(hsa_region_t, void *)) callback; \
+	args->data = (void *) data; \
 };
 
 #endif
@@ -1722,21 +1772,22 @@ struct args_hsa_agent_iterate_regions_t {
  *	)
  */
 #if HAVE_hsa_signal_wait_relaxed
-struct args_hsa_signal_wait_relaxed_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_condition_t condition;
 	hsa_signal_value_t compare_value;
 	uint64_t timeout_hint;
 	hsa_wait_state_t wait_state_hint;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_wait_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_signal_wait_relaxed(activity) { \
-	activity->hsa_args.hsa_signal_wait_relaxed.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_wait_relaxed.condition = (hsa_signal_condition_t) condition; \
-	activity->hsa_args.hsa_signal_wait_relaxed.compare_value = (hsa_signal_value_t) compare_value; \
-	activity->hsa_args.hsa_signal_wait_relaxed.timeout_hint = (uint64_t) timeout_hint; \
-	activity->hsa_args.hsa_signal_wait_relaxed.wait_state_hint = (hsa_wait_state_t) wait_state_hint; \
+	args_hsa_signal_wait_relaxed_t* args = (args_hsa_signal_wait_relaxed_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->condition = (hsa_signal_condition_t) condition; \
+	args->compare_value = (hsa_signal_value_t) compare_value; \
+	args->timeout_hint = (uint64_t) timeout_hint; \
+	args->wait_state_hint = (hsa_wait_state_t) wait_state_hint; \
 };
 
 #endif
@@ -1764,7 +1815,7 @@ struct args_hsa_signal_wait_relaxed_t {
  *	)
  */
 #if HAVE_hsa_ven_amd_pcs_create
-struct args_hsa_ven_amd_pcs_create_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_ven_amd_pcs_method_kind_t method;
 	hsa_ven_amd_pcs_units_t units;
@@ -1778,23 +1829,25 @@ struct args_hsa_ven_amd_pcs_create_t {
 		hsa_ven_amd_pcs_t val;
 	} pc_sampling__ref;
 	hsa_status_t retval;
-};
+} args_hsa_ven_amd_pcs_create_t;
 
 #define GET_ARGS_VALUE_hsa_ven_amd_pcs_create(activity) { \
-	activity->hsa_args.hsa_ven_amd_pcs_create.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ven_amd_pcs_create.method = (hsa_ven_amd_pcs_method_kind_t) method; \
-	activity->hsa_args.hsa_ven_amd_pcs_create.units = (hsa_ven_amd_pcs_units_t) units; \
-	activity->hsa_args.hsa_ven_amd_pcs_create.interval = (size_t) interval; \
-	activity->hsa_args.hsa_ven_amd_pcs_create.latency = (size_t) latency; \
-	activity->hsa_args.hsa_ven_amd_pcs_create.buffer_size = (size_t) buffer_size; \
-	activity->hsa_args.hsa_ven_amd_pcs_create.data_ready_callback = (hsa_ven_amd_pcs_data_ready_callback_t) data_ready_callback; \
-	activity->hsa_args.hsa_ven_amd_pcs_create.client_callback_data = (void *) client_callback_data; \
-	activity->hsa_args.hsa_ven_amd_pcs_create.pc_sampling = (hsa_ven_amd_pcs_t *) pc_sampling; \
+	args_hsa_ven_amd_pcs_create_t* args = (args_hsa_ven_amd_pcs_create_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->method = (hsa_ven_amd_pcs_method_kind_t) method; \
+	args->units = (hsa_ven_amd_pcs_units_t) units; \
+	args->interval = (size_t) interval; \
+	args->latency = (size_t) latency; \
+	args->buffer_size = (size_t) buffer_size; \
+	args->data_ready_callback = (hsa_ven_amd_pcs_data_ready_callback_t) data_ready_callback; \
+	args->client_callback_data = (void *) client_callback_data; \
+	args->pc_sampling = (hsa_ven_amd_pcs_t *) pc_sampling; \
 };
 
 #define GET_PTRS_VALUE_hsa_ven_amd_pcs_create(args) { \
-	if (args->hsa_ven_amd_pcs_create.pc_sampling != NULL) { \
-		args->hsa_ven_amd_pcs_create.pc_sampling__ref.val = *args->hsa_ven_amd_pcs_create.pc_sampling; \
+	args_hsa_ven_amd_pcs_create_t* pargs = (args_hsa_ven_amd_pcs_create_t*) args; \
+	if (pargs->pc_sampling != NULL) { \
+		pargs->pc_sampling__ref.val = *pargs->pc_sampling; \
 	} \
 };
 
@@ -1815,21 +1868,23 @@ struct args_hsa_ven_amd_pcs_create_t {
  *	)
  */
 #if HAVE_hsa_queue_load_read_index_relaxed
-struct args_hsa_queue_load_read_index_relaxed_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t retval;
-};
+} args_hsa_queue_load_read_index_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_queue_load_read_index_relaxed(activity) { \
-	activity->hsa_args.hsa_queue_load_read_index_relaxed.queue = (hsa_queue_t *) queue; \
+	args_hsa_queue_load_read_index_relaxed_t* args = (args_hsa_queue_load_read_index_relaxed_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_load_read_index_relaxed(args) { \
-	if (args->hsa_queue_load_read_index_relaxed.queue != NULL) { \
-		args->hsa_queue_load_read_index_relaxed.queue__ref.val = *args->hsa_queue_load_read_index_relaxed.queue; \
+	args_hsa_queue_load_read_index_relaxed_t* pargs = (args_hsa_queue_load_read_index_relaxed_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -1850,13 +1905,14 @@ struct args_hsa_queue_load_read_index_relaxed_t {
  *	)
  */
 #if HAVE_hsa_signal_load_scacquire
-struct args_hsa_signal_load_scacquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_load_scacquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_load_scacquire(activity) { \
-	activity->hsa_args.hsa_signal_load_scacquire.signal = (hsa_signal_t) signal; \
+	args_hsa_signal_load_scacquire_t* args = (args_hsa_signal_load_scacquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
 };
 
 #endif
@@ -1877,7 +1933,7 @@ struct args_hsa_signal_load_scacquire_t {
  *	)
  */
 #if HAVE_hsa_amd_signal_value_pointer
-struct args_hsa_amd_signal_value_pointer_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t ** value_ptr;
 	struct {
@@ -1885,18 +1941,20 @@ struct args_hsa_amd_signal_value_pointer_t {
 		hsa_signal_value_t val;
 	} value_ptr__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_signal_value_pointer_t;
 
 #define GET_ARGS_VALUE_hsa_amd_signal_value_pointer(activity) { \
-	activity->hsa_args.hsa_amd_signal_value_pointer.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_amd_signal_value_pointer.value_ptr = (hsa_signal_value_t **) value_ptr; \
+	args_hsa_amd_signal_value_pointer_t* args = (args_hsa_amd_signal_value_pointer_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value_ptr = (hsa_signal_value_t **) value_ptr; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_signal_value_pointer(args) { \
-	if (args->hsa_amd_signal_value_pointer.value_ptr != NULL) { \
-		args->hsa_amd_signal_value_pointer.value_ptr__ref.ptr1 = *args->hsa_amd_signal_value_pointer.value_ptr; \
-		if (args->hsa_amd_signal_value_pointer.value_ptr__ref.ptr1 != NULL) { \
-			args->hsa_amd_signal_value_pointer.value_ptr__ref.val = **args->hsa_amd_signal_value_pointer.value_ptr; \
+	args_hsa_amd_signal_value_pointer_t* pargs = (args_hsa_amd_signal_value_pointer_t*) args; \
+	if (pargs->value_ptr != NULL) { \
+		pargs->value_ptr__ref.ptr1 = *pargs->value_ptr; \
+		if (pargs->value_ptr__ref.ptr1 != NULL) { \
+			pargs->value_ptr__ref.val = **pargs->value_ptr; \
 		} \
 	} \
 };
@@ -1918,13 +1976,14 @@ struct args_hsa_amd_signal_value_pointer_t {
  *	)
  */
 #if HAVE_hsa_amd_memory_pool_free
-struct args_hsa_amd_memory_pool_free_t {
+typedef struct {
 	void * ptr;
 	hsa_status_t retval;
-};
+} args_hsa_amd_memory_pool_free_t;
 
 #define GET_ARGS_VALUE_hsa_amd_memory_pool_free(activity) { \
-	activity->hsa_args.hsa_amd_memory_pool_free.ptr = (void *) ptr; \
+	args_hsa_amd_memory_pool_free_t* args = (args_hsa_amd_memory_pool_free_t*) activity->args; \
+	args->ptr = (void *) ptr; \
 };
 
 #endif
@@ -1945,23 +2004,25 @@ struct args_hsa_amd_memory_pool_free_t {
  *	)
  */
 #if HAVE_hsa_executable_validate
-struct args_hsa_executable_validate_t {
+typedef struct {
 	hsa_executable_t executable;
 	uint32_t * result;
 	struct {
 		uint32_t val;
 	} result__ref;
 	hsa_status_t retval;
-};
+} args_hsa_executable_validate_t;
 
 #define GET_ARGS_VALUE_hsa_executable_validate(activity) { \
-	activity->hsa_args.hsa_executable_validate.executable = (hsa_executable_t) executable; \
-	activity->hsa_args.hsa_executable_validate.result = (uint32_t *) result; \
+	args_hsa_executable_validate_t* args = (args_hsa_executable_validate_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
+	args->result = (uint32_t *) result; \
 };
 
 #define GET_PTRS_VALUE_hsa_executable_validate(args) { \
-	if (args->hsa_executable_validate.result != NULL) { \
-		args->hsa_executable_validate.result__ref.val = *args->hsa_executable_validate.result; \
+	args_hsa_executable_validate_t* pargs = (args_hsa_executable_validate_t*) args; \
+	if (pargs->result != NULL) { \
+		pargs->result__ref.val = *pargs->result; \
 	} \
 };
 
@@ -1985,7 +2046,7 @@ struct args_hsa_executable_validate_t {
  *	)
  */
 #if HAVE_hsa_signal_create
-struct args_hsa_signal_create_t {
+typedef struct {
 	hsa_signal_value_t initial_value;
 	uint32_t num_consumers;
 	hsa_agent_t * consumers;
@@ -1997,21 +2058,23 @@ struct args_hsa_signal_create_t {
 		hsa_signal_t val;
 	} signal__ref;
 	hsa_status_t retval;
-};
+} args_hsa_signal_create_t;
 
 #define GET_ARGS_VALUE_hsa_signal_create(activity) { \
-	activity->hsa_args.hsa_signal_create.initial_value = (hsa_signal_value_t) initial_value; \
-	activity->hsa_args.hsa_signal_create.num_consumers = (uint32_t) num_consumers; \
-	activity->hsa_args.hsa_signal_create.consumers = (hsa_agent_t *) consumers; \
-	activity->hsa_args.hsa_signal_create.signal = (hsa_signal_t *) signal; \
+	args_hsa_signal_create_t* args = (args_hsa_signal_create_t*) activity->args; \
+	args->initial_value = (hsa_signal_value_t) initial_value; \
+	args->num_consumers = (uint32_t) num_consumers; \
+	args->consumers = (hsa_agent_t *) consumers; \
+	args->signal = (hsa_signal_t *) signal; \
 };
 
 #define GET_PTRS_VALUE_hsa_signal_create(args) { \
-	if (args->hsa_signal_create.consumers != NULL) { \
-		args->hsa_signal_create.consumers__ref.val = *args->hsa_signal_create.consumers; \
+	args_hsa_signal_create_t* pargs = (args_hsa_signal_create_t*) args; \
+	if (pargs->consumers != NULL) { \
+		pargs->consumers__ref.val = *pargs->consumers; \
 	} \
-	if (args->hsa_signal_create.signal != NULL) { \
-		args->hsa_signal_create.signal__ref.val = *args->hsa_signal_create.signal; \
+	if (pargs->signal != NULL) { \
+		pargs->signal__ref.val = *pargs->signal; \
 	} \
 };
 
@@ -2032,13 +2095,14 @@ struct args_hsa_signal_create_t {
  *	)
  */
 #if HAVE_hsa_amd_spm_acquire
-struct args_hsa_amd_spm_acquire_t {
+typedef struct {
 	hsa_agent_t preferred_agent;
 	hsa_status_t retval;
-};
+} args_hsa_amd_spm_acquire_t;
 
 #define GET_ARGS_VALUE_hsa_amd_spm_acquire(activity) { \
-	activity->hsa_args.hsa_amd_spm_acquire.preferred_agent = (hsa_agent_t) preferred_agent; \
+	args_hsa_amd_spm_acquire_t* args = (args_hsa_amd_spm_acquire_t*) activity->args; \
+	args->preferred_agent = (hsa_agent_t) preferred_agent; \
 };
 
 #endif
@@ -2058,21 +2122,23 @@ struct args_hsa_amd_spm_acquire_t {
  *	)
  */
 #if HAVE_hsa_queue_load_read_index_scacquire
-struct args_hsa_queue_load_read_index_scacquire_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t retval;
-};
+} args_hsa_queue_load_read_index_scacquire_t;
 
 #define GET_ARGS_VALUE_hsa_queue_load_read_index_scacquire(activity) { \
-	activity->hsa_args.hsa_queue_load_read_index_scacquire.queue = (hsa_queue_t *) queue; \
+	args_hsa_queue_load_read_index_scacquire_t* args = (args_hsa_queue_load_read_index_scacquire_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_load_read_index_scacquire(args) { \
-	if (args->hsa_queue_load_read_index_scacquire.queue != NULL) { \
-		args->hsa_queue_load_read_index_scacquire.queue__ref.val = *args->hsa_queue_load_read_index_scacquire.queue; \
+	args_hsa_queue_load_read_index_scacquire_t* pargs = (args_hsa_queue_load_read_index_scacquire_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -2093,21 +2159,23 @@ struct args_hsa_queue_load_read_index_scacquire_t {
  *	)
  */
 #if HAVE_hsa_queue_load_write_index_acquire
-struct args_hsa_queue_load_write_index_acquire_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t retval;
-};
+} args_hsa_queue_load_write_index_acquire_t;
 
 #define GET_ARGS_VALUE_hsa_queue_load_write_index_acquire(activity) { \
-	activity->hsa_args.hsa_queue_load_write_index_acquire.queue = (hsa_queue_t *) queue; \
+	args_hsa_queue_load_write_index_acquire_t* args = (args_hsa_queue_load_write_index_acquire_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_load_write_index_acquire(args) { \
-	if (args->hsa_queue_load_write_index_acquire.queue != NULL) { \
-		args->hsa_queue_load_write_index_acquire.queue__ref.val = *args->hsa_queue_load_write_index_acquire.queue; \
+	args_hsa_queue_load_write_index_acquire_t* pargs = (args_hsa_queue_load_write_index_acquire_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -2131,7 +2199,7 @@ struct args_hsa_queue_load_write_index_acquire_t {
  *	)
  */
 #if HAVE_hsa_executable_agent_global_variable_define
-struct args_hsa_executable_agent_global_variable_define_t {
+typedef struct {
 	hsa_executable_t executable;
 	hsa_agent_t agent;
 	char * variable_name;
@@ -2140,18 +2208,20 @@ struct args_hsa_executable_agent_global_variable_define_t {
 	} variable_name__ref;
 	void * address;
 	hsa_status_t retval;
-};
+} args_hsa_executable_agent_global_variable_define_t;
 
 #define GET_ARGS_VALUE_hsa_executable_agent_global_variable_define(activity) { \
-	activity->hsa_args.hsa_executable_agent_global_variable_define.executable = (hsa_executable_t) executable; \
-	activity->hsa_args.hsa_executable_agent_global_variable_define.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_executable_agent_global_variable_define.variable_name = (char *) variable_name; \
-	activity->hsa_args.hsa_executable_agent_global_variable_define.address = (void *) address; \
+	args_hsa_executable_agent_global_variable_define_t* args = (args_hsa_executable_agent_global_variable_define_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
+	args->agent = (hsa_agent_t) agent; \
+	args->variable_name = (char *) variable_name; \
+	args->address = (void *) address; \
 };
 
 #define GET_PTRS_VALUE_hsa_executable_agent_global_variable_define(args) { \
-	if (args->hsa_executable_agent_global_variable_define.variable_name != NULL) { \
-		strncpy(args->hsa_executable_agent_global_variable_define.variable_name__ref.val, args->hsa_executable_agent_global_variable_define.variable_name, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_executable_agent_global_variable_define_t* pargs = (args_hsa_executable_agent_global_variable_define_t*) args; \
+	if (pargs->variable_name != NULL) { \
+		strncpy(pargs->variable_name__ref.val, pargs->variable_name, HSA_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -2173,14 +2243,15 @@ struct args_hsa_executable_agent_global_variable_define_t {
  *	)
  */
 #if HAVE_hsa_signal_add_relaxed
-struct args_hsa_signal_add_relaxed_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_add_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_signal_add_relaxed(activity) { \
-	activity->hsa_args.hsa_signal_add_relaxed.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_add_relaxed.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_add_relaxed_t* args = (args_hsa_signal_add_relaxed_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -2205,7 +2276,7 @@ struct args_hsa_signal_add_relaxed_t {
  *	)
  */
 #if HAVE_hsa_soft_queue_create
-struct args_hsa_soft_queue_create_t {
+typedef struct {
 	hsa_region_t region;
 	uint32_t size;
 	hsa_queue_type32_t type;
@@ -2217,22 +2288,24 @@ struct args_hsa_soft_queue_create_t {
 		hsa_queue_t val;
 	} queue__ref;
 	hsa_status_t retval;
-};
+} args_hsa_soft_queue_create_t;
 
 #define GET_ARGS_VALUE_hsa_soft_queue_create(activity) { \
-	activity->hsa_args.hsa_soft_queue_create.region = (hsa_region_t) region; \
-	activity->hsa_args.hsa_soft_queue_create.size = (uint32_t) size; \
-	activity->hsa_args.hsa_soft_queue_create.type = (hsa_queue_type32_t) type; \
-	activity->hsa_args.hsa_soft_queue_create.features = (uint32_t) features; \
-	activity->hsa_args.hsa_soft_queue_create.doorbell_signal = (hsa_signal_t) doorbell_signal; \
-	activity->hsa_args.hsa_soft_queue_create.queue = (hsa_queue_t **) queue; \
+	args_hsa_soft_queue_create_t* args = (args_hsa_soft_queue_create_t*) activity->args; \
+	args->region = (hsa_region_t) region; \
+	args->size = (uint32_t) size; \
+	args->type = (hsa_queue_type32_t) type; \
+	args->features = (uint32_t) features; \
+	args->doorbell_signal = (hsa_signal_t) doorbell_signal; \
+	args->queue = (hsa_queue_t **) queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_soft_queue_create(args) { \
-	if (args->hsa_soft_queue_create.queue != NULL) { \
-		args->hsa_soft_queue_create.queue__ref.ptr1 = *args->hsa_soft_queue_create.queue; \
-		if (args->hsa_soft_queue_create.queue__ref.ptr1 != NULL) { \
-			args->hsa_soft_queue_create.queue__ref.val = **args->hsa_soft_queue_create.queue; \
+	args_hsa_soft_queue_create_t* pargs = (args_hsa_soft_queue_create_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.ptr1 = *pargs->queue; \
+		if (pargs->queue__ref.ptr1 != NULL) { \
+			pargs->queue__ref.val = **pargs->queue; \
 		} \
 	} \
 };
@@ -2256,7 +2329,7 @@ struct args_hsa_soft_queue_create_t {
  *	)
  */
 #if HAVE_hsa_queue_cas_write_index_screlease
-struct args_hsa_queue_cas_write_index_screlease_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
@@ -2264,17 +2337,19 @@ struct args_hsa_queue_cas_write_index_screlease_t {
 	uint64_t expected;
 	uint64_t value;
 	uint64_t retval;
-};
+} args_hsa_queue_cas_write_index_screlease_t;
 
 #define GET_ARGS_VALUE_hsa_queue_cas_write_index_screlease(activity) { \
-	activity->hsa_args.hsa_queue_cas_write_index_screlease.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_cas_write_index_screlease.expected = (uint64_t) expected; \
-	activity->hsa_args.hsa_queue_cas_write_index_screlease.value = (uint64_t) value; \
+	args_hsa_queue_cas_write_index_screlease_t* args = (args_hsa_queue_cas_write_index_screlease_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->expected = (uint64_t) expected; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_cas_write_index_screlease(args) { \
-	if (args->hsa_queue_cas_write_index_screlease.queue != NULL) { \
-		args->hsa_queue_cas_write_index_screlease.queue__ref.val = *args->hsa_queue_cas_write_index_screlease.queue; \
+	args_hsa_queue_cas_write_index_screlease_t* pargs = (args_hsa_queue_cas_write_index_screlease_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -2296,14 +2371,15 @@ struct args_hsa_queue_cas_write_index_screlease_t {
  *	)
  */
 #if HAVE_hsa_signal_xor_release
-struct args_hsa_signal_xor_release_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_xor_release_t;
 
 #define GET_ARGS_VALUE_hsa_signal_xor_release(activity) { \
-	activity->hsa_args.hsa_signal_xor_release.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_xor_release.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_xor_release_t* args = (args_hsa_signal_xor_release_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -2327,21 +2403,22 @@ struct args_hsa_signal_xor_release_t {
  *	)
  */
 #if HAVE_hsa_signal_wait_scacquire
-struct args_hsa_signal_wait_scacquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_condition_t condition;
 	hsa_signal_value_t compare_value;
 	uint64_t timeout_hint;
 	hsa_wait_state_t wait_state_hint;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_wait_scacquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_wait_scacquire(activity) { \
-	activity->hsa_args.hsa_signal_wait_scacquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_wait_scacquire.condition = (hsa_signal_condition_t) condition; \
-	activity->hsa_args.hsa_signal_wait_scacquire.compare_value = (hsa_signal_value_t) compare_value; \
-	activity->hsa_args.hsa_signal_wait_scacquire.timeout_hint = (uint64_t) timeout_hint; \
-	activity->hsa_args.hsa_signal_wait_scacquire.wait_state_hint = (hsa_wait_state_t) wait_state_hint; \
+	args_hsa_signal_wait_scacquire_t* args = (args_hsa_signal_wait_scacquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->condition = (hsa_signal_condition_t) condition; \
+	args->compare_value = (hsa_signal_value_t) compare_value; \
+	args->timeout_hint = (uint64_t) timeout_hint; \
+	args->wait_state_hint = (hsa_wait_state_t) wait_state_hint; \
 };
 
 #endif
@@ -2362,7 +2439,7 @@ struct args_hsa_signal_wait_scacquire_t {
  *	)
  */
 #if HAVE_hsa_isa_from_name
-struct args_hsa_isa_from_name_t {
+typedef struct {
 	char * name;
 	struct {
 		char val[HSA_STRING_SIZE_MAX];
@@ -2372,19 +2449,21 @@ struct args_hsa_isa_from_name_t {
 		hsa_isa_t val;
 	} isa__ref;
 	hsa_status_t retval;
-};
+} args_hsa_isa_from_name_t;
 
 #define GET_ARGS_VALUE_hsa_isa_from_name(activity) { \
-	activity->hsa_args.hsa_isa_from_name.name = (char *) name; \
-	activity->hsa_args.hsa_isa_from_name.isa = (hsa_isa_t *) isa; \
+	args_hsa_isa_from_name_t* args = (args_hsa_isa_from_name_t*) activity->args; \
+	args->name = (char *) name; \
+	args->isa = (hsa_isa_t *) isa; \
 };
 
 #define GET_PTRS_VALUE_hsa_isa_from_name(args) { \
-	if (args->hsa_isa_from_name.name != NULL) { \
-		strncpy(args->hsa_isa_from_name.name__ref.val, args->hsa_isa_from_name.name, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_isa_from_name_t* pargs = (args_hsa_isa_from_name_t*) args; \
+	if (pargs->name != NULL) { \
+		strncpy(pargs->name__ref.val, pargs->name, HSA_STRING_SIZE_MAX-1); \
 	} \
-	if (args->hsa_isa_from_name.isa != NULL) { \
-		args->hsa_isa_from_name.isa__ref.val = *args->hsa_isa_from_name.isa; \
+	if (pargs->isa != NULL) { \
+		pargs->isa__ref.val = *pargs->isa; \
 	} \
 };
 
@@ -2405,13 +2484,14 @@ struct args_hsa_isa_from_name_t {
  *	)
  */
 #if HAVE_hsa_executable_destroy
-struct args_hsa_executable_destroy_t {
+typedef struct {
 	hsa_executable_t executable;
 	hsa_status_t retval;
-};
+} args_hsa_executable_destroy_t;
 
 #define GET_ARGS_VALUE_hsa_executable_destroy(activity) { \
-	activity->hsa_args.hsa_executable_destroy.executable = (hsa_executable_t) executable; \
+	args_hsa_executable_destroy_t* args = (args_hsa_executable_destroy_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
 };
 
 #endif
@@ -2435,7 +2515,7 @@ struct args_hsa_executable_destroy_t {
  *	)
  */
 #if HAVE_hsa_ext_image_create
-struct args_hsa_ext_image_create_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_ext_image_descriptor_t * image_descriptor;
 	struct {
@@ -2448,22 +2528,24 @@ struct args_hsa_ext_image_create_t {
 		hsa_ext_image_t val;
 	} image__ref;
 	hsa_status_t retval;
-};
+} args_hsa_ext_image_create_t;
 
 #define GET_ARGS_VALUE_hsa_ext_image_create(activity) { \
-	activity->hsa_args.hsa_ext_image_create.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ext_image_create.image_descriptor = (hsa_ext_image_descriptor_t *) image_descriptor; \
-	activity->hsa_args.hsa_ext_image_create.image_data = (void *) image_data; \
-	activity->hsa_args.hsa_ext_image_create.access_permission = (hsa_access_permission_t) access_permission; \
-	activity->hsa_args.hsa_ext_image_create.image = (hsa_ext_image_t *) image; \
+	args_hsa_ext_image_create_t* args = (args_hsa_ext_image_create_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->image_descriptor = (hsa_ext_image_descriptor_t *) image_descriptor; \
+	args->image_data = (void *) image_data; \
+	args->access_permission = (hsa_access_permission_t) access_permission; \
+	args->image = (hsa_ext_image_t *) image; \
 };
 
 #define GET_PTRS_VALUE_hsa_ext_image_create(args) { \
-	if (args->hsa_ext_image_create.image_descriptor != NULL) { \
-		args->hsa_ext_image_create.image_descriptor__ref.val = *args->hsa_ext_image_create.image_descriptor; \
+	args_hsa_ext_image_create_t* pargs = (args_hsa_ext_image_create_t*) args; \
+	if (pargs->image_descriptor != NULL) { \
+		pargs->image_descriptor__ref.val = *pargs->image_descriptor; \
 	} \
-	if (args->hsa_ext_image_create.image != NULL) { \
-		args->hsa_ext_image_create.image__ref.val = *args->hsa_ext_image_create.image; \
+	if (pargs->image != NULL) { \
+		pargs->image__ref.val = *pargs->image; \
 	} \
 };
 
@@ -2487,7 +2569,7 @@ struct args_hsa_ext_image_create_t {
  *	)
  */
 #if HAVE_hsa_system_extension_supported
-struct args_hsa_system_extension_supported_t {
+typedef struct {
 	uint16_t extension;
 	uint16_t version_major;
 	uint16_t version_minor;
@@ -2496,18 +2578,20 @@ struct args_hsa_system_extension_supported_t {
 		_Bool val;
 	} result__ref;
 	hsa_status_t retval;
-};
+} args_hsa_system_extension_supported_t;
 
 #define GET_ARGS_VALUE_hsa_system_extension_supported(activity) { \
-	activity->hsa_args.hsa_system_extension_supported.extension = (uint16_t) extension; \
-	activity->hsa_args.hsa_system_extension_supported.version_major = (uint16_t) version_major; \
-	activity->hsa_args.hsa_system_extension_supported.version_minor = (uint16_t) version_minor; \
-	activity->hsa_args.hsa_system_extension_supported.result = (_Bool *) result; \
+	args_hsa_system_extension_supported_t* args = (args_hsa_system_extension_supported_t*) activity->args; \
+	args->extension = (uint16_t) extension; \
+	args->version_major = (uint16_t) version_major; \
+	args->version_minor = (uint16_t) version_minor; \
+	args->result = (_Bool *) result; \
 };
 
 #define GET_PTRS_VALUE_hsa_system_extension_supported(args) { \
-	if (args->hsa_system_extension_supported.result != NULL) { \
-		args->hsa_system_extension_supported.result__ref.val = *args->hsa_system_extension_supported.result; \
+	args_hsa_system_extension_supported_t* pargs = (args_hsa_system_extension_supported_t*) args; \
+	if (pargs->result != NULL) { \
+		pargs->result__ref.val = *pargs->result; \
 	} \
 };
 
@@ -2532,7 +2616,7 @@ struct args_hsa_system_extension_supported_t {
  *	)
  */
 #if HAVE_hsa_executable_load_agent_code_object
-struct args_hsa_executable_load_agent_code_object_t {
+typedef struct {
 	hsa_executable_t executable;
 	hsa_agent_t agent;
 	hsa_code_object_reader_t code_object_reader;
@@ -2545,22 +2629,24 @@ struct args_hsa_executable_load_agent_code_object_t {
 		hsa_loaded_code_object_t val;
 	} loaded_code_object__ref;
 	hsa_status_t retval;
-};
+} args_hsa_executable_load_agent_code_object_t;
 
 #define GET_ARGS_VALUE_hsa_executable_load_agent_code_object(activity) { \
-	activity->hsa_args.hsa_executable_load_agent_code_object.executable = (hsa_executable_t) executable; \
-	activity->hsa_args.hsa_executable_load_agent_code_object.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_executable_load_agent_code_object.code_object_reader = (hsa_code_object_reader_t) code_object_reader; \
-	activity->hsa_args.hsa_executable_load_agent_code_object.options = (char *) options; \
-	activity->hsa_args.hsa_executable_load_agent_code_object.loaded_code_object = (hsa_loaded_code_object_t *) loaded_code_object; \
+	args_hsa_executable_load_agent_code_object_t* args = (args_hsa_executable_load_agent_code_object_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
+	args->agent = (hsa_agent_t) agent; \
+	args->code_object_reader = (hsa_code_object_reader_t) code_object_reader; \
+	args->options = (char *) options; \
+	args->loaded_code_object = (hsa_loaded_code_object_t *) loaded_code_object; \
 };
 
 #define GET_PTRS_VALUE_hsa_executable_load_agent_code_object(args) { \
-	if (args->hsa_executable_load_agent_code_object.options != NULL) { \
-		strncpy(args->hsa_executable_load_agent_code_object.options__ref.val, args->hsa_executable_load_agent_code_object.options, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_executable_load_agent_code_object_t* pargs = (args_hsa_executable_load_agent_code_object_t*) args; \
+	if (pargs->options != NULL) { \
+		strncpy(pargs->options__ref.val, pargs->options, HSA_STRING_SIZE_MAX-1); \
 	} \
-	if (args->hsa_executable_load_agent_code_object.loaded_code_object != NULL) { \
-		args->hsa_executable_load_agent_code_object.loaded_code_object__ref.val = *args->hsa_executable_load_agent_code_object.loaded_code_object; \
+	if (pargs->loaded_code_object != NULL) { \
+		pargs->loaded_code_object__ref.val = *pargs->loaded_code_object; \
 	} \
 };
 
@@ -2581,13 +2667,14 @@ struct args_hsa_executable_load_agent_code_object_t {
  *	)
  */
 #if HAVE_hsa_amd_vmem_handle_release
-struct args_hsa_amd_vmem_handle_release_t {
+typedef struct {
 	hsa_amd_vmem_alloc_handle_t memory_handle;
 	hsa_status_t retval;
-};
+} args_hsa_amd_vmem_handle_release_t;
 
 #define GET_ARGS_VALUE_hsa_amd_vmem_handle_release(activity) { \
-	activity->hsa_args.hsa_amd_vmem_handle_release.memory_handle = (hsa_amd_vmem_alloc_handle_t) memory_handle; \
+	args_hsa_amd_vmem_handle_release_t* args = (args_hsa_amd_vmem_handle_release_t*) activity->args; \
+	args->memory_handle = (hsa_amd_vmem_alloc_handle_t) memory_handle; \
 };
 
 #endif
@@ -2607,13 +2694,14 @@ struct args_hsa_amd_vmem_handle_release_t {
  *	)
  */
 #if HAVE_hsa_memory_free
-struct args_hsa_memory_free_t {
+typedef struct {
 	void * ptr;
 	hsa_status_t retval;
-};
+} args_hsa_memory_free_t;
 
 #define GET_ARGS_VALUE_hsa_memory_free(activity) { \
-	activity->hsa_args.hsa_memory_free.ptr = (void *) ptr; \
+	args_hsa_memory_free_t* args = (args_hsa_memory_free_t*) activity->args; \
+	args->ptr = (void *) ptr; \
 };
 
 #endif
@@ -2635,17 +2723,18 @@ struct args_hsa_memory_free_t {
  *	)
  */
 #if HAVE_hsa_signal_cas_screlease
-struct args_hsa_signal_cas_screlease_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t expected;
 	hsa_signal_value_t value;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_cas_screlease_t;
 
 #define GET_ARGS_VALUE_hsa_signal_cas_screlease(activity) { \
-	activity->hsa_args.hsa_signal_cas_screlease.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_cas_screlease.expected = (hsa_signal_value_t) expected; \
-	activity->hsa_args.hsa_signal_cas_screlease.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_cas_screlease_t* args = (args_hsa_signal_cas_screlease_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->expected = (hsa_signal_value_t) expected; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -2667,7 +2756,7 @@ struct args_hsa_signal_cas_screlease_t {
  *	)
  */
 #if HAVE_hsa_amd_memory_copy_engine_status
-struct args_hsa_amd_memory_copy_engine_status_t {
+typedef struct {
 	hsa_agent_t dst_agent;
 	hsa_agent_t src_agent;
 	uint32_t * engine_ids_mask;
@@ -2675,17 +2764,19 @@ struct args_hsa_amd_memory_copy_engine_status_t {
 		uint32_t val;
 	} engine_ids_mask__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_memory_copy_engine_status_t;
 
 #define GET_ARGS_VALUE_hsa_amd_memory_copy_engine_status(activity) { \
-	activity->hsa_args.hsa_amd_memory_copy_engine_status.dst_agent = (hsa_agent_t) dst_agent; \
-	activity->hsa_args.hsa_amd_memory_copy_engine_status.src_agent = (hsa_agent_t) src_agent; \
-	activity->hsa_args.hsa_amd_memory_copy_engine_status.engine_ids_mask = (uint32_t *) engine_ids_mask; \
+	args_hsa_amd_memory_copy_engine_status_t* args = (args_hsa_amd_memory_copy_engine_status_t*) activity->args; \
+	args->dst_agent = (hsa_agent_t) dst_agent; \
+	args->src_agent = (hsa_agent_t) src_agent; \
+	args->engine_ids_mask = (uint32_t *) engine_ids_mask; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_memory_copy_engine_status(args) { \
-	if (args->hsa_amd_memory_copy_engine_status.engine_ids_mask != NULL) { \
-		args->hsa_amd_memory_copy_engine_status.engine_ids_mask__ref.val = *args->hsa_amd_memory_copy_engine_status.engine_ids_mask; \
+	args_hsa_amd_memory_copy_engine_status_t* pargs = (args_hsa_amd_memory_copy_engine_status_t*) args; \
+	if (pargs->engine_ids_mask != NULL) { \
+		pargs->engine_ids_mask__ref.val = *pargs->engine_ids_mask; \
 	} \
 };
 
@@ -2708,17 +2799,18 @@ struct args_hsa_amd_memory_copy_engine_status_t {
  *	)
  */
 #if HAVE_hsa_executable_iterate_program_symbols
-struct args_hsa_executable_iterate_program_symbols_t {
+typedef struct {
 	hsa_executable_t executable;
 	hsa_status_t (* callback)(hsa_executable_t, hsa_executable_symbol_t, void *);
 	void * data;
 	hsa_status_t retval;
-};
+} args_hsa_executable_iterate_program_symbols_t;
 
 #define GET_ARGS_VALUE_hsa_executable_iterate_program_symbols(activity) { \
-	activity->hsa_args.hsa_executable_iterate_program_symbols.executable = (hsa_executable_t) executable; \
-	activity->hsa_args.hsa_executable_iterate_program_symbols.callback = (hsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *)) callback; \
-	activity->hsa_args.hsa_executable_iterate_program_symbols.data = (void *) data; \
+	args_hsa_executable_iterate_program_symbols_t* args = (args_hsa_executable_iterate_program_symbols_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
+	args->callback = (hsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *)) callback; \
+	args->data = (void *) data; \
 };
 
 #endif
@@ -2743,7 +2835,7 @@ struct args_hsa_executable_iterate_program_symbols_t {
  *	)
  */
 #if HAVE_hsa_ext_image_copy
-struct args_hsa_ext_image_copy_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_ext_image_t src_image;
 	hsa_dim3_t * src_offset;
@@ -2760,26 +2852,28 @@ struct args_hsa_ext_image_copy_t {
 		hsa_dim3_t val;
 	} range__ref;
 	hsa_status_t retval;
-};
+} args_hsa_ext_image_copy_t;
 
 #define GET_ARGS_VALUE_hsa_ext_image_copy(activity) { \
-	activity->hsa_args.hsa_ext_image_copy.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ext_image_copy.src_image = (hsa_ext_image_t) src_image; \
-	activity->hsa_args.hsa_ext_image_copy.src_offset = (hsa_dim3_t *) src_offset; \
-	activity->hsa_args.hsa_ext_image_copy.dst_image = (hsa_ext_image_t) dst_image; \
-	activity->hsa_args.hsa_ext_image_copy.dst_offset = (hsa_dim3_t *) dst_offset; \
-	activity->hsa_args.hsa_ext_image_copy.range = (hsa_dim3_t *) range; \
+	args_hsa_ext_image_copy_t* args = (args_hsa_ext_image_copy_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->src_image = (hsa_ext_image_t) src_image; \
+	args->src_offset = (hsa_dim3_t *) src_offset; \
+	args->dst_image = (hsa_ext_image_t) dst_image; \
+	args->dst_offset = (hsa_dim3_t *) dst_offset; \
+	args->range = (hsa_dim3_t *) range; \
 };
 
 #define GET_PTRS_VALUE_hsa_ext_image_copy(args) { \
-	if (args->hsa_ext_image_copy.src_offset != NULL) { \
-		args->hsa_ext_image_copy.src_offset__ref.val = *args->hsa_ext_image_copy.src_offset; \
+	args_hsa_ext_image_copy_t* pargs = (args_hsa_ext_image_copy_t*) args; \
+	if (pargs->src_offset != NULL) { \
+		pargs->src_offset__ref.val = *pargs->src_offset; \
 	} \
-	if (args->hsa_ext_image_copy.dst_offset != NULL) { \
-		args->hsa_ext_image_copy.dst_offset__ref.val = *args->hsa_ext_image_copy.dst_offset; \
+	if (pargs->dst_offset != NULL) { \
+		pargs->dst_offset__ref.val = *pargs->dst_offset; \
 	} \
-	if (args->hsa_ext_image_copy.range != NULL) { \
-		args->hsa_ext_image_copy.range__ref.val = *args->hsa_ext_image_copy.range; \
+	if (pargs->range != NULL) { \
+		pargs->range__ref.val = *pargs->range; \
 	} \
 };
 
@@ -2801,23 +2895,25 @@ struct args_hsa_ext_image_copy_t {
  *	)
  */
 #if HAVE_hsa_amd_coherency_get_type
-struct args_hsa_amd_coherency_get_type_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_amd_coherency_type_t * type;
 	struct {
 		hsa_amd_coherency_type_t val;
 	} type__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_coherency_get_type_t;
 
 #define GET_ARGS_VALUE_hsa_amd_coherency_get_type(activity) { \
-	activity->hsa_args.hsa_amd_coherency_get_type.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_amd_coherency_get_type.type = (hsa_amd_coherency_type_t *) type; \
+	args_hsa_amd_coherency_get_type_t* args = (args_hsa_amd_coherency_get_type_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->type = (hsa_amd_coherency_type_t *) type; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_coherency_get_type(args) { \
-	if (args->hsa_amd_coherency_get_type.type != NULL) { \
-		args->hsa_amd_coherency_get_type.type__ref.val = *args->hsa_amd_coherency_get_type.type; \
+	args_hsa_amd_coherency_get_type_t* pargs = (args_hsa_amd_coherency_get_type_t*) args; \
+	if (pargs->type != NULL) { \
+		pargs->type__ref.val = *pargs->type; \
 	} \
 };
 
@@ -2839,23 +2935,25 @@ struct args_hsa_amd_coherency_get_type_t {
  *	)
  */
 #if HAVE_hsa_executable_freeze
-struct args_hsa_executable_freeze_t {
+typedef struct {
 	hsa_executable_t executable;
 	char * options;
 	struct {
 		char val[HSA_STRING_SIZE_MAX];
 	} options__ref;
 	hsa_status_t retval;
-};
+} args_hsa_executable_freeze_t;
 
 #define GET_ARGS_VALUE_hsa_executable_freeze(activity) { \
-	activity->hsa_args.hsa_executable_freeze.executable = (hsa_executable_t) executable; \
-	activity->hsa_args.hsa_executable_freeze.options = (char *) options; \
+	args_hsa_executable_freeze_t* args = (args_hsa_executable_freeze_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
+	args->options = (char *) options; \
 };
 
 #define GET_PTRS_VALUE_hsa_executable_freeze(args) { \
-	if (args->hsa_executable_freeze.options != NULL) { \
-		strncpy(args->hsa_executable_freeze.options__ref.val, args->hsa_executable_freeze.options, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_executable_freeze_t* pargs = (args_hsa_executable_freeze_t*) args; \
+	if (pargs->options != NULL) { \
+		strncpy(pargs->options__ref.val, pargs->options, HSA_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -2877,22 +2975,24 @@ struct args_hsa_executable_freeze_t {
  *	)
  */
 #if HAVE_hsa_queue_store_write_index_release
-struct args_hsa_queue_store_write_index_release_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t value;
-};
+} args_hsa_queue_store_write_index_release_t;
 
 #define GET_ARGS_VALUE_hsa_queue_store_write_index_release(activity) { \
-	activity->hsa_args.hsa_queue_store_write_index_release.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_store_write_index_release.value = (uint64_t) value; \
+	args_hsa_queue_store_write_index_release_t* args = (args_hsa_queue_store_write_index_release_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_store_write_index_release(args) { \
-	if (args->hsa_queue_store_write_index_release.queue != NULL) { \
-		args->hsa_queue_store_write_index_release.queue__ref.val = *args->hsa_queue_store_write_index_release.queue; \
+	args_hsa_queue_store_write_index_release_t* pargs = (args_hsa_queue_store_write_index_release_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -2915,7 +3015,7 @@ struct args_hsa_queue_store_write_index_release_t {
  *	)
  */
 #if HAVE_hsa_amd_vmem_export_shareable_handle
-struct args_hsa_amd_vmem_export_shareable_handle_t {
+typedef struct {
 	int * dmabuf_fd;
 	struct {
 		int val;
@@ -2923,17 +3023,19 @@ struct args_hsa_amd_vmem_export_shareable_handle_t {
 	hsa_amd_vmem_alloc_handle_t handle;
 	uint64_t flags;
 	hsa_status_t retval;
-};
+} args_hsa_amd_vmem_export_shareable_handle_t;
 
 #define GET_ARGS_VALUE_hsa_amd_vmem_export_shareable_handle(activity) { \
-	activity->hsa_args.hsa_amd_vmem_export_shareable_handle.dmabuf_fd = (int *) dmabuf_fd; \
-	activity->hsa_args.hsa_amd_vmem_export_shareable_handle.handle = (hsa_amd_vmem_alloc_handle_t) handle; \
-	activity->hsa_args.hsa_amd_vmem_export_shareable_handle.flags = (uint64_t) flags; \
+	args_hsa_amd_vmem_export_shareable_handle_t* args = (args_hsa_amd_vmem_export_shareable_handle_t*) activity->args; \
+	args->dmabuf_fd = (int *) dmabuf_fd; \
+	args->handle = (hsa_amd_vmem_alloc_handle_t) handle; \
+	args->flags = (uint64_t) flags; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_vmem_export_shareable_handle(args) { \
-	if (args->hsa_amd_vmem_export_shareable_handle.dmabuf_fd != NULL) { \
-		args->hsa_amd_vmem_export_shareable_handle.dmabuf_fd__ref.val = *args->hsa_amd_vmem_export_shareable_handle.dmabuf_fd; \
+	args_hsa_amd_vmem_export_shareable_handle_t* pargs = (args_hsa_amd_vmem_export_shareable_handle_t*) args; \
+	if (pargs->dmabuf_fd != NULL) { \
+		pargs->dmabuf_fd__ref.val = *pargs->dmabuf_fd; \
 	} \
 };
 
@@ -2959,7 +3061,7 @@ struct args_hsa_amd_vmem_export_shareable_handle_t {
  *	)
  */
 #if HAVE_hsa_amd_svm_prefetch_async
-struct args_hsa_amd_svm_prefetch_async_t {
+typedef struct {
 	void * ptr;
 	size_t size;
 	hsa_agent_t agent;
@@ -2970,20 +3072,22 @@ struct args_hsa_amd_svm_prefetch_async_t {
 	} dep_signals__ref;
 	hsa_signal_t completion_signal;
 	hsa_status_t retval;
-};
+} args_hsa_amd_svm_prefetch_async_t;
 
 #define GET_ARGS_VALUE_hsa_amd_svm_prefetch_async(activity) { \
-	activity->hsa_args.hsa_amd_svm_prefetch_async.ptr = (void *) ptr; \
-	activity->hsa_args.hsa_amd_svm_prefetch_async.size = (size_t) size; \
-	activity->hsa_args.hsa_amd_svm_prefetch_async.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_amd_svm_prefetch_async.num_dep_signals = (uint32_t) num_dep_signals; \
-	activity->hsa_args.hsa_amd_svm_prefetch_async.dep_signals = (hsa_signal_t *) dep_signals; \
-	activity->hsa_args.hsa_amd_svm_prefetch_async.completion_signal = (hsa_signal_t) completion_signal; \
+	args_hsa_amd_svm_prefetch_async_t* args = (args_hsa_amd_svm_prefetch_async_t*) activity->args; \
+	args->ptr = (void *) ptr; \
+	args->size = (size_t) size; \
+	args->agent = (hsa_agent_t) agent; \
+	args->num_dep_signals = (uint32_t) num_dep_signals; \
+	args->dep_signals = (hsa_signal_t *) dep_signals; \
+	args->completion_signal = (hsa_signal_t) completion_signal; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_svm_prefetch_async(args) { \
-	if (args->hsa_amd_svm_prefetch_async.dep_signals != NULL) { \
-		args->hsa_amd_svm_prefetch_async.dep_signals__ref.val = *args->hsa_amd_svm_prefetch_async.dep_signals; \
+	args_hsa_amd_svm_prefetch_async_t* pargs = (args_hsa_amd_svm_prefetch_async_t*) args; \
+	if (pargs->dep_signals != NULL) { \
+		pargs->dep_signals__ref.val = *pargs->dep_signals; \
 	} \
 };
 
@@ -3005,14 +3109,15 @@ struct args_hsa_amd_svm_prefetch_async_t {
  *	)
  */
 #if HAVE_hsa_signal_store_screlease
-struct args_hsa_signal_store_screlease_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_store_screlease_t;
 
 #define GET_ARGS_VALUE_hsa_signal_store_screlease(activity) { \
-	activity->hsa_args.hsa_signal_store_screlease.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_store_screlease.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_store_screlease_t* args = (args_hsa_signal_store_screlease_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -3034,17 +3139,18 @@ struct args_hsa_signal_store_screlease_t {
  *	)
  */
 #if HAVE_hsa_amd_memory_fill
-struct args_hsa_amd_memory_fill_t {
+typedef struct {
 	void * ptr;
 	uint32_t value;
 	size_t count;
 	hsa_status_t retval;
-};
+} args_hsa_amd_memory_fill_t;
 
 #define GET_ARGS_VALUE_hsa_amd_memory_fill(activity) { \
-	activity->hsa_args.hsa_amd_memory_fill.ptr = (void *) ptr; \
-	activity->hsa_args.hsa_amd_memory_fill.value = (uint32_t) value; \
-	activity->hsa_args.hsa_amd_memory_fill.count = (size_t) count; \
+	args_hsa_amd_memory_fill_t* args = (args_hsa_amd_memory_fill_t*) activity->args; \
+	args->ptr = (void *) ptr; \
+	args->value = (uint32_t) value; \
+	args->count = (size_t) count; \
 };
 
 #endif
@@ -3068,21 +3174,22 @@ struct args_hsa_amd_memory_fill_t {
  *	)
  */
 #if HAVE_hsa_amd_vmem_map
-struct args_hsa_amd_vmem_map_t {
+typedef struct {
 	void * va;
 	size_t size;
 	size_t in_offset;
 	hsa_amd_vmem_alloc_handle_t memory_handle;
 	uint64_t flags;
 	hsa_status_t retval;
-};
+} args_hsa_amd_vmem_map_t;
 
 #define GET_ARGS_VALUE_hsa_amd_vmem_map(activity) { \
-	activity->hsa_args.hsa_amd_vmem_map.va = (void *) va; \
-	activity->hsa_args.hsa_amd_vmem_map.size = (size_t) size; \
-	activity->hsa_args.hsa_amd_vmem_map.in_offset = (size_t) in_offset; \
-	activity->hsa_args.hsa_amd_vmem_map.memory_handle = (hsa_amd_vmem_alloc_handle_t) memory_handle; \
-	activity->hsa_args.hsa_amd_vmem_map.flags = (uint64_t) flags; \
+	args_hsa_amd_vmem_map_t* args = (args_hsa_amd_vmem_map_t*) activity->args; \
+	args->va = (void *) va; \
+	args->size = (size_t) size; \
+	args->in_offset = (size_t) in_offset; \
+	args->memory_handle = (hsa_amd_vmem_alloc_handle_t) memory_handle; \
+	args->flags = (uint64_t) flags; \
 };
 
 #endif
@@ -3103,14 +3210,15 @@ struct args_hsa_amd_vmem_map_t {
  *	)
  */
 #if HAVE_hsa_signal_subtract_scacq_screl
-struct args_hsa_signal_subtract_scacq_screl_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_subtract_scacq_screl_t;
 
 #define GET_ARGS_VALUE_hsa_signal_subtract_scacq_screl(activity) { \
-	activity->hsa_args.hsa_signal_subtract_scacq_screl.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_subtract_scacq_screl.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_subtract_scacq_screl_t* args = (args_hsa_signal_subtract_scacq_screl_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -3139,7 +3247,7 @@ struct args_hsa_signal_subtract_scacq_screl_t {
  *	)
  */
 #if HAVE_hsa_amd_memory_async_copy_rect
-struct args_hsa_amd_memory_async_copy_rect_t {
+typedef struct {
 	hsa_pitched_ptr_t * dst;
 	struct {
 		hsa_pitched_ptr_t val;
@@ -3169,39 +3277,41 @@ struct args_hsa_amd_memory_async_copy_rect_t {
 	} dep_signals__ref;
 	hsa_signal_t completion_signal;
 	hsa_status_t retval;
-};
+} args_hsa_amd_memory_async_copy_rect_t;
 
 #define GET_ARGS_VALUE_hsa_amd_memory_async_copy_rect(activity) { \
-	activity->hsa_args.hsa_amd_memory_async_copy_rect.dst = (hsa_pitched_ptr_t *) dst; \
-	activity->hsa_args.hsa_amd_memory_async_copy_rect.dst_offset = (hsa_dim3_t *) dst_offset; \
-	activity->hsa_args.hsa_amd_memory_async_copy_rect.src = (hsa_pitched_ptr_t *) src; \
-	activity->hsa_args.hsa_amd_memory_async_copy_rect.src_offset = (hsa_dim3_t *) src_offset; \
-	activity->hsa_args.hsa_amd_memory_async_copy_rect.range = (hsa_dim3_t *) range; \
-	activity->hsa_args.hsa_amd_memory_async_copy_rect.copy_agent = (hsa_agent_t) copy_agent; \
-	activity->hsa_args.hsa_amd_memory_async_copy_rect.dir = (hsa_amd_copy_direction_t) dir; \
-	activity->hsa_args.hsa_amd_memory_async_copy_rect.num_dep_signals = (uint32_t) num_dep_signals; \
-	activity->hsa_args.hsa_amd_memory_async_copy_rect.dep_signals = (hsa_signal_t *) dep_signals; \
-	activity->hsa_args.hsa_amd_memory_async_copy_rect.completion_signal = (hsa_signal_t) completion_signal; \
+	args_hsa_amd_memory_async_copy_rect_t* args = (args_hsa_amd_memory_async_copy_rect_t*) activity->args; \
+	args->dst = (hsa_pitched_ptr_t *) dst; \
+	args->dst_offset = (hsa_dim3_t *) dst_offset; \
+	args->src = (hsa_pitched_ptr_t *) src; \
+	args->src_offset = (hsa_dim3_t *) src_offset; \
+	args->range = (hsa_dim3_t *) range; \
+	args->copy_agent = (hsa_agent_t) copy_agent; \
+	args->dir = (hsa_amd_copy_direction_t) dir; \
+	args->num_dep_signals = (uint32_t) num_dep_signals; \
+	args->dep_signals = (hsa_signal_t *) dep_signals; \
+	args->completion_signal = (hsa_signal_t) completion_signal; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_memory_async_copy_rect(args) { \
-	if (args->hsa_amd_memory_async_copy_rect.dst != NULL) { \
-		args->hsa_amd_memory_async_copy_rect.dst__ref.val = *args->hsa_amd_memory_async_copy_rect.dst; \
+	args_hsa_amd_memory_async_copy_rect_t* pargs = (args_hsa_amd_memory_async_copy_rect_t*) args; \
+	if (pargs->dst != NULL) { \
+		pargs->dst__ref.val = *pargs->dst; \
 	} \
-	if (args->hsa_amd_memory_async_copy_rect.dst_offset != NULL) { \
-		args->hsa_amd_memory_async_copy_rect.dst_offset__ref.val = *args->hsa_amd_memory_async_copy_rect.dst_offset; \
+	if (pargs->dst_offset != NULL) { \
+		pargs->dst_offset__ref.val = *pargs->dst_offset; \
 	} \
-	if (args->hsa_amd_memory_async_copy_rect.src != NULL) { \
-		args->hsa_amd_memory_async_copy_rect.src__ref.val = *args->hsa_amd_memory_async_copy_rect.src; \
+	if (pargs->src != NULL) { \
+		pargs->src__ref.val = *pargs->src; \
 	} \
-	if (args->hsa_amd_memory_async_copy_rect.src_offset != NULL) { \
-		args->hsa_amd_memory_async_copy_rect.src_offset__ref.val = *args->hsa_amd_memory_async_copy_rect.src_offset; \
+	if (pargs->src_offset != NULL) { \
+		pargs->src_offset__ref.val = *pargs->src_offset; \
 	} \
-	if (args->hsa_amd_memory_async_copy_rect.range != NULL) { \
-		args->hsa_amd_memory_async_copy_rect.range__ref.val = *args->hsa_amd_memory_async_copy_rect.range; \
+	if (pargs->range != NULL) { \
+		pargs->range__ref.val = *pargs->range; \
 	} \
-	if (args->hsa_amd_memory_async_copy_rect.dep_signals != NULL) { \
-		args->hsa_amd_memory_async_copy_rect.dep_signals__ref.val = *args->hsa_amd_memory_async_copy_rect.dep_signals; \
+	if (pargs->dep_signals != NULL) { \
+		pargs->dep_signals__ref.val = *pargs->dep_signals; \
 	} \
 };
 
@@ -3225,7 +3335,7 @@ struct args_hsa_amd_memory_async_copy_rect_t {
  *	)
  */
 #if HAVE_hsa_amd_svm_attributes_set
-struct args_hsa_amd_svm_attributes_set_t {
+typedef struct {
 	void * ptr;
 	size_t size;
 	hsa_amd_svm_attribute_pair_t * attribute_list;
@@ -3234,18 +3344,20 @@ struct args_hsa_amd_svm_attributes_set_t {
 	} attribute_list__ref;
 	size_t attribute_count;
 	hsa_status_t retval;
-};
+} args_hsa_amd_svm_attributes_set_t;
 
 #define GET_ARGS_VALUE_hsa_amd_svm_attributes_set(activity) { \
-	activity->hsa_args.hsa_amd_svm_attributes_set.ptr = (void *) ptr; \
-	activity->hsa_args.hsa_amd_svm_attributes_set.size = (size_t) size; \
-	activity->hsa_args.hsa_amd_svm_attributes_set.attribute_list = (hsa_amd_svm_attribute_pair_t *) attribute_list; \
-	activity->hsa_args.hsa_amd_svm_attributes_set.attribute_count = (size_t) attribute_count; \
+	args_hsa_amd_svm_attributes_set_t* args = (args_hsa_amd_svm_attributes_set_t*) activity->args; \
+	args->ptr = (void *) ptr; \
+	args->size = (size_t) size; \
+	args->attribute_list = (hsa_amd_svm_attribute_pair_t *) attribute_list; \
+	args->attribute_count = (size_t) attribute_count; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_svm_attributes_set(args) { \
-	if (args->hsa_amd_svm_attributes_set.attribute_list != NULL) { \
-		args->hsa_amd_svm_attributes_set.attribute_list__ref.val = *args->hsa_amd_svm_attributes_set.attribute_list; \
+	args_hsa_amd_svm_attributes_set_t* pargs = (args_hsa_amd_svm_attributes_set_t*) args; \
+	if (pargs->attribute_list != NULL) { \
+		pargs->attribute_list__ref.val = *pargs->attribute_list; \
 	} \
 };
 
@@ -3267,23 +3379,25 @@ struct args_hsa_amd_svm_attributes_set_t {
  *	)
  */
 #if HAVE_hsa_amd_profiling_get_async_copy_time
-struct args_hsa_amd_profiling_get_async_copy_time_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_amd_profiling_async_copy_time_t * time;
 	struct {
 		hsa_amd_profiling_async_copy_time_t val;
 	} time__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_profiling_get_async_copy_time_t;
 
 #define GET_ARGS_VALUE_hsa_amd_profiling_get_async_copy_time(activity) { \
-	activity->hsa_args.hsa_amd_profiling_get_async_copy_time.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_amd_profiling_get_async_copy_time.time = (hsa_amd_profiling_async_copy_time_t *) time; \
+	args_hsa_amd_profiling_get_async_copy_time_t* args = (args_hsa_amd_profiling_get_async_copy_time_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->time = (hsa_amd_profiling_async_copy_time_t *) time; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_profiling_get_async_copy_time(args) { \
-	if (args->hsa_amd_profiling_get_async_copy_time.time != NULL) { \
-		args->hsa_amd_profiling_get_async_copy_time.time__ref.val = *args->hsa_amd_profiling_get_async_copy_time.time; \
+	args_hsa_amd_profiling_get_async_copy_time_t* pargs = (args_hsa_amd_profiling_get_async_copy_time_t*) args; \
+	if (pargs->time != NULL) { \
+		pargs->time__ref.val = *pargs->time; \
 	} \
 };
 
@@ -3305,15 +3419,16 @@ struct args_hsa_amd_profiling_get_async_copy_time_t {
  *	)
  */
 #if HAVE_hsa_amd_agent_set_async_scratch_limit
-struct args_hsa_amd_agent_set_async_scratch_limit_t {
+typedef struct {
 	hsa_agent_t agent;
 	size_t threshold;
 	hsa_status_t retval;
-};
+} args_hsa_amd_agent_set_async_scratch_limit_t;
 
 #define GET_ARGS_VALUE_hsa_amd_agent_set_async_scratch_limit(activity) { \
-	activity->hsa_args.hsa_amd_agent_set_async_scratch_limit.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_amd_agent_set_async_scratch_limit.threshold = (size_t) threshold; \
+	args_hsa_amd_agent_set_async_scratch_limit_t* args = (args_hsa_amd_agent_set_async_scratch_limit_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->threshold = (size_t) threshold; \
 };
 
 #endif
@@ -3334,14 +3449,15 @@ struct args_hsa_amd_agent_set_async_scratch_limit_t {
  *	)
  */
 #if HAVE_hsa_signal_subtract_screlease
-struct args_hsa_signal_subtract_screlease_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_subtract_screlease_t;
 
 #define GET_ARGS_VALUE_hsa_signal_subtract_screlease(activity) { \
-	activity->hsa_args.hsa_signal_subtract_screlease.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_subtract_screlease.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_subtract_screlease_t* args = (args_hsa_signal_subtract_screlease_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -3366,7 +3482,7 @@ struct args_hsa_signal_subtract_screlease_t {
  *	)
  */
 #if HAVE_hsa_ext_image_import
-struct args_hsa_ext_image_import_t {
+typedef struct {
 	hsa_agent_t agent;
 	void * src_memory;
 	size_t src_row_pitch;
@@ -3377,20 +3493,22 @@ struct args_hsa_ext_image_import_t {
 		hsa_ext_image_region_t val;
 	} image_region__ref;
 	hsa_status_t retval;
-};
+} args_hsa_ext_image_import_t;
 
 #define GET_ARGS_VALUE_hsa_ext_image_import(activity) { \
-	activity->hsa_args.hsa_ext_image_import.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ext_image_import.src_memory = (void *) src_memory; \
-	activity->hsa_args.hsa_ext_image_import.src_row_pitch = (size_t) src_row_pitch; \
-	activity->hsa_args.hsa_ext_image_import.src_slice_pitch = (size_t) src_slice_pitch; \
-	activity->hsa_args.hsa_ext_image_import.dst_image = (hsa_ext_image_t) dst_image; \
-	activity->hsa_args.hsa_ext_image_import.image_region = (hsa_ext_image_region_t *) image_region; \
+	args_hsa_ext_image_import_t* args = (args_hsa_ext_image_import_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->src_memory = (void *) src_memory; \
+	args->src_row_pitch = (size_t) src_row_pitch; \
+	args->src_slice_pitch = (size_t) src_slice_pitch; \
+	args->dst_image = (hsa_ext_image_t) dst_image; \
+	args->image_region = (hsa_ext_image_region_t *) image_region; \
 };
 
 #define GET_PTRS_VALUE_hsa_ext_image_import(args) { \
-	if (args->hsa_ext_image_import.image_region != NULL) { \
-		args->hsa_ext_image_import.image_region__ref.val = *args->hsa_ext_image_import.image_region; \
+	args_hsa_ext_image_import_t* pargs = (args_hsa_ext_image_import_t*) args; \
+	if (pargs->image_region != NULL) { \
+		pargs->image_region__ref.val = *pargs->image_region; \
 	} \
 };
 
@@ -3413,7 +3531,7 @@ struct args_hsa_ext_image_import_t {
  *	)
  */
 #if HAVE_hsa_amd_memory_pool_can_migrate
-struct args_hsa_amd_memory_pool_can_migrate_t {
+typedef struct {
 	hsa_amd_memory_pool_t src_memory_pool;
 	hsa_amd_memory_pool_t dst_memory_pool;
 	_Bool * result;
@@ -3421,17 +3539,19 @@ struct args_hsa_amd_memory_pool_can_migrate_t {
 		_Bool val;
 	} result__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_memory_pool_can_migrate_t;
 
 #define GET_ARGS_VALUE_hsa_amd_memory_pool_can_migrate(activity) { \
-	activity->hsa_args.hsa_amd_memory_pool_can_migrate.src_memory_pool = (hsa_amd_memory_pool_t) src_memory_pool; \
-	activity->hsa_args.hsa_amd_memory_pool_can_migrate.dst_memory_pool = (hsa_amd_memory_pool_t) dst_memory_pool; \
-	activity->hsa_args.hsa_amd_memory_pool_can_migrate.result = (_Bool *) result; \
+	args_hsa_amd_memory_pool_can_migrate_t* args = (args_hsa_amd_memory_pool_can_migrate_t*) activity->args; \
+	args->src_memory_pool = (hsa_amd_memory_pool_t) src_memory_pool; \
+	args->dst_memory_pool = (hsa_amd_memory_pool_t) dst_memory_pool; \
+	args->result = (_Bool *) result; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_memory_pool_can_migrate(args) { \
-	if (args->hsa_amd_memory_pool_can_migrate.result != NULL) { \
-		args->hsa_amd_memory_pool_can_migrate.result__ref.val = *args->hsa_amd_memory_pool_can_migrate.result; \
+	args_hsa_amd_memory_pool_can_migrate_t* pargs = (args_hsa_amd_memory_pool_can_migrate_t*) args; \
+	if (pargs->result != NULL) { \
+		pargs->result__ref.val = *pargs->result; \
 	} \
 };
 
@@ -3456,7 +3576,7 @@ struct args_hsa_amd_memory_pool_can_migrate_t {
  *	)
  */
 #if HAVE_hsa_amd_ipc_memory_attach
-struct args_hsa_amd_ipc_memory_attach_t {
+typedef struct {
 	hsa_amd_ipc_memory_t * handle;
 	struct {
 		hsa_amd_ipc_memory_t val;
@@ -3472,25 +3592,27 @@ struct args_hsa_amd_ipc_memory_attach_t {
 		void* ptr1;
 	} mapped_ptr__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_ipc_memory_attach_t;
 
 #define GET_ARGS_VALUE_hsa_amd_ipc_memory_attach(activity) { \
-	activity->hsa_args.hsa_amd_ipc_memory_attach.handle = (hsa_amd_ipc_memory_t *) handle; \
-	activity->hsa_args.hsa_amd_ipc_memory_attach.len = (size_t) len; \
-	activity->hsa_args.hsa_amd_ipc_memory_attach.num_agents = (uint32_t) num_agents; \
-	activity->hsa_args.hsa_amd_ipc_memory_attach.mapping_agents = (hsa_agent_t *) mapping_agents; \
-	activity->hsa_args.hsa_amd_ipc_memory_attach.mapped_ptr = (void **) mapped_ptr; \
+	args_hsa_amd_ipc_memory_attach_t* args = (args_hsa_amd_ipc_memory_attach_t*) activity->args; \
+	args->handle = (hsa_amd_ipc_memory_t *) handle; \
+	args->len = (size_t) len; \
+	args->num_agents = (uint32_t) num_agents; \
+	args->mapping_agents = (hsa_agent_t *) mapping_agents; \
+	args->mapped_ptr = (void **) mapped_ptr; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_ipc_memory_attach(args) { \
-	if (args->hsa_amd_ipc_memory_attach.handle != NULL) { \
-		args->hsa_amd_ipc_memory_attach.handle__ref.val = *args->hsa_amd_ipc_memory_attach.handle; \
+	args_hsa_amd_ipc_memory_attach_t* pargs = (args_hsa_amd_ipc_memory_attach_t*) args; \
+	if (pargs->handle != NULL) { \
+		pargs->handle__ref.val = *pargs->handle; \
 	} \
-	if (args->hsa_amd_ipc_memory_attach.mapping_agents != NULL) { \
-		args->hsa_amd_ipc_memory_attach.mapping_agents__ref.val = *args->hsa_amd_ipc_memory_attach.mapping_agents; \
+	if (pargs->mapping_agents != NULL) { \
+		pargs->mapping_agents__ref.val = *pargs->mapping_agents; \
 	} \
-	if (args->hsa_amd_ipc_memory_attach.mapped_ptr != NULL) { \
-		args->hsa_amd_ipc_memory_attach.mapped_ptr__ref.ptr1 = *args->hsa_amd_ipc_memory_attach.mapped_ptr; \
+	if (pargs->mapped_ptr != NULL) { \
+		pargs->mapped_ptr__ref.ptr1 = *pargs->mapped_ptr; \
 	} \
 };
 
@@ -3511,13 +3633,14 @@ struct args_hsa_amd_ipc_memory_attach_t {
  *	)
  */
 #if HAVE_hsa_amd_portable_close_dmabuf
-struct args_hsa_amd_portable_close_dmabuf_t {
+typedef struct {
 	int dmabuf;
 	hsa_status_t retval;
-};
+} args_hsa_amd_portable_close_dmabuf_t;
 
 #define GET_ARGS_VALUE_hsa_amd_portable_close_dmabuf(activity) { \
-	activity->hsa_args.hsa_amd_portable_close_dmabuf.dmabuf = (int) dmabuf; \
+	args_hsa_amd_portable_close_dmabuf_t* args = (args_hsa_amd_portable_close_dmabuf_t*) activity->args; \
+	args->dmabuf = (int) dmabuf; \
 };
 
 #endif
@@ -3538,23 +3661,25 @@ struct args_hsa_amd_portable_close_dmabuf_t {
  *	)
  */
 #if HAVE_hsa_queue_add_write_index_relaxed
-struct args_hsa_queue_add_write_index_relaxed_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t value;
 	uint64_t retval;
-};
+} args_hsa_queue_add_write_index_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_queue_add_write_index_relaxed(activity) { \
-	activity->hsa_args.hsa_queue_add_write_index_relaxed.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_add_write_index_relaxed.value = (uint64_t) value; \
+	args_hsa_queue_add_write_index_relaxed_t* args = (args_hsa_queue_add_write_index_relaxed_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_add_write_index_relaxed(args) { \
-	if (args->hsa_queue_add_write_index_relaxed.queue != NULL) { \
-		args->hsa_queue_add_write_index_relaxed.queue__ref.val = *args->hsa_queue_add_write_index_relaxed.queue; \
+	args_hsa_queue_add_write_index_relaxed_t* pargs = (args_hsa_queue_add_write_index_relaxed_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -3575,21 +3700,23 @@ struct args_hsa_queue_add_write_index_relaxed_t {
  *	)
  */
 #if HAVE_hsa_queue_destroy
-struct args_hsa_queue_destroy_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	hsa_status_t retval;
-};
+} args_hsa_queue_destroy_t;
 
 #define GET_ARGS_VALUE_hsa_queue_destroy(activity) { \
-	activity->hsa_args.hsa_queue_destroy.queue = (hsa_queue_t *) queue; \
+	args_hsa_queue_destroy_t* args = (args_hsa_queue_destroy_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_destroy(args) { \
-	if (args->hsa_queue_destroy.queue != NULL) { \
-		args->hsa_queue_destroy.queue__ref.val = *args->hsa_queue_destroy.queue; \
+	args_hsa_queue_destroy_t* pargs = (args_hsa_queue_destroy_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -3611,14 +3738,15 @@ struct args_hsa_queue_destroy_t {
  *	)
  */
 #if HAVE_hsa_signal_or_scacq_screl
-struct args_hsa_signal_or_scacq_screl_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_or_scacq_screl_t;
 
 #define GET_ARGS_VALUE_hsa_signal_or_scacq_screl(activity) { \
-	activity->hsa_args.hsa_signal_or_scacq_screl.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_or_scacq_screl.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_or_scacq_screl_t* args = (args_hsa_signal_or_scacq_screl_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -3641,19 +3769,20 @@ struct args_hsa_signal_or_scacq_screl_t {
  *	)
  */
 #if HAVE_hsa_amd_agent_memory_pool_get_info
-struct args_hsa_amd_agent_memory_pool_get_info_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_amd_memory_pool_t memory_pool;
 	hsa_amd_agent_memory_pool_info_t attribute;
 	void * value;
 	hsa_status_t retval;
-};
+} args_hsa_amd_agent_memory_pool_get_info_t;
 
 #define GET_ARGS_VALUE_hsa_amd_agent_memory_pool_get_info(activity) { \
-	activity->hsa_args.hsa_amd_agent_memory_pool_get_info.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_amd_agent_memory_pool_get_info.memory_pool = (hsa_amd_memory_pool_t) memory_pool; \
-	activity->hsa_args.hsa_amd_agent_memory_pool_get_info.attribute = (hsa_amd_agent_memory_pool_info_t) attribute; \
-	activity->hsa_args.hsa_amd_agent_memory_pool_get_info.value = (void *) value; \
+	args_hsa_amd_agent_memory_pool_get_info_t* args = (args_hsa_amd_agent_memory_pool_get_info_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->memory_pool = (hsa_amd_memory_pool_t) memory_pool; \
+	args->attribute = (hsa_amd_agent_memory_pool_info_t) attribute; \
+	args->value = (void *) value; \
 };
 
 #endif
@@ -3676,7 +3805,7 @@ struct args_hsa_amd_agent_memory_pool_get_info_t {
  *	)
  */
 #if HAVE_hsa_executable_create_alt
-struct args_hsa_executable_create_alt_t {
+typedef struct {
 	hsa_profile_t profile;
 	hsa_default_float_rounding_mode_t default_float_rounding_mode;
 	char * options;
@@ -3688,21 +3817,23 @@ struct args_hsa_executable_create_alt_t {
 		hsa_executable_t val;
 	} executable__ref;
 	hsa_status_t retval;
-};
+} args_hsa_executable_create_alt_t;
 
 #define GET_ARGS_VALUE_hsa_executable_create_alt(activity) { \
-	activity->hsa_args.hsa_executable_create_alt.profile = (hsa_profile_t) profile; \
-	activity->hsa_args.hsa_executable_create_alt.default_float_rounding_mode = (hsa_default_float_rounding_mode_t) default_float_rounding_mode; \
-	activity->hsa_args.hsa_executable_create_alt.options = (char *) options; \
-	activity->hsa_args.hsa_executable_create_alt.executable = (hsa_executable_t *) executable; \
+	args_hsa_executable_create_alt_t* args = (args_hsa_executable_create_alt_t*) activity->args; \
+	args->profile = (hsa_profile_t) profile; \
+	args->default_float_rounding_mode = (hsa_default_float_rounding_mode_t) default_float_rounding_mode; \
+	args->options = (char *) options; \
+	args->executable = (hsa_executable_t *) executable; \
 };
 
 #define GET_PTRS_VALUE_hsa_executable_create_alt(args) { \
-	if (args->hsa_executable_create_alt.options != NULL) { \
-		strncpy(args->hsa_executable_create_alt.options__ref.val, args->hsa_executable_create_alt.options, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_executable_create_alt_t* pargs = (args_hsa_executable_create_alt_t*) args; \
+	if (pargs->options != NULL) { \
+		strncpy(pargs->options__ref.val, pargs->options, HSA_STRING_SIZE_MAX-1); \
 	} \
-	if (args->hsa_executable_create_alt.executable != NULL) { \
-		args->hsa_executable_create_alt.executable__ref.val = *args->hsa_executable_create_alt.executable; \
+	if (pargs->executable != NULL) { \
+		pargs->executable__ref.val = *pargs->executable; \
 	} \
 };
 
@@ -3724,14 +3855,15 @@ struct args_hsa_executable_create_alt_t {
  *	)
  */
 #if HAVE_hsa_signal_silent_store_relaxed
-struct args_hsa_signal_silent_store_relaxed_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_silent_store_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_signal_silent_store_relaxed(activity) { \
-	activity->hsa_args.hsa_signal_silent_store_relaxed.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_silent_store_relaxed.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_silent_store_relaxed_t* args = (args_hsa_signal_silent_store_relaxed_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -3752,23 +3884,25 @@ struct args_hsa_signal_silent_store_relaxed_t {
  *	)
  */
 #if HAVE_hsa_queue_add_write_index_acq_rel
-struct args_hsa_queue_add_write_index_acq_rel_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t value;
 	uint64_t retval;
-};
+} args_hsa_queue_add_write_index_acq_rel_t;
 
 #define GET_ARGS_VALUE_hsa_queue_add_write_index_acq_rel(activity) { \
-	activity->hsa_args.hsa_queue_add_write_index_acq_rel.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_add_write_index_acq_rel.value = (uint64_t) value; \
+	args_hsa_queue_add_write_index_acq_rel_t* args = (args_hsa_queue_add_write_index_acq_rel_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_add_write_index_acq_rel(args) { \
-	if (args->hsa_queue_add_write_index_acq_rel.queue != NULL) { \
-		args->hsa_queue_add_write_index_acq_rel.queue__ref.val = *args->hsa_queue_add_write_index_acq_rel.queue; \
+	args_hsa_queue_add_write_index_acq_rel_t* pargs = (args_hsa_queue_add_write_index_acq_rel_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -3791,7 +3925,7 @@ struct args_hsa_queue_add_write_index_acq_rel_t {
  *	)
  */
 #if HAVE_hsa_queue_cas_write_index_acq_rel
-struct args_hsa_queue_cas_write_index_acq_rel_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
@@ -3799,17 +3933,19 @@ struct args_hsa_queue_cas_write_index_acq_rel_t {
 	uint64_t expected;
 	uint64_t value;
 	uint64_t retval;
-};
+} args_hsa_queue_cas_write_index_acq_rel_t;
 
 #define GET_ARGS_VALUE_hsa_queue_cas_write_index_acq_rel(activity) { \
-	activity->hsa_args.hsa_queue_cas_write_index_acq_rel.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_cas_write_index_acq_rel.expected = (uint64_t) expected; \
-	activity->hsa_args.hsa_queue_cas_write_index_acq_rel.value = (uint64_t) value; \
+	args_hsa_queue_cas_write_index_acq_rel_t* args = (args_hsa_queue_cas_write_index_acq_rel_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->expected = (uint64_t) expected; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_cas_write_index_acq_rel(args) { \
-	if (args->hsa_queue_cas_write_index_acq_rel.queue != NULL) { \
-		args->hsa_queue_cas_write_index_acq_rel.queue__ref.val = *args->hsa_queue_cas_write_index_acq_rel.queue; \
+	args_hsa_queue_cas_write_index_acq_rel_t* pargs = (args_hsa_queue_cas_write_index_acq_rel_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -3832,17 +3968,18 @@ struct args_hsa_queue_cas_write_index_acq_rel_t {
  *	)
  */
 #if HAVE_hsa_region_get_info
-struct args_hsa_region_get_info_t {
+typedef struct {
 	hsa_region_t region;
 	hsa_region_info_t attribute;
 	void * value;
 	hsa_status_t retval;
-};
+} args_hsa_region_get_info_t;
 
 #define GET_ARGS_VALUE_hsa_region_get_info(activity) { \
-	activity->hsa_args.hsa_region_get_info.region = (hsa_region_t) region; \
-	activity->hsa_args.hsa_region_get_info.attribute = (hsa_region_info_t) attribute; \
-	activity->hsa_args.hsa_region_get_info.value = (void *) value; \
+	args_hsa_region_get_info_t* args = (args_hsa_region_get_info_t*) activity->args; \
+	args->region = (hsa_region_t) region; \
+	args->attribute = (hsa_region_info_t) attribute; \
+	args->value = (void *) value; \
 };
 
 #endif
@@ -3865,7 +4002,7 @@ struct args_hsa_region_get_info_t {
  *	)
  */
 #if HAVE_hsa_executable_get_symbol_by_name
-struct args_hsa_executable_get_symbol_by_name_t {
+typedef struct {
 	hsa_executable_t executable;
 	char * symbol_name;
 	struct {
@@ -3880,24 +4017,26 @@ struct args_hsa_executable_get_symbol_by_name_t {
 		hsa_executable_symbol_t val;
 	} symbol__ref;
 	hsa_status_t retval;
-};
+} args_hsa_executable_get_symbol_by_name_t;
 
 #define GET_ARGS_VALUE_hsa_executable_get_symbol_by_name(activity) { \
-	activity->hsa_args.hsa_executable_get_symbol_by_name.executable = (hsa_executable_t) executable; \
-	activity->hsa_args.hsa_executable_get_symbol_by_name.symbol_name = (char *) symbol_name; \
-	activity->hsa_args.hsa_executable_get_symbol_by_name.agent = (hsa_agent_t *) agent; \
-	activity->hsa_args.hsa_executable_get_symbol_by_name.symbol = (hsa_executable_symbol_t *) symbol; \
+	args_hsa_executable_get_symbol_by_name_t* args = (args_hsa_executable_get_symbol_by_name_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
+	args->symbol_name = (char *) symbol_name; \
+	args->agent = (hsa_agent_t *) agent; \
+	args->symbol = (hsa_executable_symbol_t *) symbol; \
 };
 
 #define GET_PTRS_VALUE_hsa_executable_get_symbol_by_name(args) { \
-	if (args->hsa_executable_get_symbol_by_name.symbol_name != NULL) { \
-		strncpy(args->hsa_executable_get_symbol_by_name.symbol_name__ref.val, args->hsa_executable_get_symbol_by_name.symbol_name, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_executable_get_symbol_by_name_t* pargs = (args_hsa_executable_get_symbol_by_name_t*) args; \
+	if (pargs->symbol_name != NULL) { \
+		strncpy(pargs->symbol_name__ref.val, pargs->symbol_name, HSA_STRING_SIZE_MAX-1); \
 	} \
-	if (args->hsa_executable_get_symbol_by_name.agent != NULL) { \
-		args->hsa_executable_get_symbol_by_name.agent__ref.val = *args->hsa_executable_get_symbol_by_name.agent; \
+	if (pargs->agent != NULL) { \
+		pargs->agent__ref.val = *pargs->agent; \
 	} \
-	if (args->hsa_executable_get_symbol_by_name.symbol != NULL) { \
-		args->hsa_executable_get_symbol_by_name.symbol__ref.val = *args->hsa_executable_get_symbol_by_name.symbol; \
+	if (pargs->symbol != NULL) { \
+		pargs->symbol__ref.val = *pargs->symbol; \
 	} \
 };
 
@@ -3923,7 +4062,7 @@ struct args_hsa_executable_get_symbol_by_name_t {
  *	)
  */
 #if HAVE_hsa_executable_get_symbol
-struct args_hsa_executable_get_symbol_t {
+typedef struct {
 	hsa_executable_t executable;
 	char * module_name;
 	struct {
@@ -3940,26 +4079,28 @@ struct args_hsa_executable_get_symbol_t {
 		hsa_executable_symbol_t val;
 	} symbol__ref;
 	hsa_status_t retval;
-};
+} args_hsa_executable_get_symbol_t;
 
 #define GET_ARGS_VALUE_hsa_executable_get_symbol(activity) { \
-	activity->hsa_args.hsa_executable_get_symbol.executable = (hsa_executable_t) executable; \
-	activity->hsa_args.hsa_executable_get_symbol.module_name = (char *) module_name; \
-	activity->hsa_args.hsa_executable_get_symbol.symbol_name = (char *) symbol_name; \
-	activity->hsa_args.hsa_executable_get_symbol.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_executable_get_symbol.call_convention = (int32_t) call_convention; \
-	activity->hsa_args.hsa_executable_get_symbol.symbol = (hsa_executable_symbol_t *) symbol; \
+	args_hsa_executable_get_symbol_t* args = (args_hsa_executable_get_symbol_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
+	args->module_name = (char *) module_name; \
+	args->symbol_name = (char *) symbol_name; \
+	args->agent = (hsa_agent_t) agent; \
+	args->call_convention = (int32_t) call_convention; \
+	args->symbol = (hsa_executable_symbol_t *) symbol; \
 };
 
 #define GET_PTRS_VALUE_hsa_executable_get_symbol(args) { \
-	if (args->hsa_executable_get_symbol.module_name != NULL) { \
-		strncpy(args->hsa_executable_get_symbol.module_name__ref.val, args->hsa_executable_get_symbol.module_name, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_executable_get_symbol_t* pargs = (args_hsa_executable_get_symbol_t*) args; \
+	if (pargs->module_name != NULL) { \
+		strncpy(pargs->module_name__ref.val, pargs->module_name, HSA_STRING_SIZE_MAX-1); \
 	} \
-	if (args->hsa_executable_get_symbol.symbol_name != NULL) { \
-		strncpy(args->hsa_executable_get_symbol.symbol_name__ref.val, args->hsa_executable_get_symbol.symbol_name, HSA_STRING_SIZE_MAX-1); \
+	if (pargs->symbol_name != NULL) { \
+		strncpy(pargs->symbol_name__ref.val, pargs->symbol_name, HSA_STRING_SIZE_MAX-1); \
 	} \
-	if (args->hsa_executable_get_symbol.symbol != NULL) { \
-		args->hsa_executable_get_symbol.symbol__ref.val = *args->hsa_executable_get_symbol.symbol; \
+	if (pargs->symbol != NULL) { \
+		pargs->symbol__ref.val = *pargs->symbol; \
 	} \
 };
 
@@ -3981,14 +4122,15 @@ struct args_hsa_executable_get_symbol_t {
  *	)
  */
 #if HAVE_hsa_signal_xor_scacquire
-struct args_hsa_signal_xor_scacquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_xor_scacquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_xor_scacquire(activity) { \
-	activity->hsa_args.hsa_signal_xor_scacquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_xor_scacquire.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_xor_scacquire_t* args = (args_hsa_signal_xor_scacquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -4009,14 +4151,15 @@ struct args_hsa_signal_xor_scacquire_t {
  *	)
  */
 #if HAVE_hsa_signal_xor_scacq_screl
-struct args_hsa_signal_xor_scacq_screl_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_xor_scacq_screl_t;
 
 #define GET_ARGS_VALUE_hsa_signal_xor_scacq_screl(activity) { \
-	activity->hsa_args.hsa_signal_xor_scacq_screl.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_xor_scacq_screl.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_xor_scacq_screl_t* args = (args_hsa_signal_xor_scacq_screl_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -4037,22 +4180,24 @@ struct args_hsa_signal_xor_scacq_screl_t {
  *	)
  */
 #if HAVE_hsa_queue_store_write_index_screlease
-struct args_hsa_queue_store_write_index_screlease_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t value;
-};
+} args_hsa_queue_store_write_index_screlease_t;
 
 #define GET_ARGS_VALUE_hsa_queue_store_write_index_screlease(activity) { \
-	activity->hsa_args.hsa_queue_store_write_index_screlease.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_store_write_index_screlease.value = (uint64_t) value; \
+	args_hsa_queue_store_write_index_screlease_t* args = (args_hsa_queue_store_write_index_screlease_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_store_write_index_screlease(args) { \
-	if (args->hsa_queue_store_write_index_screlease.queue != NULL) { \
-		args->hsa_queue_store_write_index_screlease.queue__ref.val = *args->hsa_queue_store_write_index_screlease.queue; \
+	args_hsa_queue_store_write_index_screlease_t* pargs = (args_hsa_queue_store_write_index_screlease_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -4075,17 +4220,18 @@ struct args_hsa_queue_store_write_index_screlease_t {
  *	)
  */
 #if HAVE_hsa_amd_agent_iterate_memory_pools
-struct args_hsa_amd_agent_iterate_memory_pools_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_status_t (* callback)(hsa_amd_memory_pool_t, void *);
 	void * data;
 	hsa_status_t retval;
-};
+} args_hsa_amd_agent_iterate_memory_pools_t;
 
 #define GET_ARGS_VALUE_hsa_amd_agent_iterate_memory_pools(activity) { \
-	activity->hsa_args.hsa_amd_agent_iterate_memory_pools.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_amd_agent_iterate_memory_pools.callback = (hsa_status_t (*)(hsa_amd_memory_pool_t, void *)) callback; \
-	activity->hsa_args.hsa_amd_agent_iterate_memory_pools.data = (void *) data; \
+	args_hsa_amd_agent_iterate_memory_pools_t* args = (args_hsa_amd_agent_iterate_memory_pools_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->callback = (hsa_status_t (*)(hsa_amd_memory_pool_t, void *)) callback; \
+	args->data = (void *) data; \
 };
 
 #endif
@@ -4107,17 +4253,18 @@ struct args_hsa_amd_agent_iterate_memory_pools_t {
  *	)
  */
 #if HAVE_hsa_amd_memory_pool_get_info
-struct args_hsa_amd_memory_pool_get_info_t {
+typedef struct {
 	hsa_amd_memory_pool_t memory_pool;
 	hsa_amd_memory_pool_info_t attribute;
 	void * value;
 	hsa_status_t retval;
-};
+} args_hsa_amd_memory_pool_get_info_t;
 
 #define GET_ARGS_VALUE_hsa_amd_memory_pool_get_info(activity) { \
-	activity->hsa_args.hsa_amd_memory_pool_get_info.memory_pool = (hsa_amd_memory_pool_t) memory_pool; \
-	activity->hsa_args.hsa_amd_memory_pool_get_info.attribute = (hsa_amd_memory_pool_info_t) attribute; \
-	activity->hsa_args.hsa_amd_memory_pool_get_info.value = (void *) value; \
+	args_hsa_amd_memory_pool_get_info_t* args = (args_hsa_amd_memory_pool_get_info_t*) activity->args; \
+	args->memory_pool = (hsa_amd_memory_pool_t) memory_pool; \
+	args->attribute = (hsa_amd_memory_pool_info_t) attribute; \
+	args->value = (void *) value; \
 };
 
 #endif
@@ -4137,13 +4284,14 @@ struct args_hsa_amd_memory_pool_get_info_t {
  *	)
  */
 #if HAVE_hsa_amd_spm_release
-struct args_hsa_amd_spm_release_t {
+typedef struct {
 	hsa_agent_t preferred_agent;
 	hsa_status_t retval;
-};
+} args_hsa_amd_spm_release_t;
 
 #define GET_ARGS_VALUE_hsa_amd_spm_release(activity) { \
-	activity->hsa_args.hsa_amd_spm_release.preferred_agent = (hsa_agent_t) preferred_agent; \
+	args_hsa_amd_spm_release_t* args = (args_hsa_amd_spm_release_t*) activity->args; \
+	args->preferred_agent = (hsa_agent_t) preferred_agent; \
 };
 
 #endif
@@ -4164,14 +4312,15 @@ struct args_hsa_amd_spm_release_t {
  *	)
  */
 #if HAVE_hsa_signal_and_scacq_screl
-struct args_hsa_signal_and_scacq_screl_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_and_scacq_screl_t;
 
 #define GET_ARGS_VALUE_hsa_signal_and_scacq_screl(activity) { \
-	activity->hsa_args.hsa_signal_and_scacq_screl.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_and_scacq_screl.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_and_scacq_screl_t* args = (args_hsa_signal_and_scacq_screl_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -4193,17 +4342,18 @@ struct args_hsa_signal_and_scacq_screl_t {
  *	)
  */
 #if HAVE_hsa_wavefront_get_info
-struct args_hsa_wavefront_get_info_t {
+typedef struct {
 	hsa_wavefront_t wavefront;
 	hsa_wavefront_info_t attribute;
 	void * value;
 	hsa_status_t retval;
-};
+} args_hsa_wavefront_get_info_t;
 
 #define GET_ARGS_VALUE_hsa_wavefront_get_info(activity) { \
-	activity->hsa_args.hsa_wavefront_get_info.wavefront = (hsa_wavefront_t) wavefront; \
-	activity->hsa_args.hsa_wavefront_get_info.attribute = (hsa_wavefront_info_t) attribute; \
-	activity->hsa_args.hsa_wavefront_get_info.value = (void *) value; \
+	args_hsa_wavefront_get_info_t* args = (args_hsa_wavefront_get_info_t*) activity->args; \
+	args->wavefront = (hsa_wavefront_t) wavefront; \
+	args->attribute = (hsa_wavefront_info_t) attribute; \
+	args->value = (void *) value; \
 };
 
 #endif
@@ -4223,13 +4373,14 @@ struct args_hsa_wavefront_get_info_t {
  *	)
  */
 #if HAVE_hsa_ven_amd_pcs_destroy
-struct args_hsa_ven_amd_pcs_destroy_t {
+typedef struct {
 	hsa_ven_amd_pcs_t pc_sampling;
 	hsa_status_t retval;
-};
+} args_hsa_ven_amd_pcs_destroy_t;
 
 #define GET_ARGS_VALUE_hsa_ven_amd_pcs_destroy(activity) { \
-	activity->hsa_args.hsa_ven_amd_pcs_destroy.pc_sampling = (hsa_ven_amd_pcs_t) pc_sampling; \
+	args_hsa_ven_amd_pcs_destroy_t* args = (args_hsa_ven_amd_pcs_destroy_t*) activity->args; \
+	args->pc_sampling = (hsa_ven_amd_pcs_t) pc_sampling; \
 };
 
 #endif
@@ -4252,7 +4403,7 @@ struct args_hsa_ven_amd_pcs_destroy_t {
  *	)
  */
 #if HAVE_hsa_system_major_extension_supported
-struct args_hsa_system_major_extension_supported_t {
+typedef struct {
 	uint16_t extension;
 	uint16_t version_major;
 	uint16_t * version_minor;
@@ -4264,21 +4415,23 @@ struct args_hsa_system_major_extension_supported_t {
 		_Bool val;
 	} result__ref;
 	hsa_status_t retval;
-};
+} args_hsa_system_major_extension_supported_t;
 
 #define GET_ARGS_VALUE_hsa_system_major_extension_supported(activity) { \
-	activity->hsa_args.hsa_system_major_extension_supported.extension = (uint16_t) extension; \
-	activity->hsa_args.hsa_system_major_extension_supported.version_major = (uint16_t) version_major; \
-	activity->hsa_args.hsa_system_major_extension_supported.version_minor = (uint16_t *) version_minor; \
-	activity->hsa_args.hsa_system_major_extension_supported.result = (_Bool *) result; \
+	args_hsa_system_major_extension_supported_t* args = (args_hsa_system_major_extension_supported_t*) activity->args; \
+	args->extension = (uint16_t) extension; \
+	args->version_major = (uint16_t) version_major; \
+	args->version_minor = (uint16_t *) version_minor; \
+	args->result = (_Bool *) result; \
 };
 
 #define GET_PTRS_VALUE_hsa_system_major_extension_supported(args) { \
-	if (args->hsa_system_major_extension_supported.version_minor != NULL) { \
-		args->hsa_system_major_extension_supported.version_minor__ref.val = *args->hsa_system_major_extension_supported.version_minor; \
+	args_hsa_system_major_extension_supported_t* pargs = (args_hsa_system_major_extension_supported_t*) args; \
+	if (pargs->version_minor != NULL) { \
+		pargs->version_minor__ref.val = *pargs->version_minor; \
 	} \
-	if (args->hsa_system_major_extension_supported.result != NULL) { \
-		args->hsa_system_major_extension_supported.result__ref.val = *args->hsa_system_major_extension_supported.result; \
+	if (pargs->result != NULL) { \
+		pargs->result__ref.val = *pargs->result; \
 	} \
 };
 
@@ -4300,7 +4453,7 @@ struct args_hsa_system_major_extension_supported_t {
  *	)
  */
 #if HAVE_hsa_status_string
-struct args_hsa_status_string_t {
+typedef struct {
 	hsa_status_t status;
 	char ** status_string;
 	struct {
@@ -4308,18 +4461,20 @@ struct args_hsa_status_string_t {
 		char val[HSA_STRING_SIZE_MAX];
 	} status_string__ref;
 	hsa_status_t retval;
-};
+} args_hsa_status_string_t;
 
 #define GET_ARGS_VALUE_hsa_status_string(activity) { \
-	activity->hsa_args.hsa_status_string.status = (hsa_status_t) status; \
-	activity->hsa_args.hsa_status_string.status_string = (char **) status_string; \
+	args_hsa_status_string_t* args = (args_hsa_status_string_t*) activity->args; \
+	args->status = (hsa_status_t) status; \
+	args->status_string = (char **) status_string; \
 };
 
 #define GET_PTRS_VALUE_hsa_status_string(args) { \
-	if (args->hsa_status_string.status_string != NULL) { \
-		args->hsa_status_string.status_string__ref.ptr1 = *args->hsa_status_string.status_string; \
-		if (args->hsa_status_string.status_string__ref.ptr1 != NULL) { \
-			strncpy(args->hsa_status_string.status_string__ref.val, args->hsa_status_string.status_string__ref.ptr1, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_status_string_t* pargs = (args_hsa_status_string_t*) args; \
+	if (pargs->status_string != NULL) { \
+		pargs->status_string__ref.ptr1 = *pargs->status_string; \
+		if (pargs->status_string__ref.ptr1 != NULL) { \
+			strncpy(pargs->status_string__ref.val, pargs->status_string__ref.ptr1, HSA_STRING_SIZE_MAX-1); \
 		} \
 	} \
 };
@@ -4343,17 +4498,18 @@ struct args_hsa_status_string_t {
  *	)
  */
 #if HAVE_hsa_signal_cas_relaxed
-struct args_hsa_signal_cas_relaxed_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t expected;
 	hsa_signal_value_t value;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_cas_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_signal_cas_relaxed(activity) { \
-	activity->hsa_args.hsa_signal_cas_relaxed.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_cas_relaxed.expected = (hsa_signal_value_t) expected; \
-	activity->hsa_args.hsa_signal_cas_relaxed.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_cas_relaxed_t* args = (args_hsa_signal_cas_relaxed_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->expected = (hsa_signal_value_t) expected; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -4372,9 +4528,9 @@ struct args_hsa_signal_cas_relaxed_t {
  *	)
  */
 #if HAVE_hsa_init
-struct args_hsa_init_t {
+typedef struct {
 	hsa_status_t retval;
-};
+} args_hsa_init_t;
 
 #endif
 
@@ -4395,7 +4551,7 @@ struct args_hsa_init_t {
  *	)
  */
 #if HAVE_hsa_memory_allocate
-struct args_hsa_memory_allocate_t {
+typedef struct {
 	hsa_region_t region;
 	size_t size;
 	void ** ptr;
@@ -4403,17 +4559,19 @@ struct args_hsa_memory_allocate_t {
 		void* ptr1;
 	} ptr__ref;
 	hsa_status_t retval;
-};
+} args_hsa_memory_allocate_t;
 
 #define GET_ARGS_VALUE_hsa_memory_allocate(activity) { \
-	activity->hsa_args.hsa_memory_allocate.region = (hsa_region_t) region; \
-	activity->hsa_args.hsa_memory_allocate.size = (size_t) size; \
-	activity->hsa_args.hsa_memory_allocate.ptr = (void **) ptr; \
+	args_hsa_memory_allocate_t* args = (args_hsa_memory_allocate_t*) activity->args; \
+	args->region = (hsa_region_t) region; \
+	args->size = (size_t) size; \
+	args->ptr = (void **) ptr; \
 };
 
 #define GET_PTRS_VALUE_hsa_memory_allocate(args) { \
-	if (args->hsa_memory_allocate.ptr != NULL) { \
-		args->hsa_memory_allocate.ptr__ref.ptr1 = *args->hsa_memory_allocate.ptr; \
+	args_hsa_memory_allocate_t* pargs = (args_hsa_memory_allocate_t*) args; \
+	if (pargs->ptr != NULL) { \
+		pargs->ptr__ref.ptr1 = *pargs->ptr; \
 	} \
 };
 
@@ -4437,7 +4595,7 @@ struct args_hsa_memory_allocate_t {
  *	)
  */
 #if HAVE_hsa_ext_image_data_get_info
-struct args_hsa_ext_image_data_get_info_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_ext_image_descriptor_t * image_descriptor;
 	struct {
@@ -4449,21 +4607,23 @@ struct args_hsa_ext_image_data_get_info_t {
 		hsa_ext_image_data_info_t val;
 	} image_data_info__ref;
 	hsa_status_t retval;
-};
+} args_hsa_ext_image_data_get_info_t;
 
 #define GET_ARGS_VALUE_hsa_ext_image_data_get_info(activity) { \
-	activity->hsa_args.hsa_ext_image_data_get_info.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ext_image_data_get_info.image_descriptor = (hsa_ext_image_descriptor_t *) image_descriptor; \
-	activity->hsa_args.hsa_ext_image_data_get_info.access_permission = (hsa_access_permission_t) access_permission; \
-	activity->hsa_args.hsa_ext_image_data_get_info.image_data_info = (hsa_ext_image_data_info_t *) image_data_info; \
+	args_hsa_ext_image_data_get_info_t* args = (args_hsa_ext_image_data_get_info_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->image_descriptor = (hsa_ext_image_descriptor_t *) image_descriptor; \
+	args->access_permission = (hsa_access_permission_t) access_permission; \
+	args->image_data_info = (hsa_ext_image_data_info_t *) image_data_info; \
 };
 
 #define GET_PTRS_VALUE_hsa_ext_image_data_get_info(args) { \
-	if (args->hsa_ext_image_data_get_info.image_descriptor != NULL) { \
-		args->hsa_ext_image_data_get_info.image_descriptor__ref.val = *args->hsa_ext_image_data_get_info.image_descriptor; \
+	args_hsa_ext_image_data_get_info_t* pargs = (args_hsa_ext_image_data_get_info_t*) args; \
+	if (pargs->image_descriptor != NULL) { \
+		pargs->image_descriptor__ref.val = *pargs->image_descriptor; \
 	} \
-	if (args->hsa_ext_image_data_get_info.image_data_info != NULL) { \
-		args->hsa_ext_image_data_get_info.image_data_info__ref.val = *args->hsa_ext_image_data_get_info.image_data_info; \
+	if (pargs->image_data_info != NULL) { \
+		pargs->image_data_info__ref.val = *pargs->image_data_info; \
 	} \
 };
 
@@ -4486,17 +4646,18 @@ struct args_hsa_ext_image_data_get_info_t {
  *	)
  */
 #if HAVE_hsa_cache_get_info
-struct args_hsa_cache_get_info_t {
+typedef struct {
 	hsa_cache_t cache;
 	hsa_cache_info_t attribute;
 	void * value;
 	hsa_status_t retval;
-};
+} args_hsa_cache_get_info_t;
 
 #define GET_ARGS_VALUE_hsa_cache_get_info(activity) { \
-	activity->hsa_args.hsa_cache_get_info.cache = (hsa_cache_t) cache; \
-	activity->hsa_args.hsa_cache_get_info.attribute = (hsa_cache_info_t) attribute; \
-	activity->hsa_args.hsa_cache_get_info.value = (void *) value; \
+	args_hsa_cache_get_info_t* args = (args_hsa_cache_get_info_t*) activity->args; \
+	args->cache = (hsa_cache_t) cache; \
+	args->attribute = (hsa_cache_info_t) attribute; \
+	args->value = (void *) value; \
 };
 
 #endif
@@ -4517,14 +4678,15 @@ struct args_hsa_cache_get_info_t {
  *	)
  */
 #if HAVE_hsa_signal_subtract_relaxed
-struct args_hsa_signal_subtract_relaxed_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_subtract_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_signal_subtract_relaxed(activity) { \
-	activity->hsa_args.hsa_signal_subtract_relaxed.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_subtract_relaxed.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_subtract_relaxed_t* args = (args_hsa_signal_subtract_relaxed_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -4544,21 +4706,23 @@ struct args_hsa_signal_subtract_relaxed_t {
  *	)
  */
 #if HAVE_hsa_queue_load_write_index_relaxed
-struct args_hsa_queue_load_write_index_relaxed_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t retval;
-};
+} args_hsa_queue_load_write_index_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_queue_load_write_index_relaxed(activity) { \
-	activity->hsa_args.hsa_queue_load_write_index_relaxed.queue = (hsa_queue_t *) queue; \
+	args_hsa_queue_load_write_index_relaxed_t* args = (args_hsa_queue_load_write_index_relaxed_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_load_write_index_relaxed(args) { \
-	if (args->hsa_queue_load_write_index_relaxed.queue != NULL) { \
-		args->hsa_queue_load_write_index_relaxed.queue__ref.val = *args->hsa_queue_load_write_index_relaxed.queue; \
+	args_hsa_queue_load_write_index_relaxed_t* pargs = (args_hsa_queue_load_write_index_relaxed_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -4583,21 +4747,22 @@ struct args_hsa_queue_load_write_index_relaxed_t {
  *	)
  */
 #if HAVE_hsa_amd_signal_async_handler
-struct args_hsa_amd_signal_async_handler_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_condition_t cond;
 	hsa_signal_value_t value;
 	hsa_amd_signal_handler handler;
 	void * arg;
 	hsa_status_t retval;
-};
+} args_hsa_amd_signal_async_handler_t;
 
 #define GET_ARGS_VALUE_hsa_amd_signal_async_handler(activity) { \
-	activity->hsa_args.hsa_amd_signal_async_handler.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_amd_signal_async_handler.cond = (hsa_signal_condition_t) cond; \
-	activity->hsa_args.hsa_amd_signal_async_handler.value = (hsa_signal_value_t) value; \
-	activity->hsa_args.hsa_amd_signal_async_handler.handler = (hsa_amd_signal_handler) handler; \
-	activity->hsa_args.hsa_amd_signal_async_handler.arg = (void *) arg; \
+	args_hsa_amd_signal_async_handler_t* args = (args_hsa_amd_signal_async_handler_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->cond = (hsa_signal_condition_t) cond; \
+	args->value = (hsa_signal_value_t) value; \
+	args->handler = (hsa_amd_signal_handler) handler; \
+	args->arg = (void *) arg; \
 };
 
 #endif
@@ -4619,17 +4784,18 @@ struct args_hsa_amd_signal_async_handler_t {
  *	)
  */
 #if HAVE_hsa_signal_cas_acquire
-struct args_hsa_signal_cas_acquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t expected;
 	hsa_signal_value_t value;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_cas_acquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_cas_acquire(activity) { \
-	activity->hsa_args.hsa_signal_cas_acquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_cas_acquire.expected = (hsa_signal_value_t) expected; \
-	activity->hsa_args.hsa_signal_cas_acquire.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_cas_acquire_t* args = (args_hsa_signal_cas_acquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->expected = (hsa_signal_value_t) expected; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -4650,14 +4816,15 @@ struct args_hsa_signal_cas_acquire_t {
  *	)
  */
 #if HAVE_hsa_signal_or_scacquire
-struct args_hsa_signal_or_scacquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_or_scacquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_or_scacquire(activity) { \
-	activity->hsa_args.hsa_signal_or_scacquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_or_scacquire.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_or_scacquire_t* args = (args_hsa_signal_or_scacquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -4678,23 +4845,25 @@ struct args_hsa_signal_or_scacquire_t {
  *	)
  */
 #if HAVE_hsa_queue_add_write_index_release
-struct args_hsa_queue_add_write_index_release_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t value;
 	uint64_t retval;
-};
+} args_hsa_queue_add_write_index_release_t;
 
 #define GET_ARGS_VALUE_hsa_queue_add_write_index_release(activity) { \
-	activity->hsa_args.hsa_queue_add_write_index_release.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_add_write_index_release.value = (uint64_t) value; \
+	args_hsa_queue_add_write_index_release_t* args = (args_hsa_queue_add_write_index_release_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_add_write_index_release(args) { \
-	if (args->hsa_queue_add_write_index_release.queue != NULL) { \
-		args->hsa_queue_add_write_index_release.queue__ref.val = *args->hsa_queue_add_write_index_release.queue; \
+	args_hsa_queue_add_write_index_release_t* pargs = (args_hsa_queue_add_write_index_release_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -4719,7 +4888,7 @@ struct args_hsa_queue_add_write_index_release_t {
  *	)
  */
 #if HAVE_hsa_agent_extension_supported
-struct args_hsa_agent_extension_supported_t {
+typedef struct {
 	uint16_t extension;
 	hsa_agent_t agent;
 	uint16_t version_major;
@@ -4729,19 +4898,21 @@ struct args_hsa_agent_extension_supported_t {
 		_Bool val;
 	} result__ref;
 	hsa_status_t retval;
-};
+} args_hsa_agent_extension_supported_t;
 
 #define GET_ARGS_VALUE_hsa_agent_extension_supported(activity) { \
-	activity->hsa_args.hsa_agent_extension_supported.extension = (uint16_t) extension; \
-	activity->hsa_args.hsa_agent_extension_supported.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_agent_extension_supported.version_major = (uint16_t) version_major; \
-	activity->hsa_args.hsa_agent_extension_supported.version_minor = (uint16_t) version_minor; \
-	activity->hsa_args.hsa_agent_extension_supported.result = (_Bool *) result; \
+	args_hsa_agent_extension_supported_t* args = (args_hsa_agent_extension_supported_t*) activity->args; \
+	args->extension = (uint16_t) extension; \
+	args->agent = (hsa_agent_t) agent; \
+	args->version_major = (uint16_t) version_major; \
+	args->version_minor = (uint16_t) version_minor; \
+	args->result = (_Bool *) result; \
 };
 
 #define GET_PTRS_VALUE_hsa_agent_extension_supported(args) { \
-	if (args->hsa_agent_extension_supported.result != NULL) { \
-		args->hsa_agent_extension_supported.result__ref.val = *args->hsa_agent_extension_supported.result; \
+	args_hsa_agent_extension_supported_t* pargs = (args_hsa_agent_extension_supported_t*) args; \
+	if (pargs->result != NULL) { \
+		pargs->result__ref.val = *pargs->result; \
 	} \
 };
 
@@ -4763,15 +4934,16 @@ struct args_hsa_agent_extension_supported_t {
  *	)
  */
 #if HAVE_hsa_signal_exchange_relaxed
-struct args_hsa_signal_exchange_relaxed_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_exchange_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_signal_exchange_relaxed(activity) { \
-	activity->hsa_args.hsa_signal_exchange_relaxed.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_exchange_relaxed.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_exchange_relaxed_t* args = (args_hsa_signal_exchange_relaxed_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -4793,7 +4965,7 @@ struct args_hsa_signal_exchange_relaxed_t {
  *	)
  */
 #if HAVE_hsa_executable_validate_alt
-struct args_hsa_executable_validate_alt_t {
+typedef struct {
 	hsa_executable_t executable;
 	char * options;
 	struct {
@@ -4804,20 +4976,22 @@ struct args_hsa_executable_validate_alt_t {
 		uint32_t val;
 	} result__ref;
 	hsa_status_t retval;
-};
+} args_hsa_executable_validate_alt_t;
 
 #define GET_ARGS_VALUE_hsa_executable_validate_alt(activity) { \
-	activity->hsa_args.hsa_executable_validate_alt.executable = (hsa_executable_t) executable; \
-	activity->hsa_args.hsa_executable_validate_alt.options = (char *) options; \
-	activity->hsa_args.hsa_executable_validate_alt.result = (uint32_t *) result; \
+	args_hsa_executable_validate_alt_t* args = (args_hsa_executable_validate_alt_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
+	args->options = (char *) options; \
+	args->result = (uint32_t *) result; \
 };
 
 #define GET_PTRS_VALUE_hsa_executable_validate_alt(args) { \
-	if (args->hsa_executable_validate_alt.options != NULL) { \
-		strncpy(args->hsa_executable_validate_alt.options__ref.val, args->hsa_executable_validate_alt.options, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_executable_validate_alt_t* pargs = (args_hsa_executable_validate_alt_t*) args; \
+	if (pargs->options != NULL) { \
+		strncpy(pargs->options__ref.val, pargs->options, HSA_STRING_SIZE_MAX-1); \
 	} \
-	if (args->hsa_executable_validate_alt.result != NULL) { \
-		args->hsa_executable_validate_alt.result__ref.val = *args->hsa_executable_validate_alt.result; \
+	if (pargs->result != NULL) { \
+		pargs->result__ref.val = *pargs->result; \
 	} \
 };
 
@@ -4839,15 +5013,16 @@ struct args_hsa_executable_validate_alt_t {
  *	)
  */
 #if HAVE_hsa_signal_exchange_scacq_screl
-struct args_hsa_signal_exchange_scacq_screl_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_exchange_scacq_screl_t;
 
 #define GET_ARGS_VALUE_hsa_signal_exchange_scacq_screl(activity) { \
-	activity->hsa_args.hsa_signal_exchange_scacq_screl.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_exchange_scacq_screl.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_exchange_scacq_screl_t* args = (args_hsa_signal_exchange_scacq_screl_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -4869,17 +5044,18 @@ struct args_hsa_signal_exchange_scacq_screl_t {
  *	)
  */
 #if HAVE_hsa_executable_get_info
-struct args_hsa_executable_get_info_t {
+typedef struct {
 	hsa_executable_t executable;
 	hsa_executable_info_t attribute;
 	void * value;
 	hsa_status_t retval;
-};
+} args_hsa_executable_get_info_t;
 
 #define GET_ARGS_VALUE_hsa_executable_get_info(activity) { \
-	activity->hsa_args.hsa_executable_get_info.executable = (hsa_executable_t) executable; \
-	activity->hsa_args.hsa_executable_get_info.attribute = (hsa_executable_info_t) attribute; \
-	activity->hsa_args.hsa_executable_get_info.value = (void *) value; \
+	args_hsa_executable_get_info_t* args = (args_hsa_executable_get_info_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
+	args->attribute = (hsa_executable_info_t) attribute; \
+	args->value = (void *) value; \
 };
 
 #endif
@@ -4901,7 +5077,7 @@ struct args_hsa_executable_get_info_t {
  *	)
  */
 #if HAVE_hsa_code_object_reader_create_from_memory
-struct args_hsa_code_object_reader_create_from_memory_t {
+typedef struct {
 	void * code_object;
 	size_t size;
 	hsa_code_object_reader_t * code_object_reader;
@@ -4909,17 +5085,19 @@ struct args_hsa_code_object_reader_create_from_memory_t {
 		hsa_code_object_reader_t val;
 	} code_object_reader__ref;
 	hsa_status_t retval;
-};
+} args_hsa_code_object_reader_create_from_memory_t;
 
 #define GET_ARGS_VALUE_hsa_code_object_reader_create_from_memory(activity) { \
-	activity->hsa_args.hsa_code_object_reader_create_from_memory.code_object = (void *) code_object; \
-	activity->hsa_args.hsa_code_object_reader_create_from_memory.size = (size_t) size; \
-	activity->hsa_args.hsa_code_object_reader_create_from_memory.code_object_reader = (hsa_code_object_reader_t *) code_object_reader; \
+	args_hsa_code_object_reader_create_from_memory_t* args = (args_hsa_code_object_reader_create_from_memory_t*) activity->args; \
+	args->code_object = (void *) code_object; \
+	args->size = (size_t) size; \
+	args->code_object_reader = (hsa_code_object_reader_t *) code_object_reader; \
 };
 
 #define GET_PTRS_VALUE_hsa_code_object_reader_create_from_memory(args) { \
-	if (args->hsa_code_object_reader_create_from_memory.code_object_reader != NULL) { \
-		args->hsa_code_object_reader_create_from_memory.code_object_reader__ref.val = *args->hsa_code_object_reader_create_from_memory.code_object_reader; \
+	args_hsa_code_object_reader_create_from_memory_t* pargs = (args_hsa_code_object_reader_create_from_memory_t*) args; \
+	if (pargs->code_object_reader != NULL) { \
+		pargs->code_object_reader__ref.val = *pargs->code_object_reader; \
 	} \
 };
 
@@ -4941,15 +5119,16 @@ struct args_hsa_code_object_reader_create_from_memory_t {
  *	)
  */
 #if HAVE_hsa_amd_async_function
-struct args_hsa_amd_async_function_t {
+typedef struct {
 	void (* callback)(void *);
 	void * arg;
 	hsa_status_t retval;
-};
+} args_hsa_amd_async_function_t;
 
 #define GET_ARGS_VALUE_hsa_amd_async_function(activity) { \
-	activity->hsa_args.hsa_amd_async_function.callback = (void (*)(void *)) callback; \
-	activity->hsa_args.hsa_amd_async_function.arg = (void *) arg; \
+	args_hsa_amd_async_function_t* args = (args_hsa_amd_async_function_t*) activity->args; \
+	args->callback = (void (*)(void *)) callback; \
+	args->arg = (void *) arg; \
 };
 
 #endif
@@ -4971,7 +5150,7 @@ struct args_hsa_amd_async_function_t {
  *	)
  */
 #if HAVE_hsa_isa_compatible
-struct args_hsa_isa_compatible_t {
+typedef struct {
 	hsa_isa_t code_object_isa;
 	hsa_isa_t agent_isa;
 	_Bool * result;
@@ -4979,17 +5158,19 @@ struct args_hsa_isa_compatible_t {
 		_Bool val;
 	} result__ref;
 	hsa_status_t retval;
-};
+} args_hsa_isa_compatible_t;
 
 #define GET_ARGS_VALUE_hsa_isa_compatible(activity) { \
-	activity->hsa_args.hsa_isa_compatible.code_object_isa = (hsa_isa_t) code_object_isa; \
-	activity->hsa_args.hsa_isa_compatible.agent_isa = (hsa_isa_t) agent_isa; \
-	activity->hsa_args.hsa_isa_compatible.result = (_Bool *) result; \
+	args_hsa_isa_compatible_t* args = (args_hsa_isa_compatible_t*) activity->args; \
+	args->code_object_isa = (hsa_isa_t) code_object_isa; \
+	args->agent_isa = (hsa_isa_t) agent_isa; \
+	args->result = (_Bool *) result; \
 };
 
 #define GET_PTRS_VALUE_hsa_isa_compatible(args) { \
-	if (args->hsa_isa_compatible.result != NULL) { \
-		args->hsa_isa_compatible.result__ref.val = *args->hsa_isa_compatible.result; \
+	args_hsa_isa_compatible_t* pargs = (args_hsa_isa_compatible_t*) args; \
+	if (pargs->result != NULL) { \
+		pargs->result__ref.val = *pargs->result; \
 	} \
 };
 
@@ -5011,15 +5192,16 @@ struct args_hsa_isa_compatible_t {
  *	)
  */
 #if HAVE_hsa_amd_pointer_info_set_userdata
-struct args_hsa_amd_pointer_info_set_userdata_t {
+typedef struct {
 	void * ptr;
 	void * userdata;
 	hsa_status_t retval;
-};
+} args_hsa_amd_pointer_info_set_userdata_t;
 
 #define GET_ARGS_VALUE_hsa_amd_pointer_info_set_userdata(activity) { \
-	activity->hsa_args.hsa_amd_pointer_info_set_userdata.ptr = (void *) ptr; \
-	activity->hsa_args.hsa_amd_pointer_info_set_userdata.userdata = (void *) userdata; \
+	args_hsa_amd_pointer_info_set_userdata_t* args = (args_hsa_amd_pointer_info_set_userdata_t*) activity->args; \
+	args->ptr = (void *) ptr; \
+	args->userdata = (void *) userdata; \
 };
 
 #endif
@@ -5040,14 +5222,15 @@ struct args_hsa_amd_pointer_info_set_userdata_t {
  *	)
  */
 #if HAVE_hsa_signal_and_screlease
-struct args_hsa_signal_and_screlease_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_and_screlease_t;
 
 #define GET_ARGS_VALUE_hsa_signal_and_screlease(activity) { \
-	activity->hsa_args.hsa_signal_and_screlease.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_and_screlease.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_and_screlease_t* args = (args_hsa_signal_and_screlease_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -5069,7 +5252,7 @@ struct args_hsa_signal_and_screlease_t {
  *	)
  */
 #if HAVE_hsa_queue_cas_write_index_acquire
-struct args_hsa_queue_cas_write_index_acquire_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
@@ -5077,17 +5260,19 @@ struct args_hsa_queue_cas_write_index_acquire_t {
 	uint64_t expected;
 	uint64_t value;
 	uint64_t retval;
-};
+} args_hsa_queue_cas_write_index_acquire_t;
 
 #define GET_ARGS_VALUE_hsa_queue_cas_write_index_acquire(activity) { \
-	activity->hsa_args.hsa_queue_cas_write_index_acquire.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_cas_write_index_acquire.expected = (uint64_t) expected; \
-	activity->hsa_args.hsa_queue_cas_write_index_acquire.value = (uint64_t) value; \
+	args_hsa_queue_cas_write_index_acquire_t* args = (args_hsa_queue_cas_write_index_acquire_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->expected = (uint64_t) expected; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_cas_write_index_acquire(args) { \
-	if (args->hsa_queue_cas_write_index_acquire.queue != NULL) { \
-		args->hsa_queue_cas_write_index_acquire.queue__ref.val = *args->hsa_queue_cas_write_index_acquire.queue; \
+	args_hsa_queue_cas_write_index_acquire_t* pargs = (args_hsa_queue_cas_write_index_acquire_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -5110,7 +5295,7 @@ struct args_hsa_queue_cas_write_index_acquire_t {
  *	)
  */
 #if HAVE_hsa_queue_cas_write_index_relaxed
-struct args_hsa_queue_cas_write_index_relaxed_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
@@ -5118,17 +5303,19 @@ struct args_hsa_queue_cas_write_index_relaxed_t {
 	uint64_t expected;
 	uint64_t value;
 	uint64_t retval;
-};
+} args_hsa_queue_cas_write_index_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_queue_cas_write_index_relaxed(activity) { \
-	activity->hsa_args.hsa_queue_cas_write_index_relaxed.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_cas_write_index_relaxed.expected = (uint64_t) expected; \
-	activity->hsa_args.hsa_queue_cas_write_index_relaxed.value = (uint64_t) value; \
+	args_hsa_queue_cas_write_index_relaxed_t* args = (args_hsa_queue_cas_write_index_relaxed_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->expected = (uint64_t) expected; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_cas_write_index_relaxed(args) { \
-	if (args->hsa_queue_cas_write_index_relaxed.queue != NULL) { \
-		args->hsa_queue_cas_write_index_relaxed.queue__ref.val = *args->hsa_queue_cas_write_index_relaxed.queue; \
+	args_hsa_queue_cas_write_index_relaxed_t* pargs = (args_hsa_queue_cas_write_index_relaxed_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -5150,22 +5337,24 @@ struct args_hsa_queue_cas_write_index_relaxed_t {
  *	)
  */
 #if HAVE_hsa_queue_store_read_index_release
-struct args_hsa_queue_store_read_index_release_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t value;
-};
+} args_hsa_queue_store_read_index_release_t;
 
 #define GET_ARGS_VALUE_hsa_queue_store_read_index_release(activity) { \
-	activity->hsa_args.hsa_queue_store_read_index_release.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_store_read_index_release.value = (uint64_t) value; \
+	args_hsa_queue_store_read_index_release_t* args = (args_hsa_queue_store_read_index_release_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_store_read_index_release(args) { \
-	if (args->hsa_queue_store_read_index_release.queue != NULL) { \
-		args->hsa_queue_store_read_index_release.queue__ref.val = *args->hsa_queue_store_read_index_release.queue; \
+	args_hsa_queue_store_read_index_release_t* pargs = (args_hsa_queue_store_read_index_release_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -5190,7 +5379,7 @@ struct args_hsa_queue_store_read_index_release_t {
  *	)
  */
 #if HAVE_hsa_amd_pointer_info
-struct args_hsa_amd_pointer_info_t {
+typedef struct {
 	void * ptr;
 	hsa_amd_pointer_info_t * info;
 	struct {
@@ -5207,27 +5396,29 @@ struct args_hsa_amd_pointer_info_t {
 		hsa_agent_t val;
 	} accessible__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_pointer_info_t;
 
 #define GET_ARGS_VALUE_hsa_amd_pointer_info(activity) { \
-	activity->hsa_args.hsa_amd_pointer_info.ptr = (void *) ptr; \
-	activity->hsa_args.hsa_amd_pointer_info.info = (hsa_amd_pointer_info_t *) info; \
-	activity->hsa_args.hsa_amd_pointer_info.alloc = (void *(*)(size_t)) alloc; \
-	activity->hsa_args.hsa_amd_pointer_info.num_agents_accessible = (uint32_t *) num_agents_accessible; \
-	activity->hsa_args.hsa_amd_pointer_info.accessible = (hsa_agent_t **) accessible; \
+	args_hsa_amd_pointer_info_t* args = (args_hsa_amd_pointer_info_t*) activity->args; \
+	args->ptr = (void *) ptr; \
+	args->info = (hsa_amd_pointer_info_t *) info; \
+	args->alloc = (void *(*)(size_t)) alloc; \
+	args->num_agents_accessible = (uint32_t *) num_agents_accessible; \
+	args->accessible = (hsa_agent_t **) accessible; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_pointer_info(args) { \
-	if (args->hsa_amd_pointer_info.info != NULL) { \
-		args->hsa_amd_pointer_info.info__ref.val = *args->hsa_amd_pointer_info.info; \
+	args_hsa_amd_pointer_info_t* pargs = (args_hsa_amd_pointer_info_t*) args; \
+	if (pargs->info != NULL) { \
+		pargs->info__ref.val = *pargs->info; \
 	} \
-	if (args->hsa_amd_pointer_info.num_agents_accessible != NULL) { \
-		args->hsa_amd_pointer_info.num_agents_accessible__ref.val = *args->hsa_amd_pointer_info.num_agents_accessible; \
+	if (pargs->num_agents_accessible != NULL) { \
+		pargs->num_agents_accessible__ref.val = *pargs->num_agents_accessible; \
 	} \
-	if (args->hsa_amd_pointer_info.accessible != NULL) { \
-		args->hsa_amd_pointer_info.accessible__ref.ptr1 = *args->hsa_amd_pointer_info.accessible; \
-		if (args->hsa_amd_pointer_info.accessible__ref.ptr1 != NULL) { \
-			args->hsa_amd_pointer_info.accessible__ref.val = **args->hsa_amd_pointer_info.accessible; \
+	if (pargs->accessible != NULL) { \
+		pargs->accessible__ref.ptr1 = *pargs->accessible; \
+		if (pargs->accessible__ref.ptr1 != NULL) { \
+			pargs->accessible__ref.val = **pargs->accessible; \
 		} \
 	} \
 };
@@ -5254,7 +5445,7 @@ struct args_hsa_amd_pointer_info_t {
  *	)
  */
 #if HAVE_hsa_amd_spm_set_dest_buffer
-struct args_hsa_amd_spm_set_dest_buffer_t {
+typedef struct {
 	hsa_agent_t preferred_agent;
 	size_t size_in_bytes;
 	uint32_t * timeout;
@@ -5271,26 +5462,28 @@ struct args_hsa_amd_spm_set_dest_buffer_t {
 		_Bool val;
 	} is_data_loss__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_spm_set_dest_buffer_t;
 
 #define GET_ARGS_VALUE_hsa_amd_spm_set_dest_buffer(activity) { \
-	activity->hsa_args.hsa_amd_spm_set_dest_buffer.preferred_agent = (hsa_agent_t) preferred_agent; \
-	activity->hsa_args.hsa_amd_spm_set_dest_buffer.size_in_bytes = (size_t) size_in_bytes; \
-	activity->hsa_args.hsa_amd_spm_set_dest_buffer.timeout = (uint32_t *) timeout; \
-	activity->hsa_args.hsa_amd_spm_set_dest_buffer.size_copied = (uint32_t *) size_copied; \
-	activity->hsa_args.hsa_amd_spm_set_dest_buffer.dest = (void *) dest; \
-	activity->hsa_args.hsa_amd_spm_set_dest_buffer.is_data_loss = (_Bool *) is_data_loss; \
+	args_hsa_amd_spm_set_dest_buffer_t* args = (args_hsa_amd_spm_set_dest_buffer_t*) activity->args; \
+	args->preferred_agent = (hsa_agent_t) preferred_agent; \
+	args->size_in_bytes = (size_t) size_in_bytes; \
+	args->timeout = (uint32_t *) timeout; \
+	args->size_copied = (uint32_t *) size_copied; \
+	args->dest = (void *) dest; \
+	args->is_data_loss = (_Bool *) is_data_loss; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_spm_set_dest_buffer(args) { \
-	if (args->hsa_amd_spm_set_dest_buffer.timeout != NULL) { \
-		args->hsa_amd_spm_set_dest_buffer.timeout__ref.val = *args->hsa_amd_spm_set_dest_buffer.timeout; \
+	args_hsa_amd_spm_set_dest_buffer_t* pargs = (args_hsa_amd_spm_set_dest_buffer_t*) args; \
+	if (pargs->timeout != NULL) { \
+		pargs->timeout__ref.val = *pargs->timeout; \
 	} \
-	if (args->hsa_amd_spm_set_dest_buffer.size_copied != NULL) { \
-		args->hsa_amd_spm_set_dest_buffer.size_copied__ref.val = *args->hsa_amd_spm_set_dest_buffer.size_copied; \
+	if (pargs->size_copied != NULL) { \
+		pargs->size_copied__ref.val = *pargs->size_copied; \
 	} \
-	if (args->hsa_amd_spm_set_dest_buffer.is_data_loss != NULL) { \
-		args->hsa_amd_spm_set_dest_buffer.is_data_loss__ref.val = *args->hsa_amd_spm_set_dest_buffer.is_data_loss; \
+	if (pargs->is_data_loss != NULL) { \
+		pargs->is_data_loss__ref.val = *pargs->is_data_loss; \
 	} \
 };
 
@@ -5313,7 +5506,7 @@ struct args_hsa_amd_spm_set_dest_buffer_t {
  *	)
  */
 #if HAVE_hsa_amd_vmem_get_access
-struct args_hsa_amd_vmem_get_access_t {
+typedef struct {
 	void * va;
 	hsa_access_permission_t * perms;
 	struct {
@@ -5321,17 +5514,19 @@ struct args_hsa_amd_vmem_get_access_t {
 	} perms__ref;
 	hsa_agent_t agent_handle;
 	hsa_status_t retval;
-};
+} args_hsa_amd_vmem_get_access_t;
 
 #define GET_ARGS_VALUE_hsa_amd_vmem_get_access(activity) { \
-	activity->hsa_args.hsa_amd_vmem_get_access.va = (void *) va; \
-	activity->hsa_args.hsa_amd_vmem_get_access.perms = (hsa_access_permission_t *) perms; \
-	activity->hsa_args.hsa_amd_vmem_get_access.agent_handle = (hsa_agent_t) agent_handle; \
+	args_hsa_amd_vmem_get_access_t* args = (args_hsa_amd_vmem_get_access_t*) activity->args; \
+	args->va = (void *) va; \
+	args->perms = (hsa_access_permission_t *) perms; \
+	args->agent_handle = (hsa_agent_t) agent_handle; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_vmem_get_access(args) { \
-	if (args->hsa_amd_vmem_get_access.perms != NULL) { \
-		args->hsa_amd_vmem_get_access.perms__ref.val = *args->hsa_amd_vmem_get_access.perms; \
+	args_hsa_amd_vmem_get_access_t* pargs = (args_hsa_amd_vmem_get_access_t*) args; \
+	if (pargs->perms != NULL) { \
+		pargs->perms__ref.val = *pargs->perms; \
 	} \
 };
 
@@ -5353,14 +5548,15 @@ struct args_hsa_amd_vmem_get_access_t {
  *	)
  */
 #if HAVE_hsa_signal_silent_store_screlease
-struct args_hsa_signal_silent_store_screlease_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_silent_store_screlease_t;
 
 #define GET_ARGS_VALUE_hsa_signal_silent_store_screlease(activity) { \
-	activity->hsa_args.hsa_signal_silent_store_screlease.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_silent_store_screlease.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_silent_store_screlease_t* args = (args_hsa_signal_silent_store_screlease_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -5381,14 +5577,15 @@ struct args_hsa_signal_silent_store_screlease_t {
  *	)
  */
 #if HAVE_hsa_signal_add_acquire
-struct args_hsa_signal_add_acquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_add_acquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_add_acquire(activity) { \
-	activity->hsa_args.hsa_signal_add_acquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_add_acquire.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_add_acquire_t* args = (args_hsa_signal_add_acquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -5411,7 +5608,7 @@ struct args_hsa_signal_add_acquire_t {
  *	)
  */
 #if HAVE_hsa_executable_create
-struct args_hsa_executable_create_t {
+typedef struct {
 	hsa_profile_t profile;
 	hsa_executable_state_t executable_state;
 	char * options;
@@ -5423,21 +5620,23 @@ struct args_hsa_executable_create_t {
 		hsa_executable_t val;
 	} executable__ref;
 	hsa_status_t retval;
-};
+} args_hsa_executable_create_t;
 
 #define GET_ARGS_VALUE_hsa_executable_create(activity) { \
-	activity->hsa_args.hsa_executable_create.profile = (hsa_profile_t) profile; \
-	activity->hsa_args.hsa_executable_create.executable_state = (hsa_executable_state_t) executable_state; \
-	activity->hsa_args.hsa_executable_create.options = (char *) options; \
-	activity->hsa_args.hsa_executable_create.executable = (hsa_executable_t *) executable; \
+	args_hsa_executable_create_t* args = (args_hsa_executable_create_t*) activity->args; \
+	args->profile = (hsa_profile_t) profile; \
+	args->executable_state = (hsa_executable_state_t) executable_state; \
+	args->options = (char *) options; \
+	args->executable = (hsa_executable_t *) executable; \
 };
 
 #define GET_PTRS_VALUE_hsa_executable_create(args) { \
-	if (args->hsa_executable_create.options != NULL) { \
-		strncpy(args->hsa_executable_create.options__ref.val, args->hsa_executable_create.options, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_executable_create_t* pargs = (args_hsa_executable_create_t*) args; \
+	if (pargs->options != NULL) { \
+		strncpy(pargs->options__ref.val, pargs->options, HSA_STRING_SIZE_MAX-1); \
 	} \
-	if (args->hsa_executable_create.executable != NULL) { \
-		args->hsa_executable_create.executable__ref.val = *args->hsa_executable_create.executable; \
+	if (pargs->executable != NULL) { \
+		pargs->executable__ref.val = *pargs->executable; \
 	} \
 };
 
@@ -5459,14 +5658,15 @@ struct args_hsa_executable_create_t {
  *	)
  */
 #if HAVE_hsa_signal_store_release
-struct args_hsa_signal_store_release_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_store_release_t;
 
 #define GET_ARGS_VALUE_hsa_signal_store_release(activity) { \
-	activity->hsa_args.hsa_signal_store_release.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_store_release.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_store_release_t* args = (args_hsa_signal_store_release_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -5487,14 +5687,15 @@ struct args_hsa_signal_store_release_t {
  *	)
  */
 #if HAVE_hsa_signal_xor_screlease
-struct args_hsa_signal_xor_screlease_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_xor_screlease_t;
 
 #define GET_ARGS_VALUE_hsa_signal_xor_screlease(activity) { \
-	activity->hsa_args.hsa_signal_xor_screlease.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_xor_screlease.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_xor_screlease_t* args = (args_hsa_signal_xor_screlease_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -5516,17 +5717,18 @@ struct args_hsa_signal_xor_screlease_t {
  *	)
  */
 #if HAVE_hsa_executable_iterate_symbols
-struct args_hsa_executable_iterate_symbols_t {
+typedef struct {
 	hsa_executable_t executable;
 	hsa_status_t (* callback)(hsa_executable_t, hsa_executable_symbol_t, void *);
 	void * data;
 	hsa_status_t retval;
-};
+} args_hsa_executable_iterate_symbols_t;
 
 #define GET_ARGS_VALUE_hsa_executable_iterate_symbols(activity) { \
-	activity->hsa_args.hsa_executable_iterate_symbols.executable = (hsa_executable_t) executable; \
-	activity->hsa_args.hsa_executable_iterate_symbols.callback = (hsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *)) callback; \
-	activity->hsa_args.hsa_executable_iterate_symbols.data = (void *) data; \
+	args_hsa_executable_iterate_symbols_t* args = (args_hsa_executable_iterate_symbols_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
+	args->callback = (hsa_status_t (*)(hsa_executable_t, hsa_executable_symbol_t, void *)) callback; \
+	args->data = (void *) data; \
 };
 
 #endif
@@ -5552,7 +5754,7 @@ struct args_hsa_executable_iterate_symbols_t {
  *	)
  */
 #if HAVE_hsa_amd_memory_lock_to_pool
-struct args_hsa_amd_memory_lock_to_pool_t {
+typedef struct {
 	void * host_ptr;
 	size_t size;
 	hsa_agent_t * agents;
@@ -5567,24 +5769,26 @@ struct args_hsa_amd_memory_lock_to_pool_t {
 		void* ptr1;
 	} agent_ptr__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_memory_lock_to_pool_t;
 
 #define GET_ARGS_VALUE_hsa_amd_memory_lock_to_pool(activity) { \
-	activity->hsa_args.hsa_amd_memory_lock_to_pool.host_ptr = (void *) host_ptr; \
-	activity->hsa_args.hsa_amd_memory_lock_to_pool.size = (size_t) size; \
-	activity->hsa_args.hsa_amd_memory_lock_to_pool.agents = (hsa_agent_t *) agents; \
-	activity->hsa_args.hsa_amd_memory_lock_to_pool.num_agent = (int) num_agent; \
-	activity->hsa_args.hsa_amd_memory_lock_to_pool.pool = (hsa_amd_memory_pool_t) pool; \
-	activity->hsa_args.hsa_amd_memory_lock_to_pool.flags = (uint32_t) flags; \
-	activity->hsa_args.hsa_amd_memory_lock_to_pool.agent_ptr = (void **) agent_ptr; \
+	args_hsa_amd_memory_lock_to_pool_t* args = (args_hsa_amd_memory_lock_to_pool_t*) activity->args; \
+	args->host_ptr = (void *) host_ptr; \
+	args->size = (size_t) size; \
+	args->agents = (hsa_agent_t *) agents; \
+	args->num_agent = (int) num_agent; \
+	args->pool = (hsa_amd_memory_pool_t) pool; \
+	args->flags = (uint32_t) flags; \
+	args->agent_ptr = (void **) agent_ptr; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_memory_lock_to_pool(args) { \
-	if (args->hsa_amd_memory_lock_to_pool.agents != NULL) { \
-		args->hsa_amd_memory_lock_to_pool.agents__ref.val = *args->hsa_amd_memory_lock_to_pool.agents; \
+	args_hsa_amd_memory_lock_to_pool_t* pargs = (args_hsa_amd_memory_lock_to_pool_t*) args; \
+	if (pargs->agents != NULL) { \
+		pargs->agents__ref.val = *pargs->agents; \
 	} \
-	if (args->hsa_amd_memory_lock_to_pool.agent_ptr != NULL) { \
-		args->hsa_amd_memory_lock_to_pool.agent_ptr__ref.ptr1 = *args->hsa_amd_memory_lock_to_pool.agent_ptr; \
+	if (pargs->agent_ptr != NULL) { \
+		pargs->agent_ptr__ref.ptr1 = *pargs->agent_ptr; \
 	} \
 };
 
@@ -5609,21 +5813,22 @@ struct args_hsa_amd_memory_lock_to_pool_t {
  *	)
  */
 #if HAVE_hsa_signal_wait_acquire
-struct args_hsa_signal_wait_acquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_condition_t condition;
 	hsa_signal_value_t compare_value;
 	uint64_t timeout_hint;
 	hsa_wait_state_t wait_state_hint;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_wait_acquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_wait_acquire(activity) { \
-	activity->hsa_args.hsa_signal_wait_acquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_wait_acquire.condition = (hsa_signal_condition_t) condition; \
-	activity->hsa_args.hsa_signal_wait_acquire.compare_value = (hsa_signal_value_t) compare_value; \
-	activity->hsa_args.hsa_signal_wait_acquire.timeout_hint = (uint64_t) timeout_hint; \
-	activity->hsa_args.hsa_signal_wait_acquire.wait_state_hint = (hsa_wait_state_t) wait_state_hint; \
+	args_hsa_signal_wait_acquire_t* args = (args_hsa_signal_wait_acquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->condition = (hsa_signal_condition_t) condition; \
+	args->compare_value = (hsa_signal_value_t) compare_value; \
+	args->timeout_hint = (uint64_t) timeout_hint; \
+	args->wait_state_hint = (hsa_wait_state_t) wait_state_hint; \
 };
 
 #endif
@@ -5645,7 +5850,7 @@ struct args_hsa_signal_wait_acquire_t {
  *	)
  */
 #if HAVE_hsa_queue_cas_write_index_scacquire
-struct args_hsa_queue_cas_write_index_scacquire_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
@@ -5653,17 +5858,19 @@ struct args_hsa_queue_cas_write_index_scacquire_t {
 	uint64_t expected;
 	uint64_t value;
 	uint64_t retval;
-};
+} args_hsa_queue_cas_write_index_scacquire_t;
 
 #define GET_ARGS_VALUE_hsa_queue_cas_write_index_scacquire(activity) { \
-	activity->hsa_args.hsa_queue_cas_write_index_scacquire.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_cas_write_index_scacquire.expected = (uint64_t) expected; \
-	activity->hsa_args.hsa_queue_cas_write_index_scacquire.value = (uint64_t) value; \
+	args_hsa_queue_cas_write_index_scacquire_t* args = (args_hsa_queue_cas_write_index_scacquire_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->expected = (uint64_t) expected; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_cas_write_index_scacquire(args) { \
-	if (args->hsa_queue_cas_write_index_scacquire.queue != NULL) { \
-		args->hsa_queue_cas_write_index_scacquire.queue__ref.val = *args->hsa_queue_cas_write_index_scacquire.queue; \
+	args_hsa_queue_cas_write_index_scacquire_t* pargs = (args_hsa_queue_cas_write_index_scacquire_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -5686,7 +5893,7 @@ struct args_hsa_queue_cas_write_index_scacquire_t {
  *	)
  */
 #if HAVE_hsa_code_object_get_symbol
-struct args_hsa_code_object_get_symbol_t {
+typedef struct {
 	hsa_code_object_t code_object;
 	char * symbol_name;
 	struct {
@@ -5697,20 +5904,22 @@ struct args_hsa_code_object_get_symbol_t {
 		hsa_code_symbol_t val;
 	} symbol__ref;
 	hsa_status_t retval;
-};
+} args_hsa_code_object_get_symbol_t;
 
 #define GET_ARGS_VALUE_hsa_code_object_get_symbol(activity) { \
-	activity->hsa_args.hsa_code_object_get_symbol.code_object = (hsa_code_object_t) code_object; \
-	activity->hsa_args.hsa_code_object_get_symbol.symbol_name = (char *) symbol_name; \
-	activity->hsa_args.hsa_code_object_get_symbol.symbol = (hsa_code_symbol_t *) symbol; \
+	args_hsa_code_object_get_symbol_t* args = (args_hsa_code_object_get_symbol_t*) activity->args; \
+	args->code_object = (hsa_code_object_t) code_object; \
+	args->symbol_name = (char *) symbol_name; \
+	args->symbol = (hsa_code_symbol_t *) symbol; \
 };
 
 #define GET_PTRS_VALUE_hsa_code_object_get_symbol(args) { \
-	if (args->hsa_code_object_get_symbol.symbol_name != NULL) { \
-		strncpy(args->hsa_code_object_get_symbol.symbol_name__ref.val, args->hsa_code_object_get_symbol.symbol_name, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_code_object_get_symbol_t* pargs = (args_hsa_code_object_get_symbol_t*) args; \
+	if (pargs->symbol_name != NULL) { \
+		strncpy(pargs->symbol_name__ref.val, pargs->symbol_name, HSA_STRING_SIZE_MAX-1); \
 	} \
-	if (args->hsa_code_object_get_symbol.symbol != NULL) { \
-		args->hsa_code_object_get_symbol.symbol__ref.val = *args->hsa_code_object_get_symbol.symbol; \
+	if (pargs->symbol != NULL) { \
+		pargs->symbol__ref.val = *pargs->symbol; \
 	} \
 };
 
@@ -5731,13 +5940,14 @@ struct args_hsa_code_object_get_symbol_t {
  *	)
  */
 #if HAVE_hsa_signal_group_destroy
-struct args_hsa_signal_group_destroy_t {
+typedef struct {
 	hsa_signal_group_t signal_group;
 	hsa_status_t retval;
-};
+} args_hsa_signal_group_destroy_t;
 
 #define GET_ARGS_VALUE_hsa_signal_group_destroy(activity) { \
-	activity->hsa_args.hsa_signal_group_destroy.signal_group = (hsa_signal_group_t) signal_group; \
+	args_hsa_signal_group_destroy_t* args = (args_hsa_signal_group_destroy_t*) activity->args; \
+	args->signal_group = (hsa_signal_group_t) signal_group; \
 };
 
 #endif
@@ -5761,7 +5971,7 @@ struct args_hsa_signal_group_destroy_t {
  *	)
  */
 #if HAVE_hsa_signal_group_create
-struct args_hsa_signal_group_create_t {
+typedef struct {
 	uint32_t num_signals;
 	hsa_signal_t * signals;
 	struct {
@@ -5777,25 +5987,27 @@ struct args_hsa_signal_group_create_t {
 		hsa_signal_group_t val;
 	} signal_group__ref;
 	hsa_status_t retval;
-};
+} args_hsa_signal_group_create_t;
 
 #define GET_ARGS_VALUE_hsa_signal_group_create(activity) { \
-	activity->hsa_args.hsa_signal_group_create.num_signals = (uint32_t) num_signals; \
-	activity->hsa_args.hsa_signal_group_create.signals = (hsa_signal_t *) signals; \
-	activity->hsa_args.hsa_signal_group_create.num_consumers = (uint32_t) num_consumers; \
-	activity->hsa_args.hsa_signal_group_create.consumers = (hsa_agent_t *) consumers; \
-	activity->hsa_args.hsa_signal_group_create.signal_group = (hsa_signal_group_t *) signal_group; \
+	args_hsa_signal_group_create_t* args = (args_hsa_signal_group_create_t*) activity->args; \
+	args->num_signals = (uint32_t) num_signals; \
+	args->signals = (hsa_signal_t *) signals; \
+	args->num_consumers = (uint32_t) num_consumers; \
+	args->consumers = (hsa_agent_t *) consumers; \
+	args->signal_group = (hsa_signal_group_t *) signal_group; \
 };
 
 #define GET_PTRS_VALUE_hsa_signal_group_create(args) { \
-	if (args->hsa_signal_group_create.signals != NULL) { \
-		args->hsa_signal_group_create.signals__ref.val = *args->hsa_signal_group_create.signals; \
+	args_hsa_signal_group_create_t* pargs = (args_hsa_signal_group_create_t*) args; \
+	if (pargs->signals != NULL) { \
+		pargs->signals__ref.val = *pargs->signals; \
 	} \
-	if (args->hsa_signal_group_create.consumers != NULL) { \
-		args->hsa_signal_group_create.consumers__ref.val = *args->hsa_signal_group_create.consumers; \
+	if (pargs->consumers != NULL) { \
+		pargs->consumers__ref.val = *pargs->consumers; \
 	} \
-	if (args->hsa_signal_group_create.signal_group != NULL) { \
-		args->hsa_signal_group_create.signal_group__ref.val = *args->hsa_signal_group_create.signal_group; \
+	if (pargs->signal_group != NULL) { \
+		pargs->signal_group__ref.val = *pargs->signal_group; \
 	} \
 };
 
@@ -5816,13 +6028,14 @@ struct args_hsa_signal_group_create_t {
  *	)
  */
 #if HAVE_hsa_code_object_reader_destroy
-struct args_hsa_code_object_reader_destroy_t {
+typedef struct {
 	hsa_code_object_reader_t code_object_reader;
 	hsa_status_t retval;
-};
+} args_hsa_code_object_reader_destroy_t;
 
 #define GET_ARGS_VALUE_hsa_code_object_reader_destroy(activity) { \
-	activity->hsa_args.hsa_code_object_reader_destroy.code_object_reader = (hsa_code_object_reader_t) code_object_reader; \
+	args_hsa_code_object_reader_destroy_t* args = (args_hsa_code_object_reader_destroy_t*) activity->args; \
+	args->code_object_reader = (hsa_code_object_reader_t) code_object_reader; \
 };
 
 #endif
@@ -5843,7 +6056,7 @@ struct args_hsa_code_object_reader_destroy_t {
  *	)
  */
 #if HAVE_hsa_extension_get_name
-struct args_hsa_extension_get_name_t {
+typedef struct {
 	uint16_t extension;
 	char ** name;
 	struct {
@@ -5851,18 +6064,20 @@ struct args_hsa_extension_get_name_t {
 		char val[HSA_STRING_SIZE_MAX];
 	} name__ref;
 	hsa_status_t retval;
-};
+} args_hsa_extension_get_name_t;
 
 #define GET_ARGS_VALUE_hsa_extension_get_name(activity) { \
-	activity->hsa_args.hsa_extension_get_name.extension = (uint16_t) extension; \
-	activity->hsa_args.hsa_extension_get_name.name = (char **) name; \
+	args_hsa_extension_get_name_t* args = (args_hsa_extension_get_name_t*) activity->args; \
+	args->extension = (uint16_t) extension; \
+	args->name = (char **) name; \
 };
 
 #define GET_PTRS_VALUE_hsa_extension_get_name(args) { \
-	if (args->hsa_extension_get_name.name != NULL) { \
-		args->hsa_extension_get_name.name__ref.ptr1 = *args->hsa_extension_get_name.name; \
-		if (args->hsa_extension_get_name.name__ref.ptr1 != NULL) { \
-			strncpy(args->hsa_extension_get_name.name__ref.val, args->hsa_extension_get_name.name__ref.ptr1, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_extension_get_name_t* pargs = (args_hsa_extension_get_name_t*) args; \
+	if (pargs->name != NULL) { \
+		pargs->name__ref.ptr1 = *pargs->name; \
+		if (pargs->name__ref.ptr1 != NULL) { \
+			strncpy(pargs->name__ref.val, pargs->name__ref.ptr1, HSA_STRING_SIZE_MAX-1); \
 		} \
 	} \
 };
@@ -5889,7 +6104,7 @@ struct args_hsa_extension_get_name_t {
  *	)
  */
 #if HAVE_hsa_signal_group_wait_any_scacquire
-struct args_hsa_signal_group_wait_any_scacquire_t {
+typedef struct {
 	hsa_signal_group_t signal_group;
 	hsa_signal_condition_t * conditions;
 	struct {
@@ -5909,29 +6124,31 @@ struct args_hsa_signal_group_wait_any_scacquire_t {
 		hsa_signal_value_t val;
 	} value__ref;
 	hsa_status_t retval;
-};
+} args_hsa_signal_group_wait_any_scacquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_group_wait_any_scacquire(activity) { \
-	activity->hsa_args.hsa_signal_group_wait_any_scacquire.signal_group = (hsa_signal_group_t) signal_group; \
-	activity->hsa_args.hsa_signal_group_wait_any_scacquire.conditions = (hsa_signal_condition_t *) conditions; \
-	activity->hsa_args.hsa_signal_group_wait_any_scacquire.compare_values = (hsa_signal_value_t *) compare_values; \
-	activity->hsa_args.hsa_signal_group_wait_any_scacquire.wait_state_hint = (hsa_wait_state_t) wait_state_hint; \
-	activity->hsa_args.hsa_signal_group_wait_any_scacquire.signal = (hsa_signal_t *) signal; \
-	activity->hsa_args.hsa_signal_group_wait_any_scacquire.value = (hsa_signal_value_t *) value; \
+	args_hsa_signal_group_wait_any_scacquire_t* args = (args_hsa_signal_group_wait_any_scacquire_t*) activity->args; \
+	args->signal_group = (hsa_signal_group_t) signal_group; \
+	args->conditions = (hsa_signal_condition_t *) conditions; \
+	args->compare_values = (hsa_signal_value_t *) compare_values; \
+	args->wait_state_hint = (hsa_wait_state_t) wait_state_hint; \
+	args->signal = (hsa_signal_t *) signal; \
+	args->value = (hsa_signal_value_t *) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_signal_group_wait_any_scacquire(args) { \
-	if (args->hsa_signal_group_wait_any_scacquire.conditions != NULL) { \
-		args->hsa_signal_group_wait_any_scacquire.conditions__ref.val = *args->hsa_signal_group_wait_any_scacquire.conditions; \
+	args_hsa_signal_group_wait_any_scacquire_t* pargs = (args_hsa_signal_group_wait_any_scacquire_t*) args; \
+	if (pargs->conditions != NULL) { \
+		pargs->conditions__ref.val = *pargs->conditions; \
 	} \
-	if (args->hsa_signal_group_wait_any_scacquire.compare_values != NULL) { \
-		args->hsa_signal_group_wait_any_scacquire.compare_values__ref.val = *args->hsa_signal_group_wait_any_scacquire.compare_values; \
+	if (pargs->compare_values != NULL) { \
+		pargs->compare_values__ref.val = *pargs->compare_values; \
 	} \
-	if (args->hsa_signal_group_wait_any_scacquire.signal != NULL) { \
-		args->hsa_signal_group_wait_any_scacquire.signal__ref.val = *args->hsa_signal_group_wait_any_scacquire.signal; \
+	if (pargs->signal != NULL) { \
+		pargs->signal__ref.val = *pargs->signal; \
 	} \
-	if (args->hsa_signal_group_wait_any_scacquire.value != NULL) { \
-		args->hsa_signal_group_wait_any_scacquire.value__ref.val = *args->hsa_signal_group_wait_any_scacquire.value; \
+	if (pargs->value != NULL) { \
+		pargs->value__ref.val = *pargs->value; \
 	} \
 };
 
@@ -5953,15 +6170,16 @@ struct args_hsa_signal_group_wait_any_scacquire_t {
  *	)
  */
 #if HAVE_hsa_amd_register_system_event_handler
-struct args_hsa_amd_register_system_event_handler_t {
+typedef struct {
 	hsa_amd_system_event_callback_t callback;
 	void * data;
 	hsa_status_t retval;
-};
+} args_hsa_amd_register_system_event_handler_t;
 
 #define GET_ARGS_VALUE_hsa_amd_register_system_event_handler(activity) { \
-	activity->hsa_args.hsa_amd_register_system_event_handler.callback = (hsa_amd_system_event_callback_t) callback; \
-	activity->hsa_args.hsa_amd_register_system_event_handler.data = (void *) data; \
+	args_hsa_amd_register_system_event_handler_t* args = (args_hsa_amd_register_system_event_handler_t*) activity->args; \
+	args->callback = (hsa_amd_system_event_callback_t) callback; \
+	args->data = (void *) data; \
 };
 
 #endif
@@ -5982,14 +6200,15 @@ struct args_hsa_amd_register_system_event_handler_t {
  *	)
  */
 #if HAVE_hsa_signal_xor_acq_rel
-struct args_hsa_signal_xor_acq_rel_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_xor_acq_rel_t;
 
 #define GET_ARGS_VALUE_hsa_signal_xor_acq_rel(activity) { \
-	activity->hsa_args.hsa_signal_xor_acq_rel.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_xor_acq_rel.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_xor_acq_rel_t* args = (args_hsa_signal_xor_acq_rel_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -6016,7 +6235,7 @@ struct args_hsa_signal_xor_acq_rel_t {
  *	)
  */
 #if HAVE_hsa_queue_create
-struct args_hsa_queue_create_t {
+typedef struct {
 	hsa_agent_t agent;
 	uint32_t size;
 	hsa_queue_type32_t type;
@@ -6030,24 +6249,26 @@ struct args_hsa_queue_create_t {
 		hsa_queue_t val;
 	} queue__ref;
 	hsa_status_t retval;
-};
+} args_hsa_queue_create_t;
 
 #define GET_ARGS_VALUE_hsa_queue_create(activity) { \
-	activity->hsa_args.hsa_queue_create.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_queue_create.size = (uint32_t) size; \
-	activity->hsa_args.hsa_queue_create.type = (hsa_queue_type32_t) type; \
-	activity->hsa_args.hsa_queue_create.callback = (void (*)(hsa_status_t, hsa_queue_t *, void *)) callback; \
-	activity->hsa_args.hsa_queue_create.data = (void *) data; \
-	activity->hsa_args.hsa_queue_create.private_segment_size = (uint32_t) private_segment_size; \
-	activity->hsa_args.hsa_queue_create.group_segment_size = (uint32_t) group_segment_size; \
-	activity->hsa_args.hsa_queue_create.queue = (hsa_queue_t **) queue; \
+	args_hsa_queue_create_t* args = (args_hsa_queue_create_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->size = (uint32_t) size; \
+	args->type = (hsa_queue_type32_t) type; \
+	args->callback = (void (*)(hsa_status_t, hsa_queue_t *, void *)) callback; \
+	args->data = (void *) data; \
+	args->private_segment_size = (uint32_t) private_segment_size; \
+	args->group_segment_size = (uint32_t) group_segment_size; \
+	args->queue = (hsa_queue_t **) queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_create(args) { \
-	if (args->hsa_queue_create.queue != NULL) { \
-		args->hsa_queue_create.queue__ref.ptr1 = *args->hsa_queue_create.queue; \
-		if (args->hsa_queue_create.queue__ref.ptr1 != NULL) { \
-			args->hsa_queue_create.queue__ref.val = **args->hsa_queue_create.queue; \
+	args_hsa_queue_create_t* pargs = (args_hsa_queue_create_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.ptr1 = *pargs->queue; \
+		if (pargs->queue__ref.ptr1 != NULL) { \
+			pargs->queue__ref.val = **pargs->queue; \
 		} \
 	} \
 };
@@ -6070,23 +6291,25 @@ struct args_hsa_queue_create_t {
  *	)
  */
 #if HAVE_hsa_amd_profiling_set_profiler_enabled
-struct args_hsa_amd_profiling_set_profiler_enabled_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	int enable;
 	hsa_status_t retval;
-};
+} args_hsa_amd_profiling_set_profiler_enabled_t;
 
 #define GET_ARGS_VALUE_hsa_amd_profiling_set_profiler_enabled(activity) { \
-	activity->hsa_args.hsa_amd_profiling_set_profiler_enabled.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_amd_profiling_set_profiler_enabled.enable = (int) enable; \
+	args_hsa_amd_profiling_set_profiler_enabled_t* args = (args_hsa_amd_profiling_set_profiler_enabled_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->enable = (int) enable; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_profiling_set_profiler_enabled(args) { \
-	if (args->hsa_amd_profiling_set_profiler_enabled.queue != NULL) { \
-		args->hsa_amd_profiling_set_profiler_enabled.queue__ref.val = *args->hsa_amd_profiling_set_profiler_enabled.queue; \
+	args_hsa_amd_profiling_set_profiler_enabled_t* pargs = (args_hsa_amd_profiling_set_profiler_enabled_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -6109,7 +6332,7 @@ struct args_hsa_amd_profiling_set_profiler_enabled_t {
  *	)
  */
 #if HAVE_hsa_amd_profiling_get_dispatch_time
-struct args_hsa_amd_profiling_get_dispatch_time_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_signal_t signal;
 	hsa_amd_profiling_dispatch_time_t * time;
@@ -6117,17 +6340,19 @@ struct args_hsa_amd_profiling_get_dispatch_time_t {
 		hsa_amd_profiling_dispatch_time_t val;
 	} time__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_profiling_get_dispatch_time_t;
 
 #define GET_ARGS_VALUE_hsa_amd_profiling_get_dispatch_time(activity) { \
-	activity->hsa_args.hsa_amd_profiling_get_dispatch_time.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_amd_profiling_get_dispatch_time.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_amd_profiling_get_dispatch_time.time = (hsa_amd_profiling_dispatch_time_t *) time; \
+	args_hsa_amd_profiling_get_dispatch_time_t* args = (args_hsa_amd_profiling_get_dispatch_time_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->signal = (hsa_signal_t) signal; \
+	args->time = (hsa_amd_profiling_dispatch_time_t *) time; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_profiling_get_dispatch_time(args) { \
-	if (args->hsa_amd_profiling_get_dispatch_time.time != NULL) { \
-		args->hsa_amd_profiling_get_dispatch_time.time__ref.val = *args->hsa_amd_profiling_get_dispatch_time.time; \
+	args_hsa_amd_profiling_get_dispatch_time_t* pargs = (args_hsa_amd_profiling_get_dispatch_time_t*) args; \
+	if (pargs->time != NULL) { \
+		pargs->time__ref.val = *pargs->time; \
 	} \
 };
 
@@ -6150,7 +6375,7 @@ struct args_hsa_amd_profiling_get_dispatch_time_t {
  *	)
  */
 #if HAVE_hsa_amd_ipc_memory_create
-struct args_hsa_amd_ipc_memory_create_t {
+typedef struct {
 	void * ptr;
 	size_t len;
 	hsa_amd_ipc_memory_t * handle;
@@ -6158,17 +6383,19 @@ struct args_hsa_amd_ipc_memory_create_t {
 		hsa_amd_ipc_memory_t val;
 	} handle__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_ipc_memory_create_t;
 
 #define GET_ARGS_VALUE_hsa_amd_ipc_memory_create(activity) { \
-	activity->hsa_args.hsa_amd_ipc_memory_create.ptr = (void *) ptr; \
-	activity->hsa_args.hsa_amd_ipc_memory_create.len = (size_t) len; \
-	activity->hsa_args.hsa_amd_ipc_memory_create.handle = (hsa_amd_ipc_memory_t *) handle; \
+	args_hsa_amd_ipc_memory_create_t* args = (args_hsa_amd_ipc_memory_create_t*) activity->args; \
+	args->ptr = (void *) ptr; \
+	args->len = (size_t) len; \
+	args->handle = (hsa_amd_ipc_memory_t *) handle; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_ipc_memory_create(args) { \
-	if (args->hsa_amd_ipc_memory_create.handle != NULL) { \
-		args->hsa_amd_ipc_memory_create.handle__ref.val = *args->hsa_amd_ipc_memory_create.handle; \
+	args_hsa_amd_ipc_memory_create_t* pargs = (args_hsa_amd_ipc_memory_create_t*) args; \
+	if (pargs->handle != NULL) { \
+		pargs->handle__ref.val = *pargs->handle; \
 	} \
 };
 
@@ -6190,23 +6417,25 @@ struct args_hsa_amd_ipc_memory_create_t {
  *	)
  */
 #if HAVE_hsa_amd_vmem_import_shareable_handle
-struct args_hsa_amd_vmem_import_shareable_handle_t {
+typedef struct {
 	int dmabuf_fd;
 	hsa_amd_vmem_alloc_handle_t * handle;
 	struct {
 		hsa_amd_vmem_alloc_handle_t val;
 	} handle__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_vmem_import_shareable_handle_t;
 
 #define GET_ARGS_VALUE_hsa_amd_vmem_import_shareable_handle(activity) { \
-	activity->hsa_args.hsa_amd_vmem_import_shareable_handle.dmabuf_fd = (int) dmabuf_fd; \
-	activity->hsa_args.hsa_amd_vmem_import_shareable_handle.handle = (hsa_amd_vmem_alloc_handle_t *) handle; \
+	args_hsa_amd_vmem_import_shareable_handle_t* args = (args_hsa_amd_vmem_import_shareable_handle_t*) activity->args; \
+	args->dmabuf_fd = (int) dmabuf_fd; \
+	args->handle = (hsa_amd_vmem_alloc_handle_t *) handle; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_vmem_import_shareable_handle(args) { \
-	if (args->hsa_amd_vmem_import_shareable_handle.handle != NULL) { \
-		args->hsa_amd_vmem_import_shareable_handle.handle__ref.val = *args->hsa_amd_vmem_import_shareable_handle.handle; \
+	args_hsa_amd_vmem_import_shareable_handle_t* pargs = (args_hsa_amd_vmem_import_shareable_handle_t*) args; \
+	if (pargs->handle != NULL) { \
+		pargs->handle__ref.val = *pargs->handle; \
 	} \
 };
 
@@ -6228,23 +6457,25 @@ struct args_hsa_amd_vmem_import_shareable_handle_t {
  *	)
  */
 #if HAVE_hsa_queue_add_write_index_acquire
-struct args_hsa_queue_add_write_index_acquire_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t value;
 	uint64_t retval;
-};
+} args_hsa_queue_add_write_index_acquire_t;
 
 #define GET_ARGS_VALUE_hsa_queue_add_write_index_acquire(activity) { \
-	activity->hsa_args.hsa_queue_add_write_index_acquire.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_add_write_index_acquire.value = (uint64_t) value; \
+	args_hsa_queue_add_write_index_acquire_t* args = (args_hsa_queue_add_write_index_acquire_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_add_write_index_acquire(args) { \
-	if (args->hsa_queue_add_write_index_acquire.queue != NULL) { \
-		args->hsa_queue_add_write_index_acquire.queue__ref.val = *args->hsa_queue_add_write_index_acquire.queue; \
+	args_hsa_queue_add_write_index_acquire_t* pargs = (args_hsa_queue_add_write_index_acquire_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -6267,17 +6498,18 @@ struct args_hsa_queue_add_write_index_acquire_t {
  *	)
  */
 #if HAVE_hsa_amd_register_deallocation_callback
-struct args_hsa_amd_register_deallocation_callback_t {
+typedef struct {
 	void * ptr;
 	hsa_amd_deallocation_callback_t callback;
 	void * user_data;
 	hsa_status_t retval;
-};
+} args_hsa_amd_register_deallocation_callback_t;
 
 #define GET_ARGS_VALUE_hsa_amd_register_deallocation_callback(activity) { \
-	activity->hsa_args.hsa_amd_register_deallocation_callback.ptr = (void *) ptr; \
-	activity->hsa_args.hsa_amd_register_deallocation_callback.callback = (hsa_amd_deallocation_callback_t) callback; \
-	activity->hsa_args.hsa_amd_register_deallocation_callback.user_data = (void *) user_data; \
+	args_hsa_amd_register_deallocation_callback_t* args = (args_hsa_amd_register_deallocation_callback_t*) activity->args; \
+	args->ptr = (void *) ptr; \
+	args->callback = (hsa_amd_deallocation_callback_t) callback; \
+	args->user_data = (void *) user_data; \
 };
 
 #endif
@@ -6306,7 +6538,7 @@ struct args_hsa_amd_register_deallocation_callback_t {
  *	)
  */
 #if HAVE_hsa_ven_amd_pcs_create_from_id
-struct args_hsa_ven_amd_pcs_create_from_id_t {
+typedef struct {
 	uint32_t pcs_id;
 	hsa_agent_t agent;
 	hsa_ven_amd_pcs_method_kind_t method;
@@ -6321,24 +6553,26 @@ struct args_hsa_ven_amd_pcs_create_from_id_t {
 		hsa_ven_amd_pcs_t val;
 	} pc_sampling__ref;
 	hsa_status_t retval;
-};
+} args_hsa_ven_amd_pcs_create_from_id_t;
 
 #define GET_ARGS_VALUE_hsa_ven_amd_pcs_create_from_id(activity) { \
-	activity->hsa_args.hsa_ven_amd_pcs_create_from_id.pcs_id = (uint32_t) pcs_id; \
-	activity->hsa_args.hsa_ven_amd_pcs_create_from_id.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ven_amd_pcs_create_from_id.method = (hsa_ven_amd_pcs_method_kind_t) method; \
-	activity->hsa_args.hsa_ven_amd_pcs_create_from_id.units = (hsa_ven_amd_pcs_units_t) units; \
-	activity->hsa_args.hsa_ven_amd_pcs_create_from_id.interval = (size_t) interval; \
-	activity->hsa_args.hsa_ven_amd_pcs_create_from_id.latency = (size_t) latency; \
-	activity->hsa_args.hsa_ven_amd_pcs_create_from_id.buffer_size = (size_t) buffer_size; \
-	activity->hsa_args.hsa_ven_amd_pcs_create_from_id.data_ready_callback = (hsa_ven_amd_pcs_data_ready_callback_t) data_ready_callback; \
-	activity->hsa_args.hsa_ven_amd_pcs_create_from_id.client_callback_data = (void *) client_callback_data; \
-	activity->hsa_args.hsa_ven_amd_pcs_create_from_id.pc_sampling = (hsa_ven_amd_pcs_t *) pc_sampling; \
+	args_hsa_ven_amd_pcs_create_from_id_t* args = (args_hsa_ven_amd_pcs_create_from_id_t*) activity->args; \
+	args->pcs_id = (uint32_t) pcs_id; \
+	args->agent = (hsa_agent_t) agent; \
+	args->method = (hsa_ven_amd_pcs_method_kind_t) method; \
+	args->units = (hsa_ven_amd_pcs_units_t) units; \
+	args->interval = (size_t) interval; \
+	args->latency = (size_t) latency; \
+	args->buffer_size = (size_t) buffer_size; \
+	args->data_ready_callback = (hsa_ven_amd_pcs_data_ready_callback_t) data_ready_callback; \
+	args->client_callback_data = (void *) client_callback_data; \
+	args->pc_sampling = (hsa_ven_amd_pcs_t *) pc_sampling; \
 };
 
 #define GET_PTRS_VALUE_hsa_ven_amd_pcs_create_from_id(args) { \
-	if (args->hsa_ven_amd_pcs_create_from_id.pc_sampling != NULL) { \
-		args->hsa_ven_amd_pcs_create_from_id.pc_sampling__ref.val = *args->hsa_ven_amd_pcs_create_from_id.pc_sampling; \
+	args_hsa_ven_amd_pcs_create_from_id_t* pargs = (args_hsa_ven_amd_pcs_create_from_id_t*) args; \
+	if (pargs->pc_sampling != NULL) { \
+		pargs->pc_sampling__ref.val = *pargs->pc_sampling; \
 	} \
 };
 
@@ -6360,15 +6594,16 @@ struct args_hsa_ven_amd_pcs_create_from_id_t {
  *	)
  */
 #if HAVE_hsa_signal_exchange_screlease
-struct args_hsa_signal_exchange_screlease_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_exchange_screlease_t;
 
 #define GET_ARGS_VALUE_hsa_signal_exchange_screlease(activity) { \
-	activity->hsa_args.hsa_signal_exchange_screlease.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_exchange_screlease.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_exchange_screlease_t* args = (args_hsa_signal_exchange_screlease_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -6389,14 +6624,15 @@ struct args_hsa_signal_exchange_screlease_t {
  *	)
  */
 #if HAVE_hsa_signal_and_release
-struct args_hsa_signal_and_release_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_and_release_t;
 
 #define GET_ARGS_VALUE_hsa_signal_and_release(activity) { \
-	activity->hsa_args.hsa_signal_and_release.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_and_release.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_and_release_t* args = (args_hsa_signal_and_release_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -6418,7 +6654,7 @@ struct args_hsa_signal_and_release_t {
  *	)
  */
 #if HAVE_hsa_ext_sampler_create
-struct args_hsa_ext_sampler_create_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_ext_sampler_descriptor_t * sampler_descriptor;
 	struct {
@@ -6429,20 +6665,22 @@ struct args_hsa_ext_sampler_create_t {
 		hsa_ext_sampler_t val;
 	} sampler__ref;
 	hsa_status_t retval;
-};
+} args_hsa_ext_sampler_create_t;
 
 #define GET_ARGS_VALUE_hsa_ext_sampler_create(activity) { \
-	activity->hsa_args.hsa_ext_sampler_create.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ext_sampler_create.sampler_descriptor = (hsa_ext_sampler_descriptor_t *) sampler_descriptor; \
-	activity->hsa_args.hsa_ext_sampler_create.sampler = (hsa_ext_sampler_t *) sampler; \
+	args_hsa_ext_sampler_create_t* args = (args_hsa_ext_sampler_create_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->sampler_descriptor = (hsa_ext_sampler_descriptor_t *) sampler_descriptor; \
+	args->sampler = (hsa_ext_sampler_t *) sampler; \
 };
 
 #define GET_PTRS_VALUE_hsa_ext_sampler_create(args) { \
-	if (args->hsa_ext_sampler_create.sampler_descriptor != NULL) { \
-		args->hsa_ext_sampler_create.sampler_descriptor__ref.val = *args->hsa_ext_sampler_create.sampler_descriptor; \
+	args_hsa_ext_sampler_create_t* pargs = (args_hsa_ext_sampler_create_t*) args; \
+	if (pargs->sampler_descriptor != NULL) { \
+		pargs->sampler_descriptor__ref.val = *pargs->sampler_descriptor; \
 	} \
-	if (args->hsa_ext_sampler_create.sampler != NULL) { \
-		args->hsa_ext_sampler_create.sampler__ref.val = *args->hsa_ext_sampler_create.sampler; \
+	if (pargs->sampler != NULL) { \
+		pargs->sampler__ref.val = *pargs->sampler; \
 	} \
 };
 
@@ -6463,13 +6701,14 @@ struct args_hsa_ext_sampler_create_t {
  *	)
  */
 #if HAVE_hsa_ven_amd_pcs_start
-struct args_hsa_ven_amd_pcs_start_t {
+typedef struct {
 	hsa_ven_amd_pcs_t pc_sampling;
 	hsa_status_t retval;
-};
+} args_hsa_ven_amd_pcs_start_t;
 
 #define GET_ARGS_VALUE_hsa_ven_amd_pcs_start(activity) { \
-	activity->hsa_args.hsa_ven_amd_pcs_start.pc_sampling = (hsa_ven_amd_pcs_t) pc_sampling; \
+	args_hsa_ven_amd_pcs_start_t* args = (args_hsa_ven_amd_pcs_start_t*) activity->args; \
+	args->pc_sampling = (hsa_ven_amd_pcs_t) pc_sampling; \
 };
 
 #endif
@@ -6492,7 +6731,7 @@ struct args_hsa_ven_amd_pcs_start_t {
  *	)
  */
 #if HAVE_hsa_executable_readonly_variable_define
-struct args_hsa_executable_readonly_variable_define_t {
+typedef struct {
 	hsa_executable_t executable;
 	hsa_agent_t agent;
 	char * variable_name;
@@ -6501,18 +6740,20 @@ struct args_hsa_executable_readonly_variable_define_t {
 	} variable_name__ref;
 	void * address;
 	hsa_status_t retval;
-};
+} args_hsa_executable_readonly_variable_define_t;
 
 #define GET_ARGS_VALUE_hsa_executable_readonly_variable_define(activity) { \
-	activity->hsa_args.hsa_executable_readonly_variable_define.executable = (hsa_executable_t) executable; \
-	activity->hsa_args.hsa_executable_readonly_variable_define.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_executable_readonly_variable_define.variable_name = (char *) variable_name; \
-	activity->hsa_args.hsa_executable_readonly_variable_define.address = (void *) address; \
+	args_hsa_executable_readonly_variable_define_t* args = (args_hsa_executable_readonly_variable_define_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
+	args->agent = (hsa_agent_t) agent; \
+	args->variable_name = (char *) variable_name; \
+	args->address = (void *) address; \
 };
 
 #define GET_PTRS_VALUE_hsa_executable_readonly_variable_define(args) { \
-	if (args->hsa_executable_readonly_variable_define.variable_name != NULL) { \
-		strncpy(args->hsa_executable_readonly_variable_define.variable_name__ref.val, args->hsa_executable_readonly_variable_define.variable_name, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_executable_readonly_variable_define_t* pargs = (args_hsa_executable_readonly_variable_define_t*) args; \
+	if (pargs->variable_name != NULL) { \
+		strncpy(pargs->variable_name__ref.val, pargs->variable_name, HSA_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -6533,21 +6774,23 @@ struct args_hsa_executable_readonly_variable_define_t {
  *	)
  */
 #if HAVE_hsa_queue_inactivate
-struct args_hsa_queue_inactivate_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	hsa_status_t retval;
-};
+} args_hsa_queue_inactivate_t;
 
 #define GET_ARGS_VALUE_hsa_queue_inactivate(activity) { \
-	activity->hsa_args.hsa_queue_inactivate.queue = (hsa_queue_t *) queue; \
+	args_hsa_queue_inactivate_t* args = (args_hsa_queue_inactivate_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_inactivate(args) { \
-	if (args->hsa_queue_inactivate.queue != NULL) { \
-		args->hsa_queue_inactivate.queue__ref.val = *args->hsa_queue_inactivate.queue; \
+	args_hsa_queue_inactivate_t* pargs = (args_hsa_queue_inactivate_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -6569,14 +6812,15 @@ struct args_hsa_queue_inactivate_t {
  *	)
  */
 #if HAVE_hsa_signal_or_acq_rel
-struct args_hsa_signal_or_acq_rel_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_or_acq_rel_t;
 
 #define GET_ARGS_VALUE_hsa_signal_or_acq_rel(activity) { \
-	activity->hsa_args.hsa_signal_or_acq_rel.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_or_acq_rel.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_or_acq_rel_t* args = (args_hsa_signal_or_acq_rel_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -6599,19 +6843,20 @@ struct args_hsa_signal_or_acq_rel_t {
  *	)
  */
 #if HAVE_hsa_system_get_major_extension_table
-struct args_hsa_system_get_major_extension_table_t {
+typedef struct {
 	uint16_t extension;
 	uint16_t version_major;
 	size_t table_length;
 	void * table;
 	hsa_status_t retval;
-};
+} args_hsa_system_get_major_extension_table_t;
 
 #define GET_ARGS_VALUE_hsa_system_get_major_extension_table(activity) { \
-	activity->hsa_args.hsa_system_get_major_extension_table.extension = (uint16_t) extension; \
-	activity->hsa_args.hsa_system_get_major_extension_table.version_major = (uint16_t) version_major; \
-	activity->hsa_args.hsa_system_get_major_extension_table.table_length = (size_t) table_length; \
-	activity->hsa_args.hsa_system_get_major_extension_table.table = (void *) table; \
+	args_hsa_system_get_major_extension_table_t* args = (args_hsa_system_get_major_extension_table_t*) activity->args; \
+	args->extension = (uint16_t) extension; \
+	args->version_major = (uint16_t) version_major; \
+	args->table_length = (size_t) table_length; \
+	args->table = (void *) table; \
 };
 
 #endif
@@ -6632,22 +6877,24 @@ struct args_hsa_system_get_major_extension_table_t {
  *	)
  */
 #if HAVE_hsa_queue_store_write_index_relaxed
-struct args_hsa_queue_store_write_index_relaxed_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t value;
-};
+} args_hsa_queue_store_write_index_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_queue_store_write_index_relaxed(activity) { \
-	activity->hsa_args.hsa_queue_store_write_index_relaxed.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_store_write_index_relaxed.value = (uint64_t) value; \
+	args_hsa_queue_store_write_index_relaxed_t* args = (args_hsa_queue_store_write_index_relaxed_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_store_write_index_relaxed(args) { \
-	if (args->hsa_queue_store_write_index_relaxed.queue != NULL) { \
-		args->hsa_queue_store_write_index_relaxed.queue__ref.val = *args->hsa_queue_store_write_index_relaxed.queue; \
+	args_hsa_queue_store_write_index_relaxed_t* pargs = (args_hsa_queue_store_write_index_relaxed_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -6672,7 +6919,7 @@ struct args_hsa_queue_store_write_index_relaxed_t {
  *	)
  */
 #if HAVE_hsa_agent_major_extension_supported
-struct args_hsa_agent_major_extension_supported_t {
+typedef struct {
 	uint16_t extension;
 	hsa_agent_t agent;
 	uint16_t version_major;
@@ -6685,22 +6932,24 @@ struct args_hsa_agent_major_extension_supported_t {
 		_Bool val;
 	} result__ref;
 	hsa_status_t retval;
-};
+} args_hsa_agent_major_extension_supported_t;
 
 #define GET_ARGS_VALUE_hsa_agent_major_extension_supported(activity) { \
-	activity->hsa_args.hsa_agent_major_extension_supported.extension = (uint16_t) extension; \
-	activity->hsa_args.hsa_agent_major_extension_supported.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_agent_major_extension_supported.version_major = (uint16_t) version_major; \
-	activity->hsa_args.hsa_agent_major_extension_supported.version_minor = (uint16_t *) version_minor; \
-	activity->hsa_args.hsa_agent_major_extension_supported.result = (_Bool *) result; \
+	args_hsa_agent_major_extension_supported_t* args = (args_hsa_agent_major_extension_supported_t*) activity->args; \
+	args->extension = (uint16_t) extension; \
+	args->agent = (hsa_agent_t) agent; \
+	args->version_major = (uint16_t) version_major; \
+	args->version_minor = (uint16_t *) version_minor; \
+	args->result = (_Bool *) result; \
 };
 
 #define GET_PTRS_VALUE_hsa_agent_major_extension_supported(args) { \
-	if (args->hsa_agent_major_extension_supported.version_minor != NULL) { \
-		args->hsa_agent_major_extension_supported.version_minor__ref.val = *args->hsa_agent_major_extension_supported.version_minor; \
+	args_hsa_agent_major_extension_supported_t* pargs = (args_hsa_agent_major_extension_supported_t*) args; \
+	if (pargs->version_minor != NULL) { \
+		pargs->version_minor__ref.val = *pargs->version_minor; \
 	} \
-	if (args->hsa_agent_major_extension_supported.result != NULL) { \
-		args->hsa_agent_major_extension_supported.result__ref.val = *args->hsa_agent_major_extension_supported.result; \
+	if (pargs->result != NULL) { \
+		pargs->result__ref.val = *pargs->result; \
 	} \
 };
 
@@ -6723,17 +6972,18 @@ struct args_hsa_agent_major_extension_supported_t {
  *	)
  */
 #if HAVE_hsa_amd_memory_migrate
-struct args_hsa_amd_memory_migrate_t {
+typedef struct {
 	void * ptr;
 	hsa_amd_memory_pool_t memory_pool;
 	uint32_t flags;
 	hsa_status_t retval;
-};
+} args_hsa_amd_memory_migrate_t;
 
 #define GET_ARGS_VALUE_hsa_amd_memory_migrate(activity) { \
-	activity->hsa_args.hsa_amd_memory_migrate.ptr = (void *) ptr; \
-	activity->hsa_args.hsa_amd_memory_migrate.memory_pool = (hsa_amd_memory_pool_t) memory_pool; \
-	activity->hsa_args.hsa_amd_memory_migrate.flags = (uint32_t) flags; \
+	args_hsa_amd_memory_migrate_t* args = (args_hsa_amd_memory_migrate_t*) activity->args; \
+	args->ptr = (void *) ptr; \
+	args->memory_pool = (hsa_amd_memory_pool_t) memory_pool; \
+	args->flags = (uint32_t) flags; \
 };
 
 #endif
@@ -6754,23 +7004,25 @@ struct args_hsa_amd_memory_migrate_t {
  *	)
  */
 #if HAVE_hsa_amd_vmem_retain_alloc_handle
-struct args_hsa_amd_vmem_retain_alloc_handle_t {
+typedef struct {
 	hsa_amd_vmem_alloc_handle_t * memory_handle;
 	struct {
 		hsa_amd_vmem_alloc_handle_t val;
 	} memory_handle__ref;
 	void * addr;
 	hsa_status_t retval;
-};
+} args_hsa_amd_vmem_retain_alloc_handle_t;
 
 #define GET_ARGS_VALUE_hsa_amd_vmem_retain_alloc_handle(activity) { \
-	activity->hsa_args.hsa_amd_vmem_retain_alloc_handle.memory_handle = (hsa_amd_vmem_alloc_handle_t *) memory_handle; \
-	activity->hsa_args.hsa_amd_vmem_retain_alloc_handle.addr = (void *) addr; \
+	args_hsa_amd_vmem_retain_alloc_handle_t* args = (args_hsa_amd_vmem_retain_alloc_handle_t*) activity->args; \
+	args->memory_handle = (hsa_amd_vmem_alloc_handle_t *) memory_handle; \
+	args->addr = (void *) addr; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_vmem_retain_alloc_handle(args) { \
-	if (args->hsa_amd_vmem_retain_alloc_handle.memory_handle != NULL) { \
-		args->hsa_amd_vmem_retain_alloc_handle.memory_handle__ref.val = *args->hsa_amd_vmem_retain_alloc_handle.memory_handle; \
+	args_hsa_amd_vmem_retain_alloc_handle_t* pargs = (args_hsa_amd_vmem_retain_alloc_handle_t*) args; \
+	if (pargs->memory_handle != NULL) { \
+		pargs->memory_handle__ref.val = *pargs->memory_handle; \
 	} \
 };
 
@@ -6794,7 +7046,7 @@ struct args_hsa_amd_vmem_retain_alloc_handle_t {
  *	)
  */
 #if HAVE_hsa_amd_vmem_address_reserve
-struct args_hsa_amd_vmem_address_reserve_t {
+typedef struct {
 	void ** va;
 	struct {
 		void* ptr1;
@@ -6803,18 +7055,20 @@ struct args_hsa_amd_vmem_address_reserve_t {
 	uint64_t address;
 	uint64_t flags;
 	hsa_status_t retval;
-};
+} args_hsa_amd_vmem_address_reserve_t;
 
 #define GET_ARGS_VALUE_hsa_amd_vmem_address_reserve(activity) { \
-	activity->hsa_args.hsa_amd_vmem_address_reserve.va = (void **) va; \
-	activity->hsa_args.hsa_amd_vmem_address_reserve.size = (size_t) size; \
-	activity->hsa_args.hsa_amd_vmem_address_reserve.address = (uint64_t) address; \
-	activity->hsa_args.hsa_amd_vmem_address_reserve.flags = (uint64_t) flags; \
+	args_hsa_amd_vmem_address_reserve_t* args = (args_hsa_amd_vmem_address_reserve_t*) activity->args; \
+	args->va = (void **) va; \
+	args->size = (size_t) size; \
+	args->address = (uint64_t) address; \
+	args->flags = (uint64_t) flags; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_vmem_address_reserve(args) { \
-	if (args->hsa_amd_vmem_address_reserve.va != NULL) { \
-		args->hsa_amd_vmem_address_reserve.va__ref.ptr1 = *args->hsa_amd_vmem_address_reserve.va; \
+	args_hsa_amd_vmem_address_reserve_t* pargs = (args_hsa_amd_vmem_address_reserve_t*) args; \
+	if (pargs->va != NULL) { \
+		pargs->va__ref.ptr1 = *pargs->va; \
 	} \
 };
 
@@ -6835,13 +7089,14 @@ struct args_hsa_amd_vmem_address_reserve_t {
  *	)
  */
 #if HAVE_hsa_signal_load_relaxed
-struct args_hsa_signal_load_relaxed_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_load_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_signal_load_relaxed(activity) { \
-	activity->hsa_args.hsa_signal_load_relaxed.signal = (hsa_signal_t) signal; \
+	args_hsa_signal_load_relaxed_t* args = (args_hsa_signal_load_relaxed_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
 };
 
 #endif
@@ -6862,15 +7117,16 @@ struct args_hsa_signal_load_relaxed_t {
  *	)
  */
 #if HAVE_hsa_signal_exchange_scacquire
-struct args_hsa_signal_exchange_scacquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_exchange_scacquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_exchange_scacquire(activity) { \
-	activity->hsa_args.hsa_signal_exchange_scacquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_exchange_scacquire.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_exchange_scacquire_t* args = (args_hsa_signal_exchange_scacquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -6890,13 +7146,14 @@ struct args_hsa_signal_exchange_scacquire_t {
  *	)
  */
 #if HAVE_hsa_code_object_destroy
-struct args_hsa_code_object_destroy_t {
+typedef struct {
 	hsa_code_object_t code_object;
 	hsa_status_t retval;
-};
+} args_hsa_code_object_destroy_t;
 
 #define GET_ARGS_VALUE_hsa_code_object_destroy(activity) { \
-	activity->hsa_args.hsa_code_object_destroy.code_object = (hsa_code_object_t) code_object; \
+	args_hsa_code_object_destroy_t* args = (args_hsa_code_object_destroy_t*) activity->args; \
+	args->code_object = (hsa_code_object_t) code_object; \
 };
 
 #endif
@@ -6920,7 +7177,7 @@ struct args_hsa_code_object_destroy_t {
  *	)
  */
 #if HAVE_hsa_amd_vmem_handle_create
-struct args_hsa_amd_vmem_handle_create_t {
+typedef struct {
 	hsa_amd_memory_pool_t pool;
 	size_t size;
 	hsa_amd_memory_type_t type;
@@ -6930,19 +7187,21 @@ struct args_hsa_amd_vmem_handle_create_t {
 		hsa_amd_vmem_alloc_handle_t val;
 	} memory_handle__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_vmem_handle_create_t;
 
 #define GET_ARGS_VALUE_hsa_amd_vmem_handle_create(activity) { \
-	activity->hsa_args.hsa_amd_vmem_handle_create.pool = (hsa_amd_memory_pool_t) pool; \
-	activity->hsa_args.hsa_amd_vmem_handle_create.size = (size_t) size; \
-	activity->hsa_args.hsa_amd_vmem_handle_create.type = (hsa_amd_memory_type_t) type; \
-	activity->hsa_args.hsa_amd_vmem_handle_create.flags = (uint64_t) flags; \
-	activity->hsa_args.hsa_amd_vmem_handle_create.memory_handle = (hsa_amd_vmem_alloc_handle_t *) memory_handle; \
+	args_hsa_amd_vmem_handle_create_t* args = (args_hsa_amd_vmem_handle_create_t*) activity->args; \
+	args->pool = (hsa_amd_memory_pool_t) pool; \
+	args->size = (size_t) size; \
+	args->type = (hsa_amd_memory_type_t) type; \
+	args->flags = (uint64_t) flags; \
+	args->memory_handle = (hsa_amd_vmem_alloc_handle_t *) memory_handle; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_vmem_handle_create(args) { \
-	if (args->hsa_amd_vmem_handle_create.memory_handle != NULL) { \
-		args->hsa_amd_vmem_handle_create.memory_handle__ref.val = *args->hsa_amd_vmem_handle_create.memory_handle; \
+	args_hsa_amd_vmem_handle_create_t* pargs = (args_hsa_amd_vmem_handle_create_t*) args; \
+	if (pargs->memory_handle != NULL) { \
+		pargs->memory_handle__ref.val = *pargs->memory_handle; \
 	} \
 };
 
@@ -6964,15 +7223,16 @@ struct args_hsa_amd_vmem_handle_create_t {
  *	)
  */
 #if HAVE_hsa_amd_vmem_address_free
-struct args_hsa_amd_vmem_address_free_t {
+typedef struct {
 	void * va;
 	size_t size;
 	hsa_status_t retval;
-};
+} args_hsa_amd_vmem_address_free_t;
 
 #define GET_ARGS_VALUE_hsa_amd_vmem_address_free(activity) { \
-	activity->hsa_args.hsa_amd_vmem_address_free.va = (void *) va; \
-	activity->hsa_args.hsa_amd_vmem_address_free.size = (size_t) size; \
+	args_hsa_amd_vmem_address_free_t* args = (args_hsa_amd_vmem_address_free_t*) activity->args; \
+	args->va = (void *) va; \
+	args->size = (size_t) size; \
 };
 
 #endif
@@ -6993,14 +7253,15 @@ struct args_hsa_amd_vmem_address_free_t {
  *	)
  */
 #if HAVE_hsa_signal_subtract_release
-struct args_hsa_signal_subtract_release_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_subtract_release_t;
 
 #define GET_ARGS_VALUE_hsa_signal_subtract_release(activity) { \
-	activity->hsa_args.hsa_signal_subtract_release.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_subtract_release.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_subtract_release_t* args = (args_hsa_signal_subtract_release_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -7020,21 +7281,23 @@ struct args_hsa_signal_subtract_release_t {
  *	)
  */
 #if HAVE_hsa_queue_load_write_index_scacquire
-struct args_hsa_queue_load_write_index_scacquire_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t retval;
-};
+} args_hsa_queue_load_write_index_scacquire_t;
 
 #define GET_ARGS_VALUE_hsa_queue_load_write_index_scacquire(activity) { \
-	activity->hsa_args.hsa_queue_load_write_index_scacquire.queue = (hsa_queue_t *) queue; \
+	args_hsa_queue_load_write_index_scacquire_t* args = (args_hsa_queue_load_write_index_scacquire_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_load_write_index_scacquire(args) { \
-	if (args->hsa_queue_load_write_index_scacquire.queue != NULL) { \
-		args->hsa_queue_load_write_index_scacquire.queue__ref.val = *args->hsa_queue_load_write_index_scacquire.queue; \
+	args_hsa_queue_load_write_index_scacquire_t* pargs = (args_hsa_queue_load_write_index_scacquire_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -7057,17 +7320,18 @@ struct args_hsa_queue_load_write_index_scacquire_t {
  *	)
  */
 #if HAVE_hsa_code_object_get_info
-struct args_hsa_code_object_get_info_t {
+typedef struct {
 	hsa_code_object_t code_object;
 	hsa_code_object_info_t attribute;
 	void * value;
 	hsa_status_t retval;
-};
+} args_hsa_code_object_get_info_t;
 
 #define GET_ARGS_VALUE_hsa_code_object_get_info(activity) { \
-	activity->hsa_args.hsa_code_object_get_info.code_object = (hsa_code_object_t) code_object; \
-	activity->hsa_args.hsa_code_object_get_info.attribute = (hsa_code_object_info_t) attribute; \
-	activity->hsa_args.hsa_code_object_get_info.value = (void *) value; \
+	args_hsa_code_object_get_info_t* args = (args_hsa_code_object_get_info_t*) activity->args; \
+	args->code_object = (hsa_code_object_t) code_object; \
+	args->attribute = (hsa_code_object_info_t) attribute; \
+	args->value = (void *) value; \
 };
 
 #endif
@@ -7090,7 +7354,7 @@ struct args_hsa_code_object_get_info_t {
  *	)
  */
 #if HAVE_hsa_amd_memory_pool_allocate
-struct args_hsa_amd_memory_pool_allocate_t {
+typedef struct {
 	hsa_amd_memory_pool_t memory_pool;
 	size_t size;
 	uint32_t flags;
@@ -7099,18 +7363,20 @@ struct args_hsa_amd_memory_pool_allocate_t {
 		void* ptr1;
 	} ptr__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_memory_pool_allocate_t;
 
 #define GET_ARGS_VALUE_hsa_amd_memory_pool_allocate(activity) { \
-	activity->hsa_args.hsa_amd_memory_pool_allocate.memory_pool = (hsa_amd_memory_pool_t) memory_pool; \
-	activity->hsa_args.hsa_amd_memory_pool_allocate.size = (size_t) size; \
-	activity->hsa_args.hsa_amd_memory_pool_allocate.flags = (uint32_t) flags; \
-	activity->hsa_args.hsa_amd_memory_pool_allocate.ptr = (void **) ptr; \
+	args_hsa_amd_memory_pool_allocate_t* args = (args_hsa_amd_memory_pool_allocate_t*) activity->args; \
+	args->memory_pool = (hsa_amd_memory_pool_t) memory_pool; \
+	args->size = (size_t) size; \
+	args->flags = (uint32_t) flags; \
+	args->ptr = (void **) ptr; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_memory_pool_allocate(args) { \
-	if (args->hsa_amd_memory_pool_allocate.ptr != NULL) { \
-		args->hsa_amd_memory_pool_allocate.ptr__ref.ptr1 = *args->hsa_amd_memory_pool_allocate.ptr; \
+	args_hsa_amd_memory_pool_allocate_t* pargs = (args_hsa_amd_memory_pool_allocate_t*) args; \
+	if (pargs->ptr != NULL) { \
+		pargs->ptr__ref.ptr1 = *pargs->ptr; \
 	} \
 };
 
@@ -7134,7 +7400,7 @@ struct args_hsa_amd_memory_pool_allocate_t {
  *	)
  */
 #if HAVE_hsa_code_object_get_symbol_from_name
-struct args_hsa_code_object_get_symbol_from_name_t {
+typedef struct {
 	hsa_code_object_t code_object;
 	char * module_name;
 	struct {
@@ -7149,24 +7415,26 @@ struct args_hsa_code_object_get_symbol_from_name_t {
 		hsa_code_symbol_t val;
 	} symbol__ref;
 	hsa_status_t retval;
-};
+} args_hsa_code_object_get_symbol_from_name_t;
 
 #define GET_ARGS_VALUE_hsa_code_object_get_symbol_from_name(activity) { \
-	activity->hsa_args.hsa_code_object_get_symbol_from_name.code_object = (hsa_code_object_t) code_object; \
-	activity->hsa_args.hsa_code_object_get_symbol_from_name.module_name = (char *) module_name; \
-	activity->hsa_args.hsa_code_object_get_symbol_from_name.symbol_name = (char *) symbol_name; \
-	activity->hsa_args.hsa_code_object_get_symbol_from_name.symbol = (hsa_code_symbol_t *) symbol; \
+	args_hsa_code_object_get_symbol_from_name_t* args = (args_hsa_code_object_get_symbol_from_name_t*) activity->args; \
+	args->code_object = (hsa_code_object_t) code_object; \
+	args->module_name = (char *) module_name; \
+	args->symbol_name = (char *) symbol_name; \
+	args->symbol = (hsa_code_symbol_t *) symbol; \
 };
 
 #define GET_PTRS_VALUE_hsa_code_object_get_symbol_from_name(args) { \
-	if (args->hsa_code_object_get_symbol_from_name.module_name != NULL) { \
-		strncpy(args->hsa_code_object_get_symbol_from_name.module_name__ref.val, args->hsa_code_object_get_symbol_from_name.module_name, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_code_object_get_symbol_from_name_t* pargs = (args_hsa_code_object_get_symbol_from_name_t*) args; \
+	if (pargs->module_name != NULL) { \
+		strncpy(pargs->module_name__ref.val, pargs->module_name, HSA_STRING_SIZE_MAX-1); \
 	} \
-	if (args->hsa_code_object_get_symbol_from_name.symbol_name != NULL) { \
-		strncpy(args->hsa_code_object_get_symbol_from_name.symbol_name__ref.val, args->hsa_code_object_get_symbol_from_name.symbol_name, HSA_STRING_SIZE_MAX-1); \
+	if (pargs->symbol_name != NULL) { \
+		strncpy(pargs->symbol_name__ref.val, pargs->symbol_name, HSA_STRING_SIZE_MAX-1); \
 	} \
-	if (args->hsa_code_object_get_symbol_from_name.symbol != NULL) { \
-		args->hsa_code_object_get_symbol_from_name.symbol__ref.val = *args->hsa_code_object_get_symbol_from_name.symbol; \
+	if (pargs->symbol != NULL) { \
+		pargs->symbol__ref.val = *pargs->symbol; \
 	} \
 };
 
@@ -7189,17 +7457,18 @@ struct args_hsa_code_object_get_symbol_from_name_t {
  *	)
  */
 #if HAVE_hsa_agent_iterate_caches
-struct args_hsa_agent_iterate_caches_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_status_t (* callback)(hsa_cache_t, void *);
 	void * data;
 	hsa_status_t retval;
-};
+} args_hsa_agent_iterate_caches_t;
 
 #define GET_ARGS_VALUE_hsa_agent_iterate_caches(activity) { \
-	activity->hsa_args.hsa_agent_iterate_caches.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_agent_iterate_caches.callback = (hsa_status_t (*)(hsa_cache_t, void *)) callback; \
-	activity->hsa_args.hsa_agent_iterate_caches.data = (void *) data; \
+	args_hsa_agent_iterate_caches_t* args = (args_hsa_agent_iterate_caches_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->callback = (hsa_status_t (*)(hsa_cache_t, void *)) callback; \
+	args->data = (void *) data; \
 };
 
 #endif
@@ -7222,7 +7491,7 @@ struct args_hsa_agent_iterate_caches_t {
  *	)
  */
 #if HAVE_hsa_isa_get_round_method
-struct args_hsa_isa_get_round_method_t {
+typedef struct {
 	hsa_isa_t isa;
 	hsa_fp_type_t fp_type;
 	hsa_flush_mode_t flush_mode;
@@ -7231,18 +7500,20 @@ struct args_hsa_isa_get_round_method_t {
 		hsa_round_method_t val;
 	} round_method__ref;
 	hsa_status_t retval;
-};
+} args_hsa_isa_get_round_method_t;
 
 #define GET_ARGS_VALUE_hsa_isa_get_round_method(activity) { \
-	activity->hsa_args.hsa_isa_get_round_method.isa = (hsa_isa_t) isa; \
-	activity->hsa_args.hsa_isa_get_round_method.fp_type = (hsa_fp_type_t) fp_type; \
-	activity->hsa_args.hsa_isa_get_round_method.flush_mode = (hsa_flush_mode_t) flush_mode; \
-	activity->hsa_args.hsa_isa_get_round_method.round_method = (hsa_round_method_t *) round_method; \
+	args_hsa_isa_get_round_method_t* args = (args_hsa_isa_get_round_method_t*) activity->args; \
+	args->isa = (hsa_isa_t) isa; \
+	args->fp_type = (hsa_fp_type_t) fp_type; \
+	args->flush_mode = (hsa_flush_mode_t) flush_mode; \
+	args->round_method = (hsa_round_method_t *) round_method; \
 };
 
 #define GET_PTRS_VALUE_hsa_isa_get_round_method(args) { \
-	if (args->hsa_isa_get_round_method.round_method != NULL) { \
-		args->hsa_isa_get_round_method.round_method__ref.val = *args->hsa_isa_get_round_method.round_method; \
+	args_hsa_isa_get_round_method_t* pargs = (args_hsa_isa_get_round_method_t*) args; \
+	if (pargs->round_method != NULL) { \
+		pargs->round_method__ref.val = *pargs->round_method; \
 	} \
 };
 
@@ -7264,23 +7535,25 @@ struct args_hsa_isa_get_round_method_t {
  *	)
  */
 #if HAVE_hsa_amd_queue_set_priority
-struct args_hsa_amd_queue_set_priority_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	hsa_amd_queue_priority_t priority;
 	hsa_status_t retval;
-};
+} args_hsa_amd_queue_set_priority_t;
 
 #define GET_ARGS_VALUE_hsa_amd_queue_set_priority(activity) { \
-	activity->hsa_args.hsa_amd_queue_set_priority.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_amd_queue_set_priority.priority = (hsa_amd_queue_priority_t) priority; \
+	args_hsa_amd_queue_set_priority_t* args = (args_hsa_amd_queue_set_priority_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->priority = (hsa_amd_queue_priority_t) priority; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_queue_set_priority(args) { \
-	if (args->hsa_amd_queue_set_priority.queue != NULL) { \
-		args->hsa_amd_queue_set_priority.queue__ref.val = *args->hsa_amd_queue_set_priority.queue; \
+	args_hsa_amd_queue_set_priority_t* pargs = (args_hsa_amd_queue_set_priority_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -7302,22 +7575,24 @@ struct args_hsa_amd_queue_set_priority_t {
  *	)
  */
 #if HAVE_hsa_queue_store_read_index_screlease
-struct args_hsa_queue_store_read_index_screlease_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t value;
-};
+} args_hsa_queue_store_read_index_screlease_t;
 
 #define GET_ARGS_VALUE_hsa_queue_store_read_index_screlease(activity) { \
-	activity->hsa_args.hsa_queue_store_read_index_screlease.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_store_read_index_screlease.value = (uint64_t) value; \
+	args_hsa_queue_store_read_index_screlease_t* args = (args_hsa_queue_store_read_index_screlease_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_store_read_index_screlease(args) { \
-	if (args->hsa_queue_store_read_index_screlease.queue != NULL) { \
-		args->hsa_queue_store_read_index_screlease.queue__ref.val = *args->hsa_queue_store_read_index_screlease.queue; \
+	args_hsa_queue_store_read_index_screlease_t* pargs = (args_hsa_queue_store_read_index_screlease_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -7340,7 +7615,7 @@ struct args_hsa_queue_store_read_index_screlease_t {
  *	)
  */
 #if HAVE_hsa_amd_vmem_get_alloc_properties_from_handle
-struct args_hsa_amd_vmem_get_alloc_properties_from_handle_t {
+typedef struct {
 	hsa_amd_vmem_alloc_handle_t memory_handle;
 	hsa_amd_memory_pool_t * pool;
 	struct {
@@ -7351,20 +7626,22 @@ struct args_hsa_amd_vmem_get_alloc_properties_from_handle_t {
 		hsa_amd_memory_type_t val;
 	} type__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_vmem_get_alloc_properties_from_handle_t;
 
 #define GET_ARGS_VALUE_hsa_amd_vmem_get_alloc_properties_from_handle(activity) { \
-	activity->hsa_args.hsa_amd_vmem_get_alloc_properties_from_handle.memory_handle = (hsa_amd_vmem_alloc_handle_t) memory_handle; \
-	activity->hsa_args.hsa_amd_vmem_get_alloc_properties_from_handle.pool = (hsa_amd_memory_pool_t *) pool; \
-	activity->hsa_args.hsa_amd_vmem_get_alloc_properties_from_handle.type = (hsa_amd_memory_type_t *) type; \
+	args_hsa_amd_vmem_get_alloc_properties_from_handle_t* args = (args_hsa_amd_vmem_get_alloc_properties_from_handle_t*) activity->args; \
+	args->memory_handle = (hsa_amd_vmem_alloc_handle_t) memory_handle; \
+	args->pool = (hsa_amd_memory_pool_t *) pool; \
+	args->type = (hsa_amd_memory_type_t *) type; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_vmem_get_alloc_properties_from_handle(args) { \
-	if (args->hsa_amd_vmem_get_alloc_properties_from_handle.pool != NULL) { \
-		args->hsa_amd_vmem_get_alloc_properties_from_handle.pool__ref.val = *args->hsa_amd_vmem_get_alloc_properties_from_handle.pool; \
+	args_hsa_amd_vmem_get_alloc_properties_from_handle_t* pargs = (args_hsa_amd_vmem_get_alloc_properties_from_handle_t*) args; \
+	if (pargs->pool != NULL) { \
+		pargs->pool__ref.val = *pargs->pool; \
 	} \
-	if (args->hsa_amd_vmem_get_alloc_properties_from_handle.type != NULL) { \
-		args->hsa_amd_vmem_get_alloc_properties_from_handle.type__ref.val = *args->hsa_amd_vmem_get_alloc_properties_from_handle.type; \
+	if (pargs->type != NULL) { \
+		pargs->type__ref.val = *pargs->type; \
 	} \
 };
 
@@ -7386,7 +7663,7 @@ struct args_hsa_amd_vmem_get_alloc_properties_from_handle_t {
  *	)
  */
 #if HAVE_hsa_amd_ipc_signal_attach
-struct args_hsa_amd_ipc_signal_attach_t {
+typedef struct {
 	hsa_amd_ipc_signal_t * handle;
 	struct {
 		hsa_amd_ipc_signal_t val;
@@ -7396,19 +7673,21 @@ struct args_hsa_amd_ipc_signal_attach_t {
 		hsa_signal_t val;
 	} signal__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_ipc_signal_attach_t;
 
 #define GET_ARGS_VALUE_hsa_amd_ipc_signal_attach(activity) { \
-	activity->hsa_args.hsa_amd_ipc_signal_attach.handle = (hsa_amd_ipc_signal_t *) handle; \
-	activity->hsa_args.hsa_amd_ipc_signal_attach.signal = (hsa_signal_t *) signal; \
+	args_hsa_amd_ipc_signal_attach_t* args = (args_hsa_amd_ipc_signal_attach_t*) activity->args; \
+	args->handle = (hsa_amd_ipc_signal_t *) handle; \
+	args->signal = (hsa_signal_t *) signal; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_ipc_signal_attach(args) { \
-	if (args->hsa_amd_ipc_signal_attach.handle != NULL) { \
-		args->hsa_amd_ipc_signal_attach.handle__ref.val = *args->hsa_amd_ipc_signal_attach.handle; \
+	args_hsa_amd_ipc_signal_attach_t* pargs = (args_hsa_amd_ipc_signal_attach_t*) args; \
+	if (pargs->handle != NULL) { \
+		pargs->handle__ref.val = *pargs->handle; \
 	} \
-	if (args->hsa_amd_ipc_signal_attach.signal != NULL) { \
-		args->hsa_amd_ipc_signal_attach.signal__ref.val = *args->hsa_amd_ipc_signal_attach.signal; \
+	if (pargs->signal != NULL) { \
+		pargs->signal__ref.val = *pargs->signal; \
 	} \
 };
 
@@ -7430,14 +7709,15 @@ struct args_hsa_amd_ipc_signal_attach_t {
  *	)
  */
 #if HAVE_hsa_signal_and_acq_rel
-struct args_hsa_signal_and_acq_rel_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_and_acq_rel_t;
 
 #define GET_ARGS_VALUE_hsa_signal_and_acq_rel(activity) { \
-	activity->hsa_args.hsa_signal_and_acq_rel.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_and_acq_rel.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_and_acq_rel_t* args = (args_hsa_signal_and_acq_rel_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -7457,13 +7737,14 @@ struct args_hsa_signal_and_acq_rel_t {
  *	)
  */
 #if HAVE_hsa_signal_load_acquire
-struct args_hsa_signal_load_acquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_load_acquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_load_acquire(activity) { \
-	activity->hsa_args.hsa_signal_load_acquire.signal = (hsa_signal_t) signal; \
+	args_hsa_signal_load_acquire_t* args = (args_hsa_signal_load_acquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
 };
 
 #endif
@@ -7490,7 +7771,7 @@ struct args_hsa_signal_load_acquire_t {
  *	)
  */
 #if HAVE_hsa_amd_memory_async_copy
-struct args_hsa_amd_memory_async_copy_t {
+typedef struct {
 	void * dst;
 	hsa_agent_t dst_agent;
 	void * src;
@@ -7503,22 +7784,24 @@ struct args_hsa_amd_memory_async_copy_t {
 	} dep_signals__ref;
 	hsa_signal_t completion_signal;
 	hsa_status_t retval;
-};
+} args_hsa_amd_memory_async_copy_t;
 
 #define GET_ARGS_VALUE_hsa_amd_memory_async_copy(activity) { \
-	activity->hsa_args.hsa_amd_memory_async_copy.dst = (void *) dst; \
-	activity->hsa_args.hsa_amd_memory_async_copy.dst_agent = (hsa_agent_t) dst_agent; \
-	activity->hsa_args.hsa_amd_memory_async_copy.src = (void *) src; \
-	activity->hsa_args.hsa_amd_memory_async_copy.src_agent = (hsa_agent_t) src_agent; \
-	activity->hsa_args.hsa_amd_memory_async_copy.size = (size_t) size; \
-	activity->hsa_args.hsa_amd_memory_async_copy.num_dep_signals = (uint32_t) num_dep_signals; \
-	activity->hsa_args.hsa_amd_memory_async_copy.dep_signals = (hsa_signal_t *) dep_signals; \
-	activity->hsa_args.hsa_amd_memory_async_copy.completion_signal = (hsa_signal_t) completion_signal; \
+	args_hsa_amd_memory_async_copy_t* args = (args_hsa_amd_memory_async_copy_t*) activity->args; \
+	args->dst = (void *) dst; \
+	args->dst_agent = (hsa_agent_t) dst_agent; \
+	args->src = (void *) src; \
+	args->src_agent = (hsa_agent_t) src_agent; \
+	args->size = (size_t) size; \
+	args->num_dep_signals = (uint32_t) num_dep_signals; \
+	args->dep_signals = (hsa_signal_t *) dep_signals; \
+	args->completion_signal = (hsa_signal_t) completion_signal; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_memory_async_copy(args) { \
-	if (args->hsa_amd_memory_async_copy.dep_signals != NULL) { \
-		args->hsa_amd_memory_async_copy.dep_signals__ref.val = *args->hsa_amd_memory_async_copy.dep_signals; \
+	args_hsa_amd_memory_async_copy_t* pargs = (args_hsa_amd_memory_async_copy_t*) args; \
+	if (pargs->dep_signals != NULL) { \
+		pargs->dep_signals__ref.val = *pargs->dep_signals; \
 	} \
 };
 
@@ -7540,15 +7823,16 @@ struct args_hsa_amd_memory_async_copy_t {
  *	)
  */
 #if HAVE_hsa_signal_exchange_acq_rel
-struct args_hsa_signal_exchange_acq_rel_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_exchange_acq_rel_t;
 
 #define GET_ARGS_VALUE_hsa_signal_exchange_acq_rel(activity) { \
-	activity->hsa_args.hsa_signal_exchange_acq_rel.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_exchange_acq_rel.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_exchange_acq_rel_t* args = (args_hsa_signal_exchange_acq_rel_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -7570,7 +7854,7 @@ struct args_hsa_signal_exchange_acq_rel_t {
  *	)
  */
 #if HAVE_hsa_executable_global_variable_define
-struct args_hsa_executable_global_variable_define_t {
+typedef struct {
 	hsa_executable_t executable;
 	char * variable_name;
 	struct {
@@ -7578,17 +7862,19 @@ struct args_hsa_executable_global_variable_define_t {
 	} variable_name__ref;
 	void * address;
 	hsa_status_t retval;
-};
+} args_hsa_executable_global_variable_define_t;
 
 #define GET_ARGS_VALUE_hsa_executable_global_variable_define(activity) { \
-	activity->hsa_args.hsa_executable_global_variable_define.executable = (hsa_executable_t) executable; \
-	activity->hsa_args.hsa_executable_global_variable_define.variable_name = (char *) variable_name; \
-	activity->hsa_args.hsa_executable_global_variable_define.address = (void *) address; \
+	args_hsa_executable_global_variable_define_t* args = (args_hsa_executable_global_variable_define_t*) activity->args; \
+	args->executable = (hsa_executable_t) executable; \
+	args->variable_name = (char *) variable_name; \
+	args->address = (void *) address; \
 };
 
 #define GET_PTRS_VALUE_hsa_executable_global_variable_define(args) { \
-	if (args->hsa_executable_global_variable_define.variable_name != NULL) { \
-		strncpy(args->hsa_executable_global_variable_define.variable_name__ref.val, args->hsa_executable_global_variable_define.variable_name, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_executable_global_variable_define_t* pargs = (args_hsa_executable_global_variable_define_t*) args; \
+	if (pargs->variable_name != NULL) { \
+		strncpy(pargs->variable_name__ref.val, pargs->variable_name, HSA_STRING_SIZE_MAX-1); \
 	} \
 };
 
@@ -7608,9 +7894,9 @@ struct args_hsa_executable_global_variable_define_t {
  *	)
  */
 #if HAVE_hsa_shut_down
-struct args_hsa_shut_down_t {
+typedef struct {
 	hsa_status_t retval;
-};
+} args_hsa_shut_down_t;
 
 #endif
 
@@ -7633,7 +7919,7 @@ struct args_hsa_shut_down_t {
  *	)
  */
 #if HAVE_hsa_amd_signal_create
-struct args_hsa_amd_signal_create_t {
+typedef struct {
 	hsa_signal_value_t initial_value;
 	uint32_t num_consumers;
 	hsa_agent_t * consumers;
@@ -7646,22 +7932,24 @@ struct args_hsa_amd_signal_create_t {
 		hsa_signal_t val;
 	} signal__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_signal_create_t;
 
 #define GET_ARGS_VALUE_hsa_amd_signal_create(activity) { \
-	activity->hsa_args.hsa_amd_signal_create.initial_value = (hsa_signal_value_t) initial_value; \
-	activity->hsa_args.hsa_amd_signal_create.num_consumers = (uint32_t) num_consumers; \
-	activity->hsa_args.hsa_amd_signal_create.consumers = (hsa_agent_t *) consumers; \
-	activity->hsa_args.hsa_amd_signal_create.attributes = (uint64_t) attributes; \
-	activity->hsa_args.hsa_amd_signal_create.signal = (hsa_signal_t *) signal; \
+	args_hsa_amd_signal_create_t* args = (args_hsa_amd_signal_create_t*) activity->args; \
+	args->initial_value = (hsa_signal_value_t) initial_value; \
+	args->num_consumers = (uint32_t) num_consumers; \
+	args->consumers = (hsa_agent_t *) consumers; \
+	args->attributes = (uint64_t) attributes; \
+	args->signal = (hsa_signal_t *) signal; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_signal_create(args) { \
-	if (args->hsa_amd_signal_create.consumers != NULL) { \
-		args->hsa_amd_signal_create.consumers__ref.val = *args->hsa_amd_signal_create.consumers; \
+	args_hsa_amd_signal_create_t* pargs = (args_hsa_amd_signal_create_t*) args; \
+	if (pargs->consumers != NULL) { \
+		pargs->consumers__ref.val = *pargs->consumers; \
 	} \
-	if (args->hsa_amd_signal_create.signal != NULL) { \
-		args->hsa_amd_signal_create.signal__ref.val = *args->hsa_amd_signal_create.signal; \
+	if (pargs->signal != NULL) { \
+		pargs->signal__ref.val = *pargs->signal; \
 	} \
 };
 
@@ -7682,13 +7970,14 @@ struct args_hsa_amd_signal_create_t {
  *	)
  */
 #if HAVE_hsa_ven_amd_pcs_stop
-struct args_hsa_ven_amd_pcs_stop_t {
+typedef struct {
 	hsa_ven_amd_pcs_t pc_sampling;
 	hsa_status_t retval;
-};
+} args_hsa_ven_amd_pcs_stop_t;
 
 #define GET_ARGS_VALUE_hsa_ven_amd_pcs_stop(activity) { \
-	activity->hsa_args.hsa_ven_amd_pcs_stop.pc_sampling = (hsa_ven_amd_pcs_t) pc_sampling; \
+	args_hsa_ven_amd_pcs_stop_t* args = (args_hsa_ven_amd_pcs_stop_t*) activity->args; \
+	args->pc_sampling = (hsa_ven_amd_pcs_t) pc_sampling; \
 };
 
 #endif
@@ -7708,13 +7997,14 @@ struct args_hsa_ven_amd_pcs_stop_t {
  *	)
  */
 #if HAVE_hsa_amd_memory_unlock
-struct args_hsa_amd_memory_unlock_t {
+typedef struct {
 	void * host_ptr;
 	hsa_status_t retval;
-};
+} args_hsa_amd_memory_unlock_t;
 
 #define GET_ARGS_VALUE_hsa_amd_memory_unlock(activity) { \
-	activity->hsa_args.hsa_amd_memory_unlock.host_ptr = (void *) host_ptr; \
+	args_hsa_amd_memory_unlock_t* args = (args_hsa_amd_memory_unlock_t*) activity->args; \
+	args->host_ptr = (void *) host_ptr; \
 };
 
 #endif
@@ -7739,7 +8029,7 @@ struct args_hsa_amd_memory_unlock_t {
  *	)
  */
 #if HAVE_hsa_amd_image_create
-struct args_hsa_amd_image_create_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_ext_image_descriptor_t * image_descriptor;
 	struct {
@@ -7756,26 +8046,28 @@ struct args_hsa_amd_image_create_t {
 		hsa_ext_image_t val;
 	} image__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_image_create_t;
 
 #define GET_ARGS_VALUE_hsa_amd_image_create(activity) { \
-	activity->hsa_args.hsa_amd_image_create.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_amd_image_create.image_descriptor = (hsa_ext_image_descriptor_t *) image_descriptor; \
-	activity->hsa_args.hsa_amd_image_create.image_layout = (hsa_amd_image_descriptor_t *) image_layout; \
-	activity->hsa_args.hsa_amd_image_create.image_data = (void *) image_data; \
-	activity->hsa_args.hsa_amd_image_create.access_permission = (hsa_access_permission_t) access_permission; \
-	activity->hsa_args.hsa_amd_image_create.image = (hsa_ext_image_t *) image; \
+	args_hsa_amd_image_create_t* args = (args_hsa_amd_image_create_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->image_descriptor = (hsa_ext_image_descriptor_t *) image_descriptor; \
+	args->image_layout = (hsa_amd_image_descriptor_t *) image_layout; \
+	args->image_data = (void *) image_data; \
+	args->access_permission = (hsa_access_permission_t) access_permission; \
+	args->image = (hsa_ext_image_t *) image; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_image_create(args) { \
-	if (args->hsa_amd_image_create.image_descriptor != NULL) { \
-		args->hsa_amd_image_create.image_descriptor__ref.val = *args->hsa_amd_image_create.image_descriptor; \
+	args_hsa_amd_image_create_t* pargs = (args_hsa_amd_image_create_t*) args; \
+	if (pargs->image_descriptor != NULL) { \
+		pargs->image_descriptor__ref.val = *pargs->image_descriptor; \
 	} \
-	if (args->hsa_amd_image_create.image_layout != NULL) { \
-		args->hsa_amd_image_create.image_layout__ref.val = *args->hsa_amd_image_create.image_layout; \
+	if (pargs->image_layout != NULL) { \
+		pargs->image_layout__ref.val = *pargs->image_layout; \
 	} \
-	if (args->hsa_amd_image_create.image != NULL) { \
-		args->hsa_amd_image_create.image__ref.val = *args->hsa_amd_image_create.image; \
+	if (pargs->image != NULL) { \
+		pargs->image__ref.val = *pargs->image; \
 	} \
 };
 
@@ -7796,13 +8088,14 @@ struct args_hsa_amd_image_create_t {
  *	)
  */
 #if HAVE_hsa_amd_interop_unmap_buffer
-struct args_hsa_amd_interop_unmap_buffer_t {
+typedef struct {
 	void * ptr;
 	hsa_status_t retval;
-};
+} args_hsa_amd_interop_unmap_buffer_t;
 
 #define GET_ARGS_VALUE_hsa_amd_interop_unmap_buffer(activity) { \
-	activity->hsa_args.hsa_amd_interop_unmap_buffer.ptr = (void *) ptr; \
+	args_hsa_amd_interop_unmap_buffer_t* args = (args_hsa_amd_interop_unmap_buffer_t*) activity->args; \
+	args->ptr = (void *) ptr; \
 };
 
 #endif
@@ -7823,14 +8116,15 @@ struct args_hsa_amd_interop_unmap_buffer_t {
  *	)
  */
 #if HAVE_hsa_signal_or_screlease
-struct args_hsa_signal_or_screlease_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_or_screlease_t;
 
 #define GET_ARGS_VALUE_hsa_signal_or_screlease(activity) { \
-	activity->hsa_args.hsa_signal_or_screlease.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_or_screlease.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_or_screlease_t* args = (args_hsa_signal_or_screlease_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -7850,13 +8144,14 @@ struct args_hsa_signal_or_screlease_t {
  *	)
  */
 #if HAVE_hsa_signal_destroy
-struct args_hsa_signal_destroy_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_status_t retval;
-};
+} args_hsa_signal_destroy_t;
 
 #define GET_ARGS_VALUE_hsa_signal_destroy(activity) { \
-	activity->hsa_args.hsa_signal_destroy.signal = (hsa_signal_t) signal; \
+	args_hsa_signal_destroy_t* args = (args_hsa_signal_destroy_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
 };
 
 #endif
@@ -7877,15 +8172,16 @@ struct args_hsa_signal_destroy_t {
  *	)
  */
 #if HAVE_hsa_ext_image_destroy
-struct args_hsa_ext_image_destroy_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_ext_image_t image;
 	hsa_status_t retval;
-};
+} args_hsa_ext_image_destroy_t;
 
 #define GET_ARGS_VALUE_hsa_ext_image_destroy(activity) { \
-	activity->hsa_args.hsa_ext_image_destroy.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ext_image_destroy.image = (hsa_ext_image_t) image; \
+	args_hsa_ext_image_destroy_t* args = (args_hsa_ext_image_destroy_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->image = (hsa_ext_image_t) image; \
 };
 
 #endif
@@ -7908,7 +8204,7 @@ struct args_hsa_ext_image_destroy_t {
  *	)
  */
 #if HAVE_hsa_amd_vmem_set_access
-struct args_hsa_amd_vmem_set_access_t {
+typedef struct {
 	void * va;
 	size_t size;
 	hsa_amd_memory_access_desc_t * desc;
@@ -7917,18 +8213,20 @@ struct args_hsa_amd_vmem_set_access_t {
 	} desc__ref;
 	size_t desc_cnt;
 	hsa_status_t retval;
-};
+} args_hsa_amd_vmem_set_access_t;
 
 #define GET_ARGS_VALUE_hsa_amd_vmem_set_access(activity) { \
-	activity->hsa_args.hsa_amd_vmem_set_access.va = (void *) va; \
-	activity->hsa_args.hsa_amd_vmem_set_access.size = (size_t) size; \
-	activity->hsa_args.hsa_amd_vmem_set_access.desc = (hsa_amd_memory_access_desc_t *) desc; \
-	activity->hsa_args.hsa_amd_vmem_set_access.desc_cnt = (size_t) desc_cnt; \
+	args_hsa_amd_vmem_set_access_t* args = (args_hsa_amd_vmem_set_access_t*) activity->args; \
+	args->va = (void *) va; \
+	args->size = (size_t) size; \
+	args->desc = (hsa_amd_memory_access_desc_t *) desc; \
+	args->desc_cnt = (size_t) desc_cnt; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_vmem_set_access(args) { \
-	if (args->hsa_amd_vmem_set_access.desc != NULL) { \
-		args->hsa_amd_vmem_set_access.desc__ref.val = *args->hsa_amd_vmem_set_access.desc; \
+	args_hsa_amd_vmem_set_access_t* pargs = (args_hsa_amd_vmem_set_access_t*) args; \
+	if (pargs->desc != NULL) { \
+		pargs->desc__ref.val = *pargs->desc; \
 	} \
 };
 
@@ -7950,14 +8248,15 @@ struct args_hsa_amd_vmem_set_access_t {
  *	)
  */
 #if HAVE_hsa_signal_and_acquire
-struct args_hsa_signal_and_acquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_and_acquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_and_acquire(activity) { \
-	activity->hsa_args.hsa_signal_and_acquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_and_acquire.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_and_acquire_t* args = (args_hsa_signal_and_acquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -7978,15 +8277,16 @@ struct args_hsa_signal_and_acquire_t {
  *	)
  */
 #if HAVE_hsa_memory_deregister
-struct args_hsa_memory_deregister_t {
+typedef struct {
 	void * ptr;
 	size_t size;
 	hsa_status_t retval;
-};
+} args_hsa_memory_deregister_t;
 
 #define GET_ARGS_VALUE_hsa_memory_deregister(activity) { \
-	activity->hsa_args.hsa_memory_deregister.ptr = (void *) ptr; \
-	activity->hsa_args.hsa_memory_deregister.size = (size_t) size; \
+	args_hsa_memory_deregister_t* args = (args_hsa_memory_deregister_t*) activity->args; \
+	args->ptr = (void *) ptr; \
+	args->size = (size_t) size; \
 };
 
 #endif
@@ -8008,7 +8308,7 @@ struct args_hsa_memory_deregister_t {
  *	)
  */
 #if HAVE_hsa_amd_profiling_convert_tick_to_system_domain
-struct args_hsa_amd_profiling_convert_tick_to_system_domain_t {
+typedef struct {
 	hsa_agent_t agent;
 	uint64_t agent_tick;
 	uint64_t * system_tick;
@@ -8016,17 +8316,19 @@ struct args_hsa_amd_profiling_convert_tick_to_system_domain_t {
 		uint64_t val;
 	} system_tick__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_profiling_convert_tick_to_system_domain_t;
 
 #define GET_ARGS_VALUE_hsa_amd_profiling_convert_tick_to_system_domain(activity) { \
-	activity->hsa_args.hsa_amd_profiling_convert_tick_to_system_domain.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_amd_profiling_convert_tick_to_system_domain.agent_tick = (uint64_t) agent_tick; \
-	activity->hsa_args.hsa_amd_profiling_convert_tick_to_system_domain.system_tick = (uint64_t *) system_tick; \
+	args_hsa_amd_profiling_convert_tick_to_system_domain_t* args = (args_hsa_amd_profiling_convert_tick_to_system_domain_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->agent_tick = (uint64_t) agent_tick; \
+	args->system_tick = (uint64_t *) system_tick; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_profiling_convert_tick_to_system_domain(args) { \
-	if (args->hsa_amd_profiling_convert_tick_to_system_domain.system_tick != NULL) { \
-		args->hsa_amd_profiling_convert_tick_to_system_domain.system_tick__ref.val = *args->hsa_amd_profiling_convert_tick_to_system_domain.system_tick; \
+	args_hsa_amd_profiling_convert_tick_to_system_domain_t* pargs = (args_hsa_amd_profiling_convert_tick_to_system_domain_t*) args; \
+	if (pargs->system_tick != NULL) { \
+		pargs->system_tick__ref.val = *pargs->system_tick; \
 	} \
 };
 
@@ -8048,14 +8350,15 @@ struct args_hsa_amd_profiling_convert_tick_to_system_domain_t {
  *	)
  */
 #if HAVE_hsa_signal_add_release
-struct args_hsa_signal_add_release_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_add_release_t;
 
 #define GET_ARGS_VALUE_hsa_signal_add_release(activity) { \
-	activity->hsa_args.hsa_signal_add_release.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_add_release.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_add_release_t* args = (args_hsa_signal_add_release_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -8076,15 +8379,16 @@ struct args_hsa_signal_add_release_t {
  *	)
  */
 #if HAVE_hsa_signal_exchange_release
-struct args_hsa_signal_exchange_release_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_exchange_release_t;
 
 #define GET_ARGS_VALUE_hsa_signal_exchange_release(activity) { \
-	activity->hsa_args.hsa_signal_exchange_release.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_exchange_release.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_exchange_release_t* args = (args_hsa_signal_exchange_release_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -8108,7 +8412,7 @@ struct args_hsa_signal_exchange_release_t {
  *	)
  */
 #if HAVE_hsa_amd_vmem_address_reserve_align
-struct args_hsa_amd_vmem_address_reserve_align_t {
+typedef struct {
 	void ** va;
 	struct {
 		void* ptr1;
@@ -8118,19 +8422,21 @@ struct args_hsa_amd_vmem_address_reserve_align_t {
 	uint64_t alignment;
 	uint64_t flags;
 	hsa_status_t retval;
-};
+} args_hsa_amd_vmem_address_reserve_align_t;
 
 #define GET_ARGS_VALUE_hsa_amd_vmem_address_reserve_align(activity) { \
-	activity->hsa_args.hsa_amd_vmem_address_reserve_align.va = (void **) va; \
-	activity->hsa_args.hsa_amd_vmem_address_reserve_align.size = (size_t) size; \
-	activity->hsa_args.hsa_amd_vmem_address_reserve_align.address = (uint64_t) address; \
-	activity->hsa_args.hsa_amd_vmem_address_reserve_align.alignment = (uint64_t) alignment; \
-	activity->hsa_args.hsa_amd_vmem_address_reserve_align.flags = (uint64_t) flags; \
+	args_hsa_amd_vmem_address_reserve_align_t* args = (args_hsa_amd_vmem_address_reserve_align_t*) activity->args; \
+	args->va = (void **) va; \
+	args->size = (size_t) size; \
+	args->address = (uint64_t) address; \
+	args->alignment = (uint64_t) alignment; \
+	args->flags = (uint64_t) flags; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_vmem_address_reserve_align(args) { \
-	if (args->hsa_amd_vmem_address_reserve_align.va != NULL) { \
-		args->hsa_amd_vmem_address_reserve_align.va__ref.ptr1 = *args->hsa_amd_vmem_address_reserve_align.va; \
+	args_hsa_amd_vmem_address_reserve_align_t* pargs = (args_hsa_amd_vmem_address_reserve_align_t*) args; \
+	if (pargs->va != NULL) { \
+		pargs->va__ref.ptr1 = *pargs->va; \
 	} \
 };
 
@@ -8152,15 +8458,16 @@ struct args_hsa_amd_vmem_address_reserve_align_t {
  *	)
  */
 #if HAVE_hsa_ext_sampler_destroy
-struct args_hsa_ext_sampler_destroy_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_ext_sampler_t sampler;
 	hsa_status_t retval;
-};
+} args_hsa_ext_sampler_destroy_t;
 
 #define GET_ARGS_VALUE_hsa_ext_sampler_destroy(activity) { \
-	activity->hsa_args.hsa_ext_sampler_destroy.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ext_sampler_destroy.sampler = (hsa_ext_sampler_t) sampler; \
+	args_hsa_ext_sampler_destroy_t* args = (args_hsa_ext_sampler_destroy_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->sampler = (hsa_ext_sampler_t) sampler; \
 };
 
 #endif
@@ -8181,14 +8488,15 @@ struct args_hsa_ext_sampler_destroy_t {
  *	)
  */
 #if HAVE_hsa_signal_store_relaxed
-struct args_hsa_signal_store_relaxed_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_store_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_signal_store_relaxed(activity) { \
-	activity->hsa_args.hsa_signal_store_relaxed.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_store_relaxed.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_store_relaxed_t* args = (args_hsa_signal_store_relaxed_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -8210,17 +8518,18 @@ struct args_hsa_signal_store_relaxed_t {
  *	)
  */
 #if HAVE_hsa_signal_cas_acq_rel
-struct args_hsa_signal_cas_acq_rel_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t expected;
 	hsa_signal_value_t value;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_cas_acq_rel_t;
 
 #define GET_ARGS_VALUE_hsa_signal_cas_acq_rel(activity) { \
-	activity->hsa_args.hsa_signal_cas_acq_rel.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_cas_acq_rel.expected = (hsa_signal_value_t) expected; \
-	activity->hsa_args.hsa_signal_cas_acq_rel.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_cas_acq_rel_t* args = (args_hsa_signal_cas_acq_rel_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->expected = (hsa_signal_value_t) expected; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -8241,14 +8550,15 @@ struct args_hsa_signal_cas_acq_rel_t {
  *	)
  */
 #if HAVE_hsa_signal_xor_relaxed
-struct args_hsa_signal_xor_relaxed_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_xor_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_signal_xor_relaxed(activity) { \
-	activity->hsa_args.hsa_signal_xor_relaxed.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_xor_relaxed.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_xor_relaxed_t* args = (args_hsa_signal_xor_relaxed_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -8269,23 +8579,25 @@ struct args_hsa_signal_xor_relaxed_t {
  *	)
  */
 #if HAVE_hsa_queue_add_write_index_scacquire
-struct args_hsa_queue_add_write_index_scacquire_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t value;
 	uint64_t retval;
-};
+} args_hsa_queue_add_write_index_scacquire_t;
 
 #define GET_ARGS_VALUE_hsa_queue_add_write_index_scacquire(activity) { \
-	activity->hsa_args.hsa_queue_add_write_index_scacquire.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_add_write_index_scacquire.value = (uint64_t) value; \
+	args_hsa_queue_add_write_index_scacquire_t* args = (args_hsa_queue_add_write_index_scacquire_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_add_write_index_scacquire(args) { \
-	if (args->hsa_queue_add_write_index_scacquire.queue != NULL) { \
-		args->hsa_queue_add_write_index_scacquire.queue__ref.val = *args->hsa_queue_add_write_index_scacquire.queue; \
+	args_hsa_queue_add_write_index_scacquire_t* pargs = (args_hsa_queue_add_write_index_scacquire_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -8309,19 +8621,20 @@ struct args_hsa_queue_add_write_index_scacquire_t {
  *	)
  */
 #if HAVE_hsa_isa_get_info
-struct args_hsa_isa_get_info_t {
+typedef struct {
 	hsa_isa_t isa;
 	hsa_isa_info_t attribute;
 	uint32_t index;
 	void * value;
 	hsa_status_t retval;
-};
+} args_hsa_isa_get_info_t;
 
 #define GET_ARGS_VALUE_hsa_isa_get_info(activity) { \
-	activity->hsa_args.hsa_isa_get_info.isa = (hsa_isa_t) isa; \
-	activity->hsa_args.hsa_isa_get_info.attribute = (hsa_isa_info_t) attribute; \
-	activity->hsa_args.hsa_isa_get_info.index = (uint32_t) index; \
-	activity->hsa_args.hsa_isa_get_info.value = (void *) value; \
+	args_hsa_isa_get_info_t* args = (args_hsa_isa_get_info_t*) activity->args; \
+	args->isa = (hsa_isa_t) isa; \
+	args->attribute = (hsa_isa_info_t) attribute; \
+	args->index = (uint32_t) index; \
+	args->value = (void *) value; \
 };
 
 #endif
@@ -8342,23 +8655,25 @@ struct args_hsa_isa_get_info_t {
  *	)
  */
 #if HAVE_hsa_code_object_reader_create_from_file
-struct args_hsa_code_object_reader_create_from_file_t {
+typedef struct {
 	hsa_file_t file;
 	hsa_code_object_reader_t * code_object_reader;
 	struct {
 		hsa_code_object_reader_t val;
 	} code_object_reader__ref;
 	hsa_status_t retval;
-};
+} args_hsa_code_object_reader_create_from_file_t;
 
 #define GET_ARGS_VALUE_hsa_code_object_reader_create_from_file(activity) { \
-	activity->hsa_args.hsa_code_object_reader_create_from_file.file = (hsa_file_t) file; \
-	activity->hsa_args.hsa_code_object_reader_create_from_file.code_object_reader = (hsa_code_object_reader_t *) code_object_reader; \
+	args_hsa_code_object_reader_create_from_file_t* args = (args_hsa_code_object_reader_create_from_file_t*) activity->args; \
+	args->file = (hsa_file_t) file; \
+	args->code_object_reader = (hsa_code_object_reader_t *) code_object_reader; \
 };
 
 #define GET_PTRS_VALUE_hsa_code_object_reader_create_from_file(args) { \
-	if (args->hsa_code_object_reader_create_from_file.code_object_reader != NULL) { \
-		args->hsa_code_object_reader_create_from_file.code_object_reader__ref.val = *args->hsa_code_object_reader_create_from_file.code_object_reader; \
+	args_hsa_code_object_reader_create_from_file_t* pargs = (args_hsa_code_object_reader_create_from_file_t*) args; \
+	if (pargs->code_object_reader != NULL) { \
+		pargs->code_object_reader__ref.val = *pargs->code_object_reader; \
 	} \
 };
 
@@ -8381,17 +8696,18 @@ struct args_hsa_code_object_reader_create_from_file_t {
  *	)
  */
 #if HAVE_hsa_isa_iterate_wavefronts
-struct args_hsa_isa_iterate_wavefronts_t {
+typedef struct {
 	hsa_isa_t isa;
 	hsa_status_t (* callback)(hsa_wavefront_t, void *);
 	void * data;
 	hsa_status_t retval;
-};
+} args_hsa_isa_iterate_wavefronts_t;
 
 #define GET_ARGS_VALUE_hsa_isa_iterate_wavefronts(activity) { \
-	activity->hsa_args.hsa_isa_iterate_wavefronts.isa = (hsa_isa_t) isa; \
-	activity->hsa_args.hsa_isa_iterate_wavefronts.callback = (hsa_status_t (*)(hsa_wavefront_t, void *)) callback; \
-	activity->hsa_args.hsa_isa_iterate_wavefronts.data = (void *) data; \
+	args_hsa_isa_iterate_wavefronts_t* args = (args_hsa_isa_iterate_wavefronts_t*) activity->args; \
+	args->isa = (hsa_isa_t) isa; \
+	args->callback = (hsa_status_t (*)(hsa_wavefront_t, void *)) callback; \
+	args->data = (void *) data; \
 };
 
 #endif
@@ -8413,7 +8729,7 @@ struct args_hsa_isa_iterate_wavefronts_t {
  *	)
  */
 #if HAVE_hsa_amd_queue_cu_set_mask
-struct args_hsa_amd_queue_cu_set_mask_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
@@ -8424,20 +8740,22 @@ struct args_hsa_amd_queue_cu_set_mask_t {
 		uint32_t val;
 	} cu_mask__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_queue_cu_set_mask_t;
 
 #define GET_ARGS_VALUE_hsa_amd_queue_cu_set_mask(activity) { \
-	activity->hsa_args.hsa_amd_queue_cu_set_mask.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_amd_queue_cu_set_mask.num_cu_mask_count = (uint32_t) num_cu_mask_count; \
-	activity->hsa_args.hsa_amd_queue_cu_set_mask.cu_mask = (uint32_t *) cu_mask; \
+	args_hsa_amd_queue_cu_set_mask_t* args = (args_hsa_amd_queue_cu_set_mask_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->num_cu_mask_count = (uint32_t) num_cu_mask_count; \
+	args->cu_mask = (uint32_t *) cu_mask; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_queue_cu_set_mask(args) { \
-	if (args->hsa_amd_queue_cu_set_mask.queue != NULL) { \
-		args->hsa_amd_queue_cu_set_mask.queue__ref.val = *args->hsa_amd_queue_cu_set_mask.queue; \
+	args_hsa_amd_queue_cu_set_mask_t* pargs = (args_hsa_amd_queue_cu_set_mask_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
-	if (args->hsa_amd_queue_cu_set_mask.cu_mask != NULL) { \
-		args->hsa_amd_queue_cu_set_mask.cu_mask__ref.val = *args->hsa_amd_queue_cu_set_mask.cu_mask; \
+	if (pargs->cu_mask != NULL) { \
+		pargs->cu_mask__ref.val = *pargs->cu_mask; \
 	} \
 };
 
@@ -8459,15 +8777,16 @@ struct args_hsa_amd_queue_cu_set_mask_t {
  *	)
  */
 #if HAVE_hsa_amd_vmem_unmap
-struct args_hsa_amd_vmem_unmap_t {
+typedef struct {
 	void * va;
 	size_t size;
 	hsa_status_t retval;
-};
+} args_hsa_amd_vmem_unmap_t;
 
 #define GET_ARGS_VALUE_hsa_amd_vmem_unmap(activity) { \
-	activity->hsa_args.hsa_amd_vmem_unmap.va = (void *) va; \
-	activity->hsa_args.hsa_amd_vmem_unmap.size = (size_t) size; \
+	args_hsa_amd_vmem_unmap_t* args = (args_hsa_amd_vmem_unmap_t*) activity->args; \
+	args->va = (void *) va; \
+	args->size = (size_t) size; \
 };
 
 #endif
@@ -8488,14 +8807,15 @@ struct args_hsa_amd_vmem_unmap_t {
  *	)
  */
 #if HAVE_hsa_signal_or_acquire
-struct args_hsa_signal_or_acquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_or_acquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_or_acquire(activity) { \
-	activity->hsa_args.hsa_signal_or_acquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_or_acquire.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_or_acquire_t* args = (args_hsa_signal_or_acquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -8517,7 +8837,7 @@ struct args_hsa_signal_or_acquire_t {
  *	)
  */
 #if HAVE_hsa_agent_get_exception_policies
-struct args_hsa_agent_get_exception_policies_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_profile_t profile;
 	uint16_t * mask;
@@ -8525,17 +8845,19 @@ struct args_hsa_agent_get_exception_policies_t {
 		uint16_t val;
 	} mask__ref;
 	hsa_status_t retval;
-};
+} args_hsa_agent_get_exception_policies_t;
 
 #define GET_ARGS_VALUE_hsa_agent_get_exception_policies(activity) { \
-	activity->hsa_args.hsa_agent_get_exception_policies.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_agent_get_exception_policies.profile = (hsa_profile_t) profile; \
-	activity->hsa_args.hsa_agent_get_exception_policies.mask = (uint16_t *) mask; \
+	args_hsa_agent_get_exception_policies_t* args = (args_hsa_agent_get_exception_policies_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->profile = (hsa_profile_t) profile; \
+	args->mask = (uint16_t *) mask; \
 };
 
 #define GET_PTRS_VALUE_hsa_agent_get_exception_policies(args) { \
-	if (args->hsa_agent_get_exception_policies.mask != NULL) { \
-		args->hsa_agent_get_exception_policies.mask__ref.val = *args->hsa_agent_get_exception_policies.mask; \
+	args_hsa_agent_get_exception_policies_t* pargs = (args_hsa_agent_get_exception_policies_t*) args; \
+	if (pargs->mask != NULL) { \
+		pargs->mask__ref.val = *pargs->mask; \
 	} \
 };
 
@@ -8559,19 +8881,20 @@ struct args_hsa_agent_get_exception_policies_t {
  *	)
  */
 #if HAVE_hsa_system_get_extension_table
-struct args_hsa_system_get_extension_table_t {
+typedef struct {
 	uint16_t extension;
 	uint16_t version_major;
 	uint16_t version_minor;
 	void * table;
 	hsa_status_t retval;
-};
+} args_hsa_system_get_extension_table_t;
 
 #define GET_ARGS_VALUE_hsa_system_get_extension_table(activity) { \
-	activity->hsa_args.hsa_system_get_extension_table.extension = (uint16_t) extension; \
-	activity->hsa_args.hsa_system_get_extension_table.version_major = (uint16_t) version_major; \
-	activity->hsa_args.hsa_system_get_extension_table.version_minor = (uint16_t) version_minor; \
-	activity->hsa_args.hsa_system_get_extension_table.table = (void *) table; \
+	args_hsa_system_get_extension_table_t* args = (args_hsa_system_get_extension_table_t*) activity->args; \
+	args->extension = (uint16_t) extension; \
+	args->version_major = (uint16_t) version_major; \
+	args->version_minor = (uint16_t) version_minor; \
+	args->table = (void *) table; \
 };
 
 #endif
@@ -8592,23 +8915,25 @@ struct args_hsa_system_get_extension_table_t {
  *	)
  */
 #if HAVE_hsa_queue_add_write_index_screlease
-struct args_hsa_queue_add_write_index_screlease_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t value;
 	uint64_t retval;
-};
+} args_hsa_queue_add_write_index_screlease_t;
 
 #define GET_ARGS_VALUE_hsa_queue_add_write_index_screlease(activity) { \
-	activity->hsa_args.hsa_queue_add_write_index_screlease.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_add_write_index_screlease.value = (uint64_t) value; \
+	args_hsa_queue_add_write_index_screlease_t* args = (args_hsa_queue_add_write_index_screlease_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_add_write_index_screlease(args) { \
-	if (args->hsa_queue_add_write_index_screlease.queue != NULL) { \
-		args->hsa_queue_add_write_index_screlease.queue__ref.val = *args->hsa_queue_add_write_index_screlease.queue; \
+	args_hsa_queue_add_write_index_screlease_t* pargs = (args_hsa_queue_add_write_index_screlease_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -8635,7 +8960,7 @@ struct args_hsa_queue_add_write_index_screlease_t {
  *	)
  */
 #if HAVE_hsa_amd_signal_wait_any
-struct args_hsa_amd_signal_wait_any_t {
+typedef struct {
 	uint32_t signal_count;
 	hsa_signal_t * signals;
 	struct {
@@ -8656,30 +8981,32 @@ struct args_hsa_amd_signal_wait_any_t {
 		hsa_signal_value_t val;
 	} satisfying_value__ref;
 	uint32_t retval;
-};
+} args_hsa_amd_signal_wait_any_t;
 
 #define GET_ARGS_VALUE_hsa_amd_signal_wait_any(activity) { \
-	activity->hsa_args.hsa_amd_signal_wait_any.signal_count = (uint32_t) signal_count; \
-	activity->hsa_args.hsa_amd_signal_wait_any.signals = (hsa_signal_t *) signals; \
-	activity->hsa_args.hsa_amd_signal_wait_any.conds = (hsa_signal_condition_t *) conds; \
-	activity->hsa_args.hsa_amd_signal_wait_any.values = (hsa_signal_value_t *) values; \
-	activity->hsa_args.hsa_amd_signal_wait_any.timeout_hint = (uint64_t) timeout_hint; \
-	activity->hsa_args.hsa_amd_signal_wait_any.wait_hint = (hsa_wait_state_t) wait_hint; \
-	activity->hsa_args.hsa_amd_signal_wait_any.satisfying_value = (hsa_signal_value_t *) satisfying_value; \
+	args_hsa_amd_signal_wait_any_t* args = (args_hsa_amd_signal_wait_any_t*) activity->args; \
+	args->signal_count = (uint32_t) signal_count; \
+	args->signals = (hsa_signal_t *) signals; \
+	args->conds = (hsa_signal_condition_t *) conds; \
+	args->values = (hsa_signal_value_t *) values; \
+	args->timeout_hint = (uint64_t) timeout_hint; \
+	args->wait_hint = (hsa_wait_state_t) wait_hint; \
+	args->satisfying_value = (hsa_signal_value_t *) satisfying_value; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_signal_wait_any(args) { \
-	if (args->hsa_amd_signal_wait_any.signals != NULL) { \
-		args->hsa_amd_signal_wait_any.signals__ref.val = *args->hsa_amd_signal_wait_any.signals; \
+	args_hsa_amd_signal_wait_any_t* pargs = (args_hsa_amd_signal_wait_any_t*) args; \
+	if (pargs->signals != NULL) { \
+		pargs->signals__ref.val = *pargs->signals; \
 	} \
-	if (args->hsa_amd_signal_wait_any.conds != NULL) { \
-		args->hsa_amd_signal_wait_any.conds__ref.val = *args->hsa_amd_signal_wait_any.conds; \
+	if (pargs->conds != NULL) { \
+		pargs->conds__ref.val = *pargs->conds; \
 	} \
-	if (args->hsa_amd_signal_wait_any.values != NULL) { \
-		args->hsa_amd_signal_wait_any.values__ref.val = *args->hsa_amd_signal_wait_any.values; \
+	if (pargs->values != NULL) { \
+		pargs->values__ref.val = *pargs->values; \
 	} \
-	if (args->hsa_amd_signal_wait_any.satisfying_value != NULL) { \
-		args->hsa_amd_signal_wait_any.satisfying_value__ref.val = *args->hsa_amd_signal_wait_any.satisfying_value; \
+	if (pargs->satisfying_value != NULL) { \
+		pargs->satisfying_value__ref.val = *pargs->satisfying_value; \
 	} \
 };
 
@@ -8703,7 +9030,7 @@ struct args_hsa_amd_signal_wait_any_t {
  *	)
  */
 #if HAVE_hsa_amd_agents_allow_access
-struct args_hsa_amd_agents_allow_access_t {
+typedef struct {
 	uint32_t num_agents;
 	hsa_agent_t * agents;
 	struct {
@@ -8715,21 +9042,23 @@ struct args_hsa_amd_agents_allow_access_t {
 	} flags__ref;
 	void * ptr;
 	hsa_status_t retval;
-};
+} args_hsa_amd_agents_allow_access_t;
 
 #define GET_ARGS_VALUE_hsa_amd_agents_allow_access(activity) { \
-	activity->hsa_args.hsa_amd_agents_allow_access.num_agents = (uint32_t) num_agents; \
-	activity->hsa_args.hsa_amd_agents_allow_access.agents = (hsa_agent_t *) agents; \
-	activity->hsa_args.hsa_amd_agents_allow_access.flags = (uint32_t *) flags; \
-	activity->hsa_args.hsa_amd_agents_allow_access.ptr = (void *) ptr; \
+	args_hsa_amd_agents_allow_access_t* args = (args_hsa_amd_agents_allow_access_t*) activity->args; \
+	args->num_agents = (uint32_t) num_agents; \
+	args->agents = (hsa_agent_t *) agents; \
+	args->flags = (uint32_t *) flags; \
+	args->ptr = (void *) ptr; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_agents_allow_access(args) { \
-	if (args->hsa_amd_agents_allow_access.agents != NULL) { \
-		args->hsa_amd_agents_allow_access.agents__ref.val = *args->hsa_amd_agents_allow_access.agents; \
+	args_hsa_amd_agents_allow_access_t* pargs = (args_hsa_amd_agents_allow_access_t*) args; \
+	if (pargs->agents != NULL) { \
+		pargs->agents__ref.val = *pargs->agents; \
 	} \
-	if (args->hsa_amd_agents_allow_access.flags != NULL) { \
-		args->hsa_amd_agents_allow_access.flags__ref.val = *args->hsa_amd_agents_allow_access.flags; \
+	if (pargs->flags != NULL) { \
+		pargs->flags__ref.val = *pargs->flags; \
 	} \
 };
 
@@ -8751,23 +9080,25 @@ struct args_hsa_amd_agents_allow_access_t {
  *	)
  */
 #if HAVE_hsa_queue_add_write_index_scacq_screl
-struct args_hsa_queue_add_write_index_scacq_screl_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t value;
 	uint64_t retval;
-};
+} args_hsa_queue_add_write_index_scacq_screl_t;
 
 #define GET_ARGS_VALUE_hsa_queue_add_write_index_scacq_screl(activity) { \
-	activity->hsa_args.hsa_queue_add_write_index_scacq_screl.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_add_write_index_scacq_screl.value = (uint64_t) value; \
+	args_hsa_queue_add_write_index_scacq_screl_t* args = (args_hsa_queue_add_write_index_scacq_screl_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_add_write_index_scacq_screl(args) { \
-	if (args->hsa_queue_add_write_index_scacq_screl.queue != NULL) { \
-		args->hsa_queue_add_write_index_scacq_screl.queue__ref.val = *args->hsa_queue_add_write_index_scacq_screl.queue; \
+	args_hsa_queue_add_write_index_scacq_screl_t* pargs = (args_hsa_queue_add_write_index_scacq_screl_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -8789,14 +9120,15 @@ struct args_hsa_queue_add_write_index_scacq_screl_t {
  *	)
  */
 #if HAVE_hsa_signal_add_screlease
-struct args_hsa_signal_add_screlease_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_add_screlease_t;
 
 #define GET_ARGS_VALUE_hsa_signal_add_screlease(activity) { \
-	activity->hsa_args.hsa_signal_add_screlease.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_add_screlease.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_add_screlease_t* args = (args_hsa_signal_add_screlease_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -8817,15 +9149,16 @@ struct args_hsa_signal_add_screlease_t {
  *	)
  */
 #if HAVE_hsa_iterate_agents
-struct args_hsa_iterate_agents_t {
+typedef struct {
 	hsa_status_t (* callback)(hsa_agent_t, void *);
 	void * data;
 	hsa_status_t retval;
-};
+} args_hsa_iterate_agents_t;
 
 #define GET_ARGS_VALUE_hsa_iterate_agents(activity) { \
-	activity->hsa_args.hsa_iterate_agents.callback = (hsa_status_t (*)(hsa_agent_t, void *)) callback; \
-	activity->hsa_args.hsa_iterate_agents.data = (void *) data; \
+	args_hsa_iterate_agents_t* args = (args_hsa_iterate_agents_t*) activity->args; \
+	args->callback = (hsa_status_t (*)(hsa_agent_t, void *)) callback; \
+	args->data = (void *) data; \
 };
 
 #endif
@@ -8846,22 +9179,24 @@ struct args_hsa_iterate_agents_t {
  *	)
  */
 #if HAVE_hsa_queue_store_read_index_relaxed
-struct args_hsa_queue_store_read_index_relaxed_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t value;
-};
+} args_hsa_queue_store_read_index_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_queue_store_read_index_relaxed(activity) { \
-	activity->hsa_args.hsa_queue_store_read_index_relaxed.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_queue_store_read_index_relaxed.value = (uint64_t) value; \
+	args_hsa_queue_store_read_index_relaxed_t* args = (args_hsa_queue_store_read_index_relaxed_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->value = (uint64_t) value; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_store_read_index_relaxed(args) { \
-	if (args->hsa_queue_store_read_index_relaxed.queue != NULL) { \
-		args->hsa_queue_store_read_index_relaxed.queue__ref.val = *args->hsa_queue_store_read_index_relaxed.queue; \
+	args_hsa_queue_store_read_index_relaxed_t* pargs = (args_hsa_queue_store_read_index_relaxed_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -8883,14 +9218,15 @@ struct args_hsa_queue_store_read_index_relaxed_t {
  *	)
  */
 #if HAVE_hsa_signal_or_relaxed
-struct args_hsa_signal_or_relaxed_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_or_relaxed_t;
 
 #define GET_ARGS_VALUE_hsa_signal_or_relaxed(activity) { \
-	activity->hsa_args.hsa_signal_or_relaxed.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_or_relaxed.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_or_relaxed_t* args = (args_hsa_signal_or_relaxed_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -8910,13 +9246,14 @@ struct args_hsa_signal_or_relaxed_t {
  *	)
  */
 #if HAVE_hsa_amd_ipc_memory_detach
-struct args_hsa_amd_ipc_memory_detach_t {
+typedef struct {
 	void * mapped_ptr;
 	hsa_status_t retval;
-};
+} args_hsa_amd_ipc_memory_detach_t;
 
 #define GET_ARGS_VALUE_hsa_amd_ipc_memory_detach(activity) { \
-	activity->hsa_args.hsa_amd_ipc_memory_detach.mapped_ptr = (void *) mapped_ptr; \
+	args_hsa_amd_ipc_memory_detach_t* args = (args_hsa_amd_ipc_memory_detach_t*) activity->args; \
+	args->mapped_ptr = (void *) mapped_ptr; \
 };
 
 #endif
@@ -8937,14 +9274,15 @@ struct args_hsa_amd_ipc_memory_detach_t {
  *	)
  */
 #if HAVE_hsa_signal_or_release
-struct args_hsa_signal_or_release_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_or_release_t;
 
 #define GET_ARGS_VALUE_hsa_signal_or_release(activity) { \
-	activity->hsa_args.hsa_signal_or_release.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_or_release.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_or_release_t* args = (args_hsa_signal_or_release_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -8965,15 +9303,16 @@ struct args_hsa_signal_or_release_t {
  *	)
  */
 #if HAVE_hsa_amd_deregister_deallocation_callback
-struct args_hsa_amd_deregister_deallocation_callback_t {
+typedef struct {
 	void * ptr;
 	hsa_amd_deallocation_callback_t callback;
 	hsa_status_t retval;
-};
+} args_hsa_amd_deregister_deallocation_callback_t;
 
 #define GET_ARGS_VALUE_hsa_amd_deregister_deallocation_callback(activity) { \
-	activity->hsa_args.hsa_amd_deregister_deallocation_callback.ptr = (void *) ptr; \
-	activity->hsa_args.hsa_amd_deregister_deallocation_callback.callback = (hsa_amd_deallocation_callback_t) callback; \
+	args_hsa_amd_deregister_deallocation_callback_t* args = (args_hsa_amd_deregister_deallocation_callback_t*) activity->args; \
+	args->ptr = (void *) ptr; \
+	args->callback = (hsa_amd_deallocation_callback_t) callback; \
 };
 
 #endif
@@ -8993,21 +9332,23 @@ struct args_hsa_amd_deregister_deallocation_callback_t {
  *	)
  */
 #if HAVE_hsa_queue_load_read_index_acquire
-struct args_hsa_queue_load_read_index_acquire_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
 	} queue__ref;
 	uint64_t retval;
-};
+} args_hsa_queue_load_read_index_acquire_t;
 
 #define GET_ARGS_VALUE_hsa_queue_load_read_index_acquire(activity) { \
-	activity->hsa_args.hsa_queue_load_read_index_acquire.queue = (hsa_queue_t *) queue; \
+	args_hsa_queue_load_read_index_acquire_t* args = (args_hsa_queue_load_read_index_acquire_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
 };
 
 #define GET_PTRS_VALUE_hsa_queue_load_read_index_acquire(args) { \
-	if (args->hsa_queue_load_read_index_acquire.queue != NULL) { \
-		args->hsa_queue_load_read_index_acquire.queue__ref.val = *args->hsa_queue_load_read_index_acquire.queue; \
+	args_hsa_queue_load_read_index_acquire_t* pargs = (args_hsa_queue_load_read_index_acquire_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
 };
 
@@ -9030,17 +9371,18 @@ struct args_hsa_queue_load_read_index_acquire_t {
  *	)
  */
 #if HAVE_hsa_ven_amd_pcs_iterate_configuration
-struct args_hsa_ven_amd_pcs_iterate_configuration_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_ven_amd_pcs_iterate_configuration_callback_t configuration_callback;
 	void * callback_data;
 	hsa_status_t retval;
-};
+} args_hsa_ven_amd_pcs_iterate_configuration_t;
 
 #define GET_ARGS_VALUE_hsa_ven_amd_pcs_iterate_configuration(activity) { \
-	activity->hsa_args.hsa_ven_amd_pcs_iterate_configuration.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ven_amd_pcs_iterate_configuration.configuration_callback = (hsa_ven_amd_pcs_iterate_configuration_callback_t) configuration_callback; \
-	activity->hsa_args.hsa_ven_amd_pcs_iterate_configuration.callback_data = (void *) callback_data; \
+	args_hsa_ven_amd_pcs_iterate_configuration_t* args = (args_hsa_ven_amd_pcs_iterate_configuration_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->configuration_callback = (hsa_ven_amd_pcs_iterate_configuration_callback_t) configuration_callback; \
+	args->callback_data = (void *) callback_data; \
 };
 
 #endif
@@ -9061,23 +9403,25 @@ struct args_hsa_ven_amd_pcs_iterate_configuration_t {
  *	)
  */
 #if HAVE_hsa_amd_ipc_signal_create
-struct args_hsa_amd_ipc_signal_create_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_amd_ipc_signal_t * handle;
 	struct {
 		hsa_amd_ipc_signal_t val;
 	} handle__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_ipc_signal_create_t;
 
 #define GET_ARGS_VALUE_hsa_amd_ipc_signal_create(activity) { \
-	activity->hsa_args.hsa_amd_ipc_signal_create.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_amd_ipc_signal_create.handle = (hsa_amd_ipc_signal_t *) handle; \
+	args_hsa_amd_ipc_signal_create_t* args = (args_hsa_amd_ipc_signal_create_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->handle = (hsa_amd_ipc_signal_t *) handle; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_ipc_signal_create(args) { \
-	if (args->hsa_amd_ipc_signal_create.handle != NULL) { \
-		args->hsa_amd_ipc_signal_create.handle__ref.val = *args->hsa_amd_ipc_signal_create.handle; \
+	args_hsa_amd_ipc_signal_create_t* pargs = (args_hsa_amd_ipc_signal_create_t*) args; \
+	if (pargs->handle != NULL) { \
+		pargs->handle__ref.val = *pargs->handle; \
 	} \
 };
 
@@ -9100,17 +9444,18 @@ struct args_hsa_amd_ipc_signal_create_t {
  *	)
  */
 #if HAVE_hsa_code_object_iterate_symbols
-struct args_hsa_code_object_iterate_symbols_t {
+typedef struct {
 	hsa_code_object_t code_object;
 	hsa_status_t (* callback)(hsa_code_object_t, hsa_code_symbol_t, void *);
 	void * data;
 	hsa_status_t retval;
-};
+} args_hsa_code_object_iterate_symbols_t;
 
 #define GET_ARGS_VALUE_hsa_code_object_iterate_symbols(activity) { \
-	activity->hsa_args.hsa_code_object_iterate_symbols.code_object = (hsa_code_object_t) code_object; \
-	activity->hsa_args.hsa_code_object_iterate_symbols.callback = (hsa_status_t (*)(hsa_code_object_t, hsa_code_symbol_t, void *)) callback; \
-	activity->hsa_args.hsa_code_object_iterate_symbols.data = (void *) data; \
+	args_hsa_code_object_iterate_symbols_t* args = (args_hsa_code_object_iterate_symbols_t*) activity->args; \
+	args->code_object = (hsa_code_object_t) code_object; \
+	args->callback = (hsa_status_t (*)(hsa_code_object_t, hsa_code_symbol_t, void *)) callback; \
+	args->data = (void *) data; \
 };
 
 #endif
@@ -9134,7 +9479,7 @@ struct args_hsa_code_object_iterate_symbols_t {
  *	)
  */
 #if HAVE_hsa_ext_image_get_capability_with_layout
-struct args_hsa_ext_image_get_capability_with_layout_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_ext_image_geometry_t geometry;
 	hsa_ext_image_format_t * image_format;
@@ -9147,22 +9492,24 @@ struct args_hsa_ext_image_get_capability_with_layout_t {
 		uint32_t val;
 	} capability_mask__ref;
 	hsa_status_t retval;
-};
+} args_hsa_ext_image_get_capability_with_layout_t;
 
 #define GET_ARGS_VALUE_hsa_ext_image_get_capability_with_layout(activity) { \
-	activity->hsa_args.hsa_ext_image_get_capability_with_layout.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ext_image_get_capability_with_layout.geometry = (hsa_ext_image_geometry_t) geometry; \
-	activity->hsa_args.hsa_ext_image_get_capability_with_layout.image_format = (hsa_ext_image_format_t *) image_format; \
-	activity->hsa_args.hsa_ext_image_get_capability_with_layout.image_data_layout = (hsa_ext_image_data_layout_t) image_data_layout; \
-	activity->hsa_args.hsa_ext_image_get_capability_with_layout.capability_mask = (uint32_t *) capability_mask; \
+	args_hsa_ext_image_get_capability_with_layout_t* args = (args_hsa_ext_image_get_capability_with_layout_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->geometry = (hsa_ext_image_geometry_t) geometry; \
+	args->image_format = (hsa_ext_image_format_t *) image_format; \
+	args->image_data_layout = (hsa_ext_image_data_layout_t) image_data_layout; \
+	args->capability_mask = (uint32_t *) capability_mask; \
 };
 
 #define GET_PTRS_VALUE_hsa_ext_image_get_capability_with_layout(args) { \
-	if (args->hsa_ext_image_get_capability_with_layout.image_format != NULL) { \
-		args->hsa_ext_image_get_capability_with_layout.image_format__ref.val = *args->hsa_ext_image_get_capability_with_layout.image_format; \
+	args_hsa_ext_image_get_capability_with_layout_t* pargs = (args_hsa_ext_image_get_capability_with_layout_t*) args; \
+	if (pargs->image_format != NULL) { \
+		pargs->image_format__ref.val = *pargs->image_format; \
 	} \
-	if (args->hsa_ext_image_get_capability_with_layout.capability_mask != NULL) { \
-		args->hsa_ext_image_get_capability_with_layout.capability_mask__ref.val = *args->hsa_ext_image_get_capability_with_layout.capability_mask; \
+	if (pargs->capability_mask != NULL) { \
+		pargs->capability_mask__ref.val = *pargs->capability_mask; \
 	} \
 };
 
@@ -9192,7 +9539,7 @@ struct args_hsa_ext_image_get_capability_with_layout_t {
  *	)
  */
 #if HAVE_hsa_amd_memory_async_copy_on_engine
-struct args_hsa_amd_memory_async_copy_on_engine_t {
+typedef struct {
 	void * dst;
 	hsa_agent_t dst_agent;
 	void * src;
@@ -9207,24 +9554,26 @@ struct args_hsa_amd_memory_async_copy_on_engine_t {
 	hsa_amd_sdma_engine_id_t engine_id;
 	_Bool force_copy_on_sdma;
 	hsa_status_t retval;
-};
+} args_hsa_amd_memory_async_copy_on_engine_t;
 
 #define GET_ARGS_VALUE_hsa_amd_memory_async_copy_on_engine(activity) { \
-	activity->hsa_args.hsa_amd_memory_async_copy_on_engine.dst = (void *) dst; \
-	activity->hsa_args.hsa_amd_memory_async_copy_on_engine.dst_agent = (hsa_agent_t) dst_agent; \
-	activity->hsa_args.hsa_amd_memory_async_copy_on_engine.src = (void *) src; \
-	activity->hsa_args.hsa_amd_memory_async_copy_on_engine.src_agent = (hsa_agent_t) src_agent; \
-	activity->hsa_args.hsa_amd_memory_async_copy_on_engine.size = (size_t) size; \
-	activity->hsa_args.hsa_amd_memory_async_copy_on_engine.num_dep_signals = (uint32_t) num_dep_signals; \
-	activity->hsa_args.hsa_amd_memory_async_copy_on_engine.dep_signals = (hsa_signal_t *) dep_signals; \
-	activity->hsa_args.hsa_amd_memory_async_copy_on_engine.completion_signal = (hsa_signal_t) completion_signal; \
-	activity->hsa_args.hsa_amd_memory_async_copy_on_engine.engine_id = (hsa_amd_sdma_engine_id_t) engine_id; \
-	activity->hsa_args.hsa_amd_memory_async_copy_on_engine.force_copy_on_sdma = (_Bool) force_copy_on_sdma; \
+	args_hsa_amd_memory_async_copy_on_engine_t* args = (args_hsa_amd_memory_async_copy_on_engine_t*) activity->args; \
+	args->dst = (void *) dst; \
+	args->dst_agent = (hsa_agent_t) dst_agent; \
+	args->src = (void *) src; \
+	args->src_agent = (hsa_agent_t) src_agent; \
+	args->size = (size_t) size; \
+	args->num_dep_signals = (uint32_t) num_dep_signals; \
+	args->dep_signals = (hsa_signal_t *) dep_signals; \
+	args->completion_signal = (hsa_signal_t) completion_signal; \
+	args->engine_id = (hsa_amd_sdma_engine_id_t) engine_id; \
+	args->force_copy_on_sdma = (_Bool) force_copy_on_sdma; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_memory_async_copy_on_engine(args) { \
-	if (args->hsa_amd_memory_async_copy_on_engine.dep_signals != NULL) { \
-		args->hsa_amd_memory_async_copy_on_engine.dep_signals__ref.val = *args->hsa_amd_memory_async_copy_on_engine.dep_signals; \
+	args_hsa_amd_memory_async_copy_on_engine_t* pargs = (args_hsa_amd_memory_async_copy_on_engine_t*) args; \
+	if (pargs->dep_signals != NULL) { \
+		pargs->dep_signals__ref.val = *pargs->dep_signals; \
 	} \
 };
 
@@ -9247,17 +9596,18 @@ struct args_hsa_amd_memory_async_copy_on_engine_t {
  *	)
  */
 #if HAVE_hsa_agent_iterate_isas
-struct args_hsa_agent_iterate_isas_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_status_t (* callback)(hsa_isa_t, void *);
 	void * data;
 	hsa_status_t retval;
-};
+} args_hsa_agent_iterate_isas_t;
 
 #define GET_ARGS_VALUE_hsa_agent_iterate_isas(activity) { \
-	activity->hsa_args.hsa_agent_iterate_isas.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_agent_iterate_isas.callback = (hsa_status_t (*)(hsa_isa_t, void *)) callback; \
-	activity->hsa_args.hsa_agent_iterate_isas.data = (void *) data; \
+	args_hsa_agent_iterate_isas_t* args = (args_hsa_agent_iterate_isas_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->callback = (hsa_status_t (*)(hsa_isa_t, void *)) callback; \
+	args->data = (void *) data; \
 };
 
 #endif
@@ -9279,17 +9629,18 @@ struct args_hsa_agent_iterate_isas_t {
  *	)
  */
 #if HAVE_hsa_signal_cas_scacq_screl
-struct args_hsa_signal_cas_scacq_screl_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t expected;
 	hsa_signal_value_t value;
 	hsa_signal_value_t retval;
-};
+} args_hsa_signal_cas_scacq_screl_t;
 
 #define GET_ARGS_VALUE_hsa_signal_cas_scacq_screl(activity) { \
-	activity->hsa_args.hsa_signal_cas_scacq_screl.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_cas_scacq_screl.expected = (hsa_signal_value_t) expected; \
-	activity->hsa_args.hsa_signal_cas_scacq_screl.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_cas_scacq_screl_t* args = (args_hsa_signal_cas_scacq_screl_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->expected = (hsa_signal_value_t) expected; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -9310,15 +9661,16 @@ struct args_hsa_signal_cas_scacq_screl_t {
  *	)
  */
 #if HAVE_hsa_amd_coherency_set_type
-struct args_hsa_amd_coherency_set_type_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_amd_coherency_type_t type;
 	hsa_status_t retval;
-};
+} args_hsa_amd_coherency_set_type_t;
 
 #define GET_ARGS_VALUE_hsa_amd_coherency_set_type(activity) { \
-	activity->hsa_args.hsa_amd_coherency_set_type.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_amd_coherency_set_type.type = (hsa_amd_coherency_type_t) type; \
+	args_hsa_amd_coherency_set_type_t* args = (args_hsa_amd_coherency_set_type_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->type = (hsa_amd_coherency_type_t) type; \
 };
 
 #endif
@@ -9340,7 +9692,7 @@ struct args_hsa_amd_coherency_set_type_t {
  *	)
  */
 #if HAVE_hsa_amd_queue_cu_get_mask
-struct args_hsa_amd_queue_cu_get_mask_t {
+typedef struct {
 	hsa_queue_t * queue;
 	struct {
 		hsa_queue_t val;
@@ -9351,20 +9703,22 @@ struct args_hsa_amd_queue_cu_get_mask_t {
 		uint32_t val;
 	} cu_mask__ref;
 	hsa_status_t retval;
-};
+} args_hsa_amd_queue_cu_get_mask_t;
 
 #define GET_ARGS_VALUE_hsa_amd_queue_cu_get_mask(activity) { \
-	activity->hsa_args.hsa_amd_queue_cu_get_mask.queue = (hsa_queue_t *) queue; \
-	activity->hsa_args.hsa_amd_queue_cu_get_mask.num_cu_mask_count = (uint32_t) num_cu_mask_count; \
-	activity->hsa_args.hsa_amd_queue_cu_get_mask.cu_mask = (uint32_t *) cu_mask; \
+	args_hsa_amd_queue_cu_get_mask_t* args = (args_hsa_amd_queue_cu_get_mask_t*) activity->args; \
+	args->queue = (hsa_queue_t *) queue; \
+	args->num_cu_mask_count = (uint32_t) num_cu_mask_count; \
+	args->cu_mask = (uint32_t *) cu_mask; \
 };
 
 #define GET_PTRS_VALUE_hsa_amd_queue_cu_get_mask(args) { \
-	if (args->hsa_amd_queue_cu_get_mask.queue != NULL) { \
-		args->hsa_amd_queue_cu_get_mask.queue__ref.val = *args->hsa_amd_queue_cu_get_mask.queue; \
+	args_hsa_amd_queue_cu_get_mask_t* pargs = (args_hsa_amd_queue_cu_get_mask_t*) args; \
+	if (pargs->queue != NULL) { \
+		pargs->queue__ref.val = *pargs->queue; \
 	} \
-	if (args->hsa_amd_queue_cu_get_mask.cu_mask != NULL) { \
-		args->hsa_amd_queue_cu_get_mask.cu_mask__ref.val = *args->hsa_amd_queue_cu_get_mask.cu_mask; \
+	if (pargs->cu_mask != NULL) { \
+		pargs->cu_mask__ref.val = *pargs->cu_mask; \
 	} \
 };
 
@@ -9392,7 +9746,7 @@ struct args_hsa_amd_queue_cu_get_mask_t {
  *	)
  */
 #if HAVE_hsa_ext_image_create_with_layout
-struct args_hsa_ext_image_create_with_layout_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_ext_image_descriptor_t * image_descriptor;
 	struct {
@@ -9408,25 +9762,27 @@ struct args_hsa_ext_image_create_with_layout_t {
 		hsa_ext_image_t val;
 	} image__ref;
 	hsa_status_t retval;
-};
+} args_hsa_ext_image_create_with_layout_t;
 
 #define GET_ARGS_VALUE_hsa_ext_image_create_with_layout(activity) { \
-	activity->hsa_args.hsa_ext_image_create_with_layout.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_ext_image_create_with_layout.image_descriptor = (hsa_ext_image_descriptor_t *) image_descriptor; \
-	activity->hsa_args.hsa_ext_image_create_with_layout.image_data = (void *) image_data; \
-	activity->hsa_args.hsa_ext_image_create_with_layout.access_permission = (hsa_access_permission_t) access_permission; \
-	activity->hsa_args.hsa_ext_image_create_with_layout.image_data_layout = (hsa_ext_image_data_layout_t) image_data_layout; \
-	activity->hsa_args.hsa_ext_image_create_with_layout.image_data_row_pitch = (size_t) image_data_row_pitch; \
-	activity->hsa_args.hsa_ext_image_create_with_layout.image_data_slice_pitch = (size_t) image_data_slice_pitch; \
-	activity->hsa_args.hsa_ext_image_create_with_layout.image = (hsa_ext_image_t *) image; \
+	args_hsa_ext_image_create_with_layout_t* args = (args_hsa_ext_image_create_with_layout_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->image_descriptor = (hsa_ext_image_descriptor_t *) image_descriptor; \
+	args->image_data = (void *) image_data; \
+	args->access_permission = (hsa_access_permission_t) access_permission; \
+	args->image_data_layout = (hsa_ext_image_data_layout_t) image_data_layout; \
+	args->image_data_row_pitch = (size_t) image_data_row_pitch; \
+	args->image_data_slice_pitch = (size_t) image_data_slice_pitch; \
+	args->image = (hsa_ext_image_t *) image; \
 };
 
 #define GET_PTRS_VALUE_hsa_ext_image_create_with_layout(args) { \
-	if (args->hsa_ext_image_create_with_layout.image_descriptor != NULL) { \
-		args->hsa_ext_image_create_with_layout.image_descriptor__ref.val = *args->hsa_ext_image_create_with_layout.image_descriptor; \
+	args_hsa_ext_image_create_with_layout_t* pargs = (args_hsa_ext_image_create_with_layout_t*) args; \
+	if (pargs->image_descriptor != NULL) { \
+		pargs->image_descriptor__ref.val = *pargs->image_descriptor; \
 	} \
-	if (args->hsa_ext_image_create_with_layout.image != NULL) { \
-		args->hsa_ext_image_create_with_layout.image__ref.val = *args->hsa_ext_image_create_with_layout.image; \
+	if (pargs->image != NULL) { \
+		pargs->image__ref.val = *pargs->image; \
 	} \
 };
 
@@ -9450,7 +9806,7 @@ struct args_hsa_ext_image_create_with_layout_t {
  *	)
  */
 #if HAVE_hsa_code_object_deserialize
-struct args_hsa_code_object_deserialize_t {
+typedef struct {
 	void * serialized_code_object;
 	size_t serialized_code_object_size;
 	char * options;
@@ -9462,21 +9818,23 @@ struct args_hsa_code_object_deserialize_t {
 		hsa_code_object_t val;
 	} code_object__ref;
 	hsa_status_t retval;
-};
+} args_hsa_code_object_deserialize_t;
 
 #define GET_ARGS_VALUE_hsa_code_object_deserialize(activity) { \
-	activity->hsa_args.hsa_code_object_deserialize.serialized_code_object = (void *) serialized_code_object; \
-	activity->hsa_args.hsa_code_object_deserialize.serialized_code_object_size = (size_t) serialized_code_object_size; \
-	activity->hsa_args.hsa_code_object_deserialize.options = (char *) options; \
-	activity->hsa_args.hsa_code_object_deserialize.code_object = (hsa_code_object_t *) code_object; \
+	args_hsa_code_object_deserialize_t* args = (args_hsa_code_object_deserialize_t*) activity->args; \
+	args->serialized_code_object = (void *) serialized_code_object; \
+	args->serialized_code_object_size = (size_t) serialized_code_object_size; \
+	args->options = (char *) options; \
+	args->code_object = (hsa_code_object_t *) code_object; \
 };
 
 #define GET_PTRS_VALUE_hsa_code_object_deserialize(args) { \
-	if (args->hsa_code_object_deserialize.options != NULL) { \
-		strncpy(args->hsa_code_object_deserialize.options__ref.val, args->hsa_code_object_deserialize.options, HSA_STRING_SIZE_MAX-1); \
+	args_hsa_code_object_deserialize_t* pargs = (args_hsa_code_object_deserialize_t*) args; \
+	if (pargs->options != NULL) { \
+		strncpy(pargs->options__ref.val, pargs->options, HSA_STRING_SIZE_MAX-1); \
 	} \
-	if (args->hsa_code_object_deserialize.code_object != NULL) { \
-		args->hsa_code_object_deserialize.code_object__ref.val = *args->hsa_code_object_deserialize.code_object; \
+	if (pargs->code_object != NULL) { \
+		pargs->code_object__ref.val = *pargs->code_object; \
 	} \
 };
 
@@ -9499,17 +9857,18 @@ struct args_hsa_code_object_deserialize_t {
  *	)
  */
 #if HAVE_hsa_memory_assign_agent
-struct args_hsa_memory_assign_agent_t {
+typedef struct {
 	void * ptr;
 	hsa_agent_t agent;
 	hsa_access_permission_t access;
 	hsa_status_t retval;
-};
+} args_hsa_memory_assign_agent_t;
 
 #define GET_ARGS_VALUE_hsa_memory_assign_agent(activity) { \
-	activity->hsa_args.hsa_memory_assign_agent.ptr = (void *) ptr; \
-	activity->hsa_args.hsa_memory_assign_agent.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_memory_assign_agent.access = (hsa_access_permission_t) access; \
+	args_hsa_memory_assign_agent_t* args = (args_hsa_memory_assign_agent_t*) activity->args; \
+	args->ptr = (void *) ptr; \
+	args->agent = (hsa_agent_t) agent; \
+	args->access = (hsa_access_permission_t) access; \
 };
 
 #endif
@@ -9531,17 +9890,18 @@ struct args_hsa_memory_assign_agent_t {
  *	)
  */
 #if HAVE_hsa_isa_get_info_alt
-struct args_hsa_isa_get_info_alt_t {
+typedef struct {
 	hsa_isa_t isa;
 	hsa_isa_info_t attribute;
 	void * value;
 	hsa_status_t retval;
-};
+} args_hsa_isa_get_info_alt_t;
 
 #define GET_ARGS_VALUE_hsa_isa_get_info_alt(activity) { \
-	activity->hsa_args.hsa_isa_get_info_alt.isa = (hsa_isa_t) isa; \
-	activity->hsa_args.hsa_isa_get_info_alt.attribute = (hsa_isa_info_t) attribute; \
-	activity->hsa_args.hsa_isa_get_info_alt.value = (void *) value; \
+	args_hsa_isa_get_info_alt_t* args = (args_hsa_isa_get_info_alt_t*) activity->args; \
+	args->isa = (hsa_isa_t) isa; \
+	args->attribute = (hsa_isa_info_t) attribute; \
+	args->value = (void *) value; \
 };
 
 #endif
@@ -9562,14 +9922,15 @@ struct args_hsa_isa_get_info_alt_t {
  *	)
  */
 #if HAVE_hsa_signal_subtract_acquire
-struct args_hsa_signal_subtract_acquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_subtract_acquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_subtract_acquire(activity) { \
-	activity->hsa_args.hsa_signal_subtract_acquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_subtract_acquire.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_subtract_acquire_t* args = (args_hsa_signal_subtract_acquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -9591,17 +9952,18 @@ struct args_hsa_signal_subtract_acquire_t {
  *	)
  */
 #if HAVE_hsa_memory_copy
-struct args_hsa_memory_copy_t {
+typedef struct {
 	void * dst;
 	void * src;
 	size_t size;
 	hsa_status_t retval;
-};
+} args_hsa_memory_copy_t;
 
 #define GET_ARGS_VALUE_hsa_memory_copy(activity) { \
-	activity->hsa_args.hsa_memory_copy.dst = (void *) dst; \
-	activity->hsa_args.hsa_memory_copy.src = (void *) src; \
-	activity->hsa_args.hsa_memory_copy.size = (size_t) size; \
+	args_hsa_memory_copy_t* args = (args_hsa_memory_copy_t*) activity->args; \
+	args->dst = (void *) dst; \
+	args->src = (void *) src; \
+	args->size = (size_t) size; \
 };
 
 #endif
@@ -9623,17 +9985,18 @@ struct args_hsa_memory_copy_t {
  *	)
  */
 #if HAVE_hsa_agent_get_info
-struct args_hsa_agent_get_info_t {
+typedef struct {
 	hsa_agent_t agent;
 	hsa_agent_info_t attribute;
 	void * value;
 	hsa_status_t retval;
-};
+} args_hsa_agent_get_info_t;
 
 #define GET_ARGS_VALUE_hsa_agent_get_info(activity) { \
-	activity->hsa_args.hsa_agent_get_info.agent = (hsa_agent_t) agent; \
-	activity->hsa_args.hsa_agent_get_info.attribute = (hsa_agent_info_t) attribute; \
-	activity->hsa_args.hsa_agent_get_info.value = (void *) value; \
+	args_hsa_agent_get_info_t* args = (args_hsa_agent_get_info_t*) activity->args; \
+	args->agent = (hsa_agent_t) agent; \
+	args->attribute = (hsa_agent_info_t) attribute; \
+	args->value = (void *) value; \
 };
 
 #endif
@@ -9654,14 +10017,15 @@ struct args_hsa_agent_get_info_t {
  *	)
  */
 #if HAVE_hsa_signal_add_scacquire
-struct args_hsa_signal_add_scacquire_t {
+typedef struct {
 	hsa_signal_t signal;
 	hsa_signal_value_t value;
-};
+} args_hsa_signal_add_scacquire_t;
 
 #define GET_ARGS_VALUE_hsa_signal_add_scacquire(activity) { \
-	activity->hsa_args.hsa_signal_add_scacquire.signal = (hsa_signal_t) signal; \
-	activity->hsa_args.hsa_signal_add_scacquire.value = (hsa_signal_value_t) value; \
+	args_hsa_signal_add_scacquire_t* args = (args_hsa_signal_add_scacquire_t*) activity->args; \
+	args->signal = (hsa_signal_t) signal; \
+	args->value = (hsa_signal_value_t) value; \
 };
 
 #endif
@@ -9681,13 +10045,14 @@ struct args_hsa_signal_add_scacquire_t {
  *	)
  */
 #if HAVE_hsa_ven_amd_pcs_flush
-struct args_hsa_ven_amd_pcs_flush_t {
+typedef struct {
 	hsa_ven_amd_pcs_t pc_sampling;
 	hsa_status_t retval;
-};
+} args_hsa_ven_amd_pcs_flush_t;
 
 #define GET_ARGS_VALUE_hsa_ven_amd_pcs_flush(activity) { \
-	activity->hsa_args.hsa_ven_amd_pcs_flush.pc_sampling = (hsa_ven_amd_pcs_t) pc_sampling; \
+	args_hsa_ven_amd_pcs_flush_t* args = (args_hsa_ven_amd_pcs_flush_t*) activity->args; \
+	args->pc_sampling = (hsa_ven_amd_pcs_t) pc_sampling; \
 };
 
 #endif
@@ -9695,636 +10060,741 @@ struct args_hsa_ven_amd_pcs_flush_t {
 
 
 /**
- * @brief Union representing argument structures for different HSA API calls.
- *
- * This union allows storing parameters for various HSA API functions,
- * ensuring type safety and efficient memory usage.
- *
- * @union hsa_api_args_u 
- * @typedef hsa_api_args_t 
- */
-typedef union hsa_api_args_u {
-    FOR_EACH_HSA_FUNC(GET_ARGS_STRUCT_OF)
-} hsa_api_args_t;
-
-
-/**
  * @brief Retrieves pointer-based argument values for HSA API calls.
  *
- * This function extracts pointer-based arguments from the provided `hsa_api_args_t`
- * structure based on the given HSA API ID.
+ * This function extracts pointer-based arguments based on the given HSA API ID.
  *
  * @param[in] id The HSA API function identifier.
  * @param[in,out] args Pointer to the HSA API arguments structure.
  * @param[in] is_enter Boolean flag indicating whether this function is handling an "enter" or "exit" event.
  */
-static inline void get_hsa_pointed_args_for(hsa_api_id_t id, hsa_api_args_t* args, bool is_enter) 
+static inline void get_hsa_pointed_args_for(hsa_api_id_t id, void* args, bool is_enter) 
 {
     if (!is_enter) {
         switch(id) {
 			#if HAVE_hsa_amd_interop_map_buffer
-			case HSA_API_ID_hsa_amd_interop_map_buffer : 
+			case HSA_API_ID_hsa_amd_interop_map_buffer : {
 				GET_PTRS_VALUE_hsa_amd_interop_map_buffer(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_queue_get_info
-			case HSA_API_ID_hsa_amd_queue_get_info : 
+			case HSA_API_ID_hsa_amd_queue_get_info : {
 				GET_PTRS_VALUE_hsa_amd_queue_get_info(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_cas_write_index_scacq_screl
-			case HSA_API_ID_hsa_queue_cas_write_index_scacq_screl : 
+			case HSA_API_ID_hsa_queue_cas_write_index_scacq_screl : {
 				GET_PTRS_VALUE_hsa_queue_cas_write_index_scacq_screl(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_ext_image_get_capability
-			case HSA_API_ID_hsa_ext_image_get_capability : 
+			case HSA_API_ID_hsa_ext_image_get_capability : {
 				GET_PTRS_VALUE_hsa_ext_image_get_capability(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_executable_load_program_code_object
-			case HSA_API_ID_hsa_executable_load_program_code_object : 
+			case HSA_API_ID_hsa_executable_load_program_code_object : {
 				GET_PTRS_VALUE_hsa_executable_load_program_code_object(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_signal_group_wait_any_relaxed
-			case HSA_API_ID_hsa_signal_group_wait_any_relaxed : 
+			case HSA_API_ID_hsa_signal_group_wait_any_relaxed : {
 				GET_PTRS_VALUE_hsa_signal_group_wait_any_relaxed(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_ext_image_clear
-			case HSA_API_ID_hsa_ext_image_clear : 
+			case HSA_API_ID_hsa_ext_image_clear : {
 				GET_PTRS_VALUE_hsa_ext_image_clear(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_executable_load_code_object
-			case HSA_API_ID_hsa_executable_load_code_object : 
+			case HSA_API_ID_hsa_executable_load_code_object : {
 				GET_PTRS_VALUE_hsa_executable_load_code_object(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_ext_image_data_get_info_with_layout
-			case HSA_API_ID_hsa_ext_image_data_get_info_with_layout : 
+			case HSA_API_ID_hsa_ext_image_data_get_info_with_layout : {
 				GET_PTRS_VALUE_hsa_ext_image_data_get_info_with_layout(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_svm_attributes_get
-			case HSA_API_ID_hsa_amd_svm_attributes_get : 
+			case HSA_API_ID_hsa_amd_svm_attributes_get : {
 				GET_PTRS_VALUE_hsa_amd_svm_attributes_get(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_ext_image_export
-			case HSA_API_ID_hsa_ext_image_export : 
+			case HSA_API_ID_hsa_ext_image_export : {
 				GET_PTRS_VALUE_hsa_ext_image_export(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_portable_export_dmabuf
-			case HSA_API_ID_hsa_amd_portable_export_dmabuf : 
+			case HSA_API_ID_hsa_amd_portable_export_dmabuf : {
 				GET_PTRS_VALUE_hsa_amd_portable_export_dmabuf(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_code_object_serialize
-			case HSA_API_ID_hsa_code_object_serialize : 
+			case HSA_API_ID_hsa_code_object_serialize : {
 				GET_PTRS_VALUE_hsa_code_object_serialize(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_memory_lock
-			case HSA_API_ID_hsa_amd_memory_lock : 
+			case HSA_API_ID_hsa_amd_memory_lock : {
 				GET_PTRS_VALUE_hsa_amd_memory_lock(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_isa_get_exception_policies
-			case HSA_API_ID_hsa_isa_get_exception_policies : 
+			case HSA_API_ID_hsa_isa_get_exception_policies : {
 				GET_PTRS_VALUE_hsa_isa_get_exception_policies(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_ven_amd_pcs_create
-			case HSA_API_ID_hsa_ven_amd_pcs_create : 
+			case HSA_API_ID_hsa_ven_amd_pcs_create : {
 				GET_PTRS_VALUE_hsa_ven_amd_pcs_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_load_read_index_relaxed
-			case HSA_API_ID_hsa_queue_load_read_index_relaxed : 
+			case HSA_API_ID_hsa_queue_load_read_index_relaxed : {
 				GET_PTRS_VALUE_hsa_queue_load_read_index_relaxed(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_signal_value_pointer
-			case HSA_API_ID_hsa_amd_signal_value_pointer : 
+			case HSA_API_ID_hsa_amd_signal_value_pointer : {
 				GET_PTRS_VALUE_hsa_amd_signal_value_pointer(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_executable_validate
-			case HSA_API_ID_hsa_executable_validate : 
+			case HSA_API_ID_hsa_executable_validate : {
 				GET_PTRS_VALUE_hsa_executable_validate(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_signal_create
-			case HSA_API_ID_hsa_signal_create : 
+			case HSA_API_ID_hsa_signal_create : {
 				GET_PTRS_VALUE_hsa_signal_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_load_read_index_scacquire
-			case HSA_API_ID_hsa_queue_load_read_index_scacquire : 
+			case HSA_API_ID_hsa_queue_load_read_index_scacquire : {
 				GET_PTRS_VALUE_hsa_queue_load_read_index_scacquire(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_load_write_index_acquire
-			case HSA_API_ID_hsa_queue_load_write_index_acquire : 
+			case HSA_API_ID_hsa_queue_load_write_index_acquire : {
 				GET_PTRS_VALUE_hsa_queue_load_write_index_acquire(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_executable_agent_global_variable_define
-			case HSA_API_ID_hsa_executable_agent_global_variable_define : 
+			case HSA_API_ID_hsa_executable_agent_global_variable_define : {
 				GET_PTRS_VALUE_hsa_executable_agent_global_variable_define(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_soft_queue_create
-			case HSA_API_ID_hsa_soft_queue_create : 
+			case HSA_API_ID_hsa_soft_queue_create : {
 				GET_PTRS_VALUE_hsa_soft_queue_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_isa_from_name
-			case HSA_API_ID_hsa_isa_from_name : 
+			case HSA_API_ID_hsa_isa_from_name : {
 				GET_PTRS_VALUE_hsa_isa_from_name(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_ext_image_create
-			case HSA_API_ID_hsa_ext_image_create : 
+			case HSA_API_ID_hsa_ext_image_create : {
 				GET_PTRS_VALUE_hsa_ext_image_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_system_extension_supported
-			case HSA_API_ID_hsa_system_extension_supported : 
+			case HSA_API_ID_hsa_system_extension_supported : {
 				GET_PTRS_VALUE_hsa_system_extension_supported(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_executable_load_agent_code_object
-			case HSA_API_ID_hsa_executable_load_agent_code_object : 
+			case HSA_API_ID_hsa_executable_load_agent_code_object : {
 				GET_PTRS_VALUE_hsa_executable_load_agent_code_object(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_memory_copy_engine_status
-			case HSA_API_ID_hsa_amd_memory_copy_engine_status : 
+			case HSA_API_ID_hsa_amd_memory_copy_engine_status : {
 				GET_PTRS_VALUE_hsa_amd_memory_copy_engine_status(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_ext_image_copy
-			case HSA_API_ID_hsa_ext_image_copy : 
+			case HSA_API_ID_hsa_ext_image_copy : {
 				GET_PTRS_VALUE_hsa_ext_image_copy(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_coherency_get_type
-			case HSA_API_ID_hsa_amd_coherency_get_type : 
+			case HSA_API_ID_hsa_amd_coherency_get_type : {
 				GET_PTRS_VALUE_hsa_amd_coherency_get_type(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_vmem_export_shareable_handle
-			case HSA_API_ID_hsa_amd_vmem_export_shareable_handle : 
+			case HSA_API_ID_hsa_amd_vmem_export_shareable_handle : {
 				GET_PTRS_VALUE_hsa_amd_vmem_export_shareable_handle(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_svm_prefetch_async
-			case HSA_API_ID_hsa_amd_svm_prefetch_async : 
+			case HSA_API_ID_hsa_amd_svm_prefetch_async : {
 				GET_PTRS_VALUE_hsa_amd_svm_prefetch_async(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_memory_async_copy_rect
-			case HSA_API_ID_hsa_amd_memory_async_copy_rect : 
+			case HSA_API_ID_hsa_amd_memory_async_copy_rect : {
 				GET_PTRS_VALUE_hsa_amd_memory_async_copy_rect(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_svm_attributes_set
-			case HSA_API_ID_hsa_amd_svm_attributes_set : 
+			case HSA_API_ID_hsa_amd_svm_attributes_set : {
 				GET_PTRS_VALUE_hsa_amd_svm_attributes_set(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_profiling_get_async_copy_time
-			case HSA_API_ID_hsa_amd_profiling_get_async_copy_time : 
+			case HSA_API_ID_hsa_amd_profiling_get_async_copy_time : {
 				GET_PTRS_VALUE_hsa_amd_profiling_get_async_copy_time(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_ext_image_import
-			case HSA_API_ID_hsa_ext_image_import : 
+			case HSA_API_ID_hsa_ext_image_import : {
 				GET_PTRS_VALUE_hsa_ext_image_import(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_memory_pool_can_migrate
-			case HSA_API_ID_hsa_amd_memory_pool_can_migrate : 
+			case HSA_API_ID_hsa_amd_memory_pool_can_migrate : {
 				GET_PTRS_VALUE_hsa_amd_memory_pool_can_migrate(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_ipc_memory_attach
-			case HSA_API_ID_hsa_amd_ipc_memory_attach : 
+			case HSA_API_ID_hsa_amd_ipc_memory_attach : {
 				GET_PTRS_VALUE_hsa_amd_ipc_memory_attach(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_add_write_index_relaxed
-			case HSA_API_ID_hsa_queue_add_write_index_relaxed : 
+			case HSA_API_ID_hsa_queue_add_write_index_relaxed : {
 				GET_PTRS_VALUE_hsa_queue_add_write_index_relaxed(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_executable_create_alt
-			case HSA_API_ID_hsa_executable_create_alt : 
+			case HSA_API_ID_hsa_executable_create_alt : {
 				GET_PTRS_VALUE_hsa_executable_create_alt(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_add_write_index_acq_rel
-			case HSA_API_ID_hsa_queue_add_write_index_acq_rel : 
+			case HSA_API_ID_hsa_queue_add_write_index_acq_rel : {
 				GET_PTRS_VALUE_hsa_queue_add_write_index_acq_rel(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_cas_write_index_acq_rel
-			case HSA_API_ID_hsa_queue_cas_write_index_acq_rel : 
+			case HSA_API_ID_hsa_queue_cas_write_index_acq_rel : {
 				GET_PTRS_VALUE_hsa_queue_cas_write_index_acq_rel(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_executable_get_symbol_by_name
-			case HSA_API_ID_hsa_executable_get_symbol_by_name : 
+			case HSA_API_ID_hsa_executable_get_symbol_by_name : {
 				GET_PTRS_VALUE_hsa_executable_get_symbol_by_name(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_executable_get_symbol
-			case HSA_API_ID_hsa_executable_get_symbol : 
+			case HSA_API_ID_hsa_executable_get_symbol : {
 				GET_PTRS_VALUE_hsa_executable_get_symbol(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_system_major_extension_supported
-			case HSA_API_ID_hsa_system_major_extension_supported : 
+			case HSA_API_ID_hsa_system_major_extension_supported : {
 				GET_PTRS_VALUE_hsa_system_major_extension_supported(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_status_string
-			case HSA_API_ID_hsa_status_string : 
+			case HSA_API_ID_hsa_status_string : {
 				GET_PTRS_VALUE_hsa_status_string(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_memory_allocate
-			case HSA_API_ID_hsa_memory_allocate : 
+			case HSA_API_ID_hsa_memory_allocate : {
 				GET_PTRS_VALUE_hsa_memory_allocate(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_ext_image_data_get_info
-			case HSA_API_ID_hsa_ext_image_data_get_info : 
+			case HSA_API_ID_hsa_ext_image_data_get_info : {
 				GET_PTRS_VALUE_hsa_ext_image_data_get_info(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_load_write_index_relaxed
-			case HSA_API_ID_hsa_queue_load_write_index_relaxed : 
+			case HSA_API_ID_hsa_queue_load_write_index_relaxed : {
 				GET_PTRS_VALUE_hsa_queue_load_write_index_relaxed(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_agent_extension_supported
-			case HSA_API_ID_hsa_agent_extension_supported : 
+			case HSA_API_ID_hsa_agent_extension_supported : {
 				GET_PTRS_VALUE_hsa_agent_extension_supported(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_executable_validate_alt
-			case HSA_API_ID_hsa_executable_validate_alt : 
+			case HSA_API_ID_hsa_executable_validate_alt : {
 				GET_PTRS_VALUE_hsa_executable_validate_alt(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_code_object_reader_create_from_memory
-			case HSA_API_ID_hsa_code_object_reader_create_from_memory : 
+			case HSA_API_ID_hsa_code_object_reader_create_from_memory : {
 				GET_PTRS_VALUE_hsa_code_object_reader_create_from_memory(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_isa_compatible
-			case HSA_API_ID_hsa_isa_compatible : 
+			case HSA_API_ID_hsa_isa_compatible : {
 				GET_PTRS_VALUE_hsa_isa_compatible(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_cas_write_index_acquire
-			case HSA_API_ID_hsa_queue_cas_write_index_acquire : 
+			case HSA_API_ID_hsa_queue_cas_write_index_acquire : {
 				GET_PTRS_VALUE_hsa_queue_cas_write_index_acquire(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_cas_write_index_relaxed
-			case HSA_API_ID_hsa_queue_cas_write_index_relaxed : 
+			case HSA_API_ID_hsa_queue_cas_write_index_relaxed : {
 				GET_PTRS_VALUE_hsa_queue_cas_write_index_relaxed(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_pointer_info
-			case HSA_API_ID_hsa_amd_pointer_info : 
+			case HSA_API_ID_hsa_amd_pointer_info : {
 				GET_PTRS_VALUE_hsa_amd_pointer_info(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_spm_set_dest_buffer
-			case HSA_API_ID_hsa_amd_spm_set_dest_buffer : 
+			case HSA_API_ID_hsa_amd_spm_set_dest_buffer : {
 				GET_PTRS_VALUE_hsa_amd_spm_set_dest_buffer(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_vmem_get_access
-			case HSA_API_ID_hsa_amd_vmem_get_access : 
+			case HSA_API_ID_hsa_amd_vmem_get_access : {
 				GET_PTRS_VALUE_hsa_amd_vmem_get_access(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_executable_create
-			case HSA_API_ID_hsa_executable_create : 
+			case HSA_API_ID_hsa_executable_create : {
 				GET_PTRS_VALUE_hsa_executable_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_memory_lock_to_pool
-			case HSA_API_ID_hsa_amd_memory_lock_to_pool : 
+			case HSA_API_ID_hsa_amd_memory_lock_to_pool : {
 				GET_PTRS_VALUE_hsa_amd_memory_lock_to_pool(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_cas_write_index_scacquire
-			case HSA_API_ID_hsa_queue_cas_write_index_scacquire : 
+			case HSA_API_ID_hsa_queue_cas_write_index_scacquire : {
 				GET_PTRS_VALUE_hsa_queue_cas_write_index_scacquire(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_code_object_get_symbol
-			case HSA_API_ID_hsa_code_object_get_symbol : 
+			case HSA_API_ID_hsa_code_object_get_symbol : {
 				GET_PTRS_VALUE_hsa_code_object_get_symbol(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_signal_group_create
-			case HSA_API_ID_hsa_signal_group_create : 
+			case HSA_API_ID_hsa_signal_group_create : {
 				GET_PTRS_VALUE_hsa_signal_group_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_extension_get_name
-			case HSA_API_ID_hsa_extension_get_name : 
+			case HSA_API_ID_hsa_extension_get_name : {
 				GET_PTRS_VALUE_hsa_extension_get_name(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_signal_group_wait_any_scacquire
-			case HSA_API_ID_hsa_signal_group_wait_any_scacquire : 
+			case HSA_API_ID_hsa_signal_group_wait_any_scacquire : {
 				GET_PTRS_VALUE_hsa_signal_group_wait_any_scacquire(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_create
-			case HSA_API_ID_hsa_queue_create : 
+			case HSA_API_ID_hsa_queue_create : {
 				GET_PTRS_VALUE_hsa_queue_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_profiling_set_profiler_enabled
-			case HSA_API_ID_hsa_amd_profiling_set_profiler_enabled : 
+			case HSA_API_ID_hsa_amd_profiling_set_profiler_enabled : {
 				GET_PTRS_VALUE_hsa_amd_profiling_set_profiler_enabled(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_profiling_get_dispatch_time
-			case HSA_API_ID_hsa_amd_profiling_get_dispatch_time : 
+			case HSA_API_ID_hsa_amd_profiling_get_dispatch_time : {
 				GET_PTRS_VALUE_hsa_amd_profiling_get_dispatch_time(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_ipc_memory_create
-			case HSA_API_ID_hsa_amd_ipc_memory_create : 
+			case HSA_API_ID_hsa_amd_ipc_memory_create : {
 				GET_PTRS_VALUE_hsa_amd_ipc_memory_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_vmem_import_shareable_handle
-			case HSA_API_ID_hsa_amd_vmem_import_shareable_handle : 
+			case HSA_API_ID_hsa_amd_vmem_import_shareable_handle : {
 				GET_PTRS_VALUE_hsa_amd_vmem_import_shareable_handle(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_add_write_index_acquire
-			case HSA_API_ID_hsa_queue_add_write_index_acquire : 
+			case HSA_API_ID_hsa_queue_add_write_index_acquire : {
 				GET_PTRS_VALUE_hsa_queue_add_write_index_acquire(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_ven_amd_pcs_create_from_id
-			case HSA_API_ID_hsa_ven_amd_pcs_create_from_id : 
+			case HSA_API_ID_hsa_ven_amd_pcs_create_from_id : {
 				GET_PTRS_VALUE_hsa_ven_amd_pcs_create_from_id(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_ext_sampler_create
-			case HSA_API_ID_hsa_ext_sampler_create : 
+			case HSA_API_ID_hsa_ext_sampler_create : {
 				GET_PTRS_VALUE_hsa_ext_sampler_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_executable_readonly_variable_define
-			case HSA_API_ID_hsa_executable_readonly_variable_define : 
+			case HSA_API_ID_hsa_executable_readonly_variable_define : {
 				GET_PTRS_VALUE_hsa_executable_readonly_variable_define(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_inactivate
-			case HSA_API_ID_hsa_queue_inactivate : 
+			case HSA_API_ID_hsa_queue_inactivate : {
 				GET_PTRS_VALUE_hsa_queue_inactivate(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_store_write_index_relaxed
-			case HSA_API_ID_hsa_queue_store_write_index_relaxed : 
+			case HSA_API_ID_hsa_queue_store_write_index_relaxed : {
 				GET_PTRS_VALUE_hsa_queue_store_write_index_relaxed(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_agent_major_extension_supported
-			case HSA_API_ID_hsa_agent_major_extension_supported : 
+			case HSA_API_ID_hsa_agent_major_extension_supported : {
 				GET_PTRS_VALUE_hsa_agent_major_extension_supported(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_vmem_retain_alloc_handle
-			case HSA_API_ID_hsa_amd_vmem_retain_alloc_handle : 
+			case HSA_API_ID_hsa_amd_vmem_retain_alloc_handle : {
 				GET_PTRS_VALUE_hsa_amd_vmem_retain_alloc_handle(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_vmem_address_reserve
-			case HSA_API_ID_hsa_amd_vmem_address_reserve : 
+			case HSA_API_ID_hsa_amd_vmem_address_reserve : {
 				GET_PTRS_VALUE_hsa_amd_vmem_address_reserve(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_vmem_handle_create
-			case HSA_API_ID_hsa_amd_vmem_handle_create : 
+			case HSA_API_ID_hsa_amd_vmem_handle_create : {
 				GET_PTRS_VALUE_hsa_amd_vmem_handle_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_load_write_index_scacquire
-			case HSA_API_ID_hsa_queue_load_write_index_scacquire : 
+			case HSA_API_ID_hsa_queue_load_write_index_scacquire : {
 				GET_PTRS_VALUE_hsa_queue_load_write_index_scacquire(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_memory_pool_allocate
-			case HSA_API_ID_hsa_amd_memory_pool_allocate : 
+			case HSA_API_ID_hsa_amd_memory_pool_allocate : {
 				GET_PTRS_VALUE_hsa_amd_memory_pool_allocate(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_code_object_get_symbol_from_name
-			case HSA_API_ID_hsa_code_object_get_symbol_from_name : 
+			case HSA_API_ID_hsa_code_object_get_symbol_from_name : {
 				GET_PTRS_VALUE_hsa_code_object_get_symbol_from_name(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_isa_get_round_method
-			case HSA_API_ID_hsa_isa_get_round_method : 
+			case HSA_API_ID_hsa_isa_get_round_method : {
 				GET_PTRS_VALUE_hsa_isa_get_round_method(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_queue_set_priority
-			case HSA_API_ID_hsa_amd_queue_set_priority : 
+			case HSA_API_ID_hsa_amd_queue_set_priority : {
 				GET_PTRS_VALUE_hsa_amd_queue_set_priority(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_vmem_get_alloc_properties_from_handle
-			case HSA_API_ID_hsa_amd_vmem_get_alloc_properties_from_handle : 
+			case HSA_API_ID_hsa_amd_vmem_get_alloc_properties_from_handle : {
 				GET_PTRS_VALUE_hsa_amd_vmem_get_alloc_properties_from_handle(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_ipc_signal_attach
-			case HSA_API_ID_hsa_amd_ipc_signal_attach : 
+			case HSA_API_ID_hsa_amd_ipc_signal_attach : {
 				GET_PTRS_VALUE_hsa_amd_ipc_signal_attach(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_memory_async_copy
-			case HSA_API_ID_hsa_amd_memory_async_copy : 
+			case HSA_API_ID_hsa_amd_memory_async_copy : {
 				GET_PTRS_VALUE_hsa_amd_memory_async_copy(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_executable_global_variable_define
-			case HSA_API_ID_hsa_executable_global_variable_define : 
+			case HSA_API_ID_hsa_executable_global_variable_define : {
 				GET_PTRS_VALUE_hsa_executable_global_variable_define(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_signal_create
-			case HSA_API_ID_hsa_amd_signal_create : 
+			case HSA_API_ID_hsa_amd_signal_create : {
 				GET_PTRS_VALUE_hsa_amd_signal_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_image_create
-			case HSA_API_ID_hsa_amd_image_create : 
+			case HSA_API_ID_hsa_amd_image_create : {
 				GET_PTRS_VALUE_hsa_amd_image_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_vmem_set_access
-			case HSA_API_ID_hsa_amd_vmem_set_access : 
+			case HSA_API_ID_hsa_amd_vmem_set_access : {
 				GET_PTRS_VALUE_hsa_amd_vmem_set_access(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_profiling_convert_tick_to_system_domain
-			case HSA_API_ID_hsa_amd_profiling_convert_tick_to_system_domain : 
+			case HSA_API_ID_hsa_amd_profiling_convert_tick_to_system_domain : {
 				GET_PTRS_VALUE_hsa_amd_profiling_convert_tick_to_system_domain(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_vmem_address_reserve_align
-			case HSA_API_ID_hsa_amd_vmem_address_reserve_align : 
+			case HSA_API_ID_hsa_amd_vmem_address_reserve_align : {
 				GET_PTRS_VALUE_hsa_amd_vmem_address_reserve_align(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_add_write_index_scacquire
-			case HSA_API_ID_hsa_queue_add_write_index_scacquire : 
+			case HSA_API_ID_hsa_queue_add_write_index_scacquire : {
 				GET_PTRS_VALUE_hsa_queue_add_write_index_scacquire(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_code_object_reader_create_from_file
-			case HSA_API_ID_hsa_code_object_reader_create_from_file : 
+			case HSA_API_ID_hsa_code_object_reader_create_from_file : {
 				GET_PTRS_VALUE_hsa_code_object_reader_create_from_file(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_queue_cu_set_mask
-			case HSA_API_ID_hsa_amd_queue_cu_set_mask : 
+			case HSA_API_ID_hsa_amd_queue_cu_set_mask : {
 				GET_PTRS_VALUE_hsa_amd_queue_cu_set_mask(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_agent_get_exception_policies
-			case HSA_API_ID_hsa_agent_get_exception_policies : 
+			case HSA_API_ID_hsa_agent_get_exception_policies : {
 				GET_PTRS_VALUE_hsa_agent_get_exception_policies(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_signal_wait_any
-			case HSA_API_ID_hsa_amd_signal_wait_any : 
+			case HSA_API_ID_hsa_amd_signal_wait_any : {
 				GET_PTRS_VALUE_hsa_amd_signal_wait_any(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_agents_allow_access
-			case HSA_API_ID_hsa_amd_agents_allow_access : 
+			case HSA_API_ID_hsa_amd_agents_allow_access : {
 				GET_PTRS_VALUE_hsa_amd_agents_allow_access(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_add_write_index_scacq_screl
-			case HSA_API_ID_hsa_queue_add_write_index_scacq_screl : 
+			case HSA_API_ID_hsa_queue_add_write_index_scacq_screl : {
 				GET_PTRS_VALUE_hsa_queue_add_write_index_scacq_screl(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_store_read_index_relaxed
-			case HSA_API_ID_hsa_queue_store_read_index_relaxed : 
+			case HSA_API_ID_hsa_queue_store_read_index_relaxed : {
 				GET_PTRS_VALUE_hsa_queue_store_read_index_relaxed(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_load_read_index_acquire
-			case HSA_API_ID_hsa_queue_load_read_index_acquire : 
+			case HSA_API_ID_hsa_queue_load_read_index_acquire : {
 				GET_PTRS_VALUE_hsa_queue_load_read_index_acquire(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_ipc_signal_create
-			case HSA_API_ID_hsa_amd_ipc_signal_create : 
+			case HSA_API_ID_hsa_amd_ipc_signal_create : {
 				GET_PTRS_VALUE_hsa_amd_ipc_signal_create(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_ext_image_get_capability_with_layout
-			case HSA_API_ID_hsa_ext_image_get_capability_with_layout : 
+			case HSA_API_ID_hsa_ext_image_get_capability_with_layout : {
 				GET_PTRS_VALUE_hsa_ext_image_get_capability_with_layout(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_memory_async_copy_on_engine
-			case HSA_API_ID_hsa_amd_memory_async_copy_on_engine : 
+			case HSA_API_ID_hsa_amd_memory_async_copy_on_engine : {
 				GET_PTRS_VALUE_hsa_amd_memory_async_copy_on_engine(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_amd_queue_cu_get_mask
-			case HSA_API_ID_hsa_amd_queue_cu_get_mask : 
+			case HSA_API_ID_hsa_amd_queue_cu_get_mask : {
 				GET_PTRS_VALUE_hsa_amd_queue_cu_get_mask(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_ext_image_create_with_layout
-			case HSA_API_ID_hsa_ext_image_create_with_layout : 
+			case HSA_API_ID_hsa_ext_image_create_with_layout : {
 				GET_PTRS_VALUE_hsa_ext_image_create_with_layout(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_code_object_deserialize
-			case HSA_API_ID_hsa_code_object_deserialize : 
+			case HSA_API_ID_hsa_code_object_deserialize : {
 				GET_PTRS_VALUE_hsa_code_object_deserialize(args);
 				return;
+			}
 			#endif
             default : break;
         }
     } else {
         switch(id) {
 			#if HAVE_hsa_queue_cas_write_index_release
-			case HSA_API_ID_hsa_queue_cas_write_index_release : 
+			case HSA_API_ID_hsa_queue_cas_write_index_release : {
 				GET_PTRS_VALUE_hsa_queue_cas_write_index_release(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_cas_write_index_screlease
-			case HSA_API_ID_hsa_queue_cas_write_index_screlease : 
+			case HSA_API_ID_hsa_queue_cas_write_index_screlease : {
 				GET_PTRS_VALUE_hsa_queue_cas_write_index_screlease(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_executable_freeze
-			case HSA_API_ID_hsa_executable_freeze : 
+			case HSA_API_ID_hsa_executable_freeze : {
 				GET_PTRS_VALUE_hsa_executable_freeze(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_store_write_index_release
-			case HSA_API_ID_hsa_queue_store_write_index_release : 
+			case HSA_API_ID_hsa_queue_store_write_index_release : {
 				GET_PTRS_VALUE_hsa_queue_store_write_index_release(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_destroy
-			case HSA_API_ID_hsa_queue_destroy : 
+			case HSA_API_ID_hsa_queue_destroy : {
 				GET_PTRS_VALUE_hsa_queue_destroy(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_store_write_index_screlease
-			case HSA_API_ID_hsa_queue_store_write_index_screlease : 
+			case HSA_API_ID_hsa_queue_store_write_index_screlease : {
 				GET_PTRS_VALUE_hsa_queue_store_write_index_screlease(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_add_write_index_release
-			case HSA_API_ID_hsa_queue_add_write_index_release : 
+			case HSA_API_ID_hsa_queue_add_write_index_release : {
 				GET_PTRS_VALUE_hsa_queue_add_write_index_release(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_store_read_index_release
-			case HSA_API_ID_hsa_queue_store_read_index_release : 
+			case HSA_API_ID_hsa_queue_store_read_index_release : {
 				GET_PTRS_VALUE_hsa_queue_store_read_index_release(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_store_read_index_screlease
-			case HSA_API_ID_hsa_queue_store_read_index_screlease : 
+			case HSA_API_ID_hsa_queue_store_read_index_screlease : {
 				GET_PTRS_VALUE_hsa_queue_store_read_index_screlease(args);
 				return;
+			}
 			#endif
 			#if HAVE_hsa_queue_add_write_index_screlease
-			case HSA_API_ID_hsa_queue_add_write_index_screlease : 
+			case HSA_API_ID_hsa_queue_add_write_index_screlease : {
 				GET_PTRS_VALUE_hsa_queue_add_write_index_screlease(args);
 				return;
+			}
 			#endif
             default : break;
         }

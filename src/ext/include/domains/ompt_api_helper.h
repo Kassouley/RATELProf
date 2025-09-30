@@ -36,6 +36,7 @@ typedef enum {
 } ompt_api_id_t;
 
 
+// Target Map Emi
 struct map_t {
     void *host_addr;
     void *device_addr;
@@ -43,56 +44,65 @@ struct map_t {
     unsigned int mapping_flags;
 };
 
-struct args_target_map_emi_t {
+typedef struct {
     unsigned int nitems;
     struct map_t * map;
-};
+} args_target_map_emi_t;
 
 #define GET_ARGS_VALUE_target_map_emi(activity) { \
-    activity->args.target_map_emi.nitems = nitems; \
-    activity->args.target_map_emi.map = (struct map_t*) malloc(sizeof(struct map_t) * nitems); \
+	args_target_map_emi_t* args = (args_target_map_emi_t*) activity->args; \
+    args->nitems = nitems; \
+    args->map = (struct map_t*) malloc(sizeof(struct map_t) * nitems); \
     for (int i = 0; i < nitems; i++) { \
-        activity->args.target_map_emi.map[i].host_addr = host_addr[i]; \
-        activity->args.target_map_emi.map[i].device_addr = device_addr[i]; \
-        activity->args.target_map_emi.map[i].bytes = bytes[i]; \
-        activity->args.target_map_emi.map[i].mapping_flags = mapping_flags[i]; \
+        args->map[i].host_addr = host_addr[i]; \
+        args->map[i].device_addr = device_addr[i]; \
+        args->map[i].bytes = bytes[i]; \
+        args->map[i].mapping_flags = mapping_flags[i]; \
     } \
 };
 
-struct args_target_submit_emi_t {
+// Target Submit Emi
+typedef struct {
     ompt_id_t *host_op_id;
     unsigned int requested_num_teams;
-};
+} args_target_submit_emi_t;
 
 #define GET_ARGS_VALUE_target_submit_emi(activity) { \
-    activity->args.target_submit_emi.host_op_id = host_op_id; \
-    activity->args.target_submit_emi.requested_num_teams = requested_num_teams; \
+	args_target_submit_emi_t* args = (args_target_submit_emi_t*) activity->args; \
+    args->host_op_id = host_op_id; \
+    args->requested_num_teams = requested_num_teams; \
 };
 
-struct args_target_data_op_t {
+
+// Target Data
+typedef struct {
     ompt_id_t *host_op_id;
     void *src_addr;
     int src_device_num;
     void *dest_addr;
     int dest_device_num;
     size_t bytes;
-};
+} args_target_data_op_t;
 
 #define GET_ARGS_VALUE_target_data_op(activity) { \
-    activity->args.target_data_op.host_op_id = host_op_id; \
-    activity->args.target_data_op.src_addr = src_addr; \
-    activity->args.target_data_op.src_device_num = src_device_num; \
-    activity->args.target_data_op.dest_addr = dest_addr; \
-    activity->args.target_data_op.dest_device_num = dest_device_num; \
-    activity->args.target_data_op.bytes = bytes; \
+	args_target_data_op_t* args = (args_target_data_op_t*) activity->args; \
+    args->host_op_id = host_op_id; \
+    args->src_addr = src_addr; \
+    args->src_device_num = src_device_num; \
+    args->dest_addr = dest_addr; \
+    args->dest_device_num = dest_device_num; \
+    args->bytes = bytes; \
 };
 
-struct args_target_emi_t {
+
+// Target Emi
+typedef struct {
     int device_num;
-};
+} args_target_emi_t;
 
 #define GET_ARGS_VALUE_target_emi(activity) { \
-    activity->args.target_emi.device_num = device_num; \
+	args_target_emi_t* args = (args_target_emi_t*) activity->args; \
+    args->device_num = device_num; \
 };
 
 

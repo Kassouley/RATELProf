@@ -10,7 +10,7 @@
 void on_enter_omp_routine_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
 {
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
-    get_omp_routine_pointed_args_for(id, &activity->omp_routine_args, 1);
+    get_omp_routine_pointed_args_for(id, activity->args, 1);
     activity->phase = ratelprof_get_current_phase();
     activity->domain = domain;
     get_correlation_id(&activity->corr_id);
@@ -21,38 +21,40 @@ void on_enter_omp_routine_callback(ratelprof_domain_t domain, ratelprof_api_id_t
 void on_exit_omp_routine_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
 {
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
-    get_omp_routine_pointed_args_for(id, &activity->omp_routine_args, 0);
+    get_omp_routine_pointed_args_for(id, activity->args, 0);
     activity->pid = get_pid();
     activity->tid = get_tid();
     printf("-----------\n");
     printf("PHASE:%d : %s | ID: %lu | CID: %lu\n", activity->phase, get_omp_routine_funame_by_id(activity->funid), activity->id, activity->corr_id);
     ratelprof_get_and_print_location(activity->return_address);
-    process_omp_routine_args_for(activity->funid, &activity->omp_routine_args, NULL);
+    process_omp_routine_args_for(activity->funid, activity->args, NULL);
     pop_id();
 }
 
-void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_api_args_t* args, void* user_args)
+void process_omp_routine_args_for(omp_routine_api_id_t funid, const void* func_args, void* user_args)
 {
     switch(funid) {
 		#if HAVE_omp_target_memset
-		case OMP_ROUTINE_API_ID_omp_target_memset :
+		case OMP_ROUTINE_API_ID_omp_target_memset : {
 			//	void * ptr (void *);
 			//	int value (int);
 			//	size_t size (unsigned long);
 			//	int device_num (int);
 			//	void * retval (void *);
-			printf("\tvoid * ptr = %p", args->omp_target_memset.ptr);
+			args_omp_target_memset_t* args = (args_omp_target_memset_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tint value = %d\n", args->omp_target_memset.value);
-			printf("\tsize_t size = %lu\n", args->omp_target_memset.size);
-			printf("\tint device_num = %d\n", args->omp_target_memset.device_num);
-			printf("\tvoid * retval = %p", args->omp_target_memset.retval);
+			printf("\tint value = %d\n", args->value);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tint device_num = %d\n", args->device_num);
+			printf("\tvoid * retval = %p", args->retval);
 			printf("\n");
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_memcpy_async
-		case OMP_ROUTINE_API_ID_omp_target_memcpy_async :
+		case OMP_ROUTINE_API_ID_omp_target_memcpy_async : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t size (unsigned long);
@@ -63,27 +65,29 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			//	int async_depend_info (int);
 			//	omp_depend_t * depend (void **);
 			//	int retval (int);
-			printf("\tvoid * dst = %p", args->omp_target_memcpy_async.dst);
+			args_omp_target_memcpy_async_t* args = (args_omp_target_memcpy_async_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * src = %p", args->omp_target_memcpy_async.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->omp_target_memcpy_async.size);
-			printf("\tsize_t dst_offset = %lu\n", args->omp_target_memcpy_async.dst_offset);
-			printf("\tsize_t src_offset = %lu\n", args->omp_target_memcpy_async.src_offset);
-			printf("\tint dst_device_num = %d\n", args->omp_target_memcpy_async.dst_device_num);
-			printf("\tint src_device_num = %d\n", args->omp_target_memcpy_async.src_device_num);
-			printf("\tint async_depend_info = %d\n", args->omp_target_memcpy_async.async_depend_info);
-			printf("\tomp_depend_t * depend = %p", args->omp_target_memcpy_async.depend);
-			if (args->omp_target_memcpy_async.depend != NULL) {
-				printf("-> %p", args->omp_target_memcpy_async.depend__ref.ptr1);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tsize_t dst_offset = %lu\n", args->dst_offset);
+			printf("\tsize_t src_offset = %lu\n", args->src_offset);
+			printf("\tint dst_device_num = %d\n", args->dst_device_num);
+			printf("\tint src_device_num = %d\n", args->src_device_num);
+			printf("\tint async_depend_info = %d\n", args->async_depend_info);
+			printf("\tomp_depend_t * depend = %p", args->depend);
+			if (args->depend != NULL) {
+				printf("-> %p", args->depend__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tint retval = %d\n", args->omp_target_memcpy_async.retval);
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_memcpy_rect_async
-		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect_async :
+		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect_async : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t element_size (unsigned long);
@@ -98,68 +102,74 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			//	int depobj_count (int);
 			//	omp_depend_t * depobj_list (void **);
 			//	int retval (int);
-			printf("\tvoid * dst = %p", args->omp_target_memcpy_rect_async.dst);
+			args_omp_target_memcpy_rect_async_t* args = (args_omp_target_memcpy_rect_async_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * src = %p", args->omp_target_memcpy_rect_async.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t element_size = %lu\n", args->omp_target_memcpy_rect_async.element_size);
-			printf("\tint num_dims = %d\n", args->omp_target_memcpy_rect_async.num_dims);
-			printf("\tconst size_t * volume = %p", args->omp_target_memcpy_rect_async.volume);
-			if (args->omp_target_memcpy_rect_async.volume != NULL) {
-				printf(" -> %lu\n", args->omp_target_memcpy_rect_async.volume__ref.val);
+			printf("\tsize_t element_size = %lu\n", args->element_size);
+			printf("\tint num_dims = %d\n", args->num_dims);
+			printf("\tconst size_t * volume = %p", args->volume);
+			if (args->volume != NULL) {
+				printf(" -> %lu\n", args->volume__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst size_t * dst_offsets = %p", args->omp_target_memcpy_rect_async.dst_offsets);
-			if (args->omp_target_memcpy_rect_async.dst_offsets != NULL) {
-				printf(" -> %lu\n", args->omp_target_memcpy_rect_async.dst_offsets__ref.val);
+			printf("\tconst size_t * dst_offsets = %p", args->dst_offsets);
+			if (args->dst_offsets != NULL) {
+				printf(" -> %lu\n", args->dst_offsets__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst size_t * src_offsets = %p", args->omp_target_memcpy_rect_async.src_offsets);
-			if (args->omp_target_memcpy_rect_async.src_offsets != NULL) {
-				printf(" -> %lu\n", args->omp_target_memcpy_rect_async.src_offsets__ref.val);
+			printf("\tconst size_t * src_offsets = %p", args->src_offsets);
+			if (args->src_offsets != NULL) {
+				printf(" -> %lu\n", args->src_offsets__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst size_t * dst_dimensions = %p", args->omp_target_memcpy_rect_async.dst_dimensions);
-			if (args->omp_target_memcpy_rect_async.dst_dimensions != NULL) {
-				printf(" -> %lu\n", args->omp_target_memcpy_rect_async.dst_dimensions__ref.val);
+			printf("\tconst size_t * dst_dimensions = %p", args->dst_dimensions);
+			if (args->dst_dimensions != NULL) {
+				printf(" -> %lu\n", args->dst_dimensions__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst size_t * src_dimensions = %p", args->omp_target_memcpy_rect_async.src_dimensions);
-			if (args->omp_target_memcpy_rect_async.src_dimensions != NULL) {
-				printf(" -> %lu\n", args->omp_target_memcpy_rect_async.src_dimensions__ref.val);
+			printf("\tconst size_t * src_dimensions = %p", args->src_dimensions);
+			if (args->src_dimensions != NULL) {
+				printf(" -> %lu\n", args->src_dimensions__ref.val);
 			} else { printf("\n"); };
-			printf("\tint dst_device_num = %d\n", args->omp_target_memcpy_rect_async.dst_device_num);
-			printf("\tint src_device_num = %d\n", args->omp_target_memcpy_rect_async.src_device_num);
-			printf("\tint depobj_count = %d\n", args->omp_target_memcpy_rect_async.depobj_count);
-			printf("\tomp_depend_t * depobj_list = %p", args->omp_target_memcpy_rect_async.depobj_list);
-			if (args->omp_target_memcpy_rect_async.depobj_list != NULL) {
-				printf("-> %p", args->omp_target_memcpy_rect_async.depobj_list__ref.ptr1);
+			printf("\tint dst_device_num = %d\n", args->dst_device_num);
+			printf("\tint src_device_num = %d\n", args->src_device_num);
+			printf("\tint depobj_count = %d\n", args->depobj_count);
+			printf("\tomp_depend_t * depobj_list = %p", args->depobj_list);
+			if (args->depobj_list != NULL) {
+				printf("-> %p", args->depobj_list__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tint retval = %d\n", args->omp_target_memcpy_rect_async.retval);
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_alloc
-		case OMP_ROUTINE_API_ID_omp_target_alloc :
+		case OMP_ROUTINE_API_ID_omp_target_alloc : {
 			//	size_t size (unsigned long);
 			//	int device_num (int);
 			//	void * retval (void *);
-			printf("\tsize_t size = %lu\n", args->omp_target_alloc.size);
-			printf("\tint device_num = %d\n", args->omp_target_alloc.device_num);
-			printf("\tvoid * retval = %p", args->omp_target_alloc.retval);
+			args_omp_target_alloc_t* args = (args_omp_target_alloc_t*) func_args;
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tint device_num = %d\n", args->device_num);
+			printf("\tvoid * retval = %p", args->retval);
 			printf("\n");
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_free
-		case OMP_ROUTINE_API_ID_omp_target_free :
+		case OMP_ROUTINE_API_ID_omp_target_free : {
 			//	void * device_ptr (void *);
 			//	int device_num (int);
-			printf("\tvoid * device_ptr = %p", args->omp_target_free.device_ptr);
+			args_omp_target_free_t* args = (args_omp_target_free_t*) func_args;
+			printf("\tvoid * device_ptr = %p", args->device_ptr);
 			printf("\n");
-			printf("\tint device_num = %d\n", args->omp_target_free.device_num);
+			printf("\tint device_num = %d\n", args->device_num);
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_memcpy_rect
-		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect :
+		case OMP_ROUTINE_API_ID_omp_target_memcpy_rect : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t element_size (unsigned long);
@@ -172,52 +182,56 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			//	int dst_device_num (int);
 			//	int src_device_num (int);
 			//	int retval (int);
-			printf("\tvoid * dst = %p", args->omp_target_memcpy_rect.dst);
+			args_omp_target_memcpy_rect_t* args = (args_omp_target_memcpy_rect_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * src = %p", args->omp_target_memcpy_rect.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t element_size = %lu\n", args->omp_target_memcpy_rect.element_size);
-			printf("\tint num_dims = %d\n", args->omp_target_memcpy_rect.num_dims);
-			printf("\tconst size_t * volume = %p", args->omp_target_memcpy_rect.volume);
-			if (args->omp_target_memcpy_rect.volume != NULL) {
-				printf(" -> %lu\n", args->omp_target_memcpy_rect.volume__ref.val);
+			printf("\tsize_t element_size = %lu\n", args->element_size);
+			printf("\tint num_dims = %d\n", args->num_dims);
+			printf("\tconst size_t * volume = %p", args->volume);
+			if (args->volume != NULL) {
+				printf(" -> %lu\n", args->volume__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst size_t * dst_offsets = %p", args->omp_target_memcpy_rect.dst_offsets);
-			if (args->omp_target_memcpy_rect.dst_offsets != NULL) {
-				printf(" -> %lu\n", args->omp_target_memcpy_rect.dst_offsets__ref.val);
+			printf("\tconst size_t * dst_offsets = %p", args->dst_offsets);
+			if (args->dst_offsets != NULL) {
+				printf(" -> %lu\n", args->dst_offsets__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst size_t * src_offsets = %p", args->omp_target_memcpy_rect.src_offsets);
-			if (args->omp_target_memcpy_rect.src_offsets != NULL) {
-				printf(" -> %lu\n", args->omp_target_memcpy_rect.src_offsets__ref.val);
+			printf("\tconst size_t * src_offsets = %p", args->src_offsets);
+			if (args->src_offsets != NULL) {
+				printf(" -> %lu\n", args->src_offsets__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst size_t * dst_dimensions = %p", args->omp_target_memcpy_rect.dst_dimensions);
-			if (args->omp_target_memcpy_rect.dst_dimensions != NULL) {
-				printf(" -> %lu\n", args->omp_target_memcpy_rect.dst_dimensions__ref.val);
+			printf("\tconst size_t * dst_dimensions = %p", args->dst_dimensions);
+			if (args->dst_dimensions != NULL) {
+				printf(" -> %lu\n", args->dst_dimensions__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst size_t * src_dimensions = %p", args->omp_target_memcpy_rect.src_dimensions);
-			if (args->omp_target_memcpy_rect.src_dimensions != NULL) {
-				printf(" -> %lu\n", args->omp_target_memcpy_rect.src_dimensions__ref.val);
+			printf("\tconst size_t * src_dimensions = %p", args->src_dimensions);
+			if (args->src_dimensions != NULL) {
+				printf(" -> %lu\n", args->src_dimensions__ref.val);
 			} else { printf("\n"); };
-			printf("\tint dst_device_num = %d\n", args->omp_target_memcpy_rect.dst_device_num);
-			printf("\tint src_device_num = %d\n", args->omp_target_memcpy_rect.src_device_num);
-			printf("\tint retval = %d\n", args->omp_target_memcpy_rect.retval);
+			printf("\tint dst_device_num = %d\n", args->dst_device_num);
+			printf("\tint src_device_num = %d\n", args->src_device_num);
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_disassociate_ptr
-		case OMP_ROUTINE_API_ID_omp_target_disassociate_ptr :
+		case OMP_ROUTINE_API_ID_omp_target_disassociate_ptr : {
 			//	const void * host_ptr (const void *);
 			//	int device_num (int);
 			//	int retval (int);
-			printf("\tconst void * host_ptr = %p", args->omp_target_disassociate_ptr.host_ptr);
+			args_omp_target_disassociate_ptr_t* args = (args_omp_target_disassociate_ptr_t*) func_args;
+			printf("\tconst void * host_ptr = %p", args->host_ptr);
 			printf("\n");
-			printf("\tint device_num = %d\n", args->omp_target_disassociate_ptr.device_num);
-			printf("\tint retval = %d\n", args->omp_target_disassociate_ptr.retval);
+			printf("\tint device_num = %d\n", args->device_num);
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_memcpy
-		case OMP_ROUTINE_API_ID_omp_target_memcpy :
+		case OMP_ROUTINE_API_ID_omp_target_memcpy : {
 			//	void * dst (void *);
 			//	const void * src (const void *);
 			//	size_t size (unsigned long);
@@ -226,21 +240,23 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			//	int dst_device_num (int);
 			//	int src_device_num (int);
 			//	int retval (int);
-			printf("\tvoid * dst = %p", args->omp_target_memcpy.dst);
+			args_omp_target_memcpy_t* args = (args_omp_target_memcpy_t*) func_args;
+			printf("\tvoid * dst = %p", args->dst);
 			printf("\n");
-			printf("\tconst void * src = %p", args->omp_target_memcpy.src);
+			printf("\tconst void * src = %p", args->src);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->omp_target_memcpy.size);
-			printf("\tsize_t dst_offset = %lu\n", args->omp_target_memcpy.dst_offset);
-			printf("\tsize_t src_offset = %lu\n", args->omp_target_memcpy.src_offset);
-			printf("\tint dst_device_num = %d\n", args->omp_target_memcpy.dst_device_num);
-			printf("\tint src_device_num = %d\n", args->omp_target_memcpy.src_device_num);
-			printf("\tint retval = %d\n", args->omp_target_memcpy.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tsize_t dst_offset = %lu\n", args->dst_offset);
+			printf("\tsize_t src_offset = %lu\n", args->src_offset);
+			printf("\tint dst_device_num = %d\n", args->dst_device_num);
+			printf("\tint src_device_num = %d\n", args->src_device_num);
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_memset_async
-		case OMP_ROUTINE_API_ID_omp_target_memset_async :
+		case OMP_ROUTINE_API_ID_omp_target_memset_async : {
 			//	void * ptr (void *);
 			//	int value (int);
 			//	size_t size (unsigned long);
@@ -248,184 +264,210 @@ void process_omp_routine_args_for(omp_routine_api_id_t funid, const omp_routine_
 			//	int async_depend_info (int);
 			//	omp_depend_t * depend (void **);
 			//	void * retval (void *);
-			printf("\tvoid * ptr = %p", args->omp_target_memset_async.ptr);
+			args_omp_target_memset_async_t* args = (args_omp_target_memset_async_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tint value = %d\n", args->omp_target_memset_async.value);
-			printf("\tsize_t size = %lu\n", args->omp_target_memset_async.size);
-			printf("\tint device_num = %d\n", args->omp_target_memset_async.device_num);
-			printf("\tint async_depend_info = %d\n", args->omp_target_memset_async.async_depend_info);
-			printf("\tomp_depend_t * depend = %p", args->omp_target_memset_async.depend);
-			if (args->omp_target_memset_async.depend != NULL) {
-				printf("-> %p", args->omp_target_memset_async.depend__ref.ptr1);
+			printf("\tint value = %d\n", args->value);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tint device_num = %d\n", args->device_num);
+			printf("\tint async_depend_info = %d\n", args->async_depend_info);
+			printf("\tomp_depend_t * depend = %p", args->depend);
+			if (args->depend != NULL) {
+				printf("-> %p", args->depend__ref.ptr1);
 				printf("\n");
 			} else { printf("\n"); };
-			printf("\tvoid * retval = %p", args->omp_target_memset_async.retval);
+			printf("\tvoid * retval = %p", args->retval);
 			printf("\n");
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_is_present
-		case OMP_ROUTINE_API_ID_omp_target_is_present :
+		case OMP_ROUTINE_API_ID_omp_target_is_present : {
 			//	const void * host_ptr (const void *);
 			//	int device_num (int);
 			//	int retval (int);
-			printf("\tconst void * host_ptr = %p", args->omp_target_is_present.host_ptr);
+			args_omp_target_is_present_t* args = (args_omp_target_is_present_t*) func_args;
+			printf("\tconst void * host_ptr = %p", args->host_ptr);
 			printf("\n");
-			printf("\tint device_num = %d\n", args->omp_target_is_present.device_num);
-			printf("\tint retval = %d\n", args->omp_target_is_present.retval);
+			printf("\tint device_num = %d\n", args->device_num);
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_target_associate_ptr
-		case OMP_ROUTINE_API_ID_omp_target_associate_ptr :
+		case OMP_ROUTINE_API_ID_omp_target_associate_ptr : {
 			//	const void * host_ptr (const void *);
 			//	const void * device_ptr (const void *);
 			//	size_t size (unsigned long);
 			//	size_t alignment (unsigned long);
 			//	int device_num (int);
 			//	int retval (int);
-			printf("\tconst void * host_ptr = %p", args->omp_target_associate_ptr.host_ptr);
+			args_omp_target_associate_ptr_t* args = (args_omp_target_associate_ptr_t*) func_args;
+			printf("\tconst void * host_ptr = %p", args->host_ptr);
 			printf("\n");
-			printf("\tconst void * device_ptr = %p", args->omp_target_associate_ptr.device_ptr);
+			printf("\tconst void * device_ptr = %p", args->device_ptr);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->omp_target_associate_ptr.size);
-			printf("\tsize_t alignment = %lu\n", args->omp_target_associate_ptr.alignment);
-			printf("\tint device_num = %d\n", args->omp_target_associate_ptr.device_num);
-			printf("\tint retval = %d\n", args->omp_target_associate_ptr.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tsize_t alignment = %lu\n", args->alignment);
+			printf("\tint device_num = %d\n", args->device_num);
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_initial_device
-		case OMP_ROUTINE_API_ID_omp_get_initial_device :
+		case OMP_ROUTINE_API_ID_omp_get_initial_device : {
 			//	int retval (int);
-			printf("\tint retval = %d\n", args->omp_get_initial_device.retval);
+			args_omp_get_initial_device_t* args = (args_omp_get_initial_device_t*) func_args;
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_llvm_omp_target_dynamic_shared_alloc
-		case OMP_ROUTINE_API_ID_llvm_omp_target_dynamic_shared_alloc :
+		case OMP_ROUTINE_API_ID_llvm_omp_target_dynamic_shared_alloc : {
 			//	void * retval (void *);
-			printf("\tvoid * retval = %p", args->llvm_omp_target_dynamic_shared_alloc.retval);
+			args_llvm_omp_target_dynamic_shared_alloc_t* args = (args_llvm_omp_target_dynamic_shared_alloc_t*) func_args;
+			printf("\tvoid * retval = %p", args->retval);
 			printf("\n");
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_interop_int
-		case OMP_ROUTINE_API_ID_omp_get_interop_int :
+		case OMP_ROUTINE_API_ID_omp_get_interop_int : {
 			//	const omp_interop_t interop (const void *);
 			//	omp_interop_property_t prop (enum omp_interop_property);
 			//	int * exists (int *);
 			//	omp_intptr_t retval (long);
-			printf("\tconst omp_interop_t interop = %p", args->omp_get_interop_int.interop);
+			args_omp_get_interop_int_t* args = (args_omp_get_interop_int_t*) func_args;
+			printf("\tconst omp_interop_t interop = %p", args->interop);
 			printf("\n");
-			printf("\tomp_interop_property_t prop = %d\n", args->omp_get_interop_int.prop);
-			printf("\tint * exists = %p", args->omp_get_interop_int.exists);
-			if (args->omp_get_interop_int.exists != NULL) {
-				printf(" -> %d\n", args->omp_get_interop_int.exists__ref.val);
+			printf("\tomp_interop_property_t prop = %d\n", args->prop);
+			printf("\tint * exists = %p", args->exists);
+			if (args->exists != NULL) {
+				printf(" -> %d\n", args->exists__ref.val);
 			} else { printf("\n"); };
-			printf("\tomp_intptr_t retval = %ld\n", args->omp_get_interop_int.retval);
+			printf("\tomp_intptr_t retval = %ld\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_interop_name
-		case OMP_ROUTINE_API_ID_omp_get_interop_name :
+		case OMP_ROUTINE_API_ID_omp_get_interop_name : {
 			//	const omp_interop_t interop (const void *);
 			//	omp_interop_property_t prop (enum omp_interop_property);
 			//	const char * retval (const char *);
-			printf("\tconst omp_interop_t interop = %p", args->omp_get_interop_name.interop);
+			args_omp_get_interop_name_t* args = (args_omp_get_interop_name_t*) func_args;
+			printf("\tconst omp_interop_t interop = %p", args->interop);
 			printf("\n");
-			printf("\tomp_interop_property_t prop = %d\n", args->omp_get_interop_name.prop);
-			printf("\tconst char * retval = %p", args->omp_get_interop_name.retval);
-			if (args->omp_get_interop_name.retval != NULL) {
-				printf(" -> %s\n", args->omp_get_interop_name.retval__ref.val);
+			printf("\tomp_interop_property_t prop = %d\n", args->prop);
+			printf("\tconst char * retval = %p", args->retval);
+			if (args->retval != NULL) {
+				printf(" -> %s\n", args->retval__ref.val);
 			} else { printf("\n"); };
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_interop_ptr
-		case OMP_ROUTINE_API_ID_omp_get_interop_ptr :
+		case OMP_ROUTINE_API_ID_omp_get_interop_ptr : {
 			//	const omp_interop_t interop (const void *);
 			//	omp_interop_property_t prop (enum omp_interop_property);
 			//	int * exists (int *);
 			//	void * retval (void *);
-			printf("\tconst omp_interop_t interop = %p", args->omp_get_interop_ptr.interop);
+			args_omp_get_interop_ptr_t* args = (args_omp_get_interop_ptr_t*) func_args;
+			printf("\tconst omp_interop_t interop = %p", args->interop);
 			printf("\n");
-			printf("\tomp_interop_property_t prop = %d\n", args->omp_get_interop_ptr.prop);
-			printf("\tint * exists = %p", args->omp_get_interop_ptr.exists);
-			if (args->omp_get_interop_ptr.exists != NULL) {
-				printf(" -> %d\n", args->omp_get_interop_ptr.exists__ref.val);
+			printf("\tomp_interop_property_t prop = %d\n", args->prop);
+			printf("\tint * exists = %p", args->exists);
+			if (args->exists != NULL) {
+				printf(" -> %d\n", args->exists__ref.val);
 			} else { printf("\n"); };
-			printf("\tvoid * retval = %p", args->omp_get_interop_ptr.retval);
+			printf("\tvoid * retval = %p", args->retval);
 			printf("\n");
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_interop_str
-		case OMP_ROUTINE_API_ID_omp_get_interop_str :
+		case OMP_ROUTINE_API_ID_omp_get_interop_str : {
 			//	const omp_interop_t interop (const void *);
 			//	omp_interop_property_t prop (enum omp_interop_property);
 			//	int * exists (int *);
 			//	const char * retval (const char *);
-			printf("\tconst omp_interop_t interop = %p", args->omp_get_interop_str.interop);
+			args_omp_get_interop_str_t* args = (args_omp_get_interop_str_t*) func_args;
+			printf("\tconst omp_interop_t interop = %p", args->interop);
 			printf("\n");
-			printf("\tomp_interop_property_t prop = %d\n", args->omp_get_interop_str.prop);
-			printf("\tint * exists = %p", args->omp_get_interop_str.exists);
-			if (args->omp_get_interop_str.exists != NULL) {
-				printf(" -> %d\n", args->omp_get_interop_str.exists__ref.val);
+			printf("\tomp_interop_property_t prop = %d\n", args->prop);
+			printf("\tint * exists = %p", args->exists);
+			if (args->exists != NULL) {
+				printf(" -> %d\n", args->exists__ref.val);
 			} else { printf("\n"); };
-			printf("\tconst char * retval = %p", args->omp_get_interop_str.retval);
-			if (args->omp_get_interop_str.retval != NULL) {
-				printf(" -> %s\n", args->omp_get_interop_str.retval__ref.val);
+			printf("\tconst char * retval = %p", args->retval);
+			if (args->retval != NULL) {
+				printf(" -> %s\n", args->retval__ref.val);
 			} else { printf("\n"); };
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_interop_type_desc
-		case OMP_ROUTINE_API_ID_omp_get_interop_type_desc :
+		case OMP_ROUTINE_API_ID_omp_get_interop_type_desc : {
 			//	const omp_interop_t interop (const void *);
 			//	omp_interop_property_t prop (enum omp_interop_property);
 			//	const char * retval (const char *);
-			printf("\tconst omp_interop_t interop = %p", args->omp_get_interop_type_desc.interop);
+			args_omp_get_interop_type_desc_t* args = (args_omp_get_interop_type_desc_t*) func_args;
+			printf("\tconst omp_interop_t interop = %p", args->interop);
 			printf("\n");
-			printf("\tomp_interop_property_t prop = %d\n", args->omp_get_interop_type_desc.prop);
-			printf("\tconst char * retval = %p", args->omp_get_interop_type_desc.retval);
-			if (args->omp_get_interop_type_desc.retval != NULL) {
-				printf(" -> %s\n", args->omp_get_interop_type_desc.retval__ref.val);
+			printf("\tomp_interop_property_t prop = %d\n", args->prop);
+			printf("\tconst char * retval = %p", args->retval);
+			if (args->retval != NULL) {
+				printf(" -> %s\n", args->retval__ref.val);
 			} else { printf("\n"); };
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_mapped_ptr
-		case OMP_ROUTINE_API_ID_omp_get_mapped_ptr :
+		case OMP_ROUTINE_API_ID_omp_get_mapped_ptr : {
 			//	const void * ptr (const void *);
 			//	int device_num (int);
 			//	void * retval (void *);
-			printf("\tconst void * ptr = %p", args->omp_get_mapped_ptr.ptr);
+			args_omp_get_mapped_ptr_t* args = (args_omp_get_mapped_ptr_t*) func_args;
+			printf("\tconst void * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tint device_num = %d\n", args->omp_get_mapped_ptr.device_num);
-			printf("\tvoid * retval = %p", args->omp_get_mapped_ptr.retval);
+			printf("\tint device_num = %d\n", args->device_num);
+			printf("\tvoid * retval = %p", args->retval);
 			printf("\n");
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_get_num_devices
-		case OMP_ROUTINE_API_ID_omp_get_num_devices :
+		case OMP_ROUTINE_API_ID_omp_get_num_devices : {
 			//	int retval (int);
-			printf("\tint retval = %d\n", args->omp_get_num_devices.retval);
+			args_omp_get_num_devices_t* args = (args_omp_get_num_devices_t*) func_args;
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
 		#if HAVE_omp_is_coarse_grain_mem_region
-		case OMP_ROUTINE_API_ID_omp_is_coarse_grain_mem_region :
+		case OMP_ROUTINE_API_ID_omp_is_coarse_grain_mem_region : {
 			//	void * ptr (void *);
 			//	size_t size (unsigned long);
 			//	int retval (int);
-			printf("\tvoid * ptr = %p", args->omp_is_coarse_grain_mem_region.ptr);
+			args_omp_is_coarse_grain_mem_region_t* args = (args_omp_is_coarse_grain_mem_region_t*) func_args;
+			printf("\tvoid * ptr = %p", args->ptr);
 			printf("\n");
-			printf("\tsize_t size = %lu\n", args->omp_is_coarse_grain_mem_region.size);
-			printf("\tint retval = %d\n", args->omp_is_coarse_grain_mem_region.retval);
+			printf("\tsize_t size = %lu\n", args->size);
+			printf("\tint retval = %d\n", args->retval);
 			break;
 
+		}
 		#endif
         default : break;
     }
