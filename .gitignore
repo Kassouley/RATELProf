@@ -5,6 +5,5 @@ lib
 tmp
 devtools
 .data*
-src/core/include/utils/config/*_conf.h
-!src/core/include/utils/config/*_conf.h.in
-./share/visualize/.data
+config/*_conf.h
+!config/*_conf.h.in
