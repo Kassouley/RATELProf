@@ -7,10 +7,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 # RATELProf 
 PROJECT("RATELProf" VERSION 1.0.0)
 
-# INCLUDE(cmake/check_available_functions.cmake)
 INCLUDE(cmake/check_mpi_dependency.cmake)
 INCLUDE(cmake/check_rocm_dependency.cmake)
-INCLUDE(cmake/check_available_functions.cmake)
 
 # Set output directories for all binaries and libraries
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
@@ -24,68 +22,44 @@ SET(TOOL_PROJECT_NAME       "ratelprof"         CACHE STRING "RATELProf for the 
 
 SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+ADD_COMPILE_OPTIONS(-O3 -D__HIP_PLATFORM_AMD__ -Wall)
 
-ADD_COMPILE_OPTIONS(
-        -O3
-        -D__HIP_PLATFORM_AMD__
-        -Wall)
+SET(RATELPROF_CONFIG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/config)
 
+option(BUILD_HIP_TRACING            "Enable HIP API tracing build"              ON)
+option(BUILD_HSA_TRACING            "Enable HSA API tracing build"              ON)
+option(BUILD_OMP_ROUTINE_TRACING    "Enable OMP routine tracing build"          ON)
+option(BUILD_OMP_TGT_RTL_TRACING    "Enable OMP target RTL tracing build"       ON)
+option(BUILD_MPI_TRACING            "Enable MPI API tracing build"              ON)
+option(BUILD_OMPT_TRACING           "Enable OMPT API tracing build"             ON)
 
-SET(CONFIG_DIR ${CMAKE_SOURCE_DIR}/src/core/include/utils/config)
+option(CHECK_SYMBOL_QUIET           "Enable quiet mode for symbols checking"    OFF)
 
-SET(HIP_HEADER  hip/hip_runtime.h)
-SET(HSA_HEADER  hsa/hsa.h hsa/hsa_ext_amd.h)
-SET(OMP_HEADER  omp.h)
-SET(MPI_HEADER  mpi.h)
-# SET(OMPT_HEADER omp-tools.h)
-
-CHECK_MPI_DEPENDENCY(${MPI_HEADER})
-IF(NOT MPI_FOUND)
-    RETURN()
+MESSAGE(STATUS "Checking for depedency... Please wait.")
+IF(CHECK_SYMBOL_QUIET)
+    message(STATUS "(Quiet mode enabled for symbol checks.)")
 ENDIF()
 
-CHECK_HSA_DEPENDENCY(${HSA_HEADER})
+CHECK_HSA_DEPENDENCY()
 IF(NOT HSA_FOUND)
     RETURN()
 ENDIF()
 
-CHECK_HIP_DEPENDENCY(${HIP_HEADER})
-IF(NOT HIP_FOUND)
-    RETURN()
-ENDIF()
-
-CHECK_OMP_DEPENDENCY(${OMP_HEADER})
-IF(NOT OMP_FOUND)
-    RETURN()
-ENDIF()
-
-set(CHECK_SYMBOL_VERBOSE OFF) # default
-
-if(DEFINED ENV{CHECK_SYMBOL_VERBOSE})
-    set(CHECK_SYMBOL_VERBOSE $ENV{CHECK_SYMBOL_VERBOSE})
-endif()
-
-MESSAGE(STATUS "Verifying required symbols... Please wait.")
-IF(CHECK_SYMBOL_VERBOSE)
-    message(STATUS "(Quiet mode enabled for symbol checks.)")
-ENDIF()
-
-SET(CMAKE_REQUIRED_QUIET ${CHECK_SYMBOL_VERBOSE})
-SET(CMAKE_REQUIRED_DEFINITIONS 	"-D__HIP_PLATFORM_AMD__")
-CHECK_AVAILABLE_FUNCTION(hip         "${HIP_INCLUDE_DIR}" "${HIP_HEADER}"                     ${CONFIG_DIR})
-CHECK_AVAILABLE_FUNCTION(hsa         "${HSA_INCLUDE_DIR}" "${HSA_HEADER}"                     ${CONFIG_DIR})
-CHECK_AVAILABLE_FUNCTION(omp_routine "${OMP_INCLUDE_DIR}" "${OMP_INCLUDE_DIR}/${OMP_HEADER}"  ${CONFIG_DIR})
-CHECK_AVAILABLE_FUNCTION(omp_tgt_rtl "NO_CHECK"           "NO_CHECK"                          ${CONFIG_DIR})
-CHECK_AVAILABLE_FUNCTION(mpi         "${MPI_INCLUDE_DIR}" "${MPI_HEADER}"                     ${CONFIG_DIR})
-set(CMAKE_REQUIRED_QUIET OFF)
-
+CHECK_MPI_DEPENDENCY()
+CHECK_HIP_DEPENDENCY()
+CHECK_OMP_ROUTINE_DEPENDENCY()
+CHECK_OMP_TGT_RTL_DEPENDENCY()
+# TODO 30/07/2025 : Implement OMPT dependency checking
+# CHECK_OMPT_DEPENDENCY()
 
 INCLUDE_DIRECTORIES(
+    ${CMAKE_SOURCE_DIR}/src/config
     ${CMAKE_SOURCE_DIR}/src/tools
     ${MPI_INCLUDE_DIR}
-    ${OMP_INCLUDE_DIR}
     ${HSA_INCLUDE_DIR}
     ${HIP_INCLUDE_DIR}
+    ${OMP_ROUTINE_INCLUDE_DIR}
+    ${OMPT_INCLUDE_DIR}
 )
 
 

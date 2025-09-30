@@ -25,11 +25,15 @@ MACRO(BUILD_PLUGIN LIBRARY_NAME DIR)
     message(STATUS "Created shared library: ${LIBRARY_NAME}")
 ENDMACRO()
 
-if(DEFINED ENV{NEED_PLUGIN_STDOUT})
+option(BUILD_PLUGIN_STDOUT  "Enable STDOUT plugin build"   OFF)
+option(BUILD_PLUGIN_MSGPACK "Enable MSGPACK plugin build"  ON)
+
+
+if(BUILD_PLUGIN_STDOUT)
     BUILD_PLUGIN(plugin_stdout    "${CMAKE_CURRENT_SOURCE_DIR}/src/stdout")
 endif()
 
-if(DEFINED ENV{NEED_PLUGIN_MSGPACK})
+if(BUILD_PLUGIN_MSGPACK)
     BUILD_PLUGIN(plugin_msgpack   "${CMAKE_CURRENT_SOURCE_DIR}/src/msgpack")
 endif()
 

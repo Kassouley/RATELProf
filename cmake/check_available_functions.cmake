@@ -1,7 +1,8 @@
 include(CheckCSourceCompiles)
 
-function(CHECK_AVAILABLE_FUNCTION LIB_NAME INCLUDE_DIRS HEADERS CONFIG_DIR)
-    file(STRINGS "cmake/config_functions/${LIB_NAME}_conf.txt" FUNC_LIST)
+function(CHECK_AVAILABLE_FUNCTIONS DEP_NAME INCLUDE_DIRS HEADERS)
+    string(TOLOWER "${DEP_NAME}" DEP_NAME)
+    file(STRINGS "cmake/config_functions/${DEP_NAME}_conf.txt" FUNC_LIST)
 
     # Build the includes block
     set(INCLUDE_CODE "")
@@ -9,6 +10,7 @@ function(CHECK_AVAILABLE_FUNCTION LIB_NAME INCLUDE_DIRS HEADERS CONFIG_DIR)
         string(APPEND INCLUDE_CODE "#include <${H}>\n")
     endforeach()
 
+    SET(CMAKE_REQUIRED_QUIET ${CHECK_SYMBOL_QUIET})
     foreach(FUNC ${FUNC_LIST})
         if(FUNC STREQUAL "")
             continue()
@@ -33,10 +35,6 @@ function(CHECK_AVAILABLE_FUNCTION LIB_NAME INCLUDE_DIRS HEADERS CONFIG_DIR)
             check_c_source_compiles("${CODE}" ${VAR_NAME})
         endif()
     endforeach()
-
-    configure_file(
-        "${CONFIG_DIR}/${LIB_NAME}_conf.h.in"
-        "${CONFIG_DIR}/${LIB_NAME}_conf.h"
-    )
+    SET(CMAKE_REQUIRED_QUIET OFF)
 endfunction()
 
