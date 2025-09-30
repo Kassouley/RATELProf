@@ -5,5 +5,5 @@ lib
 tmp
 devtools
 .data*
-config/*_conf.h
-!config/*_conf.h.in
+src/config/*_conf.h
+!src/config/*_conf.h.in
