@@ -23,7 +23,7 @@ RATELProf provides a comprehensive suite of tools to profile, analyze, and optim
 - Monitor kernel dispatches, barriers and memory transfers to identify bottlenecks and optimize GPU performance.
 
 #### **Runtime API Tracing**
-- Trace calls from HSA, HIP, and OpenMP runtimes, offering deep insights into application behavior.
+- Trace calls from HSA, HIP, MPI, and OpenMP runtimes, offering deep insights into application behavior.
 
 #### **Commands**
 RATELProf includes four core commands to streamline your profiling workflow:
@@ -40,27 +40,31 @@ RATELProf includes four core commands to streamline your profiling workflow:
    - Analyze profiling results from a .rprof-rep report created by the `profile` command.  
    - Output advices to optimize your CPU/GPU code.
 
-4. **`visualize`**  
+4. **`summarize`** 
+   - Output global metrics and plot to get insight of your application.
+
+5. **`visualize`**  
    - Generates an interactive HTML timeline report for the .rprof-rep profile report created by the `profile` command.  
    - Perfect for visualizing application details.
 
-5. **`inspect`**  
+6. **`inspect`**  
    - Inspects the application binary and outputs a CSV/JSON report containing detailed kernel information.  
    - Use this command to analyze static kernel properties.
 
-6. **`export`**  
+7. **`export`**  
    - Export the .rprof-rep report to another type of report (json, arg-info, ...).
 
 ---
 
 ## **Getting Started**
 
-Installing RATELProf is simple and requires running the provided `install.sh` script.
+Installing RATELProf is simple and requires running the provided `set_install.lua` script.
 
 ### Prerequisites
 
 Ensure you have the following installed on your system before proceeding:
 - **CMake** (version 3.10 or later)
+- **Lua** (version 5.1)
 - **AMD ROCm** (download from [ROCm's official site](https://github.com/ROCm/ROCm))
 
 ### Installation
@@ -75,12 +79,12 @@ cd RATELProf
 2. Run the installation script:
 
 ```bash
-./install.sh
+./sett_install.lua
 ```
-By default, the tool will be installed to $HOME/.local. If you want to install it to a custom directory, specify it as an argument:
+By default, the tool will be installed to $HOME/.local. If you want to install it to a custom directory, specify it in the `sett.config` file:
 
 ```bash
-./install.sh /custom/install/path
+./sett_install.lua /path/to/sett.config
 ```
 
 ##  Comparison with ROCprof v3
@@ -88,39 +92,35 @@ By default, the tool will be installed to $HOME/.local. If you want to install i
 | Attribute                         | ROCprof v3                                      | RATELProf                                    |
 |-----------------------------------|-------------------------------------------------|----------------------------------------------|
 | **GPU Architecture Support**      | AMD RDNA, CDNA (ROCm-compatible GPUs)           | AMD RDNA, CDNA (ROCm-compatible GPUs)        |
-| **HIP Tracing**                   | ✅                                             | ✅                                           |
-| **HSA Tracing**                   | ✅                                             | ✅                                           |
-| **rocBLAS Tracing**               | ❌                                             | ❌ But can be easily implemented with GILDA  |
-| **RCCL Tracing**                  | ✅                                             | ❌ But can be easily implemented with GILDA  |
-| **Marker Tracing**                | ✅ (ROCTx)                                     | ❌ But can be easily implemented with GILDA  |
-| **OpenMP Routine Tracing**        | ❌                                             | ✅                                           |
-| **OpenMP Target RTL Tracing**     | ❌                                             | ✅                                           |
-| **OMPT Integration**              | ✅                                             | ✅                                           |
-| **Scratch Memory Tracing**        | ✅                                             | ❌                                           |
-| **Memory transfers Profiling**    | ✅                                             | ✅                                           |
-| **Kernel dispatch Profiling**     | ✅                                             | ✅                                           |
-| **Barrier dispatch Profiling**    | ❌                                             | ✅                                           |
-| **Trace filtering**               | ❌                                             | ✅                                           |
-| **PC Sampling**                   | ✅ (Beta)                                      | ❌                                           |
-| **HW Counter**                    | ✅                                             | ❌ (WIP)                                     |
-| **Statistical post processing**   | ✅ but really simple post processing           | ✅                                           |
-| **Post processing analysis**      | ❌                                             | ✅                                           |
+| **HIP Tracing**                   | ✅                                              | ✅                                           |
+| **HSA Tracing**                   | ✅                                              | ✅                                           |
+| **rocBLAS Tracing**               | ❌                                              | ❌ But can be easily implemented with GILDA  |
+| **RCCL Tracing**                  | ✅                                              | ❌ But can be easily implemented with GILDA  |
+| **Marker Tracing**                | ✅ (ROCTx)                                      | ✅ (ROCTx)                                   |
+| **OpenMP Routine Tracing**        | ❌                                              | ✅                                           |
+| **OpenMP Target RTL Tracing**     | ❌                                              | ✅                                           |
+| **OMPT Integration**              | ✅                                              | ✅                                           |
+| **MPI Tracing**                   | ❌                                              | ✅                                           |
+| **Scratch Memory Tracing**        | ✅                                              | ❌                                           |
+| **Memory transfers Profiling**    | ✅                                              | ✅                                           |
+| **Kernel dispatch Profiling**     | ✅                                              | ✅                                           |
+| **Barrier dispatch Profiling**    | ❌                                              | ✅                                           |
+| **Trace filtering**               | ❌                                              | ✅                                           |
+| **PC Sampling**                   | ✅ (Beta)                                       | ❌                                           |
+| **HW Counter**                    | ✅                                              | ❌ (WIP)                                     |
+| **Statistical post processing**   | ✅ but really simple post processing            | ✅                                           |
+| **Post processing analysis**      | ❌                                              | ✅                                           |
 | **Output Formats**                | CSV, JSON                                       | Binary (rprof-rep), CSV, TSV, JSON, TXT      |
 | **Output Size**                   | Large                                           | Small (msgpack binary format)                |
 | **Visualization Tools**           | External (Perfetto)                             | Integrated                                   |
 | **Ease of Use**                   | Medium (requires scripting for deeper analysis) | Easy, run and play                           |
-| **Overhead**                      | Low to Medium (depends on config)               | Low                                          |
 
 
 ##  Future Work and Improvement
 
 While the current version provides a functional profiling workflow, there are several areas identified for future enhancement:
 
-- **Timeline Visualization Performance**: The current timeline view may become sluggish or unresponsive when handling large trace datasets. Optimizing rendering performance and implementing progressive loading or filtering options will be a priority in upcoming releases.
-
-- **Build and Setup Process**: The CMake-based build system is still under refinement. Improvements are planned to enhance dependency management.
-
-- **Hardware Counter Support**: Support for hardware performance counters is a work in progress. These metrics are crucial for low-level performance analysis and are planned to be implemented in the next major release.
+- **Hardware Counter Support**: Support for hardware performance counters. These metrics are crucial for low-level performance analysis and are planned to be implemented.
 
 - **Barrier Dispatch Reliability**: Certain applications may encounter issues with barrier dispatch tracking. Investigating edge cases is on the roadmap.
 
@@ -150,6 +150,7 @@ Community feedback and contributions are welcome to help guide and accelerate th
         ├── core/
         ├── ext/
         ├── wrappers/
+        ├── common/
         └── plugins/
 ```
 
@@ -173,6 +174,7 @@ Community feedback and contributions are welcome to help guide and accelerate th
   - **`ext/`**: Extension logic of the tool (source of GPU profiling logic).
   - **`wrappers/`**: API wrappers for hooking into applications or libraries (e.g., HIP, HSA, ...).
   - **`plugins/`**: Built-in plugins for callbacks definition.
+  - **`common/`**: Common source code to lua stub libraries and RATELProf
 
 ##  Contribution
 
