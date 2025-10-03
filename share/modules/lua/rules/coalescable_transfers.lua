@@ -135,7 +135,7 @@ Optimizing these transfers might speed up your application by ]] .. string.forma
 ]]
 
         for gpu_id, count in pairs(sequences_per_gpu) do
-            msg = msg .. "On GPU ID " .. gpu_id .. ", " .. count .. " repeated memory transfers sequence(s) detected.\n\n"
+            msg = msg .. "On GPU ID " .. gpu_id .. ", " .. count .. " sequence(s) of repeated consecutive memory transfers have been detected.\n\n"
         end
 
 

@@ -132,7 +132,7 @@ These sequences were identified as:
 Optimizing these kernel calls might speed up your application by ]] .. string.format("x%.3f.\n\n", speedup_factor)
 
         for gpu_id, count in pairs(sequences_per_gpu) do
-            msg = msg .. "On GPU ID " .. gpu_id .. ", " .. count .. " repeated kernel launch sequence(s) detected.\n\n"
+            msg = msg .. "On GPU ID " .. gpu_id .. ", " .. count .. " sequence(s) of repeated consecutive kernel launch have been detected.\n\n"
         end
 
         table.sort(data, function(a, b)
