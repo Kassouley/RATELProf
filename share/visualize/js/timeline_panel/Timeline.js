@@ -187,7 +187,7 @@ class Timeline {
                 const clickedTime = this.min + (x / this.canvas.offsetWidth) * (this.max - this.min);
                 const { start, end } = this.getWindow();
                 const half = (end - start) / 2;
-                this.forceMoveWindow(clickedTime - half, clickedTime + half, true);
+                this.forceMoveWindow(clickedTime - half, clickedTime + half, false);
             }
         });
 
