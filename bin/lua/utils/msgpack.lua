@@ -5,8 +5,8 @@ local msgpack_encoder = require ("msgpack_encoder")
 
 msgpack.encoder = msgpack_encoder
 
-function msgpack.decode (file)
-    return msgpack_decoder.decode_msgpack_binary(file)
+function msgpack.decode (file, is_quiet)
+    return msgpack_decoder.decode_msgpack_binary(file, is_quiet)
 end
 
 msgpack.encode = {}
