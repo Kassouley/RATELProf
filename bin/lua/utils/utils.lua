@@ -60,7 +60,7 @@ function utils.print_mem_usage(suffix, old_value)
 
     -- Compare with old value
     if memory_rounded ~= old_value then
-        io.write(string.format("\rMemory usage: %.2f GB%s", memory_rounded, suffix))
+        io.write(string.format("\rMemory usage: %.2f GB%s", memory_rounded, suffix or ""))
         io.flush()  -- Ensure immediate print
         return memory_rounded
     else

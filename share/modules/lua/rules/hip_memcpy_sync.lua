@@ -39,7 +39,7 @@ return function(traces_data, _, opt)
 
         if trace_name:match("^hipMemcpy") and not trace_name:match("Async$") then
             local cpu_dur_ns = entry_trace.dur
-            local gpu_dur_ns = copy_trace.dur
+            local gpu_dur_ns = copy_trace.stop - copy_trace.start
             local tid = tostring(entry_trace.tid)
             local pid = tostring(entry_trace.pid)
 

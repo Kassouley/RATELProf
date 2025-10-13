@@ -28,6 +28,7 @@ local function get_path(p)
         error ("No path provided")
         return nil
     end
+    p = p:trim()
     p = sub_env_var(p)
     p = normalize_path_separator(p)
     return p
@@ -278,6 +279,24 @@ function rfs.rm(p)
         error("Failed to remove file '" .. p .. "': " .. (err or "unknown error"))
     end
     return true
+end
+
+
+function rfs.exists_in_PATH(bin)
+    local path_env = os.getenv("PATH")
+    if not path_env then
+        return nil
+    end
+    local path_sep = ":"
+    local dir_sep = "/"
+
+    for path_dir in string.gmatch(path_env, "([^"..path_sep.."]+)") do
+        local full_path = path_dir .. dir_sep .. bin
+        if rfs.exists(full_path) then
+            return full_path
+        end
+    end
+    return nil
 end
 
 return rfs

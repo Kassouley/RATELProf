@@ -50,6 +50,7 @@ static inline void print_progress_bar(const char* prefix, size_t current, size_t
 
     if (current == total) {
         last_shown = -1;
+        printf("\n");
     }
 }
 

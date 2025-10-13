@@ -336,7 +336,7 @@ end
 function BinaryReport:get_location_str(trace)
     local loc = self:get_location(trace)
     if not loc then return "Unknown Location" end
-    return string.format("%s in %s:%d", loc.sfun, loc.sfile, loc.sline)
+    return string.format("%s in %s", loc.sfun, loc.source)
 end
 
 

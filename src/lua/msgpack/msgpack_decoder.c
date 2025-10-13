@@ -230,7 +230,6 @@ int lua_decode_msgpack_file(lua_State *L) {
     msgpack_decode_ctx_t ctx = { .buf = buf, .size = size, .off = 0, .L = L, .is_quiet = is_quiet };
     decode_msgpack(&ctx);
     print_progress_bar(PROGRESS_BAR_LABEL, size, size, is_quiet);
-    printf("\n");
 
     if (ctx.ext_string_array) {
         for (size_t i = 0; i < ctx.ext_string_array_size; ++i) free(ctx.ext_string_array[i]);

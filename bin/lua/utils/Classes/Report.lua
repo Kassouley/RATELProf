@@ -225,8 +225,8 @@ function Report:generate()
 end
 
 function Report:set_default_value()
-    self.max_col_width = tonumber(self.max_col_width) or 32
-    
+    self.max_col_width = math.min(tonumber(self.max_col_width) or 32, 99)
+
     local max_lines = self.max_lines
     if max_lines == "all" then return end
     if self.output == "-" then
