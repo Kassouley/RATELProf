@@ -58,6 +58,8 @@ case "$CMD" in
 
     profile|stats|analyze|visualize|inspect|export|summarize)
         eval "$LUA_EXEC $LUA_DIR/$CMD.lua $args"
+        exit_code=$?
+        exit $exit_code
         ;;
 
     *)
