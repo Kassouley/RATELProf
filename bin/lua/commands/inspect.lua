@@ -5,8 +5,12 @@ local inspect = {}
 
 local function inspect_kernels(application, opt)
     if application == nil or not ratelprof.fs.exists(application) then
-        Message:print("No application to inspect.")
-        os.exit(1)
+        local application_in_PATH = ratelprof.fs.exists_in_PATH(application)
+        if application_in_PATH == nil then
+            Message:print("No application to inspect or '"..application.."' doesn't exists.")
+            os.exit(1)
+        end
+        application = application_in_PATH
     end
 
     local output = ratelprof.get_opt_val(opt, "output")

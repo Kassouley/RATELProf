@@ -67,7 +67,7 @@ local function normal_execution(cmd)
     if ret_code ~= 0 then
         Message:error("Application execution failed - code("..ret_code..").")
         Message:error("Run command : '"..cmd.."'")
-        os.exit(ret_code)
+        os.exit(1)
     end
 end
 
@@ -85,20 +85,32 @@ end
 
 
 function profile.process_profiling(positional_args, options_values)
-    local application_command = positional_args
-    local application = application_command[1]
-    
+    local bin_command = positional_args
+
+    local user_bin = bin_command[1]
+    local bin = ""
+    local user_bin_with_args = table.concat(bin_command, " ")
+
     local opt = handle_profile_option(options_values)
     local launch_script     = opt.launch_script
     local launch_command    = opt.launch_command
     local prefix            = opt.prefix .. " "
     local plugin_path       = opt.plugin
 
-    if not ratelprof.fs.exists(application) then
-        Message:print("No application to profile or '"..application.."' doesn't exists.")
-        os.exit(1)
+    if not ratelprof.fs.exists(user_bin) then
+        bin = ratelprof.fs.exists_in_PATH(user_bin)
+        if bin == nil then
+            Message:print("No application to profile or '"..user_bin.."' doesn't exists.")
+            os.exit(1)
+        end
+    else
+        bin = user_bin
     end
-    
+    bin_command[1] = bin
+
+    local bin_with_args = table.concat(bin_command, " ")
+
+
     local ld_library_path = os.getenv ("LD_LIBRARY_PATH")
     local preload_libs = ratelprof.consts._PRELOADED_LIBS
     local ld_preload = {}
@@ -125,14 +137,13 @@ function profile.process_profiling(positional_args, options_values)
         table.insert(ld_preload, lib.path)
     end
 
-
-    env.set_number_of_kernel_env_var(application)
+    env.set_number_of_kernel_env_var(bin)
     env.set_number_of_queue_env_var()
     env.set_env("LD_PRELOAD", table.concat(ld_preload, ":"))
 
     local env_var = env.get_env()
-    local app_cmd = table.concat(application_command, " ")
-    local run_command = prefix.."env "..env_var.." "..app_cmd
+    local run_command = prefix.."env "..env_var.." "..bin_with_args
+    local app_cmd_w_prefix = prefix == " " and user_bin_with_args or prefix..user_bin_with_args
 
     Message:print ([[
      ____      _  _____ _____ _     ____             __ 
@@ -141,8 +152,8 @@ function profile.process_profiling(positional_args, options_values)
     |  _ <  / ___ \| | | |___| |___|  __/| | | (_) |  _|
     |_| \_\/_/   \_\_| |_____|_____|_|   |_|  \___/|_|  
 ]])
-    Message:print ("RPROF: Application profiled :    '"..application.."'")
-    Message:print ("RPROF: Application Command :     '"..prefix..app_cmd.."'")
+    Message:print ("RPROF: Application profiled :    '"..bin.."'")
+    Message:print ("RPROF: Application Command :     '"..app_cmd_w_prefix.."'")
     Message:print ("RPROF: Preloaded tool :          '"..ld_preload[1].."'")
     Message:print ("RPROF: Preloaded wrapper :       '"..ld_preload[2].."'")
     Message:print ("RPROF: Plugin used :             '"..plugin_path.."'")
