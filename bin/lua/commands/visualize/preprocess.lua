@@ -238,11 +238,8 @@ function preprocess.start(traces_data, output, opt)
 
         local density = init_density(0)
 
-        local old_value = 0 
         for _, event in ipairs(events) do
             
-            old_value = ratelprof.utils.print_mem_usage("", old_value)
-
             local data = get_event_data(traces_data, event, domain_id, opt)
 
             first_value = data.first_value
