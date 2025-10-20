@@ -173,5 +173,18 @@ function agent_helper.set_gpu_props_to_msgpack(report_file)
     buf:free()
 end
 
+function agent_helper.get_arch_list()
+    local agents, _ = agent_helper.get_agents()
+    local arch_list = {}
+
+    for _, agent in pairs(agents) do
+        if agent.device_type_name == "GPU" then
+            table.insert(arch_list, agent.name)
+        end
+    end
+
+    return arch_list
+end
+
 
 return agent_helper
