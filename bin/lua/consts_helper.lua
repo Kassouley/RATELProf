@@ -374,11 +374,11 @@ consts_helper.inspect = {
             arg_required    = false,
             default         = nil
         },
-        output = {
+        output_dir = {
             desc            = [[ 
-                Change the CSV output file.]],
+                Change the directory of the CSV output file.]],
             sname           = "o",
-            arg             = "<output_file>",
+            arg             = "<output_dir>",
             arg_required    = true,
             default         = nil
         },
