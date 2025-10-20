@@ -11,7 +11,7 @@ local plot_data = {
 
 
 local function compute_percentages(total, parts, rest_label)
-    rest_label = rest_label or "Other"
+    rest_label = rest_label or "Unknown"
     local entries = {}
     local sum = 0
 

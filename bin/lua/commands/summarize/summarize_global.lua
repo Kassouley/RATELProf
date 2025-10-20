@@ -37,7 +37,6 @@ function summarize_global.get_global_summary(data)
         -- }
     }
 
-
     -- Process each metric
     for _, metric in ipairs(metrics) do
         metric.per_gpu  = {}

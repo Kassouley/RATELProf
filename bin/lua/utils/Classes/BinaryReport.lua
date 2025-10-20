@@ -211,7 +211,8 @@ end
 
 function BinaryReport:for_each_gpu(func)
     self.__in_for_each_gpu = true
-    for _, gpu_props in ipairs(self.gpu_props) do
+ 
+    for _, gpu_props in pairs(self.gpu_props) do
         local gpu_node_id = gpu_props["node"]
         self.__current_gpu = gpu_node_id
         local stop = func(gpu_node_id, gpu_props)
