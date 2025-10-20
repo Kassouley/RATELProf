@@ -13,53 +13,50 @@ local function inspect_kernels(application, opt)
         application = application_in_PATH
     end
 
-    local output = ratelprof.get_opt_val(opt, "output")
+    local output_dir = ratelprof.get_opt_val(opt, "output_dir") or "."
     local mangled = ratelprof.get_opt_val(opt, "mangled")
     local trunc = ratelprof.get_opt_val(opt, "trunc")
     local save_json = ratelprof.get_opt_val(opt, "save-json")
 
-    local output_file = output or ("inspect_"..ratelprof.fs.basename(application)..".csv")
-    if not ratelprof.fs.has_extension(output_file, ".csv") then
-        Message:error("Output file need to be a CSV")
-        os.exit(1)
-    end
-    
     Message:print("RPROF: Inspecting '"..application.."' . . .")
-    local application_metadata = kernel_helper.get_kernel_metadata(application)
+    local application_metadatas = kernel_helper.get_kernel_metadata(application)
 
-    local kernels_metadata = application_metadata["amdhsa.kernels"]
-    
-    Message:print("RPROF: "..#kernels_metadata.." kernels extracted from GPU ELF.")
-    
     local csv_entries = {"Name, Wavefront Size, Private Segment Size, Group Segment Size, SGPR count, SGPR spill count, VGPR count, VGPR spill count, Language"}
 
-    for _, kernel in pairs(kernels_metadata) do
-        local kernel_entry = {
-            ratelprof.utils.get_kernel_name(kernel[".name"], trunc, mangled),
-            kernel[".wavefront_size"],
-            kernel[".private_segment_fixed_size"],
-            kernel[".group_segment_fixed_size"],
-            kernel[".sgpr_count"],
-            kernel[".sgpr_spill_count"],
-            kernel[".vgpr_count"],
-            kernel[".vgpr_spill_count"],
-            kernel[".language"],
-        }
-        table.insert(csv_entries, table.concat(kernel_entry, ", "))
-    end
+    for id, application_metadata in pairs (application_metadatas) do
+        local kernels_metadata = application_metadata["amdhsa.kernels"]
+        Message:print("RPROF: "..#kernels_metadata.." kernels extracted for ELF "..id)
 
-    local file = ratelprof.fs.open_file(output_file, "w")
-    file:write(table.concat(csv_entries, "\n")) 
-    file:close()
-    Message:print("RPROF: CSV output written to " .. output_file)
+        for _, kernel in pairs(kernels_metadata) do
+            local kernel_entry = {
+                ratelprof.utils.get_kernel_name(kernel[".name"], trunc, mangled),
+                kernel[".wavefront_size"],
+                kernel[".private_segment_fixed_size"],
+                kernel[".group_segment_fixed_size"],
+                kernel[".sgpr_count"],
+                kernel[".sgpr_spill_count"],
+                kernel[".vgpr_count"],
+                kernel[".vgpr_spill_count"],
+                kernel[".language"],
+            }
+            table.insert(csv_entries, table.concat(kernel_entry, ", "))
+        end
 
-    if save_json then
-        local json_output = ratelprof.utils.generate_json(application_metadata)
-        output_file = ratelprof.fs.remove_extension(output_file, ".csv")..".json"
-        local file = ratelprof.fs.open_file(output_file, "w")
-        file:write(json_output)
+        local output_file_csv = ratelprof.fs.concat_path(output_dir, "inspect_"..id..".csv")
+        local file = ratelprof.fs.open_file(output_file_csv, "w")
+        file:write(table.concat(csv_entries, "\n")) 
         file:close()
-        Message:print("RPROF: JSON output written to " .. output_file)
+        Message:print("RPROF: CSV output written to " .. output_file_csv)
+
+        if save_json then
+            local output_file_json = ratelprof.fs.concat_path(output_dir, "inspect_"..id..".json")
+            local json_output = ratelprof.utils.generate_json(application_metadata)
+            local file = ratelprof.fs.open_file(output_file_json, "w")
+            file:write(json_output)
+            file:close()
+            Message:print("RPROF: JSON output written to " .. output_file_json)
+        end
+
     end
 end
 
