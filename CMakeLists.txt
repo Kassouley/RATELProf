@@ -20,6 +20,8 @@ SET(EXT_PROJECT_NAME        "ratelprof_ext"     CACHE STRING "RATELProf for the 
 SET(WRAPPER_PROJECT_NAME    "ratelprof_wrapper" CACHE STRING "RATELProf for the wrapper part")
 SET(TOOL_PROJECT_NAME       "ratelprof"         CACHE STRING "RATELProf for the tool part")
 
+SET(LUA_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/include" CACHE PATH "Path to the Lua include directory")
+
 SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 ADD_COMPILE_OPTIONS(-O3 -D__HIP_PLATFORM_AMD__ -Wall)
@@ -71,6 +73,8 @@ ADD_SUBDIRECTORY(src/wrappers)
 ADD_SUBDIRECTORY(src/plugins)
 ADD_SUBDIRECTORY(src/lua)
 
+ADD_SUBDIRECTORY(external/liborkh)
+
 FUNCTION(REMOVE_STATIC_BUILD TARGET_NAME)
     SET(LIB "${TARGET_NAME}-lib-static")
     IF (TARGET ${LIB})
@@ -84,6 +88,7 @@ ENDFUNCTION()
 # REMOVE_STATIC_BUILD(${EXT_PROJECT_NAME})
 REMOVE_STATIC_BUILD(${WRAPPER_PROJECT_NAME})
 REMOVE_STATIC_BUILD(${TOOL_PROJECT_NAME})
+
 
 # Install scripts
 INSTALL(DIRECTORY   ${CMAKE_SOURCE_DIR}/share/modules/                DESTINATION ${CMAKE_INSTALL_PREFIX}/share/modules)
