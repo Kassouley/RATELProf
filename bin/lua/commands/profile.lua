@@ -38,9 +38,7 @@ local function handle_profile_option(options)
     local plugin_path = ratelprof.get_opt_val(options, "plugin")
     if plugin_path then
         if plugin_path == "stdout"        then plugin_path = ratelprof.consts._LIBS.PLUGIN_STDOUT
-        elseif plugin_path == "msgpack"   then plugin_path = ratelprof.consts._LIBS.PLUGIN_MSGPACK
-        elseif plugin_path == "json"      then plugin_path = ratelprof.consts._LIBS.PLUGIN_JSON
-        elseif plugin_path == "json-dyn"  then plugin_path = ratelprof.consts._LIBS.PLUGIN_JSON_DYN end
+        elseif plugin_path == "msgpack"   then plugin_path = ratelprof.consts._LIBS.PLUGIN_MSGPACK end
         if not ratelprof.fs.exists(plugin_path) then
             Message:error("Plugin library '"..plugin_path.."' not found.")
             os.exit(1)
