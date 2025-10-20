@@ -11,7 +11,7 @@
 
 // Structure
 typedef struct {
-    unsigned char *buf;
+    uint8_t *buf;
     size_t off;
     size_t size;
     lua_State *L;

@@ -103,7 +103,6 @@ void decode_string_ext(msgpack_decode_ctx_t *ctx, size_t size) {
 }
 
 
-
 void decode_ext(msgpack_decode_ctx_t *ctx, size_t size) {
     uint8_t type = read_byte(ctx); // type tag
 
@@ -206,7 +205,7 @@ void decode_msgpack(msgpack_decode_ctx_t *ctx) {
     }
 }
 
-int lua_decode_msgpack_file(lua_State *L) {
+int lua_decode_msgpack_from_file(lua_State *L) {
     const char *filename = luaL_checkstring(L, 1);
     int is_quiet = lua_toboolean(L, 2);
 
@@ -217,7 +216,7 @@ int lua_decode_msgpack_file(lua_State *L) {
     long size = ftell(f);
     rewind(f);
 
-    unsigned char *buf = malloc(size);
+    uint8_t *buf = malloc(size);
     if (!buf) {
         fclose(f);
         return luaL_error(L, "Memory allocation failed");
@@ -238,9 +237,33 @@ int lua_decode_msgpack_file(lua_State *L) {
     return 1;
 }
 
+
+int lua_decode_msgpack_from_memory(lua_State *L) {
+
+    uint8_t* buf = lua_touserdata(L, 1);
+    if (!buf) {
+        return luaL_error(L, "expected lightuserdata as first argument");
+    }
+    size_t size = (size_t)luaL_checkinteger(L, 2);
+    int is_quiet = lua_toboolean(L, 3);
+
+
+    msgpack_decode_ctx_t ctx = { .buf = buf, .size = size, .off = 0, .L = L, .is_quiet = is_quiet };
+    decode_msgpack(&ctx);
+    print_progress_bar(PROGRESS_BAR_LABEL, size, size, is_quiet);
+
+    if (ctx.ext_string_array) {
+        for (size_t i = 0; i < ctx.ext_string_array_size; ++i) free(ctx.ext_string_array[i]);
+        free(ctx.ext_string_array);
+    }
+    return 1;
+}
+
+
 int luaopen_msgpack_decoder(lua_State *L) {
     luaL_Reg funcs[] = {
-        {"decode_msgpack_binary", lua_decode_msgpack_file},
+        {"decode", lua_decode_msgpack_from_file},
+        {"decode_from_memory", lua_decode_msgpack_from_memory},
         {NULL, NULL}
     };
 
