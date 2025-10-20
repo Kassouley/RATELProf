@@ -1,0 +1,3 @@
+[submodule "external/liborkh"]
+	path = external/liborkh
+	url = git@github.com:Kassouley/liborkh.git
