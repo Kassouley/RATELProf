@@ -46,7 +46,7 @@ consts._ENV = {
       NB_KERNEL_AV =        "RATELPROF_NB_KERNEL_AVAILABLE",
       NB_QUEUE_AV =         "RATELPROF_MAX_QUEUE_AVAILABLE",
       LOG_LEVEL =           "RATELPROF_LOG_LEVEL",
-      
+
       DOMAIN_HSA =          "RATELPROF_DOMAIN_HSA",
       DOMAIN_HIP =          "RATELPROF_DOMAIN_HIP",
       DOMAIN_OMP_TGT =      "RATELPROF_DOMAIN_OMP_ROUTINE",
@@ -60,6 +60,21 @@ consts._ENV = {
       DOMAIN_ROCTX =        "RATELPROF_DOMAIN_ROCTX",
       DOMAIN_MPI =          "RATELPROF_DOMAIN_MPI",
     }
+
+consts._DOMAIN_ID = {
+  [consts._ENV.DOMAIN_HSA]          = 0,
+  [consts._ENV.DOMAIN_OMP_TGT_RTL]  = 1,
+  [consts._ENV.DOMAIN_OMP_TGT]      = 2,
+  [consts._ENV.DOMAIN_HIP]          = 3,
+  [consts._ENV.DOMAIN_MPI]          = 4,
+  [consts._ENV.DOMAIN_OMPT]         = 5,
+  [consts._ENV.DOMAIN_ROCTX]        = 6,
+  [consts._ENV.DOMAIN_PROFILING]    = 7,
+  [consts._ENV.DOMAIN_COPY]         = 8,
+  [consts._ENV.DOMAIN_KERNEL]       = 9,
+  [consts._ENV.DOMAIN_BARRIERAND]   = 10,
+  [consts._ENV.DOMAIN_BARRIEROR]    = 11,
+}
 
 consts._DOMAIN_NAME = {
   [consts._ENV.DOMAIN_HIP]          = "HIP API",
