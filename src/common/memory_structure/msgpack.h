@@ -65,6 +65,7 @@ static inline char *base64_encode(const uint8_t *data, size_t input_length, size
 size_t msgpack_size(msgpack_buffer_t *buf);
 char* msgpack_to_b64(msgpack_buffer_t *buf, size_t* out_len);
 int msgpack_concat(msgpack_buffer_t *buf, msgpack_buffer_t *buf_src);
+int msgpack_push_byte(msgpack_buffer_t *buf, const uint8_t byte);
 int msgpack_write(msgpack_buffer_t *buf);
 int msgpack_init(msgpack_buffer_t *buf, size_t capacity, msgpack_overflow_mode_t mode, const char* filename);
 int msgpack_free(msgpack_buffer_t *buf);

@@ -60,6 +60,12 @@ static int __msgpack_reserve(msgpack_buffer_t *buf, size_t additional_size) {
     return 0;
 }
 
+int msgpack_push_byte(msgpack_buffer_t *buf, const uint8_t byte) {
+    __msgpack_reserve(buf, 1);
+    __msgpack_put_bytes(buf, byte);
+    return 0;
+}
+
 size_t msgpack_size(msgpack_buffer_t *buf) {
     return buf->flushed + buf->size;
 } 
@@ -325,8 +331,10 @@ int msgpack_encode_map(msgpack_buffer_t *buf, size_t count) {
 
 int msgpack_encode_ext(msgpack_buffer_t *buf, int8_t type, const uint8_t *data, size_t len) {
     __msgpack_reserve(buf, len + 6);
-
-    if (len == 1) {
+    
+    if (len == 0) {
+        return -1;
+    } else if (len == 1) {
         __msgpack_put_bytes(buf, 0xd4);
     } else if (len == 2) {
         __msgpack_put_bytes(buf, 0xd5);
@@ -343,14 +351,14 @@ int msgpack_encode_ext(msgpack_buffer_t *buf, int8_t type, const uint8_t *data, 
         __msgpack_put_bytes(buf, 0xc8);
         __msgpack_put_bytes(buf, (len >> 8) & 0xff);
         __msgpack_put_bytes(buf, len & 0xff);
-    } else {
+    } else if (len <= 0xFFFFFFFF){
         __msgpack_put_bytes(buf, 0xc9);
         for (int i = 3; i >= 0; --i)
             __msgpack_put_bytes(buf, (len >> (8 * i)) & 0xff);
     }
 
     __msgpack_put_bytes(buf, type);
-    if (data && len) {
+    if (data) {
         __msgpack_put_bytes(buf, data, len);
     }
     return 0;
