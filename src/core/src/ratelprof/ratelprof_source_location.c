@@ -10,12 +10,6 @@
 #include "ratelprof/ratelprof_status.h"
 
 
-// Cache for location data
-// Save for each address the location data
-static cached_source_data_t *location_cache = NULL;
-static pthread_mutex_t cache_mutex = PTHREAD_MUTEX_INITIALIZER;
-
-
 /*
  * addr2line:
  *  - object_path: path to binary/shared-object (from dladdr->dli_fname)
@@ -23,15 +17,16 @@ static pthread_mutex_t cache_mutex = PTHREAD_MUTEX_INITIALIZER;
  *  - dli_fbase: base address (from dladdr->dli_fbase if available)
  *
  * On success:
- *   *out_func = strdup(<function name line>)
- *   *out_fileline = strdup(<file:line line>)
+ *   *out_func = strdup(<function name>)
+ *   *out_file = strdup(<file>)
+ *   *out_line = line_number
  * Caller must free() them.
  */
 static bool addr2line(const char *object_path, void *addr, void *dli_fbase,
-                                   char **out_func, char **out_fileline)
+                                   char **out_func, char **out_file, uint64_t *out_line)
 {
     // TODO (23/09/2025) : Support escape char in object_path ("'`\s etc.)
-    if (!object_path || !addr || !out_func || !out_fileline) return false;
+    if (!object_path || !addr || !out_func || !out_file || !out_line) return false;
     uintptr_t uaddr = (uintptr_t)addr;
     uintptr_t base  = dli_fbase ? (uintptr_t)dli_fbase : 0;
     uintptr_t offset = base ? (uaddr - base) : uaddr;
@@ -62,40 +57,23 @@ static bool addr2line(const char *object_path, void *addr, void *dli_fbase,
     read = getline(&line, &len, fp);
     if (read <= 0) { free(line); pclose(fp); free(*out_func); *out_func=NULL; return false; }
     if (read > 0 && line[read-1] == '\n') line[read-1] = '\0';
-    *out_fileline = strdup(line);
+    
+    /* split file and line */
+    char *colon = strrchr(line, ':');
+    if (!colon) {
+        *out_file = strdup(line);
+        *out_line = 0;
+    } else {
+        *colon = '\0';
+        *out_file = strdup(line);
+        *out_line = atoi(colon + 1);
+    }
 
     free(line);
     pclose(fp);
     return true;
 }
 
-
-static bool match_addr_callback(ratelprof_source_data_t *location, void *user_data) {
-    ratelprof_source_data_t *args = (ratelprof_source_data_t*) user_data;
-
-    if (location->addr == args->addr) {
-        *args = *location;
-        return true;
-    }
-    return false;
-}
-
-
-static ratelprof_status_t add_new_cache_entry(ratelprof_source_data_t data) {
-    cached_source_data_t *new_entry = malloc(sizeof(cached_source_data_t));
-    if (!new_entry) {
-        return RATELPROF_STATUS_MALLOC_FAILED;
-    }
-
-    new_entry->location = data;
-    new_entry->next = NULL;
-
-    pthread_mutex_lock(&cache_mutex);
-    new_entry->next = location_cache;
-    location_cache = new_entry;
-    pthread_mutex_unlock(&cache_mutex);
-    return RATELPROF_STATUS_SUCCESS;
-}
 
 
 ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, void *addr) {    
@@ -105,10 +83,6 @@ ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, v
     ratelprof_source_data_t *data = out ? out : &tmp;
 
     data->addr = addr;
-
-    if (ratelprof_iterate_location_cache(match_addr_callback, data)) {
-        return RATELPROF_STATUS_SUCCESS;
-    }
 
     Dl_info info;
     if (!dladdr(addr, &info)) {
@@ -120,10 +94,12 @@ ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, v
 
     char *func   = NULL;
     char* source = NULL;
+    uint64_t line = 0;
 
-    if (info.dli_fname && addr2line(info.dli_fname, addr, info.dli_fbase, &func, &source)) {
+    if (info.dli_fname && addr2line(info.dli_fname, addr, info.dli_fbase, &func, &source, &line)) {
         data->func     = func;
         data->source   = source;
+        data->line    = line;
     } else {
         status = add_new_cache_entry(*data);
         return status;
@@ -133,28 +109,15 @@ ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, v
 }
 
 
-bool ratelprof_iterate_location_cache(ratelprof_cache_iter_cb_t callback, void *user_data) {
-    pthread_mutex_lock(&cache_mutex);
-    for (cached_source_data_t *entry = location_cache; entry; entry = entry->next) {
-        if (callback(&entry->location, user_data)) {
-            pthread_mutex_unlock(&cache_mutex);
-            return true;
-        }
-    }
-    pthread_mutex_unlock(&cache_mutex);
-    return false;
-}
-
-
 const char * ratelprof_format_source_location_string(const ratelprof_source_data_t *loc) {
     const char *func     = loc->func ? loc->func : "??";
-    const char *source   = loc->source ? loc->source : "??:??";
+    const char *source   = loc->source ? loc->source : "??";
 
-    size_t len = snprintf(NULL, 0, "%s from %s", func, source);
+    size_t len = snprintf(NULL, 0, "%s from %s:%ld", func, source, loc->line);
     char *buf = malloc(len + 1);
     if (!buf) return NULL;
 
-    snprintf(buf, len + 1, "%s from %s", func, source);
+    snprintf(buf, len + 1, "%s from %s:%ld", func, source, loc->line);
     return buf;
 }
 
@@ -180,26 +143,4 @@ void ratelprof_get_and_print_location(void *addr) {
     ratelprof_source_data_t loc = {0};
     ratelprof_get_source_location(&loc, addr);
     ratelprof_print_location(loc);
-}
-
-
-void ratelprof_cleanup_source_location(void) {
-    // ---- Free caller/source location cache ----
-    pthread_mutex_lock(&cache_mutex);
-    cached_source_data_t *entry = location_cache;
-    while (entry) {
-        cached_source_data_t *next = entry->next;
-
-        if (entry->location.object_file)
-            free((void *)entry->location.object_file);
-        if (entry->location.source)
-            free((void *)entry->location.source);
-        if (entry->location.func)
-            free((void *)entry->location.func);
-
-        free(entry);
-        entry = next;
-    }
-    location_cache = NULL;
-    pthread_mutex_unlock(&cache_mutex);
 }
