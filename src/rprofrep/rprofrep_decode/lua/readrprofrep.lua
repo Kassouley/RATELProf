@@ -1,8 +1,16 @@
 local rprofrep = require("rprofrep_decoder_lua")
 
 -- --------------------------
--- SECTION NAME → ENUM
+-- UTILITY FUNCTIONS
 -- --------------------------
+local function head(str, len)
+    if #str <= len then
+        return str
+    else
+        return string.sub(str, 1, len - 3) .. "..."
+    end
+end
+
 local function lookup_section_id(name)
     local sections = {
         GLOBAL = 0,
@@ -20,18 +28,18 @@ end
 -- --------------------------
 -- PRINT FUNCTIONS
 -- --------------------------
-local function print_section_title(section_id)
+local function print_section_title(name)
     local names = {
-        [0] = "GLOBAL",
-        [1] = "STRING",
-        [2] = "LOCATION",
-        [3] = "GPU_SPEC",
-        [4] = "API_DATA",
-        [5] = "KERNEL",
-        [6] = "OFFSETS",
-        [7] = "EVENTS"
+        [0] = "Global",
+        [1] = "String",
+        [2] = "Location",
+        [3] = "GPU Specification",
+        [4] = "API's Data",
+        [5] = "Kernels",
+        [6] = "Offsets Tree",
+        [7] = "Events"
     }
-    print("\n==================== " .. names[section_id] .. " Section ====================")
+    print("\n==================== " .. names[lookup_section_id(name)] .. " Section ====================")
 end
 
 local function print_section_end()
@@ -39,21 +47,21 @@ local function print_section_end()
 end
 
 local function print_global_section(ctx)
-    print_section_title(0)
+    print_section_title("GLOBAL")
     print(string.format("Run Date: %s", ctx:get_run_date()))
     local exit_code = ctx:get_run_exit_code()
     print("Exit Code: " .. exit_code)
     local cmd = ctx:get_run_command_line()
     print("Command Line: " .. cmd)
     local version = ctx:get_report_version()
-    print(string.format("Report Version: %d.%d.%d", version[1], version[2], version[3]))
+    print(string.format("Report Version: %d.%d.%d", version.major, version.minor, version.patch))
     local rank = ctx:get_rank()
     print("Rank: " .. rank)
     print_section_end()
 end
 
 local function print_offsets_section(ctx)
-    print_section_title(6)
+    print_section_title("OFFSETS")
     ctx:for_each_unit(function(pid, node)
         print("  - PID/GPU: " .. pid)
         ctx:for_each_sub_unit(node, function(tid, subnode)
@@ -65,17 +73,26 @@ local function print_offsets_section(ctx)
 end
 
 local function print_events_section(ctx, requested_domains)
-    print_section_title(7)
-    local iterator = ctx:get_iterator(requested_domains)
-    local count = 0
-    while true do
-        local event = iterator:next()
-        if not event then break end
-        print(string.format("Event: name=%s, rank=%d, domain=%d, pid=%d, tid=%d, phase=%d, id=%d, start=%d, dur=%d",
-            event:name(), event:rank(), event:domain(), event:pid(), event:tid(), event:phase(), event:id(), event:start(), event:dur()))
-        count = count + 1
-        if count > 100 then break end -- limit for demo
-    end
+    print_section_title("EVENTS")
+
+    print(string.rep("-", 134))
+    print(string.format("%-6s | %-10s | %-12s | %-32s | %-6s | %-6s | %-6s | %-16s | %-16s",
+        "Domain", "PID/GPU", "TID/QID/SDMA", "Name", "Phase", "ID", "CID", "Start", "Duration"))
+    print(string.rep("-", 134))
+
+    ctx:for_each_unit(function(_, unit_node)
+        ctx:for_each_sub_unit(unit_node, function(_, node)
+            local iterator = ctx:get_iterator(node, requested_domains)
+            if not iterator then return end
+            for _ = 1, 128 do
+                local event = iterator:next()
+                if not event then break end
+                print(string.format("%6d | %10d | %12d | %-32s | %6d | %6d | %6d | %16d | %16d",
+                    event:domain(), event:unit(), event:sub_unit(), head(event:name(), 32), event:phase(), event:id(), 0, event:start(), event:dur()))
+            end
+        end)
+    end)
+
     print_section_end()
 end
 
@@ -95,7 +112,7 @@ end
 -- MAIN
 -- --------------------------
 local function main()
-    if #arg < 3 then
+    if #arg < 2 then
         print_usage()
         return
     end
@@ -106,14 +123,10 @@ local function main()
     local requested_domains = {} -- table of domain ids
 
     if arg[1] == "-h" then
-        if #arg ~= 3 then
-            print_usage()
-            return
-        end
         show_header = true
         filename = arg[2]
     elseif arg[1] == "-s" then
-        if #arg < 4 then
+        if #arg < 3 then
             print_usage()
             return
         end
@@ -125,12 +138,12 @@ local function main()
             return
         end
         filename = arg[3]
-        if secname == "EVENTS" and arg[4] == "-d" then
-            local domains_str = arg[5]
+        if secname == "EVENTS" and arg[3] == "-d" then
+            local domains_str = arg[4]
             for d in string.gmatch(domains_str, "[^,]+") do
-                requested_domains[tonumber(d)] = true
+                table.insert(requested_domains, tonumber(d))
             end
-            filename = arg[6]
+            filename = arg[5]
         end
     else
         print_usage()
