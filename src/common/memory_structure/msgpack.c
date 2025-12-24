@@ -4,40 +4,63 @@
 
 #include "msgpack.h"
 
-#define PP_NARG(...) PP_NARG_(__VA_ARGS__, 2, 1, 0)
-#define PP_NARG_(A,B,C,N,...) N
+// #define MP_ENDIAN_BIG     1   // MessagePack standard
+#define MP_ENDIAN_LITTLE  1   // Custom format
 
-#define __msgpack_put_bytes1(BUF, BYTES) (BUF)->data[(BUF)->size++] = (uint8_t)(BYTES)
+#if defined(MP_ENDIAN_BIG)
+    #if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+        // host is already big-endian, no swap
+        #define MP_ENCODE_16(v) ((uint16_t)(v))
+        #define MP_ENCODE_32(v) ((uint32_t)(v))
+        #define MP_ENCODE_64(v) ((uint64_t)(v))
+    #else
+        // host is little-endian, swap to big-endian
+        #define MP_ENCODE_16(v) (__builtin_bswap16((uint16_t)(v)))
+        #define MP_ENCODE_32(v) (__builtin_bswap32((uint32_t)(v)))
+        #define MP_ENCODE_64(v) (__builtin_bswap64((uint64_t)(v)))
+    #endif
 
-#define __msgpack_put_bytes2(BUF, BYTES, LEN) \
-    memcpy((BUF)->data + (BUF)->size, (BYTES), (LEN)); \
-    (BUF)->size += (LEN)
+#elif defined(MP_ENDIAN_LITTLE)
+    #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+        #define MP_ENCODE_16(v) ((uint16_t)(v))
+        #define MP_ENCODE_32(v) ((uint32_t)(v))
+        #define MP_ENCODE_64(v) ((uint64_t)(v))
+    #else
+        // host is big-endian, swap to little-endian
+        #define MP_ENCODE_16(v) (__builtin_bswap16((uint16_t)(v)))
+        #define MP_ENCODE_32(v) (__builtin_bswap32((uint32_t)(v)))
+        #define MP_ENCODE_64(v) (__builtin_bswap64((uint64_t)(v)))
+    #endif
 
-#define __msgpack_put_bytes_GLUE(NAME, N) NAME##N
-#define __msgpack_put_bytes_SELECT(NAME, N) __msgpack_put_bytes_GLUE(NAME, N)
+#else
+    #error "You must define MP_ENDIAN_BIG or MP_ENDIAN_LITTLE"
+#endif
 
-#define __msgpack_put_bytes(...) __msgpack_put_bytes_SELECT(__msgpack_put_bytes, PP_NARG(__VA_ARGS__))(__VA_ARGS__)
+#define __msgpack_write_n_bytes(BUF, V, LEN) do { memcpy((BUF)->data + (BUF)->size, (V), (LEN)); (BUF)->size += (LEN); } while(0)
+#define __msgpack_write_1_bytes(BUF, V)      do { (BUF)->data[(BUF)->size++] = (uint8_t)(V); } while(0)
+#define __msgpack_write_2_bytes(BUF, V)      do { uint16_t tmp16 = MP_ENCODE_16(V); __msgpack_write_n_bytes(BUF, &tmp16, 2); } while(0)
+#define __msgpack_write_4_bytes(BUF, V)      do { uint32_t tmp32 = MP_ENCODE_32(V); __msgpack_write_n_bytes(BUF, &tmp32, 4); } while(0)
+#define __msgpack_write_8_bytes(BUF, V)      do { uint64_t tmp64 = MP_ENCODE_64(V); __msgpack_write_n_bytes(BUF, &tmp64, 8); } while(0)
 
 
-#define __msgpack_write_to_file(data, size, err) { \
+#define __msgpack_write_to_file(data, size, err) do { \
     size_t written = fwrite(data, 1, size, buf->file); \
     if (written != size) { \
         fprintf(stderr, err); \
     } \
-}
+} while (0)
 
-static int __msgpack_reserve(msgpack_buffer_t *buf, size_t additional_size) {
+static void __msgpack_reserve(msgpack_buffer_t *buf, size_t additional_size) {
     size_t required_size = buf->size + additional_size;
 
     if (required_size <= buf->capacity) {
-        return 0; // No need to grow or flush
+        return; // No need to grow or flush
     }
-
 
     if (MSGPACK_IS_FILE_MODE(buf->overflow_mode)) {
         if (additional_size <= buf->capacity) {
             msgpack_write(buf);
-            return 0;
+            return;
         }
         // else: fall through to reallocation
     }
@@ -51,19 +74,24 @@ static int __msgpack_reserve(msgpack_buffer_t *buf, size_t additional_size) {
     uint8_t *new_data = (uint8_t *)realloc(buf->data, new_capacity);
     if (!new_data) {
         fprintf(stderr, "__msgpack_reserve: memory allocation failed\n");
-        return -1;
+        exit(EXIT_FAILURE);
+        return;
     }
 
     buf->data = new_data;
     buf->capacity = new_capacity;
 
-    return 0;
+    return;
 }
 
-int msgpack_push_byte(msgpack_buffer_t *buf, const uint8_t byte) {
+void msgpack_push_bytes(msgpack_buffer_t *buf, void* bytes, size_t len) {
+    __msgpack_reserve(buf, len);
+    __msgpack_write_n_bytes(buf, bytes, len);
+}
+
+void msgpack_push_byte(msgpack_buffer_t *buf, const uint8_t byte) {
     __msgpack_reserve(buf, 1);
-    __msgpack_put_bytes(buf, byte);
-    return 0;
+    __msgpack_write_1_bytes(buf, byte);
 }
 
 size_t msgpack_size(msgpack_buffer_t *buf) {
@@ -150,6 +178,9 @@ int msgpack_free(msgpack_buffer_t *buf) {
     return 0;
 }
 
+int msgpack_flush(msgpack_buffer_t *buf) {
+    return fflush(buf->file);
+}
 
 int msgpack_write(msgpack_buffer_t *buf) {
     if (!buf->file || buf->size == 0) return 0;
@@ -188,178 +219,162 @@ int msgpack_write(msgpack_buffer_t *buf) {
     return 0;
 }
 
-int msgpack_concat(msgpack_buffer_t *buf, msgpack_buffer_t *buf_src) {
+void msgpack_concat(msgpack_buffer_t *buf, msgpack_buffer_t *buf_src) {
     __msgpack_reserve(buf, buf_src->size);
-    __msgpack_put_bytes(buf, buf_src->data, buf_src->size);
-    return 0;
+    __msgpack_write_n_bytes(buf, buf_src->data, buf_src->size);
+    return;
 }
 
-int msgpack_encode_int(msgpack_buffer_t *buf, int64_t value) {
+void msgpack_encode_int(msgpack_buffer_t *buf, int64_t value) {
     __msgpack_reserve(buf, 9);
     if (value >= 0) {
         msgpack_encode_uint(buf, (uint64_t)value);
     } else if (value >= -32) {
-        __msgpack_put_bytes(buf, value);
+        __msgpack_write_1_bytes(buf, value);
     } else if (value >= INT8_MIN) {
-        __msgpack_put_bytes(buf, 0xd0);
-        __msgpack_put_bytes(buf, value);
+        __msgpack_write_1_bytes(buf, 0xd0);
+        __msgpack_write_1_bytes(buf, value);
     } else if (value >= INT16_MIN) {
-        __msgpack_put_bytes(buf, 0xd1);
-        __msgpack_put_bytes(buf, (value >> 8) & 0xff);
-        __msgpack_put_bytes(buf, value & 0xff);
+        __msgpack_write_1_bytes(buf, 0xd1);
+        __msgpack_write_2_bytes(buf, value);
     } else if (value >= INT32_MIN) {
-        __msgpack_put_bytes(buf, 0xd2);
-        for (int i = 3; i >= 0; --i)
-            __msgpack_put_bytes(buf, (value >> (i * 8)) & 0xff);
+        __msgpack_write_1_bytes(buf, 0xd2);
+        __msgpack_write_4_bytes(buf, value);
     } else {
-        __msgpack_put_bytes(buf, 0xd3);
-        for (int i = 7; i >= 0; --i)
-            __msgpack_put_bytes(buf, (value >> (i * 8)) & 0xff);
+        __msgpack_write_1_bytes(buf, 0xd3);
+        __msgpack_write_8_bytes(buf, value);
     }
-    return 0;
+    return;
 }
 
-int msgpack_encode_uint(msgpack_buffer_t *buf, uint64_t value) {
+void msgpack_encode_uint(msgpack_buffer_t *buf, uint64_t value) {
     __msgpack_reserve(buf, 9);
     if (value < 128) {
-        __msgpack_put_bytes(buf, value);
+        __msgpack_write_1_bytes(buf, value);
     } else if (value <= UINT8_MAX) {
-        __msgpack_put_bytes(buf, 0xcc);
-        __msgpack_put_bytes(buf, value);
+        __msgpack_write_1_bytes(buf, 0xcc);
+        __msgpack_write_1_bytes(buf, value);
     } else if (value <= UINT16_MAX) {
-        __msgpack_put_bytes(buf, 0xcd);
-        __msgpack_put_bytes(buf, (value >> 8) & 0xff);
-        __msgpack_put_bytes(buf, value & 0xff);
+        __msgpack_write_1_bytes(buf, 0xcd);
+        __msgpack_write_2_bytes(buf, value);
     } else if (value <= UINT32_MAX) {
-        __msgpack_put_bytes(buf, 0xce);
-        for (int i = 3; i >= 0; --i)
-            __msgpack_put_bytes(buf, (value >> (i * 8)) & 0xff);
+        __msgpack_write_1_bytes(buf, 0xce);
+        __msgpack_write_4_bytes(buf, value);
     } else {
-        __msgpack_put_bytes(buf, 0xcf);
-        for (int i = 7; i >= 0; --i)
-            __msgpack_put_bytes(buf, (value >> (i * 8)) & 0xff);
+        __msgpack_write_1_bytes(buf, 0xcf);
+        __msgpack_write_8_bytes(buf, value);
     }
-    return 0;
+    return;
 }
 
-int msgpack_encode_float(msgpack_buffer_t *buf, float value) {
+void msgpack_encode_float(msgpack_buffer_t *buf, float value) {
     __msgpack_reserve(buf, 5);
-    __msgpack_put_bytes(buf, 0xca);
+    __msgpack_write_1_bytes(buf, 0xca);
     uint32_t v;
     memcpy(&v, &value, sizeof(v));
-    for (int i = 3; i >= 0; --i)
-        __msgpack_put_bytes(buf, (v >> (i * 8)) & 0xff);
-    return 0;
+    __msgpack_write_4_bytes(buf, v);
+    return;
 }
 
-int msgpack_encode_double(msgpack_buffer_t *buf, double value) {
+void msgpack_encode_double(msgpack_buffer_t *buf, double value) {
     __msgpack_reserve(buf, 9);
-    __msgpack_put_bytes(buf, 0xcb);
+    __msgpack_write_1_bytes(buf, 0xcb);
     uint64_t v;
     memcpy(&v, &value, sizeof(v));
-    for (int i = 7; i >= 0; --i)
-        __msgpack_put_bytes(buf, (v >> (i * 8)) & 0xff);
-    return 0;
+    __msgpack_write_8_bytes(buf, v);
+    return;
 }
 
-int msgpack_encode_bool(msgpack_buffer_t *buf, bool value) {
+void msgpack_encode_bool(msgpack_buffer_t *buf, bool value) {
     __msgpack_reserve(buf, 1);
-    __msgpack_put_bytes(buf, value ? 0xc3 : 0xc2);
-    return 0;
+    __msgpack_write_1_bytes(buf, value ? 0xc3 : 0xc2);
+    return;
 }
 
-int msgpack_encode_nil(msgpack_buffer_t *buf) {
+void msgpack_encode_nil(msgpack_buffer_t *buf) {
     __msgpack_reserve(buf, 1);
-    __msgpack_put_bytes(buf, 0xc0);
-    return 0;
+    __msgpack_write_1_bytes(buf, 0xc0);
+    return;
 }
 
-int msgpack_encode_string(msgpack_buffer_t *buf, const char *str) {
+void msgpack_encode_string(msgpack_buffer_t *buf, const char *str) {
     size_t len = strlen(str);
     __msgpack_reserve(buf, len + 5);
 
     if (len < 32) {
-        __msgpack_put_bytes(buf, 0xa0 | (uint8_t)len);  // fixstr
+        __msgpack_write_1_bytes(buf, 0xa0 | (uint8_t)len);  // fixstr
     } else if (len <= 0xff) {
-        __msgpack_put_bytes(buf, 0xd9);                 // str8
-        __msgpack_put_bytes(buf, len);
+        __msgpack_write_1_bytes(buf, 0xd9);                 // str8
+        __msgpack_write_1_bytes(buf, len);
     } else if (len <= 0xffff) {
-        __msgpack_put_bytes(buf, 0xda);                 // str16
-        __msgpack_put_bytes(buf, (len >> 8) & 0xff);
-        __msgpack_put_bytes(buf, len & 0xff);
+        __msgpack_write_1_bytes(buf, 0xda);                 // str16
+        __msgpack_write_2_bytes(buf, len);
     } else {
-        __msgpack_put_bytes(buf, 0xdb);                 // str32
-        for (int i = 3; i >= 0; --i)
-            __msgpack_put_bytes(buf, (len >> (8 * i)) & 0xff);
+        __msgpack_write_1_bytes(buf, 0xdb);                 // str32
+        __msgpack_write_4_bytes(buf, len);
     }
-    __msgpack_put_bytes(buf, str, len);
-    return 0;
+    __msgpack_write_n_bytes(buf, str, len);
+    return;
 }
 
 
-int msgpack_encode_array(msgpack_buffer_t *buf, size_t count) {
+void msgpack_encode_array(msgpack_buffer_t *buf, size_t count) {
     __msgpack_reserve(buf, 5);
     if (count < 16) {
-        __msgpack_put_bytes(buf, 0x90 | (uint8_t)count);
+        __msgpack_write_1_bytes(buf, 0x90 | (uint8_t)count);
     } else if (count <= UINT16_MAX) {
-        __msgpack_put_bytes(buf, 0xdc);
-        __msgpack_put_bytes(buf, (count >> 8) & 0xff);
-        __msgpack_put_bytes(buf, count & 0xff);
+        __msgpack_write_1_bytes(buf, 0xdc);
+        __msgpack_write_2_bytes(buf, count);
     } else {
-        __msgpack_put_bytes(buf, 0xdd);
-        for (int i = 3; i >= 0; --i)
-            __msgpack_put_bytes(buf, (count >> (i * 8)) & 0xff);
+        __msgpack_write_1_bytes(buf, 0xdd);
+        __msgpack_write_4_bytes(buf, count);
     }
-    return 0;
+    return;
 }
 
-int msgpack_encode_map(msgpack_buffer_t *buf, size_t count) {
+void msgpack_encode_map(msgpack_buffer_t *buf, size_t count) {
     __msgpack_reserve(buf, 5);
     if (count < 16) {
-        __msgpack_put_bytes(buf, 0x80 | (uint8_t)count);
+        __msgpack_write_1_bytes(buf, 0x80 | (uint8_t)count);
     } else if (count <= UINT16_MAX) {
-        __msgpack_put_bytes(buf, 0xde);
-        __msgpack_put_bytes(buf, (count >> 8) & 0xff);
-        __msgpack_put_bytes(buf, count & 0xff);
+        __msgpack_write_1_bytes(buf, 0xde);
+        __msgpack_write_2_bytes(buf, count);
     } else {
-        __msgpack_put_bytes(buf, 0xdf);
-        for (int i = 3; i >= 0; --i)
-            __msgpack_put_bytes(buf, (count >> (i * 8)) & 0xff);
+        __msgpack_write_1_bytes(buf, 0xdf);
+        __msgpack_write_4_bytes(buf, count);
     }
-    return 0;
+    return;
 }
 
-int msgpack_encode_ext(msgpack_buffer_t *buf, int8_t type, const uint8_t *data, size_t len) {
+void msgpack_encode_ext(msgpack_buffer_t *buf, int8_t type, const uint8_t *data, size_t len) {
     __msgpack_reserve(buf, len + 6);
     
     if (len == 0) {
-        return -1;
+        return ;
     } else if (len == 1) {
-        __msgpack_put_bytes(buf, 0xd4);
+        __msgpack_write_1_bytes(buf, 0xd4);
     } else if (len == 2) {
-        __msgpack_put_bytes(buf, 0xd5);
+        __msgpack_write_1_bytes(buf, 0xd5);
     } else if (len == 4) {
-        __msgpack_put_bytes(buf, 0xd6);
+        __msgpack_write_1_bytes(buf, 0xd6);
     } else if (len == 8) {
-        __msgpack_put_bytes(buf, 0xd7);
+        __msgpack_write_1_bytes(buf, 0xd7);
     } else if (len == 16) {
-        __msgpack_put_bytes(buf, 0xd8);
+        __msgpack_write_1_bytes(buf, 0xd8);
     } else if (len <= 0xFF) {
-        __msgpack_put_bytes(buf, 0xc7);
-        __msgpack_put_bytes(buf, len);
+        __msgpack_write_1_bytes(buf, 0xc7);
+        __msgpack_write_1_bytes(buf, len);
     } else if (len <= 0xFFFF) {
-        __msgpack_put_bytes(buf, 0xc8);
-        __msgpack_put_bytes(buf, (len >> 8) & 0xff);
-        __msgpack_put_bytes(buf, len & 0xff);
+        __msgpack_write_1_bytes(buf, 0xc8);
+        __msgpack_write_2_bytes(buf, len);
     } else if (len <= 0xFFFFFFFF){
-        __msgpack_put_bytes(buf, 0xc9);
-        for (int i = 3; i >= 0; --i)
-            __msgpack_put_bytes(buf, (len >> (8 * i)) & 0xff);
+        __msgpack_write_1_bytes(buf, 0xc9);
+        __msgpack_write_4_bytes(buf, len);
     }
 
-    __msgpack_put_bytes(buf, type);
+    __msgpack_write_1_bytes(buf, type);
     if (data) {
-        __msgpack_put_bytes(buf, data, len);
+        __msgpack_write_n_bytes(buf, data, len);
     }
-    return 0;
+    return;
 }
