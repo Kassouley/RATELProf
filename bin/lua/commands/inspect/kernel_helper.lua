@@ -30,7 +30,7 @@ local function iterate_linked_lib(binary_app, func)
         if visited[bin] then return end
         visited[bin] = true
         res[bin] = func(bin)
-        print(res[bin], bin)
+
         -- Recurse into linked libraries
         local libs_output = ratelprof.utils.execute_command(string.format("ldd %s | awk '{print $3}'", bin))
         for lib in libs_output:gmatch("[^\r\n]+") do
