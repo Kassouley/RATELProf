@@ -25,7 +25,7 @@ ratelprof_plugin_t* plugin = NULL;
 static void* load_symbol(void *handle, const char *symbol) {
     void *sym = dlsym(handle, symbol);
     if (sym == NULL) {
-        LOG(LOG_LEVEL_WARN, "Error loading symbol %s: %s\n", symbol, dlerror());
+        LOG(LOG_LEVEL_FATAL, "Error loading symbol %s: %s\n", symbol, dlerror());
     }
     return sym;
 }
