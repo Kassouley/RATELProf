@@ -79,33 +79,26 @@ static bool addr2line(const char *object_path, void *addr, void *dli_fbase,
 ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, void *addr) {    
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
 
-    ratelprof_source_data_t tmp = {0};
-    ratelprof_source_data_t *data = out ? out : &tmp;
-
-    data->addr = addr;
+    out->addr = addr;
 
     Dl_info info;
     if (!dladdr(addr, &info)) {
-        status = add_new_cache_entry(*data);
-        return status == RATELPROF_STATUS_SUCCESS ? RATELPROF_STATUS_DLADDR_FAILED : status;
+        return RATELPROF_STATUS_DLADDR_FAILED;
     }
 
-    data->object_file = info.dli_fname ? strdup(info.dli_fname) : NULL;
+    out->object_file = info.dli_fname ? strdup(info.dli_fname) : NULL;
 
     char *func   = NULL;
     char* source = NULL;
     uint64_t line = 0;
 
     if (info.dli_fname && addr2line(info.dli_fname, addr, info.dli_fbase, &func, &source, &line)) {
-        data->func     = func;
-        data->source   = source;
-        data->line    = line;
-    } else {
-        status = add_new_cache_entry(*data);
-        return status;
-    }
+        out->func     = func;
+        out->source   = source;
+        out->line     = line;
+    } 
 
-    return add_new_cache_entry(*data);
+    return status;
 }
 
 
