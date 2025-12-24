@@ -21,6 +21,19 @@ const char* get_kernel_name(uint64_t kernel_object)
     return kernel_name;
 }
 
+const char* get_copy_name(uint32_t src_type, uint32_t dst_type)
+{
+    static const char* table[2][2] = {
+        /* dst = 0            dst = 1                           */
+        { "CopyHostToHost",   "CopyHostToDevice" },  /* src = 0 */
+        { "CopyDeviceToHost", "CopyDeviceToDevice" } /* src = 1 */
+    };
+
+    if (src_type > 1 || dst_type > 1)
+        return "CopyUnknown";
+
+    return table[src_type][dst_type];
+}
 
 static ratelprof_status_t ratelprof_enable_memcpy_profiling() {
     if (hsa_api_table.api_ptr == NULL) return RATELPROF_STATUS_API_TABLE_NOT_INIT;
