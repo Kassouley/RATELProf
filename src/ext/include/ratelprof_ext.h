@@ -39,6 +39,8 @@ typedef enum {
     RATELPROF_DOMAIN_GPU        // Not realy a domain, used to initialize GPU API table.
 } ratelprof_domain_ext_t;
 
+#include "utils/utils.h"
+
 typedef bool (*gpu_callback_t)(hsa_signal_value_t, void*);
 
 typedef union gpu_args_s {
@@ -104,6 +106,7 @@ typedef struct ratelprof_roctx_activity_s {
 #include "domains/fun_proto/roctx_traced_functions.h"
 
 const char* get_kernel_name(uint64_t kernel_object);
+const char* get_copy_name(uint32_t src_type, uint32_t dst_type);
 ratelprof_status_t ratelprof_enable_node_id_tracking();
 
 #endif // RATELPROF_EXT_H
