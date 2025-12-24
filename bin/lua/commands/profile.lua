@@ -38,7 +38,8 @@ local function handle_profile_option(options)
     local plugin_path = ratelprof.get_opt_val(options, "plugin")
     if plugin_path then
         if plugin_path == "stdout"        then plugin_path = ratelprof.consts._LIBS.PLUGIN_STDOUT
-        elseif plugin_path == "msgpack"   then plugin_path = ratelprof.consts._LIBS.PLUGIN_MSGPACK end
+        elseif plugin_path == "msgpack"   then plugin_path = ratelprof.consts._LIBS.PLUGIN_MSGPACK
+        elseif plugin_path == "rprofrep"  then plugin_path = ratelprof.consts._LIBS.PLUGIN_RPROFREP end
         if not ratelprof.fs.exists(plugin_path) then
             Message:error("Plugin library '"..plugin_path.."' not found.")
             os.exit(1)
@@ -135,14 +136,6 @@ function profile.process_profiling(positional_args, options_values)
         table.insert(ld_preload, lib.path)
     end
 
-    env.set_number_of_kernel_env_var(bin)
-    env.set_number_of_queue_env_var()
-    env.set_env("LD_PRELOAD", table.concat(ld_preload, ":"))
-
-    local env_var = env.get_env()
-    local run_command = prefix.."env "..env_var.." "..bin_with_args
-    local app_cmd_w_prefix = prefix == " " and user_bin_with_args or prefix..user_bin_with_args
-
     Message:print ([[
      ____      _  _____ _____ _     ____             __ 
     |  _ \    / \|_   _| ____| |   |  _ \ _ __ ___  / _|
@@ -150,6 +143,9 @@ function profile.process_profiling(positional_args, options_values)
     |  _ <  / ___ \| | | |___| |___|  __/| | | (_) |  _|
     |_| \_\/_/   \_\_| |_____|_____|_|   |_|  \___/|_|  
 ]])
+
+    local app_cmd_w_prefix = prefix == " " and user_bin_with_args or prefix..user_bin_with_args
+
     Message:print ("RPROF: Application profiled :    '"..bin.."'")
     Message:print ("RPROF: Application Command :     '"..app_cmd_w_prefix.."'")
     Message:print ("RPROF: Preloaded tool :          '"..ld_preload[1].."'")
@@ -157,6 +153,12 @@ function profile.process_profiling(positional_args, options_values)
     Message:print ("RPROF: Plugin used :             '"..plugin_path.."'")
     Message:print ("RPROF: Profiling enabled for :   '"..table.concat(opt.enabled_domain, ", ").."'")
 
+    env.set_number_of_kernel_env_var(bin)
+    env.set_number_of_queue_env_var()
+    env.set_env("LD_PRELOAD", table.concat(ld_preload, ":"))
+
+    local env_var = env.get_env()
+    local run_command = prefix.."env "..env_var.." "..bin_with_args
     if launch_command and launch_script and ratelprof.fs.exists(launch_script) then
         Message:print ("RPROF: Running :                 '"..launch_command.." "..launch_script.."'")
         script_execution (run_command, launch_command, launch_script)
@@ -164,14 +166,14 @@ function profile.process_profiling(positional_args, options_values)
         normal_execution (run_command)
     end
 
-    local f = ratelprof.fs.open_file("/tmp/rprof_output_filename.txt", "r")
-    for output_file in f:lines() do
-        agent_helper.set_gpu_props_to_msgpack(output_file)
-        local bytes_written = ratelprof.fs.get_size(output_file)
-        Message:print ("RPROF: Bytes written in '"..output_file.."' : "..bytes_written)
-    end
-    f:close()
-    os.remove("/tmp/rprof_output_filename.txt")
+    -- local f = ratelprof.fs.open_file("/tmp/rprof_output_filename.txt", "r")
+    -- for output_file in f:lines() do
+    --     agent_helper.set_gpu_props_to_msgpack(output_file)
+    --     local bytes_written = ratelprof.fs.get_size(output_file)
+    --     Message:print ("RPROF: Bytes written in '"..output_file.."' : "..bytes_written)
+    -- end
+    -- f:close()
+    -- os.remove("/tmp/rprof_output_filename.txt")
 
     Message:print ("RPROF: Exiting tool . . .")
 end

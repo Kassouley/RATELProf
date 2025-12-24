@@ -19,6 +19,7 @@ consts._LIBS_NAME = {
       WRAPPERS        = "libratelprof_wrapper.so",
       PLUGIN_STDOUT   = 'libplugin_stdout.so',
       PLUGIN_MSGPACK  = 'libplugin_msgpack.so',
+      PLUGIN_RPROFREP = 'libplugin_rprofrep.so',
 }
 
 consts._LIBS = {
@@ -26,6 +27,7 @@ consts._LIBS = {
       WRAPPERS        = consts._LIBS_DIR..consts._LIBS_NAME.WRAPPERS,
       PLUGIN_STDOUT   = consts._LIBS_DIR..consts._LIBS_NAME.PLUGIN_STDOUT,
       PLUGIN_MSGPACK  = consts._LIBS_DIR..consts._LIBS_NAME.PLUGIN_MSGPACK,
+      PLUGIN_RPROFREP = consts._LIBS_DIR..consts._LIBS_NAME.PLUGIN_RPROFREP,
 }
 
 consts._PRELOADED_LIBS = {
