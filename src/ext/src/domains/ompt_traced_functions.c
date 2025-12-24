@@ -31,12 +31,14 @@ void on_ompt_callback_target_emi(
         activity->return_address = (void *)codeptr_ra;
         GET_ARGS_VALUE_target_emi(activity);
         target_task_data->ptr = (void*)activity;
+        activity->start_time = ratelprof_get_curr_timespec();
 
-        ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_TARGET_REGION + kind, activity);
+        ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, get_ompt_target_id(kind), activity);
     } else if (endpoint == ompt_scope_end) {
         ratelprof_api_activity_t *activity = (ratelprof_api_activity_t *)(target_task_data->ptr);
-        ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_TARGET_REGION + kind, activity);
-
+        activity->stop_time = ratelprof_get_curr_timespec();
+        
+        ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, get_ompt_target_id(kind), activity);
         target_task_data->ptr = 0;  // Clear the pointer
     }
 }
@@ -64,12 +66,14 @@ void on_ompt_callback_target_data_op_emi(
         activity->return_address = (void *)codeptr_ra;
         GET_ARGS_VALUE_target_data_op(activity);
         target_data->ptr = (void*)activity;
+        activity->start_time = ratelprof_get_curr_timespec();
 
-        ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_TARGET_DATA_REGION + optype, activity);
+        ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, get_ompt_target_data_op_id(optype), activity);
     } else if (endpoint == ompt_scope_end) {
         ratelprof_api_activity_t *activity = (ratelprof_api_activity_t *)(target_data->ptr);
+        activity->stop_time = ratelprof_get_curr_timespec();
 
-        ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_TARGET_DATA_REGION + optype, activity);
+        ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, get_ompt_target_data_op_id(optype), activity);
         target_data->ptr = 0;  // Clear the pointer
     }
 }
@@ -90,10 +94,13 @@ void on_ompt_callback_target_submit_emi(
         activity->return_address = NULL;
         GET_ARGS_VALUE_target_submit_emi(activity);
         target_data->ptr = (void*)activity;
+        activity->start_time = ratelprof_get_curr_timespec();
 
         ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_target_submit, activity);
     } else if (endpoint == ompt_scope_end) {
         ratelprof_api_activity_t *activity = (ratelprof_api_activity_t *)(target_data->ptr);
+        activity->stop_time = ratelprof_get_curr_timespec();
+
         ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_target_submit, activity);
         target_data->ptr = 0;  // Clear the pointer
     }
@@ -121,10 +128,12 @@ void on_ompt_callback_target_map_emi(
         activity->return_address = (void *)codeptr_ra;
         GET_ARGS_VALUE_target_map_emi(activity);
         target_data->ptr = (void*)activity;
+        activity->start_time = ratelprof_get_curr_timespec();
 
         ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_target_map, activity);
     } else if (endpoint == ompt_scope_end) {
         ratelprof_api_activity_t *activity = (ratelprof_api_activity_t *)(target_data->ptr);
+        activity->stop_time = ratelprof_get_curr_timespec();
 
         ratelprof_on_exit_callbacks[RATELPROF_DOMAIN_OMP_REGION](RATELPROF_DOMAIN_OMP_REGION, OMPT_API_ID_target_map, activity);
         target_data->ptr = 0;  // Clear the pointer
