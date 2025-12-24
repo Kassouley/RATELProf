@@ -8,108 +8,11 @@
 
 #include "msgpack_decoder.h"
 
-#include "msgpack_ext.h"
-
-/** RATELProf Ext decoding 
- *      Decoding as follow : 
- *          - tool version as 3 uint
- *          - experiment start epoch time as uint
- *          - mpi rank as int -> -1 = no mpi
- *          - lifecycle stop time as map of string to uint
- *          - map node id to agent object
- *          - string extension mapping
- *          - location data
- *          - trace data
- *          - gpu props
- */
-void decode_ratelprof_ext(msgpack_decode_ctx_t *ctx) {
-    lua_newtable(ctx->L);
-
-    lua_pushstring(ctx->L, "version");
-    decode_msgpack(ctx);
-    lua_settable(ctx->L, -3);
-
-    lua_pushstring(ctx->L, "experiment_start_epoch");
-    decode_msgpack(ctx);
-    lua_settable(ctx->L, -3);
-
-    lua_pushstring(ctx->L, "mpi_rank");
-    decode_msgpack(ctx);
-    lua_settable(ctx->L, -3);
-
-    lua_pushstring(ctx->L, "lifecycle");
-    decode_msgpack(ctx);
-    lua_settable(ctx->L, -3);
-
-    lua_pushstring(ctx->L, "main_data");
-    decode_msgpack(ctx);
-    lua_settable(ctx->L, -3);
-
-    lua_pushstring(ctx->L, "node_id");
-    decode_msgpack(ctx);
-    lua_settable(ctx->L, -3);
-
-    // String array decoding
-    decode_msgpack(ctx);  // expects and decodes an array of strings
-
-    lua_pushstring(ctx->L, "locations");
-    decode_msgpack(ctx);
-    lua_settable(ctx->L, -3);
-
-    lua_pushstring(ctx->L, "trace_events");
-    decode_msgpack(ctx);
-    lua_settable(ctx->L, -3);
-
-    lua_pushstring(ctx->L, "gpu_props");
-    decode_msgpack(ctx);
-    lua_settable(ctx->L, -3);
-}
-
-void decode_string_array_ext(msgpack_decode_ctx_t *ctx, size_t size) {
-    if (ctx->ext_string_array) free(ctx->ext_string_array);
-    ctx->ext_string_array = (char**)malloc(size * sizeof(char*));
-    ctx->ext_string_array_size = size;
-    for (size_t i = 0; i < size; i++) {
-        size_t len = 0;
-        uint8_t b = read_byte(ctx);
-
-        if ((b & 0xe0) == 0xa0) {
-            len = b & 0x1f;
-        } else if (b == 0xd9) {
-            len = read_byte(ctx);
-        } else if (b == 0xda) {
-            len = read_uint(ctx, 2);
-        } else if (b == 0xdb) {
-            len = read_uint(ctx, 4);
-        } else {
-            luaL_error(ctx->L, "String array extension excepts strings as element.");
-        }
-        ctx->ext_string_array[i] = read_string(ctx, len);
-    }
-}
-
-void decode_string_ext(msgpack_decode_ctx_t *ctx, size_t size) {
-    size_t index = read_uint(ctx, size);
-
-    if (index < 0 || index >= ctx->ext_string_array_size) {
-        luaL_error(ctx->L, "Trying to read an ext string at a wrong index");
-    }
-    
-    if (ctx->ext_string_array) {
-        lua_pushstring(ctx->L, ctx->ext_string_array[index]);
-    } else {
-        luaL_error(ctx->L, "Trying to read an ext string without initialize the string array before");
-    }
-}
-
 
 void decode_ext(msgpack_decode_ctx_t *ctx, size_t size) {
     uint8_t type = read_byte(ctx); // type tag
 
     switch(type) {
-        case MSGPACK_EXT_RATELPROF:     decode_ratelprof_ext(ctx); break;          // Custom decoding for RATELProf report
-        case MSGPACK_EXT_STRING:        decode_string_ext(ctx, size); break;       // Decoding string id with array
-        case MSGPACK_EXT_STRING_ARRAY : decode_string_array_ext(ctx, size); break;
         default: luaL_error(ctx->L, "Unsupported ext type: 0x%02x", type);
     }
 }
@@ -230,10 +133,6 @@ int lua_decode_msgpack_from_file(lua_State *L) {
     decode_msgpack(&ctx);
     print_progress_bar(PROGRESS_BAR_LABEL, size, size, is_quiet);
 
-    if (ctx.ext_string_array) {
-        for (size_t i = 0; i < ctx.ext_string_array_size; ++i) free(ctx.ext_string_array[i]);
-        free(ctx.ext_string_array);
-    }
     return 1;
 }
 
@@ -252,10 +151,6 @@ int lua_decode_msgpack_from_memory(lua_State *L) {
     decode_msgpack(&ctx);
     print_progress_bar(PROGRESS_BAR_LABEL, size, size, is_quiet);
 
-    if (ctx.ext_string_array) {
-        for (size_t i = 0; i < ctx.ext_string_array_size; ++i) free(ctx.ext_string_array[i]);
-        free(ctx.ext_string_array);
-    }
     return 1;
 }
 

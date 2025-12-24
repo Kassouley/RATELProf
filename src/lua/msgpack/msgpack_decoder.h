@@ -4,7 +4,6 @@
 #include <lua.h>
 #include <lauxlib.h>
 #include <stdint.h>
-#include "msgpack_ext.h"
 
 #define PROGRESS_BAR_LABEL "Data decoding"
 
@@ -16,9 +15,6 @@ typedef struct {
     size_t size;
     lua_State *L;
     int is_quiet;
-
-    char** ext_string_array;
-    size_t ext_string_array_size;
 } msgpack_decode_ctx_t;
 
 
