@@ -64,16 +64,22 @@ INCLUDE_DIRECTORIES(
     ${OMPT_INCLUDE_DIR}
 )
 
+SET(LSGPU_VENDOR_INCLUDE_DIR ${HSA_INCLUDE_DIR})
+SET(LSGPU_BUILD_CLI OFF)
+ADD_SUBDIRECTORY(external/lsgpu)
+ADD_SUBDIRECTORY(external/liborkh)
 
 # Add subdirectory for the shared library
 ADD_SUBDIRECTORY(src/core)
 ADD_SUBDIRECTORY(src/ext)
 ADD_SUBDIRECTORY(src/tools)
 ADD_SUBDIRECTORY(src/wrappers)
-ADD_SUBDIRECTORY(src/plugins)
+# ADD_SUBDIRECTORY(src/plugins)
 ADD_SUBDIRECTORY(src/lua)
 
-ADD_SUBDIRECTORY(external/liborkh)
+ADD_SUBDIRECTORY(src/rprofrep/rprofrep_encode)
+ADD_SUBDIRECTORY(src/rprofrep/rprofrep_decode)
+
 
 FUNCTION(REMOVE_STATIC_BUILD TARGET_NAME)
     SET(LIB "${TARGET_NAME}-lib-static")
