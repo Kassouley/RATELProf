@@ -4,36 +4,69 @@
 #include <stdlib.h>
 #include <omp-tools.h>
 
+#ifdef ADD_API_PREFIX
+#undef ADD_API_PREFIX
+#endif
+#define ADD_API_PREFIX(str) OMPT_API_##str
+
+#define FOR_EACH_OMPT_FUNC(macro)         \
+    FOR_EACH_OMPT_TARGET_FUNC(macro)      \
+    FOR_EACH_OMPT_TARGET_DATA_FUNC(macro) \
+    macro(target_map)       \
+    macro(target_submit)
+
+/* All ompt_target* callbacks */
+#define FOR_EACH_OMPT_TARGET_FUNC(macro)  \
+    macro(target)                         \
+    macro(target_enter_data)              \
+    macro(target_exit_data)               \
+    macro(target_update)                  \
+    macro(target_nowait)                  \
+    macro(target_enter_data_nowait)       \
+    macro(target_exit_data_nowait)        \
+    macro(target_update_nowait) 
+
+/* All ompt_target_data_* callbacks */
+#define FOR_EACH_OMPT_TARGET_DATA_FUNC(macro)      \
+    macro(target_data_alloc)                       \
+    macro(target_data_transfer_to_device)          \
+    macro(target_data_transfer_from_device)        \
+    macro(target_data_delete)                      \
+    macro(target_data_associate)                   \
+    macro(target_data_disassociate)                \
+    macro(target_data_alloc_async)                 \
+    macro(target_data_transfer_to_device_async)    \
+    macro(target_data_transfer_from_device_async)  \
+    macro(target_data_delete_async) 
+
+
 typedef enum {
-    OMPT_API_ID_TARGET_REGION               = 0,
-    OMPT_API_ID_target                      = ompt_target,
-    OMPT_API_ID_target_enter_data           = ompt_target_enter_data,
-    OMPT_API_ID_target_exit_data            = ompt_target_exit_data,   
-    OMPT_API_ID_target_update               = ompt_target_update,
-    OMPT_API_ID_target_nowait               = ompt_target_nowait,
-    OMPT_API_ID_target_enter_data_nowait    = ompt_target_enter_data_nowait,
-    OMPT_API_ID_target_exit_data_nowait     = ompt_target_exit_data_nowait,
-    OMPT_API_ID_target_update_nowait        = ompt_target_update_nowait,
-
-    OMPT_API_ID_TARGET_DATA_REGION                      = 0x10,
-    OMPT_API_ID_target_data_alloc                       = OMPT_API_ID_TARGET_DATA_REGION + ompt_target_data_alloc,
-    OMPT_API_ID_target_data_transfer_to_device          = OMPT_API_ID_TARGET_DATA_REGION + ompt_target_data_transfer_to_device,
-    OMPT_API_ID_target_data_transfer_from_device        = OMPT_API_ID_TARGET_DATA_REGION + ompt_target_data_transfer_from_device,
-    OMPT_API_ID_target_data_delete                      = OMPT_API_ID_TARGET_DATA_REGION + ompt_target_data_delete,
-    OMPT_API_ID_target_data_associate                   = OMPT_API_ID_TARGET_DATA_REGION + ompt_target_data_associate,
-    OMPT_API_ID_target_data_disassociate                = OMPT_API_ID_TARGET_DATA_REGION + ompt_target_data_disassociate,
-    OMPT_API_ID_target_data_alloc_async                 = OMPT_API_ID_TARGET_DATA_REGION + ompt_target_data_alloc_async,
-    OMPT_API_ID_target_data_transfer_to_device_async    = OMPT_API_ID_TARGET_DATA_REGION + ompt_target_data_transfer_to_device_async,
-    OMPT_API_ID_target_data_transfer_from_device_async  = OMPT_API_ID_TARGET_DATA_REGION + ompt_target_data_transfer_from_device_async,
-    OMPT_API_ID_target_data_delete_async                = OMPT_API_ID_TARGET_DATA_REGION + ompt_target_data_delete_async,
-
-    OMPT_API_ID_target_map,
-
-    OMPT_API_ID_target_submit,
-
-    OMPT_API_ID_NB_FUNCTION = 20,
-    OMPT_API_ID_UNKNOWN = 0xffff
+    FOR_EACH_OMPT_FUNC(GET_FUNC_API_ID)
+    OMPT_API_ID_NB_FUNCTION,
+    OMPT_API_ID_UNKNOWN
 } ompt_api_id_t;
+
+
+
+
+#define MAKE_LOOKUP_ENTRY(name) [ompt_##name] = GET_FUNC_API_ID(name)
+
+static inline ompt_api_id_t get_ompt_target_id(ompt_target_t kind) {
+    static ompt_api_id_t lookup[] = {
+        FOR_EACH_OMPT_TARGET_FUNC(MAKE_LOOKUP_ENTRY)
+    };
+    return lookup[kind];
+}
+
+static inline ompt_api_id_t get_ompt_target_data_op_id(ompt_target_data_op_t optype) {
+    static ompt_api_id_t lookup[] = {
+        FOR_EACH_OMPT_TARGET_DATA_FUNC(MAKE_LOOKUP_ENTRY)
+    };
+    return lookup[optype];
+}
+
+#undef MAKE_LOOKUP_ENTRY
+
 
 
 // Target Map Emi
@@ -41,7 +74,7 @@ struct map_t {
     void *host_addr;
     void *device_addr;
     size_t bytes;
-    unsigned int mapping_flags;
+    ompt_target_map_flag_t mapping_flags;
 };
 
 typedef struct {
