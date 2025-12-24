@@ -28,8 +28,7 @@ static int l_msgpack_free(lua_State *L) {
 static int l_msgpack_encode_int(lua_State *L) {
     msgpack_buffer_t *buf = check_buffer(L, 1);
     int64_t value = (int64_t)luaL_checkinteger(L, 2);
-    if (msgpack_encode_int(buf, value) != 0)
-        return luaL_error(L, "msgpack_encode_int failed");
+    msgpack_encode_int(buf, value);
     return 0;
 }
 
@@ -37,8 +36,7 @@ static int l_msgpack_encode_int(lua_State *L) {
 static int l_msgpack_encode_uint(lua_State *L) {
     msgpack_buffer_t *buf = check_buffer(L, 1);
     uint64_t value = (uint64_t)luaL_checkinteger(L, 2);
-    if (msgpack_encode_uint(buf, value) != 0)
-        return luaL_error(L, "msgpack_encode_uint failed");
+    msgpack_encode_uint(buf, value);
     return 0;
 }
 
@@ -46,8 +44,7 @@ static int l_msgpack_encode_uint(lua_State *L) {
 static int l_msgpack_encode_float(lua_State *L) {
     msgpack_buffer_t *buf = check_buffer(L, 1);
     float value = (float)luaL_checknumber(L, 2);
-    if (msgpack_encode_float(buf, value) != 0)
-        return luaL_error(L, "msgpack_encode_float failed");
+    msgpack_encode_float(buf, value);
     return 0;
 }
 
@@ -55,8 +52,7 @@ static int l_msgpack_encode_float(lua_State *L) {
 static int l_msgpack_encode_double(lua_State *L) {
     msgpack_buffer_t *buf = check_buffer(L, 1);
     double value = luaL_checknumber(L, 2);
-    if (msgpack_encode_double(buf, value) != 0)
-        return luaL_error(L, "msgpack_encode_double failed");
+    msgpack_encode_double(buf, value);
     return 0;
 }
 
@@ -64,16 +60,14 @@ static int l_msgpack_encode_double(lua_State *L) {
 static int l_msgpack_encode_bool(lua_State *L) {
     msgpack_buffer_t *buf = check_buffer(L, 1);
     bool value = lua_toboolean(L, 2);
-    if (msgpack_encode_bool(buf, value) != 0)
-        return luaL_error(L, "msgpack_encode_bool failed");
+    msgpack_encode_bool(buf, value);
     return 0;
 }
 
 /* Lua: buf:encode_nil() */
 static int l_msgpack_encode_nil(lua_State *L) {
     msgpack_buffer_t *buf = check_buffer(L, 1);
-    if (msgpack_encode_nil(buf) != 0)
-        return luaL_error(L, "msgpack_encode_nil failed");
+    msgpack_encode_nil(buf);
     return 0;
 }
 
@@ -81,8 +75,7 @@ static int l_msgpack_encode_nil(lua_State *L) {
 static int l_msgpack_encode_string(lua_State *L) {
     msgpack_buffer_t *buf = check_buffer(L, 1);
     const char *str = luaL_checkstring(L, 2);
-    if (msgpack_encode_string(buf, str) != 0)
-        return luaL_error(L, "msgpack_encode_string failed");
+    msgpack_encode_string(buf, str);
     return 0;
 }
 
@@ -90,8 +83,7 @@ static int l_msgpack_encode_string(lua_State *L) {
 static int l_msgpack_encode_array(lua_State *L) {
     msgpack_buffer_t *buf = check_buffer(L, 1);
     size_t count = (size_t)luaL_checkinteger(L, 2);
-    if (msgpack_encode_array(buf, count) != 0)
-        return luaL_error(L, "msgpack_encode_array failed");
+    msgpack_encode_array(buf, count);
     return 0;
 }
 
@@ -99,8 +91,7 @@ static int l_msgpack_encode_array(lua_State *L) {
 static int l_msgpack_encode_map(lua_State *L) {
     msgpack_buffer_t *buf = check_buffer(L, 1);
     size_t count = (size_t)luaL_checkinteger(L, 2);
-    if (msgpack_encode_map(buf, count) != 0)
-        return luaL_error(L, "msgpack_encode_map failed");
+    msgpack_encode_map(buf, count);
     return 0;
 }
 
@@ -239,8 +230,7 @@ static int lmsgpack_write(lua_State *L) {
 static int lmsgpack_concat(lua_State *L) {
     msgpack_buffer_t *dst = (msgpack_buffer_t *)luaL_checkudata(L, 1, LUA_MSGPACK_BUFFER);
     msgpack_buffer_t *src = (msgpack_buffer_t *)luaL_checkudata(L, 2, LUA_MSGPACK_BUFFER);
-    int res = msgpack_concat(dst, src);
-    lua_pushboolean(L, res == 0);
+    msgpack_concat(dst, src);
     return 1;
 }
 
