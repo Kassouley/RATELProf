@@ -1,3 +1,6 @@
 [submodule "external/liborkh"]
 	path = external/liborkh
 	url = git@github.com:Kassouley/liborkh.git
+[submodule "external/lsgpu"]
+	path = external/lsgpu
+	url = git@github.com:Kassouley/lsgpu.git
