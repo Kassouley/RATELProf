@@ -54,6 +54,11 @@ void ratelprof_next_phase(void)
     lifecycle.current_phase++;
 }
 
+uint64_t ratelprof_get_experiment_start_epoch(void)
+{
+    return ratelprof_get_timestamp_ns(lifecycle.experiment_start_epoch);
+}
+
 
 void ratelprof_start_lifecycle(void) 
 {

@@ -195,6 +195,16 @@ ratelprof_time_t ratelprof_get_main_time(void);
 
 
 /**
+ * @brief Retrieve the experiment start epoch time in nanoseconds.
+ * 
+ * This function returns the timestamp marking the start of the profiling experiment
+ * in nanoseconds since the Unix epoch.
+ *
+ * @return Experiment start epoch time in nanoseconds.
+ */
+uint64_t ratelprof_get_experiment_start_epoch(void);
+
+/**
  * @brief Wrapper function for the program's main function.
  *
  * This function acts as an intermediary for the program's main function (`main_fn`), 
