@@ -22,22 +22,16 @@
  *   *out_line = line_number
  * Caller must free() them.
  */
-static bool addr2line(const char *object_path, void *addr, void *dli_fbase,
-                                   char **out_func, char **out_file, uint64_t *out_line)
+static bool addr2line(const char *object_path, void *addr,
+                        char **out_func, char **out_file, uint64_t *out_line)
 {
     // TODO (23/09/2025) : Support escape char in object_path ("'`\s etc.)
     if (!object_path || !addr || !out_func || !out_file || !out_line) return false;
-    uintptr_t uaddr = (uintptr_t)addr;
-    uintptr_t base  = dli_fbase ? (uintptr_t)dli_fbase : 0;
-    uintptr_t offset = base ? (uaddr - base) : uaddr;
-
-    char addr_hex[32];
-    snprintf(addr_hex, sizeof(addr_hex), "0x%" PRIxPTR, offset);
 
     char cmd[1024];
     int n = snprintf(cmd, sizeof(cmd),
-                     "addr2line -e %s -f -C -i %s",
-                     object_path, addr_hex);
+                     "addr2line -e %s -f -C -i %p",
+                     object_path, addr);
     if (n < 0 || n >= (int)sizeof(cmd)) return false;
 
     FILE *fp = popen(cmd, "r");
@@ -92,7 +86,7 @@ ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, v
     char* source = NULL;
     uint64_t line = 0;
 
-    if (info.dli_fname && addr2line(info.dli_fname, addr, info.dli_fbase, &func, &source, &line)) {
+    if (addr2line(info.dli_fname, addr, &func, &source, &line)) {
         out->func     = func;
         out->source   = source;
         out->line     = line;
