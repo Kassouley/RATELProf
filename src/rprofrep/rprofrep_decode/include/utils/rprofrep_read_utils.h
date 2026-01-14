@@ -90,9 +90,9 @@ static inline int64_t __read_mp_int(const uint8_t* buf, size_t* off) {
             case 0xd1: val = (int16_t) __read_int16(buf, off);     break;
             case 0xd2: val = (int32_t) __read_int32(buf, off);     break;
             case 0xd3: val = (int64_t) __read_int64(buf, off);     break;
-            case 0xcc: val = (int8_t)  __read_uint8(buf, off);     break;
-            case 0xcd: val = (int16_t) __read_uint16(buf, off);    break;
-            case 0xce: val = (int32_t) __read_uint32(buf, off);    break;
+            case 0xcc: val = (int64_t) __read_uint8(buf, off);     break;
+            case 0xcd: val = (int64_t) __read_uint16(buf, off);    break;
+            case 0xce: val = (int64_t) __read_uint32(buf, off);    break;
             case 0xcf: val = (int64_t) __read_uint64(buf, off);    break;
             default: fprintf(stderr, "Unsupported int type: 0x%02x\n", b);  break;
         }
