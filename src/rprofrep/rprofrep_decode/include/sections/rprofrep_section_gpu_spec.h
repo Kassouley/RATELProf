@@ -22,5 +22,6 @@ rprofrep_status_t rprofrep_decode_gpu_spec_section(
 
 rprofrep_status_t rprofrep_print_gpus_spec(rprofrep_decode_context_t* ctx);
 
+rprofrep_status_t rprofrep_node_is_gpu(rprofrep_decode_context_t* ctx, uint64_t node_id, bool* is_gpu);
 
 #endif // RPROFREP_SECTION_GPU_SPEC_H

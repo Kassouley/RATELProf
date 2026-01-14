@@ -17,6 +17,37 @@
 #include "sections/rprofrep_section_global.h"
 
 
+rprofrep_status_t rprofrep_find_entry_point_event(
+    rprofrep_decode_context_t* ctx,
+    rprofrep_event_data_t* event,
+    rprofrep_event_data_t* entry_point_event
+) {
+    RPROFREP_CHECK_VALID_PTR(event, entry_point_event);
+
+    if (!event->valid || !event->cid.valid) {
+        entry_point_event->valid = false;
+        return RPROFREP_STATUS_SUCCESS;
+    }
+
+    rprofrep_event_data_t current_event = *event;
+    rprofrep_event_data_t parent_event;
+
+    // Walk up the parent chain
+    while (current_event.cid.valid) {
+        RPROFREP_CHECK_CALL(
+            rprofrep_get_event_by_cid(
+                ctx,
+                &current_event.cid,
+                &parent_event
+            )
+        );
+        current_event = parent_event;
+    }
+
+    *entry_point_event = current_event;
+    return RPROFREP_STATUS_SUCCESS;
+}
+
 // Get the event for a given cid
 rprofrep_status_t rprofrep_get_event_by_cid(
     rprofrep_decode_context_t* ctx, 
@@ -24,6 +55,11 @@ rprofrep_status_t rprofrep_get_event_by_cid(
     rprofrep_event_data_t* out_event
 ) {
     RPROFREP_CHECK_VALID_PTR(cid);
+
+    if (!cid->valid) {
+        out_event->valid = false;
+        return RPROFREP_STATUS_SUCCESS;
+    }
 
     rprofrep_group_entry_t* group = NULL;
     RPROFREP_CHECK_CALL(rprofrep_get_group_entry_by_id(ctx, cid->group_id, &group));
