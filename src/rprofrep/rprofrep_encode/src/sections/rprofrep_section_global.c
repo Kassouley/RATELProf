@@ -20,6 +20,11 @@ rprofrep_status_t rprofrep_write_global_section(rprofrep_encode_context_t* ctx, 
     // Encode experiment rank
     msgpack_encode_int(&buf, get_mpi_rank_from_env());
 
+    // Encode tool version
+    msgpack_encode_uint(&buf, RATELPROF_VERSION_MAJOR);
+    msgpack_encode_uint(&buf, RATELPROF_VERSION_MINOR);
+    msgpack_encode_uint(&buf, RATELPROF_VERSION_PATCH);
+
     // Encode experiment start
     msgpack_encode_uint(&buf, ratelprof_get_timestamp_ns(lc->experiment_start_epoch));
 

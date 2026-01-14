@@ -33,6 +33,11 @@ rprofrep_status_t rprofrep_decode_global_section(
     uint64_t offset = 0;
 
     out->rank             = __read_mp_int(buffer, &offset);
+
+    out->tool_version[0]  = __read_mp_uint(buffer, &offset);
+    out->tool_version[1]  = __read_mp_uint(buffer, &offset);
+    out->tool_version[2]  = __read_mp_uint(buffer, &offset);
+
     out->experiment_start = __read_mp_uint(buffer, &offset);
     for (i = 0; i < RATELPROF_NB_PHASE; i++)
         out->lifecycle[i] = __read_mp_uint(buffer, &offset);
@@ -66,6 +71,20 @@ rprofrep_status_t rprofrep_decode_global_section(
     return RPROFREP_STATUS_SUCCESS;
 }
 
+
+rprofrep_status_t rprofrep_get_tool_version(rprofrep_decode_context_t* ctx, uint64_t version[3])
+{
+    RPROFREP_CHECK_VALID_PTR(ctx, version);
+
+    rprofrep_global_data_t* data = NULL;
+    RPROFREP_CHECK_CALL(rprofrep_get_section(ctx, RPROFREP_SECTION_GLOBAL, (void**)&data));
+
+    version[0] = data->tool_version[0];
+    version[1] = data->tool_version[1];
+    version[2] = data->tool_version[2];
+
+    return RPROFREP_STATUS_SUCCESS;
+}
 
 rprofrep_status_t rprofrep_get_rank(rprofrep_decode_context_t* ctx, int64_t* rank)
 {
@@ -158,4 +177,21 @@ rprofrep_status_t rprofrep_get_destructor_time(rprofrep_decode_context_t* ctx, u
     *time = data->lifecycle[RATELPROF_IN_DESTRUCTOR_PHASE] - data->lifecycle[RATELPROF_IN_MAIN_PHASE];
 
     return RPROFREP_STATUS_SUCCESS;
+}
+
+rprofrep_status_t rprofrep_get_gpu_id_from_agent(rprofrep_decode_context_t* ctx, uint64_t agent_id, uint64_t* gpu_id)
+{
+    RPROFREP_CHECK_VALID_PTR(ctx, gpu_id);
+
+    rprofrep_global_data_t* data = NULL;
+    RPROFREP_CHECK_CALL(rprofrep_get_section(ctx, RPROFREP_SECTION_GLOBAL, (void**)&data));
+
+    for (uint64_t i = 0; i < data->num_agents; i++) {
+        if (data->agents[i] == agent_id) {
+            *gpu_id = data->nodes[i];
+            return RPROFREP_STATUS_SUCCESS;
+        }
+    }
+
+    return RPROFREP_STATUS_NOT_FOUND("Agent ID %lu not found.\n", agent_id);
 }

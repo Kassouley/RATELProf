@@ -10,6 +10,7 @@
 
 typedef struct rprofrep_global_section_t {
     int64_t   rank;
+    uint64_t  tool_version[3];
     uint64_t  experiment_start;
     uint64_t  lifecycle[RATELPROF_NB_PHASE];
     int64_t   main_ret;
@@ -38,5 +39,7 @@ rprofrep_status_t rprofrep_get_main_time(rprofrep_decode_context_t* ctx, uint64_
 rprofrep_status_t rprofrep_get_destructor_time(rprofrep_decode_context_t* ctx, uint64_t* time);
 rprofrep_status_t rprofrep_get_exit_code(rprofrep_decode_context_t* ctx, int64_t* exit_code);
 rprofrep_status_t rprofrep_get_command_line(rprofrep_decode_context_t* ctx, char*** command_line_buffer, uint64_t* buffer_size);
+rprofrep_status_t rprofrep_get_tool_version(rprofrep_decode_context_t* ctx, uint64_t version[3]);
+rprofrep_status_t rprofrep_get_gpu_id_from_agent(rprofrep_decode_context_t* ctx, uint64_t agent_id, uint64_t* gpu_id);
 
 #endif // RPROFREP_SECTION_GLOBAL_H
