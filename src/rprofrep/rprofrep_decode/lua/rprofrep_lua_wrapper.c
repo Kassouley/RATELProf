@@ -62,9 +62,6 @@
 //     {NULL, NULL}
 // };
 
-
-
-
 #define SET_GETTER(fct, field, type) \
 static int l_event_##fct(lua_State *L) { \
     rprofrep_event_data_t *e = rprofrep_lua_get_event(L, 1); \
@@ -253,8 +250,10 @@ static rprofrep_status_t run_lua_callback_on_tree(rprofrep_decode_context_t* ctx
 
     lua_rawgeti(L, LUA_REGISTRYINDEX, *cb);
 
-    lua_pushnumber(L, (lua_Number) node->value);    // arg1
-    lua_pushlightuserdata(L, (void *)node);         // arg2
+    int64_t value = (int64_t) node->value;
+
+    lua_pushnumber(L, value);               // arg1
+    lua_pushlightuserdata(L, (void *)node); // arg2
 
     // Call Lua function with 2 args, 0 results
     if (lua_pcall(L, 2, 0, 0) != 0) {
@@ -282,18 +281,30 @@ static int l_context_for_each_sub_unit(lua_State *L)
 
 
 
-// Method: ctx:for_each_unit(list: domains, callback)
-static int l_context_for_each_unit(lua_State *L)
+// Method: ctx:for_each_pid(list: domains, callback)
+static int l_context_for_each_pid(lua_State *L)
 {
     rprofrep_decode_context_t *ctx = rprofrep_lua_get_context(L, 1);
     int cb = rprofrep_lua_get_callback(L, 2);
 
-    rprofrep_lua_check(L, rprofrep_for_each_unit(ctx, run_lua_callback_on_tree, (void*[2]){L, &cb}), 
+    rprofrep_lua_check(L, rprofrep_for_each_pid(ctx, run_lua_callback_on_tree, (void*[2]){L, &cb}), 
         "Failed to iterate over units");
 
     return 0;
 }
 
+
+// Method: ctx:for_each_gpu(list: domains, callback)
+static int l_context_for_each_gpu(lua_State *L)
+{
+    rprofrep_decode_context_t *ctx = rprofrep_lua_get_context(L, 1);
+    int cb = rprofrep_lua_get_callback(L, 2);
+
+    rprofrep_lua_check(L, rprofrep_for_each_gpu(ctx, run_lua_callback_on_tree, (void*[2]){L, &cb}), 
+        "Failed to iterate over units");
+
+    return 0;
+}
 
 static int l_context_get_iterator(lua_State *L)
 {
@@ -326,16 +337,6 @@ static int l_context_get_iterator(lua_State *L)
         *iterator = tmp;
     }
     return 1;
-}
-
-
-
-static int l_context_get_domain_traced(lua_State *L)
-{
-    rprofrep_decode_context_t *ctx = rprofrep_lua_get_context(L, 1);
-    
-        
-    return 0;
 }
 
 
@@ -411,6 +412,19 @@ static int l_context_get_run_command_line(lua_State *L) {
     return 1;
 }
 
+static int l_context_get_tool_version(lua_State *L)
+{
+    rprofrep_decode_context_t* ctx = rprofrep_lua_get_context(L, 1);
+    uint64_t tool_version[3] = {0};
+    rprofrep_lua_check(L, rprofrep_get_tool_version(ctx, tool_version), "Cannot get tool version");
+    
+    lua_newtable(L);
+    rprofrep_lua_push_map_val(L, number, "major", tool_version[0]);
+    rprofrep_lua_push_map_val(L, number, "minor", tool_version[1]);
+    rprofrep_lua_push_map_val(L, number, "patch", tool_version[2]);
+
+    return 1;
+}
 
 static int l_context_get_report_version(lua_State *L)
 {
@@ -418,7 +432,6 @@ static int l_context_get_report_version(lua_State *L)
     rprofrep_header_section_t* header = &ctx->header;
     
     lua_newtable(L);
-
     rprofrep_lua_push_map_val(L, number, "major", header->report_version[0]);
     rprofrep_lua_push_map_val(L, number, "minor", header->report_version[1]);
     rprofrep_lua_push_map_val(L, number, "patch", header->report_version[2]);
@@ -442,9 +455,9 @@ static int l_context_get_location(lua_State *L) {
 
     lua_newtable(L);
 
-    rprofrep_lua_push_map_val(L, number, "return_address", loc->return_address);
-    rprofrep_lua_push_map_val(L, string, "objectfile",     loc->objectfile);
-    rprofrep_lua_push_map_val(L, string, "function",       loc->function);
+    rprofrep_lua_push_map_val(L, number, "address",        loc->return_address);
+    rprofrep_lua_push_map_val(L, string, "objfile",        loc->objectfile);
+    rprofrep_lua_push_map_val(L, string, "func",           loc->function);
     rprofrep_lua_push_map_val(L, string, "filename",       loc->filename);
     rprofrep_lua_push_map_val(L, number, "line",           loc->line);
 
@@ -478,6 +491,78 @@ static int l_context_get_correlated_event(lua_State* L) {
     return 1;
 }
 
+static int l_context_find_entry_point_event(lua_State* L) {
+    rprofrep_decode_context_t *ctx = rprofrep_lua_get_context(L, 1);
+    rprofrep_event_data_t *e       = rprofrep_lua_get_event(L, 2);
+
+    rprofrep_event_data_t entry_point = {0};
+    rprofrep_lua_check(L, rprofrep_find_entry_point_event(ctx, e, &entry_point),
+        "failed to find entry point event");
+
+    if (!entry_point.valid) {
+        lua_pushnil(L);
+        return 1;
+    }
+
+    rprofrep_event_data_t* new_entry_point = rprofrep_lua_new_event(L);
+    *new_entry_point = entry_point;
+
+    return 1;
+}
+
+
+static int l_context_node_is_gpu(lua_State* L) {
+    rprofrep_decode_context_t *ctx = rprofrep_lua_get_context(L, 1);
+    uint64_t node_id = (uint64_t) luaL_checkinteger(L, 2);
+    bool is_gpu = false;
+
+    rprofrep_lua_check(L, rprofrep_node_is_gpu(ctx, node_id, &is_gpu),
+        "failed to check if node %lu is GPU", node_id);
+
+    lua_pushboolean(L, is_gpu);
+    return 1;
+}
+
+static int l_context_get_gpu_id_from_agent(lua_State* L) {
+    rprofrep_decode_context_t *ctx = rprofrep_lua_get_context(L, 1);
+    uint64_t agent  = (uint64_t) luaL_checkinteger(L, 2);
+    uint64_t gpu_id = (uint64_t) -1;
+
+    rprofrep_lua_check(L, rprofrep_get_gpu_id_from_agent(ctx, agent, &gpu_id),
+        "failed to get GPU id from agent id %lu", agent);
+
+    lua_pushinteger(L, gpu_id);
+    return 1;
+}
+
+static int l_context_get_application_time(lua_State* L) {
+    rprofrep_decode_context_t *ctx = rprofrep_lua_get_context(L, 1);
+    uint64_t ctime = 0;
+    uint64_t mtime = 0;
+    uint64_t dtime = 0;
+
+    rprofrep_lua_check(L, rprofrep_get_constructor_time(ctx, &ctime),
+        "failed to get constructor time");
+    rprofrep_lua_check(L, rprofrep_get_main_time(ctx, &mtime),
+        "failed to get main time");
+    rprofrep_lua_check(L, rprofrep_get_destructor_time(ctx, &dtime),
+        "failed to get destructor time");
+
+    lua_pushinteger(L, ctime + mtime + dtime);
+    return 1;
+}
+
+static int l_context_is_domain_traced(lua_State* L) {
+    rprofrep_decode_context_t *ctx = rprofrep_lua_get_context(L, 1);
+    ratelprof_domain_t domain = (ratelprof_domain_t) luaL_checkinteger(L, 2);
+    bool is_traced = false;
+
+    rprofrep_lua_check(L, rprofrep_is_domain_traced(ctx, domain, &is_traced),
+        "failed to get traced domain");
+
+    lua_pushboolean(L, is_traced);
+    return 1;
+}
 
 static const struct luaL_Reg l_context_metamethods[] = {
     register_class_method(context, __gc),
@@ -487,16 +572,22 @@ static const struct luaL_Reg l_context_metamethods[] = {
 
 static const struct luaL_Reg l_context_methods[] = {
     register_class_method(context, get_iterator),
-    register_class_method(context, for_each_unit),
+    register_class_method(context, for_each_gpu),
+    register_class_method(context, for_each_pid),
     register_class_method(context, for_each_sub_unit),
     register_class_method(context, get_location),
     register_class_method(context, get_correlated_event),
+    register_class_method(context, find_entry_point_event),
+    register_class_method(context, get_tool_version),
     register_class_method(context, get_report_version),
     register_class_method(context, get_rank),
     register_class_method(context, get_run_date),
     register_class_method(context, get_run_exit_code),
     register_class_method(context, get_run_command_line),
-    register_class_method(context, get_domain_traced),
+    register_class_method(context, get_application_time),
+    register_class_method(context, node_is_gpu),
+    register_class_method(context, get_gpu_id_from_agent),
+    register_class_method(context, is_domain_traced),
     {NULL, NULL}
 };
 

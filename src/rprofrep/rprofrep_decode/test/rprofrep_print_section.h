@@ -242,24 +242,35 @@ static inline rprofrep_status_t __print_domain_tree(rprofrep_decode_context_t* c
     return RPROFREP_STATUS_SUCCESS;
 }
 
+static bool is_in_gpu_tree = false;
+
 static inline rprofrep_status_t __print_subunit_tree(rprofrep_decode_context_t* ctx, rprofrep_tree_node_t* node, void* user_arg) {
-    printf("    - TID/QID/SDMA: %" PRId64 "\n", (int64_t) node->value);
+    printf("    - %s: %" PRId64 "\n",  is_in_gpu_tree ? "QID/SDMA" : "TID",(int64_t) node->value);
     RPROFREP_CHECK_CALL(rprofrep_for_each_domain(ctx, node, __print_domain_tree, NULL));
     return RPROFREP_STATUS_SUCCESS;
 }
 
 
-static inline rprofrep_status_t __print_unit_tree(rprofrep_decode_context_t* ctx, rprofrep_tree_node_t* node, void* user_arg) {
-    printf("  - PID/GPU: %" PRIu64 "\n", node->value);
+static inline rprofrep_status_t __print_cpu_tree(rprofrep_decode_context_t* ctx, rprofrep_tree_node_t* node, void* user_arg) {
+    is_in_gpu_tree = false;
+    printf("  - PID: %" PRIu64 "\n", node->value);
     RPROFREP_CHECK_CALL(rprofrep_for_each_subunit(ctx, node, __print_subunit_tree, NULL));
     return RPROFREP_STATUS_SUCCESS;
 }
 
 
+static inline rprofrep_status_t __print_gpu_tree(rprofrep_decode_context_t* ctx, rprofrep_tree_node_t* node, void* user_arg) {
+    is_in_gpu_tree = true;
+    printf("  - GPU: %" PRIu64 "\n", node->value);
+    RPROFREP_CHECK_CALL(rprofrep_for_each_subunit(ctx, node, __print_subunit_tree, NULL));
+    return RPROFREP_STATUS_SUCCESS;
+}
+
 static inline rprofrep_status_t rprofrep_print_offsets_section(rprofrep_decode_context_t* ctx)
 {
     print_section_title(RPROFREP_SECTION_OFFSETS);
-    RPROFREP_CHECK_CALL(rprofrep_for_each_unit(ctx, __print_unit_tree, NULL));
+    RPROFREP_CHECK_CALL(rprofrep_for_each_gpu(ctx, __print_gpu_tree, NULL));
+    RPROFREP_CHECK_CALL(rprofrep_for_each_pid(ctx, __print_cpu_tree, NULL));
     print_section_end();
     return RPROFREP_STATUS_SUCCESS;
 }
@@ -306,7 +317,8 @@ static inline rprofrep_status_t rprofrep_print_events_section(rprofrep_decode_co
     requested_domains[RATELPROF_DOMAIN_KERNEL] = true;
     requested_domains[RATELPROF_DOMAIN_COPY] = true;
 
-    RPROFREP_CHECK_CALL(rprofrep_for_each_unit(ctx, __iterate_over_events, requested_domains));
+    RPROFREP_CHECK_CALL(rprofrep_for_each_gpu(ctx, __iterate_over_events, requested_domains));
+    RPROFREP_CHECK_CALL(rprofrep_for_each_pid(ctx, __iterate_over_events, requested_domains));
 
     print_table_separator();
     print_section_end();
