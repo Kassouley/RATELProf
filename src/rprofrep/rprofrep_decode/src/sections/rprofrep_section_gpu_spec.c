@@ -44,3 +44,21 @@ rprofrep_status_t rprofrep_print_gpus_spec(rprofrep_decode_context_t* ctx)
 
     return RPROFREP_STATUS_SUCCESS;
 }
+
+rprofrep_status_t rprofrep_node_is_gpu(rprofrep_decode_context_t* ctx, uint64_t node_id, bool* is_gpu)
+{
+    RPROFREP_CHECK_VALID_PTR(ctx, is_gpu);
+
+    rprofrep_gpu_spec_data_t* devices = NULL;
+    RPROFREP_CHECK_CALL(rprofrep_get_section(ctx, RPROFREP_SECTION_GPU_SPEC, (void**)&devices));
+
+    *is_gpu = false;
+    for (uint32_t i = 0; i < devices->count; i++) {
+        if (devices->entries[i].node == node_id) {
+            *is_gpu = true;
+            break;
+        }
+    }
+
+    return RPROFREP_STATUS_SUCCESS;
+}
