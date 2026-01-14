@@ -156,24 +156,47 @@ function Script:show_version()
     os.exit(0)
 end
 
+local function is_option(arg)
+    return arg:sub(1, 1) == "-"
+end
+
+local function is_opt_terminator(arg)
+    return arg == "--"
+end
+
+
+local function is_short_option_for(arg, option)
+    return option.short_name and arg == "-" .. option.short_name
+end
+
+local function is_long_option_for(arg, option)
+    if not option.long_name then return false end
+    local lname_w_esc_sym = option.long_name:gsub("-", "%%-")
+    return arg:match("^%-%-" .. lname_w_esc_sym .. "$")
+        or arg:match("^%-%-" .. lname_w_esc_sym .. "=.")
+end
+
+local function is_help_option(arg)
+    return arg:match("help")
+end
+
 function Script:check_args(args)
+    local help_opt_set = false
     local i = 1
     while i <= #args do
         local arg = args[i]
         local value = true
         local matched_option = false
         
-        if arg:sub(1, 1) == "-" then
-            if arg == "--" then
-                for i=i+1, #args do
-                    local arg = args[i]
-                    table.insert(self.arguments_values, arg)
+        if is_option(arg) then
+            if is_opt_terminator(arg) then
+                for j=i+1, #args do
+                    table.insert(self.arguments_values, args[j])
                 end
                 break
             end
             for _, option in ipairs(self.options) do
-                if (option.short_name and arg == "-" .. option.short_name) 
-                    or (option.long_name and arg:match("^%-%-" .. option.long_name:gsub("-", "%%-") .. "=?")) then
+                if is_short_option_for(arg, option) or is_long_option_for(arg, option) then
                     matched_option = true
                     option.has_been_processed = true
                     if option.arg and option.need_arg then
@@ -210,7 +233,8 @@ function Script:check_args(args)
                             end
                         end
                     end
-                    self.options_values[option.long_name] = value 
+                    self.options_values[option.long_name] = value
+                    if is_help_option(arg) then return end
                     break
                 end
             end
@@ -246,7 +270,6 @@ function Script:check_args(args)
         self:show_version()
     end
 
-    
     for _, option in ipairs(self.options) do
         if not option.has_been_processed and option.default_val then
             self.options_values[option.long_name] = option.default_val 
@@ -257,7 +280,7 @@ function Script:check_args(args)
         print("Error: Need a command\n")
         self:show_help()
     end
-    if #self.arguments_values < self.min_arguments 
+    if #self.arguments_values < self.min_arguments
         or (self.max_arguments and  #self.arguments_values > self.max_arguments) then
         local msg = "Error: Incorrect number of arguments; expected %s but received '".. #self.arguments_values .."'.\n"
         local fmt = ""

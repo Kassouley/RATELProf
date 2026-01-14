@@ -23,14 +23,13 @@ end
 
 -- MAQAO Implementation
 -- ratelprof.get_opt_val = function (opt_list, name)
---     local used_cmd = nil
 --     for cmd_name, cmd in ipairs(ratelprof.consts_helper) do
 --         if opt_list[cmd_name] then
 --             local opt = cmd.opt[name]
 --             local shortname = opt.sname
 --             local default = opt.default
 --             if opt_list[name] then 
---                 return options[name] 
+--                 return opt_list[name] 
 --             elseif opt_list[shortname] then
 --                 return opt_list[shortname]
 --             else

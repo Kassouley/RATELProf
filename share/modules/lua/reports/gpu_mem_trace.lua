@@ -1,56 +1,63 @@
-local convert       = require ("utils.convert")
 local report_helper = require ("utils.report_helper")
 
-local function get_output_data(mem_traces, timeunit)
+local function get_raw_trace(rprofrep, opt)
+    local sizeunit = "MB"
+    local timeunit = opt.timeunit
+    local gpus     = opt.gpus
     local data = {}
 
-    for id, trace in pairs(mem_traces) do
-        local dur = report_helper.get_duration(trace.dur, timeunit)
-        local size = tonumber(convert.bytes(trace.args.size, "bytes", "mb"))
-        local src_name = ratelprof.utils.get_copy_name_from_kind(trace.args.src_type)
-        local dst_name = ratelprof.utils.get_copy_name_from_kind(trace.args.dst_type)
-        local cpy_name = ratelprof.utils.get_copy_name(trace.args.src_type, trace.args.dst_type)
-        data[#data + 1] = {
-            string.format("%.0f", trace.start),
-            dur,
-            tostring(id),
-            tostring(trace.corr_id),
-            size,
-            tonumber(size / convert.time(dur, timeunit, "sec")),
-            src_name,
-            dst_name,
-            cpy_name
-        }
-    end
+    rprofrep:for_each_rank(function(rank)
+        rprofrep:for_each_gpu(function(gpu_id)
+            rprofrep:for_each_event({ ratelprof.consts.DOMAIN_COPY_ID }, function(event)
+                local args   = event:args()
+                local start  = ratelprof.utils.get_duration(event:start(), timeunit)
+                local dur    = ratelprof.utils.get_duration(event:dur(), timeunit)
+                local dur_s  = ratelprof.utils.get_duration(event:dur(), "sec")
+                local size   = ratelprof.utils.get_size(args.size, sizeunit)
+                data[#data + 1] = {
+                    tostring(rank),
+                    tostring(gpu_id),
+                    start,
+                    dur,
+                    tostring(event:id()),
+                    tostring(rprofrep:get_correlated_id(event)),
+                    size,
+                    tonumber(size / dur_s),
+                    event:name()
+                }
+            end)
+        end, gpus)
+    end)
 
     return data
 end
 
-return function(traces_data, _, opt)
-    local mem_traces = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY, opt)
 
-    local data = get_output_data(mem_traces, opt.timeunit)
+return function (report)
+    local timeunit = report.opt.timeunit
+    local sizeunit = "MB"
 
-    table.sort(data, function(a, b)
-        return tonumber(a[1]) < tonumber(b[1])
-    end)
+    report.NAME = "GPU MemOps"
 
-    return {
-        NAME = "GPU Memory",
-        TYPE = "Traces",
-        HEADER = {
-            "Start ("..opt.timeunit..")",
-            "Duration ("..opt.timeunit..")",
-            "Id",
-            "CorrId",
-            "GroupMem (MB)",
-            "PrivateMem (MB)",
-            "Bytes (MB)",
-            "Throughput (MBps)",
-            "SrcMemKd",
-            "DstMemKd",
-            "Name"
-        },
-        DATA = data
+    report.TYPE = "Traces"
+
+    report.HEADER = {
+        "Rank",
+        "GPU ID",
+        "Start ("..timeunit..")",
+        "Duration ("..timeunit..")",
+        "Id",
+        "CorrId",
+        "Bytes ("..sizeunit..")",
+        "Throughput ("..sizeunit.."ps)",
+        "Operation"
     }
+
+    report.REQUIRED_DOMAIN = { ratelprof.consts.DOMAIN_COPY_ID }
+
+    report.SORT_BY = { "desc", 3 }
+
+    report.DATA = function (self, rprofrep)
+        self.data = get_raw_trace(rprofrep, self.opt)
+    end
 end

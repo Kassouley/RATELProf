@@ -2,51 +2,9 @@ require("utils.json.json")
 
 local utils = {}
 
+local convert = require ("utils.convert") 
+
 utils.demangle = require ("demangle").demangle
-
-function utils.compute_total_covered_duration(...)
-    local intervals = {}
-    local count = 0
-    
-    -- Step 1: Flatten all traces from each argument into intervals array
-    local args = {...}
-    for _, traces in ipairs(args) do
-        for _, t in pairs(traces) do
-            count = count + 1
-            intervals[count] = {start = t.start, stop = t.start + t.dur}
-        end
-    end
-
-    if count == 0 then return 0 end
-
-    -- Step 2: Sort by start time
-    table.sort(intervals, function(a, b)
-        return a.start < b.start
-    end)
-
-    -- Step 3: Merge intervals and compute total
-    local total = 0
-    local cur_start = intervals[1].start
-    local cur_stop = intervals[1].stop
-
-    for i = 2, count do
-        local s = intervals[i].start
-        local e = intervals[i].stop
-
-        if s <= cur_stop then
-            if e > cur_stop then
-                cur_stop = e
-            end
-        else
-            total = total + (cur_stop - cur_start)
-            cur_start = s
-            cur_stop = e
-        end
-    end
-
-    total = total + (cur_stop - cur_start)
-    return total
-end
 
 
 -- Function to print memory usage in GB only if it changes (2 decimal digits)
@@ -116,38 +74,6 @@ function utils.is_array(tbl)
 end
 
 
-function utils.check_report_files(files, skip_on_check)
-    local valid_files = {}
-
-    local function error_and_handle(msg)
-        if skip_on_check then
-            Message:error(msg .. " (Skipping.)")
-        else
-            Message:error(msg)
-            os.exit(1)
-        end
-    end
-
-    for _, file in ipairs(files) do
-        if not ratelprof.fs.exists(file) then
-            error_and_handle("Report '" .. file .. "' doesn't exist.")
-        elseif not ratelprof.fs.has_extension(file, ratelprof.consts._REPORT_EXT) then
-            error_and_handle("Report '" .. file .. "' is not a ." .. ratelprof.consts._REPORT_EXT .. " file.")
-        else
-            table.insert(valid_files, file)
-        end
-    end
-
-    if #valid_files == 0 then
-        Message:error("No valid report files provided. Stopping...")
-        os.exit(1)
-    end
-
-    return valid_files
-end
-
-
-
 function utils.execute_command(cmd)
     local handle = io.popen(cmd)
     if not handle then
@@ -183,35 +109,6 @@ function utils.get_kernel_name(name, is_trunc, is_mangled)
     cached_name = '"'..ret..'"'
     name_cache[name] = cached_name
     return cached_name
-end
-
-
-local _MEM_KIND = {"Host", "Device"}
-
-function utils.get_copy_name_from_kind(kind)
-    return _MEM_KIND[kind+1]
-end
-
-local get_name = utils.get_copy_name_from_kind
-
-function utils.get_copy_name(src, dst)
-    return ("Copy%sTo%s"):format(get_name(src), get_name(dst))
-end
-
-function utils.get_copy_name_from_trace(trace)
-    return utils.get_copy_name(trace.args.src_type, trace.args.dst_type)
-end
-
-
-function utils.get_gpu_id(trace, traces_data)
-    local gpu_agent = trace.args.gpu_id
-    if not gpu_agent then
-        if trace.args.dst_type == 1 then gpu_agent = trace.args.dst_agent
-        elseif trace.args.src_type == 1 then gpu_agent = trace.args.src_agent
-        else error ("shouldn't reach, a gpu trace need to have a gpu agent")
-        end
-    end
-    return traces_data:get_gpu_id(gpu_agent)
 end
 
 
@@ -260,5 +157,43 @@ end
 
 
 utils.generate_json = generate_json
+
+
+function utils.get_duration(dur, timeunit)
+    if timeunit ~= "ns" then
+        return convert.time(dur, "ns", timeunit)
+    end
+    return dur
+end
+
+function utils.get_size(size, sizeunit)
+    if sizeunit ~= "B" then
+        return convert.bytes(size, "B", sizeunit)
+    end
+    return size
+end
+
+
+function utils.label_unit_with_rank(key, with_unit_label)
+    local rank = key.rank or -1
+
+    local unit, label
+    if key.gpu_id then
+        unit = key.gpu_id
+        label = with_unit_label and "GPU " or ""
+    elseif key.pid then
+        unit = key.pid
+        label = with_unit_label and "PID " or ""
+    else
+        unit = "??"
+        label = with_unit_label and "??" or ""
+    end
+
+    if rank == -1 then
+        return label .. tostring(unit)
+    end
+
+    return string.format("%s%s ( rank %d )", label, unit, rank)
+end
 
 return utils

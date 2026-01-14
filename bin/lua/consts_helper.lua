@@ -7,14 +7,14 @@ end
 table.sort(trace_list)
 
 local default_reports = {}
-for report_id, report in pairs(ratelprof.consts._ALL_STATS_REPORT) do
+for report_id, report in pairs(ratelprof.consts.ALL_STATS_REPORT) do
     if report.default == true then
         table.insert(default_reports, report_id)
     end
 end
 
 local default_rules = {}
-for report_id, report in pairs(ratelprof.consts._ALL_RULES_REPORT) do
+for report_id, report in pairs(ratelprof.consts.ALL_ANALYZE_REPORT) do
     if report.default == true then
         table.insert(default_rules, report_id)
     end
@@ -143,7 +143,13 @@ consts_helper.stats = {
                         ]]..table.concat(default_reports, "\n\t\t\t")..[[ 
 
                 See --help-reports for a list of built-in reports, along with more
-                information on each report.]],
+                information on each report.
+
+                Alias are:
+                    - all-agg-sum: Generate all Aggregated reports (<api>_api_sum, gpu_sum, ...)
+                    - all-per-sum: Generate all Per-Mode reports (per_pid_<api>_api_sum, per_gpu_sum, ...)
+                    - all-trace: Generate all Trace reports
+                    - all: Generate all summary reports]],
             sname           = "r",
             arg             = "<name[:args...][,name[:args...]...]>",
             arg_required    = true,
@@ -214,9 +220,18 @@ consts_helper.stats = {
             arg_required    = true,
             default         = "ns"
         },
+        sizeunit = {
+            desc            = [[ 
+                Set basic unit of size. The default is KB.
+                Possible values are: B, KB, MB, GB.]],
+            sname           = nil,
+            arg             = "<size unit>",
+            arg_required    = true,
+            default         = "KB"
+        },
         ['only-main'] = {
             desc            = [[ 
-                Compute only statistic for traces from main phase.]],
+                Process only events from main phase.]],
             sname           = nil,
             arg             = nil,
             arg_required    = false,
@@ -256,7 +271,7 @@ consts_helper.stats = {
             arg_required    = true,
             default         = nil
         },
-        ['notation'] = {
+        notation = {
             desc            = [[ 
                 Change number notation of output reports.
                 Possible values : 'raw', 'scientific', 'engineering' or 'thousands-separator'
@@ -285,23 +300,41 @@ consts_helper.stats = {
             arg_required    = true,
             default         = nil
         },
-        ['per-rank'] = {
+        gpus = {
             desc            = [[ 
-                If multiple report files are specified, or if the report files contain profiling data for many ranks, 
-                the command will generate a separate analysis report for each rank instead of aggregating the data into a single report.]],
+                List of the GPUs to analyzed. Can be useful in per-gpu mode for statistics reports or in analyze command to focus on specific GPUs.
+                If not specify, analyze all GPUs.]],
             sname           = nil,
-            arg             = nil,
-            arg_required    = nil,
-            default         = false
+            arg             = "<gpu id>[,<gpu_id>]",
+            arg_required    = true,
+            default         = nil
         },
-        ['progress-enabled'] = {
+        pids = {
             desc            = [[ 
-                Enable progress bar during report generation.]],
+                List of the Process to analyzed. Can be useful in per-pid mode for statistics reports or in analyze command to focus on specific PIDs.
+                If not specify, analyze all Process.]],
             sname           = nil,
-            arg             = nil,
-            arg_required    = false,
-            default         = true
+            arg             = "<pid>[,<pid>]",
+            arg_required    = true,
+            default         = nil
         }
+        -- ['per-rank'] = {
+        --     desc            = [[ 
+        --         If multiple report files are specified, or if the report files contain profiling data for many ranks, 
+        --         the command will generate a separate analysis report for each rank instead of aggregating the data into a single report.]],
+        --     sname           = nil,
+        --     arg             = nil,
+        --     arg_required    = nil,
+        --     default         = false
+        -- },
+        -- ['progress-enabled'] = {
+        --     desc            = [[ 
+        --         Enable progress bar during report generation.]],
+        --     sname           = nil,
+        --     arg             = nil,
+        --     arg_required    = false,
+        --     default         = true
+        -- }
     }
 }
 
@@ -327,7 +360,10 @@ consts_helper.analyze.opt.report = {
                         ]]..table.concat(default_rules, "\n\t\t\t")..[[ 
 
                 See --help-reports for a list of built-in rules, along with more
-                information on each rule.]],
+                information on each rule.
+                
+                Alias are:
+                    - all: Generate all rules analyze]],
             sname           = "r",
             arg             = "<name[:args...][,name[:args...]...]>",
             arg_required    = true,

@@ -1,115 +1,6 @@
 -- Report.lua
 local Report = {}
-Report.utils = {}
-
-local function print_if_not (cond, format, ...)
-    if not cond then
-        Message:print (format, ...)
-    end
-end
-
-local function print_skip(cond, format, ...)
-    print_if_not(cond, "SKIPPED: "..string.format(format, ...))
-end
-
-local function process_report_generation(report_ret_vals, chunk, rprof_rep_data, report_id, options_values, output_format, output, rprof_rep_files, report_path, progress_enabled, mpi_rank, opt)
-    report_ret_vals = report_ret_vals or {}
-    local ret = nil
-    ret = chunk()(rprof_rep_data, report_id, opt)
-
-    local report_obj = Report:new({
-        format           = output_format,
-        output           = output,
-        rprof_rep_files  = rprof_rep_files,
-        report_name      = ret.NAME,
-        report_type      = ret.TYPE,
-        report_id        = report_id,
-        report_path      = report_path,
-        max_col_width    = tonumber(options_values.max_col_width),
-        max_lines        = options_values.max_lines,
-        notation         = options_values.notation,
-        header           = ret.HEADER,
-        msg              = ret.MSG,
-        data             = ret.DATA,
-        progress_enabled = progress_enabled,
-        mpi_rank         = mpi_rank,
-    })
-
-    if ret.skip then
-        print_skip(progress_enabled, ret.skip or "No skip message provided.")
-    else
-        report_obj:generate()
-    end
-
-    if not report_ret_vals[mpi_rank] then
-        report_ret_vals[mpi_rank] = {}
-    end
-    report_ret_vals[mpi_rank][report_id] = ret
-end
-
-local function get_report_opt_value(ALL_REPORT, report_id, report_opt, opt)
-    report_opt = report_opt or {}
-    if not ALL_REPORT[report_id].opt then return opt end
-    for name, option in pairs(ALL_REPORT[report_id].opt) do
-        local default = option.default
-        if not default then
-            error (string.format("No default report option value provided for %s in report %s", name, report_id))
-        end
-        if type(default) == "number" then
-            opt[name] = tonumber(report_opt[name]) or default
-        else
-            opt[name] = report_opt[name] or default
-        end
-    end
-    return opt
-end
-
-function Report.utils.execute_report(rprof_rep_data, options_values, report_list, progress_enabled, progress_msg)
-    local report_ret_vals = {}
-
-    local reports = options_values.reports or {}
-    local outputs = options_values.outputs or {}
-    local formats = options_values.formats or {}
-    
-    local nreports = #reports
-    for i, report_data in ipairs(reports) do
-        local report_id = report_data.id
-
-        if progress_enabled then
-            ratelprof.utils.print_progress(i-1, nreports, progress_msg, '('..report_id..')')
-        end
-
-        local report_path = report_list.__default_report_path..report_id..".lua"
-        if ratelprof.fs.exists(report_path) then
-            local output = outputs[i] or outputs[#outputs] or '-'
-            local output_format = formats[i] or formats[#formats]
-                                    or (output == "-" and "column" or "csv")
-
-            options_values = get_report_opt_value(report_list, report_id, report_data.opt, options_values)
-            
-            local chunk, err = loadfile(report_path)
-            if not chunk then
-                error("Error loading file: " .. err)
-            end
-
-            if options_values.per_rank == true then
-                rprof_rep_data:for_each_rank(function (mpi_rank, rprof_rep_file)
-                    process_report_generation(report_ret_vals, chunk, rprof_rep_data, report_id, options_values, output_format, output, {rprof_rep_file}, report_path, progress_enabled, mpi_rank, options_values)
-                end)
-            else
-                process_report_generation(report_ret_vals, chunk, rprof_rep_data, report_id, options_values, output_format, output, rprof_rep_data:get_rprof_rep_files(), report_path, progress_enabled, -1, options_values)
-            end
-        else
-            print('\n')
-            Message:error(string.format("Report '%s' encountered an internal error: No valid report file or class found", report_id))
-        end
-    end
-    if progress_enabled then
-        ratelprof.utils.print_progress(nreports, nreports, progress_msg, '(Done)')
-    end
-
-    return report_ret_vals
-end
+Report.__index = Report
 
 -- Available formats and their extensions
 local format_extensions = {
@@ -119,159 +10,171 @@ local format_extensions = {
     tsv     = "tsv"
 }
 
-local report_attribute_type = {
-    format           = "string",
-    output           = "string",
-    rprof_rep_files  = "table",
-    report_name      = "string",
-    report_type      = "string",
-    report_id        = "string",
-    report_path      = "string",
-    max_col_width    = "number",
-    max_lines        = "string",
-    notation         = "string",
-    header           = "table",
-    msg              = "string",
-    data             = "table",
-    progress_enabled = "boolean",
-    mpi_rank         = "number",
+Report.format_extensions = format_extensions
+
+
+local default_number_notation = {
+    column = "thousands-separator",
+    table = "thousands-separator",
+    csv = "scientific",
+    tsv = "scientific"
 }
 
-Report.__index = Report
-
 -- Constructor: Initialize a new Report object
-function Report:new(attribute)
-    if not attribute then error("Report Constructor need attributes") end
-
+function Report:new(report_id, report_opt, show_print)
     local instance = setmetatable({}, self)
 
-    for name, value in pairs(attribute) do
-        local atype = report_attribute_type[name]
-        if not atype then
-            error(name.." is not a valid report attribute")
-        end
-        if value and type(value) ~= atype then
-            error(name.." argument must be a "..atype)
-        end
-        instance[name] = value
-    end
-
-    instance:set_default_value()
-    local filename = instance:get_output_filename()
-    instance.filename = filename
-    print_if_not(instance.progress_enabled, string.format(
-        "\nProcessing '%s'%s with '%s'%s...\n",
-        table.concat(instance.rprof_rep_files, ", "),
-        (instance.mpi_rank > -1 and " (MPI RANK "..instance.mpi_rank..")" or ""),
-        instance.report_path,
-        (filename and (" to '" .. filename .. "'") or "")
-    ))
+    instance.report_id  = report_id
+    instance.show_print = show_print
+    instance.opt        = report_opt
+    instance.NAME       = "<Not Available>"
+    instance.TYPE       = "<Not Available>"
+    instance.HEADER     = nil
+    instance.REQUIRED_DOMAIN = nil
 
     return instance
 end
 
+function Report:get_filter(dur, filter_type)
+    local opt = self.opt
 
-function Report:generate()
+    if not (dur or opt.start or opt.stop or opt.only_main) then
+        return nil
+    end
+
+    return {
+        phase    = opt.only_main and 1 or nil,
+        start    = opt.start,
+        stop     = opt.stop,
+        dur      = dur,
+        phase_EQ = opt.only_main and true,
+        start_GT = opt.start and true,
+        start_LT = false,
+        stop_GT  = false,
+        stop_LT  = opt.stop and true,
+        dur_GT   = filter_type == "gt",
+        dur_LT   = filter_type == "lt"
+    }
+end
+
+
+function Report:DATA(rprofrep, user_args)
+    error("The method DATA from Report Class must be overwrite.")
+end
+
+
+function Report:process(rprofrep, output, user_args)
+    -- Print header message
+    Message:print_if(self.show_print, "** %s %s (%s)%s%s:\n",
+        self.NAME, self.TYPE, self.report_id,
+    output == "-" and "" or " to '"..output.."'",
+    user_args and " for " .. ratelprof.utils.label_unit_with_rank(user_args, true) or "")
+
+    -- Check if data is available in the report
+    if not self.REQUIRED_DOMAIN then
+        error("Report class must have REQUIRED_DOMAIN attribute.")
+    end
+    for _, domain in ipairs(self.REQUIRED_DOMAIN) do
+        if not rprofrep:is_domain_traced(domain) then
+            Message:print_if(self.show_print,
+                "SKIPPED: '%s' does not contain required %s data.\n",
+                table.concat(rprofrep:get_reports_filename(), ", "), ratelprof.consts._DOMAIN_NAME[domain])
+            return false
+        end
+    end
+
+    -- Generate data
+    self:DATA(rprofrep, user_args)
+
     local data = self.data
     if not data then
         error("Report doesn't have any data to process")
     end
 
-    local has_msg = self.msg
-
+    -- If no data print "no advice message" if exists and return
     if #data == 0 then
-        if has_msg then
-            if self.output ~= "-" and self.output:sub(1, 1) ~= "@" and self.format == "csv" or self.format == "tsv" then
-                local msg_filename = ratelprof.fs.remove_extension(self.filename).."_msg.txt"
-                local msg_file = ratelprof.fs.open_file(msg_filename, "w")
-                msg_file:write(self.msg)
-                msg_file:close()
-            else
-                print_if_not(self.progress_enabled, self.msg) 
-            end
-        end
-        print_skip(self.progress_enabled, "'%s' does not contain %s data.", table.concat(self.rprof_rep_files, ", "), self.report_name)
-        return
-    end
-
-    if self.header then 
-        table.insert(data, 1, self.header)
-    end
-
-    local stream = self:get_output_stream()
-    if self.output == "-" then
-        print_if_not(self.progress_enabled, string.format(
-            "** %s %s (%s):\n",
-            self.report_name, self.report_type, self.report_id
-        ))
-    end
-
-    if has_msg then 
-        if self.output ~= "-" and self.output:sub(1, 1) ~= "@" and self.format == "csv" or self.format == "tsv" then
-            local msg_filename = ratelprof.fs.remove_extension(self.filename).."_msg.txt"
-            local msg_file = ratelprof.fs.open_file(msg_filename, "w")
-            msg_file:write(self.msg)
-            msg_file:close()
+        if self.NO_ADVICE_MSG then
+            Message:print(self:NO_ADVICE_MSG())
         else
-            stream:write(self.msg)
+            Message:print_if(self.show_print,
+                "SKIPPED: '%s' does not contain the required data.\n",
+                table.concat(rprofrep:get_reports_filename(), ", "))
+        end
+        return false
+    end
+
+    -- Else print "advice message" if exists
+    if self.ADVICE_MSG then
+        Message:print(self:ADVICE_MSG())
+    end
+
+    -- Sort data
+    local sort_by = self.SORT_BY
+    if sort_by then
+        local sort_dir = sort_by[1]
+        local sort_idx = sort_by[2]
+        if sort_dir == "asc" then
+            table.sort(data, function(a, b) return a[sort_idx] > b[sort_idx] end)
+        else
+            table.sort(data, function(a, b) return a[sort_idx] < b[sort_idx] end)
         end
     end
 
-    stream:write(self:get_formatted_data())
+    -- Add header to array
+    if self.HEADER then
+        table.insert(data, 1, self.HEADER)
+    end
+
+    -- Data is ready to be generated
+    return true
+end
+
+function Report:generate(output, format, max_lines, max_col_width, notation)
+    if max_lines ~= "all" then
+        max_lines = tonumber(max_lines) or (output == "-" and 50 or "all")
+    end
+    self.max_lines     = max_lines
+    self.max_col_width = math.min(tonumber(max_col_width) or 32, 99)
+    self.notation      = notation or default_number_notation[format]
+
+    local data_size = #self.data
+    local is_all_data_shown = max_lines == "all" or data_size < max_lines
+    local ndata = is_all_data_shown and data_size or max_lines
+    self.shown_data_len = ndata
+
+    local stream = self:get_output_stream(output)
+
+    stream:write(self:get_formatted_data(format))
     if stream ~= io.stdout then
         stream:close()
     end
 
+    if not is_all_data_shown and (format_extensions[format] == "txt" or output == "-") then
+        Message:print_if(self.show_print,
+            "(%d lines has been trunc for visibility, please use option --max-lines or export to a file)",
+            data_size - ndata)
+    end
+    if output == "-" then
+        Message:print("")
+    end
 end
 
-function Report:set_default_value()
-    self.max_col_width = math.min(tonumber(self.max_col_width) or 32, 99)
-
-    local max_lines = self.max_lines
-    if max_lines == "all" then return end
-    if self.output == "-" then
-        max_lines = tonumber(max_lines) or 50
-    else
-        max_lines = tonumber(max_lines) or "all"
-    end
-    self.max_lines = max_lines
-end
-
-function Report:get_output_filename()
-    if self.output == "-" or self.output:sub(1, 1) == "@" then
-        return
-    end
-
-    local report_wo_ext = "aggregated_report"
-    if #self.rprof_rep_files == 1 then
-        report_wo_ext = ratelprof.fs.remove_extension(self.rprof_rep_files[1])
-    end
-
-    local file_extension = format_extensions[self.format] or "txt"
-    local basename = (self.output == "." and report_wo_ext or self.output)
-
-    return string.format("%s_%s.%s", basename, self.report_id, file_extension)
-end
-
-function Report:get_output_stream()
-    local output   = self.output
-    local filename = self.filename
-    local out = nil
+function Report:get_output_stream(output)
+    local out    = nil
     if output == "-" then
         out = io.stdout
     elseif output:sub(1, 1) == "@" then
         local command = output:sub(2)
         out = io.popen(command, "w")
-        if not out then error("Failed to execute command: " .. command) end
+        if not out then error("Failed to popen command: " .. command) end
     else
-        out = io.open(filename, "w")
-        if not out then error("Failed to open file: " .. filename) end
+        out = io.open(output, "w")
+        if not out then error("Failed to open file: " .. output) end
     end
     return out
 end
 
 function Report:get_formatted_data(format)
-    local format = self.format
     if format == "csv" then
         return self:toCSV()
     elseif format == "tsv" then
@@ -302,7 +205,6 @@ local function get_engineering_notation(n)
     return formatted_scaled .. "e" .. tostring(exponent)
 end
 
-
 local function get_raw_number(n)
     return tonumber(n)
 end
@@ -318,9 +220,8 @@ local function get_separator_number(n)
     -- Want to keep ~6 significant digits total
     local decimals = 6 - num_digits_before
     if decimals < 0 then decimals = 0 end
-
     -- Format with dynamic decimals
-    s = string.format("%." .. decimals .. "f", n)
+    local s = string.format("%." .. decimals .. "f", n)
 
     -- Remove trailing zeros and dot if needed
     s = s:gsub("(%..-)[0]+$", "%1")
@@ -339,25 +240,17 @@ local function get_separator_number(n)
 end
 
 local get_notation_number = {
-    ["raw"] = get_raw_number, 
+    ["raw"] = get_raw_number,
     ["scientific"] = get_scientific_number,
     ["engineering"] = get_engineering_notation,
     ["thousands-separator"] = get_separator_number
 }
 
-local default_number_notation = {
-    column = "thousands-separator",
-    table = "thousands-separator",
-    csv = "scientific",
-    tsv = "scientific"
-}
-
 function Report:__get_notation_number(item)
-    local default  = default_number_notation[self.format]
-    local notation = self.notation or default
+    local notation = self.notation or "raw"
     local getter = get_notation_number[notation]
     if getter then return getter(item)
-    else return get_notation_number[default](item) end
+    else error(notation.." is not a valid notation") end
 end
 
 function Report:__get_formatted_item(item, width)
@@ -378,7 +271,7 @@ function Report:__calculate_column_widths()
     local formatted_item = ""
     local data      = self.data
     local max_width = self.max_col_width
-    for i = 1, #data do
+    for i = 1, self.shown_data_len do
         for j = 1, #data[i] do
             local item = data[i][j]
             if type(item) == "number" then
@@ -397,12 +290,7 @@ function Report:__format_data(separator, bsep, msep, asep, columnWidths)
     local result = {}
     local widths = columnWidths or {}
     local data = self.data
-    local max_lines = self.max_lines
-    local data_size = #data
-    local is_all_data_shown = max_lines == "all" or data_size < max_lines
-    local ndata = is_all_data_shown and data_size or max_lines
-
-    for i = 1, ndata do
+    for i = 1, self.shown_data_len do
         local line = {}
         line[#line + 1] = bsep
         local ncol = #data[i]
@@ -412,16 +300,12 @@ function Report:__format_data(separator, bsep, msep, asep, columnWidths)
         line[#line + 1] = asep
         result[#result + 1] = table.concat(line)
         
-        if i == 1 and self.header then
+        if i == 1 and self.HEADER then
             result[#result + 1] = separator
         end
     end
 
-    if not is_all_data_shown and (format_extensions[self.format] == "txt" or self.output == "-") then
-        result[#result + 1] = ". . . ("..data_size-ndata.." lines has been trunc for visibility, please use option --max-lines or export to a file)"
-    end
-
-    return table.concat(result, "\n") .. "\n", is_all_data_shown
+    return table.concat(result, "\n") .. "\n"
 end
 
 function Report:toTable()
@@ -437,10 +321,8 @@ function Report:toTable()
         return table.concat(separator)
     end
     local separator = get_separator()
-    local content, is_all_data_shown = self:__format_data(separator, "| ", " | ", " |", columnWidths)
-    if is_all_data_shown then content = separator .. "\n" .. content .. separator .. "\n"
-    else content = separator .. "\n" .. content end
-    return content
+    local content = self:__format_data(separator, "| ", " | ", " |", columnWidths)
+    return separator .. "\n" .. content .. separator .. "\n"
 end
 
 function Report:toColumn()
@@ -454,13 +336,13 @@ function Report:toColumn()
         return table.concat(separator_line, " ")
     end
     local separator = get_separator()
-    local content, _ = self:__format_data(separator, nil, " ", nil, columnWidths)
+    local content = self:__format_data(separator, nil, " ", nil, columnWidths)
     return content
 end
 
 function Report:toCSV(sep)
     sep = sep or ","
-    local content, _ = self:__format_data(nil, nil, sep, nil, nil)
+    local content = self:__format_data(nil, nil, sep, nil, nil)
     return content
 end
 

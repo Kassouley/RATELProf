@@ -1,150 +1,120 @@
-local function compute_kernel_overlap_percentage(traces_data, CONCURRENCY_THRESHOLD_PCT, opt)
+local report_helper   = require("utils.report_helper")
+local Overlapping     = require("utils.Overlapping")
+local GroupByLocation = require("utils.GroupByLocation")
+
+local function compute_kernel_overlap_percentage(rprofrep, opt)
+    local trunc    = opt.trunc
+    local mangled  = opt.mangled
+    local timeunit = opt.timeunit
+    local gpus     = opt.gpus
+    local pct_th   = opt.pct_th
+
     local concurrent_pct_per_gpu = {}
-    local concurrent_cnt_per_gpu = {}
-    local result_data = {}
-    local trace_ids = {}
-    local metrics = {}
+    local grouped_events_per_gpu = {}
+    local score = 0
+    local ngpus = 0
 
-    traces_data:for_each_gpu(function (gpu_node_id, _)
-        local kernel_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL)
-        local n = #kernel_data
+    rprofrep:for_each_gpu(function(gpu_id)
+        local grouped_events = GroupByLocation.new(rprofrep)
+        local concurrent_pct = 0
+        local concurrent_cnt = 0
 
-        if n == 0 then return end
+        local overlapping = Overlapping.new(rprofrep, {ratelprof.consts.DOMAIN_KERNEL_ID})
+        if not overlapping then return end
 
-        for i = 1, n do
-            local k = kernel_data[i]
+        rprofrep:for_each_event({ratelprof.consts.DOMAIN_KERNEL_ID}, function(event)
 
-            local intervals = {}
+            local kernel_dur = event:dur()
+            local covered = overlapping:compute_overlap(event)
+            local concurrency_pct = (covered / kernel_dur) * 100
 
-            -- Loop forward only while overlap is possible
-            for j = i + 1, n do
-                local other = kernel_data[j]
-                if other.start >= k.stop then
-                    break -- No further overlaps possible
-                end
-                if other.start < k.stop and other.stop > k.start then
-                    -- Compute actual overlap interval
-                    local overlap_start = math.max(k.start, other.start)
-                    local overlap_stop  = math.min(k.stop, other.stop)
-                    table.insert(intervals, {start = overlap_start, stop = overlap_stop})
-                end
-            end
+            if concurrency_pct >= pct_th then
+                concurrent_pct = concurrent_pct + concurrency_pct
+                concurrent_cnt = concurrent_cnt + 1
 
-            -- Loop backward too
-            for j = i - 1, 1, -1 do
-                local other = kernel_data[j]
-                if other.stop <= k.start then
-                    break -- No further overlaps possible
-                end
-                if other.start < k.stop and other.stop > k.start then
-                    -- Compute actual overlap interval
-                    local overlap_start = math.max(k.start, other.start)
-                    local overlap_stop  = math.min(k.stop, other.stop)
-                    table.insert(intervals, {start = overlap_start, stop = overlap_stop})
-                end
-            end
-
-            -- Merge intervals
-            table.sort(intervals, function(a, b) return a.start < b.start end)
-            local merged = {}
-            for _, iv in ipairs(intervals) do
-                if #merged == 0 or iv.start > merged[#merged].stop then
-                    table.insert(merged, iv)
-                else
-                    merged[#merged].stop = math.max(merged[#merged].stop, iv.stop)
-                end
-            end
-
-            -- Compute total overlap duration
-            local overlap_duration = 0
-            for _, iv in ipairs(merged) do
-                overlap_duration = overlap_duration + (iv.stop - iv.start)
-            end
-
-            local concurrency_pct = tonumber(string.format("%.2f", (overlap_duration / k.dur) * 100))
-
-            if concurrency_pct >= CONCURRENCY_THRESHOLD_PCT then
-                local total_concurrent_pct = concurrent_pct_per_gpu[gpu_node_id]
-                local total_concurrent_cnt = concurrent_cnt_per_gpu[gpu_node_id]
-                if not total_concurrent_pct then 
-                    total_concurrent_pct = 0
-                    total_concurrent_cnt = 0
-                end
-                concurrent_pct_per_gpu[gpu_node_id] = total_concurrent_pct + concurrency_pct
-                concurrent_cnt_per_gpu[gpu_node_id] = total_concurrent_cnt + 1
-                
-                table.insert(metrics, tonumber(concurrency_pct))
-                table.insert(trace_ids, k.id)
-                table.insert(result_data, {
-                    tostring(gpu_node_id),
-                    tostring(k.args.queue_id),
-                    k.id,
-                    k.dur,
-                    concurrency_pct,
-                    ratelprof.utils.get_kernel_name(k.args.kernel_name, opt.trunc, opt.mangled),
+                local entry = rprofrep:find_entry_point(event)
+                if not entry then return end
+                grouped_events:add(entry, event:name(), {
+                    total_dur         = kernel_dur,
+                    total_covered_dur = covered,
+                    pct_sum           = concurrency_pct
                 })
             end
+        end)
+
+        local concurrency_per_gpu = concurrent_pct / concurrent_cnt
+        grouped_events_per_gpu[gpu_id] = grouped_events
+        concurrent_pct_per_gpu[gpu_id] = concurrency_per_gpu
+        ngpus = ngpus + 1
+        score = score + concurrency_per_gpu
+    end, gpus)
+
+
+    local data = {}
+    
+    for gpu_id, grouped_event in pairs(grouped_events_per_gpu) do
+        for _, group in pairs(grouped_event.groups) do
+            table.insert(data, {
+                gpu_id,
+                ratelprof.utils.get_kernel_name(group.name, trunc, mangled),
+                group.location_str,
+                group.count,
+                report_helper.get_duration(group.total_dur, timeunit),
+                report_helper.get_duration(group.total_covered_dur, timeunit),
+                string.format("%.2f", group.pct_sum/group.count),
+            })
         end
-
-    end)
-
-    local app_concurrency_pct = {}
-    for gpu_node_id, count in pairs(concurrent_cnt_per_gpu) do
-        app_concurrency_pct[gpu_node_id] = string.format("%.2f", (concurrent_pct_per_gpu[gpu_node_id] / count))
     end
 
-    return result_data, app_concurrency_pct, trace_ids, metrics
+    return data, concurrent_pct_per_gpu, score/ngpus/100
 end
 
 
-return function(traces_data, _, opt)
-    local CONCURRENCY_THRESHOLD_PCT = opt.pct_th
 
-    local data, app_concurrency_pct, trace_ids, metrics = compute_kernel_overlap_percentage(traces_data, CONCURRENCY_THRESHOLD_PCT, opt)
+local DEFAULT_NO_ADVICE_MSG = [[
+None of your kernels have a concurrency percentage above %d%%.
+Concurrency can improve performance if well done.
+]]
 
-    local msg = ""
-    local score = 0
-    local nscore = 0
+local DEFAULT_ADVICE_MSG = [[
+The following kernels are running concurrently with others.
+A kernel is considered concurrent if the percentage of its execution time that overlaps with other kernels exceeds %d%%.
+]]
 
-    if #data == 0 then
-        msg = msg .. "None of your kernels have a concurrency pourcentage superior to "..CONCURRENCY_THRESHOLD_PCT.."%\n"
-                  .. "Concurrency can improve performance if well done."
-    else
+local DEFAULT_PER_GPU_MSG = [[
+    On GPU ID %s: an average of %.2f%% of kernel time overlaps with other kernels.
+]]
 
-        for gpu_id, percent in pairs(app_concurrency_pct) do
-            msg = msg .. "On GPU ID " .. gpu_id .. ": " .. percent .. "% of total kernel time overlaps with other kernels.\n"
-            nscore = nscore + 1
-            score = score + (percent - score) / nscore
-        end
-        msg = msg .. "The following kernels are running concurrently with others.\n"
-                  .. "A kernel is considered concurrent if the percentage of its execution time that overlaps with other kernels exceeds "
-                  .. CONCURRENCY_THRESHOLD_PCT .. "%.\n\n"
+return function(report)
+    local timeunit = report.opt.timeunit
 
-        table.sort(data, function(a, b)
-            return a[5] > b[5]
-        end)
+    report.NAME = "Concurrency"
+
+    report.TYPE = "Analyze"
+
+    report.HEADER = { "GPU ID", "Kernel", "Source", "Count", "Tot. Dur (" .. timeunit .. ")", "Tot. Covered Dur (" .. timeunit .. ")", "Concurrency (%)" }
+
+    report.REQUIRED_DOMAIN = { ratelprof.consts.DOMAIN_KERNEL_ID }
+
+    report.NO_ADVICE_MSG = function(self)
+        return string.format(DEFAULT_NO_ADVICE_MSG, self.opt.pct_th)
     end
 
-    local header = {
-        "GPU ID",
-        "Queue ID",
-        "Trace ID",
-        "Duration (ns)",
-        "Concurrency (%)",
-        "Kernel Name"
-    }
+    report.ADVICE_MSG = function(self)
+        local msg = string.format(DEFAULT_ADVICE_MSG, self.opt.pct_th)
+        for gpu_id, percent in pairs(self.percentage_per_gpu) do
+            msg = msg .. string.format(DEFAULT_PER_GPU_MSG, gpu_id, percent)
+        end
+        return msg
+    end
 
-    local vis = #trace_ids > 0 and {header, trace_ids, metrics} or nil
+    report.SORT_BY = {"desc", 7}
 
-    return {
-        NAME = "Concurrency",
-        TYPE = "Analyze",
-        HEADER = header,
-        DATA = data,
-        MSG = msg,
-        score = score,
-
-        -- Return data for visualize command
-        vis = vis
-    }
+    report.DATA = function (self, rprofrep)
+        local opt = self.opt
+        local data, percentage_per_gpu, score = compute_kernel_overlap_percentage(rprofrep, opt)
+        self.data = data
+        self.percentage_per_gpu = percentage_per_gpu
+        self.score = score
+    end
 end

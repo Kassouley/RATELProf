@@ -4,8 +4,8 @@ Message.__index = Message
 
 -- Constructor
 function Message:new()
-    local self = setmetatable({}, Message)
-    return self
+    local instance = setmetatable({}, Message)
+    return instance
 end
 
 -- Internal method to format and print messages
@@ -17,6 +17,12 @@ end
 -- Public methods
 function Message:print(msg)
     print(msg)
+end
+
+function Message:print_if(cond, fmt, ...)
+    if cond then
+        self:print(string.format(fmt, ...))
+    end
 end
 
 function Message:warn(msg)

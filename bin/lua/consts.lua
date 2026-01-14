@@ -35,7 +35,7 @@ consts._PRELOADED_LIBS = {
   {name = consts._LIBS_NAME.RATELPROF, path = consts._LIBS.RATELPROF},
 }
 
-consts._DEFAULT_PLUGIN = consts._LIBS.PLUGIN_MSGPACK
+consts._DEFAULT_PLUGIN = consts._LIBS.PLUGIN_RPROFREP
 
 consts._HTML_REPORT_PATH   = consts._MODULES_DIR.."/html/index.min.html"
 consts._DATA_SET_TEST_PATH = consts._MODULES_DIR.."/html/data_handler.js"
@@ -63,56 +63,55 @@ consts._ENV = {
       DOMAIN_MPI =          "RATELPROF_DOMAIN_MPI",
     }
 
-consts._DOMAIN_ID = {
-  [consts._ENV.DOMAIN_HSA]          = 0,
-  [consts._ENV.DOMAIN_OMP_TGT_RTL]  = 1,
-  [consts._ENV.DOMAIN_OMP_TGT]      = 2,
-  [consts._ENV.DOMAIN_HIP]          = 3,
-  [consts._ENV.DOMAIN_MPI]          = 4,
-  [consts._ENV.DOMAIN_OMPT]         = 5,
-  [consts._ENV.DOMAIN_ROCTX]        = 6,
-  [consts._ENV.DOMAIN_PROFILING]    = 7,
-  [consts._ENV.DOMAIN_COPY]         = 8,
-  [consts._ENV.DOMAIN_KERNEL]       = 9,
-  [consts._ENV.DOMAIN_BARRIERAND]   = 10,
-  [consts._ENV.DOMAIN_BARRIEROR]    = 11,
-}
+consts.DOMAIN_HSA_ID          = 0
+consts.DOMAIN_OMP_TGT_RTL_ID  = 1
+consts.DOMAIN_OMP_TGT_ID      = 2
+consts.DOMAIN_HIP_ID          = 3
+consts.DOMAIN_MPI_ID          = 4
+consts.DOMAIN_OMPT_ID         = 5
+consts.DOMAIN_ROCTX_ID        = 6
+consts.DOMAIN_PROFILING_ID    = 7
+consts.DOMAIN_COPY_ID         = 8
+consts.DOMAIN_KERNEL_ID       = 9
+consts.DOMAIN_BARRIERAND_ID   = 10
+consts.DOMAIN_BARRIEROR_ID    = 11
+
 
 consts._DOMAIN_NAME = {
-  [consts._ENV.DOMAIN_HIP]          = "HIP API",
-  [consts._ENV.DOMAIN_HSA]          = "HSA API",
-  [consts._ENV.DOMAIN_OMP_TGT]      = "OpenMP Target Routine",
-  [consts._ENV.DOMAIN_OMP_TGT_RTL]  = "OpenMP Target RTL",
-  [consts._ENV.DOMAIN_BARRIEROR]    = "Barrier OR Dispatch",
-  [consts._ENV.DOMAIN_BARRIERAND]   = "Barrier AND Dispatch",
-  [consts._ENV.DOMAIN_KERNEL]       = "Kernel Dispatch",
-  [consts._ENV.DOMAIN_COPY]         = "Memory Transfer",
-  [consts._ENV.DOMAIN_PROFILING]    = "HSA for RATELProf",
-  [consts._ENV.DOMAIN_OMPT]         = "OpenMP Target Region",
-  [consts._ENV.DOMAIN_ROCTX]        = "ROCtx",
-  [consts._ENV.DOMAIN_MPI]          = "MPI API",
+  [consts.DOMAIN_HIP_ID]          = "HIP API",
+  [consts.DOMAIN_HSA_ID]          = "HSA API",
+  [consts.DOMAIN_OMP_TGT_ID]      = "OpenMP Target Routine",
+  [consts.DOMAIN_OMP_TGT_RTL_ID]  = "OpenMP Target RTL",
+  [consts.DOMAIN_BARRIEROR_ID]    = "Barrier OR Dispatch",
+  [consts.DOMAIN_BARRIERAND_ID]   = "Barrier AND Dispatch",
+  [consts.DOMAIN_KERNEL_ID]       = "Kernel Dispatch",
+  [consts.DOMAIN_COPY_ID]         = "Memory Transfer",
+  [consts.DOMAIN_PROFILING_ID]    = "HSA for RATELProf",
+  [consts.DOMAIN_OMPT_ID]         = "OpenMP Target Region",
+  [consts.DOMAIN_ROCTX_ID]        = "ROCtx",
+  [consts.DOMAIN_MPI_ID]          = "MPI API",
 }
 
 consts._GPU_DOMAIN = {
-  [consts._ENV.DOMAIN_BARRIEROR]    = true,
-  [consts._ENV.DOMAIN_BARRIERAND]   = true,
-  [consts._ENV.DOMAIN_KERNEL]       = true,
-  [consts._ENV.DOMAIN_COPY]         = true,
+  [consts.DOMAIN_BARRIEROR_ID]    = true,
+  [consts.DOMAIN_BARRIERAND_ID]   = true,
+  [consts.DOMAIN_KERNEL_ID]       = true,
+  [consts.DOMAIN_COPY_ID]         = true,
 }
 
 consts._DOMAIN_DESC = {
-  [consts._ENV.DOMAIN_HIP]          = "HIP is a programming framework used to launch GPU operations such as kernel dispatch or memory transfer. This domain is useful for anyone looking to understand and optimize the interactions between the CPU and GPU in programming.",
-  [consts._ENV.DOMAIN_HSA]          = "HSA is an AMD low-level library that operates behind the scenes of HIP and OpenMP, enabling communication between CPUs and GPUs for parallel processing. This domain will be only useful for expert or debugging.",
-  [consts._ENV.DOMAIN_OMP_TGT]      = "OpenMP Target is a runtime library that provides routines for managing data movement, memory mapping, etc.",
-  [consts._ENV.DOMAIN_OMP_TGT_RTL]  = "Refers to the target runtime library in the OpenMP programming model, working behind the scenes to execute '#pragma omp target' directives by managing data transfers and kernel execution on GPUs.",
-  [consts._ENV.DOMAIN_BARRIEROR]    = "The Barrier OR is a less restrictive synchronization mechanism that allows subsequent operations to proceed as soon as any one of the specified preceding operations has completed.",
-  [consts._ENV.DOMAIN_BARRIERAND]   = "The Barrier AND is a synchronization primitive that ensures all preceding operations in the command queue have completed before subsequent operations can begin.",
-  [consts._ENV.DOMAIN_KERNEL]       = "The kernel dispatch operation is the process of launching a computational kernel on the GPU.",
-  [consts._ENV.DOMAIN_COPY]         = "The copy operation in GPU programming is responsible for transferring data between memory locations (between host and device memory or between different regions of GPU memory).",
-  [consts._ENV.DOMAIN_PROFILING]    = "The profiling domain correspond to all HSA function used by RATELProf for GPU Profiling.",
-  [consts._ENV.DOMAIN_OMPT]         = "OpenMP Target region traces given by the OMPT API.",
-  [consts._ENV.DOMAIN_ROCTX]        = "ROCtx Support for RATELProf.",
-  [consts._ENV.DOMAIN_MPI]          = "MPI is a standardized library for parallel programming that enables processes to communicate by passing messages, supporting distributed-memory architectures.",
+  [consts.DOMAIN_HIP_ID]          = "HIP is a programming framework used to launch GPU operations such as kernel dispatch or memory transfer. This domain is useful for anyone looking to understand and optimize the interactions between the CPU and GPU in programming.",
+  [consts.DOMAIN_HSA_ID]          = "HSA is an AMD low-level library that operates behind the scenes of HIP and OpenMP, enabling communication between CPUs and GPUs for parallel processing. This domain will be only useful for expert or debugging.",
+  [consts.DOMAIN_OMP_TGT_ID]      = "OpenMP Target is a runtime library that provides routines for managing data movement, memory mapping, etc.",
+  [consts.DOMAIN_OMP_TGT_RTL_ID]  = "Refers to the target runtime library in the OpenMP programming model, working behind the scenes to execute '#pragma omp target' directives by managing data transfers and kernel execution on GPUs.",
+  [consts.DOMAIN_BARRIEROR_ID]    = "The Barrier OR is a less restrictive synchronization mechanism that allows subsequent operations to proceed as soon as any one of the specified preceding operations has completed.",
+  [consts.DOMAIN_BARRIERAND_ID]   = "The Barrier AND is a synchronization primitive that ensures all preceding operations in the command queue have completed before subsequent operations can begin.",
+  [consts.DOMAIN_KERNEL_ID]       = "The kernel dispatch operation is the process of launching a computational kernel on the GPU.",
+  [consts.DOMAIN_COPY_ID]         = "The copy operation in GPU programming is responsible for transferring data between memory locations (between host and device memory or between different regions of GPU memory).",
+  [consts.DOMAIN_PROFILING_ID]    = "The profiling domain correspond to all HSA function used by RATELProf for GPU Profiling.",
+  [consts.DOMAIN_OMPT_ID]         = "OpenMP Target region traces given by the OMPT API.",
+  [consts.DOMAIN_ROCTX_ID]        = "ROCtx Support for RATELProf.",
+  [consts.DOMAIN_MPI_ID]          = "MPI is a standardized library for parallel programming that enables processes to communicate by passing messages, supporting distributed-memory architectures.",
 }
 
 
@@ -121,7 +120,7 @@ consts._TRACES = {
   ['hsa'] =           {var=consts._ENV.DOMAIN_HSA,          name="HSA API"},
   ['omp-routine'] =   {var=consts._ENV.DOMAIN_OMP_TGT,      name="OpenMP Target Routine"},
   ['omp-region'] =    {var=consts._ENV.DOMAIN_OMPT,         name="OpenMP Target Region"},
-  ['omp-tgt-rtl'] =   {var=consts._ENV.DOMAIN_OMP_TGT_RTL,  name="OpenMP Target RTL"},
+  ['omp-target'] =    {var=consts._ENV.DOMAIN_OMP_TGT_RTL,  name="OpenMP Target RTL"},
   ['hsa-for-rprof'] = {var=consts._ENV.DOMAIN_PROFILING,    name="HSA for RATELProf"},
   ['kernel'] =        {var=consts._ENV.DOMAIN_KERNEL,       name="Kernel Dispatch"},
   ['memory'] =        {var=consts._ENV.DOMAIN_COPY,         name="Memory Transfer"},
@@ -162,13 +161,14 @@ consts._TRACES = {
 }
 
 
-consts._ALL_RULES_REPORT = {
-    __default_report_path = consts._MODULES_DIR.."lua/rules/",
+local rules_dir = consts._MODULES_DIR.."lua/rules/"
 
+consts.ALL_ANALYZE_REPORT = {
     hip_memcpy_async = {
       desc   = [[
 This rule identifies asynchronous memory transfers that end up becoming synchronous if the memory is pageable or if the transfers is too short.
 ]],
+      path = rules_dir .. "hip_memcpy_async.lua",
       default = true
     },
     hip_memcpy_sync = {
@@ -176,6 +176,7 @@ This rule identifies asynchronous memory transfers that end up becoming synchron
 This rule identifies memory transfers that are synchronous and block the host during GPU memory transfers. 
 It includes all hipMemcpy*() API functions.
 ]],
+      path = rules_dir .. "hip_memcpy_sync.lua",
       default = true
     },
     gpu_idle = {
@@ -190,6 +191,7 @@ operation on that device and ends with the end of the last GPU operation on that
           desc    = "Minimum gap duration (in ms) that will be reported."
         }
       },
+      path = rules_dir .. "gpu_idle.lua",
       default = true
     },
     hidden_transfers = {
@@ -208,6 +210,7 @@ Transfers that are not sufficiently overlapped may contribute to performance bot
           desc    = "Maximum percentage of hidden time a memory transfer can have to be reported."
         }
       },
+      path = rules_dir .. "hidden_transfers.lua",
       default = true
     },
     coalescable_kernels = {
@@ -230,6 +233,7 @@ Combining them may reduce launch latency and improve overall throughput.
           desc    = "Length of the minimal sequence."
         }
       },
+      path = rules_dir .. "coalescable_kernels.lua",
       default = true
     },
     coalescable_transfers = {
@@ -253,6 +257,7 @@ Note : These transfers are detected by SDMA engine and not by Stream ID. Some of
           desc    = "Length of the minimal sequence."
         }
       },
+      path = rules_dir .. "coalescable_transfers.lua",
       default = true
     },
     concurrency = {
@@ -267,92 +272,102 @@ Kernels exceeding the configured concurrency threshold are highlighted in the re
           desc    = "Minimum concurrency pourcentage that a kernel must have to be reported."
         },
       },
+      path = rules_dir .. "concurrency.lua",
       default = true
     },
 }
 
 
-consts._ALL_STATS_REPORT = {
-      __default_report_path = consts._MODULES_DIR.."lua/reports/",
 
-      omp_region_api_trace = {
-        desc    = "Show all trace about OpenMP Target Region",
+consts.ALL_STATS_REPORT = {}
+
+local REPORT_DIRECTORY               = consts._MODULES_DIR.."lua/reports/"
+local REPORT_DESCRIPTION_SUM_FMT     = "Compute aggregated statistics about %s activities over all GPU"
+local REPORT_DESCRIPTION_PER_FMT     = "Compute Per-GPU statistics about %s activities"
+local REPORT_DESCRIPTION_TRACE_FMT   = "Show all trace of %s activities"
+
+local GPU_REPORT_DEFINITIONS = {
+  -- { key = "gpu_trace",                  name = "GPU",                       mode="Trace-Mode",   default=false },
+  -- { key = "gpu_mem_trace",              name = "memory transfer",           mode="Trace-Mode",   default=false },
+  { key = "gpu_sum",                    name = "GPU",                       mode="Aggregated-Mode", default=true },
+  { key = "gpu_kern_sum",               name = "kernel",                    mode="Aggregated-Mode", default=true },
+  { key = "gpu_mem_time_sum",           name = "memory transfer",           mode="Aggregated-Mode", default=true },
+  { key = "gpu_mem_size_sum",           name = "memory transfer",           mode="Aggregated-Mode", default=false },
+  { key = "per_gpu_sum",                name = "GPU",                       mode="Per-Mode", default=false },
+  { key = "per_gpu_mem_time_sum",       name = "memory transfer (in Time)", mode="Per-Mode", default=false },
+  { key = "per_gpu_mem_size_sum",       name = "memory transfer (in Size)", mode="Per-Mode", default=false },
+  { key = "per_gpu_kern_sum",           name = "kernel",                    mode="Per-Mode", default=false },
+}
+
+local function make_desc(r)
+  if r.mode == "Trace-Mode" then
+    return string.format(REPORT_DESCRIPTION_TRACE_FMT, r.name)
+  elseif r.mode == "Aggregated-Mode" then
+    return string.format(REPORT_DESCRIPTION_SUM_FMT, r.name)
+  else
+    return string.format(REPORT_DESCRIPTION_PER_FMT, r.name)
+  end
+end
+
+for _, r in ipairs(GPU_REPORT_DEFINITIONS) do
+  consts.ALL_STATS_REPORT[r.key] = {
+    desc    = make_desc(r),
+    mode    = r.mode,
+    path    = REPORT_DIRECTORY .. r.key .. ".lua",
+    default = r.default
+  }
+end
+
+local API_REPORT_DEFINITION = {
+    {key = "omp_region",  domain_id = consts.DOMAIN_OMPT_ID,        default = true },
+    {key = "omp_target",  domain_id = consts.DOMAIN_OMP_TGT_ID,     default = true },
+    {key = "omp_routine", domain_id = consts.DOMAIN_OMP_TGT_RTL_ID, default = true },
+    {key = "hip",         domain_id = consts.DOMAIN_HIP_ID,         default = true },
+    {key = "mpi",         domain_id = consts.DOMAIN_MPI_ID,         default = true },
+    {key = "hsa",         domain_id = consts.DOMAIN_HSA_ID,         default = false },
+}
+
+consts.DOMAIN_FOR_REPORT = {}
+
+-- Populate API reports
+for _, r in ipairs(API_REPORT_DEFINITION) do
+    local name = consts._TRACES[r.key:gsub("_", "-")].name
+    -- Trace report
+    local trace_name = r.key .. "_api_trace"
+    consts.ALL_STATS_REPORT[trace_name] = {
+        desc    = "Show all trace of " .. name .. " activities",
+        mode = "Trace-Mode",
+        path    = REPORT_DIRECTORY .. "generic_api_trace.lua",
         default = false
-      },
-      omp_region_api_sum = {
-        desc    = "Compute statistics about OpenMP Target Region traces",
-        default = true
-      },
-      omp_api_trace = {
-        desc    = "Show all trace about OpenMP Target API",
-        default = false
-      },
-      omp_api_sum = {
-        desc    = "Compute statistics about OpenMP Target API traces",
-        default = true
-      },
-      omp_target_api_trace = {
-        desc    = "Show all trace about OpenMP Target RTL API",
-        default = false
-      },
-      omp_target_api_sum = {
-        desc    = "Compute statistics about OpenMP Target RTL API traces",
-        default = true
-      },
-      hip_api_trace = {
-        desc    = "Show all trace about HIP API",
-        default = false
-      },
-      hip_api_sum = {
-        desc    = "Compute statistics about HIP API traces",
-        default = true
-      },
-      mpi_api_trace = {
-        desc    = "Show all trace about MPI API",
-        default = false
-      },
-      mpi_api_sum = {
-        desc    = "Compute statistics about MPI API traces",
-        default = true
-      },
-      hsa_api_trace = {
-        desc    = "Show all trace about HSA API",
-        default = false
-      },
-      hsa_api_sum = {
-        desc    = "Compute statistics about HSA API traces",
-        default = false
-      },
-      gpu_trace = {
-        desc    = "Show all trace about GPU activity",
-        default = false
-      },
-      gpu_mem_trace = {
-        desc    = "Show all trace about memory transfer activity",
-        default = false
-      },
-      gpu_sum = {
-        desc    = "Compute statistics about GPU traces",
-        default = true
-      },
-      gpu_kern_sum = {
-        desc    = "Compute statistics about kernel traces",
-        default = true
-      },
-      gpu_mem_time_sum = {
-        desc    = "Compute statistics about memory transfer traces (in Time)",
-        default = true
-      },
-      gpu_mem_size_sum = {
-        desc    = "Compute statistics about memory transfer traces (in Size)",
-        default = false
-      }
+    }
+    -- Sum report
+    local sum_name = r.key .. "_api_sum"
+    consts.ALL_STATS_REPORT[sum_name] = {
+        desc    = "Compute aggregated statistics about " .. name .. " activities over all Proccesses",
+        mode = "Aggregated-Mode",
+        path    = REPORT_DIRECTORY .. "generic_api_sum.lua",
+        default = r.default
     }
 
-consts._IDX_CONSTRUCTOR_STOP = 1
-consts._IDX_MAIN_START = 1
-consts._IDX_MAIN_STOP = 2
-consts._IDX_DESTRUCTOR_START = 2
-consts._IDX_DESTRUCTOR_STOP = 3
+    -- Per Sum report
+    local per_name = "per_pid_" .. sum_name
+    consts.ALL_STATS_REPORT[per_name] = {
+        desc    = "Compute Per-Process statistics about " .. name .. " activities",
+        mode = "Per-Mode",
+        path    = REPORT_DIRECTORY .. "per_pid_generic_api_sum.lua",
+        default = false
+    }
+
+    consts.DOMAIN_FOR_REPORT[trace_name] = r.domain_id
+    consts.DOMAIN_FOR_REPORT[sum_name]   = r.domain_id
+    consts.DOMAIN_FOR_REPORT[per_name]   = r.domain_id
+end
+
+
+-- consts._IDX_CONSTRUCTOR_STOP = 1
+-- consts._IDX_MAIN_START = 1
+-- consts._IDX_MAIN_STOP = 2
+-- consts._IDX_DESTRUCTOR_START = 2
+-- consts._IDX_DESTRUCTOR_STOP = 3
 
 return consts

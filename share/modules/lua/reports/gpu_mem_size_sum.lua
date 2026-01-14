@@ -1,12 +1,67 @@
-local stats_helper  = require ("utils.stats_helper")
+local Stats = require ("utils.Stats")
+local report_helper = require ("utils.report_helper")
 
-return function(traces_data, _, opt)
-    local NAME = "GPU MemOps"
-    local TYPE = "Summary (by Size)"
+local function compute_statistics(rprofrep, opt)
+    local sizeunit = opt.sizeunit
+    local gpus     = opt.gpus
 
-    local sizeunit = "B"
+    local ctx = Stats.new()
 
-    local HEADER = {
+    rprofrep:for_each_rank(function(rank)
+        rprofrep:for_each_gpu(function(gpu_id)
+            local gpu_key = {rank = rank, gpu_id = gpu_id}
+            rprofrep:for_each_event({ ratelprof.consts.DOMAIN_COPY_ID }, function(event)
+                local event_args = event:args()
+                local size   = event_args.size
+
+                local key = report_helper.create_key({
+                    event:name()
+                })
+
+                ctx:add_entry(key, size, gpu_key)
+            end)
+        end, gpus)
+    end)
+
+    local data = {}
+
+    ctx:for_each_entry(function(_, entry)
+
+        local gpu_id_for_min = entry:get_min_subkey()
+        local gpu_id_for_max = entry:get_max_subkey()
+        local gpu_id_for_total_min = entry:get_min_total_subkey()
+        local gpu_id_for_total_max = entry:get_max_total_subkey()
+
+        table.insert(data, {
+            ctx:compute_percentage(entry),
+            entry:compute_total_metric(sizeunit),
+            entry:compute_metric_count(),
+            entry:compute_avg(sizeunit),
+            entry:compute_med(sizeunit),
+            entry:compute_min(sizeunit),
+            entry:compute_max(sizeunit),
+            entry:compute_stddev(sizeunit),
+
+            entry.key[1],
+            ratelprof.utils.label_unit_with_rank(gpu_id_for_min),
+            ratelprof.utils.label_unit_with_rank(gpu_id_for_max),
+            ratelprof.utils.label_unit_with_rank(gpu_id_for_total_min),
+            ratelprof.utils.label_unit_with_rank(gpu_id_for_total_max)
+        })
+    end)
+
+    return data, ctx.total_metric
+end
+
+
+return function (report)
+    local sizeunit = report.opt.sizeunit
+
+    report.NAME = "GPU MemOps"
+
+    report.TYPE = "Summary (by Size)"
+
+    report.HEADER = {
         "Total (%)",
         "Total ("..sizeunit..")",
         "Count",
@@ -15,50 +70,18 @@ return function(traces_data, _, opt)
         "Min ("..sizeunit..")",
         "Max ("..sizeunit..")",
         "StdDev ("..sizeunit..")",
-        "Operation"
+        "Operation",
+        "GPU ID (Min)",
+        "GPU ID (Max)",
+        "GPU ID (Min Tot. Time)",
+        "GPU ID (Max Tot. Time)"
     }
 
-    local memory_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_COPY)
+    report.REQUIRED_DOMAIN = { ratelprof.consts.DOMAIN_COPY_ID }
 
-    local total_metrics = 0
-    local entries = {}
+    report.SORT_BY = { "asc", 2 }
 
-    for _, trace in pairs(memory_data) do
-        local key_str = ratelprof.utils.get_copy_name(trace.args.src_type, trace.args.dst_type)
-        local metric = trace.args.size
-
-        local entry = entries[key_str]
-
-        if not entry then
-            entry = {
-                key_str = key_str,
-                count = 0,
-                total = 0,
-                sum_of_squares = 0,
-                values = {}}
-            entries[key_str] = entry
-        end
-
-        entry.count          = entry.count + 1
-        entry.total          = entry.total + metric
-        entry.sum_of_squares = entry.sum_of_squares + (metric * metric)
-        entry.values[#entry.values + 1] = metric
-        total_metrics = total_metrics + metric
+    report.DATA = function (self, rprofrep)
+        self.data, self.total_transfered_bytes = compute_statistics(rprofrep, self.opt)
     end
-
-    local DATA = {}
-
-    for _, entry in pairs(entries) do
-        local statistic_table = stats_helper.compute_stats(entry, total_metrics)
-        table.remove(statistic_table, 1)
-        table.insert(statistic_table, entry.key_str)
-        table.insert(DATA, statistic_table)
-    end
-
-
-    table.sort(DATA, function(a, b)
-        return tonumber(a[2]) > tonumber(b[2])
-    end)
-
-    return {NAME = NAME, TYPE = TYPE, HEADER = HEADER, DATA = DATA, total_bytes = total_metrics}
 end

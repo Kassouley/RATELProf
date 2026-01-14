@@ -1,163 +1,153 @@
-local function find_coalescable_kernels(traces_data, DURATION_THRESHOLD_NS, GAP_THRESHOLD_NS, MIN_SEQUENCE_LEN, opt)
+local report_helper = require("utils.report_helper")
 
-    local items = {}
+local function find_coalescable_kernels(rprofrep, opt)
+    local timeunit = opt.timeunit
+    local trunc    = opt.trunc
+    local mangled  = opt.mangled
+    local gpus     = opt.gpus
+    
+    local DURATION_THRESHOLD_NS = opt.th_dur
+    local GAP_THRESHOLD_NS      = opt.th_gap
+    local MIN_SEQUENCE_LEN      = opt.min_seq
+
+    local data = {}
     local sequences_per_gpu = {}
+    local total_gaps_per_gpu = {}
 
-    local function on_sequence_end(sequence, gpu_node_id, queue_id, name)
+    local function on_sequence_end(sequence, gpu_id, queue_id, name)
         if #sequence >= MIN_SEQUENCE_LEN then
-            local sequence_start = sequence[1].start
-            local sequence_stop = sequence[#sequence].stop
+            local sequence_start = sequence[1]:start()
+            local sequence_stop = sequence[#sequence]:stop()
             local sequence_dur = sequence_stop - sequence_start
             local total_gap = 0
             for i = 2, #sequence do
-                total_gap = total_gap + (sequence[i].start - sequence[i-1].stop)
+                total_gap = total_gap + (sequence[i]:start() - sequence[i-1]:stop())
             end
 
             local ideal_duration = sequence_dur - total_gap
             local speedup_factor = ideal_duration > 0 and (sequence_dur / ideal_duration) or 1.0
 
-            table.insert(items, {
-                tostring(gpu_node_id),
+            table.insert(data, {
+                tostring(gpu_id),
                 tostring(queue_id),
                 #sequence,
-                sequence_start,
-                sequence_dur,
-                total_gap,
+                report_helper.get_duration(sequence_start, timeunit),
+                report_helper.get_duration(sequence_dur, timeunit),
+                report_helper.get_duration(total_gap, timeunit),
                 tonumber(string.format("%.2f", speedup_factor)),
-                ratelprof.utils.get_kernel_name(name, opt.trunc, opt.mangled),
+                ratelprof.utils.get_kernel_name(name, trunc, mangled),
             })
 
-            if not sequences_per_gpu[gpu_node_id] then
-                sequences_per_gpu[gpu_node_id] = 0
-            end
-            sequences_per_gpu[gpu_node_id] = sequences_per_gpu[gpu_node_id] + 1
+            sequences_per_gpu[gpu_id] = (sequences_per_gpu[gpu_id] or 0) + 1
+            
+            total_gaps_per_gpu[gpu_id] = total_gaps_per_gpu[gpu_id] or {}
+            total_gaps_per_gpu[gpu_id][queue_id] = (total_gaps_per_gpu[gpu_id][queue_id] or 0) + total_gap
+
         end
     end
 
-    traces_data:for_each_gpu(function (gpu_node_id, _)
-        local kernel_data = traces_data:get(ratelprof.consts._ENV.DOMAIN_KERNEL)
+    rprofrep:for_each_gpu(function(gpu_id)
+        rprofrep:for_each_queue(function(queue_id)
+            local sequence = {}
+            local curr_last = nil
 
-        if #kernel_data == 0 then return end
-
-        local last_for_each_queue = {}
-        local sequence_for_each_queue = {}
-
-        for _, k in ipairs(kernel_data) do
-            local queue_id  = k.args.queue_id
-            local curr_last = last_for_each_queue[queue_id]
-            local sequence  = sequence_for_each_queue[queue_id] or {}
-
-            if k.dur > DURATION_THRESHOLD_NS then
-                -- Skip large kernels
-                if curr_last then
-                    on_sequence_end(sequence, gpu_node_id, queue_id, curr_last.args.kernel_name)
+            rprofrep:for_each_event({ ratelprof.consts.DOMAIN_KERNEL_ID }, function(event)
+                if event:dur() > DURATION_THRESHOLD_NS then
+                    -- Skip large kernels
+                    if curr_last then
+                        on_sequence_end(sequence, gpu_id, queue_id, curr_last:name())
+                    end
+                    sequence = {}
+                    curr_last = nil
+                elseif not curr_last or (event:name() == curr_last:name()
+                        and event:start() - curr_last:stop() < GAP_THRESHOLD_NS) then
+                    -- Add to sequence
+                    table.insert(sequence, event)
+                    curr_last = event
+                else
+                    -- Check and reset
+                    on_sequence_end(sequence, gpu_id, queue_id, curr_last:name())
+                    sequence = {event}
+                    curr_last = event
                 end
-                sequence = {}
-                curr_last = nil
-            elseif not curr_last or (k.args.kernel_name == curr_last.args.kernel_name
-                    and k.start - curr_last.stop < GAP_THRESHOLD_NS) then
-                -- Add to sequence
-                table.insert(sequence, k)
-                curr_last = k
-            else
-                -- Check and reset
-                on_sequence_end(sequence, gpu_node_id, queue_id, curr_last.args.kernel_name)
-                sequence = {k}
-                curr_last = k
+
+            end)
+
+            if curr_last then
+                on_sequence_end(sequence, gpu_id, queue_id, curr_last:name())
             end
-            last_for_each_queue[queue_id] = curr_last
-            sequence_for_each_queue[queue_id] = sequence
-        end
+        end)
+    end, gpus)
 
-        -- Final check for each queue
-        for queue_id, sequence in pairs(sequence_for_each_queue) do
-            local last = last_for_each_queue[queue_id]
-            if last then
-                on_sequence_end(sequence, gpu_node_id, queue_id, last.args.kernel_name)
-            end
-        end
-    end)
-
-    return items, sequences_per_gpu
-end
-
-
-local function compute_coalescable_kernels_speedup(data, app_dur)
-    local total_gaps_per_queue = {}
-
-    for _, e in ipairs(data) do
-        local queue_id = e[2]
-        local gaps_duration = e[6]
-
-        if not total_gaps_per_queue[queue_id] then
-            total_gaps_per_queue[queue_id] = 0
-        end
-        total_gaps_per_queue[queue_id] = total_gaps_per_queue[queue_id] + gaps_duration
-    end
-
-    local max_gap_dur, _ = table.max(total_gaps_per_queue)
-
-    if max_gap_dur == nil or max_gap_dur == 0 then
-        error("Invalid max ideal duration")
-    end
-
-    return app_dur / (app_dur - max_gap_dur)
-end
-
-return function(traces_data, _, opt)
-
-    local DURATION_THRESHOLD_NS = opt.th_dur
-    local GAP_THRESHOLD_NS      = opt.th_gap
-    local MIN_SEQUENCE_LEN      = opt.min_seq
 
     local speedup_factor = 1
+    local actual_dur = rprofrep:get_application_time()
+    local max_ideal_dur = 0
+    for _, total_gaps_per_queue in pairs(total_gaps_per_gpu) do
+        for _, total_gaps in pairs(total_gaps_per_queue) do
+            local ideal_dur = actual_dur - total_gaps
+            if ideal_dur > max_ideal_dur then
+                max_ideal_dur = ideal_dur
+            end
+        end
+    end
+    if max_ideal_dur > 0 then speedup_factor = actual_dur / max_ideal_dur end
 
-    local msg = ""
+    return data, sequences_per_gpu, speedup_factor
+end
 
-    local data, sequences_per_gpu = find_coalescable_kernels(traces_data, DURATION_THRESHOLD_NS, GAP_THRESHOLD_NS, MIN_SEQUENCE_LEN, opt)
 
-    if #data ~= 0 then
 
-        local app_duration = traces_data:get_app_dur()
-        speedup_factor = compute_coalescable_kernels_speedup(data, app_duration)
-
-        msg = [[
+local DEFAULT_ADVICE_MSG = [[
 The following kernel launch sequences may benefit from coalescing into fewer, larger launches.
 These sequences were identified as:
   - Having the same kernel name, on the same GPU, in the same queue,
-  - Launched back-to-back with a gap smaller than ]] .. GAP_THRESHOLD_NS .. [[ ns,
-  - Each individual kernel shorter than ]] .. DURATION_THRESHOLD_NS .. [[ ns,
-  - Appearing at least ]] .. MIN_SEQUENCE_LEN .. [[ times in sequence.
+  - Launched back-to-back with a gap smaller than %s ns,
+  - Each individual kernel shorter than %s ns,
+  - Appearing at least %s times in sequence.
 
-Optimizing these kernel calls might speed up your application by ]] .. string.format("x%.3f.\n\n", speedup_factor)
+Optimizing these kernel calls might speed up your application by x%.3f.
+]]
 
-        for gpu_id, count in pairs(sequences_per_gpu) do
-            msg = msg .. "On GPU ID " .. gpu_id .. ", " .. count .. " sequence(s) of repeated consecutive kernel launch have been detected.\n\n"
-        end
+local DEFAULT_NO_ADVICE_MSG = [[
+No redundant or coalescable kernel launch sequences were found.
+]]
 
-        table.sort(data, function(a, b)
-            return a[8] > b[8]
-        end)
-    else
-        msg = "No redundant or coalescable kernel launch sequences were found.\n"
+local DEFAULT_PER_GPU_MSG = [[
+    On GPU ID %s: %d sequence(s) of repeated consecutive kernel launch have been detected.
+]]
+
+return function (report)
+    local timeunit = report.opt.timeunit
+
+    report.NAME = "Coalescable Kernel Launches"
+
+    report.TYPE = "Analyze"
+
+    report.HEADER = { "GPU ID", "Queue ID", "Seq. Length", "Seq. Start (" .. timeunit .. ")", "Seq. Dur (" .. timeunit .. ")", "Seq. Gap Dur (" .. timeunit .. ")", "Seq. Speed Up", "Kernel Name" }
+
+    report.REQUIRED_DOMAIN = { ratelprof.consts.DOMAIN_KERNEL_ID }
+
+    report.NO_ADVICE_MSG = function(self)
+        return DEFAULT_NO_ADVICE_MSG
     end
 
+    report.ADVICE_MSG = function(self)
+        local opt = self.opt
+        local msg = string.format(DEFAULT_ADVICE_MSG, opt.th_gap, opt.th_dur, opt.min_seq, self.speedup_factor)
+        for gpu_id, count in pairs(self.sequences_per_gpu) do
+            msg = msg .. string.format(DEFAULT_PER_GPU_MSG, gpu_id, count)
+        end
+        return msg
+    end
 
-    return {
-        NAME = "Coalescable Kernel Launches",
-        TYPE = "Analyze",
-        HEADER = {
-            "GPU ID",
-            "Queue ID",
-            "Seq Length",
-            "Seq Start (ns)",
-            "Seq Duration (ns)",
-            "Seq Gap Duration (ns)",
-            "Seq Speed Up",
-            "Kernel Name",
-        },
-        DATA = data,
-        MSG = msg,
-        speedup = speedup_factor
-    }
+    report.SORT_BY = {"asc", 6}
+
+    report.DATA = function (self, rprofrep)
+        local data, sequences_per_gpu, speedup_factor = find_coalescable_kernels(rprofrep, self.opt)
+        self.data = data
+        self.sequences_per_gpu = sequences_per_gpu
+        self.speedup_factor = speedup_factor
+    end
 end
+
