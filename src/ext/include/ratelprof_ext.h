@@ -15,6 +15,8 @@
 #include "domains/ompt_api_helper.h"
 #include "domains/roctx_api_helper.h"
 
+#include "ratelprof_version.h"
+
 #define RATELPROF_DOMAIN_COPY_NAME          "RATELPROF_DOMAIN_COPY"
 #define RATELPROF_DOMAIN_KERNEL_NAME        "RATELPROF_DOMAIN_KERNEL"
 #define RATELPROF_DOMAIN_BARRIEROR_NAME     "RATELPROF_DOMAIN_BARRIEROR"

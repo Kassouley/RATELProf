@@ -7,7 +7,6 @@
 #include <dlfcn.h>
 #include <ratelprof.h>
 #include <ratelprof_ext.h>
-#include "version.h"
 
 typedef struct ratelprof_plugin_s ratelprof_plugin_t;
 
