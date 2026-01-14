@@ -35,7 +35,7 @@ typedef struct rprofref_event_data_s {
 } rprofrep_event_data_t;
 
 typedef struct rprofrep_event_filter_s {
-    // Filter values (optional, can be 0 if unused)
+    // Filter values
     uint64_t phase;
     uint64_t start;
     uint64_t stop;
@@ -57,21 +57,21 @@ static inline bool rprofrep_filter_event(
     uint64_t phase, uint64_t start, uint64_t stop, uint64_t dur
 ) {
     if (!f) return true; // No filter means "accept all"
-
-    if ((f->phase_EQ && phase != f->phase) ||
-        (f->start_GT && start <= f->start) ||
-        (f->start_LT && start >= f->start) ||
-        (f->stop_GT  && stop  <= f->stop)  ||
-        (f->stop_LT  && stop  >= f->stop)  ||
-        (f->dur_GT   && dur   <= f->dur)   ||
-        (f->dur_LT   && dur   >= f->dur)) 
-    {
-        return false;
-    }
-
-    return true;
+    return
+        (!f->phase_EQ || phase == f->phase) &&
+        (!f->start_GT || start >  f->start) &&
+        (!f->start_LT || start <  f->start) &&
+        (!f->stop_GT  || stop  >  f->stop)  &&
+        (!f->stop_LT  || stop  <  f->stop)  &&
+        (!f->dur_GT   || dur   >  f->dur)   &&
+        (!f->dur_LT   || dur   <  f->dur);
 }
 
+
+rprofrep_status_t rprofrep_find_entry_point_event(
+    rprofrep_decode_context_t* ctx,
+    rprofrep_event_data_t* event,
+    rprofrep_event_data_t* entry_point_event);
 
 /**
  * The function `rprofrep_get_event_by_cid` retrieves event data based on a given context and CID
@@ -90,8 +90,7 @@ static inline bool rprofrep_filter_event(
 rprofrep_status_t rprofrep_get_event_by_cid(
     rprofrep_decode_context_t* ctx, 
     rprofrep_cid_tuple_t* cid,
-    rprofrep_event_data_t* out_event
-);
+    rprofrep_event_data_t* out_event);
 
 
 
