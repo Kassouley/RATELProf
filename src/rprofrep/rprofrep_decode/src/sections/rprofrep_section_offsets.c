@@ -27,8 +27,75 @@ rprofrep_status_t rprofrep_free_offsets_section(rprofrep_offsets_section_t* sct)
         free(sct->groups);
     }
 
-    rprofrep_tree_free_tree(sct->offsets_tree);
+    rprofrep_tree_free_tree(sct->gpu_offset_tree);
+    rprofrep_tree_free_tree(sct->cpu_offset_tree);
 
+    return RPROFREP_STATUS_SUCCESS;
+}
+
+
+static rprofrep_status_t read_offsets_tree(
+    rprofrep_tree_node_t** tree,
+    uint8_t* buffer, size_t* offset, rprofrep_group_entry_t* groups,
+    rprofrep_group_entry_t** prev_group, uint8_t* event_section_buffer)
+{
+    uint64_t nunits = __read_mp_uint(buffer, offset);
+    if (nunits > 0) {
+        *tree = rprofrep_tree_create_node(0, nunits);
+        RPROFREP_CHECK_ALLOC(*tree);
+
+        // ---- Read Units ----
+        for (uint64_t i = 0; i < nunits; i++) {
+            uint64_t unit_value = __read_mp_uint(buffer, offset);
+            uint64_t nsubunits  = __read_mp_uint(buffer, offset);
+
+            rprofrep_tree_node_t* unit_node = rprofrep_tree_create_node(unit_value, nsubunits);
+            RPROFREP_CHECK_ALLOC(unit_node);
+            rprofrep_tree_add_node(*tree, unit_node);
+
+            // ---- Read Sub Units ----
+            for (uint64_t j = 0; j < nsubunits; j++) {
+                int64_t  subunit_value = __read_mp_int(buffer,  offset);
+                uint64_t ndomains      = __read_mp_uint(buffer, offset);
+
+                rprofrep_tree_node_t* subunit_node = rprofrep_tree_create_node(subunit_value, ndomains);
+                RPROFREP_CHECK_ALLOC(subunit_node);
+                rprofrep_tree_add_node(unit_node, subunit_node);
+
+                // ---- Read Domains ----
+                for (uint64_t k = 0; k < ndomains; k++) {  
+                    uint64_t domain_value  = __read_mp_uint(buffer, offset);
+
+                    if (domain_value >= RATELPROF_NB_DOMAIN_EXT) {
+                        return RPROFREP_STATUS_ERROR("Domain value %lu is out of range (max %d).\n", domain_value, RATELPROF_NB_DOMAIN_EXT);
+                    }
+
+                    rprofrep_tree_node_t* domain_node = rprofrep_tree_create_node(domain_value, 0);
+                    RPROFREP_CHECK_ALLOC(domain_node);
+                    rprofrep_tree_add_node(subunit_node, domain_node);
+
+                    uint64_t group_off     = __read_mp_uint(buffer, offset);
+                    uint64_t group_nevents = __read_mp_uint(buffer, offset);
+                    uint64_t group_id      = __read_mp_uint(buffer, offset);
+
+                    rprofrep_tree_set_leaf_value(domain_node, group_id);
+
+                    rprofrep_group_entry_t* group = &groups[group_id];
+                    group->unit         = unit_value;
+                    group->sub_unit     = subunit_value;
+                    group->domain       = domain_value;
+                    group->offset_entry.offset  = group_off;
+                    group->offset_entry.nevents = group_nevents;
+                    group->offset_entry.id      = group_id;
+                    group->buffer.buffer_start = event_section_buffer + group->offset_entry.offset;
+                    if (*prev_group) {
+                        (*prev_group)->buffer.buffer_stop = group->buffer.buffer_start;
+                    }
+                    *prev_group = group;
+                }
+            }
+        }
+    }
     return RPROFREP_STATUS_SUCCESS;
 }
 
@@ -50,68 +117,24 @@ rprofrep_status_t rprofrep_decode_offsets_section(
 
     rprofrep_group_entry_t* prev_group = NULL;
 
-    uint64_t nunits = __read_mp_uint(buffer, &offset);
-    rprofrep_tree_node_t* tree = rprofrep_tree_create_node(0, nunits);
-    RPROFREP_CHECK_ALLOC(tree, rprofrep_free_offsets_section(out));
+    rprofrep_tree_node_t* gpu_offset_tree = NULL;
+    rprofrep_tree_node_t* cpu_offset_tree = NULL;
+    
 
-    // ---- Read Units ----
-    for (uint64_t i = 0; i < nunits; i++) {
-        uint64_t unit_value = __read_mp_uint(buffer, &offset);
-        uint64_t nsubunits  = __read_mp_uint(buffer, &offset);
+    RPROFREP_CHECK_CALL(read_offsets_tree(&cpu_offset_tree, buffer, &offset, out->groups, &prev_group, events_section->buffer),
+        rprofrep_free_offsets_section(out));
 
-        rprofrep_tree_node_t* unit_node = rprofrep_tree_create_node(unit_value, nsubunits);
-        RPROFREP_CHECK_ALLOC(unit_node, rprofrep_free_offsets_section(out));
-        rprofrep_tree_add_node(tree, unit_node);
+    RPROFREP_CHECK_CALL(read_offsets_tree(&gpu_offset_tree, buffer, &offset, out->groups, &prev_group, events_section->buffer),
+        rprofrep_free_offsets_section(out));
 
-        // ---- Read Sub Units ----
-        for (uint64_t j = 0; j < nsubunits; j++) {
-            uint64_t subunit_value = __read_mp_int(buffer,  &offset);
-            uint64_t ndomains      = __read_mp_uint(buffer, &offset);
-
-            rprofrep_tree_node_t* subunit_node = rprofrep_tree_create_node(subunit_value, ndomains);
-            RPROFREP_CHECK_ALLOC(subunit_node, rprofrep_free_offsets_section(out));
-            rprofrep_tree_add_node(unit_node, subunit_node);
-
-            // ---- Read Domains ----
-            for (uint64_t k = 0; k < ndomains; k++) {  
-                uint64_t domain_value  = __read_mp_uint(buffer, &offset);
-
-                if (domain_value >= RATELPROF_NB_DOMAIN_EXT) {
-                    rprofrep_free_offsets_section(out);
-                    return RPROFREP_STATUS_ERROR("Domain value %lu is out of range (max %d).\n", domain_value, RATELPROF_NB_DOMAIN_EXT - 1);
-                }
-
-                rprofrep_tree_node_t* domain_node = rprofrep_tree_create_node(domain_value, 0);
-                RPROFREP_CHECK_ALLOC(domain_node, rprofrep_free_offsets_section(out));
-                rprofrep_tree_add_node(subunit_node, domain_node);
-
-                uint64_t group_off     = __read_mp_uint(buffer, &offset);
-                uint64_t group_nevents = __read_mp_uint(buffer, &offset);
-                uint64_t group_id      = __read_mp_uint(buffer, &offset);
-
-                rprofrep_tree_set_leaf_value(domain_node, group_id);
-
-                rprofrep_group_entry_t* group = &out->groups[group_id];
-                group->unit         = unit_value;
-                group->sub_unit     = subunit_value;
-                group->domain       = domain_value;
-                group->offset_entry.offset  = group_off;
-                group->offset_entry.nevents = group_nevents;
-                group->offset_entry.id      = group_id;
-                group->buffer.buffer_start = events_section->buffer + group->offset_entry.offset;
-                if (prev_group) {
-                    prev_group->buffer.buffer_stop = group->buffer.buffer_start;
-                }
-                prev_group = group;
-            }
-        }
-    }
+    out->domain_mask = __read_mp_uint(buffer, &offset);
 
     if (prev_group) {
         prev_group->buffer.buffer_stop = events_section->buffer + events_section->size;
     }
 
-    out->offsets_tree = tree;
+    out->gpu_offset_tree = gpu_offset_tree;
+    out->cpu_offset_tree = cpu_offset_tree;
 
     return RPROFREP_STATUS_SUCCESS;
 }
@@ -131,7 +154,12 @@ rprofrep_status_t rprofrep_get_group_id(
     rprofrep_offsets_section_t* offsets_section = NULL;
     RPROFREP_CHECK_CALL(rprofrep_get_section(ctx, RPROFREP_SECTION_OFFSETS, (void**)&offsets_section));
 
-    rprofrep_tree_node_t* unit_tree = rprofrep_tree_find_node(offsets_section->offsets_tree, unit_value);
+    rprofrep_tree_node_t* offset_tree = NULL;
+
+    if (is_gpu_domain(domain_value)) offset_tree = offsets_section->gpu_offset_tree;
+    else offset_tree = offsets_section->cpu_offset_tree;
+
+    rprofrep_tree_node_t* unit_tree = rprofrep_tree_find_node(offset_tree, unit_value);
     if (unit_tree == NULL) {
         return RPROFREP_STATUS_NOT_FOUND("Unit %ld doesn't exist.\n", unit_value);
     }
@@ -181,7 +209,23 @@ static bool __rprofrep_offset_callback(rprofrep_tree_node_t* node, void* user_ar
 }
 
 
-rprofrep_status_t rprofrep_for_each_unit(
+static rprofrep_status_t rprofrep_for_each_unit(
+    rprofrep_decode_context_t* ctx,
+    rprofrep_tree_node_t* tree,
+    rprofrep_offset_callback_t callback,
+    void* user_arg
+) {
+    rprofrep_status_t status = RPROFREP_STATUS_SUCCESS;
+
+    if (!tree) return status;
+
+    rprofrep_tree_for_each_child(tree, __rprofrep_offset_callback,
+        (void*[4]){ callback, ctx, &status, user_arg });
+
+    return status;
+}
+
+rprofrep_status_t rprofrep_for_each_pid(
     rprofrep_decode_context_t* ctx,
     rprofrep_offset_callback_t callback,
     void* user_arg
@@ -191,9 +235,21 @@ rprofrep_status_t rprofrep_for_each_unit(
     rprofrep_offsets_section_t* offsets_section = NULL;
     RPROFREP_CHECK_CALL(rprofrep_get_section(ctx, RPROFREP_SECTION_OFFSETS, (void**)&offsets_section));
 
-    rprofrep_status_t status = RPROFREP_STATUS_SUCCESS;
-    rprofrep_tree_for_each_child(offsets_section->offsets_tree, __rprofrep_offset_callback, (void*[4]){callback, ctx, &status, user_arg});
-    return status;
+    return rprofrep_for_each_unit(ctx, offsets_section->cpu_offset_tree, callback, user_arg);
+}
+
+
+rprofrep_status_t rprofrep_for_each_gpu(
+    rprofrep_decode_context_t* ctx,
+    rprofrep_offset_callback_t callback,
+    void* user_arg
+) {
+    RPROFREP_CHECK_VALID_PTR(ctx, callback);
+
+    rprofrep_offsets_section_t* offsets_section = NULL;
+    RPROFREP_CHECK_CALL(rprofrep_get_section(ctx, RPROFREP_SECTION_OFFSETS, (void**)&offsets_section));
+
+    return rprofrep_for_each_unit(ctx, offsets_section->gpu_offset_tree, callback, user_arg);
 }
 
 
@@ -209,9 +265,6 @@ rprofrep_status_t rprofrep_for_each_subunit(
     rprofrep_tree_for_each_child(unit_node, __rprofrep_offset_callback, (void*[4]){callback, ctx, &status, user_arg});
     return status;
 }
-
-
-
 
 
 static bool __rprofrep_groups_callback(rprofrep_tree_node_t* node, void* user_arg) {
@@ -248,3 +301,15 @@ rprofrep_status_t rprofrep_for_each_domain(
     rprofrep_tree_for_each_child(sub_unit_node, __rprofrep_groups_callback, (void*[4]){callback, ctx, &status, user_arg});
     return status;
 }
+
+
+rprofrep_status_t rprofrep_is_domain_traced(rprofrep_decode_context_t* ctx, ratelprof_domain_t domain, bool* is_traced) {
+    
+    rprofrep_offsets_section_t* offsets_section = NULL;
+    RPROFREP_CHECK_CALL(rprofrep_get_section(ctx, RPROFREP_SECTION_OFFSETS, (void**)&offsets_section));
+
+    *is_traced = offsets_section->domain_mask & (1U << domain);
+
+    return RPROFREP_STATUS_SUCCESS;
+}
+

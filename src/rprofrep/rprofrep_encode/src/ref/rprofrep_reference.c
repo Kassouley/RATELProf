@@ -9,24 +9,12 @@
 
 #include "ref/rprofrep_reference.h"
 
-static rprofrep_status_t rprofrep_init_ref(rprofrep_reference_t* ref, ht_key_mode_t mode, const char* filename) {
+rprofrep_status_t rprofrep_init_ref_section(rprofrep_reference_t* ref, const char* filename) {
     ref->ref_counter = 0;
-    ref->ref_table = ht_create(0xFFFF, mode);
+    ref->ref_table = ht_create(0xFFFF);
     msgpack_init(&ref->buffer, 0xFFFF, MSGPACK_OVERFLOW_WRITE_TO_FILE, filename);
     RPROFREP_CHECK_ALLOC(ref->ref_table);
     return RPROFREP_STATUS_SUCCESS;
-}
-
-
-rprofrep_status_t rprofrep_init_uint64_ref_section(rprofrep_reference_t* ref, const char* filename)
-{
-    return rprofrep_init_ref(ref, HT_UINT64_KEY, filename);
-}
-
-
-rprofrep_status_t rprofrep_init_string_ref_section(rprofrep_reference_t* ref, const char* filename)
-{
-    return rprofrep_init_ref(ref, HT_STRING_KEY, filename);
 }
 
 
@@ -72,7 +60,7 @@ static inline rprofrep_reference_t* get_ref(rprofrep_encode_context_t* ctx, rpro
 uint64_t rprofrep_string_get_ref(rprofrep_encode_context_t* ctx, const char* str)
 {
     rprofrep_reference_t* ref = get_ref(ctx, RPROFREP_SECTION_STRING);
-    ht_key_t key = {.strkey = str};
+    ht_key_t key = {.mode = HT_STRING_KEY, .strkey = str};
     bool was_inserted = false;
     uint64_t ref_id = get_ref_id(ref, key, &was_inserted);
 
@@ -84,7 +72,7 @@ uint64_t rprofrep_string_get_ref(rprofrep_encode_context_t* ctx, const char* str
 uint64_t rprofrep_location_get_ref(rprofrep_encode_context_t* ctx, void* addr)
 {
     rprofrep_reference_t* ref = get_ref(ctx, RPROFREP_SECTION_LOCATION);
-    ht_key_t key = {.u64key = (uint64_t)addr};
+    ht_key_t key = {.mode = HT_UINT64_KEY, .u64key = (uint64_t)addr};
     bool was_inserted = false;
     uint64_t ref_id = get_ref_id(ref, key, &was_inserted);
 
@@ -111,7 +99,7 @@ uint64_t rprofrep_location_get_ref(rprofrep_encode_context_t* ctx, void* addr)
 uint64_t rprofrep_kernel_get_ref(rprofrep_encode_context_t* ctx, rprofrep_kernel_static_data_t* data)
 {
     rprofrep_reference_t* ref = get_ref(ctx, RPROFREP_SECTION_KERNEL);
-    ht_key_t key = {.u64key = data->kernel_object};
+    ht_key_t key = {.mode = HT_UINT64_KEY, .u64key = data->kernel_object};
     bool was_inserted = false;
     uint64_t ref_id = get_ref_id(ref, key, &was_inserted);
 

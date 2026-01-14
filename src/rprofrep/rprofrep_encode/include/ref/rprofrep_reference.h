@@ -13,9 +13,8 @@ typedef struct rprofrep_reference_s {
     msgpack_buffer_t buffer;
 } rprofrep_reference_t;
 
-rprofrep_status_t rprofrep_init_string_ref_section(rprofrep_reference_t* ref, const char* filename);
 
-rprofrep_status_t rprofrep_init_uint64_ref_section(rprofrep_reference_t* ref, const char* filename);
+rprofrep_status_t rprofrep_init_ref_section(rprofrep_reference_t* ref, const char* filename);
 
 void rprofrep_free_ref_section(rprofrep_reference_t* ref);
 

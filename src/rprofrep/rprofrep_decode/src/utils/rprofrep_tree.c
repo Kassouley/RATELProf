@@ -55,7 +55,7 @@ void rprofrep_tree_free_node(rprofrep_tree_node_t* node)
 
 void rprofrep_tree_set_leaf_value(rprofrep_tree_node_t* node, uint64_t value)
 {
-    if (node->capacity == 0) {
+    if (node && node->capacity == 0) {
         node->childs.leaf_value = value;
     } else {
         rprofrep_log(RPROFREP_LOG_WARN, "Trying to set a leaf value but a node is already setted.\n");
@@ -65,7 +65,7 @@ void rprofrep_tree_set_leaf_value(rprofrep_tree_node_t* node, uint64_t value)
 
 uint64_t rprofrep_tree_get_leaf_value(rprofrep_tree_node_t* node)
 {
-    if (node->capacity == 0) {
+    if (node && node->capacity == 0) {
         return node->childs.leaf_value;
     }
     return (uint64_t)-1;
@@ -74,6 +74,8 @@ uint64_t rprofrep_tree_get_leaf_value(rprofrep_tree_node_t* node)
 
 rprofrep_tree_node_t* rprofrep_tree_find_node(rprofrep_tree_node_t* tree, uint64_t value)
 {
+    if (!tree) return NULL;
+
     for (uint64_t i = 0; i < tree->nchild; i++) {
         rprofrep_tree_node_t* node = tree->childs.node[i];
         if (node->value == value) return node;

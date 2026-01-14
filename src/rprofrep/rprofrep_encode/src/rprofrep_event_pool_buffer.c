@@ -16,8 +16,11 @@ rprofrep_status_t rprofrep_init_event_pool_buffer(rprofrep_buffer_pool_t** out_p
     rprofrep_buffer_pool_t* pool = (rprofrep_buffer_pool_t*) calloc(1, sizeof(rprofrep_buffer_pool_t));
     RPROFREP_CHECK_ALLOC(pool);
 
-    pool->buffer = ht_create(0xFF);
-    RPROFREP_CHECK_ALLOC(pool->buffer);
+    pool->gpu_event_buffer = ht_create(0xFF);
+    RPROFREP_CHECK_ALLOC(pool->gpu_event_buffer);
+
+    pool->cpu_event_buffer = ht_create(0xFF);
+    RPROFREP_CHECK_ALLOC(pool->cpu_event_buffer);
 
     pool->nb_buffers = 0;
     *out_pool = pool;
@@ -33,15 +36,17 @@ static void destroy_callback(void* value) {
 void rprofrep_destroy_event_pool_buffer(rprofrep_buffer_pool_t* pool)
 {
     if (!pool) return;
-    ht_destroy(pool->buffer, destroy_callback);
+    ht_destroy(pool->gpu_event_buffer, destroy_callback);
+    ht_destroy(pool->cpu_event_buffer, destroy_callback);
     free(pool);
 }
 
 
-rprofrep_buffer_entry_t* rprofrep_get_event_buffer(rprofrep_encode_context_t* ctx, ratelprof_domain_t domain, uint64_t unit, int64_t sub_unit)
+
+static rprofrep_buffer_entry_t* rprofrep_get_event_buffer(
+    rprofrep_buffer_pool_t* pool, hash_table_t* table, const char* exp_tmp_dir, 
+    ratelprof_domain_t domain, uint64_t unit, uint64_t sub_unit)
 {
-    rprofrep_buffer_pool_t* pool = ctx->event_pool;
-    hash_table_t* table = pool->buffer;
     ht_dual_key_t key = {unit, sub_unit};
 
     rprofrep_buffer_entry_t* entries = ht_get(table, key);
@@ -58,10 +63,27 @@ rprofrep_buffer_entry_t* rprofrep_get_event_buffer(rprofrep_encode_context_t* ct
         entry->domain    = domain;
         entry->unit      = unit;
         entry->sub_unit  = sub_unit;
-        BUILD_FILENAME(entry->filename, ctx->exp_tmp_dir, "rprofrep_events_%u_%lu_%lu", domain, unit, sub_unit);
+        BUILD_FILENAME(entry->filename, exp_tmp_dir, "rprofrep_events_%u_%lu_%lu", domain, unit, sub_unit);
         msgpack_init(&entry->buffer, 0xFFFF, MSGPACK_OVERFLOW_WRITE_TO_FILE, entry->filename);
         pool->nb_buffers++;
     }
 
     return entry;
+}
+
+
+rprofrep_buffer_entry_t* rprofrep_get_gpu_event_buffer(rprofrep_encode_context_t* ctx, ratelprof_domain_t domain, uint64_t unit, uint64_t sub_unit)
+{
+    rprofrep_buffer_pool_t* pool = ctx->event_pool;
+    hash_table_t* table = pool->gpu_event_buffer;
+    return rprofrep_get_event_buffer(pool, table, ctx->exp_tmp_dir, domain, unit, sub_unit);
+}
+
+
+
+rprofrep_buffer_entry_t* rprofrep_get_cpu_event_buffer(rprofrep_encode_context_t* ctx, ratelprof_domain_t domain, uint64_t unit, uint64_t sub_unit)
+{
+    rprofrep_buffer_pool_t* pool = ctx->event_pool;
+    hash_table_t* table = pool->cpu_event_buffer;
+    return rprofrep_get_event_buffer(pool, table, ctx->exp_tmp_dir, domain, unit, sub_unit);
 }

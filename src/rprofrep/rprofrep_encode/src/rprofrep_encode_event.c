@@ -30,7 +30,7 @@ static void add_copy_activity_data_to_buffer(
         other_handle = activity->args.mem_copy.src_agent.handle;
     }
 
-    rprofrep_buffer_entry_t* entry = rprofrep_get_event_buffer(ctx, domain, gpu_handle, activity->args.mem_copy.engine_id);
+    rprofrep_buffer_entry_t* entry = rprofrep_get_gpu_event_buffer(ctx, domain, gpu_handle, (uint64_t) activity->args.mem_copy.engine_id);
 
     msgpack_buffer_t evt = {0};
     msgpack_init(&evt, 0xffff, MSGPACK_OVERFLOW_REALLOC, NULL);
@@ -63,7 +63,7 @@ static void add_barrier_activity_data_to_buffer(
     ratelprof_time_t dur   = stop - start;
     ratelprof_time_t dispatch_time = ratelprof_get_timestamp_ns(activity->args.dispatch.dispatch_time);
 
-    rprofrep_buffer_entry_t* entry = rprofrep_get_event_buffer(ctx, domain, activity->args.dispatch.agent.handle, activity->args.dispatch.queue_id);
+    rprofrep_buffer_entry_t* entry = rprofrep_get_gpu_event_buffer(ctx, domain, activity->args.dispatch.agent.handle, activity->args.dispatch.queue_id);
 
     msgpack_buffer_t evt = {0};
     msgpack_init(&evt, 0xffff, MSGPACK_OVERFLOW_REALLOC, NULL);
@@ -98,7 +98,7 @@ static void add_kernel_activity_data_to_buffer(
     ratelprof_time_t dur   = stop - start;
     ratelprof_time_t dispatch_time = ratelprof_get_timestamp_ns(activity->args.dispatch.dispatch_time);
 
-    rprofrep_buffer_entry_t* entry = rprofrep_get_event_buffer(ctx, domain, activity->args.dispatch.agent.handle, activity->args.dispatch.queue_id);
+    rprofrep_buffer_entry_t* entry = rprofrep_get_gpu_event_buffer(ctx, domain, activity->args.dispatch.agent.handle, activity->args.dispatch.queue_id);
 
     msgpack_buffer_t evt = {0};
     msgpack_init(&evt, 0xffff, MSGPACK_OVERFLOW_REALLOC, NULL);
@@ -145,7 +145,7 @@ static void add_api_activity_data_to_buffer(
     ratelprof_time_t stop  = ratelprof_get_timestamp_ns(activity->stop_time);
     ratelprof_time_t dur   = stop - start;
 
-    rprofrep_buffer_entry_t* entry = rprofrep_get_event_buffer(ctx, domain, activity->pid, activity->tid);
+    rprofrep_buffer_entry_t* entry = rprofrep_get_cpu_event_buffer(ctx, domain, activity->pid, activity->tid);
 
     msgpack_buffer_t evt = {0};
     msgpack_init(&evt, 0xffff, MSGPACK_OVERFLOW_REALLOC, NULL);
@@ -175,7 +175,7 @@ static void add_roctx_activity_data_to_buffer(
     ratelprof_time_t stop  = ratelprof_get_timestamp_ns(activity->stop_time);
     ratelprof_time_t dur   = stop - start;
 
-    rprofrep_buffer_entry_t* entry = rprofrep_get_event_buffer(ctx, domain, activity->pid, activity->tid);
+    rprofrep_buffer_entry_t* entry = rprofrep_get_cpu_event_buffer(ctx, domain, activity->pid, activity->tid);
 
     msgpack_buffer_t evt = {0};
     msgpack_init(&evt, 0xffff, MSGPACK_OVERFLOW_REALLOC, NULL);

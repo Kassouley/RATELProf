@@ -33,8 +33,10 @@ typedef struct rprofrep_group_entry_s {
 
 typedef struct rprofrep_offsets_section_s {
     uint64_t num_groups;
+    uint16_t domain_mask;
     rprofrep_group_entry_t* groups;
-    rprofrep_tree_node_t* offsets_tree;
+    rprofrep_tree_node_t* cpu_offset_tree;
+    rprofrep_tree_node_t* gpu_offset_tree;
 } rprofrep_offsets_section_t;
 
 
@@ -96,7 +98,13 @@ rprofrep_status_t rprofrep_get_group_entry_by_id(
     rprofrep_group_entry_t** out);
 
 
-rprofrep_status_t rprofrep_for_each_unit(
+rprofrep_status_t rprofrep_for_each_pid(
+    rprofrep_decode_context_t* ctx,
+    rprofrep_offset_callback_t callback,
+    void* user_arg);
+
+    
+rprofrep_status_t rprofrep_for_each_gpu(
     rprofrep_decode_context_t* ctx,
     rprofrep_offset_callback_t callback,
     void* user_arg);
@@ -114,6 +122,8 @@ rprofrep_status_t rprofrep_for_each_domain(
     rprofrep_tree_node_t* sub_unit_node,
     rprofrep_groups_callback_t callback,
     void* user_arg);
+
+rprofrep_status_t rprofrep_is_domain_traced(rprofrep_decode_context_t* ctx, ratelprof_domain_t domain, bool* is_traced);
 
 
 #endif // RPROFREP_SECTION_OFFSETS_H

@@ -37,11 +37,11 @@ typedef struct {
 
 static const rprofprep_section_info_t rprofprep_sections[RPROFREP_NB_SECTIONS] = {
 SCT_ENTRY(GLOBAL,   "global_section",   NULL,                             rprofrep_write_global_section,                    NULL,                           0),
-SCT_ENTRY(STRING,   "string_section",   rprofrep_init_string_ref_section, rprofrep_write_ref_section,                       rprofrep_free_ref_section,      sizeof(rprofrep_reference_t)),
-SCT_ENTRY(LOCATION, "location_section", rprofrep_init_string_ref_section, rprofrep_write_ref_section,                       rprofrep_free_ref_section,      sizeof(rprofrep_reference_t)),
+SCT_ENTRY(STRING,   "string_section",   rprofrep_init_ref_section,        rprofrep_write_ref_section,                       rprofrep_free_ref_section,      sizeof(rprofrep_reference_t)),
+SCT_ENTRY(LOCATION, "location_section", rprofrep_init_ref_section,        rprofrep_write_ref_section,                       rprofrep_free_ref_section,      sizeof(rprofrep_reference_t)),
 SCT_ENTRY(GPU_SPEC, "gpu_spec_section", NULL,                             rprofrep_write_gpu_spec_section,                  NULL,                           0),
 SCT_ENTRY(API_DATA, "api_data_section", rprofrep_init_api_data_section,   rprofrep_write_api_data_section,                  rprofrep_free_api_data_section, sizeof(rprofrep_api_data_ref_t)),
-SCT_ENTRY(KERNEL,   "kernel_section",   rprofrep_init_uint64_ref_section, rprofrep_write_ref_section,                       rprofrep_free_ref_section,      sizeof(rprofrep_reference_t)),
+SCT_ENTRY(KERNEL,   "kernel_section",   rprofrep_init_ref_section,        rprofrep_write_ref_section,                       rprofrep_free_ref_section,      sizeof(rprofrep_reference_t)),
 SCT_ENTRY(OFFSETS,  "offsets_section",  NULL,                             rprofrep_write_offsets_and_concat_events_section, NULL,                           0),
 SCT_ENTRY(EVENTS,   NULL,               NULL,                             NULL,                                             NULL,                           0),
 };
