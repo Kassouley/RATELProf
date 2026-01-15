@@ -234,7 +234,7 @@ function Script:check_args(args)
                         end
                     end
                     self.options_values[option.long_name] = value
-                    if is_help_option(arg) then return end
+                    if is_help_option(arg) then break end
                     break
                 end
             end
