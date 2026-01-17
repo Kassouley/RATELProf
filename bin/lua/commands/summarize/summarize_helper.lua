@@ -5,6 +5,13 @@ local summarize_helper = {}
 local NCHAR_SEPARATOR = 72
 summarize_helper.NCHAR_SEPARATOR = NCHAR_SEPARATOR
 
+
+local function print_separator(sep_char)
+    sep_char = sep_char or "="
+    print((sep_char):rep(NCHAR_SEPARATOR))
+end
+
+
 function summarize_helper.format_gpu_time(time, app_time)
     local percentage = (time / app_time) * 100
     local time_s = ratelprof.convert.time(time, "ns", "sec")
@@ -19,8 +26,8 @@ function summarize_helper.format_bytes(bytes)
     local units = {"B", "KB", "MB", "GB", "TB"}
     local unit_index = 1
 
-    while bytes >= 1000 and unit_index < #units do
-        bytes = bytes / 1000
+    while bytes >= 1024 and unit_index < #units do
+        bytes = bytes / 1024
         unit_index = unit_index + 1
     end
 
@@ -68,7 +75,7 @@ local function print_data(list, depth, max_len)
             print_data(v.subvalue, depth + 1, max_len)
         end
         if depth == 0 and i < #list then
-            print(("-"):rep(NCHAR_SEPARATOR))
+            print_separator("-")
         end
     end
 end
@@ -76,11 +83,10 @@ end
 
 function summarize_helper.print_report(title, data)
     local max_len = summarize_helper.get_max_label_len(data)
-    print(("="):rep(NCHAR_SEPARATOR))
     print(title)
-    print(("="):rep(NCHAR_SEPARATOR))
+    print_separator()
     print_data(data, 0, max_len)
-    print(("="):rep(NCHAR_SEPARATOR))
+    print_separator()
 end
 
 

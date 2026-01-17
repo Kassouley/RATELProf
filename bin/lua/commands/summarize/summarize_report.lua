@@ -2,16 +2,18 @@
 local Report = require ("utils.Classes.Report")
 local summarize_helper = require("commands.summarize.summarize_helper")
 
+local stats = require("commands.stats")
+
 local summarize_report = {}
 
 local analyzed_data = {
-    {key = "concurrency_score",         label = "Concurrency Score (%)",  desc = "Percentage of kernel computation that are in parallel. High concurrency can improve performance."},
-    {key = "hidden_score",              label = "Hidden Copy Score (%)",  desc = "Percentage of copy time hidden by kernel computation. "..
-                                                                                 "Higher doesn't always mean better performance, "..
-                                                                                 "but hide memory copy latency can improve GPU utilization. "..
-                                                                                 "(This score doesn't take in consideration async copies hidden by CPU computation.)"},
-    {key = "longest_activity",          label = "Longest GPU Activity",   desc = "Longest GPU activity. Can be a kernel, copy operation or a barrier."},
-    {key = "total_bytes",               label = "Total bytes transfered", desc = "Total bytes transferred from/to GPU by memory transfers."},
+    {key = "concurrency_score",         label = "Concurrency Score (%)",            desc = "Percentage of kernel computation that are in parallel. High concurrency can improve performance."},
+    {key = "hidden_score",              label = "Hidden Copy Score (%)",            desc = "Percentage of copy time hidden by kernel computation. "..
+                                                                                           "Higher doesn't always mean better performance, "..
+                                                                                           "but hide memory copy latency can improve GPU utilization. "..
+                                                                                           "(This score doesn't take in consideration async copies hidden by CPU computation.)"},
+    {key = "longest_activity",          label = "Longest GPU Activity",             desc = "Longest GPU activity. Can be a kernel, copy operation or a barrier."},
+    {key = "total_bytes",               label = "Total bytes transfered",           desc = "Total bytes transferred from/to GPU by memory transfers."},
     {key = "speedup_async_copy",        label = "Perfect HIP Async Copy (Speedup)", desc = "Speed up if all copies were 100% asynchronous"},
     {key = "speedup_hidden_copy",       label = "Perfect Hidden Copy (Speedup)",    desc = "Speed up if all copies were hidden by kernels"},
     {key = "speedup_copy_coalescing",   label = "Copy Coalescing (Speedup)",        desc = "Speed up if all coalescable copies were coalesced"},
@@ -19,67 +21,40 @@ local analyzed_data = {
 }
 
 
-local function get_ret_val(ret_vals, report, key, default)
-    local report_retval = ret_vals[-1][report]
-    if report_retval and report_retval[key] then
-        return report_retval[key]
+local function get_attribute(objs, report, key, default)
+    local obj = objs[report]
+    if obj and obj[key] then
+        return obj[key]
     else
         return default or "N/A"
     end
 end
 
 
-function summarize_report.get_analyzed_data(data, opt)
-    local stats_reports = {
-        {id = "mpi_api_sum"},
-        {id = "omp_region_api_sum"},
-        {id = "omp_api_sum"},
-        {id = "omp_target_api_sum"},
-        {id = "hip_api_sum"},
-        {id = "hsa_api_sum"},
-        {id = "gpu_sum"},
-        {id = "gpu_kern_sum"},
-        {id = "gpu_mem_time_sum"},
-        {id = "gpu_mem_size_sum"}
+function summarize_report.get_analyzed_data(rprofrep, sumarize_opt)
+    local raw_option = {
+        ["report"] = "all",
+        ["output"] = "/tmp/rprof_summarize",
+        ["format"] = "csv",
+        ["mangled"] = false,
+        ["trunc"]   = true,
+        ["start"]   = sumarize_opt.start,
+        ["stop"]    = sumarize_opt.stop,
+        ["enable-progress"] = true
     }
 
-    local analyze_reports = {
-        {id = "coalescable_kernels"},
-        -- {id = "hidden_transfers"},
-        {id = "gpu_idle"},
-        {id = "hip_memcpy_sync"},
-        {id = "hip_memcpy_async"},
-        {id = "coalescable_transfers"},
-        -- {id = "concurrency"}
-    }
+    local stats_report_objs   = stats.process_stats_impl(rprofrep, raw_option)
+    local analyze_report_objs = stats.process_analyze_impl(rprofrep, raw_option)
 
-    local options = {
-        ["outputs"]     = {"/tmp/rprof_summarize"},
-        ["formats"]     = {"csv"},
-        ["mangled"]     = opt.mangled,
-        ["trunc"]       = opt.trunc,
-        ["timeunit"]    = "ns",
-        ["start"]       = opt.start,
-        ["stop"]        = opt.stop,
-    }
-    
-    options.reports = stats_reports
-    local stats_ret_vals = Report.utils.execute_report(data, options, ratelprof.consts._ALL_STATS_REPORT, true, "Report statistics")
-
-    options.reports = analyze_reports
-
-    local analyze_ret_vals = Report.utils.execute_report(data, options, ratelprof.consts._ALL_RULES_REPORT, true, "Report analysis")
-
-
-    local async_speedup                 = get_ret_val(analyze_ret_vals, "hip_memcpy_async",       "speedup", 1)
-    local sync_speedup                  = get_ret_val(analyze_ret_vals, "hip_memcpy_sync",        "speedup", 1)
-    local bytes_transferred             = get_ret_val(stats_ret_vals,   "gpu_mem_size_sum",       "total_bytes")
-    local concurrency_score             = get_ret_val(analyze_ret_vals, "concurrency",            "score")
-    local hidden_score                  = get_ret_val(analyze_ret_vals, "hidden_transfers",       "score")
-    local longest_activity              = get_ret_val(stats_ret_vals,   "gpu_sum",                "longest_activity")
-    local hidden_speedup                = get_ret_val(analyze_ret_vals, "hidden_transfers",       "speedup")
-    local coalescable_kernels_speedup   = get_ret_val(analyze_ret_vals, "coalescable_kernels" ,   "speedup")
-    local coalescable_transfers_speedup = get_ret_val(analyze_ret_vals, "coalescable_transfers" , "speedup")
+    local async_speedup                 = get_attribute(analyze_report_objs, "hip_memcpy_async",       "speedup_factor", 1)
+    local sync_speedup                  = get_attribute(analyze_report_objs, "hip_memcpy_sync",        "speedup_factor", 1)
+    local bytes_transferred             = get_attribute(stats_report_objs,   "gpu_mem_size_sum",       "total_transfered_bytes")
+    local concurrency_score             = get_attribute(analyze_report_objs, "concurrency",            "score")
+    local hidden_score                  = get_attribute(analyze_report_objs, "hidden_transfers",       "score")
+    local longest_activity              = get_attribute(stats_report_objs,   "gpu_sum",                "longest_activity")
+    local hidden_speedup                = get_attribute(analyze_report_objs, "hidden_transfers",       "speedup_factor")
+    local coalescable_kernels_speedup   = get_attribute(analyze_report_objs, "coalescable_kernels" ,   "speedup_factor")
+    local coalescable_transfers_speedup = get_attribute(analyze_report_objs, "coalescable_transfers" , "speedup_factor")
 
     -- Fill analyzed_data
     for _, entry in ipairs(analyzed_data) do
@@ -102,7 +77,7 @@ function summarize_report.get_analyzed_data(data, opt)
         end
     end
 
-    return analyzed_data, stats_ret_vals, analyze_ret_vals
+    return analyzed_data, stats_report_objs, analyze_report_objs
 end
 
 

@@ -42,3 +42,17 @@ function summarize.process_summarize(positional_args, options_values)
 end
 
 return summarize
+
+
+-- GPU | Active Time (s) | (%)* | Active Compute Time (s) | (%)* | Active Copy Time (s) | (%)* | Active Hidden Copy Time (s) | (%)* 
+-- --- | --------------- | ---- | ----------------------- | ---- | -------------------- | ---- | --------------------------- | ---- 
+-- 1   | 125             | 19   | 125                     | 19   | 125                  | 19   | 125                         | 19   
+-- 1   | 125             | 19   | 125                     | 19   | 125                  | 19   | 125                         | 19   
+
+
+-- PID | GPU/CPU Interaction Time (s) | (%)* | Active HIP Time (s) | (%)* | Active OMP Time (s) | (%)* | Active MPI Time (s) | (%)* 
+-- --- | ---------------------------- | ---- | ------------------- | ---- | ------------------- | ---- | ------------------- | ---- 
+-- 1   | 125                          | 19   | 125                 | 19   | 125                 | 19   | 125                 | 19   
+-- 1   | 125                          | 19   | 125                 | 19   | 125                 | 19   | 125                 | 19   
+
+-- * Percentage relative to App Time
