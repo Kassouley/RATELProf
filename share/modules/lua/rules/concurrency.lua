@@ -11,7 +11,7 @@ local function compute_kernel_overlap_percentage(rprofrep, opt)
 
     local concurrent_pct_per_gpu = {}
     local grouped_events_per_gpu = {}
-    local score = 0
+    local sum_concurrency = 0
     local ngpus = 0
 
     rprofrep:for_each_gpu(function(gpu_id)
@@ -46,7 +46,7 @@ local function compute_kernel_overlap_percentage(rprofrep, opt)
         grouped_events_per_gpu[gpu_id] = grouped_events
         concurrent_pct_per_gpu[gpu_id] = concurrency_per_gpu
         ngpus = ngpus + 1
-        score = score + concurrency_per_gpu
+        sum_concurrency = sum_concurrency + concurrency_per_gpu
     end, gpus)
 
 
@@ -66,7 +66,7 @@ local function compute_kernel_overlap_percentage(rprofrep, opt)
         end
     end
 
-    return data, concurrent_pct_per_gpu, score/ngpus/100
+    return data, concurrent_pct_per_gpu, sum_concurrency/ngpus/100
 end
 
 

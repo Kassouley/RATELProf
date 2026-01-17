@@ -42,6 +42,7 @@ local function find_sync_hipmemcpy(rprofrep, opt)
         local useless_sync_time = total_cpu_dur - total_gpu_dur
 
         max_useless_time = math.max(max_useless_time, useless_sync_time)
+
         table.insert(data, {
             grouped_by_loc_event.entry_name,
             grouped_by_loc_event.name,

@@ -90,9 +90,9 @@ return function (report)
 
     report.REQUIRED_DOMAIN = { ratelprof.consts.DOMAIN_KERNEL_ID }
 
-    report.SORT_BY = { "asc", 2 }
-
     report.DATA = function (self, rprofrep)
         self.data = compute_statistics(rprofrep, self.opt)
+        table.sort(self.data, function(a, b) return a[2] > b[2] end)
+        self.longest_activity = self.data[1]
     end
 end
