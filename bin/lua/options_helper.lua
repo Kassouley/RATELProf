@@ -138,53 +138,55 @@ end
 function options_helper.handle_stats_analyze_option(options, command)
 
     local reports = nil
+    local progress_enabled = parse_bool_option(options, "enable-progress")
+    local progress_msg = nil
 
     if command == "stats" then
         if parse_bool_option(options, "help-reports") then
-            print_help_report(ratelprof.consts.ALL_STATS_REPORT, "Reports") 
+            print_help_report(ratelprof.consts.ALL_STATS_REPORT, "Reports")
         end
+
+        if progress_enabled then progress_msg = "Process statistics" end
+
         reports = parse_report_option(options, ratelprof.consts.ALL_STATS_REPORT)
     elseif command == "analyze" then
         if parse_bool_option(options, "help-rules") then
             print_help_report(ratelprof.consts.ALL_ANALYZE_REPORT, "Rules")
         end
+
+        if progress_enabled then progress_msg = "Process statistics" end
+
         reports = parse_report_option(options, ratelprof.consts.ALL_ANALYZE_REPORT)
     end
 
-    local outputs   = parse_list_option(options, "output")
-    local formats   = parse_list_option(options, "format")
-    local gpus      = parse_mask_option(options, "gpus")
-    local pids      = parse_mask_option(options, "pids")
-    local timeunit  = parse_unit_option(options, "timeunit", { sec = true, ms = true, us = true, ns = true })
-    local sizeunit  = parse_unit_option(options, "sizeunit", { B = true, KB = true, MB = true, GB = true })
-
-    local mangled       = parse_bool_option(options, "mangled")
-    local trunc         = parse_bool_option(options, "trunc")
-    local only_main     = parse_bool_option(options, "only-main")
-    local notation      = parse_string_option(options, "notation")
-    local max_lines     = parse_string_option(options, "max-lines")
-    local max_col_width = parse_number_option(options, "max-col-width")
-    local start         = parse_number_option(options, "start")
-    local stop          = parse_number_option(options, "stop")
 
     return {
-        reports = reports,
-        outputs = outputs,
-        formats = formats,
-        timeunit = timeunit,
-        sizeunit = sizeunit,
-        only_main = only_main,
-        mangled = mangled,
-        trunc = trunc,
-        max_col_width = max_col_width,
-        max_lines = max_lines,
-        notation = notation,
-        start = start,
-        stop = stop,
-        gpus = gpus,
-        pids = pids,
+        reports         = reports,
+        outputs         = parse_list_option(options, "output"),
+        formats         = parse_list_option(options, "format"),
+        timeunit        = parse_unit_option(options, "timeunit", { sec = true, ms = true, us = true, ns = true }),
+        sizeunit        = parse_unit_option(options, "sizeunit", { B = true, KB = true, MB = true, GB = true }),
+        only_main       = parse_bool_option(options, "only-main"),
+        mangled         = parse_bool_option(options, "mangled"),
+        trunc           = parse_bool_option(options, "trunc"),
+        max_col_width   = parse_number_option(options, "max-col-width"),
+        max_lines       = parse_string_option(options, "max-lines"),
+        notation        = parse_string_option(options, "notation"),
+        start           = parse_number_option(options, "start"),
+        stop            = parse_number_option(options, "stop"),
+        gpus            = parse_mask_option(options, "gpus"),
+        pids            = parse_mask_option(options, "pids"),
+        progress_enabled = progress_enabled,
+        progress_msg     = progress_msg,
     }
 end
 
+options_helper.parse_list_option   = parse_list_option
+options_helper.parse_mask_option   = parse_mask_option
+options_helper.parse_unit_option   = parse_unit_option
+options_helper.parse_bool_option   = parse_bool_option
+options_helper.parse_number_option = parse_number_option
+options_helper.parse_string_option = parse_string_option
+options_helper.parse_report_option = parse_report_option
 
 return options_helper

@@ -16,8 +16,7 @@ function ReportLauncher:new(rprofrep, opt)
     instance.max_lines       = opt.max_lines
     instance.max_col_width   = opt.max_col_width
     instance.notation        = opt.notation
-    
-    instance.progress_enable = opt.progress_enable
+    instance.progress_enabled = opt.progress_enabled
     instance.progress_msg    = opt.progress_msg or "No progress message set"
 
     instance.report_objs = {}
@@ -133,8 +132,8 @@ local function get_report_opt_value(ALL_REPORT, report_data, command_options)
 end
 
 function ReportLauncher:print_header_msg(report_path)
-    Message:print_if(not self.progress_enabled, "Processing '%s' with '%s' . . .\n",
-        table.concat(self.rprofrep:get_reports_filename(), ", "), report_path)
+    Message:print_if(not self.progress_enabled, string.format("Processing '%s' with '%s' . . .\n",
+        table.concat(self.rprofrep:get_reports_filename(), ", "), report_path))
 end
 
 
@@ -165,7 +164,7 @@ function ReportLauncher:execute_reports(report_list, opt)
         local report_path = report_info and report_info.path or "<No file provided>"
 
         self:print_header_msg(report_path)
-        self:print_progress(i, nreports, report_id)
+        self:print_progress(i - 1, nreports, report_id)
 
         if report_info and ratelprof.fs.exists(report_info.path) then
 

@@ -317,7 +317,7 @@ consts_helper.stats = {
             arg             = "<pid>[,<pid>]",
             arg_required    = true,
             default         = nil
-        }
+        },
         -- ['per-rank'] = {
         --     desc            = [[ 
         --         If multiple report files are specified, or if the report files contain profiling data for many ranks, 
@@ -327,14 +327,14 @@ consts_helper.stats = {
         --     arg_required    = nil,
         --     default         = false
         -- },
-        -- ['progress-enabled'] = {
-        --     desc            = [[ 
-        --         Enable progress bar during report generation.]],
-        --     sname           = nil,
-        --     arg             = nil,
-        --     arg_required    = false,
-        --     default         = true
-        -- }
+        ['enable-progress'] = {
+            desc            = [[ 
+                Quiet default generation and enable progress bar during report generation.]],
+            sname           = nil,
+            arg             = nil,
+            arg_required    = false,
+            default         = false
+        }
     }
 }
 

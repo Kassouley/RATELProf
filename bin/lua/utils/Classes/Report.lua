@@ -62,13 +62,12 @@ function Report:DATA(rprofrep, user_args)
     error("The method DATA from Report Class must be overwrite.")
 end
 
-
 function Report:process(rprofrep, output, user_args)
     -- Print header message
-    Message:print_if(self.show_print, "** %s %s (%s)%s%s:\n",
+    Message:print_if(self.show_print, string.format("** %s %s (%s)%s%s:\n",
         self.NAME, self.TYPE, self.report_id,
     output == "-" and "" or " to '"..output.."'",
-    user_args and " for " .. ratelprof.utils.label_unit_with_rank(user_args, true) or "")
+    user_args and " for " .. ratelprof.utils.label_unit_with_rank(user_args, true) or ""))
 
     -- Check if data is available in the report
     if not self.REQUIRED_DOMAIN then
@@ -76,9 +75,9 @@ function Report:process(rprofrep, output, user_args)
     end
     for _, domain in ipairs(self.REQUIRED_DOMAIN) do
         if not rprofrep:is_domain_traced(domain) then
-            Message:print_if(self.show_print,
+            Message:print_if(string.format(self.show_print,
                 "SKIPPED: '%s' does not contain required %s data.\n",
-                table.concat(rprofrep:get_reports_filename(), ", "), ratelprof.consts._DOMAIN_NAME[domain])
+                table.concat(rprofrep:get_reports_filename(), ", "), ratelprof.consts._DOMAIN_NAME[domain]))
             return false
         end
     end
@@ -94,18 +93,20 @@ function Report:process(rprofrep, output, user_args)
     -- If no data print "no advice message" if exists and return
     if #data == 0 then
         if self.NO_ADVICE_MSG then
-            Message:print(self:NO_ADVICE_MSG())
+            self.message = self:NO_ADVICE_MSG()
+            Message:print_if(self.show_print, self.message)
         else
-            Message:print_if(self.show_print,
+            Message:print_if(self.show_print, string.format(
                 "SKIPPED: '%s' does not contain the required data.\n",
-                table.concat(rprofrep:get_reports_filename(), ", "))
+                table.concat(rprofrep:get_reports_filename(), ", ")))
         end
         return false
     end
 
     -- Else print "advice message" if exists
     if self.ADVICE_MSG then
-        Message:print(self:ADVICE_MSG())
+        self.message = self:ADVICE_MSG()
+        Message:print_if(self.show_print, self.message)
     end
 
     -- Sort data
@@ -144,19 +145,22 @@ function Report:generate(output, format, max_lines, max_col_width, notation)
 
     local stream = self:get_output_stream(output)
 
+    Message:print_if(not self.show_print and output == "-", "\n")
+
     stream:write(self:get_formatted_data(format))
     if stream ~= io.stdout then
         stream:close()
     end
 
     if not is_all_data_shown and (format_extensions[format] == "txt" or output == "-") then
-        Message:print_if(self.show_print,
+        Message:print_if(self.show_print, string.format(
             "(%d lines has been trunc for visibility, please use option --max-lines or export to a file)",
-            data_size - ndata)
+            data_size - ndata))
     end
-    if output == "-" then
-        Message:print("")
-    end
+
+    Message:print_if(output == "-", "")
+
+    self.data = nil -- Free memory after generation
 end
 
 function Report:get_output_stream(output)
