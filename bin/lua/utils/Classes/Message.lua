@@ -19,9 +19,9 @@ function Message:print(msg)
     print(msg)
 end
 
-function Message:print_if(cond, fmt, ...)
+function Message:print_if(cond, msg)
     if cond then
-        self:print(string.format(fmt, ...))
+        self:print(msg)
     end
 end
 
