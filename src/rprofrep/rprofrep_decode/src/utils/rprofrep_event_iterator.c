@@ -168,3 +168,16 @@ rprofrep_status_t rprofrep_event_iterator_destroy(rprofrep_event_iterator_t* ite
     iterator->initialized = false;
     return RPROFREP_STATUS_SUCCESS;
 }
+
+rprofrep_status_t rprofrep_event_iterator_count_events(rprofrep_event_iterator_t* iterator, size_t* num_events) {
+    RPROFREP_CHECK_VALID_PTR(iterator, num_events);
+
+    if (!iterator->initialized)
+        return RPROFREP_STATUS_NOT_INIT("Event iterator is not initialized !\n");
+
+    for (size_t i = 0; i < iterator->group_count; i++)
+    {
+        *num_events += iterator->groups[i]->offset_entry.nevents;
+    }
+    return RPROFREP_STATUS_SUCCESS;
+}

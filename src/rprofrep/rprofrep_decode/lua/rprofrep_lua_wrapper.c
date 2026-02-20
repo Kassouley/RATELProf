@@ -165,6 +165,18 @@ static int l_iterator_next(lua_State *L)
     return 1;
 }
 
+static int l_iterator_count_events(lua_State *L) 
+{
+    rprofrep_event_iterator_t* it = rprofrep_lua_get_iterator(L, 1);
+    size_t count = 0;
+
+    rprofrep_lua_check(L, rprofrep_event_iterator_count_events(it, &count), "failed to count events");
+
+    lua_pushnumber(L, count);
+
+    return 1;
+}
+
 static const struct luaL_Reg l_iterator_metamethods[] = {
     register_class_method(iterator, __gc),
     {NULL, NULL}
@@ -172,6 +184,7 @@ static const struct luaL_Reg l_iterator_metamethods[] = {
 
 static const struct luaL_Reg l_iterator_methods[] = {
     register_class_method(iterator, next),
+    register_class_method(iterator, count_events),
     {NULL, NULL}
 };
 
@@ -381,32 +394,43 @@ static int l_context_get_run_exit_code(lua_State *L) {
 
 static int l_context_get_run_command_line(lua_State *L) {
     rprofrep_decode_context_t* ctx = rprofrep_lua_get_context(L, 1);
-    char** command_line_buffer = NULL;
-    uint64_t buffer_size = 0;
+    char** argv = NULL;
+    uint64_t argc = 0;
 
-    rprofrep_lua_check(L, rprofrep_get_command_line(ctx, &command_line_buffer, &buffer_size), "Cannot get command line buffer");
+    rprofrep_lua_check(L, rprofrep_get_command_line(ctx, &argv, &argc), "Cannot get command line buffer");
+
+    size_t* len_arr = (size_t*)malloc(argc * sizeof(size_t));
+    if (!len_arr) return rprofrep_lua_error(L, "Memory allocation failed");
 
     size_t total_len = 0;
-    for (uint64_t i = 0; i < buffer_size; i++) {
-        if (command_line_buffer[i]) {
-            total_len += strlen(command_line_buffer[i]);
+    for (uint64_t i = 0; i < argc; i++) {
+        if (argv[i]) {
+            len_arr[i] = strlen(argv[i]);
+            total_len += len_arr[i];
+            if (i < argc - 1) total_len += 1; // for space between args
         }
     }
 
     char* result = (char*)malloc(total_len + 1);
     if (!result) return rprofrep_lua_error(L, "Memory allocation failed");
 
-    result[0] = '\0';
-
-    for (uint64_t i = 0; i < buffer_size; i++) {
-        if (command_line_buffer[i]) {
-            strcat(result, command_line_buffer[i]);
-            if (i < buffer_size -1) strcat(result, " ");
+    char* p = result; // pointer to fill buffer
+    for (uint64_t i = 0; i < argc; i++) {
+        if (argv[i]) {
+            size_t len = len_arr[i];
+            memcpy(p, argv[i], len);
+            p += len;
+            if (i < argc - 1) {
+                *p = ' ';
+                p++;
+            }
         }
     }
 
+    *p = '\0'; // null terminate
 
     lua_pushstring(L, result);
+    free(len_arr);
     free(result);
 
     return 1;
@@ -563,6 +587,7 @@ static int l_context_is_domain_traced(lua_State* L) {
     lua_pushboolean(L, is_traced);
     return 1;
 }
+
 
 static const struct luaL_Reg l_context_metamethods[] = {
     register_class_method(context, __gc),

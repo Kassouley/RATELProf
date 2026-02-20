@@ -39,5 +39,6 @@ rprofrep_status_t rprofrep_event_iterator_next(
 
 rprofrep_status_t rprofrep_event_iterator_destroy(rprofrep_event_iterator_t* iterator);
 
+rprofrep_status_t rprofrep_event_iterator_count_events(rprofrep_event_iterator_t* iterator, size_t* num_events);
 
 #endif // RPROFREP_EVENT_ITERATOR_H
