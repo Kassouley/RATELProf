@@ -58,32 +58,50 @@ end
 
 
 function RProfRep:get_run_exit_code()
-    return self.reports_rprofrep[1]:get_run_exit_code()
+    local _, report = next(self.reports_rprofrep)
+    if report then
+        return report:get_run_exit_code()
+    end
+    return "<unknown>"
 end
 
 
 function RProfRep:get_run_command_line()
-    return self.reports_rprofrep[1]:get_run_command_line()
+    local _, report = next(self.reports_rprofrep)
+    if report then
+        return report:get_run_command_line()
+    end
+    return "<unknown>"
 end
 
 
 function RProfRep:get_run_date()
-    return self.reports_rprofrep[1]:get_run_date()
+    local _, report = next(self.reports_rprofrep)
+    if report then
+        return report:get_run_date()
+    end
+    return "<unknown>"
 end
 
 
 function RProfRep:get_tool_version()
-    local v = self.reports_rprofrep[1]:get_tool_version()
-    return string.format("%d.%d.%d", v.major, v.minor, v.patch)
+    local _, report = next(self.reports_rprofrep)
+    if report then
+        local v = report:get_tool_version()
+        return string.format("%d.%d.%d", v.major, v.minor, v.patch)
+    end
+    return "<unknown>"
 end
 
 
 function RProfRep:for_each_rank(callback)
     self.__in_for_each_rank = true
     for rank, ctx in pairs(self.reports_rprofrep) do
+        self.__current_rank = rank
         self.__current_rprofrep = ctx
         callback(rank)
     end
+    self.__current_rank = nil
     self.__current_rprofrep = nil
     self.__in_for_each_rank = false
 end
@@ -187,18 +205,31 @@ end
 
 
 
-function RProfRep:for_each_event(domains, callback, filter)
+function RProfRep:for_each_event(domains, callback, filter, progress_message)
     if not self.__current_node then
         error("for_each_event must be called at least inside a for_each_pid/gpu method.")
     end
 
     self.__current_it = self:get_iterator(domains, filter)
     if not self.__current_it then return end
+    local event_count = self.__current_it:count_events()
     local curr_event = self.__current_it:next()
+
+    local progress = ratelprof.utils.Progress:new{
+        total        = event_count,
+        show_percent = true,
+        show_count   = true,
+        prefix       = progress_message or "Process events: ",
+        percent_step = 1
+    }
+
     while curr_event do
-       if callback(curr_event) then break end
-       curr_event = self.__current_it:next()
+        if callback(curr_event, event_count) then break end
+        progress:update()
+        curr_event = self.__current_it:next()
     end
+
+    progress:finish(true)
     self.__current_it = nil
 end
 
@@ -262,12 +293,14 @@ function RProfRep:get_max_application_time()
     return max_time
 end
 
-function RProfRep:get_application_time(rank)
-    rank = rank or self._current_rank
-    if not rank then
-        return self:get_max_application_time()
+function RProfRep:get_application_time(unit)
+    local dur = 0
+    if self.__current_rprofrep then
+        dur = self.__current_rprofrep:get_application_time()
+    else
+        dur = self:get_max_application_time()
     end
-    return self.reports_rprofrep[rank]:get_application_time()
+    return ratelprof.utils.get_duration(dur, unit)
 end
 
 
@@ -276,10 +309,11 @@ function RProfRep:to_json(filename)
 end
 
 
-function RProfRep:get_analyzed_interval_dur()
+function RProfRep:get_analyzed_interval_dur(unit)
     local start = math.max(self.start or 0, 0)
     local stop  = math.min(self.stop or math.huge, self:get_application_time())
-    return stop - start
+    local dur = stop - start
+    return ratelprof.utils.get_duration(dur, unit)
 end
 
 
@@ -303,6 +337,19 @@ function RProfRep:get_reports_filename(rank)
     end
     return { self.reports_filename[rank] }
 end
+
+function RProfRep:get_reports_filename_str(rank, max_len)
+    max_len = max_len or 64
+    local arr = self:get_reports_filename(rank)
+    local s = table.concat(arr, ", ")
+
+    if max_len ~= 0 and #s > max_len then
+        s = s:sub(1, max_len - 3) .. "..."
+    end
+
+    return s
+end
+
 
 function RProfRep:get_current_rank()
     return self._current_rank or -1
