@@ -49,14 +49,12 @@ end
 -- @param ext Optional, check if the filename has the correct extension.
 -- @return A file handle if the file is opened successfully, otherwise raises an error.
 function rfs.open_file(filename, mode, ext)
-    if filename == nil then
+    if filename == nil or type(filename) ~= "string" then
         error ("Error: Missing input file")
-        return nil
     end
     filename = get_path(filename)
     if ext and not rfs.has_extension (filename, ext) then
         error ("Error: The input file is not a '"..ext.."' file")
-        return nil
     end
     
     local dirname = rfs.dirname(filename)
@@ -67,7 +65,6 @@ function rfs.open_file(filename, mode, ext)
     local file = io.open(filename, mode)
     if not file then
         error ("Error: Unable to open file " .. filename)
-        return nil
     end
     return file
 end

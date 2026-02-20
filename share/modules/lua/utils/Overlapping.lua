@@ -7,7 +7,7 @@ function Overlapping.new(rprofrep, domains)
     self.active_events = {}
 
     self.it = rprofrep:get_iterator(domains)
-    if not self.it then return nil end
+    if not self.it then return end
     self.curr_event = self.it:next()
     return self
 end
@@ -16,6 +16,8 @@ function Overlapping:update_active_events(event_start, event_stop)
     local active = self.active_events
     local curr = self.curr_event
     local it = self.it
+
+    if not it then return end
 
     -- 1. Add only events that actually overlap the window
     while curr and curr:start() < event_stop do

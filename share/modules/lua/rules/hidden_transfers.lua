@@ -2,63 +2,6 @@ local report_helper = require ("utils.report_helper")
 local Overlapping = require("utils.Overlapping")
 local GroupByLocation = require("utils.GroupByLocation")
 
-local function find_hidden_latency(rprofrep, opt, filter)
-    local gpus = opt.gpus
-    local HIDDEN_THRESHOLD_PCT = opt.th_hidden
-
-    local grouped_event = GroupByLocation.new(rprofrep)
-
-    local total_percentage_per_gpu = {}
-    local max_not_hidden_copy_per_gpu = {}
-    local score = 0
-    local ngpus = 0
-
-    rprofrep:for_each_gpu(function(gpu_id)
-
-        local overlapped_total_time = 0
-        local overall_total_time = 0
-        local not_hidden_copy_dur_per_sdma = {}
-
-        local overlapping = Overlapping.new(rprofrep, { ratelprof.consts.DOMAIN_KERNEL_ID })
-        if not overlapping then return end
-
-        rprofrep:for_each_event({ratelprof.consts.DOMAIN_COPY_ID}, function(copy_event)
-            local copy_dur = copy_event:dur()
-            local covered = overlapping:compute_overlap(copy_event)
-            local hidden_percentage = (covered / copy_dur) * 100
-
-            if hidden_percentage < HIDDEN_THRESHOLD_PCT then
-                overall_total_time    = overall_total_time + copy_dur
-                overlapped_total_time = overlapped_total_time + covered
-
-                local sdma = copy_event:sdma_id()
-                not_hidden_copy_dur_per_sdma[sdma] = (not_hidden_copy_dur_per_sdma[sdma] or 0) + copy_dur - covered
-
-                local entry = rprofrep:find_entry_point(copy_event)
-                if not entry then return end
-                grouped_event:add(entry, copy_event:name(), {
-                    total_size        = copy_event:args().size,
-                    total_dur         = copy_dur,
-                    total_covered_dur = covered,
-                    pct_sum           = hidden_percentage
-                })
-            end
-        end, filter)
-
-        total_percentage_per_gpu[gpu_id] = 100 - (overlapped_total_time / overall_total_time) * 100
-        max_not_hidden_copy_per_gpu[gpu_id] = table.max(not_hidden_copy_dur_per_sdma)
-        ngpus = ngpus + 1
-        score = score + overlapped_total_time/overall_total_time
-    end, gpus)
-
-    local max_ideal_hidden_dur, _ = table.max(max_not_hidden_copy_per_gpu)
-    
-    local actual_dur = rprofrep:get_application_time()
-    local ideal_dur = actual_dur - (max_ideal_hidden_dur or 0)
-    local speedup_factor = actual_dur / ideal_dur
-    return grouped_event, total_percentage_per_gpu, speedup_factor, score/ngpus
-end
-
 local DEFAULT_NO_ADVICE_MSG = [[
 All memory transfers were sufficiently overlapped by kernel execution. No visible latency (>%d%%) due to memory transfers was detected.
 ]]
@@ -107,6 +50,8 @@ local DEFAULT_PER_GPU_MSG = [[
 return function(report)
     local timeunit = report.opt.timeunit
     local sizeunit = report.opt.sizeunit
+    local HIDDEN_THRESHOLD_PCT = report.opt.th_hidden
+    local TIME_THRESHOLD = report.opt.th_dur
 
     report.NAME = "Hidden transfers latency"
 
@@ -114,27 +59,80 @@ return function(report)
 
     report.HEADER = { "Entry Point", "Operation", "Source", "Count", "Tot. Dur (" .. timeunit .. ")", "Tot. Covered Dur (" .. timeunit .. ")", "Avg Hidden (%)", "Tot. Size (" .. sizeunit .. ")" }
 
-    report.REQUIRED_DOMAIN = { ratelprof.consts.DOMAIN_KERNEL_ID, ratelprof.consts.DOMAIN_COPY_ID }
+    report.LOOP_IN = { ratelprof.consts.DOMAIN_COPY_ID }
 
-    report.NO_ADVICE_MSG = function(self)
-        return string.format(DEFAULT_NO_ADVICE_MSG, self.opt.th_hidden)
-    end
-
-    report.ADVICE_MSG = function(self)
-        local msg = string.format(DEFAULT_ADVICE_MSG, self.opt.th_hidden, self.opt.th_dur, self.speedup_factor)
-        for gpu_id, percent in pairs(self.percentage_per_gpu) do
-            msg = msg .. string.format(DEFAULT_PER_GPU_MSG, gpu_id, percent)
-        end
-        return msg
-    end
+    report.REQUIRED_DOMAIN = { ratelprof.consts.DOMAIN_KERNEL_ID }
 
     report.SORT_BY = {"desc", 7}
 
-    report.DATA = function (self, rprofrep)
-        local opt = self.opt
-        local TIME_THRESHOLD = opt.th_dur
-        local filter = self:get_filter(TIME_THRESHOLD, "gt")
-        local grouped_event, percentage_per_gpu, speedup_factor, score = find_hidden_latency(rprofrep, opt, filter)
+    report.PRE_LOOP = function (self, rprofrep)
+
+        self.grouped_event = GroupByLocation.new(rprofrep)
+
+        self.total_percentage_per_gpu = {}
+        self.max_not_hidden_copy_per_gpu = {}
+        self.score = 0
+        self.ngpus = 0
+    end
+
+    report.PRE_EVENT_LOOP = function (self, rprofrep)
+        self.overlapped_total_time = 0
+        self.overall_total_time = 0
+        self.not_hidden_copy_dur_per_sdma = {}
+
+        self.overlapping = Overlapping.new(rprofrep, { ratelprof.consts.DOMAIN_KERNEL_ID })
+    end
+
+    report.FOR_EACH = function (self, event, rprofrep)
+        local copy_dur = event:dur()
+
+        if copy_dur < TIME_THRESHOLD then return end
+
+        local covered = self.overlapping:compute_overlap(event)
+        local hidden_percentage = (covered / copy_dur) * 100
+
+        if hidden_percentage < HIDDEN_THRESHOLD_PCT then
+            self.overall_total_time    = self.overall_total_time + copy_dur
+            self.overlapped_total_time = self.overlapped_total_time + covered
+
+            local sdma = event:sdma_id()
+            self.not_hidden_copy_dur_per_sdma[sdma] = (self.not_hidden_copy_dur_per_sdma[sdma] or 0) + copy_dur - covered
+
+            local entry = rprofrep:find_entry_point(event)
+            if not entry then return end
+            self.grouped_event:add(entry, event:name(), {
+                total_size        = event:args().size,
+                total_dur         = copy_dur,
+                total_covered_dur = covered,
+                pct_sum           = hidden_percentage
+            })
+        end
+    end
+
+    report.POST_EVENT_LOOP = function (self, _, gpu_key)
+        self.total_percentage_per_gpu[gpu_key] = 100 - (self.overlapped_total_time / self.overall_total_time) * 100
+        self.max_not_hidden_copy_per_gpu[gpu_key] = table.max(self.not_hidden_copy_dur_per_sdma)
+        self.ngpus = self.ngpus + 1
+        if self.overall_total_time > 0 then
+            self.score = self.score + self.overlapped_total_time/(self.overall_total_time)
+        end
+    end
+
+
+    report.POST_LOOP = function (self, rprofrep)
+        local grouped_event = self.grouped_event
+        local total_percentage_per_gpu = self.total_percentage_per_gpu
+        local max_ideal_hidden_dur, _ = table.max(self.max_not_hidden_copy_per_gpu)
+
+        local actual_dur = rprofrep:get_analyzed_interval_dur()
+        local ideal_dur = actual_dur - (max_ideal_hidden_dur or 0)
+
+        self.speedup_factor = actual_dur / ideal_dur
+
+        if self.ngpus > 0 then
+            self.score = self.score / self.ngpus
+        end
+
         local data = {}
         for _, group in pairs(grouped_event.groups) do
             table.insert(data, {
@@ -149,8 +147,17 @@ return function(report)
             })
         end
         self.data = data
-        self.percentage_per_gpu = percentage_per_gpu
-        self.speedup_factor = speedup_factor
-        self.score = score
+
+        if #data == 0 then
+            self.MESSAGE = string.format(DEFAULT_NO_ADVICE_MSG, HIDDEN_THRESHOLD_PCT)
+        else
+            local msg = string.format(DEFAULT_ADVICE_MSG, HIDDEN_THRESHOLD_PCT, TIME_THRESHOLD, self.speedup_factor)
+
+            for gpu_key, pct in pairs(total_percentage_per_gpu) do
+                msg = msg .. string.format(DEFAULT_PER_GPU_MSG, ratelprof.utils.label_unit_with_rank(gpu_key), pct)
+            end
+
+            self.MESSAGE = msg
+        end
     end
 end

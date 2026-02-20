@@ -146,7 +146,7 @@ function Stats.new()
 end
 
 function Stats:compute_percentage(entry)
-    return string.format("%.2f", (entry.metrics_sum / self.total_metric) * 100)
+    return string.format("%.2f", (entry.metrics_sum / (self.total_metric or 1)) * 100)
 end
 
 -- Process a single trace and update entries

@@ -6,6 +6,8 @@ local convert = require ("utils.convert")
 
 utils.demangle = require ("demangle").demangle
 
+utils.Progress = require ("utils.Classes.Progress")
+
 
 -- Function to print memory usage in GB only if it changes (2 decimal digits)
 function utils.print_mem_usage(suffix, old_value)
@@ -18,7 +20,7 @@ function utils.print_mem_usage(suffix, old_value)
 
     -- Compare with old value
     if memory_rounded ~= old_value then
-        io.write(string.format("\rMemory usage: %.2f GB%s", memory_rounded, suffix or ""))
+        io.write(string.format("\rMemory usage: %.2f GB %s", memory_rounded, suffix or ""))
         io.flush()  -- Ensure immediate print
         return memory_rounded
     else
@@ -26,17 +28,6 @@ function utils.print_mem_usage(suffix, old_value)
     end
 end
 
-
-function utils.print_progress(current, total, prefix, suffix)
-    prefix = prefix or ""
-    suffix = suffix or ""
-    local bar_length = 30
-    local progress = math.floor((current / total) * bar_length)
-    local bar = string.rep("=", progress) .. string.rep(" ", bar_length - progress)
-    io.write(string.format("\r%-20s [%s] %d/%d %-30s", prefix, bar, current, total, suffix))
-    if current == total then io.write("\n") end
-    io.flush()
-end
 
 function utils.load_json (__input_path__)
     local infile = ratelprof.fs.open_file (__input_path__, "r", "json")
@@ -160,7 +151,7 @@ utils.generate_json = generate_json
 
 
 function utils.get_duration(dur, timeunit)
-    if timeunit ~= "ns" then
+    if timeunit and timeunit ~= "ns" then
         return convert.time(dur, "ns", timeunit)
     end
     return dur
@@ -173,6 +164,9 @@ function utils.get_size(size, sizeunit)
     return size
 end
 
+function utils.is_gpu_domain(domain)
+    return ratelprof.consts._GPU_DOMAIN[domain]
+end
 
 function utils.label_unit_with_rank(key, with_unit_label)
     local rank = key.rank or -1

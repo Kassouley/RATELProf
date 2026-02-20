@@ -25,15 +25,24 @@ function table.max(tbl)
 end
 
 function table.merge_arr(t1, t2)
-    local len1 = #t1
-    local len2 = #t2
-    for i = 1, len2 do
-        t1[len1 + i] = t2[i]
+    if not t1 then return t2
+    elseif not t2 then return t1 end
+    local res = {}
+
+    for _, e in ipairs(t1) do
+        res[#res + 1] = e
     end
-    return t1
+
+    for _, e in ipairs(t2) do
+        res[#res + 1] = e
+    end
+
+    return res
 end
 
 function table.merge_map(t1, t2)
+    if not t1 then return t2
+    elseif not t2 then return t1 end
     for k, v in pairs(t2) do
         t1[k] = v
     end
@@ -70,6 +79,20 @@ function table.copy(src)
     return dest
 end
 
+
+local function deep_copy(o)
+    if type(o) ~= "table" then
+        return o
+    end
+
+    local copy = {}
+    for k, v in pairs(o) do
+        copy[k] = deep_copy(v)
+    end
+    return copy
+end
+table.deep_copy = deep_copy
+
 function table.concat_keys(t, sep)
     sep = sep or ""
     local result, i = {}, 1
@@ -77,4 +100,14 @@ function table.concat_keys(t, sep)
         result[i], i = k, i + 1
     end
     return table.concat(result, sep)
+end
+
+
+function table.popi(array, index)
+    local value = array[index]        -- store the value to return
+    for i = index, #array - 1 do      -- shift elements left
+        array[i] = array[i + 1]
+    end
+    array[#array] = nil                -- remove the last duplicate
+    return value
 end
