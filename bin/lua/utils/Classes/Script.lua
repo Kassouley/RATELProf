@@ -82,12 +82,13 @@ function Script:add_argument(name, is_optional, is_list, description)
 end
 
 -- Method to add an option
-function Script:add_option(long_name, short_name, arg, description, need_arg, default_val)
+function Script:add_option(long_name, short_name, arg, description, need_arg, default_val, early_exit)
     table.insert(self.options, {
         long_name = long_name,
         short_name = short_name,
         arg = arg,
         description = description or "No description",
+        early_exit = early_exit,
         need_arg = need_arg,
         default_val = default_val
     })
@@ -176,12 +177,9 @@ local function is_long_option_for(arg, option)
         or arg:match("^%-%-" .. lname_w_esc_sym .. "=.")
 end
 
-local function is_help_option(arg)
-    return arg:match("help")
-end
 
 function Script:check_args(args)
-    local help_opt_set = false
+    local exit_opt_set = false
     local i = 1
     while i <= #args do
         local arg = args[i]
@@ -234,7 +232,7 @@ function Script:check_args(args)
                         end
                     end
                     self.options_values[option.long_name] = value
-                    if is_help_option(arg) then break end
+                    if option.early_exit then exit_opt_set = true end
                     break
                 end
             end
@@ -268,6 +266,9 @@ function Script:check_args(args)
         self:show_help()
     elseif self.options_values["version"] then
         self:show_version()
+    end
+    if exit_opt_set then
+        return
     end
 
     for _, option in ipairs(self.options) do

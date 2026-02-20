@@ -83,7 +83,7 @@ local function script_execution(cmd, launch_command, launch_script)
 end
 
 
-function profile.process_profiling(positional_args, options_values)
+function profile.process(positional_args, options_values)
     local bin_command = positional_args
 
     local user_bin = bin_command[1]
