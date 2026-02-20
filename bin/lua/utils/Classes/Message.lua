@@ -19,6 +19,10 @@ function Message:print(msg)
     print(msg)
 end
 
+function Message:printf(fmt, ...)
+    print(string.format(fmt, ...))
+end
+
 function Message:print_if(cond, msg)
     if cond then
         self:print(msg)
