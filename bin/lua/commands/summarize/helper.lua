@@ -1,9 +1,9 @@
--- summarize_helper.lua
+-- helper.lua
 
-local summarize_helper = {}
+local helper = {}
 
 local NCHAR_SEPARATOR = 72
-summarize_helper.NCHAR_SEPARATOR = NCHAR_SEPARATOR
+helper.NCHAR_SEPARATOR = NCHAR_SEPARATOR
 
 
 local function print_separator(sep_char)
@@ -12,14 +12,14 @@ local function print_separator(sep_char)
 end
 
 
-function summarize_helper.format_gpu_time(time, app_time)
+function helper.format_gpu_time(time, app_time)
     local percentage = (time / app_time) * 100
     local time_s = ratelprof.convert.time(time, "ns", "sec")
     return string.format("%.2f %% (%.3f s) of App Time", percentage, time_s)
 end
 
 
-function summarize_helper.format_bytes(bytes)
+function helper.format_bytes(bytes)
     if not bytes or bytes == "N/A" then
         return 'N/A'
     end
@@ -35,7 +35,22 @@ function summarize_helper.format_bytes(bytes)
 end
 
 
-function summarize_helper.format_speedup(speedup)
+function helper.format_time(time_ns)
+    if not time_ns or time_ns == "N/A" then
+        return 'N/A'
+    end
+    local units = {"ns", "us", "ms", "s"}
+    local unit_index = 1
+
+    while time_ns >= 1000 and unit_index < #units do
+        time_ns = time_ns / 1000
+        unit_index = unit_index + 1
+    end
+
+    return string.format("%.3f %s", time_ns, units[unit_index])
+end
+
+function helper.format_speedup(speedup)
     if speedup == "N/A" or speedup < 1 then
         return "N/A"
     else
@@ -43,7 +58,7 @@ function summarize_helper.format_speedup(speedup)
     end
 end
 
-function summarize_helper.format_percentage(percentage)
+function helper.format_percentage(percentage)
     if not percentage or percentage == "N/A" then
         return "N/A"
     end
@@ -51,7 +66,7 @@ function summarize_helper.format_percentage(percentage)
 end
 
 
-function summarize_helper.get_max_label_len(data)
+function helper.get_max_label_len(data)
     local max_len = 0
     local function scan(list)
         for _, v in ipairs(list) do
@@ -81,13 +96,15 @@ local function print_data(list, depth, max_len)
 end
 
 
-function summarize_helper.print_report(title, data)
-    local max_len = summarize_helper.get_max_label_len(data)
+function helper.print_report(title, data)
+    local max_len = helper.get_max_label_len(data)
+    print_separator()
     print(title)
     print_separator()
     print_data(data, 0, max_len)
     print_separator()
+    print()
 end
 
 
-return summarize_helper
+return helper

@@ -1,58 +1,26 @@
 -- summarize.lua
-local BinaryReport = require ("utils.Classes.BinaryReport")
+local RProfRep = require ("utils.Classes.RProfRep")
 
-local summarize_helper     = require ("commands.summarize.summarize_helper")
-local summarize_report     = require ("commands.summarize.summarize_report")
-local summarize_experiment = require ("commands.summarize.summarize_experiment")
-local summarize_plot       = require ("commands.summarize.summarize_plot")
-local summarize_global     = require ("commands.summarize.summarize_global")
+local helper     = require ("commands.summarize.helper")
+local global     = require ("commands.summarize.global")
+local experiment = require ("commands.summarize.experiment")
 
 local summarize = {}
 
-function summarize.get_summary(data)
-    local experiment_info = summarize_experiment.get_experiment_info(data)
-    local global_data     = summarize_global.get_global_summary(data)
-    local plot_data       = summarize_plot.get_plot_data(data)
-
+function summarize.get_summary(rprofrep, options_values)
     return {
-        experiment_info = experiment_info,
-        global_data     = global_data,
-        plot_data       = plot_data
+        experiment_info = experiment.get_experiment_info(rprofrep),
+        global_data     = global.get_global_data(rprofrep, options_values)
     }
 end
 
-function summarize.process_summarize(positional_args, options_values)
-    local data = BinaryReport:new(positional_args)
+function summarize.process(positional_args, options_values)
+    local rprofrep = RProfRep:new(positional_args)
 
-    local with_analysis = ratelprof.get_opt_val(options_values, "with-analysis")
+    local summary = summarize.get_summary(rprofrep, options_values)
 
-    local summary = summarize.get_summary(data)
-
-    summarize_helper.print_report("EXPERIMENT INFO", summary.experiment_info)
-    summarize_helper.print_report("GLOBAL SUMMARY", summary.global_data)
-
-    summarize_plot.print_plot("PLOT SUMMARY", summary.plot_data)
-
-    if with_analysis then
-        local analyzed_data = summarize_report.get_analyzed_data(data, options_values)
-        summarize_helper.print_report("ANALYZED METRICS", analyzed_data)
-    end
-
-
+    helper.print_report("Experiment Summary", summary.experiment_info)
+    helper.print_report("Global Summary", summary.global_data)
 end
 
 return summarize
-
-
--- GPU | Active Time (s) | (%)* | Active Compute Time (s) | (%)* | Active Copy Time (s) | (%)* | Active Hidden Copy Time (s) | (%)* 
--- --- | --------------- | ---- | ----------------------- | ---- | -------------------- | ---- | --------------------------- | ---- 
--- 1   | 125             | 19   | 125                     | 19   | 125                  | 19   | 125                         | 19   
--- 1   | 125             | 19   | 125                     | 19   | 125                  | 19   | 125                         | 19   
-
-
--- PID | GPU/CPU Interaction Time (s) | (%)* | Active HIP Time (s) | (%)* | Active OMP Time (s) | (%)* | Active MPI Time (s) | (%)* 
--- --- | ---------------------------- | ---- | ------------------- | ---- | ------------------- | ---- | ------------------- | ---- 
--- 1   | 125                          | 19   | 125                 | 19   | 125                 | 19   | 125                 | 19   
--- 1   | 125                          | 19   | 125                 | 19   | 125                 | 19   | 125                 | 19   
-
--- * Percentage relative to App Time
