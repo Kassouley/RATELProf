@@ -1,12 +1,14 @@
 ratelprof = {}
 
-ratelprof.consts        = require ("consts")
+require ("utils.string_ext")
+require ("utils.table_ext")
+require ("utils.Classes.Set")
+
+require ("consts")
+require ("consts_reports")
 
 package.cpath = ratelprof.consts._LIBS_DIR.."lua/?.so;" .. package.cpath
 package.path  = ratelprof.consts._MODULES_DIR.."lua/?.lua;" .. package.path
-
-require ("utils.string_ext")
-require ("utils.table_ext")
 
 Message = require ("utils.Classes.Message"):new()
 
@@ -20,6 +22,13 @@ ratelprof.msgpack       = require ("utils.msgpack")
 ratelprof.get_opt_val = function (opt_list, name)
     return opt_list[name]
 end
+
+ratelprof.profile   = require("commands.profile")
+ratelprof.stats     = require("commands.common").stats
+ratelprof.analyze   = require("commands.common").analyze
+ratelprof.breakdown = require("commands.common").breakdown
+ratelprof.summarize = require("commands.summarize")
+ratelprof.visualize = require("commands.visualize")
 
 -- MAQAO Implementation
 -- ratelprof.get_opt_val = function (opt_list, name)

@@ -6,35 +6,37 @@ for k, _ in pairs(ratelprof.consts._TRACES) do
 end
 table.sort(trace_list)
 
-local default_reports = {}
-for report_id, report in pairs(ratelprof.consts.ALL_STATS_REPORT) do
-    if report.default == true then
-        table.insert(default_reports, report_id)
+local function collect_defaults(reports)
+    local result = {}
+    for id, report in pairs(reports) do
+        if report.default then
+            result[#result + 1] = id
+        end
     end
+    return result
 end
 
-local default_rules = {}
-for report_id, report in pairs(ratelprof.consts.ALL_ANALYZE_REPORT) do
-    if report.default == true then
-        table.insert(default_rules, report_id)
-    end
-end
-
-local function deep_copy(original)
-    if type(original) ~= "table" then
-        return original
-    end
-
-    local copy = {}
-    for k, v in pairs(original) do
-        copy[k] = deep_copy(v)
-    end
-    return copy
-end
+local default_reports   = collect_defaults(ratelprof.consts.STATS_REPORTS)
+local default_rules     = collect_defaults(ratelprof.consts.ANALYZE_REPORTS)
+local default_breakdown = collect_defaults(ratelprof.consts.BREAKDOWN_REPORTS)
 
 
 consts_helper.profile = {
     desc = "\n\tProfile an AMD GPU application and trace AMD Library functions",
+    args = {
+        {
+            name = "application",
+            desc = "The application binary to profile.",
+            is_optional = false,
+            is_list = false
+        },
+        {
+            name = "application-args",
+            desc = "Arguments of the application.",
+            is_optional = true,
+            is_list = true
+        }
+    },
     opt = {
         output = {
             desc            = "Output report filename.",
@@ -126,7 +128,8 @@ consts_helper.profile = {
 consts_helper.stats = {
     cmd = "stats",
     args = {
-        ["report-file"] = {
+        {
+            name = "report-file",
             desc = "Path(s) to the "..ratelprof.consts._REPORT_EXT.." report file(s).",
             is_optional = false,
             is_list = true
@@ -209,7 +212,8 @@ consts_helper.stats = {
             sname           = nil,
             arg             = nil,
             arg_required    = false,
-            default         = nil
+            default         = nil,
+            early_exit      = true
         },
         timeunit = {
             desc            = [[ 
@@ -318,23 +322,24 @@ consts_helper.stats = {
             arg_required    = true,
             default         = nil
         },
-        -- ['per-rank'] = {
-        --     desc            = [[ 
-        --         If multiple report files are specified, or if the report files contain profiling data for many ranks, 
-        --         the command will generate a separate analysis report for each rank instead of aggregating the data into a single report.]],
-        --     sname           = nil,
-        --     arg             = nil,
-        --     arg_required    = nil,
-        --     default         = false
-        -- },
-        ['enable-progress'] = {
+        template = {
             desc            = [[ 
-                Quiet default generation and enable progress bar during report generation.]],
+                Generate a template config file that can be used in --config option to customize reports generation.]],
             sname           = nil,
             arg             = nil,
             arg_required    = false,
-            default         = false
-        }
+            default         = nil,
+            early_exit      = true
+        },
+        config = {
+            desc            = [[ 
+                Path to a JSON configuration file that specifies the reports to generate and their options.
+                If this option is provided, it overrides any --timeunit, --sizeunit, --mangled, --trunc, --report, --format, and --output options.]],
+            sname           = "c",
+            arg             = "<config file>",
+            arg_required    = true,
+            default         = nil
+        },
     }
 }
 
@@ -342,14 +347,15 @@ consts_helper.stats = {
 consts_helper.analyze = {
     cmd = "analyze",
     args = {
-        ["report-file"] = {
+        {
+            name = "report-file",
             desc = "Path to the "..ratelprof.consts._REPORT_EXT.." report file.",
             is_optional = false,
             is_list = true
         },
     },
     desc = "\n\tAnalyze a report file and give advice about possible optimizations.",
-    opt = deep_copy(consts_helper.stats.opt)
+    opt = table.deep_copy(consts_helper.stats.opt)
 }
 consts_helper.analyze.opt.report = {
             desc            = [[ 
@@ -359,7 +365,7 @@ consts_helper.analyze.opt.report = {
 
                         ]]..table.concat(default_rules, "\n\t\t\t")..[[ 
 
-                See --help-reports for a list of built-in rules, along with more
+                See --help-rules for a list of built-in rules, along with more
                 information on each rule.
                 
                 Alias are:
@@ -377,14 +383,69 @@ consts_helper.analyze.opt['help-rules'] = {
             sname           = nil,
             arg             = nil,
             arg_required    = false,
-            default         = nil
+            default         = nil,
+            early_exit      = true
         }
+
+
+
+consts_helper.breakdown = {
+    cmd = "breakdown",
+    args = {
+        {
+            name = "report-file",
+            desc = "Path to the "..ratelprof.consts._REPORT_EXT.." report file.",
+            is_optional = false,
+            is_list = true
+        },
+    },
+    desc = "\n\tGive a time breakdown of the profiling report.",
+    opt = table.deep_copy(consts_helper.stats.opt)
+}
+consts_helper.breakdown.opt.report = {
+            desc            = [[ 
+                Specify the breakdown(s) to generate.
+                This option may be used multiple times. If no breakdowns are given, 
+                the following will be used as the default breakdown set:
+
+                        ]]..table.concat(default_breakdown, "\n\t\t\t")..[[ 
+
+                See --help-reports for a list of built-in rules, along with more
+                information on each rule.
+                
+                Alias are:
+                    - all: Generate all rules analyze]],
+            sname           = "r",
+            arg             = "<name[:args...][,name[:args...]...]>",
+            arg_required    = true,
+            default         = table.concat(default_breakdown, ",")
+        }
+
+consts_helper.breakdown.opt['help-reports'] = nil
+consts_helper.breakdown.opt['help-breakdown'] = {
+            desc            = [[ 
+                Display help information about the available breakdowns.]],
+            sname           = nil,
+            arg             = nil,
+            arg_required    = false,
+            default         = nil,
+            early_exit      = true
+        }
+consts_helper.breakdown.opt['timeunit'].desc = [[ 
+                Set basic unit of time. The default is milliseconds.
+                Possible values are: ns, us, ms, sec.]]
+consts_helper.breakdown.opt['timeunit'].default = "ms"
+consts_helper.breakdown.opt['sizeunit'] = nil
+consts_helper.breakdown.opt['mangled']  = nil
+consts_helper.breakdown.opt['trunc']    = nil
+
 
 
 consts_helper.inspect = {
     cmd = "inspect",
     args = {
-        ["application"] = {
+        {
+            name = "application",
             desc = "Path to the application to inspect.",
             is_optional = true,
             is_list = false
@@ -440,8 +501,9 @@ consts_helper.inspect = {
 consts_helper.visualize = {
     cmd = "visualize",
     args = {
-        ["report"] = {
-            desc = "Path to the report file to visualize.",
+        {
+            name = "report-file",
+            desc = "Path to the "..ratelprof.consts._REPORT_EXT.." report file.",
             is_optional = false,
             is_list = false
         }
@@ -488,7 +550,8 @@ consts_helper.visualize = {
 consts_helper.export = {
     cmd = "export",
     args = {
-        ["report-file"] = {
+        {
+            name = "report-file",
             desc = "Path to the "..ratelprof.consts._REPORT_EXT.." report file.",
             is_optional = false,
             is_list = true
@@ -512,7 +575,8 @@ consts_helper.export = {
 consts_helper.summarize = {
     cmd = "summarize",
     args = {
-        ["report-file"] = {
+        {
+            name = "report-file",
             desc = "Path to the "..ratelprof.consts._REPORT_EXT.." report file.",
             is_optional = false,
             is_list = true
@@ -520,15 +584,33 @@ consts_helper.summarize = {
     },
     desc = "\n\tSummarize global metrics about a report file.",
     opt = {
-        ["with-analysis"] = {
+        ["save-csv"] = {
             desc            = [[ 
-                Run statistical and analysis reports and show summary about these.]],
-            sname           = "a",
-            arg             = nil,
+                Save report outputs as CSV format in <DIR>.]],
+            sname           = "s",
+            arg             = "<DIR>",
             arg_required    = false,
             default         = false
-        }
-    }
+        },
+        gpus = {
+            desc            = [[ 
+                List of the GPUs to analyzed. Can be useful in per-gpu mode for statistics reports or in analyze command to focus on specific GPUs.
+                If not specify, analyze all GPUs.]],
+            sname           = nil,
+            arg             = "<gpu id>[,<gpu_id>]",
+            arg_required    = true,
+            default         = nil
+        },
+        pids = {
+            desc            = [[ 
+                List of the Process to analyzed. Can be useful in per-pid mode for statistics reports or in analyze command to focus on specific PIDs.
+                If not specify, analyze all Process.]],
+            sname           = nil,
+            arg             = "<pid>[,<pid>]",
+            arg_required    = true,
+            default         = nil
+        },
+    },
 }
 
 

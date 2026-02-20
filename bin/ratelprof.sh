@@ -46,7 +46,7 @@ fi
 CMD="$1"
 shift
 
-args=""
+args="$CMD"
 for arg in "$@"; do
     args="$args '$arg'"
 done
@@ -56,8 +56,8 @@ case "$CMD" in
         display_help
         ;;
 
-    profile|stats|analyze|visualize|inspect|export|summarize)
-        eval "$LUA_EXEC $LUA_DIR/$CMD.lua $args"
+    profile|stats|analyze|visualize|inspect|export|summarize|breakdown)
+        eval "$LUA_EXEC $LUA_DIR/main.lua $args"
         exit_code=$?
         exit $exit_code
         ;;
