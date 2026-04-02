@@ -11,6 +11,8 @@ return function (report)
 
     report.TYPE = "Summary"
 
+    report.LINK_TO = "gpu_sum"
+
     report.HEADER = {
         "Active Time (%)",
         "API Time (%)", "Tot. Time ("..timeunit..")",
@@ -20,6 +22,9 @@ return function (report)
         "StdDev ("..timeunit..")",
         "Category", "Operation",
     }
+
+    report.COL_IDX_NAME = 11
+    report.COL_IDX_METRIC = 2
 
     report.PER_MODE = true
 

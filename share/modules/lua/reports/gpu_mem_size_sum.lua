@@ -4,9 +4,9 @@ local report_helper = require ("utils.report_helper")
 return function (report)
     local sizeunit = report.opt.sizeunit
 
-    report.NAME = "GPU MemOps"
+    report.NAME = "GPU MemOps (by Size)"
 
-    report.TYPE = "Summary (by Size)"
+    report.TYPE = "Summary"
 
     report.HEADER = {
         "Total (%)", "Total ("..sizeunit..")",
@@ -18,6 +18,9 @@ return function (report)
         "GPU ID (Min)", "GPU ID (Max)",
         "GPU ID (Min Tot. Time)", "GPU ID (Max Tot. Time)"
     }
+
+    report.COL_IDX_NAME = 9
+    report.COL_IDX_METRIC = 1
 
     report.LOOP_IN = { ratelprof.consts.DOMAIN_COPY_ID }
 

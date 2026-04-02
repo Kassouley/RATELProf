@@ -5,9 +5,11 @@ local report_helper = require ("utils.report_helper")
 return function (report)
     local timeunit = report.opt.timeunit
 
-    report.NAME = "Per-GPU MemOps"
+    report.NAME = "Per-GPU MemOps (by Time)"
 
-    report.TYPE = "Summary (by Time)"
+    report.TYPE = "Summary"
+    
+    report.LINK_TO = "gpu_mem_time_sum"
 
     report.HEADER = {
         "Active Time (%)",
@@ -18,6 +20,9 @@ return function (report)
         "StdDev ("..timeunit..")",
         "Operation",
     }
+    
+    report.COL_IDX_NAME = 10
+    report.COL_IDX_METRIC = 2
 
     report.PER_MODE = true
 

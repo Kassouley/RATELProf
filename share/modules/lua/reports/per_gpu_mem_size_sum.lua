@@ -4,9 +4,11 @@ local report_helper = require ("utils.report_helper")
 return function (report)
     local sizeunit = report.opt.sizeunit
 
-    report.NAME = "Per-GPU MemOps"
+    report.NAME = "Per-GPU MemOps (by Size)"
 
-    report.TYPE = "Summary (by Size)"
+    report.TYPE = "Summary"
+
+    report.LINK_TO = "gpu_mem_size_sum"
 
     report.HEADER = {
         "Total (%)", "Total ("..sizeunit..")",
@@ -16,6 +18,9 @@ return function (report)
         "StdDev ("..sizeunit..")",
         "Operation",
     }
+
+    report.COL_IDX_NAME = 9
+    report.COL_IDX_METRIC = 1
 
     report.PER_MODE = true
 

@@ -34,6 +34,9 @@ return function (report)
         "GPU ID (Min Tot. Time)",
         "GPU ID (Max Tot. Time)"
     }
+    
+    report.COL_IDX_NAME = 22
+    report.COL_IDX_METRIC = 1
 
     report.LOOP_IN = { ratelprof.consts.DOMAIN_KERNEL_ID }
 

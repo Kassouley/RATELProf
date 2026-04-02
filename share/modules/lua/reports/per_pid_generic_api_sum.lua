@@ -10,6 +10,8 @@ return function (report)
 
     report.TYPE = "Summary"
 
+    report.LINK_TO = report.report_id:gsub("per_pid_", "")
+
     report.HEADER = {
         "Active Time (%)",
         "API Time (%)", "Tot. Time ("..timeunit..")",
@@ -19,6 +21,9 @@ return function (report)
         "StdDev ("..timeunit..")",
         "Name",
     }
+    
+    report.COL_IDX_NAME = 10
+    report.COL_IDX_METRIC = 2
 
     report.LOOP_IN = { domain_id }
 

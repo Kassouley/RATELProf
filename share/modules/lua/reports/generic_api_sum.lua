@@ -19,6 +19,9 @@ return function (report)
         "PID (Min)", "PID (Max)",
         "PID (Min Tot. Time)", "PID (Max Tot. Time)"
     }
+    
+    report.COL_IDX_NAME = 9
+    report.COL_IDX_METRIC = 1
 
     report.LOOP_IN = { domain_id }
 

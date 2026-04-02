@@ -11,6 +11,8 @@ return function (report)
 
     report.TYPE = "Summary"
 
+    report.LINK_TO = "gpu_kern_sum"
+
     report.HEADER = {
         "Active Time (%)",
 
@@ -37,6 +39,9 @@ return function (report)
         "BlockX", "BlockY", "BlockZ",
         "Name",
     }
+    
+    report.COL_IDX_NAME = 24
+    report.COL_IDX_METRIC = 2
 
     report.PER_MODE = true
 
