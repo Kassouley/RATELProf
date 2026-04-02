@@ -96,9 +96,9 @@ end
 -- @param src The source file path.
 -- @param dest The destination file path.
 -- @return True if the file was copied successfully, false otherwise.
-function rfs.copy_file(src, dest)
-    local command = string.format('cp "%s" "%s"', src, dest)
-    local success = os.execute(command)
+function rfs.cp(src, dest, option)
+    local command = string.format('cp %s "%s" %s', src, dest, option or "")
+    local success, err = os.execute(command)
     return success == 0
 end
 
@@ -277,6 +277,13 @@ function rfs.rm(p)
     end
     return true
 end
+
+function rfs.rmdir(p)
+    p = get_path(p)
+    os.execute('rm -rf "' .. p .. '"')
+    return true
+end
+
 
 
 function rfs.exists_in_PATH(bin)
