@@ -198,6 +198,7 @@ consts_helper.stats = {
                     table      Human readable table (.txt)
                     csv        Comma Separated Values (.csv)
                     tsv        Tab Separated Values (.tsv)
+                    json       JSON structure (.json)
 
                 This option may be used multiple times. Multiple formats may also
                 be specified using a comma-separated list.]],
@@ -505,7 +506,7 @@ consts_helper.visualize = {
             name = "report-file",
             desc = "Path to the "..ratelprof.consts._REPORT_EXT.." report file.",
             is_optional = false,
-            is_list = false
+            is_list = true
         }
     },
     desc = "\n\tGenerate a HTML report view to see traces as a timeline.",
@@ -587,6 +588,14 @@ consts_helper.summarize = {
         ["save-csv"] = {
             desc            = [[ 
                 Save report outputs as CSV format in <DIR>.]],
+            sname           = "s",
+            arg             = "<DIR>",
+            arg_required    = false,
+            default         = false
+        },
+        ["save-json"] = {
+            desc            = [[ 
+                Save report outputs as JSON format in <DIR>.]],
             sname           = "s",
             arg             = "<DIR>",
             arg_required    = false,

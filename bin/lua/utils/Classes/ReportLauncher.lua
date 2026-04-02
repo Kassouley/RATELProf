@@ -105,7 +105,7 @@ function ReportLauncher:preprocess_reports()
         self:print_header_msg(report_path)
 
         if report_path and ratelprof.fs.exists(report_path) then
-            local report_obj = Report:new(report_id, report_opt, report_output, report_format)
+            local report_obj = Report:new(report_id, report_opt, report_output, report_format, self.disable_print)
 
             local report_exe = self:load_report_file(report_path)
             report_exe(report_obj)
@@ -144,12 +144,14 @@ function ReportLauncher:preprocess_reports()
                             error("A report cannot process GPU AND CPU events at the same time")
                         end
                         is_gpu_report = true
+                        report_obj.is_gpu_report = true
                         self.gpu_loop_in_domain:add(domain)
                     else
                         if is_gpu_report then
                             error("A report cannot process GPU AND CPU events at the same time")
                         end
                         is_cpu_report = true
+                        report_obj.is_cpu_report = true
                         self.cpu_loop_in_domain:add(domain)
                     end
 

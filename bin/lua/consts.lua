@@ -5,6 +5,7 @@ ratelprof.consts = consts
 consts._INSTALL_DIR  = os.getenv("INSTALL_DIR") or "."
 consts._LIBS_DIR     = consts._INSTALL_DIR.."/lib/"
 consts._MODULES_DIR  = consts._INSTALL_DIR.."/share/modules/"
+consts._HTML_DIR     = consts._INSTALL_DIR.."/share/visualize/"
 
 
 local major, minor, patch = 1, 1, 0
@@ -98,6 +99,13 @@ consts._GPU_DOMAIN = {
   [consts.DOMAIN_KERNEL_ID]       = true,
   [consts.DOMAIN_COPY_ID]         = true,
 }
+
+consts._CPU_DOMAIN = {}
+for id, _ in pairs(consts._DOMAIN_NAME) do
+  if not consts._GPU_DOMAIN[id] then
+    consts._CPU_DOMAIN[id] = true
+  end
+end
 
 consts._DOMAIN_DESC = {
   [consts.DOMAIN_HIP_ID]          = "HIP is a programming framework used to launch GPU operations such as kernel dispatch or memory transfer. This domain is useful for anyone looking to understand and optimize the interactions between the CPU and GPU in programming.",

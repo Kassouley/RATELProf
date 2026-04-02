@@ -7,12 +7,14 @@ local format_extensions = {
     column  = "txt",
     table   = "txt",
     csv     = "csv",
-    tsv     = "tsv"
+    tsv     = "tsv",
+    json    = "json"
 }
 
 Report.format_extensions = format_extensions
 
 local default_number_notation = {
+    json = "raw",
     column = "thousands-separator",
     table = "thousands-separator",
     csv = "scientific",
@@ -20,7 +22,7 @@ local default_number_notation = {
 }
 
 -- Constructor: Initialize a new Report object
-function Report:new(report_id, report_opt, output, format)
+function Report:new(report_id, report_opt, output, format, disable_print)
     local instance = setmetatable({}, self)
 
     instance.report_id  = report_id
@@ -31,6 +33,8 @@ function Report:new(report_id, report_opt, output, format)
     instance.TYPE       = "<Not Available>"
     instance.HEADER     = nil
     instance.REQUIRED_DOMAIN = nil
+    instance.disable_print = disable_print or false
+    instance.generated = {}
 
     return instance
 end
@@ -61,8 +65,6 @@ function Report:get_output(rprofrep, per_data)
         return output
     end
 
-    if self.filename then return self.filename end
-
     local format_extension = format_extensions[format]
 
     local report_wo_ext
@@ -73,7 +75,12 @@ function Report:get_output(rprofrep, per_data)
         report_wo_ext = "aggregated_report"
     end
 
-
+    -- If output is a directory (end with /) 
+    -- then keep basename as output .. report_wo_ext
+    if string.sub(output, -1) == "/" then
+        output = output .. report_wo_ext
+    end
+    
     local basename = output == "." and report_wo_ext or output
     local suffix = get_per_rank_suffix(per_data)
     self.filename = string.format("%s_%s%s.%s", basename, id, suffix, format_extension)
@@ -102,7 +109,7 @@ function Report:insert_header()
 end
 
 function Report:process(rprofrep, output, user_args)
-    local show_print = output ~= "_"
+    local show_print = output ~= "_" and not self.disable_print
 
     -- Print header message
     Message:print_if(show_print, string.format("** %s %s (%s)%s%s:\n",
@@ -135,13 +142,22 @@ function Report:process(rprofrep, output, user_args)
     return true
 end
 
+function Report:set_generated(output, user_args, skip)
+    table.insert(self.generated, {
+        output = output,
+        filename = self.filename,
+        user_args = user_args,
+        skip = skip
+    })
+end
+
 function Report:generate(rprofrep, max_lines, max_col_width, notation, user_args)
     local output = self:get_output(rprofrep, user_args)
     if output == "_" then self.data = nil return end
 
-    if not self:process(rprofrep, output, user_args) then
-        return false
-    end
+    local skipped = not self:process(rprofrep, output, user_args)
+    self:set_generated(output, user_args, skipped)
+    if skipped then return false end
 
     local format = self.format
 
@@ -170,7 +186,7 @@ function Report:generate(rprofrep, max_lines, max_col_width, notation, user_args
             data_size - ndata)
     end
 
-    Message:print_if(output == "-", "")
+    Message:print_if(output == "-", "\n")
 
     self.data = nil -- Free memory after generation
 end
@@ -202,6 +218,8 @@ function Report:get_formatted_data(format)
         return self:toTSV()
     elseif format == "table" then
         return self:toTable()
+    elseif format == "json" then
+        return self:toJSON()
     else
         return self:toColumn()
     end
@@ -274,11 +292,14 @@ function Report:__get_notation_number(item)
     else error(notation.." is not a valid notation") end
 end
 
-function Report:__get_formatted_item(item, width)
+function Report:__get_formatted_item(item, width, string_safe)
     local formatted_item = nil
     if type(item) == "number" then
         formatted_item = string.format("%"..width.."s", self:__get_notation_number(item))
     else
+        if string_safe then
+            item = '"'.. tostring(item):gsub('"', '').. '"'
+        end
         formatted_item = string.format("%-"..width.."s", tostring(item))
     end
     if width ~= 1 and #formatted_item > width then
@@ -307,16 +328,17 @@ function Report:__calculate_column_widths()
     return columnWidths
 end
 
-function Report:__format_data(separator, bsep, msep, asep, columnWidths)
+function Report:__format_data(separator, bsep, msep, asep, columnWidths, line_sep, string_safe)
     local result = {}
     local widths = columnWidths or {}
     local data = self.data
+    line_sep = line_sep or "\n"
     for i = 1, self.shown_data_len do
         local line = {}
         line[#line + 1] = bsep
         local ncol = #data[i]
         for j = 1, ncol do
-            line[#line + 1] = self:__get_formatted_item(data[i][j], widths[j] or 1) .. (ncol == j and "" or msep)
+            line[#line + 1] = self:__get_formatted_item(data[i][j], widths[j] or 1, string_safe) .. (ncol == j and "" or msep)
         end
         line[#line + 1] = asep
         result[#result + 1] = table.concat(line)
@@ -326,7 +348,7 @@ function Report:__format_data(separator, bsep, msep, asep, columnWidths)
         end
     end
 
-    return table.concat(result, "\n") .. "\n"
+    return table.concat(result, line_sep)
 end
 
 function Report:toTable()
@@ -369,6 +391,48 @@ end
 
 function Report:toTSV()
     return self:toCSV(";")
+end
+
+function Report:toJSON()
+    local result = {}
+    local data = self.data
+    local shown_len = self.shown_data_len
+
+    local function format_row(row, padded)
+        local line = {}
+        line[#line + 1] = '['
+        for j = 1, #row do
+            local item = row[j]
+            if j == 1 and padded then
+                item = item:gsub("^%s+", "")
+            end
+            line[#line + 1] = self:__get_formatted_item(item, 1, true)
+            if j < #row then line[#line + 1] = ", " end
+        end
+        line[#line + 1] = ']'
+        return table.concat(line)
+    end
+
+    local i = 1
+    while i <= shown_len do
+        local row = data[i]
+        local padded = string.sub(row[1], 1, 1) == " "
+        if padded then
+            -- start a group
+            local group = {}
+            while i <= shown_len and string.sub(data[i][1], 1, 1) == " " do
+                group[#group + 1] = "\t\t" .. format_row(data[i], true)
+                i = i + 1
+            end
+            -- add group with indentation
+            result[#result + 1] = "\t[\n" .. table.concat(group, ",\n") .. "\n\t]"
+        else
+            result[#result + 1] = "\t" .. format_row(row, false)
+            i = i + 1
+        end
+    end
+
+    return "[\n" .. table.concat(result, ",\n") .. "\n]"
 end
 
 return Report
