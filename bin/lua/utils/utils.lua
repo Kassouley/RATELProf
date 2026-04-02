@@ -190,4 +190,23 @@ function utils.label_unit_with_rank(key, with_unit_label)
     return string.format("%s%s ( rank %d )", label, unit, rank)
 end
 
+
+
+function utils.json_to_js(filename, varname, output)
+    -- read JSON
+    local f = ratelprof.fs.open_file(filename, "r")
+    local content = f:read("*all")
+    f:close()
+
+    -- write prefixed JS
+    output = output or ratelprof.fs.remove_extension(filename)..'.js'
+    local f2 = ratelprof.fs.open_file(output, "w")
+    f2:write(varname, "=", content, ";\n")
+    f2:close()
+
+    ratelprof.fs.rm(filename)
+
+    return output
+end
+
 return utils
