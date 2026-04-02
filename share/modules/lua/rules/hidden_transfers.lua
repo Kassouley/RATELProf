@@ -110,12 +110,14 @@ return function(report)
     end
 
     report.POST_EVENT_LOOP = function (self, _, gpu_key)
-        self.total_percentage_per_gpu[gpu_key] = 100 - (self.overlapped_total_time / self.overall_total_time) * 100
-        self.max_not_hidden_copy_per_gpu[gpu_key] = table.max(self.not_hidden_copy_dur_per_sdma)
         self.ngpus = self.ngpus + 1
+        local total_ratio = 0
         if self.overall_total_time > 0 then
-            self.score = self.score + self.overlapped_total_time/(self.overall_total_time)
+            total_ratio = self.overlapped_total_time / self.overall_total_time
+            self.score = self.score + total_ratio
         end
+        self.total_percentage_per_gpu[gpu_key] = 100 - total_ratio * 100
+        self.max_not_hidden_copy_per_gpu[gpu_key] = table.max(self.not_hidden_copy_dur_per_sdma)
     end
 
 
