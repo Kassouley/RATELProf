@@ -8,9 +8,11 @@ local experiment = require ("commands.summarize.experiment")
 local summarize = {}
 
 function summarize.get_summary(rprofrep, options_values)
+    local global_data, report_launcher = global.get_global_data(rprofrep, options_values)
     return {
         experiment_info = experiment.get_experiment_info(rprofrep),
-        global_data     = global.get_global_data(rprofrep, options_values)
+        global_data     = global_data,
+        report_launcher = report_launcher
     }
 end
 

@@ -78,19 +78,32 @@ function helper.get_max_label_len(data)
     return max_len
 end
 
+local INDENT = "    "
 
 local function print_data(list, depth, max_len)
     depth = depth or 0
-    local indent = ("    "):rep(depth)
+    local indent = (INDENT):rep(depth)
+    local subrow_indent = ""
+    local subrow_count = 0;
 
     for i, v in ipairs(list) do
-        local label = string.format("%-" .. max_len .. "s", indent .. v.label)
-        print(label .. " : " .. (v.value or "N/A"))
-        if v.subvalue then
-            print_data(v.subvalue, depth + 1, max_len)
-        end
-        if depth == 0 and i < #list then
+        local label = string.format(
+        "%-" .. max_len .. "s", (subrow_count > 0 and INDENT or "") .. indent .. v.label)
+        if v.type == "sep" then
+            print(label .. " : ")
             print_separator("-")
+            subrow_count = v.subrow
+        else
+            if subrow_count > 0 then
+                subrow_count = subrow_count - 1
+            end
+            print(label .. " : " .. (v.value or "N/A"))
+            if v.subvalue then
+                print_data(v.subvalue, depth + 1, max_len)
+            end
+            if depth == 0 and i < #list then
+                print_separator("-")
+            end
         end
     end
 end
