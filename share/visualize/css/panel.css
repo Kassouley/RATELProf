@@ -1,8 +1,0 @@
-.tab-panel { 
-    display: none; 
-    background-color: var(--secondary-bg);
-    border-radius: 8px;
-}
-.tab-panel.active { 
-    display: block; 
-}

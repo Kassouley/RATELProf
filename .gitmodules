@@ -4,3 +4,6 @@
 [submodule "external/lsgpu"]
 	path = external/lsgpu
 	url = git@github.com:Kassouley/lsgpu.git
+[submodule "external/RATELProf-Visualize"]
+	path = external/RATELProf-Visualize
+	url = git@github.com:Kassouley/RATELProf-Visualize.git
