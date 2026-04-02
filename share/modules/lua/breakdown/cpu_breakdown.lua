@@ -2,11 +2,11 @@ local Timewise = require ("utils.Timewise")
 local report_helper = require ("utils.report_helper")
 
 local DOMAIN_COL_IDX = {
-    [ ratelprof.consts.DOMAIN_HIP_ID ] = 5,
-    [ ratelprof.consts.DOMAIN_OMPT_ID ] = 6,
-    [ ratelprof.consts.DOMAIN_OMP_TGT_RTL_ID ] = 6,
-    [ ratelprof.consts.DOMAIN_OMP_TGT_ID ] = 6,
-    [ ratelprof.consts.DOMAIN_MPI_ID ] = 7,
+    [ ratelprof.consts.DOMAIN_HIP_ID ] = 6,
+    [ ratelprof.consts.DOMAIN_OMPT_ID ] = 7,
+    [ ratelprof.consts.DOMAIN_OMP_TGT_RTL_ID ] = 7,
+    [ ratelprof.consts.DOMAIN_OMP_TGT_ID ] = 7,
+    [ ratelprof.consts.DOMAIN_MPI_ID ] = 8,
 }
 
 return function (report)
@@ -17,7 +17,9 @@ return function (report)
     report.TYPE = "Breakdown"
 
     report.HEADER = {
-        "###", "Wall Time ("..timeunit..")", "Total Active Time (%)", "Non-Profiled (%)", "HIP Active Time (%)", "OMP Active Time (%)", "MPI Active Time (%)",
+        "###", "Wall Time ("..timeunit..")", 
+        "CPU Profiled Time (%)", "Non-Profiled (%)", "Interaction w/ GPU Time (%)",
+        "HIP Active Time (%)", "OMP Active Time (%)", "MPI Active Time (%)",
     }
 
     report.LOOP_IN = { ratelprof.consts.DOMAIN_HIP_ID, ratelprof.consts.DOMAIN_MPI_ID,
@@ -68,6 +70,9 @@ return function (report)
             local col_idx = entry.key[1]
             row[col_idx] = entry:compute_active_percentage(total_time)
         end)
+
+        row[5] = tostring(active_pct - row[8])
+
 
         table.insert(rows, row)
 

@@ -2,8 +2,8 @@ local Timewise = require ("utils.Timewise")
 local report_helper = require ("utils.report_helper")
 
 local DOMAIN_COL_IDX = {
-    [ ratelprof.consts.DOMAIN_KERNEL_ID ] = 4,
-    [ ratelprof.consts.DOMAIN_COPY_ID ] = 5,
+    [ ratelprof.consts.DOMAIN_KERNEL_ID ] = 5,
+    [ ratelprof.consts.DOMAIN_COPY_ID ] = 6,
 }
 
 return function (report)
@@ -14,7 +14,7 @@ return function (report)
     report.TYPE = "Breakdown"
 
     report.HEADER = {
-        "###", "Wall Time ("..timeunit..")", "GPU Time (%)", "Compute Time (%)", "Mem. Transfer Time (%)", "Visible Mem. Transfer Time (%)",
+        "###", "Wall Time ("..timeunit..")", "GPU Time (%)", "Idle Time (%)", "Compute Time (%)", "Mem. Transfer Time (%)", "Visible Mem. Transfer Time (%)",
     }
 
     report.LOOP_IN = { ratelprof.consts.DOMAIN_COPY_ID, ratelprof.consts.DOMAIN_KERNEL_ID }
@@ -59,6 +59,7 @@ return function (report)
         row[1] = label
         row[2] = ratelprof.utils.get_duration(walltime, timeunit)
         row[3] = gpu_pct
+        row[4] = tostring(100 - gpu_pct)
 
         for _, idx in pairs(DOMAIN_COL_IDX) do
             row[idx] = "0.00"
@@ -69,7 +70,7 @@ return function (report)
             row[col_idx] = entry:compute_active_percentage(total_time)
         end)
 
-        row[6] = string.format("%.2f", gpu_pct - row[4])
+        row[7] = string.format("%.2f", gpu_pct - row[5])
 
         table.insert(rows, row)
 
