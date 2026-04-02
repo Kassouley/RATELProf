@@ -62,3 +62,16 @@ rprofrep_status_t rprofrep_node_is_gpu(rprofrep_decode_context_t* ctx, uint64_t 
 
     return RPROFREP_STATUS_SUCCESS;
 }
+
+
+rprofrep_status_t rprofrep_gpu_to_json(rprofrep_decode_context_t* ctx, const char* prefix)
+{
+    RPROFREP_CHECK_VALID_PTR(ctx, prefix);
+
+    rprofrep_gpu_spec_data_t* devices = NULL;
+    RPROFREP_CHECK_CALL(rprofrep_get_section(ctx, RPROFREP_SECTION_GPU_SPEC, (void**)&devices));
+
+    lsgpu_to_json_gpus_data(prefix, devices);
+
+    return RPROFREP_STATUS_SUCCESS;
+}

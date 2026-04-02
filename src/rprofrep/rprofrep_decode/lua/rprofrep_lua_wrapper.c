@@ -589,6 +589,18 @@ static int l_context_is_domain_traced(lua_State* L) {
 }
 
 
+static int l_context_gpu_to_json(lua_State* L) {
+    rprofrep_decode_context_t *ctx = rprofrep_lua_get_context(L, 1);
+    const char* prefix = luaL_checkstring(L, 2);
+
+    rprofrep_lua_check(L, rprofrep_gpu_to_json(ctx, prefix),
+        "failed to write gpu data to json");
+
+    return 0;
+}
+
+
+
 static const struct luaL_Reg l_context_metamethods[] = {
     register_class_method(context, __gc),
     {NULL, NULL}
@@ -613,6 +625,7 @@ static const struct luaL_Reg l_context_methods[] = {
     register_class_method(context, node_is_gpu),
     register_class_method(context, get_gpu_id_from_agent),
     register_class_method(context, is_domain_traced),
+    register_class_method(context, gpu_to_json),
     {NULL, NULL}
 };
 
