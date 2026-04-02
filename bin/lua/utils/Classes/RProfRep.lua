@@ -203,7 +203,11 @@ function RProfRep:get_iterator(domains, filter)
     return self.__current_rprofrep:get_iterator(self.__current_node, domains, filter)
 end
 
-
+function RProfRep:for_each_domain(callback)
+    for id, name in pairs(ratelprof.consts._DOMAIN_NAME) do
+        callback(id, name)
+    end
+end
 
 function RProfRep:for_each_event(domains, callback, filter, progress_message)
     if not self.__current_node then
@@ -372,6 +376,14 @@ function RProfRep:topology_get_profiled_process()
     end)
     return pid_list
 end
+
+
+function RProfRep:gpu_to_json(prefix)
+    for _, rprofrep in pairs(self.reports_rprofrep) do
+        rprofrep:gpu_to_json(prefix)
+    end
+end
+
 
 
 return RProfRep
