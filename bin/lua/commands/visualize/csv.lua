@@ -107,6 +107,30 @@ local function insert_datasets_data(csv_data, filename, col_idx_name, col_idx_me
     end
 end
 
+local function add_others_dataset(csv_data)
+    local datasets = csv_data.data.datasets
+    local labels = csv_data.data.labels
+
+    if not datasets or #datasets == 0 then return end
+
+    local others = { label = "others", data = {} }
+
+    for i = 1, #labels do
+        local sum = 0
+
+        for _, dataset in ipairs(datasets) do
+            local val = dataset.data[i] or 0
+            sum = sum + val
+        end
+
+        local remaining = 100 - sum
+        if remaining < 0 then remaining = 0 end
+
+        table.insert(others.data, remaining)
+    end
+
+    table.insert(datasets, others)
+end
 
 local function insert_sub_csv(csv_data, report_obj)
     local is_gpu_report = report_obj.is_gpu_report
@@ -130,6 +154,8 @@ local function insert_sub_csv(csv_data, report_obj)
             dataRendering = "renderPie",
         })
     end
+
+    add_others_dataset(csv_data)
 end
 
 function csv.process_csv_data(fs, summary_data)
