@@ -1,9 +1,9 @@
 [submodule "external/liborkh"]
 	path = external/liborkh
-	url = git@github.com:Kassouley/liborkh.git
+	url =  https://github.com/Kassouley/liborkh.git
 [submodule "external/lsgpu"]
 	path = external/lsgpu
-	url = git@github.com:Kassouley/lsgpu.git
+	url =  https://github.com/Kassouley/lsgpu.git
 [submodule "external/RATELProf-Visualize"]
 	path = external/RATELProf-Visualize
-	url = git@github.com:Kassouley/RATELProf-Visualize.git
+	url =  https://github.com/Kassouley/RATELProf-Visualize.git
