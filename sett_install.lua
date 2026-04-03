@@ -93,10 +93,11 @@ add_cmake_option("CMAKE_CXX_COMPILER", cxx_compiler)
 add_cmake_option("HIPCC_COMPILER",     hipcc_compiler)
 
 -- Plugins
-local build_plugin_stdout    = get_json_value("plugins", "stdout")
-local build_plugin_msgpack   = get_json_value("plugins", "msgpack")
-add_cmake_option("BUILD_PLUGIN_STDOUT",  build_plugin_stdout  and "ON" or "OFF")
-add_cmake_option("BUILD_PLUGIN_MSGPACK", build_plugin_msgpack and "ON" or "OFF")
+-- TODO 03/04/2026: Need to reimplement plugin handling. For now, those are useless 
+-- local build_plugin_stdout    = get_json_value("plugins", "stdout")
+-- local build_plugin_rprofrep  = get_json_value("plugins", "rprofrep")
+-- add_cmake_option("BUILD_PLUGIN_STDOUT",   build_plugin_stdout  and "ON" or "OFF")
+-- add_cmake_option("BUILD_PLUGIN_RPROFREP", build_plugin_rprofrep and "ON" or "OFF")
 
 -- Options
 local check_symbol_quiet = get_json_value("options", "check_symbol_quiet")
