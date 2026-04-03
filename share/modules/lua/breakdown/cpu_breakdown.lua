@@ -103,7 +103,7 @@ return function (report)
 
         for _, cpu_data in ipairs(tmp_data) do
 
-            max_interaction_pct = math.max(max_interaction_pct, cpu_data[3])
+            max_interaction_pct = math.max(max_interaction_pct, cpu_data[5])
 
             local sub_data = cpu_data["tmp"]
             cpu_data["tmp"] = nil

@@ -121,9 +121,9 @@ return function (report)
             table.insert(data, gpu_data)
 
             max_gpu_pct = math.max(max_gpu_pct, gpu_data[3])
-            max_compute_pct = math.max(max_compute_pct, gpu_data[4])
-            max_copy_pct = math.max(max_copy_pct, gpu_data[5])
-            max_visible_copy_pct = math.max(max_visible_copy_pct, gpu_data[6])
+            max_compute_pct = math.max(max_compute_pct, gpu_data[5])
+            max_copy_pct = math.max(max_copy_pct, gpu_data[6])
+            max_visible_copy_pct = math.max(max_visible_copy_pct, gpu_data[7])
 
             insert_subdata(gpu_data, "tmp_queue")
             insert_subdata(gpu_data, "tmp_sdma")

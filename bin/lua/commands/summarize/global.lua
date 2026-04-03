@@ -7,7 +7,7 @@ local global = {}
 
 local analyzed_data = {
     {key = "app_time",            label = "App Time",                         desc = "Application total time"},
-    {key = "interaction_time",    label = "Max Interaction Time (%)",         desc = "Max Total Time spent in GPU-CPU interaction libraries or in MPI. "},
+    {key = "interaction_time",    label = "Max GPU/CPU Interaction Time (%)", desc = "Max Total Time spent in GPU-CPU interaction libraries or in MPI. "},
     {key = "gpu_time",            label = "Max GPU Active Time (%)",          desc = "Max Total GPU active time including all kernels and copies. "..
                                                                                      "This is the time when GPU was not idle, not the sum of all GPU activity time."},
     {key = "kernel_time",         label = "Max GPU Compute Time (%)",         desc = "Max total time spent in all kernels"},
