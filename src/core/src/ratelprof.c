@@ -84,6 +84,9 @@ ratelprof_status_t __ratelprof_init_impl(unsigned int ndomains)
 
 	for (int i = 0; i < RATELPROF_NB_DOMAIN; i++)
 	{
+        if (domains_data[i].nb_function == 0 || domains_data[i].api_table_addr == NULL) {
+            continue; // Skip domains with no functions
+        }
 		RATELPROF_TRY(
 			ratelprof_init_api_table(i, domains_data[i].api_table_addr, domains_data[i].nb_function),
 			LOG(LOG_LEVEL_ERROR, "Cannot init API table for domain %d. %s (code %d)\n", i, get_error_string(status), status)
