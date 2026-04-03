@@ -29,6 +29,7 @@ ratelprof.analyze   = require("commands.common").analyze
 ratelprof.breakdown = require("commands.common").breakdown
 ratelprof.summarize = require("commands.summarize")
 ratelprof.visualize = require("commands.visualize")
+ratelprof.inspect   = require("commands.inspect")
 
 -- MAQAO Implementation
 -- ratelprof.get_opt_val = function (opt_list, name)

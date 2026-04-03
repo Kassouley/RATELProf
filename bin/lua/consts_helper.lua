@@ -448,22 +448,12 @@ consts_helper.inspect = {
         {
             name = "application",
             desc = "Path to the application to inspect.",
-            is_optional = true,
+            is_optional = false,
             is_list = false
         }
     },
     desc = "\n\tInspect an AMD GPU application and output data about kernels from the application.",
     opt = {
-        info = {
-            desc            = [[
-                Specify the information to inspect.
-                Possible values are: 'gpu', 'kernels'.
-                Default is 'kernels'.]],
-            sname           = "i",
-            arg             = "<info>",
-            arg_required    = true,
-            default         = "kernels"
-        },
         ['save-json'] = {
             desc            = [[ 
                 Save all metadata in a JSON file in addition to the CSV file.]],

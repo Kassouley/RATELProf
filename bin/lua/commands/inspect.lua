@@ -1,5 +1,4 @@
 local kernel_helper = require ("commands.inspect.kernel_helper")
-local agent_helper  = require ("commands.inspect.agent_helper")
 
 local inspect = {}
 
@@ -60,20 +59,9 @@ local function inspect_kernels(application, opt)
     end
 end
 
-local function inspect_agents()
-    agent_helper.print_gpu_data()
-end
-
-function inspect.process_inspecting(positional_args, opt)
-
-    if ratelprof.get_opt_val(opt, "info") == "gpu" then
-        inspect_agents()
-    elseif ratelprof.get_opt_val(opt, "info") == "kernels" then
-        inspect_kernels(positional_args[1], opt)
-    else
-        Message:print ("Invalid inspect option. Use 'gpu' or 'kernels'.")
-        os.exit(1)
-    end
+function inspect.process(positional_args, opt)
+    inspect_kernels(positional_args[1], opt)
+  
 end
 
 return inspect
