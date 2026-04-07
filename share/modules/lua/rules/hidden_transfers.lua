@@ -133,6 +133,8 @@ return function(report)
 
         if self.ngpus > 0 then
             self.score = self.score / self.ngpus
+        else
+            self.score = 0
         end
 
         local data = {}
