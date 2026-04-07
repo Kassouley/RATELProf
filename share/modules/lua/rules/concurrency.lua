@@ -90,6 +90,7 @@ return function(report)
 
     report.POST_LOOP = function (self, rprofrep)
         local concurrent_pct_per_gpu = self.concurrent_pct_per_gpu
+        self.score = 0
         if self.ngpus > 0 then
             self.score = self.sum_concurrency / self.ngpus
         end
