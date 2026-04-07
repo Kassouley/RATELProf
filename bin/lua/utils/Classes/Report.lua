@@ -182,7 +182,7 @@ function Report:generate(rprofrep, max_lines, max_col_width, notation, user_args
 
     if not is_all_data_shown and (format_extensions[format] == "txt" or output == "-") then
         Message:printf(
-            "(%d lines has been truncated for visibility, please use option --max-lines or export to a file)",
+            "\n(%d lines has been truncated for visibility, please use option --max-lines or export to a file)",
             data_size - ndata)
     end
 
