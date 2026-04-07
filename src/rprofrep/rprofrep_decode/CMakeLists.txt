@@ -1,15 +1,14 @@
-cmake_minimum_required(VERSION 3.16)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
-project(rprofrep_decoder C)
+PROJECT(rprofrep_decoder C)
 
+FILE(GLOB COMMON_SRC "${CMAKE_SOURCE_DIR}/src/common/memory_structure/*.c")   
 
-file(GLOB COMMON_SRC "${CMAKE_SOURCE_DIR}/src/common/memory_structure/*.c")   
-
-file(GLOB_RECURSE SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
+FILE(GLOB_RECURSE SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 
 ADD_LIBRARY(${PROJECT_NAME} STATIC ${SOURCES} ${COMMON_SRC})
 
-target_include_directories(${PROJECT_NAME}
+TARGET_INCLUDE_DIRECTORIES(${PROJECT_NAME}
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/src/core/include
@@ -18,18 +17,18 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_SOURCE_DIR}/src/rprofrep/common/
 )
 
-target_compile_options(${PROJECT_NAME} 
+TARGET_COMPILE_OPTIONS(${PROJECT_NAME} 
     PUBLIC
         -O3
         -D__HIP_PLATFORM_AMD__
 )
 
 # ---- Link to the lsgpu static library ----
-if (NOT TARGET lsgpu_core)
-    message(FATAL_ERROR "lsgpu_core target not found. Ensure the parent lsgpu CMakeLists.txt is included.")
-endif()
-target_link_libraries(${PROJECT_NAME} PUBLIC lsgpu_core)
+IF (NOT TARGET lsgpu_core)
+    MESSAGE(FATAL_ERROR "lsgpu_core target not found. Ensure the parent lsgpu CMakeLists.txt is included.")
+ENDIF()
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} PUBLIC lsgpu_core)
 
-add_subdirectory(test)
-add_subdirectory(lua)
+ADD_SUBDIRECTORY(test)
+ADD_SUBDIRECTORY(lua)
 
