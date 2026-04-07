@@ -485,7 +485,15 @@ consts_helper.inspect = {
             arg             = nil,
             arg_required    = false,
             default         = nil
-        }
+        },
+        archs = {
+            desc            = [[ 
+                Inspect binary from the selected archs.]],
+            sname           = "a",
+            arg             = "<gfxXYZ,[gfxXYZ,...]>",
+            arg_required    = true,
+            default         = nil
+        },
     }
 }
 

@@ -1,4 +1,4 @@
-local kernel_helper = require ("commands.inspect.kernel_helper")
+local inspect = require ("commands.inspect")
 
 local env = {}
 
@@ -52,7 +52,7 @@ function env.set_filter_env_var(filename, filter_type)
 end
 
 function env.set_number_of_kernel_env_var(application)
-    local n = kernel_helper.get_kernel_number(application)
+    local n = inspect.get_kernel_number(application)
     env.set_env(ratelprof.consts._ENV.NB_KERNEL_AV, n)
 end
 

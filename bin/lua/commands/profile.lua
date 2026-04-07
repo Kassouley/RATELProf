@@ -1,5 +1,4 @@
 local env           = require ("commands.profile.env")
-local agent_helper  = require ("commands.inspect.agent_helper")
 
 local profile = {}
 
@@ -165,15 +164,6 @@ function profile.process(positional_args, options_values)
     else
         normal_execution (run_command)
     end
-
-    -- local f = ratelprof.fs.open_file("/tmp/rprof_output_filename.txt", "r")
-    -- for output_file in f:lines() do
-    --     agent_helper.set_gpu_props_to_msgpack(output_file)
-    --     local bytes_written = ratelprof.fs.get_size(output_file)
-    --     Message:print ("RPROF: Bytes written in '"..output_file.."' : "..bytes_written)
-    -- end
-    -- f:close()
-    -- os.remove("/tmp/rprof_output_filename.txt")
 
     Message:print ("RPROF: Exiting tool . . .")
 end
