@@ -18,6 +18,8 @@ return function (report)
     }
 
     report.LOOP_IN = { ratelprof.consts.DOMAIN_COPY_ID, ratelprof.consts.DOMAIN_KERNEL_ID }
+    
+    report.OR_REQUIRED_MODE = true
 
     local tmp_data = {}
 

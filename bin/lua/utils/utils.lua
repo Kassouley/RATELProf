@@ -193,6 +193,11 @@ end
 
 
 function utils.json_to_js(filename, varname, output)
+
+    if not ratelprof.fs.exists(filename) then
+        return nil
+    end
+
     -- read JSON
     local f = ratelprof.fs.open_file(filename, "r")
     local content = f:read("*all")

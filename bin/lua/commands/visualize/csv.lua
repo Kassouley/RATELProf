@@ -44,15 +44,19 @@ local function get_csv_data(report_obj, report_id)
         local filename = generated_report.filename
         local skipped = generated_report.skip
          if type == "Summary" then
-            local datasets, hot_events = read_and_init_hot_event_dataset(filename, col_idx_name, 6)
-            csv_data.dataRendering = "renderHistogram"
-            csv_data.data = {
-                xLabel = is_gpu_report and "GPU ID" or "Rank",
-                yLabel = "Time (%)",
-                labels = {},
-                datasets = datasets,
-                hot_events = hot_events
-            }
+            if not skipped then
+                local datasets, hot_events = read_and_init_hot_event_dataset(filename, col_idx_name, 6)
+                csv_data.dataRendering = "renderHistogram"
+                csv_data.data = {
+                    xLabel = is_gpu_report and "GPU ID" or "Rank",
+                    yLabel = "Time (%)",
+                    labels = {},
+                    datasets = datasets,
+                    hot_events = hot_events
+                }
+            else
+                return
+            end
         else
             csv_data.dataRendering = "renderAdvice"
             csv_data.data = {
@@ -138,21 +142,24 @@ local function insert_sub_csv(csv_data, report_obj)
     local col_idx_metric = report_obj.COL_IDX_METRIC
     for _, generated_report in ipairs(report_obj.generated) do
         local filename = generated_report.filename
+        local skipped = generated_report.skip
         local user_args = generated_report.user_args
 
-        local label = is_gpu_report and
-            user_args.gpu_id or user_args.rank
-        table.insert(csv_data.data.labels, label)
+        if not skipped then
+            local label = is_gpu_report and
+                user_args.gpu_id or user_args.rank
+            table.insert(csv_data.data.labels, label)
 
-        insert_datasets_data(csv_data, filename, col_idx_name, col_idx_metric)
+            insert_datasets_data(csv_data, filename, col_idx_name, col_idx_metric)
 
-        csv_data.subCSV = csv_data.subCSV or {}
-        local jsfile = ratelprof.utils.json_to_js(filename, "window.currentCSV")
-        table.insert(csv_data.subCSV, {
-            name = ratelprof.utils.label_unit_with_rank(user_args, true),
-            file = jsfile,
-            dataRendering = "renderPie",
-        })
+            csv_data.subCSV = csv_data.subCSV or {}
+            local jsfile = ratelprof.utils.json_to_js(filename, "window.currentCSV")
+            table.insert(csv_data.subCSV, {
+                name = ratelprof.utils.label_unit_with_rank(user_args, true),
+                file = jsfile,
+                dataRendering = "renderPie",
+            })
+        end
     end
 
     add_others_dataset(csv_data)
@@ -176,7 +183,7 @@ function csv.process_csv_data(fs, summary_data)
                     csv_data = get_csv_data(report_objs[link_to], link_to)
                 end
 
-                if type == "Summary" then
+                if type == "Summary" and csv_data then
                     insert_sub_csv(csv_data, report_obj)
                 end
 

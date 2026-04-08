@@ -54,8 +54,6 @@ function FileStructure:generate()
                 local full_path = self._root .. "/" .. ((prefix and prefix .. "/" .. v) or v)
                 local dir = full_path:match("(.+)/[^/]+$")
                 if dir then ratelprof.fs.mkdir(dir) end
-                local f = ratelprof.fs.open_file(full_path, "w")
-                if f then f:close() end
             end
         end
     end
