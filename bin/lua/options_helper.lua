@@ -42,10 +42,10 @@ function options_helper.parse_string_option(options, name)
     return ratelprof.get_opt_val(options, name)
 end
 
-function options_helper.parse_file_option(options, name)
+function options_helper.parse_file_option(options, name, ext)
     local filepath = ratelprof.get_opt_val(options, name)
     if not filepath then return nil end
-    return ratelprof.fs.open_file(filepath, "r")
+    return ratelprof.fs.open_file(filepath, "r", ext), filepath
 end
 
 function options_helper.parse_json_option(options, name)

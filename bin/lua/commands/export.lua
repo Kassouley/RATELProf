@@ -1,100 +1,235 @@
-local BinaryReport = require("utils.Classes.BinaryReport")
+local RProfRep = require ("utils.Classes.RProfRep")
+local options_helper = require ("options_helper")
+
 local export = {}
 
-local function write_to_output_file(report_files, data, ext)
-    local report_wo_ext = "aggregated_report"
-    if #report_files == 1 then
-        report_wo_ext = ratelprof.fs.remove_extension(report_files[1], ratelprof.consts._REPORT_EXT)
-    end
+local function to_json(rprofrep, output)
+    local write = output.write
+    local DOMAIN_KERNEL_ID = ratelprof.consts.DOMAIN_KERNEL_ID
 
-    local output_file = report_wo_ext..ext
-    local f = ratelprof.fs.open_file(output_file, "w")
-    f:write(data)
-    f:close()
-    
-    Message:print("RPROF: Export written to '" .. output_file.."'")
-end
+    local indent_level = 0
+    local indent_cache = { [0] = "" }
 
-local function export_json(report_files)
-    local data = BinaryReport:new(report_files)
-    local json_data = ratelprof.utils.generate_json(data:to_json())
-
-    write_to_output_file(report_files, json_data, ".json")
-end
-
-local function format_number(val)
-    if type(val) == "number" and val % 1 == 0 then
-        -- Integer: format without scientific notation
-        return string.format("%.0f", val)
-    else
-        return tostring(val)
-    end
-end
-
-local function format_value(name, data)
-    if type(data.value) == "table" then
-        -- Recursively format all subfields
-        local sub_parts = {}
-        for sub_name, sub_data in pairs(data.value) do
-            table.insert(sub_parts, format_value(sub_name, sub_data))
+    local function indent()
+        local s = indent_cache[indent_level]
+        if not s then
+            s = ("\t"):rep(indent_level)
+            indent_cache[indent_level] = s
         end
-        return string.format("%s{%s}", name, table.concat(sub_parts, ", "))
+        return s
+    end
+
+    local function inc() indent_level = indent_level + 1 end
+    local function dec() indent_level = indent_level - 1 end
+
+    local function write_line(s)
+        write(output, indent() .. s)
+    end
+
+    write_line("{\n")
+    inc()
+    write_line('"events": {\n')
+    inc()
+    write_line('"ranks": {\n')
+    inc()
+
+    local first_rank = true
+    rprofrep:for_each_rank(function(rank)
+        if not first_rank then write(output, ",\n") end
+        first_rank = false
+
+        write_line('"' .. rank .. '": {\n')
+        inc()
+
+        -- GPUs
+        write_line('"gpus": {\n')
+        inc()
+
+        local first_gpu = true
+        rprofrep:for_each_gpu(function(gpu_id)
+            if not first_gpu then write(output, ",\n") end
+            first_gpu = false
+
+            write_line('"' .. gpu_id .. '": [\n')
+            inc()
+
+            local first_event = true
+            rprofrep:for_each_event("all", function(event)
+                if not first_event then write(output, ",\n") end
+                first_event = false
+
+                local e = {
+                    name = event:name(),
+                    domain = event:domain(),
+                    id = event:id(),
+                    cid = rprofrep:get_correlated_id(event),
+                    start = event:start(),
+                    dur = event:dur(),
+                    args = event:args(),
+                }
+
+                if e.domain ~= DOMAIN_KERNEL_ID then
+                    e.sdma = event:sdma_id()
+                else
+                    if e.domain == DOMAIN_KERNEL_ID then
+                        e.kernel_metadata = event:kernel_metadata()
+                    end
+                    e.qid = event:queue_id()
+                end
+
+                write_line(JSON:encode(e))
+            end)
+
+            write(output, "\n")
+            dec()
+            write_line("]")
+        end)
+
+        write(output, "\n")
+        dec()
+        write_line("},\n")
+
+        -- PIDs
+        write_line('"pids": {\n')
+        inc()
+
+        local first_pid = true
+        rprofrep:for_each_pid(function(pid)
+            if not first_pid then write(output, ",\n") end
+            first_pid = false
+
+            write_line('"' .. pid .. '": [\n')
+            inc()
+
+            local first_event = true
+            rprofrep:for_each_event("all", function(event)
+                if not first_event then write(output, ",\n") end
+                first_event = false
+
+                local e = {
+                    name = event:name(),
+                    domain = event:domain(),
+                    id = event:id(),
+                    cid = rprofrep:get_correlated_id(event),
+                    start = event:start(),
+                    dur = event:dur(),
+                    args = event:args(),
+                    tid = event:tid(),
+                    loc = rprofrep:get_source_location(event)
+                }
+
+                write_line(JSON:encode(e))
+            end)
+
+            write(output, "\n")
+            dec()
+            write_line("]")
+        end)
+
+        write(output, "\n")
+        dec()
+        write_line("}")
+
+        dec()
+        write_line("}")
+    end)
+
+    write(output, "\n")
+    dec()
+    write_line("}")
+    dec()
+    write_line("}")
+    dec()
+    write_line("}")
+
+    output:close()
+end
+
+
+local function format_value(name, value)
+    if type(value) == "table" then
+        local sub_parts = {}
+        for _, field in ipairs(value) do
+            table.insert(sub_parts, field)
+        end
+        return string.format("%s{%s}", name or "", table.concat(sub_parts, ", "))
     else
-        return string.format("%s:%s", name, format_number(data.value))
+        return string.format("%s%s", name and name..":" or "", value)
     end
 end
 
-local function format_call(function_name, args)
+local function format_call(e)
     local arg_parts = {}
     local retval_value = "void"
 
-    for name, data in pairs(args) do
+    for name, value in pairs(e:args()) do
         if name == "retval" then
-            retval_value = data.value
+            retval_value = format_value(nil, value)
         else
-            table.insert(arg_parts, format_value(name, data))
+            table.insert(arg_parts, format_value(name, value))
         end
     end
 
     local args_str = table.concat(arg_parts, ", ")
-    return string.format("%s(%s):%s", function_name, args_str, format_number(retval_value))
+    return string.format("%s(%s):%s", e:name(), args_str, retval_value)
 end
 
 
-local function export_arg_info(report_files)
-    local data = BinaryReport:new(report_files)
-    local arg_info_data = {}
+local function to_arg_info(rprofrep, output)
+    local write = output.write
 
-    data:for_each_traces(function(mpi_rank, domain_name, trace_id, trace)
-        if trace.name then
-            local name = trace.name
-            local args = trace.args
-            local arg_info = format_call(name, args)
-            local entry = string.format("%-32s |%s %8s | %s", 
-                    domain_name, mpi_rank == -1 and "" or " RANK "..mpi_rank.." |", trace_id, arg_info)
-            arg_info_data[#arg_info_data + 1] = entry
-        end
+    rprofrep:for_each_rank(function(rank)
+        rprofrep:for_each_gpu(function(gpu_id)
+            rprofrep:for_each_event("all", function(e)
+                local domain_name = ratelprof.consts._DOMAIN_NAME[e:domain()]
+                write(output, string.format("%-24s |%s id:%8s | %s\n", 
+                    domain_name, rank == -1 and "" or " RANK "..rank.." |", e:id(), format_call(e)))
+            end)
+        end)
+        rprofrep:for_each_pid(function(pid)
+            rprofrep:for_each_event("all", function(e)
+                local domain_name = ratelprof.consts._DOMAIN_NAME[e:domain()]
+                write(output, string.format("%-24s |%s id:%8s | %s\n", 
+                    domain_name, rank == -1 and "" or " RANK "..rank.." |", e:id(), format_call(e)))
+            end)
+        end)
     end)
-
-    write_to_output_file(report_files, table.concat(arg_info_data, "\n"), "_arg_info.txt")
+    output:close()
 end
 
-function export.process_export(positional_args, opt)
-    local export_type = ratelprof.get_opt_val(opt, "type")
 
-    local report_files = ratelprof.utils.check_report_files(positional_args)
+local function open_file(default, opt, ext)
+    local output, filename = options_helper.parse_file_option(opt, "output", ext)
+    if not output then
+        filename = default .. "." .. ext
+        output = ratelprof.fs.open_file(filename, "w", ext)
+    end
+    return output, filename
+end
 
-    if not export_type then
+function export.process(positional_args, opt)
+    local type = ratelprof.get_opt_val(opt, "type")
+
+    if not type then
         Message:error("Export type is required.")
         os.exit(1)
-    elseif export_type == "json" then
-        export_json(report_files)
-    elseif export_type == "arg-info" then
-        export_arg_info(report_files)
-    else
-        Message:error("Unknown export type: "..export_type)
+    end
+
+    local rprofrep = RProfRep:new(positional_args)
+
+    local handlers = {
+        ["json"]     = to_json,
+        ["arg-info"] = to_arg_info
+    }
+    local fn = handlers[type]
+    if not fn then
+        Message:error("Unknown export type: "..type)
         os.exit(1)
     end
+
+    local output, filename = open_file(rprofrep.basename, opt, type)
+    fn(rprofrep, output)
+    Message:print("RPROF: Export written to '" .. filename.."'")
 end
 
 return export

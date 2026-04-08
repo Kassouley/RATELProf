@@ -84,6 +84,7 @@ SET_GETTER(id,       id,        number)
 SET_GETTER(start,    start,     number)
 SET_GETTER(dur,      dur,       number)
 
+#undef SET_GETTER
 
 static int l_event_stop(lua_State *L) {
     rprofrep_event_data_t *e = rprofrep_lua_get_event(L, 1);
@@ -102,10 +103,34 @@ static int l_event_args(lua_State *L) {
         lua_pushstring(L, args_labels[i]);
         __decode_msgpack(L, e->args, &off);
         lua_settable(L, -3);                       
-    } 
+    }
     return 1;
-} 
-#undef SET_GETTER
+}
+
+
+static int l_event_kernel_metadata(lua_State *L) {
+    rprofrep_event_data_t *e = rprofrep_lua_get_event(L, 1);
+    if (e->domain != RATELPROF_DOMAIN_KERNEL) {
+        lua_pushnil(L);
+        return 1;
+    }
+
+    lua_newtable(L);         
+
+    lua_pushstring(L, "kernel_object");
+    lua_pushnumber(L, e->extra.kernel_data->kernel_object);
+    lua_settable(L, -3);    
+
+    lua_pushstring(L, "group_segment_size");
+    lua_pushnumber(L, e->extra.kernel_data->group_segment_size);
+    lua_settable(L, -3);    
+
+    lua_pushstring(L, "private_segment_size");
+    lua_pushnumber(L, e->extra.kernel_data->private_segment_size);
+    lua_settable(L, -3);    
+
+    return 1;
+}
 
 
 static const struct luaL_Reg l_event_metamethods[] = {
@@ -129,6 +154,7 @@ static const struct luaL_Reg l_event_methods[] = {
     register_class_method(event, dur),
     register_class_method(event, stop),
     register_class_method(event, args),
+    register_class_method(event, kernel_metadata),
     {NULL, NULL}
 };
 
@@ -323,19 +349,31 @@ static int l_context_get_iterator(lua_State *L)
 {
     rprofrep_decode_context_t* ctx  = rprofrep_lua_get_context(L, 1);
     rprofrep_tree_node_t*      node = rprofrep_lua_get_node(L, 2);
-    luaL_checktype(L, 3, LUA_TTABLE);
     rprofrep_event_filter_t* filter = rprofrep_lua_get_filter(L, 4);
- 
     bool requested_domains[RATELPROF_NB_DOMAIN_EXT] = { false };
 
-    int n = lua_objlen(L, 3);
-    for (int i = 1; i <= n; i++) {
-        // push table[i] onto stack
-        lua_rawgeti(L, 3, i);
-        uint64_t domain_requested = luaL_checknumber(L, -1);
-        requested_domains[domain_requested] = true;
-        // pop value
-        lua_pop(L, 1);
+    if (lua_isstring(L, 3)) {
+        const char* mode = lua_tostring(L, 3);
+
+        if (strcmp(mode, "all") == 0) {
+            for (int i = 0; i < RATELPROF_NB_DOMAIN_EXT; i++) {
+                requested_domains[i] = true;
+            }
+        } else {
+            return luaL_error(L, "Invalid string for arg 3 (expected \"all\")");
+        }
+
+    } else {
+        luaL_checktype(L, 3, LUA_TTABLE);
+        int n = lua_objlen(L, 3);
+        for (int i = 1; i <= n; i++) {
+            // push table[i] onto stack
+            lua_rawgeti(L, 3, i);
+            uint64_t domain_requested = luaL_checknumber(L, -1);
+            requested_domains[domain_requested] = true;
+            // pop value
+            lua_pop(L, 1);
+        }
     }
   
     rprofrep_event_iterator_t tmp = {0};

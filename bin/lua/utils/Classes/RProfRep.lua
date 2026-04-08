@@ -308,11 +308,6 @@ function RProfRep:get_application_time(unit)
 end
 
 
-function RProfRep:to_json(filename)
-    print("TO IMPLEMENT")
-end
-
-
 function RProfRep:get_analyzed_interval_dur(unit)
     local start = math.max(self.start or 0, 0)
     local stop  = math.min(self.stop or math.huge, self:get_application_time())
@@ -383,7 +378,6 @@ function RProfRep:gpu_to_json(prefix)
         rprofrep:gpu_to_json(prefix)
     end
 end
-
 
 
 return RProfRep
