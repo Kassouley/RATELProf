@@ -68,7 +68,10 @@ return function(report)
     end
 
     report.POST_EVENT_LOOP = function (self, _, gpu_key)
-        local concurrency_per_gpu = self.concurrent_pct / self.concurrent_cnt
+        local concurrency_per_gpu = 0
+        if self.concurrent_cnt > 0 then
+            concurrency_per_gpu = self.concurrent_pct / self.concurrent_cnt
+        end
 
         for _, group in pairs(self.grouped_events.groups) do
             table.insert(self.data, {
