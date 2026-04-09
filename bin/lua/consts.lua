@@ -8,7 +8,7 @@ consts._MODULES_DIR  = consts._INSTALL_DIR.."/share/modules/"
 consts._HTML_DIR     = consts._INSTALL_DIR.."/share/visualize/"
 
 
-local major, minor, patch = 1, 1, 0
+local major, minor, patch = 1, 4, 0
 consts._VERSION_MAJOR = major
 consts._VERSION_MINOR = minor
 consts._VERSION_PATCH = patch
