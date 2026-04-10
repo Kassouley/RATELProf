@@ -10,7 +10,6 @@ RATELProf is a powerful and lightweight profiler designed specifically for AMD G
   - [Installation](#installation)
 - [Comparison with ROCprof v3](#comparison-with-rocprof-v3)
 - [Future Work and Improvement](#future-work-and-improvement)
-- [Project Structure](#project-structure)
 - [Contribution](#contribution)
 
 ---
@@ -40,15 +39,21 @@ RATELProf includes four core commands to streamline your profiling workflow:
    - Analyze profiling results from a .rprof-rep report created by the `profile` command.  
    - Output advices to optimize your CPU/GPU code.
 
-4. **`visualize`**  
+4. **`breakdown`**  
+   - Give time breakdown information for each PID or GPU.  
+
+5. **`summarize`**  
+   - Run `stats`, `analyze` and `breakdown` command to give in terminal view a summary of your profiling report.  
+
+6. **`visualize`**  
    - Generates an interactive HTML timeline report for the .rprof-rep profile report created by the `profile` command.  
    - Perfect for visualizing application details.
 
-5. **`inspect`**  
+7. **`inspect`**  
    - Inspects the application binary and outputs a CSV/JSON report containing detailed kernel information.  
    - Use this command to analyze static kernel properties.
 
-6. **`export`**  
+8. **`export`**  
    - Export the .rprof-rep report to another type of report (json, arg-info, ...).
 
 ---
@@ -61,6 +66,8 @@ Installing RATELProf is simple and requires running the provided `install.sh` sc
 
 Ensure you have the following installed on your system before proceeding:
 - **CMake** (version 3.10 or later)
+- **Lua** (version 5.1)
+- **LuaJIT** (optional)
 - **AMD ROCm** (download from [ROCm's official site](https://github.com/ROCm/ROCm))
 
 ### Installation
@@ -68,19 +75,30 @@ Ensure you have the following installed on your system before proceeding:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/Kassouley/RATELProf
+git clone --recurse-submodules https://github.com/Kassouley/RATELProf.git
 cd RATELProf
 ```
 
 2. Run the installation script:
 
 ```bash
-./install.sh
+lua sett_install.lua
 ```
-By default, the tool will be installed to $HOME/.local. If you want to install it to a custom directory, specify it as an argument:
+By default, the installation script will use the sett.config config file.
+Modify this file to custom your installation.
 
 ```bash
-./install.sh /custom/install/path
+lua set_install.lua <sett.config>
+```
+
+3. Set ENV
+
+If needed, set up your environment variable:
+```bash
+export PATH=<path/to/ratelprof/bin>:$PATH
+export PATH=<path/to/lua5.1/bin>:$PATH
+export LD_LIBRARY_PATH=<path/to/hsa/lib/dir>:$LD_LIBRARY_PATH
+export LIBRARY_PATH=<path/to/hsa/lib/dir>:$LIBRARY_PATH
 ```
 
 ##  Comparison with ROCprof v3
@@ -92,7 +110,7 @@ By default, the tool will be installed to $HOME/.local. If you want to install i
 | **HSA Tracing**                   | ✅                                             | ✅                                           |
 | **rocBLAS Tracing**               | ❌                                             | ❌ But can be easily implemented with GILDA  |
 | **RCCL Tracing**                  | ✅                                             | ❌ But can be easily implemented with GILDA  |
-| **Marker Tracing**                | ✅ (ROCTx)                                     | ❌ But can be easily implemented with GILDA  |
+| **Marker Tracing**                | ✅ (ROCTx)                                     | ✅ (ROCTx)                                   |
 | **OpenMP Routine Tracing**        | ❌                                             | ✅                                           |
 | **OpenMP Target RTL Tracing**     | ❌                                             | ✅                                           |
 | **OMPT Integration**              | ✅                                             | ✅                                           |
@@ -106,7 +124,7 @@ By default, the tool will be installed to $HOME/.local. If you want to install i
 | **Statistical post processing**   | ✅ but really simple post processing           | ✅                                           |
 | **Post processing analysis**      | ❌                                             | ✅                                           |
 | **Output Formats**                | CSV, JSON                                       | Binary (rprof-rep), CSV, TSV, JSON, TXT      |
-| **Output Size**                   | Large                                           | Small (msgpack binary format)                |
+| **Output Size**                   | Large                                           | Small (binary format)                        |
 | **Visualization Tools**           | External (Perfetto)                             | Integrated                                   |
 | **Ease of Use**                   | Medium (requires scripting for deeper analysis) | Easy, run and play                           |
 | **Overhead**                      | Low to Medium (depends on config)               | Low                                          |
@@ -116,10 +134,6 @@ By default, the tool will be installed to $HOME/.local. If you want to install i
 
 While the current version provides a functional profiling workflow, there are several areas identified for future enhancement:
 
-- **Timeline Visualization Performance**: The current timeline view may become sluggish or unresponsive when handling large trace datasets. Optimizing rendering performance and implementing progressive loading or filtering options will be a priority in upcoming releases.
-
-- **Build and Setup Process**: The CMake-based build system is still under refinement. Improvements are planned to enhance dependency management.
-
 - **Hardware Counter Support**: Support for hardware performance counters is a work in progress. These metrics are crucial for low-level performance analysis and are planned to be implemented in the next major release.
 
 - **Barrier Dispatch Reliability**: Certain applications may encounter issues with barrier dispatch tracking. Investigating edge cases is on the roadmap.
@@ -127,52 +141,6 @@ While the current version provides a functional profiling workflow, there are se
 - **Documentation**: A full and detailed documentation is work in progress.
 
 Community feedback and contributions are welcome to help guide and accelerate these improvements.
-
-
-##  Project Structure
-
-```sh
-└── RATELProf/
-    ├── CMakeLists.txt
-    ├── install.sh
-    ├── README.md
-    ├── bin/
-    │   ├── lua/
-    │   ├── ratelprof.sh
-    ├── share/
-    │   ├── modules/
-    │   │      ├── lua/
-    │   │      ├── html/
-    │   ├── visualize/
-    └── src/
-        ├── lua/
-        ├── tools/
-        ├── core/
-        ├── ext/
-        ├── wrappers/
-        └── plugins/
-```
-
-- **`bin/`**  
-  Contains executable scripts and lua command scripts:
-  - **`lua/`**: Lua scripts used for tooling.
-  - **`ratelprof.sh`**: Main shell script to launch RATELProf.
-
-- **`share/`**  
-  Contains shared assets used by the tool:
-  - **`modules/`**: Modular components of the tool.
-    - **`lua/`**: Built-in and user Lua modules for Analyze and Stats scripts.
-    - **`html/`**: Minified and unified HTML report from visualize directory.
-  - **`visualize/`**: HTML code used for the visualizing report.
-
-- **`src/`**  
-  Core source code of RATELProf:
-  - **`lua/`**: C Stub for Lua modules.
-  - **`tools/`**: Main tool src file.
-  - **`core/`**: Core logic of the tool (auto generated by GILDA).
-  - **`ext/`**: Extension logic of the tool (source of GPU profiling logic).
-  - **`wrappers/`**: API wrappers for hooking into applications or libraries (e.g., HIP, HSA, ...).
-  - **`plugins/`**: Built-in plugins for callbacks definition.
 
 ##  Contribution
 
