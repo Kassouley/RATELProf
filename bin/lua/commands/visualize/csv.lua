@@ -66,7 +66,8 @@ local function get_csv_data(report_obj, report_id)
         end
 
         if not skipped then
-            csv_data.file = ratelprof.utils.json_to_js(filename, "window.currentCSV")
+            local jsfile = ratelprof.utils.json_to_js(filename, "window.currentCSV")
+            csv_data.file = ratelprof.fs.basename(jsfile)
         end
     end
 
@@ -156,7 +157,7 @@ local function insert_sub_csv(csv_data, report_obj)
             local jsfile = ratelprof.utils.json_to_js(filename, "window.currentCSV")
             table.insert(csv_data.subCSV, {
                 name = ratelprof.utils.label_unit_with_rank(user_args, true),
-                file = jsfile,
+                file = ratelprof.fs.basename(jsfile),
                 dataRendering = "renderPie",
             })
         end

@@ -34,6 +34,7 @@ function RProfRep:new(rprofrep_files)
     end
 
     instance.basename = #rprofrep_files == 1 and ratelprof.fs.remove_extension(rprofrep_files[1]) or "aggregated_report"
+    instance.basename = ratelprof.fs.basename(instance.basename)
 
     instance.rank_count = #rprofrep_files
     instance.reports_rprofrep = {}

@@ -4,16 +4,16 @@ local csv       = require ("commands.visualize.csv")
 local breakdown = require ("commands.visualize.breakdown")
 local summarize = require ("commands.summarize")
 local RProfRep  = require ("utils.Classes.RProfRep")
-local FileStructure  = require ("utils.Classes.FileStructure")
+local FileStructure = require ("utils.Classes.FileStructure")
 
 local visualize = {}
 
 function visualize.process(positional_args, options_values)
     local rprofrep = RProfRep:new(positional_args)
 
-    local output  = ratelprof.get_opt_val(options_values, "output") or rprofrep.basename
+    local output = ratelprof.get_opt_val(options_values, "output") or rprofrep.basename
 
-    local fs = FileStructure.new( output, {
+    local fs = FileStructure.new(output, {
         data = {
             csv = {},
             gpus = {},

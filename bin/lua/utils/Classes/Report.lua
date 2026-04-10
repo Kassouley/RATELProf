@@ -67,14 +67,9 @@ function Report:get_output(rprofrep, per_data)
 
     local format_extension = format_extensions[format]
 
-    local report_wo_ext
-    local reports_filename = rprofrep:get_reports_filename()
-    if #reports_filename == 1 then
-        report_wo_ext = ratelprof.fs.remove_extension(reports_filename[1])
-    else
-        report_wo_ext = "aggregated_report"
-    end
-
+    local reports_filename = rprofrep.basename
+    local report_wo_ext = ratelprof.fs.remove_extension(reports_filename)
+    
     -- If output is a directory (end with /) 
     -- then keep basename as output .. report_wo_ext
     if string.sub(output, -1) == "/" then

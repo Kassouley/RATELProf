@@ -50,7 +50,7 @@ function global.get_global_data(rprofrep, summarize_opt)
     local output_base = path and (path == "" and "./summarize" or path) or "_"
 
     local output_per_list = {
-        [ratelprof.consts.STATS_REPORTS]     = "/stats/",
+        [ratelprof.consts.STATS_REPORTS]     = "/statistics/",
         [ratelprof.consts.ANALYZE_REPORTS]   = "/analyze/",
         [ratelprof.consts.BREAKDOWN_REPORTS] = "/breakdown/",
     }
