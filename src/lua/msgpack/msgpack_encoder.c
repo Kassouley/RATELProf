@@ -120,12 +120,21 @@ static int l_msgpack_encode_ext(lua_State *L) {
     return 0;
 }
 
-
-/* Lua: buf:tostring() -- returns the raw buffer data as Lua string */
-static int l_msgpack_tostring(lua_State *L) {
+/* Lua: buf:push_byte(byte) */
+static int l_msgpack_push_byte(lua_State *L) {
     msgpack_buffer_t *buf = check_buffer(L, 1);
-    lua_pushlstring(L, (const char *)buf->data, buf->size);
-    return 1;
+    uint8_t byte = (uint8_t)luaL_checkinteger(L, 2);
+    msgpack_push_byte(buf, byte);
+    return 0;
+}
+
+/* Lua: buf:push_bytes(str) */
+static int l_msgpack_push_bytes(lua_State *L) {
+    msgpack_buffer_t *buf = check_buffer(L, 1);
+    size_t len;
+    uint8_t* data = (uint8_t *)luaL_checklstring(L, 2, &len);
+    msgpack_push_bytes(buf, data, len);
+    return 0;
 }
 
 /* Lua: buf:size() */
@@ -142,13 +151,19 @@ static int l_msgpack_capacity(lua_State *L) {
     return 1;
 }
 
+/* Lua: buf:tostring() -- returns the raw buffer data as Lua string */
+static int l_msgpack_tostring(lua_State *L) {
+    msgpack_buffer_t *buf = check_buffer(L, 1);
+    lua_pushlstring(L, (const char *)buf->data, buf->size);
+    return 1;
+}
+
 /* Garbage collector metamethod */
-static int l_msgpack_gc(lua_State *L) {
+static int l_msgpack___gc(lua_State *L) {
     msgpack_buffer_t *buf = check_buffer(L, 1);
     msgpack_free(buf);
     return 0;
 }
-
 
 /* Lua: buf = msgpack_encoder.new(capacity, mode, filename) */
 static int l_msgpack_new(lua_State *L) {
@@ -173,7 +188,7 @@ static int l_msgpack_new(lua_State *L) {
 }
 
 
-static int lmsgpack_to_hex(lua_State *L) {
+static int l_msgpack_to_hex(lua_State *L) {
     msgpack_buffer_t *buf = (msgpack_buffer_t *)luaL_checkudata(L, 1, LUA_MSGPACK_BUFFER);
 
     if (!buf->data || buf->size == 0) {
@@ -200,7 +215,7 @@ static int lmsgpack_to_hex(lua_State *L) {
 }
 
 
-static int lmsgpack_to_b64(lua_State *L) {
+static int l_msgpack_to_b64(lua_State *L) {
     msgpack_buffer_t *buf = (msgpack_buffer_t *)luaL_checkudata(L, 1, LUA_MSGPACK_BUFFER);
 
     if (!buf->data || buf->size == 0) {
@@ -220,45 +235,48 @@ static int lmsgpack_to_b64(lua_State *L) {
     return 1;
 }
 
-static int lmsgpack_write(lua_State *L) {
+static int l_msgpack_write(lua_State *L) {
     msgpack_buffer_t *buf = (msgpack_buffer_t *)luaL_checkudata(L, 1, LUA_MSGPACK_BUFFER);
     int res = msgpack_write(buf);
     lua_pushboolean(L, res == 0);
     return 1;
 }
 
-static int lmsgpack_concat(lua_State *L) {
+static int l_msgpack_concat(lua_State *L) {
     msgpack_buffer_t *dst = (msgpack_buffer_t *)luaL_checkudata(L, 1, LUA_MSGPACK_BUFFER);
     msgpack_buffer_t *src = (msgpack_buffer_t *)luaL_checkudata(L, 2, LUA_MSGPACK_BUFFER);
     msgpack_concat(dst, src);
     return 1;
 }
 
+#define register_method(fname) {#fname, l_msgpack_##fname}
 
 static const luaL_Reg msgpack_methods[] = {
-    {"free", l_msgpack_free},
-    {"encode_int", l_msgpack_encode_int},
-    {"encode_uint", l_msgpack_encode_uint},
-    {"encode_float", l_msgpack_encode_float},
-    {"encode_double", l_msgpack_encode_double},
-    {"encode_bool", l_msgpack_encode_bool},
-    {"encode_nil", l_msgpack_encode_nil},
-    {"encode_string", l_msgpack_encode_string},
-    {"encode_array", l_msgpack_encode_array},
-    {"encode_map", l_msgpack_encode_map},
-    {"encode_ext", l_msgpack_encode_ext},
-    {"tostring", l_msgpack_tostring},
-    {"size", l_msgpack_size},
-    {"capacity", l_msgpack_capacity},
-    {"write", lmsgpack_write},
-    {"concat", lmsgpack_concat},
-    {"to_hex", lmsgpack_to_hex},
-    {"to_b64", lmsgpack_to_b64},
+    register_method(free),
+    register_method(encode_int),
+    register_method(encode_uint),
+    register_method(encode_float),
+    register_method(encode_double),
+    register_method(encode_bool),
+    register_method(encode_nil),
+    register_method(encode_string),
+    register_method(encode_array),
+    register_method(encode_map),
+    register_method(encode_ext),
+    register_method(push_byte),
+    register_method(push_bytes),
+    register_method(tostring),
+    register_method(size),
+    register_method(capacity),
+    register_method(write),
+    register_method(concat),
+    register_method(to_hex),
+    register_method(to_b64),
     {NULL, NULL}
 };
 
 static const luaL_Reg msgpack_meta[] = {
-    {"__gc", l_msgpack_gc},
+    register_method(__gc),
     {"__tostring", l_msgpack_tostring},
     {NULL, NULL}
 };
@@ -267,6 +285,10 @@ static const luaL_Reg msgpack_meta[] = {
 static int l_msgpack_create(lua_State *L) {
     return l_msgpack_new(L);
 }
+
+#define export_enum(enum) \
+    lua_pushinteger(L, MSGPACK_##enum); \
+    lua_setfield(L, -2, #enum);
 
 int luaopen_msgpack_encoder(lua_State *L) {
     /* Create MsgpackBuffer metatable */
@@ -283,16 +305,10 @@ int luaopen_msgpack_encoder(lua_State *L) {
     lua_setfield(L, -2, "new");
 
     /* Export overflow modes as constants */
-    lua_pushinteger(L, MSGPACK_OVERFLOW_REALLOC);
-    lua_setfield(L, -2, "OVERFLOW_REALLOC");
-    lua_pushinteger(L, MSGPACK_OVERFLOW_WRITE_TO_FILE);
-    lua_setfield(L, -2, "OVERFLOW_WRITE_TO_FILE");
-    lua_pushinteger(L, MSGPACK_OVERFLOW_APPEND_TO_FILE);
-    lua_setfield(L, -2, "OVERFLOW_APPEND_TO_FILE");
-    lua_pushinteger(L, MSGPACK_OVERFLOW_WRITE_B64_TO_FILE);
-    lua_setfield(L, -2, "OVERFLOW_WRITE_B64_TO_FILE");
-    lua_pushinteger(L, MSGPACK_OVERFLOW_APPEND_B64_TO_FILE);
-    lua_setfield(L, -2, "OVERFLOW_APPEND_B64_TO_FILE");
-
+    export_enum(OVERFLOW_REALLOC)
+    export_enum(OVERFLOW_WRITE_TO_FILE)
+    export_enum(OVERFLOW_APPEND_TO_FILE)
+    export_enum(OVERFLOW_WRITE_B64_TO_FILE)
+    export_enum(OVERFLOW_APPEND_B64_TO_FILE)
     return 1;
 }

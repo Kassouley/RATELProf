@@ -94,6 +94,10 @@ void msgpack_push_byte(msgpack_buffer_t *buf, const uint8_t byte) {
     __msgpack_write_1_bytes(buf, byte);
 }
 
+void msgpack_concat(msgpack_buffer_t *buf, msgpack_buffer_t *buf_src) {
+    msgpack_push_bytes(buf, buf_src->data, buf_src->size);
+}
+
 size_t msgpack_size(msgpack_buffer_t *buf) {
     return buf->flushed + buf->size;
 } 
@@ -219,11 +223,6 @@ int msgpack_write(msgpack_buffer_t *buf) {
     return 0;
 }
 
-void msgpack_concat(msgpack_buffer_t *buf, msgpack_buffer_t *buf_src) {
-    __msgpack_reserve(buf, buf_src->size);
-    __msgpack_write_n_bytes(buf, buf_src->data, buf_src->size);
-    return;
-}
 
 void msgpack_encode_int(msgpack_buffer_t *buf, int64_t value) {
     __msgpack_reserve(buf, 9);
