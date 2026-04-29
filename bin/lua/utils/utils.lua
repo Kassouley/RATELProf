@@ -76,6 +76,7 @@ function utils.execute_command(cmd)
 end
 
 local omp_pattern = "^__omp_offloading_[%da-f]+_[%da-f]+_(.-)_l(%d+).*"
+local intern_suffix_pattern = "(.-)(%.intern%.[%da-f]+)$"
 
 local name_cache = {}
 function utils.get_kernel_name(name, is_trunc, is_mangled)
@@ -88,10 +89,19 @@ function utils.get_kernel_name(name, is_trunc, is_mangled)
         if mangled_name then
             name = mangled_name
         end
+        local base_name, suffix = name:match(intern_suffix_pattern)
+        if base_name then
+            name = base_name
+        end
+
         if is_trunc then
             ret = utils.demangle(name, true)
         else
             ret = utils.demangle(name)
+        end
+
+        if suffix then
+            ret = ret .. suffix
         end
         if line then
             ret = ret .. " (l." .. line .. ")"
@@ -198,17 +208,14 @@ function utils.json_to_js(filename, varname, output)
         return nil
     end
 
-    -- read JSON
-    local f = ratelprof.fs.open_file(filename, "r")
-    local content = f:read("*all")
-    f:close()
-
     -- write prefixed JS
     output = output or ratelprof.fs.remove_extension(filename)..'.js'
+
     local f2 = ratelprof.fs.open_file(output, "w")
-    f2:write(varname, "=", content, ";\n")
+    f2:write(varname, "=")
     f2:close()
 
+    ratelprof.fs.cat(filename, output)
     ratelprof.fs.rm(filename)
 
     return output
