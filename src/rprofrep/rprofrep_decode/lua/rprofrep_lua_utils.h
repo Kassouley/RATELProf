@@ -76,4 +76,18 @@ static inline void* __rprofrep_lua_new(lua_State *L, size_t size, const char* me
     } \
 } while(0)
 
+typedef struct {
+    const char *name;
+    int value;
+} rprofrep_lua_enum_Reg;
+
+static inline void rprofrep_lua_register_enum(lua_State *L, const rprofrep_lua_enum_Reg *l) {
+    lua_newtable(L);
+    for (int i = 0; l[i].name != NULL; i++) {
+        lua_pushinteger(L, l[i].value);
+        lua_setfield(L, -2, l[i].name);
+    }
+    lua_setfield(L, -2, "enum");
+}
+
 #endif // RPROFREP_LUA_UTILS_H

@@ -17,6 +17,7 @@ typedef struct rprofrep_tree_node_s {
     uint64_t capacity;
     uint64_t nchild;
     rprofrep_tree_child_t childs;
+    uint64_t tag;
 } rprofrep_tree_node_t;
 
 typedef bool (*rprofrep_tree_callback_t)(rprofrep_tree_node_t* node, void* user_arg);

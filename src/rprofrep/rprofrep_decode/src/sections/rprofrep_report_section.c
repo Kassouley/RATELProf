@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <inttypes.h>
+#include <sys/sendfile.h>
+#include <fcntl.h>
+#include <errno.h>
 
 #include "rprofrep_status.h"
 #include "rprofrep_log.h"
@@ -121,6 +124,49 @@ rprofrep_status_t rprofrep_destroy_section(rprofrep_decode_context_t* ctx, rprof
 
     section->is_decoded = false;
     free(section->data);
+
+    return RPROFREP_STATUS_SUCCESS;
+}
+
+rprofrep_status_t rprofrep_export_section(rprofrep_decode_context_t* ctx, rprofrep_section_id_t sct_id, const char* filename, int mode, size_t* out_size) {
+    RPROFREP_CHECK_VALID_PTR(ctx, ctx->handle, filename);
+    RPROFREP_CHECK_VALID_ARG(sct_id < RPROFREP_NB_SECTIONS);
+
+    uint64_t offset = 0;
+    uint64_t size = 0;
+    RPROFREP_CHECK_CALL(rprofrep_get_section_metadata(ctx, sct_id, &offset, &size));
+
+    int dst_flags = O_WRONLY | O_CREAT | (mode == 1 ? 0 : O_TRUNC);
+
+    int src_fd = fileno(ctx->handle);
+    if (src_fd < 0) return RPROFREP_STATUS_FILE_ERROR("Cannot get fd for handle %x", ctx->handle);
+
+    int dst_fd = open(filename, dst_flags, 0644);
+    if (dst_fd < 0) return RPROFREP_STATUS_FILE_ERROR("Cannot open destination file %s", filename);
+
+    if (mode == 1 && lseek(dst_fd, 0, SEEK_END) == (off_t)-1) {
+        close(dst_fd);
+        return RPROFREP_STATUS_FILE_ERROR("Cannot seek to end of destination file %s", filename);
+    }
+
+    off_t off = (off_t)offset;
+    size_t remaining = (size_t)size;
+
+    while (remaining > 0) {
+        ssize_t sent = sendfile(dst_fd, src_fd, &off, remaining);
+        if (sent <= 0) {
+            close(dst_fd);
+            return RPROFREP_STATUS_FILE_ERROR("sendfile failed");
+        }
+
+        remaining -= sent;
+    }
+
+    close(dst_fd);
+
+    if (out_size) {
+        *out_size = size;
+    }
 
     return RPROFREP_STATUS_SUCCESS;
 }

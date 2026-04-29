@@ -5,6 +5,7 @@
 #include "rprofrep_encode_type.h"
 
 #include "utils/rprofrep_argument_manager.h"
+#include "ref/rprofrep_reference.h"
 #include "ref/rprofrep_api_reference.h"
 
 rprofrep_status_t rprofrep_init_api_data_section(rprofrep_api_data_ref_t* data, const char* filename)
@@ -59,7 +60,8 @@ uint64_t rprofrep_api_data_get_ref(rprofrep_encode_context_t* ctx, ratelprof_dom
     uint64_t ref_id = ref->api_data_existed_ref_id[domain][id];
     if (ref_id == (uint64_t)-1) {
         const char* name = ratelprof_get_funame_by_id(domain, id);
-        msgpack_encode_string(&ref->buffer, name);
+        uint64_t name_strid = rprofrep_string_get_ref(ctx, name);
+        msgpack_encode_uint(&ref->buffer, name_strid);
         rprofrep_write_params(ctx, &ref->buffer, domain, id);
 
         ref_id = ref->ref_counter++;

@@ -19,7 +19,22 @@
  */
 rprofrep_status_t rprofrep_decode_header_section(rprofrep_decode_context_t* ctx);
 
-
+/**
+ * The function `rprofrep_get_section_metadata` retrieves the offset and size of a specific section from
+ * the report context.
+ * 
+ * @param ctx Input of type `rprofrep_decode_context_t` used to store the context of the report.
+ * @param section_id The `section_id` parameter is of type `rprofrep_section_id_t` and represents the identifier of the section for which to retrieve metadata.
+ * @param out_offset Pointer to a `uint64_t` where the offset of the section will be stored.
+ * @param out_size Pointer to a `uint64_t` where the size of the section will be stored.
+ * 
+ * @return `rprofrep_status_t`
+ */
+rprofrep_status_t rprofrep_get_section_metadata(
+    rprofrep_decode_context_t* ctx, 
+    rprofrep_section_id_t section_id, 
+    uint64_t* out_offset, 
+    uint64_t* out_size);
 
 /**
  * The function `rprofrep_get_section_buffer` reads a specific section from a report context and

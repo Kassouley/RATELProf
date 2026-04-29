@@ -40,6 +40,7 @@ rprofrep_status_t rprofrep_decode_location_section(
 
         for (uint64_t i = 0; i < nentries; i++) {
             entries[i].return_address = __read_mp_uint(buffer, &offset);
+            entries[i].base_address = __read_mp_uint(buffer, &offset);
             rprofrep_get_string_by_id(ctx, __read_mp_uint(buffer, &offset), &entries[i].objectfile);
             rprofrep_get_string_by_id(ctx, __read_mp_uint(buffer, &offset), &entries[i].function);
             rprofrep_get_string_by_id(ctx, __read_mp_uint(buffer, &offset), &entries[i].filename);

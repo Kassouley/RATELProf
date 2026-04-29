@@ -9,6 +9,7 @@
 
 typedef struct rprofrep_location_entry_t {
     uint64_t return_address;
+    uint64_t base_address;
     char* objectfile;
     char* function;
     char* filename;

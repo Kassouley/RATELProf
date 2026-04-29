@@ -9,6 +9,7 @@
 
 typedef struct rprofrep_api_data_entry_s {
     char* fname;
+    uint64_t fname_strid;
     size_t num_args;
     char** arg_types;
     char** arg_names;

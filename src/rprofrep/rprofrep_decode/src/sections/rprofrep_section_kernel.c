@@ -17,9 +17,6 @@ rprofrep_status_t rprofrep_free_kernel_section(rprofrep_ref_section_t* section)
 {
     rprofrep_kernel_static_data_t* nentries = (rprofrep_kernel_static_data_t*) section->entries;
     if (nentries)  {
-        for (uint64_t i = 0; i < section->nentries; i++) {
-            free(nentries[i].kernel_name);
-        }
         free(nentries);
     }
 
@@ -43,7 +40,9 @@ rprofrep_status_t rprofrep_decode_kernel_section(
         entries = (rprofrep_kernel_static_data_t*) data_out->entries;
 
         for (uint64_t i = 0; i < nentries; i++) {
-            entries[i].kernel_name          = __read_mp_string(buffer, &offset);
+            uint64_t str_id = __read_mp_uint(buffer, &offset);
+            rprofrep_get_string_by_id(ctx, str_id, &entries[i].kernel_name);
+            entries[i].kernel_strid         = str_id;
             entries[i].kernel_object        = __read_mp_uint(buffer, &offset);
             entries[i].group_segment_size   = __read_mp_uint(buffer, &offset);
             entries[i].private_segment_size = __read_mp_uint(buffer, &offset);

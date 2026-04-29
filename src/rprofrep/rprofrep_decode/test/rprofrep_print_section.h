@@ -254,7 +254,7 @@ static inline rprofrep_status_t __print_subunit_tree(rprofrep_decode_context_t* 
 static inline rprofrep_status_t __print_cpu_tree(rprofrep_decode_context_t* ctx, rprofrep_tree_node_t* node, void* user_arg) {
     is_in_gpu_tree = false;
     printf("  - PID: %" PRIu64 "\n", node->value);
-    RPROFREP_CHECK_CALL(rprofrep_for_each_subunit(ctx, node, __print_subunit_tree, NULL));
+    RPROFREP_CHECK_CALL(rprofrep_for_each_tid(ctx, node, __print_subunit_tree, NULL));
     return RPROFREP_STATUS_SUCCESS;
 }
 
@@ -262,7 +262,8 @@ static inline rprofrep_status_t __print_cpu_tree(rprofrep_decode_context_t* ctx,
 static inline rprofrep_status_t __print_gpu_tree(rprofrep_decode_context_t* ctx, rprofrep_tree_node_t* node, void* user_arg) {
     is_in_gpu_tree = true;
     printf("  - GPU: %" PRIu64 "\n", node->value);
-    RPROFREP_CHECK_CALL(rprofrep_for_each_subunit(ctx, node, __print_subunit_tree, NULL));
+    RPROFREP_CHECK_CALL(rprofrep_for_each_queue(ctx, node, __print_subunit_tree, NULL));
+    RPROFREP_CHECK_CALL(rprofrep_for_each_sdma(ctx, node, __print_subunit_tree, NULL));
     return RPROFREP_STATUS_SUCCESS;
 }
 

@@ -2,7 +2,7 @@
 #define RPROFREP_DEFS_H
 
 #define RPROFREP_VERSION_MAJOR 1
-#define RPROFREP_VERSION_MINOR 0
+#define RPROFREP_VERSION_MINOR 1
 #define RPROFREP_VERSION_PATCH 0
 
 #define RPROFREP_FILE_MAGIC "RATELProf"
@@ -26,6 +26,7 @@ typedef enum {
 
 typedef struct rprofrep_kernel_static_data_s {
     char* kernel_name;
+    uint64_t kernel_strid;
     uint32_t private_segment_size;
     uint32_t group_segment_size;
     uint64_t kernel_object;

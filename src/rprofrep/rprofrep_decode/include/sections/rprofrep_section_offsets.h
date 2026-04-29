@@ -110,7 +110,21 @@ rprofrep_status_t rprofrep_for_each_gpu(
     void* user_arg);
 
 
-rprofrep_status_t rprofrep_for_each_subunit(
+rprofrep_status_t rprofrep_for_each_sdma(
+    rprofrep_decode_context_t* ctx,
+    rprofrep_tree_node_t* unit_node,
+    rprofrep_offset_callback_t callback,
+    void* user_arg);
+
+
+rprofrep_status_t rprofrep_for_each_queue(
+    rprofrep_decode_context_t* ctx,
+    rprofrep_tree_node_t* unit_node,
+    rprofrep_offset_callback_t callback,
+    void* user_arg);
+
+
+rprofrep_status_t rprofrep_for_each_tid(
     rprofrep_decode_context_t* ctx,
     rprofrep_tree_node_t* unit_node,
     rprofrep_offset_callback_t callback,

@@ -107,6 +107,7 @@ rprofrep_status_t rprofrep_get_event(
         return RPROFREP_STATUS_INVALID_EVENT("Invalid size value\n");
     }
 
+    size_t   event_hdr_size = offset;
     size_t   next_event_off = event_off + offset + event_size;
     uint8_t* next_event_buf = buffer_start + next_event_off;
 
@@ -138,22 +139,26 @@ rprofrep_status_t rprofrep_get_event(
 
     char* name = NULL;
     uint64_t loc_id = (uint64_t) -1;
-    uint64_t extra_id = 0;
+    uint64_t extra_id = (uint64_t) -1;
+    uint64_t unique_funid = (uint64_t) -1;
 
     if(!is_gpu_domain(group->domain)) {
         extra_id = __read_mp_uint(event_buf, &offset);
         loc_id   = __read_mp_uint(event_buf, &offset);
         RPROFREP_CHECK_CALL(rprofrep_get_api_data(ctx, extra_id, &out_event->extra.api_data));
         name = out_event->extra.api_data->fname;
+        unique_funid = out_event->extra.api_data->fname_strid;
 
     } else if (group->domain == RATELPROF_DOMAIN_COPY) {
         extra_id = __read_mp_uint(event_buf, &offset);
         RPROFREP_CHECK_CALL(rprofrep_get_string_by_id(ctx, extra_id, &name));
+        unique_funid = extra_id;
 
     } else if (group->domain == RATELPROF_DOMAIN_KERNEL) {
         extra_id = __read_mp_uint(event_buf, &offset);
         RPROFREP_CHECK_CALL(rprofrep_get_kernel(ctx, extra_id, &out_event->extra.kernel_data));
         name = out_event->extra.kernel_data->kernel_name;
+        unique_funid = out_event->extra.kernel_data->kernel_strid;
 
     } else {
         name = "Barrier";
@@ -163,6 +168,7 @@ rprofrep_status_t rprofrep_get_event(
 
     out_event->valid    = true;
     out_event->name     = name;
+    out_event->ufunid   = unique_funid;
     out_event->rank     = rank;
     out_event->unit     = group->unit;
     out_event->domain   = group->domain;
@@ -173,7 +179,9 @@ rprofrep_status_t rprofrep_get_event(
     out_event->dur      = dur;
     out_event->cid      = cid;
     out_event->loc_id   = loc_id;
+    out_event->extra_id = extra_id;
     out_event->args     = event_buf + offset;
+    out_event->args_len = (event_hdr_size + event_size) - offset;
 
     return RPROFREP_STATUS_SUCCESS;
 }

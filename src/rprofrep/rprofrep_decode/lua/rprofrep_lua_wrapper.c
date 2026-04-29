@@ -70,6 +70,7 @@ static int l_event_##fct(lua_State *L) { \
 } 
 
 SET_GETTER(name,     name,      string)
+SET_GETTER(ufunid,   ufunid,    number)
 SET_GETTER(rank,     rank,      number)
 SET_GETTER(domain,   domain,    number)
 SET_GETTER(unit,     unit,      number)
@@ -83,14 +84,31 @@ SET_GETTER(phase,    phase,     number)
 SET_GETTER(id,       id,        number)
 SET_GETTER(start,    start,     number)
 SET_GETTER(dur,      dur,       number)
+SET_GETTER(extra_id, extra_id,  number)
 
 #undef SET_GETTER
+
+static int l_event_loc_id(lua_State *L) {
+    rprofrep_event_data_t *e = rprofrep_lua_get_event(L, 1);
+    lua_pushnumber(L, (int64_t)e->loc_id);
+    return 1;
+} 
+
 
 static int l_event_stop(lua_State *L) {
     rprofrep_event_data_t *e = rprofrep_lua_get_event(L, 1);
     lua_pushnumber(L, e->start + e->dur);
     return 1;
 } 
+
+static int l_event_rawargs(lua_State *L) {
+    rprofrep_event_data_t *e = rprofrep_lua_get_event(L, 1);
+    uint64_t nargs = 0;
+    rprofrep_get_event_args_labels(e, &nargs);
+    lua_pushlstring(L, (const char*)e->args, e->args_len);
+    lua_pushnumber(L, nargs);
+    return 2;
+}
 
 static int l_event_args(lua_State *L) {
     rprofrep_event_data_t *e = rprofrep_lua_get_event(L, 1);
@@ -139,6 +157,7 @@ static const struct luaL_Reg l_event_metamethods[] = {
 
 static const struct luaL_Reg l_event_methods[] = {
     register_class_method(event, name),
+    register_class_method(event, ufunid),
     register_class_method(event, rank),
     register_class_method(event, domain),
     register_class_method(event, unit),
@@ -153,7 +172,10 @@ static const struct luaL_Reg l_event_methods[] = {
     register_class_method(event, start),
     register_class_method(event, dur),
     register_class_method(event, stop),
+    register_class_method(event, loc_id),
+    register_class_method(event, extra_id),
     register_class_method(event, args),
+    register_class_method(event, rawargs),
     register_class_method(event, kernel_metadata),
     {NULL, NULL}
 };
@@ -305,20 +327,80 @@ static rprofrep_status_t run_lua_callback_on_tree(rprofrep_decode_context_t* ctx
 }
 
 
-// Method: ctx:for_each_sub_unit(list: handles, handles_count, callback)
-static int l_context_for_each_sub_unit(lua_State *L)
+static inline rprofrep_status_t run_lua_callback_on_domain(rprofrep_decode_context_t* ctx, rprofrep_group_entry_t* group, void* user_args)
+{
+    lua_State* L = ((lua_State**) user_args)[0];
+    int* cb      = ((int**) user_args)[1];
+
+    lua_rawgeti(L, LUA_REGISTRYINDEX, *cb);
+
+    lua_pushnumber(L, group->domain); // arg1
+    lua_pushnumber(L, group->offset_entry.nevents); // arg2
+
+    // Call Lua function with 2 args, 0 results
+    if (lua_pcall(L, 2, 0, 0) != 0) {
+        // Handle Lua error
+        const char *err = lua_tostring(L, -1);
+        lua_pop(L, 1); // remove error message
+        return RPROFREP_STATUS_ERROR("lua callback - %s\n", err);
+    }
+    return RPROFREP_STATUS_SUCCESS;
+}
+
+
+// Method: ctx:for_each_domain(list: handles, handles_count, callback)
+static int l_context_for_each_domain(lua_State *L)
+{
+    rprofrep_decode_context_t *ctx     = rprofrep_lua_get_context(L, 1);
+    rprofrep_tree_node_t* subunit_node = rprofrep_lua_get_node(L, 2);
+    int cb = rprofrep_lua_get_callback(L, 3);
+
+    rprofrep_lua_check(L, rprofrep_for_each_domain(ctx, subunit_node, run_lua_callback_on_domain, (void*[2]){L, &cb}), 
+        "Failed to iterate over domains");
+
+    return 0;
+}
+
+// Method: ctx:for_each_tid(list: handles, handles_count, callback)
+static int l_context_for_each_tid(lua_State *L)
 {
     rprofrep_decode_context_t *ctx  = rprofrep_lua_get_context(L, 1);
     rprofrep_tree_node_t* unit_node = rprofrep_lua_get_node(L, 2);
     int cb = rprofrep_lua_get_callback(L, 3);
 
-    rprofrep_lua_check(L, rprofrep_for_each_subunit(ctx, unit_node, run_lua_callback_on_tree, (void*[2]){L, &cb}), 
-        "Failed to iterate over sub units");
+    rprofrep_lua_check(L, rprofrep_for_each_tid(ctx, unit_node, run_lua_callback_on_tree, (void*[2]){L, &cb}), 
+        "Failed to iterate over tid");
 
     return 0;
 }
 
 
+// Method: ctx:for_each_queue(list: handles, handles_count, callback)
+static int l_context_for_each_queue(lua_State *L)
+{
+    rprofrep_decode_context_t *ctx  = rprofrep_lua_get_context(L, 1);
+    rprofrep_tree_node_t* unit_node = rprofrep_lua_get_node(L, 2);
+    int cb = rprofrep_lua_get_callback(L, 3);
+
+    rprofrep_lua_check(L, rprofrep_for_each_queue(ctx, unit_node, run_lua_callback_on_tree, (void*[2]){L, &cb}), 
+        "Failed to iterate over queue");
+
+    return 0;
+}
+
+
+// Method: ctx:for_each_sdma(list: handles, handles_count, callback)
+static int l_context_for_each_sdma(lua_State *L)
+{
+    rprofrep_decode_context_t *ctx  = rprofrep_lua_get_context(L, 1);
+    rprofrep_tree_node_t* unit_node = rprofrep_lua_get_node(L, 2);
+    int cb = rprofrep_lua_get_callback(L, 3);
+
+    rprofrep_lua_check(L, rprofrep_for_each_sdma(ctx, unit_node, run_lua_callback_on_tree, (void*[2]){L, &cb}), 
+        "Failed to iterate over sdma");
+
+    return 0;
+}
 
 // Method: ctx:for_each_pid(list: domains, callback)
 static int l_context_for_each_pid(lua_State *L)
@@ -327,7 +409,7 @@ static int l_context_for_each_pid(lua_State *L)
     int cb = rprofrep_lua_get_callback(L, 2);
 
     rprofrep_lua_check(L, rprofrep_for_each_pid(ctx, run_lua_callback_on_tree, (void*[2]){L, &cb}), 
-        "Failed to iterate over units");
+        "Failed to iterate over pid");
 
     return 0;
 }
@@ -340,7 +422,7 @@ static int l_context_for_each_gpu(lua_State *L)
     int cb = rprofrep_lua_get_callback(L, 2);
 
     rprofrep_lua_check(L, rprofrep_for_each_gpu(ctx, run_lua_callback_on_tree, (void*[2]){L, &cb}), 
-        "Failed to iterate over units");
+        "Failed to iterate over gpu");
 
     return 0;
 }
@@ -360,7 +442,7 @@ static int l_context_get_iterator(lua_State *L)
                 requested_domains[i] = true;
             }
         } else {
-            return luaL_error(L, "Invalid string for arg 3 (expected \"all\")");
+            return luaL_error(L, "Invalid string for arg 3 (got %s, expected \"all\")", mode);
         }
 
     } else {
@@ -637,6 +719,20 @@ static int l_context_gpu_to_json(lua_State* L) {
     return 0;
 }
 
+static int l_context_export_section(lua_State* L) {
+    rprofrep_decode_context_t *ctx = rprofrep_lua_get_context(L, 1);
+    rprofrep_section_id_t section_id = (rprofrep_section_id_t) luaL_checkinteger(L, 2);
+    const char* output_path = luaL_checkstring(L, 3);
+    const int mode = (int) luaL_checkinteger(L, 4);
+    size_t size = 0;
+
+    rprofrep_lua_check(L, rprofrep_export_section(ctx, section_id, output_path, mode, &size),
+        "failed to export section %d to path '%s'", section_id, output_path);
+
+    lua_pushinteger(L, size);
+
+    return 1;
+}
 
 
 static const struct luaL_Reg l_context_metamethods[] = {
@@ -649,7 +745,10 @@ static const struct luaL_Reg l_context_methods[] = {
     register_class_method(context, get_iterator),
     register_class_method(context, for_each_gpu),
     register_class_method(context, for_each_pid),
-    register_class_method(context, for_each_sub_unit),
+    register_class_method(context, for_each_queue),
+    register_class_method(context, for_each_sdma),
+    register_class_method(context, for_each_tid),
+    register_class_method(context, for_each_domain),
     register_class_method(context, get_location),
     register_class_method(context, get_correlated_event),
     register_class_method(context, find_entry_point_event),
@@ -664,6 +763,7 @@ static const struct luaL_Reg l_context_methods[] = {
     register_class_method(context, get_gpu_id_from_agent),
     register_class_method(context, is_domain_traced),
     register_class_method(context, gpu_to_json),
+    register_class_method(context, export_section),
     {NULL, NULL}
 };
 
@@ -685,7 +785,23 @@ static const struct luaL_Reg l_rprofrep_decoder_lua_funcs[] = {
     {"new", l_rprofrep_decoder_lua_new},
     {NULL, NULL}
 };
-
+    
+    
+#define register_enum(name) {#name, name}
+static const rprofrep_lua_enum_Reg l_rprofrep_decoder_lua_enums[] = {
+    register_enum(RPROFREP_SECTION_GLOBAL),
+    register_enum(RPROFREP_SECTION_STRING),
+    register_enum(RPROFREP_SECTION_LOCATION),
+    register_enum(RPROFREP_SECTION_GPU_SPEC),
+    register_enum(RPROFREP_SECTION_API_DATA),
+    register_enum(RPROFREP_SECTION_KERNEL),
+    register_enum(RPROFREP_SECTION_OFFSETS),
+    register_enum(RPROFREP_SECTION_EVENTS),
+    register_enum(RPROFREP_NB_SECTIONS),
+    register_enum(RPROFREP_NO_SECTION),
+    {NULL, 0}
+};
+#undef register_enum
 
 int luaopen_rprofrep_decoder_lua(lua_State *L) {
     // Create module classes
@@ -695,6 +811,8 @@ int luaopen_rprofrep_decoder_lua(lua_State *L) {
 
     // Register module functions
     luaL_register(L, "rprofrep_decoder_lua", l_rprofrep_decoder_lua_funcs);
+
+    rprofrep_lua_register_enum(L, l_rprofrep_decoder_lua_enums);
 
     return 1;
 }

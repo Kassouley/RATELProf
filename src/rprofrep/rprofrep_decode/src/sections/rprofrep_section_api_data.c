@@ -18,7 +18,6 @@ rprofrep_status_t rprofrep_free_api_data_section(rprofrep_ref_section_t* section
     rprofrep_api_data_entry_t* api_datas = (rprofrep_api_data_entry_t*) section->entries;
     if (api_datas)  {
         for (uint64_t i = 0; i < section->nentries; i++) {
-            free(api_datas[i].fname);
             free(api_datas[i].arg_types);
             free(api_datas[i].arg_names);
         }
@@ -48,7 +47,9 @@ rprofrep_status_t rprofrep_decode_api_data_section(
         api_datas = (rprofrep_api_data_entry_t*) data_out->entries;
 
         for (uint64_t i = 0; i < num_api_datas; i++) {
-            api_datas[i].fname  = __read_mp_string(buffer, &offset);
+            uint64_t str_id = __read_mp_uint(buffer, &offset);
+            rprofrep_get_string_by_id(ctx, str_id, &api_datas[i].fname);
+            api_datas[i].fname_strid = str_id;
             num_args            = __read_mp_uint(buffer, &offset);
 
             if (num_args > 0) {

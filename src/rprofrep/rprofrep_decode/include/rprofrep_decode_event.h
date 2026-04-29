@@ -17,6 +17,7 @@
 typedef struct rprofref_event_data_s {
     bool valid;
     char* name;
+    uint64_t ufunid;
     int64_t  rank;
     uint64_t domain;
     uint64_t unit;
@@ -31,7 +32,9 @@ typedef struct rprofref_event_data_s {
         rprofrep_api_data_entry_t* api_data;
         rprofrep_kernel_static_data_t* kernel_data;
     } extra;
+    uint64_t extra_id;
     uint8_t* args;
+    uint64_t args_len;
 } rprofrep_event_data_t;
 
 typedef struct rprofrep_event_filter_s {

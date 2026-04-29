@@ -56,15 +56,21 @@ static rprofrep_status_t read_offsets_tree(
             // ---- Read Sub Units ----
             for (uint64_t j = 0; j < nsubunits; j++) {
                 int64_t  subunit_value = __read_mp_int(buffer,  offset);
+                uint64_t tag = 0;
+                if (subunit_value < 0) {
+                    tag = 1; // Mark as SDMA if subunit value is negative
+                    subunit_value = -(subunit_value + 2); // Convert back to original subunit value
+                }
                 uint64_t ndomains      = __read_mp_uint(buffer, offset);
 
                 rprofrep_tree_node_t* subunit_node = rprofrep_tree_create_node(subunit_value, ndomains);
                 RPROFREP_CHECK_ALLOC(subunit_node);
+                subunit_node->tag = tag; // Store the tag in the node
                 rprofrep_tree_add_node(unit_node, subunit_node);
 
                 // ---- Read Domains ----
                 for (uint64_t k = 0; k < ndomains; k++) {  
-                    uint64_t domain_value  = __read_mp_uint(buffer, offset);
+                    uint64_t domain_value = __read_mp_uint(buffer, offset);
 
                     if (domain_value >= RATELPROF_NB_DOMAIN_EXT) {
                         return RPROFREP_STATUS_ERROR("Domain value %lu is out of range (max %d).\n", domain_value, RATELPROF_NB_DOMAIN_EXT);
@@ -81,9 +87,9 @@ static rprofrep_status_t read_offsets_tree(
                     rprofrep_tree_set_leaf_value(domain_node, group_id);
 
                     rprofrep_group_entry_t* group = &groups[group_id];
-                    group->unit         = unit_value;
-                    group->sub_unit     = subunit_value;
-                    group->domain       = domain_value;
+                    group->unit     = unit_value;
+                    group->sub_unit = subunit_value;
+                    group->domain   = domain_value;
                     group->offset_entry.offset  = group_off;
                     group->offset_entry.nevents = group_nevents;
                     group->offset_entry.id      = group_id;
@@ -253,17 +259,77 @@ rprofrep_status_t rprofrep_for_each_gpu(
 }
 
 
-rprofrep_status_t rprofrep_for_each_subunit(
+static rprofrep_status_t __rprofrep_for_each_subunit(
     rprofrep_decode_context_t* ctx,
     rprofrep_tree_node_t* unit_node,
     rprofrep_offset_callback_t callback,
+    rprofrep_tree_callback_t tree_callback,
     void* user_arg
 ) {
     RPROFREP_CHECK_VALID_PTR(unit_node, callback);
 
     rprofrep_status_t status = RPROFREP_STATUS_SUCCESS;
-    rprofrep_tree_for_each_child(unit_node, __rprofrep_offset_callback, (void*[4]){callback, ctx, &status, user_arg});
+    rprofrep_tree_for_each_child(unit_node, tree_callback, (void*[4]){callback, ctx, &status, user_arg});
     return status;
+}
+
+
+static bool __rprofrep_offset_callback_for_sdma(rprofrep_tree_node_t* node, void* user_arg) {
+    rprofrep_offset_callback_t callback = ((rprofrep_offset_callback_t*) user_arg)[0];
+    rprofrep_decode_context_t* ctx      = ((rprofrep_decode_context_t**) user_arg)[1];
+    rprofrep_status_t* status           = ((rprofrep_status_t**)         user_arg)[2];
+    void* ua                            = ((void**)                      user_arg)[3];
+
+    if (node->tag != 1) {
+         *status = RPROFREP_STATUS_SUCCESS; // Skip non-sdma subunits
+         return true;
+    }
+    *status = callback(ctx, node, ua);
+    return rprofrep_status_is_success(*status);
+}
+
+static bool __rprofrep_offset_callback_for_queue(rprofrep_tree_node_t* node, void* user_arg) {
+    rprofrep_offset_callback_t callback = ((rprofrep_offset_callback_t*) user_arg)[0];
+    rprofrep_decode_context_t* ctx      = ((rprofrep_decode_context_t**) user_arg)[1];
+    rprofrep_status_t* status           = ((rprofrep_status_t**)         user_arg)[2];
+    void* ua                            = ((void**)                      user_arg)[3];
+
+    if (node->tag == 1) {
+         *status = RPROFREP_STATUS_SUCCESS; // Skip sdma subunits
+         return true;
+    }
+    *status = callback(ctx, node, ua);
+    return rprofrep_status_is_success(*status);
+}
+
+
+rprofrep_status_t rprofrep_for_each_sdma(
+    rprofrep_decode_context_t* ctx,
+    rprofrep_tree_node_t* unit_node,
+    rprofrep_offset_callback_t callback,
+    void* user_arg
+) {
+    return __rprofrep_for_each_subunit(ctx, unit_node, callback, __rprofrep_offset_callback_for_sdma, user_arg);
+}
+
+
+rprofrep_status_t rprofrep_for_each_queue(
+    rprofrep_decode_context_t* ctx,
+    rprofrep_tree_node_t* unit_node,
+    rprofrep_offset_callback_t callback,
+    void* user_arg
+) {
+    return __rprofrep_for_each_subunit(ctx, unit_node, callback, __rprofrep_offset_callback_for_queue, user_arg);
+}
+
+
+rprofrep_status_t rprofrep_for_each_tid(
+    rprofrep_decode_context_t* ctx,
+    rprofrep_tree_node_t* unit_node,
+    rprofrep_offset_callback_t callback,
+    void* user_arg
+) {
+    return __rprofrep_for_each_subunit(ctx, unit_node, callback, __rprofrep_offset_callback, user_arg);
 }
 
 

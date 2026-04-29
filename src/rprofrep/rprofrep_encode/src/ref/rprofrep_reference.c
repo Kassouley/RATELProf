@@ -87,6 +87,7 @@ uint64_t rprofrep_location_get_ref(rprofrep_encode_context_t* ctx, void* addr)
         #undef str_or_unknown
 
         msgpack_encode_uint(&ref->buffer, (uintptr_t) loc.addr);
+        msgpack_encode_uint(&ref->buffer, (uintptr_t) loc.base_addr);
         msgpack_encode_uint(&ref->buffer, objfile_ref);
         msgpack_encode_uint(&ref->buffer, func_ref);
         msgpack_encode_uint(&ref->buffer, source_ref);
@@ -105,7 +106,8 @@ uint64_t rprofrep_kernel_get_ref(rprofrep_encode_context_t* ctx, rprofrep_kernel
 
     if (was_inserted) {
         const char* kernel_name = get_kernel_name(data->kernel_object);
-        msgpack_encode_string(&ref->buffer, kernel_name);
+        uint64_t kernel_strid = rprofrep_string_get_ref(ctx, kernel_name);
+        msgpack_encode_uint(&ref->buffer, kernel_strid);
         msgpack_encode_uint(&ref->buffer, data->kernel_object);
         msgpack_encode_uint(&ref->buffer, data->group_segment_size);
         msgpack_encode_uint(&ref->buffer, data->private_segment_size);
