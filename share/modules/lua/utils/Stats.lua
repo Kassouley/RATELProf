@@ -16,7 +16,8 @@ Entry.__index = Entry
 -- Constructor
 function Entry.new(key)
     local self = setmetatable({}, Entry)
-    self.key = key
+    self.key = key.values
+    self.uargs = key.uargs
     self.metrics = {}
     self.is_sorted = true
     self.metrics_count = 0
@@ -154,7 +155,7 @@ function Stats:add_entry(key, metric, subkey)
     local entry = self.entries[key.str]
 
     if not entry then
-        entry = Entry.new(key.values)
+        entry = Entry.new(key)
         self.entries[key.str] = entry
     end
 

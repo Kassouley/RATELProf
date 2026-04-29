@@ -26,7 +26,7 @@ function report_helper.label_gpu_with_rank(key)
     return gpu_id .. string.format(" ( rank %d )", rank)
 end
 
-function report_helper.create_key(key_arr)
+function report_helper.create_key(key_arr, uargs)
     local str = ""
     for _, k in ipairs(key_arr) do
         str = str .. "::" .. k
@@ -34,7 +34,8 @@ function report_helper.create_key(key_arr)
 
     return {
         str = str,
-        values = key_arr
+        values = key_arr,
+        uargs = uargs
     }
 end
 

@@ -36,7 +36,7 @@ return function (report)
     end
 
     report.FOR_EACH = function(self, event, _, gpu_key)
-        local key = report_helper.create_key({ event:name(), event:domain() })
+        local key = report_helper.create_key({ event:ufunid() }, { fname = event:name(), domain = event:domain() })
         self.ctx:add_entry(key, event:dur(), gpu_key)
     end
 
@@ -51,9 +51,9 @@ return function (report)
             local gpu_id_for_total_min = entry:get_min_total_subkey()
             local gpu_id_for_total_max = entry:get_max_total_subkey()
 
-            local name = entry.key[1]
-            local domain_id = entry.key[2]
-            local categorie = ratelprof.consts._DOMAIN_NAME[domain_id]
+            local name = entry.uargs.fname
+            local domain_id = entry.uargs.domain
+            local category = ratelprof.consts._DOMAIN_NAME[domain_id]
             if domain_id == ratelprof.consts.DOMAIN_KERNEL_ID then
                 name = ratelprof.utils.get_kernel_name(name, trunc, mangled)
             end
@@ -68,7 +68,7 @@ return function (report)
                 entry:compute_max(timeunit),
                 entry:compute_stddev(timeunit),
 
-                categorie,
+                category,
                 name,
 
                 ratelprof.utils.label_unit_with_rank(gpu_id_for_min),

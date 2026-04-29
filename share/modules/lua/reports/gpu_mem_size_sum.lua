@@ -34,7 +34,7 @@ return function (report)
         local event_args = event:args()
         local size   = event_args.size
 
-        local key = report_helper.create_key({ event:name() })
+        local key = report_helper.create_key({ event:ufunid() }, { fname = event:name() })
 
         self.ctx:add_entry(key, size, gpu_key)
     end
@@ -61,7 +61,7 @@ return function (report)
                 entry:compute_max(sizeunit),
                 entry:compute_stddev(sizeunit),
 
-                entry.key[1],
+                entry.uargs.fname,
                 ratelprof.utils.label_unit_with_rank(gpu_id_for_min),
                 ratelprof.utils.label_unit_with_rank(gpu_id_for_max),
                 ratelprof.utils.label_unit_with_rank(gpu_id_for_total_min),

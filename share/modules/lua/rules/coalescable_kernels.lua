@@ -91,7 +91,7 @@ return function (report)
             sequence = {}
             curr_last = nil
 
-        elseif not curr_last or (event:name() == curr_last:name()
+        elseif not curr_last or (event:ufunid() == curr_last:ufunid()
                 and event:start() - curr_last:stop() < GAP_THRESHOLD_NS) then
             -- Add to sequence
             table.insert(sequence, event)

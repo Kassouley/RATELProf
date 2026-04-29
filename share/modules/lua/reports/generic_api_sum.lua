@@ -32,7 +32,7 @@ return function (report)
     end
 
     report.FOR_EACH = function(self, event, _, pid_key)
-        local key = report_helper.create_key({ event:name() })
+        local key = report_helper.create_key({ event:ufunid() }, { fname = event:name() })
         self.ctx:add_entry(key, event:dur(), pid_key)
     end
 
@@ -55,7 +55,7 @@ return function (report)
                 entry:compute_max(timeunit),
                 entry:compute_stddev(timeunit),
 
-                entry.key[1],
+                entry.uargs.fname,
 
                 ratelprof.utils.label_unit_with_rank(pid_for_min),
                 ratelprof.utils.label_unit_with_rank(pid_for_max),

@@ -71,7 +71,9 @@ return function (report)
             event_args.wgr[1],
             event_args.wgr[2],
             event_args.wgr[3],
-            event:name()
+            event:ufunid()
+        }, {
+            fname = event:name()
         })
 
         self.time_ctx:add_entry(key, start, stop)
@@ -122,7 +124,7 @@ return function (report)
                 dur_entry.key[4],
                 dur_entry.key[5],
                 dur_entry.key[6],
-                ratelprof.utils.get_kernel_name(dur_entry.key[7], trunc, mangled),
+                ratelprof.utils.get_kernel_name(dur_entry.uargs.fname, trunc, mangled),
             })
         end)
 

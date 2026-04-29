@@ -34,7 +34,7 @@ return function (report)
 
     report.FOR_EACH = function(self, event)
         local event_args = event:args()
-        local key = report_helper.create_key({ event:name() })
+        local key = report_helper.create_key({ event:ufunid() }, { fname = event:name() })
         self.ctx:add_entry(key, event_args.size)
     end
 
@@ -53,7 +53,7 @@ return function (report)
                 entry:compute_max(sizeunit),
                 entry:compute_stddev(sizeunit),
 
-                entry.key[1],
+                entry.uargs.fname,
             })
         end)
 
