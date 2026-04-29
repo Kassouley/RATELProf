@@ -22,16 +22,25 @@
  *   *out_line = line_number
  * Caller must free() them.
  */
-static bool addr2line(const char *object_path, void *addr,
+// TODO (13/04/2026) : Better support for Non PIE/shared lib address with offset and base subtract 
+//                     (for now we cheat using filename but it's not robust/right way to do it)
+// TODO (23/09/2025) : Support escape char in object_path ("'`\s etc.)
+static bool addr2line(const char *object_path, void *addr, void *base_addr,
                         char **out_func, char **out_file, uint64_t *out_line)
 {
-    // TODO (23/09/2025) : Support escape char in object_path ("'`\s etc.)
     if (!object_path || !addr || !out_func || !out_file || !out_line) return false;
+
+    uintptr_t query_addr = (uintptr_t)addr;
+
+    if (strstr(object_path, ".so") != NULL) {
+        query_addr -= (uintptr_t)base_addr;
+    }
 
     char cmd[1024];
     int n = snprintf(cmd, sizeof(cmd),
-                     "addr2line -e %s -f -C -i %p",
-                     object_path, addr);
+                     "addr2line -e '%s' -f -C 0x%lx",
+                     object_path, (unsigned long) query_addr);
+
     if (n < 0 || n >= (int)sizeof(cmd)) return false;
 
     FILE *fp = popen(cmd, "r");
@@ -81,12 +90,13 @@ ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, v
     }
 
     out->object_file = info.dli_fname ? strdup(info.dli_fname) : NULL;
+    out->base_addr = info.dli_fbase;
 
     char *func   = NULL;
     char* source = NULL;
     uint64_t line = 0;
 
-    if (addr2line(info.dli_fname, addr, &func, &source, &line)) {
+    if (addr2line(info.dli_fname, addr, info.dli_fbase, &func, &source, &line)) {
         out->func     = func;
         out->source   = source;
         out->line     = line;

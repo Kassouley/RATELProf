@@ -8,6 +8,7 @@
 
 typedef struct ratelprof_source_data_s {
     void *addr;
+    void *base_addr;
     const char *object_file;
     const char *source; 
     const char *func;
