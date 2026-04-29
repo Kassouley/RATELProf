@@ -54,6 +54,10 @@ function RProfRep:new(rprofrep_files)
         instance.reports_filename[rank] = filename
     end
 
+    for enum_name, enum_value in pairs(c_rprofrep.enum) do
+        instance[enum_name] = enum_value
+    end
+
     return instance
 end
 
@@ -147,50 +151,62 @@ function RProfRep:for_each_gpu(callback, filter)
 end
 
 
-function RProfRep:for_each_tid(callback)
-    if not self.__in_for_each_pid then
-        error("The method for_each_tid must be call in a for_each_pid callback.")
+local function _for_each(self, guard_flag, err_msg, iter_fn, callback)
+    if not self[guard_flag] then
+        error(err_msg)
     end
 
     local node = self.__current_node
+    local rep = self.__current_rprofrep
 
-    self.__current_rprofrep:for_each_sub_unit(node, function (tid, sub_node)
+    rep[iter_fn](rep, node, function (id, sub_node)
         self.__current_node = sub_node
-        callback(tid)
+        callback(id)
         self.__current_node = node
     end)
 end
 
 
+function RProfRep:for_each_tid(callback)
+    return _for_each(
+        self,
+        "__in_for_each_pid",
+        "The method for_each_tid must be call in a for_each_pid callback.",
+        "for_each_tid",
+        callback
+    )
+end
+
 
 function RProfRep:for_each_queue(callback)
-    if not self.__in_for_each_gpu then
-        error("The method for_each_queue must be call in a for_each_gpu callback.")
-    end
-
-    local node = self.__current_node
-
-    self.__current_rprofrep:for_each_sub_unit(node, function (qid, sub_node)
-        self.__current_node = sub_node
-        callback(qid)
-        self.__current_node = node
-    end)
+    return _for_each(
+        self,
+        "__in_for_each_gpu",
+        "The method for_each_queue must be call in a for_each_gpu callback.",
+        "for_each_queue",
+        callback
+    )
 end
 
 
 function RProfRep:for_each_sdma(callback)
-    if not self.__in_for_each_gpu then
-        error("The method for_each_sdma must be call in a for_each_gpu callback.")
-    end
+    return _for_each(
+        self,
+        "__in_for_each_gpu",
+        "The method for_each_sdma must be call in a for_each_gpu callback.",
+        "for_each_sdma",
+        callback
+    )
+end
 
+function RProfRep:for_each_domain(callback)
+    -- TODO: 14/04/2026 This function must be only called inside a for each subunit function (so need to check it)
     local node = self.__current_node
-
-    self.__current_rprofrep:for_each_sub_unit(node, function (sdma, sub_node)
-        self.__current_node = sub_node
-        callback(sdma)
-        self.__current_node = node
+    self.__current_rprofrep:for_each_domain(node, function (domain, nevents)
+        callback(domain, ratelprof.consts._DOMAIN_NAME[domain], nevents)
     end)
 end
+
 
 
 function RProfRep:next_event()
@@ -202,12 +218,6 @@ end
 
 function RProfRep:get_iterator(domains, filter)
     return self.__current_rprofrep:get_iterator(self.__current_node, domains, filter)
-end
-
-function RProfRep:for_each_domain(callback)
-    for id, name in pairs(ratelprof.consts._DOMAIN_NAME) do
-        callback(id, name)
-    end
 end
 
 function RProfRep:for_each_event(domains, callback, filter, progress_message)
@@ -380,5 +390,14 @@ function RProfRep:gpu_to_json(prefix)
     end
 end
 
+function RProfRep:export_section(id, filename, mode, rank)
+    if rank then
+        return self.reports_rprofrep[rank]:export_section(id, filename, mode)
+    elseif self.__current_rprofrep then
+        return self.__current_rprofrep:export_section(id, filename, mode)
+    else
+        error("export_section must be called inside a for_each_rank callback or with a rank argument.")
+    end
+end
 
 return RProfRep

@@ -111,3 +111,11 @@ function table.popi(array, index)
     array[#array] = nil                -- remove the last duplicate
     return value
 end
+
+function table.map(tbl, fn)
+    local result = {}
+    for i, v in ipairs(tbl) do
+        result[i] = fn(v, i)
+    end
+    return result
+end

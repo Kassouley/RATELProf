@@ -509,6 +509,14 @@ consts_helper.visualize = {
     },
     desc = "\n\tGenerate a HTML report view to see traces as a timeline.",
     opt = {
+        ["bucket-size"] = {
+            desc            = [[ 
+                Change the max number of event for each bucket (default: 10000)]],
+            sname           = "b",
+            arg             = "<size>",
+            arg_required    = true,
+            default         = "10000"
+        },
         tmp = {
             desc            = [[ 
                 Specify a temp directory to save CSV statistics output (default: /tmp)]],
