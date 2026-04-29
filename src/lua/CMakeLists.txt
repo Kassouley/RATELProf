@@ -23,3 +23,5 @@ TARGET_INCLUDE_DIRECTORIES(msgpack_encoder PRIVATE ${MSGPACK_DIR})
 
 ADD_LUA_LIBRARY(demangle demangle.c)
 TARGET_LINK_LIBRARIES(demangle PRIVATE -lstdc++)
+
+ADD_LUA_LIBRARY(fileutils fileutils.c)

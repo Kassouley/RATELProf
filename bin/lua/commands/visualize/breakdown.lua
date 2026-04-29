@@ -95,7 +95,7 @@ function breakdown.process_breakdown_report(fs, summary_data)
     if cpu_breakdown then ratelprof.utils.json_to_js(cpu_breakdown.filename, "const __BREAKDOWN_DATA__", fs.data.cpu_breakdown:path()) end
     if gpu_breakdown then ratelprof.utils.json_to_js(gpu_breakdown.filename, "const __BREAKDOWN_DATA__", fs.data.gpu_breakdown:path()) end
 
-    ratelprof.fs.rm(fs.data.csv:path().."/breakdown")
+    ratelprof.fs.rmdir(fs.data.csv:path().."/breakdown")
 end
 
 return breakdown

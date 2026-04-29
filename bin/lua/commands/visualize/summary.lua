@@ -61,10 +61,10 @@ function summary.process_summary_data(rprofrep, fs, summary_data, summary_datase
 
     rprofrep:gpu_to_json(gpu_path.."/attribute")
 
-    local gpu_file_list = ratelprof.fs.scanfile(gpu_path)
+    local gpu_file_list = ratelprof.fs.listdir(gpu_path)
     for _, file in ipairs(gpu_file_list) do
         if ratelprof.fs.has_extension(file, "json") then
-            local output_file = ratelprof.utils.json_to_js(file, "window.currentGPU")
+            local output_file = ratelprof.utils.json_to_js(gpu_path.."/"..file, "window.currentGPU")
             local basename = ratelprof.fs.basename(output_file)
             local node = string.match(basename, "%d+")
             __SUMMARY_DATA__.GPU[node] = basename
