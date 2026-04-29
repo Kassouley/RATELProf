@@ -18,7 +18,7 @@ static inline ratelprof_status_t ratelprof_intercept_copy(
     hsa_agent_t src_agent, 
     size_t size,
     hsa_signal_t* completion_signal, 
-    hsa_amd_sdma_engine_id_t engine_id) 
+    uint32_t engine_id) 
     __attribute__((always_inline));
 
 static inline ratelprof_status_t ratelprof_create_kernel_dispatch_activity(
@@ -132,12 +132,11 @@ static inline bool __copy_callback_function(hsa_signal_value_t value, void* arg)
     return false;
 }
 
-
 static inline ratelprof_status_t ratelprof_intercept_copy(hsa_agent_t dst_agent, 
                                             hsa_agent_t src_agent, 
                                             size_t size,
                                             hsa_signal_t* completion_signal, 
-                                            hsa_amd_sdma_engine_id_t engine_id) {
+                                            uint32_t engine_id) {
     ratelprof_gpu_activity_t* activity = calloc(1, sizeof(ratelprof_gpu_activity_t));
     if (!activity) {
         LOG(LOG_LEVEL_FATAL, "Cannot allocate a new activity. Out of memory ?\n");

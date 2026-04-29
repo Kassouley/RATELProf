@@ -10,6 +10,12 @@
 #include "rprofrep_encode_event.h"
 #include "rprofrep_encode_type.h"
 
+static uint64_t engine_id_from_mask(unsigned int mask) {
+    if (mask == 0 || (mask & (mask - 1)) != 0) {
+        return -1;
+    }
+    return -(__builtin_ctz(mask) + 2);
+}
 
 static void add_copy_activity_data_to_buffer(
     rprofrep_encode_context_t* ctx,
@@ -30,7 +36,8 @@ static void add_copy_activity_data_to_buffer(
         other_handle = activity->args.mem_copy.src_agent.handle;
     }
 
-    rprofrep_buffer_entry_t* entry = rprofrep_get_gpu_event_buffer(ctx, domain, gpu_handle, (uint64_t) activity->args.mem_copy.engine_id);
+    uint64_t sub_unit = engine_id_from_mask(activity->args.mem_copy.engine_id);
+    rprofrep_buffer_entry_t* entry = rprofrep_get_gpu_event_buffer(ctx, domain, gpu_handle, sub_unit);
 
     msgpack_buffer_t evt = {0};
     msgpack_init(&evt, 0xffff, MSGPACK_OVERFLOW_REALLOC, NULL);

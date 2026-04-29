@@ -52,7 +52,7 @@ void i_gpu_hsa_signal_store_release(hsa_signal_t signal, hsa_signal_value_t valu
 
 
 hsa_status_t i_gpu_hsa_amd_memory_async_copy(void * dst, hsa_agent_t dst_agent, const void * src, hsa_agent_t src_agent, size_t size, uint32_t num_dep_signals, const hsa_signal_t * dep_signals, hsa_signal_t completion_signal, void* return_address) {
-    ratelprof_intercept_copy(dst_agent, src_agent, size, &completion_signal, -1);
+    ratelprof_intercept_copy(dst_agent, src_agent, size, &completion_signal, 0);
     return CALL_GPU_FUNC(hsa_amd_memory_async_copy, dst, dst_agent, src, src_agent, size, num_dep_signals, dep_signals, completion_signal, return_address);
 };
 

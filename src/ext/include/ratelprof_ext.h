@@ -74,7 +74,7 @@ typedef union gpu_args_s {
         uint32_t src_type;
         uint32_t dst_type;
         size_t size;
-        int32_t engine_id;
+        uint32_t engine_id;
     } mem_copy;
 } gpu_args_t;
 
