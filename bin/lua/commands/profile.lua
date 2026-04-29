@@ -85,8 +85,7 @@ end
 function profile.process(positional_args, options_values)
     local bin_command = positional_args
 
-    local user_bin = bin_command[1]
-    local bin = ""
+    local bin = ratelprof.get_bin_val(bin_command)
     local user_bin_with_args = table.concat(bin_command, " ")
 
     local opt = handle_profile_option(options_values)
@@ -95,17 +94,8 @@ function profile.process(positional_args, options_values)
     local prefix            = opt.prefix .. " "
     local plugin_path       = opt.plugin
 
-    if not ratelprof.fs.exists(user_bin) then
-        bin = ratelprof.fs.exists_in_PATH(user_bin)
-        if bin == nil then
-            Message:print("No application to profile or '"..user_bin.."' doesn't exists.")
-            os.exit(1)
-        end
-    else
-        bin = user_bin
-    end
-    bin_command[1] = bin
 
+    bin_command[1] = bin
     local bin_with_args = table.concat(bin_command, " ")
 
 

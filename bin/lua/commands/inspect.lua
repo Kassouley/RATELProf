@@ -78,15 +78,6 @@ end
 
 
 local function inspect_kernels(application, opt)
-    if application == nil or not ratelprof.fs.exists(application) then
-        local application_in_PATH = ratelprof.fs.exists_in_PATH(application)
-        if application_in_PATH == nil then
-            Message:print("No application to inspect or '"..application.."' doesn't exists.")
-            os.exit(1)
-        end
-        application = application_in_PATH
-    end
-
     local output_dir = ratelprof.get_opt_val(opt, "output_dir") or "."
     local mangled    = ratelprof.get_opt_val(opt, "mangled")
     local trunc      = ratelprof.get_opt_val(opt, "trunc")
@@ -139,7 +130,8 @@ local function inspect_kernels(application, opt)
 end
 
 function inspect.process(positional_args, opt)
-    inspect_kernels(positional_args[1], opt)
+    local application = ratelprof.get_bin_val(positional_args)
+    inspect_kernels(application, opt)
 end
 
 return inspect

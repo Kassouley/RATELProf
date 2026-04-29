@@ -23,6 +23,25 @@ ratelprof.get_opt_val = function (opt_list, name)
     return opt_list[name]
 end
 
+ratelprof.get_bin_val = function (arg_list)
+    local user_bin = arg_list[1]
+
+    local function not_found_msg()
+        Message:print("No application found or '" .. (user_bin or "nil") .. "' doesn't exists.")
+        os.exit(1)
+    end
+    local bin = nil
+    if user_bin == nil then not_found_msg() end
+    if not ratelprof.fs.exists(user_bin) then
+        bin = ratelprof.fs.check_in_env(user_bin, "PATH")
+        if bin == nil then not_found_msg() end
+    else
+        bin = ratelprof.fs.realpath(user_bin)
+    end
+
+    return bin
+end
+
 ratelprof.profile   = require("commands.profile")
 ratelprof.stats     = require("commands.common").stats
 ratelprof.analyze   = require("commands.common").analyze
