@@ -188,7 +188,7 @@ rprofrep_status_t rprofrep_get_event(
 
 
 /* GPU argument labels per domain */
-static char* __gpu_kernel_args[]  = {"completion_signal", "dispatch_time", "wgr", "grd"};
+static char* __gpu_kernel_args[]  = {"completion_signal", "dispatch_time", "wgr", "grd", "args_addr"};
 static char* __gpu_copy_args[]    = {"completion_signal", "size", "other_handle"};
 static char* __gpu_barrier_args[] = {"completion_signal", "dispatch_time", "dep_signal"};
 
@@ -202,7 +202,7 @@ static char** rprofrep_gpu_args_labels[RATELPROF_NB_DOMAIN_EXT] = {
 
 /* Number of args per GPU domain */
 static const uint8_t rprofrep_gpu_args_count[RATELPROF_NB_DOMAIN_EXT] = {
-    [RATELPROF_DOMAIN_KERNEL]     = 4,
+    [RATELPROF_DOMAIN_KERNEL]     = 5,
     [RATELPROF_DOMAIN_COPY]       = 3,
     [RATELPROF_DOMAIN_BARRIERAND] = 3,
     [RATELPROF_DOMAIN_BARRIEROR]  = 3,
