@@ -50,6 +50,7 @@ static inline void* __rprofrep_lua_new(lua_State *L, size_t size, const char* me
     return ud;
 }
 
+
 #define rprofrep_lua_new_context(L)  (rprofrep_decode_context_t*) __rprofrep_lua_new(L, sizeof(rprofrep_decode_context_t), RPROFREP_CONTEXT_CLASS)
 #define rprofrep_lua_new_iterator(L) (rprofrep_event_iterator_t*) __rprofrep_lua_new(L, sizeof(rprofrep_event_iterator_t), RPROFREP_ITERATOR_CLASS)
 #define rprofrep_lua_new_event(L)    (rprofrep_event_data_t*)     __rprofrep_lua_new(L, sizeof(rprofrep_event_data_t),     RPROFREP_EVENT_CLASS)

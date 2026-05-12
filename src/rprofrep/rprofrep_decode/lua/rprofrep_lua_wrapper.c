@@ -734,6 +734,18 @@ static int l_context_export_section(lua_State* L) {
     return 1;
 }
 
+static int l_context_string_section_to_json(lua_State* L) {
+    rprofrep_decode_context_t *ctx = rprofrep_lua_get_context(L, 1);
+    const char* json_filename = luaL_checkstring(L, 2);
+    const char* dst_mode = luaL_checkstring(L, 3);
+    const bool need_demangled = lua_toboolean(L, 4);
+
+    rprofrep_lua_check(L, rprofrep_to_json_string_section(ctx, json_filename, dst_mode, need_demangled),
+        "failed to export string section to json in path '%s'", json_filename);
+
+    return 0;
+}
+
 
 static const struct luaL_Reg l_context_metamethods[] = {
     register_class_method(context, __gc),
@@ -764,6 +776,7 @@ static const struct luaL_Reg l_context_methods[] = {
     register_class_method(context, is_domain_traced),
     register_class_method(context, gpu_to_json),
     register_class_method(context, export_section),
+    register_class_method(context, string_section_to_json),
     {NULL, NULL}
 };
 
@@ -774,8 +787,12 @@ static const struct luaL_Reg l_context_methods[] = {
 // Constructor: rprofrep.new(filename)
 static int l_rprofrep_decoder_lua_new(lua_State *L) {
     const char *filename = luaL_checkstring(L, 1);
+    rprofrep_decode_context_t tmp = {0};
+    rprofrep_lua_check(L, rprofrep_decode_context_init(&tmp, filename), "failed to load file '%s'", filename);
+
     rprofrep_decode_context_t *ctx = rprofrep_lua_new_context(L);
-    rprofrep_lua_check(L, rprofrep_decode_context_init(ctx, filename), "failed to load file '%s'", filename);
+    *ctx = tmp;
+    
     return 1;
 }
 

@@ -16,4 +16,7 @@ rprofrep_status_t rprofrep_decode_string_section(
     size_t size, 
     rprofrep_ref_section_t* data_out);
 
+rprofrep_status_t rprofrep_to_json_string_section(
+    rprofrep_decode_context_t* ctx, const char* json_filename, const char* dst_mode, bool need_demangled);
+
 #endif // RPROFREP_SECTION_STRING_H
