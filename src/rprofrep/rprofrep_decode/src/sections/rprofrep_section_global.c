@@ -12,8 +12,10 @@
 
 // Free the section
 rprofrep_status_t rprofrep_free_global_section(rprofrep_global_data_t* section) {
+    if (!section) return RPROFREP_STATUS_SUCCESS;
+    
     for (uint32_t i = 0; i < section->main_argc; i++) {
-        free(section->main_argv[i]);
+        if(section->main_argv[i]) free(section->main_argv[i]);
     }
     if (section->main_argv) free(section->main_argv);
     if (section->agents)    free(section->agents);

@@ -107,7 +107,7 @@ rprofrep_status_t rprofrep_decode_section(rprofrep_decode_context_t* ctx, rprofr
 rprofrep_status_t rprofrep_get_section(rprofrep_decode_context_t* ctx, rprofrep_section_id_t sct_id, void** out)
 {
     rprofrep_report_section_t* section = &ctx->sections[sct_id];
-    if (section->is_decoded == false) {
+    if (!section->is_decoded) {
         RPROFREP_CHECK_CALL(rprofrep_decode_section(ctx, sct_id));
     }
     *out = section->data;
@@ -118,11 +118,13 @@ rprofrep_status_t rprofrep_destroy_section(rprofrep_decode_context_t* ctx, rprof
 {
     rprofrep_report_section_t* section = &ctx->sections[sct_id];
 
+    if (!section) return RPROFREP_STATUS_SUCCESS;
     if (!section->is_decoded) return RPROFREP_STATUS_SUCCESS;
-
+    
     RPROFREP_CHECK_CALL(__rprofrep_destroy_section[sct_id](section->data));
 
     section->is_decoded = false;
+
     free(section->data);
 
     return RPROFREP_STATUS_SUCCESS;

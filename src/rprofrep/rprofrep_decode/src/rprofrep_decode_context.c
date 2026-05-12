@@ -16,21 +16,18 @@ rprofrep_status_t rprofrep_decode_context_init(
     RPROFREP_CHECK_VALID_PTR(filepath, ctx);
 
     ctx->handle = fopen(filepath, "rb");
-    RPROFREP_CHECK_FOPEN(ctx->handle, {
-        rprofrep_decode_context_free(ctx);
-    });
+    RPROFREP_CHECK_FOPEN(ctx->handle);
 
     ctx->size = get_file_size(filepath);
-
-    RPROFREP_CHECK_CALL(rprofrep_decode_header_section(ctx), {
-        rprofrep_decode_context_free(ctx);
-    });
-
 
     for (size_t i = 0; i < RPROFREP_NB_SECTIONS; i++)
     {
         ctx->sections[i].is_decoded = false;
     }
+
+    RPROFREP_CHECK_CALL(rprofrep_decode_header_section(ctx), {
+        fclose(ctx->handle);
+    });
 
     return RPROFREP_STATUS_SUCCESS;
 }

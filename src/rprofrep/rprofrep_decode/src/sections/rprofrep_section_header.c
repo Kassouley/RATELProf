@@ -41,6 +41,7 @@ rprofrep_status_t rprofrep_decode_header_section(rprofrep_decode_context_t* ctx)
         out->report_version[1] != RPROFREP_VERSION_MINOR ||
         out->report_version[2] != RPROFREP_VERSION_PATCH )
     {
+        free(buffer);
         return RPROFREP_STATUS_INVALID_REPORT("Incompatible report file version: expected %d.%d.%d but got %d.%d.%d.\n", 
             RPROFREP_VERSION_MAJOR, RPROFREP_VERSION_MINOR, RPROFREP_VERSION_PATCH, 
             out->report_version[0], out->report_version[1], out->report_version[2]);
@@ -55,9 +56,11 @@ rprofrep_status_t rprofrep_decode_header_section(rprofrep_decode_context_t* ctx)
     }
 
     if (size < offset + total_size) {
+        free(buffer);
         return RPROFREP_STATUS_INVALID_REPORT("The report file is truncated or corrupted (size mismatch)\n");
     }
 
+    free(buffer);
     return RPROFREP_STATUS_SUCCESS;
 }
 
