@@ -201,7 +201,6 @@ function utils.label_unit_with_rank(key, with_unit_label)
 end
 
 
-
 function utils.json_to_js(filename, varname, output)
 
     if not ratelprof.fs.exists(filename) then
@@ -220,5 +219,29 @@ function utils.json_to_js(filename, varname, output)
 
     return output
 end
+
+
+
+function utils.get_filter(start, stop, only_main, dur, filter_type)
+    if not (dur or start or stop or only_main) then
+        return nil
+    end
+
+    return {
+        phase    = only_main and 1 or nil,
+        start    = start,
+        stop     = stop,
+        dur      = dur,
+        phase_EQ = only_main and true,
+        start_GT = start and true,
+        start_LT = false,
+        stop_GT  = false,
+        stop_LT  = stop and true,
+        dur_GT   = filter_type == "gt",
+        dur_LT   = filter_type == "lt"
+    }
+end
+
+
 
 return utils

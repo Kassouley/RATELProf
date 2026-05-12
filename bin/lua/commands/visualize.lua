@@ -6,6 +6,7 @@ local summarize = require ("commands.summarize")
 local RProfRep  = require ("utils.Classes.RProfRep")
 local RProfVis  = require ("commands.visualize.RProfVis")
 local FileStructure = require ("utils.Classes.FileStructure")
+local options_helper = require ("options_helper")
 
 local visualize = {}
 
@@ -13,7 +14,12 @@ function visualize.process(positional_args, options_values)
     local rprofrep = RProfRep:new(positional_args)
 
     local output = ratelprof.get_opt_val(options_values, "output") or rprofrep.basename
-    local bucket_size = tonumber(ratelprof.get_opt_val(options_values, "bucket-size")) or 10000
+    local bucket_size = options_helper.parse_number_option(options_values, "bucket-size") or 10000
+    local start = options_helper.parse_number_option(options_values, "start")
+    local stop = options_helper.parse_number_option(options_values, "stop")
+    local pids = options_helper.parse_mask_option(options_values, "pids")
+    local gpus = options_helper.parse_mask_option(options_values, "gpus")
+    
 
     local fs = FileStructure.new(output, {
         data = {
@@ -25,13 +31,14 @@ function visualize.process(positional_args, options_values)
             gpu_breakdown = "gpu_breakdown.js",
             analyze = "analyze.js",
             summary = "summary.js",
-            timeline = "timeline.js"
+            timeline = "timeline.js",
+            misc = "misc.js"
         }
     })
 
     fs:generate()
 
-    local rprofvis = RProfVis:new(rprofrep, fs.data.traces:path(), bucket_size)
+    local rprofvis = RProfVis:new(rprofrep, fs.data.traces:path(), bucket_size, start, stop, pids, gpus)
     rprofvis:generate()
 
     ratelprof.fs.cpdir(ratelprof.consts._HTML_DIR, output)
@@ -43,6 +50,8 @@ function visualize.process(positional_args, options_values)
     csv.process_csv_data(fs, summary_data)
     breakdown.process_breakdown_report(fs, summary_data)
     rprofvis:write_jsfile(fs)
+
+    fs.data.misc:write([[document.title = document.title + " - ]], output, [[";]])
 
     Message:print("RPROF: HTML report written in '" .. output .. "' dir.")
     Message:print("RPROF: Index file can be found at '" .. output .. "/index.html'.")

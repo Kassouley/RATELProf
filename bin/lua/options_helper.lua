@@ -31,7 +31,8 @@ function options_helper.parse_unit_option(options, name, allowed)
 end
 
 function options_helper.parse_number_option(options, name)
-    return tonumber(ratelprof.get_opt_val(options, name))
+    local n = ratelprof.get_opt_val(options, name)
+    return n and tonumber(n) or nil
 end
 
 function options_helper.parse_bool_option(options, name)

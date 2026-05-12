@@ -1,25 +1,5 @@
 local Report = require("utils.Classes.Report")
 
-local function get_filter(start, stop, only_main, dur, filter_type)
-    if not (dur or start or stop or only_main) then
-        return nil
-    end
-
-    return {
-        phase    = only_main and 1 or nil,
-        start    = start,
-        stop     = stop,
-        dur      = dur,
-        phase_EQ = only_main and true,
-        start_GT = start and true,
-        start_LT = false,
-        stop_GT  = false,
-        stop_LT  = stop and true,
-        dur_GT   = filter_type == "gt",
-        dur_LT   = filter_type == "lt"
-    }
-end
-
 -- ReportLauncher.lua
 local ReportLauncher = {}
 ReportLauncher.__index = ReportLauncher
@@ -39,7 +19,7 @@ function ReportLauncher:new(rprofrep, opt)
 
     instance.gpus         = opt.gpus
     instance.pids         = opt.pids
-    instance.event_filter = get_filter(opt.start, opt.stop, opt.only_main, nil, nil)
+    instance.event_filter = ratelprof.utils.get_filter(opt.start, opt.stop, opt.only_main, nil, nil)
 
     instance.report_objs = {}
 

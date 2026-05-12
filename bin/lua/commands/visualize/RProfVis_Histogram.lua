@@ -20,8 +20,8 @@ function RProfVis_Histogram:new(total_dur, nbars)
 end
 
 function RProfVis_Histogram:add_event(event)
-    local start = event:start()
-    local stop  = event:stop()
+    local start  = event:start()
+    local stop   = event:stop()
     local ufunid = event:ufunid()
     local first_bar = math.floor(start / self.bar_interval) + 1
     local last_bar = math.floor(stop / self.bar_interval) + 1

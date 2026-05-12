@@ -2,6 +2,7 @@
 local helper = require("commands.summarize.helper")
 local common = require("commands.common")
 local ReportLauncher = require ("utils.Classes.ReportLauncher")
+local options_helper = require ("options_helper")
 
 local global = {}
 
@@ -40,6 +41,10 @@ function global.get_global_data(rprofrep, summarize_opt)
 
     local save_json = ratelprof.get_opt_val(summarize_opt, "save-json")
     local save_csv  = ratelprof.get_opt_val(summarize_opt, "save-csv")
+    local start = options_helper.parse_number_option(summarize_opt, "start")
+    local stop = options_helper.parse_number_option(summarize_opt, "stop")
+    local pids = options_helper.parse_mask_option(summarize_opt, "pids")
+    local gpus = options_helper.parse_mask_option(summarize_opt, "gpus")
 
     local format, path =
         save_json and "json" or
@@ -68,10 +73,10 @@ function global.get_global_data(rprofrep, summarize_opt)
 
     local report_launcher = ReportLauncher:new(rprofrep, {
         reports = reports,
-        start   = summarize_opt.start,
-        stop    = summarize_opt.stop,
-        gpus    = summarize_opt.gpus,
-        pids    = summarize_opt.pids,
+        start   = start,
+        stop    = stop,
+        gpus    = gpus,
+        pids    = pids,
         notation = "raw",
         disable_print = true,
     })

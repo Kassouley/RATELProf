@@ -20,7 +20,6 @@ local default_reports   = collect_defaults(ratelprof.consts.STATS_REPORTS)
 local default_rules     = collect_defaults(ratelprof.consts.ANALYZE_REPORTS)
 local default_breakdown = collect_defaults(ratelprof.consts.BREAKDOWN_REPORTS)
 
-
 consts_helper.profile = {
     desc = "\n\tProfile an AMD GPU application and trace AMD Library functions",
     args = {
@@ -299,7 +298,7 @@ consts_helper.stats = {
         stop = {
             desc            = [[ 
                 Process only trace before 'stop' argument (in nanoseconds). 
-                Default 'stop' is until application end.]],
+                Default 'stop' is application end.]],
             sname           = nil,
             arg             = "<value>",
             arg_required    = true,
@@ -517,14 +516,6 @@ consts_helper.visualize = {
             arg_required    = true,
             default         = "10000"
         },
-        tmp = {
-            desc            = [[ 
-                Specify a temp directory to save CSV statistics output (default: /tmp)]],
-            sname           = "t",
-            arg             = "<DIR>",
-            arg_required    = true,
-            default         = "/tmp"
-        },
         output = {
             desc            = [[ 
                 Change the path to the output html report.]],
@@ -535,7 +526,7 @@ consts_helper.visualize = {
         },
         start = {
             desc            = [[ 
-                Visualize only trace after 'start' argument (in nanoseconds). 
+                Process only trace after 'start' argument (in nanoseconds). 
                 Default 'start' is 0 (Application start).]],
             sname           = nil,
             arg             = "<value>",
@@ -544,13 +535,31 @@ consts_helper.visualize = {
         },
         stop = {
             desc            = [[ 
-                Visualize only trace before 'stop' argument (in nanoseconds). 
-                Default 'stop' is until application end.]],
+                Process only trace before 'stop' argument (in nanoseconds). 
+                Default 'stop' is application end.]],
             sname           = nil,
             arg             = "<value>",
             arg_required    = true,
             default         = nil
-        }
+        },
+        gpus = {
+            desc            = [[ 
+                List of the GPUs to analyzed. Can be useful in per-gpu mode for statistics reports or in analyze command to focus on specific GPUs.
+                If not specify, analyze all GPUs.]],
+            sname           = nil,
+            arg             = "<gpu id>[,<gpu_id>]",
+            arg_required    = true,
+            default         = nil
+        },
+        pids = {
+            desc            = [[ 
+                List of the Process to analyzed. Can be useful in per-pid mode for statistics reports or in analyze command to focus on specific PIDs.
+                If not specify, analyze all Process.]],
+            sname           = nil,
+            arg             = "<pid>[,<pid>]",
+            arg_required    = true,
+            default         = nil
+        },
     }
 }
 

@@ -400,4 +400,15 @@ function RProfRep:export_section(id, filename, mode, rank)
     end
 end
 
+
+function RProfRep:string_section_to_json(filename, mode, need_demangled, rank)
+    if rank then
+        return self.reports_rprofrep[rank]:string_section_to_json(filename, mode, need_demangled)
+    elseif self.__current_rprofrep then
+        return self.__current_rprofrep:string_section_to_json(filename, mode, need_demangled)
+    else
+        error("string_section_to_json must be called inside a for_each_rank callback or with a rank argument.")
+    end
+end
+
 return RProfRep
