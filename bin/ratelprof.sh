@@ -6,10 +6,12 @@ function display_help() {
 Usage: ratelprof [--help] <command> [options] [command args] 
 
 Commands:
-  profile       Run an application and capture its profile into a json report file.
-  stats         Generate statistics from an existing json report file.
-  visualize     Generate a HTML Report Viewer to see the traces into a timeline.
-  inspect       Inspect an application and output data about kernels from the application.
+  profile       Run an application and capture its profile into a RProf-Rep report.
+  stats         Generate statistics reports from from an input RProf-Rep report.
+  analyze       Generate analyze reports from an input RProf-Rep report.
+  breakdown     Generate breakdown reports from an input RProf-Rep report.
+  visualize     Generate a HTML Report Viewer to see the profiling report into a web-view and a timeline.
+  inspect       Inspect an application and output data about kernels from the application binary.
   summarize     Summarize global information/metrics about a profiling report.
 
 Use '$(basename $0) <command> --help' for more information about a specific command.

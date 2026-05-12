@@ -51,10 +51,12 @@ function visualize.process(positional_args, options_values)
     breakdown.process_breakdown_report(fs, summary_data)
     rprofvis:write_jsfile(fs)
 
-    fs.data.misc:write([[document.title = document.title + " - ]], output, [[";]])
+    fs.data.misc:write([[document.title = document.title + " - ]], ratelprof.fs.basename(output), [[";]])
 
     Message:print("RPROF: HTML report written in '" .. output .. "' dir.")
     Message:print("RPROF: Index file can be found at '" .. output .. "/index.html'.")
 end
 
 return visualize
+
+
