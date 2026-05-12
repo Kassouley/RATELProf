@@ -126,15 +126,19 @@ static void add_kernel_activity_data_to_buffer(
 
     msgpack_encode_uint(&evt, ratelprof_get_normalized_time(dispatch_time));
     
+    const uint16_t wgx = activity->args.dispatch.kernel.workgroup_size_x;
+    const uint16_t wgy = activity->args.dispatch.kernel.workgroup_size_y;
+    const uint16_t wgz = activity->args.dispatch.kernel.workgroup_size_z;
+
     msgpack_encode_array(&evt, 3);
-    msgpack_encode_uint(&evt, activity->args.dispatch.kernel.workgroup_size_x);
-    msgpack_encode_uint(&evt, activity->args.dispatch.kernel.workgroup_size_y);
-    msgpack_encode_uint(&evt, activity->args.dispatch.kernel.workgroup_size_z);
+    msgpack_encode_uint(&evt, wgx);
+    msgpack_encode_uint(&evt, wgy);
+    msgpack_encode_uint(&evt, wgz);
     
     msgpack_encode_array(&evt, 3);
-    msgpack_encode_uint(&evt, activity->args.dispatch.kernel.grid_size_x);
-    msgpack_encode_uint(&evt, activity->args.dispatch.kernel.grid_size_y);
-    msgpack_encode_uint(&evt, activity->args.dispatch.kernel.grid_size_z);
+    msgpack_encode_uint(&evt, activity->args.dispatch.kernel.grid_size_x/wgx);
+    msgpack_encode_uint(&evt, activity->args.dispatch.kernel.grid_size_y/wgy);
+    msgpack_encode_uint(&evt, activity->args.dispatch.kernel.grid_size_z/wgz);
 
     msgpack_encode_uint(&evt, (uintptr_t)activity->args.dispatch.kernel.kernarg_address);
 
