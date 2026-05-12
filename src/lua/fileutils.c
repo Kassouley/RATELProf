@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -15,7 +16,7 @@
 #define BUF_SIZE 8192
 
 /* helper: push error */
-#define fileutils_error(L, msg) luaL_error(L, "fileutils: %s. %s", msg, strerror(errno));
+#define fileutils_error(L, fmt, ...) luaL_error(L, "fileutils: " fmt ": %s", ##__VA_ARGS__, strerror(errno))
 
 /* helper: get path */
 static inline char *fileutils_get_path(lua_State *L, int index) {
@@ -52,9 +53,8 @@ static int l_fileutils_size(lua_State *L) {
     char *path = fileutils_get_path(L, 1);
     struct stat st;
 
-    int res = stat(path, &st);
+    if (stat(path, &st) != 0) fileutils_error(L, "cannot get file size for '%s'", path);
     free(path);
-    if (res != 0) fileutils_error(L, "cannot get file size");
 
     lua_pushinteger(L, st.st_size);
     return 1;
@@ -63,12 +63,16 @@ static int l_fileutils_size(lua_State *L) {
 
 static inline size_t __copy_file(lua_State *L, const char *src, const char *dst, const char *dst_modes) {
     FILE *in = fopen(src, "rb");
-    if (!in) return (size_t) -1;
+    if (!in) {
+        fileutils_error(L, "cannot open source file '%s'", src);
+        return (size_t) -1;
+    }
+
 
     FILE *out = fopen(dst, dst_modes);
     if (!out) {
         fclose(in);
-        fileutils_error(L, "cannot open destination file");
+        fileutils_error(L, "cannot open destination file '%s'", dst);
         return (size_t) -1;
     }
 
@@ -97,10 +101,9 @@ static int l_fileutils_cp(lua_State *L) {
     char *dst = fileutils_get_path(L, 2);
 
     size_t total = __copy_file(L, src, dst, "wb");
+    if (total == (size_t) -1) fileutils_error(L, "cannot copy file '%s' to '%s'", src, dst);
     free(src);
     free(dst);
-
-    if (total == (size_t) -1) fileutils_error(L, "cannot copy file");
 
     lua_pushinteger(L, total);
     return 1;
@@ -111,15 +114,15 @@ static inline int __copy_dir(lua_State *L, const char *src, const char *dst) {
     size_t total = 0;
     struct stat st;
 
-    if (stat(src, &st) < 0) fileutils_error(L, "cannot stat source directory");
+    if (stat(src, &st) < 0) fileutils_error(L, "cannot stat source directory '%s'", src);
 
     // Create destination directory if it doesn't exist
     if (mkdir(dst, st.st_mode) < 0) {
-        if (errno != EEXIST) fileutils_error(L, "cannot create destination directory");
+        if (errno != EEXIST) fileutils_error(L, "cannot create destination directory '%s'", dst);
     }
 
     DIR *dir = opendir(src);
-    if (!dir) fileutils_error(L, "cannot open source directory");
+    if (!dir) fileutils_error(L, "cannot open source directory '%s'", src);
 
     struct dirent *entry;
 
@@ -144,7 +147,7 @@ static inline int __copy_dir(lua_State *L, const char *src, const char *dst) {
         snprintf(src_path, src_len, "%s/%s", src, entry->d_name);
         snprintf(dst_path, dst_len, "%s/%s", dst, entry->d_name);
 
-        if (stat(src_path, &st) < 0) fileutils_error(L, "cannot stat source entry");
+        if (stat(src_path, &st) < 0) fileutils_error(L, "cannot stat source entry '%s'", src_path);
 
         if (S_ISDIR(st.st_mode)) {
             total += __copy_dir(L, src_path, dst_path);
@@ -193,19 +196,19 @@ static int l_fileutils_cat(lua_State *L) {
 static inline ssize_t __zero_copy_files(lua_State *L, const char *src, const char *dst, int dst_flags) {
     int in_fd = open(src, O_RDONLY);
     if (in_fd < 0) {
-        fileutils_error(L, "cannot open source file")
+        fileutils_error(L, "cannot open source file '%s'", src);
         return -1;
     };
 
     int out_fd = open(dst, O_WRONLY | O_CREAT | dst_flags, 0644);
     if (out_fd < 0) {
-        fileutils_error(L, "cannot open destination file");
+        fileutils_error(L, "cannot open destination file '%s'", dst);
         close(in_fd);
         return -1;
     }
 
     if (dst_flags == 0 && lseek(out_fd, 0, SEEK_END) == (off_t)-1) {
-        fileutils_error(L, "cannot seek to end of destination file");
+        fileutils_error(L, "cannot seek to end of destination file '%s'", dst);
         close(in_fd);
         close(out_fd);
         return -1;
@@ -213,7 +216,7 @@ static inline ssize_t __zero_copy_files(lua_State *L, const char *src, const cha
 
     struct stat st;
     if (fstat(in_fd, &st) != 0) {
-        fileutils_error(L, "cannot stat source file");
+        fileutils_error(L, "cannot stat source file '%s'", src);
         close(in_fd);
         close(out_fd);
         return -1;
@@ -226,7 +229,7 @@ static inline ssize_t __zero_copy_files(lua_State *L, const char *src, const cha
     while (remaining > 0) {
         sent = sendfile(out_fd, in_fd, NULL, remaining);
         if (sent <= 0) {
-            fileutils_error(L, "error during zero-copy file transfer");
+            fileutils_error(L, "error during zero-copy file transfer from '%s' to '%s'", src, dst);
             close(in_fd);
             close(out_fd);
             return -1;
@@ -277,11 +280,10 @@ static int l_fileutils_mv(lua_State *L) {
     char *src = fileutils_get_path(L, 1);
     char *dst = fileutils_get_path(L, 2);
 
-    int res = rename(src, dst);
+    if (rename(src, dst) != 0) fileutils_error(L, "cannot move file '%s' to '%s'", src, dst);
+
     free(src);
     free(dst);
-
-    if (res != 0) fileutils_error(L, "cannot move file");
 
     return 0;
 }
@@ -290,10 +292,9 @@ static int l_fileutils_mv(lua_State *L) {
 static int l_fileutils_rm(lua_State *L) {
     char *path = fileutils_get_path(L, 1);
 
-    int res = unlink(path);
-    free(path);
+    if (unlink(path) != 0) fileutils_error(L, "cannot remove file '%s'", path);
 
-    if (res != 0) fileutils_error(L, "cannot remove file");
+    free(path);
 
     return 0;
 }
@@ -316,8 +317,8 @@ static int l_fileutils_realpath(lua_State *L) {
     char *path = fileutils_get_path(L, 1);
     char resolved[4096];
     char* p = realpath(path, resolved);
+    if (!p) fileutils_error(L, "cannot resolve real path of '%s'", path);
     free(path);
-    if (!p) fileutils_error(L, "cannot resolve real path");
     lua_pushstring(L, resolved);
     return 1;
 }
@@ -443,9 +444,8 @@ static int l_fileutils_is_absolute(lua_State *L) {
 static int l_fileutils_is_dir(lua_State *L) {
     char *path = fileutils_get_path(L, 1);
     struct stat st;
-    int res = stat(path, &st);
+    if (stat(path, &st) != 0) fileutils_error(L, "cannot stat file '%s'", path);
     free(path);
-    if (res != 0) fileutils_error(L, "cannot stat file");
 
     lua_pushboolean(L, S_ISDIR(st.st_mode));
     return 1;
@@ -455,10 +455,8 @@ static int l_fileutils_is_dir(lua_State *L) {
 static int l_fileutils_is_file(lua_State *L) {
     char *path = fileutils_get_path(L, 1);
     struct stat st;
-    int res = stat(path, &st);
+    if (stat(path, &st) != 0) fileutils_error(L, "cannot stat file '%s'", path);
     free(path);
-    if (res != 0) fileutils_error(L, "cannot stat file");
-
 
     lua_pushboolean(L, S_ISREG(st.st_mode));
     return 1;
@@ -468,18 +466,20 @@ static int l_fileutils_is_file(lua_State *L) {
 static int l_fileutils_mkdir(lua_State *L) {
     char *path = fileutils_get_path(L, 1);
     int res = mkdir(path, 0755);
+    if (errno == EEXIST) {
+        free(path);
+        return 0; // Ignore if directory already exists
+    }
+    if (res != 0) fileutils_error(L, "cannot create directory '%s'", path);
     free(path);
-    if (errno == EEXIST) return 0; // Ignore if directory already exists
-    if (res != 0) fileutils_error(L, "cannot create directory");
     return 0;
 }
 
 // Function: fileutils.rmdir(path: string) -> nil
 static int l_fileutils_rmdir(lua_State *L) {
     char *path = fileutils_get_path(L, 1);
-    int res = rmdir(path);
+    if (rmdir(path) != 0) fileutils_error(L, "cannot remove directory '%s'", path);
     free(path);
-    if (res != 0) fileutils_error(L, "cannot remove directory");
     return 0;
 }
 
@@ -487,8 +487,8 @@ static int l_fileutils_rmdir(lua_State *L) {
 static int l_fileutils_listdir(lua_State *L) {
     char *path = fileutils_get_path(L, 1);
     DIR *dir = opendir(path);
+    if (!dir) fileutils_error(L, "cannot open directory '%s'", path);
     free(path);
-    if (!dir) fileutils_error(L, "cannot open directory");
 
     lua_newtable(L);
     struct dirent *entry;
@@ -574,7 +574,71 @@ static int l_fileutils_write_pack(lua_State *L) {
     return 0;
 }
 
+#define IN_BUF_SIZE  (3 * 4096)   // multiple of 3
+#define OUT_BUF_SIZE (4 * 4096)
 
+static const char b64_table[] =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+static int l_fileutils_to_b64(lua_State *L) {
+    char* in_filename  = fileutils_get_path(L, 1);
+    char* out_filename = fileutils_get_path(L, 2);
+    const char* mode = luaL_checkstring(L, 3);
+
+    FILE* in = fopen(in_filename, "rb");
+    if (!in) fileutils_error(L, "cannot open input file");
+    free(in_filename);
+
+    FILE *out = fopen(out_filename, mode);
+    if (!out) fileutils_error(L, "cannot open output file");
+    free(out_filename);
+
+    uint8_t ibuf[IN_BUF_SIZE];
+    uint8_t obuf[OUT_BUF_SIZE];
+
+    size_t bytes_read;
+
+    while ((bytes_read = fread(ibuf, 1, IN_BUF_SIZE, in)) > 0) {
+        size_t i = 0, o = 0;
+
+        // Process full 3-byte chunks
+        size_t full_chunks = bytes_read / 3 * 3;
+
+        for (; i < full_chunks; i += 3) {
+            uint32_t triple = (ibuf[i] << 16) | (ibuf[i + 1] << 8) | (ibuf[i + 2]);
+
+            obuf[o++] = b64_table[(triple >> 18) & 0x3F];
+            obuf[o++] = b64_table[(triple >> 12) & 0x3F];
+            obuf[o++] = b64_table[(triple >> 6) & 0x3F];
+            obuf[o++] = b64_table[triple & 0x3F];
+        }
+
+        // Handle remainder (at most 2 bytes)
+        if (i < bytes_read) {
+            uint32_t triple = ibuf[i] << 16;
+            if (i + 1 < bytes_read)
+                triple |= ibuf[i + 1] << 8;
+
+            obuf[o++] = b64_table[(triple >> 18) & 0x3F];
+            obuf[o++] = b64_table[(triple >> 12) & 0x3F];
+
+            if (i + 1 < bytes_read) {
+                obuf[o++] = b64_table[(triple >> 6) & 0x3F];
+            } else {
+                obuf[o++] = '=';
+            }
+
+            obuf[o++] = '=';
+        }
+
+        fwrite(obuf, 1, o, out);
+    }
+
+    fclose(in);
+    fclose(out);
+
+    return 0;
+}
 
 /* ===================== register ===================== */
 #define register_function(fname) {#fname, l_fileutils_##fname}
@@ -603,6 +667,7 @@ static const struct luaL_Reg fileutils[] = {
     register_function(listdir),
     register_function(check_in_env),
     register_function(write_pack),
+    register_function(to_b64),
     {NULL, NULL}
 };
 
