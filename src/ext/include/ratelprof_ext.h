@@ -80,7 +80,6 @@ typedef union gpu_args_s {
 
 typedef struct ratelprof_gpu_activity_s {
     ratelprof_domain_ext_t domain;
-    ratelprof_phase_t phase;
     uint64_t id;
     uint64_t corr_id;
     uint64_t start_time;
@@ -93,7 +92,6 @@ typedef struct ratelprof_gpu_activity_s {
 
 typedef struct ratelprof_roctx_activity_s {
     ratelprof_domain_ext_t domain;
-    ratelprof_phase_t phase;
 	uint64_t tid;
 	uint64_t pid;
     uint64_t id;

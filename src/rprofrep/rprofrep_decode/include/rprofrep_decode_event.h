@@ -22,7 +22,6 @@ typedef struct rprofref_event_data_s {
     uint64_t domain;
     uint64_t unit;
     int64_t  sub_unit;
-    uint64_t phase;
     uint64_t id;
     uint64_t start;
     uint64_t dur;  
@@ -39,13 +38,11 @@ typedef struct rprofref_event_data_s {
 
 typedef struct rprofrep_event_filter_s {
     // Filter values
-    uint64_t phase;
     uint64_t start;
     uint64_t stop;
     uint64_t dur;
 
     // Comparison flags (1 = enabled, 0 = ignore)
-    bool phase_EQ;
     bool start_GT;
     bool start_LT;
     bool stop_GT;
@@ -57,11 +54,10 @@ typedef struct rprofrep_event_filter_s {
 
 static inline bool rprofrep_filter_event(
     const rprofrep_event_filter_t* f, 
-    uint64_t phase, uint64_t start, uint64_t stop, uint64_t dur
+    uint64_t start, uint64_t stop, uint64_t dur
 ) {
     if (!f) return true; // No filter means "accept all"
     return
-        (!f->phase_EQ || phase == f->phase) &&
         (!f->start_GT || start >  f->start) &&
         (!f->start_LT || start <  f->start) &&
         (!f->stop_GT  || stop  >  f->stop)  &&
@@ -109,7 +105,7 @@ rprofrep_status_t rprofrep_get_event_by_cid(
  * @param event_off Represents the offset within a group's buffer where the event data starts.
  * It is used to locate the specific event within the buffer of events belonging to a group.
  * 
- * @param filter It is used to filter events based on certain criteria such as phase, start time, stop time, and duration.
+ * @param filter It is used to filter events based on certain criteria such as start time, stop time, and duration.
  * If NULL, accept all events.
  * 
  * @param out_event This parameter is used to store the event data that is

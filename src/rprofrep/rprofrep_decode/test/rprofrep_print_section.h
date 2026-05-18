@@ -297,8 +297,8 @@ static inline rprofrep_status_t __iterate_over_events(rprofrep_decode_context_t*
             cid = corr_event.id;
         }
         
-        printf("%6lu | %10lu | %12ld | %-32s | %6lu | %6lu | %6lu | %16lu | %16lu \n", 
-            event.domain, event.unit, event.sub_unit, tail32(event.name), event.phase, event.id, cid, event.start, event.dur);
+        printf("%6lu | %10lu | %12ld | %-32s | %6lu | %6lu | %16lu | %16lu \n", 
+            event.domain, event.unit, event.sub_unit, tail32(event.name), event.id, cid, event.start, event.dur);
     }
     RPROFREP_CHECK_CALL(rprofrep_event_iterator_destroy(&iterator));
     return RPROFREP_STATUS_SUCCESS;
@@ -308,10 +308,10 @@ static inline rprofrep_status_t rprofrep_print_events_section(rprofrep_decode_co
 {
     print_section_title(RPROFREP_SECTION_EVENTS);
 
-    print_declare_table(6, 10, 12, 32, 6, 6, 6, 16, 16);
+    print_declare_table(6, 10, 12, 32, 6, 6, 16, 16);
 
     print_table_separator();
-    print_table_header("Domain", "PID/GPU", "TID/QID/SDMA", "Name", "Phase", "ID", "CID", "Start", "Dur");
+    print_table_header("Domain", "PID/GPU", "TID/QID/SDMA", "Name", "ID", "CID", "Start", "Dur");
     print_table_separator();
 
     requested_domains[RATELPROF_DOMAIN_HIP] = true;

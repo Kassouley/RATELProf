@@ -73,7 +73,7 @@ typedef enum ratelprof_domain_e{
  * @brief Structure to represent an API activity within the profiling system.
  * 
  * This structure holds information about an API activity during profiling,
- * such as the domain, phase, function ID, and timing details, along with
+ * such as the domain, function ID, and timing details, along with
  * domain-specific arguments that vary based on the profiling domain.
  */
 typedef struct ratelprof_api_activity_s  {
@@ -83,13 +83,6 @@ typedef struct ratelprof_api_activity_s  {
      * This specifies the domain under which the API activity falls.
      */
 	ratelprof_domain_t domain;
-
-    /**
-     * @brief The phase of the API activity (e.g., constructor or main).
-     * 
-     * Indicates the phase within the profiling lifecycle.
-     */
-    ratelprof_phase_t phase;
 
     /**
      * @brief The unique identifier of the function being profiled.

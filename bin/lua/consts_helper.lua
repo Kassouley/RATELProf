@@ -233,14 +233,14 @@ consts_helper.stats = {
             arg_required    = true,
             default         = "KB"
         },
-        ['only-main'] = {
-            desc            = [[ 
-                Process only events from main phase.]],
-            sname           = nil,
-            arg             = nil,
-            arg_required    = false,
-            default         = nil
-        },
+        -- ['only-main'] = {
+        --     desc            = [[ 
+        --         Process only events from main phase.]],
+        --     sname           = nil,
+        --     arg             = nil,
+        --     arg_required    = false,
+        --     default         = nil
+        -- },
         mangled = {
             desc            = [[ 
                 Use the mangled name of the function in the report.]],

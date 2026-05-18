@@ -7,7 +7,6 @@
 #include "ratelprof_ext.h"
 
 static inline void __on_enter_profiling_callback_function(ratelprof_api_id_t id, ratelprof_api_activity_t* activity) {
-    activity->phase = ratelprof_get_current_phase();
     activity->domain = (ratelprof_domain_t) RATELPROF_DOMAIN_PROFILING;
     activity->funid = id;
     activity->pid = get_pid();

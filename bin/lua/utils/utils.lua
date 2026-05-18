@@ -228,11 +228,9 @@ function utils.get_filter(start, stop, only_main, dur, filter_type)
     end
 
     return {
-        phase    = only_main and 1 or nil,
         start    = start,
         stop     = stop,
         dur      = dur,
-        phase_EQ = only_main and true,
         start_GT = start and true,
         start_LT = false,
         stop_GT  = false,

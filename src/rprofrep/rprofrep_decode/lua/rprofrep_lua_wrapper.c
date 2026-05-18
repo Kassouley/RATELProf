@@ -32,7 +32,6 @@
 //     else if (is(key, tid))      { lua_pushnumber(L, e->sub_unit); } 
 //     else if (is(key, queue_id)) { lua_pushnumber(L, e->sub_unit); } 
 //     else if (is(key, sdma_id))  { lua_pushnumber(L, e->sub_unit); } 
-//     else if (is(key, phase))    { lua_pushnumber(L, e->phase);    } 
 //     else if (is(key, id))       { lua_pushnumber(L, e->id);       } 
 //     else if (is(key, start))    { lua_pushnumber(L, e->start);    } 
 //     else if (is(key, dur))      { lua_pushnumber(L, e->dur);      } 
@@ -80,7 +79,6 @@ SET_GETTER(sub_unit, sub_unit,  number)
 SET_GETTER(tid,      sub_unit,  number)
 SET_GETTER(queue_id, sub_unit,  number)
 SET_GETTER(sdma_id,  sub_unit,  number)
-SET_GETTER(phase,    phase,     number)
 SET_GETTER(id,       id,        number)
 SET_GETTER(start,    start,     number)
 SET_GETTER(dur,      dur,       number)
@@ -167,7 +165,6 @@ static const struct luaL_Reg l_event_methods[] = {
     register_class_method(event, tid),
     register_class_method(event, queue_id),
     register_class_method(event, sdma_id),
-    register_class_method(event, phase),
     register_class_method(event, id),
     register_class_method(event, start),
     register_class_method(event, dur),
@@ -284,12 +281,10 @@ static rprofrep_event_filter_t* rprofrep_lua_get_filter(lua_State *L, int index)
         lua_pop(L, 1); \
     } while(0)
 
-    READ_UINT64_FIELD(phase);
     READ_UINT64_FIELD(start);
     READ_UINT64_FIELD(stop);
     READ_UINT64_FIELD(dur);
 
-    READ_BOOL_FIELD(phase_EQ);
     READ_BOOL_FIELD(start_GT);
     READ_BOOL_FIELD(start_LT);
     READ_BOOL_FIELD(stop_GT);

@@ -22,7 +22,6 @@ int i_roctxRangePushA(const char* message) {
     ratelprof_stack_push(&roctx_activity_stack, (uint64_t)(uintptr_t) activity);
 
     activity->domain = RATELPROF_DOMAIN_ROCTX;
-    activity->phase = ratelprof_get_current_phase();
 
     activity->message = strdup(message);
     get_correlation_id(&activity->corr_id);
@@ -60,7 +59,6 @@ roctx_range_id_t i_roctxRangeStartA(const char* message) {
     ratelprof_roctx_activity_t* activity = (ratelprof_roctx_activity_t*) malloc (sizeof(ratelprof_roctx_activity_t));
 
     activity->domain = RATELPROF_DOMAIN_ROCTX;
-    activity->phase = ratelprof_get_current_phase();
 
     activity->message = strdup(message);
     get_correlation_id(&activity->corr_id);
@@ -94,7 +92,6 @@ void i_roctxMarkA(const char* message) {
     activity->start_time = ratelprof_get_curr_timespec();
 
     activity->domain = RATELPROF_DOMAIN_ROCTX;
-    activity->phase = ratelprof_get_current_phase();
 
     activity->message = strdup(message);
     get_correlation_id(&activity->corr_id);

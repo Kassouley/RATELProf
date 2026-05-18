@@ -25,7 +25,6 @@ void on_enter_api_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, voi
     ratelprof_activity_pool_push_activity(activity);
     get_correlation_id(&activity->corr_id);
     get_id(&activity->id);
-    activity->phase = ratelprof_get_current_phase();
     activity->domain = domain;
     activity->funid = id;
     activity->pid = get_pid();

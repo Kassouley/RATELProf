@@ -120,12 +120,11 @@ rprofrep_status_t rprofrep_get_event(
         return RPROFREP_STATUS_INVALID_EVENT("The next event is not valid");
     }
 
-    uint64_t phase = __read_mp_uint(event_buf, &offset);
     uint64_t id    = __read_mp_uint(event_buf, &offset);
     uint64_t start = __read_mp_uint(event_buf, &offset);
     uint64_t dur   = __read_mp_uint(event_buf, &offset);
 
-    if (!rprofrep_filter_event(filter, phase, start, start + dur, dur)) {
+    if (!rprofrep_filter_event(filter, start, start + dur, dur)) {
         if (next_event_buf < buffer_stop) {
             return rprofrep_get_event(ctx, group, next_event_off, filter, out_event, cursor);
         }
@@ -173,7 +172,6 @@ rprofrep_status_t rprofrep_get_event(
     out_event->unit     = group->unit;
     out_event->domain   = group->domain;
     out_event->sub_unit = group->sub_unit;
-    out_event->phase    = phase;
     out_event->id       = id;
     out_event->start    = start;
     out_event->dur      = dur;

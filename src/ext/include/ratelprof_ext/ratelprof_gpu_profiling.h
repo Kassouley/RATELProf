@@ -145,7 +145,6 @@ static inline ratelprof_status_t ratelprof_intercept_copy(hsa_agent_t dst_agent,
 
     get_correlation_id(&activity->corr_id);
     get_id(&activity->id);
-    activity->phase                   = ratelprof_get_current_phase();
     activity->domain                  = RATELPROF_DOMAIN_COPY;
     activity->completion_signal       = *completion_signal;
     activity->args.mem_copy.src_agent = src_agent;
@@ -202,7 +201,6 @@ static inline ratelprof_status_t ratelprof_create_kernel_dispatch_activity(hsa_k
     get_correlation_id(&activity->corr_id);
     get_id(&activity->id);
 
-    activity->phase                                     = ratelprof_get_current_phase();
     activity->args.dispatch.agent                       = *agent;
     activity->args.dispatch.queue_id                    = queue_id;
     activity->domain                                    = RATELPROF_DOMAIN_KERNEL;
@@ -247,7 +245,6 @@ static inline ratelprof_status_t ratelprof_create_barrier_dispatch_activity(void
     get_correlation_id(&activity->corr_id);
     get_id(&activity->id);
 
-    activity->phase                  = ratelprof_get_current_phase();
     activity->args.dispatch.agent    = *agent;
     activity->args.dispatch.queue_id = queue_id;
     activity->domain                 = domain;

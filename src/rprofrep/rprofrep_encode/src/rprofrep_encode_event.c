@@ -41,7 +41,6 @@ static void add_copy_activity_data_to_buffer(
 
     msgpack_buffer_t evt = {0};
     msgpack_init(&evt, 0xffff, MSGPACK_OVERFLOW_REALLOC, NULL);
-    msgpack_encode_uint(&evt, activity->phase);
     msgpack_encode_uint(&evt, activity->id);
     msgpack_encode_uint(&evt, ratelprof_get_normalized_time(start));
     msgpack_encode_uint(&evt, dur);
@@ -74,7 +73,6 @@ static void add_barrier_activity_data_to_buffer(
 
     msgpack_buffer_t evt = {0};
     msgpack_init(&evt, 0xffff, MSGPACK_OVERFLOW_REALLOC, NULL);
-    msgpack_encode_uint(&evt, activity->phase);
     msgpack_encode_uint(&evt, activity->id);
     msgpack_encode_uint(&evt, ratelprof_get_normalized_time(start));
     msgpack_encode_uint(&evt, dur);
@@ -109,7 +107,6 @@ static void add_kernel_activity_data_to_buffer(
 
     msgpack_buffer_t evt = {0};
     msgpack_init(&evt, 0xffff, MSGPACK_OVERFLOW_REALLOC, NULL);
-    msgpack_encode_uint(&evt, activity->phase);
     msgpack_encode_uint(&evt, activity->id);
     msgpack_encode_uint(&evt, ratelprof_get_normalized_time(start));
     msgpack_encode_uint(&evt, dur);
@@ -160,7 +157,6 @@ static void add_api_activity_data_to_buffer(
 
     msgpack_buffer_t evt = {0};
     msgpack_init(&evt, 0xffff, MSGPACK_OVERFLOW_REALLOC, NULL);
-    msgpack_encode_uint(&evt, activity->phase);
     msgpack_encode_uint(&evt, activity->id);
     msgpack_encode_uint(&evt, ratelprof_get_normalized_time(start));
     msgpack_encode_uint(&evt, dur);
@@ -190,7 +186,6 @@ static void add_roctx_activity_data_to_buffer(
 
     msgpack_buffer_t evt = {0};
     msgpack_init(&evt, 0xffff, MSGPACK_OVERFLOW_REALLOC, NULL);
-    msgpack_encode_uint(&evt, activity->phase);
     msgpack_encode_uint(&evt, activity->id);
     msgpack_encode_uint(&evt, ratelprof_get_normalized_time(start));
     msgpack_encode_uint(&evt, dur);

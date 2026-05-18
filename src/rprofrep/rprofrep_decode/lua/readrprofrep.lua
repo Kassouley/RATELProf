@@ -77,7 +77,7 @@ local function print_events_section(ctx, requested_domains)
 
     print(string.rep("-", 134))
     print(string.format("%-6s | %-10s | %-12s | %-32s | %-6s | %-6s | %-6s | %-16s | %-16s",
-        "Domain", "PID/GPU", "TID/QID/SDMA", "Name", "Phase", "ID", "CID", "Start", "Duration"))
+        "Domain", "PID/GPU", "TID/QID/SDMA", "Name", "ID", "CID", "Start", "Duration"))
     print(string.rep("-", 134))
 
     ctx:for_each_unit(function(_, unit_node)
@@ -87,8 +87,8 @@ local function print_events_section(ctx, requested_domains)
             for _ = 1, 128 do
                 local event = iterator:next()
                 if not event then break end
-                print(string.format("%6d | %10d | %12d | %-32s | %6d | %6d | %6d | %16d | %16d",
-                    event:domain(), event:unit(), event:sub_unit(), head(event:name(), 32), event:phase(), event:id(), 0, event:start(), event:dur()))
+                print(string.format("%6d | %10d | %12d | %-32s | %6d | %6d | %16d | %16d",
+                    event:domain(), event:unit(), event:sub_unit(), head(event:name(), 32), event:id(), 0, event:start(), event:dur()))
             end
         end)
     end)
