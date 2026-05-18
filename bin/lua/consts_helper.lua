@@ -510,11 +510,11 @@ consts_helper.visualize = {
     opt = {
         ["bucket-size"] = {
             desc            = [[ 
-                Change the max number of event for each bucket (default: 10000)]],
+                Change the max number of event for each bucket (default: 100000)]],
             sname           = "b",
             arg             = "<size>",
             arg_required    = true,
-            default         = "10000"
+            default         = "100000"
         },
         output = {
             desc            = [[ 
