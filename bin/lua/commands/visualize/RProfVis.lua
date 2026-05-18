@@ -119,7 +119,7 @@ function RProfVis:get_track_id(group, subunit)
     local track = {
         id = track_id,
         subunit = subunit,
-        nsubtracks = 1
+        nsubtracks = 0
     }
     tracks[track_id] = track
     return track
@@ -148,7 +148,6 @@ function RProfVis:for_each_track(unit, subunit, domain, process_info)
         if start < last_event_stop[subtrack_id] then
             subtrack_id = subtrack_id + 1
         end
-
         last_event_stop[subtrack_id] = stop
 
         return subtrack_id
@@ -168,16 +167,16 @@ function RProfVis:for_each_track(unit, subunit, domain, process_info)
         local start = event:start()
         local dur = event:dur()
         local stop = start + dur
+        local cid = self.rprofrep:get_correlated_id(event)
 
        subtrack_id = get_subtrack_id(start, stop)
 
         if subtrack_id > 1 then
-            buf:push_byte(0xc4)
+            buf:push_byte(0xc5)
             buf:encode_uint(subtrack_id - 1)
         else
             histogram:add_event(event)
         end
-
 
         buf:encode_uint(event:ufunid())
         buf:encode_uint(start)
@@ -185,7 +184,6 @@ function RProfVis:for_each_track(unit, subunit, domain, process_info)
 
         buf:encode_uint(event:id())
 
-        local cid = self.rprofrep:get_correlated_id(event)
         if cid > 0 then
             buf:push_byte(0xc4)
             buf:encode_uint(cid)
@@ -200,6 +198,10 @@ function RProfVis:for_each_track(unit, subunit, domain, process_info)
 
 
     end, self.event_filter, self:__get_process_str(process_info))
+
+    for _, _ in pairs(last_event_stop) do
+        track.nsubtracks = track.nsubtracks + 1
+    end
 
     self:for_each_bucket(function(bucket, _)
         local buf = bucket.buffer

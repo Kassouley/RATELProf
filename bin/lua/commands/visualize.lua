@@ -14,7 +14,7 @@ function visualize.process(positional_args, options_values)
     local rprofrep = RProfRep:new(positional_args)
 
     local output = ratelprof.get_opt_val(options_values, "output") or rprofrep.basename
-    local bucket_size = options_helper.parse_number_option(options_values, "bucket-size") or 10000
+    local bucket_size = options_helper.parse_number_option(options_values, "bucket-size") or 100000
     local start = options_helper.parse_number_option(options_values, "start")
     local stop = options_helper.parse_number_option(options_values, "stop")
     local pids = options_helper.parse_mask_option(options_values, "pids")

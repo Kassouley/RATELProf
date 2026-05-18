@@ -49,7 +49,7 @@ self.onmessage = function(e) {
         const [gid, tid] = [R(), R()];
         while (P() !== 0xc1) {
             let st = 0;
-            if (P() === 0xc4) { o++; st = R(); }
+            if (P() === 0xc5) { o++; st = R(); }
             const [f, s, d, ii] = [R(), R(), R(), R()];
             let cid = 0;
             if (P() === 0xc4) { o++; cid = R(); }
