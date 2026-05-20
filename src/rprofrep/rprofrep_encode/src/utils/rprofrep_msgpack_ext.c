@@ -79,7 +79,7 @@ void rprofrep_msgpack_ext_encode_cid(
             msgpack_encode_ext(buf, MSGPACK_EXT_CID, NULL, 1);
             msgpack_encode_uint(buf, cid_entry.group_id);
             msgpack_encode_uint(buf, cid_entry.event_off);
-            return;
+            break;
         }
         stack_pop(cid_stack, &cid_entry);
     }
