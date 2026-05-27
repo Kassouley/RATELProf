@@ -59,7 +59,7 @@ return function(report)
 
     report.HEADER = { "Entry Point", "Operation", "Source", "Count", "Tot. Dur (" .. timeunit .. ")", "Tot. Covered Dur (" .. timeunit .. ")", "Avg Hidden (%)", "Tot. Size (" .. sizeunit .. ")" }
 
-    report.LOOP_IN = { ratelprof.consts.DOMAIN_COPY_ID }
+    report.LOOP_IN = { ratelprof.consts.DOMAIN_MEMORY_ID }
 
     report.REQUIRED_DOMAIN = { ratelprof.consts.DOMAIN_KERNEL_ID }
 
@@ -78,7 +78,7 @@ return function(report)
     report.PRE_EVENT_LOOP = function (self, rprofrep)
         self.overlapped_total_time = 0
         self.overall_total_time = 0
-        self.not_hidden_copy_dur_per_sdma = {}
+        self.not_hidden_copy_dur_per_channel = {}
 
         self.overlapping = Overlapping.new(rprofrep, { ratelprof.consts.DOMAIN_KERNEL_ID })
     end
@@ -95,8 +95,8 @@ return function(report)
             self.overall_total_time    = self.overall_total_time + copy_dur
             self.overlapped_total_time = self.overlapped_total_time + covered
 
-            local sdma = event:sdma_id()
-            self.not_hidden_copy_dur_per_sdma[sdma] = (self.not_hidden_copy_dur_per_sdma[sdma] or 0) + copy_dur - covered
+            local sub_unit = event:sub_unit()
+            self.not_hidden_copy_dur_per_channel[sub_unit] = (self.not_hidden_copy_dur_per_channel[sub_unit] or 0) + copy_dur - covered
 
             local entry = rprofrep:find_entry_point(event)
             if not entry then return end
@@ -117,7 +117,7 @@ return function(report)
             self.score = self.score + total_ratio
         end
         self.total_percentage_per_gpu[gpu_key] = 100 - total_ratio * 100
-        self.max_not_hidden_copy_per_gpu[gpu_key] = table.max(self.not_hidden_copy_dur_per_sdma)
+        self.max_not_hidden_copy_per_gpu[gpu_key] = table.max(self.not_hidden_copy_dur_per_channel)
     end
 
 

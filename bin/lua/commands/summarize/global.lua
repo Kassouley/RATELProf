@@ -12,16 +12,16 @@ local analyzed_data = {
     {key = "gpu_time",            label = "Max GPU Active Time (%)",          desc = "Max Total GPU active time including all kernels and copies. "..
                                                                                      "This is the time when GPU was not idle, not the sum of all GPU activity time."},
     {key = "kernel_time",         label = "Max GPU Compute Time (%)",         desc = "Max total time spent in all kernels"},
-    {key = "copy_time",           label = "Max GPU Copy Time (%)",            desc = "Max Total time spent in all memory transfers"},
-    {key = "visible_copy_time",   label = "Max GPU Visible Copy Time (%)",    desc = "Max Total time spent in all memory transfers that are not hidden by GPU computation."},
+    {key = "copy_time",           label = "Max GPU MemOp Time (%)",            desc = "Max Total time spent in all memory operations"},
+    {key = "visible_copy_time",   label = "Max GPU Visible MemOp Time (%)",    desc = "Max Total time spent in all memory operations that are not hidden by GPU computation."},
 
-    {key = "longest_activity",          label = "Longest GPU Activity",             desc = "Longest GPU activity. Can be a kernel, copy operation or a barrier."},
+    {key = "longest_activity",          label = "Longest GPU Activity",             desc = "Longest GPU activity. Can be a kernel, memory operation or a barrier."},
     {key = "total_bytes",               label = "Total bytes transfered",           desc = "Total bytes transferred from/to GPU by memory transfers."},
     {type = "sep", subrow = 2,          label = "Score"},
     {key = "concurrency_score",         label = "Concurrency Score (%)",            desc = "Percentage of kernel computation that are in parallel. High concurrency can improve performance."},
-    {key = "hidden_score",              label = "Hidden Copy Score (%)",            desc = "Percentage of copy time hidden by kernel computation. "..
+    {key = "hidden_score",              label = "Hidden Copy Score (%)",            desc = "Percentage of memory operation time hidden by kernel computation. "..
                                                                                            "Higher doesn't always mean better performance, "..
-                                                                                           "but hide memory copy latency can improve GPU utilization. "..
+                                                                                           "but hide memory operation latency can improve GPU utilization. "..
                                                                                            "(This score doesn't take in consideration async copies hidden by CPU computation.)"},
     {type = "sep", subrow = 4,          label = "Potential Speedup"},
     {key = "speedup_async_copy",        label = "Perfect HIP Async Copy", desc = "Speed up if all copies were 100% asynchronous"},

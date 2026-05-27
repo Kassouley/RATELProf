@@ -3,7 +3,7 @@ local report_helper = require ("utils.report_helper")
 
 local DOMAIN_COL_IDX = {
     [ ratelprof.consts.DOMAIN_KERNEL_ID ] = 5,
-    [ ratelprof.consts.DOMAIN_COPY_ID ] = 6,
+    [ ratelprof.consts.DOMAIN_MEMORY_ID ] = 6,
 }
 
 return function (report)
@@ -14,10 +14,10 @@ return function (report)
     report.TYPE = "Breakdown"
 
     report.HEADER = {
-        "###", "Wall Time ("..timeunit..")", "GPU Time (%)", "Idle Time (%)", "Compute Time (%)", "Mem. Transfer Time (%)", "Visible Mem. Transfer Time (%)",
+        "###", "Wall Time ("..timeunit..")", "GPU Time (%)", "Idle Time (%)", "Compute Time (%)", "Mem. Op. Time (%)", "Visible Mem. Op. Time (%)",
     }
 
-    report.LOOP_IN = { ratelprof.consts.DOMAIN_COPY_ID, ratelprof.consts.DOMAIN_KERNEL_ID }
+    report.LOOP_IN = { ratelprof.consts.DOMAIN_MEMORY_ID, ratelprof.consts.DOMAIN_KERNEL_ID }
     
     report.OR_REQUIRED_MODE = true
 
@@ -25,8 +25,7 @@ return function (report)
 
     report.PRE_EVENT_LOOP = function(self)
         self.gpu_ctx = Timewise.new()
-        self.ctx_per_qid  = {}
-        self.ctx_per_sdma = {}
+        self.ctx_per_channel = {}
     end
 
     report.FOR_EACH = function(self, event)
@@ -39,16 +38,11 @@ return function (report)
 
         local gpu_ctx = self.gpu_ctx
 
-        local sub_ctx = nil
-        if domain == ratelprof.consts.DOMAIN_COPY_ID then
-            local sdma = event:sdma_id()
-            sub_ctx = self.ctx_per_sdma[sdma] or Timewise.new()
-            self.ctx_per_sdma[sdma] = sub_ctx
-        else
-            local queue_id = event:queue_id()
-            sub_ctx = self.ctx_per_qid[queue_id] or Timewise.new()
-            self.ctx_per_qid[queue_id] = sub_ctx
-        end
+        local label, id = event:gpu_channel()
+        local channel = label .. " " .. id
+
+        local sub_ctx = self.ctx_per_channel[channel] or Timewise.new()
+        self.ctx_per_channel[channel] = sub_ctx
 
         gpu_ctx:add_entry(key, start, stop)
         sub_ctx:add_entry(key, start, stop)
@@ -82,22 +76,17 @@ return function (report)
     report.POST_EVENT_LOOP = function(self, rprofrep, cpu_key)
         local total_time   = rprofrep:get_analyzed_interval_dur()
 
-        local queue_data = {}
-        for queue_id, ctx in pairs(self.ctx_per_qid) do
-            add_new_row(queue_data, ctx, " Queue ID " .. queue_id, ctx:compute_walltime(), total_time)
+        local channel_data = {}
+        for channel, ctx in pairs(self.ctx_per_channel) do
+            add_new_row(channel_data, ctx, " "..channel, ctx:compute_walltime(), total_time)
         end
 
-        local sdma_data = {}
-        for sdma_id, ctx in pairs(self.ctx_per_sdma) do
-            add_new_row(sdma_data, ctx, " SDMA ID " .. sdma_id, ctx:compute_walltime(), total_time)
-        end
 
         local row = add_new_row(tmp_data, self.gpu_ctx, ratelprof.utils.label_unit_with_rank(cpu_key, true), total_time, total_time)
-        row["tmp_queue"] = queue_data
-        row["tmp_sdma"]  = sdma_data
+        row["tmp_channel"] = channel_data
 
         self.gpu_ctx = nil
-        self.ctx_per_qid = nil
+        self.ctx_per_channel = nil
     end
 
     report.POST_LOOP = function (self)
@@ -127,8 +116,7 @@ return function (report)
             max_copy_pct = math.max(max_copy_pct, gpu_data[6])
             max_visible_copy_pct = math.max(max_visible_copy_pct, gpu_data[7])
 
-            insert_subdata(gpu_data, "tmp_queue")
-            insert_subdata(gpu_data, "tmp_sdma")
+            insert_subdata(gpu_data, "tmp_channel")
         end
 
         self.data = data

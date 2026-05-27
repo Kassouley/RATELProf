@@ -24,7 +24,7 @@ return function (report)
 
     report.PER_MODE = true
 
-    report.LOOP_IN = { ratelprof.consts.DOMAIN_COPY_ID }
+    report.LOOP_IN = { ratelprof.consts.DOMAIN_MEMORY_ID }
 
     report.SORT_BY = { "asc", 2 }
 

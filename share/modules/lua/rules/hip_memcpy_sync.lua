@@ -25,7 +25,7 @@ return function (report)
 
     report.HEADER = { "API Name", "Operation", "Source", "Count", "Tot. Size ("..sizeunit..")", "Tot. CPU Dur ("..timeunit..")", "Tot. GPU Dur ("..timeunit..")", "Tot. Sync Dur ("..timeunit..")" }
 
-    report.LOOP_IN = { ratelprof.consts.DOMAIN_COPY_ID }
+    report.LOOP_IN = { ratelprof.consts.DOMAIN_MEMORY_ID }
 
     report.REQUIRED_DOMAIN = { ratelprof.consts.DOMAIN_HIP_ID }
 

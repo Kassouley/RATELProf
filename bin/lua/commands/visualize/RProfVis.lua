@@ -78,28 +78,25 @@ function RProfVis:get_bucket(event)
     return bucket, bucket_id
 end
 
-local function get_group_and_track_labels(domain)
-    local consts = ratelprof.consts
-    if domain == consts.DOMAIN_COPY_ID then
-        return "GPU", "SDMA ID", 0
-    elseif domain == consts.DOMAIN_KERNEL_ID
-        or domain == consts.DOMAIN_BARRIEROR_ID
-        or domain == consts.DOMAIN_BARRIERAND_ID then
-        return "GPU", "Queue ID", domain == consts.DOMAIN_KERNEL_ID and 1 or 3
-    end
-    return "PID", "TID", 2
-end
+local domain_mode_map = {
+    [ratelprof.consts.DOMAIN_MEMORY_ID] = 0,
+    [ratelprof.consts.DOMAIN_KERNEL_ID] = 1,
+    [ratelprof.consts.DOMAIN_BARRIEROR_ID] = 3,
+    [ratelprof.consts.DOMAIN_BARRIERAND_ID] = 3
+}
 
-function RProfVis:get_group(unit, domain, domain_name)
+function RProfVis:get_group(unit, domain, process_info)
+    local domain_name = process_info.domain_name 
+    local subunit_label = process_info.subunit_label
+    local group_label = process_info.unit_label
     local key = unit .. "_" .. domain
     local group = self.curr_group_list[key]
     if not group then
-        local group_label, track_label, mode = get_group_and_track_labels(domain)
+        local mode = domain_mode_map[domain] or 2
         group = {
             id = self.group_count,
             unit = unit,
             group_label = group_label,
-            track_label = track_label,
             domain = domain_name,
             domain_mode = mode,
             tracks_count = 0,
@@ -112,13 +109,14 @@ function RProfVis:get_group(unit, domain, domain_name)
     return group
 end
 
-function RProfVis:get_track_id(group, subunit)
+function RProfVis:get_track_id(group, subunit, track_label)
     local tracks = group.tracks
     local track_id = group.tracks_count
     group.tracks_count = group.tracks_count + 1
     local track = {
         id = track_id,
         subunit = subunit,
+        track_label = track_label,
         nsubtracks = 0
     }
     tracks[track_id] = track
@@ -132,10 +130,10 @@ function RProfVis:for_each_bucket(f)
 end
 
 function RProfVis:for_each_track(unit, subunit, domain, process_info)
-    local group = self:get_group(unit, domain, process_info.domain_name)
+    local group = self:get_group(unit, domain, process_info)
     local histogram = group.histogram
     local group_id = group.id
-    local track = self:get_track_id(group, subunit)
+    local track = self:get_track_id(group, subunit, process_info.subunit_label)
     local track_id = track.id
     local subtrack_id = 1
     local last_event_stop = {0}
@@ -219,6 +217,9 @@ function RProfVis:encode_metadata(file, event, domain)
 
     if domain == ratelprof.consts.DOMAIN_KERNEL_ID then
         buf:encode_uint(event:extra_id())
+    elseif domain == ratelprof.consts.DOMAIN_MEMORY_ID then
+        local _, memop = event:memop()
+        buf:encode_uint(memop)
     elseif loc_id >= 0 then
         buf:encode_uint(event:extra_id())
         buf:encode_uint(loc_id)
@@ -407,11 +408,11 @@ function RProfVis:encode_groups(section)
         buf:encode_string(group.group_label)
         buf:encode_string(group.domain)
         buf:encode_uint(group.domain_mode)
-        buf:encode_string(group.track_label)
         buf:encode_uint(group.unit)
         buf:encode_uint(group.tracks_count)
         for _, track in pairs(group.tracks) do
             buf:encode_uint(track.id)
+            buf:encode_string(track.track_label)
             buf:encode_int(track.subunit)
             buf:encode_uint(track.nsubtracks)
         end

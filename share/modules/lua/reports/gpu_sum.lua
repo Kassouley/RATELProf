@@ -25,7 +25,7 @@ return function (report)
     report.COL_IDX_METRIC = 1
 
     report.LOOP_IN = {
-        ratelprof.consts.DOMAIN_KERNEL_ID, ratelprof.consts.DOMAIN_COPY_ID,
+        ratelprof.consts.DOMAIN_KERNEL_ID, ratelprof.consts.DOMAIN_MEMORY_ID,
         ratelprof.consts.DOMAIN_BARRIERAND_ID, ratelprof.consts.DOMAIN_BARRIEROR_ID
     }
 

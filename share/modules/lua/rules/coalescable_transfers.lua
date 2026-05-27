@@ -3,7 +3,7 @@ local report_helper = require("utils.report_helper")
 local DEFAULT_ADVICE_MSG = [[
 The following memory transfers sequences may benefit from coalescing into fewer, larger transfers.
 These sequences were identified as:
-  - Being the same transfers kind in the same SDMA,
+  - Being the same transfers kind in the same GPU channel (SDMA or queue),
   - Transfers back-to-back with a gap smaller than %s ns,
   - Each individual transfers shorter than %s ns,
   - Appearing at least %s times in sequence.
@@ -30,9 +30,9 @@ return function (report)
 
     report.TYPE = "Analyze"
 
-    report.HEADER = { "GPU ID", "SDMA", "Seq. Length", "Seq. Start (" .. timeunit .. ")", "Seq. Dur (" .. timeunit .. ")", "Seq. Gap Dur (" .. timeunit .. ")", "Seq. Speed Up", "Operation" }
+    report.HEADER = { "GPU ID", "Channel", "Seq. Length", "Seq. Start (" .. timeunit .. ")", "Seq. Dur (" .. timeunit .. ")", "Seq. Gap Dur (" .. timeunit .. ")", "Seq. Speed Up", "Operation" }
 
-    report.LOOP_IN = { ratelprof.consts.DOMAIN_COPY_ID }
+    report.LOOP_IN = { ratelprof.consts.DOMAIN_MEMORY_ID }
 
     report.SORT_BY = {"asc", 6}
 
@@ -40,7 +40,7 @@ return function (report)
     local nb_sequences_per_gpu = {}
     local total_gaps_per_gpu = {}
 
-    local function on_sequence_end(sequence, gpu_key, sdma, name)
+    local function on_sequence_end(sequence, gpu_key, channel, name)
         if #sequence >= MIN_SEQUENCE_LEN then
             local sequence_start = sequence[1]:start()
             local sequence_stop = sequence[#sequence]:stop()
@@ -55,7 +55,7 @@ return function (report)
 
             table.insert(data, {
                 ratelprof.utils.label_unit_with_rank(gpu_key),
-                tostring(sdma),
+                channel,
                 #sequence,
                 report_helper.get_duration(sequence_start, timeunit),
                 report_helper.get_duration(sequence_dur, timeunit),
@@ -67,7 +67,7 @@ return function (report)
             nb_sequences_per_gpu[gpu_key] = (nb_sequences_per_gpu[gpu_key] or 0) + 1
             
             total_gaps_per_gpu[gpu_key] = total_gaps_per_gpu[gpu_key] or {}
-            total_gaps_per_gpu[gpu_key][sdma] = (total_gaps_per_gpu[gpu_key][sdma] or 0) + total_gap
+            total_gaps_per_gpu[gpu_key][channel] = (total_gaps_per_gpu[gpu_key][channel] or 0) + total_gap
 
         end
     end
@@ -78,14 +78,16 @@ return function (report)
     end
 
     report.FOR_EACH = function (self, event, _, gpu_key)
-        local sdma = event:sdma_id()
-        local curr_last = self.curr_last_per_sdma[sdma]
-        local sequence = self.sequence_per_sdma[sdma] or {}
+        local sub_unit = event:sub_unit()
+        local curr_last = self.curr_last_per_sdma[sub_unit]
+        local sequence = self.sequence_per_sdma[sub_unit] or {}
 
         if event:dur() > DURATION_THRESHOLD_NS then
             -- Skip large kernels
             if curr_last then
-                on_sequence_end(sequence, gpu_key, sdma, curr_last:name())
+                local channel_label, channel_id = curr_last:gpu_channel()
+                local channel = channel_label .. " " .. channel_id
+                on_sequence_end(sequence, gpu_key, channel, curr_last:name())
             end
             sequence = {}
             curr_last = nil
@@ -98,20 +100,24 @@ return function (report)
 
         else
             -- Check and reset
-            on_sequence_end(sequence, gpu_key, sdma, curr_last:name())
+            local channel_label, channel_id = curr_last:gpu_channel()
+            local channel = channel_label .. " " .. channel_id
+            on_sequence_end(sequence, gpu_key, channel, curr_last:name())
             sequence = {event}
             curr_last = event
         end
 
-        self.curr_last_per_sdma[sdma] = curr_last
-        self.sequence_per_sdma[sdma] = sequence
+        self.curr_last_per_sdma[sub_unit] = curr_last
+        self.sequence_per_sdma[sub_unit] = sequence
     end
 
     report.POST_EVENT_LOOP = function (self, _, gpu_key)
-        for sdma, curr_last in pairs(self.curr_last_per_sdma) do
+        for sub_unit, curr_last in pairs(self.curr_last_per_sdma) do
             if curr_last then
-                local sequence = self.sequence_per_sdma[sdma]
-                on_sequence_end(sequence, gpu_key, sdma, curr_last:name())
+                local sequence = self.sequence_per_sdma[sub_unit]
+                local channel_label, channel_id = curr_last:gpu_channel()
+                local channel = channel_label .. " " .. channel_id
+                on_sequence_end(sequence, gpu_key, channel, curr_last:name())
             end
         end
     end

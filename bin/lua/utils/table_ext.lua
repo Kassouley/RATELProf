@@ -73,8 +73,8 @@ end
 
 function table.copy(src)
     local dest = {}
-    for i, v in ipairs(src) do
-        dest[i] = v
+    for k, v in pairs(src) do
+        dest[k] = v
     end
     return dest
 end

@@ -22,7 +22,7 @@ return function (report)
     report.COL_IDX_NAME = 9
     report.COL_IDX_METRIC = 1
 
-    report.LOOP_IN = { ratelprof.consts.DOMAIN_COPY_ID }
+    report.LOOP_IN = { ratelprof.consts.DOMAIN_MEMORY_ID }
 
     report.SORT_BY = { "asc", 2 }
 
@@ -32,7 +32,7 @@ return function (report)
 
     report.FOR_EACH = function(self, event, _, gpu_key)
         local event_args = event:args()
-        local size   = event_args.size
+        local size = event_args.size
 
         local key = report_helper.create_key({ event:ufunid() }, { fname = event:name() })
 
@@ -43,8 +43,14 @@ return function (report)
         local ctx = self.ctx
 
         local data = {}
+        self.total_bytes = 0
 
         ctx:for_each_entry(function(_, entry)
+
+            local fname = entry.uargs.fname or ""
+            if fname:sub(1, 4) == "Copy" then
+                self.total_bytes = self.total_bytes + entry:compute_total_metric()
+            end
 
             local gpu_id_for_min = entry:get_min_subkey()
             local gpu_id_for_max = entry:get_max_subkey()
@@ -61,7 +67,7 @@ return function (report)
                 entry:compute_max(sizeunit),
                 entry:compute_stddev(sizeunit),
 
-                entry.uargs.fname,
+                fname,
                 ratelprof.utils.label_unit_with_rank(gpu_id_for_min),
                 ratelprof.utils.label_unit_with_rank(gpu_id_for_max),
                 ratelprof.utils.label_unit_with_rank(gpu_id_for_total_min),
@@ -70,7 +76,6 @@ return function (report)
         end)
 
         self.data = data
-        self.total_bytes = ctx.total_metric
         self.ctx = nil
     end
 end

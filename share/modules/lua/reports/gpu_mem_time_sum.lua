@@ -22,7 +22,7 @@ return function (report)
     report.COL_IDX_NAME = 9
     report.COL_IDX_METRIC = 1
 
-    report.LOOP_IN = { ratelprof.consts.DOMAIN_COPY_ID }
+    report.LOOP_IN = { ratelprof.consts.DOMAIN_MEMORY_ID }
 
     report.SORT_BY = { "asc", 2 }
 

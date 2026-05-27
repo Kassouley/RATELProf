@@ -57,7 +57,7 @@ consts._ENV = {
       DOMAIN_BARRIEROR =    "RATELPROF_DOMAIN_BARRIEROR",
       DOMAIN_BARRIERAND =   "RATELPROF_DOMAIN_BARRIERAND",
       DOMAIN_KERNEL =       "RATELPROF_DOMAIN_KERNEL",
-      DOMAIN_COPY =         "RATELPROF_DOMAIN_COPY",
+      DOMAIN_MEMORY =       "RATELPROF_DOMAIN_MEMORY",
       DOMAIN_PROFILING =    "RATELPROF_DOMAIN_PROFILING",
       DOMAIN_OMPT =         "RATELPROF_DOMAIN_OMP_REGION",
       DOMAIN_ROCTX =        "RATELPROF_DOMAIN_ROCTX",
@@ -72,7 +72,7 @@ consts.DOMAIN_MPI_ID          = 4
 consts.DOMAIN_OMPT_ID         = 5
 consts.DOMAIN_ROCTX_ID        = 6
 consts.DOMAIN_PROFILING_ID    = 7
-consts.DOMAIN_COPY_ID         = 8
+consts.DOMAIN_MEMORY_ID       = 8
 consts.DOMAIN_KERNEL_ID       = 9
 consts.DOMAIN_BARRIERAND_ID   = 10
 consts.DOMAIN_BARRIEROR_ID    = 11
@@ -86,7 +86,7 @@ consts._DOMAIN_NAME = {
   [consts.DOMAIN_BARRIEROR_ID]    = "Barrier OR Dispatch",
   [consts.DOMAIN_BARRIERAND_ID]   = "Barrier AND Dispatch",
   [consts.DOMAIN_KERNEL_ID]       = "Kernel Dispatch",
-  [consts.DOMAIN_COPY_ID]         = "Memory Transfer",
+  [consts.DOMAIN_MEMORY_ID]       = "Memory Operations",
   [consts.DOMAIN_PROFILING_ID]    = "HSA for RATELProf",
   [consts.DOMAIN_OMPT_ID]         = "OpenMP Target Region",
   [consts.DOMAIN_ROCTX_ID]        = "ROCtx",
@@ -97,7 +97,7 @@ consts._GPU_DOMAIN = {
   [consts.DOMAIN_BARRIEROR_ID]    = true,
   [consts.DOMAIN_BARRIERAND_ID]   = true,
   [consts.DOMAIN_KERNEL_ID]       = true,
-  [consts.DOMAIN_COPY_ID]         = true,
+  [consts.DOMAIN_MEMORY_ID]       = true,
 }
 
 consts._CPU_DOMAIN = {}
@@ -115,7 +115,7 @@ consts._DOMAIN_DESC = {
   [consts.DOMAIN_BARRIEROR_ID]    = "The Barrier OR is a less restrictive synchronization mechanism that allows subsequent operations to proceed as soon as any one of the specified preceding operations has completed.",
   [consts.DOMAIN_BARRIERAND_ID]   = "The Barrier AND is a synchronization primitive that ensures all preceding operations in the command queue have completed before subsequent operations can begin.",
   [consts.DOMAIN_KERNEL_ID]       = "The kernel dispatch operation is the process of launching a computational kernel on the GPU.",
-  [consts.DOMAIN_COPY_ID]         = "The copy operation in GPU programming is responsible for transferring data between memory locations (between host and device memory or between different regions of GPU memory).",
+  [consts.DOMAIN_MEMORY_ID]       = "The memory operation in GPU programming is responsible for transferring data between memory locations (between host and device memory or between different regions of GPU memory) or setting values. (memset)",
   [consts.DOMAIN_PROFILING_ID]    = "The profiling domain correspond to all HSA function used by RATELProf for GPU Profiling.",
   [consts.DOMAIN_OMPT_ID]         = "OpenMP Target region traces given by the OMPT API.",
   [consts.DOMAIN_ROCTX_ID]        = "ROCtx Support for RATELProf.",
@@ -131,7 +131,7 @@ consts._TRACES = {
   ['omp-target'] =    {var=consts._ENV.DOMAIN_OMP_TGT_RTL,  name="OpenMP Target RTL"},
   ['hsa-for-rprof'] = {var=consts._ENV.DOMAIN_PROFILING,    name="HSA for RATELProf"},
   ['kernel'] =        {var=consts._ENV.DOMAIN_KERNEL,       name="Kernel Dispatch"},
-  ['memory'] =        {var=consts._ENV.DOMAIN_COPY,         name="Memory Transfer"},
+  ['memory'] =        {var=consts._ENV.DOMAIN_MEMORY,       name="Memory Operations"},
   ['roctx'] =         {var=consts._ENV.DOMAIN_ROCTX,        name="ROCtx"},
   ['mpi'] =           {var=consts._ENV.DOMAIN_MPI,          name="MPI API"},
   ['barrier'] =       {var={
@@ -146,7 +146,7 @@ consts._TRACES = {
                           consts._ENV.DOMAIN_HIP},         name="CPU Activity"},
   ['gpu'] =           {var={
                           consts._ENV.DOMAIN_KERNEL,
-                          consts._ENV.DOMAIN_COPY,
+                          consts._ENV.DOMAIN_MEMORY,
                           consts._ENV.DOMAIN_BARRIEROR,
                           consts._ENV.DOMAIN_BARRIERAND},  name="GPU Activity"},
   ['omp'] =           {var={
@@ -162,7 +162,7 @@ consts._TRACES = {
                           consts._ENV.DOMAIN_HSA,
                           consts._ENV.DOMAIN_HIP,
                           consts._ENV.DOMAIN_KERNEL,
-                          consts._ENV.DOMAIN_COPY,
+                          consts._ENV.DOMAIN_MEMORY,
                           consts._ENV.DOMAIN_BARRIEROR,
                           consts._ENV.DOMAIN_BARRIERAND},  name="All Activity"},
   ['none'] =          {var = nil,                          name="No Traces"},
