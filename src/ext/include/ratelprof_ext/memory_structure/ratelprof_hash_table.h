@@ -29,6 +29,8 @@ typedef struct ratelprof_hash_table_s {
     ratelprof_hash_entry_t **buckets; 
     /** The size of the hash table (number of buckets). */
     size_t size;
+    /** Count of entries in the hash table. */
+    size_t count;
     /** Mutex. */                
     pthread_mutex_t mutex;
 } ratelprof_hash_table_t;
@@ -61,10 +63,11 @@ ratelprof_hashtable_init(ratelprof_hash_table_t *table,
  * @param size Size is the size of the hash table or the number of buckets in the hash table. It is
  * used to determine the index where the key should be stored in the hash table.
  * 
- * @return The `ratelprof_hash` function is returning the result of the key modulo size operation,
- * which is the remainder when key is divided by size.
+ * @return The `ratelprof_hash` function returns an index derived from the key.
+ * When the table size is a power of two, this can be computed via bitmasking
+ * instead of modulo.
  */
-unsigned int 
+size_t 
 ratelprof_hash(uint64_t key, 
                size_t size);
 
@@ -156,6 +159,18 @@ ratelprof_delete_hash(ratelprof_hash_table_t *table,
  * `RATELPROF_STATUS_SUCCESS`.
  */
 ratelprof_status_t 
-ratelprof_hashtable_free(ratelprof_hash_table_t *table);
+ratelprof_hashtable_free(ratelprof_hash_table_t *table, void (*free_value)(void*));
+
+
+/**
+ * The function `ratelprof_hash_table_for_each` iterates over each key-value pair in a hash table and applies a callback function to them.
+ * 
+ * @param table The `table` parameter is a pointer to a hash table structure (`ratelprof_hash_table_t`) that contains information about the hash table.
+ * @param callback The `callback` parameter is a function pointer to a function that will be called for each key-value pair in the hash table.
+ * @param user_data The `user_data` parameter is a pointer to user-defined data that will be passed to the callback function.
+ * 
+ * @return The function `ratelprof_hash_table_for_each` returns a `ratelprof_status_t` enum value.
+ */
+ratelprof_status_t ratelprof_hash_table_for_each(ratelprof_hash_table_t *table, void (*callback)(uint64_t, void*, void*), void *user_data);
 
 #endif // RATELPROF_HASH_TABLE_H
