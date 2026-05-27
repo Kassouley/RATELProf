@@ -56,16 +56,13 @@ static rprofrep_status_t read_offsets_tree(
             // ---- Read Sub Units ----
             for (uint64_t j = 0; j < nsubunits; j++) {
                 int64_t  subunit_value = __read_mp_int(buffer,  offset);
-                uint64_t tag = 0;
-                if (subunit_value < 0) {
-                    tag = 1; // Mark as SDMA if subunit value is negative
-                    subunit_value = -(subunit_value + 2); // Convert back to original subunit value
-                }
+                // if (subunit_value < 0) {
+                //     subunit_value = -(subunit_value + 2); // Convert back to original subunit value
+                // }
                 uint64_t ndomains      = __read_mp_uint(buffer, offset);
 
                 rprofrep_tree_node_t* subunit_node = rprofrep_tree_create_node(subunit_value, ndomains);
                 RPROFREP_CHECK_ALLOC(subunit_node);
-                subunit_node->tag = tag; // Store the tag in the node
                 rprofrep_tree_add_node(unit_node, subunit_node);
 
                 // ---- Read Domains ----
@@ -280,7 +277,7 @@ static bool __rprofrep_offset_callback_for_sdma(rprofrep_tree_node_t* node, void
     rprofrep_status_t* status           = ((rprofrep_status_t**)         user_arg)[2];
     void* ua                            = ((void**)                      user_arg)[3];
 
-    if (node->tag != 1) {
+    if ((int64_t) node->value >= 0) {
          *status = RPROFREP_STATUS_SUCCESS; // Skip non-sdma subunits
          return true;
     }
@@ -294,7 +291,7 @@ static bool __rprofrep_offset_callback_for_queue(rprofrep_tree_node_t* node, voi
     rprofrep_status_t* status           = ((rprofrep_status_t**)         user_arg)[2];
     void* ua                            = ((void**)                      user_arg)[3];
 
-    if (node->tag == 1) {
+    if ((int64_t) node->value < 0) {
          *status = RPROFREP_STATUS_SUCCESS; // Skip sdma subunits
          return true;
     }

@@ -45,7 +45,7 @@ void rprofrep_destroy_event_pool_buffer(rprofrep_buffer_pool_t* pool)
 
 static rprofrep_buffer_entry_t* rprofrep_get_event_buffer(
     rprofrep_buffer_pool_t* pool, hash_table_t* table, const char* exp_tmp_dir, 
-    ratelprof_domain_t domain, uint64_t unit, uint64_t sub_unit)
+    ratelprof_domain_t domain, uint64_t unit, int64_t sub_unit)
 {
     ht_dual_key_t key = {unit, sub_unit};
 
@@ -63,7 +63,7 @@ static rprofrep_buffer_entry_t* rprofrep_get_event_buffer(
         entry->domain    = domain;
         entry->unit      = unit;
         entry->sub_unit  = sub_unit;
-        BUILD_FILENAME(entry->filename, exp_tmp_dir, "rprofrep_events_%u_%lu_%lu", domain, unit, sub_unit);
+        BUILD_FILENAME(entry->filename, exp_tmp_dir, "rprofrep_events_%u_%lu_%ld", domain, unit, sub_unit);
         msgpack_init(&entry->buffer, 0xFFFF, MSGPACK_OVERFLOW_WRITE_TO_FILE, entry->filename);
         pool->nb_buffers++;
     }
@@ -72,7 +72,7 @@ static rprofrep_buffer_entry_t* rprofrep_get_event_buffer(
 }
 
 
-rprofrep_buffer_entry_t* rprofrep_get_gpu_event_buffer(rprofrep_encode_context_t* ctx, ratelprof_domain_t domain, uint64_t unit, uint64_t sub_unit)
+rprofrep_buffer_entry_t* rprofrep_get_gpu_event_buffer(rprofrep_encode_context_t* ctx, ratelprof_domain_t domain, uint64_t unit, int64_t sub_unit)
 {
     rprofrep_buffer_pool_t* pool = ctx->event_pool;
     hash_table_t* table = pool->gpu_event_buffer;
@@ -81,7 +81,7 @@ rprofrep_buffer_entry_t* rprofrep_get_gpu_event_buffer(rprofrep_encode_context_t
 
 
 
-rprofrep_buffer_entry_t* rprofrep_get_cpu_event_buffer(rprofrep_encode_context_t* ctx, ratelprof_domain_t domain, uint64_t unit, uint64_t sub_unit)
+rprofrep_buffer_entry_t* rprofrep_get_cpu_event_buffer(rprofrep_encode_context_t* ctx, ratelprof_domain_t domain, uint64_t unit, int64_t sub_unit)
 {
     rprofrep_buffer_pool_t* pool = ctx->event_pool;
     hash_table_t* table = pool->cpu_event_buffer;

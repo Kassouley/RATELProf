@@ -30,6 +30,7 @@ typedef struct rprofref_event_data_s {
     union {
         rprofrep_api_data_entry_t* api_data;
         rprofrep_kernel_static_data_t* kernel_data;
+        uint64_t memop; // For memory operations
     } extra;
     uint64_t extra_id;
     uint8_t* args;

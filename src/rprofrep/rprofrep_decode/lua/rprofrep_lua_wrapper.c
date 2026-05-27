@@ -78,13 +78,35 @@ SET_GETTER(gpu_id,   unit,      number)
 SET_GETTER(sub_unit, sub_unit,  number)
 SET_GETTER(tid,      sub_unit,  number)
 SET_GETTER(queue_id, sub_unit,  number)
-SET_GETTER(sdma_id,  sub_unit,  number)
 SET_GETTER(id,       id,        number)
 SET_GETTER(start,    start,     number)
 SET_GETTER(dur,      dur,       number)
 SET_GETTER(extra_id, extra_id,  number)
 
 #undef SET_GETTER
+
+static int l_event_sdma_id(lua_State *L) {
+    rprofrep_event_data_t *e = rprofrep_lua_get_event(L, 1);
+    int64_t sdma_id = e->sub_unit;
+    if (sdma_id < 0) sdma_id = -(sdma_id + 2); // Convert back to original sdma_id value
+    lua_pushnumber(L, sdma_id);
+    return 1;
+}
+
+static int l_event_gpu_channel(lua_State *L) {
+    rprofrep_event_data_t *e = rprofrep_lua_get_event(L, 1);
+
+    int64_t channel = e->sub_unit;
+    if (channel < 0) { 
+        channel = -(channel + 2);  // Convert back to original sdma_id value
+        lua_pushstring(L, "SDMA ID");
+    } else {
+        lua_pushstring(L, "Queue ID");
+    }
+    lua_pushnumber(L, channel);
+    return 2;
+} 
+
 
 static int l_event_loc_id(lua_State *L) {
     rprofrep_event_data_t *e = rprofrep_lua_get_event(L, 1);
@@ -121,6 +143,17 @@ static int l_event_args(lua_State *L) {
         lua_settable(L, -3);                       
     }
     return 1;
+}
+
+static int l_event_memop(lua_State *L) {
+    rprofrep_event_data_t *e = rprofrep_lua_get_event(L, 1);
+    if (e->domain != RATELPROF_DOMAIN_MEMORY) {
+        lua_pushnil(L);
+        return 1;
+    }
+    lua_pushstring(L, get_blit_name_by_op(e->extra.memop));
+    lua_pushnumber(L, e->extra.memop);
+    return 2;
 }
 
 
@@ -165,12 +198,14 @@ static const struct luaL_Reg l_event_methods[] = {
     register_class_method(event, tid),
     register_class_method(event, queue_id),
     register_class_method(event, sdma_id),
+    register_class_method(event, gpu_channel),
     register_class_method(event, id),
     register_class_method(event, start),
     register_class_method(event, dur),
     register_class_method(event, stop),
     register_class_method(event, loc_id),
     register_class_method(event, extra_id),
+    register_class_method(event, memop),
     register_class_method(event, args),
     register_class_method(event, rawargs),
     register_class_method(event, kernel_metadata),

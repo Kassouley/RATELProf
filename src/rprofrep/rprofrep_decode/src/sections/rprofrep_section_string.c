@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "rprofrep_status.h"
 
@@ -55,16 +56,99 @@ rprofrep_status_t rprofrep_decode_string_section(
 extern char *__cxa_demangle(const char *mangled_name, char *output_buffer, size_t *length, int *status);
 
 static inline char *__demangle(const char *mangled, bool need_demangle) {
-    int status = 0;
-    if (need_demangle && strncmp(mangled, "_Z", 2) == 0) {
-        char *demangled = __cxa_demangle(mangled, NULL, NULL, &status);
+    if (!need_demangle) {
+        return strdup(mangled);
+    }
 
-        if (status == 0 && demangled != NULL) {
-            return demangled;
+    const char *name = mangled;
+    char *tmp_name = NULL;
+    char *intern_suffix = NULL;
+    char *omp_line = NULL;
+
+    // __omp_offloading_<hex>_<hex>_<kernel>_l<line>
+    if (strncmp(name, "__omp_offloading_", 18) == 0) {
+        const char *p = name + 18;
+
+        // skip hex field
+        while (isxdigit(*p)) p++;
+        if (*p == '_') p++;
+
+        // skip hex field
+        while (isxdigit(*p)) p++;
+        if (*p == '_') p++;
+
+        // <kernel>_l<line>
+        const char *line_marker = strstr(p, "_l");
+        if (line_marker != NULL) {
+            tmp_name = strndup(p, line_marker - p);
+            name = tmp_name;
+
+            omp_line = strdup(line_marker + 2);
         }
     }
-    return strdup(mangled);
+
+    // <symbol>.intern.<hex>
+    const char *intern = strstr(name, ".intern.");
+    char *base_name = NULL;
+
+    if (intern != NULL) {
+        base_name = strndup(name, intern - name);
+        intern_suffix = strdup(intern);
+        name = base_name;
+    }
+
+    char *result = NULL;
+
+    if (strncmp(name, "_Z", 2) == 0) {
+        int status = 0;
+        char *demangled = __cxa_demangle(name, NULL, NULL, &status);
+
+        if (status == 0 && demangled != NULL) {
+            result = demangled;
+        }
+    }
+
+    if (result == NULL) {
+        free(tmp_name);
+        free(base_name);
+        free(intern_suffix);
+        free(omp_line);
+        return strdup(mangled);
+    }
+
+    // Re-append .intern.<hex> suffix
+    if (intern_suffix != NULL) {
+        size_t len = strlen(result) + strlen(intern_suffix) + 1;
+
+        char *final = malloc(len);
+
+        snprintf(final, len, "%s%s", result, intern_suffix);
+
+        free(result);
+        result = final;
+    }
+
+   
+    //  Re-append OpenMP line: (l.<line>)
+    if (omp_line != NULL) {
+        size_t len = strlen(result) + strlen(omp_line) + 7;
+        char *final = malloc(len);
+
+        snprintf(final, len, "%s (l.%s)", result, omp_line);
+
+        free(result);
+        result = final;
+    }
+
+    free(tmp_name);
+    free(base_name);
+    free(intern_suffix);
+    free(omp_line);
+
+    return result;
 }
+
+
 
 rprofrep_status_t rprofrep_to_json_string_section(
     rprofrep_decode_context_t* ctx, const char* json_filename, const char* dst_mode, bool need_demangle

@@ -6,7 +6,7 @@
 typedef struct rprofrep_buffer_entry_s {
     ratelprof_domain_t domain;
     uint64_t unit;
-    uint64_t sub_unit;
+    int64_t sub_unit;
     size_t nb_events;
     size_t id;
     msgpack_buffer_t buffer;
@@ -29,8 +29,8 @@ rprofrep_status_t rprofrep_init_event_pool_buffer(rprofrep_buffer_pool_t** out_p
 
 void rprofrep_destroy_event_pool_buffer(rprofrep_buffer_pool_t* pool);
 
-rprofrep_buffer_entry_t* rprofrep_get_gpu_event_buffer(rprofrep_encode_context_t* ctx, ratelprof_domain_t domain, uint64_t unit, uint64_t sub_unit);
-rprofrep_buffer_entry_t* rprofrep_get_cpu_event_buffer(rprofrep_encode_context_t* ctx, ratelprof_domain_t domain, uint64_t unit, uint64_t sub_unit);
+rprofrep_buffer_entry_t* rprofrep_get_gpu_event_buffer(rprofrep_encode_context_t* ctx, ratelprof_domain_t domain, uint64_t unit, int64_t sub_unit);
+rprofrep_buffer_entry_t* rprofrep_get_cpu_event_buffer(rprofrep_encode_context_t* ctx, ratelprof_domain_t domain, uint64_t unit, int64_t sub_unit);
 
 
 #endif // RPROFREP_EVENT_POOL_BUFFER_H

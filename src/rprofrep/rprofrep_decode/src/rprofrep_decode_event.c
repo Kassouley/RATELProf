@@ -148,9 +148,11 @@ rprofrep_status_t rprofrep_get_event(
         name = out_event->extra.api_data->fname;
         unique_funid = out_event->extra.api_data->fname_strid;
 
-    } else if (group->domain == RATELPROF_DOMAIN_COPY) {
+    } else if (group->domain == RATELPROF_DOMAIN_MEMORY) {
         extra_id = __read_mp_uint(event_buf, &offset);
+        out_event->extra.memop = __read_mp_uint(event_buf, &offset);
         RPROFREP_CHECK_CALL(rprofrep_get_string_by_id(ctx, extra_id, &name));
+
         unique_funid = extra_id;
 
     } else if (group->domain == RATELPROF_DOMAIN_KERNEL) {
@@ -186,25 +188,11 @@ rprofrep_status_t rprofrep_get_event(
 
 
 /* GPU argument labels per domain */
-static char* __gpu_kernel_args[]  = {"completion_signal", "dispatch_time", "wgr", "grd", "args_addr"};
-static char* __gpu_copy_args[]    = {"completion_signal", "size", "other_handle"};
-static char* __gpu_barrier_args[] = {"completion_signal", "dispatch_time", "dep_signal"};
-
-/* Array of pointers to the above arrays */
-static char** rprofrep_gpu_args_labels[RATELPROF_NB_DOMAIN_EXT] = {
-    [RATELPROF_DOMAIN_KERNEL]     = __gpu_kernel_args,
-    [RATELPROF_DOMAIN_COPY]       = __gpu_copy_args,
-    [RATELPROF_DOMAIN_BARRIERAND] = __gpu_barrier_args,
-    [RATELPROF_DOMAIN_BARRIEROR]  = __gpu_barrier_args,
-};
-
-/* Number of args per GPU domain */
-static const uint8_t rprofrep_gpu_args_count[RATELPROF_NB_DOMAIN_EXT] = {
-    [RATELPROF_DOMAIN_KERNEL]     = 5,
-    [RATELPROF_DOMAIN_COPY]       = 3,
-    [RATELPROF_DOMAIN_BARRIERAND] = 3,
-    [RATELPROF_DOMAIN_BARRIEROR]  = 3,
-};
+static char* __gpu_kernel_args[]    = {"completion_signal", "dispatch_time", "wgr", "grd", "args_addr"};
+static char* __gpu_sdma_copy_args[] = {"completion_signal", "size", "other_handle"};
+static char* __gpu_blit_copy_args[] = {"completion_signal", "size", "other_handle", "dispatch_time", "workgroup_size_x"};
+static char* __gpu_blit_fill_args[] = {"completion_signal", "size", "dispatch_time", "workgroup_size_x"};
+static char* __gpu_barrier_args[]   = {"completion_signal", "dispatch_time", "dep_signal"};
 
 char** rprofrep_get_event_args_labels(
     rprofrep_event_data_t* event,
@@ -213,8 +201,25 @@ char** rprofrep_get_event_args_labels(
     if (!is_gpu_domain(event->domain)) {
         *num_args = event->extra.api_data->num_args;
         return event->extra.api_data->arg_names;
+    } else if (event->domain == RATELPROF_DOMAIN_MEMORY) {
+        if (is_blit_copy_kernel(event->extra.memop)) {
+            *num_args = 5;
+            return __gpu_blit_copy_args;
+        } else if (is_blit_set_kernel(event->extra.memop)) {
+            *num_args = 4;
+            return __gpu_blit_fill_args;
+        } else if (event->extra.memop == RATELPROF_MEMORY_OP_SDMA_COPY) {
+            *num_args = 3;
+            return __gpu_sdma_copy_args;
+        }
+    } else if (event->domain == RATELPROF_DOMAIN_BARRIERAND || event->domain == RATELPROF_DOMAIN_BARRIEROR) {
+        *num_args = 3;
+        return __gpu_barrier_args;
+    } else if (event->domain == RATELPROF_DOMAIN_KERNEL) {
+        *num_args = 5;
+        return __gpu_kernel_args;
     }
 
-    *num_args = rprofrep_gpu_args_count[event->domain];
-    return rprofrep_gpu_args_labels[event->domain];
+    *num_args = 0;
+    return NULL;
 }

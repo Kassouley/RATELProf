@@ -170,7 +170,7 @@ ratelprof_status_t ratelprof_get_api_callback(const ratelprof_plugin_t* plugin, 
     if (plugin == NULL) return RATELPROF_STATUS_INVALID_PTR;
     switch((int)domain)
     {
-        case RATELPROF_DOMAIN_COPY:
+        case RATELPROF_DOMAIN_MEMORY:
         case RATELPROF_DOMAIN_KERNEL:
         case RATELPROF_DOMAIN_BARRIEROR:
         case RATELPROF_DOMAIN_BARRIERAND:

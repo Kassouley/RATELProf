@@ -316,7 +316,7 @@ static inline rprofrep_status_t rprofrep_print_events_section(rprofrep_decode_co
 
     requested_domains[RATELPROF_DOMAIN_HIP] = true;
     requested_domains[RATELPROF_DOMAIN_KERNEL] = true;
-    requested_domains[RATELPROF_DOMAIN_COPY] = true;
+    requested_domains[RATELPROF_DOMAIN_MEMORY] = true;
 
     RPROFREP_CHECK_CALL(rprofrep_for_each_gpu(ctx, __iterate_over_events, requested_domains));
     RPROFREP_CHECK_CALL(rprofrep_for_each_pid(ctx, __iterate_over_events, requested_domains));

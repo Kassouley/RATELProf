@@ -34,16 +34,16 @@ static inline const char* get_section_name(rprofrep_section_id_t section_id) {
     return "Unknown";
 }
 
-static inline const char* get_unit_name(ratelprof_domain_t domain) {
-    return is_gpu_domain(domain) ? "GPU" : "PID";
-}
+// static inline const char* get_unit_name(ratelprof_domain_t domain) {
+//     return is_gpu_domain(domain) ? "GPU" : "PID";
+// }
 
-static inline const char* get_sub_unit_name(ratelprof_domain_t domain)
-{
-    if (!is_gpu_domain(domain))
-        return "TID";
+// static inline const char* get_sub_unit_name(ratelprof_domain_t domain)
+// {
+//     if (!is_gpu_domain(domain))
+//         return "TID";
 
-    return ((int)domain == RATELPROF_DOMAIN_COPY) ? "SDMA" : "QID";
-}
+//     return ((int)domain == RATELPROF_DOMAIN_COPY) ? "SDMA" : "QID";
+// }
 
 #endif // RPROFREP_UTILS_H
