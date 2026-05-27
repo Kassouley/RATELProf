@@ -21,9 +21,9 @@ const char* get_kernel_name(uint64_t kernel_object)
     return kernel_name;
 }
 
-const char* get_copy_name(uint32_t src_type, uint32_t dst_type)
+char* get_copy_name(uint32_t src_type, uint32_t dst_type)
 {
-    static const char* table[2][2] = {
+    static char* table[2][2] = {
         /* dst = 0            dst = 1                           */
         { "CopyHostToHost",   "CopyHostToDevice" },  /* src = 0 */
         { "CopyDeviceToHost", "CopyDeviceToDevice" } /* src = 1 */
@@ -109,6 +109,7 @@ static ratelprof_status_t ratelprof_populate_profiling_table() {
         HSA_API_ID_hsa_amd_profiling_async_copy_enable,
         HSA_API_ID_hsa_executable_symbol_get_info,
         HSA_API_ID_hsa_amd_signal_async_handler,
+        HSA_API_ID_hsa_amd_pointer_info,
         HSA_API_ID_hsa_iterate_agents,
     };
 
@@ -174,7 +175,7 @@ const char* ratelprof_get_domain_name(ratelprof_domain_t domain)
 {
 	switch((int)domain) {
 		case RATELPROF_DOMAIN_ROCTX:        return RATELPROF_DOMAIN_ROCTX_NAME;
-		case RATELPROF_DOMAIN_COPY:         return RATELPROF_DOMAIN_COPY_NAME;
+		case RATELPROF_DOMAIN_MEMORY:       return RATELPROF_DOMAIN_MEMORY_NAME;
 		case RATELPROF_DOMAIN_KERNEL:       return RATELPROF_DOMAIN_KERNEL_NAME;
 		case RATELPROF_DOMAIN_BARRIEROR:    return RATELPROF_DOMAIN_BARRIEROR_NAME;
 		case RATELPROF_DOMAIN_BARRIERAND:   return RATELPROF_DOMAIN_BARRIERAND_NAME;
@@ -192,7 +193,7 @@ ratelprof_status_t ratelprof_enable_domain(ratelprof_domain_t domain)
     switch ((int)domain) {
         case RATELPROF_DOMAIN_ROCTX         : status = ratelprof_enable_api_table(&roctx_api_table, NULL, NULL); break;
         case RATELPROF_DOMAIN_PROFILING     : status = ratelprof_enable_api_table(&profiling_table, NULL, NULL); break;
-        case RATELPROF_DOMAIN_COPY          : status = ratelprof_enable_memcpy_profiling(); break;
+        case RATELPROF_DOMAIN_MEMORY        : status = ratelprof_enable_memcpy_profiling(); break;
         case RATELPROF_DOMAIN_KERNEL        : status = ratelprof_enable_kernel_dispatch_profiling(); break;
         case RATELPROF_DOMAIN_BARRIERAND    : 
         case RATELPROF_DOMAIN_BARRIEROR     : status = ratelprof_enable_barrier_dispatch_profiling(); break;
@@ -213,7 +214,7 @@ ratelprof_status_t ratelprof_disable_domain(ratelprof_domain_t domain)
     switch ((int)domain) {
         case RATELPROF_DOMAIN_ROCTX         : status = RATELPROF_STATUS_ERROR; break;
         case RATELPROF_DOMAIN_PROFILING     : status = RATELPROF_STATUS_ERROR; break;
-        case RATELPROF_DOMAIN_COPY          : status = RATELPROF_STATUS_ERROR; break;
+        case RATELPROF_DOMAIN_MEMORY        : status = RATELPROF_STATUS_ERROR; break;
         case RATELPROF_DOMAIN_KERNEL        : status = RATELPROF_STATUS_ERROR; break;
         case RATELPROF_DOMAIN_BARRIERAND    : 
         case RATELPROF_DOMAIN_BARRIEROR     : status = RATELPROF_STATUS_ERROR; break;

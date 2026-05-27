@@ -18,7 +18,6 @@ hsa_status_t i_gpu_hsa_init(void* return_address) {
 };
 
 
-
 hsa_status_t i_gpu_hsa_executable_get_symbol_by_name(hsa_executable_t executable, const char * symbol_name, const hsa_agent_t * agent, hsa_executable_symbol_t * symbol, void* return_address) {
     hsa_status_t __ret = CALL_GPU_FUNC(hsa_executable_get_symbol_by_name, executable, symbol_name, agent, symbol, return_address);
 	if (__ret == HSA_STATUS_SUCCESS) ratelprof_intercept_kernel_object(symbol_name,  symbol);

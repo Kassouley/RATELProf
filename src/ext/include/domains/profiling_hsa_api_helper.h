@@ -17,6 +17,7 @@
     macro(hsa_amd_profiling_async_copy_enable) \
     macro(hsa_executable_symbol_get_info) \
     macro(hsa_amd_signal_async_handler) \
+    macro(hsa_amd_pointer_info) \
     macro(hsa_iterate_agents)
 
     

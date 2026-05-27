@@ -6,7 +6,7 @@
 #include "ratelprof.h"
 #include "ratelprof_ext.h"
 
-#define GPU_MASK ((1u << RATELPROF_DOMAIN_COPY)       | \
+#define GPU_MASK ((1u << RATELPROF_DOMAIN_MEMORY)       | \
                   (1u << RATELPROF_DOMAIN_KERNEL)     | \
                   (1u << RATELPROF_DOMAIN_BARRIERAND) | \
                   (1u << RATELPROF_DOMAIN_BARRIEROR))
