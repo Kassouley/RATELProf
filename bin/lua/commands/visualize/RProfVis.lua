@@ -320,7 +320,10 @@ end
 function RProfVis:init_report(rank)
     local basename = "rank_" .. rank
     local dirname = self.output .. "/" .. basename
-    table.insert(self.filenames, basename)
+    table.insert(self.filenames, {
+        basename = basename,
+        rank = rank,
+    })
     ratelprof.fs.mkdir(dirname)
 
     self:set_section_output(dirname)
@@ -375,6 +378,7 @@ end
 function RProfVis:encode_buckets(section)
     local filename = section.filename..".js"
     local json = {
+        mainTime = self.rprofrep:get_main_time(),
         maxTime = self.rprofrep:get_analyzed_interval_dur(),
         bucketList = {}
     }

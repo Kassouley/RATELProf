@@ -342,6 +342,7 @@ static rprofrep_status_t run_lua_callback_on_tree(rprofrep_decode_context_t* ctx
     lua_rawgeti(L, LUA_REGISTRYINDEX, *cb);
 
     int64_t value = (int64_t) node->value;
+    if (value < 0) value = -(value + 2); // Convert back to original sdma_id value
 
     lua_pushnumber(L, value);               // arg1
     lua_pushlightuserdata(L, (void *)node); // arg2
@@ -776,6 +777,16 @@ static int l_context_string_section_to_json(lua_State* L) {
     return 0;
 }
 
+static int l_context_get_main_time(lua_State* L) {
+    rprofrep_decode_context_t *ctx = rprofrep_lua_get_context(L, 1);
+    uint64_t mtime = 0;
+
+    rprofrep_lua_check(L, rprofrep_get_main_time(ctx, &mtime),
+        "failed to get main time");
+
+    lua_pushinteger(L, mtime);
+    return 1;
+}
 
 static const struct luaL_Reg l_context_metamethods[] = {
     register_class_method(context, __gc),
@@ -807,6 +818,7 @@ static const struct luaL_Reg l_context_methods[] = {
     register_class_method(context, gpu_to_json),
     register_class_method(context, export_section),
     register_class_method(context, string_section_to_json),
+    register_class_method(context, get_main_time),
     {NULL, NULL}
 };
 

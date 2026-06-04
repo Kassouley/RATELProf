@@ -411,4 +411,14 @@ function RProfRep:string_section_to_json(filename, mode, need_demangled, rank)
     end
 end
 
+function RProfRep:get_main_time(rank)
+    if rank then
+        return self.reports_rprofrep[rank]:get_main_time()
+    elseif self.__current_rprofrep then
+        return self.__current_rprofrep:get_main_time()
+    else
+        error("get_main_time must be called inside a for_each_rank callback or with a rank argument.")
+    end
+end
+
 return RProfRep
