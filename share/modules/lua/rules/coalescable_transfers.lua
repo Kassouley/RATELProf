@@ -30,6 +30,8 @@ return function (report)
 
     report.TYPE = "Analyze"
 
+    report.COL_IDX = { rank = 0, start = 3, dur = 4 }
+
     report.HEADER = { "GPU ID", "Channel", "Seq. Length", "Seq. Start (" .. timeunit .. ")", "Seq. Dur (" .. timeunit .. ")", "Seq. Gap Dur (" .. timeunit .. ")", "Seq. Speed Up", "Operation" }
 
     report.LOOP_IN = { ratelprof.consts.DOMAIN_MEMORY_ID }

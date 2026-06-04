@@ -63,6 +63,7 @@ local function get_csv_data(report_obj, report_id)
                 desc = ratelprof.consts.ANALYZE_REPORTS[report_id].desc or "No description available.",
                 advice = msg or "No advice available.",
             }
+            csv_data.onRowClickColIdx = report_obj.COL_IDX
         end
 
         if not skipped then

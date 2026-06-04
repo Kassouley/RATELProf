@@ -31,6 +31,8 @@ return function (report)
 
     report.TYPE = "Analyze"
 
+    report.COL_IDX = { rank = 0, start = 3, dur = 4 }
+
     report.HEADER = { "GPU ID", "Queue ID", "Seq. Length", "Seq. Start (" .. timeunit .. ")", "Seq. Dur (" .. timeunit .. ")", "Seq. Gap Dur (" .. timeunit .. ")", "Seq. Speed Up", "Kernel Name" }
 
     report.LOOP_IN = { ratelprof.consts.DOMAIN_KERNEL_ID }
@@ -88,18 +90,29 @@ return function (report)
             if curr_last then
                 on_sequence_end(sequence, gpu_key, queue_id, curr_last:name())
             end
+
             sequence = {}
             curr_last = nil
 
-        elseif not curr_last or (event:ufunid() == curr_last:ufunid()
-                and event:start() - curr_last:stop() < GAP_THRESHOLD_NS) then
-            -- Add to sequence
-            table.insert(sequence, event)
-            curr_last = event
         else
-            -- Check and reset
-            on_sequence_end(sequence, gpu_key, queue_id, curr_last:name())
-            sequence = {event}
+            local can_append = false
+
+            if not curr_last then
+                can_append = true
+            else
+                local gap = event:start() - curr_last:stop()
+
+                can_append = event:ufunid() == curr_last:ufunid()
+                    and gap > 0 and gap < GAP_THRESHOLD_NS
+            end
+
+            if can_append then
+                sequence[#sequence + 1] = event
+            else
+                on_sequence_end(sequence, gpu_key, queue_id, curr_last:name())
+                sequence = { event }
+            end
+
             curr_last = event
         end
 

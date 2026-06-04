@@ -26,6 +26,8 @@ return function (report)
     report.LOOP_IN = { ratelprof.consts.DOMAIN_KERNEL_ID }
 
     report.SORT_BY = {"asc", 5}
+    
+    report.COL_IDX = { rank = 0, start = 2, stop = 3 }
 
     report.PRE_LOOP = function (self)
         self.data = {}
