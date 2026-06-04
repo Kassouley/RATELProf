@@ -66,7 +66,7 @@ function global.get_global_data(rprofrep, summarize_opt)
             output = output .. output_per_list[reports_list]
             ratelprof.fs.mkdir(output)
         end
-        local rpt = common.get_reports_data({ "all" }, { output }, { format }, nil, reports_list)
+        local rpt = common.get_reports_data({ "all" }, { output }, { format }, { sizeunit = "B", timeunit = "ns" }, reports_list)
 
         reports = table.merge_arr(reports, rpt)
     end
