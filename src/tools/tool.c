@@ -179,7 +179,7 @@ void handle_signal(int sig) {
 
 __attribute__((constructor(101))) void init(void) 
 {
-    signal(SIGSEGV, handle_signal); // segmentation fault
+    // signal(SIGSEGV, handle_signal); // segmentation fault
     // signal(SIGABRT, handle_signal); // abort()
     // signal(SIGINT,  handle_signal); // Ctrl+C
     // signal(SIGTERM, handle_signal); // kill
@@ -188,7 +188,5 @@ __attribute__((constructor(101))) void init(void)
 
 __attribute__((destructor(101))) void fini(void) 
 {
-    int cr = atexit( onExit );
-    assert( cr == 0 );
-    (void)cr;
+    atexit( onExit );
 }

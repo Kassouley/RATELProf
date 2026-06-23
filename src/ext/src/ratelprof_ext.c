@@ -35,17 +35,6 @@ char* get_copy_name(uint32_t src_type, uint32_t dst_type)
     return table[src_type][dst_type];
 }
 
-static ratelprof_status_t ratelprof_enable_memcpy_profiling() {
-    if (hsa_api_table.api_ptr == NULL) return RATELPROF_STATUS_API_TABLE_NOT_INIT;
-    
-    hsa_api_table.api_ptr[HSA_API_ID_hsa_init]                            = i_gpu_hsa_init;
-    hsa_api_table.api_ptr[HSA_API_ID_hsa_amd_memory_async_copy]           = i_gpu_hsa_amd_memory_async_copy;
-    hsa_api_table.api_ptr[HSA_API_ID_hsa_amd_memory_async_copy_on_engine] = i_gpu_hsa_amd_memory_async_copy_on_engine;
-
-    return RATELPROF_STATUS_SUCCESS;
-}
-
-
 static ratelprof_status_t ratelprof_enable_barrier_dispatch_profiling() {
     if (hsa_api_table.api_ptr == NULL) return RATELPROF_STATUS_API_TABLE_NOT_INIT;
     
@@ -68,6 +57,17 @@ static ratelprof_status_t ratelprof_enable_kernel_dispatch_profiling() {
     
     return RATELPROF_STATUS_SUCCESS;
 }
+
+static ratelprof_status_t ratelprof_enable_memcpy_profiling() {
+    if (hsa_api_table.api_ptr == NULL) return RATELPROF_STATUS_API_TABLE_NOT_INIT;
+    
+    hsa_api_table.api_ptr[HSA_API_ID_hsa_init]                            = i_gpu_hsa_init;
+    hsa_api_table.api_ptr[HSA_API_ID_hsa_amd_memory_async_copy]           = i_gpu_hsa_amd_memory_async_copy;
+    hsa_api_table.api_ptr[HSA_API_ID_hsa_amd_memory_async_copy_on_engine] = i_gpu_hsa_amd_memory_async_copy_on_engine;
+
+    return RATELPROF_STATUS_SUCCESS;
+}
+
 
 static ratelprof_status_t ratelprof_populate_gpu_api_table() {
     if (gpu_api_table.api_fn == NULL || hsa_api_table.api_fn == NULL || hsa_api_table.api_ptr == NULL)

@@ -102,12 +102,11 @@ end
 function Entry:update_for_subkey(subkey, metric)
     self.per_subkey_total[subkey] = (self.per_subkey_total[subkey] or 0) + metric
 
-    if metric < self.subkey_min_val then
+    if metric <= self.subkey_min_val then
         self.subkey_min_val = metric
         self.subkey_min_key = subkey
     end
-
-    if metric > self.subkey_max_val then
+    if metric >= self.subkey_max_val then
         self.subkey_max_val = metric
         self.subkey_max_key = subkey
     end
