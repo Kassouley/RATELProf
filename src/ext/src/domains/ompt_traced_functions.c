@@ -1,9 +1,9 @@
 #include <stdio.h>
-#include <omp-tools.h>
 
 #include <ratelprof.h>
 #include "ratelprof_ext.h"
 
+#include "domains/minimal_abi/ompt_minimal_abi.h"
 #include "domains/ompt_api_helper.h"
 
 #define ratelprof_ompt_set_callback(name) \

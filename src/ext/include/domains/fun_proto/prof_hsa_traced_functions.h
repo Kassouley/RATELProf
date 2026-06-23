@@ -1,8 +1,7 @@
 #ifndef PROF_HSA_TRACED_FUNCTIONS_H
 #define PROF_HSA_TRACED_FUNCTIONS_H
 
-#include <hsa/hsa.h>
-#include <hsa/hsa_ext_amd.h>
+#include "domains/minimal_abi/hsa_minimal_abi.h"
 
 #include "ratelprof_ext.h"
 

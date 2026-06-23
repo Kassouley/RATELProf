@@ -1,8 +1,7 @@
 #ifndef GPU_HSA_TRACED_FUNCTIONS_H
 #define GPU_HSA_TRACED_FUNCTIONS_H
 
-#include <hsa/hsa.h>
-#include <hsa/amd_hsa_signal.h>
+#include "domains/minimal_abi/gpu_hsa_minimal_abi.h"
 
 hsa_status_t i_gpu_hsa_init(void* return_address);
 hsa_status_t i_gpu_hsa_executable_get_symbol_by_name(hsa_executable_t executable, const char * symbol_name, const hsa_agent_t * agent, hsa_executable_symbol_t * symbol, void* return_address);

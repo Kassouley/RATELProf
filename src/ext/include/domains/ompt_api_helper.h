@@ -2,7 +2,7 @@
 #define RATELPROF_OMPT_H
 
 #include <stdlib.h>
-#include <omp-tools.h>
+#include "domains/minimal_abi/ompt_minimal_abi.h"
 
 #ifdef ADD_API_PREFIX
 #undef ADD_API_PREFIX
@@ -48,21 +48,20 @@ typedef enum {
 
 
 
-
 #define MAKE_LOOKUP_ENTRY(name) [ompt_##name] = GET_FUNC_API_ID(name)
 
 static inline ompt_api_id_t get_ompt_target_id(ompt_target_t kind) {
-    static ompt_api_id_t lookup[] = {
+    static ompt_api_id_t ompt_kind_lookup[] = {
         FOR_EACH_OMPT_TARGET_FUNC(MAKE_LOOKUP_ENTRY)
     };
-    return lookup[kind];
+    return ompt_kind_lookup[kind];
 }
 
 static inline ompt_api_id_t get_ompt_target_data_op_id(ompt_target_data_op_t optype) {
-    static ompt_api_id_t lookup[] = {
+    static ompt_api_id_t ompt_optype_lookup[] = {
         FOR_EACH_OMPT_TARGET_DATA_FUNC(MAKE_LOOKUP_ENTRY)
     };
-    return lookup[optype];
+    return ompt_optype_lookup[optype];
 }
 
 #undef MAKE_LOOKUP_ENTRY
@@ -180,8 +179,6 @@ static inline const char* get_ompt_funame_by_id(ompt_api_id_t id)
     }
     return NULL;
 }
-
-
 
 
 #endif // RATELPROF_OMPT_H

@@ -1,8 +1,6 @@
 #ifndef RATELPROF_GPU_PROFILING_H
 #define RATELPROF_GPU_PROFILING_H
 
-#include <hsa/hsa.h>
-#include <hsa/amd_hsa_signal.h>
 #include <ratelprof.h>
 
 #include "ratelprof_ext.h"
@@ -10,6 +8,7 @@
 #include "ratelprof_ext/ratelprof_activity_pool.h"
 
 #include "domains/fun_proto/prof_hsa_traced_functions.h"
+#include "domains/minimal_abi/gpu_hsa_minimal_abi.h"
 
 #define CALL_PROF_FUNC(func, ...) ((__##func##_t)profiling_table.api_ptr[PROFILING_ID_##func])(__VA_ARGS__, NULL)
 
@@ -170,6 +169,7 @@ static inline bool __dispatch_callback_function(hsa_signal_value_t value, void* 
         ? activity->args.memory.blit.agent
         : activity->args.dispatch.agent;
 
+        
     hsa_amd_profiling_dispatch_time_t t;
     hsa_status_t status = CALL_PROF_FUNC(hsa_amd_profiling_get_dispatch_time, agent, activity->proxy_signal, &t);
     if (status == HSA_STATUS_SUCCESS) {
@@ -319,14 +319,15 @@ static inline ratelprof_status_t ratelprof_create_barrier_dispatch_activity(void
     // Don't work for some application (e.g AMR WIND)
     activity->completion_signal = *packet_signal;
 
-    if (packet_signal->handle == 0) {
+
+    // if (packet_signal->handle == 0) {
         ratelprof_create_proxy_signal(&activity->proxy_signal);
         *packet_signal = activity->proxy_signal;
-    } else {
-        activity->proxy_signal = *packet_signal;
-    }
+    // } else {
+    //     activity->proxy_signal = *packet_signal;
+    // }
     ratelprof_set_signal_handler(activity->proxy_signal, __dispatch_callback_function, activity);
-    
+
     pop_id();
     activity->args.dispatch.dispatch_time = ratelprof_get_curr_timespec();
     return RATELPROF_STATUS_SUCCESS;
