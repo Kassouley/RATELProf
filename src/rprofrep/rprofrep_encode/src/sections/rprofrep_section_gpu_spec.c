@@ -14,7 +14,7 @@ rprofrep_status_t rprofrep_write_gpu_spec_section(rprofrep_encode_context_t* ctx
     (void) data;
 
     lsgpu_gpu_list_t devices = {0};
-    if(lsgpu_init() != 0)
+    if(lsgpu_query_init() != 0)
         return RPROFREP_STATUS_AMD_ERROR("Failed to init lsgpu\n");
 
     if (lsgpu_query_gpus_data(&devices) != 0)
@@ -26,7 +26,7 @@ rprofrep_status_t rprofrep_write_gpu_spec_section(rprofrep_encode_context_t* ctx
    
     free(devices.entries);
     
-    if(lsgpu_fini() != 0)
+    if(lsgpu_query_fini() != 0)
         return RPROFREP_STATUS_AMD_ERROR("Failed to fini lsgpu\n");
 
     return RPROFREP_STATUS_SUCCESS;

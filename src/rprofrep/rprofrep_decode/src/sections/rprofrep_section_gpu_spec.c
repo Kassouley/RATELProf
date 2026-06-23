@@ -13,7 +13,11 @@
 
 // Free the GPU sections
 rprofrep_status_t rprofrep_free_gpu_spec_section(rprofrep_gpu_spec_data_t* data) {
-    if(data->entries) free(data->entries);
+    if(data->entries) {
+        for(int i = 0; i < data->count; i++)
+            lsgpu_destroy_gpu_data(data->entries[i]);
+        free(data->entries);
+    };
     return RPROFREP_STATUS_SUCCESS;
 }
 
@@ -54,7 +58,9 @@ rprofrep_status_t rprofrep_node_is_gpu(rprofrep_decode_context_t* ctx, uint64_t 
 
     *is_gpu = false;
     for (uint32_t i = 0; i < devices->count; i++) {
-        if (devices->entries[i].node == node_id) {
+        uint32_t entry_node_id = 0;
+        lsgpu_get_attribute(devices->entries[i], LSGPU_ATTRIBUTE_NODE_ID, &entry_node_id);
+        if (entry_node_id == node_id) {
             *is_gpu = true;
             break;
         }
