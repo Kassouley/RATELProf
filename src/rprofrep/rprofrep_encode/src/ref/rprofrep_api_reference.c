@@ -18,6 +18,8 @@ rprofrep_status_t rprofrep_init_api_data_section(rprofrep_api_data_ref_t* data, 
     data->api_data_existed_ref_id[RATELPROF_DOMAIN_MPI]         = data->__mpi_api_existed_ref_id;
     data->api_data_existed_ref_id[RATELPROF_DOMAIN_OMP_TGT_RTL] = data->__omp_tgt_rtl_api_existed_ref_id;
     data->api_data_existed_ref_id[RATELPROF_DOMAIN_OMP_ROUTINE] = data->__omp_routine_api_existed_ref_id;
+    data->api_data_existed_ref_id[RATELPROF_DOMAIN_RCCL]        = data->__rccl_api_existed_ref_id;
+    data->api_data_existed_ref_id[RATELPROF_DOMAIN_ROCBLAS]     = data->__rocblas_api_existed_ref_id;
     data->api_data_existed_ref_id[RATELPROF_DOMAIN_OMP_REGION]  = data->__ompt_api_existed_ref_id;
 
     memset(data->__hip_api_existed_ref_id,         0xFF, sizeof(data->__hip_api_existed_ref_id));
@@ -26,6 +28,8 @@ rprofrep_status_t rprofrep_init_api_data_section(rprofrep_api_data_ref_t* data, 
     memset(data->__omp_tgt_rtl_api_existed_ref_id, 0xFF, sizeof(data->__omp_tgt_rtl_api_existed_ref_id));
     memset(data->__omp_routine_api_existed_ref_id, 0xFF, sizeof(data->__omp_routine_api_existed_ref_id));
     memset(data->__ompt_api_existed_ref_id,        0xFF, sizeof(data->__ompt_api_existed_ref_id));
+    memset(data->__rccl_api_existed_ref_id,        0xFF, sizeof(data->__rccl_api_existed_ref_id));
+    memset(data->__rocblas_api_existed_ref_id,     0xFF, sizeof(data->__rocblas_api_existed_ref_id));
 
     msgpack_init(&data->buffer, 0xFFFF, MSGPACK_OVERFLOW_WRITE_TO_FILE, filename);
 

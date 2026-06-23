@@ -253,6 +253,8 @@ static encode_activity_data_to_buffer_cb_t encode_activity_data_to_buffer_cb[RAT
     [RATELPROF_DOMAIN_HIP]          = (encode_activity_data_to_buffer_cb_t) add_api_activity_data_to_buffer,
     [RATELPROF_DOMAIN_MPI]          = (encode_activity_data_to_buffer_cb_t) add_api_activity_data_to_buffer,
     [RATELPROF_DOMAIN_OMP_REGION]   = (encode_activity_data_to_buffer_cb_t) add_api_activity_data_to_buffer,
+    [RATELPROF_DOMAIN_RCCL]         = (encode_activity_data_to_buffer_cb_t) add_api_activity_data_to_buffer,
+    [RATELPROF_DOMAIN_ROCBLAS]      = (encode_activity_data_to_buffer_cb_t) add_api_activity_data_to_buffer,
     [RATELPROF_DOMAIN_ROCTX]        = (encode_activity_data_to_buffer_cb_t) add_roctx_activity_data_to_buffer,
     [RATELPROF_DOMAIN_PROFILING]    = (encode_activity_data_to_buffer_cb_t) add_api_activity_data_to_buffer,
     [RATELPROF_DOMAIN_MEMORY]       = (encode_activity_data_to_buffer_cb_t) add_memory_activity_data_to_buffer,

@@ -20,6 +20,8 @@ typedef struct rprofrep_argument_manager_s
     rprofrep_arg_writer_t __omp_tgt_rtl_api_arg_writer[OMP_TGT_RTL_API_ID_NB_FUNCTION];
     rprofrep_arg_writer_t __omp_routine_api_arg_writer[OMP_ROUTINE_API_ID_NB_FUNCTION];
     rprofrep_arg_writer_t __ompt_api_arg_writer[OMPT_API_ID_NB_FUNCTION];
+    rprofrep_arg_writer_t __rocblas_api_arg_writer[ROCBLAS_API_ID_NB_FUNCTION];
+    rprofrep_arg_writer_t __rccl_api_arg_writer[RCCL_API_ID_NB_FUNCTION];
 
     rprofrep_arg_writer_t* api_arg_writer[RATELPROF_NB_DOMAIN_EXT];
 

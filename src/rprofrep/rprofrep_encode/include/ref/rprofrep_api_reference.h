@@ -14,6 +14,8 @@ typedef struct rprofrep_api_data_ref_s
     uint64_t __omp_tgt_rtl_api_existed_ref_id[OMP_TGT_RTL_API_ID_NB_FUNCTION];
     uint64_t __omp_routine_api_existed_ref_id[OMP_ROUTINE_API_ID_NB_FUNCTION];
     uint64_t __ompt_api_existed_ref_id[OMPT_API_ID_NB_FUNCTION];
+    uint64_t __rocblas_api_existed_ref_id[ROCBLAS_API_ID_NB_FUNCTION];
+    uint64_t __rccl_api_existed_ref_id[RCCL_API_ID_NB_FUNCTION];
 
     uint64_t* api_data_existed_ref_id[RATELPROF_NB_DOMAIN_EXT];
 

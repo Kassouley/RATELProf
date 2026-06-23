@@ -8,6 +8,8 @@
 #include "args_helper/omp_tgt_rtl_args.h"
 #include "args_helper/omp_routine_args.h"
 #include "args_helper/mpi_args.h"
+#include "args_helper/rocblas_args.h"
+#include "args_helper/rccl_args.h"
 
 #include "rprofrep_encode_type.h"
 
@@ -48,6 +50,16 @@ void rprofrep_init_argument_manager(rprofrep_argument_manager_t* arg_manager)
     FOR_EACH_OMPT_FUNC(SET_WRITER);
     #undef SET_WRITER
 
+    // Initialize ROCBLAS API argument writers
+    #define SET_WRITER(name) SET_WRITER_AUX(name, rocblas, ROCBLAS)
+    FOR_EACH_ROCBLAS_FUNC(SET_WRITER);
+    #undef SET_WRITER
+
+    // Initialize RCCL API argument writers
+    #define SET_WRITER(name) SET_WRITER_AUX(name, rccl, RCCL)
+    FOR_EACH_RCCL_FUNC(SET_WRITER);
+    #undef SET_WRITER
+
     // Map domain to corresponding argument writer arrays
     arg_manager->api_arg_writer[RATELPROF_DOMAIN_HIP]         = arg_manager->__hip_api_arg_writer;
     arg_manager->api_arg_writer[RATELPROF_DOMAIN_HSA]         = arg_manager->__hsa_api_arg_writer;
@@ -55,6 +67,8 @@ void rprofrep_init_argument_manager(rprofrep_argument_manager_t* arg_manager)
     arg_manager->api_arg_writer[RATELPROF_DOMAIN_OMP_TGT_RTL] = arg_manager->__omp_tgt_rtl_api_arg_writer;
     arg_manager->api_arg_writer[RATELPROF_DOMAIN_OMP_ROUTINE] = arg_manager->__omp_routine_api_arg_writer;
     arg_manager->api_arg_writer[RATELPROF_DOMAIN_OMP_REGION]  = arg_manager->__ompt_api_arg_writer;
+    arg_manager->api_arg_writer[RATELPROF_DOMAIN_ROCBLAS]     = arg_manager->__rocblas_api_arg_writer;
+    arg_manager->api_arg_writer[RATELPROF_DOMAIN_RCCL]        = arg_manager->__rccl_api_arg_writer;
 }
 
 
