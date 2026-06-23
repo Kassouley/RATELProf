@@ -19,17 +19,13 @@ TARGET_INCLUDE_DIRECTORIES(${PROJECT_NAME}
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE -lstdc++)
 
-TARGET_COMPILE_OPTIONS(${PROJECT_NAME} 
-    PUBLIC
-        -O3
-        -D__HIP_PLATFORM_AMD__
-)
+TARGET_COMPILE_OPTIONS(${PROJECT_NAME} PUBLIC -O3 )
 
 # ---- Link to the lsgpu static library ----
-IF (NOT TARGET lsgpu_core)
-    MESSAGE(FATAL_ERROR "lsgpu_core target not found. Ensure the parent lsgpu CMakeLists.txt is included.")
+IF (NOT TARGET lsgpu_utils)
+    MESSAGE(FATAL_ERROR "lsgpu_utils target not found. Ensure the parent lsgpu CMakeLists.txt is included.")
 ENDIF()
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} PUBLIC lsgpu_core)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} PUBLIC lsgpu_utils)
 
 ADD_SUBDIRECTORY(test)
 ADD_SUBDIRECTORY(lua)

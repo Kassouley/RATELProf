@@ -63,18 +63,6 @@ local function add_cmake_option(option, value)
     end
 end
 
--- Feature parsing
-local function parse_feature(feature, key, option)
-    local build = get_json_value("features", feature, "build")
-    local feature_macro = feature:upper()
-    local build_opt_name = "BUILD_" .. feature_macro
-
-    if build == true then
-        local value = get_json_value("features", feature, key)
-        add_cmake_option(option,  value)
-    end
-    add_cmake_option(build_opt_name,  build  and "ON" or "OFF")
-end
 
 -- Read top-level options
 local install_dir = get_json_value("options", "install_dir") or (os.getenv("HOME") .. "/.local")
@@ -86,11 +74,11 @@ add_cmake_option("CMAKE_INSTALL_PREFIX", install_dir)
 -- Toolchain
 local cc_compiler       = get_json_value("toolchain", "CC")
 local cxx_compiler      = get_json_value("toolchain", "CXX")
-local hipcc_compiler    = get_json_value("toolchain", "HIPCC")
+-- local hipcc_compiler    = get_json_value("toolchain", "HIPCC")
 
 add_cmake_option("CMAKE_C_COMPILER",   cc_compiler)
 add_cmake_option("CMAKE_CXX_COMPILER", cxx_compiler)
-add_cmake_option("HIPCC_COMPILER",     hipcc_compiler)
+-- add_cmake_option("HIPCC_COMPILER",     hipcc_compiler)
 
 -- Plugins
 -- TODO 03/04/2026: Need to reimplement plugin handling. For now, those are useless 
@@ -99,22 +87,19 @@ add_cmake_option("HIPCC_COMPILER",     hipcc_compiler)
 -- add_cmake_option("BUILD_PLUGIN_STDOUT",   build_plugin_stdout  and "ON" or "OFF")
 -- add_cmake_option("BUILD_PLUGIN_RPROFREP", build_plugin_rprofrep and "ON" or "OFF")
 
--- Options
-local check_symbol_quiet = get_json_value("options", "check_symbol_quiet")
-add_cmake_option("CHECK_SYMBOL_QUIET",  check_symbol_quiet  and "ON" or "OFF")
-
--- Features
-parse_feature("hip_tracing",          "include_dir", "HIP_INCLUDE_DIR")
-parse_feature("hsa_tracing",          "include_dir", "HSA_INCLUDE_DIR")
-parse_feature("omp_routine_tracing",  "include_dir", "OMP_ROUTINE_INCLUDE_DIR")
-parse_feature("mpi_tracing",          "include_dir", "MPI_INCLUDE_DIR")
-parse_feature("omp_tgt_rtl_tracing",  "library",     "OMP_TGT_RTL_LIB")
--- parse_feature("ompt_tracing",         "include_dir", "OMPT_INCLUDE_DIR")
 
 -- Run CMake
-os.execute("cmake -B " .. build_dir .. " " .. table.concat(cmake_options, " "))
-os.execute("cmake --build " .. build_dir)
-os.execute("cmake --install " .. build_dir)
+local function run(cmd)
+    local ok, why, code = os.execute(cmd)
+    if ok ~= 0 then
+        print("Build failed: " .. cmd)
+        os.exit(0)
+    end
+end
+
+run("cmake -B " .. build_dir .. " " .. table.concat(cmake_options, " "))
+run("cmake --build " .. build_dir)
+run("cmake --install " .. build_dir)
 
 print("Installed to " .. install_dir)
 
