@@ -150,11 +150,13 @@ end
 
 local API_REPORT_DEFINITION = {
     {key = "omp_region",  domain_id = consts.DOMAIN_OMPT_ID,        default = true },
-    {key = "omp_target",  domain_id = consts.DOMAIN_OMP_TGT_ID,     default = true },
-    {key = "omp_routine", domain_id = consts.DOMAIN_OMP_TGT_RTL_ID, default = true },
+    {key = "omp_target",  domain_id = consts.DOMAIN_OMP_TGT_RTL_ID, default = false },
+    {key = "omp_routine", domain_id = consts.DOMAIN_OMP_TGT_ID,     default = true },
     {key = "hip",         domain_id = consts.DOMAIN_HIP_ID,         default = true },
-    {key = "mpi",         domain_id = consts.DOMAIN_MPI_ID,         default = true },
+    {key = "mpi",         domain_id = consts.DOMAIN_MPI_ID,         default = false },
     {key = "hsa",         domain_id = consts.DOMAIN_HSA_ID,         default = false },
+    {key = "rocblas",     domain_id = consts.DOMAIN_ROCBLAS_ID,     default = false },
+    {key = "rccl",        domain_id = consts.DOMAIN_RCCL_ID,        default = false },
 }
 
 consts.DOMAIN_FOR_REPORT = {}
