@@ -8,35 +8,26 @@
 
 #include "ratelprof.h"
 
-#include "hsa_conf.h"
-#ifdef HAVE_HSA
 #include "domains/hsa_api_helper.h"
 extern ratelprof_api_table_t hsa_api_table;
-#endif
 
-#include "omp_tgt_rtl_conf.h"
-#ifdef HAVE_OMP_TGT_RTL
 #include "domains/omp_tgt_rtl_api_helper.h"
 extern ratelprof_api_table_t omp_tgt_rtl_api_table;
-#endif
 
-#include "omp_routine_conf.h"
-#ifdef HAVE_OMP_ROUTINE
+#include "domains/rocblas_api_helper.h"
+extern ratelprof_api_table_t rocblas_api_table;
+
 #include "domains/omp_routine_api_helper.h"
 extern ratelprof_api_table_t omp_routine_api_table;
-#endif
 
-#include "hip_conf.h"
-#ifdef HAVE_HIP
 #include "domains/hip_api_helper.h"
 extern ratelprof_api_table_t hip_api_table;
-#endif
 
-#include "mpi_conf.h"
-#ifdef HAVE_MPI
+#include "domains/rccl_api_helper.h"
+extern ratelprof_api_table_t rccl_api_table;
+
 #include "domains/mpi_api_helper.h"
 extern ratelprof_api_table_t mpi_api_table;
-#endif
 
 
 typedef struct {

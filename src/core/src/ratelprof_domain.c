@@ -6,62 +6,20 @@
 #include "ratelprof_domain.h"
 #include "ratelprof.h"
 
-#ifdef HAVE_HSA
-ratelprof_api_table_t hsa_api_table;
-#endif
-
-#ifdef HAVE_OMP_TGT_RTL
-ratelprof_api_table_t omp_tgt_rtl_api_table;
-#endif
-
-#ifdef HAVE_OMP_ROUTINE
-ratelprof_api_table_t omp_routine_api_table;
-#endif
-
-#ifdef HAVE_HIP
-ratelprof_api_table_t hip_api_table;
-#endif
-
-#ifdef HAVE_MPI
-ratelprof_api_table_t mpi_api_table;
-#endif
-
+ratelprof_api_table_t hsa_api_table; 
+ratelprof_api_table_t omp_tgt_rtl_api_table; 
+ratelprof_api_table_t rocblas_api_table; 
+ratelprof_api_table_t omp_routine_api_table; 
+ratelprof_api_table_t hip_api_table; 
+ratelprof_api_table_t rccl_api_table; 
+ratelprof_api_table_t mpi_api_table; 
 
 ratelprof_domain_class_t domains_data[RATELPROF_NB_DOMAIN] = {
-
-    [RATELPROF_DOMAIN_HSA] =
-#ifdef HAVE_HSA
-    DEFINE_DOMAIN(HSA, hsa),
-#else
-    EMPTY_DOMAIN,
-#endif
-
-    [RATELPROF_DOMAIN_OMP_TGT_RTL] =
-#ifdef HAVE_OMP_TGT_RTL
-    DEFINE_DOMAIN(OMP_TGT_RTL, omp_tgt_rtl),
-#else
-    EMPTY_DOMAIN,
-#endif
-
-    [RATELPROF_DOMAIN_OMP_ROUTINE] =
-#ifdef HAVE_OMP_ROUTINE
-    DEFINE_DOMAIN(OMP_ROUTINE, omp_routine),
-#else
-    EMPTY_DOMAIN,
-#endif
-
-    [RATELPROF_DOMAIN_HIP] =
-#ifdef HAVE_HIP
-    DEFINE_DOMAIN(HIP, hip),
-#else
-    EMPTY_DOMAIN,
-#endif
-
-    [RATELPROF_DOMAIN_MPI] =
-#ifdef HAVE_MPI
-    DEFINE_DOMAIN(MPI, mpi),
-#else
-    EMPTY_DOMAIN,
-#endif
-
+    [RATELPROF_DOMAIN_HSA] = DEFINE_DOMAIN(HSA, hsa),
+    [RATELPROF_DOMAIN_OMP_TGT_RTL] = DEFINE_DOMAIN(OMP_TGT_RTL, omp_tgt_rtl),
+    [RATELPROF_DOMAIN_ROCBLAS] = DEFINE_DOMAIN(ROCBLAS, rocblas),
+    [RATELPROF_DOMAIN_OMP_ROUTINE] = DEFINE_DOMAIN(OMP_ROUTINE, omp_routine),
+    [RATELPROF_DOMAIN_HIP] = DEFINE_DOMAIN(HIP, hip),
+    [RATELPROF_DOMAIN_RCCL] = DEFINE_DOMAIN(RCCL, rccl),
+    [RATELPROF_DOMAIN_MPI] = DEFINE_DOMAIN(MPI, mpi),
 };

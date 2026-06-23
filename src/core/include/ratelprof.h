@@ -60,8 +60,10 @@ typedef size_t ratelprof_api_id_t;
 typedef enum ratelprof_domain_e{
 	RATELPROF_DOMAIN_HSA, /**< Domain hsa. */
 	RATELPROF_DOMAIN_OMP_TGT_RTL, /**< Domain omp_tgt_rtl. */
+	RATELPROF_DOMAIN_ROCBLAS, /**< Domain rocblas. */
 	RATELPROF_DOMAIN_OMP_ROUTINE, /**< Domain omp_routine. */
 	RATELPROF_DOMAIN_HIP, /**< Domain hip. */
+	RATELPROF_DOMAIN_RCCL, /**< Domain rccl. */
 	RATELPROF_DOMAIN_MPI, /**< Domain mpi. */
     RATELPROF_NB_DOMAIN /**< Total number of domains (used for bounds checking). */
 } ratelprof_domain_t;

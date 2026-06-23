@@ -18,7 +18,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "domains/fun_proto/omp_tgt_rtl_profiled_functions.h"
-#include "omp_support.h" 
+#include "domains/minimal_abi/omp_tgt_rtl_minimal_abi.h" 
 
 #define OMP_TGT_RTL_STRING_SIZE_MAX 128
 
@@ -29,49 +29,49 @@
 
 
 #define FOR_EACH_OMP_TGT_RTL_FUNC(macro) \
-IF_ENABLED(__tgt_rtl_query_async, macro)           \
-IF_ENABLED(__tgt_rtl_data_submit, macro)           \
-IF_ENABLED(__tgt_rtl_are_allocations_for_maps_on_apus_disabled, macro) \
-IF_ENABLED(__tgt_rtl_data_notify_mapped, macro)    \
-IF_ENABLED(__tgt_rtl_data_submit_async, macro)     \
-IF_ENABLED(__tgt_rtl_init_async_info, macro)       \
-IF_ENABLED(__tgt_rtl_is_data_exchangable, macro)   \
-IF_ENABLED(__tgt_rtl_data_retrieve_async, macro)   \
-IF_ENABLED(__tgt_rtl_data_delete, macro)           \
-IF_ENABLED(__tgt_rtl_data_exchange_async, macro)   \
-IF_ENABLED(__tgt_rtl_prepopulate_page_table, macro) \
-IF_ENABLED(__tgt_rtl_data_exchange, macro)         \
-IF_ENABLED(__tgt_rtl_launch_kernel, macro)         \
-IF_ENABLED(__tgt_rtl_is_valid_binary, macro)       \
-IF_ENABLED(__tgt_rtl_data_retrieve, macro)         \
-IF_ENABLED(__tgt_rtl_data_lock, macro)             \
-IF_ENABLED(__tgt_rtl_supports_empty_images, macro) \
-IF_ENABLED(__tgt_rtl_destroy_event, macro)         \
-IF_ENABLED(__tgt_rtl_number_of_devices, macro)     \
-IF_ENABLED(__tgt_rtl_init_requires, macro)         \
-IF_ENABLED(__tgt_rtl_data_notify_unmapped, macro)  \
-IF_ENABLED(__tgt_rtl_init_device_info, macro)      \
-IF_ENABLED(__tgt_rtl_sync_event, macro)            \
-IF_ENABLED(__tgt_rtl_synchronize, macro)           \
-IF_ENABLED(__tgt_rtl_set_up_env, macro)            \
-IF_ENABLED(__tgt_rtl_data_unlock, macro)           \
-IF_ENABLED(__tgt_rtl_is_fine_grained_memory_enabled, macro) \
-IF_ENABLED(__tgt_rtl_has_USM_capable_dGPU, macro)  \
-IF_ENABLED(__tgt_rtl_has_apu_device, macro)        \
-IF_ENABLED(__tgt_rtl_set_device_offset, macro)     \
-IF_ENABLED(__tgt_rtl_launch_kernel_sync, macro)    \
-IF_ENABLED(__tgt_rtl_record_event, macro)          \
-IF_ENABLED(__tgt_rtl_set_info_flag, macro)         \
-IF_ENABLED(__tgt_rtl_create_event, macro)          \
-IF_ENABLED(__tgt_rtl_print_device_info, macro)     \
-IF_ENABLED(__tgt_rtl_get_function, macro)          \
-IF_ENABLED(__tgt_rtl_init_plugin, macro)           \
-IF_ENABLED(__tgt_rtl_number_of_team_procs, macro)  \
-IF_ENABLED(__tgt_rtl_wait_event, macro)            \
-IF_ENABLED(__tgt_rtl_data_alloc, macro)            \
-IF_ENABLED(__tgt_rtl_init_device, macro)           \
-IF_ENABLED(__tgt_rtl_get_global, macro)            \
-IF_ENABLED(__tgt_rtl_requested_prepopulate_gpu_page_table, macro) \
+macro(__tgt_rtl_query_async)                       \
+macro(__tgt_rtl_data_submit)                       \
+macro(__tgt_rtl_are_allocations_for_maps_on_apus_disabled) \
+macro(__tgt_rtl_data_notify_mapped)                \
+macro(__tgt_rtl_data_submit_async)                 \
+macro(__tgt_rtl_init_async_info)                   \
+macro(__tgt_rtl_is_data_exchangable)               \
+macro(__tgt_rtl_data_retrieve_async)               \
+macro(__tgt_rtl_data_delete)                       \
+macro(__tgt_rtl_data_exchange_async)               \
+macro(__tgt_rtl_prepopulate_page_table)            \
+macro(__tgt_rtl_data_exchange)                     \
+macro(__tgt_rtl_launch_kernel)                     \
+macro(__tgt_rtl_is_valid_binary)                   \
+macro(__tgt_rtl_data_retrieve)                     \
+macro(__tgt_rtl_data_lock)                         \
+macro(__tgt_rtl_supports_empty_images)             \
+macro(__tgt_rtl_destroy_event)                     \
+macro(__tgt_rtl_number_of_devices)                 \
+macro(__tgt_rtl_init_requires)                     \
+macro(__tgt_rtl_data_notify_unmapped)              \
+macro(__tgt_rtl_init_device_info)                  \
+macro(__tgt_rtl_sync_event)                        \
+macro(__tgt_rtl_synchronize)                       \
+macro(__tgt_rtl_set_up_env)                        \
+macro(__tgt_rtl_data_unlock)                       \
+macro(__tgt_rtl_is_fine_grained_memory_enabled)    \
+macro(__tgt_rtl_has_USM_capable_dGPU)              \
+macro(__tgt_rtl_has_apu_device)                    \
+macro(__tgt_rtl_set_device_offset)                 \
+macro(__tgt_rtl_launch_kernel_sync)                \
+macro(__tgt_rtl_record_event)                      \
+macro(__tgt_rtl_set_info_flag)                     \
+macro(__tgt_rtl_create_event)                      \
+macro(__tgt_rtl_print_device_info)                 \
+macro(__tgt_rtl_get_function)                      \
+macro(__tgt_rtl_init_plugin)                       \
+macro(__tgt_rtl_number_of_team_procs)              \
+macro(__tgt_rtl_wait_event)                        \
+macro(__tgt_rtl_data_alloc)                        \
+macro(__tgt_rtl_init_device)                       \
+macro(__tgt_rtl_get_global)                        \
+macro(__tgt_rtl_requested_prepopulate_gpu_page_table) \
 
 
 /**
@@ -159,12 +159,11 @@ static inline omp_tgt_rtl_api_id_t get_omp_tgt_rtl_funid_by_name(const char* nam
  *			__tgt_async_info * AsyncInfoPtr (struct __tgt_async_info*)
  *	)
  */
-#if HAVE___tgt_rtl_query_async
 typedef struct {
 	int32_t device_id;
 	__tgt_async_info * AsyncInfoPtr;
 	struct {
-		__tgt_async_info val;
+		__tgt_async_info  val;
 	} AsyncInfoPtr__ref;
 	int32_t retval;
 } args___tgt_rtl_query_async_t;
@@ -181,8 +180,6 @@ typedef struct {
 		pargs->AsyncInfoPtr__ref.val = *pargs->AsyncInfoPtr; \
 	} \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_data_submit` function.
@@ -201,7 +198,6 @@ typedef struct {
  *			int64_t size (long)
  *	)
  */
-#if HAVE___tgt_rtl_data_submit
 typedef struct {
 	int32_t device_id;
 	void * target_ptr;
@@ -218,8 +214,6 @@ typedef struct {
 	args->size = (int64_t) size; \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_are_allocations_for_maps_on_apus_disabled` function.
  *
@@ -233,12 +227,9 @@ typedef struct {
  *	__tgt_rtl_are_allocations_for_maps_on_apus_disabled (
  *	)
  */
-#if HAVE___tgt_rtl_are_allocations_for_maps_on_apus_disabled
 typedef struct {
 	int retval;
 } args___tgt_rtl_are_allocations_for_maps_on_apus_disabled_t;
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_data_notify_mapped` function.
@@ -256,7 +247,6 @@ typedef struct {
  *			int64_t size (long)
  *	)
  */
-#if HAVE___tgt_rtl_data_notify_mapped
 typedef struct {
 	int32_t device_id;
 	void * host_ptr;
@@ -270,8 +260,6 @@ typedef struct {
 	args->host_ptr = (void *) host_ptr; \
 	args->size = (int64_t) size; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_data_submit_async` function.
@@ -291,7 +279,6 @@ typedef struct {
  *			__tgt_async_info * AsyncInfo (struct __tgt_async_info*)
  *	)
  */
-#if HAVE___tgt_rtl_data_submit_async
 typedef struct {
 	int32_t device_id;
 	void * target_ptr;
@@ -299,7 +286,7 @@ typedef struct {
 	int64_t size;
 	__tgt_async_info * AsyncInfo;
 	struct {
-		__tgt_async_info val;
+		__tgt_async_info  val;
 	} AsyncInfo__ref;
 	int32_t retval;
 } args___tgt_rtl_data_submit_async_t;
@@ -320,8 +307,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_init_async_info` function.
  *
@@ -337,13 +322,12 @@ typedef struct {
  *			__tgt_async_info ** async_info_ptr (struct __tgt_async_info**)
  *	)
  */
-#if HAVE___tgt_rtl_init_async_info
 typedef struct {
 	int32_t device_id;
 	__tgt_async_info ** async_info_ptr;
 	struct {
 		void* ptr1;
-		__tgt_async_info val;
+		__tgt_async_info  val;
 	} async_info_ptr__ref;
 	int32_t retval;
 } args___tgt_rtl_init_async_info_t;
@@ -364,8 +348,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_is_data_exchangable` function.
  *
@@ -381,7 +363,6 @@ typedef struct {
  *			int32_t dst_dev_id (int)
  *	)
  */
-#if HAVE___tgt_rtl_is_data_exchangable
 typedef struct {
 	int32_t src_dev_id;
 	int32_t dst_dev_id;
@@ -393,8 +374,6 @@ typedef struct {
 	args->src_dev_id = (int32_t) src_dev_id; \
 	args->dst_dev_id = (int32_t) dst_dev_id; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_data_retrieve_async` function.
@@ -414,7 +393,6 @@ typedef struct {
  *			__tgt_async_info * AsyncInfo (struct __tgt_async_info*)
  *	)
  */
-#if HAVE___tgt_rtl_data_retrieve_async
 typedef struct {
 	int32_t device_id;
 	void * host_ptr;
@@ -422,7 +400,7 @@ typedef struct {
 	int64_t size;
 	__tgt_async_info * AsyncInfo;
 	struct {
-		__tgt_async_info val;
+		__tgt_async_info  val;
 	} AsyncInfo__ref;
 	int32_t retval;
 } args___tgt_rtl_data_retrieve_async_t;
@@ -443,8 +421,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_data_delete` function.
  *
@@ -461,7 +437,6 @@ typedef struct {
  *			int32_t kind (int)
  *	)
  */
-#if HAVE___tgt_rtl_data_delete
 typedef struct {
 	int32_t device_id;
 	void * target_ptr;
@@ -475,8 +450,6 @@ typedef struct {
 	args->target_ptr = (void *) target_ptr; \
 	args->kind = (int32_t) kind; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_data_exchange_async` function.
@@ -497,7 +470,6 @@ typedef struct {
  *			__tgt_async_info * AsyncInfo (struct __tgt_async_info*)
  *	)
  */
-#if HAVE___tgt_rtl_data_exchange_async
 typedef struct {
 	int32_t src_dev_id;
 	void * src_ptr;
@@ -506,7 +478,7 @@ typedef struct {
 	int64_t size;
 	__tgt_async_info * AsyncInfo;
 	struct {
-		__tgt_async_info val;
+		__tgt_async_info  val;
 	} AsyncInfo__ref;
 	int32_t retval;
 } args___tgt_rtl_data_exchange_async_t;
@@ -528,8 +500,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_prepopulate_page_table` function.
  *
@@ -546,7 +516,6 @@ typedef struct {
  *			int64_t size (long)
  *	)
  */
-#if HAVE___tgt_rtl_prepopulate_page_table
 typedef struct {
 	int32_t device_id;
 	void * ptr;
@@ -560,8 +529,6 @@ typedef struct {
 	args->ptr = (void *) ptr; \
 	args->size = (int64_t) size; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_data_exchange` function.
@@ -581,7 +548,6 @@ typedef struct {
  *			int64_t size (long)
  *	)
  */
-#if HAVE___tgt_rtl_data_exchange
 typedef struct {
 	int32_t src_dev_id;
 	void * src_ptr;
@@ -599,8 +565,6 @@ typedef struct {
 	args->dst_ptr = (void *) dst_ptr; \
 	args->size = (int64_t) size; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_launch_kernel` function.
@@ -621,7 +585,6 @@ typedef struct {
  *			__tgt_async_info * AsyncInfo (struct __tgt_async_info*)
  *	)
  */
-#if HAVE___tgt_rtl_launch_kernel
 typedef struct {
 	int32_t device_id;
 	void * tgt_entry_ptr;
@@ -631,15 +594,15 @@ typedef struct {
 	} tgt_args__ref;
 	ptrdiff_t * tgt_offsets;
 	struct {
-		ptrdiff_t val;
+		ptrdiff_t  val;
 	} tgt_offsets__ref;
 	KernelArgsTy * KernelArgs;
 	struct {
-		KernelArgsTy val;
+		KernelArgsTy  val;
 	} KernelArgs__ref;
 	__tgt_async_info * AsyncInfo;
 	struct {
-		__tgt_async_info val;
+		__tgt_async_info  val;
 	} AsyncInfo__ref;
 	int32_t retval;
 } args___tgt_rtl_launch_kernel_t;
@@ -670,8 +633,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_is_valid_binary` function.
  *
@@ -686,11 +647,10 @@ typedef struct {
  *			__tgt_device_image * image (struct __tgt_device_image*)
  *	)
  */
-#if HAVE___tgt_rtl_is_valid_binary
 typedef struct {
 	__tgt_device_image * image;
 	struct {
-		__tgt_device_image val;
+		__tgt_device_image  val;
 	} image__ref;
 	int32_t retval;
 } args___tgt_rtl_is_valid_binary_t;
@@ -706,8 +666,6 @@ typedef struct {
 		pargs->image__ref.val = *pargs->image; \
 	} \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_data_retrieve` function.
@@ -726,7 +684,6 @@ typedef struct {
  *			int64_t size (long)
  *	)
  */
-#if HAVE___tgt_rtl_data_retrieve
 typedef struct {
 	int32_t device_id;
 	void * host_ptr;
@@ -742,8 +699,6 @@ typedef struct {
 	args->target_ptr = (void *) target_ptr; \
 	args->size = (int64_t) size; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_data_lock` function.
@@ -762,7 +717,6 @@ typedef struct {
  *			void ** LockedHostPtr (void **)
  *	)
  */
-#if HAVE___tgt_rtl_data_lock
 typedef struct {
 	int32_t device_id;
 	void * host_ptr;
@@ -789,8 +743,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_supports_empty_images` function.
  *
@@ -804,12 +756,9 @@ typedef struct {
  *	__tgt_rtl_supports_empty_images (
  *	)
  */
-#if HAVE___tgt_rtl_supports_empty_images
 typedef struct {
 	int32_t retval;
 } args___tgt_rtl_supports_empty_images_t;
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_destroy_event` function.
@@ -826,7 +775,6 @@ typedef struct {
  *			void * event (void *)
  *	)
  */
-#if HAVE___tgt_rtl_destroy_event
 typedef struct {
 	int32_t device_id;
 	void * event;
@@ -838,8 +786,6 @@ typedef struct {
 	args->device_id = (int32_t) device_id; \
 	args->event = (void *) event; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_number_of_devices` function.
@@ -854,12 +800,9 @@ typedef struct {
  *	__tgt_rtl_number_of_devices (
  *	)
  */
-#if HAVE___tgt_rtl_number_of_devices
 typedef struct {
 	int32_t retval;
 } args___tgt_rtl_number_of_devices_t;
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_init_requires` function.
@@ -875,7 +818,6 @@ typedef struct {
  *			int64_t RequiresFlags (long)
  *	)
  */
-#if HAVE___tgt_rtl_init_requires
 typedef struct {
 	int64_t RequiresFlags;
 	int64_t retval;
@@ -885,8 +827,6 @@ typedef struct {
 	args___tgt_rtl_init_requires_t* args = (args___tgt_rtl_init_requires_t*) activity->args; \
 	args->RequiresFlags = (int64_t) RequiresFlags; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_data_notify_unmapped` function.
@@ -903,7 +843,6 @@ typedef struct {
  *			void * host_ptr (void *)
  *	)
  */
-#if HAVE___tgt_rtl_data_notify_unmapped
 typedef struct {
 	int32_t device_id;
 	void * host_ptr;
@@ -915,8 +854,6 @@ typedef struct {
 	args->device_id = (int32_t) device_id; \
 	args->host_ptr = (void *) host_ptr; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_init_device_info` function.
@@ -934,17 +871,16 @@ typedef struct {
  *			const char ** err_str (const char **)
  *	)
  */
-#if HAVE___tgt_rtl_init_device_info
 typedef struct {
 	int32_t device_id;
 	__tgt_device_info * device_info_ptr;
 	struct {
-		__tgt_device_info val;
+		__tgt_device_info  val;
 	} device_info_ptr__ref;
 	char ** err_str;
 	struct {
 		void* ptr1;
-		char val[OMP_TGT_RTL_STRING_SIZE_MAX];
+		char  val;
 	} err_str__ref;
 	int32_t retval;
 } args___tgt_rtl_init_device_info_t;
@@ -964,12 +900,10 @@ typedef struct {
 	if (pargs->err_str != NULL) { \
 		pargs->err_str__ref.ptr1 = *pargs->err_str; \
 		if (pargs->err_str__ref.ptr1 != NULL) { \
-			strncpy(pargs->err_str__ref.val, pargs->err_str__ref.ptr1, OMP_TGT_RTL_STRING_SIZE_MAX-1); \
+			pargs->err_str__ref.val = **pargs->err_str; \
 		} \
 	} \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_sync_event` function.
@@ -986,7 +920,6 @@ typedef struct {
  *			void * event (void *)
  *	)
  */
-#if HAVE___tgt_rtl_sync_event
 typedef struct {
 	int32_t device_id;
 	void * event;
@@ -998,8 +931,6 @@ typedef struct {
 	args->device_id = (int32_t) device_id; \
 	args->event = (void *) event; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_synchronize` function.
@@ -1016,12 +947,11 @@ typedef struct {
  *			__tgt_async_info * AsyncInfo (struct __tgt_async_info*)
  *	)
  */
-#if HAVE___tgt_rtl_synchronize
 typedef struct {
 	int32_t device_id;
 	__tgt_async_info * AsyncInfo;
 	struct {
-		__tgt_async_info val;
+		__tgt_async_info  val;
 	} AsyncInfo__ref;
 	int32_t retval;
 } args___tgt_rtl_synchronize_t;
@@ -1039,8 +969,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_set_up_env` function.
  *
@@ -1054,12 +982,9 @@ typedef struct {
  *	__tgt_rtl_set_up_env (
  *	)
  */
-#if HAVE___tgt_rtl_set_up_env
 typedef struct {
 
 } args___tgt_rtl_set_up_env_t;
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_data_unlock` function.
@@ -1076,7 +1001,6 @@ typedef struct {
  *			void * host_ptr (void *)
  *	)
  */
-#if HAVE___tgt_rtl_data_unlock
 typedef struct {
 	int device_id;
 	void * host_ptr;
@@ -1088,8 +1012,6 @@ typedef struct {
 	args->device_id = (int) device_id; \
 	args->host_ptr = (void *) host_ptr; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_is_fine_grained_memory_enabled` function.
@@ -1104,12 +1026,9 @@ typedef struct {
  *	__tgt_rtl_is_fine_grained_memory_enabled (
  *	)
  */
-#if HAVE___tgt_rtl_is_fine_grained_memory_enabled
 typedef struct {
 	int retval;
 } args___tgt_rtl_is_fine_grained_memory_enabled_t;
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_has_USM_capable_dGPU` function.
@@ -1124,12 +1043,9 @@ typedef struct {
  *	__tgt_rtl_has_USM_capable_dGPU (
  *	)
  */
-#if HAVE___tgt_rtl_has_USM_capable_dGPU
 typedef struct {
 	int retval;
 } args___tgt_rtl_has_USM_capable_dGPU_t;
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_has_apu_device` function.
@@ -1144,12 +1060,9 @@ typedef struct {
  *	__tgt_rtl_has_apu_device (
  *	)
  */
-#if HAVE___tgt_rtl_has_apu_device
 typedef struct {
 	int retval;
 } args___tgt_rtl_has_apu_device_t;
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_set_device_offset` function.
@@ -1165,7 +1078,6 @@ typedef struct {
  *			int32_t DeviceIdOffset (int)
  *	)
  */
-#if HAVE___tgt_rtl_set_device_offset
 typedef struct {
 	int32_t DeviceIdOffset;
 	int32_t retval;
@@ -1175,8 +1087,6 @@ typedef struct {
 	args___tgt_rtl_set_device_offset_t* args = (args___tgt_rtl_set_device_offset_t*) activity->args; \
 	args->DeviceIdOffset = (int32_t) DeviceIdOffset; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_launch_kernel_sync` function.
@@ -1196,7 +1106,6 @@ typedef struct {
  *			KernelArgsTy * KernelArgs (struct KernelArgsTy*)
  *	)
  */
-#if HAVE___tgt_rtl_launch_kernel_sync
 typedef struct {
 	int32_t device_id;
 	void * tgt_entry_ptr;
@@ -1206,11 +1115,11 @@ typedef struct {
 	} tgt_args__ref;
 	ptrdiff_t * tgt_offsets;
 	struct {
-		ptrdiff_t val;
+		ptrdiff_t  val;
 	} tgt_offsets__ref;
 	KernelArgsTy * KernelArgs;
 	struct {
-		KernelArgsTy val;
+		KernelArgsTy  val;
 	} KernelArgs__ref;
 	int32_t retval;
 } args___tgt_rtl_launch_kernel_sync_t;
@@ -1237,8 +1146,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_record_event` function.
  *
@@ -1255,13 +1162,12 @@ typedef struct {
  *			__tgt_async_info * AsyncInfo (struct __tgt_async_info*)
  *	)
  */
-#if HAVE___tgt_rtl_record_event
 typedef struct {
 	int32_t device_id;
 	void * event;
 	__tgt_async_info * AsyncInfo;
 	struct {
-		__tgt_async_info val;
+		__tgt_async_info  val;
 	} AsyncInfo__ref;
 	int32_t retval;
 } args___tgt_rtl_record_event_t;
@@ -1280,8 +1186,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_set_info_flag` function.
  *
@@ -1296,7 +1200,6 @@ typedef struct {
  *			uint32_t NewInfoLevel (unsigned int)
  *	)
  */
-#if HAVE___tgt_rtl_set_info_flag
 typedef struct {
 	uint32_t NewInfoLevel;
 } args___tgt_rtl_set_info_flag_t;
@@ -1305,8 +1208,6 @@ typedef struct {
 	args___tgt_rtl_set_info_flag_t* args = (args___tgt_rtl_set_info_flag_t*) activity->args; \
 	args->NewInfoLevel = (uint32_t) NewInfoLevel; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_create_event` function.
@@ -1323,7 +1224,6 @@ typedef struct {
  *			void ** event (void **)
  *	)
  */
-#if HAVE___tgt_rtl_create_event
 typedef struct {
 	int32_t device_id;
 	void ** event;
@@ -1346,8 +1246,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_print_device_info` function.
  *
@@ -1362,7 +1260,6 @@ typedef struct {
  *			int32_t device_id (int)
  *	)
  */
-#if HAVE___tgt_rtl_print_device_info
 typedef struct {
 	int32_t device_id;
 } args___tgt_rtl_print_device_info_t;
@@ -1371,8 +1268,6 @@ typedef struct {
 	args___tgt_rtl_print_device_info_t* args = (args___tgt_rtl_print_device_info_t*) activity->args; \
 	args->device_id = (int32_t) device_id; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_get_function` function.
@@ -1390,12 +1285,11 @@ typedef struct {
  *			void ** kernel_ptr (void **)
  *	)
  */
-#if HAVE___tgt_rtl_get_function
 typedef struct {
 	__tgt_device_binary binary;
 	char * name;
 	struct {
-		char val[OMP_TGT_RTL_STRING_SIZE_MAX];
+		char  val;
 	} name__ref;
 	void ** kernel_ptr;
 	struct {
@@ -1414,14 +1308,12 @@ typedef struct {
 #define GET_PTRS_VALUE___tgt_rtl_get_function(args) { \
 	args___tgt_rtl_get_function_t* pargs = (args___tgt_rtl_get_function_t*) args; \
 	if (pargs->name != NULL) { \
-		strncpy(pargs->name__ref.val, pargs->name, OMP_TGT_RTL_STRING_SIZE_MAX-1); \
+		pargs->name__ref.val = *pargs->name; \
 	} \
 	if (pargs->kernel_ptr != NULL) { \
 		pargs->kernel_ptr__ref.ptr1 = *pargs->kernel_ptr; \
 	} \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_init_plugin` function.
@@ -1436,12 +1328,9 @@ typedef struct {
  *	__tgt_rtl_init_plugin (
  *	)
  */
-#if HAVE___tgt_rtl_init_plugin
 typedef struct {
 	int32_t retval;
 } args___tgt_rtl_init_plugin_t;
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_number_of_team_procs` function.
@@ -1457,7 +1346,6 @@ typedef struct {
  *			int device_id (int)
  *	)
  */
-#if HAVE___tgt_rtl_number_of_team_procs
 typedef struct {
 	int device_id;
 	int32_t retval;
@@ -1467,8 +1355,6 @@ typedef struct {
 	args___tgt_rtl_number_of_team_procs_t* args = (args___tgt_rtl_number_of_team_procs_t*) activity->args; \
 	args->device_id = (int) device_id; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_wait_event` function.
@@ -1486,13 +1372,12 @@ typedef struct {
  *			__tgt_async_info * AsyncInfo (struct __tgt_async_info*)
  *	)
  */
-#if HAVE___tgt_rtl_wait_event
 typedef struct {
 	int32_t device_id;
 	void * event;
 	__tgt_async_info * AsyncInfo;
 	struct {
-		__tgt_async_info val;
+		__tgt_async_info  val;
 	} AsyncInfo__ref;
 	int32_t retval;
 } args___tgt_rtl_wait_event_t;
@@ -1511,8 +1396,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_data_alloc` function.
  *
@@ -1530,7 +1413,6 @@ typedef struct {
  *			int32_t kind (int)
  *	)
  */
-#if HAVE___tgt_rtl_data_alloc
 typedef struct {
 	int32_t device_id;
 	int64_t size;
@@ -1547,8 +1429,6 @@ typedef struct {
 	args->kind = (int32_t) kind; \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_init_device` function.
  *
@@ -1563,7 +1443,6 @@ typedef struct {
  *			int32_t device_id (int)
  *	)
  */
-#if HAVE___tgt_rtl_init_device
 typedef struct {
 	int32_t device_id;
 	int32_t retval;
@@ -1573,8 +1452,6 @@ typedef struct {
 	args___tgt_rtl_init_device_t* args = (args___tgt_rtl_init_device_t*) activity->args; \
 	args->device_id = (int32_t) device_id; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_get_global` function.
@@ -1593,13 +1470,12 @@ typedef struct {
  *			void ** device_ptr (void **)
  *	)
  */
-#if HAVE___tgt_rtl_get_global
 typedef struct {
 	__tgt_device_binary binary;
 	uint64_t size;
 	char * name;
 	struct {
-		char val[OMP_TGT_RTL_STRING_SIZE_MAX];
+		char  val;
 	} name__ref;
 	void ** device_ptr;
 	struct {
@@ -1619,14 +1495,12 @@ typedef struct {
 #define GET_PTRS_VALUE___tgt_rtl_get_global(args) { \
 	args___tgt_rtl_get_global_t* pargs = (args___tgt_rtl_get_global_t*) args; \
 	if (pargs->name != NULL) { \
-		strncpy(pargs->name__ref.val, pargs->name, OMP_TGT_RTL_STRING_SIZE_MAX-1); \
+		pargs->name__ref.val = *pargs->name; \
 	} \
 	if (pargs->device_ptr != NULL) { \
 		pargs->device_ptr__ref.ptr1 = *pargs->device_ptr; \
 	} \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `__tgt_rtl_requested_prepopulate_gpu_page_table` function.
@@ -1641,12 +1515,9 @@ typedef struct {
  *	__tgt_rtl_requested_prepopulate_gpu_page_table (
  *	)
  */
-#if HAVE___tgt_rtl_requested_prepopulate_gpu_page_table
 typedef struct {
 	int retval;
 } args___tgt_rtl_requested_prepopulate_gpu_page_table_t;
-
-#endif
 
 
 
@@ -1663,102 +1534,70 @@ static inline void get_omp_tgt_rtl_pointed_args_for(omp_tgt_rtl_api_id_t id, voi
 {
     if (!is_enter) {
         switch(id) {
-			#if HAVE___tgt_rtl_query_async
 			case OMP_TGT_RTL_API_ID___tgt_rtl_query_async : {
 				GET_PTRS_VALUE___tgt_rtl_query_async(args);
 				return;
 			}
-			#endif
-			#if HAVE___tgt_rtl_data_submit_async
 			case OMP_TGT_RTL_API_ID___tgt_rtl_data_submit_async : {
 				GET_PTRS_VALUE___tgt_rtl_data_submit_async(args);
 				return;
 			}
-			#endif
-			#if HAVE___tgt_rtl_init_async_info
 			case OMP_TGT_RTL_API_ID___tgt_rtl_init_async_info : {
 				GET_PTRS_VALUE___tgt_rtl_init_async_info(args);
 				return;
 			}
-			#endif
-			#if HAVE___tgt_rtl_data_retrieve_async
 			case OMP_TGT_RTL_API_ID___tgt_rtl_data_retrieve_async : {
 				GET_PTRS_VALUE___tgt_rtl_data_retrieve_async(args);
 				return;
 			}
-			#endif
-			#if HAVE___tgt_rtl_data_exchange_async
 			case OMP_TGT_RTL_API_ID___tgt_rtl_data_exchange_async : {
 				GET_PTRS_VALUE___tgt_rtl_data_exchange_async(args);
 				return;
 			}
-			#endif
-			#if HAVE___tgt_rtl_launch_kernel
 			case OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel : {
 				GET_PTRS_VALUE___tgt_rtl_launch_kernel(args);
 				return;
 			}
-			#endif
-			#if HAVE___tgt_rtl_is_valid_binary
 			case OMP_TGT_RTL_API_ID___tgt_rtl_is_valid_binary : {
 				GET_PTRS_VALUE___tgt_rtl_is_valid_binary(args);
 				return;
 			}
-			#endif
-			#if HAVE___tgt_rtl_data_lock
 			case OMP_TGT_RTL_API_ID___tgt_rtl_data_lock : {
 				GET_PTRS_VALUE___tgt_rtl_data_lock(args);
 				return;
 			}
-			#endif
-			#if HAVE___tgt_rtl_init_device_info
 			case OMP_TGT_RTL_API_ID___tgt_rtl_init_device_info : {
 				GET_PTRS_VALUE___tgt_rtl_init_device_info(args);
 				return;
 			}
-			#endif
-			#if HAVE___tgt_rtl_synchronize
 			case OMP_TGT_RTL_API_ID___tgt_rtl_synchronize : {
 				GET_PTRS_VALUE___tgt_rtl_synchronize(args);
 				return;
 			}
-			#endif
-			#if HAVE___tgt_rtl_launch_kernel_sync
 			case OMP_TGT_RTL_API_ID___tgt_rtl_launch_kernel_sync : {
 				GET_PTRS_VALUE___tgt_rtl_launch_kernel_sync(args);
 				return;
 			}
-			#endif
-			#if HAVE___tgt_rtl_record_event
 			case OMP_TGT_RTL_API_ID___tgt_rtl_record_event : {
 				GET_PTRS_VALUE___tgt_rtl_record_event(args);
 				return;
 			}
-			#endif
-			#if HAVE___tgt_rtl_create_event
 			case OMP_TGT_RTL_API_ID___tgt_rtl_create_event : {
 				GET_PTRS_VALUE___tgt_rtl_create_event(args);
 				return;
 			}
-			#endif
-			#if HAVE___tgt_rtl_get_function
 			case OMP_TGT_RTL_API_ID___tgt_rtl_get_function : {
 				GET_PTRS_VALUE___tgt_rtl_get_function(args);
 				return;
 			}
-			#endif
-			#if HAVE___tgt_rtl_wait_event
 			case OMP_TGT_RTL_API_ID___tgt_rtl_wait_event : {
 				GET_PTRS_VALUE___tgt_rtl_wait_event(args);
 				return;
 			}
-			#endif
-			#if HAVE___tgt_rtl_get_global
 			case OMP_TGT_RTL_API_ID___tgt_rtl_get_global : {
 				GET_PTRS_VALUE___tgt_rtl_get_global(args);
 				return;
 			}
-			#endif
             default : break;
         }
     } else {

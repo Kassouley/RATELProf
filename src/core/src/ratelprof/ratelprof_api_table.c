@@ -37,7 +37,10 @@ ratelprof_status_t ratelprof_populate_api_table(ratelprof_api_table_t* api_table
     void* handler = RTLD_NEXT;
     if (lib_path) {
         handler = dlopen(lib_path, RTLD_LOCAL | RTLD_LAZY);
-        if (!handler) return RATELPROF_STATUS_DLOPEN_FAILED;
+        if (!handler) {
+            LOG(LOG_LEVEL_ERROR, "Failed to dlopen \"%s\". (%s). Fallback to RTLD_NEXT.\n", lib_path, dlerror());
+            handler = RTLD_NEXT;
+        };
     } 
     for (ratelprof_api_id_t id = 0; id < api_table->size; id++)
     {

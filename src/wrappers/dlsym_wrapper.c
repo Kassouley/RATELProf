@@ -19,7 +19,7 @@ void* dlsym(void *handle, const char *symbol) {
   if (dlsym_fn == NULL)
     dlsym_fn = (__dlsym_t)dlvsym(RTLD_NEXT, "dlsym", "GLIBC_2.2.5");
 
-  if (handle != NULL) {
+  if (handle != NULL && handle != RTLD_NEXT) {
     if (handle == omp_tgt_rtl_api_table.handler && omp_tgt_rtl_api_table.is_populate) {
       omp_tgt_rtl_api_id_t id = get_omp_tgt_rtl_funid_by_name(symbol);
       if (id != OMP_TGT_RTL_API_ID_UNKNOWN) {

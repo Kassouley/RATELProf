@@ -15,7 +15,6 @@
 
 #include "msgpack.h"
 
-#if HAVE___tgt_rtl_query_async
 //	int32_t device_id (int);
 //	__tgt_async_info * AsyncInfoPtr (struct __tgt_async_info*);
 //	int32_t retval (int);
@@ -36,9 +35,8 @@ static void write___tgt_rtl_query_async_args_to_buffer(args___tgt_rtl_query_asyn
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_data_submit
+
 //	int32_t device_id (int);
 //	void * target_ptr (void *);
 //	void * host_ptr (void *);
@@ -67,9 +65,8 @@ static void write___tgt_rtl_data_submit_args_to_buffer(args___tgt_rtl_data_submi
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_are_allocations_for_maps_on_apus_disabled
+
 //	int retval (int);
 
 static void write___tgt_rtl_are_allocations_for_maps_on_apus_disabled_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
@@ -82,9 +79,8 @@ static void write___tgt_rtl_are_allocations_for_maps_on_apus_disabled_args_to_bu
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_data_notify_mapped
+
 //	int32_t device_id (int);
 //	void * host_ptr (void *);
 //	int64_t size (long);
@@ -109,9 +105,8 @@ static void write___tgt_rtl_data_notify_mapped_args_to_buffer(args___tgt_rtl_dat
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_data_submit_async
+
 //	int32_t device_id (int);
 //	void * target_ptr (void *);
 //	void * host_ptr (void *);
@@ -144,9 +139,8 @@ static void write___tgt_rtl_data_submit_async_args_to_buffer(args___tgt_rtl_data
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_init_async_info
+
 //	int32_t device_id (int);
 //	__tgt_async_info ** async_info_ptr (struct __tgt_async_info**);
 //	int32_t retval (int);
@@ -167,9 +161,8 @@ static void write___tgt_rtl_init_async_info_args_to_buffer(args___tgt_rtl_init_a
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_is_data_exchangable
+
 //	int32_t src_dev_id (int);
 //	int32_t dst_dev_id (int);
 //	int32_t retval (int);
@@ -190,9 +183,8 @@ static void write___tgt_rtl_is_data_exchangable_args_to_buffer(args___tgt_rtl_is
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_data_retrieve_async
+
 //	int32_t device_id (int);
 //	void * host_ptr (void *);
 //	void * target_ptr (void *);
@@ -225,9 +217,8 @@ static void write___tgt_rtl_data_retrieve_async_args_to_buffer(args___tgt_rtl_da
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_data_delete
+
 //	int32_t device_id (int);
 //	void * target_ptr (void *);
 //	int32_t kind (int);
@@ -252,9 +243,8 @@ static void write___tgt_rtl_data_delete_args_to_buffer(args___tgt_rtl_data_delet
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_data_exchange_async
+
 //	int32_t src_dev_id (int);
 //	void * src_ptr (void *);
 //	int32_t dst_dev_id (int);
@@ -291,9 +281,8 @@ static void write___tgt_rtl_data_exchange_async_args_to_buffer(args___tgt_rtl_da
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_prepopulate_page_table
+
 //	int32_t device_id (int);
 //	void * ptr (void *);
 //	int64_t size (long);
@@ -318,9 +307,8 @@ static void write___tgt_rtl_prepopulate_page_table_args_to_buffer(args___tgt_rtl
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_data_exchange
+
 //	int32_t src_dev_id (int);
 //	void * src_ptr (void *);
 //	int32_t dst_dev_id (int);
@@ -353,9 +341,8 @@ static void write___tgt_rtl_data_exchange_args_to_buffer(args___tgt_rtl_data_exc
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_launch_kernel
+
 //	int32_t device_id (int);
 //	void * tgt_entry_ptr (void *);
 //	void ** tgt_args (void **);
@@ -392,9 +379,8 @@ static void write___tgt_rtl_launch_kernel_args_to_buffer(args___tgt_rtl_launch_k
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_is_valid_binary
+
 //	__tgt_device_image * image (struct __tgt_device_image*);
 //	int32_t retval (int);
 
@@ -411,9 +397,8 @@ static void write___tgt_rtl_is_valid_binary_args_to_buffer(args___tgt_rtl_is_val
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_data_retrieve
+
 //	int32_t device_id (int);
 //	void * host_ptr (void *);
 //	void * target_ptr (void *);
@@ -442,9 +427,8 @@ static void write___tgt_rtl_data_retrieve_args_to_buffer(args___tgt_rtl_data_ret
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_data_lock
+
 //	int32_t device_id (int);
 //	void * host_ptr (void *);
 //	int64_t size (long);
@@ -473,9 +457,8 @@ static void write___tgt_rtl_data_lock_args_to_buffer(args___tgt_rtl_data_lock_t*
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_supports_empty_images
+
 //	int32_t retval (int);
 
 static void write___tgt_rtl_supports_empty_images_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
@@ -488,9 +471,8 @@ static void write___tgt_rtl_supports_empty_images_args_to_buffer(args___tgt_rtl_
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_destroy_event
+
 //	int32_t device_id (int);
 //	void * event (void *);
 //	int32_t retval (int);
@@ -511,9 +493,8 @@ static void write___tgt_rtl_destroy_event_args_to_buffer(args___tgt_rtl_destroy_
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_number_of_devices
+
 //	int32_t retval (int);
 
 static void write___tgt_rtl_number_of_devices_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
@@ -526,9 +507,8 @@ static void write___tgt_rtl_number_of_devices_args_to_buffer(args___tgt_rtl_numb
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_init_requires
+
 //	int64_t RequiresFlags (long);
 //	int64_t retval (long);
 
@@ -545,9 +525,8 @@ static void write___tgt_rtl_init_requires_args_to_buffer(args___tgt_rtl_init_req
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_data_notify_unmapped
+
 //	int32_t device_id (int);
 //	void * host_ptr (void *);
 //	int32_t retval (int);
@@ -568,9 +547,8 @@ static void write___tgt_rtl_data_notify_unmapped_args_to_buffer(args___tgt_rtl_d
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_init_device_info
+
 //	int32_t device_id (int);
 //	__tgt_device_info * device_info_ptr (struct __tgt_device_info*);
 //	const char ** err_str (const char **);
@@ -595,9 +573,8 @@ static void write___tgt_rtl_init_device_info_args_to_buffer(args___tgt_rtl_init_
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_sync_event
+
 //	int32_t device_id (int);
 //	void * event (void *);
 //	int32_t retval (int);
@@ -618,9 +595,8 @@ static void write___tgt_rtl_sync_event_args_to_buffer(args___tgt_rtl_sync_event_
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_synchronize
+
 //	int32_t device_id (int);
 //	__tgt_async_info * AsyncInfo (struct __tgt_async_info*);
 //	int32_t retval (int);
@@ -641,9 +617,8 @@ static void write___tgt_rtl_synchronize_args_to_buffer(args___tgt_rtl_synchroniz
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_set_up_env
+
 
 
 static void write___tgt_rtl_set_up_env_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
@@ -655,9 +630,8 @@ static void write___tgt_rtl_set_up_env_args_to_buffer(args___tgt_rtl_set_up_env_
 
 }
 
-#endif
 
-#if HAVE___tgt_rtl_data_unlock
+
 //	int device_id (int);
 //	void * host_ptr (void *);
 //	int32_t retval (int);
@@ -678,9 +652,8 @@ static void write___tgt_rtl_data_unlock_args_to_buffer(args___tgt_rtl_data_unloc
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_is_fine_grained_memory_enabled
+
 //	int retval (int);
 
 static void write___tgt_rtl_is_fine_grained_memory_enabled_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
@@ -693,9 +666,8 @@ static void write___tgt_rtl_is_fine_grained_memory_enabled_args_to_buffer(args__
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_has_USM_capable_dGPU
+
 //	int retval (int);
 
 static void write___tgt_rtl_has_USM_capable_dGPU_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
@@ -708,9 +680,8 @@ static void write___tgt_rtl_has_USM_capable_dGPU_args_to_buffer(args___tgt_rtl_h
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_has_apu_device
+
 //	int retval (int);
 
 static void write___tgt_rtl_has_apu_device_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
@@ -723,9 +694,8 @@ static void write___tgt_rtl_has_apu_device_args_to_buffer(args___tgt_rtl_has_apu
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_set_device_offset
+
 //	int32_t DeviceIdOffset (int);
 //	int32_t retval (int);
 
@@ -742,9 +712,8 @@ static void write___tgt_rtl_set_device_offset_args_to_buffer(args___tgt_rtl_set_
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_launch_kernel_sync
+
 //	int32_t device_id (int);
 //	void * tgt_entry_ptr (void *);
 //	void ** tgt_args (void **);
@@ -777,9 +746,8 @@ static void write___tgt_rtl_launch_kernel_sync_args_to_buffer(args___tgt_rtl_lau
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_record_event
+
 //	int32_t device_id (int);
 //	void * event (void *);
 //	__tgt_async_info * AsyncInfo (struct __tgt_async_info*);
@@ -804,9 +772,8 @@ static void write___tgt_rtl_record_event_args_to_buffer(args___tgt_rtl_record_ev
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_set_info_flag
+
 //	uint32_t NewInfoLevel (unsigned int);
 
 static void write___tgt_rtl_set_info_flag_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
@@ -819,9 +786,8 @@ static void write___tgt_rtl_set_info_flag_args_to_buffer(args___tgt_rtl_set_info
 	msgpack_encode_int(buf, args->NewInfoLevel);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_create_event
+
 //	int32_t device_id (int);
 //	void ** event (void **);
 //	int32_t retval (int);
@@ -842,9 +808,8 @@ static void write___tgt_rtl_create_event_args_to_buffer(args___tgt_rtl_create_ev
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_print_device_info
+
 //	int32_t device_id (int);
 
 static void write___tgt_rtl_print_device_info_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
@@ -857,9 +822,8 @@ static void write___tgt_rtl_print_device_info_args_to_buffer(args___tgt_rtl_prin
 	msgpack_encode_int(buf, args->device_id);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_get_function
+
 //	__tgt_device_binary binary ({
 //		uintptr_t handle (unsigned long);
 //	});
@@ -887,9 +851,8 @@ static void write___tgt_rtl_get_function_args_to_buffer(args___tgt_rtl_get_funct
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_init_plugin
+
 //	int32_t retval (int);
 
 static void write___tgt_rtl_init_plugin_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
@@ -902,9 +865,8 @@ static void write___tgt_rtl_init_plugin_args_to_buffer(args___tgt_rtl_init_plugi
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_number_of_team_procs
+
 //	int device_id (int);
 //	int32_t retval (int);
 
@@ -921,9 +883,8 @@ static void write___tgt_rtl_number_of_team_procs_args_to_buffer(args___tgt_rtl_n
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_wait_event
+
 //	int32_t device_id (int);
 //	void * event (void *);
 //	__tgt_async_info * AsyncInfo (struct __tgt_async_info*);
@@ -948,9 +909,8 @@ static void write___tgt_rtl_wait_event_args_to_buffer(args___tgt_rtl_wait_event_
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_data_alloc
+
 //	int32_t device_id (int);
 //	int64_t size (long);
 //	void * host_ptr (void *);
@@ -979,9 +939,8 @@ static void write___tgt_rtl_data_alloc_args_to_buffer(args___tgt_rtl_data_alloc_
 	msgpack_encode_uint(buf, (uintptr_t)args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_init_device
+
 //	int32_t device_id (int);
 //	int32_t retval (int);
 
@@ -998,9 +957,8 @@ static void write___tgt_rtl_init_device_args_to_buffer(args___tgt_rtl_init_devic
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_get_global
+
 //	__tgt_device_binary binary ({
 //		uintptr_t handle (unsigned long);
 //	});
@@ -1032,9 +990,8 @@ static void write___tgt_rtl_get_global_args_to_buffer(args___tgt_rtl_get_global_
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE___tgt_rtl_requested_prepopulate_gpu_page_table
+
 //	int retval (int);
 
 static void write___tgt_rtl_requested_prepopulate_gpu_page_table_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
@@ -1047,7 +1004,7 @@ static void write___tgt_rtl_requested_prepopulate_gpu_page_table_args_to_buffer(
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
+
 
 
 #endif // OMP_TGT_RTL_ARGS_H

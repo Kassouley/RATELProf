@@ -15,7 +15,6 @@
 
 #include "msgpack.h"
 
-#if HAVE_omp_target_memset
 //	void * ptr (void *);
 //	int value (int);
 //	size_t size (unsigned long);
@@ -44,9 +43,8 @@ static void write_omp_target_memset_args_to_buffer(args_omp_target_memset_t* arg
 	msgpack_encode_uint(buf, (uintptr_t)args->retval);
 }
 
-#endif
 
-#if HAVE_omp_target_memcpy_async
+
 //	void * dst (void *);
 //	const void * src (const void *);
 //	size_t size (unsigned long);
@@ -95,9 +93,8 @@ static void write_omp_target_memcpy_async_args_to_buffer(args_omp_target_memcpy_
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE_omp_target_memcpy_rect_async
+
 //	void * dst (void *);
 //	const void * src (const void *);
 //	size_t element_size (unsigned long);
@@ -162,9 +159,8 @@ static void write_omp_target_memcpy_rect_async_args_to_buffer(args_omp_target_me
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE_omp_target_alloc
+
 //	size_t size (unsigned long);
 //	int device_num (int);
 //	void * retval (void *);
@@ -185,9 +181,8 @@ static void write_omp_target_alloc_args_to_buffer(args_omp_target_alloc_t* args,
 	msgpack_encode_uint(buf, (uintptr_t)args->retval);
 }
 
-#endif
 
-#if HAVE_omp_target_free
+
 //	void * device_ptr (void *);
 //	int device_num (int);
 
@@ -204,9 +199,8 @@ static void write_omp_target_free_args_to_buffer(args_omp_target_free_t* args, r
 	msgpack_encode_int(buf, args->device_num);
 }
 
-#endif
 
-#if HAVE_omp_target_memcpy_rect
+
 //	void * dst (void *);
 //	const void * src (const void *);
 //	size_t element_size (unsigned long);
@@ -263,9 +257,8 @@ static void write_omp_target_memcpy_rect_args_to_buffer(args_omp_target_memcpy_r
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE_omp_target_disassociate_ptr
+
 //	const void * host_ptr (const void *);
 //	int device_num (int);
 //	int retval (int);
@@ -286,9 +279,8 @@ static void write_omp_target_disassociate_ptr_args_to_buffer(args_omp_target_dis
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE_omp_target_memcpy
+
 //	void * dst (void *);
 //	const void * src (const void *);
 //	size_t size (unsigned long);
@@ -329,9 +321,8 @@ static void write_omp_target_memcpy_args_to_buffer(args_omp_target_memcpy_t* arg
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE_omp_target_memset_async
+
 //	void * ptr (void *);
 //	int value (int);
 //	size_t size (unsigned long);
@@ -368,9 +359,8 @@ static void write_omp_target_memset_async_args_to_buffer(args_omp_target_memset_
 	msgpack_encode_uint(buf, (uintptr_t)args->retval);
 }
 
-#endif
 
-#if HAVE_omp_target_is_present
+
 //	const void * host_ptr (const void *);
 //	int device_num (int);
 //	int retval (int);
@@ -391,9 +381,8 @@ static void write_omp_target_is_present_args_to_buffer(args_omp_target_is_presen
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE_omp_target_associate_ptr
+
 //	const void * host_ptr (const void *);
 //	const void * device_ptr (const void *);
 //	size_t size (unsigned long);
@@ -426,9 +415,8 @@ static void write_omp_target_associate_ptr_args_to_buffer(args_omp_target_associ
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE_omp_get_initial_device
+
 //	int retval (int);
 
 static void write_omp_get_initial_device_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
@@ -441,9 +429,8 @@ static void write_omp_get_initial_device_args_to_buffer(args_omp_get_initial_dev
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE_llvm_omp_target_dynamic_shared_alloc
+
 //	void * retval (void *);
 
 static void write_llvm_omp_target_dynamic_shared_alloc_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
@@ -456,9 +443,8 @@ static void write_llvm_omp_target_dynamic_shared_alloc_args_to_buffer(args_llvm_
 	msgpack_encode_uint(buf, (uintptr_t)args->retval);
 }
 
-#endif
 
-#if HAVE_omp_get_interop_int
+
 //	const omp_interop_t interop (const void *);
 //	omp_interop_property_t prop (enum omp_interop_property);
 //	int * exists (int *);
@@ -483,9 +469,8 @@ static void write_omp_get_interop_int_args_to_buffer(args_omp_get_interop_int_t*
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE_omp_get_interop_name
+
 //	const omp_interop_t interop (const void *);
 //	omp_interop_property_t prop (enum omp_interop_property);
 //	const char * retval (const char *);
@@ -506,9 +491,8 @@ static void write_omp_get_interop_name_args_to_buffer(args_omp_get_interop_name_
 	msgpack_encode_uint(buf, (uintptr_t)args->retval);
 }
 
-#endif
 
-#if HAVE_omp_get_interop_ptr
+
 //	const omp_interop_t interop (const void *);
 //	omp_interop_property_t prop (enum omp_interop_property);
 //	int * exists (int *);
@@ -533,9 +517,8 @@ static void write_omp_get_interop_ptr_args_to_buffer(args_omp_get_interop_ptr_t*
 	msgpack_encode_uint(buf, (uintptr_t)args->retval);
 }
 
-#endif
 
-#if HAVE_omp_get_interop_str
+
 //	const omp_interop_t interop (const void *);
 //	omp_interop_property_t prop (enum omp_interop_property);
 //	int * exists (int *);
@@ -560,9 +543,8 @@ static void write_omp_get_interop_str_args_to_buffer(args_omp_get_interop_str_t*
 	msgpack_encode_uint(buf, (uintptr_t)args->retval);
 }
 
-#endif
 
-#if HAVE_omp_get_interop_type_desc
+
 //	const omp_interop_t interop (const void *);
 //	omp_interop_property_t prop (enum omp_interop_property);
 //	const char * retval (const char *);
@@ -583,9 +565,8 @@ static void write_omp_get_interop_type_desc_args_to_buffer(args_omp_get_interop_
 	msgpack_encode_uint(buf, (uintptr_t)args->retval);
 }
 
-#endif
 
-#if HAVE_omp_get_mapped_ptr
+
 //	const void * ptr (const void *);
 //	int device_num (int);
 //	void * retval (void *);
@@ -606,9 +587,8 @@ static void write_omp_get_mapped_ptr_args_to_buffer(args_omp_get_mapped_ptr_t* a
 	msgpack_encode_uint(buf, (uintptr_t)args->retval);
 }
 
-#endif
 
-#if HAVE_omp_get_num_devices
+
 //	int retval (int);
 
 static void write_omp_get_num_devices_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
@@ -621,9 +601,8 @@ static void write_omp_get_num_devices_args_to_buffer(args_omp_get_num_devices_t*
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
 
-#if HAVE_omp_is_coarse_grain_mem_region
+
 //	void * ptr (void *);
 //	size_t size (unsigned long);
 //	int retval (int);
@@ -644,7 +623,7 @@ static void write_omp_is_coarse_grain_mem_region_args_to_buffer(args_omp_is_coar
 	msgpack_encode_int(buf, args->retval);
 }
 
-#endif
+
 
 
 #endif // OMP_ROUTINE_ARGS_H

@@ -17,7 +17,6 @@ static void write_target_data_op_args_to_buffer(args_target_data_op_t* args, rpr
 	//	void* dest_addr (void);
 	//	int dest_device_num (int);
 	//	size_t bytes (unsigned long);
-	msgpack_encode_array(buf, 6);
 	msgpack_encode_uint(buf, (uintptr_t)args->host_op_id);
 	msgpack_encode_uint(buf, (uintptr_t)args->src_addr);
 	msgpack_encode_int(buf, args->src_device_num);
@@ -33,6 +32,8 @@ static void write_target_data_op_params_to_buffer(rprofrep_encode_context_t* ctx
 	//	void* dest_addr (void);
 	//	int dest_device_num (int);
 	//	size_t bytes (unsigned long);
+	msgpack_encode_uint(buf, 6);
+
 	rprofrep_msgpack_ext_encode_string(ctx, buf, "ompt_id_t*");
 	rprofrep_msgpack_ext_encode_string(ctx, buf, "host_op_id");
 
@@ -68,12 +69,12 @@ FOR_EACH_OMPT_TARGET_DATA_FUNC(DECL_TARGET_DATA_OP_PARAM_WRITER_FUNCTION)
 
 static void __write_target_args_to_buffer(args_target_emi_t* args, rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
 	//	int device_num (int);
-	msgpack_encode_array(buf, 1);
 	msgpack_encode_int(buf, args->device_num);
 }
 
 static void __write_target_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
 	//	int device_num (int);
+	msgpack_encode_uint(buf, 1);
 	rprofrep_msgpack_ext_encode_string(ctx, buf, "int");
 	rprofrep_msgpack_ext_encode_string(ctx, buf, "device_num");
 }
@@ -96,7 +97,6 @@ FOR_EACH_OMPT_TARGET_FUNC(DECL_TARGET_PARAM_WRITER_FUNCTION)
 static void write_target_submit_args_to_buffer(args_target_submit_emi_t* args, rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
 	//	ompt_id_t* host_op_id (unsigned long);
 	//	unsigned int requested_num_teams (unsigned int);
-	msgpack_encode_array(buf, 2);
 	msgpack_encode_uint(buf, (uintptr_t)args->host_op_id);
 	msgpack_encode_int(buf, args->requested_num_teams);
 }
@@ -104,6 +104,7 @@ static void write_target_submit_args_to_buffer(args_target_submit_emi_t* args, r
 static void write_target_submit_params_to_buffer(rprofrep_encode_context_t* ctx, msgpack_buffer_t* buf) {
 	//	ompt_id_t* host_op_id (unsigned long);
 	//	unsigned int requested_num_teams (unsigned int);
+	msgpack_encode_uint(buf, 2);
 	rprofrep_msgpack_ext_encode_string(ctx, buf, "ompt_id_t*");
 	rprofrep_msgpack_ext_encode_string(ctx, buf, "host_op_id");
 	rprofrep_msgpack_ext_encode_string(ctx, buf, "unsigned int");
@@ -117,7 +118,7 @@ static void write_target_map_args_to_buffer(args_target_map_emi_t* args, rprofre
 	//	void** device_addr (void);
 	//	size_t* bytes (unsigned long);
 	//	unsigned int* mapping_flags (unsigned int);
-	msgpack_encode_int(buf, args->nitems);
+	msgpack_encode_uint(buf, args->nitems);
 
 	msgpack_encode_array(buf, args->nitems);
 	for (int i = 0; i < args->nitems; i++)
@@ -149,6 +150,8 @@ static void write_target_map_params_to_buffer(rprofrep_encode_context_t* ctx, ms
 	//	void** device_addr (void);
 	//	size_t* bytes (unsigned long);
 	//	unsigned int* mapping_flags (unsigned int);
+	msgpack_encode_uint(buf, 5);
+	
 	rprofrep_msgpack_ext_encode_string(ctx, buf, "unsigned int");
 	rprofrep_msgpack_ext_encode_string(ctx, buf, "nitems");
 

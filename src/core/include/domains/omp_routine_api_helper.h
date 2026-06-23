@@ -18,7 +18,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "domains/fun_proto/omp_routine_profiled_functions.h"
-#include "omp.h" 
+#include "domains/minimal_abi/omp_tgt_minimal_abi.h" 
 
 #define OMP_ROUTINE_STRING_SIZE_MAX 128
 
@@ -29,27 +29,27 @@
 
 
 #define FOR_EACH_OMP_ROUTINE_FUNC(macro) \
-IF_ENABLED(omp_target_memset, macro)               \
-IF_ENABLED(omp_target_memcpy_async, macro)         \
-IF_ENABLED(omp_target_memcpy_rect_async, macro)    \
-IF_ENABLED(omp_target_alloc, macro)                \
-IF_ENABLED(omp_target_free, macro)                 \
-IF_ENABLED(omp_target_memcpy_rect, macro)          \
-IF_ENABLED(omp_target_disassociate_ptr, macro)     \
-IF_ENABLED(omp_target_memcpy, macro)               \
-IF_ENABLED(omp_target_memset_async, macro)         \
-IF_ENABLED(omp_target_is_present, macro)           \
-IF_ENABLED(omp_target_associate_ptr, macro)        \
-IF_ENABLED(omp_get_initial_device, macro)          \
-IF_ENABLED(llvm_omp_target_dynamic_shared_alloc, macro) \
-IF_ENABLED(omp_get_interop_int, macro)             \
-IF_ENABLED(omp_get_interop_name, macro)            \
-IF_ENABLED(omp_get_interop_ptr, macro)             \
-IF_ENABLED(omp_get_interop_str, macro)             \
-IF_ENABLED(omp_get_interop_type_desc, macro)       \
-IF_ENABLED(omp_get_mapped_ptr, macro)              \
-IF_ENABLED(omp_get_num_devices, macro)             \
-IF_ENABLED(omp_is_coarse_grain_mem_region, macro)  \
+macro(omp_target_memset)                           \
+macro(omp_target_memcpy_async)                     \
+macro(omp_target_memcpy_rect_async)                \
+macro(omp_target_alloc)                            \
+macro(omp_target_free)                             \
+macro(omp_target_memcpy_rect)                      \
+macro(omp_target_disassociate_ptr)                 \
+macro(omp_target_memcpy)                           \
+macro(omp_target_memset_async)                     \
+macro(omp_target_is_present)                       \
+macro(omp_target_associate_ptr)                    \
+macro(omp_get_initial_device)                      \
+macro(llvm_omp_target_dynamic_shared_alloc)        \
+macro(omp_get_interop_int)                         \
+macro(omp_get_interop_name)                        \
+macro(omp_get_interop_ptr)                         \
+macro(omp_get_interop_str)                         \
+macro(omp_get_interop_type_desc)                   \
+macro(omp_get_mapped_ptr)                          \
+macro(omp_get_num_devices)                         \
+macro(omp_is_coarse_grain_mem_region)              \
 
 
 /**
@@ -139,7 +139,6 @@ static inline omp_routine_api_id_t get_omp_routine_funid_by_name(const char* nam
  *			int device_num (int)
  *	)
  */
-#if HAVE_omp_target_memset
 typedef struct {
 	void * ptr;
 	int value;
@@ -155,8 +154,6 @@ typedef struct {
 	args->size = (size_t) size; \
 	args->device_num = (int) device_num; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_memcpy_async` function.
@@ -180,7 +177,6 @@ typedef struct {
  *			omp_depend_t * depend (void **)
  *	)
  */
-#if HAVE_omp_target_memcpy_async
 typedef struct {
 	void * dst;
 	void * src;
@@ -217,8 +213,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `omp_target_memcpy_rect_async` function.
  *
@@ -245,7 +239,6 @@ typedef struct {
  *			omp_depend_t * depobj_list (void **)
  *	)
  */
-#if HAVE_omp_target_memcpy_rect_async
 typedef struct {
 	void * dst;
 	void * src;
@@ -253,23 +246,23 @@ typedef struct {
 	int num_dims;
 	size_t * volume;
 	struct {
-		size_t val;
+		size_t  val;
 	} volume__ref;
 	size_t * dst_offsets;
 	struct {
-		size_t val;
+		size_t  val;
 	} dst_offsets__ref;
 	size_t * src_offsets;
 	struct {
-		size_t val;
+		size_t  val;
 	} src_offsets__ref;
 	size_t * dst_dimensions;
 	struct {
-		size_t val;
+		size_t  val;
 	} dst_dimensions__ref;
 	size_t * src_dimensions;
 	struct {
-		size_t val;
+		size_t  val;
 	} src_dimensions__ref;
 	int dst_device_num;
 	int src_device_num;
@@ -320,8 +313,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `omp_target_alloc` function.
  *
@@ -337,7 +328,6 @@ typedef struct {
  *			int device_num (int)
  *	)
  */
-#if HAVE_omp_target_alloc
 typedef struct {
 	size_t size;
 	int device_num;
@@ -349,8 +339,6 @@ typedef struct {
 	args->size = (size_t) size; \
 	args->device_num = (int) device_num; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_free` function.
@@ -367,7 +355,6 @@ typedef struct {
  *			int device_num (int)
  *	)
  */
-#if HAVE_omp_target_free
 typedef struct {
 	void * device_ptr;
 	int device_num;
@@ -378,8 +365,6 @@ typedef struct {
 	args->device_ptr = (void *) device_ptr; \
 	args->device_num = (int) device_num; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_memcpy_rect` function.
@@ -405,7 +390,6 @@ typedef struct {
  *			int src_device_num (int)
  *	)
  */
-#if HAVE_omp_target_memcpy_rect
 typedef struct {
 	void * dst;
 	void * src;
@@ -413,23 +397,23 @@ typedef struct {
 	int num_dims;
 	size_t * volume;
 	struct {
-		size_t val;
+		size_t  val;
 	} volume__ref;
 	size_t * dst_offsets;
 	struct {
-		size_t val;
+		size_t  val;
 	} dst_offsets__ref;
 	size_t * src_offsets;
 	struct {
-		size_t val;
+		size_t  val;
 	} src_offsets__ref;
 	size_t * dst_dimensions;
 	struct {
-		size_t val;
+		size_t  val;
 	} dst_dimensions__ref;
 	size_t * src_dimensions;
 	struct {
-		size_t val;
+		size_t  val;
 	} src_dimensions__ref;
 	int dst_device_num;
 	int src_device_num;
@@ -470,8 +454,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `omp_target_disassociate_ptr` function.
  *
@@ -487,7 +469,6 @@ typedef struct {
  *			int device_num (int)
  *	)
  */
-#if HAVE_omp_target_disassociate_ptr
 typedef struct {
 	void * host_ptr;
 	int device_num;
@@ -499,8 +480,6 @@ typedef struct {
 	args->host_ptr = (void *) host_ptr; \
 	args->device_num = (int) device_num; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_memcpy` function.
@@ -522,7 +501,6 @@ typedef struct {
  *			int src_device_num (int)
  *	)
  */
-#if HAVE_omp_target_memcpy
 typedef struct {
 	void * dst;
 	void * src;
@@ -545,8 +523,6 @@ typedef struct {
 	args->src_device_num = (int) src_device_num; \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `omp_target_memset_async` function.
  *
@@ -566,7 +542,6 @@ typedef struct {
  *			omp_depend_t * depend (void **)
  *	)
  */
-#if HAVE_omp_target_memset_async
 typedef struct {
 	void * ptr;
 	int value;
@@ -597,8 +572,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `omp_target_is_present` function.
  *
@@ -614,7 +587,6 @@ typedef struct {
  *			int device_num (int)
  *	)
  */
-#if HAVE_omp_target_is_present
 typedef struct {
 	void * host_ptr;
 	int device_num;
@@ -626,8 +598,6 @@ typedef struct {
 	args->host_ptr = (void *) host_ptr; \
 	args->device_num = (int) device_num; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_target_associate_ptr` function.
@@ -647,7 +617,6 @@ typedef struct {
  *			int device_num (int)
  *	)
  */
-#if HAVE_omp_target_associate_ptr
 typedef struct {
 	void * host_ptr;
 	void * device_ptr;
@@ -666,8 +635,6 @@ typedef struct {
 	args->device_num = (int) device_num; \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `omp_get_initial_device` function.
  *
@@ -681,12 +648,9 @@ typedef struct {
  *	omp_get_initial_device (
  *	)
  */
-#if HAVE_omp_get_initial_device
 typedef struct {
 	int retval;
 } args_omp_get_initial_device_t;
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `llvm_omp_target_dynamic_shared_alloc` function.
@@ -701,12 +665,9 @@ typedef struct {
  *	llvm_omp_target_dynamic_shared_alloc (
  *	)
  */
-#if HAVE_llvm_omp_target_dynamic_shared_alloc
 typedef struct {
 	void * retval;
 } args_llvm_omp_target_dynamic_shared_alloc_t;
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_get_interop_int` function.
@@ -724,13 +685,12 @@ typedef struct {
  *			int * exists (int *)
  *	)
  */
-#if HAVE_omp_get_interop_int
 typedef struct {
 	void * interop;
 	omp_interop_property_t prop;
 	int * exists;
 	struct {
-		int val;
+		int  val;
 	} exists__ref;
 	omp_intptr_t retval;
 } args_omp_get_interop_int_t;
@@ -749,8 +709,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `omp_get_interop_name` function.
  *
@@ -766,13 +724,12 @@ typedef struct {
  *			omp_interop_property_t prop (enum omp_interop_property)
  *	)
  */
-#if HAVE_omp_get_interop_name
 typedef struct {
 	void * interop;
 	omp_interop_property_t prop;
 	char * retval;
 	struct {
-		char val[OMP_ROUTINE_STRING_SIZE_MAX];
+		char  val;
 	} retval__ref;
 } args_omp_get_interop_name_t;
 
@@ -785,11 +742,9 @@ typedef struct {
 #define GET_PTRS_RET_VALUE_omp_get_interop_name(args) { \
 	args_omp_get_interop_name_t* pargs = (args_omp_get_interop_name_t*) args; \
 	if (pargs->retval != NULL) { \
-		strncpy(pargs->retval__ref.val, pargs->retval, OMP_ROUTINE_STRING_SIZE_MAX-1); \
+		pargs->retval__ref.val = *pargs->retval; \
 	} \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_get_interop_ptr` function.
@@ -807,13 +762,12 @@ typedef struct {
  *			int * exists (int *)
  *	)
  */
-#if HAVE_omp_get_interop_ptr
 typedef struct {
 	void * interop;
 	omp_interop_property_t prop;
 	int * exists;
 	struct {
-		int val;
+		int  val;
 	} exists__ref;
 	void * retval;
 } args_omp_get_interop_ptr_t;
@@ -832,8 +786,6 @@ typedef struct {
 	} \
 };
 
-#endif
-
 /**
  * @brief Structure to hold the arguments for the `omp_get_interop_str` function.
  *
@@ -850,17 +802,16 @@ typedef struct {
  *			int * exists (int *)
  *	)
  */
-#if HAVE_omp_get_interop_str
 typedef struct {
 	void * interop;
 	omp_interop_property_t prop;
 	int * exists;
 	struct {
-		int val;
+		int  val;
 	} exists__ref;
 	char * retval;
 	struct {
-		char val[OMP_ROUTINE_STRING_SIZE_MAX];
+		char  val;
 	} retval__ref;
 } args_omp_get_interop_str_t;
 
@@ -881,11 +832,9 @@ typedef struct {
 #define GET_PTRS_RET_VALUE_omp_get_interop_str(args) { \
 	args_omp_get_interop_str_t* pargs = (args_omp_get_interop_str_t*) args; \
 	if (pargs->retval != NULL) { \
-		strncpy(pargs->retval__ref.val, pargs->retval, OMP_ROUTINE_STRING_SIZE_MAX-1); \
+		pargs->retval__ref.val = *pargs->retval; \
 	} \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_get_interop_type_desc` function.
@@ -902,13 +851,12 @@ typedef struct {
  *			omp_interop_property_t prop (enum omp_interop_property)
  *	)
  */
-#if HAVE_omp_get_interop_type_desc
 typedef struct {
 	void * interop;
 	omp_interop_property_t prop;
 	char * retval;
 	struct {
-		char val[OMP_ROUTINE_STRING_SIZE_MAX];
+		char  val;
 	} retval__ref;
 } args_omp_get_interop_type_desc_t;
 
@@ -921,11 +869,9 @@ typedef struct {
 #define GET_PTRS_RET_VALUE_omp_get_interop_type_desc(args) { \
 	args_omp_get_interop_type_desc_t* pargs = (args_omp_get_interop_type_desc_t*) args; \
 	if (pargs->retval != NULL) { \
-		strncpy(pargs->retval__ref.val, pargs->retval, OMP_ROUTINE_STRING_SIZE_MAX-1); \
+		pargs->retval__ref.val = *pargs->retval; \
 	} \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_get_mapped_ptr` function.
@@ -942,7 +888,6 @@ typedef struct {
  *			int device_num (int)
  *	)
  */
-#if HAVE_omp_get_mapped_ptr
 typedef struct {
 	void * ptr;
 	int device_num;
@@ -954,8 +899,6 @@ typedef struct {
 	args->ptr = (void *) ptr; \
 	args->device_num = (int) device_num; \
 };
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_get_num_devices` function.
@@ -970,12 +913,9 @@ typedef struct {
  *	omp_get_num_devices (
  *	)
  */
-#if HAVE_omp_get_num_devices
 typedef struct {
 	int retval;
 } args_omp_get_num_devices_t;
-
-#endif
 
 /**
  * @brief Structure to hold the arguments for the `omp_is_coarse_grain_mem_region` function.
@@ -992,7 +932,6 @@ typedef struct {
  *			size_t size (unsigned long)
  *	)
  */
-#if HAVE_omp_is_coarse_grain_mem_region
 typedef struct {
 	void * ptr;
 	size_t size;
@@ -1004,8 +943,6 @@ typedef struct {
 	args->ptr = (void *) ptr; \
 	args->size = (size_t) size; \
 };
-
-#endif
 
 
 
@@ -1022,61 +959,43 @@ static inline void get_omp_routine_pointed_args_for(omp_routine_api_id_t id, voi
 {
     if (!is_enter) {
         switch(id) {
-			#if HAVE_omp_target_memcpy_async
 			case OMP_ROUTINE_API_ID_omp_target_memcpy_async : {
 				GET_PTRS_VALUE_omp_target_memcpy_async(args);
 				return;
 			}
-			#endif
-			#if HAVE_omp_target_memcpy_rect_async
 			case OMP_ROUTINE_API_ID_omp_target_memcpy_rect_async : {
 				GET_PTRS_VALUE_omp_target_memcpy_rect_async(args);
 				return;
 			}
-			#endif
-			#if HAVE_omp_target_memcpy_rect
 			case OMP_ROUTINE_API_ID_omp_target_memcpy_rect : {
 				GET_PTRS_VALUE_omp_target_memcpy_rect(args);
 				return;
 			}
-			#endif
-			#if HAVE_omp_target_memset_async
 			case OMP_ROUTINE_API_ID_omp_target_memset_async : {
 				GET_PTRS_VALUE_omp_target_memset_async(args);
 				return;
 			}
-			#endif
-			#if HAVE_omp_get_interop_int
 			case OMP_ROUTINE_API_ID_omp_get_interop_int : {
 				GET_PTRS_VALUE_omp_get_interop_int(args);
 				return;
 			}
-			#endif
-			#if HAVE_omp_get_interop_name
 			case OMP_ROUTINE_API_ID_omp_get_interop_name : {
 				GET_PTRS_RET_VALUE_omp_get_interop_name(args);
 				return;
 			}
-			#endif
-			#if HAVE_omp_get_interop_ptr
 			case OMP_ROUTINE_API_ID_omp_get_interop_ptr : {
 				GET_PTRS_VALUE_omp_get_interop_ptr(args);
 				return;
 			}
-			#endif
-			#if HAVE_omp_get_interop_str
 			case OMP_ROUTINE_API_ID_omp_get_interop_str : {
 				GET_PTRS_VALUE_omp_get_interop_str(args);
 				GET_PTRS_RET_VALUE_omp_get_interop_str(args);
 				return;
 			}
-			#endif
-			#if HAVE_omp_get_interop_type_desc
 			case OMP_ROUTINE_API_ID_omp_get_interop_type_desc : {
 				GET_PTRS_RET_VALUE_omp_get_interop_type_desc(args);
 				return;
 			}
-			#endif
             default : break;
         }
     } else {
