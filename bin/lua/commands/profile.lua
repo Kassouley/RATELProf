@@ -1,4 +1,5 @@
-local env           = require ("commands.profile.env")
+local env            = require ("commands.profile.env")
+local options_helper = require ("options_helper")
 
 local profile = {}
 
@@ -16,17 +17,50 @@ local function handle_profile_option(options)
     local log_level = ratelprof.get_opt_val(options, "log-level")
     if log_level then env.set_env(ratelprof.consts._ENV.LOG_LEVEL, log_level) end
 
+    
+    local lib_path = options_helper.parse_list_option(options, "lib-path")
+
+    local paths_to_set = {}
+    
+    for domain, path in pairs(ratelprof.consts._TRACED_LIB_PATH) do
+        if path and ratelprof.fs.exists(path) then
+            local domain_data = ratelprof.consts._TRACES[domain]
+            if domain_data then 
+                paths_to_set[domain_data.var] = path
+            end
+        end
+    end
+
+    for _, lib_data in ipairs(lib_path) do
+        local domain, path = lib_data:match("([^:]+):([^:]+)")
+        local domain_data = ratelprof.consts._TRACES[domain]
+        local has_lib_path = ratelprof.consts._TRACED_LIB_PATH[domain]
+        if domain_data and has_lib_path ~= nil then
+            paths_to_set[domain_data.var] = path
+        end
+    end
+
+    for var, path in pairs(paths_to_set) do
+        env.set_env(var.."_LIB_PATH", path)
+    end
+
+    
+
+    local function enable_domain(var)
+        env.set_env(var, "1")
+    end
+
     local enabled_domain = {}
-    local traces_list = ratelprof.get_opt_val(options, "trace"):split(",")
+    local traces_list = options_helper.parse_list_option(options, "trace")
     for _, trace_name in ipairs(traces_list) do
         local trace = ratelprof.consts._TRACES[trace_name]
         if trace then
             if type(trace.var) == "table" then
                 for _, var in ipairs(trace.var) do
-                    env.set_env(var, "1")
+                    enable_domain(var)
                 end
             else
-                env.set_env(trace.var, "1")
+                enable_domain(trace.var)
             end
             table.insert(enabled_domain, trace.name)
         else
@@ -49,6 +83,7 @@ local function handle_profile_option(options)
     local launch_script     = ratelprof.get_opt_val(options, "launch_script")
     local launch_command    = ratelprof.get_opt_val(options, "launch_command")
     local prefix            = ratelprof.get_opt_val(options, "prefix")
+
     
     return {
         launch_script = launch_script,
@@ -94,10 +129,8 @@ function profile.process(positional_args, options_values)
     local prefix            = opt.prefix .. " "
     local plugin_path       = opt.plugin
 
-
     bin_command[1] = bin
     local bin_with_args = table.concat(bin_command, " ")
-
 
     local ld_library_path = os.getenv ("LD_LIBRARY_PATH")
     local preload_libs = ratelprof.consts._PRELOADED_LIBS
@@ -138,7 +171,6 @@ function profile.process(positional_args, options_values)
     Message:print ("RPROF: Application profiled :    '"..bin.."'")
     Message:print ("RPROF: Application Command :     '"..app_cmd_w_prefix.."'")
     Message:print ("RPROF: Preloaded tool :          '"..ld_preload[1].."'")
-    Message:print ("RPROF: Preloaded wrapper :       '"..ld_preload[2].."'")
     Message:print ("RPROF: Plugin used :             '"..plugin_path.."'")
     Message:print ("RPROF: Profiling enabled for :   '"..table.concat(opt.enabled_domain, ", ").."'")
 

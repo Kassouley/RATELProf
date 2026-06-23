@@ -14,7 +14,6 @@ function env.get_env()
     return table.concat(env.env_value, " ")
 end
 
-
 function env.set_filter_env_var(filename, filter_type)
     local file = ratelprof.fs.open_file(filename, "r")
     local categories = {}

@@ -57,7 +57,7 @@ consts_helper.profile = {
             arg_required    = true,
         },
         plugin = {
-            desc            = "Specify the plugin path for RATELProf (options: msgpack, stdout, or custom path)",
+            desc            = "Specify the plugin path for RATELProf (deprecated, do not use)",
             sname           = nil,
             arg             = "<PLUGIN>",
             arg_required    = true,
@@ -69,15 +69,26 @@ consts_helper.profile = {
                 Possible values are %s.
                 Select the API(s) to trace. Multiple APIs can be selected, separated by commas only (no spaces).
                 If 'none' is selected, no API is traced.
-                'gpu' is equivalent to 'kernel,memory,barrier'.
-                'cpu' is equivalent to all other APIs.
-                'omp' is equivalent to 'omp-routine,omp-region,omp-tgt-rtl'.
-                'all' is equivalent to 'cpu,gpu'.
+                'gpu'     is equivalent to 'kernel,memory,barrier'.
+                'cpu'     is equivalent to all other APIs.
+                'omp'     is equivalent to 'omp-routine,omp-region,omp-tgt-rtl'.
+                'all'     is equivalent to 'cpu,gpu'.
+                'runtime' is equivalent to 'kernel,memory,omp-routine,omp-region,hip,rocblas,rccl,mpi'
                 Default is 'kernel,memory,hip'.]], "'" .. table.concat(trace_list, "', '") .. "'"),
             sname           = "t",
             arg             = "<API>[,<API>]",
             arg_required    = true,
             default         = "kernel,memory,hip"
+        },
+        ["lib-path"] = {
+            desc            = string.format([[ 
+                Force to resolve intercepted symbols in a specific library.
+                This options might be useful is RATELProf cannot resolve symbols from itself.
+                Available domains:
+                    %s.
+                ]], table.concat_keys(ratelprof.consts._TRACED_LIB_PATH, "', '")),
+            arg             = "<DOMAIN>:<PATH>[,<DOMAIN>:<PATH>]",
+            arg_required    = true,
         },
         ['log-level'] = {
             desc            = [[ 
