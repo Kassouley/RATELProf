@@ -9,75 +9,7 @@
 #include "ratelprof/ratelprof_source_location.h"
 #include "ratelprof/ratelprof_status.h"
 
-
-/*
- * addr2line:
- *  - object_path: path to binary/shared-object (from dladdr->dli_fname)
- *  - addr: the runtime address
- *  - dli_fbase: base address (from dladdr->dli_fbase if available)
- *
- * On success:
- *   *out_func = strdup(<function name>)
- *   *out_file = strdup(<file>)
- *   *out_line = line_number
- * Caller must free() them.
- */
-// TODO (13/04/2026) : Better support for Non PIE/shared lib address with offset and base subtract 
-//                     (for now we cheat using filename but it's not robust/right way to do it)
-// TODO (23/09/2025) : Support escape char in object_path ("'`\s etc.)
-static bool addr2line(const char *object_path, void *addr, void *base_addr,
-                        char **out_func, char **out_file, uint64_t *out_line)
-{
-    if (!object_path || !addr || !out_func || !out_file || !out_line) return false;
-
-    uintptr_t query_addr = (uintptr_t)addr;
-
-    if (strstr(object_path, ".so") != NULL) {
-        query_addr -= (uintptr_t)base_addr;
-    }
-
-    char cmd[1024];
-    int n = snprintf(cmd, sizeof(cmd),
-                     "addr2line -e '%s' -f -C 0x%lx",
-                     object_path, (unsigned long) query_addr);
-
-    if (n < 0 || n >= (int)sizeof(cmd)) return false;
-
-    FILE *fp = popen(cmd, "r");
-    if (!fp) return false;
-
-    char *line = NULL;
-    size_t len = 0;
-    ssize_t read;
-
-    /* function name */
-    read = getline(&line, &len, fp);
-    if (read <= 0) { free(line); pclose(fp); return false; }
-    if (read > 0 && line[read-1] == '\n') line[read-1] = '\0';
-    *out_func = strdup(line);
-
-    /* file:line */
-    read = getline(&line, &len, fp);
-    if (read <= 0) { free(line); pclose(fp); free(*out_func); *out_func=NULL; return false; }
-    if (read > 0 && line[read-1] == '\n') line[read-1] = '\0';
-    
-    /* split file and line */
-    char *colon = strrchr(line, ':');
-    if (!colon) {
-        *out_file = strdup(line);
-        *out_line = 0;
-    } else {
-        *colon = '\0';
-        *out_file = strdup(line);
-        *out_line = atoi(colon + 1);
-    }
-
-    free(line);
-    pclose(fp);
-    return true;
-}
-
-
+#include "utils/addr2line.h"
 
 ratelprof_status_t ratelprof_get_source_location(ratelprof_source_data_t* out, void *addr) {    
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
