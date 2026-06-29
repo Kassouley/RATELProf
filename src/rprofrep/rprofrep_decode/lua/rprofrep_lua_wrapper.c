@@ -669,9 +669,13 @@ static int l_context_get_correlated_event(lua_State* L) {
 static int l_context_find_entry_point_event(lua_State* L) {
     rprofrep_decode_context_t *ctx = rprofrep_lua_get_context(L, 1);
     rprofrep_event_data_t *e       = rprofrep_lua_get_event(L, 2);
+    int64_t domain_filter = -1;
+    if (!lua_isnoneornil(L, 3)) {
+        domain_filter = (int64_t) luaL_checkinteger(L, 3);
+    }
 
     rprofrep_event_data_t entry_point = {0};
-    rprofrep_lua_check(L, rprofrep_find_entry_point_event(ctx, e, &entry_point),
+    rprofrep_lua_check(L, rprofrep_find_entry_point_event(ctx, e, &entry_point, domain_filter),
         "failed to find entry point event");
 
     if (!entry_point.valid) {

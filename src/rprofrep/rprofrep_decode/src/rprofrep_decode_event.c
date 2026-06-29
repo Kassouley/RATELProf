@@ -20,7 +20,8 @@
 rprofrep_status_t rprofrep_find_entry_point_event(
     rprofrep_decode_context_t* ctx,
     rprofrep_event_data_t* event,
-    rprofrep_event_data_t* entry_point_event
+    rprofrep_event_data_t* entry_point_event,
+    int64_t domain_filter
 ) {
     RPROFREP_CHECK_VALID_PTR(event, entry_point_event);
 
@@ -31,6 +32,8 @@ rprofrep_status_t rprofrep_find_entry_point_event(
 
     rprofrep_event_data_t current_event = *event;
     rprofrep_event_data_t parent_event;
+    rprofrep_event_data_t last_matching_event;
+    bool found_match = false;
 
     // Walk up the parent chain
     while (current_event.cid.valid) {
@@ -42,9 +45,13 @@ rprofrep_status_t rprofrep_find_entry_point_event(
             )
         );
         current_event = parent_event;
+        if (domain_filter != -1 && current_event.domain == domain_filter) {
+            last_matching_event = current_event;
+            found_match = true;
+        }
     }
 
-    *entry_point_event = current_event;
+    *entry_point_event = found_match ? last_matching_event : current_event;
     return RPROFREP_STATUS_SUCCESS;
 }
 
@@ -141,7 +148,12 @@ rprofrep_status_t rprofrep_get_event(
     uint64_t extra_id = (uint64_t) -1;
     uint64_t unique_funid = (uint64_t) -1;
 
-    if(!is_gpu_domain(group->domain)) {
+    if(group->domain == RATELPROF_DOMAIN_ROCTX) {
+        extra_id = __read_mp_uint(event_buf, &offset);
+        loc_id   = __read_mp_uint(event_buf, &offset);
+        RPROFREP_CHECK_CALL(rprofrep_get_string_by_id(ctx, extra_id, &name));
+        unique_funid = extra_id;
+    } else if(!is_gpu_domain(group->domain)) {
         extra_id = __read_mp_uint(event_buf, &offset);
         loc_id   = __read_mp_uint(event_buf, &offset);
         RPROFREP_CHECK_CALL(rprofrep_get_api_data(ctx, extra_id, &out_event->extra.api_data));
@@ -198,7 +210,10 @@ char** rprofrep_get_event_args_labels(
     rprofrep_event_data_t* event,
     uint64_t* num_args
 ) {
-    if (!is_gpu_domain(event->domain)) {
+    if (event->domain == RATELPROF_DOMAIN_ROCTX) {
+        *num_args = 0;
+        return NULL;
+    } else if (!is_gpu_domain(event->domain)) {
         *num_args = event->extra.api_data->num_args;
         return event->extra.api_data->arg_names;
     } else if (event->domain == RATELPROF_DOMAIN_MEMORY) {

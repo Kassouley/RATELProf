@@ -71,7 +71,8 @@ static inline bool rprofrep_filter_event(
 rprofrep_status_t rprofrep_find_entry_point_event(
     rprofrep_decode_context_t* ctx,
     rprofrep_event_data_t* event,
-    rprofrep_event_data_t* entry_point_event);
+    rprofrep_event_data_t* entry_point_event,
+    int64_t domain_filter);
 
 /**
  * The function `rprofrep_get_event_by_cid` retrieves event data based on a given context and CID

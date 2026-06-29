@@ -38,8 +38,8 @@ return function (report)
     end
 
     report.FOR_EACH = function (self, event, rprofrep)
-        local cpu_event = rprofrep:find_entry_point(event)
-        if cpu_event and cpu_event:domain() == ratelprof.consts.DOMAIN_HIP_ID then
+        local cpu_event = rprofrep:find_entry_point(event, ratelprof.consts.DOMAIN_HIP_ID)
+        if cpu_event then
             local api_name = cpu_event:name()
             self.nb_copy = self.nb_copy + 1
             if api_name:match("^hipMemcpy") and not api_name:match("Async$") then
