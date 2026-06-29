@@ -236,6 +236,8 @@ static void add_roctx_activity_data_to_buffer(
 
     rprofrep_msgpack_ext_encode_string(ctx, &evt, activity->message);
 
+    rprofrep_msgpack_ext_encode_loc(ctx, &evt, activity->return_address);
+
     rprofrep_msgpack_ext_encode_event(entry, &evt);
 }
 

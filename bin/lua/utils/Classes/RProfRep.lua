@@ -273,8 +273,8 @@ function RProfRep:get_correlated_id(event)
     return 0
 end
 
-function RProfRep:find_entry_point(event)
-    return self.reports_rprofrep[event:rank()]:find_entry_point_event(event)
+function RProfRep:find_entry_point(event, from)
+    return self.reports_rprofrep[event:rank()]:find_entry_point_event(event, from)
 end
 
 function RProfRep:get_entry_point_location(event)

@@ -157,6 +157,7 @@ local API_REPORT_DEFINITION = {
     {key = "hsa",         domain_id = consts.DOMAIN_HSA_ID,         default = false },
     {key = "rocblas",     domain_id = consts.DOMAIN_ROCBLAS_ID,     default = false },
     {key = "rccl",        domain_id = consts.DOMAIN_RCCL_ID,        default = false },
+    {key = "roctx",       domain_id = consts.DOMAIN_ROCTX_ID,       default = false },
 }
 
 consts.DOMAIN_FOR_REPORT = {}

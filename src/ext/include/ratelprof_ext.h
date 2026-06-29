@@ -127,6 +127,7 @@ typedef struct ratelprof_roctx_activity_s {
     uint64_t corr_id;
     ratelprof_timespec_t start_time;
     ratelprof_timespec_t stop_time;
+    void * return_address;
     const char* message;
 } ratelprof_roctx_activity_t;
 

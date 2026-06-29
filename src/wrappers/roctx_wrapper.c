@@ -10,7 +10,7 @@ typedef uint64_t roctx_range_id_t;
 #define CALL(func, ...) ((__##func##_t)roctx_api_table.api_ptr[ROCTX_API_ID_##func])(__VA_ARGS__)
 
 int roctxRangePushA(const char* message) {
-    return CALL(roctxRangePushA, message);
+    return CALL(roctxRangePushA, message, __builtin_return_address(0));
 }
 
 int roctxRangePop() {
@@ -18,7 +18,7 @@ int roctxRangePop() {
 }
 
 roctx_range_id_t roctxRangeStartA(const char* message) {
-    return CALL(roctxRangeStartA, message);
+    return CALL(roctxRangeStartA, message, __builtin_return_address(0));
 }
 
 void roctxRangeStop(roctx_range_id_t id) {
@@ -26,5 +26,5 @@ void roctxRangeStop(roctx_range_id_t id) {
 }
 
 void roctxMarkA(const char* message) {
-    CALL(roctxMarkA, message);
+    CALL(roctxMarkA, message, __builtin_return_address(0));
 }

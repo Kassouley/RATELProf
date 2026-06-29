@@ -82,7 +82,8 @@ local domain_mode_map = {
     [ratelprof.consts.DOMAIN_MEMORY_ID] = 0,
     [ratelprof.consts.DOMAIN_KERNEL_ID] = 1,
     [ratelprof.consts.DOMAIN_BARRIEROR_ID] = 3,
-    [ratelprof.consts.DOMAIN_BARRIERAND_ID] = 3
+    [ratelprof.consts.DOMAIN_BARRIERAND_ID] = 3,
+    [ratelprof.consts.DOMAIN_ROCTX_ID] = 4
 }
 
 function RProfVis:get_group(unit, domain, process_info)
@@ -221,7 +222,9 @@ function RProfVis:encode_metadata(file, event, domain)
         local _, memop = event:memop()
         buf:encode_uint(memop)
     elseif loc_id >= 0 then
-        buf:encode_uint(event:extra_id())
+        if domain ~= ratelprof.consts.DOMAIN_ROCTX_ID then
+            buf:encode_uint(event:extra_id())
+        end
         buf:encode_uint(loc_id)
     end
 
