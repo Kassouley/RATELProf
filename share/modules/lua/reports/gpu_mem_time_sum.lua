@@ -31,7 +31,8 @@ return function (report)
     end
 
     report.FOR_EACH = function(self, event, _, gpu_key)
-        local key = report_helper.create_key({ event:ufunid() }, { fname = event:name() })
+        local fname = event:name()
+        local key = report_helper.create_key({ fname }, { fname = fname })
         self.ctx:add_entry(key, event:dur(), gpu_key)
     end
 

@@ -60,6 +60,7 @@ return function (report)
         local start      = event:start()
         local stop       = event:stop()
         local event_args = event:args()
+        local fname      = event:name()
         local dispatch   = event_args.dispatch_time
         local qelapsed   = start - dispatch
         local elapsed    = stop  - start
@@ -71,9 +72,9 @@ return function (report)
             event_args.wgr[1],
             event_args.wgr[2],
             event_args.wgr[3],
-            event:ufunid()
+            fname
         }, {
-            fname = event:name()
+            fname = fname
         })
 
         self.time_ctx:add_entry(key, start, stop)

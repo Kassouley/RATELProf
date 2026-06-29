@@ -36,7 +36,8 @@ return function (report)
     end
 
     report.FOR_EACH = function(self, event)
-        local key = report_helper.create_key({ event:ufunid() }, { fname = event:name() })
+        local fname = event:name()
+        local key = report_helper.create_key({ fname }, { fname = fname })
         self.ctx:add_entry(key, event:dur())
         self.time_ctx:add_entry(key, event:start(), event:stop())
     end
