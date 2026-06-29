@@ -65,10 +65,9 @@ Installing RATELProf is simple and requires running the provided `install.sh` sc
 ### Prerequisites
 
 Ensure you have the following installed on your system before proceeding:
-- **CMake** (version 3.10 or later)
+- **CMake** (version 3.13 or later)
 - **Lua** (version 5.1)
 - **LuaJIT** (optional)
-- **AMD ROCm** (download from [ROCm's official site](https://github.com/ROCm/ROCm))
 
 ### Installation
 
@@ -97,8 +96,6 @@ If needed, set up your environment variable:
 ```bash
 export PATH=<path/to/ratelprof/bin>:$PATH
 export PATH=<path/to/lua5.1/bin>:$PATH
-export LD_LIBRARY_PATH=<path/to/hsa/lib/dir>:$LD_LIBRARY_PATH
-export LIBRARY_PATH=<path/to/hsa/lib/dir>:$LIBRARY_PATH
 ```
 
 ##  Comparison with ROCprof v3
@@ -108,8 +105,8 @@ export LIBRARY_PATH=<path/to/hsa/lib/dir>:$LIBRARY_PATH
 | **GPU Architecture Support**      | AMD RDNA, CDNA (ROCm-compatible GPUs)           | AMD RDNA, CDNA (ROCm-compatible GPUs)        |
 | **HIP Tracing**                   | ✅                                             | ✅                                           |
 | **HSA Tracing**                   | ✅                                             | ✅                                           |
-| **rocBLAS Tracing**               | ❌                                             | ❌ But can be easily implemented with GILDA  |
-| **RCCL Tracing**                  | ✅                                             | ❌ But can be easily implemented with GILDA  |
+| **rocBLAS Tracing**               | ❌                                             | ✅                                           |
+| **RCCL Tracing**                  | ✅                                             | ✅                                           |
 | **Marker Tracing**                | ✅ (ROCTx)                                     | ✅ (ROCTx)                                   |
 | **OpenMP Routine Tracing**        | ❌                                             | ✅                                           |
 | **OpenMP Target RTL Tracing**     | ❌                                             | ✅                                           |
