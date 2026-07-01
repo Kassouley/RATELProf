@@ -27,7 +27,7 @@ ratelprof_status_t
 ratelprof_activity_pool_fini();
 
 ratelprof_status_t 
-ratelprof_activity_pool_flush_activities();
+ratelprof_activity_pool_flush_activities(size_t* out_nactivities);
 
 ratelprof_activity_pool_t* 
 ratelprof_get_activity_pool();

@@ -60,12 +60,13 @@ ratelprof_get_activity_pool()
 }
 
 ratelprof_status_t 
-ratelprof_activity_pool_flush_activities()
+ratelprof_activity_pool_flush_activities(size_t* out_nactivities)
 {
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
     if (activity_pool->prop.activity_callback == NULL) {
         return RATELPROF_STATUS_NO_CALLBACK_SET;
     }
+    size_t nactivities = 0;
     while(!ratelprof_queue_is_empty(&activity_pool->activities)) {
         void* activity = NULL;
         RATELPROF_TRY(
@@ -78,7 +79,9 @@ ratelprof_activity_pool_flush_activities()
             activity_pool->prop.activity_callback(*domain_ptr, activity, activity_pool->last_activity, activity_pool->prop.activity_callback_user_args),
             LOG(LOG_LEVEL_ERROR, "The activity callback failed to execute. %s (code %d)\n", get_error_string_ext(status), status)
         );
+        nactivities++;
         free(activity);
     }
+    if (out_nactivities) *out_nactivities = nactivities;
     return status;
 }
