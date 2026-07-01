@@ -137,7 +137,10 @@ void onExit()
 
     LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Flushing activities . . .\r");
     
-    ratelprof_status_t status = ratelprof_activity_pool_flush_activities();
+    size_t nactivities = 0;
+    ratelprof_timespec_t flushed_start = ratelprof_get_curr_timespec();
+    ratelprof_status_t status = ratelprof_activity_pool_flush_activities(&nactivities);
+    ratelprof_timespec_t flushed_end = ratelprof_get_curr_timespec();
     if (status == (ratelprof_status_t)RATELPROF_STATUS_NO_CALLBACK_SET) {
         LOG(LOG_LEVEL_WARN, "Activity callback not setted.\n");
     } else if (status != RATELPROF_STATUS_SUCCESS) {
@@ -150,7 +153,12 @@ void onExit()
     plugin_manager.plugin_finalize(&plugin);
     close_plugin_manager(&plugin_manager);
 
-    LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Flushing activities :     SUCCESS\n");
+    ratelprof_time_t flushed_start_ms = ratelprof_get_timestamp_ms(flushed_start);
+    ratelprof_time_t flushed_end_ms = ratelprof_get_timestamp_ms(flushed_end);
+    ratelprof_time_t flushed_dur = flushed_end_ms - flushed_start_ms;
+    float flushed_dur_per_event = (float)flushed_dur / (float)nactivities;
+
+    LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Flushed %lu activities in %lu ms (%.5f ms/event).\n", nactivities, flushed_dur, flushed_dur_per_event);
 
 
     ratelprof_time_t constructor_time  = ratelprof_get_constructor_time() / 1e6;
