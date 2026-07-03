@@ -14,6 +14,7 @@
 hsa_status_t i_gpu_hsa_init(void* return_address) {
     hsa_status_t __ret = CALL_GPU_FUNC(hsa_init, return_address);
     if (__ret == HSA_STATUS_SUCCESS) CALL_PROF_FUNC(hsa_amd_profiling_async_copy_enable, true);
+    ratelprof_intercept_agent_object();
 	return __ret;
 };
 
@@ -60,9 +61,3 @@ hsa_status_t i_gpu_hsa_amd_memory_async_copy_on_engine(void * dst, hsa_agent_t d
     ratelprof_intercept_copy(dst_agent, src_agent, size, &completion_signal, engine_id);
     return CALL_GPU_FUNC(hsa_amd_memory_async_copy_on_engine, dst, dst_agent, src, src_agent, size, num_dep_signals, dep_signals, completion_signal, engine_id, force_copy_on_sdma, return_address);
 };
-
-
-hsa_status_t i_gpu_hsa_shut_down(void* return_address) {
-    ratelprof_intercept_agent_object();
-    return CALL_GPU_FUNC(hsa_shut_down, return_address);
-}

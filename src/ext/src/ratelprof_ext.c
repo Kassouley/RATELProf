@@ -82,8 +82,7 @@ static ratelprof_status_t ratelprof_populate_gpu_api_table() {
         HSA_API_ID_hsa_signal_store_screlease,
         HSA_API_ID_hsa_signal_store_release,
         HSA_API_ID_hsa_amd_memory_async_copy,
-        HSA_API_ID_hsa_amd_memory_async_copy_on_engine,
-        HSA_API_ID_hsa_shut_down
+        HSA_API_ID_hsa_amd_memory_async_copy_on_engine
     };
     
     for (int i = 0; i < GPU_API_ID_NB_FUNCTION; i++) {
@@ -126,7 +125,7 @@ ratelprof_status_t ratelprof_enable_node_id_tracking()
 {
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
 
-    hsa_api_table.api_ptr[HSA_API_ID_hsa_shut_down] = i_gpu_hsa_shut_down;
+    hsa_api_table.api_ptr[HSA_API_ID_hsa_init] = i_gpu_hsa_init;
 
     return status;
 }

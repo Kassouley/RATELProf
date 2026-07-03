@@ -10,7 +10,6 @@ typedef enum {
     GPU_API_ID_hsa_signal_store_release,
     GPU_API_ID_hsa_amd_memory_async_copy,
     GPU_API_ID_hsa_amd_memory_async_copy_on_engine,
-    GPU_API_ID_hsa_shut_down,
     GPU_API_ID_NB_FUNCTION,
     GPU_API_ID_UNKNOWN
 } gpu_api_id_t;
