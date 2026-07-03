@@ -74,45 +74,45 @@ static inline char* get_report_filename() {
 }
 
 
-static inline void memorize_filename(const char filename[512])
-{
-    const char *filepath = "/tmp/rprof_output_filename.txt";
+// static inline void memorize_filename(const char filename[512])
+// {
+//     const char *filepath = "/tmp/rprof_output_filename.txt";
 
-    // Open file for appending, create if not exists
-    int fd = open(filepath, O_WRONLY | O_CREAT | O_APPEND, 0666);
-    if (fd == -1) {
-        LOG(LOG_LEVEL_ERROR, "Failed to open file %s for writing: %s\n", filepath, strerror(errno));
-        return;
-    }
+//     // Open file for appending, create if not exists
+//     int fd = open(filepath, O_WRONLY | O_CREAT | O_APPEND, 0666);
+//     if (fd == -1) {
+//         LOG(LOG_LEVEL_ERROR, "Failed to open file %s for writing: %s\n", filepath, strerror(errno));
+//         return;
+//     }
 
-    // Lock the file exclusively
-    if (flock(fd, LOCK_EX) == -1) {
-        LOG(LOG_LEVEL_ERROR, "Failed to lock file %s: %s\n", filepath, strerror(errno));
-        close(fd);
-        return;
-    }
+//     // Lock the file exclusively
+//     if (flock(fd, LOCK_EX) == -1) {
+//         LOG(LOG_LEVEL_ERROR, "Failed to lock file %s: %s\n", filepath, strerror(errno));
+//         close(fd);
+//         return;
+//     }
 
-    // Write the data safely
-    ssize_t written = write(fd, filename, strlen(filename));
-    if (written == -1) {
-        LOG(LOG_LEVEL_ERROR, "Failed to write to file %s: %s\n", filepath, strerror(errno));
-        flock(fd, LOCK_UN); // unlock before returning
-        close(fd);
-        return;
-    }
+//     // Write the data safely
+//     ssize_t written = write(fd, filename, strlen(filename));
+//     if (written == -1) {
+//         LOG(LOG_LEVEL_ERROR, "Failed to write to file %s: %s\n", filepath, strerror(errno));
+//         flock(fd, LOCK_UN); // unlock before returning
+//         close(fd);
+//         return;
+//     }
 
-    written = write(fd, "\n", 1);
-    if (written == -1) {
-        LOG(LOG_LEVEL_ERROR, "Failed to write to file %s: %s\n", filepath, strerror(errno));
-        flock(fd, LOCK_UN); // unlock before returning
-        close(fd);
-        return;
-    }
+//     written = write(fd, "\n", 1);
+//     if (written == -1) {
+//         LOG(LOG_LEVEL_ERROR, "Failed to write to file %s: %s\n", filepath, strerror(errno));
+//         flock(fd, LOCK_UN); // unlock before returning
+//         close(fd);
+//         return;
+//     }
 
-    // Unlock and close
-    flock(fd, LOCK_UN);
-    close(fd);
-}
+//     // Unlock and close
+//     flock(fd, LOCK_UN);
+//     close(fd);
+// }
 
 
 ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin) 
@@ -139,7 +139,7 @@ ratelprof_status_t ratelprof_plugin_initialize(ratelprof_plugin_t** plugin)
         rprofrep_log_status(s);
         return RATELPROF_STATUS_ERROR;
     }
-    memorize_filename(report_filename);
+    // memorize_filename(report_filename);
 
     *plugin = p;
     return status;
