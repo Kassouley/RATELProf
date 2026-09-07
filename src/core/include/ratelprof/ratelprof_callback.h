@@ -27,7 +27,7 @@
  * @param id The unique identifier of the API function.
  * @param activity A generic pointer to the API activity structure containing event details.
  */
-typedef void (*api_callback_t)(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity);
+typedef void (*api_callback_t)(ratelprof_domain_t domain, ratelprof_api_id_t id, void* activity);
 
 
 /**
@@ -38,19 +38,6 @@ typedef struct {
     api_callback_t on_enter; /**< Function pointer for the enter callback. */
     api_callback_t on_exit;  /**< Function pointer for the exit callback. */
 } api_callback_handler_t;
-
-/**
- * @brief Default callback function.
- *
- * This function is called when no specific callback has been set for a domain.
- * It logs a warning message indicating that no callback function has been set.
- *
- * @param domain The API domain in which the function is executed.
- * @param id The unique identifier of the API function.
- * @param user_activity A generic pointer to the API activity structure containing event details.
- */
-void default_callback_function(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity);
-
 
 /**
  * @brief Initializes the callback system for a given number of domains.

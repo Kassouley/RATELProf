@@ -14,7 +14,7 @@ api_callback_t *ratelprof_on_exit_callbacks = NULL;
 
 static int _ndomains = 0;
 
-void default_callback_function(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
+void default_callback_function(ratelprof_domain_t domain, ratelprof_api_id_t id, void* activity)
 {
     LOG(LOG_LEVEL_WARN, "No callback function has been set for domain ID %d.\n", domain); 
 }
@@ -24,7 +24,6 @@ ratelprof_status_t init_callback_system(unsigned int ndomains) {
     if (!ratelprof_on_enter_callbacks) return RATELPROF_STATUS_MALLOC_FAILED;
     ratelprof_on_exit_callbacks = (api_callback_t*) malloc(ndomains * sizeof(api_callback_t));
     if (!ratelprof_on_exit_callbacks) return RATELPROF_STATUS_MALLOC_FAILED;
-
     _ndomains = ndomains;
 
     for (size_t i = 0; i < ndomains; i++)
