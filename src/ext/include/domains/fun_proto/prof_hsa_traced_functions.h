@@ -10,22 +10,21 @@ static inline void __on_enter_profiling_callback_function(ratelprof_api_id_t id,
     activity->funid = id;
     activity->pid = get_pid();
     activity->tid = get_tid();
-    get_correlation_id(&activity->corr_id);
     get_id(&activity->id);
-    ratelprof_activity_pool_push_activity(activity);
 }
 
 static inline void __on_exit_profiling_callback_function(ratelprof_api_activity_t* activity) {
-    pop_id();
+    get_correlation_id(&activity->corr_id, &activity->has_children);
+    ratelprof_activity_pool_push_activity(activity);
 }
 
 #define PROF_FUNCTION_CALL(func, ...) { \
 	ratelprof_api_activity_t* profiling_activity = (ratelprof_api_activity_t*)calloc(1, sizeof(ratelprof_api_activity_t) * sizeof(args_##func##_t)); \
 	profiling_activity->args = (void*)(profiling_activity + 1); \
 	__on_enter_profiling_callback_function(HSA_API_ID_##func, profiling_activity); \
-    profiling_activity->start_time = ratelprof_get_curr_timespec(); \
+    profiling_activity->start_time = ratelprof_get_clock_now(); \
     ((__##func##_t)profiling_table.api_fn[PROFILING_ID_##func])(__VA_ARGS__, NULL); \
-    profiling_activity->stop_time = ratelprof_get_curr_timespec(); \
+    profiling_activity->stop_time = ratelprof_get_clock_now(); \
 	GET_ARGS_VALUE_##func(profiling_activity); \
 	__on_exit_profiling_callback_function(profiling_activity); \
 	return; \
@@ -36,9 +35,9 @@ static inline void __on_exit_profiling_callback_function(ratelprof_api_activity_
 	ratelprof_api_activity_t* profiling_activity = (ratelprof_api_activity_t*)calloc(1, sizeof(ratelprof_api_activity_t) * sizeof(args_##func##_t)); \
 	profiling_activity->args = (void*)(profiling_activity + 1); \
 	__on_enter_profiling_callback_function(HSA_API_ID_##func, profiling_activity); \
-    profiling_activity->start_time = ratelprof_get_curr_timespec(); \
+    profiling_activity->start_time = ratelprof_get_clock_now(); \
     __ret = ((__##func##_t)profiling_table.api_fn[PROFILING_ID_##func])(__VA_ARGS__, NULL); \
-    profiling_activity->stop_time = ratelprof_get_curr_timespec(); \
+    profiling_activity->stop_time = ratelprof_get_clock_now(); \
 	GET_ARGS_VALUE_##func(profiling_activity); \
     args_##func##_t* __args = (args_##func##_t*)profiling_activity->args; \
 	__args->retval = (hsa_status_t)__ret; \

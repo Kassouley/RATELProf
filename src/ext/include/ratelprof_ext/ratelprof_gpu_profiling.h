@@ -108,7 +108,6 @@ static inline void ratelprof_set_signal_handler(hsa_signal_t signal, hsa_amd_sig
 static inline bool __copy_callback_function(hsa_signal_value_t value, void* arg)
 {
     ratelprof_gpu_activity_t* activity = (ratelprof_gpu_activity_t*) arg;
-    
     hsa_amd_profiling_async_copy_time_t copy_time;
     hsa_status_t status = CALL_PROF_FUNC(hsa_amd_profiling_get_async_copy_time, activity->proxy_signal, &copy_time);
     if (status == HSA_STATUS_SUCCESS) {
@@ -124,6 +123,7 @@ static inline bool __copy_callback_function(hsa_signal_value_t value, void* arg)
     }
     
     ratelprof_refresh_original_signal(activity->completion_signal, activity->proxy_signal, value);
+    ratelprof_activity_pool_push_activity(activity);
     return false;
 }
 
@@ -132,14 +132,13 @@ static inline ratelprof_status_t ratelprof_intercept_copy(hsa_agent_t dst_agent,
                                             size_t size,
                                             hsa_signal_t* completion_signal, 
                                             uint32_t engine_id) {
-    ratelprof_gpu_activity_t* activity = calloc(1, sizeof(ratelprof_gpu_activity_t));
+    ratelprof_gpu_activity_t* activity = ratelprof_memory_pool_alloc(sizeof(ratelprof_gpu_activity_t));
     if (!activity) {
         LOG(LOG_LEVEL_FATAL, "Cannot allocate a new activity. Out of memory ?\n");
     }
-    ratelprof_activity_pool_push_activity(activity);
 
-    get_correlation_id(&activity->corr_id);
     get_id(&activity->id);
+    get_correlation_id(&activity->corr_id, NULL);
     activity->domain                  = RATELPROF_DOMAIN_MEMORY;
     activity->completion_signal       = *completion_signal;
     activity->args.memory.memop          = RATELPROF_MEMORY_OP_SDMA_COPY;
@@ -147,7 +146,6 @@ static inline ratelprof_status_t ratelprof_intercept_copy(hsa_agent_t dst_agent,
     activity->args.memory.copy.dst_agent = dst_agent;
     activity->args.memory.copy.size      = size;
     activity->args.memory.engine_id = engine_id;
-    pop_id();
 
     ratelprof_create_proxy_signal(&activity->proxy_signal);
     *completion_signal = activity->proxy_signal;
@@ -182,6 +180,7 @@ static inline bool __dispatch_callback_function(hsa_signal_value_t value, void* 
     }
 
     ratelprof_refresh_original_signal(activity->completion_signal, activity->proxy_signal, value);
+    ratelprof_activity_pool_push_activity(activity);
     return false;
 }
 
@@ -217,11 +216,10 @@ ratelprof_create_kernel_dispatch_activity(
         return RATELPROF_STATUS_SUCCESS;
     }
 
-    ratelprof_gpu_activity_t* activity = calloc(1, sizeof(ratelprof_gpu_activity_t));
+    ratelprof_gpu_activity_t* activity = ratelprof_memory_pool_alloc(sizeof(ratelprof_gpu_activity_t));
     if (!activity) {
         LOG(LOG_LEVEL_FATAL, "Cannot allocate a new activity. Out of memory ?\n");
     }
-    ratelprof_activity_pool_push_activity(activity);
 
     hsa_agent_t* agent = NULL;
 
@@ -230,8 +228,8 @@ ratelprof_create_kernel_dispatch_activity(
         LOG(LOG_LEVEL_FATAL, "Cannot retrieve agent object from queue id. This error would lead to a segfault.\n");
     );
 
-    get_correlation_id(&activity->corr_id);
     get_id(&activity->id);
+    get_correlation_id(&activity->corr_id, NULL);
 
     dispatch_args_t* dispatch_args = NULL;
 
@@ -271,22 +269,21 @@ ratelprof_create_kernel_dispatch_activity(
     activity->completion_signal                = packet->completion_signal;
 
     ratelprof_create_proxy_signal(&activity->proxy_signal);
+    // TODO 07/09/2026: This create too much overhead !!!
     packet->completion_signal = activity->proxy_signal;
 
     ratelprof_set_signal_handler(activity->proxy_signal, __dispatch_callback_function, activity);
 
-    pop_id();
-    dispatch_args->dispatch_time = ratelprof_get_curr_timespec();
+    dispatch_args->dispatch_time = ratelprof_get_clock_now();
     return RATELPROF_STATUS_SUCCESS;
 }
 
 
 static inline ratelprof_status_t ratelprof_create_barrier_dispatch_activity(void* packet, uint64_t queue_id, ratelprof_domain_ext_t domain) {
-    ratelprof_gpu_activity_t* activity = calloc(1, sizeof(ratelprof_gpu_activity_t));
+    ratelprof_gpu_activity_t* activity = ratelprof_memory_pool_alloc(sizeof(ratelprof_gpu_activity_t));
     if (!activity) {
         LOG(LOG_LEVEL_FATAL, "Cannot allocate a new activity. Out of memory ?\n");
     }
-    ratelprof_activity_pool_push_activity(activity);
 
     hsa_signal_t* packet_signal = NULL;
     hsa_agent_t*  agent         = NULL;
@@ -296,8 +293,8 @@ static inline ratelprof_status_t ratelprof_create_barrier_dispatch_activity(void
         LOG(LOG_LEVEL_FATAL, "Cannot retrieve agent object from queue id. This error would lead to a segfault.\n");
     );
 
-    get_correlation_id(&activity->corr_id);
     get_id(&activity->id);
+    get_correlation_id(&activity->corr_id, NULL);
 
     activity->args.dispatch.agent    = *agent;
     activity->args.dispatch.queue_id = queue_id;
@@ -328,8 +325,7 @@ static inline ratelprof_status_t ratelprof_create_barrier_dispatch_activity(void
     // }
     ratelprof_set_signal_handler(activity->proxy_signal, __dispatch_callback_function, activity);
 
-    pop_id();
-    activity->args.dispatch.dispatch_time = ratelprof_get_curr_timespec();
+    activity->args.dispatch.dispatch_time = ratelprof_get_clock_now();
     return RATELPROF_STATUS_SUCCESS;
 }
 
@@ -354,8 +350,10 @@ static inline ratelprof_status_t ratelprof_intercept_dispatch(hsa_signal_t signa
         } else if (packet_type != HSA_PACKET_TYPE_KERNEL_DISPATCH
                 && packet_type != HSA_PACKET_TYPE_BARRIER_OR
                 && packet_type != HSA_PACKET_TYPE_BARRIER_AND) {
+            uint64_t id;
             uint64_t corr_id;
-            get_correlation_id(&corr_id);
+            get_id(&id);
+            get_correlation_id(&corr_id, NULL);
             LOG(LOG_LEVEL_WARN, "An unknown packet (type %d) has been enqueue onto the AQL Queue by event %lu.\n", packet_type, corr_id);
         }
     }

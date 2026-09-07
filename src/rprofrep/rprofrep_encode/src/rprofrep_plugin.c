@@ -22,8 +22,6 @@ typedef struct ratelprof_plugin_s {
 void on_enter_api_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
 {
     ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
-    ratelprof_activity_pool_push_activity(activity);
-    get_correlation_id(&activity->corr_id);
     get_id(&activity->id);
     activity->domain = domain;
     activity->funid = id;
@@ -33,14 +31,15 @@ void on_enter_api_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, voi
 
 void on_exit_api_callback(ratelprof_domain_t domain, ratelprof_api_id_t id, void* user_activity)
 {
+    ratelprof_api_activity_t* activity = (ratelprof_api_activity_t*)user_activity;
 	(void)domain;
 	(void)id;
-	(void)user_activity;
-    pop_id();
+    get_correlation_id(&activity->corr_id, &activity->has_children);
+    ratelprof_activity_pool_push_activity(activity);
 }
 
 
-ratelprof_status_t activity_callback(ratelprof_domain_t domain, const void* activity, const void* last_activity, void* user_args)
+ratelprof_status_t activity_callback(ratelprof_domain_t domain, const void* activity, void* user_args)
 {
     if (domain < 0 || (int)domain >= RATELPROF_NB_DOMAIN_EXT) {
         LOG(LOG_LEVEL_FATAL, "Unknown domain : %d\n", domain);
