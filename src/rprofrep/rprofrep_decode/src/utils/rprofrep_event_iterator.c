@@ -25,7 +25,6 @@ static bool __create_iterator(rprofrep_tree_node_t* domain_node, void* user_arg)
     rprofrep_decode_context_t* ctx = iterator->ctx;
     rprofrep_status_t* status = &creator->status;
     *status = RPROFREP_STATUS_SUCCESS;
-    
     if (creator->requested_domain[domain_node->value] == false) {
         iterator->group_count--;
         return true;
@@ -34,7 +33,7 @@ static bool __create_iterator(rprofrep_tree_node_t* domain_node, void* user_arg)
     uint64_t group_id = rprofrep_tree_get_leaf_value(domain_node);
     if (group_id == (uint64_t)-1) {
         iterator->group_count--;
-        printf("Should not happen: leaf node does not have a valid group ID.\n");
+        fprintf(stderr, "Should not happen: leaf node does not have a valid group ID.\n");
         return true;
     }
 
@@ -44,9 +43,9 @@ static bool __create_iterator(rprofrep_tree_node_t* domain_node, void* user_arg)
         return false;
     }
 
-    iterator->cursors[i] = 0;
-    
     rprofrep_event_data_t event = {0};
+    uint64_t group_size = iterator->groups[i]->buffer.buffer_stop - iterator->groups[i]->buffer.buffer_start;
+    iterator->cursors[i] = group_size - 1;
     *status = rprofrep_get_event(
         iterator->ctx,
         iterator->groups[i],
@@ -55,7 +54,6 @@ static bool __create_iterator(rprofrep_tree_node_t* domain_node, void* user_arg)
         &event,
         &iterator->cursors[i]);
 
-        
     if (!rprofrep_status_is_success(*status)) {
         return false;
     }

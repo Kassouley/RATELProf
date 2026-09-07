@@ -54,18 +54,18 @@ static rprofrep_status_t write_event_buffer_into_file(
             for (size_t d = 0; d < RATELPROF_NB_DOMAIN_EXT; d++) {
                 rprofrep_buffer_entry_t* entry = &buffer_entries[j][d];
                 if (entry->is_initialized) {
+
                     msgpack_encode_uint(buf, entry->domain);
-                    msgpack_encode_uint(buf, *offset);
+                    msgpack_encode_uint(buf, *offset );
                     msgpack_encode_uint(buf, entry->nb_events);
                     msgpack_encode_uint(buf, entry->id);
-
-                    *domain_seen_mask |= (1u << entry->domain);
 
                     msgpack_write(&entry->buffer);
                     msgpack_flush(&entry->buffer);
                     RPROFREP_CHECK_CALL(rprofrep_concatenator_concat_section(concatenator, entry->filename, RPROFREP_SECTION_EVENTS));
-                    
                     *offset += msgpack_size(&entry->buffer);
+
+                    *domain_seen_mask |= (1u << entry->domain);
                 }
             }
         }

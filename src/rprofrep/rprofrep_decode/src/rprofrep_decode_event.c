@@ -15,6 +15,7 @@
 #include "sections/rprofrep_section_offsets.h"
 #include "sections/rprofrep_section_location.h"
 #include "sections/rprofrep_section_global.h"
+#include "sections/rprofrep_section_cid.h"
 
 
 rprofrep_status_t rprofrep_find_entry_point_event(
@@ -25,7 +26,7 @@ rprofrep_status_t rprofrep_find_entry_point_event(
 ) {
     RPROFREP_CHECK_VALID_PTR(event, entry_point_event);
 
-    if (!event->valid || !event->cid.valid) {
+    if (!event->valid || event->cid == 0) {
         entry_point_event->valid = false;
         return RPROFREP_STATUS_SUCCESS;
     }
@@ -36,11 +37,11 @@ rprofrep_status_t rprofrep_find_entry_point_event(
     bool found_match = false;
 
     // Walk up the parent chain
-    while (current_event.cid.valid) {
+    while (current_event.cid != 0) {
         RPROFREP_CHECK_CALL(
             rprofrep_get_event_by_cid(
                 ctx,
-                &current_event.cid,
+                current_event.cid,
                 &parent_event
             )
         );
@@ -58,23 +59,27 @@ rprofrep_status_t rprofrep_find_entry_point_event(
 // Get the event for a given cid
 rprofrep_status_t rprofrep_get_event_by_cid(
     rprofrep_decode_context_t* ctx, 
-    rprofrep_cid_tuple_t* cid,
+    uint64_t cid,
     rprofrep_event_data_t* out_event
 ) {
-    RPROFREP_CHECK_VALID_PTR(cid);
-
-    if (!cid->valid) {
+    if (cid == 0) {
         out_event->valid = false;
         return RPROFREP_STATUS_SUCCESS;
     }
 
     rprofrep_group_entry_t* group = NULL;
-    RPROFREP_CHECK_CALL(rprofrep_get_group_entry_by_id(ctx, cid->group_id, &group));
+    rprofrep_cid_tuple_t cid_tuple;
 
-    RPROFREP_CHECK_CALL(rprofrep_get_event(ctx, group, cid->offset, NULL, out_event, NULL));
+    RPROFREP_CHECK_CALL(rprofrep_get_cid_tuple(ctx, cid, &cid_tuple));
+
+    RPROFREP_CHECK_CALL(rprofrep_get_group_entry_by_id(ctx, cid_tuple.group_id, &group));
+
+    printf("Looking for event with cid %lu in group %lu at offset %zu\n", cid, cid_tuple.group_id, cid_tuple.offset);
+    RPROFREP_CHECK_CALL(rprofrep_get_event(ctx, group, cid_tuple.offset, NULL, out_event, NULL));
    
     return RPROFREP_STATUS_SUCCESS;
 }
+
 
 // Get the event at cursor and move the cursor if needed
 rprofrep_status_t rprofrep_get_event(
@@ -91,39 +96,47 @@ rprofrep_status_t rprofrep_get_event(
 
     rprofrep_events_section_t* evt_sct = (rprofrep_events_section_t*) ctx->sections[RPROFREP_SECTION_EVENTS].data;
 
-    size_t   global_buffer_size = evt_sct->size;
     uint8_t* global_buffer      = evt_sct->buffer;
 
     uint8_t* buffer_start = group->buffer.buffer_start;
     uint8_t* buffer_stop  = group->buffer.buffer_stop;
+    uint8_t* header_buffer = buffer_start + event_off;
 
-    uint8_t* event_buf = buffer_start + event_off;
-    if (event_buf >= buffer_stop) {
+    if (header_buffer > buffer_stop || header_buffer <= buffer_start) {
         return RPROFREP_STATUS_SUCCESS; // Read too far from the group
     }
-
-    size_t offset = 0;
-
-    uint8_t magic = event_buf[offset++];
+    
+    uint8_t magic = bread8(&header_buffer);
     if (magic != 0xc1) {
         return RPROFREP_STATUS_INVALID_EVENT("Missing magic byte\n");
     }
 
-    uint64_t event_size  = __read_mp_uint(event_buf, &offset);
+    uint64_t event_size = 0;
+
+    uint8_t b = bread8(&header_buffer);
+    if      (b <= 0x7f) event_size = b; // positive fixint
+    else if (b == 0xcc) event_size = bread8(&header_buffer); // uint8
+    else if (b == 0xcd) event_size = bread16(&header_buffer); // uint16
+    else if (b == 0xce) event_size = bread32(&header_buffer); // uint32
+    else if (b == 0xcf) event_size = bread64(&header_buffer); // uint64
+ 
     if (event_size == 0) {
         return RPROFREP_STATUS_INVALID_EVENT("Invalid size value\n");
     }
 
-    size_t   event_hdr_size = offset;
-    size_t   next_event_off = event_off + offset + event_size;
-    uint8_t* next_event_buf = buffer_start + next_event_off;
-
-    if (next_event_buf > buffer_stop) {
+    size_t offset = 0;
+    uint8_t* event_buf = header_buffer - event_size + 1;
+    if (event_buf < buffer_start) {
         return RPROFREP_STATUS_INVALID_EVENT("Event size exceeds group buffer\n");
     }
+    
+    uint8_t* next_header_buffer = event_buf - 1;
+    
+    // TODO 27/08/2026 : next_event_off may be negative if the next event is not in the same group. This should be handled properly.
+    ssize_t  next_event_off = next_header_buffer - buffer_start;
 
     // The next event, whatever its group, must start with the magic byte
-    if (next_event_buf < global_buffer + global_buffer_size && next_event_buf[0] != 0xc1) {
+    if (next_header_buffer >= global_buffer && *next_header_buffer != 0xc1) {
         return RPROFREP_STATUS_INVALID_EVENT("The next event is not valid");
     }
 
@@ -132,14 +145,13 @@ rprofrep_status_t rprofrep_get_event(
     uint64_t dur   = __read_mp_uint(event_buf, &offset);
 
     if (!rprofrep_filter_event(filter, start, start + dur, dur)) {
-        if (next_event_buf < buffer_stop) {
+        if (next_header_buffer < buffer_stop && next_event_off > 0) {
             return rprofrep_get_event(ctx, group, next_event_off, filter, out_event, cursor);
         }
         return RPROFREP_STATUS_SUCCESS;
     }
 
-    rprofrep_cid_tuple_t cid = __read_mp_cid(event_buf, &offset);
-
+    uint64_t cid = __read_mp_cid(event_buf, &offset);
     int64_t rank = -1;
     RPROFREP_CHECK_CALL(rprofrep_get_rank(ctx, &rank));
 
@@ -193,7 +205,7 @@ rprofrep_status_t rprofrep_get_event(
     out_event->loc_id   = loc_id;
     out_event->extra_id = extra_id;
     out_event->args     = event_buf + offset;
-    out_event->args_len = (event_hdr_size + event_size) - offset;
+    out_event->args_len = event_size - offset;
 
     return RPROFREP_STATUS_SUCCESS;
 }

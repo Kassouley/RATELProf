@@ -19,7 +19,6 @@ rprofrep_status_t rprofrep_write_global_section(rprofrep_encode_context_t* ctx, 
     (void) data;
     
     size_t i = 0;
-    ratelprof_lifecycle_t* lc = ratelprof_get_lifecycle();
 
     msgpack_buffer_t buf = {0};
     msgpack_init(&buf, 0xFFFF, MSGPACK_OVERFLOW_WRITE_TO_FILE, filename);
@@ -33,17 +32,17 @@ rprofrep_status_t rprofrep_write_global_section(rprofrep_encode_context_t* ctx, 
     msgpack_encode_uint(&buf, RATELPROF_VERSION_PATCH);
 
     // Encode experiment start
-    msgpack_encode_uint(&buf, ratelprof_get_timestamp_ns(lc->experiment_start_epoch));
+    msgpack_encode_uint(&buf, ratelprof_get_experiment_start_epoch());
 
     // Encode lifecycle stop time (first start is 0 and other start are prev stop)
     for (i = 0; i < RATELPROF_NB_PHASE; i++)
     {
-        ratelprof_time_t t = ratelprof_get_timestamp_ns(lc->phase_stop_ts[i]);
-        msgpack_encode_uint(&buf, ratelprof_get_normalized_time(t));
+        msgpack_encode_uint(&buf, ratelprof_get_phase_time(i));
     }
 
     
     // Encode main data
+    ratelprof_lifecycle_t* lc = ratelprof_get_lifecycle();
     msgpack_encode_int(&buf, lc->main_data.retval);
     msgpack_encode_uint(&buf, lc->main_data.argc);
     for (i = 0; i < lc->main_data.argc; i++)

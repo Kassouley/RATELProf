@@ -79,6 +79,7 @@ SET_GETTER(sub_unit, sub_unit,  number)
 SET_GETTER(tid,      sub_unit,  number)
 SET_GETTER(queue_id, sub_unit,  number)
 SET_GETTER(id,       id,        number)
+SET_GETTER(cid,      cid,       number)
 SET_GETTER(start,    start,     number)
 SET_GETTER(dur,      dur,       number)
 SET_GETTER(extra_id, extra_id,  number)
@@ -200,6 +201,7 @@ static const struct luaL_Reg l_event_methods[] = {
     register_class_method(event, sdma_id),
     register_class_method(event, gpu_channel),
     register_class_method(event, id),
+    register_class_method(event, cid),
     register_class_method(event, start),
     register_class_method(event, dur),
     register_class_method(event, stop),
@@ -644,7 +646,7 @@ static int l_context_get_correlated_event(lua_State* L) {
     rprofrep_decode_context_t *ctx = rprofrep_lua_get_context(L, 1);
     rprofrep_event_data_t *e       = rprofrep_lua_get_event(L, 2);
 
-    if (!e->cid.valid) {
+    if (e->cid == 0) {
         lua_pushnil(L);
         return 1;
     } 
@@ -652,8 +654,8 @@ static int l_context_get_correlated_event(lua_State* L) {
     rprofrep_event_data_t* cid_event = NULL;
     rprofrep_event_data_t tmp = {0};
 
-    rprofrep_lua_check(L, rprofrep_get_event_by_cid(ctx, &e->cid, &tmp),
-        "failed to get event from cid {off: %lu, group: %lu}", e->cid.offset, e->cid.group_id);
+    rprofrep_lua_check(L, rprofrep_get_event_by_cid(ctx, e->cid, &tmp),
+        "failed to get event from cid %lu", e->cid);
 
     if (!tmp.valid) {
         lua_pushnil(L);

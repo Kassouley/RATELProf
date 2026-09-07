@@ -25,7 +25,7 @@ typedef struct rprofref_event_data_s {
     uint64_t id;
     uint64_t start;
     uint64_t dur;  
-    rprofrep_cid_tuple_t cid;
+    uint64_t cid;
     uint64_t loc_id;
     union {
         rprofrep_api_data_entry_t* api_data;
@@ -81,7 +81,7 @@ rprofrep_status_t rprofrep_find_entry_point_event(
  * @param ctx Input of type `rprofrep_decode_context_t` used to store the context of the report. 
 
  * @param cid The `cid` parameter in the `rprofrep_get_event_by_cid` function is of type
- * `rprofrep_cid_tuple_t*`. Structure that contains the group ID and offset within that group of the correlated event.
+ * `uint64_t`. It represents the correlation ID of the event to retrieve.
  * 
  * @param out_event This parameter is used to store the event data that is
  * retrieved by the function `rprofrep_get_event_by_cid`.
@@ -90,7 +90,7 @@ rprofrep_status_t rprofrep_find_entry_point_event(
  */
 rprofrep_status_t rprofrep_get_event_by_cid(
     rprofrep_decode_context_t* ctx, 
-    rprofrep_cid_tuple_t* cid,
+    uint64_t cid,
     rprofrep_event_data_t* out_event);
 
 
