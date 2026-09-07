@@ -10,6 +10,8 @@
 #include "ref/rprofrep_reference.h"
 #include "ref/rprofrep_api_reference.h"
 
+#include "sections/rprofrep_section_cid.h"
+
 #include "structure/cid_stack.h"
 
 #include "rprofrep_event_pool_buffer.h"
@@ -64,47 +66,32 @@ void rprofrep_msgpack_ext_encode_kernel(
     msgpack_encode_uint(buf, ref);
 }
 
-
 void rprofrep_msgpack_ext_encode_cid(
-    rprofrep_encode_context_t* ctx, 
-    msgpack_buffer_t* buf, 
-    uint64_t evt_id,
-    uint64_t evt_cid,
-    rprofrep_buffer_entry_t* buffer_entry
+    msgpack_buffer_t *buf, 
+    uint64_t cid
 ) {
-    rprofrep_cid_manager_t* cid_stack = ctx->cid_stack;
-    rprofrep_cid_entry_t cid_entry = {0};
-    while (stack_peek(cid_stack, &cid_entry)) {
-        if (cid_entry.id == evt_cid) {
-            msgpack_encode_ext(buf, MSGPACK_EXT_CID, NULL, 1);
-            msgpack_encode_uint(buf, cid_entry.group_id);
-            msgpack_encode_uint(buf, cid_entry.event_off);
-            break;
-        }
-        stack_pop(cid_stack, &cid_entry);
+    if (cid != 0) {
+        size_t len = (64 - __builtin_clzll(cid) + 7) / 8;
+        msgpack_encode_ext(buf, MSGPACK_EXT_CID, (const uint8_t *)&cid, len);
     }
-
-    rprofrep_cid_entry_t new_entry = {
-        evt_id,
-        buffer_entry->id,
-        msgpack_size(&buffer_entry->buffer)
-    };
-    stack_push(cid_stack, new_entry);
-    return;
 }
 
 void rprofrep_msgpack_ext_encode_event(
+    rprofrep_encode_context_t* ctx,
     rprofrep_buffer_entry_t* entry,
-    msgpack_buffer_t* event_buffer
+    size_t event_size,
+    uint64_t id,
+    bool has_children
 ) {
     msgpack_buffer_t* buf = &entry->buffer;
     entry->nb_events++;
 
+    msgpack_reverse_encode_uint(buf, event_size);
     msgpack_push_byte(buf, 0xc1);
-    msgpack_encode_uint(buf, msgpack_size(event_buffer));
-    msgpack_concat(buf, event_buffer);
 
-    msgpack_free(event_buffer);
+    if (has_children) {
+        rprofrep_cid_write_new_entry(ctx, id, entry->id, msgpack_size(buf));
+    }
 }
 
 void rprofrep_msgpack_ext_encode_args(

@@ -10,12 +10,6 @@
 
 #include "rprofrep_defs.h"
 
-typedef struct rprofrep_cid_tuple_s {
-    bool valid;
-    uint64_t group_id;
-    uint64_t offset;
-} rprofrep_cid_tuple_t;
-
 typedef struct rprofrep_report_section_s {
     bool is_decoded;
     void* data;

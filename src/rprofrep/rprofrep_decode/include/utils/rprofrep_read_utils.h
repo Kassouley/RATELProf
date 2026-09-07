@@ -19,7 +19,6 @@
 } while(0)
 
 
-
 // Read byte from buffer
 static inline uint8_t __read_byte(const uint8_t* buf, size_t* off) {
     return (uint8_t) buf[(*off)++];
@@ -29,7 +28,6 @@ static inline uint8_t __read_byte(const uint8_t* buf, size_t* off) {
 static inline uint8_t __read_uint8(const uint8_t* buf, size_t* off) {
     return __read_byte(buf, off);
 }
-
 
 static inline uint16_t __read_uint16(const uint8_t* buf, size_t* off) {
     uint16_t v;
@@ -166,20 +164,55 @@ static inline char* __read_mp_string(const uint8_t* buf, size_t* off) {
 }
 
 
-static inline rprofrep_cid_tuple_t __read_mp_cid(const uint8_t* buf, size_t* off) {
-    rprofrep_cid_tuple_t cid = {0};
+static inline uint64_t __read_mp_cid(const uint8_t* buf, size_t* off) {
+    uint64_t cid = 0;
     uint8_t b    = __read_byte(buf, off);
+    uint64_t len  = 0;
+    switch (b) {
+        case 0xd4: len = 1;  break; // fixext 1
+        case 0xd5: len = 2;  break; // fixext 2
+        case 0xd6: len = 4;  break; // fixext 4
+        case 0xd7: len = 8;  break; // fixext 8
+        default:
+            (*off)--;
+            return cid;
+    }
+
     uint8_t type = __read_int8(buf, off);
 
-    if (b != 0xd4 || type != MSGPACK_EXT_CID) {
-        *off -= 2;
+    if (type != MSGPACK_EXT_CID) {
+        (*off) -= 2;
         return cid;
     }
 
-    cid.valid = true;
-    cid.group_id = __read_mp_uint(buf, off);
-    cid.offset   = __read_mp_uint(buf, off);
+    memcpy(&cid, buf + *off, len);
+    (*off) += len;
+
     return cid;
+}
+
+static inline uint8_t bread8(uint8_t **buf)
+{
+    return *(*buf)--;
+}
+
+static inline uint16_t bread16(uint8_t **buf)
+{
+    return (uint16_t)bread8(buf)
+         | ((uint16_t)bread8(buf) << 8);
+}
+
+static inline uint32_t bread32(uint8_t **buf)
+{
+    return (uint32_t)bread16(buf)
+         | ((uint32_t)bread8(buf) << 16)
+         | ((uint32_t)bread8(buf) << 24);
+}
+
+static inline uint64_t bread64(uint8_t **buf)
+{
+    return (uint64_t)bread32(buf)
+         | ((uint64_t)bread32(buf) << 32);
 }
 
 

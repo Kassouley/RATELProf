@@ -28,6 +28,7 @@ static inline const char* get_section_name(rprofrep_section_id_t section_id) {
         case RPROFREP_SECTION_KERNEL:       return "Kernel";            break;
         case RPROFREP_SECTION_GPU_SPEC:     return "GPU Specification"; break;
         case RPROFREP_SECTION_OFFSETS:      return "Offsets";           break;
+        case RPROFREP_SECTION_CID:          return "CID";               break;
         case RPROFREP_SECTION_EVENTS:       return "Events";            break;
         default: return "Unknown"; break;
     }

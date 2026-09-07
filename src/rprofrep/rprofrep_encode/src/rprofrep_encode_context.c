@@ -16,8 +16,6 @@
 #include "rprofrep_event_pool_buffer.h"
 #include "rprofrep_encode_context.h"
 
-#include "structure/cid_stack.h"
-
 rprofrep_status_t rprofrep_encode_context_init(
     rprofrep_encode_context_t** ctx, 
     const char* context_id, const char* report_name)
@@ -41,10 +39,6 @@ rprofrep_status_t rprofrep_encode_context_init(
     
     RPROFREP_CHECK_CALL(rprofrep_init_event_pool_buffer(&c->event_pool));
 
-    if(stack_init(&c->cid_stack, 16) == false) {
-        return RPROFREP_STATUS_ALLOC_FAILED("Cannot allocated stack\n");
-    }
-
     RPROFREP_CHECK_CALL(rprofrep_concatenator_init(&c->concatenator, report_name));
 
     rprofrep_init_argument_manager(&c->arg_manager);
@@ -65,6 +59,7 @@ rprofrep_status_t rprofrep_encode_context_destroy(rprofrep_encode_context_t* ctx
         RPROFREP_SECTION_LOCATION,
         RPROFREP_SECTION_STRING,
         RPROFREP_SECTION_KERNEL,
+        RPROFREP_SECTION_CID,
         RPROFREP_SECTION_API_DATA,
         RPROFREP_SECTION_OFFSETS
     };
@@ -80,7 +75,6 @@ rprofrep_status_t rprofrep_encode_context_destroy(rprofrep_encode_context_t* ctx
     }
     
     rprofrep_destroy_event_pool_buffer(ctx->event_pool);
-    stack_free(ctx->cid_stack);
 
     char cmd[256];
     snprintf(cmd, sizeof(cmd), "rm -rf %s", ctx->exp_tmp_dir);

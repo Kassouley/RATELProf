@@ -21,6 +21,7 @@
 #include "sections/rprofrep_section_api_data.h"
 #include "sections/rprofrep_section_offsets.h"
 #include "sections/rprofrep_section_kernel.h"
+#include "sections/rprofrep_section_cid.h"
 
 #include "sections/rprofrep_section_ref.h"
 #include "sections/rprofrep_report_section.h"
@@ -47,6 +48,7 @@ static section_data_decoder_t __rprofrep_decode_section[RPROFREP_NB_SECTIONS] = 
     [RPROFREP_SECTION_API_DATA] = (section_data_decoder_t) rprofrep_decode_api_data_section,
     [RPROFREP_SECTION_KERNEL]   = (section_data_decoder_t) rprofrep_decode_kernel_section,
     [RPROFREP_SECTION_OFFSETS]  = (section_data_decoder_t) rprofrep_decode_offsets_section,
+    [RPROFREP_SECTION_CID]      = (section_data_decoder_t) rprofrep_decode_cid_section,
     [RPROFREP_SECTION_EVENTS]   = (section_data_decoder_t) default_decoder,
 };
 
@@ -59,6 +61,7 @@ static section_data_destroyer_t __rprofrep_destroy_section[RPROFREP_NB_SECTIONS]
     [RPROFREP_SECTION_API_DATA] = (section_data_destroyer_t) rprofrep_free_api_data_section,
     [RPROFREP_SECTION_KERNEL]   = (section_data_destroyer_t) rprofrep_free_kernel_section,
     [RPROFREP_SECTION_OFFSETS]  = (section_data_destroyer_t) rprofrep_free_offsets_section,
+    [RPROFREP_SECTION_CID]      = (section_data_destroyer_t) rprofrep_free_cid_section,
     [RPROFREP_SECTION_EVENTS]   = (section_data_destroyer_t) rprofrep_free_events_section,
 };
 
@@ -71,6 +74,7 @@ static size_t __rprofprep_section_size[RPROFREP_NB_SECTIONS] = {
     [RPROFREP_SECTION_API_DATA] = sizeof(rprofrep_ref_section_t),
     [RPROFREP_SECTION_KERNEL]   = sizeof(rprofrep_ref_section_t),
     [RPROFREP_SECTION_OFFSETS]  = sizeof(rprofrep_offsets_section_t),
+    [RPROFREP_SECTION_CID]      = sizeof(rprofrep_cid_section_t),
     [RPROFREP_SECTION_EVENTS]   = sizeof(rprofrep_events_section_t),
 };
 

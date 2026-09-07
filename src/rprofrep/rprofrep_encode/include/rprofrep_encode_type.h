@@ -17,7 +17,6 @@ struct rprofrep_encode_context_s
     rprofrep_concatenator_t concatenator;
 
     rprofrep_buffer_pool_t* event_pool;
-    rprofrep_cid_manager_t* cid_stack;
 
     rprofrep_argument_manager_t arg_manager;
 

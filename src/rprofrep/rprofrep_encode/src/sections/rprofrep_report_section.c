@@ -6,6 +6,7 @@
 #include "sections/rprofrep_section_gpu_spec.h"
 #include "sections/rprofrep_section_offsets.h"
 #include "sections/rprofrep_section_global.h"
+#include "sections/rprofrep_section_cid.h"
 
 #include "ref/rprofrep_reference.h"
 #include "ref/rprofrep_api_reference.h"
@@ -42,6 +43,7 @@ SCT_ENTRY(LOCATION, "location_section", rprofrep_init_ref_section,        rprofr
 SCT_ENTRY(GPU_SPEC, "gpu_spec_section", NULL,                             rprofrep_write_gpu_spec_section,                  NULL,                           0),
 SCT_ENTRY(API_DATA, "api_data_section", rprofrep_init_api_data_section,   rprofrep_write_api_data_section,                  rprofrep_free_api_data_section, sizeof(rprofrep_api_data_ref_t)),
 SCT_ENTRY(KERNEL,   "kernel_section",   rprofrep_init_ref_section,        rprofrep_write_ref_section,                       rprofrep_free_ref_section,      sizeof(rprofrep_reference_t)),
+SCT_ENTRY(CID,      "cid_section",      rprofrep_init_cid_section,        rprofrep_write_cid_section,                       rprofrep_free_cid_section,      sizeof(rprofrep_cid_section_t)),
 SCT_ENTRY(OFFSETS,  "offsets_section",  NULL,                             rprofrep_write_offsets_and_concat_events_section, NULL,                           0),
 SCT_ENTRY(EVENTS,   NULL,               NULL,                             NULL,                                             NULL,                           0),
 };
