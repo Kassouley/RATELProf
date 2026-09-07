@@ -44,6 +44,8 @@ static size_t global_id_counter = 1;
  */
 static pthread_key_t thread_stack_key;
 
+#define RATELPROF_CHILD_BIT (1ULL << 63)
+#define RATELPROF_ID_MASK   (~RATELPROF_CHILD_BIT)
 
 // Destructor function that will be called when the thread exits
 void cleanup_stack(void* s)
@@ -99,48 +101,48 @@ ratelprof_status_t get_id(uint64_t *id)
     pthread_mutex_lock(&id_mutex);
     *id = global_id_counter++;
     pthread_mutex_unlock(&id_mutex);
+
+    uint64_t event = *id & RATELPROF_ID_MASK;
     
     RATELPROF_TRY(
-        ratelprof_stack_push(s, *id),
+        ratelprof_stack_push(s, event),
         LOG(LOG_LEVEL_ERROR, "Failed to push an ID onto stack. %s (code %d)\n", get_error_string(status), status)
     );
     return status;
 }
 
-// Pop an ID from the current thread's stack
-ratelprof_status_t pop_id(void)
+// Get the next correlation ID for the global thread
+ratelprof_status_t get_correlation_id(uint64_t *corr_id, bool* has_children)
 {
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
     ratelprof_stack_t* s;
+    
+    uint64_t event;
+    uint64_t* parent;
     
     RATELPROF_TRY(
         get_thread_stack(&s),
         LOG(LOG_LEVEL_FATAL, "Failed to get thread specific ID stack. %s (code %d)\n", get_error_string(status), status)
     );
-    
-    uint64_t e;
+
     RATELPROF_TRY(
-        ratelprof_stack_pop(s, &e),
+        ratelprof_stack_pop(s, &event),
         LOG(LOG_LEVEL_ERROR, "Failed to pop an ID from stack. %s (code %d)\n", get_error_string(status), status)
     );
-    return status;
-}
 
-// Get the next correlation ID for the global thread
-ratelprof_status_t get_correlation_id(uint64_t *corr_id)
-{
-    ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
-    ratelprof_stack_t* s;
+    if (has_children) *has_children = (event & RATELPROF_CHILD_BIT) != 0;
     
     RATELPROF_TRY(
-        get_thread_stack(&s),
-        LOG(LOG_LEVEL_FATAL, "Failed to get thread specific ID stack. %s (code %d)\n", get_error_string(status), status)
-    );
-    
-    RATELPROF_TRY(
-        ratelprof_stack_peek(s, corr_id),
+        ratelprof_stack_peek(s, &parent),
         LOG(LOG_LEVEL_ERROR, "Failed to peek a correlation ID from stack. %s (code %d)\n", get_error_string(status), status)
     );
+    
+    *corr_id = *parent & RATELPROF_ID_MASK;
+
+    if (*corr_id != 0) {
+        *parent |= RATELPROF_CHILD_BIT;
+    }
+
     return status;
 }
 

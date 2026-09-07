@@ -144,39 +144,13 @@ ratelprof_status_t get_id(uint64_t *id);
 
 
 /**
- * @brief Pops a globally unique ID from the thread-local stack.
- *
- * This function pops the top ID from the thread-local stack. It ensures that the 
- * stack is initialized for the current thread by calling `get_thread_stack`. If the stack is 
- * empty, an error status will be returned.
- *
- * @return RATELPROF_STATUS_SUCCESS The ID was successfully popped from the stack.
- * @return RATELPROF_STATUS_STACK_NOT_INIT The stack is not init or null.
- * @return RATELPROF_STATUS_STACK_IS_EMPTY The stack is empty, and no ID could be popped.
- *
- * @note The function relies on thread-local storage (TLS) to manage the stack. It ensures that each 
- *       thread operates on its own stack, without interference from other threads.
- * 
- * @example
- * ```c
- * ratelprof_status_t status = pop_id();
- * if (status == RATELPROF_STATUS_SUCCESS) {
- *     printf("Successfully popped an ID.\n");
- * } else {
- *     printf("Failed to pop ID.\n");
- * }
- * ```
- */
-ratelprof_status_t pop_id(void);
-
-
-/**
  * @brief Retrieves the correlation ID from the top of the thread-local stack.
  *
  * This function peeks at the top element of the thread-local stack to retrieve the correlation ID 
  * associated with the current thread, without modifying the stack.
  *
  * @param[out] corr_id Pointer to a `uint64_t` variable where the correlation ID will be stored.
+ * @param[out] has_children Pointer to a `bool` variable that will be set to true if the current event has children, false otherwise.
  *
  * @return RATELPROF_STATUS_SUCCESS The correlation ID was successfully retrieved.
  * @return RATELPROF_STATUS_STACK_NOT_INIT The stack is not init or null.
@@ -188,15 +162,17 @@ ratelprof_status_t pop_id(void);
  * @example
  * ```c
  * uint64_t corr_id;
- * ratelprof_status_t status = get_correlation_id(&corr_id);
+ * bool has_children;
+ * ratelprof_status_t status = get_correlation_id(&corr_id, &has_children);
  * if (status == RATELPROF_STATUS_SUCCESS) {
  *     printf("Retrieved correlation ID: %lld\n", corr_id);
+ *     printf("Has children: %s\n", has_children ? "true" : "false");
  * } else {
  *     printf("Failed to retrieve correlation ID.\n");
  * }
  * ```
  */
-ratelprof_status_t get_correlation_id(uint64_t *corr_id);
+ratelprof_status_t get_correlation_id(uint64_t *corr_id, bool* has_children);
 
 
 /**
