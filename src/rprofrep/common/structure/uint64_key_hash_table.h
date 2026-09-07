@@ -9,11 +9,16 @@
 /* =========================
    Key / Value Structures
    ========================= */
+#ifndef HT_VALUE_TYPE
+#define HT_VALUE_TYPE uint64_t
+#endif
 
-#define HT_DEFAULT_VALUE (uint64_t)(-1)
+#ifndef HT_DEFAULT_VALUE
+#define HT_DEFAULT_VALUE (HT_VALUE_TYPE)(-1)
+#endif
 
 typedef uint64_t ht_key_t;
-typedef uint64_t ht_value_t;
+typedef HT_VALUE_TYPE ht_value_t;
 
 /* =========================
    Hash + Compare
