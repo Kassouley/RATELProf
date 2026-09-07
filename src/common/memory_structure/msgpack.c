@@ -224,156 +224,384 @@ int msgpack_write(msgpack_buffer_t *buf) {
 }
 
 
-void msgpack_encode_int(msgpack_buffer_t *buf, int64_t value) {
+int msgpack_encode_int(msgpack_buffer_t *buf, int64_t value) {
     __msgpack_reserve(buf, 9);
     if (value >= 0) {
         msgpack_encode_uint(buf, (uint64_t)value);
+        return 1;
     } else if (value >= -32) {
         __msgpack_write_1_bytes(buf, value);
+        return 1;
     } else if (value >= INT8_MIN) {
         __msgpack_write_1_bytes(buf, 0xd0);
         __msgpack_write_1_bytes(buf, value);
+        return 2;
     } else if (value >= INT16_MIN) {
         __msgpack_write_1_bytes(buf, 0xd1);
         __msgpack_write_2_bytes(buf, value);
+        return 3;
     } else if (value >= INT32_MIN) {
         __msgpack_write_1_bytes(buf, 0xd2);
         __msgpack_write_4_bytes(buf, value);
+        return 5;
     } else {
         __msgpack_write_1_bytes(buf, 0xd3);
         __msgpack_write_8_bytes(buf, value);
+        return 9;
     }
-    return;
+    return 0;
 }
 
-void msgpack_encode_uint(msgpack_buffer_t *buf, uint64_t value) {
+
+int msgpack_reverse_encode_int(msgpack_buffer_t *buf, int64_t value) {
+    __msgpack_reserve(buf, 9);
+    if (value >= 0) {
+        msgpack_reverse_encode_uint(buf, (uint64_t)value);
+        return 1;
+    } else if (value >= -32) {
+        __msgpack_write_1_bytes(buf, value);
+        return 1;
+    } else if (value >= INT8_MIN) {
+        __msgpack_write_1_bytes(buf, value);
+        __msgpack_write_1_bytes(buf, 0xd0);
+        return 2;
+    } else if (value >= INT16_MIN) {
+        __msgpack_write_2_bytes(buf, value);
+        __msgpack_write_1_bytes(buf, 0xd1);
+        return 3;
+    } else if (value >= INT32_MIN) {
+        __msgpack_write_4_bytes(buf, value);
+        __msgpack_write_1_bytes(buf, 0xd2);
+        return 5;
+    } else {
+        __msgpack_write_8_bytes(buf, value);
+        __msgpack_write_1_bytes(buf, 0xd3);
+        return 9;
+    }
+    return 0;
+}
+
+
+int msgpack_encode_uint(msgpack_buffer_t *buf, uint64_t value) {
     __msgpack_reserve(buf, 9);
     if (value < 128) {
         __msgpack_write_1_bytes(buf, value);
+        return 1;
     } else if (value <= UINT8_MAX) {
         __msgpack_write_1_bytes(buf, 0xcc);
         __msgpack_write_1_bytes(buf, value);
+        return 2;
     } else if (value <= UINT16_MAX) {
         __msgpack_write_1_bytes(buf, 0xcd);
         __msgpack_write_2_bytes(buf, value);
+        return 3;
     } else if (value <= UINT32_MAX) {
         __msgpack_write_1_bytes(buf, 0xce);
         __msgpack_write_4_bytes(buf, value);
+        return 5;
     } else {
         __msgpack_write_1_bytes(buf, 0xcf);
         __msgpack_write_8_bytes(buf, value);
+        return 9;
     }
-    return;
+    return 0;
 }
 
-void msgpack_encode_float(msgpack_buffer_t *buf, float value) {
+
+int msgpack_reverse_encode_uint(msgpack_buffer_t *buf, uint64_t value) {
+    __msgpack_reserve(buf, 9);
+    if (value < 128) {
+        __msgpack_write_1_bytes(buf, value);
+        return 1;
+    } else if (value <= UINT8_MAX) {
+        __msgpack_write_1_bytes(buf, value);
+        __msgpack_write_1_bytes(buf, 0xcc);
+        return 2;
+    } else if (value <= UINT16_MAX) {
+        __msgpack_write_2_bytes(buf, value);
+        __msgpack_write_1_bytes(buf, 0xcd);
+        return 3;
+    } else if (value <= UINT32_MAX) {
+        __msgpack_write_4_bytes(buf, value);
+        __msgpack_write_1_bytes(buf, 0xce);
+        return 5;
+    } else {
+        __msgpack_write_8_bytes(buf, value);
+        __msgpack_write_1_bytes(buf, 0xcf);
+        return 9;
+    }
+    return 0;
+}
+
+
+int msgpack_encode_float(msgpack_buffer_t *buf, float value) {
     __msgpack_reserve(buf, 5);
     __msgpack_write_1_bytes(buf, 0xca);
     uint32_t v;
     memcpy(&v, &value, sizeof(v));
     __msgpack_write_4_bytes(buf, v);
-    return;
+    return 5;
 }
 
-void msgpack_encode_double(msgpack_buffer_t *buf, double value) {
+
+int msgpack_reverse_encode_float(msgpack_buffer_t *buf, float value) {
+    __msgpack_reserve(buf, 5);
+    uint32_t v;
+    memcpy(&v, &value, sizeof(v));
+    __msgpack_write_4_bytes(buf, v);
+    __msgpack_write_1_bytes(buf, 0xca);
+    return 5;
+}
+
+
+int msgpack_encode_double(msgpack_buffer_t *buf, double value) {
     __msgpack_reserve(buf, 9);
     __msgpack_write_1_bytes(buf, 0xcb);
     uint64_t v;
     memcpy(&v, &value, sizeof(v));
     __msgpack_write_8_bytes(buf, v);
-    return;
+    return 9;
 }
 
-void msgpack_encode_bool(msgpack_buffer_t *buf, bool value) {
+
+int msgpack_reverse_encode_double(msgpack_buffer_t *buf, double value) {
+    __msgpack_reserve(buf, 9);
+    uint64_t v;
+    memcpy(&v, &value, sizeof(v));
+    __msgpack_write_8_bytes(buf, v);
+    __msgpack_write_1_bytes(buf, 0xcb);
+    return 9;
+}
+
+int msgpack_encode_bool(msgpack_buffer_t *buf, bool value) {
     __msgpack_reserve(buf, 1);
     __msgpack_write_1_bytes(buf, value ? 0xc3 : 0xc2);
-    return;
+    return 1;
 }
 
-void msgpack_encode_nil(msgpack_buffer_t *buf) {
+int msgpack_encode_nil(msgpack_buffer_t *buf) {
     __msgpack_reserve(buf, 1);
     __msgpack_write_1_bytes(buf, 0xc0);
-    return;
+    return 1;
 }
 
-void msgpack_encode_string(msgpack_buffer_t *buf, const char *str) {
+int msgpack_encode_string(msgpack_buffer_t *buf, const char *str) {
     size_t len = strlen(str);
+    size_t written_bytes = 0;
     __msgpack_reserve(buf, len + 5);
 
     if (len < 32) {
         __msgpack_write_1_bytes(buf, 0xa0 | (uint8_t)len);  // fixstr
+        written_bytes = len + 1;
     } else if (len <= 0xff) {
         __msgpack_write_1_bytes(buf, 0xd9);                 // str8
         __msgpack_write_1_bytes(buf, len);
+        written_bytes = len + 2;
     } else if (len <= 0xffff) {
         __msgpack_write_1_bytes(buf, 0xda);                 // str16
         __msgpack_write_2_bytes(buf, len);
-    } else {
+        written_bytes = len + 3;
+    } else if (len <= 0xffffffff) {
         __msgpack_write_1_bytes(buf, 0xdb);                 // str32
         __msgpack_write_4_bytes(buf, len);
+        written_bytes = len + 5;
+    } else {
+        return 0;
     }
     __msgpack_write_n_bytes(buf, str, len);
-    return;
+    return written_bytes;
+}
+
+int msgpack_reverse_encode_string(msgpack_buffer_t *buf, const char *str) {
+    size_t len = strlen(str);
+    size_t written_bytes = 0;
+    __msgpack_reserve(buf, len + 5);
+
+    __msgpack_write_n_bytes(buf, str, len);
+
+    if (len < 32) {
+        __msgpack_write_1_bytes(buf, 0xa0 | (uint8_t)len);  // fixstr
+        written_bytes = len + 1;
+    } else if (len <= 0xff) {
+        __msgpack_write_1_bytes(buf, len);
+        __msgpack_write_1_bytes(buf, 0xd9);                 // str8
+        written_bytes = len + 2;
+    } else if (len <= 0xffff) {
+        __msgpack_write_2_bytes(buf, len);
+        __msgpack_write_1_bytes(buf, 0xda);                 // str16
+        written_bytes = len + 3;
+    } else if (len <= 0xffffffff) {
+        __msgpack_write_4_bytes(buf, len);
+        __msgpack_write_1_bytes(buf, 0xdb);                 // str32
+        written_bytes = len + 5;
+    }
+
+    return written_bytes;
 }
 
 
-void msgpack_encode_array(msgpack_buffer_t *buf, size_t count) {
+
+int msgpack_encode_array(msgpack_buffer_t *buf, size_t count) {
     __msgpack_reserve(buf, 5);
     if (count < 16) {
         __msgpack_write_1_bytes(buf, 0x90 | (uint8_t)count);
-    } else if (count <= UINT16_MAX) {
+        return 1;
+    } else if (count <= 0xffff) {
         __msgpack_write_1_bytes(buf, 0xdc);
         __msgpack_write_2_bytes(buf, count);
-    } else {
+        return 3;
+    } else if (count <= 0xffffffff) {
         __msgpack_write_1_bytes(buf, 0xdd);
         __msgpack_write_4_bytes(buf, count);
+        return 5;
     }
-    return;
+    return 0;
 }
 
-void msgpack_encode_map(msgpack_buffer_t *buf, size_t count) {
+
+int msgpack_reverse_encode_array(msgpack_buffer_t *buf, size_t count) {
+    __msgpack_reserve(buf, 5);
+    if (count < 16) {
+        __msgpack_write_1_bytes(buf, 0x90 | (uint8_t)count);
+        return 1;
+    } else if (count <= 0xffff) {
+        __msgpack_write_2_bytes(buf, count);
+        __msgpack_write_1_bytes(buf, 0xdc);
+        return 3;
+    } else if (count <= 0xffffffff) {
+        __msgpack_write_4_bytes(buf, count);
+        __msgpack_write_1_bytes(buf, 0xdd);
+        return 5;
+    }
+    return 0;
+}
+
+
+int msgpack_encode_map(msgpack_buffer_t *buf, size_t count) {
     __msgpack_reserve(buf, 5);
     if (count < 16) {
         __msgpack_write_1_bytes(buf, 0x80 | (uint8_t)count);
-    } else if (count <= UINT16_MAX) {
+        return 1;
+    } else if (count <= 0xffff) {
         __msgpack_write_1_bytes(buf, 0xde);
         __msgpack_write_2_bytes(buf, count);
-    } else {
+        return 3;
+    } else if (count <= 0xffffffff) {
         __msgpack_write_1_bytes(buf, 0xdf);
         __msgpack_write_4_bytes(buf, count);
+        return 5;
     }
-    return;
+    return 0;
 }
 
-void msgpack_encode_ext(msgpack_buffer_t *buf, int8_t type, const uint8_t *data, size_t len) {
+
+int msgpack_reverse_encode_map(msgpack_buffer_t *buf, size_t count) {
+    __msgpack_reserve(buf, 5);
+    if (count < 16) {
+        __msgpack_write_1_bytes(buf, 0x80 | (uint8_t)count);
+        return 1;
+    } else if (count <= 0xffff) {
+        __msgpack_write_2_bytes(buf, count);
+        __msgpack_write_1_bytes(buf, 0xde);
+        return 3;
+    } else if (count <= 0xffffffff) {
+        __msgpack_write_4_bytes(buf, count);
+        __msgpack_write_1_bytes(buf, 0xdf);
+        return 5;
+    }
+    return 0;
+}
+
+
+int msgpack_encode_ext(msgpack_buffer_t *buf, int8_t type, const uint8_t *data, size_t len) {
     __msgpack_reserve(buf, len + 6);
-    
+    size_t written_bytes = 0;
+
     if (len == 0) {
-        return ;
+        return 0;
     } else if (len == 1) {
         __msgpack_write_1_bytes(buf, 0xd4);
+        written_bytes = 1;
     } else if (len == 2) {
         __msgpack_write_1_bytes(buf, 0xd5);
-    } else if (len == 4) {
+        written_bytes = 1;
+        } else if (len == 4) {
         __msgpack_write_1_bytes(buf, 0xd6);
+        written_bytes = 1;
     } else if (len == 8) {
         __msgpack_write_1_bytes(buf, 0xd7);
+        written_bytes = 1;
     } else if (len == 16) {
         __msgpack_write_1_bytes(buf, 0xd8);
+        written_bytes = 1;
     } else if (len <= 0xFF) {
         __msgpack_write_1_bytes(buf, 0xc7);
         __msgpack_write_1_bytes(buf, len);
+        written_bytes = 2;
     } else if (len <= 0xFFFF) {
         __msgpack_write_1_bytes(buf, 0xc8);
         __msgpack_write_2_bytes(buf, len);
+        written_bytes = 3;
     } else if (len <= 0xFFFFFFFF){
         __msgpack_write_1_bytes(buf, 0xc9);
         __msgpack_write_4_bytes(buf, len);
+        written_bytes = 5;
+    } else {
+        return 0;
     }
 
     __msgpack_write_1_bytes(buf, type);
+    written_bytes += 1;
     if (data) {
         __msgpack_write_n_bytes(buf, data, len);
+        written_bytes += len;
     }
-    return;
+    return written_bytes;
+}
+
+
+int msgpack_reverse_encode_ext(msgpack_buffer_t *buf, int8_t type, const uint8_t *data, size_t len) {
+    __msgpack_reserve(buf, len + 6);
+    size_t written_bytes = 0;
+
+    if (data) {
+        __msgpack_write_n_bytes(buf, data, len);
+        written_bytes += len;
+    }
+
+    __msgpack_write_1_bytes(buf, type);
+    written_bytes += 1;
+
+    if (len == 0) {
+        return 0;
+    } else if (len == 1) {
+        __msgpack_write_1_bytes(buf, 0xd4);
+        written_bytes += 1;
+    } else if (len == 2) {
+        __msgpack_write_1_bytes(buf, 0xd5);
+        written_bytes += 1;
+        } else if (len == 4) {
+        __msgpack_write_1_bytes(buf, 0xd6);
+        written_bytes += 1;
+    } else if (len == 8) {
+        __msgpack_write_1_bytes(buf, 0xd7);
+        written_bytes += 1;
+    } else if (len == 16) {
+        __msgpack_write_1_bytes(buf, 0xd8);
+        written_bytes += 1;
+    } else if (len <= 0xFF) {
+        __msgpack_write_1_bytes(buf, len);
+        __msgpack_write_1_bytes(buf, 0xc7);
+        written_bytes += 2;
+    } else if (len <= 0xFFFF) {
+        __msgpack_write_2_bytes(buf, len);
+        __msgpack_write_1_bytes(buf, 0xc8);
+        written_bytes += 3;
+    } else if (len <= 0xFFFFFFFF){
+        __msgpack_write_4_bytes(buf, len);
+        __msgpack_write_1_bytes(buf, 0xc9);
+        written_bytes += 5;
+    } 
+
+    return written_bytes;
 }
