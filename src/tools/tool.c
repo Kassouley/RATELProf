@@ -113,13 +113,14 @@ ratelprof_status_t onLoad()
     void* user_args = NULL;
     if (plugin_manager.get_activity_callback)
         plugin_manager.get_activity_callback(plugin, &activity_callback, &user_args);
-
     ratelprof_pool_properties_t props = {
         .activity_callback = activity_callback,
         .activity_callback_user_args = user_args,
-        .buffer_size = envtoll("RATELPROF_BUFFER_SIZE", 0x200000)
+        .chunk_size = envtoll("RATELPROF_POOL_CHUNK_SIZE", 0xfff),
+        .capacity = envtoll("RATELPROF_POOL_CAPACITY", 0xfff)
     };
-    ratelprof_activity_pool_init(&props);
+
+    ratelprof_activity_pool_init(props);
 
     LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Starting profiling . . .\n");
     ratelprof_start();
@@ -135,17 +136,17 @@ void onExit()
     if (is_main_rank()) printf("\n");
     LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Profiling finished.\n");
 
-    LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Flushing activities . . .\r");
+    // LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Flushing activities . . .\r");
     
-    size_t nactivities = 0;
-    ratelprof_timespec_t flushed_start = ratelprof_get_curr_timespec();
-    ratelprof_status_t status = ratelprof_activity_pool_flush_activities(&nactivities);
-    ratelprof_timespec_t flushed_end = ratelprof_get_curr_timespec();
-    if (status == (ratelprof_status_t)RATELPROF_STATUS_NO_CALLBACK_SET) {
-        LOG(LOG_LEVEL_WARN, "Activity callback not setted.\n");
-    } else if (status != RATELPROF_STATUS_SUCCESS) {
-        LOG(LOG_LEVEL_FATAL, "Failed to flush activity pool.\n");
-    }
+    // size_t nactivities = 0;
+    // ratelprof_clock_t flushed_start = ratelprof_get_clock_now();
+    // ratelprof_status_t status = ratelprof_activity_pool_flush_activities(&nactivities);
+    // ratelprof_clock_t flushed_end = ratelprof_get_clock_now();
+    // if (status == (ratelprof_status_t)RATELPROF_STATUS_NO_CALLBACK_SET) {
+    //     LOG(LOG_LEVEL_WARN, "Activity callback not setted.\n");
+    // } else if (status != RATELPROF_STATUS_SUCCESS) {
+    //     LOG(LOG_LEVEL_FATAL, "Failed to flush activity pool.\n");
+    // }
 
     if (ratelprof_activity_pool_fini())
         LOG(LOG_LEVEL_FATAL, "Failed to finalize activity pool.\n");
@@ -153,12 +154,12 @@ void onExit()
     plugin_manager.plugin_finalize(&plugin);
     close_plugin_manager(&plugin_manager);
 
-    ratelprof_time_t flushed_start_ms = ratelprof_get_timestamp_ms(flushed_start);
-    ratelprof_time_t flushed_end_ms = ratelprof_get_timestamp_ms(flushed_end);
-    ratelprof_time_t flushed_dur = flushed_end_ms - flushed_start_ms;
-    float flushed_dur_per_event = (float)flushed_dur / (float)nactivities;
+    // ratelprof_time_t flushed_start_ms = ratelprof_get_time_ms(flushed_start);
+    // ratelprof_time_t flushed_end_ms = ratelprof_get_time_ms(flushed_end);
+    // ratelprof_time_t flushed_dur = flushed_end_ms - flushed_start_ms;
+    // float flushed_dur_per_event = (float)flushed_dur / (float)nactivities;
 
-    LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Flushed %lu activities in %lu ms (%.5f ms/event).\n", nactivities, flushed_dur, flushed_dur_per_event);
+    // LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Flushed %lu activities in %lu ms (%.5f ms/event).\n", nactivities, flushed_dur, flushed_dur_per_event);
 
 
     ratelprof_time_t constructor_time  = ratelprof_get_constructor_time() / 1e6;
@@ -185,7 +186,7 @@ void handle_signal(int sig) {
     raise(sig);
 }
 
-__attribute__((constructor(101))) void init(void) 
+__attribute__((constructor(102))) void init(void) 
 {
     // signal(SIGSEGV, handle_signal); // segmentation fault
     // signal(SIGABRT, handle_signal); // abort()
