@@ -82,6 +82,10 @@ ratelprof_status_t __ratelprof_init_impl(unsigned int ndomains)
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
     RATELPROF_TRY(init_id_system());
 
+    RATELPROF_TRY(ratelprof_memory_pool_init(),
+        LOG(LOG_LEVEL_ERROR, "Failed to initialize memory pool. %s (code %d)\n", get_error_string(status), status)
+    );
+
 	for (int i = 0; i < RATELPROF_NB_DOMAIN; i++)
 	{
         if (domains_data[i].nb_function == 0 || domains_data[i].api_table_addr == NULL) {
@@ -111,6 +115,10 @@ ratelprof_status_t __ratelprof_fini_impl(void)
 {
     cleanup_id_system();
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
+
+    RATELPROF_TRY(ratelprof_memory_pool_fini(),
+        LOG(LOG_LEVEL_ERROR, "Failed to finalize memory pool. %s (code %d)\n", get_error_string(status), status)
+    );
     
 	for (int i = 0; i < RATELPROF_NB_DOMAIN; i++) {
 		RATELPROF_TRY(

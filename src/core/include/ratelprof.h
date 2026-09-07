@@ -35,6 +35,7 @@
 #include "ratelprof/ratelprof_lifecycle.h"
 #include "ratelprof/ratelprof_source_location.h"
 #include "ratelprof/ratelprof_status.h"
+#include "ratelprof/ratelprof_memory_pool.h"
 
 #define RATELPROF_PUBLIC_API __attribute__((weak))
 
@@ -107,6 +108,10 @@ typedef struct ratelprof_api_activity_s  {
      */
     uint64_t corr_id;
 
+    /** @brief Flag indicating whether the activity has children.
+     */
+    bool has_children;
+
     /**
      * @brief Process ID that triggered the activity.
      * 
@@ -126,14 +131,14 @@ typedef struct ratelprof_api_activity_s  {
      * 
      * The timestamp when the API activity began.
      */
-    ratelprof_timespec_t start_time;
+    ratelprof_clock_t start_time;
 
     /**
      * @brief Stop time of the API activity.
      * 
      * The timestamp when the API activity ended.
      */
-    ratelprof_timespec_t stop_time;
+    ratelprof_clock_t stop_time;
 
     /**
      * @brief Return address of the API activity.

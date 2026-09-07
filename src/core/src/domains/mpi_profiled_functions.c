@@ -11,21 +11,21 @@
 #include "domains/minimal_abi/mpi_minimal_abi.h" 
 
 #define CALL(func, ...) { \
-    __mpi_activity->start_time = ratelprof_get_curr_timespec(); \
+    __mpi_activity->start_time = ratelprof_get_clock_now(); \
 	((__##func##_t)mpi_api_table.api_fn[MPI_API_ID_##func])(__VA_ARGS__); \
-    __mpi_activity->stop_time = ratelprof_get_curr_timespec(); \
+    __mpi_activity->stop_time = ratelprof_get_clock_now(); \
 };
 
 #define CALL_RET(ret_type, func, ...) \
-    __mpi_activity->start_time = ratelprof_get_curr_timespec(); \
+    __mpi_activity->start_time = ratelprof_get_clock_now(); \
 	ret_type __mpi_ret = (ret_type)((__##func##_t)mpi_api_table.api_fn[MPI_API_ID_##func])(__VA_ARGS__); \
-    __mpi_activity->stop_time = ratelprof_get_curr_timespec(); \
+    __mpi_activity->stop_time = ratelprof_get_clock_now(); \
 	args_##func##_t* __args = (args_##func##_t*)__mpi_activity->args; \
 	__args->retval = (ret_type)__mpi_ret; 
 
 
 MPI_Comm i_MPI_Comm_f2c(int comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_f2c_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_f2c_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_f2c, __mpi_activity);
@@ -36,7 +36,7 @@ MPI_Comm i_MPI_Comm_f2c(int comm, void* return_address) {
 };
 
 MPI_Datatype i_MPI_Type_f2c(int datatype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_f2c_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_f2c_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_f2c, __mpi_activity);
@@ -47,7 +47,7 @@ MPI_Datatype i_MPI_Type_f2c(int datatype, void* return_address) {
 };
 
 MPI_Errhandler i_MPI_Errhandler_f2c(int errhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Errhandler_f2c_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Errhandler_f2c_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Errhandler_f2c, __mpi_activity);
@@ -58,7 +58,7 @@ MPI_Errhandler i_MPI_Errhandler_f2c(int errhandler, void* return_address) {
 };
 
 MPI_File i_MPI_File_f2c(int file, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_f2c_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_f2c_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_f2c, __mpi_activity);
@@ -69,7 +69,7 @@ MPI_File i_MPI_File_f2c(int file, void* return_address) {
 };
 
 MPI_Group i_MPI_Group_f2c(int group, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_f2c_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_f2c_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_f2c, __mpi_activity);
@@ -80,7 +80,7 @@ MPI_Group i_MPI_Group_f2c(int group, void* return_address) {
 };
 
 MPI_Info i_MPI_Info_f2c(int info, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_f2c_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_f2c_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_f2c, __mpi_activity);
@@ -91,7 +91,7 @@ MPI_Info i_MPI_Info_f2c(int info, void* return_address) {
 };
 
 MPI_Message i_MPI_Message_f2c(int message, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Message_f2c_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Message_f2c_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Message_f2c, __mpi_activity);
@@ -102,7 +102,7 @@ MPI_Message i_MPI_Message_f2c(int message, void* return_address) {
 };
 
 MPI_Op i_MPI_Op_f2c(int op, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Op_f2c_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Op_f2c_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Op_f2c, __mpi_activity);
@@ -113,7 +113,7 @@ MPI_Op i_MPI_Op_f2c(int op, void* return_address) {
 };
 
 MPI_Request i_MPI_Request_f2c(int request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Request_f2c_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Request_f2c_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Request_f2c, __mpi_activity);
@@ -124,7 +124,7 @@ MPI_Request i_MPI_Request_f2c(int request, void* return_address) {
 };
 
 MPI_Session i_MPI_Session_f2c(int session, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_f2c_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_f2c_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_f2c, __mpi_activity);
@@ -135,7 +135,7 @@ MPI_Session i_MPI_Session_f2c(int session, void* return_address) {
 };
 
 MPI_Win i_MPI_Win_f2c(int win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_f2c_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_f2c_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_f2c, __mpi_activity);
@@ -146,7 +146,7 @@ MPI_Win i_MPI_Win_f2c(int win, void* return_address) {
 };
 
 double i_MPI_Wtime(void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Wtime_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Wtime_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Wtime, __mpi_activity);
@@ -156,7 +156,7 @@ double i_MPI_Wtime(void* return_address) {
 };
 
 double i_MPI_Wtick(void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Wtick_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Wtick_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Wtick, __mpi_activity);
@@ -166,7 +166,7 @@ double i_MPI_Wtick(void* return_address) {
 };
 
 int i_MPI_Sendrecv_replace(void * buf, int count, MPI_Datatype datatype, int dest, int sendtag, int source, int recvtag, MPI_Comm comm, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Sendrecv_replace_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Sendrecv_replace_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Sendrecv_replace, __mpi_activity);
@@ -177,7 +177,7 @@ int i_MPI_Sendrecv_replace(void * buf, int count, MPI_Datatype datatype, int des
 };
 
 int i_MPI_Intercomm_create_from_groups(MPI_Group local_group, int local_leader, MPI_Group remote_group, int remote_leader, const char * tag, MPI_Info info, MPI_Errhandler errhandler, MPI_Comm * newintercomm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Intercomm_create_from_groups_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Intercomm_create_from_groups_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Intercomm_create_from_groups, __mpi_activity);
@@ -188,7 +188,7 @@ int i_MPI_Intercomm_create_from_groups(MPI_Group local_group, int local_leader, 
 };
 
 int i_MPI_Win_call_errhandler(MPI_Win win, int errorcode, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_call_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_call_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_call_errhandler, __mpi_activity);
@@ -199,7 +199,7 @@ int i_MPI_Win_call_errhandler(MPI_Win win, int errorcode, void* return_address) 
 };
 
 int i_MPI_File_iread(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iread_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iread_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_iread, __mpi_activity);
@@ -210,7 +210,7 @@ int i_MPI_File_iread(MPI_File fh, void * buf, int count, MPI_Datatype datatype, 
 };
 
 int i_MPI_Init(int * argc, char *** argv, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Init, __mpi_activity);
@@ -221,7 +221,7 @@ int i_MPI_Init(int * argc, char *** argv, void* return_address) {
 };
 
 int i_MPI_Win_free_keyval(int * win_keyval, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_free_keyval_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_free_keyval_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	GET_ARGS_VALUE_MPI_Win_free_keyval(__mpi_activity);
@@ -232,7 +232,7 @@ int i_MPI_Win_free_keyval(int * win_keyval, void* return_address) {
 };
 
 int i_MPI_Group_size(MPI_Group group, int * size, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_size_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_size_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_size, __mpi_activity);
@@ -243,7 +243,7 @@ int i_MPI_Group_size(MPI_Group group, int * size, void* return_address) {
 };
 
 int i_MPI_Pcontrol(const int level, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pcontrol_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pcontrol_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Pcontrol, __mpi_activity);
@@ -254,7 +254,7 @@ int i_MPI_Pcontrol(const int level, void* return_address) {
 };
 
 int i_MPI_Win_shared_query(MPI_Win win, int rank, MPI_Aint * size, int * disp_unit, void * baseptr, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_shared_query_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_shared_query_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_shared_query, __mpi_activity);
@@ -265,7 +265,7 @@ int i_MPI_Win_shared_query(MPI_Win win, int rank, MPI_Aint * size, int * disp_un
 };
 
 int i_MPI_Barrier(MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Barrier_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Barrier_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Barrier, __mpi_activity);
@@ -276,7 +276,7 @@ int i_MPI_Barrier(MPI_Comm comm, void* return_address) {
 };
 
 int i_MPI_Testany(int count, MPI_Request array_of_requests[], int * index, int * flag, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Testany_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Testany_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Testany, __mpi_activity);
@@ -287,7 +287,7 @@ int i_MPI_Testany(int count, MPI_Request array_of_requests[], int * index, int *
 };
 
 int i_MPI_Iexscan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iexscan_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iexscan_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Iexscan, __mpi_activity);
@@ -298,7 +298,7 @@ int i_MPI_Iexscan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype 
 };
 
 int i_MPI_Op_free(MPI_Op * op, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Op_free_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Op_free_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	GET_ARGS_VALUE_MPI_Op_free(__mpi_activity);
@@ -309,7 +309,7 @@ int i_MPI_Op_free(MPI_Op * op, void* return_address) {
 };
 
 int i_MPI_Comm_spawn(const char * command, char * argv[], int maxprocs, MPI_Info info, int root, MPI_Comm comm, MPI_Comm * intercomm, int array_of_errcodes[], void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_spawn_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_spawn_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_spawn, __mpi_activity);
@@ -320,7 +320,7 @@ int i_MPI_Comm_spawn(const char * command, char * argv[], int maxprocs, MPI_Info
 };
 
 int i_MPI_Testsome(int incount, MPI_Request array_of_requests[], int * outcount, int array_of_indices[], MPI_Status array_of_statuses[], void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Testsome_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Testsome_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Testsome, __mpi_activity);
@@ -331,7 +331,7 @@ int i_MPI_Testsome(int incount, MPI_Request array_of_requests[], int * outcount,
 };
 
 int i_MPI_File_iread_at_all(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iread_at_all_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iread_at_all_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_iread_at_all, __mpi_activity);
@@ -342,7 +342,7 @@ int i_MPI_File_iread_at_all(MPI_File fh, MPI_Offset offset, void * buf, int coun
 };
 
 int i_MPI_Win_create_dynamic(MPI_Info info, MPI_Comm comm, MPI_Win * win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_create_dynamic_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_create_dynamic_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_create_dynamic, __mpi_activity);
@@ -353,7 +353,7 @@ int i_MPI_Win_create_dynamic(MPI_Info info, MPI_Comm comm, MPI_Win * win, void* 
 };
 
 int i_MPI_Session_call_errhandler(MPI_Session session, int errorcode, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_call_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_call_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_call_errhandler, __mpi_activity);
@@ -364,7 +364,7 @@ int i_MPI_Session_call_errhandler(MPI_Session session, int errorcode, void* retu
 };
 
 int i_MPI_Errhandler_free(MPI_Errhandler * errhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Errhandler_free_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Errhandler_free_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	GET_ARGS_VALUE_MPI_Errhandler_free(__mpi_activity);
@@ -375,7 +375,7 @@ int i_MPI_Errhandler_free(MPI_Errhandler * errhandler, void* return_address) {
 };
 
 int i_MPI_Status_set_elements(MPI_Status * status, MPI_Datatype datatype, int count, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_set_elements_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_set_elements_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_set_elements, __mpi_activity);
@@ -386,7 +386,7 @@ int i_MPI_Status_set_elements(MPI_Status * status, MPI_Datatype datatype, int co
 };
 
 int i_MPI_Win_free(MPI_Win * win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_free_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_free_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	GET_ARGS_VALUE_MPI_Win_free(__mpi_activity);
@@ -397,7 +397,7 @@ int i_MPI_Win_free(MPI_Win * win, void* return_address) {
 };
 
 int i_MPI_Keyval_free(int * keyval, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Keyval_free_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Keyval_free_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	GET_ARGS_VALUE_MPI_Keyval_free(__mpi_activity);
@@ -408,7 +408,7 @@ int i_MPI_Keyval_free(int * keyval, void* return_address) {
 };
 
 int i_MPI_Win_create(void * base, MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, MPI_Win * win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_create_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_create_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_create, __mpi_activity);
@@ -419,7 +419,7 @@ int i_MPI_Win_create(void * base, MPI_Aint size, int disp_unit, MPI_Info info, M
 };
 
 int i_MPI_Message_c2f(MPI_Message message, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Message_c2f_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Message_c2f_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Message_c2f, __mpi_activity);
@@ -430,7 +430,7 @@ int i_MPI_Message_c2f(MPI_Message message, void* return_address) {
 };
 
 int i_MPI_Abort(MPI_Comm comm, int errorcode, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Abort_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Abort_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Abort, __mpi_activity);
@@ -441,7 +441,7 @@ int i_MPI_Abort(MPI_Comm comm, int errorcode, void* return_address) {
 };
 
 int i_MPI_File_read_all_begin(MPI_File fh, void * buf, int count, MPI_Datatype datatype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_all_begin_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_all_begin_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_read_all_begin, __mpi_activity);
@@ -452,7 +452,7 @@ int i_MPI_File_read_all_begin(MPI_File fh, void * buf, int count, MPI_Datatype d
 };
 
 int i_MPI_Group_difference(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_difference_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_difference_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_difference, __mpi_activity);
@@ -463,7 +463,7 @@ int i_MPI_Group_difference(MPI_Group group1, MPI_Group group2, MPI_Group * newgr
 };
 
 int i_MPI_Comm_dup(MPI_Comm comm, MPI_Comm * newcomm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_dup_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_dup_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_dup, __mpi_activity);
@@ -474,7 +474,7 @@ int i_MPI_Comm_dup(MPI_Comm comm, MPI_Comm * newcomm, void* return_address) {
 };
 
 int i_MPI_Add_error_string(int errorcode, const char * string, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Add_error_string_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Add_error_string_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Add_error_string, __mpi_activity);
@@ -485,7 +485,7 @@ int i_MPI_Add_error_string(int errorcode, const char * string, void* return_addr
 };
 
 int i_MPI_Comm_c2f(MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_c2f_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_c2f_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_c2f, __mpi_activity);
@@ -496,7 +496,7 @@ int i_MPI_Comm_c2f(MPI_Comm comm, void* return_address) {
 };
 
 int i_MPI_Test(MPI_Request * request, int * flag, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Test_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Test_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Test, __mpi_activity);
@@ -507,7 +507,7 @@ int i_MPI_Test(MPI_Request * request, int * flag, MPI_Status * status, void* ret
 };
 
 int i_MPI_File_iwrite_shared(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iwrite_shared_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iwrite_shared_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_iwrite_shared, __mpi_activity);
@@ -518,7 +518,7 @@ int i_MPI_File_iwrite_shared(MPI_File fh, const void * buf, int count, MPI_Datat
 };
 
 int i_MPI_Initialized(int * flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Initialized_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Initialized_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Initialized, __mpi_activity);
@@ -529,7 +529,7 @@ int i_MPI_Initialized(int * flag, void* return_address) {
 };
 
 int i_MPI_Get_library_version(char * version, int * resultlen, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_library_version_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_library_version_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Get_library_version, __mpi_activity);
@@ -540,7 +540,7 @@ int i_MPI_Get_library_version(char * version, int * resultlen, void* return_addr
 };
 
 int i_MPI_Win_flush_all(MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_flush_all_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_flush_all_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_flush_all, __mpi_activity);
@@ -551,7 +551,7 @@ int i_MPI_Win_flush_all(MPI_Win win, void* return_address) {
 };
 
 int i_MPI_Win_c2f(MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_c2f_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_c2f_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_c2f, __mpi_activity);
@@ -562,7 +562,7 @@ int i_MPI_Win_c2f(MPI_Win win, void* return_address) {
 };
 
 int i_MPI_Testall(int count, MPI_Request array_of_requests[], int * flag, MPI_Status array_of_statuses[], void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Testall_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Testall_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Testall, __mpi_activity);
@@ -573,7 +573,7 @@ int i_MPI_Testall(int count, MPI_Request array_of_requests[], int * flag, MPI_St
 };
 
 int i_MPI_Gather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Gather_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Gather_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Gather, __mpi_activity);
@@ -584,7 +584,7 @@ int i_MPI_Gather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, voi
 };
 
 int i_MPI_Win_detach(MPI_Win win, const void * base, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_detach_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_detach_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_detach, __mpi_activity);
@@ -595,7 +595,7 @@ int i_MPI_Win_detach(MPI_Win win, const void * base, void* return_address) {
 };
 
 int i_MPI_Cart_create(MPI_Comm old_comm, int ndims, const int dims[], const int periods[], int reorder, MPI_Comm * comm_cart, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cart_create_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cart_create_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Cart_create, __mpi_activity);
@@ -606,7 +606,7 @@ int i_MPI_Cart_create(MPI_Comm old_comm, int ndims, const int dims[], const int 
 };
 
 int i_MPI_Comm_split_type(MPI_Comm comm, int split_type, int key, MPI_Info info, MPI_Comm * newcomm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_split_type_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_split_type_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_split_type, __mpi_activity);
@@ -617,7 +617,7 @@ int i_MPI_Comm_split_type(MPI_Comm comm, int split_type, int key, MPI_Info info,
 };
 
 int i_MPI_Win_allocate_shared(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void * baseptr, MPI_Win * win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_allocate_shared_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_allocate_shared_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_allocate_shared, __mpi_activity);
@@ -628,7 +628,7 @@ int i_MPI_Win_allocate_shared(MPI_Aint size, int disp_unit, MPI_Info info, MPI_C
 };
 
 int i_MPI_Get(void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Get, __mpi_activity);
@@ -639,7 +639,7 @@ int i_MPI_Get(void * origin_addr, int origin_count, MPI_Datatype origin_datatype
 };
 
 int i_MPI_Win_set_errhandler(MPI_Win win, MPI_Errhandler errhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_set_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_set_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_set_errhandler, __mpi_activity);
@@ -650,7 +650,7 @@ int i_MPI_Win_set_errhandler(MPI_Win win, MPI_Errhandler errhandler, void* retur
 };
 
 int i_MPI_Type_get_name(MPI_Datatype type, char * type_name, int * resultlen, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_name_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_name_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_get_name, __mpi_activity);
@@ -661,7 +661,7 @@ int i_MPI_Type_get_name(MPI_Datatype type, char * type_name, int * resultlen, vo
 };
 
 int i_MPI_Comm_create_group(MPI_Comm comm, MPI_Group group, int tag, MPI_Comm * newcomm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_create_group_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_create_group_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_create_group, __mpi_activity);
@@ -672,7 +672,7 @@ int i_MPI_Comm_create_group(MPI_Comm comm, MPI_Group group, int tag, MPI_Comm * 
 };
 
 int i_MPI_File_get_type_extent(MPI_File fh, MPI_Datatype datatype, MPI_Aint * extent, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_type_extent_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_type_extent_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_get_type_extent, __mpi_activity);
@@ -683,7 +683,7 @@ int i_MPI_File_get_type_extent(MPI_File fh, MPI_Datatype datatype, MPI_Aint * ex
 };
 
 int i_MPI_Neighbor_allgatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_allgatherv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_allgatherv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Neighbor_allgatherv, __mpi_activity);
@@ -694,7 +694,7 @@ int i_MPI_Neighbor_allgatherv(const void * sendbuf, int sendcount, MPI_Datatype 
 };
 
 int i_MPI_Graphdims_get(MPI_Comm comm, int * nnodes, int * nedges, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Graphdims_get_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Graphdims_get_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Graphdims_get, __mpi_activity);
@@ -705,7 +705,7 @@ int i_MPI_Graphdims_get(MPI_Comm comm, int * nnodes, int * nedges, void* return_
 };
 
 int i_MPI_Reduce(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Reduce_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Reduce_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Reduce, __mpi_activity);
@@ -716,7 +716,7 @@ int i_MPI_Reduce(const void * sendbuf, void * recvbuf, int count, MPI_Datatype d
 };
 
 int i_MPI_Keyval_create(MPI_Copy_function * copy_fn, MPI_Delete_function * delete_fn, int * keyval, void * extra_state, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Keyval_create_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Keyval_create_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Keyval_create, __mpi_activity);
@@ -727,7 +727,7 @@ int i_MPI_Keyval_create(MPI_Copy_function * copy_fn, MPI_Delete_function * delet
 };
 
 int i_MPI_Barrier_init(MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Barrier_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Barrier_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Barrier_init, __mpi_activity);
@@ -738,7 +738,7 @@ int i_MPI_Barrier_init(MPI_Comm comm, MPI_Info info, MPI_Request * request, void
 };
 
 int i_MPI_Type_set_attr(MPI_Datatype type, int type_keyval, void * attr_val, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_set_attr_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_set_attr_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_set_attr, __mpi_activity);
@@ -749,7 +749,7 @@ int i_MPI_Type_set_attr(MPI_Datatype type, int type_keyval, void * attr_val, voi
 };
 
 int i_MPI_Pack_external_size(const char datarep[], int incount, MPI_Datatype datatype, MPI_Aint * size, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pack_external_size_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pack_external_size_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Pack_external_size, __mpi_activity);
@@ -760,7 +760,7 @@ int i_MPI_Pack_external_size(const char datarep[], int incount, MPI_Datatype dat
 };
 
 int i_MPI_Session_get_num_psets(MPI_Session session, MPI_Info info, int * npset_names, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_get_num_psets_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_get_num_psets_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_get_num_psets, __mpi_activity);
@@ -771,7 +771,7 @@ int i_MPI_Session_get_num_psets(MPI_Session session, MPI_Info info, int * npset_
 };
 
 int i_MPI_File_get_group(MPI_File fh, MPI_Group * group, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_group_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_group_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_get_group, __mpi_activity);
@@ -782,7 +782,7 @@ int i_MPI_File_get_group(MPI_File fh, MPI_Group * group, void* return_address) {
 };
 
 int i_MPI_Request_free(MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Request_free_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Request_free_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	GET_ARGS_VALUE_MPI_Request_free(__mpi_activity);
@@ -793,7 +793,7 @@ int i_MPI_Request_free(MPI_Request * request, void* return_address) {
 };
 
 int i_MPI_Pack_size(int incount, MPI_Datatype datatype, MPI_Comm comm, int * size, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pack_size_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pack_size_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Pack_size, __mpi_activity);
@@ -804,7 +804,7 @@ int i_MPI_Pack_size(int incount, MPI_Datatype datatype, MPI_Comm comm, int * siz
 };
 
 int i_MPI_File_iwrite_at(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iwrite_at_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iwrite_at_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_iwrite_at, __mpi_activity);
@@ -815,7 +815,7 @@ int i_MPI_File_iwrite_at(MPI_File fh, MPI_Offset offset, const void * buf, int c
 };
 
 int i_MPI_Win_create_keyval(MPI_Win_copy_attr_function * win_copy_attr_fn, MPI_Win_delete_attr_function * win_delete_attr_fn, int * win_keyval, void * extra_state, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_create_keyval_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_create_keyval_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_create_keyval, __mpi_activity);
@@ -826,7 +826,7 @@ int i_MPI_Win_create_keyval(MPI_Win_copy_attr_function * win_copy_attr_fn, MPI_W
 };
 
 int i_MPI_File_iwrite_at_all(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iwrite_at_all_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iwrite_at_all_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_iwrite_at_all, __mpi_activity);
@@ -837,7 +837,7 @@ int i_MPI_File_iwrite_at_all(MPI_File fh, MPI_Offset offset, const void * buf, i
 };
 
 int i_MPI_Cart_sub(MPI_Comm comm, const int remain_dims[], MPI_Comm * new_comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cart_sub_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cart_sub_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Cart_sub, __mpi_activity);
@@ -848,7 +848,7 @@ int i_MPI_Cart_sub(MPI_Comm comm, const int remain_dims[], MPI_Comm * new_comm, 
 };
 
 int i_MPI_File_read_at(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_at_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_at_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_read_at, __mpi_activity);
@@ -859,7 +859,7 @@ int i_MPI_File_read_at(MPI_File fh, MPI_Offset offset, void * buf, int count, MP
 };
 
 int i_MPI_Free_mem(void * base, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Free_mem_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Free_mem_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	GET_ARGS_VALUE_MPI_Free_mem(__mpi_activity);
@@ -870,7 +870,7 @@ int i_MPI_Free_mem(void * base, void* return_address) {
 };
 
 int i_MPI_File_read_at_all(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_at_all_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_at_all_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_read_at_all, __mpi_activity);
@@ -881,7 +881,7 @@ int i_MPI_File_read_at_all(MPI_File fh, MPI_Offset offset, void * buf, int count
 };
 
 int i_MPI_Comm_create(MPI_Comm comm, MPI_Group group, MPI_Comm * newcomm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_create_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_create_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_create, __mpi_activity);
@@ -892,7 +892,7 @@ int i_MPI_Comm_create(MPI_Comm comm, MPI_Group group, MPI_Comm * newcomm, void* 
 };
 
 int i_MPI_Dist_graph_neighbors_count(MPI_Comm comm, int * inneighbors, int * outneighbors, int * weighted, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Dist_graph_neighbors_count_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Dist_graph_neighbors_count_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Dist_graph_neighbors_count, __mpi_activity);
@@ -903,7 +903,7 @@ int i_MPI_Dist_graph_neighbors_count(MPI_Comm comm, int * inneighbors, int * out
 };
 
 int i_MPI_Group_translate_ranks(MPI_Group group1, int n, const int ranks1[], MPI_Group group2, int ranks2[], void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_translate_ranks_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_translate_ranks_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_translate_ranks, __mpi_activity);
@@ -914,7 +914,7 @@ int i_MPI_Group_translate_ranks(MPI_Group group1, int n, const int ranks1[], MPI
 };
 
 int i_MPI_Grequest_start(MPI_Grequest_query_function * query_fn, MPI_Grequest_free_function * free_fn, MPI_Grequest_cancel_function * cancel_fn, void * extra_state, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Grequest_start_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Grequest_start_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Grequest_start, __mpi_activity);
@@ -925,7 +925,7 @@ int i_MPI_Grequest_start(MPI_Grequest_query_function * query_fn, MPI_Grequest_fr
 };
 
 int i_MPI_Win_post(MPI_Group group, int mpi_assert, MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_post_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_post_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_post, __mpi_activity);
@@ -936,7 +936,7 @@ int i_MPI_Win_post(MPI_Group group, int mpi_assert, MPI_Win win, void* return_ad
 };
 
 int i_MPI_Type_size(MPI_Datatype type, int * size, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_size_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_size_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_size, __mpi_activity);
@@ -947,7 +947,7 @@ int i_MPI_Type_size(MPI_Datatype type, int * size, void* return_address) {
 };
 
 int i_MPI_Ireduce_scatter(const void * sendbuf, void * recvbuf, const int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ireduce_scatter_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ireduce_scatter_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ireduce_scatter, __mpi_activity);
@@ -958,7 +958,7 @@ int i_MPI_Ireduce_scatter(const void * sendbuf, void * recvbuf, const int recvco
 };
 
 int i_MPI_Dist_graph_create(MPI_Comm comm_old, int n, const int nodes[], const int degrees[], const int targets[], const int weights[], MPI_Info info, int reorder, MPI_Comm * newcomm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Dist_graph_create_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Dist_graph_create_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Dist_graph_create, __mpi_activity);
@@ -969,7 +969,7 @@ int i_MPI_Dist_graph_create(MPI_Comm comm_old, int n, const int nodes[], const i
 };
 
 int i_MPI_File_get_size(MPI_File fh, MPI_Offset * size, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_size_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_size_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_get_size, __mpi_activity);
@@ -980,7 +980,7 @@ int i_MPI_File_get_size(MPI_File fh, MPI_Offset * size, void* return_address) {
 };
 
 int i_MPI_Ineighbor_allgatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ineighbor_allgatherv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ineighbor_allgatherv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ineighbor_allgatherv, __mpi_activity);
@@ -991,7 +991,7 @@ int i_MPI_Ineighbor_allgatherv(const void * sendbuf, int sendcount, MPI_Datatype
 };
 
 int i_MPI_Waitsome(int incount, MPI_Request array_of_requests[], int * outcount, int array_of_indices[], MPI_Status array_of_statuses[], void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Waitsome_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Waitsome_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Waitsome, __mpi_activity);
@@ -1002,7 +1002,7 @@ int i_MPI_Waitsome(int incount, MPI_Request array_of_requests[], int * outcount,
 };
 
 int i_MPI_Iallreduce(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iallreduce_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iallreduce_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Iallreduce, __mpi_activity);
@@ -1013,7 +1013,7 @@ int i_MPI_Iallreduce(const void * sendbuf, void * recvbuf, int count, MPI_Dataty
 };
 
 int i_MPI_Reduce_init(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Reduce_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Reduce_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Reduce_init, __mpi_activity);
@@ -1024,7 +1024,7 @@ int i_MPI_Reduce_init(const void * sendbuf, void * recvbuf, int count, MPI_Datat
 };
 
 int i_MPI_File_c2f(MPI_File file, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_c2f_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_c2f_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_c2f, __mpi_activity);
@@ -1035,7 +1035,7 @@ int i_MPI_File_c2f(MPI_File file, void* return_address) {
 };
 
 int i_MPI_Type_create_keyval(MPI_Type_copy_attr_function * type_copy_attr_fn, MPI_Type_delete_attr_function * type_delete_attr_fn, int * type_keyval, void * extra_state, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_keyval_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_keyval_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_create_keyval, __mpi_activity);
@@ -1046,7 +1046,7 @@ int i_MPI_Type_create_keyval(MPI_Type_copy_attr_function * type_copy_attr_fn, MP
 };
 
 int i_MPI_Type_create_hindexed_block(int count, int blocklength, const MPI_Aint array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_hindexed_block_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_hindexed_block_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_create_hindexed_block, __mpi_activity);
@@ -1057,7 +1057,7 @@ int i_MPI_Type_create_hindexed_block(int count, int blocklength, const MPI_Aint 
 };
 
 int i_MPI_Type_create_indexed_block(int count, int blocklength, const int array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_indexed_block_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_indexed_block_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_create_indexed_block, __mpi_activity);
@@ -1068,7 +1068,7 @@ int i_MPI_Type_create_indexed_block(int count, int blocklength, const int array_
 };
 
 int i_MPI_Allreduce_init(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Allreduce_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Allreduce_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Allreduce_init, __mpi_activity);
@@ -1079,7 +1079,7 @@ int i_MPI_Allreduce_init(const void * sendbuf, void * recvbuf, int count, MPI_Da
 };
 
 int i_MPI_File_write_at_all(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_at_all_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_at_all_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_write_at_all, __mpi_activity);
@@ -1090,7 +1090,7 @@ int i_MPI_File_write_at_all(MPI_File fh, MPI_Offset offset, const void * buf, in
 };
 
 int i_MPI_Get_elements(const MPI_Status * status, MPI_Datatype datatype, int * count, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_elements_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_elements_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Get_elements, __mpi_activity);
@@ -1101,7 +1101,7 @@ int i_MPI_Get_elements(const MPI_Status * status, MPI_Datatype datatype, int * c
 };
 
 int i_MPI_Comm_accept(const char * port_name, MPI_Info info, int root, MPI_Comm comm, MPI_Comm * newcomm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_accept_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_accept_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_accept, __mpi_activity);
@@ -1112,7 +1112,7 @@ int i_MPI_Comm_accept(const char * port_name, MPI_Info info, int root, MPI_Comm 
 };
 
 int i_MPI_Info_delete(MPI_Info info, const char * key, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_delete_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_delete_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_delete, __mpi_activity);
@@ -1123,7 +1123,7 @@ int i_MPI_Info_delete(MPI_Info info, const char * key, void* return_address) {
 };
 
 int i_MPI_Bcast(void * buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Bcast_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Bcast_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Bcast, __mpi_activity);
@@ -1134,7 +1134,7 @@ int i_MPI_Bcast(void * buffer, int count, MPI_Datatype datatype, int root, MPI_C
 };
 
 int i_MPI_Graph_create(MPI_Comm comm_old, int nnodes, const int index[], const int edges[], int reorder, MPI_Comm * comm_graph, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Graph_create_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Graph_create_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Graph_create, __mpi_activity);
@@ -1145,7 +1145,7 @@ int i_MPI_Graph_create(MPI_Comm comm_old, int nnodes, const int index[], const i
 };
 
 int i_MPI_Op_create(MPI_User_function * function, int commute, MPI_Op * op, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Op_create_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Op_create_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Op_create, __mpi_activity);
@@ -1156,7 +1156,7 @@ int i_MPI_Op_create(MPI_User_function * function, int commute, MPI_Op * op, void
 };
 
 int i_MPI_Allgatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Allgatherv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Allgatherv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Allgatherv, __mpi_activity);
@@ -1167,7 +1167,7 @@ int i_MPI_Allgatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype,
 };
 
 int i_MPI_Comm_free_keyval(int * comm_keyval, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_free_keyval_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_free_keyval_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	GET_ARGS_VALUE_MPI_Comm_free_keyval(__mpi_activity);
@@ -1178,7 +1178,7 @@ int i_MPI_Comm_free_keyval(int * comm_keyval, void* return_address) {
 };
 
 int i_MPI_Cart_coords(MPI_Comm comm, int rank, int maxdims, int coords[], void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cart_coords_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cart_coords_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Cart_coords, __mpi_activity);
@@ -1189,7 +1189,7 @@ int i_MPI_Cart_coords(MPI_Comm comm, int rank, int maxdims, int coords[], void* 
 };
 
 int i_MPI_Isendrecv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, int dest, int sendtag, void * recvbuf, int recvcount, MPI_Datatype recvtype, int source, int recvtag, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Isendrecv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Isendrecv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Isendrecv, __mpi_activity);
@@ -1200,7 +1200,7 @@ int i_MPI_Isendrecv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, 
 };
 
 int i_MPI_Win_get_info(MPI_Win win, MPI_Info * info_used, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_get_info_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_get_info_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_get_info, __mpi_activity);
@@ -1211,7 +1211,7 @@ int i_MPI_Win_get_info(MPI_Win win, MPI_Info * info_used, void* return_address) 
 };
 
 int i_MPI_Graph_get(MPI_Comm comm, int maxindex, int maxedges, int index[], int edges[], void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Graph_get_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Graph_get_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Graph_get, __mpi_activity);
@@ -1222,7 +1222,7 @@ int i_MPI_Graph_get(MPI_Comm comm, int maxindex, int maxedges, int index[], int 
 };
 
 int i_MPI_Neighbor_allgather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_allgather_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_allgather_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Neighbor_allgather, __mpi_activity);
@@ -1233,7 +1233,7 @@ int i_MPI_Neighbor_allgather(const void * sendbuf, int sendcount, MPI_Datatype s
 };
 
 int i_MPI_File_write_all(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_all_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_all_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_write_all, __mpi_activity);
@@ -1244,7 +1244,7 @@ int i_MPI_File_write_all(MPI_File fh, const void * buf, int count, MPI_Datatype 
 };
 
 int i_MPI_Comm_size(MPI_Comm comm, int * size, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_size_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_size_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_size, __mpi_activity);
@@ -1255,7 +1255,7 @@ int i_MPI_Comm_size(MPI_Comm comm, int * size, void* return_address) {
 };
 
 int i_MPI_File_get_errhandler(MPI_File file, MPI_Errhandler * errhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_get_errhandler, __mpi_activity);
@@ -1266,7 +1266,7 @@ int i_MPI_File_get_errhandler(MPI_File file, MPI_Errhandler * errhandler, void* 
 };
 
 int i_MPI_Type_create_struct(int count, const int array_of_block_lengths[], const MPI_Aint array_of_displacements[], const MPI_Datatype array_of_types[], MPI_Datatype * newtype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_struct_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_struct_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_create_struct, __mpi_activity);
@@ -1277,7 +1277,7 @@ int i_MPI_Type_create_struct(int count, const int array_of_block_lengths[], cons
 };
 
 int i_MPI_File_set_atomicity(MPI_File fh, int flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_set_atomicity_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_set_atomicity_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_set_atomicity, __mpi_activity);
@@ -1288,7 +1288,7 @@ int i_MPI_File_set_atomicity(MPI_File fh, int flag, void* return_address) {
 };
 
 int i_MPI_Request_get_status(MPI_Request request, int * flag, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Request_get_status_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Request_get_status_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Request_get_status, __mpi_activity);
@@ -1299,7 +1299,7 @@ int i_MPI_Request_get_status(MPI_Request request, int * flag, MPI_Status * statu
 };
 
 int i_MPI_Get_accumulate(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, void * result_addr, int result_count, MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_accumulate_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_accumulate_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Get_accumulate, __mpi_activity);
@@ -1310,7 +1310,7 @@ int i_MPI_Get_accumulate(const void * origin_addr, int origin_count, MPI_Datatyp
 };
 
 int i_MPI_Win_get_group(MPI_Win win, MPI_Group * group, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_get_group_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_get_group_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_get_group, __mpi_activity);
@@ -1321,7 +1321,7 @@ int i_MPI_Win_get_group(MPI_Win win, MPI_Group * group, void* return_address) {
 };
 
 int i_MPI_Type_create_f90_complex(int p, int r, MPI_Datatype * newtype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_f90_complex_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_f90_complex_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_create_f90_complex, __mpi_activity);
@@ -1332,7 +1332,7 @@ int i_MPI_Type_create_f90_complex(int p, int r, MPI_Datatype * newtype, void* re
 };
 
 int i_MPI_Comm_spawn_multiple(int count, char * array_of_commands[], char ** array_of_argv[], const int array_of_maxprocs[], const MPI_Info array_of_info[], int root, MPI_Comm comm, MPI_Comm * intercomm, int array_of_errcodes[], void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_spawn_multiple_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_spawn_multiple_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_spawn_multiple, __mpi_activity);
@@ -1343,7 +1343,7 @@ int i_MPI_Comm_spawn_multiple(int count, char * array_of_commands[], char ** arr
 };
 
 int i_MPI_Probe(int source, int tag, MPI_Comm comm, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Probe_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Probe_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Probe, __mpi_activity);
@@ -1354,7 +1354,7 @@ int i_MPI_Probe(int source, int tag, MPI_Comm comm, MPI_Status * status, void* r
 };
 
 int i_MPI_Session_create_errhandler(MPI_Session_errhandler_function * session_errhandler_fn, MPI_Errhandler * errhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_create_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_create_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_create_errhandler, __mpi_activity);
@@ -1365,7 +1365,7 @@ int i_MPI_Session_create_errhandler(MPI_Session_errhandler_function * session_er
 };
 
 int i_MPI_File_get_position(MPI_File fh, MPI_Offset * offset, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_position_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_position_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_get_position, __mpi_activity);
@@ -1376,7 +1376,7 @@ int i_MPI_File_get_position(MPI_File fh, MPI_Offset * offset, void* return_addre
 };
 
 int i_MPI_Status_c2f(const MPI_Status * c_status, int * f_status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_c2f_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_c2f_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_c2f, __mpi_activity);
@@ -1387,7 +1387,7 @@ int i_MPI_Status_c2f(const MPI_Status * c_status, int * f_status, void* return_a
 };
 
 int i_MPI_Ineighbor_alltoallv(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ineighbor_alltoallv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ineighbor_alltoallv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ineighbor_alltoallv, __mpi_activity);
@@ -1398,7 +1398,7 @@ int i_MPI_Ineighbor_alltoallv(const void * sendbuf, const int sendcounts[], cons
 };
 
 int i_MPI_Status_set_elements_x(MPI_Status * status, MPI_Datatype datatype, MPI_Count count, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_set_elements_x_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_set_elements_x_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_set_elements_x, __mpi_activity);
@@ -1409,7 +1409,7 @@ int i_MPI_Status_set_elements_x(MPI_Status * status, MPI_Datatype datatype, MPI_
 };
 
 int i_MPI_Ialltoallv(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ialltoallv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ialltoallv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ialltoallv, __mpi_activity);
@@ -1420,7 +1420,7 @@ int i_MPI_Ialltoallv(const void * sendbuf, const int sendcounts[], const int sdi
 };
 
 int i_MPI_Get_processor_name(char * name, int * resultlen, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_processor_name_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_processor_name_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Get_processor_name, __mpi_activity);
@@ -1431,7 +1431,7 @@ int i_MPI_Get_processor_name(char * name, int * resultlen, void* return_address)
 };
 
 int i_MPI_Op_commutative(MPI_Op op, int * commute, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Op_commutative_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Op_commutative_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Op_commutative, __mpi_activity);
@@ -1442,7 +1442,7 @@ int i_MPI_Op_commutative(MPI_Op op, int * commute, void* return_address) {
 };
 
 int i_MPI_Ineighbor_allgather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ineighbor_allgather_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ineighbor_allgather_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ineighbor_allgather, __mpi_activity);
@@ -1453,7 +1453,7 @@ int i_MPI_Ineighbor_allgather(const void * sendbuf, int sendcount, MPI_Datatype 
 };
 
 int i_MPI_Comm_disconnect(MPI_Comm * comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_disconnect_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_disconnect_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_disconnect, __mpi_activity);
@@ -1464,7 +1464,7 @@ int i_MPI_Comm_disconnect(MPI_Comm * comm, void* return_address) {
 };
 
 int i_MPI_File_write_all_begin(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_all_begin_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_all_begin_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_write_all_begin, __mpi_activity);
@@ -1475,7 +1475,7 @@ int i_MPI_File_write_all_begin(MPI_File fh, const void * buf, int count, MPI_Dat
 };
 
 int i_MPI_Type_contiguous(int count, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_contiguous_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_contiguous_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_contiguous, __mpi_activity);
@@ -1486,7 +1486,7 @@ int i_MPI_Type_contiguous(int count, MPI_Datatype oldtype, MPI_Datatype * newtyp
 };
 
 int i_MPI_Comm_set_info(MPI_Comm comm, MPI_Info info, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_set_info_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_set_info_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_set_info, __mpi_activity);
@@ -1497,7 +1497,7 @@ int i_MPI_Comm_set_info(MPI_Comm comm, MPI_Info info, void* return_address) {
 };
 
 int i_MPI_Scatterv_init(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Scatterv_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Scatterv_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Scatterv_init, __mpi_activity);
@@ -1508,7 +1508,7 @@ int i_MPI_Scatterv_init(const void * sendbuf, const int sendcounts[], const int 
 };
 
 int i_MPI_Session_finalize(MPI_Session * session, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_finalize_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_finalize_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_finalize, __mpi_activity);
@@ -1519,7 +1519,7 @@ int i_MPI_Session_finalize(MPI_Session * session, void* return_address) {
 };
 
 int i_MPI_Dims_create(int nnodes, int ndims, int dims[], void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Dims_create_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Dims_create_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Dims_create, __mpi_activity);
@@ -1530,7 +1530,7 @@ int i_MPI_Dims_create(int nnodes, int ndims, int dims[], void* return_address) {
 };
 
 int i_MPI_Session_get_pset_info(MPI_Session session, const char * pset_name, MPI_Info * info_used, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_get_pset_info_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_get_pset_info_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_get_pset_info, __mpi_activity);
@@ -1541,7 +1541,7 @@ int i_MPI_Session_get_pset_info(MPI_Session session, const char * pset_name, MPI
 };
 
 int i_MPI_Iprobe(int source, int tag, MPI_Comm comm, int * flag, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iprobe_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iprobe_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Iprobe, __mpi_activity);
@@ -1552,7 +1552,7 @@ int i_MPI_Iprobe(int source, int tag, MPI_Comm comm, int * flag, MPI_Status * st
 };
 
 int i_MPI_Rput(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_cout, MPI_Datatype target_datatype, MPI_Win win, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Rput_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Rput_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Rput, __mpi_activity);
@@ -1563,7 +1563,7 @@ int i_MPI_Rput(const void * origin_addr, int origin_count, MPI_Datatype origin_d
 };
 
 int i_MPI_Type_create_resized(MPI_Datatype oldtype, MPI_Aint lb, MPI_Aint extent, MPI_Datatype * newtype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_resized_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_resized_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_create_resized, __mpi_activity);
@@ -1574,7 +1574,7 @@ int i_MPI_Type_create_resized(MPI_Datatype oldtype, MPI_Aint lb, MPI_Aint extent
 };
 
 int i_MPI_Type_get_extent(MPI_Datatype type, MPI_Aint * lb, MPI_Aint * extent, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_extent_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_extent_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_get_extent, __mpi_activity);
@@ -1585,7 +1585,7 @@ int i_MPI_Type_get_extent(MPI_Datatype type, MPI_Aint * lb, MPI_Aint * extent, v
 };
 
 int i_MPI_Cart_map(MPI_Comm comm, int ndims, const int dims[], const int periods[], int * newrank, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cart_map_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cart_map_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Cart_map, __mpi_activity);
@@ -1596,7 +1596,7 @@ int i_MPI_Cart_map(MPI_Comm comm, int ndims, const int dims[], const int periods
 };
 
 int i_MPI_File_create_errhandler(MPI_File_errhandler_function * function, MPI_Errhandler * errhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_create_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_create_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_create_errhandler, __mpi_activity);
@@ -1607,7 +1607,7 @@ int i_MPI_File_create_errhandler(MPI_File_errhandler_function * function, MPI_Er
 };
 
 int i_MPI_Topo_test(MPI_Comm comm, int * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Topo_test_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Topo_test_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Topo_test, __mpi_activity);
@@ -1618,7 +1618,7 @@ int i_MPI_Topo_test(MPI_Comm comm, int * status, void* return_address) {
 };
 
 int i_MPI_Reduce_scatter_init(const void * sendbuf, void * recvbuf, const int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Reduce_scatter_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Reduce_scatter_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Reduce_scatter_init, __mpi_activity);
@@ -1629,7 +1629,7 @@ int i_MPI_Reduce_scatter_init(const void * sendbuf, void * recvbuf, const int re
 };
 
 int i_MPI_Reduce_scatter_block_init(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Reduce_scatter_block_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Reduce_scatter_block_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Reduce_scatter_block_init, __mpi_activity);
@@ -1640,7 +1640,7 @@ int i_MPI_Reduce_scatter_block_init(const void * sendbuf, void * recvbuf, int re
 };
 
 int i_MPI_File_read_at_all_begin(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_at_all_begin_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_at_all_begin_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_read_at_all_begin, __mpi_activity);
@@ -1651,7 +1651,7 @@ int i_MPI_File_read_at_all_begin(MPI_File fh, MPI_Offset offset, void * buf, int
 };
 
 int i_MPI_Reduce_scatter_block(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Reduce_scatter_block_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Reduce_scatter_block_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Reduce_scatter_block, __mpi_activity);
@@ -1662,7 +1662,7 @@ int i_MPI_Reduce_scatter_block(const void * sendbuf, void * recvbuf, int recvcou
 };
 
 int i_MPI_Iallgatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iallgatherv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iallgatherv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Iallgatherv, __mpi_activity);
@@ -1673,7 +1673,7 @@ int i_MPI_Iallgatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype
 };
 
 int i_MPI_Imrecv(void * buf, int count, MPI_Datatype type, MPI_Message * message, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Imrecv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Imrecv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Imrecv, __mpi_activity);
@@ -1684,7 +1684,7 @@ int i_MPI_Imrecv(void * buf, int count, MPI_Datatype type, MPI_Message * message
 };
 
 int i_MPI_File_iwrite_all(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iwrite_all_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iwrite_all_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_iwrite_all, __mpi_activity);
@@ -1695,7 +1695,7 @@ int i_MPI_File_iwrite_all(MPI_File fh, const void * buf, int count, MPI_Datatype
 };
 
 int i_MPI_Bsend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Bsend_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Bsend_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Bsend, __mpi_activity);
@@ -1706,7 +1706,7 @@ int i_MPI_Bsend(const void * buf, int count, MPI_Datatype datatype, int dest, in
 };
 
 int i_MPI_Type_create_f90_integer(int r, MPI_Datatype * newtype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_f90_integer_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_f90_integer_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_create_f90_integer, __mpi_activity);
@@ -1717,7 +1717,7 @@ int i_MPI_Type_create_f90_integer(int r, MPI_Datatype * newtype, void* return_ad
 };
 
 int i_MPI_Mrecv(void * buf, int count, MPI_Datatype type, MPI_Message * message, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Mrecv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Mrecv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Mrecv, __mpi_activity);
@@ -1728,7 +1728,7 @@ int i_MPI_Mrecv(void * buf, int count, MPI_Datatype type, MPI_Message * message,
 };
 
 int i_MPI_Scatter_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Scatter_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Scatter_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Scatter_init, __mpi_activity);
@@ -1739,7 +1739,7 @@ int i_MPI_Scatter_init(const void * sendbuf, int sendcount, MPI_Datatype sendtyp
 };
 
 int i_MPI_File_get_atomicity(MPI_File fh, int * flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_atomicity_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_atomicity_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_get_atomicity, __mpi_activity);
@@ -1750,7 +1750,7 @@ int i_MPI_File_get_atomicity(MPI_File fh, int * flag, void* return_address) {
 };
 
 int i_MPI_Info_dup(MPI_Info info, MPI_Info * newinfo, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_dup_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_dup_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_dup, __mpi_activity);
@@ -1761,7 +1761,7 @@ int i_MPI_Info_dup(MPI_Info info, MPI_Info * newinfo, void* return_address) {
 };
 
 int i_MPI_File_write(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_write, __mpi_activity);
@@ -1772,7 +1772,7 @@ int i_MPI_File_write(MPI_File fh, const void * buf, int count, MPI_Datatype data
 };
 
 int i_MPI_Graph_neighbors(MPI_Comm comm, int rank, int maxneighbors, int neighbors[], void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Graph_neighbors_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Graph_neighbors_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Graph_neighbors, __mpi_activity);
@@ -1783,7 +1783,7 @@ int i_MPI_Graph_neighbors(MPI_Comm comm, int rank, int maxneighbors, int neighbo
 };
 
 int i_MPI_File_get_position_shared(MPI_File fh, MPI_Offset * offset, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_position_shared_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_position_shared_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_get_position_shared, __mpi_activity);
@@ -1794,7 +1794,7 @@ int i_MPI_File_get_position_shared(MPI_File fh, MPI_Offset * offset, void* retur
 };
 
 int i_MPI_Info_set(MPI_Info info, const char * key, const char * value, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_set_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_set_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_set, __mpi_activity);
@@ -1805,7 +1805,7 @@ int i_MPI_Info_set(MPI_Info info, const char * key, const char * value, void* re
 };
 
 int i_MPI_Type_size_x(MPI_Datatype type, MPI_Count * size, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_size_x_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_size_x_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_size_x, __mpi_activity);
@@ -1816,7 +1816,7 @@ int i_MPI_Type_size_x(MPI_Datatype type, MPI_Count * size, void* return_address)
 };
 
 int i_MPI_Session_set_info(MPI_Session session, MPI_Info info, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_set_info_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_set_info_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_set_info, __mpi_activity);
@@ -1827,7 +1827,7 @@ int i_MPI_Session_set_info(MPI_Session session, MPI_Info info, void* return_addr
 };
 
 int i_MPI_Status_c2f08(const MPI_Status * c_status, MPI_F08_status * f08_status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_c2f08_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_c2f08_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_c2f08, __mpi_activity);
@@ -1838,7 +1838,7 @@ int i_MPI_Status_c2f08(const MPI_Status * c_status, MPI_F08_status * f08_status,
 };
 
 int i_MPI_Type_get_contents(MPI_Datatype mtype, int max_integers, int max_addresses, int max_datatypes, int array_of_integers[], MPI_Aint array_of_addresses[], MPI_Datatype array_of_datatypes[], void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_contents_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_contents_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_get_contents, __mpi_activity);
@@ -1849,7 +1849,7 @@ int i_MPI_Type_get_contents(MPI_Datatype mtype, int max_integers, int max_addres
 };
 
 int i_MPI_File_close(MPI_File * fh, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_close_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_close_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_close, __mpi_activity);
@@ -1860,7 +1860,7 @@ int i_MPI_File_close(MPI_File * fh, void* return_address) {
 };
 
 int i_MPI_Comm_set_name(MPI_Comm comm, const char * comm_name, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_set_name_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_set_name_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_set_name, __mpi_activity);
@@ -1871,7 +1871,7 @@ int i_MPI_Comm_set_name(MPI_Comm comm, const char * comm_name, void* return_addr
 };
 
 int i_MPI_Parrived(MPI_Request request, int partition, int * flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Parrived_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Parrived_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Parrived, __mpi_activity);
@@ -1882,7 +1882,7 @@ int i_MPI_Parrived(MPI_Request request, int partition, int * flag, void* return_
 };
 
 int i_MPI_Win_fence(int mpi_assert, MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_fence_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_fence_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_fence, __mpi_activity);
@@ -1893,7 +1893,7 @@ int i_MPI_Win_fence(int mpi_assert, MPI_Win win, void* return_address) {
 };
 
 int i_MPI_Ineighbor_alltoallw(const void * sendbuf, const int sendcounts[], const MPI_Aint sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ineighbor_alltoallw_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ineighbor_alltoallw_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ineighbor_alltoallw, __mpi_activity);
@@ -1904,7 +1904,7 @@ int i_MPI_Ineighbor_alltoallw(const void * sendbuf, const int sendcounts[], cons
 };
 
 int i_MPI_Lookup_name(const char * service_name, MPI_Info info, char * port_name, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Lookup_name_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Lookup_name_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Lookup_name, __mpi_activity);
@@ -1915,7 +1915,7 @@ int i_MPI_Lookup_name(const char * service_name, MPI_Info info, char * port_name
 };
 
 int i_MPI_Iscatter(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iscatter_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iscatter_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Iscatter, __mpi_activity);
@@ -1926,7 +1926,7 @@ int i_MPI_Iscatter(const void * sendbuf, int sendcount, MPI_Datatype sendtype, v
 };
 
 int i_MPI_Comm_get_attr(MPI_Comm comm, int comm_keyval, void * attribute_val, int * flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_get_attr_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_get_attr_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_get_attr, __mpi_activity);
@@ -1937,7 +1937,7 @@ int i_MPI_Comm_get_attr(MPI_Comm comm, int comm_keyval, void * attribute_val, in
 };
 
 int i_MPI_Pack_external(const char datarep[], const void * inbuf, int incount, MPI_Datatype datatype, void * outbuf, MPI_Aint outsize, MPI_Aint * position, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pack_external_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pack_external_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Pack_external, __mpi_activity);
@@ -1948,7 +1948,7 @@ int i_MPI_Pack_external(const char datarep[], const void * inbuf, int incount, M
 };
 
 int i_MPI_File_iread_all(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iread_all_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iread_all_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_iread_all, __mpi_activity);
@@ -1959,7 +1959,7 @@ int i_MPI_File_iread_all(MPI_File fh, void * buf, int count, MPI_Datatype dataty
 };
 
 int i_MPI_Win_create_errhandler(MPI_Win_errhandler_function * function, MPI_Errhandler * errhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_create_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_create_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_create_errhandler, __mpi_activity);
@@ -1970,7 +1970,7 @@ int i_MPI_Win_create_errhandler(MPI_Win_errhandler_function * function, MPI_Errh
 };
 
 int i_MPI_Send(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Send_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Send_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Send, __mpi_activity);
@@ -1981,7 +1981,7 @@ int i_MPI_Send(const void * buf, int count, MPI_Datatype datatype, int dest, int
 };
 
 int i_MPI_Win_lock_all(int mpi_assert, MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_lock_all_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_lock_all_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_lock_all, __mpi_activity);
@@ -1992,7 +1992,7 @@ int i_MPI_Win_lock_all(int mpi_assert, MPI_Win win, void* return_address) {
 };
 
 int i_MPI_File_read_all(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_all_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_all_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_read_all, __mpi_activity);
@@ -2003,7 +2003,7 @@ int i_MPI_File_read_all(MPI_File fh, void * buf, int count, MPI_Datatype datatyp
 };
 
 int i_MPI_Win_flush(int rank, MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_flush_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_flush_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_flush, __mpi_activity);
@@ -2014,7 +2014,7 @@ int i_MPI_Win_flush(int rank, MPI_Win win, void* return_address) {
 };
 
 int i_MPI_File_sync(MPI_File fh, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_sync_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_sync_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_sync, __mpi_activity);
@@ -2025,7 +2025,7 @@ int i_MPI_File_sync(MPI_File fh, void* return_address) {
 };
 
 int i_MPI_Win_attach(MPI_Win win, void * base, MPI_Aint size, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_attach_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_attach_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_attach, __mpi_activity);
@@ -2036,7 +2036,7 @@ int i_MPI_Win_attach(MPI_Win win, void * base, MPI_Aint size, void* return_addre
 };
 
 int i_MPI_Comm_get_name(MPI_Comm comm, char * comm_name, int * resultlen, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_get_name_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_get_name_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_get_name, __mpi_activity);
@@ -2047,7 +2047,7 @@ int i_MPI_Comm_get_name(MPI_Comm comm, char * comm_name, int * resultlen, void* 
 };
 
 int i_MPI_Scatter(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Scatter_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Scatter_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Scatter, __mpi_activity);
@@ -2058,7 +2058,7 @@ int i_MPI_Scatter(const void * sendbuf, int sendcount, MPI_Datatype sendtype, vo
 };
 
 int i_MPI_Comm_get_errhandler(MPI_Comm comm, MPI_Errhandler * erhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_get_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_get_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_get_errhandler, __mpi_activity);
@@ -2069,7 +2069,7 @@ int i_MPI_Comm_get_errhandler(MPI_Comm comm, MPI_Errhandler * erhandler, void* r
 };
 
 int i_MPI_Type_get_true_extent_x(MPI_Datatype datatype, MPI_Count * true_lb, MPI_Count * true_extent, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_true_extent_x_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_true_extent_x_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_get_true_extent_x, __mpi_activity);
@@ -2080,7 +2080,7 @@ int i_MPI_Type_get_true_extent_x(MPI_Datatype datatype, MPI_Count * true_lb, MPI
 };
 
 int i_MPI_Alltoallw(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Alltoallw_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Alltoallw_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Alltoallw, __mpi_activity);
@@ -2091,7 +2091,7 @@ int i_MPI_Alltoallw(const void * sendbuf, const int sendcounts[], const int sdis
 };
 
 int i_MPI_Type_get_envelope(MPI_Datatype type, int * num_integers, int * num_addresses, int * num_datatypes, int * combiner, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_envelope_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_envelope_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_get_envelope, __mpi_activity);
@@ -2102,7 +2102,7 @@ int i_MPI_Type_get_envelope(MPI_Datatype type, int * num_integers, int * num_add
 };
 
 int i_MPI_Request_c2f(MPI_Request request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Request_c2f_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Request_c2f_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Request_c2f, __mpi_activity);
@@ -2113,7 +2113,7 @@ int i_MPI_Request_c2f(MPI_Request request, void* return_address) {
 };
 
 int i_MPI_Type_create_darray(int size, int rank, int ndims, const int gsize_array[], const int distrib_array[], const int darg_array[], const int psize_array[], int order, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_darray_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_darray_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_create_darray, __mpi_activity);
@@ -2124,7 +2124,7 @@ int i_MPI_Type_create_darray(int size, int rank, int ndims, const int gsize_arra
 };
 
 int i_MPI_Get_address(const void * location, MPI_Aint * address, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_address_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_address_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Get_address, __mpi_activity);
@@ -2135,7 +2135,7 @@ int i_MPI_Get_address(const void * location, MPI_Aint * address, void* return_ad
 };
 
 int i_MPI_Graph_neighbors_count(MPI_Comm comm, int rank, int * nneighbors, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Graph_neighbors_count_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Graph_neighbors_count_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Graph_neighbors_count, __mpi_activity);
@@ -2146,7 +2146,7 @@ int i_MPI_Graph_neighbors_count(MPI_Comm comm, int rank, int * nneighbors, void*
 };
 
 int i_MPI_Neighbor_alltoallv_init(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_alltoallv_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_alltoallv_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Neighbor_alltoallv_init, __mpi_activity);
@@ -2157,7 +2157,7 @@ int i_MPI_Neighbor_alltoallv_init(const void * sendbuf, const int sendcounts[], 
 };
 
 int i_MPI_Op_c2f(MPI_Op op, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Op_c2f_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Op_c2f_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Op_c2f, __mpi_activity);
@@ -2168,7 +2168,7 @@ int i_MPI_Op_c2f(MPI_Op op, void* return_address) {
 };
 
 int i_MPI_Rsend_init(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Rsend_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Rsend_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Rsend_init, __mpi_activity);
@@ -2179,7 +2179,7 @@ int i_MPI_Rsend_init(const void * buf, int count, MPI_Datatype datatype, int des
 };
 
 int i_MPI_Register_datarep(const char * datarep, MPI_Datarep_conversion_function * read_conversion_fn, MPI_Datarep_conversion_function * write_conversion_fn, MPI_Datarep_extent_function * dtype_file_extent_fn, void * extra_state, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Register_datarep_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Register_datarep_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Register_datarep, __mpi_activity);
@@ -2190,7 +2190,7 @@ int i_MPI_Register_datarep(const char * datarep, MPI_Datarep_conversion_function
 };
 
 int i_MPI_Win_get_errhandler(MPI_Win win, MPI_Errhandler * errhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_get_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_get_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_get_errhandler, __mpi_activity);
@@ -2201,7 +2201,7 @@ int i_MPI_Win_get_errhandler(MPI_Win win, MPI_Errhandler * errhandler, void* ret
 };
 
 int i_MPI_Win_lock(int lock_type, int rank, int mpi_assert, MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_lock_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_lock_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_lock, __mpi_activity);
@@ -2212,7 +2212,7 @@ int i_MPI_Win_lock(int lock_type, int rank, int mpi_assert, MPI_Win win, void* r
 };
 
 int i_MPI_Cartdim_get(MPI_Comm comm, int * ndims, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cartdim_get_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cartdim_get_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Cartdim_get, __mpi_activity);
@@ -2223,7 +2223,7 @@ int i_MPI_Cartdim_get(MPI_Comm comm, int * ndims, void* return_address) {
 };
 
 int i_MPI_Gatherv_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Gatherv_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Gatherv_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Gatherv_init, __mpi_activity);
@@ -2234,7 +2234,7 @@ int i_MPI_Gatherv_init(const void * sendbuf, int sendcount, MPI_Datatype sendtyp
 };
 
 int i_MPI_File_read(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_read, __mpi_activity);
@@ -2245,7 +2245,7 @@ int i_MPI_File_read(MPI_File fh, void * buf, int count, MPI_Datatype datatype, M
 };
 
 int i_MPI_File_read_ordered(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_ordered_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_ordered_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_read_ordered, __mpi_activity);
@@ -2256,7 +2256,7 @@ int i_MPI_File_read_ordered(MPI_File fh, void * buf, int count, MPI_Datatype dat
 };
 
 int i_MPI_Sendrecv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, int dest, int sendtag, void * recvbuf, int recvcount, MPI_Datatype recvtype, int source, int recvtag, MPI_Comm comm, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Sendrecv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Sendrecv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Sendrecv, __mpi_activity);
@@ -2267,7 +2267,7 @@ int i_MPI_Sendrecv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, i
 };
 
 int i_MPI_Info_get_string(MPI_Info info, const char * key, int * buflen, char * value, int * flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_get_string_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_get_string_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_get_string, __mpi_activity);
@@ -2278,7 +2278,7 @@ int i_MPI_Info_get_string(MPI_Info info, const char * key, int * buflen, char * 
 };
 
 int i_MPI_Win_sync(MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_sync_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_sync_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_sync, __mpi_activity);
@@ -2289,7 +2289,7 @@ int i_MPI_Win_sync(MPI_Win win, void* return_address) {
 };
 
 int i_MPI_Allgather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Allgather_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Allgather_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Allgather, __mpi_activity);
@@ -2300,7 +2300,7 @@ int i_MPI_Allgather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, 
 };
 
 int i_MPI_Win_set_attr(MPI_Win win, int win_keyval, void * attribute_val, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_set_attr_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_set_attr_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_set_attr, __mpi_activity);
@@ -2311,7 +2311,7 @@ int i_MPI_Win_set_attr(MPI_Win win, int win_keyval, void * attribute_val, void* 
 };
 
 int i_MPI_Allreduce(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Allreduce_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Allreduce_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Allreduce, __mpi_activity);
@@ -2322,7 +2322,7 @@ int i_MPI_Allreduce(const void * sendbuf, void * recvbuf, int count, MPI_Datatyp
 };
 
 int i_MPI_Ialltoall(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ialltoall_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ialltoall_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ialltoall, __mpi_activity);
@@ -2333,7 +2333,7 @@ int i_MPI_Ialltoall(const void * sendbuf, int sendcount, MPI_Datatype sendtype, 
 };
 
 int i_MPI_Graph_map(MPI_Comm comm, int nnodes, const int index[], const int edges[], int * newrank, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Graph_map_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Graph_map_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Graph_map, __mpi_activity);
@@ -2344,7 +2344,7 @@ int i_MPI_Graph_map(MPI_Comm comm, int nnodes, const int index[], const int edge
 };
 
 int i_MPI_File_seek(MPI_File fh, MPI_Offset offset, int whence, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_seek_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_seek_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_seek, __mpi_activity);
@@ -2355,7 +2355,7 @@ int i_MPI_File_seek(MPI_File fh, MPI_Offset offset, int whence, void* return_add
 };
 
 int i_MPI_Unpack(const void * inbuf, int insize, int * position, void * outbuf, int outcount, MPI_Datatype datatype, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Unpack_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Unpack_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Unpack, __mpi_activity);
@@ -2366,7 +2366,7 @@ int i_MPI_Unpack(const void * inbuf, int insize, int * position, void * outbuf, 
 };
 
 int i_MPI_Comm_get_info(MPI_Comm comm, MPI_Info * info_used, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_get_info_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_get_info_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_get_info, __mpi_activity);
@@ -2377,7 +2377,7 @@ int i_MPI_Comm_get_info(MPI_Comm comm, MPI_Info * info_used, void* return_addres
 };
 
 int i_MPI_Group_union(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_union_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_union_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_union, __mpi_activity);
@@ -2388,7 +2388,7 @@ int i_MPI_Group_union(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, 
 };
 
 int i_MPI_Unpublish_name(const char * service_name, MPI_Info info, const char * port_name, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Unpublish_name_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Unpublish_name_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Unpublish_name, __mpi_activity);
@@ -2399,7 +2399,7 @@ int i_MPI_Unpublish_name(const char * service_name, MPI_Info info, const char * 
 };
 
 int i_MPI_Win_wait(MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_wait_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_wait_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_wait, __mpi_activity);
@@ -2410,7 +2410,7 @@ int i_MPI_Win_wait(MPI_Win win, void* return_address) {
 };
 
 int i_MPI_Get_count(const MPI_Status * status, MPI_Datatype datatype, int * count, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_count_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_count_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Get_count, __mpi_activity);
@@ -2421,7 +2421,7 @@ int i_MPI_Get_count(const MPI_Status * status, MPI_Datatype datatype, int * coun
 };
 
 int i_MPI_Ineighbor_alltoall(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ineighbor_alltoall_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ineighbor_alltoall_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ineighbor_alltoall, __mpi_activity);
@@ -2432,7 +2432,7 @@ int i_MPI_Ineighbor_alltoall(const void * sendbuf, int sendcount, MPI_Datatype s
 };
 
 int i_MPI_Type_create_f90_real(int p, int r, MPI_Datatype * newtype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_f90_real_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_f90_real_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_create_f90_real, __mpi_activity);
@@ -2443,7 +2443,7 @@ int i_MPI_Type_create_f90_real(int p, int r, MPI_Datatype * newtype, void* retur
 };
 
 int i_MPI_Accumulate(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Accumulate_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Accumulate_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Accumulate, __mpi_activity);
@@ -2454,7 +2454,7 @@ int i_MPI_Accumulate(const void * origin_addr, int origin_count, MPI_Datatype or
 };
 
 int i_MPI_Fetch_and_op(const void * origin_addr, void * result_addr, MPI_Datatype datatype, int target_rank, MPI_Aint target_disp, MPI_Op op, MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Fetch_and_op_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Fetch_and_op_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Fetch_and_op, __mpi_activity);
@@ -2465,7 +2465,7 @@ int i_MPI_Fetch_and_op(const void * origin_addr, void * result_addr, MPI_Datatyp
 };
 
 int i_MPI_Comm_create_errhandler(MPI_Comm_errhandler_function * function, MPI_Errhandler * errhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_create_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_create_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_create_errhandler, __mpi_activity);
@@ -2476,7 +2476,7 @@ int i_MPI_Comm_create_errhandler(MPI_Comm_errhandler_function * function, MPI_Er
 };
 
 int i_MPI_Comm_remote_group(MPI_Comm comm, MPI_Group * group, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_remote_group_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_remote_group_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_remote_group, __mpi_activity);
@@ -2487,7 +2487,7 @@ int i_MPI_Comm_remote_group(MPI_Comm comm, MPI_Group * group, void* return_addre
 };
 
 int i_MPI_Group_intersection(MPI_Group group1, MPI_Group group2, MPI_Group * newgroup, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_intersection_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_intersection_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_intersection, __mpi_activity);
@@ -2498,7 +2498,7 @@ int i_MPI_Group_intersection(MPI_Group group1, MPI_Group group2, MPI_Group * new
 };
 
 int i_MPI_Psend_init(const void * buf, int partitions, MPI_Count count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Psend_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Psend_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Psend_init, __mpi_activity);
@@ -2509,7 +2509,7 @@ int i_MPI_Psend_init(const void * buf, int partitions, MPI_Count count, MPI_Data
 };
 
 int i_MPI_Session_get_errhandler(MPI_Session session, MPI_Errhandler * erhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_get_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_get_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_get_errhandler, __mpi_activity);
@@ -2520,7 +2520,7 @@ int i_MPI_Session_get_errhandler(MPI_Session session, MPI_Errhandler * erhandler
 };
 
 int i_MPI_File_iread_shared(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iread_shared_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iread_shared_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_iread_shared, __mpi_activity);
@@ -2531,7 +2531,7 @@ int i_MPI_File_iread_shared(MPI_File fh, void * buf, int count, MPI_Datatype dat
 };
 
 int i_MPI_Type_set_name(MPI_Datatype type, const char * type_name, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_set_name_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_set_name_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_set_name, __mpi_activity);
@@ -2542,7 +2542,7 @@ int i_MPI_Type_set_name(MPI_Datatype type, const char * type_name, void* return_
 };
 
 int i_MPI_Alltoallv_init(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Alltoallv_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Alltoallv_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Alltoallv_init, __mpi_activity);
@@ -2553,7 +2553,7 @@ int i_MPI_Alltoallv_init(const void * sendbuf, const int sendcounts[], const int
 };
 
 int i_MPI_Group_from_session_pset(MPI_Session session, const char * pset_name, MPI_Group * newgroup, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_from_session_pset_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_from_session_pset_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_from_session_pset, __mpi_activity);
@@ -2564,7 +2564,7 @@ int i_MPI_Group_from_session_pset(MPI_Session session, const char * pset_name, M
 };
 
 int i_MPI_Add_error_class(int * errorclass, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Add_error_class_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Add_error_class_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Add_error_class, __mpi_activity);
@@ -2575,7 +2575,7 @@ int i_MPI_Add_error_class(int * errorclass, void* return_address) {
 };
 
 int i_MPI_Start(MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Start_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Start_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Start, __mpi_activity);
@@ -2586,7 +2586,7 @@ int i_MPI_Start(MPI_Request * request, void* return_address) {
 };
 
 int i_MPI_Wait(MPI_Request * request, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Wait_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Wait_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Wait, __mpi_activity);
@@ -2597,7 +2597,7 @@ int i_MPI_Wait(MPI_Request * request, MPI_Status * status, void* return_address)
 };
 
 int i_MPI_Precv_init(void * buf, int partitions, MPI_Count count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Precv_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Precv_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Precv_init, __mpi_activity);
@@ -2608,7 +2608,7 @@ int i_MPI_Precv_init(void * buf, int partitions, MPI_Count count, MPI_Datatype d
 };
 
 int i_MPI_File_read_shared(MPI_File fh, void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_shared_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_shared_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_read_shared, __mpi_activity);
@@ -2619,7 +2619,7 @@ int i_MPI_File_read_shared(MPI_File fh, void * buf, int count, MPI_Datatype data
 };
 
 int i_MPI_Alltoall_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Alltoall_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Alltoall_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Alltoall_init, __mpi_activity);
@@ -2630,7 +2630,7 @@ int i_MPI_Alltoall_init(const void * sendbuf, int sendcount, MPI_Datatype sendty
 };
 
 int i_MPI_Info_c2f(MPI_Info info, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_c2f_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_c2f_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_c2f, __mpi_activity);
@@ -2641,7 +2641,7 @@ int i_MPI_Info_c2f(MPI_Info info, void* return_address) {
 };
 
 int i_MPI_File_set_info(MPI_File fh, MPI_Info info, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_set_info_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_set_info_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_set_info, __mpi_activity);
@@ -2652,7 +2652,7 @@ int i_MPI_File_set_info(MPI_File fh, MPI_Info info, void* return_address) {
 };
 
 int i_MPI_Attr_get(MPI_Comm comm, int keyval, void * attribute_val, int * flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Attr_get_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Attr_get_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Attr_get, __mpi_activity);
@@ -2663,7 +2663,7 @@ int i_MPI_Attr_get(MPI_Comm comm, int keyval, void * attribute_val, int * flag, 
 };
 
 int i_MPI_Cart_shift(MPI_Comm comm, int direction, int disp, int * rank_source, int * rank_dest, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cart_shift_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cart_shift_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Cart_shift, __mpi_activity);
@@ -2674,7 +2674,7 @@ int i_MPI_Cart_shift(MPI_Comm comm, int direction, int disp, int * rank_source, 
 };
 
 int i_MPI_File_read_all_end(MPI_File fh, void * buf, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_all_end_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_all_end_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_read_all_end, __mpi_activity);
@@ -2685,7 +2685,7 @@ int i_MPI_File_read_all_end(MPI_File fh, void * buf, MPI_Status * status, void* 
 };
 
 int i_MPI_Info_get(MPI_Info info, const char * key, int valuelen, char * value, int * flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_get_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_get_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_get, __mpi_activity);
@@ -2696,7 +2696,7 @@ int i_MPI_Info_get(MPI_Info info, const char * key, int valuelen, char * value, 
 };
 
 int i_MPI_Rsend(const void * ibuf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Rsend_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Rsend_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Rsend, __mpi_activity);
@@ -2707,7 +2707,7 @@ int i_MPI_Rsend(const void * ibuf, int count, MPI_Datatype datatype, int dest, i
 };
 
 int i_MPI_Mprobe(int source, int tag, MPI_Comm comm, MPI_Message * message, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Mprobe_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Mprobe_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Mprobe, __mpi_activity);
@@ -2718,7 +2718,7 @@ int i_MPI_Mprobe(int source, int tag, MPI_Comm comm, MPI_Message * message, MPI_
 };
 
 int i_MPI_Query_thread(int * provided, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Query_thread_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Query_thread_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Query_thread, __mpi_activity);
@@ -2729,7 +2729,7 @@ int i_MPI_Query_thread(int * provided, void* return_address) {
 };
 
 int i_MPI_Comm_rank(MPI_Comm comm, int * rank, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_rank_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_rank_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_rank, __mpi_activity);
@@ -2740,7 +2740,7 @@ int i_MPI_Comm_rank(MPI_Comm comm, int * rank, void* return_address) {
 };
 
 int i_MPI_Type_delete_attr(MPI_Datatype type, int type_keyval, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_delete_attr_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_delete_attr_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_delete_attr, __mpi_activity);
@@ -2751,7 +2751,7 @@ int i_MPI_Type_delete_attr(MPI_Datatype type, int type_keyval, void* return_addr
 };
 
 int i_MPI_File_get_view(MPI_File fh, MPI_Offset * disp, MPI_Datatype * etype, MPI_Datatype * filetype, char * datarep, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_view_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_view_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_get_view, __mpi_activity);
@@ -2762,7 +2762,7 @@ int i_MPI_File_get_view(MPI_File fh, MPI_Offset * disp, MPI_Datatype * etype, MP
 };
 
 int i_MPI_Alltoallw_init(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Alltoallw_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Alltoallw_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Alltoallw_init, __mpi_activity);
@@ -2773,7 +2773,7 @@ int i_MPI_Alltoallw_init(const void * sendbuf, const int sendcounts[], const int
 };
 
 int i_MPI_Comm_get_parent(MPI_Comm * parent, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_get_parent_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_get_parent_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_get_parent, __mpi_activity);
@@ -2784,7 +2784,7 @@ int i_MPI_Comm_get_parent(MPI_Comm * parent, void* return_address) {
 };
 
 int i_MPI_Type_create_hvector(int count, int blocklength, MPI_Aint stride, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_hvector_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_hvector_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_create_hvector, __mpi_activity);
@@ -2795,7 +2795,7 @@ int i_MPI_Type_create_hvector(int count, int blocklength, MPI_Aint stride, MPI_D
 };
 
 int i_MPI_Group_compare(MPI_Group group1, MPI_Group group2, int * result, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_compare_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_compare_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_compare, __mpi_activity);
@@ -2806,7 +2806,7 @@ int i_MPI_Group_compare(MPI_Group group1, MPI_Group group2, int * result, void* 
 };
 
 int i_MPI_Status_f082f(const MPI_F08_status * f08_status, int * f_status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_f082f_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_f082f_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f082f, __mpi_activity);
@@ -2817,7 +2817,7 @@ int i_MPI_Status_f082f(const MPI_F08_status * f08_status, int * f_status, void* 
 };
 
 int i_MPI_Publish_name(const char * service_name, MPI_Info info, const char * port_name, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Publish_name_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Publish_name_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Publish_name, __mpi_activity);
@@ -2828,7 +2828,7 @@ int i_MPI_Publish_name(const char * service_name, MPI_Info info, const char * po
 };
 
 int i_MPI_File_preallocate(MPI_File fh, MPI_Offset size, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_preallocate_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_preallocate_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_preallocate, __mpi_activity);
@@ -2839,7 +2839,7 @@ int i_MPI_File_preallocate(MPI_File fh, MPI_Offset size, void* return_address) {
 };
 
 int i_MPI_Win_flush_local_all(MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_flush_local_all_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_flush_local_all_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_flush_local_all, __mpi_activity);
@@ -2850,7 +2850,7 @@ int i_MPI_Win_flush_local_all(MPI_Win win, void* return_address) {
 };
 
 int i_MPI_Type_dup(MPI_Datatype type, MPI_Datatype * newtype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_dup_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_dup_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_dup, __mpi_activity);
@@ -2861,7 +2861,7 @@ int i_MPI_Type_dup(MPI_Datatype type, MPI_Datatype * newtype, void* return_addre
 };
 
 int i_MPI_Ireduce(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ireduce_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ireduce_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ireduce, __mpi_activity);
@@ -2872,7 +2872,7 @@ int i_MPI_Ireduce(const void * sendbuf, void * recvbuf, int count, MPI_Datatype 
 };
 
 int i_MPI_Scan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Scan_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Scan_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Scan, __mpi_activity);
@@ -2883,7 +2883,7 @@ int i_MPI_Scan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype dat
 };
 
 int i_MPI_Get_elements_x(const MPI_Status * status, MPI_Datatype datatype, MPI_Count * count, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_elements_x_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_elements_x_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Get_elements_x, __mpi_activity);
@@ -2894,7 +2894,7 @@ int i_MPI_Get_elements_x(const MPI_Status * status, MPI_Datatype datatype, MPI_C
 };
 
 int i_MPI_Scatterv(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Scatterv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Scatterv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Scatterv, __mpi_activity);
@@ -2905,7 +2905,7 @@ int i_MPI_Scatterv(const void * sendbuf, const int sendcounts[], const int displ
 };
 
 int i_MPI_Comm_group(MPI_Comm comm, MPI_Group * group, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_group_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_group_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_group, __mpi_activity);
@@ -2916,7 +2916,7 @@ int i_MPI_Comm_group(MPI_Comm comm, MPI_Group * group, void* return_address) {
 };
 
 int i_MPI_Issend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Issend_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Issend_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Issend, __mpi_activity);
@@ -2927,7 +2927,7 @@ int i_MPI_Issend(const void * buf, int count, MPI_Datatype datatype, int dest, i
 };
 
 int i_MPI_Neighbor_alltoallw(const void * sendbuf, const int sendcounts[], const MPI_Aint sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_alltoallw_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_alltoallw_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Neighbor_alltoallw, __mpi_activity);
@@ -2938,7 +2938,7 @@ int i_MPI_Neighbor_alltoallw(const void * sendbuf, const int sendcounts[], const
 };
 
 int i_MPI_Type_create_hindexed(int count, const int array_of_blocklengths[], const MPI_Aint array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_hindexed_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_hindexed_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_create_hindexed, __mpi_activity);
@@ -2949,7 +2949,7 @@ int i_MPI_Type_create_hindexed(int count, const int array_of_blocklengths[], con
 };
 
 int i_MPI_Alloc_mem(MPI_Aint size, MPI_Info info, void * baseptr, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Alloc_mem_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Alloc_mem_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Alloc_mem, __mpi_activity);
@@ -2960,7 +2960,7 @@ int i_MPI_Alloc_mem(MPI_Aint size, MPI_Info info, void * baseptr, void* return_a
 };
 
 int i_MPI_Ialltoallw(const void * sendbuf, const int sendcounts[], const int sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ialltoallw_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ialltoallw_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ialltoallw, __mpi_activity);
@@ -2971,7 +2971,7 @@ int i_MPI_Ialltoallw(const void * sendbuf, const int sendcounts[], const int sdi
 };
 
 int i_MPI_Group_free(MPI_Group * group, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_free_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_free_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	GET_ARGS_VALUE_MPI_Group_free(__mpi_activity);
@@ -2982,7 +2982,7 @@ int i_MPI_Group_free(MPI_Group * group, void* return_address) {
 };
 
 int i_MPI_Session_set_errhandler(MPI_Session session, MPI_Errhandler errhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_set_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_set_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_set_errhandler, __mpi_activity);
@@ -2993,7 +2993,7 @@ int i_MPI_Session_set_errhandler(MPI_Session session, MPI_Errhandler errhandler,
 };
 
 int i_MPI_Cart_rank(MPI_Comm comm, const int coords[], int * rank, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cart_rank_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cart_rank_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Cart_rank, __mpi_activity);
@@ -3004,7 +3004,7 @@ int i_MPI_Cart_rank(MPI_Comm comm, const int coords[], int * rank, void* return_
 };
 
 int i_MPI_File_read_at_all_end(MPI_File fh, void * buf, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_at_all_end_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_at_all_end_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_read_at_all_end, __mpi_activity);
@@ -3015,7 +3015,7 @@ int i_MPI_File_read_at_all_end(MPI_File fh, void * buf, MPI_Status * status, voi
 };
 
 int i_MPI_Iscan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iscan_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iscan_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Iscan, __mpi_activity);
@@ -3026,7 +3026,7 @@ int i_MPI_Iscan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype da
 };
 
 int i_MPI_Irecv(void * buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Irecv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Irecv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Irecv, __mpi_activity);
@@ -3037,7 +3037,7 @@ int i_MPI_Irecv(void * buf, int count, MPI_Datatype datatype, int source, int ta
 };
 
 int i_MPI_File_write_at_all_end(MPI_File fh, const void * buf, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_at_all_end_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_at_all_end_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_write_at_all_end, __mpi_activity);
@@ -3048,7 +3048,7 @@ int i_MPI_File_write_at_all_end(MPI_File fh, const void * buf, MPI_Status * stat
 };
 
 int i_MPI_Status_set_cancelled(MPI_Status * status, int flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_set_cancelled_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_set_cancelled_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_set_cancelled, __mpi_activity);
@@ -3059,7 +3059,7 @@ int i_MPI_Status_set_cancelled(MPI_Status * status, int flag, void* return_addre
 };
 
 int i_MPI_Neighbor_allgather_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_allgather_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_allgather_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Neighbor_allgather_init, __mpi_activity);
@@ -3070,7 +3070,7 @@ int i_MPI_Neighbor_allgather_init(const void * sendbuf, int sendcount, MPI_Datat
 };
 
 int i_MPI_File_write_shared(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_shared_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_shared_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_write_shared, __mpi_activity);
@@ -3081,7 +3081,7 @@ int i_MPI_File_write_shared(MPI_File fh, const void * buf, int count, MPI_Dataty
 };
 
 int i_MPI_Exscan_init(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Exscan_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Exscan_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Exscan_init, __mpi_activity);
@@ -3092,7 +3092,7 @@ int i_MPI_Exscan_init(const void * sendbuf, void * recvbuf, int count, MPI_Datat
 };
 
 int i_MPI_Send_init(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Send_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Send_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Send_init, __mpi_activity);
@@ -3103,7 +3103,7 @@ int i_MPI_Send_init(const void * buf, int count, MPI_Datatype datatype, int dest
 };
 
 int i_MPI_Finalize(void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Finalize_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Finalize_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Finalize, __mpi_activity);
@@ -3113,7 +3113,7 @@ int i_MPI_Finalize(void* return_address) {
 };
 
 int i_MPI_File_write_ordered(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_ordered_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_ordered_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_write_ordered, __mpi_activity);
@@ -3124,7 +3124,7 @@ int i_MPI_File_write_ordered(MPI_File fh, const void * buf, int count, MPI_Datat
 };
 
 int i_MPI_Waitany(int count, MPI_Request array_of_requests[], int * index, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Waitany_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Waitany_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Waitany, __mpi_activity);
@@ -3135,7 +3135,7 @@ int i_MPI_Waitany(int count, MPI_Request array_of_requests[], int * index, MPI_S
 };
 
 int i_MPI_Waitall(int count, MPI_Request array_of_requests[], MPI_Status * array_of_statuses, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Waitall_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Waitall_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Waitall, __mpi_activity);
@@ -3146,7 +3146,7 @@ int i_MPI_Waitall(int count, MPI_Request array_of_requests[], MPI_Status * array
 };
 
 int i_MPI_Comm_test_inter(MPI_Comm comm, int * flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_test_inter_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_test_inter_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_test_inter, __mpi_activity);
@@ -3157,7 +3157,7 @@ int i_MPI_Comm_test_inter(MPI_Comm comm, int * flag, void* return_address) {
 };
 
 int i_MPI_Neighbor_alltoallw_init(const void * sendbuf, const int sendcounts[], const MPI_Aint sdispls[], const MPI_Datatype sendtypes[], void * recvbuf, const int recvcounts[], const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_alltoallw_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_alltoallw_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Neighbor_alltoallw_init, __mpi_activity);
@@ -3168,7 +3168,7 @@ int i_MPI_Neighbor_alltoallw_init(const void * sendbuf, const int sendcounts[], 
 };
 
 int i_MPI_Win_unlock_all(MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_unlock_all_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_unlock_all_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_unlock_all, __mpi_activity);
@@ -3179,7 +3179,7 @@ int i_MPI_Win_unlock_all(MPI_Win win, void* return_address) {
 };
 
 int i_MPI_Allgather_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Allgather_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Allgather_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Allgather_init, __mpi_activity);
@@ -3190,7 +3190,7 @@ int i_MPI_Allgather_init(const void * sendbuf, int sendcount, MPI_Datatype sendt
 };
 
 int i_MPI_Win_test(MPI_Win win, int * flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_test_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_test_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_test, __mpi_activity);
@@ -3201,7 +3201,7 @@ int i_MPI_Win_test(MPI_Win win, int * flag, void* return_address) {
 };
 
 int i_MPI_Intercomm_create(MPI_Comm local_comm, int local_leader, MPI_Comm bridge_comm, int remote_leader, int tag, MPI_Comm * newintercomm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Intercomm_create_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Intercomm_create_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Intercomm_create, __mpi_activity);
@@ -3212,7 +3212,7 @@ int i_MPI_Intercomm_create(MPI_Comm local_comm, int local_leader, MPI_Comm bridg
 };
 
 int i_MPI_Comm_create_from_group(MPI_Group group, const char * tag, MPI_Info info, MPI_Errhandler errhandler, MPI_Comm * newcomm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_create_from_group_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_create_from_group_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_create_from_group, __mpi_activity);
@@ -3223,7 +3223,7 @@ int i_MPI_Comm_create_from_group(MPI_Group group, const char * tag, MPI_Info inf
 };
 
 int i_MPI_Group_c2f(MPI_Group group, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_c2f_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_c2f_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_c2f, __mpi_activity);
@@ -3234,7 +3234,7 @@ int i_MPI_Group_c2f(MPI_Group group, void* return_address) {
 };
 
 int i_MPI_Cancel(MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cancel_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cancel_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Cancel, __mpi_activity);
@@ -3245,7 +3245,7 @@ int i_MPI_Cancel(MPI_Request * request, void* return_address) {
 };
 
 int i_MPI_Pack(const void * inbuf, int incount, MPI_Datatype datatype, void * outbuf, int outsize, int * position, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pack_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pack_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Pack, __mpi_activity);
@@ -3256,7 +3256,7 @@ int i_MPI_Pack(const void * inbuf, int incount, MPI_Datatype datatype, void * ou
 };
 
 int i_MPI_Scan_init(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Scan_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Scan_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Scan_init, __mpi_activity);
@@ -3267,7 +3267,7 @@ int i_MPI_Scan_init(const void * sendbuf, void * recvbuf, int count, MPI_Datatyp
 };
 
 int i_MPI_Type_match_size(int typeclass, int size, MPI_Datatype * type, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_match_size_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_match_size_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_match_size, __mpi_activity);
@@ -3278,7 +3278,7 @@ int i_MPI_Type_match_size(int typeclass, int size, MPI_Datatype * type, void* re
 };
 
 int i_MPI_File_write_ordered_end(MPI_File fh, const void * buf, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_ordered_end_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_ordered_end_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_write_ordered_end, __mpi_activity);
@@ -3289,7 +3289,7 @@ int i_MPI_File_write_ordered_end(MPI_File fh, const void * buf, MPI_Status * sta
 };
 
 int i_MPI_File_open(MPI_Comm comm, const char * filename, int amode, MPI_Info info, MPI_File * fh, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_open_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_open_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_open, __mpi_activity);
@@ -3300,7 +3300,7 @@ int i_MPI_File_open(MPI_Comm comm, const char * filename, int amode, MPI_Info in
 };
 
 int i_MPI_Info_create_env(int argc, char * argv[], MPI_Info * info, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_create_env_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_create_env_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_create_env, __mpi_activity);
@@ -3311,7 +3311,7 @@ int i_MPI_Info_create_env(int argc, char * argv[], MPI_Info * info, void* return
 };
 
 int i_MPI_Win_get_attr(MPI_Win win, int win_keyval, void * attribute_val, int * flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_get_attr_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_get_attr_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_get_attr, __mpi_activity);
@@ -3322,7 +3322,7 @@ int i_MPI_Win_get_attr(MPI_Win win, int win_keyval, void * attribute_val, int * 
 };
 
 int i_MPI_Comm_dup_with_info(MPI_Comm comm, MPI_Info info, MPI_Comm * newcomm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_dup_with_info_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_dup_with_info_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_dup_with_info, __mpi_activity);
@@ -3333,7 +3333,7 @@ int i_MPI_Comm_dup_with_info(MPI_Comm comm, MPI_Info info, MPI_Comm * newcomm, v
 };
 
 int i_MPI_File_seek_shared(MPI_File fh, MPI_Offset offset, int whence, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_seek_shared_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_seek_shared_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_seek_shared, __mpi_activity);
@@ -3344,7 +3344,7 @@ int i_MPI_File_seek_shared(MPI_File fh, MPI_Offset offset, int whence, void* ret
 };
 
 int i_MPI_Group_range_incl(MPI_Group group, int n, int ranges[][3], MPI_Group * newgroup, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_range_incl_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_range_incl_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_range_incl, __mpi_activity);
@@ -3355,7 +3355,7 @@ int i_MPI_Group_range_incl(MPI_Group group, int n, int ranges[][3], MPI_Group * 
 };
 
 int i_MPI_File_set_size(MPI_File fh, MPI_Offset size, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_set_size_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_set_size_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_set_size, __mpi_activity);
@@ -3366,7 +3366,7 @@ int i_MPI_File_set_size(MPI_File fh, MPI_Offset size, void* return_address) {
 };
 
 int i_MPI_Type_free_keyval(int * type_keyval, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_free_keyval_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_free_keyval_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	GET_ARGS_VALUE_MPI_Type_free_keyval(__mpi_activity);
@@ -3377,7 +3377,7 @@ int i_MPI_Type_free_keyval(int * type_keyval, void* return_address) {
 };
 
 int i_MPI_Win_set_name(MPI_Win win, const char * win_name, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_set_name_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_set_name_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_set_name, __mpi_activity);
@@ -3388,7 +3388,7 @@ int i_MPI_Win_set_name(MPI_Win win, const char * win_name, void* return_address)
 };
 
 int i_MPI_Win_delete_attr(MPI_Win win, int win_keyval, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_delete_attr_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_delete_attr_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_delete_attr, __mpi_activity);
@@ -3399,7 +3399,7 @@ int i_MPI_Win_delete_attr(MPI_Win win, int win_keyval, void* return_address) {
 };
 
 int i_MPI_Compare_and_swap(const void * origin_addr, const void * compare_addr, void * result_addr, MPI_Datatype datatype, int target_rank, MPI_Aint target_disp, MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Compare_and_swap_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Compare_and_swap_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Compare_and_swap, __mpi_activity);
@@ -3410,7 +3410,7 @@ int i_MPI_Compare_and_swap(const void * origin_addr, const void * compare_addr, 
 };
 
 int i_MPI_Status_f2c(const int * f_status, MPI_Status * c_status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_f2c_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_f2c_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f2c, __mpi_activity);
@@ -3421,7 +3421,7 @@ int i_MPI_Status_f2c(const int * f_status, MPI_Status * c_status, void* return_a
 };
 
 int i_MPI_Pready_range(int partition_low, int partition_high, MPI_Request request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pready_range_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pready_range_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Pready_range, __mpi_activity);
@@ -3432,7 +3432,7 @@ int i_MPI_Pready_range(int partition_low, int partition_high, MPI_Request reques
 };
 
 int i_MPI_Gatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Gatherv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Gatherv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Gatherv, __mpi_activity);
@@ -3443,7 +3443,7 @@ int i_MPI_Gatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, vo
 };
 
 int i_MPI_Win_get_name(MPI_Win win, char * win_name, int * resultlen, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_get_name_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_get_name_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_get_name, __mpi_activity);
@@ -3454,7 +3454,7 @@ int i_MPI_Win_get_name(MPI_Win win, char * win_name, int * resultlen, void* retu
 };
 
 int i_MPI_Session_get_info(MPI_Session session, MPI_Info * info_used, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_get_info_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_get_info_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_get_info, __mpi_activity);
@@ -3465,7 +3465,7 @@ int i_MPI_Session_get_info(MPI_Session session, MPI_Info * info_used, void* retu
 };
 
 int i_MPI_File_get_amode(MPI_File fh, int * amode, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_amode_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_amode_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_get_amode, __mpi_activity);
@@ -3476,7 +3476,7 @@ int i_MPI_File_get_amode(MPI_File fh, int * amode, void* return_address) {
 };
 
 int i_MPI_Intercomm_merge(MPI_Comm intercomm, int high, MPI_Comm * newintracomm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Intercomm_merge_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Intercomm_merge_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Intercomm_merge, __mpi_activity);
@@ -3487,7 +3487,7 @@ int i_MPI_Intercomm_merge(MPI_Comm intercomm, int high, MPI_Comm * newintracomm,
 };
 
 int i_MPI_Status_f082c(const MPI_F08_status * f08_status, MPI_Status * c_status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_f082c_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_f082c_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f082c, __mpi_activity);
@@ -3498,7 +3498,7 @@ int i_MPI_Status_f082c(const MPI_F08_status * f08_status, MPI_Status * c_status,
 };
 
 int i_MPI_Igatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Igatherv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Igatherv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Igatherv, __mpi_activity);
@@ -3509,7 +3509,7 @@ int i_MPI_Igatherv(const void * sendbuf, int sendcount, MPI_Datatype sendtype, v
 };
 
 int i_MPI_Type_vector(int count, int blocklength, int stride, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_vector_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_vector_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_vector, __mpi_activity);
@@ -3520,7 +3520,7 @@ int i_MPI_Type_vector(int count, int blocklength, int stride, MPI_Datatype oldty
 };
 
 int i_MPI_Isendrecv_replace(void * buf, int count, MPI_Datatype datatype, int dest, int sendtag, int source, int recvtag, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Isendrecv_replace_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Isendrecv_replace_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Isendrecv_replace, __mpi_activity);
@@ -3531,7 +3531,7 @@ int i_MPI_Isendrecv_replace(void * buf, int count, MPI_Datatype datatype, int de
 };
 
 int i_MPI_Recv_init(void * buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Recv_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Recv_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Recv_init, __mpi_activity);
@@ -3542,7 +3542,7 @@ int i_MPI_Recv_init(void * buf, int count, MPI_Datatype datatype, int source, in
 };
 
 int i_MPI_Comm_connect(const char * port_name, MPI_Info info, int root, MPI_Comm comm, MPI_Comm * newcomm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_connect_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_connect_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_connect, __mpi_activity);
@@ -3553,7 +3553,7 @@ int i_MPI_Comm_connect(const char * port_name, MPI_Info info, int root, MPI_Comm
 };
 
 int i_MPI_Get_version(int * version, int * subversion, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_version_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Get_version_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Get_version, __mpi_activity);
@@ -3564,7 +3564,7 @@ int i_MPI_Get_version(int * version, int * subversion, void* return_address) {
 };
 
 int i_MPI_Comm_join(int fd, MPI_Comm * intercomm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_join_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_join_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_join, __mpi_activity);
@@ -3575,7 +3575,7 @@ int i_MPI_Comm_join(int fd, MPI_Comm * intercomm, void* return_address) {
 };
 
 int i_MPI_Test_cancelled(const MPI_Status * status, int * flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Test_cancelled_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Test_cancelled_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Test_cancelled, __mpi_activity);
@@ -3586,7 +3586,7 @@ int i_MPI_Test_cancelled(const MPI_Status * status, int * flag, void* return_add
 };
 
 int i_MPI_File_iread_at(MPI_File fh, MPI_Offset offset, void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iread_at_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iread_at_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_iread_at, __mpi_activity);
@@ -3597,7 +3597,7 @@ int i_MPI_File_iread_at(MPI_File fh, MPI_Offset offset, void * buf, int count, M
 };
 
 int i_MPI_Ibcast(void * buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ibcast_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ibcast_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ibcast, __mpi_activity);
@@ -3608,7 +3608,7 @@ int i_MPI_Ibcast(void * buffer, int count, MPI_Datatype datatype, int root, MPI_
 };
 
 int i_MPI_Recv(void * buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Recv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Recv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Recv, __mpi_activity);
@@ -3619,7 +3619,7 @@ int i_MPI_Recv(void * buf, int count, MPI_Datatype datatype, int source, int tag
 };
 
 int i_MPI_Improbe(int source, int tag, MPI_Comm comm, int * flag, MPI_Message * message, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Improbe_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Improbe_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Improbe, __mpi_activity);
@@ -3630,7 +3630,7 @@ int i_MPI_Improbe(int source, int tag, MPI_Comm comm, int * flag, MPI_Message * 
 };
 
 int i_MPI_Type_free(MPI_Datatype * type, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_free_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_free_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	GET_ARGS_VALUE_MPI_Type_free(__mpi_activity);
@@ -3641,7 +3641,7 @@ int i_MPI_Type_free(MPI_Datatype * type, void* return_address) {
 };
 
 int i_MPI_File_set_errhandler(MPI_File file, MPI_Errhandler errhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_set_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_set_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_set_errhandler, __mpi_activity);
@@ -3652,7 +3652,7 @@ int i_MPI_File_set_errhandler(MPI_File file, MPI_Errhandler errhandler, void* re
 };
 
 int i_MPI_Errhandler_c2f(MPI_Errhandler errhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Errhandler_c2f_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Errhandler_c2f_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Errhandler_c2f, __mpi_activity);
@@ -3663,7 +3663,7 @@ int i_MPI_Errhandler_c2f(MPI_Errhandler errhandler, void* return_address) {
 };
 
 int i_MPI_Exscan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Exscan_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Exscan_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Exscan, __mpi_activity);
@@ -3674,7 +3674,7 @@ int i_MPI_Exscan(const void * sendbuf, void * recvbuf, int count, MPI_Datatype d
 };
 
 int i_MPI_Comm_idup(MPI_Comm comm, MPI_Comm * newcomm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_idup_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_idup_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_idup, __mpi_activity);
@@ -3685,7 +3685,7 @@ int i_MPI_Comm_idup(MPI_Comm comm, MPI_Comm * newcomm, MPI_Request * request, vo
 };
 
 int i_MPI_Group_rank(MPI_Group group, int * rank, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_rank_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_rank_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_rank, __mpi_activity);
@@ -3696,7 +3696,7 @@ int i_MPI_Group_rank(MPI_Group group, int * rank, void* return_address) {
 };
 
 int i_MPI_Ssend_init(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ssend_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ssend_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ssend_init, __mpi_activity);
@@ -3707,7 +3707,7 @@ int i_MPI_Ssend_init(const void * buf, int count, MPI_Datatype datatype, int des
 };
 
 int i_MPI_Info_free(MPI_Info * info, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_free_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_free_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	GET_ARGS_VALUE_MPI_Info_free(__mpi_activity);
@@ -3718,7 +3718,7 @@ int i_MPI_Info_free(MPI_Info * info, void* return_address) {
 };
 
 int i_MPI_Irsend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Irsend_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Irsend_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Irsend, __mpi_activity);
@@ -3729,7 +3729,7 @@ int i_MPI_Irsend(const void * buf, int count, MPI_Datatype datatype, int dest, i
 };
 
 int i_MPI_Gather_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Gather_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Gather_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Gather_init, __mpi_activity);
@@ -3740,7 +3740,7 @@ int i_MPI_Gather_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype
 };
 
 int i_MPI_Iscatterv(const void * sendbuf, const int sendcounts[], const int displs[], MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iscatterv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iscatterv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Iscatterv, __mpi_activity);
@@ -3751,7 +3751,7 @@ int i_MPI_Iscatterv(const void * sendbuf, const int sendcounts[], const int disp
 };
 
 int i_MPI_Alltoall(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Alltoall_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Alltoall_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Alltoall, __mpi_activity);
@@ -3762,7 +3762,7 @@ int i_MPI_Alltoall(const void * sendbuf, int sendcount, MPI_Datatype sendtype, v
 };
 
 int i_MPI_Isend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Isend_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Isend_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Isend, __mpi_activity);
@@ -3773,7 +3773,7 @@ int i_MPI_Isend(const void * buf, int count, MPI_Datatype datatype, int dest, in
 };
 
 int i_MPI_Attr_delete(MPI_Comm comm, int keyval, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Attr_delete_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Attr_delete_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Attr_delete, __mpi_activity);
@@ -3784,7 +3784,7 @@ int i_MPI_Attr_delete(MPI_Comm comm, int keyval, void* return_address) {
 };
 
 int i_MPI_Win_allocate(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void * baseptr, MPI_Win * win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_allocate_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_allocate_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_allocate, __mpi_activity);
@@ -3795,7 +3795,7 @@ int i_MPI_Win_allocate(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm com
 };
 
 int i_MPI_Startall(int count, MPI_Request array_of_requests[], void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Startall_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Startall_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Startall, __mpi_activity);
@@ -3806,7 +3806,7 @@ int i_MPI_Startall(int count, MPI_Request array_of_requests[], void* return_addr
 };
 
 int i_MPI_Type_get_extent_x(MPI_Datatype type, MPI_Count * lb, MPI_Count * extent, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_extent_x_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_extent_x_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_get_extent_x, __mpi_activity);
@@ -3817,7 +3817,7 @@ int i_MPI_Type_get_extent_x(MPI_Datatype type, MPI_Count * lb, MPI_Count * exten
 };
 
 int i_MPI_Ssend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ssend_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ssend_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ssend, __mpi_activity);
@@ -3828,7 +3828,7 @@ int i_MPI_Ssend(const void * buf, int count, MPI_Datatype datatype, int dest, in
 };
 
 int i_MPI_Neighbor_alltoall_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_alltoall_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_alltoall_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Neighbor_alltoall_init, __mpi_activity);
@@ -3839,7 +3839,7 @@ int i_MPI_Neighbor_alltoall_init(const void * sendbuf, int sendcount, MPI_Dataty
 };
 
 int i_MPI_Buffer_attach(void * buffer, int size, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Buffer_attach_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Buffer_attach_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Buffer_attach, __mpi_activity);
@@ -3850,7 +3850,7 @@ int i_MPI_Buffer_attach(void * buffer, int size, void* return_address) {
 };
 
 int i_MPI_Win_complete(MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_complete_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_complete_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_complete, __mpi_activity);
@@ -3861,7 +3861,7 @@ int i_MPI_Win_complete(MPI_Win win, void* return_address) {
 };
 
 int i_MPI_Win_flush_local(int rank, MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_flush_local_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_flush_local_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_flush_local, __mpi_activity);
@@ -3872,7 +3872,7 @@ int i_MPI_Win_flush_local(int rank, MPI_Win win, void* return_address) {
 };
 
 int i_MPI_Type_commit(MPI_Datatype * type, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_commit_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_commit_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_commit, __mpi_activity);
@@ -3883,7 +3883,7 @@ int i_MPI_Type_commit(MPI_Datatype * type, void* return_address) {
 };
 
 int i_MPI_Comm_create_keyval(MPI_Comm_copy_attr_function * comm_copy_attr_fn, MPI_Comm_delete_attr_function * comm_delete_attr_fn, int * comm_keyval, void * extra_state, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_create_keyval_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_create_keyval_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_create_keyval, __mpi_activity);
@@ -3894,7 +3894,7 @@ int i_MPI_Comm_create_keyval(MPI_Comm_copy_attr_function * comm_copy_attr_fn, MP
 };
 
 int i_MPI_Info_create(MPI_Info * info, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_create_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_create_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_create, __mpi_activity);
@@ -3905,7 +3905,7 @@ int i_MPI_Info_create(MPI_Info * info, void* return_address) {
 };
 
 int i_MPI_Neighbor_alltoallv(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_alltoallv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_alltoallv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Neighbor_alltoallv, __mpi_activity);
@@ -3916,7 +3916,7 @@ int i_MPI_Neighbor_alltoallv(const void * sendbuf, const int sendcounts[], const
 };
 
 int i_MPI_Rget_accumulate(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, void * result_addr, int result_count, MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Rget_accumulate_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Rget_accumulate_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Rget_accumulate, __mpi_activity);
@@ -3927,7 +3927,7 @@ int i_MPI_Rget_accumulate(const void * origin_addr, int origin_count, MPI_Dataty
 };
 
 int i_MPI_Win_unlock(int rank, MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_unlock_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_unlock_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_unlock, __mpi_activity);
@@ -3938,7 +3938,7 @@ int i_MPI_Win_unlock(int rank, MPI_Win win, void* return_address) {
 };
 
 int i_MPI_File_write_all_end(MPI_File fh, const void * buf, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_all_end_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_all_end_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_write_all_end, __mpi_activity);
@@ -3949,7 +3949,7 @@ int i_MPI_File_write_all_end(MPI_File fh, const void * buf, MPI_Status * status,
 };
 
 int i_MPI_Comm_free(MPI_Comm * comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_free_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_free_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	GET_ARGS_VALUE_MPI_Comm_free(__mpi_activity);
@@ -3960,7 +3960,7 @@ int i_MPI_Comm_free(MPI_Comm * comm, void* return_address) {
 };
 
 int i_MPI_Rget(void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Rget_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Rget_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Rget, __mpi_activity);
@@ -3971,7 +3971,7 @@ int i_MPI_Rget(void * origin_addr, int origin_count, MPI_Datatype origin_datatyp
 };
 
 int i_MPI_File_write_at(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_at_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_at_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_write_at, __mpi_activity);
@@ -3982,7 +3982,7 @@ int i_MPI_File_write_at(MPI_File fh, MPI_Offset offset, const void * buf, int co
 };
 
 int i_MPI_Dist_graph_create_adjacent(MPI_Comm comm_old, int indegree, const int sources[], const int sourceweights[], int outdegree, const int destinations[], const int destweights[], MPI_Info info, int reorder, MPI_Comm * comm_dist_graph, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Dist_graph_create_adjacent_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Dist_graph_create_adjacent_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Dist_graph_create_adjacent, __mpi_activity);
@@ -3993,7 +3993,7 @@ int i_MPI_Dist_graph_create_adjacent(MPI_Comm comm_old, int indegree, const int 
 };
 
 int i_MPI_Error_string(int errorcode, char * string, int * resultlen, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Error_string_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Error_string_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Error_string, __mpi_activity);
@@ -4004,7 +4004,7 @@ int i_MPI_Error_string(int errorcode, char * string, int * resultlen, void* retu
 };
 
 int i_MPI_File_write_at_all_begin(MPI_File fh, MPI_Offset offset, const void * buf, int count, MPI_Datatype datatype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_at_all_begin_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_at_all_begin_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_write_at_all_begin, __mpi_activity);
@@ -4015,7 +4015,7 @@ int i_MPI_File_write_at_all_begin(MPI_File fh, MPI_Offset offset, const void * b
 };
 
 int i_MPI_Attr_put(MPI_Comm comm, int keyval, void * attribute_val, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Attr_put_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Attr_put_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Attr_put, __mpi_activity);
@@ -4026,7 +4026,7 @@ int i_MPI_Attr_put(MPI_Comm comm, int keyval, void * attribute_val, void* return
 };
 
 int i_MPI_Session_init(MPI_Info info, MPI_Errhandler errhandler, MPI_Session * session, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_init, __mpi_activity);
@@ -4037,7 +4037,7 @@ int i_MPI_Session_init(MPI_Info info, MPI_Errhandler errhandler, MPI_Session * s
 };
 
 int i_MPI_Win_start(MPI_Group group, int mpi_assert, MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_start_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_start_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_start, __mpi_activity);
@@ -4048,7 +4048,7 @@ int i_MPI_Win_start(MPI_Group group, int mpi_assert, MPI_Win win, void* return_a
 };
 
 int i_MPI_Status_f2f08(const int * f_status, MPI_F08_status * f08_status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_f2f08_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Status_f2f08_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Status_f2f08, __mpi_activity);
@@ -4059,7 +4059,7 @@ int i_MPI_Status_f2f08(const int * f_status, MPI_F08_status * f08_status, void* 
 };
 
 int i_MPI_Win_set_info(MPI_Win win, MPI_Info info, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_set_info_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Win_set_info_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Win_set_info, __mpi_activity);
@@ -4070,7 +4070,7 @@ int i_MPI_Win_set_info(MPI_Win win, MPI_Info info, void* return_address) {
 };
 
 int i_MPI_File_get_byte_offset(MPI_File fh, MPI_Offset offset, MPI_Offset * disp, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_byte_offset_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_byte_offset_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_get_byte_offset, __mpi_activity);
@@ -4081,7 +4081,7 @@ int i_MPI_File_get_byte_offset(MPI_File fh, MPI_Offset offset, MPI_Offset * disp
 };
 
 int i_MPI_File_call_errhandler(MPI_File fh, int errorcode, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_call_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_call_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_call_errhandler, __mpi_activity);
@@ -4092,7 +4092,7 @@ int i_MPI_File_call_errhandler(MPI_File fh, int errorcode, void* return_address)
 };
 
 int i_MPI_Neighbor_alltoall(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_alltoall_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_alltoall_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Neighbor_alltoall, __mpi_activity);
@@ -4103,7 +4103,7 @@ int i_MPI_Neighbor_alltoall(const void * sendbuf, int sendcount, MPI_Datatype se
 };
 
 int i_MPI_Unpack_external(const char datarep[], const void * inbuf, MPI_Aint insize, MPI_Aint * position, void * outbuf, int outcount, MPI_Datatype datatype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Unpack_external_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Unpack_external_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Unpack_external, __mpi_activity);
@@ -4114,7 +4114,7 @@ int i_MPI_Unpack_external(const char datarep[], const void * inbuf, MPI_Aint ins
 };
 
 int i_MPI_Session_c2f(const MPI_Session session, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_c2f_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_c2f_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_c2f, __mpi_activity);
@@ -4125,7 +4125,7 @@ int i_MPI_Session_c2f(const MPI_Session session, void* return_address) {
 };
 
 int i_MPI_Ibarrier(MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ibarrier_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ibarrier_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ibarrier, __mpi_activity);
@@ -4136,7 +4136,7 @@ int i_MPI_Ibarrier(MPI_Comm comm, MPI_Request * request, void* return_address) {
 };
 
 int i_MPI_Is_thread_main(int * flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Is_thread_main_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Is_thread_main_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Is_thread_main, __mpi_activity);
@@ -4147,7 +4147,7 @@ int i_MPI_Is_thread_main(int * flag, void* return_address) {
 };
 
 int i_MPI_Type_c2f(MPI_Datatype datatype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_c2f_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_c2f_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_c2f, __mpi_activity);
@@ -4158,7 +4158,7 @@ int i_MPI_Type_c2f(MPI_Datatype datatype, void* return_address) {
 };
 
 int i_MPI_Reduce_local(const void * inbuf, void * inoutbuf, int count, MPI_Datatype datatype, MPI_Op op, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Reduce_local_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Reduce_local_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Reduce_local, __mpi_activity);
@@ -4169,7 +4169,7 @@ int i_MPI_Reduce_local(const void * inbuf, void * inoutbuf, int count, MPI_Datat
 };
 
 int i_MPI_Dist_graph_neighbors(MPI_Comm comm, int maxindegree, int sources[], int sourceweights[], int maxoutdegree, int destinations[], int destweights[], void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Dist_graph_neighbors_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Dist_graph_neighbors_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Dist_graph_neighbors, __mpi_activity);
@@ -4180,7 +4180,7 @@ int i_MPI_Dist_graph_neighbors(MPI_Comm comm, int maxindegree, int sources[], in
 };
 
 int i_MPI_Comm_split(MPI_Comm comm, int color, int key, MPI_Comm * newcomm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_split_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_split_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_split, __mpi_activity);
@@ -4191,7 +4191,7 @@ int i_MPI_Comm_split(MPI_Comm comm, int color, int key, MPI_Comm * newcomm, void
 };
 
 int i_MPI_Put(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Put_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Put_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Put, __mpi_activity);
@@ -4202,7 +4202,7 @@ int i_MPI_Put(const void * origin_addr, int origin_count, MPI_Datatype origin_da
 };
 
 int i_MPI_Add_error_code(int errorclass, int * errorcode, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Add_error_code_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Add_error_code_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Add_error_code, __mpi_activity);
@@ -4213,7 +4213,7 @@ int i_MPI_Add_error_code(int errorclass, int * errorcode, void* return_address) 
 };
 
 int i_MPI_Grequest_complete(MPI_Request request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Grequest_complete_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Grequest_complete_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Grequest_complete, __mpi_activity);
@@ -4224,7 +4224,7 @@ int i_MPI_Grequest_complete(MPI_Request request, void* return_address) {
 };
 
 int i_MPI_Raccumulate(const void * origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Raccumulate_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Raccumulate_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Raccumulate, __mpi_activity);
@@ -4235,7 +4235,7 @@ int i_MPI_Raccumulate(const void * origin_addr, int origin_count, MPI_Datatype o
 };
 
 int i_MPI_Comm_set_errhandler(MPI_Comm comm, MPI_Errhandler errhandler, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_set_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_set_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_set_errhandler, __mpi_activity);
@@ -4246,7 +4246,7 @@ int i_MPI_Comm_set_errhandler(MPI_Comm comm, MPI_Errhandler errhandler, void* re
 };
 
 int i_MPI_Type_indexed(int count, const int array_of_blocklengths[], const int array_of_displacements[], MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_indexed_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_indexed_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_indexed, __mpi_activity);
@@ -4257,7 +4257,7 @@ int i_MPI_Type_indexed(int count, const int array_of_blocklengths[], const int a
 };
 
 int i_MPI_Igather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Igather_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Igather_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Igather, __mpi_activity);
@@ -4268,7 +4268,7 @@ int i_MPI_Igather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, vo
 };
 
 int i_MPI_File_delete(const char * filename, MPI_Info info, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_delete_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_delete_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_delete, __mpi_activity);
@@ -4279,7 +4279,7 @@ int i_MPI_File_delete(const char * filename, MPI_Info info, void* return_address
 };
 
 int i_MPI_Info_get_nkeys(MPI_Info info, int * nkeys, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_get_nkeys_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_get_nkeys_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_get_nkeys, __mpi_activity);
@@ -4290,7 +4290,7 @@ int i_MPI_Info_get_nkeys(MPI_Info info, int * nkeys, void* return_address) {
 };
 
 int i_MPI_Bcast_init(void * buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Bcast_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Bcast_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Bcast_init, __mpi_activity);
@@ -4301,7 +4301,7 @@ int i_MPI_Bcast_init(void * buffer, int count, MPI_Datatype datatype, int root, 
 };
 
 int i_MPI_Comm_idup_with_info(MPI_Comm comm, MPI_Info info, MPI_Comm * newcomm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_idup_with_info_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_idup_with_info_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_idup_with_info, __mpi_activity);
@@ -4312,7 +4312,7 @@ int i_MPI_Comm_idup_with_info(MPI_Comm comm, MPI_Info info, MPI_Comm * newcomm, 
 };
 
 int i_MPI_Neighbor_allgatherv_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_allgatherv_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Neighbor_allgatherv_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Neighbor_allgatherv_init, __mpi_activity);
@@ -4323,7 +4323,7 @@ int i_MPI_Neighbor_allgatherv_init(const void * sendbuf, int sendcount, MPI_Data
 };
 
 int i_MPI_File_read_ordered_end(MPI_File fh, void * buf, MPI_Status * status, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_ordered_end_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_ordered_end_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_read_ordered_end, __mpi_activity);
@@ -4334,7 +4334,7 @@ int i_MPI_File_read_ordered_end(MPI_File fh, void * buf, MPI_Status * status, vo
 };
 
 int i_MPI_Allgatherv_init(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Allgatherv_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Allgatherv_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Allgatherv_init, __mpi_activity);
@@ -4345,7 +4345,7 @@ int i_MPI_Allgatherv_init(const void * sendbuf, int sendcount, MPI_Datatype send
 };
 
 int i_MPI_Comm_delete_attr(MPI_Comm comm, int comm_keyval, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_delete_attr_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_delete_attr_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_delete_attr, __mpi_activity);
@@ -4356,7 +4356,7 @@ int i_MPI_Comm_delete_attr(MPI_Comm comm, int comm_keyval, void* return_address)
 };
 
 int i_MPI_Type_create_subarray(int ndims, const int size_array[], const int subsize_array[], const int start_array[], int order, MPI_Datatype oldtype, MPI_Datatype * newtype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_subarray_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_create_subarray_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_create_subarray, __mpi_activity);
@@ -4367,7 +4367,7 @@ int i_MPI_Type_create_subarray(int ndims, const int size_array[], const int subs
 };
 
 int i_MPI_Reduce_scatter(const void * sendbuf, void * recvbuf, const int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Reduce_scatter_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Reduce_scatter_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Reduce_scatter, __mpi_activity);
@@ -4378,7 +4378,7 @@ int i_MPI_Reduce_scatter(const void * sendbuf, void * recvbuf, const int recvcou
 };
 
 int i_MPI_Info_get_valuelen(MPI_Info info, const char * key, int * valuelen, int * flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_get_valuelen_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_get_valuelen_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_get_valuelen, __mpi_activity);
@@ -4389,7 +4389,7 @@ int i_MPI_Info_get_valuelen(MPI_Info info, const char * key, int * valuelen, int
 };
 
 int i_MPI_Type_get_attr(MPI_Datatype type, int type_keyval, void * attribute_val, int * flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_attr_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_attr_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_get_attr, __mpi_activity);
@@ -4400,7 +4400,7 @@ int i_MPI_Type_get_attr(MPI_Datatype type, int type_keyval, void * attribute_val
 };
 
 int i_MPI_File_iwrite(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iwrite_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_iwrite_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_iwrite, __mpi_activity);
@@ -4411,7 +4411,7 @@ int i_MPI_File_iwrite(MPI_File fh, const void * buf, int count, MPI_Datatype dat
 };
 
 int i_MPI_Ibsend(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ibsend_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ibsend_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ibsend, __mpi_activity);
@@ -4422,7 +4422,7 @@ int i_MPI_Ibsend(const void * buf, int count, MPI_Datatype datatype, int dest, i
 };
 
 int i_MPI_Pready(int partitions, MPI_Request request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pready_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pready_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Pready, __mpi_activity);
@@ -4433,7 +4433,7 @@ int i_MPI_Pready(int partitions, MPI_Request request, void* return_address) {
 };
 
 int i_MPI_Session_get_nth_pset(MPI_Session session, MPI_Info info, int n, int * len, char * pset_name, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_get_nth_pset_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Session_get_nth_pset_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Session_get_nth_pset, __mpi_activity);
@@ -4444,7 +4444,7 @@ int i_MPI_Session_get_nth_pset(MPI_Session session, MPI_Info info, int n, int * 
 };
 
 int i_MPI_Pready_list(int length, int partition_list[], MPI_Request request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pready_list_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Pready_list_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Pready_list, __mpi_activity);
@@ -4455,7 +4455,7 @@ int i_MPI_Pready_list(int length, int partition_list[], MPI_Request request, voi
 };
 
 int i_MPI_Cart_get(MPI_Comm comm, int maxdims, int dims[], int periods[], int coords[], void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cart_get_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Cart_get_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Cart_get, __mpi_activity);
@@ -4466,7 +4466,7 @@ int i_MPI_Cart_get(MPI_Comm comm, int maxdims, int dims[], int periods[], int co
 };
 
 int i_MPI_Group_range_excl(MPI_Group group, int n, int ranges[][3], MPI_Group * newgroup, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_range_excl_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_range_excl_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_range_excl, __mpi_activity);
@@ -4477,7 +4477,7 @@ int i_MPI_Group_range_excl(MPI_Group group, int n, int ranges[][3], MPI_Group * 
 };
 
 int i_MPI_Type_get_true_extent(MPI_Datatype datatype, MPI_Aint * true_lb, MPI_Aint * true_extent, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_true_extent_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Type_get_true_extent_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Type_get_true_extent, __mpi_activity);
@@ -4488,7 +4488,7 @@ int i_MPI_Type_get_true_extent(MPI_Datatype datatype, MPI_Aint * true_lb, MPI_Ai
 };
 
 int i_MPI_Iallgather(const void * sendbuf, int sendcount, MPI_Datatype sendtype, void * recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iallgather_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Iallgather_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Iallgather, __mpi_activity);
@@ -4499,7 +4499,7 @@ int i_MPI_Iallgather(const void * sendbuf, int sendcount, MPI_Datatype sendtype,
 };
 
 int i_MPI_Init_thread(int * argc, char *** argv, int required, int * provided, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Init_thread_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Init_thread_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Init_thread, __mpi_activity);
@@ -4510,7 +4510,7 @@ int i_MPI_Init_thread(int * argc, char *** argv, int required, int * provided, v
 };
 
 int i_MPI_Group_incl(MPI_Group group, int n, const int ranks[], MPI_Group * newgroup, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_incl_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_incl_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_incl, __mpi_activity);
@@ -4521,7 +4521,7 @@ int i_MPI_Group_incl(MPI_Group group, int n, const int ranks[], MPI_Group * newg
 };
 
 int i_MPI_Alltoallv(const void * sendbuf, const int sendcounts[], const int sdispls[], MPI_Datatype sendtype, void * recvbuf, const int recvcounts[], const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Alltoallv_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Alltoallv_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Alltoallv, __mpi_activity);
@@ -4532,7 +4532,7 @@ int i_MPI_Alltoallv(const void * sendbuf, const int sendcounts[], const int sdis
 };
 
 int i_MPI_Comm_remote_size(MPI_Comm comm, int * size, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_remote_size_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_remote_size_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_remote_size, __mpi_activity);
@@ -4543,7 +4543,7 @@ int i_MPI_Comm_remote_size(MPI_Comm comm, int * size, void* return_address) {
 };
 
 int i_MPI_Comm_set_attr(MPI_Comm comm, int comm_keyval, void * attribute_val, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_set_attr_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_set_attr_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_set_attr, __mpi_activity);
@@ -4554,7 +4554,7 @@ int i_MPI_Comm_set_attr(MPI_Comm comm, int comm_keyval, void * attribute_val, vo
 };
 
 int i_MPI_Open_port(MPI_Info info, char * port_name, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Open_port_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Open_port_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Open_port, __mpi_activity);
@@ -4565,7 +4565,7 @@ int i_MPI_Open_port(MPI_Info info, char * port_name, void* return_address) {
 };
 
 int i_MPI_Error_class(int errorcode, int * errorclass, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Error_class_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Error_class_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Error_class, __mpi_activity);
@@ -4576,7 +4576,7 @@ int i_MPI_Error_class(int errorcode, int * errorclass, void* return_address) {
 };
 
 int i_MPI_Bsend_init(const void * buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Bsend_init_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Bsend_init_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Bsend_init, __mpi_activity);
@@ -4587,7 +4587,7 @@ int i_MPI_Bsend_init(const void * buf, int count, MPI_Datatype datatype, int des
 };
 
 int i_MPI_Finalized(int * flag, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Finalized_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Finalized_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Finalized, __mpi_activity);
@@ -4598,7 +4598,7 @@ int i_MPI_Finalized(int * flag, void* return_address) {
 };
 
 int i_MPI_Close_port(const char * port_name, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Close_port_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Close_port_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Close_port, __mpi_activity);
@@ -4609,7 +4609,7 @@ int i_MPI_Close_port(const char * port_name, void* return_address) {
 };
 
 int i_MPI_Buffer_detach(void * buffer, int * size, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Buffer_detach_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Buffer_detach_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Buffer_detach, __mpi_activity);
@@ -4620,7 +4620,7 @@ int i_MPI_Buffer_detach(void * buffer, int * size, void* return_address) {
 };
 
 int i_MPI_Info_get_nthkey(MPI_Info info, int n, char * key, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_get_nthkey_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Info_get_nthkey_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Info_get_nthkey, __mpi_activity);
@@ -4631,7 +4631,7 @@ int i_MPI_Info_get_nthkey(MPI_Info info, int n, char * key, void* return_address
 };
 
 int i_MPI_Ireduce_scatter_block(const void * sendbuf, void * recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request * request, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ireduce_scatter_block_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Ireduce_scatter_block_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Ireduce_scatter_block, __mpi_activity);
@@ -4642,7 +4642,7 @@ int i_MPI_Ireduce_scatter_block(const void * sendbuf, void * recvbuf, int recvco
 };
 
 int i_MPI_Comm_compare(MPI_Comm comm1, MPI_Comm comm2, int * result, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_compare_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_compare_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_compare, __mpi_activity);
@@ -4653,7 +4653,7 @@ int i_MPI_Comm_compare(MPI_Comm comm1, MPI_Comm comm2, int * result, void* retur
 };
 
 int i_MPI_Group_excl(MPI_Group group, int n, const int ranks[], MPI_Group * newgroup, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_excl_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Group_excl_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Group_excl, __mpi_activity);
@@ -4664,7 +4664,7 @@ int i_MPI_Group_excl(MPI_Group group, int n, const int ranks[], MPI_Group * newg
 };
 
 int i_MPI_File_read_ordered_begin(MPI_File fh, void * buf, int count, MPI_Datatype datatype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_ordered_begin_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_read_ordered_begin_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_read_ordered_begin, __mpi_activity);
@@ -4675,7 +4675,7 @@ int i_MPI_File_read_ordered_begin(MPI_File fh, void * buf, int count, MPI_Dataty
 };
 
 int i_MPI_File_get_info(MPI_File fh, MPI_Info * info_used, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_info_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_get_info_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_get_info, __mpi_activity);
@@ -4686,7 +4686,7 @@ int i_MPI_File_get_info(MPI_File fh, MPI_Info * info_used, void* return_address)
 };
 
 int i_MPI_Comm_call_errhandler(MPI_Comm comm, int errorcode, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_call_errhandler_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_Comm_call_errhandler_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_Comm_call_errhandler, __mpi_activity);
@@ -4697,7 +4697,7 @@ int i_MPI_Comm_call_errhandler(MPI_Comm comm, int errorcode, void* return_addres
 };
 
 int i_MPI_File_set_view(MPI_File fh, MPI_Offset disp, MPI_Datatype etype, MPI_Datatype filetype, const char * datarep, MPI_Info info, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_set_view_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_set_view_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_set_view, __mpi_activity);
@@ -4708,7 +4708,7 @@ int i_MPI_File_set_view(MPI_File fh, MPI_Offset disp, MPI_Datatype etype, MPI_Da
 };
 
 int i_MPI_File_write_ordered_begin(MPI_File fh, const void * buf, int count, MPI_Datatype datatype, void* return_address) {
-	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_ordered_begin_t));
+	ratelprof_api_activity_t* __mpi_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_MPI_File_write_ordered_begin_t));
 	__mpi_activity->args = (void*)(__mpi_activity + 1);
 	__mpi_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_MPI](RATELPROF_DOMAIN_MPI, MPI_API_ID_MPI_File_write_ordered_begin, __mpi_activity);

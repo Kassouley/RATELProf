@@ -24,6 +24,10 @@
 #include <stdint.h>
 #include <time.h> 
 
+typedef uint64_t ratelprof_tsc_t;
+typedef struct timespec ratelprof_timespec_t;
+
+
 /**
  * @brief Type alias for `struct timespec` used for time measurements.
  *
@@ -33,7 +37,11 @@
  *
  * @see struct timespec
  */
-typedef struct timespec ratelprof_timespec_t;
+// typedef struct timespec ratelprof_timespec_t;
+typedef union ratelprof_clock_s {
+    ratelprof_timespec_t ts;
+    ratelprof_tsc_t tsc;
+} ratelprof_clock_t;
 
 /**
  * @brief Type alias for representing time.
@@ -62,7 +70,7 @@ typedef uint64_t ratelprof_time_t;
  * printf("Current time: %ld.%09ld seconds\n", ts.tv_sec, ts.tv_nsec);
  * ```
  */
-ratelprof_timespec_t ratelprof_get_curr_timespec();
+ratelprof_clock_t ratelprof_get_clock_now();
 
 
 /**
@@ -73,7 +81,7 @@ ratelprof_timespec_t ratelprof_get_curr_timespec();
  *
  * @return The current time as a `ratelprof_timespec_t` structure.
  */
-ratelprof_timespec_t ratelprof_get_curr_epoch();
+ratelprof_clock_t ratelprof_get_real_timespec();
 
 
 /**
@@ -97,7 +105,7 @@ ratelprof_timespec_t ratelprof_get_curr_epoch();
  * printf("Timestamp: %llu ns\n", timestamp_ns);
  * ```
  */
-ratelprof_time_t ratelprof_get_timestamp_ns(ratelprof_timespec_t ts);
+ratelprof_time_t ratelprof_get_time_ns(ratelprof_clock_t clock);
 
 
 /**
@@ -121,7 +129,7 @@ ratelprof_time_t ratelprof_get_timestamp_ns(ratelprof_timespec_t ts);
  * printf("Timestamp: %llu us\n", timestamp_us);
  * ```
  */
-ratelprof_time_t ratelprof_get_timestamp_us(ratelprof_timespec_t ts);
+ratelprof_time_t ratelprof_get_time_us(ratelprof_clock_t clock);
 
 
 /**
@@ -145,7 +153,7 @@ ratelprof_time_t ratelprof_get_timestamp_us(ratelprof_timespec_t ts);
  * printf("Timestamp: %llu ms\n", timestamp_ms);
  * ```
  */
-ratelprof_time_t ratelprof_get_timestamp_ms(ratelprof_timespec_t ts);
+ratelprof_time_t ratelprof_get_time_ms(ratelprof_clock_t clock);
 
 
 /**
@@ -169,6 +177,17 @@ ratelprof_time_t ratelprof_get_timestamp_ms(ratelprof_timespec_t ts);
  * printf("Timestamp: %llu s\n", timestamp_s);
  * ```
  */
-ratelprof_time_t ratelprof_get_timestamp_s(ratelprof_timespec_t ts);
+ratelprof_time_t ratelprof_get_time_s(ratelprof_clock_t clock);
+
+
+ratelprof_time_t ratelprof_ts_to_ns(ratelprof_clock_t c);
+ratelprof_time_t ratelprof_ts_to_us(ratelprof_clock_t c);
+ratelprof_time_t ratelprof_ts_to_ms(ratelprof_clock_t c);
+ratelprof_time_t ratelprof_ts_to_s(ratelprof_clock_t c);
+
+// ratelprof_time_t ratelprof_tsc_to_ns(ratelprof_clock_t c);
+// ratelprof_time_t ratelprof_tsc_to_us(ratelprof_clock_t c);
+// ratelprof_time_t ratelprof_tsc_to_ms(ratelprof_clock_t c);
+// ratelprof_time_t ratelprof_tsc_to_s(ratelprof_clock_t c);
 
 #endif // RATELPROF_TIME_H

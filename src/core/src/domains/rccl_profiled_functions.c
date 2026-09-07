@@ -12,21 +12,21 @@
 #include "domains/minimal_abi/rccl_minimal_abi.h" 
 
 #define CALL(func, ...) { \
-    __rccl_activity->start_time = ratelprof_get_curr_timespec(); \
+    __rccl_activity->start_time = ratelprof_get_clock_now(); \
 	((__##func##_t)rccl_api_table.api_fn[RCCL_API_ID_##func])(__VA_ARGS__); \
-    __rccl_activity->stop_time = ratelprof_get_curr_timespec(); \
+    __rccl_activity->stop_time = ratelprof_get_clock_now(); \
 };
 
 #define CALL_RET(ret_type, func, ...) \
-    __rccl_activity->start_time = ratelprof_get_curr_timespec(); \
+    __rccl_activity->start_time = ratelprof_get_clock_now(); \
 	ret_type __rccl_ret = (ret_type)((__##func##_t)rccl_api_table.api_fn[RCCL_API_ID_##func])(__VA_ARGS__); \
-    __rccl_activity->stop_time = ratelprof_get_curr_timespec(); \
+    __rccl_activity->stop_time = ratelprof_get_clock_now(); \
 	args_##func##_t* __args = (args_##func##_t*)__rccl_activity->args; \
 	__args->retval = (ret_type)__rccl_ret; 
 
 
 const char * i_ncclGetLastError(ncclComm_t comm, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGetLastError_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGetLastError_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclGetLastError, __rccl_activity);
@@ -37,7 +37,7 @@ const char * i_ncclGetLastError(ncclComm_t comm, void* return_address) {
 };
 
 const char * i_ncclGetErrorString(ncclResult_t result, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGetErrorString_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGetErrorString_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclGetErrorString, __rccl_activity);
@@ -48,7 +48,7 @@ const char * i_ncclGetErrorString(ncclResult_t result, void* return_address) {
 };
 
 ncclResult_t i_ncclGetVersion(int * version, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGetVersion_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGetVersion_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclGetVersion, __rccl_activity);
@@ -59,7 +59,7 @@ ncclResult_t i_ncclGetVersion(int * version, void* return_address) {
 };
 
 ncclResult_t i_ncclCommFinalize(ncclComm_t comm, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommFinalize_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommFinalize_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommFinalize, __rccl_activity);
@@ -70,7 +70,7 @@ ncclResult_t i_ncclCommFinalize(ncclComm_t comm, void* return_address) {
 };
 
 ncclResult_t i_ncclBcast(void * buff, size_t count, ncclDataType_t datatype, int root, ncclComm_t comm, int stream, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclBcast_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclBcast_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclBcast, __rccl_activity);
@@ -81,7 +81,7 @@ ncclResult_t i_ncclBcast(void * buff, size_t count, ncclDataType_t datatype, int
 };
 
 ncclResult_t i_ncclGroupStart(void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGroupStart_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGroupStart_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclGroupStart, __rccl_activity);
@@ -91,7 +91,7 @@ ncclResult_t i_ncclGroupStart(void* return_address) {
 };
 
 ncclResult_t i_ncclAllToAll(const void * sendbuff, void * recvbuff, size_t count, ncclDataType_t datatype, ncclComm_t comm, int stream, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclAllToAll_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclAllToAll_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclAllToAll, __rccl_activity);
@@ -102,7 +102,7 @@ ncclResult_t i_ncclAllToAll(const void * sendbuff, void * recvbuff, size_t count
 };
 
 ncclResult_t i_ncclAllGather(const void * sendbuff, void * recvbuff, size_t sendcount, ncclDataType_t datatype, ncclComm_t comm, int stream, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclAllGather_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclAllGather_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclAllGather, __rccl_activity);
@@ -113,7 +113,7 @@ ncclResult_t i_ncclAllGather(const void * sendbuff, void * recvbuff, size_t send
 };
 
 ncclResult_t i_ncclGroupSimulateEnd(ncclSimInfo_t * simInfo, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGroupSimulateEnd_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGroupSimulateEnd_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclGroupSimulateEnd, __rccl_activity);
@@ -124,7 +124,7 @@ ncclResult_t i_ncclGroupSimulateEnd(ncclSimInfo_t * simInfo, void* return_addres
 };
 
 ncclResult_t i_ncclCommWindowRegister(ncclComm_t comm, void * buff, size_t size, ncclWindow_t * win, int winFlags, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommWindowRegister_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommWindowRegister_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommWindowRegister, __rccl_activity);
@@ -135,7 +135,7 @@ ncclResult_t i_ncclCommWindowRegister(ncclComm_t comm, void * buff, size_t size,
 };
 
 ncclResult_t i_ncclCommDeregister(const ncclComm_t comm, void * handle, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommDeregister_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommDeregister_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommDeregister, __rccl_activity);
@@ -146,7 +146,7 @@ ncclResult_t i_ncclCommDeregister(const ncclComm_t comm, void * handle, void* re
 };
 
 ncclResult_t i_mscclUnloadAlgo(mscclAlgoHandle_t mscclAlgoHandle, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_mscclUnloadAlgo_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_mscclUnloadAlgo_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	GET_ARGS_VALUE_mscclUnloadAlgo(__rccl_activity);
@@ -157,7 +157,7 @@ ncclResult_t i_mscclUnloadAlgo(mscclAlgoHandle_t mscclAlgoHandle, void* return_a
 };
 
 ncclResult_t i_ncclRecv(void * recvbuff, size_t count, ncclDataType_t datatype, int peer, ncclComm_t comm, int stream, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclRecv_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclRecv_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclRecv, __rccl_activity);
@@ -168,7 +168,7 @@ ncclResult_t i_ncclRecv(void * recvbuff, size_t count, ncclDataType_t datatype, 
 };
 
 ncclResult_t i_ncclGroupEnd(void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGroupEnd_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGroupEnd_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclGroupEnd, __rccl_activity);
@@ -178,7 +178,7 @@ ncclResult_t i_ncclGroupEnd(void* return_address) {
 };
 
 ncclResult_t i_ncclRedOpDestroy(ncclRedOp_t op, ncclComm_t comm, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclRedOpDestroy_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclRedOpDestroy_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	GET_ARGS_VALUE_ncclRedOpDestroy(__rccl_activity);
@@ -189,7 +189,7 @@ ncclResult_t i_ncclRedOpDestroy(ncclRedOp_t op, ncclComm_t comm, void* return_ad
 };
 
 ncclResult_t i_ncclCommCount(const ncclComm_t comm, int * count, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommCount_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommCount_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommCount, __rccl_activity);
@@ -200,7 +200,7 @@ ncclResult_t i_ncclCommCount(const ncclComm_t comm, int * count, void* return_ad
 };
 
 ncclResult_t i_ncclScatter(const void * sendbuff, void * recvbuff, size_t recvcount, ncclDataType_t datatype, int root, ncclComm_t comm, int stream, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclScatter_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclScatter_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclScatter, __rccl_activity);
@@ -211,7 +211,7 @@ ncclResult_t i_ncclScatter(const void * sendbuff, void * recvbuff, size_t recvco
 };
 
 ncclResult_t i_ncclCommShrink(ncclComm_t comm, int * excludeRanksList, int excludeRanksCount, ncclComm_t * newcomm, ncclConfig_t * config, int shrinkFlags, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommShrink_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommShrink_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommShrink, __rccl_activity);
@@ -222,7 +222,7 @@ ncclResult_t i_ncclCommShrink(ncclComm_t comm, int * excludeRanksList, int exclu
 };
 
 ncclResult_t i_ncclCommInitRankScalable(ncclComm_t * newcomm, int nranks, int myrank, int nId, ncclUniqueId * commIds, ncclConfig_t * config, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommInitRankScalable_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommInitRankScalable_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommInitRankScalable, __rccl_activity);
@@ -233,7 +233,7 @@ ncclResult_t i_ncclCommInitRankScalable(ncclComm_t * newcomm, int nranks, int my
 };
 
 ncclResult_t i_ncclCommRegister(const ncclComm_t comm, void * buff, size_t size, void ** handle, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommRegister_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommRegister_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommRegister, __rccl_activity);
@@ -244,7 +244,7 @@ ncclResult_t i_ncclCommRegister(const ncclComm_t comm, void * buff, size_t size,
 };
 
 ncclResult_t i_ncclCommGetAsyncError(ncclComm_t comm, ncclResult_t * asyncError, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommGetAsyncError_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommGetAsyncError_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommGetAsyncError, __rccl_activity);
@@ -255,7 +255,7 @@ ncclResult_t i_ncclCommGetAsyncError(ncclComm_t comm, ncclResult_t * asyncError,
 };
 
 ncclResult_t i_ncclMemFree(void * ptr, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclMemFree_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclMemFree_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	GET_ARGS_VALUE_ncclMemFree(__rccl_activity);
@@ -266,7 +266,7 @@ ncclResult_t i_ncclMemFree(void * ptr, void* return_address) {
 };
 
 ncclResult_t i_ncclCommInitAll(ncclComm_t * comm, int ndev, const int * devlist, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommInitAll_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommInitAll_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommInitAll, __rccl_activity);
@@ -277,7 +277,7 @@ ncclResult_t i_ncclCommInitAll(ncclComm_t * comm, int ndev, const int * devlist,
 };
 
 ncclResult_t i_ncclCommCuDevice(const ncclComm_t comm, int * device, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommCuDevice_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommCuDevice_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommCuDevice, __rccl_activity);
@@ -288,7 +288,7 @@ ncclResult_t i_ncclCommCuDevice(const ncclComm_t comm, int * device, void* retur
 };
 
 ncclResult_t i_ncclCommSplit(ncclComm_t comm, int color, int key, ncclComm_t * newcomm, ncclConfig_t * config, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommSplit_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommSplit_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommSplit, __rccl_activity);
@@ -299,7 +299,7 @@ ncclResult_t i_ncclCommSplit(ncclComm_t comm, int color, int key, ncclComm_t * n
 };
 
 ncclResult_t i_mscclRunAlgo(const void * sendBuff, const size_t sendCounts[], const size_t sDisPls[], void * recvBuff, const size_t recvCounts[], const size_t rDisPls[], size_t count, ncclDataType_t dataType, int root, int peer, ncclRedOp_t op, mscclAlgoHandle_t mscclAlgoHandle, ncclComm_t comm, int stream, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_mscclRunAlgo_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_mscclRunAlgo_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_mscclRunAlgo, __rccl_activity);
@@ -310,7 +310,7 @@ ncclResult_t i_mscclRunAlgo(const void * sendBuff, const size_t sendCounts[], co
 };
 
 ncclResult_t i_ncclCommUserRank(const ncclComm_t comm, int * rank, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommUserRank_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommUserRank_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommUserRank, __rccl_activity);
@@ -321,7 +321,7 @@ ncclResult_t i_ncclCommUserRank(const ncclComm_t comm, int * rank, void* return_
 };
 
 ncclResult_t i_ncclRedOpCreatePreMulSum(ncclRedOp_t * op, void * scalar, ncclDataType_t datatype, ncclScalarResidence_t residence, ncclComm_t comm, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclRedOpCreatePreMulSum_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclRedOpCreatePreMulSum_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclRedOpCreatePreMulSum, __rccl_activity);
@@ -332,7 +332,7 @@ ncclResult_t i_ncclRedOpCreatePreMulSum(ncclRedOp_t * op, void * scalar, ncclDat
 };
 
 ncclResult_t i_ncclAllReduce(const void * sendbuff, void * recvbuff, size_t count, ncclDataType_t datatype, ncclRedOp_t op, ncclComm_t comm, int stream, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclAllReduce_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclAllReduce_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclAllReduce, __rccl_activity);
@@ -343,7 +343,7 @@ ncclResult_t i_ncclAllReduce(const void * sendbuff, void * recvbuff, size_t coun
 };
 
 ncclResult_t i_ncclCommInitRank(ncclComm_t * comm, int nranks, ncclUniqueId commId, int rank, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommInitRank_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommInitRank_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommInitRank, __rccl_activity);
@@ -354,7 +354,7 @@ ncclResult_t i_ncclCommInitRank(ncclComm_t * comm, int nranks, ncclUniqueId comm
 };
 
 ncclResult_t i_ncclBroadcast(const void * sendbuff, void * recvbuff, size_t count, ncclDataType_t datatype, int root, ncclComm_t comm, int stream, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclBroadcast_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclBroadcast_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclBroadcast, __rccl_activity);
@@ -365,7 +365,7 @@ ncclResult_t i_ncclBroadcast(const void * sendbuff, void * recvbuff, size_t coun
 };
 
 ncclResult_t i_ncclAllToAllv(const void * sendbuff, const size_t sendcounts[], const size_t sdispls[], void * recvbuff, const size_t recvcounts[], const size_t rdispls[], ncclDataType_t datatype, ncclComm_t comm, int stream, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclAllToAllv_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclAllToAllv_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclAllToAllv, __rccl_activity);
@@ -376,7 +376,7 @@ ncclResult_t i_ncclAllToAllv(const void * sendbuff, const size_t sendcounts[], c
 };
 
 ncclResult_t i_mscclLoadAlgo(const char * mscclAlgoFilePath, mscclAlgoHandle_t * mscclAlgoHandle, int rank, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_mscclLoadAlgo_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_mscclLoadAlgo_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_mscclLoadAlgo, __rccl_activity);
@@ -387,7 +387,7 @@ ncclResult_t i_mscclLoadAlgo(const char * mscclAlgoFilePath, mscclAlgoHandle_t *
 };
 
 ncclResult_t i_ncclMemAlloc(void ** ptr, size_t size, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclMemAlloc_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclMemAlloc_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclMemAlloc, __rccl_activity);
@@ -398,7 +398,7 @@ ncclResult_t i_ncclMemAlloc(void ** ptr, size_t size, void* return_address) {
 };
 
 ncclResult_t i_ncclCommAbort(ncclComm_t comm, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommAbort_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommAbort_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommAbort, __rccl_activity);
@@ -409,7 +409,7 @@ ncclResult_t i_ncclCommAbort(ncclComm_t comm, void* return_address) {
 };
 
 ncclResult_t i_ncclGetUniqueId(ncclUniqueId * uniqueId, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGetUniqueId_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGetUniqueId_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclGetUniqueId, __rccl_activity);
@@ -420,7 +420,7 @@ ncclResult_t i_ncclGetUniqueId(ncclUniqueId * uniqueId, void* return_address) {
 };
 
 ncclResult_t i_ncclReduceScatter(const void * sendbuff, void * recvbuff, size_t recvcount, ncclDataType_t datatype, ncclRedOp_t op, ncclComm_t comm, int stream, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclReduceScatter_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclReduceScatter_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclReduceScatter, __rccl_activity);
@@ -431,7 +431,7 @@ ncclResult_t i_ncclReduceScatter(const void * sendbuff, void * recvbuff, size_t 
 };
 
 ncclResult_t i_ncclGather(const void * sendbuff, void * recvbuff, size_t sendcount, ncclDataType_t datatype, int root, ncclComm_t comm, int stream, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGather_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclGather_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclGather, __rccl_activity);
@@ -442,7 +442,7 @@ ncclResult_t i_ncclGather(const void * sendbuff, void * recvbuff, size_t sendcou
 };
 
 ncclResult_t i_ncclCommWindowDeregister(ncclComm_t comm, ncclWindow_t win, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommWindowDeregister_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommWindowDeregister_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommWindowDeregister, __rccl_activity);
@@ -453,7 +453,7 @@ ncclResult_t i_ncclCommWindowDeregister(ncclComm_t comm, ncclWindow_t win, void*
 };
 
 ncclResult_t i_ncclSend(const void * sendbuff, size_t count, ncclDataType_t datatype, int peer, ncclComm_t comm, int stream, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclSend_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclSend_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclSend, __rccl_activity);
@@ -464,7 +464,7 @@ ncclResult_t i_ncclSend(const void * sendbuff, size_t count, ncclDataType_t data
 };
 
 ncclResult_t i_ncclCommInitRankConfig(ncclComm_t * comm, int nranks, ncclUniqueId commId, int rank, ncclConfig_t * config, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommInitRankConfig_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommInitRankConfig_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclCommInitRankConfig, __rccl_activity);
@@ -475,7 +475,7 @@ ncclResult_t i_ncclCommInitRankConfig(ncclComm_t * comm, int nranks, ncclUniqueI
 };
 
 ncclResult_t i_ncclCommDestroy(ncclComm_t comm, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommDestroy_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclCommDestroy_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	GET_ARGS_VALUE_ncclCommDestroy(__rccl_activity);
@@ -486,7 +486,7 @@ ncclResult_t i_ncclCommDestroy(ncclComm_t comm, void* return_address) {
 };
 
 ncclResult_t i_ncclAllReduceWithBias(const void * sendbuff, void * recvbuff, size_t count, ncclDataType_t datatype, ncclRedOp_t op, ncclComm_t comm, int stream, const void * acc, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclAllReduceWithBias_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclAllReduceWithBias_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclAllReduceWithBias, __rccl_activity);
@@ -497,7 +497,7 @@ ncclResult_t i_ncclAllReduceWithBias(const void * sendbuff, void * recvbuff, siz
 };
 
 ncclResult_t i_ncclReduce(const void * sendbuff, void * recvbuff, size_t count, ncclDataType_t datatype, ncclRedOp_t op, int root, ncclComm_t comm, int stream, void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclReduce_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclReduce_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclReduce, __rccl_activity);
@@ -508,7 +508,7 @@ ncclResult_t i_ncclReduce(const void * sendbuff, void * recvbuff, size_t count, 
 };
 
 void i_ncclResetDebugInit(void* return_address) {
-	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)malloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclResetDebugInit_t));
+	ratelprof_api_activity_t* __rccl_activity = (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_ncclResetDebugInit_t));
 	__rccl_activity->args = (void*)(__rccl_activity + 1);
 	__rccl_activity->return_address = return_address;
 	ratelprof_on_enter_callbacks[RATELPROF_DOMAIN_RCCL](RATELPROF_DOMAIN_RCCL, RCCL_API_ID_ncclResetDebugInit, __rccl_activity);

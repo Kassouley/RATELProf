@@ -17,22 +17,20 @@ int i_roctxRangePushA(const char* message, void* return_address) {
         ratelprof_stack_init(&roctx_activity_stack, DEFAULT_RANGE_ACTIVITIES_CAPACITY);
     }
     
-    ratelprof_roctx_activity_t* activity = (ratelprof_roctx_activity_t*) malloc(sizeof(ratelprof_roctx_activity_t));
+    ratelprof_roctx_activity_t* activity = (ratelprof_roctx_activity_t*) ratelprof_memory_pool_alloc(sizeof(ratelprof_roctx_activity_t));
 
     ratelprof_stack_push(&roctx_activity_stack, (uint64_t)(uintptr_t) activity);
 
     activity->domain = RATELPROF_DOMAIN_ROCTX;
 
     activity->message = strdup(message);
-    get_correlation_id(&activity->corr_id);
     get_id(&activity->id);
     activity->pid = get_pid();
     activity->tid = get_tid();
     activity->return_address = return_address;
 
-    activity->start_time = ratelprof_get_curr_timespec();
+    activity->start_time = ratelprof_get_clock_now();
 
-    ratelprof_activity_pool_push_activity(activity);
 
     return CALL(roctxRangePushA, message, NULL);
 }
@@ -41,8 +39,9 @@ int i_roctxRangePop() {
     uint64_t popped_activity = 0; 
     if (ratelprof_stack_pop(&roctx_activity_stack, &popped_activity) == RATELPROF_STATUS_SUCCESS) {
         ratelprof_roctx_activity_t* activity = (ratelprof_roctx_activity_t*)(uintptr_t) popped_activity;
-        activity->stop_time = ratelprof_get_curr_timespec();
-        pop_id();
+        activity->stop_time = ratelprof_get_clock_now();
+        get_correlation_id(&activity->corr_id, &activity->has_children);
+        ratelprof_activity_pool_push_activity(activity);
     }
 
     return CALL(roctxRangePop);
@@ -59,21 +58,19 @@ roctx_range_id_t i_roctxRangeStartA(const char* message, void* return_address) {
     roctx_range_id_t id = CALL(roctxRangeStartA, message, NULL);
 
 
-    ratelprof_roctx_activity_t* activity = (ratelprof_roctx_activity_t*) malloc (sizeof(ratelprof_roctx_activity_t));
+    ratelprof_roctx_activity_t* activity = (ratelprof_roctx_activity_t*) ratelprof_memory_pool_alloc(sizeof(ratelprof_roctx_activity_t));
 
     activity->domain = RATELPROF_DOMAIN_ROCTX;
 
     activity->message = strdup(message);
-    get_correlation_id(&activity->corr_id);
     get_id(&activity->id);
     activity->pid = get_pid();
     activity->tid = get_tid();
     activity->return_address = return_address;
 
-    activity->start_time = ratelprof_get_curr_timespec();
+    activity->start_time = ratelprof_get_clock_now();
 
     ratelprof_insert_hash(&roctx_activity_hash_table, (uint64_t)id, activity);
-    ratelprof_activity_pool_push_activity(activity);
 
     return id;
     
@@ -84,8 +81,9 @@ void i_roctxRangeStop(roctx_range_id_t id) {
 
     if (ratelprof_find_hash(&roctx_activity_hash_table, (uint64_t)id, &activity_ptr) == RATELPROF_STATUS_SUCCESS) {
         ratelprof_roctx_activity_t *activity = (ratelprof_roctx_activity_t *)activity_ptr;
-        activity->stop_time = ratelprof_get_curr_timespec();
-        pop_id();
+        activity->stop_time = ratelprof_get_clock_now();
+        get_correlation_id(&activity->corr_id, &activity->has_children);
+    ratelprof_activity_pool_push_activity(activity);
     }
 
     CALL(roctxRangeStop, id);
@@ -93,20 +91,19 @@ void i_roctxRangeStop(roctx_range_id_t id) {
 
 
 void i_roctxMarkA(const char* message, void* return_address) {
-    ratelprof_roctx_activity_t* activity = (ratelprof_roctx_activity_t*) malloc(sizeof(ratelprof_roctx_activity_t));
-    activity->start_time = ratelprof_get_curr_timespec();
+    ratelprof_roctx_activity_t* activity = (ratelprof_roctx_activity_t*) ratelprof_memory_pool_alloc(sizeof(ratelprof_roctx_activity_t));
+    activity->start_time = ratelprof_get_clock_now();
 
     activity->domain = RATELPROF_DOMAIN_ROCTX;
 
     activity->message = strdup(message);
-    get_correlation_id(&activity->corr_id);
     get_id(&activity->id);
+    get_correlation_id(&activity->corr_id, &activity->has_children);
     activity->pid = get_pid();
     activity->tid = get_tid();
     activity->return_address = return_address;
-    pop_id();
 
     ratelprof_activity_pool_push_activity(activity);
 
-    activity->stop_time = ratelprof_get_curr_timespec();
+    activity->stop_time = ratelprof_get_clock_now();
 }

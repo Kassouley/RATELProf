@@ -2,40 +2,194 @@
  * DO NOT MODIFY UNLESS YOU KNOW WHAT YOU ARE DOING.
  * ANY CHANGES MAY BE OVERWRITTEN BY SUBSEQUENT RUNS OF GILDA. 
  */
-
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
 #include <time.h>
+#include <unistd.h>
+
 #include "ratelprof/ratelprof_time.h"
+#include "utils/logger.h"
 
-ratelprof_timespec_t ratelprof_get_curr_timespec() 
+#ifdef __i386
+static inline uint64_t rdtsc(void)
 {
-    ratelprof_timespec_t ts;
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    return ts;
+    uint64_t x;
+    __asm__ volatile ("rdtsc" : "=A"(x));
+    return x;
+}
+#elif defined(__amd64__) || defined(__x86_64__)
+static inline uint64_t rdtsc(void)
+{
+    uint32_t lo, hi;
+    __asm__ volatile ("rdtsc" : "=a"(lo), "=d"(hi));
+    return ((uint64_t)hi << 32) | lo;
+}
+#else
+#error "RDTSC is not supported on this architecture."
+#endif
+
+// static double cycles_per_ns = 0.0;
+
+/* -------------------------------------------------------------------------- */
+/* TSC calibration                                                             */
+/* -------------------------------------------------------------------------- */
+
+// static void calibrate_tsc(void)
+// {
+//     struct timespec start, end;
+
+//     clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+//     uint64_t t0 = rdtsc();
+
+//     sleep(1);
+
+//     uint64_t t1 = rdtsc();
+//     clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+
+//     uint64_t elapsed_ns =
+//         (uint64_t)(end.tv_sec - start.tv_sec) * 1000000000ULL +
+//         (uint64_t)(end.tv_nsec - start.tv_nsec);
+
+//     cycles_per_ns = (double)(t1 - t0) / (double)elapsed_ns;
+// }
+
+/* -------------------------------------------------------------------------- */
+/* MONOTONIC backend                                                           */
+/* -------------------------------------------------------------------------- */
+
+static ratelprof_clock_t get_clock_now_timespec(void)
+{
+    ratelprof_clock_t c;
+    clock_gettime(CLOCK_MONOTONIC, &c.ts);
+    return c;
 }
 
-ratelprof_timespec_t ratelprof_get_curr_epoch()
+ratelprof_time_t ratelprof_ts_to_ns(ratelprof_clock_t c)
 {
-    ratelprof_timespec_t ts;
-    clock_gettime(CLOCK_REALTIME, &ts);
-    return ts;
+    return (ratelprof_time_t)c.ts.tv_sec * 1000000000ULL + (ratelprof_time_t)c.ts.tv_nsec;
 }
 
-ratelprof_time_t ratelprof_get_timestamp_ns(ratelprof_timespec_t ts)
+ratelprof_time_t ratelprof_ts_to_us(ratelprof_clock_t c)
 {
-    return (ratelprof_time_t)ts.tv_sec * 1000000000ULL + (ratelprof_time_t)ts.tv_nsec;
+    return (ratelprof_time_t)c.ts.tv_sec * 1000000ULL + (ratelprof_time_t)c.ts.tv_nsec / 1000ULL;
 }
 
-ratelprof_time_t ratelprof_get_timestamp_us(ratelprof_timespec_t ts)
+ratelprof_time_t ratelprof_ts_to_ms(ratelprof_clock_t c)
 {
-    return (ratelprof_time_t)ts.tv_sec * 1000000ULL + (ratelprof_time_t)(ts.tv_nsec / 1000ULL);
+    return (ratelprof_time_t)c.ts.tv_sec * 1000ULL + (ratelprof_time_t)c.ts.tv_nsec / 1000000ULL;
 }
 
-ratelprof_time_t ratelprof_get_timestamp_ms(ratelprof_timespec_t ts)
+ratelprof_time_t ratelprof_ts_to_s(ratelprof_clock_t c)
 {
-    return (ratelprof_time_t)ts.tv_sec * 1000ULL + (ratelprof_time_t)(ts.tv_nsec / 1000000ULL);
+    return (ratelprof_time_t)c.ts.tv_sec;
 }
 
-ratelprof_time_t ratelprof_get_timestamp_s(ratelprof_timespec_t ts)
+/* -------------------------------------------------------------------------- */
+/* TSC backend                                                                 */
+/* -------------------------------------------------------------------------- */
+
+// static ratelprof_clock_t get_clock_now_tsc(void)
+// {
+//     ratelprof_clock_t c;
+//     c.tsc = rdtsc();
+//     return c;
+// }
+
+// ratelprof_time_t ratelprof_tsc_to_ns(ratelprof_clock_t c)
+// {
+//     return (ratelprof_time_t)((double)c.tsc / cycles_per_ns);
+// }
+
+// ratelprof_time_t ratelprof_tsc_to_us(ratelprof_clock_t c)
+// {
+//     return (ratelprof_time_t)((double)c.tsc / (cycles_per_ns * 1000.0));
+// }
+
+// ratelprof_time_t ratelprof_tsc_to_ms(ratelprof_clock_t c)
+// {
+//     return (ratelprof_time_t)((double)c.tsc / (cycles_per_ns * 1000000.0));
+// }
+
+// ratelprof_time_t ratelprof_tsc_to_s(ratelprof_clock_t c)
+// {
+//     return (ratelprof_time_t)((double)c.tsc / (cycles_per_ns * 1000000000.0));
+// }
+
+/* -------------------------------------------------------------------------- */
+/* Runtime dispatch                                                            */
+/* -------------------------------------------------------------------------- */
+
+// static ratelprof_clock_t (*clock_now_impl)(void);
+
+// static ratelprof_time_t (*time_ns_impl)(ratelprof_clock_t);
+// static ratelprof_time_t (*time_us_impl)(ratelprof_clock_t);
+// static ratelprof_time_t (*time_ms_impl)(ratelprof_clock_t);
+// static ratelprof_time_t (*time_s_impl)(ratelprof_clock_t);
+
+// __attribute__((constructor(101)))
+// static void ratelprof_time_init(void)
+// {
+//     const char *env = getenv("RATELPROF_CLOCK");
+
+//     LOG(LOG_LEVEL_DEBUG, "Using clock backend: %s\n", env ? env : "default (timespec)");
+//     if (env && strcmp(env, "tsc") == 0) {
+//         calibrate_tsc();
+
+//         clock_now_impl = get_clock_now_tsc;
+
+//         time_ns_impl = ratelprof_tsc_to_ns;
+//         time_us_impl = ratelprof_tsc_to_us;
+//         time_ms_impl = ratelprof_tsc_to_ms;
+//         time_s_impl = ratelprof_tsc_to_s;
+//     }
+//     else {
+//         clock_now_impl = get_clock_now_timespec;
+
+//         time_ns_impl = ratelprof_ts_to_ns;
+//         time_us_impl = ratelprof_ts_to_us;
+//         time_ms_impl = ratelprof_ts_to_ms;
+//         time_s_impl = ratelprof_ts_to_s;
+//     }
+// }
+
+/* -------------------------------------------------------------------------- */
+/* Public API                                                                  */
+/* -------------------------------------------------------------------------- */
+
+ratelprof_clock_t ratelprof_get_clock_now(void)
 {
-    return (ratelprof_time_t)ts.tv_sec;
+    return get_clock_now_timespec();
+    // return clock_now_impl();
+}
+
+ratelprof_clock_t ratelprof_get_real_timespec(void)
+{
+    ratelprof_clock_t c;
+    clock_gettime(CLOCK_REALTIME, &c.ts);
+    return c;
+}
+
+ratelprof_time_t ratelprof_get_time_ns(ratelprof_clock_t c)
+{
+    return ratelprof_ts_to_ns(c);
+    // return time_ns_impl(c);
+}
+
+ratelprof_time_t ratelprof_get_time_us(ratelprof_clock_t c)
+{
+    return ratelprof_ts_to_us(c);
+    // return time_us_impl(c);
+}
+
+ratelprof_time_t ratelprof_get_time_ms(ratelprof_clock_t c)
+{
+    return ratelprof_ts_to_ms(c);
+    // return time_ms_impl(c);
+}
+
+ratelprof_time_t ratelprof_get_time_s(ratelprof_clock_t c)
+{
+    return ratelprof_ts_to_s(c);
+    // return time_s_impl(c);
 }
