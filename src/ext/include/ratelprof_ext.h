@@ -76,7 +76,7 @@ typedef struct barrier_args_s {
 } barrier_args_t;
 
 typedef struct dispatch_args_s {
-    ratelprof_timespec_t dispatch_time;
+    ratelprof_clock_t dispatch_time;
     hsa_agent_t agent;
     uint64_t queue_id;
     union {
@@ -125,8 +125,9 @@ typedef struct ratelprof_roctx_activity_s {
 	uint64_t pid;
     uint64_t id;
     uint64_t corr_id;
-    ratelprof_timespec_t start_time;
-    ratelprof_timespec_t stop_time;
+    bool has_children;
+    ratelprof_clock_t start_time;
+    ratelprof_clock_t stop_time;
     void * return_address;
     const char* message;
 } ratelprof_roctx_activity_t;

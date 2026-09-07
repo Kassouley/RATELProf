@@ -106,7 +106,6 @@ static addr2line_ctx *get_ctx(const char *object_path)
         cur = cur->next;
     }
 
-    // not found → create
     addr2line_ctx *ctx = ctx_create(object_path);
     if (!ctx)
         return NULL;
