@@ -18,16 +18,19 @@ SET(LUA_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/include" CACHE PATH "Pa
 
 SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-ADD_COMPILE_OPTIONS(-O3 -Wall)
+ADD_COMPILE_OPTIONS(-O3 -Wall -g)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src/common)
 
+# LSGPU Build
 SET(LSGPU_VENDOR_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/core/include")
 SET(LSGPU_BUILD_CLI OFF)
 ADD_SUBDIRECTORY(external/lsgpu)
 TARGET_COMPILE_OPTIONS(lsgpu_query PRIVATE -include ${CMAKE_CURRENT_SOURCE_DIR}/src/common/hsa_api.h)
 
+# liborkh Build
 ADD_SUBDIRECTORY(external/liborkh)
 
-# Add subdirectory for the shared library
+# RATELProf Build
 ADD_SUBDIRECTORY(src/core)
 ADD_SUBDIRECTORY(src/ext)
 ADD_SUBDIRECTORY(src/wrappers)
@@ -35,6 +38,7 @@ ADD_SUBDIRECTORY(src/tools)
 # ADD_SUBDIRECTORY(src/plugins)
 ADD_SUBDIRECTORY(src/lua)
 
+# RProf-Rep Build
 ADD_SUBDIRECTORY(src/rprofrep/rprofrep_encode)
 ADD_SUBDIRECTORY(src/rprofrep/rprofrep_decode)
 
