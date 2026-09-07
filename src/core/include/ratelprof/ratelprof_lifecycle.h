@@ -66,8 +66,8 @@ typedef struct {
 typedef struct ratelprof_lifecycle_s {
     ratelprof_phase_t current_phase;           /**< The current phase of the program lifecycle. */
    
-    ratelprof_timespec_t experiment_start_epoch; /**< The start epoch of the current profiling experiment */
-    ratelprof_timespec_t phase_stop_ts[RATELPROF_NB_PHASE]; /**< Stop time for each phase (start is previous phase stop) */
+    ratelprof_clock_t experiment_start_epoch; /**< The start epoch of the current profiling experiment */
+    ratelprof_clock_t phase_stop_ts[RATELPROF_NB_PHASE]; /**< Stop time for each phase (start is previous phase stop) */
     ratelprof_time_t normalizer; /**< Normalizer time (in ns) used to normalize and reduce timing data */
 
     ratelprof_main_data_t main_data;   /**< Data related to the program's main execution. */
@@ -202,7 +202,10 @@ ratelprof_time_t ratelprof_get_main_time(void);
  *
  * @return Experiment start epoch time in nanoseconds.
  */
-uint64_t ratelprof_get_experiment_start_epoch(void);
+ratelprof_time_t ratelprof_get_experiment_start_epoch(void);
+
+
+ratelprof_time_t ratelprof_get_phase_time(ratelprof_phase_t phase);
 
 /**
  * @brief Wrapper function for the program's main function.

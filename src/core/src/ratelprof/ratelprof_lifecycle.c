@@ -43,7 +43,7 @@ ratelprof_time_t ratelprof_get_normalized_time(ratelprof_time_t time)
 
 void ratelprof_next_phase(void)
 {
-    ratelprof_timespec_t ts = ratelprof_get_curr_timespec();
+    ratelprof_clock_t ts = ratelprof_get_clock_now();
 
     if (lifecycle.current_phase != RATELPROF_IN_UNKNOWN_PHASE 
         && lifecycle.current_phase < RATELPROF_NB_PHASE)
@@ -54,19 +54,15 @@ void ratelprof_next_phase(void)
     lifecycle.current_phase++;
 }
 
-uint64_t ratelprof_get_experiment_start_epoch(void)
-{
-    return ratelprof_get_timestamp_ns(lifecycle.experiment_start_epoch);
-}
 
 
 void ratelprof_start_lifecycle(void) 
 {
-    ratelprof_timespec_t ts = ratelprof_get_curr_timespec();
+    ratelprof_clock_t ts = ratelprof_get_clock_now();
     
-    lifecycle.experiment_start_epoch = ratelprof_get_curr_epoch();
+    lifecycle.experiment_start_epoch = ratelprof_get_real_timespec();
     lifecycle.current_phase          = RATELPROF_IN_CONSTRUCTOR_PHASE;
-    lifecycle.normalizer             = ratelprof_get_timestamp_ns(ts);
+    lifecycle.normalizer             = ratelprof_get_time_ns(ts);
 }
 
 
@@ -92,25 +88,40 @@ ratelprof_lifecycle_t* ratelprof_get_lifecycle(void)
 }
 
 
+ratelprof_time_t ratelprof_get_experiment_start_epoch(void)
+{
+    return ratelprof_ts_to_ns(lifecycle.experiment_start_epoch);
+}
+
+ratelprof_time_t ratelprof_get_phase_time(ratelprof_phase_t phase)
+{
+    if (phase < RATELPROF_NB_PHASE) {
+        ratelprof_time_t phase_stop = ratelprof_get_time_ns(lifecycle.phase_stop_ts[phase]);
+        return ratelprof_get_normalized_time(phase_stop);
+    }
+    return 0;
+}
+
+
 ratelprof_time_t ratelprof_get_constructor_time(void)
 {
-    ratelprof_time_t constructor_stop = ratelprof_get_timestamp_ns(lifecycle.phase_stop_ts[RATELPROF_IN_CONSTRUCTOR_PHASE]);
+    ratelprof_time_t constructor_stop = ratelprof_get_time_ns(lifecycle.phase_stop_ts[RATELPROF_IN_CONSTRUCTOR_PHASE]);
     return ratelprof_get_normalized_time(constructor_stop);
 }
 
 
 ratelprof_time_t ratelprof_get_main_time(void)
 {
-    ratelprof_time_t main_start = ratelprof_get_timestamp_ns(lifecycle.phase_stop_ts[RATELPROF_IN_CONSTRUCTOR_PHASE]);
-    ratelprof_time_t main_stop  = ratelprof_get_timestamp_ns(lifecycle.phase_stop_ts[RATELPROF_IN_MAIN_PHASE]);
+    ratelprof_time_t main_start = ratelprof_get_time_ns(lifecycle.phase_stop_ts[RATELPROF_IN_CONSTRUCTOR_PHASE]);
+    ratelprof_time_t main_stop  = ratelprof_get_time_ns(lifecycle.phase_stop_ts[RATELPROF_IN_MAIN_PHASE]);
     return main_stop - main_start;
 }
 
 
 ratelprof_time_t ratelprof_get_destructor_time(void)
 {
-    ratelprof_time_t destructor_start = ratelprof_get_timestamp_ns(lifecycle.phase_stop_ts[RATELPROF_IN_MAIN_PHASE]);
-    ratelprof_time_t destructor_stop  = ratelprof_get_timestamp_ns(lifecycle.phase_stop_ts[RATELPROF_IN_DESTRUCTOR_PHASE]);
+    ratelprof_time_t destructor_start = ratelprof_get_time_ns(lifecycle.phase_stop_ts[RATELPROF_IN_MAIN_PHASE]);
+    ratelprof_time_t destructor_stop  = ratelprof_get_time_ns(lifecycle.phase_stop_ts[RATELPROF_IN_DESTRUCTOR_PHASE]);
     return destructor_stop - destructor_start;
 
 }
