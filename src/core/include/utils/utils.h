@@ -40,11 +40,15 @@
  * printf("Current Thread ID: %u\n", tid);
  * ```
  */
-static inline uint32_t get_tid() 
-{ 
-    return syscall(__NR_gettid); 
-}
+static inline uint32_t get_tid(void)
+{
+    static __thread uint32_t tid = 0;
+    if (tid == 0) {
+        tid = syscall(__NR_gettid);
+    }
 
+    return (uint32_t)tid;
+}
 
 /**
  * @brief Retrieves the process ID of the calling process.
@@ -64,9 +68,13 @@ static inline uint32_t get_tid()
  * printf("Current Process ID: %u\n", pid);
  * ```
  */
-static inline uint32_t get_pid() 
-{ 
-    return syscall(__NR_getpid); 
+static inline uint32_t get_pid(void)
+{
+    static uint32_t pid = 0;
+    if (pid == 0) {
+        pid = syscall(__NR_getpid); 
+    }
+    return pid;
 }
 
 #endif // UTILS_H
