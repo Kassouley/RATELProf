@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include <time.h>
+#include "ratelprof.h"
 #include "rprofrep_decode.h"
 
 #define print_section_title(section_id) \
@@ -235,7 +236,7 @@ static inline void rprofrep_print_section_header(rprofrep_decode_context_t* ctx)
 
 
 static inline rprofrep_status_t __print_domain_tree(rprofrep_decode_context_t* ctx, rprofrep_group_entry_t* group, void* user_arg) {
-    printf("      - Domain:       %" PRIu64 ":\n", group->domain);
+    printf("      - Domain:       %s:\n", ratelprof_get_domain_name(group->domain));
     printf("         - Group ID:     %" PRIu64 ":\n", group->offset_entry.id);
     printf("         - Num Events:   %" PRIu64 ":\n", group->offset_entry.nevents);
     printf("         - Group Offset: %" PRIu64 ":\n", group->offset_entry.offset);
@@ -285,21 +286,17 @@ static inline rprofrep_status_t __iterate_over_events(rprofrep_decode_context_t*
     if (iterator.initialized == false) {
         return RPROFREP_STATUS_SUCCESS;
     }
+
     for (size_t i = 0; i < 128; i++)
     {
         rprofrep_event_data_t event = {0};
-        rprofrep_event_data_t corr_event = {0};
-        uint64_t cid = 0;
         RPROFREP_CHECK_CALL(rprofrep_event_iterator_next(&iterator, &event));
         if (!event.valid) break;
-        if (event.cid.valid) {
-            RPROFREP_CHECK_CALL(rprofrep_get_event_by_cid(ctx, &event.cid, &corr_event));
-            cid = corr_event.id;
-        }
         
         printf("%6lu | %10lu | %12ld | %-32s | %6lu | %6lu | %16lu | %16lu \n", 
-            event.domain, event.unit, event.sub_unit, tail32(event.name), event.id, cid, event.start, event.dur);
+            event.domain, event.unit, event.sub_unit, tail32(event.name), event.id, event.cid, event.start, event.dur);
     }
+
     RPROFREP_CHECK_CALL(rprofrep_event_iterator_destroy(&iterator));
     return RPROFREP_STATUS_SUCCESS;
 }
@@ -317,6 +314,7 @@ static inline rprofrep_status_t rprofrep_print_events_section(rprofrep_decode_co
     requested_domains[RATELPROF_DOMAIN_HIP] = true;
     requested_domains[RATELPROF_DOMAIN_KERNEL] = true;
     requested_domains[RATELPROF_DOMAIN_MEMORY] = true;
+    requested_domains[RATELPROF_DOMAIN_HSA] = false;
 
     RPROFREP_CHECK_CALL(rprofrep_for_each_gpu(ctx, __iterate_over_events, requested_domains));
     RPROFREP_CHECK_CALL(rprofrep_for_each_pid(ctx, __iterate_over_events, requested_domains));

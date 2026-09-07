@@ -19,6 +19,7 @@ static int lookup_section_id(const char *name) {
     if (strcmp(name, "KERNEL")      == 0) return RPROFREP_SECTION_KERNEL;
     if (strcmp(name, "OFFSETS")     == 0) return RPROFREP_SECTION_OFFSETS;
     if (strcmp(name, "EVENTS")      == 0) return RPROFREP_SECTION_EVENTS;
+    if (strcmp(name, "CID")         == 0) return RPROFREP_SECTION_CID;
 
     return -1;
 }
@@ -51,7 +52,7 @@ int main(int argc, char **argv) {
     int show_header = 0;
     int section_id = -1;
 
-    bool requested_domains[RATELPROF_NB_DOMAIN_EXT] = { false };
+    bool requested_domains[RATELPROF_NB_DOMAIN_EXT] = { true };
 
     // --------------------------
     // Parse arguments
