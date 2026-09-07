@@ -25,7 +25,7 @@ return function (report)
             ratelprof.utils.get_duration(event:dur(), timeunit),
             event:name(),
             tostring(event:id()),
-            tostring(rprofrep:get_correlated_id(event)),
+            tostring(event:cid()),
             ratelprof.utils.label_unit_with_rank(pid_key),
             tostring(event:tid()),
         })

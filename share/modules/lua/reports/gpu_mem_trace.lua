@@ -33,7 +33,7 @@ return function (report)
             start,
             dur,
             tostring(event:id()),
-            tostring(rprofrep:get_correlated_id(event)),
+            tostring(event:cid()),
             size,
             tonumber(size / dur_s),
             event:name()

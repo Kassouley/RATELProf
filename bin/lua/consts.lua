@@ -146,6 +146,8 @@ consts._TRACES = {
                           consts._ENV.DOMAIN_OMP_TGT_RTL,
                           consts._ENV.DOMAIN_OMPT,
                           consts._ENV.DOMAIN_HSA,
+                          consts._ENV.DOMAIN_ROCBLAS,
+                          consts._ENV.DOMAIN_RCCL,
                           consts._ENV.DOMAIN_HIP},         name="CPU Activity"},
   ['gpu'] =           {var={
                           consts._ENV.DOMAIN_KERNEL,

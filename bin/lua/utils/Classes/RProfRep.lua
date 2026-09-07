@@ -267,12 +267,6 @@ function RProfRep:get_correlated_event(event)
     return self.reports_rprofrep[event:rank()]:get_correlated_event(event)
 end
 
-function RProfRep:get_correlated_id(event)
-    local corr_event = self:get_correlated_event(event)
-    if corr_event then return corr_event:id() end
-    return 0
-end
-
 function RProfRep:find_entry_point(event, from)
     return self.reports_rprofrep[event:rank()]:find_entry_point_event(event, from)
 end

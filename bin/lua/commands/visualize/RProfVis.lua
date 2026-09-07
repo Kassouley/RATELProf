@@ -137,17 +137,17 @@ function RProfVis:for_each_track(unit, subunit, domain, process_info)
     local track = self:get_track_id(group, subunit, process_info.subunit_label)
     local track_id = track.id
     local subtrack_id = 1
-    local last_event_stop = {0}
+    local last_event_start = {math.huge}
 
     local function get_subtrack_id(start, stop)
-        while subtrack_id > 1 and start >= last_event_stop[subtrack_id] do
+        while subtrack_id > 1 and stop <= last_event_start[subtrack_id] do
             subtrack_id = subtrack_id - 1
         end
 
-        if start < last_event_stop[subtrack_id] then
+        if stop > last_event_start[subtrack_id] then
             subtrack_id = subtrack_id + 1
         end
-        last_event_stop[subtrack_id] = stop
+        last_event_start[subtrack_id] = start
 
         return subtrack_id
     end
@@ -166,7 +166,7 @@ function RProfVis:for_each_track(unit, subunit, domain, process_info)
         local start = event:start()
         local dur = event:dur()
         local stop = start + dur
-        local cid = self.rprofrep:get_correlated_id(event)
+        local cid = event:cid()
 
        subtrack_id = get_subtrack_id(start, stop)
 
@@ -198,7 +198,7 @@ function RProfVis:for_each_track(unit, subunit, domain, process_info)
 
     end, self.event_filter, self:__get_process_str(process_info))
 
-    for _, _ in pairs(last_event_stop) do
+    for _, _ in pairs(last_event_start) do
         track.nsubtracks = track.nsubtracks + 1
     end
 
