@@ -55,13 +55,13 @@ ratelprof_status_t ratelprof_stack_pop(ratelprof_stack_t* s, uint64_t* poped_el)
 }
 
 // Peek operation to get the top element without removing it
-ratelprof_status_t ratelprof_stack_peek(ratelprof_stack_t* s, uint64_t* peeked_el) {
+ratelprof_status_t ratelprof_stack_peek(ratelprof_stack_t* s, uint64_t** peeked_el) {
     if (!s) return RATELPROF_STATUS_INVALID_PTR;
     if (s->capacity == 0) return RATELPROF_STATUS_STACK_NOT_INIT;
     if (ratelprof_stack_is_empty(s)) {
         return RATELPROF_STATUS_STACK_IS_EMPTY;
     }
-    *peeked_el = s->items[s->top];
+    *peeked_el = &s->items[s->top];
     return RATELPROF_STATUS_SUCCESS;
 }
 

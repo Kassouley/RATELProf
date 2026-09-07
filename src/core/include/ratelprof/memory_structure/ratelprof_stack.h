@@ -210,16 +210,16 @@ ratelprof_status_t ratelprof_stack_pop(ratelprof_stack_t* s, uint64_t* poped_el)
  *
  * ratelprof_stack_push(&stack, 42);
  *
- * int peeked_element;
+ * int* peeked_element;
  * ratelprof_status_t status = ratelprof_stack_peek(&stack, &peeked_element);
  * if (status == RATELPROF_STATUS_SUCCESS) {
- *     printf("Peeked element: %d\n", peeked_element);
+ *     printf("Peeked element: %d\n", *peeked_element);
  * } else {
  *     printf("Failed to peek: Stack is empty.\n");
  * }
  * ```
  */
-ratelprof_status_t ratelprof_stack_peek(ratelprof_stack_t* s, uint64_t* peeked_el);
+ratelprof_status_t ratelprof_stack_peek(ratelprof_stack_t* s, uint64_t** peeked_el);
 
 
 /**
