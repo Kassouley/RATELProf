@@ -3,7 +3,7 @@ Overlapping.__index = Overlapping
 
 function Overlapping.new(rprofrep, domains)
     local self = setmetatable({}, Overlapping)
-    -- Active events where stop > current looking start
+    -- Active events where stop >= current looking start
     self.active_events = {}
 
     self.it = rprofrep:get_iterator(domains)
@@ -19,9 +19,10 @@ function Overlapping:update_active_events(event_start, event_stop)
 
     if not it then return end
 
-    -- 1. Add only events that actually overlap the window
-    while curr and curr:start() < event_stop do
-        if curr:stop() > event_start then
+    -- 1. Add events that overlap the window.
+    -- Events are ordered by STOP descending.
+    while curr and curr:stop() > event_start do
+        if curr:start() < event_stop then
             active[#active + 1] = curr
         end
         curr = it:next()
@@ -32,7 +33,7 @@ function Overlapping:update_active_events(event_start, event_stop)
     local write = 1
     for read = 1, #active do
         local ev = active[read]
-        if ev:stop() > event_start then
+        if ev:start() < event_stop then
             active[write] = ev
             write = write + 1
         end
