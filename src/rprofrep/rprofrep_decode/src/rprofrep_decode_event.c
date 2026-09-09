@@ -74,7 +74,6 @@ rprofrep_status_t rprofrep_get_event_by_cid(
 
     RPROFREP_CHECK_CALL(rprofrep_get_group_entry_by_id(ctx, cid_tuple.group_id, &group));
 
-    printf("Looking for event with cid %lu in group %lu at offset %zu\n", cid, cid_tuple.group_id, cid_tuple.offset);
     RPROFREP_CHECK_CALL(rprofrep_get_event(ctx, group, cid_tuple.offset, NULL, out_event, NULL));
    
     return RPROFREP_STATUS_SUCCESS;
