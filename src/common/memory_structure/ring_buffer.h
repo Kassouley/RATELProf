@@ -3,7 +3,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
-#include <pthread.h>
+
+#define DEBUG_RING_BUFFER 0
 
 typedef struct rb_chunk
 {
@@ -55,16 +56,45 @@ static inline rb_chunk_t* rb_grow(ring_buffer_t* rb)
     return c;
 }
 
+static inline void rb_destroy(ring_buffer_t* rb)
+{
+    if (!rb || !rb->head_chunk) return;
+    
+    #if DEBUG_RING_BUFFER
+        debug_print_number_new_chunks(rb);
+    #endif
+
+    rb_chunk_t *start = rb->head_chunk;
+    rb_chunk_t *cur = start->next;
+
+    while (cur != start)
+    {
+        rb_chunk_t *tmp = cur;
+        cur = cur->next;
+        free(tmp);
+    }
+
+    free(start);
+    rb->head_chunk = NULL;
+    rb->tail_chunk = NULL;
+    rb->head_off = 0;
+    rb->tail_off = 0;
+    rb->capacity = 0;
+    rb->initial_capacity = 0;
+    rb->chunk_size = 0;
+}
+
 static inline int rb_init(ring_buffer_t* rb, size_t capacity, size_t chunk_size)
 {
-    if (capacity == 0)
-        return -1;
+    if (!rb) return 1;
+    if (capacity == 0 || chunk_size == 0) return 2;
+    if (chunk_size > SIZE_MAX / sizeof(void*)) return 3;
 
     size_t data_size = chunk_size * sizeof(void*);
 
     const size_t total_size = sizeof(rb_chunk_t) + data_size;
     rb_chunk_t* c = (rb_chunk_t*) malloc(total_size);
-    if (!c) return -1;
+    if (!c) return 4;
 
     c->next = c; // circular linked list
     c->data = (void**)(c + 1);
@@ -82,28 +112,16 @@ static inline int rb_init(ring_buffer_t* rb, size_t capacity, size_t chunk_size)
     for (size_t i = 0; i < capacity - 1; i++)
     {
         c = rb_grow(rb);
-        if (c == NULL)
-            return -1;
+        if (c == NULL) {
+            rb_destroy(rb);
+            return 4;
+        }
         memset(c->data, 0, data_size);
     }
 
     return 0;
 }
 
-static inline void rb_destroy(ring_buffer_t* rb)
-{
-    rb_chunk_t *start = rb->head_chunk;
-    rb_chunk_t *cur = start->next;
-
-    while (cur != start)
-    {
-        rb_chunk_t *tmp = cur;
-        cur = cur->next;
-        free(tmp);
-    }
-
-    free(start);
-}
 
 
 static inline int rb_write(ring_buffer_t *rb, void* addr)
@@ -111,37 +129,36 @@ static inline int rb_write(ring_buffer_t *rb, void* addr)
     /* ring full -> grow */
     if (rb_is_full(rb)) {
         if (rb_grow(rb) == NULL) {
-            return -1;
+            return 4;
         }
     }
+
+    rb->head_chunk->data[rb->head_off] = addr;
+    rb->head_off++;
 
     if (rb->head_off >= rb->chunk_size) {
         rb->head_chunk = rb->head_chunk->next;
         rb->head_off = 0;
     }
 
-    rb->head_chunk->data[rb->head_off] = addr;
-    rb->head_off++;
     return 0;
 }
 
-static inline int rb_read(ring_buffer_t *rb, void** addr)
+static inline void* rb_read(ring_buffer_t *rb)
 {
     if (rb_is_empty(rb))
     {
-        *addr = NULL;
-        return -1;
+        return NULL;
     }
 
+    void* addr = rb->tail_chunk->data[rb->tail_off];
+    rb->tail_off++;
+
     /* move to next chunk if needed */
-    if (rb->tail_off >= rb->chunk_size)
-    {
+    if (rb->tail_off >= rb->chunk_size) {
         rb->tail_chunk = rb->tail_chunk->next;
         rb->tail_off = 0;
     }
 
-    *addr = rb->tail_chunk->data[rb->tail_off];
-    rb->tail_off++;
-
-    return 0;
+    return addr;
 }

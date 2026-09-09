@@ -22,8 +22,7 @@ static void* ratelprof_activity_pool_consume_activity(void* arg) {
     }
     while (activity_pool->active || !rb_is_empty(activity_pool->buffer))
     {
-        void *activity = NULL;
-        rb_read(activity_pool->buffer, &activity);
+        void *activity = rb_read(activity_pool->buffer);
         if (!activity)
         {
             usleep(100);
