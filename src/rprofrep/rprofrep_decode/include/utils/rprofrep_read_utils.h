@@ -167,26 +167,11 @@ static inline char* __read_mp_string(const uint8_t* buf, size_t* off) {
 static inline uint64_t __read_mp_cid(const uint8_t* buf, size_t* off) {
     uint64_t cid = 0;
     uint8_t b    = __read_byte(buf, off);
-    uint64_t len  = 0;
-    switch (b) {
-        case 0xd4: len = 1;  break; // fixext 1
-        case 0xd5: len = 2;  break; // fixext 2
-        case 0xd6: len = 4;  break; // fixext 4
-        case 0xd7: len = 8;  break; // fixext 8
-        default:
-            (*off)--;
-            return cid;
-    }
-
-    uint8_t type = __read_int8(buf, off);
-
-    if (type != MSGPACK_EXT_CID) {
-        (*off) -= 2;
+    if (b != 0xc6) {
+        (*off)--;
         return cid;
     }
-
-    memcpy(&cid, buf + *off, len);
-    (*off) += len;
+    cid = __read_mp_uint(buf, off);
 
     return cid;
 }

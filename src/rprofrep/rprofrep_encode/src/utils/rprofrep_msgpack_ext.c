@@ -71,8 +71,8 @@ void rprofrep_msgpack_ext_encode_cid(
     uint64_t cid
 ) {
     if (cid != 0) {
-        size_t len = (64 - __builtin_clzll(cid) + 7) / 8;
-        msgpack_encode_ext(buf, MSGPACK_EXT_CID, (const uint8_t *)&cid, len);
+        msgpack_push_byte(buf, 0xc6);
+        msgpack_encode_uint(buf, cid);
     }
 }
 

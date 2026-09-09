@@ -236,10 +236,13 @@ static inline void rprofrep_print_section_header(rprofrep_decode_context_t* ctx)
 
 
 static inline rprofrep_status_t __print_domain_tree(rprofrep_decode_context_t* ctx, rprofrep_group_entry_t* group, void* user_arg) {
-    printf("      - Domain:       %s:\n", ratelprof_get_domain_name(group->domain));
-    printf("         - Group ID:     %" PRIu64 ":\n", group->offset_entry.id);
-    printf("         - Num Events:   %" PRIu64 ":\n", group->offset_entry.nevents);
-    printf("         - Group Offset: %" PRIu64 ":\n", group->offset_entry.offset);
+    rprofrep_header_section_t* header = &ctx->header;
+    size_t base_off = header->sections[RPROFREP_SECTION_EVENTS].offset;
+    printf("      - Domain:       %s\n", ratelprof_get_domain_name(group->domain));
+    printf("         - Group ID:     %" PRIu64 "\n", group->offset_entry.id);
+    printf("         - Num Events:   %" PRIu64 "\n", group->offset_entry.nevents);
+    printf("         - Group Offset: 0x%" PRIx64 " (rel)\n", group->offset_entry.offset);
+    printf("         - Group Offset: 0x%" PRIx64 " (abs)\n", group->offset_entry.offset + base_off);
     return RPROFREP_STATUS_SUCCESS;
 }
 
