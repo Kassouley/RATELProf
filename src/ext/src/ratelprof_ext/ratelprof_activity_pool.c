@@ -14,11 +14,9 @@ static void* ratelprof_activity_pool_consume_activity(void* arg) {
     ratelprof_activity_pool_t* activity_pool = (ratelprof_activity_pool_t*) arg;
     if (!activity_pool) {
         LOG(LOG_LEVEL_FATAL, "Activity pool is NULL.\n");
-        exit(1);
     }
     if (!activity_pool->prop.activity_callback) {
         LOG(LOG_LEVEL_FATAL, "Activity callback is not set.\n");
-        exit(1);
     }
     while (activity_pool->active || !rb_is_empty(activity_pool->buffer))
     {
