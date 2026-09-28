@@ -6,6 +6,7 @@
 #include "ratelprof_ext.h"
 
 #include "ratelprof_ext/ratelprof_activity_pool.h"
+#include "ratelprof_ext/ratelprof_completion_signal_pool.h"
 
 #include "domains/fun_proto/prof_hsa_traced_functions.h"
 #include "domains/minimal_abi/gpu_hsa_minimal_abi.h"
@@ -22,12 +23,12 @@ static inline ratelprof_status_t ratelprof_intercept_copy(
 
 static inline ratelprof_status_t ratelprof_create_kernel_dispatch_activity(
     hsa_kernel_dispatch_packet_t* packet, 
-    uint64_t queue_id) 
+    hsa_queue_t* queue) 
     __attribute__((always_inline));
 
 static inline ratelprof_status_t ratelprof_create_barrier_dispatch_activity(
     void* packet, 
-    uint64_t queue_id, 
+    hsa_queue_t* queue, 
     ratelprof_domain_ext_t domain) 
     __attribute__((always_inline));
 
@@ -49,63 +50,29 @@ static inline ratelprof_status_t ratelprof_intercept_kernel_object(
 static inline ratelprof_status_t ratelprof_intercept_agent_object() 
     __attribute__((always_inline));
 
-static inline void ratelprof_create_proxy_signal(
-    hsa_signal_t* signal) 
-    __attribute__((always_inline));
-
-static inline void ratelprof_destroy_proxy_signal(
-    hsa_signal_t signal) 
-    __attribute__((always_inline));
-
 static inline void ratelprof_refresh_original_signal(
     hsa_signal_t original, 
-    hsa_signal_t proxy, 
-    hsa_signal_value_t value) 
+    hsa_signal_t proxy) 
     __attribute__((always_inline));
 
-static inline void ratelprof_set_signal_handler(
-    hsa_signal_t signal, 
-    hsa_amd_signal_handler handler, 
-    void* arg) 
-    __attribute__((always_inline));
-
-
-/**
- * These functions are related to managing signals in the profiling system, including creating proxy
- * signals, refreshing original signals, and setting signal handlers.
- */
-static inline void ratelprof_create_proxy_signal(hsa_signal_t* signal) {
-    CALL_PROF_FUNC(hsa_signal_create, 1, 0, NULL, signal);
-}
-
-static inline void ratelprof_destroy_proxy_signal(hsa_signal_t signal) {
-    CALL_PROF_FUNC(hsa_signal_destroy, signal);
-}
-
-static inline void ratelprof_refresh_original_signal(hsa_signal_t original, hsa_signal_t proxy, hsa_signal_value_t value) {
-    if (original.handle && proxy.handle && original.handle != proxy.handle ) {
-        amd_signal_t* original_signal_ptr = (amd_signal_t*)(original.handle);
-        amd_signal_t* proxy_signal_ptr = (amd_signal_t*)(proxy.handle);
-        original_signal_ptr->start_ts = proxy_signal_ptr->start_ts;
-        original_signal_ptr->end_ts = proxy_signal_ptr->end_ts;
-        CALL_PROF_FUNC(hsa_signal_store_screlease, original, value);
+    
+static inline void ratelprof_refresh_original_signal(hsa_signal_t original, hsa_signal_t proxy) {
+    if (original.handle && proxy.handle && original.handle != proxy.handle) {
+        amd_signal_copy_signal(original, proxy);
     }
-    if (original.handle != proxy.handle)
-        ratelprof_destroy_proxy_signal(proxy);
 };
 
-static inline void ratelprof_set_signal_handler(hsa_signal_t signal, hsa_amd_signal_handler handler, void *arg) {
-    hsa_status_t status = CALL_PROF_FUNC(hsa_amd_signal_async_handler, signal, HSA_SIGNAL_CONDITION_LT, 1, handler, arg);
-    if (status != HSA_STATUS_SUCCESS) {
-        LOG(LOG_LEVEL_ERROR, "Failed to set async handler: hsa error(%d)\n", status);
-    }
+static inline hsa_agent_t ratelprof_get_agent_from_queue(hsa_queue_t* queue) {
+    hsa_agent_t agent;
+    CALL_PROF_FUNC(hsa_amd_queue_get_info, queue, HSA_AMD_QUEUE_INFO_AGENT, &agent);
+    return agent;
 }
 
 
 /**
  * These functions are related to intercepting and profiling memory copy operations on a GPU.
  */
-static inline bool __copy_callback_function(hsa_signal_value_t value, void* arg)
+static inline void __copy_callback_function(void* arg)
 {
     ratelprof_gpu_activity_t* activity = (ratelprof_gpu_activity_t*) arg;
     hsa_amd_profiling_async_copy_time_t copy_time;
@@ -116,15 +83,15 @@ static inline bool __copy_callback_function(hsa_signal_value_t value, void* arg)
     } else {
         LOG(LOG_LEVEL_WARN, 
             "Failed to get copy time for activity ID %d (Domain %d) : "
-            "HSA error(%d) : Signal(%lu) : Proxy(%lu) : Signal Value (%lu)\n", 
-            activity->id, activity->domain, status, activity->completion_signal.handle, activity->proxy_signal.handle, value);
+            "HSA error(%d) : Signal(%lu) : Proxy(%lu)\n", 
+            activity->id, activity->domain, status, activity->completion_signal.handle, activity->proxy_signal.handle);
         activity->start_time = 0;
         activity->stop_time = 0;
     }
     
-    ratelprof_refresh_original_signal(activity->completion_signal, activity->proxy_signal, value);
+    ratelprof_refresh_original_signal(activity->completion_signal, activity->proxy_signal);
     ratelprof_activity_pool_push_activity(activity);
-    return false;
+    return;
 }
 
 static inline ratelprof_status_t ratelprof_intercept_copy(hsa_agent_t dst_agent, 
@@ -133,23 +100,19 @@ static inline ratelprof_status_t ratelprof_intercept_copy(hsa_agent_t dst_agent,
                                             hsa_signal_t* completion_signal, 
                                             uint32_t engine_id) {
     ratelprof_gpu_activity_t* activity = ratelprof_memory_pool_alloc(sizeof(ratelprof_gpu_activity_t));
-    if (!activity) {
-        LOG(LOG_LEVEL_FATAL, "Cannot allocate a new activity. Out of memory ?\n");
-    }
 
     get_id(&activity->id);
     get_correlation_id(&activity->corr_id, NULL);
-    activity->domain                  = RATELPROF_DOMAIN_MEMORY;
-    activity->completion_signal       = *completion_signal;
+    activity->domain                     = RATELPROF_DOMAIN_MEMORY;
+    activity->completion_signal          = *completion_signal;
     activity->args.memory.memop          = RATELPROF_MEMORY_OP_SDMA_COPY;
     activity->args.memory.copy.src_agent = src_agent;
     activity->args.memory.copy.dst_agent = dst_agent;
     activity->args.memory.copy.size      = size;
-    activity->args.memory.engine_id = engine_id;
+    activity->args.memory.engine_id      = engine_id;
 
-    ratelprof_create_proxy_signal(&activity->proxy_signal);
-    *completion_signal = activity->proxy_signal;
-    ratelprof_set_signal_handler(*completion_signal, __copy_callback_function, activity);
+    RATELPROF_TRY(ratelprof_completion_signal_pool_set_signal(activity, completion_signal, 
+        dst_agent.handle + src_agent.handle + (-(engine_id+2)), __copy_callback_function));
 
     return RATELPROF_STATUS_SUCCESS;
 }
@@ -160,7 +123,7 @@ static inline ratelprof_status_t ratelprof_intercept_copy(hsa_agent_t dst_agent,
  * barrier packets in a profiling tool.
  */
 
-static inline bool __dispatch_callback_function(hsa_signal_value_t value, void* arg)
+static inline void __dispatch_callback_function(void* arg)
 {
     ratelprof_gpu_activity_t* activity = (ratelprof_gpu_activity_t*)arg;
     hsa_agent_t agent = activity->domain == RATELPROF_DOMAIN_MEMORY
@@ -179,9 +142,9 @@ static inline bool __dispatch_callback_function(hsa_signal_value_t value, void* 
         activity->stop_time = 0;
     }
 
-    ratelprof_refresh_original_signal(activity->completion_signal, activity->proxy_signal, value);
+    ratelprof_refresh_original_signal(activity->completion_signal, activity->proxy_signal);
     ratelprof_activity_pool_push_activity(activity);
-    return false;
+    return;
 }
 
 
@@ -201,7 +164,7 @@ static inline hsa_agent_t get_agent_from_ptr(void* ptr) {
 
 static inline ratelprof_status_t 
 ratelprof_create_kernel_dispatch_activity(
-    hsa_kernel_dispatch_packet_t* packet, uint64_t queue_id
+    hsa_kernel_dispatch_packet_t* packet, hsa_queue_t* queue
 ) {
     ratelprof_memory_op_t memop = RATELPROF_MEMORY_OP_UNKNOWN;
     RATELPROF_TRY(
@@ -217,16 +180,8 @@ ratelprof_create_kernel_dispatch_activity(
     }
 
     ratelprof_gpu_activity_t* activity = ratelprof_memory_pool_alloc(sizeof(ratelprof_gpu_activity_t));
-    if (!activity) {
-        LOG(LOG_LEVEL_FATAL, "Cannot allocate a new activity. Out of memory ?\n");
-    }
 
-    hsa_agent_t* agent = NULL;
-
-    RATELPROF_TRY(
-        ratelprof_object_tracking_pool_get_agent_from_queueId(queue_id, (void*)&agent),
-        LOG(LOG_LEVEL_FATAL, "Cannot retrieve agent object from queue id. This error would lead to a segfault.\n");
-    );
+    hsa_agent_t agent = ratelprof_get_agent_from_queue(queue);;
 
     get_id(&activity->id);
     get_correlation_id(&activity->corr_id, NULL);
@@ -254,8 +209,8 @@ ratelprof_create_kernel_dispatch_activity(
         dispatch_args = &activity->args.dispatch;
     }
     
-    dispatch_args->agent                       = *agent;
-    dispatch_args->queue_id                    = queue_id;
+    dispatch_args->agent                       = agent;
+    dispatch_args->queue_id                    = queue->id;
     dispatch_args->kernel.workgroup_size_x     = packet->workgroup_size_x;
     dispatch_args->kernel.workgroup_size_y     = packet->workgroup_size_y;
     dispatch_args->kernel.workgroup_size_z     = packet->workgroup_size_z;
@@ -268,36 +223,28 @@ ratelprof_create_kernel_dispatch_activity(
     dispatch_args->kernel.kernarg_address      = packet->kernarg_address;
     activity->completion_signal                = packet->completion_signal;
 
-    ratelprof_create_proxy_signal(&activity->proxy_signal);
-    // TODO 07/09/2026: This create too much overhead !!!
-    packet->completion_signal = activity->proxy_signal;
-
-    ratelprof_set_signal_handler(activity->proxy_signal, __dispatch_callback_function, activity);
+    RATELPROF_TRY(ratelprof_completion_signal_pool_set_signal(activity, &packet->completion_signal, agent.handle + queue->id, __dispatch_callback_function));
 
     dispatch_args->dispatch_time = ratelprof_get_clock_now();
     return RATELPROF_STATUS_SUCCESS;
 }
 
 
-static inline ratelprof_status_t ratelprof_create_barrier_dispatch_activity(void* packet, uint64_t queue_id, ratelprof_domain_ext_t domain) {
+static inline ratelprof_status_t 
+ratelprof_create_barrier_dispatch_activity(
+        void* packet, hsa_queue_t* queue, ratelprof_domain_ext_t domain
+) {
     ratelprof_gpu_activity_t* activity = ratelprof_memory_pool_alloc(sizeof(ratelprof_gpu_activity_t));
-    if (!activity) {
-        LOG(LOG_LEVEL_FATAL, "Cannot allocate a new activity. Out of memory ?\n");
-    }
 
     hsa_signal_t* packet_signal = NULL;
-    hsa_agent_t*  agent         = NULL;
 
-    RATELPROF_TRY(
-        ratelprof_object_tracking_pool_get_agent_from_queueId(queue_id, (void*)&agent),
-        LOG(LOG_LEVEL_FATAL, "Cannot retrieve agent object from queue id. This error would lead to a segfault.\n");
-    );
+    hsa_agent_t agent = ratelprof_get_agent_from_queue(queue);;
 
     get_id(&activity->id);
     get_correlation_id(&activity->corr_id, NULL);
 
-    activity->args.dispatch.agent    = *agent;
-    activity->args.dispatch.queue_id = queue_id;
+    activity->args.dispatch.agent    = agent;
+    activity->args.dispatch.queue_id = queue->id;
     activity->domain                 = domain;
 
     if (domain == RATELPROF_DOMAIN_BARRIERAND) {
@@ -311,19 +258,10 @@ static inline ratelprof_status_t ratelprof_create_barrier_dispatch_activity(void
     } else {
         LOG(LOG_LEVEL_FATAL, "Unknown packet type for barrier dispatch activity. (shouldn't reach here)\n");
     }
-   
+
     // TODO 03/05/2025 : Fix barrier dispatch interception. 
     // Don't work for some application (e.g AMR WIND)
-    activity->completion_signal = *packet_signal;
-
-
-    // if (packet_signal->handle == 0) {
-        ratelprof_create_proxy_signal(&activity->proxy_signal);
-        *packet_signal = activity->proxy_signal;
-    // } else {
-    //     activity->proxy_signal = *packet_signal;
-    // }
-    ratelprof_set_signal_handler(activity->proxy_signal, __dispatch_callback_function, activity);
+    RATELPROF_TRY(ratelprof_completion_signal_pool_set_signal(activity, packet_signal, agent.handle + queue->id, __dispatch_callback_function));
 
     activity->args.dispatch.dispatch_time = ratelprof_get_clock_now();
     return RATELPROF_STATUS_SUCCESS;
@@ -331,9 +269,11 @@ static inline ratelprof_status_t ratelprof_create_barrier_dispatch_activity(void
 
 
 static inline ratelprof_status_t ratelprof_intercept_dispatch(hsa_signal_t signal, hsa_signal_value_t value) {
-    hsa_queue_t*  queue = NULL;
-    ratelprof_status_t s = ratelprof_object_tracking_pool_get_queue_from_signal(signal.handle, &queue);
-    if (s == RATELPROF_STATUS_SUCCESS) {
+    if (!amd_signal_is_doorbell_signal(signal)) {
+        return RATELPROF_STATUS_SUCCESS;
+    }
+    hsa_queue_t* queue = amd_signal_get_queue(signal);
+    if (queue != NULL) {
         void* base = (void*) queue->base_address;
         size_t packet_size = sizeof(hsa_kernel_dispatch_packet_t);
         void* packet = base + (value % queue->size) * packet_size;
@@ -341,12 +281,13 @@ static inline ratelprof_status_t ratelprof_intercept_dispatch(hsa_signal_t signa
         int packet_type = (header & ((1 << HSA_PACKET_HEADER_WIDTH_TYPE) - 1));
 
         bool is_barrier_packet_tracked = ratelprof_object_tracking_is_barrier_packet_tracked();
-        if (packet_type == HSA_PACKET_TYPE_KERNEL_DISPATCH    && ratelprof_object_tracking_is_kernel_packet_tracked()) {
-            ratelprof_create_kernel_dispatch_activity(packet, queue->id);
+        bool is_kernel_packet_tracked = ratelprof_object_tracking_is_kernel_packet_tracked();
+        if (packet_type == HSA_PACKET_TYPE_KERNEL_DISPATCH    && is_kernel_packet_tracked) {
+            ratelprof_create_kernel_dispatch_activity(packet, queue);
         } else if (packet_type == HSA_PACKET_TYPE_BARRIER_AND && is_barrier_packet_tracked) {
-            ratelprof_create_barrier_dispatch_activity(packet, queue->id, RATELPROF_DOMAIN_BARRIERAND);
+            ratelprof_create_barrier_dispatch_activity(packet, queue, RATELPROF_DOMAIN_BARRIERAND);
         } else if (packet_type == HSA_PACKET_TYPE_BARRIER_OR  && is_barrier_packet_tracked) {
-            ratelprof_create_barrier_dispatch_activity(packet, queue->id, RATELPROF_DOMAIN_BARRIEROR);
+            ratelprof_create_barrier_dispatch_activity(packet, queue, RATELPROF_DOMAIN_BARRIEROR);
         } else if (packet_type != HSA_PACKET_TYPE_KERNEL_DISPATCH
                 && packet_type != HSA_PACKET_TYPE_BARRIER_OR
                 && packet_type != HSA_PACKET_TYPE_BARRIER_AND) {
@@ -357,6 +298,7 @@ static inline ratelprof_status_t ratelprof_intercept_dispatch(hsa_signal_t signa
             LOG(LOG_LEVEL_WARN, "An unknown packet (type %d) has been enqueue onto the AQL Queue by event %lu.\n", packet_type, corr_id);
         }
     }
+
     return RATELPROF_STATUS_SUCCESS;
 }
 
@@ -366,14 +308,14 @@ static inline ratelprof_status_t ratelprof_intercept_dispatch(hsa_signal_t signa
  */
 static inline ratelprof_status_t ratelprof_intercept_queue_object(hsa_agent_t agent, hsa_queue_t ** queue) {
     CALL_PROF_FUNC(hsa_amd_profiling_set_profiler_enabled, *queue, 1);
-    RATELPROF_TRY(
-        ratelprof_object_tracking_pool_map_new_agent_to_queueId((*queue)->id, agent),
-        LOG(LOG_LEVEL_FATAL, "Failed to intercept queue object.\n");
-    );
-    RATELPROF_TRY(
-        ratelprof_object_tracking_pool_map_new_queue_to_signal((*queue)->doorbell_signal.handle, **queue),
-        LOG(LOG_LEVEL_FATAL, "Failed to intercept queue object.\n");
-    );
+    // RATELPROF_TRY(
+    //     ratelprof_object_tracking_pool_map_new_agent_to_queueId((*queue)->id, agent),
+    //     LOG(LOG_LEVEL_FATAL, "Failed to intercept queue object.\n");
+    // );
+    // RATELPROF_TRY(
+    //     ratelprof_object_tracking_pool_map_new_queue_to_signal((*queue)->doorbell_signal.handle, **queue),
+    //     LOG(LOG_LEVEL_FATAL, "Failed to intercept queue object.\n");
+    // );
     return RATELPROF_STATUS_SUCCESS;
 }
 

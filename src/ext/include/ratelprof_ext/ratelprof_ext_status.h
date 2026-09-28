@@ -13,6 +13,8 @@ typedef enum {
     RATELPROF_STATUS_FAILED_OPEN_FILE,
     RATELPROF_STATUS_NO_CALLBACK_SET,
     RATELPROF_STATUS_QUEUE_POP_NULL,
+    RATELPROF_STATUS_OUT_OF_MEMORY,
+    RATELPROF_STATUS_INVALID_POOL
 } ratelprof_status_ext_t;
 
 
@@ -28,6 +30,8 @@ static inline const char* get_error_string_ext(ratelprof_status_t status) {
         case RATELPROF_STATUS_FAILED_OPEN_FILE:             return "Failed to open the file";
         case RATELPROF_STATUS_NO_CALLBACK_SET:              return "No callback has been set";
         case RATELPROF_STATUS_QUEUE_POP_NULL:               return "A NULL element has been pop from a queue";
+        case RATELPROF_STATUS_OUT_OF_MEMORY:                return "Out of memory";
+        case RATELPROF_STATUS_INVALID_POOL:                 return "The pool is not initialized (NULL)";
         default: return get_error_string(status); break;
     }
     return "Unknown error";

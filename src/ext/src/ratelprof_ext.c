@@ -2,6 +2,8 @@
 #include "ratelprof_ext.h"
 #include "ratelprof_internal.h"
 
+#include "ratelprof_ext/ratelprof_completion_signal_pool.h"
+
 #include "domains/fun_proto/gpu_hsa_traced_functions.h"
 #include "domains/fun_proto/prof_hsa_traced_functions.h"
 
@@ -42,6 +44,7 @@ static ratelprof_status_t ratelprof_enable_barrier_dispatch_profiling() {
     hsa_api_table.api_ptr[HSA_API_ID_hsa_signal_store_relaxed]   = i_gpu_hsa_signal_store_relaxed;
     hsa_api_table.api_ptr[HSA_API_ID_hsa_signal_store_screlease] = i_gpu_hsa_signal_store_screlease;
     hsa_api_table.api_ptr[HSA_API_ID_hsa_signal_store_release]   = i_gpu_hsa_signal_store_release;
+    hsa_api_table.api_ptr[HSA_API_ID_hsa_shut_down]              = i_gpu_hsa_shut_down;
 
     return RATELPROF_STATUS_SUCCESS;
 }
@@ -54,6 +57,7 @@ static ratelprof_status_t ratelprof_enable_kernel_dispatch_profiling() {
     hsa_api_table.api_ptr[HSA_API_ID_hsa_signal_store_relaxed]          = i_gpu_hsa_signal_store_relaxed;
     hsa_api_table.api_ptr[HSA_API_ID_hsa_signal_store_screlease]        = i_gpu_hsa_signal_store_screlease;
     hsa_api_table.api_ptr[HSA_API_ID_hsa_signal_store_release]          = i_gpu_hsa_signal_store_release;
+    hsa_api_table.api_ptr[HSA_API_ID_hsa_shut_down]                     = i_gpu_hsa_shut_down;
     
     return RATELPROF_STATUS_SUCCESS;
 }
@@ -64,7 +68,9 @@ static ratelprof_status_t ratelprof_enable_memcpy_profiling() {
     hsa_api_table.api_ptr[HSA_API_ID_hsa_init]                            = i_gpu_hsa_init;
     hsa_api_table.api_ptr[HSA_API_ID_hsa_amd_memory_async_copy]           = i_gpu_hsa_amd_memory_async_copy;
     hsa_api_table.api_ptr[HSA_API_ID_hsa_amd_memory_async_copy_on_engine] = i_gpu_hsa_amd_memory_async_copy_on_engine;
-
+    hsa_api_table.api_ptr[HSA_API_ID_hsa_shut_down]                       = i_gpu_hsa_shut_down;
+    ratelprof_enable_kernel_dispatch_profiling();
+    
     return RATELPROF_STATUS_SUCCESS;
 }
 
@@ -82,7 +88,8 @@ static ratelprof_status_t ratelprof_populate_gpu_api_table() {
         HSA_API_ID_hsa_signal_store_screlease,
         HSA_API_ID_hsa_signal_store_release,
         HSA_API_ID_hsa_amd_memory_async_copy,
-        HSA_API_ID_hsa_amd_memory_async_copy_on_engine
+        HSA_API_ID_hsa_amd_memory_async_copy_on_engine,
+        HSA_API_ID_hsa_shut_down
     };
     
     for (int i = 0; i < GPU_API_ID_NB_FUNCTION; i++) {
@@ -101,6 +108,7 @@ static ratelprof_status_t ratelprof_populate_profiling_table() {
         HSA_API_ID_hsa_signal_create,
         HSA_API_ID_hsa_signal_destroy,
         HSA_API_ID_hsa_signal_store_screlease,
+        HSA_API_ID_hsa_signal_load_scacquire,
         HSA_API_ID_hsa_agent_get_info,
         HSA_API_ID_hsa_amd_profiling_get_async_copy_time,
         HSA_API_ID_hsa_amd_profiling_get_dispatch_time,
@@ -110,6 +118,7 @@ static ratelprof_status_t ratelprof_populate_profiling_table() {
         HSA_API_ID_hsa_amd_signal_async_handler,
         HSA_API_ID_hsa_amd_pointer_info,
         HSA_API_ID_hsa_iterate_agents,
+        HSA_API_ID_hsa_amd_queue_get_info
     };
 
     for (int i = 0; i < PROFILING_ID_NB_FUNCTION; i++) {
@@ -126,6 +135,7 @@ ratelprof_status_t ratelprof_enable_node_id_tracking()
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
 
     hsa_api_table.api_ptr[HSA_API_ID_hsa_init] = i_gpu_hsa_init;
+    hsa_api_table.api_ptr[HSA_API_ID_hsa_shut_down] = i_gpu_hsa_shut_down;
 
     return status;
 }
@@ -151,7 +161,11 @@ ratelprof_status_t ratelprof_init()
     RATELPROF_TRY(ratelprof_populate_api_table(&roctx_api_table, NULL),
         LOG(LOG_LEVEL_ERROR, "Cannot populate API table for domain %d. %s (code %d)\n", RATELPROF_DOMAIN_ROCTX, get_error_string_ext(status), status));
     
-	RATELPROF_TRY(ratelprof_object_tracking_pool_init());
+	RATELPROF_TRY(ratelprof_object_tracking_pool_init(),
+        LOG(LOG_LEVEL_ERROR, "Cannot init object tracking pool. %s (code %d)\n", get_error_string_ext(status), status));
+
+    RATELPROF_TRY(ratelprof_completion_signal_pool_init(),
+        LOG(LOG_LEVEL_ERROR, "Cannot init completion signal pool. %s (code %d)\n", get_error_string_ext(status), status));
     
     return status;
 }
@@ -162,6 +176,7 @@ ratelprof_status_t ratelprof_fini()
 
     ratelprof_status_t status = RATELPROF_STATUS_SUCCESS;
     RATELPROF_TRY(__ratelprof_fini_impl());
+    RATELPROF_TRY(ratelprof_completion_signal_pool_fini());
 	RATELPROF_TRY(ratelprof_object_tracking_pool_fini());
 	RATELPROF_TRY(ratelprof_cleanup_api_table(&gpu_api_table));
 	RATELPROF_TRY(ratelprof_cleanup_api_table(&profiling_table));
