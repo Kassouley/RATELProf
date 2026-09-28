@@ -159,11 +159,12 @@ rprofrep_status_t rprofrep_get_event(
     uint64_t extra_id = (uint64_t) -1;
     uint64_t unique_funid = (uint64_t) -1;
 
-    if(group->domain == RATELPROF_DOMAIN_ROCTX) {
+    if(group->domain == RATELPROF_DOMAIN_ROCTX || group->domain == RATELPROF_DOMAIN_PROFILING) {
         extra_id = __read_mp_uint(event_buf, &offset);
         loc_id   = __read_mp_uint(event_buf, &offset);
         RPROFREP_CHECK_CALL(rprofrep_get_string_by_id(ctx, extra_id, &name));
         unique_funid = extra_id;
+
     } else if(!is_gpu_domain(group->domain)) {
         extra_id = __read_mp_uint(event_buf, &offset);
         loc_id   = __read_mp_uint(event_buf, &offset);
@@ -175,7 +176,6 @@ rprofrep_status_t rprofrep_get_event(
         extra_id = __read_mp_uint(event_buf, &offset);
         out_event->extra.memop = __read_mp_uint(event_buf, &offset);
         RPROFREP_CHECK_CALL(rprofrep_get_string_by_id(ctx, extra_id, &name));
-
         unique_funid = extra_id;
 
     } else if (group->domain == RATELPROF_DOMAIN_KERNEL) {
@@ -221,7 +221,7 @@ char** rprofrep_get_event_args_labels(
     rprofrep_event_data_t* event,
     uint64_t* num_args
 ) {
-    if (event->domain == RATELPROF_DOMAIN_ROCTX) {
+    if (event->domain == RATELPROF_DOMAIN_ROCTX || event->domain == RATELPROF_DOMAIN_PROFILING) {
         *num_args = 0;
         return NULL;
     } else if (!is_gpu_domain(event->domain)) {
