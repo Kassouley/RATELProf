@@ -360,7 +360,7 @@ function Report:toTable()
     end
     local separator = get_separator()
     local content = self:__format_data(separator, "| ", " | ", " |", columnWidths)
-    return separator .. "\n" .. content .. separator .. "\n"
+    return separator .. "\n" .. content .. "\n" .. separator .. "\n"
 end
 
 function Report:toColumn()
