@@ -253,6 +253,36 @@ static void add_roctx_activity_data_to_buffer(
 }
 
 
+static void add_profiling_activity_data_to_buffer(
+    rprofrep_encode_context_t* ctx,
+    ratelprof_domain_t domain, 
+    const ratelprof_api_activity_t* activity
+) {
+    ratelprof_time_t start = ratelprof_get_time_ns(activity->start_time);
+    ratelprof_time_t stop  = ratelprof_get_time_ns(activity->stop_time);
+    ratelprof_time_t dur   = stop - start;
+
+    rprofrep_buffer_entry_t* entry = rprofrep_get_cpu_event_buffer(ctx, domain, activity->pid, activity->tid);
+    msgpack_buffer_t* evt = &entry->buffer;
+
+    size_t old_size = msgpack_size(evt);
+
+    msgpack_encode_uint(evt, activity->id);
+
+    msgpack_encode_uint(evt, ratelprof_get_normalized_time(start));
+
+    msgpack_encode_uint(evt, dur);
+
+    rprofrep_msgpack_ext_encode_cid(evt, activity->corr_id);
+
+    rprofrep_msgpack_ext_encode_string(ctx, evt, ratelprof_get_funame_by_id(domain, activity->funid));
+
+    rprofrep_msgpack_ext_encode_loc(ctx, evt, activity->return_address);
+
+    rprofrep_msgpack_ext_encode_event(ctx, entry, msgpack_size(evt) - old_size, activity->id, activity->has_children);
+}
+
+
 typedef void (*encode_activity_data_to_buffer_cb_t)(
     rprofrep_encode_context_t* ctx,
     ratelprof_domain_t domain,
@@ -269,7 +299,7 @@ static encode_activity_data_to_buffer_cb_t encode_activity_data_to_buffer_cb[RAT
     [RATELPROF_DOMAIN_RCCL]         = (encode_activity_data_to_buffer_cb_t) add_api_activity_data_to_buffer,
     [RATELPROF_DOMAIN_ROCBLAS]      = (encode_activity_data_to_buffer_cb_t) add_api_activity_data_to_buffer,
     [RATELPROF_DOMAIN_ROCTX]        = (encode_activity_data_to_buffer_cb_t) add_roctx_activity_data_to_buffer,
-    [RATELPROF_DOMAIN_PROFILING]    = (encode_activity_data_to_buffer_cb_t) add_api_activity_data_to_buffer,
+    [RATELPROF_DOMAIN_PROFILING]    = (encode_activity_data_to_buffer_cb_t) add_profiling_activity_data_to_buffer,
     [RATELPROF_DOMAIN_MEMORY]       = (encode_activity_data_to_buffer_cb_t) add_memory_activity_data_to_buffer,
     [RATELPROF_DOMAIN_KERNEL]       = (encode_activity_data_to_buffer_cb_t) add_kernel_activity_data_to_buffer,
     [RATELPROF_DOMAIN_BARRIERAND]   = (encode_activity_data_to_buffer_cb_t) add_barrier_activity_data_to_buffer,
