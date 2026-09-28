@@ -120,14 +120,15 @@ rprofrep_status_t rprofrep_event_iterator_next(
         return RPROFREP_STATUS_NOT_INIT("Event iterator is not initialized !\n");
 
     int64_t  best_idx = -1;
-    uint64_t best_start = UINT64_MAX;
+    uint64_t best_stop = 0;
 
     // TODO 05/12/2025 : Can be optimized
     // find the earliest valid event
     for (size_t i = 0; i < iterator->group_count; ++i) {
         if (!iterator->cache_valid[i]) continue;
-        if (iterator->cached_events[i].start < best_start) {
-            best_start = iterator->cached_events[i].start;
+        uint64_t stop = iterator->cached_events[i].start + iterator->cached_events[i].dur;
+        if (stop > best_stop) {
+            best_stop = stop;
             best_idx = i;
         }
     }
