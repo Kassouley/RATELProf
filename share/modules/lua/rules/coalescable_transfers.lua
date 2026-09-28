@@ -42,16 +42,12 @@ return function (report)
     local nb_sequences_per_gpu = {}
     local total_gaps_per_gpu = {}
 
-    local function on_sequence_end(sequence, gpu_key, channel, name)
+    local function on_sequence_end(sequence, total_gap, gpu_key, channel, name)
         if #sequence >= MIN_SEQUENCE_LEN then
-            local sequence_start = sequence[1]:start()
-            local sequence_stop = sequence[#sequence]:stop()
+            local sequence_start = sequence[#sequence]:start()
+            local sequence_stop = sequence[1]:stop()
             local sequence_dur = sequence_stop - sequence_start
-            local total_gap = 0
-            for i = 2, #sequence do
-                total_gap = total_gap + (sequence[i]:start() - sequence[i-1]:stop())
-            end
-
+         
             local ideal_duration = sequence_dur - total_gap
             local speedup_factor = ideal_duration > 0 and (sequence_dur / ideal_duration) or 1.0
 
@@ -77,49 +73,64 @@ return function (report)
     report.PRE_EVENT_LOOP = function (self)
         self.sequence_per_sdma = {}
         self.curr_last_per_sdma = {}
+        self.total_gap_per_sdma = {}
     end
 
     report.FOR_EACH = function (self, event, _, gpu_key)
         local sub_unit = event:sub_unit()
         local curr_last = self.curr_last_per_sdma[sub_unit]
         local sequence = self.sequence_per_sdma[sub_unit] or {}
+        local total_gap = self.total_gap_per_sdma[sub_unit] or 0
 
         if event:dur() > DURATION_THRESHOLD_NS then
             -- Skip large kernels
             if curr_last then
                 local channel_label, channel_id = curr_last:gpu_channel()
                 local channel = channel_label .. " " .. channel_id
-                on_sequence_end(sequence, gpu_key, channel, curr_last:name())
+                on_sequence_end(sequence, total_gap, gpu_key, channel, curr_last:name())
             end
             sequence = {}
             curr_last = nil
 
-        elseif not curr_last or (event:ufunid() == curr_last:ufunid()
-                and event:start() - curr_last:stop() < GAP_THRESHOLD_NS) then
-            -- Add to sequence
-            table.insert(sequence, event)
-            curr_last = event
-
         else
-            -- Check and reset
-            local channel_label, channel_id = curr_last:gpu_channel()
-            local channel = channel_label .. " " .. channel_id
-            on_sequence_end(sequence, gpu_key, channel, curr_last:name())
-            sequence = {event}
+            local can_append = false
+            local gap = 0
+            if not curr_last then
+                can_append = true
+            else
+                gap = curr_last:start() - event:stop()
+
+                can_append = event:ufunid() == curr_last:ufunid()
+                    and gap > 0 and gap < GAP_THRESHOLD_NS
+            end
+
+            if can_append then
+                sequence[#sequence + 1] = event
+                total_gap = total_gap + gap
+            else
+                local channel_label, channel_id = curr_last:gpu_channel()
+                local channel = channel_label .. " " .. channel_id
+                on_sequence_end(sequence, total_gap, gpu_key, channel, curr_last:name())
+                sequence = { event }
+                total_gap = 0
+            end
+
             curr_last = event
         end
 
         self.curr_last_per_sdma[sub_unit] = curr_last
         self.sequence_per_sdma[sub_unit] = sequence
+        self.total_gap_per_sdma[sub_unit] = total_gap
     end
 
     report.POST_EVENT_LOOP = function (self, _, gpu_key)
         for sub_unit, curr_last in pairs(self.curr_last_per_sdma) do
             if curr_last then
                 local sequence = self.sequence_per_sdma[sub_unit]
+                local total_gap = self.total_gap_per_sdma[sub_unit]
                 local channel_label, channel_id = curr_last:gpu_channel()
                 local channel = channel_label .. " " .. channel_id
-                on_sequence_end(sequence, gpu_key, channel, curr_last:name())
+                on_sequence_end(sequence, total_gap, gpu_key, channel, curr_last:name())
             end
         end
     end

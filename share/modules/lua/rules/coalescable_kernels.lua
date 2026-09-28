@@ -43,15 +43,11 @@ return function (report)
     local nb_sequences_per_gpu = {}
     local total_gaps_per_gpu = {}
 
-    local function on_sequence_end(sequence, gpu_key, queue_id, name)
+    local function on_sequence_end(sequence, total_gap, gpu_key, queue_id, name)
         if #sequence >= MIN_SEQUENCE_LEN then
-            local sequence_start = sequence[1]:start()
-            local sequence_stop = sequence[#sequence]:stop()
+            local sequence_start = sequence[#sequence]:start()
+            local sequence_stop = sequence[1]:stop()
             local sequence_dur = sequence_stop - sequence_start
-            local total_gap = 0
-            for i = 2, #sequence do
-                total_gap = total_gap + (sequence[i]:start() - sequence[i-1]:stop())
-            end
 
             local ideal_duration = sequence_dur - total_gap
             local speedup_factor = ideal_duration > 0 and (sequence_dur / ideal_duration) or 1.0
@@ -78,17 +74,19 @@ return function (report)
     report.PRE_EVENT_LOOP = function (self)
         self.sequence_per_queue = {}
         self.curr_last_per_queue = {}
+        self.total_gap_per_queue = {}
     end
 
     report.FOR_EACH = function (self, event, _, gpu_key)
         local queue_id = event:queue_id()
         local curr_last = self.curr_last_per_queue[queue_id]
         local sequence = self.sequence_per_queue[queue_id] or {}
+        local total_gap = self.total_gap_per_queue[queue_id] or 0
 
         if event:dur() > DURATION_THRESHOLD_NS then
             -- Skip large kernels
             if curr_last then
-                on_sequence_end(sequence, gpu_key, queue_id, curr_last:name())
+                on_sequence_end(sequence, total_gap, gpu_key, queue_id, curr_last:name())
             end
 
             sequence = {}
@@ -96,11 +94,11 @@ return function (report)
 
         else
             local can_append = false
-
+            local gap = 0
             if not curr_last then
                 can_append = true
             else
-                local gap = event:start() - curr_last:stop()
+                gap = curr_last:start() - event:stop()
 
                 can_append = event:ufunid() == curr_last:ufunid()
                     and gap > 0 and gap < GAP_THRESHOLD_NS
@@ -108,9 +106,11 @@ return function (report)
 
             if can_append then
                 sequence[#sequence + 1] = event
+                total_gap = total_gap + gap
             else
-                on_sequence_end(sequence, gpu_key, queue_id, curr_last:name())
+                on_sequence_end(sequence, total_gap, gpu_key, queue_id, curr_last:name())
                 sequence = { event }
+                total_gap = 0
             end
 
             curr_last = event
@@ -118,13 +118,15 @@ return function (report)
 
         self.curr_last_per_queue[queue_id] = curr_last
         self.sequence_per_queue[queue_id] = sequence
+        self.total_gap_per_queue[queue_id] = total_gap
     end
 
     report.POST_EVENT_LOOP = function (self, _, gpu_key)
         for queue_id, curr_last in pairs(self.curr_last_per_queue) do
             if curr_last then
                 local sequence = self.sequence_per_queue[queue_id]
-                on_sequence_end(sequence, gpu_key, queue_id, curr_last:name())
+                local total_gap = self.total_gap_per_queue[queue_id]
+                on_sequence_end(sequence, total_gap, gpu_key, queue_id, curr_last:name())
             end
         end
     end

@@ -137,7 +137,8 @@ function RProfVis:for_each_track(unit, subunit, domain, process_info)
     local track = self:get_track_id(group, subunit, process_info.subunit_label)
     local track_id = track.id
     local subtrack_id = 1
-    local last_event_start = {math.huge}
+    local last_event_start = {}
+    last_event_start[subtrack_id] = math.huge
 
     local function get_subtrack_id(start, stop)
         while subtrack_id > 1 and stop <= last_event_start[subtrack_id] do
@@ -147,6 +148,7 @@ function RProfVis:for_each_track(unit, subunit, domain, process_info)
         if stop > last_event_start[subtrack_id] then
             subtrack_id = subtrack_id + 1
         end
+
         last_event_start[subtrack_id] = start
 
         return subtrack_id
@@ -168,7 +170,7 @@ function RProfVis:for_each_track(unit, subunit, domain, process_info)
         local stop = start + dur
         local cid = event:cid()
 
-       subtrack_id = get_subtrack_id(start, stop)
+        subtrack_id = get_subtrack_id(start, stop)
 
         if subtrack_id > 1 then
             buf:push_byte(0xc5)
