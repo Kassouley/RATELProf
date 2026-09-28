@@ -65,18 +65,16 @@ ratelprof_status_t ratelprof_insert_hash(ratelprof_hash_table_t *table,
         return RATELPROF_STATUS_MALLOC_FAILED;
     }
 
-    table->count++;
     new_entry->key = key;
     new_entry->value = value;
     new_entry->next = NULL;
 
     pthread_mutex_lock(&table->mutex);
-    if (table->buckets[index] == NULL) {
-        table->buckets[index] = new_entry;
-    } else {
-        new_entry->next = table->buckets[index];
-        table->buckets[index] = new_entry;
-    }
+    table->count++;
+    
+    new_entry->next = table->buckets[index];
+    table->buckets[index] = new_entry;
+
     pthread_mutex_unlock(&table->mutex);
     return RATELPROF_STATUS_SUCCESS;
 }
@@ -88,7 +86,6 @@ ratelprof_status_t ratelprof_find_hash(ratelprof_hash_table_t *table,
 {
     if (!table) return RATELPROF_STATUS_INVALID_PTR;
     if (!table->buckets) return RATELPROF_STATUS_TABLE_IS_NULL;
-
 
     size_t index = ratelprof_hash(key, table->size);
 
