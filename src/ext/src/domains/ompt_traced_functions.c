@@ -25,7 +25,7 @@ void on_ompt_callback_target_emi(
 {
     if (endpoint == ompt_scope_begin) {
         ratelprof_api_activity_t *activity =
-            (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_target_emi_t));
+            (ratelprof_api_activity_t*)ratelprof_activity_pool_alloc_activity(sizeof(ratelprof_api_activity_t) + sizeof(args_target_emi_t));
         activity->args = (void*)(activity + 1);
 
         activity->return_address = (void *)codeptr_ra;
@@ -60,7 +60,7 @@ void on_ompt_callback_target_data_op_emi(
 {
     if (endpoint == ompt_scope_begin) {
         ratelprof_api_activity_t *activity =
-            (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_target_data_op_t));
+            (ratelprof_api_activity_t*)ratelprof_activity_pool_alloc_activity(sizeof(ratelprof_api_activity_t) + sizeof(args_target_data_op_t));
         activity->args = (void*)(activity + 1);
 
         activity->return_address = (void *)codeptr_ra;
@@ -88,7 +88,7 @@ void on_ompt_callback_target_submit_emi(
 {
     if (endpoint == ompt_scope_begin) {
         ratelprof_api_activity_t *activity =
-            (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_target_submit_emi_t));
+            (ratelprof_api_activity_t*)ratelprof_activity_pool_alloc_activity(sizeof(ratelprof_api_activity_t) + sizeof(args_target_submit_emi_t));
         activity->args = (void*)(activity + 1);
 
         activity->return_address = NULL;
@@ -122,7 +122,7 @@ void on_ompt_callback_target_map_emi(
 {
     if (endpoint == ompt_scope_begin) {
         ratelprof_api_activity_t *activity =
-            (ratelprof_api_activity_t*)ratelprof_memory_pool_alloc(sizeof(ratelprof_api_activity_t) + sizeof(args_target_map_emi_t));
+            (ratelprof_api_activity_t*)ratelprof_activity_pool_alloc_activity(sizeof(ratelprof_api_activity_t) + sizeof(args_target_map_emi_t));
         activity->args = (void*)(activity + 1);
 
         activity->return_address = (void *)codeptr_ra;

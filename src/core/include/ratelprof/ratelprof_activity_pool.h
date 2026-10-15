@@ -10,8 +10,6 @@ typedef ratelprof_status_t (*activity_callback_t)(ratelprof_domain_t domain, con
 typedef struct ratelprof_pool_properties_s {
     activity_callback_t activity_callback;
     void* activity_callback_user_args;
-    size_t capacity;
-    size_t chunk_size;
 } ratelprof_pool_properties_t;
 
 typedef struct ratelprof_activity_pool_s {
@@ -19,7 +17,6 @@ typedef struct ratelprof_activity_pool_s {
     bool active;
     void* buffer;
     ratelprof_pool_properties_t prop;
-    pthread_mutex_t mutex;
 } ratelprof_activity_pool_t;
 
 ratelprof_status_t 
@@ -30,5 +27,11 @@ ratelprof_activity_pool_fini();
 
 void 
 ratelprof_activity_pool_push_activity(void* activity);
+
+void* 
+ratelprof_activity_pool_alloc_activity(size_t size);
+
+void 
+ratelprof_activity_pool_free_activity(void* ptr);
 
 #endif // RATELPROF_ACTIVITY_POOL_H

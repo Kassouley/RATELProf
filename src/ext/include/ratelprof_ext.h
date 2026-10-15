@@ -7,7 +7,6 @@
 #include "utils/mpi_helper.h"
 
 #include "ratelprof_ext/ratelprof_ext_status.h"
-#include "ratelprof_ext/ratelprof_activity_pool.h"
 #include "ratelprof_ext/ratelprof_object_tracking.h"
 
 #include "domains/gpu_hsa_api_helper.h"
@@ -111,8 +110,8 @@ typedef struct ratelprof_gpu_activity_s {
     ratelprof_domain_ext_t domain;
     uint64_t id;
     uint64_t corr_id;
-    uint64_t start_time;
-    uint64_t stop_time;
+    ratelprof_time_t start_time;
+    ratelprof_time_t stop_time;
     hsa_signal_t completion_signal;
     hsa_signal_t proxy_signal;
     gpu_args_t args;

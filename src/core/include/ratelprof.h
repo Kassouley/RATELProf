@@ -35,7 +35,6 @@
 #include "ratelprof/ratelprof_lifecycle.h"
 #include "ratelprof/ratelprof_source_location.h"
 #include "ratelprof/ratelprof_status.h"
-#include "ratelprof/ratelprof_memory_pool.h"
 
 #define RATELPROF_PUBLIC_API __attribute__((weak))
 
@@ -156,6 +155,7 @@ typedef struct ratelprof_api_activity_s  {
 
 #include "ratelprof/ratelprof_api_table.h"
 #include "ratelprof/ratelprof_callback.h"
+#include "ratelprof/ratelprof_activity_pool.h"
 
 #include "ratelprof_domain.h"
 
