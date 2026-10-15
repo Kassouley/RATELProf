@@ -105,7 +105,7 @@ static inline void amd_signal_destroy(hsa_signal_t signal) {
 
 static inline bool amd_signal_is_valid(hsa_signal_t signal) {
     amd_signal_t* signal_ptr = amd_signal_convert(signal);
-    return signal.handle != 0 && signal_ptr->kind == AMD_SIGNAL_KIND_USER;
+    return signal_ptr && signal_ptr->kind == AMD_SIGNAL_KIND_USER;
 }
 
 static inline bool amd_signal_is_doorbell_signal(hsa_signal_t signal) {
