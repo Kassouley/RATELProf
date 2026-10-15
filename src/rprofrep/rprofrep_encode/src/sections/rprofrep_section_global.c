@@ -6,8 +6,8 @@
 
 #include "sections/rprofrep_section_global.h"
 
-void agent_callback(uint64_t key, void* value, void* user_data) {
-    ratelprof_agent_object_t* agent_obj = value;
+
+void agent_callback(uint64_t key, ratelprof_agent_object_t* agent_obj, void* user_data) {
     msgpack_buffer_t* buf = (msgpack_buffer_t*) user_data;
     msgpack_encode_uint(buf, key);
     msgpack_encode_uint(buf, agent_obj->node);
@@ -52,12 +52,11 @@ rprofrep_status_t rprofrep_write_global_section(rprofrep_encode_context_t* ctx, 
 
     // Encode map Node ID to Agent Object
     ratelprof_object_tracking_pool_t* pool = ratelprof_object_tracking_pool_get_pool();
-    ratelprof_hash_table_t*  agents_list = &pool->agents_list;
-    size_t                   agents_count = pool->agents_list.count;
+    size_t agents_count = pool->nagents;
 
     if (agents_count > 0) {
         msgpack_encode_uint(&buf, agents_count);
-        ratelprof_hash_table_for_each(agents_list, agent_callback, &buf);
+        ratelprof_object_tracking_pool_for_each_agent(agent_callback, &buf);
     } else {
         return RPROFREP_STATUS_ERROR("Shouldn't reach\n");
     }
